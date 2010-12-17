@@ -34,6 +34,16 @@
 #include <language/duchain/declaration.h>
 #include <KUrl>
 #include <language/editor/persistentmovingrange.h>
+#include <language/interfaces/iquickopen.h>
+#include <QToolButton>
+#include <QMenu>
+#include <QHBoxLayout>
+#include <language/editor/documentcursor.h>
+#include <KTextEditor/Document>
+
+namespace Sublime {
+  class MainWindow;
+}
 
 namespace KDevelop {
   class IDocument;
@@ -48,10 +58,12 @@ namespace KTextEditor {
   class View;
 }
 
+//TODO: move into kdevelop namespace
 using namespace KDevelop;
 
 class ContextBrowserViewFactory;
 class ContextBrowserView;
+class BrowseManager;
 
 QWidget* masterWidget(QWidget* w);
 
@@ -81,8 +93,16 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
-    QWidget* toolbarWidgetForMainWindow(QWidget* widgetInWindow);
-    
+    virtual KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window );
+
+    ///duchain must be locked
+    ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
+    void updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& cursorPosition,
+                       bool force = false);
+
+    void updateDeclarationListBox(KDevelop::DUContext* context);
+    void setAllowBrowsing(bool allow);
+
   public Q_SLOTS:
     void previousContextShortcut();
     void nextContextShortcut();
@@ -110,10 +130,31 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
     void selectionChanged(KTextEditor::View*);
-    
+
+  private slots:
+    // history browsing
+    void documentJumpPerformed( KDevelop::IDocument* newDocument,
+                                const KTextEditor::Cursor& newCursor,
+                                KDevelop::IDocument* previousDocument,
+                                const KTextEditor::Cursor& previousCursor);
+
+    void historyNext();
+    void historyPrevious();
+    void nextMenuAboutToShow();
+    void previousMenuAboutToShow();
+    void actionTriggered();
+
+    void navigateLeft();
+    void navigateRight();
+    void navigateUp();
+    void navigateDown();
+    void navigateAccept();
+    void navigateBack();
+
   private:
-    
-    virtual void createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions);
+    QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
+    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
+                                            KActionCollection& actions);
     void switchUse(bool forward);
     void clearMouseHover();
 
@@ -125,8 +166,24 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KDevelop::SimpleCursor&, bool mouseHighlight);
     void updateForView(KTextEditor::View* view);
 
+    // history browsing
+    bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor) const;
+    QString actionTextFor(int historyIndex) const;
+    void updateButtonState();
+    void openDocument(int historyIndex);
+    void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
+
+    enum NavigationActionType {
+      Accept,
+      Back,
+      Down,
+      Up,
+      Left,
+      Right
+    };
+    void doNavigate(NavigationActionType action);
+
   private:
-    
     ContextBrowserView* browserViewForTextView(KTextEditor::View* view);
     
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
@@ -147,12 +204,46 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     SimpleCursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
+    QPointer<QWidget> m_currentNavigationWidget;
     IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
     
     QPointer<KTextEditor::Document> m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
-    QList<QPointer<QWidget> > m_toolbarWidgets;
+
+    // outline toolbar
+    QPointer<KDevelop::IQuickOpenLine> m_outlineLine;
+    QPointer<QHBoxLayout> m_toolbarWidgetLayout;
+    QPointer<QWidget> m_toolbarWidget;
+
+    // history browsing
+    struct HistoryEntry {
+        //Duchain must be locked
+        HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
+        HistoryEntry(KDevelop::DocumentCursor pos);
+        //Duchain must be locked
+        void setCursorPosition(const KDevelop::SimpleCursor& cursorPosition);
+
+        //Duchain does not need to be locked
+        KDevelop::DocumentCursor computePosition() const;
+
+        KDevelop::IndexedDUContext context;
+        KDevelop::DocumentCursor absoluteCursorPosition;
+        KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
+        QString alternativeString;
+    };
+
+    QVector<HistoryEntry> m_history;
+    QPointer<QToolButton> m_previousButton;
+    QPointer<QToolButton> m_nextButton;
+    QPointer<QMenu> m_previousMenu, m_nextMenu;
+    QPointer<QToolButton> m_browseButton;
+    QList<KDevelop::IndexedDeclaration> m_listDeclarations;
+    KDevelop::IndexedString m_listUrl;
+    BrowseManager* m_browseManager;
+    //Used to not record jumps triggered by the context-browser as history entries
+    QPointer<QWidget> m_focusBackWidget;
+    int m_nextHistoryIndex;
 };
 
 #endif // CONTEXTBROWSERPLUGIN_H

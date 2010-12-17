@@ -21,6 +21,9 @@
 
 #include "contextbrowser.h"
 
+#include "browsemanager.h"
+
+///TODO: cleanup includes
 #include <QTimer>
 #include <QApplication>
 #include <qalgorithms.h>
@@ -63,9 +66,14 @@
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
 #include <memory>
+#include <QToolButton>
+#include <QLayout>
+#include <language/duchain/types/functiontype.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 static const unsigned int highlightingTimeout = 150;
 static const float highlightingZDepth = -5000;
+static const int maxHistoryLength = 30;
 
 using KDevelop::ILanguage;
 using KTextEditor::Attribute;
@@ -84,10 +92,22 @@ QWidget* masterWidget(QWidget* w) {
 DUContext* contextForHighlightingAt(const SimpleCursor& position, TopDUContext* topContext)
 {
   DUContext* ctx = topContext->findContextAt(topContext->transformToLocalRevision(position));
-  while(ctx && (ctx->type() == DUContext::Template || ctx->type() == DUContext::Helper || ctx->localScopeIdentifier().isEmpty()) && ctx->parentContext())
+  while(ctx && ctx->parentContext()
+        && (ctx->type() == DUContext::Template || ctx->type() == DUContext::Helper
+            || ctx->localScopeIdentifier().isEmpty()))
+  {
     ctx = ctx->parentContext();
+  }
   return ctx;
 }
+
+///Duchain must be locked
+DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
+  TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
+  if (!topContext) return 0;
+  return contextForHighlightingAt(SimpleCursor(cursor), topContext);
+}
+
 
 class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 {
@@ -97,8 +117,6 @@ public:
     virtual QWidget* create(QWidget *parent = 0)
     {
         ContextBrowserView* ret = new ContextBrowserView(m_plugin, parent);
-        QObject::connect(ret, SIGNAL(startDelayedBrowsing(KTextEditor::View*)), m_plugin, SLOT(startDelayedBrowsing(KTextEditor::View*)));
-        QObject::connect(ret, SIGNAL(stopDelayedBrowsing()), m_plugin, SLOT(stopDelayedBrowsing()));
         return ret;
     }
 
@@ -115,8 +133,84 @@ public:
 private:
     ContextBrowserPlugin *m_plugin;
 };
+KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow* window )
+{
+    KXMLGUIClient* ret = KDevelop::IPlugin::createGUIForMainWindow( window );
+    
+    m_browseManager = new BrowseManager(this);
+    
+    connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+    
+    m_previousButton = new QToolButton();
+    m_previousButton->setToolTip(i18n("Go back in context history"));
+    m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_previousButton->setIcon(KIcon("go-previous"));
+    m_previousButton->setEnabled(false);
+    m_previousButton->setFocusPolicy(Qt::NoFocus);
+    m_previousMenu = new QMenu();
+    m_previousButton->setMenu(m_previousMenu);
+    connect(m_previousButton, SIGNAL(clicked(bool)), this, SLOT(historyPrevious()));
+    connect(m_previousMenu, SIGNAL(aboutToShow()), this, SLOT(previousMenuAboutToShow()));
 
-void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) {
+    m_nextButton = new QToolButton();
+    m_nextButton->setToolTip(i18n("Go forward in context history"));
+    m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_nextButton->setIcon(KIcon("go-next"));
+    m_nextButton->setEnabled(false);
+    m_nextButton->setFocusPolicy(Qt::NoFocus);
+    m_nextMenu = new QMenu();
+    m_nextButton->setMenu(m_nextMenu);
+    connect(m_nextButton, SIGNAL(clicked(bool)), this, SLOT(historyNext()));
+    connect(m_nextMenu, SIGNAL(aboutToShow()), this, SLOT(nextMenuAboutToShow()));
+
+    m_browseButton = new QToolButton();
+    m_browseButton->setIcon(KIcon("games-hint"));
+    m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
+    m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
+    m_browseButton->setCheckable(true);
+    m_browseButton->setFocusPolicy(Qt::NoFocus);
+    
+    connect(m_browseButton, SIGNAL(clicked(bool)), m_browseManager, SLOT(setBrowsing(bool)));
+
+    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
+    
+    if(quickOpen) {
+      m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
+      m_outlineLine->setDefaultText(i18n("Outline..."));
+      m_outlineLine->setToolTip(i18n("Navigate outline of active document, click to browse."));
+    }
+
+    connect(m_browseManager, SIGNAL(startDelayedBrowsing(KTextEditor::View*)),
+            this, SLOT(startDelayedBrowsing(KTextEditor::View*)));
+    connect(m_browseManager, SIGNAL(stopDelayedBrowsing()),
+            this, SLOT(stopDelayedBrowsing()));
+
+    m_toolbarWidget = toolbarWidgetForMainWindow(window);
+    m_toolbarWidgetLayout = new QHBoxLayout;
+    m_toolbarWidgetLayout->setSizeConstraint(QLayout::SetMaximumSize);
+    m_previousButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_nextButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_browseButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_toolbarWidgetLayout->setMargin(0);
+
+    m_toolbarWidgetLayout->addWidget(m_previousButton);
+    m_toolbarWidgetLayout->addWidget(m_outlineLine);
+    m_outlineLine->setMaximumWidth(600);
+    m_toolbarWidgetLayout->addWidget(m_nextButton);
+    m_toolbarWidgetLayout->addWidget(m_browseButton);
+
+    if(m_toolbarWidget->children().isEmpty())
+        m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
+
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
+
+    return ret;
+}
+
+void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
+                                                      KActionCollection& actions)
+{
     xmlFile = "kdevcontextbrowser.rc" ;
 
     KAction* previousContext = actions.addAction("previous_context");
@@ -150,28 +244,16 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     outline->setDefaultWidget(w);
 }
 
-
 void ContextBrowserPlugin::nextContextShortcut()
 {
-  foreach(ContextBrowserView* view, m_views)
-  {
-    kDebug() << masterWidget(ICore::self()->uiController()->activeMainWindow()) << masterWidget(view);
-    if(masterWidget(ICore::self()->uiController()->activeMainWindow()) == masterWidget(view)) {
-      view->historyNext();
-      return;
-    }
-  }
+  // TODO: cleanup
+  historyNext();
 }
 
 void ContextBrowserPlugin::previousContextShortcut()
 {
-  foreach(ContextBrowserView* view, m_views)
-  {
-    if(masterWidget(ICore::self()->uiController()->activeMainWindow()) == masterWidget(view)) {
-      view->historyPrevious();
-      return;
-    }
-  }
+  // TODO: cleanup
+  historyPrevious();
 }
 
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
@@ -179,7 +261,8 @@ K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevconte
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)
-    , m_viewFactory(new ContextBrowserViewFactory(this)), m_lastInsertionDocument(0)
+    , m_viewFactory(new ContextBrowserViewFactory(this))
+    , m_nextHistoryIndex(0)
 {
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
@@ -200,6 +283,15 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
 {
+  ///TODO: QObject inheritance should suffice?
+  delete m_nextMenu;
+  delete m_previousMenu;
+  delete m_toolbarWidgetLayout;
+
+  delete m_previousButton;
+  delete m_outlineLine;
+  delete m_nextButton;
+  delete m_browseButton;
 }
 
 void ContextBrowserPlugin::unload()
@@ -269,6 +361,7 @@ void ContextBrowserPlugin::stopDelayedBrowsing() {
   if(m_currentToolTip) {
     m_currentToolTip->deleteLater();
     m_currentToolTip = 0;
+    m_currentNavigationWidget = 0;
   }
 }
 
@@ -282,6 +375,7 @@ void ContextBrowserPlugin::hideTooTip() {
   if(m_currentToolTip) {
     m_currentToolTip->deleteLater();
     m_currentToolTip = 0;
+    m_currentNavigationWidget = 0;
   }
 }
 
@@ -330,12 +424,14 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     if(m_currentToolTip) {
       m_currentToolTip->deleteLater();
       m_currentToolTip = 0;
+      m_currentNavigationWidget = 0;
     }
     
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     kDebug() << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
+    m_currentNavigationWidget = navigationWidget;
     ActiveToolTip::showToolTip(tooltip);
 
     //First disconnect to prevent multiple connections
@@ -529,9 +625,7 @@ void ContextBrowserPlugin::updateForView(View* view)
       //Only update the history if this context is around the text cursor
       if(core()->documentController()->activeDocument() && highlightPosition == SimpleCursor(view->cursorPosition()) && view->document() == core()->documentController()->activeDocument()->textDocument())
       {
-        foreach(ContextBrowserView* contextView, m_views)
-          if(masterWidget(contextView) == masterWidget(view))
-            contextView->updateHistory(ctx, highlightPosition);
+        updateHistory(ctx, highlightPosition);
       }
       
       Declaration* foundDeclaration = findDeclaration(view, highlightPosition, mouseHighlight);
@@ -868,18 +962,340 @@ void ContextBrowserPlugin::unRegisterToolView(ContextBrowserView* view)
   m_views.removeAll(view);
 }
 
-QWidget* ContextBrowserPlugin::toolbarWidgetForMainWindow(QWidget* widgetInWindow)
+// history browsing
+
+QWidget* ContextBrowserPlugin::toolbarWidgetForMainWindow( Sublime::MainWindow* window )
 {
-  QWidget* master = masterWidget(widgetInWindow);
-  
-  for(QList< QPointer< QWidget > >::const_iterator it = m_toolbarWidgets.constBegin(); it != m_toolbarWidgets.constEnd(); ++it) {
-    if((*it) && masterWidget(*it) == master) {
-      return *it;
+  //TODO: support multiple windows (if that ever gets revived)
+  if (!m_toolbarWidget) {
+    m_toolbarWidget = new QWidget(window);
+  }
+  return m_toolbarWidget;
+}
+
+void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocument,
+                                            const KTextEditor::Cursor& newCursor,
+                                            KDevelop::IDocument* previousDocument,
+                                            const KTextEditor::Cursor& previousCursor) {
+        
+    DUChainReadLocker lock(DUChain::lock());
+
+    /*TODO: support multiple windows if that ever gets revived
+    if(newDocument && newDocument->textDocument() && newDocument->textDocument()->activeView() && masterWidget(newDocument->textDocument()->activeView()) != masterWidget(this))
+        return;
+    */
+
+    if(previousDocument && previousCursor.isValid()) {
+        kDebug() << "updating jump source";
+        DUContext* context = getContextAt(previousDocument->url(), previousCursor);
+        if(context) {
+            updateHistory(context, SimpleCursor(previousCursor), true);
+        }else{
+            //We just want this place in the history
+            m_history.resize(m_nextHistoryIndex); // discard forward history
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(previousDocument->url()), SimpleCursor(previousCursor))));
+            ++m_nextHistoryIndex;
+        }
+    }
+    kDebug() << "new doc: " << newDocument << " new cursor: " << newCursor;
+    if(newDocument && newCursor.isValid()) {
+        kDebug() << "updating jump target";
+        DUContext* context = getContextAt(newDocument->url(), newCursor);
+        if(context) {
+            updateHistory(context, SimpleCursor(newCursor), true);
+        }else{
+            //We just want this place in the history
+            m_history.resize(m_nextHistoryIndex); // discard forward history
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(newDocument->url()), SimpleCursor(newCursor))));
+            ++m_nextHistoryIndex;
+            m_outlineLine->clear();
+        }
+    }
+}
+
+void ContextBrowserPlugin::updateButtonState()
+{
+    m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
+    m_previousButton->setEnabled( m_nextHistoryIndex >= 2 );
+}
+
+void ContextBrowserPlugin::historyNext() {
+    if(m_nextHistoryIndex >= m_history.size()) {
+        return;
+    }
+    openDocument(m_nextHistoryIndex); // opening the document at given position 
+                                      // will update the widget for us
+    ++m_nextHistoryIndex;
+    updateButtonState();
+}
+
+void ContextBrowserPlugin::openDocument(int historyIndex) {
+    Q_ASSERT_X(historyIndex >= 0, "openDocument", "negative history index");
+    Q_ASSERT_X(historyIndex < m_history.size(), "openDocument", "history index out of range");
+    DocumentCursor c = m_history[historyIndex].computePosition();
+    if (c.isValid() && !c.document.str().isEmpty()) {
+        
+        disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+        
+        ICore::self()->documentController()->openDocument(c.document.toUrl(), c.textCursor());
+        
+        connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+
+        KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+        updateDeclarationListBox(m_history[historyIndex].context.data());
+    }
+}
+
+void ContextBrowserPlugin::historyPrevious() {
+    if(m_nextHistoryIndex < 2) {
+        return;
+    }
+    --m_nextHistoryIndex;
+    openDocument(m_nextHistoryIndex-1); // opening the document at given position 
+                                        // will update the widget for us
+    updateButtonState();
+}
+
+QString ContextBrowserPlugin::actionTextFor(int historyIndex) const
+{
+    const HistoryEntry& entry = m_history.at(historyIndex);
+    QString actionText = entry.context.data() ? entry.context.data()->scopeIdentifier(true).toString() : QString();
+    if(actionText.isEmpty())
+        actionText = entry.alternativeString;
+    if(actionText.isEmpty())
+        actionText = "<unnamed>";
+    actionText += " @ ";
+    QString fileName = entry.absoluteCursorPosition.document.toUrl().fileName();
+    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line+1);
+    return actionText;
+}
+
+/*
+inline QDebug operator<<(QDebug debug, const ContextBrowserPlugin::HistoryEntry &he)
+{
+    DocumentCursor c = he.computePosition();
+    debug << "\n\tHistoryEntry " << c.line << " " << c.document.str();
+    return debug;
+}
+*/
+
+void ContextBrowserPlugin::nextMenuAboutToShow() {
+    QList<int> indices;
+    for(int a = m_nextHistoryIndex; a < m_history.size(); ++a) {
+        indices << a;
+    }
+    fillHistoryPopup(m_nextMenu, indices);
+}
+
+void ContextBrowserPlugin::previousMenuAboutToShow() {
+    QList<int> indices;
+    for(int a = m_nextHistoryIndex-2; a >= 0; --a) {
+        indices << a;
+    }
+    fillHistoryPopup(m_previousMenu, indices);
+}
+
+void ContextBrowserPlugin::fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices) {
+    menu->clear();
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+    foreach(int index, historyIndices) {
+        QAction* action = new QAction(actionTextFor(index), menu);
+        action->setData(index);
+        menu->addAction(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
+    }
+}
+
+bool ContextBrowserPlugin::isPreviousEntry(KDevelop::DUContext* context,
+                                           const KDevelop::SimpleCursor& /*position*/) const
+{
+    if (m_nextHistoryIndex == 0) return false;
+    Q_ASSERT(m_nextHistoryIndex <= m_history.count());
+    const HistoryEntry& he = m_history.at(m_nextHistoryIndex-1);
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() ); // is this necessary??
+    Q_ASSERT(context);
+    return IndexedDUContext(context) == he.context;
+}
+
+void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position, bool force)
+{
+    kDebug() << "updating history";
+    
+    if(m_outlineLine->isVisible())
+        updateDeclarationListBox(context);
+    
+    if(!context && !context->owner() && !force) {
+        return; //Only add history-entries for contexts that have owners, which in practice should be functions and classes
+                //This keeps the history cleaner
+    }
+
+    if (isPreviousEntry(context, position)) {
+        if(m_nextHistoryIndex) {
+            HistoryEntry& he = m_history[m_nextHistoryIndex-1];
+            he.setCursorPosition(position);
+        }
+        return;
+    } else { // Append new history entry
+        m_history.resize(m_nextHistoryIndex); // discard forward history
+        m_history.append(HistoryEntry(IndexedDUContext(context), position));
+        ++m_nextHistoryIndex;
+
+        updateButtonState();
+        if(m_history.size() > (maxHistoryLength + 5)) {
+            m_history = m_history.mid(m_history.size() - maxHistoryLength);
+            m_nextHistoryIndex = m_history.size();
+        }
+    }
+}
+
+void ContextBrowserPlugin::setAllowBrowsing(bool allow) {
+    m_browseButton->setChecked(allow);
+}
+
+void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context) {
+    if(!context || !context->owner()) {
+        kDebug() << "not updating box";
+        m_listUrl = IndexedString(); ///@todo Compute the context in the document here
+        m_outlineLine->clear();
+        return;
+    }
+    
+    Declaration* decl = context->owner();
+    
+    m_listUrl = context->url();
+
+    Declaration* specialDecl = SpecializationStore::self().applySpecialization(decl, decl->topContext());
+
+    FunctionType::Ptr function = specialDecl->type<FunctionType>();
+    QString text = specialDecl->qualifiedIdentifier().toString();
+    if(function)
+        text += function->partToString(KDevelop::FunctionType::SignatureArguments);
+    
+    if(!m_outlineLine->hasFocus())
+    {
+        m_outlineLine->setText(text);
+        m_outlineLine->setCursorPosition(0); 
+    } 
+    
+    kDebug() << "updated" << text;
+}
+
+void ContextBrowserPlugin::actionTriggered() {
+    QAction* action = qobject_cast<QAction*>(sender());
+    Q_ASSERT(action); Q_ASSERT(action->data().type() == QVariant::Int);
+    int historyPosition = action->data().toInt();
+    // kDebug() << "history pos" << historyPosition << m_history.size() << m_history;
+    if(historyPosition >= 0 && historyPosition < m_history.size()) {
+        m_nextHistoryIndex = historyPosition + 1;
+        openDocument(historyPosition);
+        updateButtonState();
+    }
+}
+
+void ContextBrowserPlugin::doNavigate(NavigationActionType action)
+{
+  ///TODO: is this *really* required?
+  KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+  if(!view) {
+      kWarning() << "sender is not a view";
+      return;
+  }
+  KTextEditor::CodeCompletionInterface* iface = qobject_cast<KTextEditor::CodeCompletionInterface*>(view);
+  if(!iface || iface->isCompletionActive())
+      return;
+  ///
+
+  QList<QWidget*> widgets;
+  widgets << m_currentNavigationWidget.data();
+  foreach(ContextBrowserView* view, m_views) {
+    widgets << view->navigationWidget();
+  }
+
+  foreach(QWidget* w, widgets) {
+    AbstractNavigationWidget* widget = qobject_cast<AbstractNavigationWidget*>(w);
+    if (!widget)
+      continue;
+
+    switch(action) {
+      case Accept:
+        widget->accept();
+        break;
+      case Back:
+        widget->back();
+        break;
+      case Left:
+        widget->previous();
+        break;
+      case Right:
+        widget->next();
+        break;
+      case Up:
+        widget->up();
+        break;
+      case Down:
+        widget->down();
+        break;
     }
   }
-  m_toolbarWidgets.append(new QWidget(master));
-  m_toolbarWidgets.back()->setHidden(true);
-  return m_toolbarWidgets.back();
+}
+
+void ContextBrowserPlugin::navigateAccept() {
+  doNavigate(Accept);
+}
+
+void ContextBrowserPlugin::navigateBack() {
+  doNavigate(Back);
+}
+
+void ContextBrowserPlugin::navigateDown() {
+  doNavigate(Down);
+}
+
+void ContextBrowserPlugin::navigateLeft() {
+  doNavigate(Left);
+}
+
+void ContextBrowserPlugin::navigateRight() {
+  doNavigate(Right);
+}
+
+void ContextBrowserPlugin::navigateUp() {
+  doNavigate(Up);
+}
+
+
+//BEGIN HistoryEntry
+ContextBrowserPlugin::HistoryEntry::HistoryEntry(KDevelop::DocumentCursor pos) : absoluteCursorPosition(pos) {
+}
+
+ContextBrowserPlugin::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
+        //Use a position relative to the context
+        setCursorPosition(cursorPosition);
+        if(ctx.data())
+            alternativeString = ctx.data()->scopeIdentifier(true).toString();
+        if(!alternativeString.isEmpty())
+            alternativeString += i18n("(changed)"); //This is used when the context was deleted in between
+}
+
+DocumentCursor ContextBrowserPlugin::HistoryEntry::computePosition() const {
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+    DocumentCursor ret;
+    if(context.data()) {
+        ret = DocumentCursor(context.data()->url(), relativeCursorPosition);
+        ret.line += context.data()->range().start.line;
+    }else{
+        ret = absoluteCursorPosition;
+    }
+    return ret;
+}
+
+void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+    if(context.data()) {
+        absoluteCursorPosition =  DocumentCursor(context.data()->url(), cursorPosition);
+        relativeCursorPosition = cursorPosition;
+        relativeCursorPosition.line -= context.data()->range().start.line;
+    }
 }
 
 #include "contextbrowser.moc"
