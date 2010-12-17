@@ -27,6 +27,9 @@ namespace KDevelop {
 class AbstractNavigationWidget;
 
 ///A tooltip that just emebed the given widget.
+///
+///TODO: 4.3 - cleanup indentation
+///      introduce getter for widget, use that in context browser
 class KDEVPLATFORMLANGUAGE_EXPORT NavigationToolTip : public ActiveToolTip
 {
     Q_OBJECT
