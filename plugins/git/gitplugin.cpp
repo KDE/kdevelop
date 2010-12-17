@@ -48,6 +48,7 @@
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
 #include <KMessageBox>
+#include <KStandardDirs>
 #include "gitjob.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
@@ -161,9 +162,16 @@ QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: cou
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData()), m_oldVersion(false)
 {
+    if (KStandardDirs::findExe("git").isEmpty()) {
+        m_hasError = true;
+        m_errorDescription = "git is not installed";
+        return;
+    }
+
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
 
+    m_hasError = false;
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
     setObjectName("Git");
     
@@ -1174,4 +1182,14 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
 KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
 {
     return new GitVcsLocationWidget(parent);
+}
+
+bool GitPlugin::hasError() const
+{
+    return m_hasError;
+}
+
+QString GitPlugin::errorDescription() const
+{
+    return m_errorDescription;
 }
