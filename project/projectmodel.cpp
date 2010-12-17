@@ -207,7 +207,9 @@ void ProjectBaseItem::removeRows(int row, int count)
         QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
     QList<ProjectBaseItem*> toRemove;
+#if QT_VERSION >= 0x040700
     toRemove.reserve(count);
+#endif
     if (row == 0 && count == d->children.size()) {
         // optimize shutdown for big projects
         toRemove = d->children;
