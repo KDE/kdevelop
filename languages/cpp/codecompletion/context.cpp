@@ -1754,6 +1754,22 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
+/**
+ * see @p type as function type and try to get it's return type as IntegralType data type.
+ */
+static inline int getIntegralReturnType(const AbstractType::Ptr& type)
+{
+  if (!type)
+    return -1;
+  const FunctionType::Ptr funcType = type.cast<FunctionType>();
+  if (!funcType || !funcType->returnType())
+    return -1;
+  const IntegralType::Ptr intType = funcType->returnType().cast<IntegralType>();
+  if (!intType)
+    return -1;
+  return intType->dataType();
+}
+
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic, bool typeIsConst) {
   if(!decl)
     return true;
@@ -1807,6 +1823,19 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
       return filterDeclaration(classMember, declarationContext, typeIsConst);
+  }
+
+  // https://bugs.kde.org/show_bug.cgi?id=206376
+  // hide void functions in expressions but don't hide signals / slots with void return type
+  if (m_onlyShow != ShowSignals && m_onlyShow != ShowSlots
+      && m_parentContext && decl->isFunctionDeclaration()
+      && getIntegralReturnType(decl->abstractType()) == IntegralType::TypeVoid)
+  {
+    const ExpressionEvaluationResult& result =
+            static_cast<CodeCompletionContext*>(m_parentContext.data())->m_expressionResult;
+    // for now only hide in non-lvalue expressions so we don't get problems in sig/slot connections e.g.
+    if (result.type.isValid() && !result.isLValue())
+      return false;
   }
 
   return true;
