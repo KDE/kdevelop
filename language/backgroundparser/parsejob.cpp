@@ -99,8 +99,8 @@ public:
     volatile bool abortRequested : 1;
     bool aborted : 1;
     TopDUContext::Features features;
-    QList<QPointer<QObject> > notify;
-    QPointer<DocumentChangeTracker> tracker;
+    QList<QWeakPointer<QObject> > notify;
+    QWeakPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
 };
@@ -117,15 +117,15 @@ void ParseJob::setTracker ( DocumentChangeTracker* tracker )
 
 DocumentChangeTracker* ParseJob::tracker() const
 {
-    return d->tracker;
+    return d->tracker.data();
 }
 
 ParseJob::~ParseJob()
 {
-    typedef QPointer<QObject> QObjectPointer;
+    typedef QWeakPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify)
         if(p)
-            QMetaObject::invokeMethod(p, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
+            QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
 
     delete d;
 }
@@ -239,7 +239,8 @@ void ParseJob::abortJob()
     setFinished(true);
 }
 
-void ParseJob::setNotifyWhenReady(QList<QPointer<QObject> > notify) {
+void ParseJob::setNotifyWhenReady(QList< QWeakPointer< QObject > > notify
+) {
     d->notify = notify;
 }
 
@@ -275,18 +276,18 @@ KDevelop::ProblemPointer ParseJob::readContents()
         return KDevelop::ProblemPointer();
     }
     
-    if(d->tracker)
+    if(DocumentChangeTracker* t = d->tracker.data())
     {
         // The file is open in an editor
-        d->previousRevision = d->tracker->revisionAtLastReset();
+        d->previousRevision = t->revisionAtLastReset();
 
-        d->tracker->reset(); // Reset the tracker to the current revision
-        Q_ASSERT(d->tracker->revisionAtLastReset());
+        t->reset(); // Reset the tracker to the current revision
+        Q_ASSERT(t->revisionAtLastReset());
         
-        d->contents.contents = tracker()->textAtLastReset().toUtf8();
-        d->contents.modification = KDevelop::ModificationRevision( lastModified, d->tracker->revisionAtLastReset()->revision() );
+        d->contents.contents = t->textAtLastReset().toUtf8();
+        d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
         
-        d->revision = d->tracker->acquireRevision(d->contents.modification.revision);
+        d->revision = t->acquireRevision(d->contents.modification.revision);
     }else{
         // We have to load the file from disk
         
@@ -414,7 +415,7 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
     }
     
     ForegroundLock lock;
-    if(d->tracker)
+    if(DocumentChangeTracker* t = d->tracker.data())
     {
         if(!d->previousRevision)
         {
@@ -428,14 +429,14 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
             return;
         }
         
-        if(!d->tracker->holdingRevision(sourceRevision) || !d->tracker->holdingRevision(targetRevision))
+        if(!t->holdingRevision(sourceRevision) || !t->holdingRevision(targetRevision))
         {
             kDebug() << "lost one of the translation revisions, not doing the map";
             return;
         }
         
         // Perform translation
-        MovingInterface* moving = d->tracker->documentMovingInterface();
+        MovingInterface* moving = t->documentMovingInterface();
         
         DUChainWriteLocker wLock;
         
