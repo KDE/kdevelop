@@ -28,7 +28,6 @@
 #include <QtCore/QPair>
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
-#include <QtCore/QPointer>
 
 #include <KDE/KUrl>
 

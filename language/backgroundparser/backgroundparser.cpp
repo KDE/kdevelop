@@ -30,6 +30,7 @@
 #include <QWaitCondition>
 #include <QMutexLocker>
 #include <QThread>
+#include <QtCore/QWeakPointer>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -163,7 +164,7 @@ public:
         }
     }
 
-    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
+    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QWeakPointer<QObject> > notifyWhenReady)
     {
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
@@ -206,10 +207,10 @@ public:
             kDebug() << "could not create parse-job for url" << url;
 
         //Notify that we failed
-        typedef QPointer<QObject> Notify;
+        typedef QWeakPointer<QObject> Notify;
         foreach(const Notify& n, notifyWhenReady)
             if(n)
-                QMetaObject::invokeMethod(n, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
+                QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
         return 0;
     }
@@ -270,7 +271,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     ILanguageController* m_languageController;
 
     //Current parse-job that is executed in the additional thread
-    QPointer<ParseJob> specialParseJob;
+    QWeakPointer<ParseJob> specialParseJob;
 
     QTimer m_timer;
     int m_delay;
@@ -279,7 +280,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     bool m_shuttingDown;
     
     struct DocumentParseTarget {
-        QPointer<QObject> notifyWhenReady;
+        QWeakPointer<QObject> notifyWhenReady;
         int priority;
         TopDUContext::Features features;
         bool operator==(const DocumentParseTarget& rhs) const {
@@ -307,8 +308,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
             return ret;
         }
 
-        QList<QPointer<QObject> > notifyWhenReady() {
-            QList<QPointer<QObject> > ret;
+        QList<QWeakPointer<QObject> > notifyWhenReady() {
+            QList<QWeakPointer<QObject> > ret;
 
             foreach(const DocumentParseTarget &target, targets)
                 if(target.notifyWhenReady)
@@ -391,7 +392,7 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
-    QPointer<QObject> p(notifyWhenReady);
+    QWeakPointer<QObject> p(notifyWhenReady);
 
     QMutexLocker lock(&d->m_mutex);
     for(QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
@@ -400,7 +401,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 
         int index = -1;
         for(int a = 0; a < (*it).targets.size(); ++a)
-            if((*it).targets[a].notifyWhenReady == notifyWhenReady)
+            if((*it).targets[a].notifyWhenReady.data() == notifyWhenReady)
                 index = a;
 
         if(index != -1) {
@@ -428,7 +429,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         BackgroundParserPrivate::DocumentParseTarget target;
         target.priority = priority;
         target.features = features;
-        target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
+        target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
 
         QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
 
@@ -466,7 +467,7 @@ void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
         
         foreach(BackgroundParserPrivate::DocumentParseTarget target, d->m_documents[url].targets)
-            if(target.notifyWhenReady == notifyWhenReady)
+            if(target.notifyWhenReady.data() == notifyWhenReady)
                 d->m_documents[url].targets.removeAll(target);
 
         if(d->m_documents[url].targets.isEmpty()) {
