@@ -93,7 +93,7 @@ void ProjectModelTest::initTestCase()
 
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
-    new ModelTest( model, this );
+    modelTest = new ModelTest( model, this );
 }
 
 void ProjectModelTest::init()
@@ -473,6 +473,22 @@ void ProjectModelTest::testAddItemInThread()
     t.start();
     QVERIFY(spy.wait( 10000 ));
     QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
+}
+
+void ProjectModelTest::testDeleteLots()
+{
+    delete modelTest;
+
+    const int items = 10000;
+    ProjectBaseItem* root = new ProjectBaseItem( 0, "root", 0 );
+    model->appendRow( root );
+    for ( int i = 0; i < items; ++i ) {
+        new ProjectBaseItem( 0, QString::number(i), root );
+    }
+    QCOMPARE(root->children().size(), items);
+    delete root;
+
+    modelTest = new ModelTest( model, this );
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
