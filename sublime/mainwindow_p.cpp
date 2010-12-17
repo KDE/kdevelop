@@ -227,7 +227,6 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         Container *container = 0;
         if (!splitter->widget(0))
         {
-            qDebug() << "new container";
             //we need to create view container
             container = new Container(splitter);
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
