@@ -196,8 +196,41 @@ void ProjectBaseItem::removeRow( int row )
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    for( ; count > 0; count-- ) {
-        removeRow( row );
+    if (!count) {
+        return;
+    }
+
+    Q_D(ProjectBaseItem);
+    Q_ASSERT(row >= 0 && row + count <= d->children.size());
+
+    if( model() ) {
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+    }
+    QList<ProjectBaseItem*> toRemove;
+    toRemove.reserve(count);
+    if (row == 0 && count == d->children.size()) {
+        // optimize shutdown for big projects
+        toRemove = d->children;
+        d->children.clear();
+    } else {
+        for (int i = row; i < count; ++i) {
+            toRemove << d->children.takeAt( row );
+        }
+        for(int i = row; i < d->children.size(); ++i) {
+            d->children.at(i)->d_func()->row--;
+            Q_ASSERT(child(i)->d_func()->row==i);
+        }
+    }
+
+    foreach(ProjectBaseItem* item, toRemove) {
+        item->d_func()->parent = 0;
+        item->d_func()->row = -1;
+        item->setModel( 0 );
+        delete item;
+    }
+
+    if( model() ) {
+        QMetaObject::invokeMethod( model(), "rowsRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
 }
 
