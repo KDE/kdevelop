@@ -204,7 +204,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
 	bool modelinefound = false;
 	QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
-	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode)");
+	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)");
 	while (!is.atEnd()) {
 		QString line = is.readLine();
 		// replace only the options we care about
