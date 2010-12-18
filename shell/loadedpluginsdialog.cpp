@@ -40,6 +40,10 @@
 
 #define MARGIN 5
 
+bool sortPlugins(KDevelop::IPlugin* l, KDevelop::IPlugin* r)
+{
+    return l->componentData().aboutData()->programName() < r->componentData().aboutData()->programName();
+}
 
 class PluginsModel : public QAbstractListModel
 {
@@ -51,6 +55,7 @@ public:
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
+        qSort(m_plugins.begin(), m_plugins.end(), sortPlugins);
     }
 
     KDevelop::IPlugin *plugin(const QModelIndex& index) const
