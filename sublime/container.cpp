@@ -272,6 +272,7 @@ void Container::addWidget(View *view, int position)
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
+    setCurrentWidget(d->stack->currentWidget());
     
     // This fixes a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
     // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
