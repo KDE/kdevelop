@@ -70,6 +70,7 @@ X-KDE-PluginInfo-Author=Matt Rogers
 X-KDE-PluginInfo-Email=mattr@kde.org
 X-KDE-PluginInfo-Name=KDevCMakeManager
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-Version=11
 X-KDevelop-Category=Project
 X-KDevelop-Language=CMake

@@ -100,6 +100,7 @@ ServiceTypes=KDevelop/Plugin
 Icon=source-cpp
 X-KDE-Library=kdevcpplanguagesupport
 X-KDE-PluginInfo-Name=kdevcppsupport
+X-KDE-PluginInfo-Category=Language Support
 X-KDevelop-Version=11
 X-KDevelop-Language=C++
 X-KDevelop-Args=CPP

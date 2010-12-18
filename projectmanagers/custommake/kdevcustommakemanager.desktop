@@ -89,6 +89,7 @@ Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustommakemanager
 X-KDE-PluginInfo-Name=KDevCustomMakeManager
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-FileManager=CustomMake
 X-KDevelop-Version=11
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
