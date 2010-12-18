@@ -142,7 +142,12 @@ class SessionControllerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    SessionControllerPrivate( SessionController* s ) : q(s), activeSession(0), recoveryDirectoryIsOwn(false) {
+    SessionControllerPrivate( SessionController* s )
+        : q(s)
+        , activeSession(0)
+        , grp(0)
+        , recoveryDirectoryIsOwn(false)
+    {
         recoveryTimer.setInterval(recoveryStorageInterval * 1000);
         connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
         
@@ -705,9 +710,11 @@ void SessionController::deleteSession( const QString& nameOrId )
     Q_ASSERT( it != d->sessionActions.end() );
 
     unplugActionList( "available_sessions" );
-    d->grp->removeAction(*it);
     actionCollection()->removeAction(*it);
-    plugActionList( "available_sessions", d->grp->actions() );
+    if (d->grp) { // happens in unit tests
+        d->grp->removeAction(*it);
+        plugActionList( "available_sessions", d->grp->actions() );
+    }
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
     d->sessionActions.remove(s);
