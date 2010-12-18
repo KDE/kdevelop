@@ -26,6 +26,7 @@
 
 #include <QStack>
 #include <KDebug>
+#include <KMimeType>
 
 QMap<QChar, QChar> whatToScape()
 {
@@ -264,6 +265,11 @@ bool CMakeListsParser::parseCMakeFunction( cmListFileLexer* lexer,
 
 CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
 {
+    KMimeType::Ptr mimeType = KMimeType::findByPath(fileName);
+    if (!mimeType->is("text/plain")) {
+        kWarning() << "not parsing cmake file" << fileName << "(mime type is" << mimeType->name() << ", but text/plain was expected)";
+        return CMakeFileContent();
+    }
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
         return CMakeFileContent();
