@@ -586,7 +586,13 @@ void KDevelop::RunController::checkState()
 
 void KDevelop::RunController::stopAllProcesses()
 {
+    // composite jobs might remove child jobs, see also:
+    // https://bugs.kde.org/show_bug.cgi?id=258904
+    // foreach already iterates over a copy
     foreach (KJob* job, d->jobs.keys()) {
+        // now we check the real list whether it was deleted
+        if (!d->jobs.contains(job))
+            continue;
         if (job->capabilities() & KJob::Killable)
             job->kill(KJob::EmitResult);
     }
