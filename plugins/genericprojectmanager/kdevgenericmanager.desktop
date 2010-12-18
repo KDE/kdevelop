@@ -92,5 +92,6 @@ X-KDevelop-FileManager=None
 X-KDevelop-Version=11
 X-KDevelop-Interfaces=org.kdevelop.IProjectFileManager,org.kdevelop.IGenericProjectManager
 X-KDE-PluginInfo-Author=Milian Wolff
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-Mode=GUI
 

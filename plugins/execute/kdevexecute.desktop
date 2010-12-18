@@ -88,5 +88,6 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevexecute
 X-KDE-PluginInfo-Author=Hamish Rodda
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Core
 X-KDevelop-Interfaces=org.kdevelop.IExecutePlugin
 X-KDevelop-Mode=NoGUI

@@ -70,6 +70,7 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevexternalscript
 X-KDE-PluginInfo-Author=Milian Wolff
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Interfaces=org.kdevelop.IPlugin
 X-KDevelop-Mode=GUI
 X-KDevelop-IRequired=org.kdevelop.IOutputView

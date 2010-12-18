@@ -65,5 +65,6 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevpastebin
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Mode=GUI
 X-KDevelop-Interfaces=org.kdevelop.IPatchExporter

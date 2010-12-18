@@ -86,4 +86,5 @@ X-KDevelop-Interfaces=org.kdevelop.IPatchReview
 X-KDE-PluginInfo-Name=kdevpatchreview
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Mode=GUI
