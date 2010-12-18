@@ -91,5 +91,6 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevcontextbrowser
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Core
 X-KDevelop-IRequired=org.kdevelop.IQuickOpen
 X-KDevelop-Mode=GUI

@@ -88,4 +88,5 @@ X-KDE-PluginInfo-Name=kdevopenwith
 X-KDE-PluginInfo-Author=Andreas Pakulat
 X-KDevelop-Interfaces=org.kdevelop.IOpenWith
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Core
 X-KDevelop-Mode=GUI

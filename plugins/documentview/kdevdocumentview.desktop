@@ -86,6 +86,7 @@ X-KDE-PluginInfo-Name=kdevdocumentview
 X-KDE-PluginInfo-Author=Adam Treat
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

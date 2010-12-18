@@ -94,4 +94,5 @@ X-KDevelop-Interfaces=org.kdevelop.IQuickOpen
 X-KDE-PluginInfo-Name=kdevquickopen
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Core
 X-KDevelop-Mode=GUI
