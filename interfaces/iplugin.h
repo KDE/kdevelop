@@ -79,6 +79,7 @@ class ContextMenuExtension;
  * X-KDE-PluginInfo-Author=
  * X-KDE-PluginInfo-Version=
  * X-KDE-PluginInfo-License=
+ * X-KDE-PluginInfo-Category=
  * X-KDevelop-Version=
  * X-KDevelop-Category=
  * X-KDevelop-Mode=GUI
@@ -105,6 +106,10 @@ class ContextMenuExtension;
  * - <i>X-KDE-PluginInfo-License</i> is a license (optional). can be: GPL,
  * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
  * considered as unknown;
+ * - <i>X-KDE-PluginInfo-Category</i> is used to categorize plugins (optional). can be:
+ *    Core, Project Management, Version Control, Utilities, Documentation,
+ *    Language Support, Debugging, Other
+ *   If this property is not set, "Other" is assumed
  * - <i>X-KDevelop-Version</i> is the KDevPlatform API version this plugin
  *   works with (required);
  * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
