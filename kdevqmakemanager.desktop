@@ -30,6 +30,7 @@ Icon=qtlogo
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevqmakemanager
 X-KDE-PluginInfo-Name=KDevQMakeManager
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-FileManager=QMake
 X-KDevelop-Version=11
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
