@@ -427,13 +427,13 @@ void TestDUChain::testIntegralTypes()
 {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;");
+  QByteArray method("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l; long long o; long long int p;");
 
   LockedTopDUContext top = parse(method, DumpNone);
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 0);
-  QCOMPARE(top->localDeclarations().count(), 6);
+  QCOMPARE(top->localDeclarations().count(), 8);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
   Declaration* defI = top->localDeclarations().first();
@@ -480,6 +480,21 @@ void TestDUChain::testIntegralTypes()
   QVERIFY(base);
   QCOMPARE(base->dataType(), (uint)IntegralType::TypeInt);
   QCOMPARE(base->modifiers(), (unsigned long long)AbstractType::ConstModifier);
+
+  Declaration* defO = top->localDeclarations()[6];
+  QCOMPARE(defO->identifier(), Identifier("o"));
+  QVERIFY(defO->type<IntegralType>());
+  QCOMPARE(defO->type<IntegralType>()->modifiers(),
+           (unsigned long long)AbstractType::LongLongModifier |
+           (unsigned long long)AbstractType::LongModifier);
+  QCOMPARE(defO->abstractType()->toString(), QString("long long int"));
+
+  Declaration* defP = top->localDeclarations()[7];
+  QCOMPARE(defP->identifier(), Identifier("p"));
+  QVERIFY(defP->type<IntegralType>());
+  QCOMPARE(defP->type<IntegralType>()->modifiers(),
+           defO->type<IntegralType>()->modifiers());
+  QCOMPARE(defP->abstractType()->toString(), QString("long long int"));
 
   //Even if reference/pointer types have an invalid target, they should still preserve the pointer
   QVERIFY(AbstractType::Ptr(new ReferenceType)->toString().endsWith("&"));
