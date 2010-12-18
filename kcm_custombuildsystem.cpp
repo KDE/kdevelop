@@ -26,7 +26,7 @@
 #include "kcfg_custombuildsystemconfig.h"
 
 K_PLUGIN_FACTORY(CustomBuildSystemKCModuleFactory, registerPlugin<CustomBuildSystemKCModule>(); )
-K_EXPORT_PLUGIN(CustomBuildSystemKCModuleFactory("kcm_kdevcustombuildsystem"))
+K_EXPORT_PLUGIN(CustomBuildSystemKCModuleFactory("kcm_kdevcustombuildsystem", "kdevcustombuildsystem"))
 
 CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVariantList& args )
     : ProjectKCModule<CustomBuildSystemSettings>( CustomBuildSystemKCModuleFactory::componentData(), parent, args )
