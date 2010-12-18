@@ -109,6 +109,7 @@ X-KDevelop-Category=Global
 X-KDevelop-Version=11
 X-KDE-PluginInfo-Name=kdevgdb
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Debugging
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Interfaces=org.kdevelop.IStatus
 X-KDevelop-IRequired=org.kdevelop.IExecutePlugin

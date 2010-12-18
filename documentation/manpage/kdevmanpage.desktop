@@ -52,5 +52,6 @@ X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=KDevManPage
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Documentation
 X-KDevelop-Mode=GUI
 X-KDevelop-Interfaces=org.kdevelop.IDocumentationProvider

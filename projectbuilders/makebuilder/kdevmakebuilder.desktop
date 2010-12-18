@@ -89,6 +89,7 @@ Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevmakebuilder
 X-KDE-PluginInfo-Name=KDevMakeBuilder
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-Version=11
 X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder

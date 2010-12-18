@@ -88,6 +88,7 @@ Icon=system-run
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcmakebuilder
 X-KDE-PluginInfo-Name=KDevCMakeBuilder
+X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-ProjectBuilder=CMake
 X-KDevelop-Version=11
 X-KDevelop-Category=Project
