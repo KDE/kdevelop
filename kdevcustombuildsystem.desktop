@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[es]=Sistema de construcción personalizado
 Name[nds]=Topasst Buusystem
 Name[pt]=Sistema de Compilação Personalizado
 Name[pt_BR]=Sistema de Compilação personalizado
@@ -8,6 +9,7 @@ Name[sv]=Eget byggsystem
 Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Comment=KDevelop Custom BuildSystem Support
+Comment[es]=Implementación del sistema de construcción personalizado de KDevelop
 Comment[pt]=Suporte para Sistemas de Compilação Personalizados
 Comment[pt_BR]=Suporte para Sistemas de Compilação personalizados
 Comment[sv]=Kdevelop stöd för eget byggsystem
