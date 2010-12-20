@@ -9,6 +9,7 @@ X-KDE-FactoryName=kcm_kdev_ccsettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
+X-KDE-Weight=1
 
 Name=Language Support
 Name[bg]=Поддържани езици
