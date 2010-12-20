@@ -166,8 +166,11 @@ public:
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
+            const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
+            if (info.property("X-KDevelop-Category").toString() != "Project")
+                continue;
             if( !iface || plugin == project->managerPlugin() )
-                pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
+                pluginnames << info.pluginName();
         }
 
         return pluginnames;
