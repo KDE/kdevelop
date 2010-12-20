@@ -2768,6 +2768,22 @@ void TestDUChain::testSignalSlotUse() {
     QCOMPARE(sig->uses().begin()->count(), 1);
     QCOMPARE(sig->uses().begin()->first(), RangeInRevision(4, 52, 4, 59));
   }
+  {
+    QByteArray text("int main() { const char* signal; signal = __qt_signal__(someSignal()); }");
+
+    LockedTopDUContext top = parse(text, DumpNone);
+
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts().at(1)->localDeclarations().size(), 1);
+    Declaration* sig =
+        dynamic_cast<Declaration*>(top->childContexts().at(1)->localDeclarations().first());
+    QVERIFY(sig);
+    QVERIFY(sig->identifier() == Identifier("signal"));
+    QCOMPARE(sig->uses().size(), 1);
+    QCOMPARE(sig->uses().begin()->count(), 1);
+    QCOMPARE(sig->uses().begin()->first(), RangeInRevision(0, 33, 0, 39));
+  }
 }
 
 void TestDUChain::testFunctionDefinition() {
