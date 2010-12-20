@@ -7,14 +7,8 @@ set(qthelpplugintest_SRCS
     ../qthelpprovider.cpp
     ../qthelpdocumentation.cpp
     ../qthelpqtdoc.cpp
-    ../qthelpconfig.cpp
+    ../qthelp_config_shared.cpp
 )
-
-set(kdevqthelp_config_UI
-    ../qthelpconfig.ui
-)
-
-kde4_add_ui_files(qthelpplugintest_SRCS ${kdevqthelp_config_UI})
 
 kde4_add_unit_test(qthelpplugintest ${qthelpplugintest_SRCS} )
 target_link_libraries( qthelpplugintest ${QT_QTTEST_LIBRARY}     ${KDE4_KCMUTILS_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTHELP_LIBRARY} ${QT_QTWEBKIT_LIBRARY}

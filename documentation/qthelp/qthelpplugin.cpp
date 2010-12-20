@@ -26,17 +26,13 @@
 #include <KSettings/Dispatcher>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <kconfiggroup.h>
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
-#include "qthelpconfig.h"
+#include "qthelp_config_shared.h"
 
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
-K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory,
-                 registerPlugin<QtHelpPlugin>();
-registerPlugin<QtHelpConfig>();
-)
+K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
@@ -49,7 +45,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     Q_UNUSED(args);
     s_plugin = this;
     readConfig();
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp_config"),
                                                     this, "readConfig" );
     connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDocumentationProviders()));
 }
@@ -61,11 +57,9 @@ QtHelpPlugin::~QtHelpPlugin()
 
 void QtHelpPlugin::readConfig()
 {
-    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
-    QStringList iconList = cg.readEntry("iconList", QStringList());
-    QStringList nameList = cg.readEntry("nameList", QStringList());
-    QStringList pathList = cg.readEntry("pathList", QStringList());
-    bool loadQtDoc = cg.readEntry("loadQtDocs", true);
+    QStringList iconList, nameList, pathList;
+    bool loadQtDoc;
+    qtHelpReadConfig(iconList, nameList, pathList, loadQtDoc);
 
     loadQtHelpProvider(pathList, nameList, iconList);
     loadQtDocumentation(loadQtDoc);
@@ -125,15 +119,6 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
 
     // delete unused providers
     qDeleteAll(oldList);
-}
-
-void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc)
-{
-    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
-    cg.writeEntry("iconList", iconList);
-    cg.writeEntry("nameList", nameList);
-    cg.writeEntry("pathList", pathList);
-    cg.writeEntry("loadQtDocs", loadQtDoc);
 }
 
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()

@@ -23,7 +23,7 @@
 
 #include <KCModule>
 
-#include "ui_qthelpconfig.h"
+#warning included
 
 namespace Ui
 {

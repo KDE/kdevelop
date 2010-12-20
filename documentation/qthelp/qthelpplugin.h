@@ -42,8 +42,6 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         virtual QList<KDevelop::IDocumentationProvider*> providers();
         QList<QtHelpProvider*> qtHelpProviderLoaded();
         bool qtHelpQtDocLoaded();
-        void writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc);
-
 
     public slots:
         void readConfig();
