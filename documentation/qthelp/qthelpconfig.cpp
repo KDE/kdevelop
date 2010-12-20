@@ -18,8 +18,6 @@
     Boston, MA 02110-1301, USA.
 */
 
-#warning help config
-
 #include "qthelpconfig.h"
 
 #include <KMessageBox>
