@@ -9,6 +9,7 @@ X-KDE-FactoryName=kcm_kdev_projectsettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
+X-KDE-Weight=3
 
 Name=Projects
 Name[bg]=Проекти

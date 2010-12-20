@@ -9,6 +9,7 @@ X-KDE-FactoryName=kcm_kdev_bgsettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
+X-KDE-Weight=4
 
 Name=Background Parser
 Name[bg]=Фонов анализатор на синтаксиса

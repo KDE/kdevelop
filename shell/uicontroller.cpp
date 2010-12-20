@@ -392,6 +392,11 @@ void UiController::addNewToolView(MainWindow *mw)
 void UiController::showSettingsDialog()
 {
     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
+    foreach(const KPluginInfo& info, d->core->pluginControllerInternal()->allPluginInfos()) {
+        if (!blacklist.contains(info.pluginName()) && !info.isPluginEnabled()) {
+            blacklist << info.pluginName();
+        }
+    }
     kDebug() << "blacklist" << blacklist;
     KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
                                         activeMainWindow() );

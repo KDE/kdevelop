@@ -9,6 +9,8 @@ X-KDE-FactoryName=kcm_kdevsourceformattersettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
+X-KDE-Weight=5
+
 Name=Source Formatter
 Name[bg]=Форматиращ модул за програмен текст
 Name[ca]=Formatador de codi font
