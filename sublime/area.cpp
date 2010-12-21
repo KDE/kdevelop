@@ -163,12 +163,6 @@ void Area::setActiveView(View* view)
 
 void Area::addView(View *view, AreaIndex *index)
 {
-    addViewSilently(view, index);
-    emit viewAdded(index, view);
-}
-
-void Area::addViewSilently(View *view, AreaIndex *index)
-{
     View *after = 0;
     if (controller()->openAfterCurrent()) {
         after = activeView();
@@ -177,6 +171,7 @@ void Area::addViewSilently(View *view, AreaIndex *index)
     connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
     kDebug() << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+    emit viewAdded(index, view);
 }
 
 void Area::addView(View *view, View *after)

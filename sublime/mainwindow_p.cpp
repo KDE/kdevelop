@@ -195,7 +195,6 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
     kDebug() << "reconstructing views for area index" << index;
-    QSplitter *parent = 0;
     QSplitter *splitter = d->m_indexSplitters.value(index);
     if (!splitter)
     {
@@ -210,13 +209,18 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         }
         else
         {
-            parent = d->m_indexSplitters[index->parent()];
-            Q_ASSERT(parent);
+            if (!d->m_indexSplitters.value(index->parent())) {
+                // can happen in working set code, as that adds a view to a child index first
+                // hence, recursively reconstruct the parent indizes first
+                operator()(index->parent());
+            }
+            QSplitter *parent = d->m_indexSplitters.value(index->parent());
             kDebug() << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
             parent->addWidget(splitter);
         }
+        Q_ASSERT(splitter);
     }
     splitter->show();
 
