@@ -23,6 +23,8 @@
 
 #include <KCModule>
 
+#include "ui_qthelpconfig.h"
+
 namespace Ui
 {
     class QtHelpConfigUI;

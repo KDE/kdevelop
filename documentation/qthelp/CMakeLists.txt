@@ -6,8 +6,14 @@ set(kdevqthelp_SRCS
     qthelpprovider.cpp
     qthelpdocumentation.cpp
     qthelpqtdoc.cpp
-    qthelp_config_shared.cpp
+    qthelpconfig.cpp
 )
+
+set(kdevqthelp_config_UI
+    qthelpconfig.ui
+)
+
+kde4_add_ui_files(kdevqthelp_SRCS ${kdevqthelp_config_UI})
 
 kde4_add_plugin(kdevqthelp ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
@@ -15,21 +21,4 @@ target_link_libraries(kdevqthelp
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES})
 
 install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install(FILES kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
-### Configuration module for QtHelp plugin
-
-set(kdevqthelp_config_SRCS
-    qthelpconfig.cpp
-    qthelp_config_shared.cpp
-)
-
-kde4_add_ui_files(kdevqthelp_config_SRCS qthelpconfig.ui)
-
-kde4_add_plugin( kdevqthelp_config ${kdevqthelp_config_SRCS} )
-
-target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} ${QT_QTHELP_LIBRARY} )
-
-install( TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES kdevqthelp.desktop kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})

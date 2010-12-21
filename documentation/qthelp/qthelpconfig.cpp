@@ -21,23 +21,13 @@
 #include "qthelpconfig.h"
 
 #include <KMessageBox>
-#include <KLocalizedString>
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
-#include <KDebug>
-#include <KSettings/Dispatcher>
-
-#include <qhelpenginecore.h>
 
 #include "ui_qthelpconfig.h"
-#include "qthelp_config_shared.h"
-
-K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
-K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
+#include "qthelpplugin.h"
+#include "qthelpprovider.h"
 
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(QtHelpConfigFactory::componentData(), parent, args)
+    : KCModule(QtHelpFactory::componentData(), parent, args)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
 
@@ -76,18 +66,19 @@ QtHelpConfig::~QtHelpConfig()
 
 void QtHelpConfig::save()
 {
-    QStringList iconList, nameList, pathList;
-    for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
-        nameList << m_configWidget->qchTable->item(i,0)->text();
-        pathList << m_configWidget->qchTable->item(i,1)->text();
-        iconList << m_configWidget->qchTable->item(i,2)->text();
+    QtHelpPlugin *plugin = QtHelpPlugin::self();
+    if(plugin){
+        QStringList iconList;
+        QStringList nameList;
+        QStringList pathList;
+        for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
+            nameList << m_configWidget->qchTable->item(i,0)->text();
+            pathList << m_configWidget->qchTable->item(i,1)->text();
+            iconList << m_configWidget->qchTable->item(i,2)->text();
+        }
+        bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
+        plugin->writeConfig(iconList, nameList, pathList, loadQtDoc);
     }
-    bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
-
-    qtHelpWriteConfig(iconList, nameList, pathList, loadQtDoc);
-
-    KSettings::Dispatcher::reparseConfiguration( componentData().componentName() );
-
     emit changed(false);
 }
 
@@ -96,24 +87,21 @@ void QtHelpConfig::load()
     while(m_configWidget->qchTable->rowCount()) {
         m_configWidget->qchTable->removeRow(0);
     }
-
-    QStringList iconList, nameList, pathList;
-    bool loadQtDoc;
-    qtHelpReadConfig(iconList, nameList, pathList, loadQtDoc);
-
-    const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
-    for(int i = 0; i < size; ++i) {
-        m_configWidget->qchTable->insertRow(i);
-        QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(iconList.at(i)), nameList.at(i));
-        m_configWidget->qchTable->setItem(i, 0, itemName);
-        QTableWidgetItem *itemPath = new QTableWidgetItem(pathList.at(i));
-        m_configWidget->qchTable->setItem(i, 1, itemPath);
-        QTableWidgetItem *itemIconName = new QTableWidgetItem(iconList.at(i));
-        m_configWidget->qchTable->setItem(i, 2, itemIconName);
+    QtHelpPlugin *plugin = QtHelpPlugin::self();
+    if(plugin){
+        plugin->readConfig();
+        foreach(QtHelpProvider* qtProvider, plugin->qtHelpProviderLoaded()) {
+            int row = m_configWidget->qchTable->rowCount();
+            m_configWidget->qchTable->insertRow(row);
+            QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(qtProvider->iconName()), qtProvider->name());
+            m_configWidget->qchTable->setItem(row, 0, itemName);
+            QTableWidgetItem *itemPath = new QTableWidgetItem(qtProvider->fileName());
+            m_configWidget->qchTable->setItem(row, 1, itemPath);
+            QTableWidgetItem *itemIconName = new QTableWidgetItem(qtProvider->iconName());
+            m_configWidget->qchTable->setItem(row, 2, itemIconName);
+        }
+        m_configWidget->loadQtDocsCheckBox->setChecked(plugin->qtHelpQtDocLoaded());
     }
-
-    m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
-
     emit changed(false);
 }
 
