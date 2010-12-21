@@ -210,7 +210,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     if (!area->views().isEmpty()) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
             if(window->area() == area) {
-                window->setArea(area);
                 QString activeView = group.readEntry("Active View", QString());
                 kDebug() << activeView;
                 bool found = false;
@@ -221,7 +220,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                         break;
                     }
                 }
-                if (!found) window->activateView(area->views().first()); //fallback
                 break;
             }
         }
@@ -283,7 +281,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 if (!state.isEmpty())
                     view->setState(state);
 
-                area->addViewSilently(view, areaIndex);
+                area->addView(view, areaIndex);
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }
