@@ -1,8 +1,9 @@
 [Desktop Entry]
 Icon=qtlogo
 Type=Service
-X-KDE-ServiceTypes=KCModule
-X-KDE-Library=kdevqthelp
+ServiceTypes=KCModule
+X-KDE-ModuleType=Library
+X-KDE-Library=kdevqthelp_config
 X-KDE-FactoryName=kdevqthelp_config
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform,kdevqthelp
