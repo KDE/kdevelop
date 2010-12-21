@@ -47,6 +47,19 @@ DumpChain::~ DumpChain( )
 {
 }
 
+class Indent {
+private:
+  int m_level;
+public:
+  Indent(int level): m_level(level) {}
+  friend QDebug operator<<(QDebug debug, const Indent& ind) {
+    for (int i=0; i<ind.m_level; i++) {
+      debug << ' ';
+    }
+    return debug;
+  }
+};
+
 void DumpChain::dump( DUContext * context, int allowedDepth )
 {
   if(!top)
@@ -63,7 +76,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     case DUContext::Helper: type = "Helper"; break;
     case DUContext::Other: type = "Other"; break;
   }
-  kDebug() << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+  kDebug() << Indent(indent * 2) << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
 
 
   if( !context )
@@ -73,20 +86,20 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
 
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
 
-      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
+      kDebug() << Indent((indent+1) * 2) << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (FunctionDefinition::definition(dec)) {
-        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
+        kDebug() << Indent((indent+1) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
       }
       QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
       for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
-        kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
+        kDebug() << Indent((indent+2) * 2) << "File:" << it.key().str();
         foreach (const SimpleRange& range, *it) {
-          kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();
+          kDebug() << Indent((indent+2) * 2+1) << "Use:" << range.textRange();
         }
       }
     }
   } else {
-    kDebug() << QString((indent+1) * 2, ' ') << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts";
+    kDebug() << Indent((indent+1) * 2) << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts";
   }
 
   ++indent;
@@ -94,12 +107,12 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     foreach (const DUContext::Import &parent, context->importedParentContexts()) {
       DUContext* import = parent.context(top);
       if(!import) {
-          kDebug() << QString((indent+2) * 2+1, ' ') << "Could not get parent, is it registered in the DUChain?";
+          kDebug() << Indent((indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?";
           continue;
       }
 
       if(had.contains(import)) {
-        kDebug() << QString((indent+2) * 2+1, ' ') << "skipping" << import->scopeIdentifier(true) << "because it was already printed";
+        kDebug() << Indent((indent+2) * 2+1) << "skipping" << import->scopeIdentifier(true) << "because it was already printed";
         continue;
       }
       had.insert(import);
