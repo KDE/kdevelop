@@ -121,8 +121,7 @@ class ControlFlowToDot
       int i=0;
       *m_dev << "digraph " << name << " {\n";
       for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it, ++i) {
-        *m_dev << "  subgraph cluster_" << i << "  {\n"
-                                                       "\tstyle=filled;\n\tcolor=lightgrey;\n";
+        *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
         r &= exportNode(*it);
         *m_dev << "  }\n";
       }
@@ -130,6 +129,7 @@ class ControlFlowToDot
       QVector< ControlFlowNode* > deadNodes = graph->deadNodes();
       if(!deadNodes.isEmpty()) {
         *m_dev << "  subgraph cluster_"<< i <<"  {\n";
+        *m_dev << "\tlabel = \"Dead Nodes\";";
         foreach(ControlFlowNode* node, deadNodes) {
           *m_dev << '\t' << nodesName(node) << " [color=green]\n\n";
         }
