@@ -62,13 +62,13 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());
     m_prefsUi->cacheList->setItemDelegate(new CMakeCacheDelegate(m_prefsUi->cacheList));
+    m_prefsUi->cacheList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
+    m_prefsUi->cacheList->verticalHeader()->hide();
     addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
             this, SLOT(buildDirChanged( const QString & )));
-    connect(m_prefsUi->cacheList, SIGNAL(clicked ( const QModelIndex & ) ),
-            this, SLOT(listSelectionChanged ( const QModelIndex & )));
     connect(m_prefsUi->showInternal, SIGNAL( stateChanged ( int ) ),
             this, SLOT(showInternal ( int )));
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
@@ -134,12 +134,16 @@ void CMakePreferences::save()
     KUrl installPrefix;
     QString buildType;
     
+    bool needReconfiguring = true;
     if(m_currentModel)
     {
         cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
         installPrefix=m_currentModel->value("CMAKE_INSTALL_PREFIX");
         buildType=m_currentModel->value("CMAKE_BUILD_TYPE");
-        m_currentModel->writeDown();
+        if (!m_currentModel->writeDown()) {
+            KMessageBox::error(this, i18n("Could not write CMake settings to file '%1'.\nCheck that you have write access to it", m_currentModel->filePath().pathOrUrl()));
+            needReconfiguring = false;
+        }
     }
     
     item = CMakeSettings::self()->findItem("cmakeBin");
@@ -156,7 +160,9 @@ void CMakePreferences::save()
     CMakeSettings::self()->writeConfig();
     
     //We run cmake on the builddir to generate it 
-    configure();
+    if (needReconfiguring) {
+        configure();
+    }
 }
 
 void CMakePreferences::defaults()
@@ -180,6 +186,8 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->setEnabled(true);
         connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
                 this, SLOT( cacheEdited( QStandardItem * ) ));
+        connect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(listSelectionChanged (QModelIndex,QModelIndex)));
         
         foreach(const QModelIndex &idx, m_currentModel->persistentIndices())
         {
@@ -197,7 +205,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
 }
 
-void CMakePreferences::listSelectionChanged(const QModelIndex & index)
+void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QModelIndex& )
 {
     kDebug(9042) << "item " << index << " selected";
     QModelIndex idx = index.sibling(index.row(), 3);

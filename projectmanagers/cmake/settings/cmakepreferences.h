@@ -27,6 +27,7 @@
 
 #include <KSharedConfig>
 
+class QItemSelection;
 class CMakeSettings;
 
 namespace Ui { class CMakeBuildSettings; }
@@ -46,7 +47,7 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         virtual void load();
         virtual void save();
         virtual void defaults();
-        void listSelectionChanged ( const QModelIndex & index );
+        void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(true); }
         void buildDirChanged(const QString &);

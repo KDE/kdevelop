@@ -101,7 +101,13 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
         KDevelop::DUChainReadLocker lock;
         KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         if(qid.count() == 1){
-            return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier+"a", KUrl("man:"+identifier))));
+            if(m_model->identifierInSection(identifier, "3")){
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:(3)/"+identifier))));
+            } else if(m_model->identifierInSection(identifier, "2")){
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:(2)/"+identifier))));
+            } else {
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:"+identifier))));
+            }
         }
     }
     return  KSharedPtr<IDocumentation>();

@@ -22,6 +22,7 @@
 
 #include "astfactory.h"
 #include "cmakeparserutils.h"
+#include <QtCore/QRegExp>
 
 QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 {
@@ -67,6 +68,7 @@ QSet<QString> CMakeCondition::s_trueDefinitions=QSet<QString>() << "1" << "ON" <
 
 CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v)
     : m_vars(v->variables()), m_cache(v->cache()), m_visitor(v)
+    , m_numberRx(" *-?[0-9]+")
 {
 }
 
@@ -80,27 +82,15 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
-//     qDebug() << "+++++++ isTrue: " << varName;
     QString val = *it;
     QString valUpper = val.toUpper();
     bool ret;
-
+//     qDebug() << "+++++++ isTrue: " << val;
 //         Documentation currently say
 //         * if(<constant>)
 //         *    True if the constant is 1, ON, YES, TRUE, Y, or a non-zero number. False if the constant is 0, OFF, NO, FALSE, N, IGNORE, "", or ends in the suffix '-NOTFOUND'. Named boolean constants are case-insensitive.
 //         Then, if not one of the named constant, it is apparently treated as a variables or an expression.
-    if (!val.isEmpty() && val.at(val.size()-1).isDigit())
-    {
-        // Number case
-        bool ok;
-        int n = val.toInt(&ok);
-        if (ok && n!=0) {
-            ret = true;
-        } else {
-            ret = false;
-        }
-    }
-    else if (s_trueDefinitions.contains(valUpper))
+    if (s_trueDefinitions.contains(valUpper))
     {
         // TODO Don't go here if CMP0012 is OLD
         ret = true;
@@ -110,7 +100,14 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
         // TODO Don't go here if CMP0012 is OLD
         ret = false;
     }
-    else
+    else if (m_numberRx.exactMatch(val))
+    {
+        // Number case
+        bool ok;
+        int n = val.toInt(&ok);
+        ret = ok && n!=0;
+    }
+    else 
     {
         QString value;
         if(m_vars->contains(val))
@@ -181,13 +178,15 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 break;
             case EXISTS:
             {
+                last=false;
                 QString v=*(it2+1);
+                
                 if(v.isEmpty())
                     kDebug(9042) << "error: no parameter to exist";
+                else if(v.startsWith("/.."))
+                    last=false;
                 else
                 {
-                    last=false;
-                    
                     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
                     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                     QFileInfo f(dir, v);

@@ -160,6 +160,8 @@ void ManPageModel::sectionDataReceived(KJob *job){
     } else {
         // End of init
         m_loaded = true;
+        m_index.removeDuplicates();
+        m_index.sort();
         m_indexModel->setStringList(m_index);
         delete iterator;
         emit manPagesLoaded();
@@ -181,7 +183,7 @@ QList<ManSection> ManPageModel::indexParser(){
      QList<ManSection> list;
      foreach(QWebElement e, links){
          QString sectionId = e.attribute("href");
-         sectionId = sectionId.mid(5,sectionId.size()-1);
+         sectionId = sectionId.mid(5,sectionId.size()-6);
          list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
      }
      delete page;
@@ -189,20 +191,37 @@ QList<ManSection> ManPageModel::indexParser(){
 }
 
 void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
-     QWebPage * page = new QWebPage();
-     QWebFrame * frame = page->mainFrame();
-     frame->setHtml(data);
-     QWebElement document = frame->documentElement();
-     QWebElementCollection links = document.findAll("a");
-     QList<ManPage> pageList;
-     foreach(QWebElement e, links){
-         if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
-             pageList.append(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))));
-             m_index.append(e.toPlainText());
-         }
-     }
-     m_manMap.insert(sectionId, pageList);
-     delete page;
+    // the regex version is much faster than the QWebKit one...
+    static QRegExp linkRegex("<a href=\"(man:[^\"#]+)\">([^<]+)</a>", Qt::CaseSensitive, QRegExp::RegExp2);
+    int pos = 0;
+    QList<ManPage> pageList;
+    while (-1 != (pos = data.indexOf(linkRegex, pos))) {
+        const QString text = linkRegex.cap(2).trimmed();
+        pageList.append(qMakePair(text, KUrl(linkRegex.cap(1))));
+        m_index.append(text);
+        pos++;
+    }
+    m_manMap.insert(sectionId, pageList);
+
+    /* 
+    ///NOTE: this is slow, esp. the .toPlainText()
+    QWebPage * page = new QWebPage();
+    QWebFrame * frame = page->mainFrame();
+    frame->setHtml(data);
+    QWebElement document = frame->documentElement();
+    QWebElementCollection links = document.findAll("a");
+    QList<ManPage> pageList2;
+    foreach(QWebElement e, links){
+        if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
+            pageList2.append(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))));
+            m_index.append(e.toPlainText());
+        }
+    }
+    m_manMap.insert(sectionId, pageList2);
+    delete page;
+
+    Q_ASSERT(pageList2 == pageList);
+    */
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){
@@ -243,6 +262,17 @@ bool ManPageModel::isLoaded() const
 int ManPageModel::nbSectionLoaded() const
 {
     return m_nbSectionLoaded;
+}
+
+bool ManPageModel::identifierInSection(const QString &identifier, const QString& section) const
+{
+    QList<ManPage> list = m_manMap.value(section);
+    foreach(ManPage page, list){
+        if(page.first == identifier){
+            return true;
+        }
+    }
+    return false;
 }
 
 #include "manpagemodel.moc"

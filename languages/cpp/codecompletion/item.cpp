@@ -42,6 +42,8 @@
 #include <language/codecompletion/codecompletionhelper.h>
 #include "context.h"
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/movingrange.h>
+#include <ktexteditor/movinginterface.h>
 
 using namespace KDevelop;
 
@@ -49,9 +51,11 @@ namespace Cpp {
 
 
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
+
+  KTextEditor::Range word(_word);
 
   if(m_isQtSignalSlotCompletion) {
     bool addSignalSlot = true;
@@ -121,8 +125,22 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }else{
     newText = alternativeText;
   }
-
+  
+  // Text that will be removed in a separate editing step (so the user can undo it)
+  std::auto_ptr<KTextEditor::MovingRange> removeInSecondStep;
+  
+  KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
+  if(cursor != word.end())
+  {
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
+    Q_ASSERT(moving);
+    removeInSecondStep =  std::auto_ptr<KTextEditor::MovingRange>(
+      moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
+    word.end() = cursor;
+  }
+  
   document->replaceText(word, newText);
+  
   KTextEditor::Cursor end = word.start();
   end.setColumn(end.column() + newText.length());
   
@@ -130,33 +148,49 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   
-  if(!m_declaration.data())
-    return;
-  
-  Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
-  if(templateDecl) {
-    DUContext* context = templateDecl->templateContext(m_declaration->topContext());
-    if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
-      jumpForbidden = true;
+  if(m_declaration.data())
+  {
+    Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
+    if(templateDecl) {
+      DUContext* context = templateDecl->templateContext(m_declaration->topContext());
+      if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
+        jumpForbidden = true;
+        lock.unlock();
+        document->insertText( end, "<>" );
+        end.setColumn(end.column() + 2);
+        document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
+        lock.lock();
+      }
+    }
+    
+    if(m_declaration.data()->kind() == Declaration::Namespace) {
       lock.unlock();
-      document->insertText( end, "<>" );
+      document->insertText(end, "::");
       end.setColumn(end.column() + 2);
-      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
+    }
+      
+    if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
+      //Do some intelligent stuff for functions with the parens:
+      lock.unlock();
+      insertFunctionParenText(document, end, m_declaration, jumpForbidden);
     }
   }
   
-  if(m_declaration.data()->kind() == Declaration::Namespace) {
-    lock.unlock();
-    document->insertText(end, "::");
-    end.setColumn(end.column() + 2);
-    lock.lock();
-  }
-    
-  if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
-    //Do some intelligent stuff for functions with the parens:
-    lock.unlock();
-    insertFunctionParenText(document, end, m_declaration, jumpForbidden);
+  
+  if(removeInSecondStep.get())
+  {
+    KTextEditor::Range removeRange = removeInSecondStep->toRange();
+    if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))
+    {
+      // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
+      bool wasEditing = document->endEditing();
+      if(wasEditing)
+        document->startEditing();
+      else
+        kWarning() << "Was not editing";
+      document->removeText(removeRange);
+    }
   }
 }
 
@@ -703,10 +737,14 @@ namespace {
   uint currentMaxArgumentHints = defaultMaxArgumentHints;
 };
 
-uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints()
+uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticCompletion)
 {
   uint ret = currentMaxArgumentHints;
   currentMaxArgumentHints = defaultMaxArgumentHints;
+  
+  if(isAutomaticCompletion)
+    return 1;
+  
   return ret;
 }
 

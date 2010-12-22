@@ -47,6 +47,7 @@ class CMakeCacheModel : public QStandardItemModel
         bool isInternal(int i) const;
         
         QList<QModelIndex> persistentIndices() const;
+        KUrl filePath() const;
     private slots:
         void edited() { m_changed=true; }
         

@@ -66,6 +66,7 @@ X-KDE-PluginInfo-Author=Friedrich W. H. Kossebau
 X-KDE-PluginInfo-Email=kossebau@kde.org
 X-KDE-PluginInfo-Version=0.1.0
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

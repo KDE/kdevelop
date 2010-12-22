@@ -51,6 +51,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
 //         int m_parameters[Last];
 
         QStringList::const_iterator conditionBegin;
+        QRegExp m_numberRx;
 };
 
 #endif

@@ -391,6 +391,21 @@ void ReplaceCurrentAccess::exec(KUrl url, QString old, QString _new)
       KTextEditor::View* activeView = textDocument->activeView();
       if(activeView) {
         KTextEditor::Cursor cursor = activeView->cursorPosition();
+        
+        static KUrl lastUrl;
+        static KTextEditor::Cursor lastPos;
+        static QString lastOld;
+        static QString lastNew;
+        if(lastUrl == url && lastPos == cursor)
+        {
+          kDebug() << "Not doing the same access replacement twice at" << lastUrl << lastPos;
+          return;
+        }
+        lastUrl = url;
+        lastPos = cursor;
+        lastOld = old;
+        lastNew = _new;
+        
         KTextEditor::Range oldRange = KTextEditor::Range(cursor-KTextEditor::Cursor(0,old.length()), cursor);
         if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == old) {
           textDocument->replaceText(oldRange, _new);

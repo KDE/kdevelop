@@ -66,5 +66,6 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevkdeprovider
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Mode=GUI
 X-KDevelop-Interfaces=org.kdevelop.IProjectProvider

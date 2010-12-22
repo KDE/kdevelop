@@ -57,6 +57,7 @@
 #include <templateparameterdeclaration.h>
 #include <language/duchain/classdeclaration.h>
 #include "qpropertydeclaration.h"
+#include "model.h"
 
 // #define ifDebug(x) x
 
@@ -1280,7 +1281,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           {
             ifDebug( kDebug() << "functionCallAccess" << functions().count() << m_expression; )
             
-            uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints();
+            uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints(!fullCompletion);
             
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
@@ -1291,9 +1292,19 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
               int num = 0;
               foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
                 if (num == max) {
-                  //When there are too many overloaded functions, do not show them all if completion was invoked automatically
-                  CompletionTreeItemPointer item( new MoreArgumentHintsCompletionItem( KSharedPtr <KDevelop::CodeCompletionContext >(this), i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2 (show more)", "%1 more overloads of %2 (show more)", functions().count() - num, functionName()), num ) );
-                  items << item;
+                  if(fullCompletion)
+                  {
+                    //When there are too many overloaded functions, do not show them all
+                    CompletionTreeItemPointer item( new MoreArgumentHintsCompletionItem( KSharedPtr <KDevelop::CodeCompletionContext >(this), i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2 (show more)", "%1 more overloads of %2 (show more)", functions().count() - num, functionName()), num ) );
+                    items.push_front(item);
+                  }else if(!items.isEmpty()) {
+                    NormalDeclarationCompletionItem* last = dynamic_cast<NormalDeclarationCompletionItem*>(items.back().data());
+                    if(last->declaration())
+                    {
+//                       last->alternativeText = i18n("(%1 more) ", functions().count() - num) + last->declaration()->identifier().toString();
+//                       last->useAlternativeText = true;
+                    }
+                  }
                   break;
                 }
 
@@ -1483,7 +1494,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
       }
     }
 
-    if(!ignoreParentContext && fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
+    if(!ignoreParentContext 
+      && (fullCompletion || (Cpp::useArgumentHintInAutomaticCompletion() && depth() == 0))
+      && m_parentContext
+      && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
       items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0) {
@@ -1740,6 +1754,22 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
+/**
+ * see @p type as function type and try to get it's return type as IntegralType data type.
+ */
+static inline int getIntegralReturnType(const AbstractType::Ptr& type)
+{
+  if (!type)
+    return -1;
+  const FunctionType::Ptr funcType = type.cast<FunctionType>();
+  if (!funcType || !funcType->returnType())
+    return -1;
+  const IntegralType::Ptr intType = funcType->returnType().cast<IntegralType>();
+  if (!intType)
+    return -1;
+  return intType->dataType();
+}
+
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic, bool typeIsConst) {
   if(!decl)
     return true;
@@ -1793,6 +1823,19 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
       return filterDeclaration(classMember, declarationContext, typeIsConst);
+  }
+
+  // https://bugs.kde.org/show_bug.cgi?id=206376
+  // hide void functions in expressions but don't hide signals / slots with void return type
+  if (m_onlyShow != ShowSignals && m_onlyShow != ShowSlots
+      && m_parentContext && decl->isFunctionDeclaration()
+      && getIntegralReturnType(decl->abstractType()) == IntegralType::TypeVoid)
+  {
+    const ExpressionEvaluationResult& result =
+            static_cast<CodeCompletionContext*>(m_parentContext.data())->m_expressionResult;
+    // for now only hide in non-lvalue expressions so we don't get problems in sig/slot connections e.g.
+    if (result.type.isValid() && !result.isLValue())
+      return false;
   }
 
   return true;

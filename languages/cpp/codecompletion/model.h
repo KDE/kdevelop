@@ -49,6 +49,8 @@ namespace Cpp {
   class NavigationWidget;
   class CodeCompletionWorker;
 
+bool useArgumentHintInAutomaticCompletion();
+
 class CodeCompletionModel : public KDevelop::CodeCompletionModel
 {
   Q_OBJECT

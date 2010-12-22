@@ -65,6 +65,7 @@ public:
     int sectionCount() const;
     bool isLoaded() const;
     int nbSectionLoaded() const;
+    bool identifierInSection(const QString &identifier, const QString &section) const;
 signals:
     void sectionParsed();
     void sectionListUpdated();

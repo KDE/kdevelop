@@ -66,6 +66,10 @@ using namespace TypeUtils;
 
 namespace Cpp {
 
+bool useArgumentHintInAutomaticCompletion() {
+  return false;
+}
+
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
@@ -86,10 +90,9 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
   if(insertedTrimmed.endsWith('\"'))
     return false; //Never start completion behind a string literal
     
-    ///@todo Add an option for this, and find out which variant is better
-  /*
-  if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
-    return true;*/
+  if(useArgumentHintInAutomaticCompletion())
+    if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
+      return true;
   
   //Start automatic completion behind '::'
   if(insertedTrimmed.endsWith(":") && position.column() > 1 && lineText.right(2) == "::")

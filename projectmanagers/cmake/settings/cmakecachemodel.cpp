@@ -234,5 +234,10 @@ QList< QModelIndex > CMakeCacheModel::persistentIndices() const
     return ret;
 }
 
+KUrl CMakeCacheModel::filePath() const
+{
+    return m_filePath;
+}
+
 #include "cmakecachemodel.moc"
 

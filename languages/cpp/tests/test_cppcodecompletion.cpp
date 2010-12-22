@@ -2348,6 +2348,26 @@ void TestCppCodeCompletion::testOverrideCtor()
   release(top);
 }
 
+void TestCppCodeCompletion::testFilterVoid()
+{
+  QByteArray code("struct S{}; void foo() {}");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  // filter void here
+  foreach(const QString& s, QStringList() << "int i = " << "S* sPtr = ") {
+    CompletionItemTester complCtx(top->childContexts().last(), s);
+    QVERIFY(!complCtx.containsDeclaration(top->localDeclarations().last()));
+  }
+
+  // but not here
+  CompletionItemTester complCtx(top->childContexts().last(), "void (*fPtr)() =");
+  QVERIFY(complCtx.containsDeclaration(top->localDeclarations().last()));
+
+  release(top);
+}
+
 //BEGIN: Helper
 
 class TestPreprocessor : public rpp::Preprocessor

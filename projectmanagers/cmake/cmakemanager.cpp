@@ -188,6 +188,10 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     data->modulePath=initials.first["CMAKE_MODULE_PATH"];
     data->vm=initials.first;
     data->vm.insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    
+    KUrl cachefile=buildDirectory(project->projectItem());
+    cachefile.addPath("CMakeCache.txt");
+    data->cache=readCache(cachefile);
 
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -324,7 +328,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             CMake::checkForNeedingConfigure(m_rootItem);
         }
         cachefile.addPath("CMakeCache.txt");
-        m_projectsData[project].cache=readCache(cachefile);
         
         KDirWatch* w = new KDirWatch(project);
         w->setObjectName(project->name()+"_ProjectWatcher");
@@ -345,18 +348,18 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir);
 }
 
-QMutex rxFileFilterMutex; //We have to use a mutex-lock to protect static regular ex
-static QRegExp rxFileFilter("\\w*~$|\\w*\\.bak$"); ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
+
 
 QSet<QString> filterFiles(const QStringList& orig)
 {
-    QMutexLocker lock(&rxFileFilterMutex);
-    
     QSet<QString> ret;
     foreach(const QString& str, orig)
     {
-        if(rxFileFilter.indexIn(str)<0)
-            ret.insert(str);
+        ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
+        if (str.endsWith(QLatin1Char('~')) || str.endsWith(QLatin1String(".bak")))
+            continue;
+
+        ret.insert(str);
     }
     return ret;
 }
@@ -371,7 +374,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     KUrl cmakeListsPath(folder->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     
-    if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder && QFile::exists(cmakeListsPath.toLocalFile()))
+    if(folder && QFile::exists(cmakeListsPath.toLocalFile()))
     {
         kDebug(9042) << "parse:" << folder->url();
         
@@ -546,6 +549,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
+    } else {
+        folder->cleanupBuildFolders(QList<Subdirectory>());
+        folder->cleanupTargets(QList<CMakeTarget>());
     }
     reloadFiles(folder);
 
@@ -719,18 +725,18 @@ bool CMakeManager::isReloading(IProject* p)
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
-    dirurl.adjustPath(KUrl::AddTrailingSlash);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     
     if(p) {
+        dirurl.adjustPath(KUrl::AddTrailingSlash);
         if(p->folder()==dirurl)
             ICore::self()->projectController()->closeProject(p);
         else if(!isReloading(p)) {
             KUrl url(path);
             
             if(path.endsWith("/CMakeLists.txt")) {
-                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl().upUrl());
-                foreach(ProjectFolderItem* folder, folders)
+                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
+                foreach(ProjectFolderItem* folder, folders) 
                     reload(folder);
                 
             } else {
@@ -787,7 +793,6 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         
         if(p) {
-            m_projectsData[p].cache=readCache(dirtyFile);
             p->reloadModel();
         }
     } else if(dirty.endsWith(".cmake"))
@@ -847,12 +852,12 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         {
             qDeleteAll(item->project()->itemsForUrl(fileurl));
         }
-        else if(it->url()!=fileurl) {
-            it->setUrl(fileurl);
-            ProjectFolderItem* folder = it->folder();
-            
-            if(folder)
-                reloadFiles(folder);
+        else {
+            if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash)) {
+                it->setUrl(fileurl);
+            }
+            // reduce amount of checks done when looking for new items
+            entries.remove(current);
         }
     }
     
@@ -861,12 +866,12 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
     {
         KUrl fileurl = folderurl;
         fileurl.addPath( entry );
-        
-        if( item->hasFileOrFolder( entry ) )
-        {
-            continue;
-        }
-        else if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+
+        // existing entries should have been removed above already
+        // disabled for performance reasons
+//         Q_ASSERT( !item->hasFileOrFolder( entry ) );
+
+        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
             ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
@@ -875,6 +880,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
                 item->appendRow(pendingfolder);
             } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
+                m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
                 reloadFiles(new ProjectFolderItem( item->project(), fileurl, item ));
             }
         }
@@ -985,8 +991,10 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
         {
             CacheLine c;
             c.readLine(line);
-            if(c.flag().isEmpty())
+            if(c.flag().isEmpty()) {
                 ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
+                currentComment.clear();
+            }
 //             kDebug(9042) << "Cache line" << line << c.name();
         }
         else if(line.startsWith("//"))
@@ -997,8 +1005,8 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
 
 KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
-    if(!dynamic_cast<CMakeFolderItem*>(parent)) {
-        KDevelop::createFolder(folder);
+    bool created = KDevelop::createFolder(folder);
+    if(!created || !dynamic_cast<CMakeFolderItem*>(parent)) {
         return 0;
     }
     
@@ -1020,7 +1028,7 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     if(e.exec())
     {
         bool saved=e.applyAllChanges();
-        if(saved && KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
+        if(saved) { //If saved we create the folder then the CMakeLists.txt file
             KUrl newCMakeLists(folder);
             newCMakeLists.addPath("CMakeLists.txt");
 

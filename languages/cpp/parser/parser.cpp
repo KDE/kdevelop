@@ -4667,7 +4667,8 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
       advance();
 
       ExpressionAST *rightExpr = 0;
-      if (!parseConditionalExpression(rightExpr))
+      if (!parseConditionalExpression(rightExpr) &&
+          !parseSignalSlotExpression(rightExpr))
         return false;
 
       BinaryExpressionAST *ast = CreateNode<BinaryExpressionAST>(session->mempool);
