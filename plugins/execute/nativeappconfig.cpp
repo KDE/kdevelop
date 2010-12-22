@@ -121,10 +121,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     environment->addItems( env.groups() );
     browseProject->setIcon(KIcon("folder-document"));
 
-    configureEnvironment->setIcon(KIcon("configure"));
-    configureEnvironment->setToolTip(i18n("configure environment variables"));
-    connect(configureEnvironment, SIGNAL(clicked(bool)),
-            this, SLOT(configureEnv()));
+    configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
     connect( projectTarget, SIGNAL(currentIndexChanged(const QString&)), SIGNAL(changed()) );
@@ -282,27 +279,6 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
 QString NativeAppConfigPage::title() const 
 {
     return i18n("Configure Native Application");
-}
-
-void NativeAppConfigPage::configureEnv()
-{
-    KDialog dlg(qApp->activeWindow());
-    KCModuleProxy proxy("kcm_kdev_envsettings", 0, QStringList() << environment->currentProfile());
-    dlg.setMainWidget(&proxy);
-    dlg.setWindowTitle(proxy.moduleInfo().moduleName());
-    dlg.setWindowIcon(KIcon(proxy.moduleInfo().icon()));
-    if (dlg.exec() == KDialog::Accepted) {
-        proxy.save();
-        const QString wasSelected = environment->currentProfile();
-        KDevelop::EnvironmentGroupList env( KGlobal::config() );
-        environment->clear();
-        environment->addItems(env.groups());
-        if (env.groups().contains(wasSelected)) {
-            environment->setCurrentProfile(wasSelected);
-        } else {
-            environment->setCurrentProfile(env.defaultGroup());
-        }
-    }
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > NativeAppLauncher::configPages() const 
