@@ -203,7 +203,8 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
         m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), 
+      this, SLOT(documentActivated(KDevelop::IDocument*)));
 
     return ret;
 }
@@ -692,6 +693,7 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 
 void ContextBrowserPlugin::documentActivated( IDocument* doc )
 {
+  m_outlineLine->clear();
   if (doc->textDocument() && doc->textDocument()->activeView())
   {
     cursorPositionChanged(doc->textDocument()->activeView(), doc->textDocument()->activeView()->cursorPosition());
