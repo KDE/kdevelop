@@ -1798,7 +1798,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return true;
 
     visit(expression);
-    qDebug("b");
 
     //binary expressions don't yield m_lastType, so when m_lastType is set we probably only have one single parameter
     if( m_lastType ) {
