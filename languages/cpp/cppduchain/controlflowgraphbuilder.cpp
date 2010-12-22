@@ -25,6 +25,7 @@
 #include <util/pushvalue.h>
 
 using namespace KDevelop;
+QString nodeToString(ParseSession* s, AST* node);
 
 ControlFlowGraphBuilder::ControlFlowGraphBuilder(ParseSession* session, ControlFlowGraph* graph)
   : m_session(session)
@@ -175,7 +176,7 @@ void ControlFlowGraphBuilder::visitReturnStatement(ReturnStatementAST* node)
 void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
 {
   m_currentNode->setEndCursor(cursorForToken(node->end_token));
-  switch(node->op) {
+  switch(m_session->token_stream->token(node->start_token).kind) {
     case Token_continue:
 //       if(!m_continueNode) addproblem(!!!);
       m_currentNode->m_next = m_continueNode;
@@ -187,9 +188,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
     case Token_goto:
       break;
   }
-  qDebug() << "jump!!";
 }
-QString nodeToString(ParseSession* s, AST* node);
 
 void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
 {
@@ -199,17 +198,39 @@ void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
   
   ControlFlowNode* nextNode = new ControlFlowNode;
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
+  PushValue<ControlFlowNode*> pushDefault(m_defaultNode, nextNode);
+  
+  ControlFlowNode* switchNode = m_currentNode;
+  switchNode->m_next = nextNode;
+  PushValue<QList<ControlFlowNode*> > pushCases(m_caseNodes, QList<ControlFlowNode*>() << switchNode);
   visit(node->statement);
+  switchNode->m_next = m_defaultNode;
+  switchNode->m_alternative = m_caseNodes[1];
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
-  
-  qDebug() << "loooooo" << nodeToString(m_session, node);
 }
 
 void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
 {
-  qDebug() << "laaaaaa" << nodeToString(m_session, node);
   visit(node->expression);
-  visit(node->statement);
   
+  int token = m_session->token_stream->token(node->start_token).kind;
+  
+  if(token==Token_default || token==Token_case) {
+    ControlFlowNode* condNode = new ControlFlowNode;
+    condNode->setStartCursor(cursorForToken(node->start_token));
+    condNode->setEndCursor(cursorForToken(node->statement->start_token));
+    
+    if(!m_caseNodes.last()->m_next->m_next) //if we didn't end the last case with a break, use this one
+      m_caseNodes.last()->m_next->m_next = condNode;
+    
+    m_caseNodes.last()->m_alternative = condNode;
+    m_caseNodes+=condNode;
+    
+    condNode->m_next = createCompoundStatement(node->statement, 0);
+    
+    if(token==Token_default)
+      m_defaultNode = condNode;
+    
+  }
 }

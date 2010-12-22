@@ -60,6 +60,9 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     KDevelop::ControlFlowNode* m_returnNode;
     KDevelop::ControlFlowNode* m_breakNode;
     KDevelop::ControlFlowNode* m_continueNode;
+    
+    KDevelop::ControlFlowNode* m_defaultNode;
+    QList<KDevelop::ControlFlowNode*> m_caseNodes;
 };
 
 #endif // CONTROLFLOWGRAPHBUILDER_H

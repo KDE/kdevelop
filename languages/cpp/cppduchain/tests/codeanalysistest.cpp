@@ -117,7 +117,7 @@ class ControlFlowToDot
     
     bool exportGraph(const QByteArray& name, const ControlFlowNode* initial)
     {
-      *m_dev << "digraph " << name << "{\n";
+      *m_dev << "digraph " << name << " {\n";
       bool r = exportNode(initial);
       *m_dev << "}\n";
       return r;
@@ -130,6 +130,7 @@ private:
         return false;
       
       QHash< const ControlFlowNode*, QString >::iterator initialIt = m_names.find(node);
+      bool isfirst = m_names.isEmpty();
       
       if(initialIt==m_names.end()) {
         initialIt = m_names.insert(node, nodesName(node));
@@ -137,21 +138,30 @@ private:
         return true;
       
       QString name = initialIt.value();
+      if(isfirst)
+        *m_dev << '\t' << name << " [shape=doubleoctagon]\n\n";
+      if(!node->m_next && !node->m_alternative)
+        *m_dev << '\t' << name << " [color=green]\n\n";
       
-      if(exportNode(node->m_next))        *m_dev << '\t' << name << " -> " << m_names.value(node->m_next) << ";\n";
-      if(exportNode(node->m_alternative)) *m_dev << '\t' << name << " -> " << m_names.value(node->m_alternative) << ";\n";
+      if(exportNode(node->m_next))        *m_dev << '\t' << name << " -> " << m_names.value(node->m_next) << " [color=blue];\n";
+      if(exportNode(node->m_alternative)) *m_dev << '\t' << name << " -> " << m_names.value(node->m_alternative) << " [color=red];\n";
       
       return true;
     }
     
     QString nodesName(const ControlFlowNode* node) const
     {
-      if(!node->m_next && !node->m_alternative)
+      RangeInRevision range = node->m_nodeRange;
+      if(!node->m_next && !node->m_alternative && range.isEmpty())
         return "Exit";
       else {
-        RangeInRevision range = node->m_nodeRange;
-        int a=cursorToPos(range.start), b=cursorToPos(range.end);
-        return "\""+m_sources.mid(a, b-a)+"\"";
+        if(range.isEmpty()) {
+          static int uniqueId=0;
+          return QString("dummy_%1").arg(uniqueId++);
+        } else {
+          int a=cursorToPos(range.start), b=cursorToPos(range.end);
+          return "\""+m_sources.mid(a, b-a)+"\"";
+        }
       }
     }
     
@@ -188,9 +198,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   for(; it!=itEnd; ++it, ++entries)
     walkNodesRecursively(*it, visited);
   
-  QCOMPARE(entries, 1);
-  QCOMPARE(visited.size(), nodeCount);
-  
+  {//Graph exporting
   QFile file(QString(QTest::currentDataTag())+".dot");
   QVERIFY(file.open(QFile::WriteOnly));
   QTextStream st(&file);
@@ -198,6 +206,10 @@ void CodeAnalysisTest::testControlFlowCreation()
   
   for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it)
     exporter.exportGraph(QTest::currentDataTag(), *it);
+  }
+  
+  QCOMPARE(entries, 1);
+  QCOMPARE(visited.size(), nodeCount);
 }
 
 void CodeAnalysisTest::testControlFlowCreation_data()
@@ -213,9 +225,10 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::newRow("conditional_inlined") << "int f(int a) { a=a?a+1 : a-1; return a+3; }" << 5;
   QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 5;
   QTest::newRow("for") << "int f(int a) { for(int i=0; i<a; i++) {i+=54;} return 0; }" << 6;
-  QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: case 2: break; case 3; break;} }" << 5;
+  QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: f(1); break; case 2: f(2); return; default: f(3); break; } f(4); }" << 9;
+  QTest::newRow("switch2") << "void f(int a) { switch(a) { case 1: f(-1); case 2: f(1); break; case 3: f(2); break;} f(666); }" << 8;
   QTest::newRow("do-while") << "void f(int a) { do {a--; } while(a); }" << 5;
   
-  QTest::newRow("loopbreak") << "void f(int i) { while(i) { if(i>20) break; } i++; }" << 7;
-  QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } i++; }" << 7;
+  QTest::newRow("loopbreak") << "void f(int i) { while(i) { if(i>20) break; } f(666); }" << 7;
+  QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } f(666); }" << 7;
 }
