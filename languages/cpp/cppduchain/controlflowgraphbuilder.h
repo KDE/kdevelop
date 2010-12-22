@@ -46,6 +46,8 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     
     virtual void visitReturnStatement(ReturnStatementAST* node);
     virtual void visitJumpStatement(JumpStatementAST* node);
+    virtual void visitSwitchStatement(SwitchStatementAST* node);
+    virtual void visitLabeledStatement(LabeledStatementAST* node);
     
   private:
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);

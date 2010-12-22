@@ -114,7 +114,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   QFETCH(QString, code);
   QFETCH(int, nodeCount);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAST);
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   

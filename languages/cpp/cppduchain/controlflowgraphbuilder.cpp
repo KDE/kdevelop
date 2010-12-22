@@ -187,5 +187,29 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
     case Token_goto:
       break;
   }
+  qDebug() << "jump!!";
+}
+QString nodeToString(ParseSession* s, AST* node);
+
+void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
+{
+  visit(node->condition);
+  m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
+//   ControlFlowNode* previous = m_currentNode;
+  
+  ControlFlowNode* nextNode = new ControlFlowNode;
+  PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
+  visit(node->statement);
+  nextNode->setStartCursor(cursorForToken(node->end_token));
+  m_currentNode = nextNode;
+  
+  qDebug() << "loooooo" << nodeToString(m_session, node);
 }
 
+void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
+{
+  qDebug() << "laaaaaa" << nodeToString(m_session, node);
+  visit(node->expression);
+  visit(node->statement);
+  
+}
