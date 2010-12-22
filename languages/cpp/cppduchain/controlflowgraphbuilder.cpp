@@ -74,7 +74,7 @@ void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
 {
 //TODO:   m_currentNode->m_conditionRange = rangeBetween(node->condition->start_token, node->condition->end_token);
   ControlFlowNode* previous = m_currentNode;
-  m_currentNode->setEndCursor(cursorForToken(node->start_token));
+  m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
   visit(node->condition);
   
   ControlFlowNode* nextNode = new ControlFlowNode;

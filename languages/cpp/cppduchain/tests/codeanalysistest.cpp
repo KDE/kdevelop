@@ -109,6 +109,70 @@ static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& 
   }
 }
 
+class ControlFlowToDot
+{
+  public:
+    ControlFlowToDot(QTextStream* dev, const QByteArray& sources) : m_dev(dev), m_sources(sources)
+    {}
+    
+    bool exportGraph(const QByteArray& name, const ControlFlowNode* initial)
+    {
+      *m_dev << "digraph " << name << "{\n";
+      bool r = exportNode(initial);
+      *m_dev << "}\n";
+      return r;
+    }
+    
+private:
+    bool exportNode(const ControlFlowNode* node)
+    {
+      if(!node)
+        return false;
+      
+      QHash< const ControlFlowNode*, QString >::iterator initialIt = m_names.find(node);
+      
+      if(initialIt==m_names.end()) {
+        initialIt = m_names.insert(node, nodesName(node));
+      } else
+        return true;
+      
+      QString name = initialIt.value();
+      
+      if(exportNode(node->m_next))        *m_dev << '\t' << name << " -> " << m_names.value(node->m_next) << ";\n";
+      if(exportNode(node->m_alternative)) *m_dev << '\t' << name << " -> " << m_names.value(node->m_alternative) << ";\n";
+      
+      return true;
+    }
+    
+    QString nodesName(const ControlFlowNode* node) const
+    {
+      if(!node->m_next && !node->m_alternative)
+        return "Exit";
+      else {
+        RangeInRevision range = node->m_nodeRange;
+        int a=cursorToPos(range.start), b=cursorToPos(range.end);
+        return "\""+m_sources.mid(a, b-a)+"\"";
+      }
+    }
+    
+    int cursorToPos(const CursorInRevision& cursor) const
+    {
+      int ret=0;
+      int line=cursor.line, col=cursor.column;
+      for(; line>0 && ret>0; line--)
+        ret = m_sources.indexOf('\n', ret);
+      
+      if(ret<0)
+        return -1;
+      
+      return ret + col;
+    }
+    
+    QTextStream* m_dev;
+    QHash<const ControlFlowNode*, QString> m_names;
+    QByteArray m_sources;
+};
+
 void CodeAnalysisTest::testControlFlowCreation()
 {
   QFETCH(QString, code);
@@ -126,7 +190,16 @@ void CodeAnalysisTest::testControlFlowCreation()
   
   QCOMPARE(entries, 1);
   QCOMPARE(visited.size(), nodeCount);
+  
+  QFile file(QString(QTest::currentDataTag())+".dot");
+  QVERIFY(file.open(QFile::WriteOnly));
+  QTextStream st(&file);
+  ControlFlowToDot exporter(&st, code.toUtf8());
+  
+  for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it)
+    exporter.exportGraph(QTest::currentDataTag(), *it);
 }
+
 void CodeAnalysisTest::testControlFlowCreation_data()
 {
   QTest::addColumn<QString>("code");
