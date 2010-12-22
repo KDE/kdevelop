@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
+    <width>521</width>
     <height>362</height>
    </rect>
   </property>
@@ -189,7 +189,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Active Environment &amp;Profile:</string>
@@ -202,23 +202,35 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <property name="insertPolicy">
-      <enum>QComboBox::NoInsert</enum>
-     </property>
-     <property name="autoCompletion">
-      <bool>false</bool>
-     </property>
+   <item row="9" column="1">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="insertPolicy">
+         <enum>QComboBox::NoInsert</enum>
+        </property>
+        <property name="autoCompletion">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment" />
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -244,6 +256,11 @@
    <extends>KComboBox</extends>
    <header location="global">util/environmentselectionwidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentConfigureButton</class>
+   <extends>QToolButton</extends>
+   <header>util/environmentconfigurebutton.h</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -254,12 +271,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>557</x>
-     <y>80</y>
+     <x>516</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>566</x>
-     <y>112</y>
+     <x>516</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>
@@ -270,8 +287,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>349</x>
-     <y>76</y>
+     <x>516</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>195</x>
