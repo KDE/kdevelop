@@ -115,11 +115,29 @@ class ControlFlowToDot
     ControlFlowToDot(QTextStream* dev, const QByteArray& sources) : m_dev(dev), m_sources(sources)
     {}
     
-    bool exportGraph(const QByteArray& name, const ControlFlowNode* initial)
+    bool exportGraph(const QByteArray& name, const ControlFlowGraph* graph)
     {
+      bool r = true;
+      int i=0;
       *m_dev << "digraph " << name << " {\n";
-      bool r = exportNode(initial);
+      for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it, ++i) {
+        *m_dev << "  subgraph cluster_" << i << "  {\n"
+                                                       "\tstyle=filled;\n\tcolor=lightgrey;\n";
+        r &= exportNode(*it);
+        *m_dev << "  }\n";
+      }
+      
+      QVector< ControlFlowNode* > deadNodes = graph->deadNodes();
+      if(!deadNodes.isEmpty()) {
+        *m_dev << "  subgraph cluster_"<< i <<"  {\n";
+        foreach(ControlFlowNode* node, deadNodes) {
+          *m_dev << '\t' << nodesName(node) << " [color=green]\n\n";
+        }
+        *m_dev << "  }\n";
+      }
+      
       *m_dev << "}\n";
+      
       return r;
     }
     
@@ -141,7 +159,7 @@ private:
       if(isfirst)
         *m_dev << '\t' << name << " [shape=doubleoctagon]\n\n";
       if(!node->m_next && !node->m_alternative)
-        *m_dev << '\t' << name << " [color=green]\n\n";
+        *m_dev << '\t' << name << " [color=red]\n\n";
       
       if(exportNode(node->m_next))        *m_dev << '\t' << name << " -> " << m_names.value(node->m_next) << " [color=blue];\n";
       if(exportNode(node->m_alternative)) *m_dev << '\t' << name << " -> " << m_names.value(node->m_alternative) << " [color=red];\n";
@@ -203,9 +221,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   QVERIFY(file.open(QFile::WriteOnly));
   QTextStream st(&file);
   ControlFlowToDot exporter(&st, code.toUtf8());
-  
-  for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it)
-    exporter.exportGraph(QTest::currentDataTag(), *it);
+  exporter.exportGraph(QTest::currentDataTag(), graph);
   }
   
   QCOMPARE(entries, 1);
@@ -231,4 +247,7 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   
   QTest::newRow("loopbreak") << "void f(int i) { while(i) { if(i>20) break; } f(666); }" << 7;
   QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } f(666); }" << 7;
+  
+  QTest::newRow("goto") << "void f(int i) { f(0); tag: f(1); if(i) goto tag; f(2); }" << 5;
+  QTest::newRow("goto2") << "void f(int i) { f(0); goto tag; f(1); if(i) f(3); tag: f(2); }" << 0;
 }
