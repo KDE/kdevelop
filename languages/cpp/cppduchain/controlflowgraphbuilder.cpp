@@ -36,6 +36,9 @@ ControlFlowGraphBuilder::ControlFlowGraphBuilder(ParseSession* session, ControlF
   , m_continueNode(0)
 {}
 
+ControlFlowGraphBuilder::~ControlFlowGraphBuilder()
+{}
+
 void ControlFlowGraphBuilder::run(AST* node)
 {
   Q_ASSERT(!m_currentNode);
@@ -185,9 +188,24 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
 //       if(!m_breakNode) addproblem(!!!);
       m_currentNode->m_next = m_breakNode;
       break;
-    case Token_goto:
-      break;
+    case Token_goto: {
+      qDebug() << "goto!";
+      IndexedString tag = m_session->token_stream->token(node->identifier).symbol();
+      QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.find(tag);
+      if(tagIt!=m_taggedNodes.constEnd())
+        m_currentNode->m_next = *tagIt;
+      else {
+        m_pendingGotoNodes[tag] += m_currentNode;
+        m_currentNode->m_next=m_currentNode; //we set itself so that we know it has somewhere to go
+      }
+    } break;
   }
+  
+  //here we create a node with the dead code
+  ControlFlowNode* deadNode = new ControlFlowNode;
+  deadNode->setStartCursor(m_currentNode->m_nodeRange.end);
+  m_currentNode=deadNode;
+  m_graph->addDeadNode(deadNode);
 }
 
 void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
@@ -232,5 +250,20 @@ void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
     if(token==Token_default)
       m_defaultNode = condNode;
     
+  } else { //it is a goto tag
+    m_currentNode->setEndCursor(cursorForToken(node->start_token));
+    
+    ControlFlowNode* nextNode = new ControlFlowNode;
+    nextNode->setStartCursor(cursorForToken(node->start_token));
+    if(!m_currentNode->m_next) m_currentNode->m_next = nextNode;
+    
+    IndexedString tag = m_session->token_stream->token(node->label).symbol();
+    m_taggedNodes.insert(tag, nextNode);
+    QList< ControlFlowNode* > pendingNodes = m_pendingGotoNodes.take(tag);
+    foreach(ControlFlowNode* pending, pendingNodes)
+      pending->m_next = nextNode;
+    
+    m_currentNode = nextNode;
+    visit(node->statement);
   }
 }

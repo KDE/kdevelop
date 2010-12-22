@@ -27,12 +27,14 @@ namespace KDevelop
 class ControlFlowGraph;
 class ControlFlowNode;
 class CursorInRevision;
+class IndexedString;
 }
 
 class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
 {
   public:
     ControlFlowGraphBuilder(ParseSession* session, KDevelop::ControlFlowGraph* graph);
+    virtual ~ControlFlowGraphBuilder();
     
     void run(AST* node);
     
@@ -63,6 +65,8 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     
     KDevelop::ControlFlowNode* m_defaultNode;
     QList<KDevelop::ControlFlowNode*> m_caseNodes;
+    QMap<KDevelop::IndexedString, KDevelop::ControlFlowNode*> m_taggedNodes;
+    QMap<KDevelop::IndexedString, QList<KDevelop::ControlFlowNode*> > m_pendingGotoNodes;
 };
 
 #endif // CONTROLFLOWGRAPHBUILDER_H

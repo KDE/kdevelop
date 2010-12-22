@@ -19,16 +19,25 @@
 #include "flowgraph.h"
 #include "flownode.h"
 
-void KDevelop::ControlFlowGraph::addEntry(KDevelop::ControlFlowNode* n)
+using namespace KDevelop;
+
+void ControlFlowGraph::addEntry(ControlFlowNode* n)
 {
   m_graphNodes += n;
 }
 
-void KDevelop::ControlFlowGraph::clear()
+
+void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
+{
+  m_deadNodes += n;
+}
+
+void ControlFlowGraph::clear()
 {
   //TODO: delete recursively!!
   qDeleteAll(m_graphNodes);
+  qDeleteAll(m_deadNodes);
   
   m_graphNodes.clear();
+  m_deadNodes.clear();
 }
-

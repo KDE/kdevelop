@@ -32,13 +32,16 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraph
     typedef QVector<ControlFlowNode*>::const_iterator const_iterator;
     
     void addEntry(ControlFlowNode* n);
+    void addDeadNode(ControlFlowNode* n);
     void clear();
     
     const_iterator constBegin() const { return m_graphNodes.constBegin(); }
     const_iterator constEnd() const { return m_graphNodes.constEnd(); }
     
+    QVector<ControlFlowNode*> deadNodes() const { return m_deadNodes; }
   private:
     QVector<ControlFlowNode*> m_graphNodes;
+    QVector<ControlFlowNode*> m_deadNodes;
 };
 
 }
