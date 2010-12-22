@@ -729,11 +729,19 @@ void ProjectController::initializePluginCleanup(IProject* proj)
 
 void ProjectController::closeProject(IProject* proj_)
 {
-    if(!proj_ || d->m_projects.indexOf(proj_) == -1)
+    if (!proj_)
     {
         return;
     }
-    
+
+    // loading might have failed
+    d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
+
+    if(d->m_projects.indexOf(proj_) == -1)
+    {
+        return;
+    }
+
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
     if( !proj ) 
     {
