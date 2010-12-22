@@ -7,6 +7,7 @@ set(kdevplatformutil_LIB_SRCS
     focusedtreeview.cpp
     processlinemaker.cpp
     commandexecutor.cpp
+    environmentconfigurebutton.cpp
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
     activetooltip.cpp
@@ -44,6 +45,7 @@ install( FILES
     processlinemaker.h
     commandexecutor.h
     utilexport.h
+    environmentconfigurebutton.h
     environmentselectionwidget.h
     environmentgrouplist.h
     pushvalue.h

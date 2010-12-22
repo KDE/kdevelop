@@ -46,7 +46,6 @@ private slots:
     void activateDeps( int );
     void checkActions( const QItemSelection& , const QItemSelection& );
     void depEdited( const QString& );
-    void configureEnv();
 };
 
 class NativeAppLauncher : public KDevelop::ILauncher
