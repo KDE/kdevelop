@@ -69,9 +69,18 @@ ControlFlowNode* ControlFlowGraphBuilder::createCompoundStatement(AST* node, Con
 
 void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
+  PushValue<ControlFlowNode*> currentNode(m_currentNode);
   m_returnNode = new ControlFlowNode;
   m_graph->addEntry(createCompoundStatement(node->function_body, m_returnNode));
-  m_currentNode=0;
+}
+
+void ControlFlowGraphBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
+{
+  bool create=!m_currentNode;
+  if(create)
+    m_graph->addEntry(createCompoundStatement(node, 0));
+  else
+    DefaultVisitor::visitSimpleDeclaration(node);
 }
 
 void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)

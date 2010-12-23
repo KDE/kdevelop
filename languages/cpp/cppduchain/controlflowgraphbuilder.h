@@ -40,6 +40,8 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     
   protected:
     virtual void visitFunctionDefinition(FunctionDefinitionAST* node);
+    virtual void visitSimpleDeclaration(SimpleDeclarationAST* node);
+    
     virtual void visitIfStatement(IfStatementAST* node);
     virtual void visitWhileStatement(WhileStatementAST* node);
     virtual void visitForStatement(ForStatementAST* node);

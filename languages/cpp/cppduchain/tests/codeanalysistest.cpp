@@ -249,5 +249,7 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } f(666); }" << 7;
   
   QTest::newRow("goto") << "void f(int i) { f(0); tag: f(1); if(i) goto tag; f(2); }" << 5;
-  QTest::newRow("goto2") << "void f(int i) { f(0); goto tag; f(1); if(i) f(3); tag: f(2); }" << 0;
+  QTest::newRow("goto2") << "void f(int i) { f(0); goto tag; f(1); if(i) f(3); tag: f(2); }" << 3;
+  
+  QTest::newRow("outside") << "enum {Result = 2 ? 1 : 3 };" << 3;
 }

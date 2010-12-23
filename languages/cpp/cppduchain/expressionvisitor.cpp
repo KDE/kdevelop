@@ -1976,7 +1976,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         m_lastType = missing.cast<AbstractType>(); // Forward the MissingType, as it will be used for assistants.
     }
     
-    session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
+    if(chosenFunction)
+      session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
 
     static IndexedString functionCallOperatorIdentifier("operator()");
 
