@@ -135,7 +135,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
     Q_ASSERT(gmlJob);
-    kDebug() << job << gmlJob;
+    ifDebug(kDebug() << job << gmlJob;)
     m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
 }
 
