@@ -363,6 +363,10 @@ void DUContextDynamicData::removeDeclarationFromHash(const Identifier& identifie
       disableLocalDeclarationsHash();
 }
 
+inline bool isContextTemporary(uint index) {
+  return index > (0xffffffff/2);
+}
+
 void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 {
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
@@ -371,14 +375,8 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 
 //     m_localDeclarations.append(newDeclaration);
 
-  if(m_indexInTopContext < (0xffffffff/2)) {
-    //If this context is not temporary, added declarations shouldn't be either
-    Q_ASSERT(newDeclaration->ownIndex() < (0xffffffff/2));
-  }
-  if(m_indexInTopContext > (0xffffffff/2)) {
-    //If this context is temporary, added declarations should be as well
-    Q_ASSERT(newDeclaration->ownIndex() > (0xffffffff/2));
-  }
+  //If this context is temporary, added declarations should be as well, and viceversa
+  Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(newDeclaration->ownIndex()));
 
   SimpleCursor start = newDeclaration->range().start;
 ///@todo Do binary search to find the position
@@ -437,14 +435,8 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   LocalIndexedDUContext indexed(context->m_dynamicData->m_indexInTopContext);
 
-  if(m_indexInTopContext < (0xffffffff/2)) {
-    //If this context is not temporary, added declarations shouldn't be either
-    Q_ASSERT(indexed.localIndex() < (0xffffffff/2));
-  }
-  if(m_indexInTopContext > (0xffffffff/2)) {
-    //If this context is temporary, added declarations should be as well
-    Q_ASSERT(indexed.localIndex() > (0xffffffff/2));
-  }
+  //If this context is temporary, added declarations should be as well, and viceversa
+  Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(indexed.localIndex()));
 
   bool inserted = false;
 
