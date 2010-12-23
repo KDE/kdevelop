@@ -159,6 +159,9 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
 
         KUrl url = baseItem->url();
         url.addPath( name );
+        if (entry.isDir()) {
+            url.adjustPath(KUrl::AddTrailingSlash);
+        }
 
         if ( !q->isValid( url, entry.isDir(), baseItem->project() ) ) {
             continue;
