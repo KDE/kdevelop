@@ -217,14 +217,13 @@ void CodeAnalysisTest::testControlFlowCreation()
     walkNodesRecursively(*it, visited);
   
   {//Graph exporting
-  QFile file(QString(QTest::currentDataTag())+".dot");
-  QVERIFY(file.open(QFile::WriteOnly));
-  QTextStream st(&file);
-  ControlFlowToDot exporter(&st, code.toUtf8());
-  exporter.exportGraph(QTest::currentDataTag(), graph);
+    QFile file(QString(QTest::currentDataTag())+".dot");
+    QVERIFY(file.open(QFile::WriteOnly));
+    QTextStream st(&file);
+    ControlFlowToDot exporter(&st, code.toUtf8());
+    exporter.exportGraph(QTest::currentDataTag(), graph);
   }
   
-  QCOMPARE(entries, 1);
   QCOMPARE(visited.size(), nodeCount);
 }
 
@@ -251,5 +250,7 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::newRow("goto") << "void f(int i) { f(0); tag: f(1); if(i) goto tag; f(2); }" << 5;
   QTest::newRow("goto2") << "void f(int i) { f(0); goto tag; f(1); if(i) f(3); tag: f(2); }" << 3;
   
-  QTest::newRow("outside") << "enum {Result = 2 ? 1 : 3 };" << 3;
+  QTest::newRow("outside") << "enum {Result = 2 ? 1 : 3 };" << 4;
+  QTest::newRow("class") << "struct Peu { public: Peu() { int x = 3?4:2; } int thing(int x) { return x ? x+1 : x-1; } };" << 10;
 }
+

@@ -74,14 +74,15 @@ void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* nod
   m_graph->addEntry(createCompoundStatement(node->function_body, m_returnNode));
 }
 
-void ControlFlowGraphBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
+void ControlFlowGraphBuilder::visitEnumerator(EnumeratorAST* node)
 {
-  bool create=!m_currentNode;
-  if(create)
-    m_graph->addEntry(createCompoundStatement(node, 0));
-  else
-    DefaultVisitor::visitSimpleDeclaration(node);
+    bool create=!m_currentNode;
+    if(create && node->expression)
+      m_graph->addEntry(createCompoundStatement(node->expression, 0));
+    else
+      DefaultVisitor::visitEnumerator(node);
 }
+
 
 void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
 {
