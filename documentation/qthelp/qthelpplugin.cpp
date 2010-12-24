@@ -102,7 +102,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     
     if(!dirName.isEmpty()) {
         QDir d(dirName);
-        foreach(const QString& file, d.entryList(QDir::NoDotAndDotDot)) {
+        foreach(const QString& file, d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot)) {
             QString fileName=dirName+'/'+file;
             QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
             
