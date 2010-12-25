@@ -66,6 +66,8 @@ std::string*/
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/area.h>
+#include <sublime/document.h>
+#include <sublime/view.h>
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
 #include <interfaces/iplugincontroller.h>
@@ -1441,9 +1443,8 @@ void PatchReviewPlugin::updateReview()
       
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
-        if (!documents.contains(absoluteUrl)) {
-          ICore::self()->documentController()->openDocument(absoluteUrl);
-        } else {
+        ICore::self()->documentController()->openDocument(absoluteUrl);
+        if (documents.contains(absoluteUrl)) {
           documents.remove(absoluteUrl);
         }
         seekHunk(true, absoluteUrl); //Jump to the first changed position
@@ -1454,9 +1455,13 @@ void PatchReviewPlugin::updateReview()
     }
   }
 
-  // close documents we didn't open again
-  foreach(IDocument* doc, documents.values()) {
-    doc->close();
+  // Close views for documents that were loaded from the working set, but are not in the patch
+  QList<IDocument*> documentsList = documents.values();
+  foreach(Sublime::View* view, w->area()->views()) {
+    IDocument* doc = dynamic_cast<IDocument*>(view->document());
+    if(doc && documentsList.contains(doc)) {
+      w->area()->closeView(view);
+    }
   }
 
   Q_ASSERT(futureActiveDoc);
