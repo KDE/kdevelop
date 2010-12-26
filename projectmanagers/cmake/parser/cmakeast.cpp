@@ -277,7 +277,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     //check and make sure the target name isn't something silly
     CMakeFunctionArgument arg = func.arguments.front();
-    if ( arg.value.toLower() == QLatin1String( "all" ) )
+    if ( arg.value=="ALL" )
         return false;
     else
         m_target = arg.value;
