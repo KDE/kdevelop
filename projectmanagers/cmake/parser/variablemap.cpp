@@ -47,36 +47,3 @@ QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & v
     
     return QHash<QString, QStringList>::insertMulti(varName, ret);
 }
-
-#if 0
-//We had this one when we splitted when reading
-QStringList VariableMap::value(const QString & varName) const
-{
-    const QStringList & value=QHash<QString, QStringList>::value(varName);
-    QStringList res;
-    foreach(const QString& v, value) {
-        res << v.split(';');
-    }
-    return res;
-}
-
-
-bool VariableMap::contains(const QString & varName) const
-{
-    return QHash<QString, QStringList>::contains(varName.toLower());
-}
-
-QStringList VariableMap::take(const QString & varName)
-{
-    return QHash<QString, QStringList>::take(varName.toLower());
-}
-
-int VariableMap::remove(const QString & varName)
-{
-    return QHash<QString, QStringList>::remove(varName.toLower());
-}
-#endif
-
-
-
-
