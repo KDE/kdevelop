@@ -28,10 +28,7 @@ QHash<QString, QStringList>::iterator VariableMap::insert(const QString & varNam
         if(v.isEmpty())
             continue;
         
-        if(v.contains(';'))
-            ret += v.split(';');
-        else
-            ret += v;
+        ret += v.split(';');
     }
     
     return QHash<QString, QStringList>::insert(varName, ret);
@@ -45,10 +42,7 @@ QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & v
         if(v.isEmpty())
             continue;
         
-        if(v.contains(';'))
-            ret += v.split(';');
-        else
-            ret += v;
+        ret += v.split(';');
     }
     
     return QHash<QString, QStringList>::insertMulti(varName, ret);
