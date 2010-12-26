@@ -286,10 +286,7 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.arguments.count()>1)
     {
         CMakeFunctionArgument arg2 = func.arguments[1];
-        if ( arg2.value.toUpper() == QLatin1String( "ALL" ) )
-            m_buildAlways = true;
-        else
-            m_buildAlways = false;
+        m_buildAlways = arg2.value == "ALL";
     }
 
     //what are we doing?
@@ -669,7 +666,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "cmake_minimum_required" )
         return false;
-    if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value.toUpper() != "VERSION")
+    if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value != "VERSION")
         return false;
 
     bool correct = false;
@@ -679,7 +676,7 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     if(func.arguments.count()==3)
     {
-        if(func.arguments[2].value.toUpper()=="FATAL_ERROR")
+        if(func.arguments[2].value=="FATAL_ERROR")
             m_wrongVersionIsFatal = true;
         else
             return false;
@@ -832,7 +829,7 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     // don't re-read the first element
     it++;
     for(; it!=itEnd; ++it) {
-        if(it->value.toUpper()=="OUTPUT_VARIABLE") {
+        if(it->value=="OUTPUT_VARIABLE") {
             ++it;
             if(it!=itEnd)
             {
@@ -841,7 +838,7 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
             else
                 return false;
-        } else if(it->value.toUpper()=="RETURN_VALUE") {
+        } else if(it->value=="RETURN_VALUE") {
             ++it;
             if(it!=itEnd)
             {
@@ -851,7 +848,7 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             else
                 return false;
         }
-        else if(it->value.toUpper()=="ARGS")
+        else if(it->value=="ARGS")
         {
             args=true;
         }
@@ -1618,7 +1615,7 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     
-    QString type=func.arguments[1].value.toUpper();
+    QString type=func.arguments[1].value;
     if(type=="VARIABLES")
         m_type=Variables;
     else if(type=="CACHE_VARIABLES")
@@ -2886,13 +2883,13 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="string" || func.arguments.count()<2)
         return false;
-    QString stringType=func.arguments[0].value.toUpper();
+    QString stringType=func.arguments[0].value;
     if(stringType=="REGEX")
     {
         if(func.arguments.count()<5)
             return false;
         m_type=Regex;
-        QString regexType = func.arguments[1].value.toUpper();
+        QString regexType = func.arguments[1].value;
 
         int outpos=3;
         if(regexType=="MATCH") m_cmdType=Match;
@@ -2935,7 +2932,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(func.arguments.count()!=5)
             return false;
         m_type=Compare;
-        QString argumentType=func.arguments[1].value.toUpper();
+        QString argumentType=func.arguments[1].value;
         if(argumentType=="EQUAL") m_cmdType=Equal;
         else if(argumentType=="NOTEQUAL") m_cmdType=NotEqual;
         else if(argumentType=="LESS") m_cmdType=Less;
@@ -2969,9 +2966,9 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         addOutputArgument(func.arguments[2]);
         
         int i=3;
-        if(func.arguments.count()>i) m_only = func.arguments[i].value.toUpper()=="@ONLY";
+        if(func.arguments.count()>i) m_only = func.arguments[i].value=="@ONLY";
         if(m_only) i++;
-        if(func.arguments.count()>i) m_escapeQuotes = func.arguments[i].value.toUpper()=="ESCAPE_QUOTES";
+        if(func.arguments.count()>i) m_escapeQuotes = func.arguments[i].value=="ESCAPE_QUOTES";
     }
     else if(stringType=="TOUPPER")
     {
