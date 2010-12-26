@@ -683,6 +683,10 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
             topctx->deleteChildContextsRecursively();
             topctx->deleteUses();
         }
+        
+        foreach(DUContext* importer, topctx->importers())
+            importer->removeImportedParentContext(topctx);
+        topctx->clearImportedParentContexts();
     }
     else
     {
@@ -699,10 +703,6 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     ///      for example a standard import like FindKDE4.cmake, because it creates a cross-dependency
     ///      between the topducontext's of independent projects, like for example kdebase and kdevplatform
     ///@todo Solve that by creating unique versions of all used top-context on a per-project basis using ParsingEnvironmentFile for disambiguation.
-    
-    foreach(DUContext* importer, topctx->importers())
-        importer->removeImportedParentContext(topctx);
-    topctx->clearImportedParentContexts();
     
     topctx->addImportedParentContext(aux);
 
