@@ -1831,16 +1831,10 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_includeType = Default;
     m_isSystem = false;
     
-    if(func.arguments[i].value=="AFTER") {
-        if(m_includeType!=Default)
-            return false;
+    if(func.arguments.first().value=="AFTER") {
         m_includeType = After;
         i++;
-    }
-    
-    if(func.arguments[i].value=="BEFORE") {
-        if(m_includeType!=Default)
-            return false;
+    } else if(func.arguments.first().value=="BEFORE") {
         m_includeType = Before;
         i++;
     }
@@ -1853,9 +1847,8 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() <= i )
         return false;
 
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
-    it=func.arguments.constBegin() + i;
-    itEnd = func.arguments.constEnd();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin() + i;
+    QList<CMakeFunctionArgument>::const_iterator itEnd = func.arguments.constEnd();
 
     for ( ; it != itEnd; ++it )
         m_includedDirectories.append(it->value);
