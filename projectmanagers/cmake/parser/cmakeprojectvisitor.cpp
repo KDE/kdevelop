@@ -2216,11 +2216,13 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
+        Identifier id(arg.value);
+        
+        QList<Declaration*> decls=m_topctx->findDeclarations(id);
         if(decls.isEmpty())
         {
             Declaration *d = new Declaration(arg.range(), m_topctx);
-            d->setIdentifier( Identifier(arg.value) );
+            d->setIdentifier(id);
         }
         else
         {
