@@ -329,41 +329,34 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
     int parenthesis=1;
     while((token = cmListFileLexer_Scan(lexer)))
     {
-        if(token->type == cmListFileLexer_Token_ParenRight)
+        switch(token->type)
         {
-            parenthesis--;
-            if(parenthesis==0) {
-                func.endLine=token->line;
-                func.endColumn=token->column;
-                return true;
-            } else if(parenthesis<0)
-                 return false;
-            else
-            {
-                CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
-                func.arguments << a;
-            }
-        }
-        else if(token->type == cmListFileLexer_Token_ParenLeft)
-        {
-            parenthesis++;
-            CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
-            func.arguments << a;
-        }
-        else if(token->type == cmListFileLexer_Token_Identifier ||
-                token->type == cmListFileLexer_Token_ArgumentUnquoted)
-        {
-            CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
-            func.arguments << a;
-        }
-        else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
-        {
-            CMakeFunctionArgument a( token->text, true, fileName, token->line, token->column+1 );
-            func.arguments << a;
-        }
-        else if(token->type != cmListFileLexer_Token_Newline)
-        {
-            return false;
+            case cmListFileLexer_Token_ParenRight:
+                parenthesis--;
+                if(parenthesis==0) {
+                    func.endLine=token->line;
+                    func.endColumn=token->column;
+                    return true;
+                } else if(parenthesis<0)
+                    return false;
+                else
+                    func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                break;
+            case cmListFileLexer_Token_ParenLeft:
+                parenthesis++;
+                func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                break;
+            case cmListFileLexer_Token_Identifier:
+            case cmListFileLexer_Token_ArgumentUnquoted:
+                func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                break;
+            case cmListFileLexer_Token_ArgumentQuoted:
+                func.arguments << CMakeFunctionArgument( token->text, true, fileName, token->line, token->column+1 );
+                break;
+            case cmListFileLexer_Token_Newline:
+                break;
+            default:
+                return false;
         }
         lastLine = cmListFileLexer_GetCurrentLine(lexer);
     }
