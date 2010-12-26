@@ -37,9 +37,9 @@ QMap<QChar, QChar> whatToScape()
     return ret;
 }
 
-QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
+const QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
 
-static QChar scapingChar='\\';
+static const QChar scapingChar='\\';
 QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
     int firstScape=value.indexOf(scapingChar);
@@ -50,12 +50,15 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
     
     QString newValue;
     int last=0;
+    QMap<QChar, QChar>::const_iterator itEnd = scapings.constEnd();
     for(int i=firstScape; i<value.size()-1 && i>=0; i=value.indexOf(scapingChar, i+2))
     {
         newValue+=value.mid(last, i-last);
-        QChar current=value[i+1];
-        if(scapings.contains(current))
-            newValue += scapings[current];
+        const QChar current=value[i+1];
+        QMap<QChar, QChar>::const_iterator it = scapings.constFind(current);
+        
+        if(it!=itEnd)
+            newValue += *it;
         else
             newValue += current;
 
