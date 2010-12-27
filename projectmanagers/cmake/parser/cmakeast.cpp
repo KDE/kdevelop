@@ -375,7 +375,7 @@ AddDefinitionsAst::~AddDefinitionsAst()
 
 bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_definitions" )
+    if ( func.name != "add_definitions" )
         return false;
 
     if ( func.arguments.isEmpty() )
@@ -401,7 +401,7 @@ AddDependenciesAst::~AddDependenciesAst()
 
 bool AddDependenciesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_dependencies" )
+    if ( func.name != "add_dependencies" )
         return false;
 
     if ( func.arguments.size() < 2 )
@@ -434,7 +434,7 @@ AddExecutableAst::~AddExecutableAst()
 
 bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_executable" )
+    if ( func.name != "add_executable" )
         return false;
 
     if ( func.arguments.size() < 2 )
@@ -487,7 +487,7 @@ AddLibraryAst::~AddLibraryAst()
 
 bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_library" || func.arguments.isEmpty() )
+    if ( func.name != "add_library" || func.arguments.isEmpty() )
         return false;
 
     bool libTypeSet = false;
@@ -542,7 +542,7 @@ AddSubdirectoryAst::~AddSubdirectoryAst()
 
 bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_subdirectory" )
+    if ( func.name != "add_subdirectory" )
         return false;
     if ( func.arguments.size() < 1 || func.arguments[0].value.isEmpty())
         return false;
@@ -573,7 +573,7 @@ AddTestAst::~AddTestAst()
 
 bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_test" )
+    if ( func.name != "add_test" )
         return false;
     if ( func.arguments.size() < 2 )
         return false;
@@ -598,7 +598,7 @@ AuxSourceDirectoryAst::~AuxSourceDirectoryAst()
 
 bool AuxSourceDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "aux_source_directory" )
+    if ( func.name != "aux_source_directory" )
         return false;
     if ( func.arguments.size() != 2 )
         return false;
@@ -620,7 +620,7 @@ BuildCommandAst::~BuildCommandAst()
 
 bool BuildCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "build_command" )
+    if ( func.name != "build_command" )
         return false;
     if ( func.arguments.size() < 2 )
         return false;
@@ -642,7 +642,7 @@ BuildNameAst::~BuildNameAst()
 
 bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "build_name" )
+    if ( func.name != "build_name" )
         return false;
     if ( func.arguments.size() != 1 )
         return false;
@@ -664,7 +664,7 @@ CMakeMinimumRequiredAst::~CMakeMinimumRequiredAst()
 
 bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "cmake_minimum_required" )
+    if ( func.name != "cmake_minimum_required" )
         return false;
     if ( func.arguments.size() < 2 || func.arguments.count() > 3 || func.arguments.first().value != "VERSION")
         return false;
@@ -695,7 +695,7 @@ ConfigureFileAst::~ConfigureFileAst()
 
 bool ConfigureFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "configure_file" )
+    if ( func.name != "configure_file" )
         return false;
 
     if ( func.arguments.size() < 2 )
@@ -734,7 +734,7 @@ CreateTestSourcelistAst::~CreateTestSourcelistAst()
 
 bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "create_test_sourcelist" )
+    if ( func.name != "create_test_sourcelist" )
         return false;
 
     if ( func.arguments.count() < 3 )
@@ -781,7 +781,7 @@ EnableLanguageAst::~EnableLanguageAst()
 
 bool EnableLanguageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "enable_language" )
+    if ( func.name != "enable_language" )
         return false;
 
     if ( func.arguments.isEmpty() || func.arguments.count() != 1 )
@@ -819,7 +819,7 @@ ExecProgramAst::~ExecProgramAst()
 
 bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower() != "exec_program" || func.arguments.count() == 0 )
+    if(func.name != "exec_program" || func.arguments.count() == 0 )
         return false;
 
     m_executableName = func.arguments[0].value;
@@ -875,7 +875,7 @@ ExecuteProcessAst::~ExecuteProcessAst()
 
 bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower() != "execute_process" || func.arguments.count()<2)
+    if(func.name != "execute_process" || func.arguments.count()<2)
         return false;
     
     enum Action {
@@ -987,7 +987,7 @@ ExportLibraryDepsAst::~ExportLibraryDepsAst()
 
 bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower() != "export_library_dependencies" || func.arguments.isEmpty())
+    if(func.name != "export_library_dependencies" || func.arguments.isEmpty())
         return false;
     m_file=func.arguments[0].value;
     if(func.arguments.count()>=2)
@@ -1014,7 +1014,7 @@ FileAst::~FileAst()
 
 bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "file" || func.arguments.count()<2)
+    if ( func.name != "file" || func.arguments.count()<2)
         return false;
 
     QString type = func.arguments.first().value;
@@ -1370,7 +1370,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_isQuiet=false;
     m_noModule=false;
     m_isRequired=false;
-    if ( func.name.toLower() != "find_package" )
+    if ( func.name != "find_package" )
         return false;
 
     if ( func.arguments.isEmpty() )
@@ -1787,7 +1787,7 @@ IncludeAst::~IncludeAst()
 
 bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "include" || (func.arguments.isEmpty() || func.arguments.size() > 4))
+    if ( func.name != "include" || (func.arguments.isEmpty() || func.arguments.size() > 4))
         return false;
 
     m_includeFile = func.arguments[0].value;
@@ -1824,7 +1824,7 @@ IncludeDirectoriesAst::~IncludeDirectoriesAst()
 
 bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "include_directories" || func.arguments.isEmpty() )
+    if ( func.name != "include_directories" || func.arguments.isEmpty() )
         return false;
     
     int i=0;
@@ -1882,7 +1882,7 @@ IncludeRegularExpressionAst::~IncludeRegularExpressionAst()
 
 bool IncludeRegularExpressionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "include_regular_expression" || func.arguments.isEmpty() || func.arguments.count()>2 )
+    if ( func.name != "include_regular_expression" || func.arguments.isEmpty() || func.arguments.count()>2 )
         return false;
     m_match=func.arguments[0].value;
     if(func.arguments.count()==2)
@@ -2009,7 +2009,7 @@ LinkDirectoriesAst::~LinkDirectoriesAst()
 
 bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "link_directories" || func.arguments.isEmpty() )
+    if ( func.name != "link_directories" || func.arguments.isEmpty() )
         return false;
     
     foreach(const CMakeFunctionArgument &arg, func.arguments)
@@ -2028,7 +2028,7 @@ LinkLibrariesAst::~LinkLibrariesAst()
 
 bool LinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "link_libraries" || func.arguments.isEmpty() )
+    if ( func.name != "link_libraries" || func.arguments.isEmpty() )
         return false;
     
     QString lastLib;
@@ -2062,7 +2062,7 @@ ListAst::~ListAst()
 
 bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "list" )
+    if ( func.name != "list" )
         return false;
     if ( func.arguments.size() < 2)
         return false;
@@ -2209,7 +2209,7 @@ LoadCacheAst::~LoadCacheAst()
 
 bool LoadCacheAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "load_cache" || func.arguments.count()<4)
+    if ( func.name != "load_cache" || func.arguments.count()<4)
         return false;
     m_cachePath=func.arguments[0].value;
     if(func.arguments[1].value=="READ_WITH_PREFIX")
@@ -2264,7 +2264,7 @@ LoadCommandAst::~LoadCommandAst()
 
 bool LoadCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "load_command" || func.arguments.count()<4)
+    if ( func.name != "load_command" || func.arguments.count()<4)
         return false;
     m_cmdName=func.arguments[0].value;
     
@@ -2285,7 +2285,7 @@ MacroAst::~MacroAst()
 
 bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "macro" || func.arguments.isEmpty())
+    if ( func.name != "macro" || func.arguments.isEmpty())
         return false;
 
     m_macroName = func.arguments.first().value.toLower();
@@ -2307,7 +2307,7 @@ FunctionAst::~FunctionAst()
 
 bool FunctionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "function" || func.arguments.isEmpty())
+    if ( func.name != "function" || func.arguments.isEmpty())
         return false;
 
     m_name = func.arguments.first().value.toLower();
@@ -2329,7 +2329,7 @@ MakeDirectoryAst::~MakeDirectoryAst()
 
 bool MakeDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "make_directory" || func.arguments.isEmpty() || func.arguments.size()>1)
+    if ( func.name != "make_directory" || func.arguments.isEmpty() || func.arguments.size()>1)
         return false;
     m_directory=func.arguments.first().value;
     return true;
@@ -2347,7 +2347,7 @@ MarkAsAdvancedAst::~MarkAsAdvancedAst()
 
 bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "mark_as_advanced" || func.arguments.isEmpty() )
+    if ( func.name != "mark_as_advanced" || func.arguments.isEmpty() )
         return false;
 
     m_isClear = func.arguments[0].value == "CLEAR";
@@ -2468,7 +2468,7 @@ ProjectAst::~ProjectAst()
 
 bool ProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "project" )
+    if ( func.name != "project" )
         return false;
 
     if ( func.arguments.size() < 1 )
@@ -2534,7 +2534,7 @@ RemoveAst::~RemoveAst()
 
 bool RemoveAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "remove" || func.arguments.isEmpty())
+    if ( func.name != "remove" || func.arguments.isEmpty())
         return false;
 
     m_variableName = func.arguments[0].value;
@@ -2558,7 +2558,7 @@ RemoveDefinitionsAst::~RemoveDefinitionsAst()
 
 bool RemoveDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "remove_definitions")
+    if ( func.name != "remove_definitions")
         return false;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
@@ -2581,7 +2581,7 @@ SeparateArgumentsAst::~SeparateArgumentsAst()
 /// introduced in CMake 2.8.
 bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "separate_arguments" || func.arguments.count()!=1)
+    if ( func.name != "separate_arguments" || func.arguments.count()!=1)
         return false;
 
     addOutputArgument(func.arguments.first());
@@ -2601,7 +2601,7 @@ SetAst::~SetAst()
 
 bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "set" || func.arguments.isEmpty() )
+    if ( func.name != "set" || func.arguments.isEmpty() )
         return false;
 
     m_variableName = func.arguments.first().value;
@@ -3069,7 +3069,7 @@ SubdirDependsAst::~SubdirDependsAst()
 
 bool SubdirDependsAst::parseFunctionInfo( const CMakeFunctionDesc& func)
 {
-    if ( func.name.toLower() != "subdir_depends" || func.arguments.isEmpty())
+    if ( func.name != "subdir_depends" || func.arguments.isEmpty())
         return false;
 
     return true;
@@ -3086,7 +3086,7 @@ SubdirsAst::~SubdirsAst()
 
 bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "subdirs" )
+    if ( func.name != "subdirs" )
         return false;
 
     if ( func.arguments.isEmpty() )
@@ -3120,7 +3120,7 @@ TargetLinkLibrariesAst::~TargetLinkLibrariesAst()
 
 bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "target_link_libraries" )
+    if ( func.name != "target_link_libraries" )
         return false;
 
     //we don't do variable expansion when parsing like CMake does, so we
@@ -3171,7 +3171,7 @@ TryCompileAst::~TryCompileAst()
 
 bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "try_compile" || func.arguments.size() < 3)
+    if ( func.name != "try_compile" || func.arguments.size() < 3)
         return false;
     m_resultName=func.arguments[0].value;
     m_binDir=func.arguments[1].value;

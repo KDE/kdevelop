@@ -121,7 +121,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
             {
                 haveNewline = false;
                 CMakeFunctionDesc function;
-                function.name = token->text;
+                function.name = QString(token->text).toLower();
                 function.filePath = fileName;
                 function.line = token->line;
                 function.column = token->column;

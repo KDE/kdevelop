@@ -1198,7 +1198,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     QList<int> ini;
     for(; it!=itEnd; ++it, lines++)
     {
-        QString funcName=it->name.toLower();
+        QString funcName=it->name;
 //         kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
         if(funcName=="if")
         {
@@ -1693,11 +1693,11 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
             for(; depth>0 && it!=itEnd; ++it, lines++)
             {
-                if(it->name.toLower()=="foreach")
+                if(it->name=="foreach")
                 {
                     depth++;
                 }
-                else if(it->name.toLower()=="endforeach")
+                else if(it->name=="endforeach")
                 {
                     depth--;
                 }
@@ -1715,11 +1715,11 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
             for(; depth>0 && it!=itEnd; ++it, lines++)
             {
-                if(it->name.toLower()=="foreach")
+                if(it->name=="foreach")
                 {
                     depth++;
                 }
-                else if(it->name.toLower()=="endforeach")
+                else if(it->name=="endforeach")
                 {
                     depth--;
                 }
@@ -2062,7 +2062,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     int lines=0, inside=1;
     for(; inside>0 && it!=itEnd; ++it, lines++)
     {
-        QString funcName=it->name.toLower();
+        QString funcName=it->name;
         if(funcName=="while")
             inside++;
         else if(funcName=="endwhile")
@@ -2095,13 +2095,13 @@ enum RecursivityType { No, Yes, End, Break };
 
 RecursivityType recursivity(const QString& functionName)
 {
-    QString upperFunctioName=functionName.toUpper();
-    if(upperFunctioName=="IF" || upperFunctioName=="WHILE" ||
-       upperFunctioName=="FOREACH" || upperFunctioName=="MACRO")
+    QString upperFunctioName=functionName;
+    if(upperFunctioName=="if" || upperFunctioName=="while" ||
+       upperFunctioName=="foreach" || upperFunctioName=="macro")
         return Yes;
-    else if(upperFunctioName=="ELSE" || upperFunctioName=="ELSEIF" || upperFunctioName.startsWith("END"))
+    else if(upperFunctioName=="else" || upperFunctioName=="elseif" || upperFunctioName.startsWith("end"))
         return End;
-    else if(upperFunctioName=="BREAK")
+    else if(upperFunctioName=="break")
         return Break;
     return No;
 }
