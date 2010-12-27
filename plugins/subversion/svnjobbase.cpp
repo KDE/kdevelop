@@ -156,6 +156,7 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
         {
             m_status = KDevelop::VcsJob::JobFailed;
         }
+        emitResult();
     }
     if( m_status == VcsJob::JobCanceled )
     {
