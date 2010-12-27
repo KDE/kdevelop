@@ -2009,7 +2009,7 @@ LinkDirectoriesAst::~LinkDirectoriesAst()
 
 bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "include_regular_expression" || func.arguments.isEmpty() )
+    if ( func.name.toLower() != "link_directories" || func.arguments.isEmpty() )
         return false;
     
     foreach(const CMakeFunctionArgument &arg, func.arguments)
