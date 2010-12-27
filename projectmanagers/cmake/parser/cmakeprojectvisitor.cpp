@@ -1002,8 +1002,9 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         return;
     QString id=def.arguments.first().value.toLower();
     
+    Identifier identifier(id);
     DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
+    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
     int idx;
@@ -1016,7 +1017,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     else
     {
         Declaration *d = new Declaration(sr, m_topctx);
-        d->setIdentifier( Identifier(id) );
+        d->setIdentifier( identifier );
 
         FunctionType* func=new FunctionType();
         foreach(const QString& arg, args)
