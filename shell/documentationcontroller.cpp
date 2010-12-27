@@ -130,14 +130,20 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     foreach(IPlugin* p, pluginsProvider)
     {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
-        Q_ASSERT(docProvider);
+        if (!docProvider) {
+            kWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca4";
+            continue;
+        }
         ret.append(docProvider->providers());
     }
     
     foreach(IPlugin* p, plugins)
     {
         IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
-        Q_ASSERT(doc);
+        if (!doc) {
+            kWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca4";
+            continue;
+        }
         ret.append(doc);
     }
 

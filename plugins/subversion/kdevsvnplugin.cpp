@@ -102,6 +102,11 @@ KDevSvnPlugin::~KDevSvnPlugin()
 
 bool KDevSvnPlugin::isVersionControlled(const KUrl& localLocation)
 {
+    ///TODO: also check this in the other functions?
+    if (!localLocation.isValid()) {
+        return false;
+    }
+
     SvnInfoJob* job = new SvnInfoJob(this);
 
     job->setLocation(localLocation);
