@@ -93,8 +93,10 @@ struct AbstractFileManagerPlugin::Private {
     /// Common renaming function.
     bool rename( ProjectBaseItem* item, const KUrl& destination);
 
+    void removeFolder(ProjectFolderItem* folder);
+
     QMap<IProject*, KDirWatch*> m_watchers;
-    QMap<IProject*, QList<KJob*> > m_projectJobs;
+    QMap<IProject*, QList<FileManagerListJob*> > m_projectJobs;
 };
 
 void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
@@ -102,7 +104,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
     if ( m_projectJobs.contains(project) ) {
         // make sure the import job does not live longer than the project
         // see also addLotsOfFiles test
-        foreach( KJob* job, m_projectJobs[project] ) {
+        foreach( FileManagerListJob* job, m_projectJobs[project] ) {
             kDebug(9517) << "killing project job:" << job;
             job->kill();
         }
@@ -116,7 +118,7 @@ KJob* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderIte
 {
     FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
-    kDebug(9517) << "adding job" << listJob << item->url() << "for project" << item->project();
+    kDebug(9517) << "adding job" << listJob << item << item->url() << "for project" << item->project();
 
     ICore::self()->runController()->registerJob( listJob );
 
@@ -133,8 +135,8 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
     Q_ASSERT(gmlJob);
-    kDebug(9517) << gmlJob;
-    m_projectJobs[ gmlJob->item()->project() ].removeOne( job );
+    ifDebug(kDebug() << job << gmlJob;)
+    m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
 }
 
 void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
@@ -159,6 +161,9 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
 
         KUrl url = baseItem->url();
         url.addPath( name );
+        if (entry.isDir()) {
+            url.adjustPath(KUrl::AddTrailingSlash);
+        }
 
         if ( !q->isValid( url, entry.isDir(), baseItem->project() ) ) {
             continue;
@@ -192,8 +197,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             int index = folders.indexOf( f->url() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
-                ifDebug(kDebug(9517) << "removing folder:" << f->url();)
-                baseItem->removeRow( j );
+                removeFolder(f);
                 --j;
             } else {
                 // this folder already exists in the view
@@ -208,7 +212,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             int index = files.indexOf( f->url() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
-                ifDebug(kDebug(9517) << "removing file:" << f->url();)
+                ifDebug(kDebug(9517) << "removing file:" << f << f->url();)
                 baseItem->removeRow( j );
                 --j;
             } else {
@@ -236,15 +240,29 @@ void AbstractFileManagerPlugin::Private::created(const QString &path)
     QFileInfo info(path);
 
     KUrl url = KUrl(path);
+    if (info.isDir()) {
+        url.adjustPath(KUrl::AddTrailingSlash);
+    }
     KUrl parent = url.upUrl();
 
     foreach ( IProject* p, m_watchers.keys() ) {
         if ( !q->isValid(url, info.isDir(), p) ) {
             continue;
         }
-        if ( !p->foldersForUrl(url).isEmpty() || !p->filesForUrl(url).isEmpty() ) {
-            // exists already in this project, happens e.g. when we restart the dirwatcher
-            // for files it also gets triggered for kate's backup files
+        if ( info.isDir() ) {
+            bool found = false;
+            foreach ( ProjectFolderItem* folder, p->foldersForUrl(url) ) {
+                // exists already in this project, happens e.g. when we restart the dirwatcher
+                // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
+                kDebug(9517) << "force reload of" << url << folder;
+                eventuallyReadFolder( folder, true );
+                found = true;
+            }
+            if ( found ) {
+                continue;
+            }
+        } else if (!p->filesForUrl(url).isEmpty()) {
+            // also gets triggered for kate's backup files
             continue;
         }
         foreach ( ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
@@ -280,11 +298,11 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path)
             continue;
         }
         foreach ( ProjectFolderItem* item, p->foldersForUrl(url) ) {
-            emit q->folderRemoved(item);
-            item->parent()->removeRow(item->row());
+            removeFolder(item);
         }
         foreach ( ProjectFileItem* item, p->filesForUrl(url) ) {
             emit q->fileRemoved(item);
+            ifDebug(kDebug(9517) << "removing file" << item;)
             item->parent()->removeRow(item->row());
         }
     }
@@ -341,6 +359,18 @@ void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* fold
     }
     Q_ASSERT(m_watchers.contains(folder->project()));
     m_watchers[folder->project()]->restartDirScan(folder->url().toLocalFile());
+}
+
+void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
+{
+    ifDebug(kDebug(9517) << "removing folder:" << folder << folder->url();)
+    foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
+        if (job->item() == folder) {
+            kDebug(9517) << "killing list job for removed folder" << job << folder->url();
+            job->kill();
+        }
+    }
+    folder->parent()->removeRow( folder->row() );
 }
 
 //END Private

@@ -138,8 +138,6 @@ public:
         A project won't be ready for use when it's being reloaded or still loading
     */
     virtual bool isReady() const=0;
-//     virtual void setLocalFile( const KUrl& ) = 0;
-//     virtual void setGlobalFile( const KUrl& ) = 0;
 
 public Q_SLOTS:
     /**

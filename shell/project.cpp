@@ -143,7 +143,7 @@ public:
     QString developerTempFile;
     QString projectTempFile;
     IPlugin* manager;
-    IPlugin* vcsPlugin;
+    QWeakPointer<IPlugin> vcsPlugin;
     ProjectFolderItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
@@ -389,7 +389,7 @@ public:
                 if( iface && iface->isVersionControlled( topItem->url() ) )
                 {
                     vcsPlugin = p;
-                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( vcsPlugin ).pluginName() );
+                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( p ).pluginName() );
                     projectGroup.sync();
                 }
             }
@@ -425,7 +425,6 @@ Project::Project( QObject *parent )
     d->project = this;
     d->manager = 0;
     d->topItem = 0;
-    d->vcsPlugin = 0;
     d->loading = false;
     d->scheduleReload = false;
     d->progress = new ProjectProgress;
@@ -638,9 +637,8 @@ ProjectFolderItem* Project::projectItem() const
 
 IPlugin* Project::versionControlPlugin() const
 {
-    return d->vcsPlugin;
+    return d->vcsPlugin.data();
 }
-
 
 void Project::addToFileSet( const IndexedString& file )
 {
