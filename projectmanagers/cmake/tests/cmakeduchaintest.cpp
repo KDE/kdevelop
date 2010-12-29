@@ -21,6 +21,8 @@
 #include "cmakeduchaintest.h"
 #include "cmakeprojectvisitor.h"
 
+#include <set>
+
 #include <language/duchain/identifier.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
@@ -273,13 +275,12 @@ void CMakeDUChainTest::testUses()
     }
     
     QCOMPARE(ctx->usesCount(), uses.count());
-    for(int i=0; i<ctx->usesCount(); i++)
-    {
-        Use u=ctx->uses()[i];
-        qDebug() << "use" << i << u.m_range.castToSimpleRange().textRange() << uses[i].castToSimpleRange().textRange()
-                 << u.usedDeclaration(ctx)->toString();
-        QCOMPARE(uses[i], u.m_range);
+
+    std::set<RangeInRevision> found;
+    for(int i=0;i<ctx->usesCount();i++){
+        found.insert(ctx->uses()[i].m_range);
     }
+    QCOMPARE(found,std::set<RangeInRevision>(uses.begin(),uses.end()));
     
     DUChain::self()->removeDocumentChain(m_fakeContext);
 
