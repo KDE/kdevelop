@@ -128,7 +128,7 @@ QHash<int, QString> initOperatorNames() {
   ret['<'] = "<";
   ret['>'] = ">";
   ret[','] = ",";
-  ret[Token_assign] = "=";
+  ret[Token_assign] = "+=";
   ret[Token_shift] = "<<"; ///@todo Parser does not differentiate between << and >>
   ret[Token_eq] = "==";
   ret[Token_not_eq] = "!=";
@@ -142,7 +142,7 @@ QHash<int, QString> initOperatorNames() {
 }
 
 QHash<int, QString> operatorNames = initOperatorNames();
-
+//BUG use the much more complete list from tokens.cpp
 QString operatorNameFromTokenKind( int tokenKind )
 {
   QHash<int, QString>::const_iterator it = operatorNames.constFind(tokenKind);
