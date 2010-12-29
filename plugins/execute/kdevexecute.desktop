@@ -20,6 +20,7 @@ Comment[nds]=Dit Moduul föhrt Programmen ahn Utstatter ut, d.h. bloots mit den 
 Comment[nl]=Deze plugin staat het uitvoeren van programma's toe zonder hulpprogramma, dwz. van nature op de huidige host.
 Comment[pt]=Este 'plugin' permite a execução dos programas não-instrumentalizados, i.e. nativamente pela máquina actual.
 Comment[pt_BR]=Esta extensão permite rodar programas sem orquestrador, ou seja, nativamente pelo computador hospedeiro.
+Comment[sl]=Vstavek omogoča zaganjanje programov, za katere v KDevelop ni posebnega grafičnega vmesnika.
 Comment[sv]=Insticksprogrammet tillåter att program utan instrumentering körs, dvs. direkt av nuvarande värddator.
 Comment[uk]=За допомогою цього додатка можна запускати програми безпосередньо на поточному вузлі.
 Comment[x-test]=xxThis plugin allows running of programs with no instrumentor, ie. natively by the current host.xx
