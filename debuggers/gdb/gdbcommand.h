@@ -21,7 +21,7 @@
 #include <QStringList>
 
 #include "mi/gdbmi.h"
-#include <QPointer>
+#include <QWeakPointer>
 
 namespace GDBDebugger
 {
@@ -151,7 +151,7 @@ public:
 private:
     GDBMI::CommandType type_;
     QString command_;
-    QPointer<QObject> handler_this;
+    QWeakPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
     GDBCommandHandler *commandHandler_;
@@ -195,7 +195,7 @@ public: // GDBCommand overrides
     bool invokeHandler(const GDBMI::ResultRecord& r);
 
 private:
-        QPointer<QObject> cli_handler_this;
+        QWeakPointer<QObject> cli_handler_this;
     typedef void (QObject::* cli_handler_t)(const QStringList&);
     cli_handler_t cli_handler_method;
 };
@@ -220,7 +220,7 @@ public:
     using GDBCommand::invokeHandler;
     void invokeHandler()
     {
-        (handler_this->*handler_method)();
+        (handler_this.data()->*handler_method)();
     }
 
     QString cmdToSend()
@@ -229,7 +229,7 @@ public:
     }
 
 private:
-        QPointer<QObject> handler_this;
+        QWeakPointer<QObject> handler_this;
     handler_method_t handler_method;
 
 };
@@ -265,11 +265,11 @@ public:
 
     void handleResponse(const GDBMI::ResultRecord& r)
     {
-        (handler_this->*handler_method)(r["value"].literal());
+        (handler_this.data()->*handler_method)(r["value"].literal());
     }
 
 private:
-        QPointer<QObject> handler_this;
+        QWeakPointer<QObject> handler_this;
     handler_method_t handler_method;
 };
 

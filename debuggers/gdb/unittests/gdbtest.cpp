@@ -1219,13 +1219,13 @@ void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {
-    QPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
+    QWeakPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
     kDebug() << "waiting for state" << state;
     QTime stopWatch;
     stopWatch.start();
-    while (s->state() != state) {
+    while (s.data()->state() != state) {
         if (stopWatch.elapsed() > 5000) {
-            kWarning() << "current state" << s->state() << "waiting for" << state;
+            kWarning() << "current state" << s.data()->state() << "waiting for" << state;
             kFatal() << QString("Didn't reach state in %0:%1").arg(file).arg(line);
         }
         QTest::qWait(20);

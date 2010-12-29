@@ -103,9 +103,10 @@ public:
         if (r.reason == "error") {
             /* Probably should mark this disabled, or something.  */
         } else {
-            m_variable->deleteChildren();
-            m_variable->setInScope(true);
-            m_variable->setVarobj(r["name"].literal());
+            GdbVariable* variable = m_variable.data();
+            variable->deleteChildren();
+            variable->setInScope(true);
+            variable->setVarobj(r["name"].literal());
             
             bool hasMore = false;
             if (r.hasField("has_more") && r["has_more"].toInt())
@@ -119,17 +120,17 @@ public:
                 // be true.
                 hasMore = r["numchild"].toInt() != 0;
 
-            m_variable->setHasMore(hasMore);
+            variable->setHasMore(hasMore);
 
-            m_variable->setValue(r["value"].literal());
+            variable->setValue(r["value"].literal());
             hasValue = !r["value"].literal().isEmpty();
-            if (m_variable->isExpanded() && r["numchild"].toInt()) {
-                m_variable->fetchMoreChildren();
+            if (variable->isExpanded() && r["numchild"].toInt()) {
+                variable->fetchMoreChildren();
             }
 
-            if (m_variable->format() != KDevelop::Variable::Natural) {
+            if (variable->format() != KDevelop::Variable::Natural) {
                 //TODO doesn't work for children as they are not yet loaded
-                m_variable->formatChanged();
+                variable->formatChanged();
             }
         }
 
@@ -140,7 +141,7 @@ public:
     virtual bool handlesError() { return true; }
 
 private:
-    QPointer<GdbVariable> m_variable;
+    QWeakPointer<GdbVariable> m_variable;
     QObject *m_callback;
     const char *m_callbackMethod;
 };
@@ -183,6 +184,8 @@ public:
         if (!m_variable) return;
         --m_activeCommands;
 
+        GdbVariable* variable = m_variable.data();
+
         if (r.hasField("children"))
         {
             const GDBMI::Value& children = r["children"];
@@ -198,13 +201,13 @@ public:
                                        this/*use again as handler*/));
                 } else {
                     KDevelop::Variable* xvar = m_session->variableController()->
-                        createVariable(m_variable->model(), m_variable, 
+                        createVariable(variable->model(), variable,
                                        child["exp"].literal());
                     GdbVariable* var = static_cast<GdbVariable*>(xvar);
                     var->setTopLevel(false);
                     var->setVarobj(child["name"].literal());
                     var->setHasMoreInitial(child["numchild"].toInt());
-                    m_variable->appendChild(var);
+                    variable->appendChild(var);
                     var->setValue(child["value"].literal());
                 }
             }
@@ -218,7 +221,7 @@ public:
         if (r.hasField("has_more"))
             hasMore = r["has_more"].toInt();
 
-        m_variable->setHasMore(hasMore);
+        variable->setHasMore(hasMore);
         if (m_activeCommands == 0) {
             delete this;
         }
@@ -233,7 +236,7 @@ public:
     }
 
 private:
-    QPointer<GdbVariable> m_variable;
+    QWeakPointer<GdbVariable> m_variable;
     DebugSession *m_session;
     int m_activeCommands;
 };
@@ -339,10 +342,10 @@ public:
     virtual void handle(const GDBMI::ResultRecord &r)
     {
         if(r.hasField("value"))
-            m_variable->setValue(r["value"].literal());
+            m_variable.data()->setValue(r["value"].literal());
     }
 private:
-    QPointer<GdbVariable> m_variable;
+    QWeakPointer<GdbVariable> m_variable;
 };
 
 void GdbVariable::formatChanged()
