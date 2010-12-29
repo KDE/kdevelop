@@ -180,16 +180,13 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
   repository->close();
   m_repositories.remove(repository);
 }
-
-//Recursive delete, copied from a mailing-list
-//Returns true on success
-bool removeDirectory(const QDir &aDir)
+bool removeDirectory(const QDir &aDir);
+bool clearDirectory(const QDir &aDir)
 {
   bool has_err = false;
   if (aDir.exists())//QDir::NoDotAndDotDot
   {
-    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot | 
-    QDir::Dirs | QDir::Files);
+    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
     int count = entries.size();
     for (int idx = 0; ((idx < count) && !has_err); idx++)
     {
@@ -203,13 +200,19 @@ bool removeDirectory(const QDir &aDir)
       {
         QFile file(path);
         if (!file.remove())
-        has_err = true;
+          has_err = true;
       }
     }
-    if (!aDir.rmdir(aDir.absolutePath()))
-      has_err = true;
   }
   return !has_err;
+  
+}
+
+//Recursive delete, copied from a mailing-list
+//Returns true on success
+bool removeDirectory(const QDir &aDir)
+{
+  return !(clearDirectory(aDir) && !QDir().rmdir(aDir.absolutePath()));
 }
 
 //After calling this, the data-directory may be a new one
@@ -226,8 +229,8 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   // to be released before deleting a directory that contains these files
   
   m_lock->unlock();
-  bool result = removeDirectory(d);
-  Q_ASSERT(result);
+  bool result = clearDirectory(d);
+//  Q_ASSERT(result);
   Q_ASSERT(m_lock);
   //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();
