@@ -75,8 +75,8 @@ Source kdeProjects[nOfKDEProjects] = {
     Source("", "kdesupport", Source::SVN, "%PREFIX/trunk/kdesupport"),
     
     //GIT
-    Source("", "kdevplatform", Source::Git, "git@gitorious.org:kdevplatform/kdevplatform.git"),
-    Source("kdevelop", "kdevelop", Source::Git, "git@gitorious.org:kdevelop/kdevelop.git")
+    Source("kdevelop", "kdevplatform", Source::Git, "git@git.kde.org:kdevplatform"),
+    Source("kdevelop", "kdevelop", Source::Git, "git@git.kde.org:kdevelop")
 };
 }
 

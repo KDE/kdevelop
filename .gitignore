@@ -1,5 +1,6 @@
 apidocs
 .kdev4
+build
 *~
 *.orig
 *.rej
