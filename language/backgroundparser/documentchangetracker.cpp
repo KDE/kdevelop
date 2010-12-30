@@ -75,6 +75,7 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)));
     connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)));
     connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
+    connect(document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)), SLOT(documentSavedOrUploaded(KTextEditor::Document*,bool)));
     
     m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(m_moving);
@@ -251,6 +252,11 @@ void DocumentChangeTracker::textRemoved( Document* document, Range oldRange, QSt
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
     
     updateChangedRange(oldRange);
+}
+
+void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc,bool)
+{
+    ModificationRevision::clearModificationCache(IndexedString(doc->url()));
 }
 
 void DocumentChangeTracker::documentDestroyed( QObject* )

@@ -46,6 +46,8 @@ class  hash_map : public std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> { }
 #include "modificationrevisionset.h"
 #include <sys/time.h>
 
+///@todo Listen to filesystem changes (together with the project manager) and call fileModificationCache().clear(...) when a file has changed
+
 namespace KDevelop {
 
 const int cacheModificationTimesForSeconds = 30;
