@@ -253,7 +253,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     QString extension;
     if(extensionStart != -1)
     {
-        extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')));
+        extension = fileName.mid(extensionStart+1);
         if(extension.size() > maximumCacheExtensionLength || isNumeric(extension))
             extension = QString();
     }
