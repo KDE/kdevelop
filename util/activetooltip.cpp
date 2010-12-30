@@ -85,7 +85,8 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     {
         if(insideThis(object))
             return false;
-        kDebug() << "closing because of window activation";
+        if(isVisible())
+            kDebug() << "closing because of window activation";
         close();
     }
     case QEvent::MouseButtonPress:
@@ -101,7 +102,8 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
                 return false;
         }
         if (!insideThis(object)) {
-            kDebug() << "closing because of click into" << object;
+            if(isVisible())
+                kDebug() << "closing because of click into" << object;
             close();
         }
 
