@@ -76,6 +76,9 @@ struct LanguageControllerPrivate {
     LanguageCache languageCache; //Maps mimetype-names to languages
     typedef QMultiMap<KMimeType::Ptr, ILanguage*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
+    // fallback cache for file extensions not handled by any pattern
+    typedef QMap<QString, QList<ILanguage*> > FileExtensionCache;
+    FileExtensionCache fileExtensionCache;
 
     BackgroundParser *backgroundParser;
     bool m_cleanedUp;
@@ -198,7 +201,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     if(d->m_cleanedUp)
         return languages;
     
-    QString fileName = url.fileName();
+    const QString fileName = url.fileName();
 
     ///TODO: cache regexp or simple string pattern for endsWith matching
     QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
@@ -227,13 +230,20 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         }
     }
 
+    if(!languages.isEmpty())
+        return languages;
+
+    // no pattern found, try the file extension cache
+    const QString extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')));
+    languages = d->fileExtensionCache.value(extension);
+
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
     ///Crashy and unsafe part: Load missing language-supports
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url, 0, false, true);
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
 
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
     if (it != d->languageCache.constEnd()) {
@@ -256,6 +266,8 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
             }
         }
     }
+
+    d->fileExtensionCache.insert(extension, languages);
 
     return languages;
 }

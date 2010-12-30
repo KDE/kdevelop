@@ -172,7 +172,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
     if(info.isFile())
     {
         kDebug() << "adding file" << path;
-        KUrl pathUrl(path);
+        KUrl pathUrl(info.canonicalFilePath());
         
         m_waiting << pathUrl;
         ++m_total;
