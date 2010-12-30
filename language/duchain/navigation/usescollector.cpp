@@ -32,6 +32,7 @@
 #include "../classmemberdeclaration.h"
 #include "../abstractfunctiondeclaration.h"
 #include "../functiondefinition.h"
+#include <interfaces/iuicontroller.h>
 
 using namespace KDevelop;
 
@@ -337,14 +338,22 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   if(!m_staticFeaturesManipulated.contains(url))
     return; //Not interesting
 
-  if(!(topContext->features() & TopDUContext::AllDeclarationsContextsAndUses) || topContext->parsingEnvironmentFile()->needsUpdate()) {
+  if(!(topContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
       ///@todo With simplified environment-matching, the same file may have been imported multiple times,
       ///while only one of  those was updated. We have to check here whether this file is just such an import,
       ///or whether we work on with it.
       ///@todo We will lose files that were edited right after their update here.
-//       kDebug() << "context" << topContext->url().str() << "does not have the required features";
+      kWarning() << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
+      ICore::self()->uiController()->showErrorMessage("Updating " + ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " failed!", 5);
       return;
   }
+  
+  if(topContext->parsingEnvironmentFile()->needsUpdate()) {
+      kWarning() << "WARNING: context" << topContext->url().str() << "is not up to date!";
+      ICore::self()->uiController()->showErrorMessage(ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " still needs an update!", 5);
+//       return;
+  }
+  
 
     IndexedTopDUContext indexed(topContext.data());
     if(m_checked.contains(indexed))
