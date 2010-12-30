@@ -233,6 +233,14 @@ struct InsertIntoDUChain
     if(!m_topContext)
       m_topContext = tryGet();
   }
+
+  ///Helper function: get a declaration based on its qualified identifier
+  Declaration* getDeclaration(QString id) {
+    get();
+    if(!topContext())
+      return 0;
+    return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).getDeclaration(topContext());
+  }
   
   TopDUContext* topContext() {
     return m_topContext.data();
