@@ -38,6 +38,10 @@
 #include "completionsettings.h"
 #include <QThread>
 
+// Maximum length of a string to still consider it as a file extension which we cache
+// This has to be a slow value, so that we don't fill our file extension cache with crap
+static const int maximumCacheExtensionLength = 3;
+
 namespace KDevelop {
 
 
@@ -192,6 +196,17 @@ ILanguage *LanguageController::language(const QString &name) const
     }
 }
 
+bool isNumeric(const QString& str)
+{
+    int len = str.length();
+    if(len == 0)
+        return false;
+    for(int a = 0; a < len; ++a)
+        if(!str[a].isNumber())
+            return false;
+    return true;
+}
+
 QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 {
     QMutexLocker lock(&d->dataMutex);
@@ -234,16 +249,34 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         return languages;
 
     // no pattern found, try the file extension cache
-    const QString extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')));
-    languages = d->fileExtensionCache.value(extension);
+    int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
+    QString extension;
+    if(extensionStart != -1)
+    {
+        extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')));
+        if(extension.size() > maximumCacheExtensionLength || isNumeric(extension))
+            extension = QString();
+    }
+
+    if(!extension.isEmpty())
+        languages = d->fileExtensionCache.value(extension);
 
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
-    ///Crashy and unsafe part: Load missing language-supports
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+    KMimeType::Ptr mimeType;
+    
+    if(!extension.isEmpty())
+        // If we have recognized a file extension, allow using the file-contents
+        // to look up the type. We will cache it after all.
+        mimeType = KMimeType::findByUrl(url);
+    else
+        // If we have not recognized a file extension, do not allow using the file-contents
+        // to look up the type. We cannot cache the result, and thus we might end up reading
+        // the contents of every single file, which can make the application very unresponsive.
+        mimeType = KMimeType::findByUrl(url, 0, false, true);
 
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
     if (it != d->languageCache.constEnd()) {
@@ -267,7 +300,8 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         }
     }
 
-    d->fileExtensionCache.insert(extension, languages);
+    if(!extension.isEmpty())
+        d->fileExtensionCache.insert(extension, languages);
 
     return languages;
 }
