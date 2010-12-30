@@ -110,9 +110,9 @@ ColorCache::ColorCache(QObject* parent)
             this, SLOT(updateColorsFromScheme()), Qt::QueuedConnection);
   #endif
 
-  m_self = this;
+  updateInternal();
 
-  update();
+  m_self = this;
 }
 
 ColorCache::~ColorCache()
@@ -227,16 +227,22 @@ void ColorCache::updateColorsFromSettings()
 
 void ColorCache::update()
 {
+  if ( !m_self ) {
+    // don't update on startup, updateInternal is called directly there
+    return;
+  }
+
   QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
 }
 
 void ColorCache::updateInternal()
 {
-  if ( !m_self ) { // don't update during startup
+  generateColors();
+
+  if ( !m_self ) {
+    // don't do anything else fancy on startup
     return;
   }
-
-  generateColors();
 
   emit colorsGotChanged();
 
