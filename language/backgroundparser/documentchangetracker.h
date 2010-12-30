@@ -247,6 +247,7 @@ public slots:
     virtual void textChanged( KTextEditor::Document* document, KTextEditor::Range oldRange, QString oldText, KTextEditor::Range newRange );
     void documentDestroyed( QObject* );
     void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
+    void documentSavedOrUploaded(KTextEditor::Document*,bool);
 private:
     
     virtual bool checkMergeTokens(const KTextEditor::Range& range, QString oldText, QString newText);
