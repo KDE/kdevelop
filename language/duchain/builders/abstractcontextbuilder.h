@@ -569,6 +569,7 @@ protected:
    * \param identifier The identifier which corresponds to the context.
    * \returns the opened context.
    */
+  
   virtual DUContext* openContextInternal( const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     Q_ASSERT( m_compilingContexts );
@@ -585,9 +586,10 @@ protected:
         for ( ; currentIndex < childContexts.count(); ++currentIndex )
         {
           DUContext* child = childContexts.at( currentIndex );
+          RangeInRevision childRange = child->range();
 
           //For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
-          if ( child->type() == type && child->localScopeIdentifier() == identifier && (!identifier.isEmpty() || child->range() == range) )
+          if ( (childRange == range && !childRange.isEmpty()) || (child->type() == type && child->localScopeIdentifier() == identifier && !identifier.isEmpty()) )
           {
             // Match
             ret = child;
@@ -597,14 +599,11 @@ protected:
             ret->clearImportedParentContexts();
             ++currentIndex;
             break;
-          }else{
-            break;
           }
         }
         if(ret)
           nextContextIndex() = currentIndex; //If we had a match, jump forward to that position
-        else
-          ++nextContextIndex();   //If we did not have a match, just increment by 1
+          ///@todo We should also somehow make sure we don't get quadratic worst-case effort while updating.
       }
 
       if ( !ret )
