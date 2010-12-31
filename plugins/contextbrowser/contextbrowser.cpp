@@ -537,10 +537,12 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCurso
       return foundDeclaration;
 }
 
-ContextBrowserView* ContextBrowserPlugin::browserViewForTextView(View* view)
+ContextBrowserView* ContextBrowserPlugin::browserViewForWidget(QWidget* widget)
 {
   foreach(ContextBrowserView* contextView, m_views) {
-    if(masterWidget(contextView) == masterWidget(view)) {
+    if(!contextView->isVisible())
+      continue;
+    if(masterWidget(contextView) == masterWidget(widget)) {
       return contextView;
     }
   }
@@ -596,7 +598,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     ///Check whether there is a special language object to highlight (for example a macro)
     
     SimpleRange specialRange = language->languageSupport()->specialLanguageObjectRange(url, highlightPosition);
-    ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForTextView(view) : 0;
+    ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForWidget(view) : 0;
     
     if(specialRange.isValid())
     {
@@ -1196,7 +1198,6 @@ void ContextBrowserPlugin::actionTriggered() {
 
 void ContextBrowserPlugin::doNavigate(NavigationActionType action)
 {
-  ///TODO: is this *really* required?
   KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
   if(!view) {
       kWarning() << "sender is not a view";
@@ -1204,39 +1205,42 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action)
   }
   KTextEditor::CodeCompletionInterface* iface = qobject_cast<KTextEditor::CodeCompletionInterface*>(view);
   if(!iface || iface->isCompletionActive())
-      return;
-  ///
+      return; // If code completion is active, the actions should be handled by the completion widget
 
-  QList<QWidget*> widgets;
-  widgets << m_currentNavigationWidget.data();
-  foreach(ContextBrowserView* view, m_views) {
-    widgets << view->navigationWidget();
+  QWidget* widget = m_currentNavigationWidget.data();
+  
+  if(!widget || !widget->isVisible())
+  {
+    ContextBrowserView* contextView = browserViewForWidget(view);
+    if(contextView)
+      widget = contextView->navigationWidget();
   }
-
-  foreach(QWidget* w, widgets) {
-    AbstractNavigationWidget* widget = qobject_cast<AbstractNavigationWidget*>(w);
-    if (!widget)
-      continue;
-
-    switch(action) {
-      case Accept:
-        widget->accept();
-        break;
-      case Back:
-        widget->back();
-        break;
-      case Left:
-        widget->previous();
-        break;
-      case Right:
-        widget->next();
-        break;
-      case Up:
-        widget->up();
-        break;
-      case Down:
-        widget->down();
-        break;
+  
+  if(widget)
+  {
+    AbstractNavigationWidget* navWidget = qobject_cast<AbstractNavigationWidget*>(widget);
+    if (navWidget)
+    {
+      switch(action) {
+        case Accept:
+          navWidget->accept();
+          break;
+        case Back:
+          navWidget->back();
+          break;
+        case Left:
+          navWidget->previous();
+          break;
+        case Right:
+          navWidget->next();
+          break;
+        case Up:
+          navWidget->up();
+          break;
+        case Down:
+          navWidget->down();
+          break;
+      }
     }
   }
 }
