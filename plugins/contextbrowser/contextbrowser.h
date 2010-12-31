@@ -52,6 +52,7 @@ namespace KDevelop {
   class DUContext;
   class TopDUContext;
   class DUChainBase;
+  class AbstractNavigationWidget;
 }
 
 namespace KTextEditor {
@@ -184,7 +185,12 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     void doNavigate(NavigationActionType action);
 
   private:
-    ContextBrowserView* browserViewForTextView(KTextEditor::View* view);
+    
+    AbstractNavigationWidget* getCurrentNavigationWidget();
+
+    // Returns the currently active and visible context browser view that belongs
+    // to the same context (mainwindow and area) as the given widget
+    ContextBrowserView* browserViewForWidget(QWidget* widget);
     
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
