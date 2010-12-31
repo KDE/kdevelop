@@ -186,8 +186,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
 
   private:
     
-    AbstractNavigationWidget* getCurrentNavigationWidget();
-
     // Returns the currently active and visible context browser view that belongs
     // to the same context (mainwindow and area) as the given widget
     ContextBrowserView* browserViewForWidget(QWidget* widget);

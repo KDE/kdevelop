@@ -381,6 +381,11 @@ void ContextBrowserPlugin::hideTooTip() {
 }
 
 void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
+  
+  ContextBrowserView* contextView = browserViewForWidget(view);
+  if(contextView && contextView->isVisible())
+    return; // If the context-browser view is visible, it will care about updating by itself
+  
   KUrl viewUrl(view->document()->url());
   QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
   
@@ -412,15 +417,10 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
 
   if(navigationWidget) {
 
-    foreach(ContextBrowserView* contextView, m_views)
-      if(masterWidget(contextView) == masterWidget(view)) {
-        if(contextView->isVisible()) {
-          //There is a context-browser view visible, we don't need a tooltip
-          delete navigationWidget;
-          return;
-        }
-        contextView->setNavigationWidget(navigationWidget);
-      }
+    // If we have an invisible context-view, assign the tooltip navigation-widget to it.
+    // If the user makes the context-view visible, it will instantly contain the correct widget.
+    if(contextView)
+      contextView->setNavigationWidget(navigationWidget);
       
     if(m_currentToolTip) {
       m_currentToolTip->deleteLater();
@@ -540,8 +540,6 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCurso
 ContextBrowserView* ContextBrowserPlugin::browserViewForWidget(QWidget* widget)
 {
   foreach(ContextBrowserView* contextView, m_views) {
-    if(!contextView->isVisible())
-      continue;
     if(masterWidget(contextView) == masterWidget(widget)) {
       return contextView;
     }
