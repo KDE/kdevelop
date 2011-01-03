@@ -167,8 +167,14 @@ public:
 	int sourceLineNumber() const { return m_sourceLineNo; }
 	int destinationLineNumber() const { return m_destinationLineNo; }
 
+	void setSourceLineNumber(int i) { m_sourceLineNo = i; }
+	void setDestinationLineNumber(int i) { m_destinationLineNo = i; }
+
 	int sourceLineCount() const;
 	int destinationLineCount() const;
+
+	int sourceLineEnd() const;
+	int destinationLineEnd() const;
 
 	DifferenceString* sourceLineAt( int i ) { return m_sourceLines[ i ]; }
 	DifferenceString* destinationLineAt( int i ) { return m_destinationLines[ i ]; }

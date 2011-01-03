@@ -104,6 +104,8 @@ public:
 	bool isBlended() const { return m_blended; }
 	void setBlended( bool blended ) { m_blended = blended; }
 
+	void linesChanged(const QStringList& oldLines, const QStringList& newLines, int startPos);
+
 private:
 	void splitSourceInPathAndFileName();
 	void splitDestinationInPathAndFileName();

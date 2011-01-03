@@ -56,6 +56,16 @@ int Difference::destinationLineCount() const
 	return m_destinationLines.count();
 }
 
+int Difference::sourceLineEnd() const
+{
+    return m_sourceLineNo + m_sourceLines.count();
+}
+
+int Difference::destinationLineEnd() const
+{
+    return m_destinationLineNo + m_destinationLines.count();
+}
+
 void Difference::apply( bool apply )
 {
 	m_applied = apply;
