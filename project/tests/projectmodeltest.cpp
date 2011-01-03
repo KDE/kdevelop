@@ -27,6 +27,8 @@
 #include <tests/modeltest.h>
 #include "dummyproject.h"
 #include <tests/kdevsignalspy.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -85,9 +87,13 @@ private:
 
 void ProjectModelTest::initTestCase()
 {
+    KDevelop::AutoTestShell::init();
+    KDevelop::TestCore* core = new KDevelop::TestCore();
+    core->initialize(KDevelop::Core::NoUi);
+
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
-    new ModelTest( model, this );
+    modelTest = new ModelTest( model, this );
 }
 
 void ProjectModelTest::init()
@@ -155,7 +161,7 @@ void ProjectModelTest::testCreateFileSystemItems_data()
     QTest::newRow("RootFolder")
         << (int)ProjectBaseItem::Folder
         << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir")
+        << KUrl("file:///rootdir/")
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
@@ -163,7 +169,7 @@ void ProjectModelTest::testCreateFileSystemItems_data()
     QTest::newRow("RootBuildFolder")
         << (int)ProjectBaseItem::BuildFolder
         << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir")
+        << KUrl("file:///rootdir/")
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
@@ -257,7 +263,9 @@ void ProjectModelTest::testCreateSimpleHierarchy()
     QString targetName = "testtarged";
     QString cppFileName = "file.cpp";
     ProjectFolderItem* rootFolder = new ProjectFolderItem( 0, KUrl("file:///"+folderName) );
+    QCOMPARE(rootFolder->baseName(), folderName);
     ProjectFileItem* file = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+fileName), rootFolder );
+    QCOMPARE(file->baseName(), fileName);
     ProjectTargetItem* target = new ProjectTargetItem( 0, targetName );
     rootFolder->appendRow( target );
     ProjectFileItem* targetfile = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+cppFileName), target );
@@ -327,7 +335,7 @@ void ProjectModelTest::testItemSanity()
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )) );
-    parent->setText( "newtest" );
+    parent->setUrl( KUrl("file:///newtest") );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
 
@@ -465,6 +473,22 @@ void ProjectModelTest::testAddItemInThread()
     t.start();
     QVERIFY(spy.wait( 10000 ));
     QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
+}
+
+void ProjectModelTest::testDeleteLots()
+{
+    delete modelTest;
+
+    const int items = 10000;
+    ProjectBaseItem* root = new ProjectBaseItem( 0, "root", 0 );
+    model->appendRow( root );
+    for ( int i = 0; i < items; ++i ) {
+        new ProjectBaseItem( 0, QString::number(i), root );
+    }
+    QCOMPARE(root->children().size(), items);
+    delete root;
+
+    modelTest = new ModelTest( model, this );
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)

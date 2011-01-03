@@ -38,6 +38,10 @@
 #include "completionsettings.h"
 #include <QThread>
 
+// Maximum length of a string to still consider it as a file extension which we cache
+// This has to be a slow value, so that we don't fill our file extension cache with crap
+static const int maximumCacheExtensionLength = 3;
+
 namespace KDevelop {
 
 
@@ -76,6 +80,9 @@ struct LanguageControllerPrivate {
     LanguageCache languageCache; //Maps mimetype-names to languages
     typedef QMultiMap<KMimeType::Ptr, ILanguage*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
+    // fallback cache for file extensions not handled by any pattern
+    typedef QMap<QString, QList<ILanguage*> > FileExtensionCache;
+    FileExtensionCache fileExtensionCache;
 
     BackgroundParser *backgroundParser;
     bool m_cleanedUp;
@@ -126,6 +133,8 @@ LanguageController::~LanguageController()
 
 void LanguageController::initialize()
 {
+    d->backgroundParser->loadSettings();
+
     // make sure the DUChain is setup before we try to access it from different threads at the same time
     DUChain::self();
 
@@ -187,6 +196,17 @@ ILanguage *LanguageController::language(const QString &name) const
     }
 }
 
+bool isNumeric(const QString& str)
+{
+    int len = str.length();
+    if(len == 0)
+        return false;
+    for(int a = 0; a < len; ++a)
+        if(!str[a].isNumber())
+            return false;
+    return true;
+}
+
 QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 {
     QMutexLocker lock(&d->dataMutex);
@@ -196,7 +216,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     if(d->m_cleanedUp)
         return languages;
     
-    QString fileName = url.fileName();
+    const QString fileName = url.fileName();
 
     ///TODO: cache regexp or simple string pattern for endsWith matching
     QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
@@ -225,13 +245,38 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         }
     }
 
+    if(!languages.isEmpty())
+        return languages;
+
+    // no pattern found, try the file extension cache
+    int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
+    QString extension;
+    if(extensionStart != -1)
+    {
+        extension = fileName.mid(extensionStart+1);
+        if(extension.size() > maximumCacheExtensionLength || isNumeric(extension))
+            extension = QString();
+    }
+
+    if(!extension.isEmpty())
+        languages = d->fileExtensionCache.value(extension);
+
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
-    ///Crashy and unsafe part: Load missing language-supports
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+    KMimeType::Ptr mimeType;
+    
+    if(!extension.isEmpty())
+        // If we have recognized a file extension, allow using the file-contents
+        // to look up the type. We will cache it after all.
+        mimeType = KMimeType::findByUrl(url);
+    else
+        // If we have not recognized a file extension, do not allow using the file-contents
+        // to look up the type. We cannot cache the result, and thus we might end up reading
+        // the contents of every single file, which can make the application very unresponsive.
+        mimeType = KMimeType::findByUrl(url, 0, false, true);
 
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
     if (it != d->languageCache.constEnd()) {
@@ -254,6 +299,9 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
             }
         }
     }
+
+    if(!extension.isEmpty())
+        d->fileExtensionCache.insert(extension, languages);
 
     return languages;
 }

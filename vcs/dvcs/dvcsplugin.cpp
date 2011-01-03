@@ -63,6 +63,7 @@
 #include <vcs/vcspluginhelper.h>
 #include <KMenu>
 #include <kparts/mainwindow.h>
+#include <interfaces/idocumentcontroller.h>
 
 namespace KDevelop
 {
@@ -79,43 +80,12 @@ struct DistributedVersionControlPluginPrivate {
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
         : IPlugin(compData, parent)
         , d(new DistributedVersionControlPluginPrivate(this))
-{
-    QString EasterEgg = i18n("Horses are forbidden to eat fire hydrants in Marshalltown, Iowa.");
-    Q_UNUSED(EasterEgg)
-}
+{}
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 {
     //TODO: Find out why this crashes on the svn tests delete d->m_factory;
     delete d;
-}
-
-// Begin:  KDevelop::IBasicVersionControl
-QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
-QList<QVariant> DistributedVersionControlPlugin::getCachedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
-QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::log(const KUrl& url,
-                                     const VcsRevision& from,
-                                     const VcsRevision& to)
-{
-    Q_UNUSED(to)
-    return log(url, from, 0);
 }
 
 // End:  KDevelop::IBasicVersionControl
@@ -138,9 +108,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     d->m_common->setupFromContext(context);
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
 
-    if (ctxUrlList.isEmpty())
-        return ContextMenuExtension();
-
     bool isWorkingDirectory = false;
     foreach(const KUrl &url, ctxUrlList) {
         if (isValidDirectory(url)) {
@@ -154,24 +121,12 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     }
 
     QMenu * menu = d->m_common->commonActions();
-    menu->addSeparator();
-    
-    KAction *action;
-    action = new KAction(KIcon("arrow-up-double"), i18n("Push..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxPush()));
-    menu->addAction(action);
-
-    action = new KAction(KIcon("arrow-down-double"), i18n("Pull..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxPull()));
-    menu->addAction(action);
-
-    action = new KAction(i18n("Branch Manager"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxBranchManager()));
-    menu->addAction(action);
-
-    action = new KAction(i18n("Revision History"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()));
-    menu->addAction(action);
+    menu->addSeparator();    
+    menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
+    menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
+    menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
+    menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
+    additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;
     menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());
@@ -179,6 +134,9 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     return menuExt;
 
 }
+
+void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
+{}
 
 void DistributedVersionControlPlugin::slotInit()
 {
@@ -200,11 +158,8 @@ void DistributedVersionControlPlugin::ctxPush()
     Q_ASSERT(!ctxUrlList.isEmpty());
 
     VcsJob* job = push(ctxUrlList.front().toLocalFile(), VcsLocation());
-    if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
-        job->start();
-    }
+    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+    ICore::self()->runController()->registerJob(job);
 }
 
 void DistributedVersionControlPlugin::ctxPull()
@@ -213,58 +168,43 @@ void DistributedVersionControlPlugin::ctxPull()
     Q_ASSERT(!ctxUrlList.isEmpty());
 
     VcsJob* job = pull(VcsLocation(), ctxUrlList.front().toLocalFile());
-    if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
-        job->start();
-    }
+    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+    ICore::self()->runController()->registerJob(job);
+}
+
+static QString stripPathToDir(const QString &path)
+{
+    return QFileInfo(path).absolutePath();
 }
 
 void DistributedVersionControlPlugin::ctxBranchManager()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
-    BranchManager * branchManager = new BranchManager(ctxUrlList.front().toLocalFile(), this, core()->uiController()->activeMainWindow());
-    branchManager->show();
+    
+    ICore::self()->documentController()->saveAllDocuments();
+    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
+    if(branchManager.isValid())
+        branchManager.exec();
+    else
+        KMessageBox::error(0, i18n("Could not show the Branch Manager, current branch is unavailable."));
 }
 
+// This is redundant with the normal VCS "history" action
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
+    
+    KDialog d;
 
-    CommitLogModel* model = new CommitLogModel(getAllCommits(ctxUrlList.front().toLocalFile()));
-    CommitView *revTree = new CommitView;
+    CommitLogModel* model = new CommitLogModel(this, ctxUrlList.first().toLocalFile(), &d);
+    CommitView *revTree = new CommitView(&d);
     revTree->setModel(model);
 
-    emit addNewTabToMainView(revTree, i18n("Revision History"));
-}
-
-void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
-{
-    DVcsJob* checkoutJob = dynamic_cast<DVcsJob*>(_checkoutJob);
-
-    QString workingDir = checkoutJob->getDirectory().absolutePath();
-    kDebug() << "checkout url is: " << workingDir;
-    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(workingDir));
-
-    if (!curProject) {
-        kDebug() << "couldn't find project for url:" << workingDir;
-        return;
-    }
-    KUrl projectFile = curProject->projectFileUrl();
-
-    core()->projectController()->closeProject(curProject); //let's ask to save all files!
-
-    if (!checkoutJob->exec()) {
-        kDebug() << "CHECKOUT PROBLEM!";
-    }
-
-    kDebug() << "projectFile is " << projectFile << " JobDir is " << workingDir;
-    kDebug() << "Project was closed, now it will be opened";
-    core()->projectController()->openProject(projectFile);
-//  maybe  IProject::reloadModel?
-//     emit jobFinished(_checkoutJob); //causes crash!
+    d.setButtons(KDialog::Close);
+    d.setMainWidget(revTree);
+    d.exec();
 }
 
 KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
@@ -272,75 +212,9 @@ KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
     return d->m_factory;
 }
 
-bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& repository, RequestedOperation op)
+KDevelop::DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    Q_ASSERT(job);
-    
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "git clone" isValidDirectory() would fail as the
-    // directory is not yet under git control
-    if (op == NormalOperation && !isValidDirectory(repository)) {
-        kDebug() << repository << " is not a valid repository";
-        return false;
-    }
-
-    QFileInfo repoInfo(repository);
-    Q_ASSERT(repoInfo.isAbsolute());
-
-    // clear commands and args from a possible previous run
-    job->clear();
-
-    //repository is sent by ContextMenu, so we check if it is a file and use it's path
-    if (repoInfo.isFile())
-        job->setDirectory(repoInfo.absoluteDir());
-    else
-        job->setDirectory(QDir(repository));
-
-    return true;
-}
-
-QString DistributedVersionControlPlugin::stripPathToDir(const QString &path)
-{
-    QFileInfo repoInfo = QFileInfo(path);
-    if (repoInfo.isFile())
-        return repoInfo.path() + QDir::separator();
-    else if (path.endsWith(QDir::separator()))
-        return path;
-    else
-        return path + QDir::separator();
-}
-
-bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List& urls)
-{
-    QStringList args;
-    const QDir & dir = job->getDirectory();
-    const QString workingDir = dir.absolutePath();
-
-    foreach(const KUrl &url, urls) {
-        ///@todo this is ok for now, but what if some of the urls are not
-        ///      to the given repository
-        //all urls should be relative to the working directory!
-        //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
-        QString file;
-        
-        if (url.isEmpty())
-            file = '.';
-        else if (!url.isRelative())
-            file = dir.relativeFilePath(url.toLocalFile());
-        else
-            file = url.toLocalFile();
-
-        args << file;
-        kDebug() << "url is: " << url << "job->getDirectory(): " << workingDir << " file is: " << file;
-    }
-
-    *job << args;
-    return true;
-}
-
-DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    DVcsJob* j = new DVcsJob(this, verbosity);
+    DVcsJob* j = new DVcsJob(QDir(), this, verbosity);
     *j << "echo" << "command not implemented" << "-n";
     return j;
 }

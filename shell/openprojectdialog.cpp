@@ -23,6 +23,7 @@
 #include <kio/netaccess.h>
 #include <kio/udsentry.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 
 #include <kdebug.h>
 
@@ -42,18 +43,19 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     resize(QSize(700, 500));
     
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    start.adjustPath(KUrl::AddTrailingSlash);
     sourcePageWidget = new ProjectSourcePage( start, this );
     connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
-    sourcePage = addPage( sourcePageWidget, "Select the source" );
+    sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
     
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( openPageWidget, "Select the project" );
+    openPage = addPage( openPageWidget, i18n("Select the project") );
     
     QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
-    projectInfoPage = addPage( page, "Project information" );
+    projectInfoPage = addPage( page, i18n("Project information") );
     
     setValid( sourcePage, true );
     setValid( openPage, false );
@@ -84,11 +86,13 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
             isDir = info.isDir();
             extension = info.suffix();
         }
-    } else 
+    } else
     {
-        KIO::UDSEntry entry;
-        isValid = KIO::NetAccess::stat( url, entry, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
+        statJob->ui()->setWindow( Core::self()->uiControllerInternal()->defaultMainWindow() );
+        isValid = statJob->exec(); // TODO: do this asynchronously so that the user isn't blocked while typing every letter of the hostname in sftp://hostname
         if ( isValid ) {
+            KIO::UDSEntry entry = statJob->statResult();
             isDir = entry.isDir();
             extension = QFileInfo( entry.stringValue( KIO::UDSEntry::UDS_NAME ) ).suffix();
         }

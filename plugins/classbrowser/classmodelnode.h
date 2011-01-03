@@ -162,9 +162,7 @@ private:
 class IdentifierNode : public DynamicNode
 {
 public:
-  IdentifierNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model);
-  IdentifierNode(const QString& a_displayName, const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model);
-  IdentifierNode(const QString& a_displayName, KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
+  IdentifierNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model, const QString& a_displayName = QString());
 
 public:
   /// Returns the qualified identifier for this node by going through the tree
@@ -180,6 +178,7 @@ public: // Overridables
 
 private:
   KDevelop::IndexedQualifiedIdentifier m_identifier;
+  KDevelop::IndexedDeclaration m_indexedDeclaration;
   KDevelop::DeclarationPointer m_cachedDeclaration;
 };
 
@@ -205,7 +204,7 @@ public: // Node overrides
 class ClassNode : public IdentifierNode, public ClassModelNodeDocumentChangedInterface
 {
 public:
-  ClassNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model);
+  ClassNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
   virtual ~ClassNode();
 
   /// Lookup a contained class and return the related node.

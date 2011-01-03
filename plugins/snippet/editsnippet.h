@@ -11,21 +11,29 @@
 #ifndef EDITSNIPPET_H
 #define EDITSNIPPET_H
 
-#include "ui_editsnippet.h"
-
 #include <KDialog>
+
+namespace KTextEditor
+{
+class Document;
+class View;
+}
 
 class SnippetRepository;
 class Snippet;
 
 class QStandardItemModel;
 
+namespace Ui {
+class EditSnippetBase;
+}
+
 /**
  * This dialog is used to create/edit snippets in a given repository.
  *
  * @author Milian Wolff <mail@milianw.de>
  */
-class EditSnippet : public KDialog, public Ui::EditSnippetBase
+class EditSnippet : public KDialog
 {
     Q_OBJECT
 
@@ -34,13 +42,23 @@ public:
     explicit EditSnippet(SnippetRepository* repo, Snippet* snippet, QWidget* parent = 0);
     virtual ~EditSnippet();
 
+    void setSnippetText(const QString& text);
+
+    virtual void reject();
+
 private:
+    Ui::EditSnippetBase* m_ui;
     SnippetRepository* m_repo;
     Snippet* m_snippet;
+    KTextEditor::View* m_snippetView;
+    KTextEditor::View* m_scriptsView;
 
 private slots:
     void save();
     void validate();
+
+    void slotSnippetDocumentation();
+    void slotScriptDocumentation();
 };
 
 #endif

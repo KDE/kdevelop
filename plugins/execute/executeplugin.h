@@ -47,6 +47,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString dependencyEntry;
     static QString environmentGroupEntry;
     static QString useTerminalEntry;
+    static QString terminalEntry;
     static QString userIdToRunEntry;
     static QString dependencyActionEntry;
     static QString projectTargetEntry;
@@ -59,6 +60,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
+    QString terminal( KDevelop::ILaunchConfiguration* ) const;
     QString nativeAppConfigTypeId() const;
 };
 

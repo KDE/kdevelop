@@ -37,7 +37,7 @@ class Declaration;
 class DUChainBase;
 class DUContext;
 class SimpleCursor;
-class HashedString;
+class IndexedString;
 class TopDUContext;
 class IndexedDUContext;
 class IndexedDeclaration;
@@ -55,12 +55,14 @@ namespace DUChainUtils {
     */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);
   /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
+   * Must only be called from the foreground or with the foreground lock held.
    * If the item under the cursor is a use, the declaration is returned. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* itemUnderCursor(const KUrl& url, const SimpleCursor& cursor);
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
   ///Returns the first declaration in the given line. Searches the given context and all sub-contexts.
+  ///Must only be called from the foreground or with the foreground lock held.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, KDevelop::DUContext* ctx);
 
   class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemFilter {

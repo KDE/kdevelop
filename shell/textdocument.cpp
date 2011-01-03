@@ -38,6 +38,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/modificationinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/markinterface.h>
+#include <ktexteditor/configinterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -45,7 +47,6 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
-#include <language/editor/editorintegrator.h>
 #include <language/interfaces/editorcontext.h>
 
 #include "core.h"
@@ -170,7 +171,6 @@ struct TextDocumentPrivate {
             return;
         // Tell the editor integrator first
         m_loaded = true;
-        EditorIntegrator::addDocument( m_textDocument->textDocument() );
         m_textDocument->notifyLoaded();
     }
 
@@ -290,23 +290,28 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     view = d->document->createView(parent);
 
     if (view) {
-        #if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 60)
-        view->setContextMenu( view->defaultContextMenu() );
-        #endif
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
 
-        #if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with out own restructured UI configuration
         QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevelop/katepartui.rc");
         const QString katePartUI = katePartUIs.last();
         const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevelop/katepartui.rc");
+        if (!QFile::exists(katePartLocalUI)) {
+            // prevent warning:
+            // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
+            QFile::copy(katePartUI, katePartLocalUI);
+        }
         view->replaceXMLFile(katePartUI, katePartLocalUI);
-        #endif
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
+    
+    if (KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
+        config->setConfigValue("allow-mark-menu", false);
+        config->setConfigValue("default-mark-type", KTextEditor::MarkInterface::BreakpointActive);
+    }
 
     return view;
 }
@@ -497,7 +502,6 @@ bool TextDocument::close(DocumentSaveMode mode)
         return false;
 
     if ( d->document ) {
-        KDevelop::EditorIntegrator::removeDocument(d->document);
         delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
     }
 

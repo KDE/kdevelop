@@ -439,6 +439,13 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     if ( plugin )
     {
+        if ( plugin->hasError() ) {
+            KMessageBox::error(0, i18n("Plugin '%1' could not be loaded correctly and was disabled.\nReason: %2.", info.name(), plugin->errorDescription()));
+            info.setPluginEnabled(false);
+            info.save(Core::self()->activeSession()->config()->group(pluginControllerGrp));
+            unloadPlugin(pluginId);
+            return 0;
+        }
         d->loadedPlugins.insert( info, plugin );
         info.setPluginEnabled( true );
 

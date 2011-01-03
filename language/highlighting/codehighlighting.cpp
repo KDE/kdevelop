@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+ * Copyright 2007-2010 David Nolden <david.nolden.kdevelop@art-master.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  * Copyright 2009 Milian Wolff <mail@milianw.de>
  *
@@ -23,13 +23,12 @@
 
 #include "codehighlighting.h"
 
-#include <KTextEditor/SmartRange>
-#include <KTextEditor/SmartInterface>
 #include <KTextEditor/Document>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
+#include "../../interfaces/foregroundlock.h"
 
 #include "../duchain/declaration.h"
 #include "../duchain/types/functiontype.h"
@@ -42,19 +41,27 @@
 
 #include "colorcache.h"
 #include "configurablecolors.h"
+#include <duchain/parsingenvironment.h>
+#include <backgroundparser/backgroundparser.h>
+#include <ktexteditor/movinginterface.h>
+#include <duchain/dumpchain.h>
+#include <backgroundparser/urlparselock.h>
 
 using namespace KTextEditor;
 
-#define LOCK_SMART(range) KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(range->document()); QMutexLocker lock(iface ? iface->smartMutex() : 0);
+static const float highlightingZDepth = -500;
 
 #define ifDebug(x)
 
 namespace KDevelop {
 
+///@todo Don't highlighting everything, only what is visible on-demand
 
 CodeHighlighting::CodeHighlighting( QObject * parent )
-  : QObject(parent), m_localColorization(true), m_globalColorization(true)
+  : QObject(parent), m_localColorization(true), m_globalColorization(true), m_dataMutex(QMutex::Recursive)
 {
+  qRegisterMetaType<KDevelop::IndexedString>("KDevelop::IndexedString");
+
   adaptToColorChanges();
 
   connect(ColorCache::self(), SIGNAL(colorsGotChanged()),
@@ -63,6 +70,7 @@ CodeHighlighting::CodeHighlighting( QObject * parent )
 
 CodeHighlighting::~CodeHighlighting( )
 {
+  qDeleteAll(m_highlights.values());
 }
 
 void CodeHighlighting::adaptToColorChanges()
@@ -82,7 +90,6 @@ void CodeHighlighting::adaptToColorChanges()
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Contexts context, const QColor &color ) const
 {
   QMutexLocker lock(&m_dataMutex);
-  ///@todo Clear cache when the highlighting has changed
   KTextEditor::Attribute::Ptr a;
   switch (context) {
     case DefinitionContext:
@@ -127,25 +134,6 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
   return a;
 }
 
-
-bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
-{
-  ///@todo Just create separate smart-ranges in the context-browser, that will solve this mess
-  ///@todo Do this properly, by statically building a set of attributes, and testing whether the given attribute is in that set
-  ///Right now we just try to keep the highlighting of the context-browser alive to prevent flashing
-  if(!attr || attr->underlineStyle() != KTextEditor::Attribute::NoUnderline)
-    return true;
-  return !attr->hasProperty(QTextFormat::BackgroundBrush);
-}
-
-void CodeHighlightingInstance::outputRange( KTextEditor::SmartRange * range ) const
-{
-  ifDebug(kDebug() << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();)
-  Q_ASSERT(range->start() <= range->end());
-  foreach (SmartRange* child, range->childRanges())
-    outputRange(child);
-}
-
 ColorMap emptyColorMap() {
  ColorMap ret(ColorCache::self()->validColorCount()+1, 0);
  return ret;
@@ -156,52 +144,65 @@ CodeHighlightingInstance* CodeHighlighting::createInstance() const
   return new CodeHighlightingInstance(this);
 }
 
-void CodeHighlighting::highlightDUChain(TopDUContext* context) const
+bool CodeHighlighting::hasHighlighting(IndexedString url) const
 {
-  kDebug() << "highlighting du chain" << context->url().toUrl();
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
+  if(tracker)
+  {
+    QMutexLocker lock(&m_dataMutex);
+    return m_highlights.contains(tracker) && !m_highlights[tracker]->m_highlightedRanges.isEmpty();
+  }
+  return false;
+}
 
-  DUChainReadLocker lock(DUChain::lock());
+void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
+{
+  IndexedString url;
+
+  {
+    DUChainReadLocker lock;
+    url = context->url();
+  }
+
+  // This prevents the background-parser from updating the top-context while we're working with it
+  UrlParseLock urlLock(context->url());
+
+  DUChainReadLocker lock;
+
+  qint64 revision = context->parsingEnvironmentFile()->modificationRevision().revision;
+
+  kDebug() << "highlighting du chain" << url.toUrl();
 
   if ( !m_localColorization && !m_globalColorization ) {
     kDebug() << "highlighting disabled";
-    deleteHighlighting(context);
+    QMetaObject::invokeMethod(this, "clearHighlightingForDocument", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url));
     return;
   }
 
   CodeHighlightingInstance* instance = createInstance();
 
-  instance->highlightDUChain(context);
+  lock.unlock();
+
+  instance->highlightDUChain(context.data());
+
+  DocumentHighlighting* highlighting = new DocumentHighlighting;
+  highlighting->m_document = url;
+  highlighting->m_waitingRevision = revision;
+  highlighting->m_waiting = instance->m_highlight;
+  qSort(highlighting->m_waiting.begin(), highlighting->m_waiting.end());
+
+  QMetaObject::invokeMethod(this, "applyHighlighting", Qt::QueuedConnection, Q_ARG(void*, highlighting));
 
   delete instance;
 }
 
-void CodeHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
-  if (!context->smartRange())
-    return;
-
-  {
-    LOCK_SMART(context->smartRange());
-
-    foreach (Declaration* dec, context->localDeclarations())
-      if(dec->smartRange() && isCodeHighlight(dec->smartRange()->attribute()))
-        dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
-
-    for(int a = 0; a < context->usesCount(); ++a)
-      if(context->useSmartRange(a) && isCodeHighlight(context->useSmartRange(a)->attribute()))
-        context->useSmartRange(a)->setAttribute(KTextEditor::Attribute::Ptr());
-  }
-
-  foreach (DUContext* child, context->childContexts())
-    deleteHighlighting(child);
-}
-
-void CodeHighlightingInstance::highlightDUChain(DUContext* context) const
+void CodeHighlightingInstance::highlightDUChain(TopDUContext* context)
 {
   m_contextClasses.clear();
   m_useClassCache = true;
 
   //Highlight
-  highlightDUChainSimple(static_cast<DUContext*>(context));
+  highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
 
   m_functionColorsForDeclarations.clear();
   m_functionDeclarationsForColors.clear();
@@ -210,37 +211,9 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context) const
   m_contextClasses.clear();
 }
 
-void CodeHighlightingInstance::highlightDUChainSimple(DUContext* context) const
+void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors)
 {
-  if (!context->smartRange()) {
-    kDebug() << "not a smart range! highlighting aborted";
-    return;
-  }
-
-  ///TODO: 4.1 make this overloadable, e.g. in PHP we also want local colorization in global context
-  bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
-
-  if( isInFunction && m_highlighting->m_localColorization ) {
-    highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
-    return;
-  }
-
-
-  foreach (Declaration* dec, context->localDeclarations()) {
-    highlightDeclaration(dec, QColor(QColor::Invalid));
-  }
-
-  highlightUses(context);
-
-  foreach (DUContext* child, context->childContexts()) {
-    highlightDUChainSimple(child);
-  }
-}
-
-void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors) const
-{
-  if (!context->smartRange())
-    return;
+  DUChainReadLocker lock;
 
   TopDUContext* top = context->topContext();
 
@@ -258,6 +231,10 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
   QList<Declaration*> takeFreeColors;
 
   foreach (Declaration* dec, context->localDeclarations()) {
+    if (!useRainbowColor(dec)) {
+      highlightDeclaration(dec, QColor(QColor::Invalid));
+      continue;
+    }
     //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
     uint colorNum = dec->identifier().hash() % ColorCache::self()->validColorCount();
 
@@ -300,13 +277,17 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     highlightUse(context, a, color);
   }
 
-  foreach (DUContext* child, context->childContexts()) {
-    highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
-  }
   if(context->type() == DUContext::Other || context->type() == DUContext::Function) {
     m_functionColorsForDeclarations[IndexedDUContext(context)] = colorsForDeclarations;
     m_functionDeclarationsForColors[IndexedDUContext(context)] = declarationsForColors;
   }
+
+  QVector< DUContext* > children = context->childContexts();
+
+  lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
+
+  foreach (DUContext* child, children)
+    highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
 }
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const
@@ -436,44 +417,178 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
   return type;
 }
 
-void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, const QColor &color) const
+bool CodeHighlightingInstance::useRainbowColor(Declaration* dec) const
 {
-  if (SmartRange* range = declaration->smartRange()) {
-    LOCK_SMART(range);
+  return dec->context()->type() == DUContext::Function || (dec->context()->type() == DUContext::Other && dec->context()->owner());
+}
 
-    if(!m_highlighting->isCodeHighlight(range->attribute()))
-      return;
+void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, const QColor &color)
+{
+  HighlightedRange h;
+  h.range = declaration->range();
+  h.attribute = m_highlighting->attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color);
+  m_highlight.push_back(h);
+}
 
-    range->setAttribute(m_highlighting->attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
+void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor &color)
+{
+  Types type = ErrorVariableType;
+  Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
+
+  type = typeForDeclaration(decl, context);
+
+  if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
+  {
+    HighlightedRange h;
+    h.range = context->uses()[index].m_range;
+    h.attribute = m_highlighting->attributeForType(type, ReferenceContext, color);
+    m_highlight.push_back(h);
   }
 }
 
-void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor &color) const
+void CodeHighlightingInstance::highlightUses(DUContext* context)
 {
-  if (SmartRange* range = context->useSmartRange(index)) {
+  for(int a = 0; a < context->usesCount(); ++a)
+    highlightUse(context, a, QColor(QColor::Invalid));
+}
 
-    Types type = ErrorVariableType;
-    Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
 
-    type = typeForDeclaration(decl, context);
+void CodeHighlighting::clearHighlightingForDocument(IndexedString document)
+{
+  VERIFY_FOREGROUND_LOCKED
+  QMutexLocker lock(&m_dataMutex);
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document);
+  if(m_highlights.contains(tracker))
+  {
+    disconnect(tracker, SIGNAL(destroyed(QObject*)), this, SLOT(trackerDestroyed(QObject*)));
+    qDeleteAll(m_highlights[tracker]->m_highlightedRanges);
+    delete m_highlights[tracker];
+    m_highlights.remove(tracker);
+  }
+}
 
-    LOCK_SMART(range);
+void CodeHighlighting::applyHighlighting(void* _highlighting)
+{
+  CodeHighlighting::DocumentHighlighting* highlighting = static_cast<CodeHighlighting::DocumentHighlighting*>(_highlighting);
 
-    if(!m_highlighting->isCodeHighlight(range->attribute())) {
-      return;
+  VERIFY_FOREGROUND_LOCKED
+  QMutexLocker lock(&m_dataMutex);
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(highlighting->m_document);
+
+  if(!tracker)
+  {
+    kDebug() << "no document found for the planned highlighting of" << highlighting->m_document.str();
+    delete highlighting;
+    return;
+  }
+
+  QVector< MovingRange* > oldHighlightedRanges;
+
+  if(m_highlights.contains(tracker))
+  {
+    oldHighlightedRanges = m_highlights[tracker]->m_highlightedRanges;
+    delete m_highlights[tracker];
+  }else{
+    // we newly add this tracker, so add the connection
+    connect(tracker, SIGNAL(destroyed(QObject*)), SLOT(trackerDestroyed(QObject*)));
+    connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+            this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
+            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
+  }
+
+  m_highlights[tracker] = highlighting;
+
+  // Now create MovingRanges (match old ones with the incoming ranges)
+
+  KTextEditor::Range tempRange;
+
+  QVector<MovingRange*>::iterator movingIt = oldHighlightedRanges.begin();
+  QVector<HighlightedRange>::iterator rangeIt = highlighting->m_waiting.begin();
+
+  while(rangeIt != highlighting->m_waiting.end())
+  {
+    // Translate the range into the current revision
+    SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
+
+    while(movingIt != oldHighlightedRanges.end() &&
+      ((*movingIt)->start().line() < transformedRange.start.line ||
+      ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column)))
+    {
+      delete *movingIt; // Skip ranges that are in front of the current matched range
+      ++movingIt;
     }
 
-    if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
-      range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, color));
+    tempRange.start().setPosition(transformedRange.start.line, transformedRange.start.column);
+    tempRange.end().setPosition(transformedRange.end.line, transformedRange.end.column);
+
+    if(movingIt == oldHighlightedRanges.end() ||
+      transformedRange.start.line != (*movingIt)->start().line() ||
+      transformedRange.start.column != (*movingIt)->start().column() ||
+      transformedRange.end.line != (*movingIt)->end().line() ||
+      transformedRange.end.column != (*movingIt)->end().column())
+    {
+      Q_ASSERT(rangeIt->attribute);
+      // The moving range is behind or unequal, create a new range
+      highlighting->m_highlightedRanges.push_back(tracker->documentMovingInterface()->newMovingRange(tempRange));
+      highlighting->m_highlightedRanges.back()->setAttribute(rangeIt->attribute);
+      highlighting->m_highlightedRanges.back()->setZDepth(highlightingZDepth);
+    }
     else
-      range->setAttribute(KTextEditor::Attribute::Ptr());
+    {
+      // Update the existing moving range
+      (*movingIt)->setAttribute(rangeIt->attribute);
+      (*movingIt)->setRange(tempRange);
+      highlighting->m_highlightedRanges.push_back(*movingIt);
+      ++movingIt;
+    }
+    ++rangeIt;
   }
+
+  for(; movingIt != oldHighlightedRanges.end(); ++movingIt)
+    delete *movingIt; // Delete unmatched moving ranges behind
 }
 
-void CodeHighlightingInstance::highlightUses(DUContext* context) const
+void CodeHighlighting::trackerDestroyed(QObject* object)
 {
-  for(int a = 0; a < context->usesCount(); ++a) {
-    highlightUse(context, a, QColor(QColor::Invalid));
+  // Called when a document is destroyed
+  VERIFY_FOREGROUND_LOCKED
+  QMutexLocker lock(&m_dataMutex);
+  DocumentChangeTracker* tracker = static_cast<DocumentChangeTracker*>(object);
+  Q_ASSERT(m_highlights.contains(tracker));
+  delete m_highlights[tracker]; // No need to care about the individual ranges, as the document is being destroyed
+  m_highlights.remove(tracker);
+}
+
+void CodeHighlighting::aboutToInvalidateMovingInterfaceContent(Document* doc)
+{
+  clearHighlightingForDocument(IndexedString(doc->url()));
+}
+
+void CodeHighlighting::aboutToRemoveText( const KTextEditor::Range& range )
+{
+  if (range.onSingleLine()) // don't try to optimize this
+    return;
+
+  VERIFY_FOREGROUND_LOCKED
+  QMutexLocker lock(&m_dataMutex);
+  Q_ASSERT(dynamic_cast<KTextEditor::Document*>(sender()));
+  KTextEditor::Document* doc = static_cast<KTextEditor::Document*>(sender());
+
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()
+                                      ->trackerForUrl(IndexedString(doc->url()));
+  if(m_highlights.contains(tracker))
+  {
+    QVector<MovingRange*>& ranges = m_highlights.value(tracker)->m_highlightedRanges;
+    QVector<MovingRange*>::iterator it = ranges.begin();
+    while(it != ranges.end()) {
+      if (range.contains((*it)->toRange())) {
+        delete (*it);
+        it = ranges.erase(it);
+      } else {
+        ++it;
+      }
+    }
   }
 }
 

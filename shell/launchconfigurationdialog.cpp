@@ -44,6 +44,7 @@
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
 #include <QLayout>
+#include <QMenu>
 
 namespace KDevelop
 {
@@ -60,8 +61,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     addConfig->setIcon( KIcon("list-add") );
     addConfig->setEnabled( false );
+    addConfig->setToolTip(i18n("Add a new launch configuration."));
     deleteConfig->setIcon( KIcon("list-remove") );
     deleteConfig->setEnabled( false );
+    deleteConfig->setToolTip(i18n("Delete selected launch configuration."));
     
     model = new LaunchConfigurationsModel( tree );
     tree->setModel( model );
@@ -94,7 +97,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
     tree->selectionModel()->select( QItemSelection( idx, idx ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     tree->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
-    setInitialSize( QSize( 700, 500 ) );
     
     // Unfortunately tree->resizeColumnToContents() only looks at the top-level 
     // items, instead of all open ones. Hence we're calculating it ourselves like
@@ -118,11 +120,32 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         level++;
         parentidx = parentidx.parent();
     }
-    int width = qMax( tree->columnWidth( 0 ), level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
+    // make sure the base column width is honored, e.g. when no launch configs exist
+    tree->resizeColumnToContents(0);
+    int width = tree->columnWidth( 0 );
+    while ( widthidx.isValid() )
+    {
+        width = qMax( width, level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
+        widthidx = widthidx.parent();
+    }
     tree->setColumnWidth( 0, width );
-    
+
+    QMenu* m = new QMenu(this);
+    foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
+    {
+        QMenu* suggestionsMenu = type->launcherSuggestions();
+        
+        if(suggestionsMenu) {
+            m->addMenu(suggestionsMenu);
+            connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        }
+    }
+    addConfig->setMenu(m);
+
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
+
+    setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
@@ -296,6 +319,23 @@ void LaunchConfigurationDialog::createConfiguration()
     }
 }
 
+void LaunchConfigurationDialog::addConfiguration(ILaunchConfiguration* _launch)
+{
+    LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>(_launch);
+    Q_ASSERT(launch);
+    int row = model->findItemForProject(launch->project())->row;
+    QModelIndex idx  = model->index(row, 0);
+    
+    qDebug() << "pepepe" << idx.isValid() << launch->project()->name();
+    model->addConfiguration(launch, idx);
+    
+    QModelIndex newindex = model->index( model->rowCount( idx ) - 1, 0, idx );
+    tree->selectionModel()->select( newindex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
+    tree->selectionModel()->setCurrentIndex( newindex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
+    tree->edit( newindex );
+    tree->resizeColumnToContents( 0 );
+}
+
 LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstractItemModel(parent)
 {
     GenericPageItem* global = new GenericPageItem;
@@ -434,6 +474,15 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 if( lmi && index.column() == 0 )
                 {
                     return lmi->mode->icon();
+                }
+                if ( index.column() == 0 && !index.parent().isValid() ) {
+                    if (index.row() == 0) {
+                        // global item
+                        return KIcon("folder");
+                    } else {
+                        // project item
+                        return KIcon("folder-development");
+                    }
                 }
             }
             case Qt::EditRole:
@@ -665,23 +714,32 @@ void LaunchConfigurationsModel::deleteConfiguration( const QModelIndex& index )
 
 void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
 {
-    TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
-    ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
-    if( parent.isValid() && t && !Core::self()->runController()->launchConfigurationTypes().isEmpty() )
+    if(!Core::self()->runController()->launchConfigurationTypes().isEmpty())
     {
-        if( !ti && t->parent )
-        {
-            kWarning() << "Expected project or global item, but didn't find either";
-            return;
-        }
-        beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
+        TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
+        ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
         
         LaunchConfigurationType* type = Core::self()->runController()->launchConfigurationTypes().at(0);
         QPair<QString,QString> launcher = qMakePair( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
         IProject* p = ( ti ? ti->project : 0 );
         ILaunchConfiguration* l = Core::self()->runController()->createLaunchConfiguration( type, launcher, p );
+        
+        addConfiguration(l, parent);
+    }
+}
+
+void LaunchConfigurationsModel::addConfiguration(ILaunchConfiguration* l, const QModelIndex& parent)
+{
+    if( parent.isValid() )
+    {
+        beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
         addItemForLaunchConfig( dynamic_cast<LaunchConfiguration*>( l ) );
         endInsertRows();
+    }
+    else
+    {
+        delete l;
+        Q_ASSERT(false && "could not add the configuration");
     }
 }
 

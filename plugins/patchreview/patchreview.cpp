@@ -22,7 +22,6 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QMenu>
 #include <QFile>
 #include <QTimer>
-#include <QMutexLocker>
 #include <QPersistentModelIndex>
 #include <kfiledialog.h>
 #include <interfaces/idocument.h>
@@ -44,7 +43,7 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
-#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/movinginterface.h>
 #include <interfaces/idocumentcontroller.h>
 #include <kprocess.h>
 #include <interfaces/iuicontroller.h>
@@ -56,7 +55,6 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
 //krazy:excludeall=doublequote_chars
-#include <language/editor/editorintegrator.h>
 #include <krun.h>
 #include <kparts/mainwindow.h>
 #include <qtextdocument.h>
@@ -68,11 +66,14 @@ std::string*/
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/area.h>
+#include <sublime/document.h>
+#include <sublime/view.h>
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ipatchexporter.h>
 #include "standardpatchexport.h"
+#include <language/highlighting/colorcache.h>
 
 using namespace KDevelop;
 
@@ -295,8 +296,8 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
             
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
@@ -308,17 +309,15 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
                   
-                    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc->textDocument() );
-                    Q_ASSERT(smart);
-                    QMutexLocker lock(smart->smartMutex());
-
-                    const QList< KTextEditor::SmartRange* > ranges = m_highlighters[doc->url()]->ranges();
+                    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc->textDocument() );
+                    Q_ASSERT(moving);
+                    const QList< KTextEditor::MovingRange* > ranges = m_highlighters[doc->url()]->ranges();
                     
                     KTextEditor::View * v = doc->textDocument() ->activeView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
-                        for ( QList< KTextEditor::SmartRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
+                        for ( QList< KTextEditor::MovingRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
                             int line;
                             
                             line = (*it)->start().line();
@@ -332,7 +331,6 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                             }
                         }
                         if ( bestLine != -1 ) {
-                          lock.unlock();
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return ;
                         }
@@ -364,8 +362,8 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
 
             if (file != highlightFile)
                 continue;
@@ -405,8 +403,8 @@ void PatchReviewPlugin::highlightPatch() {
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
 
             addHighlighting(file);
         }
@@ -434,8 +432,8 @@ void PatchReviewToolView::finishReview()
 
           KUrl file = m_plugin->patch()->baseDir();
           
-          file.addPath( model->sourcePath() );
-          file.addPath( model->sourceFile() );
+          file.addPath( model->destinationPath() );
+          file.addPath( model->destinationFile() );
           
           selectedUrls << file;
         }
@@ -466,8 +464,8 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
 
         KUrl file = m_plugin->patch()->baseDir();
         
-        file.addPath( model->sourcePath() );
-        file.addPath( model->sourceFile() );
+        file.addPath( model->destinationPath() );
+        file.addPath( model->destinationFile() );
 
         kDebug() << "opening" << file.toLocalFile();
 
@@ -485,10 +483,52 @@ KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
 {
   KUrl file = m_plugin->patch()->baseDir();
   
-  file.addPath( model->sourcePath() );
-  file.addPath( model->sourceFile() );
+  file.addPath( model->destinationPath() );
+  file.addPath( model->destinationFile() );
   
   return file;
+}
+
+static QString stateToString(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return i18nc("VCS file status", "Added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return i18nc("VCS file status", "Deleted");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return i18nc("VCS file status", "Has Conflicts");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return i18nc("VCS file status", "Modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return i18nc("VCS file status", "Up To Date");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return i18nc("VCS file status", "Unknown");
+    }
+    return i18nc("Unknown VCS file status, probably a backend error", "?");
+}
+
+static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return KIcon("vcs-added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return KIcon("vcs-removed");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return KIcon("vcs-conflicting");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return KIcon("vcs-locally-modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return KIcon("vcs-normal");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return KIcon("unknown");
+    }
+    return KIcon("dialog-error");
 }
 
 void PatchReviewToolView::kompareModelChanged()
@@ -499,71 +539,101 @@ void PatchReviewToolView::kompareModelChanged()
     if (!m_plugin->modelList())
         return;
 
-    QMap<KUrl, QString> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+
+    QSet<KUrl> haveUrls;
     
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
-    if ( !models )
-        return;
-    Diff2::DiffModelList::const_iterator it = models->constBegin();
-    QSet<KUrl> haveUrls;
-    for(; it != models->constEnd(); ++it) {
-        Diff2::DifferenceList * diffs = ( *it ) ->differences();
-        int cnt = 0;
-        if ( diffs )
-            cnt = diffs->count();
-
-        KUrl file = urlForFileModel(*it);
-        haveUrls.insert(file);
-
-        if(!QFileInfo(file.toLocalFile()).isReadable())
-          continue;
-          
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
-        
-        m_editPatch.filesList->insertTopLevelItem(0, item);
-
-        const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
-
-        QString text;
-        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
-            text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
-        } else {
-            text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
-        }
-
-        item->setData( 0, Qt::DisplayRole, text );
-        item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
-        item->setCheckState( 0, Qt::Checked );
-    }
-    
-    ///First add files that a project was found for, then the other ones
-    ///findProject() excludes some useless files like backups, so we can use that to sort those files to the back
-    for(int withProject = 1; withProject >= 0; --withProject)
+    if( models )
     {
-      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
-      {
-        KUrl url = it.key();
-        
-          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)) != (bool)withProject)
+      Diff2::DiffModelList::const_iterator it = models->constBegin();
+      for(; it != models->constEnd(); ++it) {
+          Diff2::DifferenceList * diffs = ( *it ) ->differences();
+          int cnt = 0;
+          if ( diffs )
+              cnt = diffs->count();
+
+          KUrl file = urlForFileModel(*it);
+          haveUrls.insert(file);
+
+          if(!QFileInfo(file.toLocalFile()).isReadable())
             continue;
-        
-        if(!haveUrls.contains(url))
-        {
-          haveUrls.insert(url);
-          
+            
           QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
           
           m_editPatch.filesList->insertTopLevelItem(0, item);
-          QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-          if(!(*it).isEmpty())
-            text += " (" + (*it) + ")";
-          
+
+          const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
+
+          QString text;
+          QIcon icon;
+          if(additionalUrls.contains(file)) {
+              text = i18ncp("%1: number of changed hunks, %2: file name, %3: vcs file state",
+                "%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
+              icon = stateToIcon(additionalUrls[file]);
+          } else {
+              text = i18ncp("%1: number of changed hunks, %2: file name",
+                "%2 (1 hunk)", "%2 (%1 hunks)", cnt, filenameArgument);
+          }
+
           item->setData( 0, Qt::DisplayRole, text );
-          QVariant v;
-          v.setValue<KUrl>( url );
-          item->setData( 0, Qt::UserRole, v );
-          item->setCheckState( 0, Qt::Unchecked );
+          item->setIcon( 0, icon );
+          item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
+          item->setCheckState( 0, Qt::Checked );
+      }
+    }
+    
+    // Maps the _really_ useful items (with VCS state) to index 0,
+    // the items that have at least a project found to 1,
+    // and the probably really useless items without project found to 2.
+    // The project-manager filters useless stuff like backups out so they get index 2.
+    QMap<int, QList< QPair<KUrl, KDevelop::VcsStatusInfo::State> > > newItems;
+    
+    for(QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
+    {
+      KUrl url = it.key();
+      
+      if(!haveUrls.contains(url))
+      {
+        haveUrls.insert(url);
+        
+        if(*it != KDevelop::VcsStatusInfo::ItemUnknown)
+        {
+          newItems[0] << qMakePair(url, *it);
+        }else{
+          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)))
+          {
+            newItems[1] << qMakePair(url, *it);
+          }else{
+            newItems[2] << qMakePair(url, *it);
+          }
         }
+      }
+    }
+    
+    for(int a = 0; a < 3; ++a)
+    {
+      for(QList< QPair< KUrl, KDevelop::VcsStatusInfo::State > >::iterator itemIt = newItems[a].begin(); itemIt != newItems[a].end(); ++itemIt)
+      {
+        KUrl url = itemIt->first;
+        KDevelop::VcsStatusInfo::State state = itemIt->second;
+        
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
+        
+        QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
+        text += " (" + stateToString(state) + ")";
+        
+        item->setData( 0, Qt::DisplayRole, text );
+        QVariant v;
+        v.setValue<KUrl>( url );
+        item->setData( 0, Qt::UserRole, v );
+        item->setIcon( 0, stateToIcon(state) );
+        item->setCheckState( 0, Qt::Unchecked );
+
+        if(a == 0)
+          item->setCheckState( 0, Qt::Checked );
+        
+        m_editPatch.filesList->addTopLevelItem(item);
       }
     }
 }
@@ -593,11 +663,10 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
     m_editPatch.filesList->setCurrentIndex(QModelIndex());
 }
 
-
-void PatchHighlighter::rangeDeleted(KTextEditor::SmartRange* range)
+void PatchHighlighter::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* )
 {
-    m_ranges.remove(range);
-    m_differencesForRanges.remove(range);
+    kDebug() << "about to delete";
+    clear();
 }
 
 QSize sizeHintForHtml(QString html, QSize maxSize) {
@@ -617,10 +686,13 @@ QSize sizeHintForHtml(QString html, QSize maxSize) {
   return ret;
 }
 
-void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* markRange, QPair< int, int > highlightMark)
+namespace {
+  QPointer<QWidget> currentTooltip;
+  KTextEditor::MovingRange* currentTooltipMark;
+}
+
+void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* markRange, QPair< int, int > highlightMark)
 {
-  static QPointer<QWidget> currentTooltip;
-  static KTextEditor::SmartRange* currentTooltipMark;
   if(currentTooltipMark == markRange && currentTooltip)
     return;
   delete currentTooltip;
@@ -726,14 +798,13 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
   if(doc->activeView()) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
     doc->activeView()->setCursorPosition(KTextEditor::Cursor(mark.line, 0));
 
-  KTextEditor::SmartRange* range = rangeForMark(mark);
+  KTextEditor::MovingRange* range = rangeForMark(mark);
   
   if(range) {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
-    Q_ASSERT(smart);
-    QMutexLocker lock(smart->smartMutex());
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    Q_ASSERT(moving);
     
-    QStringList currentText = range->text();
+    QString currentText = doc->text(range->toRange());
     Diff2::Difference* diff = m_differencesForRanges[range];
     
     removeLineMarker(range, diff);
@@ -764,28 +835,35 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
       replaceWith = sourceText;
     }
     
-    if(currentText.join("\n").simplified() != replace.simplified()) {
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText.join("\n")));
+    if(currentText.simplified() != replace.simplified()) {
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText));
       return;
     }
     
     diff->apply(!diff->applied());
     
-    KTextEditor::Cursor start = range->start();
-    range->document()->replaceText(*range, replaceWith);
-    range->start() = start;
-    range->end() = start;
+    KTextEditor::Cursor start = range->start().toCursor();
+    range->document()->replaceText(range->toRange(), replaceWith);
+    KTextEditor::Range newRange(start, start);
     
     uint replaceWithLines = replaceWith.count('\n');
-    range->end().setLine(range->end().line() +  replaceWithLines);
+    newRange.end().setLine(newRange.end().line() +  replaceWithLines);
+    range->setRange(newRange);
     
     addLineMarker(range, diff);
   }
+  
+  {
+    // After applying the change, show the tooltip again, mainly to update an old tooltip
+    delete currentTooltip;
+    bool h = false;
+    markToolTipRequested(doc, mark, QCursor::pos(), h);
+  }
 }
 
-KTextEditor::SmartRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
+KTextEditor::MovingRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
 {
-    for(QMap< KTextEditor::SmartRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it) {
+    for(QMap< KTextEditor::MovingRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it) {
       if(it.key()->start().line() == mark.line)
       {
         return it.key();
@@ -805,7 +883,7 @@ void PatchHighlighter::markToolTipRequested(KTextEditor::Document* , KTextEditor
   int myMarksPattern = KTextEditor::MarkInterface::markType22 | KTextEditor::MarkInterface::markType23 | KTextEditor::MarkInterface::markType24 | KTextEditor::MarkInterface::markType25 | KTextEditor::MarkInterface::markType26 | KTextEditor::MarkInterface::markType27;
   if(mark.type & myMarksPattern) {
     //There is a mark in this line. Show the old text.
-    KTextEditor::SmartRange* range = rangeForMark(mark);
+    KTextEditor::MovingRange* range = rangeForMark(mark);
     if(range)
         showToolTipForMark(pos, range);
   }
@@ -827,12 +905,12 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 {
     if(range == doc->documentRange())
     {
-      kWarning() << "re-doing";
+      kDebug() << "re-doing";
       //The document was loaded / reloaded
     if ( !m_model->differences() )
         return ;
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
@@ -867,12 +945,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
     markIface->setMarkDescription(KTextEditor::MarkInterface::markType27, i18n("Change"));
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, KIcon("text-field").pixmap(16, 16));
 
-    QMutexLocker lock(smart->smartMutex());
-
-    KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-
-    topRange->addWatcher(this);
-    
     for ( Diff2::DifferenceList::const_iterator it = m_model->differences() ->constBegin(); it != m_model->differences() ->constEnd(); ++it ) {
         Diff2::Difference* diff = *it;
         int line, lineCount;
@@ -899,9 +971,8 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
             endC.setLine( doc->lines() );
 
         if ( endC.isValid() && c.isValid() ) {
-            KTextEditor::SmartRange * r = smart->newSmartRange( c, endC );
-            r->setParentRange(topRange);
-            r->addWatcher(this);
+            KTextEditor::MovingRange * r = moving->newMovingRange( KTextEditor::Range(c, endC) );
+            m_ranges << r;
             
             m_differencesForRanges[r] = *it;
 
@@ -909,9 +980,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
         }
     }
 
-    m_ranges << topRange;
-
-    smart->addHighlightToDocument(topRange);
     }
 }
 
@@ -926,17 +994,17 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     if ( doc->lines() == 0 )
         return ;
 
-    ///This requires the KDE 4.4 development branch from 12.8.2009
     connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)), this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
+    connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
     
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
 
-void PatchHighlighter::removeLineMarker(KTextEditor::SmartRange* range, Diff2::Difference* difference)
+void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* difference)
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( range->document() );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
@@ -949,32 +1017,40 @@ void PatchHighlighter::removeLineMarker(KTextEditor::SmartRange* range, Diff2::D
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType25);
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType26);
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType27);
+    
+    // Remove all ranges that are in the same line (the line markers)
+    foreach(KTextEditor::MovingRange* r, m_ranges)
+    {
+      if(r != range && range->contains(r->toRange()))
+      {
+        delete r;
+        m_ranges.remove(r);
+      }
+    }
 }
 
-void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Difference* diff)
+void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* diff)
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( range->document() );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
     if( !markIface )
       return;
     
-    QMutexLocker lock(smart->smartMutex());
-  
     KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
     
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
     
     if(isOriginalState) {
-      t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
+      t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 0, 255, 255), 20 ) ) );
     }else{
-      t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 255, 20 ) ) );
+      t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 255), 20 ) ) );
     }
     range->setAttribute( t );
+    range->setZDepth( -500 );
     
-    range->deleteChildRanges();
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
@@ -1015,12 +1091,14 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
         {
           if(currentPos != 0 || markers[b]->offset() != string.size())
           {
-            KTextEditor::SmartRange * r2 = smart->newSmartRange( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()), range );
+            KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()) ) );
+            m_ranges << r2;
             
             KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
-            t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 0, 70 ) ) );
+            t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 0), 70 ) ) );
             r2->setAttribute( t );
+            r2->setZDepth( -600 );
           }
         }
         currentPos = markers[b]->offset();
@@ -1030,8 +1108,11 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
 
 void PatchHighlighter::clear()
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( m_doc->textDocument() );
-    if ( !smart )
+    if(m_ranges.empty())
+      return;
+
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( m_doc->textDocument() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( m_doc->textDocument() );
@@ -1048,13 +1129,9 @@ void PatchHighlighter::clear()
       markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
     }
     
-    QMutexLocker lock(smart->smartMutex());
-
-    while(!m_ranges.isEmpty())
-      delete *m_ranges.begin();
-
-    Q_ASSERT(m_ranges.isEmpty());
-    Q_ASSERT(m_differencesForRanges.isEmpty());
+    qDeleteAll(m_ranges);
+    m_ranges.clear();
+    m_differencesForRanges.clear();
 }
 
 PatchHighlighter::~PatchHighlighter()
@@ -1067,7 +1144,9 @@ IDocument* PatchHighlighter::doc() {
 }
 
 void PatchHighlighter::documentDestroyed() {
+    kDebug() << "document destroyed";
     m_ranges.clear();
+    m_differencesForRanges.clear();
 }
 
 void PatchReviewPlugin::removeHighlighting( const KUrl& file ) {
@@ -1106,9 +1185,9 @@ void PatchReviewPlugin::updateKompareModel() {
   
     kDebug() << "updating model";
     try {
+        removeHighlighting();
         m_modelList.reset( 0 );
         delete m_diffSettings;
-        removeHighlighting();
         
         emit patchChanged();
 
@@ -1126,7 +1205,13 @@ void PatchReviewPlugin::updateKompareModel() {
         
         try {
             if ( !m_modelList->openDirAndDiff() )
-                throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
+            {
+#if 0
+                // Don't error out on empty files, as those are valid diffs too
+                if(QFileInfo(m_patch->file().toLocalFile()).size() != 0)
+                    throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
+#endif
+            }
          } catch ( const QString & str ) {
             throw;
         } catch ( ... ) {
@@ -1150,6 +1235,7 @@ void PatchReviewPlugin::updateKompareModel() {
     } catch ( const char * str ) {
         KMessageBox::error(0, str, i18n("Kompare Model Update"));
     }
+    removeHighlighting();
     m_modelList.reset( 0 );
     m_kompareInfo.reset( 0 );
     delete m_diffSettings;
@@ -1226,6 +1312,7 @@ void showDiff(const KDevelop::VcsDiff& d)
         {
             KTemporaryFile temp2;
             temp2.setSuffix("2.patch");
+            //FIXME: don't leak
             temp2.setAutoRemove(false);
             temp2.open();
             QTextStream t2(&temp2);
@@ -1254,6 +1341,7 @@ void showDiff(const KDevelop::VcsDiff& d)
 void PatchReviewPlugin::cancelReview()
 {
   if(m_patch) {
+    removeHighlighting();
     m_modelList.reset( 0 );
     m_patch->cancelReview();
 
@@ -1262,7 +1350,7 @@ void PatchReviewPlugin::cancelReview()
     delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1274,15 +1362,16 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
   if(m_patch) {
     if(!m_patch->finishReview(selection))
       return;
+    removeHighlighting();
     m_modelList.reset( 0 );
     
     emit patchChanged();
     
-    if(!dynamic_cast<LocalPatchSource*>(m_patch))
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data()))
       delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1303,16 +1392,24 @@ void PatchReviewPlugin::updateReview()
   
   m_updateKompareTimer->stop();
   updateKompareModel();
-  ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  if (w->area()->objectName() != "review")
+    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
-  w->area()->clearViews();
-  
   if(!m_modelList.get())
     return;
+
+  // list of opened documents to prevent flicker
+  QMap<KUrl, IDocument*> documents;
+  foreach(IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    documents[doc->url()] = doc;
+  }
   
+  IDocument* futureActiveDoc = 0;
   //Open the diff itself
 #ifdef HAVE_KOMPARE
   KUrl fakeUrl(m_patch->file());
@@ -1322,20 +1419,54 @@ void PatchReviewPlugin::updateReview()
   IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
   
   Q_ASSERT(pdoc);
-  ICore::self()->documentController()->openDocument(doc);
+  futureActiveDoc = ICore::self()->documentController()->openDocument(doc);
+  //TODO: close kompare doc if available
 #else
-  ICore::self()->documentController()->openDocument(m_patch->file());
+  if (!documents.contains(m_patch->file())) {
+    futureActiveDoc = ICore::self()->documentController()->openDocument(m_patch->file());
+  } else {
+    futureActiveDoc = documents.take(m_patch->file());
+  }
 #endif
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
     for(int a = 0; a < m_modelList->modelCount(); ++a) {
-      KUrl url(m_modelList->modelAt(a)->source());
-       ICore::self()->documentController()->openDocument(url);
-       seekHunk(true, url); //Jump to the first changed position
+      
+      KUrl absoluteUrl = m_patch->baseDir();
+      KUrl url(m_modelList->modelAt(a)->destination());
+      
+      if(url.isRelative())
+        absoluteUrl.addPath(url.path());
+      else
+        absoluteUrl = url;
+      
+      if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
+      {
+        ICore::self()->documentController()->openDocument(absoluteUrl);
+        if (documents.contains(absoluteUrl)) {
+          documents.remove(absoluteUrl);
+        }
+        seekHunk(true, absoluteUrl); //Jump to the first changed position
+      }else{
+        // Maybe the file was deleted
+        kDebug() << "could not open" << absoluteUrl << "because it doesn't exist";
+      }
     }
   }
-  
+
+  // Close views for documents that were loaded from the working set, but are not in the patch
+  QList<IDocument*> documentsList = documents.values();
+  foreach(Sublime::View* view, w->area()->views()) {
+    IDocument* doc = dynamic_cast<IDocument*>(view->document());
+    if(doc && documentsList.contains(doc)) {
+      w->area()->closeView(view);
+    }
+  }
+
+  Q_ASSERT(futureActiveDoc);
+  ICore::self()->documentController()->activateDocument(futureActiveDoc);
+
   bool b = ICore::self()->uiController()->findToolView(i18n("Patch Review"), m_factory);
   Q_ASSERT(b);
 }
@@ -1343,21 +1474,15 @@ void PatchReviewPlugin::updateReview()
 void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
   if(m_patch) {
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      disconnect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+    disconnect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   m_patch = patch;
 
   if(m_patch) {
     kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
     registerPatch(patch);
-    
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      connect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+
+    connect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   
   notifyPatchChanged();

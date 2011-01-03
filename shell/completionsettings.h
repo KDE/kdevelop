@@ -32,6 +32,7 @@ public:
           m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
           m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000)
     {
+        m_todoMarkerWords << "TODO" << "FIXME";
     }
 
     bool readBoolConfig(QString name, bool _default = false) const {
@@ -87,6 +88,8 @@ public:
     virtual int minFilesForSimplifiedParsing() const {
         return readIntConfig("minFilesForSimplifiedParsing", m_minFilesForSimplifiedParsing);
     }
+
+    virtual QStringList todoMarkerWords() const;
     
     static CompletionSettings& self();
     
@@ -95,6 +98,7 @@ public:
     int m_localColorizationLevel;
     int m_globalColorizationLevel;
     int m_minFilesForSimplifiedParsing;
+    QStringList m_todoMarkerWords;
 };
 
 #endif

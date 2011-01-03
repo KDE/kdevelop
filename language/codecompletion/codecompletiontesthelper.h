@@ -121,7 +121,7 @@ struct CodeCompletionItemTester {
   }
 
   //Standard constructor
-  CodeCompletionItemTester(DUContext* context, QString text = "; ", QString followingText = "", SimpleCursor position = SimpleCursor::invalid()) {
+  CodeCompletionItemTester(DUContext* context, QString text = "; ", QString followingText = "", CursorInRevision position = CursorInRevision::invalid()) {
     completionContext = new  T(DUContextPointer(context), text, followingText, position.isValid() ? position : context->range().end);
 
     init();
@@ -232,6 +232,14 @@ struct InsertIntoDUChain
   void get() {
     if(!m_topContext)
       m_topContext = tryGet();
+  }
+
+  ///Helper function: get a declaration based on its qualified identifier
+  Declaration* getDeclaration(QString id) {
+    get();
+    if(!topContext())
+      return 0;
+    return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).getDeclaration(topContext());
   }
   
   TopDUContext* topContext() {

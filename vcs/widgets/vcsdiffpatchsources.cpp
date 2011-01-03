@@ -27,13 +27,13 @@
 #include <interfaces/iruncontroller.h>
 #include "vcsjob.h"
 #include <interfaces/iplugincontroller.h>
+#include <KComboBox>
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs, QStringList oldMessages)
     : VCSDiffPatchSource(vcsdiff), m_selectable(selectable), m_vcs(vcs)
 {
-    
     Q_ASSERT(m_vcs);
 
     m_commitMessageWidget = new QWidget;
@@ -42,8 +42,31 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsd
     m_commitMessageEdit = new QTextEdit;
     m_commitMessageEdit->setFont( KGlobalSettings::fixedFont() );
     
-    layout->addWidget(new QLabel(i18n("Commit Message:")));
+    QHBoxLayout* titleLayout = new QHBoxLayout;
+    titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
+    
+    m_oldMessages = new KComboBox;
+    
+    m_oldMessages->addItem(i18n("Old Messages"));
+    foreach(QString message, oldMessages)
+        m_oldMessages->addItem(message, message);
+    m_oldMessages->setMaximumWidth(200);
+    
+    connect(m_oldMessages, SIGNAL(currentIndexChanged(QString)), this, SLOT(oldMessageChanged(QString)));
+    
+    titleLayout->addWidget(m_oldMessages);
+    
+    layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit);
+}
+
+void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
+{
+    if(m_oldMessages->currentIndex() != 0)
+    {
+        m_oldMessages->setCurrentIndex(0);
+        m_commitMessageEdit->setText(text);
+    }
 }
 
 VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& vcsdiff)
@@ -62,6 +85,11 @@ VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& vcsdiff)
 
     m_name = "VCS Diff";
     m_base = vcsdiff.baseDiff();
+}
+
+VCSDiffPatchSource::~VCSDiffPatchSource()
+{
+    QFile::remove(m_file.toLocalFile());
 }
 
 KUrl VCSDiffPatchSource::baseDir() const {
@@ -87,7 +115,7 @@ bool VCSCommitDiffPatchSource::canSelectFiles() const {
     return true;
 }
 
-QMap< KUrl, QString > VCSCommitDiffPatchSource::additionalSelectableFiles() const {
+QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSCommitDiffPatchSource::additionalSelectableFiles() const {
     return m_selectable;
 }
 
@@ -104,6 +132,14 @@ bool VCSCommitDiffPatchSource::canCancel() const {
 }
 
 void VCSCommitDiffPatchSource::cancelReview() {
+    
+    QString message;
+
+    if (m_commitMessageEdit)
+        message = m_commitMessageEdit->toPlainText();
+
+    emit reviewCancelled(message);
+    
     deleteLater();
 }
 
@@ -115,11 +151,11 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
         message = m_commitMessageEdit->toPlainText();
 
     kDebug() << "Finishing with selection" << selection;
-    QString text = i18n("Files will be committed:") + "\n";
+    QString text = i18n("Files will be committed:\n");
     foreach(const KUrl& url, selection)
-        text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "\n";
+        text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + '\n';
 
-    text += "\n" + i18n("With message:") + "\n" + message;
+    text += i18n("\nWith message:\n %1", message);
 
     int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"));
     if (res != KMessageBox::Continue) {

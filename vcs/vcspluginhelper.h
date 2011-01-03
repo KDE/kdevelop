@@ -21,6 +21,11 @@ class QAction;
 class QActionGroup;
 class QMenu;
 
+namespace KTextEditor
+{
+class View;
+}
+
 namespace KDevelop
 {
 class VcsDiff;
@@ -49,18 +54,24 @@ private Q_SLOTS:
     void revert();
     void history();
     void annotation();
+    void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
     void diffToHead();
     void diffToBase();
+    void diffForRev();
     void update();
-    void executeCommit(KDevelop::VcsCommitDialog* dlg);
+    void executeCommit(const QString& message, const QList<KUrl>& urls);
     void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
+    void commitReviewCancelled(QString);
 private:
     KUrl urlForItem(KDevelop::ProjectBaseItem* item) const;
 
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;
 };
+
+QStringList retrieveOldCommitMessages();
+void addOldCommitMessage(QString);
 
 } // namespace KDevelop
 

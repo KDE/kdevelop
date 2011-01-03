@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QHeaderView>
 #include <QContextMenuEvent>
+#include <QSortFilterProxyModel>
 
 #include <kaction.h>
 #include <kurl.h>
@@ -47,10 +48,17 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 {
     m_documentModel = new KDevDocumentModel();
 
-    m_selectionModel = new KDevDocumentSelection( m_documentModel );
     m_delegate = new KDevDocumentViewDelegate( this, this );
 
-    setModel( m_documentModel );
+    m_proxy = new QSortFilterProxyModel( this );
+    m_proxy->setSourceModel( m_documentModel );
+    m_proxy->setDynamicSortFilter( true );
+    m_proxy->setSortCaseSensitivity( Qt::CaseInsensitive );
+    m_proxy->sort(0);
+
+    m_selectionModel = new KDevDocumentSelection( m_proxy );
+
+    setModel( m_proxy );
     setSelectionModel( m_selectionModel );
     setItemDelegate( m_delegate );
 
@@ -81,14 +89,14 @@ KDevDocumentViewPlugin *KDevDocumentView::plugin() const
 
 void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 {
-    QModelIndex index = indexAt( event->pos() );
-    KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
+    QModelIndex proxyIndex = indexAt( event->pos() );
+    QModelIndex index = m_proxy->mapToSource( proxyIndex );
 
-    if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
+    if ( event->button() == Qt::LeftButton && proxyIndex.parent().isValid() &&
             event->modifiers() == Qt::NoModifier )
     {
         KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-        KUrl documentUrl = static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem()->url();
+        KUrl documentUrl = static_cast<KDevDocumentItem*>( m_documentModel->itemFromIndex( index ) )->fileItem()->url();
         if (dc->documentForUrl(documentUrl) != dc->activeDocument())
         {
             dc->openDocument(documentUrl);
@@ -96,9 +104,9 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
         }
     }
 
-    if ( !index.parent().isValid() )
+    if ( !proxyIndex.parent().isValid() )
     {
-        setExpanded( index, !isExpanded( index ) );
+        setExpanded( proxyIndex, !isExpanded( proxyIndex ) );
         return;
     }
 
@@ -234,7 +242,7 @@ void KDevDocumentView::updateSelectedDocs()
         {
             if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())
             {
-                if (m_selectionModel->isSelected(m_documentModel->indexFromItem(fileItem)))
+                if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))
                     m_selectedDocs << fileItem->url();
                 else
                     m_unselectedDocs << fileItem->url();
@@ -245,7 +253,7 @@ void KDevDocumentView::updateSelectedDocs()
 
 void KDevDocumentView::activated( KDevelop::IDocument* document )
 {
-    setCurrentIndex( m_documentModel->indexFromItem( m_doc2index[ document ] ) );
+    setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( m_doc2index[ document ] ) ) );
 }
 
 void KDevDocumentView::saved( KDevelop::IDocument* )
@@ -260,14 +268,14 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
     {
         mimeItem = new KDevMimeTypeItem( mimeType );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
-        setExpanded( m_documentModel->indexFromItem( mimeItem ), false);
+        setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
     }
 
     if ( !mimeItem->file( document->url() ) )
     {
         KDevFileItem * fileItem = new KDevFileItem( document->url() );
         mimeItem->setChild( mimeItem->rowCount(), fileItem );
-        setCurrentIndex( m_documentModel->indexFromItem( fileItem ) );
+        setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( fileItem ) ) );
         m_doc2index[ document ] = fileItem;
     }
 }

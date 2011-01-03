@@ -110,7 +110,7 @@ public:
     /** @return the selection controller */
     Q_SCRIPTABLE virtual KDevelop::ISelectionController* selectionController() = 0;
     
-    /** @return the documetation controller */
+    /** @return the documentation controller */
     Q_SCRIPTABLE virtual KDevelop::IDocumentationController* documentationController() = 0;
 
     /** @return the debug controller */

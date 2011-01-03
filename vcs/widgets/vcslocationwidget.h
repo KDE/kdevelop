@@ -28,17 +28,31 @@ namespace KDevelop
 {
 class VcsLocation; 
 
+/**
+ * Provides a widget to be used to ask the user for a VersionControl location.
+ * 
+ * Every VCS plugin will provide their own to be able to construct VcsLocations
+ * from the UI in a VCS-dependent fashion.
+ */
 class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
 {
     Q_OBJECT
     public:
         VcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
         
+        /** @returns the VcsLocation specified in the widget. */
         virtual VcsLocation location() const=0;
+        
+        /** @returns whether we have a correct location in the widget. */
         virtual bool isCorrect() const=0;
         
+        /** @returns a proposed project name to be used as a hint for an identifier
+         * for the VcsLocation.
+         */
+        virtual QString projectName() const=0;
+        
     signals:
-        virtual void changed()=0;
+        void changed();
 };
 
 }

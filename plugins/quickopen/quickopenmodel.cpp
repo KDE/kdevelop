@@ -22,7 +22,6 @@
 #include <QTimer>
 
 #include <ktexteditor/codecompletionmodel.h>
-#include <language/editor/hashedstring.h>
 #include <kdebug.h>
 #include <typeinfo>
 

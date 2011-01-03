@@ -109,7 +109,7 @@ IF (NOT WIN32)
                STRING(REGEX REPLACE "^-l" "" _ARG ${_ARG})
                FIND_LIBRARY(_APU_LIB_FROM_ARG NAMES ${_ARG}
                     PATHS
-                    ${_c_LIB_PATHS}
+                    ${_APU_LIB_PATHS}
                )
                IF(_APU_LIB_FROM_ARG)
                   SET(APU_LIBRARY ${APU_LIBRARY} ${_APU_LIB_FROM_ARG})

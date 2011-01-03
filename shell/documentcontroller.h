@@ -87,7 +87,7 @@ public:
     /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
     /// Returns false if the user cancels the save dialog.
     virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode);
-    bool saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode);
+    bool saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false);
 
     void notifyDocumentClosed(IDocument* doc);
 
@@ -140,7 +140,7 @@ private Q_SLOTS:
 
 private:
     QList<IDocument*> documentsInWindow(MainWindow* mw) const;
-    QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw) const;
+    QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw, bool currentAreaOnly = false) const;
     QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;
 
     bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode);

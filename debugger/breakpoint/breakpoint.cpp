@@ -38,12 +38,12 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 : m_model(model), enabled_(true),
   deleted_(false), kind_(kind),
   m_line(-1),
-  m_smartCursor(0), m_ignoreHits(0)
+  m_movingCursor(0), m_ignoreHits(0)
 {
 }
 
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
-: m_model(model), deleted_(false), m_line(-1), m_smartCursor(0)
+: m_model(model), deleted_(false), m_line(-1), m_movingCursor(0)
 {
     QString kindString = config.readEntry("kind", "");
     int i;
@@ -270,11 +270,11 @@ bool Breakpoint::enabled() const
     return data(EnableColumn, Qt::CheckStateRole).toBool();
 }
 
-void KDevelop::Breakpoint::setSmartCursor(KTextEditor::SmartCursor* cursor) {
-    m_smartCursor = cursor;
+void KDevelop::Breakpoint::setMovingCursor(KTextEditor::MovingCursor* cursor) {
+    m_movingCursor = cursor;
 }
-KTextEditor::SmartCursor* KDevelop::Breakpoint::smartCursor() const {
-    return m_smartCursor;
+KTextEditor::MovingCursor* KDevelop::Breakpoint::movingCursor() const {
+    return m_movingCursor;
 }
 
 void Breakpoint::setIgnoreHits(int c)

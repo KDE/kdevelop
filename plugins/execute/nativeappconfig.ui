@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>515</height>
+    <width>511</width>
+    <height>580</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -16,7 +16,7 @@
      <property name="title">
       <string>Executable</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -28,30 +28,34 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QRadioButton" name="projectTargetRadio">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="ProjectTargetsComboBox" name="projectTarget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="projectTargetRadio">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="ProjectTargetsComboBox" name="projectTarget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
@@ -64,29 +68,30 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QRadioButton" name="executableRadio">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KUrlRequester" name="executablePath">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="clickMessage">
-         <string>Enter the executable name or absolute path to an executable file</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="executableRadio">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KUrlRequester" name="executablePath">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="clickMessage">
+           <string>Enter the executable name or absolute path to an executable file</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
-     <zorder></zorder>
-     <zorder>label_2</zorder>
-     <zorder>label</zorder>
     </widget>
    </item>
    <item>
@@ -94,7 +99,7 @@
      <property name="title">
       <string>Behaviour</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -146,10 +151,68 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Select an environment to be used</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment"/>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="runInTerminal">
         <property name="toolTip">
-         <string>Select an environment to be used</string>
+         <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
         </property>
+        <property name="text">
+         <string>Use External Terminal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KComboBox" name="terminal">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;code&gt;%exe&lt;/code&gt;&lt;/dt&gt;
+&lt;dd&gt;The path to the executable selected above.&lt;/dd&gt;
+&lt;dt&gt;&lt;code&gt;%workdir&lt;/code&gt;&lt;/dt&gt;
+&lt;dd&gt;The path to the working directory selected above.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;The arguments defined above will get appended to this command.&lt;/p&gt;</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">konsole --noclose --workdir %workdir -e %exe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">xterm -hold -e %exe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">gnome-terminal -e %exe</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
@@ -160,7 +223,7 @@
      <property name="title">
       <string>Dependencies</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
+     <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
@@ -171,7 +234,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="3">
+      <item row="0" column="1">
        <widget class="KComboBox" name="dependencyAction">
         <property name="toolTip">
          <string>Specifies the action to take for the dependencies before starting the executable.</string>
@@ -210,111 +273,115 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="ProjectItemLineEdit" name="targetDependency">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Enter a dependency to add to the list</string>
-        </property>
-        <property name="clickMessage">
-         <string>Enter a dependency to add to the list</string>
-        </property>
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="browseProject">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QPushButton" name="addDependency">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Adds the listed target to the dependency list.</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" rowspan="4" colspan="2">
-       <widget class="KListWidget" name="dependencies">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>List of indirect dependent targets.</string>
-        </property>
-        <property name="whatsThis">
-         <string>This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="uniformItemSizes">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QPushButton" name="removeDependency">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Removes the selected dependencies from the list.</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QPushButton" name="moveDepUp">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Move a dependency up in the list.</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QPushButton" name="moveDepDown">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Moves the selected dependency down in the list.</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="ProjectItemLineEdit" name="targetDependency">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Enter a dependency to add to the list</string>
+          </property>
+          <property name="clickMessage">
+           <string>Enter a dependency to add to the list</string>
+          </property>
+          <property name="showClearButton" stdset="0">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="browseProject">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="addDependency">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Adds the listed target to the dependency list.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="4" colspan="2">
+         <widget class="KListWidget" name="dependencies">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>List of indirect dependent targets.</string>
+          </property>
+          <property name="whatsThis">
+           <string>This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="uniformItemSizes">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="removeDependency">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Removes the selected dependencies from the list.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="moveDepUp">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Move a dependency up in the list.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="moveDepDown">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Moves the selected dependency down in the list.</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -357,10 +424,13 @@
    <extends>QComboBox</extends>
    <header>projecttargetscombobox.h</header>
   </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentConfigureButton</class>
+   <extends>QToolButton</extends>
+   <header>util/environmentconfigurebutton.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>projectTargetRadio</tabstop>
-  <tabstop>executableRadio</tabstop>
   <tabstop>executablePath</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
@@ -381,12 +451,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
+     <x>124</x>
      <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>384</x>
-     <y>92</y>
+     <x>497</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -397,12 +467,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>87</y>
+     <x>124</x>
+     <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>473</x>
-     <y>92</y>
+     <x>497</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runInTerminal</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>terminal</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectTargetRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>projectTarget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>38</y>
     </hint>
    </hints>
   </connection>

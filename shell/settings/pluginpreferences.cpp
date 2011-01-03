@@ -46,17 +46,40 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
     QVBoxLayout* lay = new QVBoxLayout(this );
     selector = new KPluginSelector( this );
     lay->addWidget( selector );
-    QList<KPluginInfo> plugins;
+    QMap<QString, QList<KPluginInfo> > plugins;
+    QMap<QString, QString> categories;
+    categories["Core"] = i18n("Core");
+    categories["Project Management"] = i18n("Project Management");
+    categories["Version Control"] = i18n("Version Control");
+    categories["Utilities"] = i18n("Utilities");
+    categories["Documentation"] = i18n("Documentation");
+    categories["Language Support"] = i18n("Language Support");
+    categories["Debugging"] = i18n("Debugging");
+    categories["Other"] = i18n("Other");
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->allPluginInfos() )
     {
         QString loadMode = info.property("X-KDevelop-LoadMode").toString();
         if( info.property("X-KDevelop-Category") == "Global"
             && ( loadMode.isEmpty() || loadMode == "UserSelectable") )
         {
-            plugins << info;
+            QString category = info.category();
+            if (!categories.contains(category)) {
+                if (!category.isEmpty()) {
+                    kWarning() << "unknown category for plugin" << info.name() << ":" << info.category();
+                }
+                category = "Other";
+            }
+            plugins[category] << info;
         }
     }
-    selector->addPlugins( plugins, KPluginSelector::ReadConfigFile, QString(), QString(), Core::self()->activeSession()->config() );
+    QMap< QString, QList<KPluginInfo> >::const_iterator it = plugins.constBegin();
+    QMap< QString, QList<KPluginInfo> >::const_iterator end = plugins.constEnd();
+    while(it != end) {
+        selector->addPlugins( it.value(), KPluginSelector::ReadConfigFile,
+                              categories.value(it.key()), it.key(),
+                              Core::self()->activeSession()->config() );
+        ++it;
+    }
     connect( selector, SIGNAL( changed(bool) ), this, SLOT( changed() ) );
     connect( selector, SIGNAL( configCommitted(const QByteArray&) ), this, SLOT( reparseConfig(const QByteArray&) ) );
     selector->load();
@@ -79,6 +102,7 @@ void PluginPreferences::save()
     selector->save();
     KCModule::save();
     Core::self()->pluginControllerInternal()->updateLoadedPlugins();
+    selector->load();   // Some plugins may have failed to load, they must be unchecked.
 }
 
 void PluginPreferences::load()

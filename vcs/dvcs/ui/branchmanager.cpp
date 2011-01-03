@@ -31,180 +31,181 @@
 
 #include "../dvcsjob.h"
 #include "../dvcsplugin.h"
+#include "ui_branchmanager.h"
+#include <QStandardItemModel>
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 
-BranchManager::BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
+using namespace KDevelop;
+
+BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
     : KDialog(parent)
-    , d(executor)
+    , repo(repo), d(executor)
 {
-    //we do the same in prepareJob, so actually it isn't required
-    QFileInfo repoInfo = QFileInfo(_repo);
-    if (repoInfo.isFile())
-        repo = repoInfo.path();
-    else
-        repo = _repo;
-    setButtons(0);
-    setupUi(this);
+    setButtons(KDialog::Close);
+    
+    m_ui = new Ui::BranchDialogBase;
+    QWidget* w = new QWidget(this);
+    m_ui->setupUi(w);
+    setMainWidget(w);
 
-    QStringList branches = d->branches(repo);
-    QString curBranch = d->curBranch(repo);
-
-    QStringList::const_iterator constIterator;
-    for (constIterator = branches.constBegin(); constIterator != branches.constEnd(); ++constIterator)
-    {
-        QListWidgetItem *item = new QListWidgetItem(*constIterator, branchWidget);
-        item->setFlags(Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        if (*constIterator == curBranch)
-            item->setForeground(Qt::red);
+    m_model = new BranchesListModel(d, repo, this);
+    m_ui->branchView->setModel(m_model);
+    
+    QString branchname = d->curBranch(repo);
+    m_valid = !branchname.isEmpty();
+    if(m_valid) {
+        QList< QStandardItem* > items = m_model->findItems(branchname);
+        m_ui->branchView->selectionModel()->select(items.first()->index(), QItemSelectionModel::ClearAndSelect);
     }
-
-    branchWidget->setEditTriggers(/*QAbstractItemView::AnyKeyPressed
-                                    | */QAbstractItemView::DoubleClicked);
-    branchWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    connect(branchWidget->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
-            this, SLOT(activateButtons(const QItemSelection&, const QItemSelection&) ) );
-    connect(branchWidget, SIGNAL(itemActivated(QListWidgetItem *) ), 
-            this, SLOT(currentActivatedData(QListWidgetItem *)));
-    connect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-            this, SLOT(renameBranch(QListWidgetItem *)));
-
-    connect(newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
-    connect(deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));
-    connect(checkoutButton, SIGNAL(clicked()), this, SLOT(checkoutBranch()));
+    
+    connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
+    connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));
+    connect(m_ui->checkoutButton, SIGNAL(clicked()), this, SLOT(checkoutBranch()));
 }
 
 BranchManager::~BranchManager()
 {
+    delete m_ui;
 }
 
 void BranchManager::createBranch()
 {
-    //a hack to prevent renameBranch()
-    disconnect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-               this, SLOT(renameBranch(QListWidgetItem *)));
-    QString baseBranch = branchWidget->currentIndex().data().toString();
-    QString newBranch = QInputDialog::getText(this, i18n("New branch"),
-                                              i18n("Name of the new branch:"));
+    QString baseBranch = m_ui->branchView->currentIndex().data().toString();
+    QString newBranch = QInputDialog::getText(this, i18n("New branch"), i18n("Name of the new branch:"));
 
-    if (d->branches(repo).contains(newBranch))
+    if (!m_model->findItems(newBranch).isEmpty())
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
                                 i18n("Branch \"%1\" already exists.\n"
-                                        "Pick another name.",
+                                        "Please, choose another name.",
                                         newBranch));
-        connect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-                this, SLOT(renameBranch(QListWidgetItem *)));
-        return;
     }
-
-    kDebug() << "Creating " << baseBranch << " based on " << newBranch;
-    KDevelop::VcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
-
-    if (branchJob)
-    {
-        kDebug() << "Adding new branch";
-        branchJob->exec();
-    }
-    QListWidgetItem *item = new QListWidgetItem(newBranch, branchWidget);
-    item->setFlags(Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-    connect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-            this, SLOT(renameBranch(QListWidgetItem *)));
-}
-
-void BranchManager::renameBranch(QListWidgetItem * item)
-{
-    QString baseBranch = lastActivated;
-    QString newBranch = item->data(Qt::DisplayRole).toString();
-
-    if (d->branches(repo).contains(newBranch))
-    {
-        KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                i18n("Branch \"%1\" already exists.\n"
-                                        "Pick another name.",
-                                        newBranch));
-        //a hack to prevent another one renameBranch() after resetting item to the old value
-        disconnect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-                   this, SLOT(renameBranch(QListWidgetItem *)));
-        item->setText(baseBranch);
-        connect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
-                this, SLOT(renameBranch(QListWidgetItem *)));
-        return;
-    }
-
-    int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
-                                      i18n("The branch is going to be renamed from\n"
-                                            "%1 to %2.\nAre you sure?",baseBranch, newBranch));
-
-    if (ret == QMessageBox::Cancel)
-        return;
-
-    KDevelop::VcsJob *branchJob = d->branch(repo, newBranch, baseBranch, QStringList("-m"));
-    if (branchJob)
-    {
-        kDebug() << "Renaming " << baseBranch << " to " << newBranch;
-        branchJob->exec();
-    }
+    else
+        m_model->createBranch(baseBranch, newBranch);
 }
 
 void BranchManager::delBranch()
 {
-    QString baseBranch = branchWidget->currentIndex().data().toString();
+    QString baseBranch = m_ui->branchView->selectionModel()->selection().indexes().first().data().toString();
 
     if (baseBranch == d->curBranch(repo))
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
                                     i18n("Currently at the branch \"%1\".\n"
-                                            "To remove it, another branch has to be checked out.",
+                                            "To remove it, please change to another branch.",
                                             baseBranch));
         return;
     }
 
     int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
-                                      i18n("About to remove the branch \"%1\".\n" 
-                                              "Once removed, it cannot be restored.\nAre you sure?",
-                                              baseBranch));
-    if (ret == QMessageBox::Cancel)
-        return;
-
-    KDevelop::VcsJob *branchJob = d->branch(repo, baseBranch, QString(), QStringList("-D"));
-    if (branchJob)
-    {
-        kDebug() << "Removing " << baseBranch;
-        branchJob->exec();
-    }
-    branchWidget->model()->removeRow(branchWidget->currentIndex().row());
+                                      i18n("Are you sure you want to irreversibly remove the branch '%1'?", baseBranch));
+    if (ret == KMessageBox::Yes)
+        m_model->removeBranch(baseBranch);
 }
 
 void BranchManager::checkoutBranch()
 {
-    QString baseBranch = branchWidget->currentIndex().data().toString();
-    if (baseBranch == d->curBranch(repo))
+    QString branch = m_ui->branchView->currentIndex().data().toString();
+    if (branch == d->curBranch(repo))
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
                                 i18n("Already on branch \"%1\"\n",
-                                        baseBranch));
+                                        branch));
         return;
     }
 
-    KDevelop::VcsJob *branchJob = d->switchBranch(repo, baseBranch);
-    if (branchJob)
-    {
-        //we don't run here, because we have to save all unsaved files (reload proj), checkout and then reload again
-        emit checkedOut(branchJob);
-    }
+    kDebug() << "Switching to" << branch << "in" << repo;
+    KDevelop::VcsJob *branchJob = d->switchBranch(repo, branch);
+//     connect(branchJob, SIGNAL(finished(KJob*)), m_model, SIGNAL(resetCurrent()));
+    
+    ICore::self()->runController()->registerJob(branchJob);
     close();
 }
 
-void BranchManager::currentActivatedData(QListWidgetItem * item)
+///////// BranchesListModel ////////
+
+class BranchItem : public QStandardItem
 {
-    lastActivated = item->data(Qt::DisplayRole).toString();
-//     kDebug() << "Last activated item data: " << lastActivated;
+    public:
+        BranchItem(const QString& name, bool current=false) : 
+            QStandardItem(KIcon( current ? "arrow-right" : ""), name)
+        {
+            setEditable(true);
+        }
+        
+        void setCurrent(bool current)
+        {
+            setIcon(KIcon( current ? "arrow-right" : ""));
+        }
+        
+        void setData(const QVariant& value, int role = Qt::UserRole + 1)
+        {
+            if(role==Qt::EditRole && value.toString()!=text()) {
+                QString newBranch = value.toString();
+                
+                BranchesListModel* bmodel = qobject_cast<BranchesListModel*>(model());
+                if(!bmodel->findItems(newBranch).isEmpty())
+                {
+                    KMessageBox::messageBox(0, KMessageBox::Sorry, i18n("Branch \"%1\" already exists.", newBranch));
+                    return;
+                }
+
+                int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo, 
+                                                i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
+
+                if (ret == KMessageBox::Yes ) {
+                    KDevelop::VcsJob *branchJob = bmodel->dvcsPlugin()->branch(bmodel->repository(), newBranch, text(), QStringList("-m"));
+
+                    bool ret = branchJob->exec();
+                    kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
+                    if(ret) {
+                        setText(newBranch);
+                        QStandardItem::setData(value, Qt::DisplayRole);
+                    }
+                }
+            }
+        }
+};
+
+BranchesListModel::BranchesListModel(DistributedVersionControlPlugin* dvcsplugin, const QString& repo, QObject* parent)
+    : QStandardItemModel(parent), dvcsplugin(dvcsplugin), repo(repo)
+{
+    QStringList branches = dvcsplugin->branches(repo);
+    QString curBranch = dvcsplugin->curBranch(repo);
+
+    foreach(const QString& branch, branches)
+        appendRow(new BranchItem(branch, branch == curBranch));
 }
 
-void BranchManager::activateButtons(const QItemSelection &selected, const QItemSelection&)
+void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)
 {
-    Q_UNUSED(selected)
-    bool enableButtons = branchWidget->selectionModel()->hasSelection();
-    newButton->setEnabled(enableButtons);
-    deleteButton->setEnabled(enableButtons);
-    checkoutButton->setEnabled(enableButtons);
+    kDebug() << "Creating " << baseBranch << " based on " << newBranch;
+    KDevelop::VcsJob* branchJob = dvcsplugin->branch(repo, baseBranch, newBranch);
+
+    kDebug() << "Adding new branch";
+    if (branchJob->exec())
+        appendRow(new BranchItem(newBranch));
+}
+
+void BranchesListModel::removeBranch(const QString& branch)
+{
+    KDevelop::VcsJob *branchJob = dvcsplugin->branch(repo, branch, QString(), QStringList("-D"));
+    
+    kDebug() << "Removing branch:" << branch;
+    if (branchJob->exec()) {
+        QList< QStandardItem* > items = findItems(branch);
+        foreach(QStandardItem* item, items)
+            removeRow(item->row());
+    }
+}
+
+void BranchesListModel::resetCurrent()
+{
+    QString cur = dvcsplugin->curBranch(repo);
+    
+    for(int i=0; i<rowCount(); ++i) {
+        BranchItem* it=static_cast<BranchItem*>(item(i, 0));
+        it->setCurrent(it->text()==cur);
+    }
 }

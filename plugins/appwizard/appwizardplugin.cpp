@@ -44,6 +44,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <vcs/vcslocation.h>
@@ -101,13 +102,21 @@ void AppWizardPlugin::slotNewProject()
     m_templatesModel->refresh();
     AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
-
     if (dlg.exec() == QDialog::Accepted)
     {
         QString project = createProject( dlg.appInfo() );
         if (!project.isEmpty())
         {
             core()->projectController()->openProject(KUrl::fromPath(project));
+
+            KConfig templateConfig(dlg.appInfo().appTemplate);
+            KConfigGroup general(&templateConfig, "General");
+            QString file = general.readEntry("ShowFilesAfterGeneration");
+            if (!file.isEmpty())
+            {
+                file = KMacroExpander::expandMacros(file, m_variables);
+                core()->documentController()->openDocument(file);
+            }                        
         } else {
             KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
         }

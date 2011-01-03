@@ -19,10 +19,9 @@
 
 #include "ui_logview.h"
 
-class DVcsJob;
-
 namespace KDevelop
 {
+    class DVcsJob;
     class DistributedVersionControlPlugin;
 }
 
@@ -36,7 +35,7 @@ class LogView : public QWidget, private Ui::LogViewBase
 {
 Q_OBJECT
 public:
-    explicit LogView(KDevelop::DistributedVersionControlPlugin* plugin, DVcsJob* job=0, QWidget *parent = 0);
+    explicit LogView(KDevelop::DistributedVersionControlPlugin* plugin, KDevelop::DVcsJob* job=0, QWidget *parent = 0);
     virtual ~LogView();
 
 private slots:

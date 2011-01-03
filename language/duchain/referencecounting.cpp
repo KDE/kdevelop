@@ -205,6 +205,13 @@ static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem,
   return oldReferencesObject;
 }
 
+namespace KDevelop {
+void initReferenceCounting() {
+  references();
+  oldReferences();
+}
+}
+
 ReferenceCountManager::~ReferenceCountManager() {
   //Make sure everything is cleaned up when the object is destroyed
 //   Q_ASSERT(!references().contains(m_id));
@@ -249,4 +256,9 @@ void ReferenceCountManager::decrease(uint& ref, uint targetId) {
 }
 }
 
+#else
+namespace KDevelop {
+  void initReferenceCounting() {
+  }
+}
 #endif

@@ -274,7 +274,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
 
       kDebug() << "current count of crashes: " << count;
       
-      if(count >= crashesBeforeCleanup)
+      if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
       {
         ///@todo Ask the user
         kWarning() << "kdevelop crashed" << count << "times in a row with the duchain repository" << m_path << ", clearing it";

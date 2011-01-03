@@ -11,63 +11,125 @@
 
 #include "editsnippet.h"
 
+#include "ui_editsnippet.h"
+
 #include "snippetrepository.h"
 
+#include <QToolButton>
+
 #include <KLocalizedString>
-
-#include <KTextEditor/EditorChooser>
 #include <KPushButton>
-
 #include <KAction>
+#include <KMimeTypeTrader>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KToolInvocation>
+#include <KMessageBox>
 
 #include "snippetstore.h"
 #include "snippet.h"
 
+QPair<KTextEditor::View*, QToolButton*> getViewForTab(QWidget* tabWidget)
+{
+    QVBoxLayout* layout = new QVBoxLayout;
+    tabWidget->setLayout(layout);
+    KParts::ReadWritePart* part= KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
+                                        "text/plain", tabWidget, tabWidget);
+    KTextEditor::Document* document = qobject_cast<KTextEditor::Document*>(part);
+    Q_ASSERT(document);
+    Q_ASSERT(document->action("file_save"));
+    document->action("file_save")->setEnabled(false);
+
+    KTextEditor::View* view = qobject_cast< KTextEditor::View* >( document->widget() );
+    layout->addWidget(view);
+
+    QHBoxLayout* hlayout = new QHBoxLayout;
+    hlayout->addStretch();
+
+    QToolButton* button = new QToolButton;
+    button->setText(i18n("Show Documentation"));
+    button->setIcon(KIcon("help-about"));
+    button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    hlayout->addWidget(button);
+    layout->addLayout(hlayout);
+
+    return qMakePair(view, button);
+}
+
 EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidget* parent)
-    : KDialog(parent), Ui::EditSnippetBase(), m_repo(repository), m_snippet(snippet)
+    : KDialog(parent), m_ui(new Ui::EditSnippetBase), m_repo(repository), m_snippet(snippet)
 {
     Q_ASSERT(m_repo);
 
     setButtons(/*Reset | */Apply | Cancel | Ok);
-    setupUi(mainWidget());
-    mainWidget()->layout()->setMargin(0);
-    snippetShortcutWidget->layout()->setMargin(0);
+    m_ui->setupUi(mainWidget());
+
+    ///TODO: highlighting and documentation of template handler variables
+    QPair<KTextEditor::View*, QToolButton*> pair = getViewForTab(m_ui->snippetTab);
+    m_snippetView = pair.first;
+    if (!m_repo->fileTypes().isEmpty()) {
+        m_snippetView->document()->setMode(m_repo->fileTypes().first());
+    }
+    connect(pair.second, SIGNAL(clicked(bool)),
+            this, SLOT(slotSnippetDocumentation()));
+    ///TODO: highlighting and documentation of KTextEditor API
+    pair = getViewForTab(m_ui->scriptTab);
+    m_scriptsView = pair.first;
+    m_scriptsView->document()->setMode("JavaScript");
+    m_scriptsView->document()->setText(m_repo->script());
+    connect(pair.second, SIGNAL(clicked(bool)),
+            this, SLOT(slotScriptDocumentation()));
+
+    m_ui->verticalLayout->setMargin(0);
+    m_ui->formLayout->setMargin(0);
+
+    m_ui->snippetShortcutWidget->layout()->setMargin(0);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
 
-    connect(snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
-    connect(snippetContentsEdit, SIGNAL(textChanged()), this, SLOT(validate()));
+    connect(m_ui->snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
+    connect(m_snippetView->document(), SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(validate()));
 
     // if we edit a snippet, add all existing data
     if ( m_snippet ) {
-        snippetNameEdit->setText(m_repo->text());
+        m_ui->snippetNameEdit->setText(m_repo->text());
 
         setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
 
-        snippetArgumentsEdit->setText(m_snippet->arguments());
-        snippetContentsEdit->setPlainText(m_snippet->snippet());
-        snippetNameEdit->setText(m_snippet->text());
-        snippetPostfixEdit->setText(m_snippet->postfix());
-        snippetPrefixEdit->setText(m_snippet->prefix());
-        snippetShortcutWidget->setShortcut(m_snippet->action()->shortcut());
+        m_ui->snippetArgumentsEdit->setText(m_snippet->arguments());
+        m_snippetView->document()->setText(m_snippet->snippet());
+        m_ui->snippetNameEdit->setText(m_snippet->text());
+        m_ui->snippetPostfixEdit->setText(m_snippet->postfix());
+        m_ui->snippetPrefixEdit->setText(m_snippet->prefix());
+        m_ui->snippetShortcutWidget->setShortcut(m_snippet->action()->shortcut());
     } else {
         setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
     }
 
     validate();
 
-    snippetNameEdit->setFocus();
+    m_ui->snippetNameEdit->setFocus();
+
+    QSize initSize = sizeHint();
+    initSize.setHeight( initSize.height() + 200 );
+    setInitialSize(initSize);
 }
 
 EditSnippet::~EditSnippet()
 {
 }
 
+void EditSnippet::setSnippetText( const QString& text )
+{
+    m_snippetView->document()->setText(text);
+    validate();
+}
+
 void EditSnippet::validate()
 {
-    const QString& name = snippetNameEdit->text();
-    bool valid = !name.isEmpty() && !snippetContentsEdit->document()->isEmpty();
+    const QString& name = m_ui->snippetNameEdit->text();
+    bool valid = !name.isEmpty() && !m_snippetView->document()->isEmpty();
     if (valid) {
         // make sure the snippetname includes no spaces
         for ( int i = 0; i < name.length(); ++i ) {
@@ -83,22 +145,49 @@ void EditSnippet::validate()
 
 void EditSnippet::save()
 {
-    Q_ASSERT(!snippetNameEdit->text().isEmpty());
+    Q_ASSERT(!m_ui->snippetNameEdit->text().isEmpty());
 
     if ( !m_snippet ) {
         // save as new snippet
         m_snippet = new Snippet();
         m_repo->appendRow(m_snippet);
     }
-    m_snippet->setArguments(snippetArgumentsEdit->text());
-    m_snippet->setSnippet(snippetContentsEdit->document()->toPlainText());
-    m_snippet->setText(snippetNameEdit->text());
-    m_snippet->setPostfix(snippetPostfixEdit->text());
-    m_snippet->setPrefix(snippetPrefixEdit->text());
-    m_snippet->action()->setShortcut(snippetShortcutWidget->shortcut());
+    m_snippet->setArguments(m_ui->snippetArgumentsEdit->text());
+    m_snippet->setSnippet(m_snippetView->document()->text());
+    m_snippetView->document()->setModified(false);
+    m_snippet->setText(m_ui->snippetNameEdit->text());
+    m_snippet->setPostfix(m_ui->snippetPostfixEdit->text());
+    m_snippet->setPrefix(m_ui->snippetPrefixEdit->text());
+    m_snippet->action()->setShortcut(m_ui->snippetShortcutWidget->shortcut());
+    m_repo->setScript(m_scriptsView->document()->text());
+    m_scriptsView->document()->setModified(false);
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
+}
+
+void EditSnippet::slotSnippetDocumentation()
+{
+    KToolInvocation::invokeHelp("katefiletemplates-format", "kate");
+}
+
+void EditSnippet::slotScriptDocumentation()
+{
+    KToolInvocation::invokeHelp("advanced-editing-tools-scripting-api", "kate");
+}
+
+void EditSnippet::reject()
+{
+    if (m_snippetView->document()->isModified() || m_scriptsView->document()->isModified()) {
+        int ret = KMessageBox::warningContinueCancel(qApp->activeWindow(),
+            i18n("The snippet contains unsaved changes. Do you want to continue and lose all changes?"),
+            i18n("Warning - Unsaved Changes")
+        );
+        if (ret == KMessageBox::Cancel) {
+            return;
+        }
+    }
+    QDialog::reject();
 }
 
 #include "editsnippet.moc"

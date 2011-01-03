@@ -51,6 +51,8 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     proxyModel->setSourceModel( groupModel );
     ui.variableTable->setModel( proxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
+    ui.newButton->setIcon(KIcon("list-add"));
+    ui.deleteButton->setIcon(KIcon("list-remove"));
 
     connect( ui.newButton, SIGNAL( clicked() ),
              SLOT( newButtonClicked() ) );
@@ -72,6 +74,11 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
     connect( groupModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
     connect( groupModel, SIGNAL( modelReset() ), SLOT( enableDeleteButton() ) );
+}
+
+void EnvironmentWidget::setActiveGroup( const QString& group )
+{
+    ui.activeCombo->setCurrentItem(group);
 }
 
 void EnvironmentWidget::enableDeleteButton()

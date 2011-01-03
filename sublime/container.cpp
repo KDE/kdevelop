@@ -42,6 +42,9 @@
 #include "document.h"
 #include <qpointer.h>
 #include <QEvent>
+#include <QKeyEvent>
+#include "urldocument.h"
+#include <ksqueezedtextlabel.h>
 
 namespace Sublime {
 
@@ -69,7 +72,13 @@ class ContainerTabBar : public KTabBar {
         
         return KTabBar::event(ev);
     }
-    
+    virtual void mousePressEvent(QMouseEvent* event) {
+        if (event->button() == Qt::MidButton) {
+            // just close on midbutton, drag can still be done with left mouse button
+            return;
+        }
+        KTabBar::mousePressEvent(event);
+    }
     Container* m_container;
 };
 
@@ -78,16 +87,16 @@ struct ContainerPrivate {
 
     ContainerTabBar *tabBar;
     QStackedWidget *stack;
-    QLabel *fileNameCorner;
+    KSqueezedTextLabel *fileNameCorner;
     QLabel *fileStatus;
-    QLabel *statusCorner;
+    KSqueezedTextLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
 };
 
-class UnderlinedLabel: public QLabel {
+class UnderlinedLabel: public KSqueezedTextLabel {
 public:
-    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0)
-        :QLabel(parent, f), m_tabBar(tabBar)
+    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0)
+        :KSqueezedTextLabel(parent), m_tabBar(tabBar)
     {
     }
 
@@ -118,7 +127,7 @@ protected:
             }
         }
 
-        QLabel::paintEvent(ev);
+        KSqueezedTextLabel::paintEvent(ev);
     }
 
     KTabBar *m_tabBar;
@@ -127,8 +136,8 @@ protected:
 
 class StatusLabel: public UnderlinedLabel {
 public:
-    StatusLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0):
-        UnderlinedLabel(tabBar, parent, f)
+    StatusLabel(KTabBar *tabBar, QWidget* parent = 0):
+        UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         setSizePolicy(QSizePolicy::Maximum, sizePolicy().verticalPolicy());
@@ -176,10 +185,11 @@ Container::Container(QWidget *parent)
     l->addWidget(d->stack);
 
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
-    connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
+    connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeRequest(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
+    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(closeRequest(int)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -262,6 +272,7 @@ void Container::addWidget(View *view, int position)
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
+    setCurrentWidget(d->stack->currentWidget());
     
     // This fixes a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
     // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
@@ -299,7 +310,21 @@ void Container::documentTitleChanged(Sublime::Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
-            d->fileNameCorner->setText( doc->title() );
+            QString txt = doc->title();
+            //TODO: Maybe add new virtual in Document to support supplying this
+            // extended information from subclasses like IDocument which can use
+            // the rest of the kdevplatform API
+            UrlDocument* udoc = dynamic_cast<UrlDocument*>( doc );
+            if( udoc ) {
+                QString pretty;
+                if( udoc->url().isLocalFile() ) {
+                    pretty = udoc->url().toLocalFile();
+                } else {
+                    pretty = udoc->url().prettyUrl();
+                }
+                txt = txt + " (" + pretty + ")";
+            }
+            d->fileNameCorner->setText( txt );
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
@@ -331,7 +356,8 @@ void Container::setCurrentWidget(QWidget* w)
     if (View *view = d->viewForWidget[w])
     {
         statusChanged(view);
-        d->fileNameCorner->setText(view->document()->title());
+        statusIconChanged( view->document() );
+        documentTitleChanged( view->document() );
     }
 }
 
@@ -351,8 +377,13 @@ void Sublime::Container::removeWidget(QWidget *w)
         int widgetIdx = d->stack->indexOf(w);
         d->stack->removeWidget(w);
         d->tabBar->removeTab(widgetIdx);
-        if (d->tabBar->currentIndex() != -1)
-            d->fileNameCorner->setText(d->tabBar->tabText(d->tabBar->currentIndex()));
+        if (d->tabBar->currentIndex() != -1) {
+            QWidget* w = widget( d->tabBar->currentIndex() );
+            if( w ) {
+                statusIconChanged( d->viewForWidget[w]->document() );
+                documentTitleChanged( d->viewForWidget[w]->document() );
+            }
+        }
         View* view = d->viewForWidget.take(w);
         if (view)
         {
@@ -431,8 +462,9 @@ void Container::contextMenu( int currentTab, QPoint pos )
             // activate last tab
             widgetActivated(count() - 1);
             // close all
-            while ( count() ) {
-                closeRequest(widget(0));
+            QList<QWidget*> tabs;
+            for ( int i = 0; i < count(); ++i ) {
+                closeRequest(widget(i));
             }
         } // else the action was handled by someone else
     }

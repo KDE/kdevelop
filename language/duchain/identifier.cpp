@@ -61,11 +61,11 @@ public:
   IndexedString m_identifier;
   uint m_refCount;
 
-  START_APPENDED_LISTS(IdentifierPrivate)
+  START_APPENDED_LISTS_STATIC(IdentifierPrivate)
 
-  APPENDED_LIST_FIRST(IndexedTypeIdentifier, templateIdentifiers)
+  APPENDED_LIST_FIRST_STATIC(IndexedTypeIdentifier, templateIdentifiers)
 
-  END_APPENDED_LISTS(templateIdentifiers)
+  END_APPENDED_LISTS_STATIC(templateIdentifiers)
 
   unsigned int itemSize() const {
     return sizeof(IdentifierPrivate<false>) + lastOffsetBehind();
@@ -76,7 +76,7 @@ public:
       //this must stay thread-safe(may be called by multiple threads at a time)
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
-      FOREACH_FUNCTION(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
+      FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
         hash = hash * 13 + IndexedTypeIdentifier(templateIdentifier).hash();
       hash += m_unique;
       m_hash = hash;
@@ -179,11 +179,11 @@ public:
   mutable uint m_hash;
   uint m_refCount;
 
-  START_APPENDED_LISTS(QualifiedIdentifierPrivate)
+  START_APPENDED_LISTS_STATIC(QualifiedIdentifierPrivate)
 
-  APPENDED_LIST_FIRST(IndexedIdentifier, identifiers)
+  APPENDED_LIST_FIRST_STATIC(IndexedIdentifier, identifiers)
 
-  END_APPENDED_LISTS(identifiers)
+  END_APPENDED_LISTS_STATIC(identifiers)
 
   unsigned int itemSize() const {
     return sizeof(QualifiedIdentifierPrivate<false>) + lastOffsetBehind();
@@ -212,7 +212,7 @@ public:
     if( m_hash == 0 )
     {
       uint mhash = 0;
-      FOREACH_FUNCTION( const IndexedIdentifier& identifier, identifiers )
+      FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers )
         mhash = 11*mhash + Identifier(identifier).hash();
 
       if(mhash != m_hash)
@@ -598,10 +598,10 @@ QStringList QualifiedIdentifier::toStringList() const
     ret.append(QString());
 
   if(m_index) {
-    FOREACH_FUNCTION(const IndexedIdentifier& index, cd->identifiers)
+    FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
       ret << index.identifier().toString();
   }else{
-    FOREACH_FUNCTION(const IndexedIdentifier& index, dd->identifiers)
+    FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
       ret << index.identifier().toString();
   }
 
@@ -616,7 +616,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 
   bool first = true;
   if(m_index) {
-    FOREACH_FUNCTION(const IndexedIdentifier& index, cd->identifiers)
+    FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
     {
       if( !first )
         ret += "::";
@@ -626,7 +626,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
       ret += index.identifier().toString();
     }
   }else{
-    FOREACH_FUNCTION(const IndexedIdentifier& index, dd->identifiers)
+    FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
     {
       if( !first )
         ret += "::";
@@ -1238,6 +1238,11 @@ QualifiedIdentifier IndexedQualifiedIdentifier::identifier() const {
 
 IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
   return QualifiedIdentifier(index);
+}
+
+void initIdentifierRepository() {
+  identifierRepository();
+  qualifiedidentifierRepository();
 }
 
 }

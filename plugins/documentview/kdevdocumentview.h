@@ -22,6 +22,7 @@
 
 #include <QTreeView>
 
+class QSortFilterProxyModel;
 class KAction;
 class KUrl;
 class KDevDocumentViewPlugin;
@@ -80,6 +81,7 @@ private:
     KDevDocumentViewPlugin *m_plugin;
     KDevDocumentModel *m_documentModel;
     KDevDocumentSelection* m_selectionModel;
+    QSortFilterProxyModel* m_proxy;
     KDevDocumentViewDelegate* m_delegate;
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu

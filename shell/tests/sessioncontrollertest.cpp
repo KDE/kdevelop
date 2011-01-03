@@ -80,7 +80,8 @@ void SessionControllerTest::cleanupTestCase()
 {
     foreach( const QString& name, m_sessionCtrl->sessionNames() )
     {
-        m_sessionCtrl->deleteSession( name );
+        if (m_sessionCtrl->activeSession()->name() != name)
+            m_sessionCtrl->deleteSession( name );
     }
     // Need to cleanup this directory manually, because SessionController (rightfully) doesn't
     // allow to delete the active session
@@ -106,18 +107,6 @@ void SessionControllerTest::createSession()
     QVERIFY( m_sessionCtrl->sessionNames().contains( sessionName )  );
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
-}
-
-void SessionControllerTest::loadSession()
-{
-    const QString sessionName = "TestSession2";
-    m_sessionCtrl->createSession( sessionName );
-    ISession* s = m_sessionCtrl->activeSession();
-    m_sessionCtrl->loadSession( sessionName );
-    QEXPECT_FAIL("", "expecting a changed active session", Continue);
-    QCOMPARE( s, m_sessionCtrl->activeSession());
-    KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
-    QCOMPARE( grp.readEntry( SessionController::cfgActiveSessionEntry(), "default" ), sessionName );
 }
 
 void SessionControllerTest::renameSession()

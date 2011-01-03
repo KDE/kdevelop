@@ -246,8 +246,8 @@ void KompareProcess::start()
 #ifndef NDEBUG
 	QString cmdLine;
 	QStringList program = KProcess::program();
-	QStringList::ConstIterator it = program.begin();
-	for (; it != program.end(); ++it )
+	QStringList::ConstIterator it = program.constBegin();
+	for (; it != program.constEnd(); ++it )
 	    cmdLine += "\"" + (*it) + "\" ";
 	kDebug(8101) << cmdLine << endl;
 #endif

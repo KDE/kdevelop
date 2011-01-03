@@ -85,6 +85,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 
     action = menu.addAction(i18n("Diff between revisions"));
     QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
+    action->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
 }
@@ -138,14 +139,15 @@ void VcsEventWidgetPrivate::diffToPrevious()
         if( iface )
         {
             KDevelop::VcsEvent ev = m_logModel->eventForIndex( m_contextIndex );
-            KDevelop::VcsRevision prev;
-            prev.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Previous ),
-                                   KDevelop::VcsRevision::Special );
+            KDevelop::VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
             KDevelop::VcsJob* job = iface->diff( m_url, prev, ev.revision() );
 
             VcsDiffWidget* widget = new VcsDiffWidget( job );
             widget->setRevisions( prev, ev.revision() );
             KDialog* dlg = new KDialog( q );
+            
+            widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+            
             dlg->setCaption( i18n("Difference To Previous") );
             dlg->setButtons( KDialog::Ok );
             dlg->setMainWidget( widget );
@@ -220,6 +222,7 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
              this, SLOT( jobReceivedResults( KDevelop::VcsJob* ) ) );
     ICore::self()->runController()->registerJob( d->m_job );
 }
+
 VcsEventWidget::~VcsEventWidget()
 {
     delete d->m_logModel;

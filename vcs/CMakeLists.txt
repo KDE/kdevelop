@@ -1,5 +1,4 @@
 add_subdirectory(dvcs/tests)
-add_subdirectory(dvcs/test2)
 add_subdirectory(tests)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
@@ -59,8 +58,8 @@ target_link_libraries(kdevplatformvcs
 )
 # add kdevplatform* when they're exported targets
 target_link_libraries(kdevplatformvcs LINK_INTERFACE_LIBRARIES 
-        ${KDE4_KIO_LIBS} 
-        ${KDE4_KPARTS_LIBS})
+    kdevplatformoutputview
+    kdevplatforminterfaces)
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

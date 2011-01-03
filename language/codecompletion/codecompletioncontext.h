@@ -25,6 +25,7 @@
 #include "../duchain/duchainpointer.h"
 #include "../languageexport.h"
 #include "../editor/simplecursor.h"
+#include "../editor/cursorinrevision.h"
 
 namespace KTextEditor {
   class View;
@@ -34,7 +35,7 @@ namespace KTextEditor {
 namespace KDevelop {
   class DUContext;
   class AbstractType;
-  class SimpleCursor;
+  class CursorInRevision;
 
 
   class CompletionTreeItem;
@@ -56,7 +57,7 @@ namespace KDevelop {
        * @param knownArgumentExpressions has no effect when firstContext is set
        * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const KDevelop::SimpleCursor& position, int depth = 0);
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const KDevelop::CursorInRevision& position, int depth = 0);
       virtual ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
@@ -90,7 +91,7 @@ namespace KDevelop {
       QString m_text;
       int m_depth;
       bool m_valid;
-      KDevelop::SimpleCursor m_position;
+      KDevelop::CursorInRevision m_position;
 
       KDevelop::DUContextPointer m_duContext;
 

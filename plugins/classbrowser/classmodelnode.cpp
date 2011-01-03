@@ -35,52 +35,21 @@
 using namespace KDevelop;
 using namespace ClassModelNodes;
 
-IdentifierNode::IdentifierNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model)
-  : DynamicNode(a_identifier.toString(), a_model)
-  , m_identifier(a_identifier)
-{
-}
-
-IdentifierNode::IdentifierNode(const QString& a_displayName,
-                               const KDevelop::QualifiedIdentifier& a_identifier,
-                               NodesModelInterface* a_model)
-  : DynamicNode(a_displayName, a_model)
-  , m_identifier(a_identifier)
-{
-}
-
-IdentifierNode::IdentifierNode(const QString& a_displayName,
-                               KDevelop::Declaration* a_decl,
-                               NodesModelInterface* a_model)
-  : DynamicNode(a_displayName, a_model)
+IdentifierNode::IdentifierNode(KDevelop::Declaration* a_decl,
+                               NodesModelInterface* a_model,
+                               const QString& a_displayName)
+  : DynamicNode(a_displayName.isEmpty() ? a_decl->identifier().toString() : a_displayName, a_model)
   , m_identifier(a_decl->qualifiedIdentifier())
+  , m_indexedDeclaration(a_decl)
   , m_cachedDeclaration(a_decl)
 {
 }
 
 Declaration* IdentifierNode::getDeclaration()
 {
-  if ( m_cachedDeclaration )
-    return m_cachedDeclaration.data();
-
-  uint declarationCount = 0;
-  const IndexedDeclaration* declarations = 0;
-  PersistentSymbolTable::self().declarations(
-    m_identifier,
-    declarationCount,
-    declarations );
-
-  for ( uint i = 0; i < declarationCount; ++i )
-  {
-    // See if this declaration matches and return it.
-    Declaration* decl = dynamic_cast<Declaration*>(declarations[i].declaration());
-    if ( decl && !decl->isForwardDeclaration() )
-    {
-      m_cachedDeclaration = decl;
-      break;
-    }
-  }
-
+  if ( !m_cachedDeclaration )
+    m_cachedDeclaration = m_indexedDeclaration.declaration();
+  
   return m_cachedDeclaration.data();
 }
 
@@ -99,7 +68,7 @@ bool IdentifierNode::getIcon(QIcon& a_resultIcon)
 //////////////////////////////////////////////////////////////////////////////
 
 EnumNode::EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model)
-  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
+  : IdentifierNode(a_decl, a_model)
 {
   // Set display name for anonymous enums
   if ( m_displayName.isEmpty() )
@@ -152,8 +121,8 @@ void EnumNode::populateNode()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-ClassNode::ClassNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model)
-  : IdentifierNode(a_identifier.last().toString(), a_identifier, a_model)
+ClassNode::ClassNode(Declaration* a_decl, NodesModelInterface* a_model)
+  : IdentifierNode(a_decl, a_model)
 {
 }
 
@@ -215,7 +184,7 @@ bool ClassNode::updateClassDeclarations()
       else if ( ClassFunctionDeclaration* funcDecl = dynamic_cast<ClassFunctionDeclaration*>(decl) )
         newNode = new FunctionNode( funcDecl, m_model );
       else if ( ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(decl) )
-        newNode = new ClassNode(classDecl->qualifiedIdentifier(), m_model);
+        newNode = new ClassNode(classDecl, m_model);
       else if ( ClassMemberDeclaration* memDecl = dynamic_cast<ClassMemberDeclaration*>(decl) )
         newNode = new ClassMemberNode( memDecl, m_model );
       else
@@ -292,7 +261,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
 //////////////////////////////////////////////////////////////////////////////
 
 FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesModelInterface* a_model)
-  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
+  : IdentifierNode(a_decl, a_model)
 {
   // Append the argument signature to the identifier's name (which is what the displayName is.
   if (FunctionType::Ptr type = a_decl->type<FunctionType>())
@@ -309,7 +278,7 @@ FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesMode
 //////////////////////////////////////////////////////////////////////////////
 
 ClassMemberNode::ClassMemberNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model)
-  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
+  : IdentifierNode(a_decl, a_model)
 {
 }
 
@@ -403,7 +372,7 @@ void BaseClassesFolderNode::populateNode()
         if ( baseClassDeclaration )
         {
           // Add the base class.
-          addNode( new ClassNode(baseClassDeclaration->qualifiedIdentifier(), m_model) );
+          addNode( new ClassNode(baseClassDeclaration, m_model) );
         }
       }
     }
@@ -431,7 +400,7 @@ void DerivedClassesFolderNode::populateNode()
 
     foreach( Declaration* decl, inheriters )
     {
-      addNode( new ClassNode(decl->qualifiedIdentifier(), m_model) );
+      addNode( new ClassNode(decl, m_model) );
     }
   }
 }

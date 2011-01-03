@@ -27,7 +27,6 @@ target_link_libraries(sublime
         ${KDE4_KDEUI_LIBS} 
         ${KDE4_KPARTS_LIBS})
 target_link_libraries(sublime LINK_INTERFACE_LIBRARIES
-        ${KDE4_KDEUI_LIBS} 
         ${KDE4_KPARTS_LIBS})
 set_target_properties(sublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS sublime EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

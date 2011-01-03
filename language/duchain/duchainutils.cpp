@@ -255,7 +255,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   return chosen;
 }
 
-Declaration* declarationUnderCursor(const SimpleCursor& c, DUContext* ctx)
+Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
 {
   foreach( Declaration* decl, ctx->localDeclarations() )
     if( decl->range().contains(c) )
@@ -273,12 +273,13 @@ Declaration* declarationUnderCursor(const SimpleCursor& c, DUContext* ctx)
   return 0;
 }
 
-Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const SimpleCursor& c)
+Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& _c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
   if( chosen )
   {
+    CursorInRevision c = chosen->transformToLocalRevision(_c);
     DUContext* ctx = chosen->findContextAt(c);
 
     while( ctx ) {
@@ -315,20 +316,22 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
   return definition;
 }
 
-Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* ctx) {
+Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& _cursor, DUContext* ctx) {
   if(!ctx)
     return 0;
+  
+  CursorInRevision cursor = ctx->transformToLocalRevision(_cursor);
   
   foreach(Declaration* decl, ctx->localDeclarations()) {
     if(decl->range().start.line == cursor.line)
       return decl;
     DUContext* funCtx = getFunctionContext(decl);
-    if(funCtx && funCtx->contains(cursor))
+    if(funCtx && funCtx->range().contains(cursor))
       return decl;
   }
 
   foreach(DUContext* child, ctx->childContexts()){
-    Declaration* decl = declarationInLine(cursor, child);
+    Declaration* decl = declarationInLine(_cursor, child);
     if(decl)
       return decl;
   }
@@ -473,7 +476,7 @@ QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass,
     return ret;
   
   if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
-    ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), SimpleCursor::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
+    ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), CursorInRevision::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
   
   foreach(Declaration* inheriter, getInheriters(currentClass, maxAllowedSteps))
     ret += getOverriders(inheriter, overriddenDeclaration, maxAllowedSteps);
@@ -530,7 +533,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
     DUContext* ctx = import.context(decl->topContext());
     if(ctx)
       decls += ctx->findDeclarations(QualifiedIdentifier(decl->identifier()), 
-                                            SimpleCursor::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
+                                            CursorInRevision::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
   }
 
   foreach(Declaration* found, decls) {

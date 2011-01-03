@@ -79,6 +79,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType : public ReferenceCountManager {
       return m_index != rhs.m_index;
     }
 
+    /// Less than operator, \param rhs indexed type to compare.
+    /// \returns true if integral index value of this type is lower than the index of \p rhs.
+    bool operator<(const IndexedType& rhs) const {
+      return m_index < rhs.m_index;
+    }
+
     /// Access the type's hash value. \returns the hash value.
     uint hash() const {
       return m_index>>1;

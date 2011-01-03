@@ -123,36 +123,9 @@ void Document::setStatusIcon(QIcon icon)
     emit statusIconChanged(this);
 }
 
-
 QIcon Document::statusIcon() const
 {
     return d->statusIcon;
-}
-
-bool Document::uniqueView(Area *area, View *view, bool sameWorkingset)
-{
-    if (!sameWorkingset)
-        return (views().count() > 1);
-  
-    bool uniqueView = true;
-    
-    int viewCnt = 0;  
-     
-  // two or more views in current area
-    foreach(Sublime::View *testView, views())
-        if (area->views().contains(testView))
-              viewCnt++;
-    if (viewCnt > 1)
-        uniqueView = false;
-            
-   foreach(Sublime::Area *testArea, controller()->allAreas())
-        foreach(Sublime::View *testView, views())
-            if (testArea->views().contains(testView) &&
-                view->document() == testView->document() 
-                && testArea->workingSet() != area->workingSet())
-                uniqueView = false;
-            
-    return uniqueView;
 }
 
 bool Document::closeDocument()

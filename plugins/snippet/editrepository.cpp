@@ -25,8 +25,6 @@
 
 #include "snippetstore.h"
 
-#include "snippetfeatures.h"
-
 EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     : KDialog(parent), Ui::EditRepositoryBase(), m_repo(repository)
 {
@@ -41,7 +39,6 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
 
     // fill list of available modes
     KTextEditor::Document *document = KTextEditor::EditorChooser::editor()->createDocument(0);
-
     repoFileTypesList->addItems(document->highlightingModes());
     repoFileTypesList->sortItems();
     repoFileTypesList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -55,19 +52,11 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     repoLicenseEdit->setCurrentIndex(1); // preselect BSD
     repoLicenseEdit->setEditable(true);
 
-#ifndef SNIPPETS_HAVE_TPLIFACE2
-    tabWidget->setTabEnabled(1, false);
-    tabWidget->setTabToolTip(1, i18n("You need at least KDE 4.5 for scripting support in snippets."));
-#endif
-
     // if we edit a repo, add all existing data
     if ( m_repo ) {
         repoNameEdit->setText(m_repo->text());
         repoAuthorsEdit->setText(m_repo->authors());
         repoNamespaceEdit->setText(m_repo->completionNamespace());
-        ///TODO: Use KTextEditor here
-        ///      improve documentation, link to correct part in Kate's documentation.
-        repoScriptEdit->setPlainText(m_repo->script());
         if ( !m_repo->license().isEmpty() ) {
             int index = repoLicenseEdit->findText(m_repo->license());
             if ( index == -1 ) {
@@ -117,7 +106,6 @@ void EditRepository::save()
     m_repo->setAuthors(repoAuthorsEdit->text());
     m_repo->setLicense(repoLicenseEdit->currentText());
     m_repo->setCompletionNamespace(repoNamespaceEdit->text());
-    m_repo->setScript(repoScriptEdit->toPlainText());
 
     QStringList types;
     foreach( QListWidgetItem* item, repoFileTypesList->selectedItems() ) {

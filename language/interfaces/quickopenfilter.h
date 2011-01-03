@@ -157,9 +157,23 @@ class FilterWithSeparator {
 
       m_filtered.clear();
 
+      QString exactNeedle;
+      if (!text.isEmpty()) {
+          exactNeedle = separator + text.join(separator);
+      }
+
+      // filterBase is correctly sorted, to keep it that way we add
+      // exact matches to this list in sorted way and then prepend the whole list in one go.
+      QList<Item> exactMatches;
       foreach( const Item& data, filterBase ) {
           QString toFilter = itemText(data);
-          
+
+          if (!exactNeedle.isEmpty() && toFilter.endsWith(exactNeedle)) {
+              // put exact matches up front
+              exactMatches << data;
+              continue;
+          }
+
           int searchStart = 0;
           for(QStringList::const_iterator it = text.constBegin(); it != text.constEnd(); ++it) {
               if(searchStart != 0) {
@@ -178,8 +192,14 @@ class FilterWithSeparator {
           
           if(searchStart == -1)
               continue;
-          
+
           m_filtered << data;
+      }
+
+      if (!exactMatches.isEmpty()) {
+          for(int i = exactMatches.size() - 1; i >= 0; --i ) {
+              m_filtered.prepend(exactMatches.at(i));
+          }
       }
       
       m_oldFilterText = text;

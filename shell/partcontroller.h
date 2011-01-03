@@ -57,7 +57,7 @@ public:
     PartController(Core *core, QWidget *toplevel);
     virtual ~PartController();
 
-    KTextEditor::Document* createTextPart( const QString &encoding );
+    KTextEditor::Document* createTextPart( const QString &encoding = QString() );
     virtual KTextEditor::Editor* editorPart() const;
 
     bool canCreatePart( const KUrl &url );
@@ -69,8 +69,6 @@ public:
                               const QString &partType,
                               const QString &className,
                               const QString &preferredName = QString() );
-
-    virtual void removePart( KParts::Part *part);
 
     KParts::ReadOnlyPart* activeReadOnly() const;
     KParts::ReadWritePart* activeReadWrite() const;

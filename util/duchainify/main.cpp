@@ -116,6 +116,8 @@ void Manager::init()
     }
     if(m_args->isSet("force-update"))
         features |= TopDUContext::ForceUpdate;
+    if(m_args->isSet("force-update-recursive"))
+        features |= TopDUContext::ForceUpdateRecursive;
     
     if(m_args->isSet("threads"))
     {
@@ -170,7 +172,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
     if(info.isFile())
     {
         kDebug() << "adding file" << path;
-        KUrl pathUrl(path);
+        KUrl pathUrl(info.canonicalFilePath());
         
         m_waiting << pathUrl;
         ++m_total;
@@ -207,6 +209,7 @@ int main(int argc, char** argv)
     options.add("warnings", ki18n("Show warnings"));
     options.add("verbose", ki18n("Show warnings and debug output"));
     options.add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));
+    options.add("force-update-recursive", ki18n("Enforce an update of the top-contexts corresponding to the given files and all included files"));
     options.add("threads <count>", ki18n("Number of threads to use"));
     options.add("f <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
     KCmdLineArgs::addCmdLineOptions( options );

@@ -14,7 +14,6 @@ set(kdevcvs_PART_SRCS
     cvsproxy.cpp
     editorsview.cpp
     commitdialog.cpp
-    updateoptionsdialog.cpp
     importmetadatawidget.cpp
     importdialog.cpp
     checkoutdialog.cpp
@@ -29,7 +28,6 @@ set(kdevcvs_PART_UI
     cvsgenericoutputview.ui
     editorsview.ui
     commitdialog.ui
-    updateoptionsdialog.ui
     importmetadatawidget.ui
     checkoutdialog.ui
 )

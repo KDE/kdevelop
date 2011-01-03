@@ -22,6 +22,14 @@
 #include "../languageexport.h"
 
 namespace KDevelop {
+
+/**
+ * Represents a cursor (line-number and column-number) within a text document. Generally this is
+ * a more efficient version of KTextEditor::Cursor.
+ * In KDevelop, this object is used when referencing the most current document revision
+ * (the document in its current version)
+ */
+
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleCursor {
 public:
 
@@ -74,6 +82,14 @@ public:
 
  SimpleCursor operator +(const SimpleCursor& rhs) const {
      return SimpleCursor(line + rhs.line, column + rhs.column);
+ }
+
+ /**
+  * kDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.
+  */
+ inline friend QDebug operator<< (QDebug s, const SimpleCursor& cursor) {
+     s.nospace() << "(" << cursor.line << ", " << cursor.column << ")";
+     return s.space();
  }
 };
 }

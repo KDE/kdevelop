@@ -20,6 +20,7 @@
 #define IDOCUMENTCONTROLLER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QList>
 
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
@@ -82,6 +83,7 @@ public:
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
     Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
+    Q_SCRIPTABLE virtual bool saveSomeDocuments(const QList<IDocument*>& list, KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
 
     /** Opens a text document containing the @p data text. */
     Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;

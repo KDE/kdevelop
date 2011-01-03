@@ -78,7 +78,7 @@ void ParseProjectJob::start() {
                                     KDevelop::TopDUContext::VisibleDeclarationsAndContexts : KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
     
     foreach(const KDevelop::IndexedString& url, files)
-        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, 10000, this );
+        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, BackgroundParser::WorstPriority, this );
 }
 
 #include "parseprojectjob.moc"

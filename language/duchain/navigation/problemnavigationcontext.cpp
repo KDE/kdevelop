@@ -39,6 +39,8 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
     QPushButton* button = new QPushButton;
 //     button->setPopupMode(QToolButton::InstantPopup);
     button->setText(i18n("Solve"));
+    if(!solution->title().isEmpty())
+      button->setText(i18n("Solve: %1", solution->title()));
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
     foreach(IAssistantAction::Ptr action, solution->actions()) {

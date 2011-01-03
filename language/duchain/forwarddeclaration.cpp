@@ -19,7 +19,6 @@
 
 #include "forwarddeclaration.h"
 
-#include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 #include <klocale.h>
 
@@ -37,13 +36,12 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(ForwardDeclaration);
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationData(*rhs.d_func())) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 ForwardDeclaration::ForwardDeclaration(ForwardDeclarationData& data) : Declaration(data) {
 }
 
-ForwardDeclaration::ForwardDeclaration(const SimpleRange& range, DUContext* context )
+ForwardDeclaration::ForwardDeclaration(const RangeInRevision& range, DUContext* context )
   : Declaration(*new ForwardDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
@@ -85,7 +83,7 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   globalIdentifier.setExplicitlyGlobal(true);
 
   //We've got to use DUContext::DirectQualifiedLookup so C++ works correctly.
-  QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
+  QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
 
   foreach(Declaration* decl, declarations) {
     if( !decl->isForwardDeclaration() )

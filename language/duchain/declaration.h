@@ -34,10 +34,6 @@
 
 class QByteArray;
 
-namespace KTextEditor {
-  class SmartRange;
-}
-
 namespace KDevelop
 {
 
@@ -87,7 +83,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
-  Declaration(const SimpleRange& range, DUContext* parentContext);
+  Declaration(const RangeInRevision& range, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   /// Destructor
@@ -335,23 +331,27 @@ public:
    */
   virtual QString toString() const;
 
-  ///@todo The following two are convenience-functions. Think whether they should stay here, or be moved out.
+  /**
+   * Returns a list of pairs:
+   * An url of a file, paired together with all use-ranges of this declaration in that file.
+   * The ranges are in the documents local revision (use DUChainUtils::transformFromRevision or usesCurrentRevision())
+   * The uses are unique, no 2 uses are returend that have the same range within the same file.
+   * 
+   * This is a non-trivial operation.
+   * */
+  QMap<IndexedString, QList<RangeInRevision> > uses() const;
 
   /**
    * Returns a list of pairs:
    * An url of a file, paired together with all use-ranges of this declaration in that file.
+   * The ranges are in the most current document revisions available.
    * The uses are unique, no 2 uses are returend that have the same range within the same file.
-   *
+   * 
+   * @warning This must be called only from within the foreground, or with the foreground lock locked.
    * This is a non-trivial operation.
    * */
-  QMap<IndexedString, QList<SimpleRange> > uses() const;
-
-  /**
-   * Collects the smart-ranges for all uses. Uses that do not have smart ranges are not represented
-   * in the result.
-   * */
-  QList<KTextEditor::SmartRange*> smartUses() const;
-
+  QMap<IndexedString, QList<SimpleRange> > usesCurrentRevision() const;
+  
   /**
     * This hash-value should differentiate between multiple different
     * declarations that have the same qualifiedIdentifier, but should have a different
@@ -427,7 +427,7 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  Declaration( DeclarationData & dd, const SimpleRange& range );
+  Declaration( DeclarationData & dd, const RangeInRevision& range );
 
   /**
    * Returns true if this declaration is being currently destroyed persistently,

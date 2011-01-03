@@ -30,9 +30,6 @@
 #include "../languageexport.h"
 
 #include <kdeversion.h>
-#if KDE_VERSION > KDE_MAKE_VERSION(4, 3, 80)
-  #define HAVE_HIGHLIGHTIFACE
-#endif
 
 namespace KTextEditor {
 class Document;
@@ -57,9 +54,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the global color cache
     static ColorCache* self();
 
-    /// setup the color cache, this needs to be called before self() is accessed
-    static void initialize();
-
     /// adapt a given foreground color to the current color scheme
     /// @p ratio between 0 and 255 where 0 gives @see m_foregroundColor
     /// and 255 gives @p color
@@ -67,6 +61,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// @note if you are looking for a background color, simply setting an alpha
     ///       value should work.
     QColor blend(QColor color, uchar ratio) const;
+
+    /// adapt a given background color to the current color scheme
+    /// @p ratio between 0 and 255 where 0 gives @see m_foregroundColor
+    /// and 255 gives @p color
+    ///
+    /// @note if you are looking for a background color, simply setting an alpha
+    ///       value should work.
+    QColor blendBackground(QColor color, uchar ratio) const;
 
     /// blend a color for local colorization according to the user settings
     /// @see blend()
@@ -139,6 +141,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 
     /// the text color for the current color scheme
     QColor m_foregroundColor;
+
+    /// the editor background color color for the current color scheme
+    QColor m_backgroundColor;
 
     /// How generated colors for local variables should be mixed with the foreground color.
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.

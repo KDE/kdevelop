@@ -33,11 +33,7 @@
 #include "snippet.h"
 #include "snippetrepository.h"
 
-#include "snippetfeatures.h"
-
-#ifdef SNIPPETS_HAVE_TPLIFACE2
 #include <ktexteditor/templateinterface2.h>
-#endif
 
 SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet, SnippetRepository* repo )
     : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_prefix(snippet->prefix()),
@@ -99,15 +95,16 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
             values["selection"] = document->text(document->activeView()->selectionRange());
         }
         document->removeText(word);
-        #ifdef SNIPPETS_HAVE_TPLIFACE2
-            if ( KTextEditor::TemplateInterface2* templateIface2 = qobject_cast<KTextEditor::TemplateInterface2*>(document->activeView()) ) {
-                if ( word != document->activeView()->selectionRange() ) {
-                    document->removeText(word);
-                }
-                templateIface2->insertTemplateText(word.start(), m_snippet, values, m_repo->registeredScript());
-                return;
+        KTextEditor::TemplateInterface2* templateIface2
+            = qobject_cast<KTextEditor::TemplateInterface2*>(document->activeView());
+        if ( templateIface2 )
+        {
+            if ( word != document->activeView()->selectionRange() ) {
+                document->removeText(word);
             }
-        #endif
+            templateIface2->insertTemplateText(word.start(), m_snippet, values, m_repo->registeredScript());
+            return;
+        }
         KTextEditor::TemplateInterface* templateIface
             = qobject_cast<KTextEditor::TemplateInterface*>(document->activeView());
         if ( templateIface ) {

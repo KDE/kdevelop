@@ -38,7 +38,6 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include <language/backgroundparser/parsejob.h>
-#include <language/editor/editorintegrator.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchainlock.h>
@@ -46,6 +45,7 @@
 
 #include "problemhighlighter.h"
 #include "problemwidget.h"
+#include "problemmodel.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>
@@ -65,7 +65,10 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new ProblemWidget(parent, m_plugin);
+    ProblemWidget* widget = new ProblemWidget(parent, m_plugin);
+    ProblemModel* model = m_plugin->getModel();
+    widget->setModel(model);
+    return widget;
   }
 
   virtual Qt::DockWidgetArea defaultPosition()
@@ -84,12 +87,12 @@ private:
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent)
-    , m_factory(new ProblemReporterFactory(this))
+    , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemModel(this))
 {
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
 
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
   connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
   connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
 }
@@ -99,19 +102,25 @@ ProblemReporterPlugin::~ProblemReporterPlugin()
   qDeleteAll(m_highlighters);
 }
 
+ProblemModel* ProblemReporterPlugin::getModel() const
+{
+  return m_model;
+}
+
 void ProblemReporterPlugin::unload()
 {
   core()->uiController()->removeToolView(m_factory);
 }
 
-void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
+void ProblemReporterPlugin::documentClosed(IDocument* doc)
 {
-  if(!doc)
-      return;
+  if(!doc->textDocument())
+    return;
+  
   QMutableHashIterator<IndexedString, ProblemHighlighter*> it = m_highlighters;
-
+  
   IndexedString url(doc->url().pathOrUrl());
-
+  
   if (m_highlighters.contains(url))
     delete m_highlighters.take(url);
 }
@@ -124,21 +133,14 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
   DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext) {
+  m_model->problemsUpdated(url);
   if (m_highlighters.contains(url)) {
     ProblemHighlighter* ph = m_highlighters[url];
     if (!ph)
       return;
 
-    QList<ProblemPointer> allProblems;
-    QSet<TopDUContext*> hadContexts;
-
-    {
-      DUChainReadLocker lock(DUChain::lock());
-
-      ProblemWidget::collectProblems(allProblems, topContext.data(), hadContexts);
-    }
-
+    QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
     ph->setProblems(allProblems);
   }
 }
@@ -160,14 +162,16 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         return extension;
       }
       
+    QString title;
     QList<QAction*> actions;
     
     TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
     if(top) {
       foreach(KDevelop::ProblemPointer problem, top->problems()) {
-        if(problem->range().contains(KDevelop::SimpleCursor(editorContext->position()))) {
+        if(problem->range().contains(top->transformToLocalRevision(KDevelop::SimpleCursor(editorContext->position())))) {
           KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
           if(solution) {
+            title = solution->title();
             foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
               actions << action->toKAction();
           }
@@ -176,8 +180,12 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
     }
     
     if(!actions.isEmpty()) {
-      QAction* menuAction = new QAction(i18n("Solve Problem"), 0);
-      QMenu* menu(new QMenu(i18n("Solve Problem"), 0));
+      QString text = i18n("Solve Problem");
+      if(!title.isEmpty())
+        text = i18n("Solve: %1", title);
+      
+      QAction* menuAction = new QAction(text, 0);
+      QMenu* menu(new QMenu(text, 0));
       menuAction->setMenu(menu);
       foreach(QAction* action, actions)
         menu->addAction(action);

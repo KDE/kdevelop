@@ -37,7 +37,7 @@ QString CodeCompletionContext::extractLastLine(const QString& str) {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const KDevelop::SimpleCursor& position, int depth)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const KDevelop::CursorInRevision& position, int depth)
   : m_text(text), m_depth(depth), m_valid(true), m_position(position), m_duContext(context), m_parentContext(0)
 {
   IntPusher( completionRecursionDepth, completionRecursionDepth+1 );

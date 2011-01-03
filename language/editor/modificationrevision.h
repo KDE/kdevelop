@@ -22,6 +22,7 @@
 #include <QtCore/QDateTime>
 #include <kdebug.h>
 #include "../languageexport.h"
+#include "../backgroundparser/documentchangetracker.h"
 
 class QString;
 
@@ -33,7 +34,7 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
 
 /**
  * Pairs together a date and a revision-number, for simpler moving around and comparison. Plus some convenience-functions.
- * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable(@see KTextEditor::SmartInterface)
+ * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable (@see KTextEditor::MovingInterface)
  *
  * All member-functions except the IndexedString constructor directly act on the two members, without additional logic.
  *
@@ -46,11 +47,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
 	static ModificationRevision revisionForFile(const IndexedString& fileName);
 
-	///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access.
-    ///Otherwise, the modification-times are re-used for a specific amount of time
+	///You can use this when you want to make sure that any cached on-disk modification-time is discarded
+    ///and it's re-read from disk on the next access.
+    ///Otherwise, the on-disk modification-times are re-used for a specific amount of time
 	static void clearModificationCache(const IndexedString& fileName);
 
-	///The default-revision is 1, because that is the kate smart-revision for cleanly opened documents
+	///The default-revision is 1, because that is the kate moving-revision for cleanly opened documents
 	ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 1 );
 
 	bool operator <( const ModificationRevision& rhs ) const;
@@ -62,7 +64,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 	QString toString() const;
 
 	uint modificationTime;  //On-disk modification-time of a document in time_t format
-	  int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
+    int revision;        //MovingInterface revision of a document(0 if the document is not loaded)
+    
+private:
+  friend class DocumentChangeTracker;
+    static void setEditorRevisionForFile(const IndexedString& filename, int revision);
+    static void clearEditorRevisionForFile(const IndexedString& filename);
 };
 
 }

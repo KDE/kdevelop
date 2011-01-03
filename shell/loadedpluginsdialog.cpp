@@ -40,6 +40,10 @@
 
 #define MARGIN 5
 
+bool sortPlugins(KDevelop::IPlugin* l, KDevelop::IPlugin* r)
+{
+    return l->componentData().aboutData()->programName() < r->componentData().aboutData()->programName();
+}
 
 class PluginsModel : public QAbstractListModel
 {
@@ -51,6 +55,7 @@ public:
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
+        qSort(m_plugins.begin(), m_plugins.end(), sortPlugins);
     }
 
     KDevelop::IPlugin *plugin(const QModelIndex& index) const
@@ -241,6 +246,15 @@ public:
         setModel(new PluginsModel());
         setItemDelegate(new LoadedPluginsDelegate(this));
         setVerticalScrollMode(QListView::ScrollPerPixel);
+    }
+
+    virtual ~PluginsView()
+    {
+        // explicitly delete the delegate here since otherwise
+        // we get spammed by warnings that the KPushButton we return
+        // in createItemWidgets is deleted before the delegate
+        // *sigh* - even dfaure says KWidgetItemDelegate is a crude hack
+        delete itemDelegate();
     }
 
     virtual QSize sizeHint() const

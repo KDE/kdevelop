@@ -48,9 +48,9 @@ bool IPatchSource::canCancel() const
     return false;
 }
 
-QMap<KUrl, QString> IPatchSource::additionalSelectableFiles() const
+QMap<KUrl, KDevelop::VcsStatusInfo::State> IPatchSource::additionalSelectableFiles() const
 {
-    return QMap<KUrl, QString>();
+    return QMap<KUrl, KDevelop::VcsStatusInfo::State>();
 }
 
 bool IPatchSource::canSelectFiles() const

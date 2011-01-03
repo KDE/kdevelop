@@ -1,4 +1,5 @@
 /* This file is part of KDevelop
+    CopyRight 2010 Milian Wolff <mail@milianw.de>
     Copyright 2004,2005 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
@@ -19,93 +20,25 @@
 #ifndef KDEVGENERICMANAGER_H
 #define KDEVGENERICMANAGER_H
 
-#include "igenericprojectmanager.h"
-#include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <project/abstractfilemanagerplugin.h>
 
-class QFileInfo;
-class QStringList;
-class KUrl;
-class KDirWatch;
-template <typename T> class QList;
-
-///FIXME: remove once the hack is gone
-class KJob;
-
-namespace KIO
-{
-class Job;
-class UDSEntry;
-typedef QList<UDSEntry> UDSEntryList;
-}
-
-namespace KDevelop
-{
-class ProjectBaseItem;
-class ProjectFolderItem;
-class ProjectFileItem;
-}
-
-class KDialogBase;
-
-class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IGenericProjectManager
+class GenericProjectManager: public KDevelop::AbstractFileManagerPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IProjectFileManager )
-    Q_INTERFACES( KDevelop::IGenericProjectManager )
+
 public:
-    explicit GenericProjectManager( QObject *parent = 0,
-                     const QVariantList &args = QVariantList() );
-    virtual ~GenericProjectManager();
+    explicit GenericProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-//
-// IProjectFileManager interface
-//
-    virtual Features features() const
-    {
-        return Features( Folders | Files );
-    }
+    virtual KJob* createImportJob( KDevelop::ProjectFolderItem* item );
+    virtual bool reload( KDevelop::ProjectFolderItem* item );
 
-    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem *parent );
-    virtual KDevelop::ProjectFileItem* addFile( const KUrl& file, KDevelop::ProjectFolderItem *parent );
-    virtual bool removeFolder( KDevelop::ProjectFolderItem *folder );
-    virtual bool removeFile( KDevelop::ProjectFileItem *file );
-    virtual bool renameFolder( KDevelop::ProjectFolderItem *folder, const KUrl& url );
-    virtual bool renameFile( KDevelop::ProjectFileItem *file, const KUrl& url );
+protected:
+    virtual bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project ) const;
 
-    virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
-    virtual KDevelop::ProjectFolderItem *import( KDevelop::IProject *project );
-    virtual bool reload(KDevelop::ProjectFolderItem* item);
-    virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
-
-    /// first item is includes, second excludes
+private:
     typedef QPair<QStringList, QStringList> IncludeRules;
-
-Q_SIGNALS:
-    void appendSubDir( KDevelop::ProjectFolderItem* item );
-
-private Q_SLOTS:
-    /// @p forceRecursion if true, existing folders will be re-read no matter what
-    KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion = false );
-    void addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
-
-    void deleted(const QString &path);
-    void created(const QString &path);
-
-    void projectClosing(KDevelop::IProject* project);
-
-private:
-    /// Stops watching the given folder for changes, only useful for local files.
-    void stopWatcher(KDevelop::ProjectFolderItem* folder);
-    /// Continues watching the given folder for changes.
-    void continueWatcher(KDevelop::ProjectFolderItem* folder);
-    /// Common renaming function.
-    bool rename( KDevelop::ProjectBaseItem* item, const KUrl& source, const KUrl& destination);
-
-private:
-    bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
-                  const IncludeRules& rules ) const;
-    QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    void updateIncludeRules( KDevelop::IProject* project );
+    QMap< KDevelop::IProject*, IncludeRules > m_includeRules;
 };
 
 #endif // KDEVGENERICIMPORTER_H

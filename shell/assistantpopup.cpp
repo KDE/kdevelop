@@ -21,139 +21,57 @@
 #include <QToolButton>
 #include <QLabel>
 #include <klocalizedstring.h>
+#include <KAction>
+#include <QApplication>
+
+const int SPACING_FROM_PARENT_BOTTOM = 5;
 
 void AssistantPopup::updateActions() {
-    setUpdatesEnabled(false);
-    
-    setFrameStyle(QFrame::Panel);
-    
-//     foreach(QObject* child, children())
-//         delete child;
-
-    QWidget* parent = qobject_cast<QWidget*>(this->parent());
-
-    setGeometry(parent->width() / 6, parent->height() - 200, (parent->width() / 6) * 4, 200);
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    QString title = m_assistant->title();
-    if(!title.isEmpty()) {
-        QLabel* l = new QLabel(title);
-        l->setWordWrap(true);
-        layout->addWidget(l);
+    QPalette palette = QApplication::palette();
+    palette.setBrush(QPalette::Background, palette.toolTipBase());
+    setPalette(palette);
+    m_assistantActions = m_assistant->actions();
+    if (!m_assistant->title().isEmpty()) {
+        QLabel* title = new QLabel("<b>" + m_assistant->title() + ":<b>");
+        title->setTextFormat(Qt::RichText);
+        addWidget(title);
     }
-    
-    m_actions = m_assistant->actions();
-
-    //Add widgets that need to be vertical
-    foreach(KDevelop::IAssistantAction::Ptr action, m_actions)
-        if(action->flags() & KDevelop::IAssistantAction::OwnLineFlag)
-            layout->addWidget(widgetForAction(action));
-    
-    QHBoxLayout* hLayout = new QHBoxLayout;
-    
-    //Now add horizontally aligned actions
-    foreach(KDevelop::IAssistantAction::Ptr action, m_actions)
-        if(!(action->flags() & KDevelop::IAssistantAction::OwnLineFlag))
-            hLayout->addWidget(widgetForAction(action));
-    
-    if(hLayout->count() == 0) {
-        delete hLayout;
-        layout->addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
-    } else{
-        hLayout->addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
-        layout->addLayout(hLayout);
-    }
-    QSize hint = sizeHint();
-    
-    resize(hint);
-    
-    move((parent->width() - hint.width())/2, parent->height() - hint.height());
-    
-    setUpdatesEnabled(true);
+    foreach(KDevelop::IAssistantAction::Ptr action, m_assistantActions)
+        addWidget(widgetForAction(action));
+    addSeparator();
+    addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
+    resize(sizeHint());
+    move((parentWidget()->width() - width())/2, parentWidget()->height() - height() - SPACING_FROM_PARENT_BOTTOM);
 }
 
-AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QFrame(parent), m_assistant(assistant) {
+AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QToolBar(parent), m_assistant(assistant) {
     Q_ASSERT(assistant);
-    m_normalPalette = palette();
-    
     setAutoFillBackground(true);
-
-    updateActions();
-}
-
-void AssistantPopup::assistantActionsChanged() {
     updateActions();
 }
 
 QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action) {
-    int index = m_actions.indexOf(action);
-    QFrame* containerWidget = new QFrame;
-    containerWidget->setAutoFillBackground(true);
-    containerWidget->setPalette(m_normalPalette);
-//     containerWidget->setFrameStyle(QFrame::Panel);
-    QHBoxLayout* layout = new QHBoxLayout(containerWidget);
-    
-    QString desc;
-    if(action)
-        desc = action->description();
-    else
-        desc = i18n("Hide");
-    
-    QLabel* label = new QLabel(desc);
-    label->setWordWrap(true);
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     QToolButton* button = new QToolButton;
-    button->setText(QString("%1").arg(index+1));
-
+    KAction* realAction;
+    QString buttonText;
+    int index = m_assistantActions.indexOf(action);
     if(index == -1) {
-        kDebug() << "connecting with doHide";
-        connect(button, SIGNAL(clicked(bool)), SLOT(executeHideAction()));
+        realAction = new KAction(button);
+        buttonText = "&0 - " + i18n("Hide");
     }
-    if(index == 0)
-        connect(button, SIGNAL(clicked(bool)), SLOT(executeAction1()));
-    if(index == 1)
-        connect(button, SIGNAL(clicked(bool)), SLOT(executeAction2()));
-    if(index == 2)
-        connect(button, SIGNAL(clicked(bool)), SLOT(executeAction3()));
-    if(index == 3)
-        connect(button, SIGNAL(clicked(bool)), SLOT(executeAction4()));
-    
-    layout->addWidget(button);
-    layout->addWidget(label);
-    
-    return containerWidget;
+    else {
+        realAction = action->toKAction();
+        buttonText = QString("&%1 - ").arg(index+1) + action->description();
+    }
+    realAction->setParent(button);
+    connect(realAction, SIGNAL(triggered(bool)), SLOT(executeHideAction()));
+    button->setDefaultAction(realAction);
+    button->setText(buttonText);
+    return button;
 }
 
 void AssistantPopup::executeHideAction() {
-    KDevelop::IAssistant::Ptr assistant = m_assistant;
-    assistant->doHide();
-}
-
-void AssistantPopup::executeAction(int number) {
-    Q_ASSERT(m_assistant);
-    //Copy the assistant, we may get destroyed during the execute() call
-    KDevelop::IAssistant::Ptr assistant = m_assistant;
-    
-    QList<KDevelop::IAssistantAction::Ptr> actions = assistant->actions();
-    if(actions.size() > number)
-        actions[number]->execute();
-    
-    assistant->doHide();
-}
-
-void AssistantPopup::executeAction1() {
-    executeAction(0);
-}
-
-void AssistantPopup::executeAction2() {
-    executeAction(1);
-}
-
-void AssistantPopup::executeAction3() {
-    executeAction(2);
-}
-
-void AssistantPopup::executeAction4() {
-    executeAction(3);
+    m_assistant->doHide();
 }
 
 KSharedPtr< KDevelop::IAssistant > AssistantPopup::assistant() const {

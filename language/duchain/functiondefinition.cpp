@@ -27,7 +27,7 @@ FunctionDefinition::FunctionDefinition(FunctionDefinitionData& data) : FunctionD
 {
 }
 
-FunctionDefinition::FunctionDefinition(const SimpleRange& range, DUContext* context)
+FunctionDefinition::FunctionDefinition(const RangeInRevision& range, DUContext* context)
   : FunctionDeclaration(*new FunctionDefinitionData, range)
 {
   d_func_dynamic()->setClassId(this);

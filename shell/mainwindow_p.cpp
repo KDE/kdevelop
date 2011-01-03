@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLabel>
 
+#include <KMenuBar>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,6 +51,8 @@ Boston, MA 02110-1301, USA.
 #include <sublime/document.h>
 #include <sublime/tooldocument.h>
 
+#include <util/pushvalue.h>
+
 #include <interfaces/iplugin.h>
 
 #include "core.h"
@@ -57,12 +60,9 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "uicontroller.h"
 #include "statusbar.h"
-
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
-
 #include "textdocument.h"
-#include <KMenuBar>
 #include "sessioncontroller.h"
 
 namespace KDevelop {
@@ -236,6 +236,11 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
+    action = actionCollection()->addAction( "show_editorconfig", this, SLOT( showEditorConfig() ) );
+    action->setIcon( KIcon("preferences-other") );
+    action->setText( i18n("Configure Editor..."));
+    action->setWhatsThis( i18n("Configure various aspects of this editor.") );
+
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
     action->setToolTip( i18n("Configure Notifications") );
@@ -269,21 +274,21 @@ void MainWindowPrivate::setupActions()
 //     connect( popupAction->menu(), SIGNAL( triggered( Action* ) ),
 //              this, SLOT( stopPopupActivated( QAction* ) ) );
 
-    action = actionCollection()->addAction( "view_next_window" );
-    action->setText( i18n( "&Next Window" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
-    action->setToolTip( i18n( "Next window" ) );
-    action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
-    action->setIcon(KIcon("go-next"));
+     action = actionCollection()->addAction( "view_next_window" );
+     action->setText( i18n( "&Next Window" ) );
+     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
+     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
+     action->setToolTip( i18n( "Next window" ) );
+     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
+     action->setIcon(KIcon("go-next"));
 
-    action = actionCollection()->addAction( "view_previous_window" );
-    action->setText( i18n( "&Previous Window" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
-    action->setToolTip( i18n( "Previous window" ) );
-    action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
-    action->setIcon(KIcon("go-previous"));
+     action = actionCollection()->addAction( "view_previous_window" );
+     action->setText( i18n( "&Previous Window" ) );
+     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
+     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
+     action->setToolTip( i18n( "Previous window" ) );
+     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
+     action->setIcon(KIcon("go-previous"));
 
     /*action = actionCollection()->addAction( "new_window" );
     action->setIcon(KIcon( "window-new" ));
@@ -330,16 +335,6 @@ void MainWindowPrivate::setupActions()
     connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );
     action->setToolTip( i18n( "Add Tool View" ) );
     action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
-}
-
-void MainWindowPrivate::setupAreaSelector()
-{
-#if 0
-    if(!m_workingSetCornerWidget) {
-        m_workingSetCornerWidget = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
-        m_mainWindow->setTabBarLeftCornerWidget(m_workingSetCornerWidget);
-    }
-#endif
 }
 
 void MainWindowPrivate::toggleArea(bool b)
@@ -425,13 +420,17 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         Core::self()->uiControllerInternal()->factoryDocuments();
     QMap<QAction*, IToolViewFactory*> actionToFactory;
     if ( !factories.isEmpty() ) {
+        // sorted actions
+        QMap<QString, QAction*> actionMap;
         for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = factories.constBegin();
                 it != factories.constEnd(); ++it)
         {
-            QAction* action = menu.addAction(it.value()->statusIcon(), it.value()->title());
+            QAction* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
             action->setIcon(it.value()->statusIcon());
             actionToFactory.insert(action, it.key());
+            actionMap[action->text()] = action;
         }
+        menu.addActions(actionMap.values());
     }
 
     QAction* triggered = menu.exec(position);

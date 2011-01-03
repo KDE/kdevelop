@@ -23,6 +23,7 @@
 
 #include <ktexteditor/annotationinterface.h>
 #include "../vcsexport.h"
+#include "../vcsrevision.h"
 
 class QModelIndex;
 template<typename T> class QList;
@@ -41,6 +42,8 @@ Q_OBJECT
 public:
     VcsAnnotationModel( VcsJob* job, const KUrl&, QObject* );
     virtual ~VcsAnnotationModel();
+
+    VcsRevision revisionForLine(int line) const;
 
     QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const;
 

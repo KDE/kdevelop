@@ -23,6 +23,7 @@
 #include <KMessageBox>
 #include <KUrl>
 #include <KAction>
+#include <KAboutData>
 
 #include <memory>
 
@@ -41,7 +42,6 @@
 #include "cvsjob.h"
 #include "editorsview.h"
 #include "commitdialog.h"
-#include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
 #include "checkoutdialog.h"
 #include "importdialog.h"
@@ -51,7 +51,7 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
-K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))
+K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
 
 class KDevCvsViewFactory: public KDevelop::IToolViewFactory
 {

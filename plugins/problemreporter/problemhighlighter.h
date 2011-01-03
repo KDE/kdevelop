@@ -23,12 +23,12 @@
 #ifndef PROBLEM_HIGHLIGHT_H
 #define PROBLEM_HIGHLIGHT_H
 
-#include <KTextEditor/SmartRangeWatcher>
 
 #include <language/interfaces/iproblem.h>
 #include <qpointer.h>
+#include <ktexteditor/movingrange.h>
 
-class ProblemHighlighter : public QObject, KTextEditor::SmartRangeWatcher
+class ProblemHighlighter : public QObject
 {
     Q_OBJECT
 public:
@@ -40,18 +40,16 @@ public:
 private slots:
     void viewCreated(KTextEditor::Document*,KTextEditor::View*);
     void textHintRequested(const KTextEditor::Cursor&, QString&);
+    void aboutToInvalidateMovingInterfaceContent();
+    void aboutToRemoveText(const KTextEditor::Range& range);
 private:
-    /// Detect and respond to a highlighted range being deleted
-    virtual void rangeDeleted(KTextEditor::SmartRange *range);
-    /// Hide the error when the text is changed, it's likely to be different on the next parse
-    virtual void rangeContentsChanged(KTextEditor::SmartRange* range);
 
     void clearHighlights();
 
     QPointer<KTextEditor::Document> m_document;
-    QList<KTextEditor::SmartRange*> m_topHLRanges;
+    QList<KTextEditor::MovingRange*> m_topHLRanges;
     QList<KDevelop::ProblemPointer> m_problems;
-    QMap<KTextEditor::SmartRange*, KDevelop::ProblemPointer> m_problemsForRanges;
+    QMap<KTextEditor::MovingRange*, KDevelop::ProblemPointer> m_problemsForRanges;
 public slots:
     void settingsChanged();
 };

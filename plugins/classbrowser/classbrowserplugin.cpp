@@ -91,10 +91,6 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
   
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
-  m_openDec = new QAction(i18n("Show &Declaration"), this);
-  connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
-  m_openDef = new QAction(i18n("Show De&finition"), this);
-  connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
@@ -132,14 +128,6 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
         m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
       }
-  
-      m_openDec->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDec);
-
-      if(FunctionDefinition::definition(decl)) {
-        m_openDef->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDef);
-      }
     }
   }
 
@@ -166,83 +154,6 @@ void ClassBrowserPlugin::findInClassBrowser()
     m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
 }
 
-template<class DestClass>
-static DestClass* getBestDeclaration(Declaration* a_decl)
-{
-  if ( a_decl == 0 )
-    return 0;
-
-  uint declarationCount = 0;
-  const IndexedDeclaration* declarations = 0;
-  PersistentSymbolTable::self().declarations(
-    a_decl->qualifiedIdentifier(),
-    declarationCount,
-    declarations );
-
-  for ( uint i = 0; i < declarationCount; ++i )
-  {
-    // See if this declaration matches and return it.
-    DestClass* decl = dynamic_cast<DestClass*>(declarations[i].declaration());
-    if ( decl && !decl->isForwardDeclaration() )
-    {
-      return decl;
-    }
-  }
-
-  return 0;
-}
-
-void ClassBrowserPlugin::openDeclaration()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  QAction* a = static_cast<QAction*>(sender());
-
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-
-  DeclarationPointer declPtr = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declPtr.data());
-
-  // If it's a function, find the function definition to go to the actual declaration.
-  if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )
-  {
-    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(bestDeclaration);
-    if ( funcDefinition == 0 )
-      funcDefinition = FunctionDefinition::definition(bestDeclaration);
-    if ( funcDefinition && funcDefinition->declaration() )
-      bestDeclaration = funcDefinition->declaration();
-  }
-
-  if (bestDeclaration)
-  {
-    KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->range().textRange();
-
-    readLock.unlock();
-
-    ICore::self()->documentController()->openDocument(url, range.start());
-  }
-}
-
-void ClassBrowserPlugin::openDefinition()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  QAction* a = static_cast<QAction*>(sender());
-
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-
-  DeclarationPointer declPtr = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  readLock.unlock();
-
-  // Delegate to real function
-  showDefinition(declPtr);
-}
-
 void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
 {
   DUChainReadLocker readLock(DUChain::lock());
@@ -250,22 +161,21 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if ( !declaration )
     return;
 
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declaration.data());
-
+  Declaration* decl = declaration.data();
   // If it's a function, find the function definition to go to the actual declaration.
-  if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )
+  if ( decl && decl->isFunctionDeclaration() )
   {
-    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(bestDeclaration);
+    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
     if ( funcDefinition == 0 )
-      funcDefinition = FunctionDefinition::definition(bestDeclaration);
+      funcDefinition = FunctionDefinition::definition(decl);
     if ( funcDefinition )
-      bestDeclaration = funcDefinition;
+      decl = funcDefinition;
   }
 
-  if (bestDeclaration)
+  if (decl)
   {
-    KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->range().textRange();
+    KUrl url(decl->url().str());
+    KTextEditor::Range range = decl->rangeInCurrentRevision().textRange();
 
     readLock.unlock();
 

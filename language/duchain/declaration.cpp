@@ -22,9 +22,6 @@
 
 #include <QtCore/QByteArray>
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/document.h>
-
 #include <limits>
 
 #include "topducontext.h"
@@ -39,7 +36,6 @@
 #include "indexedstring.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
-#include "repositories/stringrepository.h"
 #include "types/identifiedtype.h"
 #include "types/structuretype.h"
 #include "functiondefinition.h"
@@ -48,17 +44,10 @@
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
-
-using namespace KTextEditor;
+#include "repositories/stringrepository.h"
 
 namespace KDevelop
 {
-
-///@todo Use reference counting
-static Repositories::StringRepository& commentRepository() {
-    static Repositories::StringRepository commentRepositoryObject("Comment Repository");
-    return commentRepositoryObject;
-}
 
 REGISTER_DUCHAIN_ITEM(Declaration);
 
@@ -84,6 +73,16 @@ m_isFinal(rhs.m_isFinal)
 {
 }
 
+///@todo Use reference counting
+static Repositories::StringRepository& commentRepository() {
+    static Repositories::StringRepository commentRepositoryObject("Comment Repository");
+    return commentRepositoryObject;
+}
+
+void initDeclarationRepositories() {
+  commentRepository();
+}
+
 Declaration::Kind Declaration::kind() const {
   DUCHAIN_D(Declaration);
   return d->m_kind;
@@ -105,7 +104,7 @@ bool Declaration::inDUChain() const {
   return top && top->inDUChain();
 }
 
-Declaration::Declaration( const SimpleRange& range, DUContext* context )
+Declaration::Declaration( const RangeInRevision& range, DUContext* context )
   : DUChainBase(*new DeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
@@ -125,7 +124,6 @@ uint Declaration::ownIndex() const
 
 Declaration::Declaration(const Declaration& rhs)
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
   m_topContext = 0;
   m_context = 0;
   m_indexInTopContext = 0;
@@ -138,7 +136,7 @@ Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
   m_indexInTopContext = 0;
 }
 
-Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
+Declaration::Declaration( DeclarationData & dd, const RangeInRevision& range )
   : DUChainBase(dd, range)
 {
   m_topContext = 0;
@@ -722,41 +720,15 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   return m_context->equalScopeIdentifier(m_context);
 }
 
-QList<KTextEditor::SmartRange*> Declaration::smartUses() const
-{
-  Q_ASSERT(topContext());
-  ENSURE_CAN_READ
-  QSet<KTextEditor::SmartRange*> tempUses;
-  //First, search for uses within the own context
-  {
-    foreach(KTextEditor::SmartRange* range, allSmartUses(topContext(), const_cast<Declaration*>(this)))
-      tempUses.insert(range);
-  }
-
-  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
-
-  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
-    if(!indexedContext.isLoaded())
-      continue;
-    TopDUContext* context = indexedContext.data();
-    if(context) {
-      foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
-        tempUses.insert(range);
-    }
-  }
-
-  return tempUses.toList();
-}
-
-QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
+QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
 {
   ENSURE_CAN_READ
-  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
+  QMap<IndexedString, QMap<RangeInRevision, bool> > tempUses;
 
   //First, search for uses within the own context
   {
-    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
-    foreach(const SimpleRange& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    QMap<RangeInRevision, bool>& ranges(tempUses[topContext()->url()]);
+    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
       ranges[range] = true;
   }
 
@@ -765,13 +737,50 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
   FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
-      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
-      foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+      QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
+      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
         ranges[range] = true;
     }
   }
 
-  QMap<IndexedString, QList<SimpleRange> > ret;
+  QMap<IndexedString, QList<RangeInRevision> > ret;
+
+  for(QMap<IndexedString, QMap<RangeInRevision, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
+    if(!(*it).isEmpty()) {
+      QList<RangeInRevision>& list(ret[it.key()]);
+      for(QMap<RangeInRevision, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
+        list << it2.key();
+    }
+  }
+  return ret;
+}
+
+QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const
+{
+  ENSURE_CAN_READ
+  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
+
+  //First, search for uses within the own context
+  {
+    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
+    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    {
+      ranges[topContext()->transformFromLocalRevision(range)] = true;
+    }
+  }
+
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
+
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
+    TopDUContext* context = indexedContext.data();
+    if(context) {
+      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
+      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
+        ranges[context->transformFromLocalRevision(range)] = true;
+    }
+  }
+
+QMap<IndexedString, QList<SimpleRange> > ret;
 
   for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {

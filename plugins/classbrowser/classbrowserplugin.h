@@ -52,15 +52,11 @@ public: // KDevelop::Plugin overrides
   // The duchain must not be locked when this is called!
   void showDefinition(KDevelop::DeclarationPointer declaration);
 private Q_SLOTS:
-  void openDeclaration();
-  void openDefinition();
   void findInClassBrowser();
 
 private:
   class ClassBrowserFactory* m_factory;
   ClassTree* m_activeClassTree;
-  QAction* m_openDef;
-  QAction* m_openDec;
   QAction* m_findInBrowser;
 };
 

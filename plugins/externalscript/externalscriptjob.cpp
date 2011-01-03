@@ -79,8 +79,6 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     m_errorMode = ExternalScriptItem::ErrorMergeOutput;
   }
 
-  qDebug() << m_errorMode << m_outputMode;
-
   KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
 
   if ( m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone
@@ -238,6 +236,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
 
     ExternalScriptOutputModel* model = dynamic_cast<ExternalScriptOutputModel*>(OutputJob::model());
     Q_ASSERT(model);
+    model->addPending();
 
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
       QStringList lines = model->stdOut();

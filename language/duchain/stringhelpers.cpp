@@ -21,6 +21,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 namespace KDevelop
 {
@@ -449,8 +452,8 @@ void strip( const QString& str, QString& from ) {
   if( ip ) from = from.mid( ip );
 }
 
-void rStrip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return;
+int rStrip( const QByteArray& str, QByteArray& from ) {
+  if( str.isEmpty() ) return 0;
 
   int i = 0;
   int ip = from.length();
@@ -471,10 +474,11 @@ void rStrip( const QByteArray& str, QByteArray& from ) {
   }
 
   if( ip != (int)from.length() ) from = from.left( ip );
+  return s - from.length();
 }
 
-void strip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return;
+int strip( const QByteArray& str, QByteArray& from ) {
+  if( str.isEmpty() ) return 0;
 
   int i = 0;
   int ip = 0;
@@ -495,6 +499,7 @@ void strip( const QByteArray& str, QByteArray& from ) {
   }
 
   if( ip ) from = from.mid( ip );
+  return s - from.length();
 }
 QString formatComment( const QString& comment ) {
   QString ret;
@@ -547,6 +552,7 @@ QByteArray formatComment( const QByteArray& comment ) {
 
   return ret.trimmed();
 }
+
 ParamIterator::~ParamIterator()
 {
   delete d;

@@ -47,6 +47,7 @@ public:
     virtual KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
+    virtual QString terminal( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString nativeAppConfigTypeId() const = 0;
 };
 

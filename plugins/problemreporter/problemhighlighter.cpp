@@ -26,11 +26,7 @@
 #include <KTextEditor/MarkInterface>
 
 #include <language/duchain/indexedstring.h>
-#include <language/editor/hashedstring.h>
-
-#include <language/editor/editorintegrator.h>
 #include <ktexteditor/texthintinterface.h>
-#include <ktexteditor/smartinterface.h>
 #include <qwidget.h>
 #include <ktextbrowser.h>
 #include <qboxlayout.h>
@@ -41,6 +37,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
+#include <ktexteditor/movinginterface.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -49,12 +48,16 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
-    
+
     foreach(KTextEditor::View* view, m_document->views())
         viewCreated(document, view);
-    
+
     connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
     connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), this, SLOT(settingsChanged()));
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+            this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
+            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
 
 void ProblemHighlighter::settingsChanged()
@@ -74,39 +77,30 @@ void ProblemHighlighter::viewCreated(Document* , View* view)
 
 void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QString& )
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(m_document.data());
-    if(smart) {
-        QMutexLocker lock(smart->smartMutex());
-        foreach(SmartRange* range, m_topHLRanges) {
-            SmartRange* deepestRange = range->deepestRangeContaining(pos);
-            if(m_problemsForRanges.contains(deepestRange))
+    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+    Q_ASSERT(view);
+
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+    if(moving) {
+        ///@todo Sort the ranges when writing them, and do binary search instead of linear
+        foreach(MovingRange* range, m_topHLRanges) {
+            if(m_problemsForRanges.contains(range) && range->contains(pos))
             {
-                ProblemPointer problem = m_problemsForRanges[deepestRange];
-                
-                lock.unlock();
-                
+                //There is a problem which's range contains the cursor
+                ProblemPointer problem = m_problemsForRanges[range];
+                if (problem->source() == ProblemData::ToDo) {
+                    continue;
+                }
+
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
-                
-                KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(0, QCursor::pos() + QPoint(20, 40), widget);
-                
+
+                KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
+
                 tooltip->resize( widget->sizeHint() + QSize(10, 10) );
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
-                
-                //There is a problem that contains the smart-range
                 return;
             }
-        }
-    }
-}
-
-void removeWatcher(const QList<SmartRange*> ranges, SmartRangeWatcher* watcher)
-{
-    foreach(SmartRange* range, ranges) {
-        Q_ASSERT(!range->watchers().contains(watcher));
-        foreach(SmartRange* child, range->childRanges()) {
-            Q_ASSERT(child->watchers().contains(watcher));
-            child->removeWatcher(watcher);
         }
     }
 }
@@ -116,41 +110,25 @@ ProblemHighlighter::~ProblemHighlighter()
     if(m_topHLRanges.isEmpty() || !m_document)
         return;
 
-    KDevelop::EditorIntegrator editor;
-    editor.setCurrentUrl(IndexedString(m_document->url()), true);
-
-    LockedSmartInterface iface = editor.smart();
-    if (iface) {
-        removeWatcher(m_topHLRanges, this);
-        qDeleteAll(m_topHLRanges);
-    }
+    qDeleteAll(m_topHLRanges);
 }
 
 void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& problems)
 {
     if(!m_document)
         return;
-    
-    KDevelop::EditorIntegrator editor;
-    IndexedString url(m_document->url());
-    editor.setCurrentUrl(url, true);
 
-    LockedSmartInterface iface = editor.smart();
-    if (!iface)
-        return;
-    
+    KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+    Q_ASSERT(iface);
+
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
-    removeWatcher(m_topHLRanges, this);
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
     m_problemsForRanges.clear();
 
-    KTextEditor::SmartRange* topRange = editor.topRange(iface, EditorIntegrator::Highlighting);
-    m_topHLRanges.append(topRange);
-
-    HashedString hashedUrl = url.str();
+    IndexedString url( m_document->url() );
 
     ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
     ///      but having no background.
@@ -168,25 +146,34 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         }
     }
 
+    DUChainReadLocker lock;
+
+    TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
+
     foreach (const KDevelop::ProblemPointer& problem, problems) {
-        if (problem->finalLocation().document() != hashedUrl || !problem->finalLocation().isValid())
+        if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 
-        DocumentRange range = problem->finalLocation();
-        
-        if(range.end().line() >= m_document->lines())
-            range.end() = m_document->endOfLine(m_document->lines()-1);
-        
-        KTextEditor::SmartRange* problemRange = editor.createRange(iface, range);
-        
-        m_problemsForRanges.insert(problemRange, problem);
-        
-//         *range = problem->finalLocation();
-        if (problemRange->isEmpty())
-            problemRange->smartEnd().advance(1);
+        SimpleRange range;
+        if(top)
+            range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
+        else
+            range = problem->finalLocation();
 
-        if(problem->severity() != ProblemData::Hint || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
-        
+        if(range.end.line >= m_document->lines())
+            range.end = SimpleCursor(m_document->endOfLine(m_document->lines()-1));
+
+        if(range.isEmpty())
+            range.end.column += 1;
+
+        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range.textRange());
+
+        m_problemsForRanges.insert(problemRange, problem);
+        m_topHLRanges.append(problemRange);
+
+        if(problem->source() != ProblemData::ToDo && (problem->severity() != ProblemData::Hint
+            || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
+        {
             KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
             if(problem->severity() == ProblemData::Error)
                 error->setUnderlineColor(Qt::red);
@@ -194,7 +181,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
                 error->setUnderlineColor(Qt::magenta);
             else if(problem->severity() == ProblemData::Hint)
                 error->setUnderlineColor(Qt::yellow);
-                
+
             error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
 #if 0
@@ -208,9 +195,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 
             problemRange->setAttribute(error);
         }
-        problemRange->addWatcher(this);
-        editor.exitCurrentRange(iface);
-        
+
         if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
             uint mark;
             if (problem->severity() == ProblemData::Error) {
@@ -220,21 +205,34 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             } else {
                 continue;
             }
-            markIface->addMark(problem->finalLocation().start().line(), mark);
+            markIface->addMark(problem->finalLocation().start.line, mark);
         }
     }
-    
-    editor.exitCurrentRange(iface);
 }
 
-void ProblemHighlighter::rangeDeleted(KTextEditor::SmartRange *range)
+void ProblemHighlighter::aboutToInvalidateMovingInterfaceContent()
 {
-    m_topHLRanges.removeAll(range);
+    qDeleteAll(m_topHLRanges);
+    m_topHLRanges.clear();
+    m_problemsForRanges.clear();
 }
 
-void ProblemHighlighter::rangeContentsChanged(KTextEditor::SmartRange* range)
+void ProblemHighlighter::aboutToRemoveText( const KTextEditor::Range& range )
 {
-    range->setAttribute(KTextEditor::Attribute::Ptr());
+    if (range.onSingleLine()) { // no need to optimize this
+        return;
+    }
+
+    QList< MovingRange* >::iterator it = m_topHLRanges.begin();
+    while(it != m_topHLRanges.end()) {
+        if (range.contains((*it)->toRange())) {
+            m_problemsForRanges.remove(*it);
+            delete (*it);
+            it = m_topHLRanges.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 #include "problemhighlighter.moc"

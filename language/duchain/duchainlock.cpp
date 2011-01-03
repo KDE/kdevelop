@@ -72,7 +72,7 @@ public:
   }
 
   ///Holds the writer that currently has the write-lock, or zero. Is protected by m_writerRecursion.
-  volatile Qt::HANDLE m_writer;
+  volatile QThread* m_writer;
 
   ///How often is the chain write-locked by the writer? This value protects m_writer,
   ///m_writer may only be changed by the thread that successfully increases this value from 0 to 1
@@ -113,7 +113,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
   d->changeOwnReaderRecursion(1);
   
-  if(d->m_writer == 0 || d->m_writer == QThread::currentThreadId())
+  if(d->m_writer == 0 || d->m_writer == QThread::currentThread())
   {
     //Successful lock: Either there is no writer, or we hold the write-lock by ourselves
   }else{
@@ -164,7 +164,7 @@ bool DUChainLock::lockForWrite(uint timeout)
 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  if(d->m_writer == QThread::currentThreadId())
+  if(d->m_writer == QThread::currentThread())
   {
     //We already hold the write lock, just increase the recursion count and return
     d->m_writerRecursion.fetchAndAddRelaxed(1);
@@ -180,7 +180,7 @@ bool DUChainLock::lockForWrite(uint timeout)
     if(d->m_totalReaderRecursion == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1))
     {
       //Now we can be sure that there is no other writer, as we have increased m_writerRecursion from 0 to 1
-      d->m_writer = QThread::currentThreadId();
+      d->m_writer = QThread::currentThread();
       if(d->m_totalReaderRecursion == 0)
       {
         //There is still no readers, we have successfully acquired a write-lock
@@ -225,7 +225,7 @@ void DUChainLock::releaseWriteLock()
 
 bool DUChainLock::currentThreadHasWriteLock()
 {
-  return d->m_writer == QThread::currentThreadId();
+  return d->m_writer == QThread::currentThread();
 }
 
 

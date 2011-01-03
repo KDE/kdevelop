@@ -19,11 +19,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <memory>
 #include <qstandarditemmodel.h>
 #include <interfaces/iplugin.h>
-#include <ktexteditor/smartrange.h>
 #include "localpatchsource.h"
 #include "ui_patchreview.h"
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/rangefeedback.h>
+#include <ktexteditor/movingrangefeedback.h>
 #include "libdiff2/diffmodel.h"
 
 class PatchReviewToolViewFactory;
@@ -41,7 +40,9 @@ class DiffModel;
 class DiffModel;
 }
 namespace KTextEditor {
-class SmartRange;
+class Document;
+class Range;
+class MovingRange;
 class Mark;
 }
 namespace Kompare {
@@ -52,34 +53,34 @@ class IDocument;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class PatchHighlighter : public QObject, public KTextEditor::SmartRangeWatcher {
+class PatchHighlighter : public QObject {
     Q_OBJECT
 public:
     PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
-    QList<KTextEditor::SmartRange*> ranges() const {
+    QList<KTextEditor::MovingRange*> ranges() const {
       return m_differencesForRanges.keys();
     }
 private slots:
     void documentDestroyed();
+    void aboutToDeleteMovingInterfaceContent(KTextEditor::Document*);
 private:
 
-    void addLineMarker(KTextEditor::SmartRange* arg1, Diff2::Difference* arg2);
-    void removeLineMarker(KTextEditor::SmartRange* arg1, Diff2::Difference* arg2);
+    void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
+    void removeLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
   
-    KTextEditor::SmartRange* rangeForMark(KTextEditor::Mark mark);
+    KTextEditor::MovingRange* rangeForMark(KTextEditor::Mark mark);
 
-    virtual void rangeDeleted(KTextEditor::SmartRange* range);
     void clear();
-    QSet<KTextEditor::SmartRange*> m_ranges;
-    QMap<KTextEditor::SmartRange*, Diff2::Difference*> m_differencesForRanges;
+    QSet<KTextEditor::MovingRange*> m_ranges;
+    QMap<KTextEditor::MovingRange*, Diff2::Difference*> m_differencesForRanges;
     KDevelop::IDocument* m_doc;
     PatchReviewPlugin* m_plugin;
     const Diff2::DiffModel* m_model;
 public slots:
     void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
-    void showToolTipForMark(QPoint arg1, KTextEditor::SmartRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
+    void showToolTipForMark(QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
     bool isRemoval(Diff2::Difference*);
     bool isInsertion(Diff2::Difference*);
     void markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&);
@@ -203,7 +204,7 @@ private:
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
 
-    KDevelop::IPatchSource* m_patch;
+    KDevelop::IPatchSource::Ptr m_patch;
 
     QTimer* m_updateKompareTimer;
 

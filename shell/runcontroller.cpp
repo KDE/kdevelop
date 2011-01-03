@@ -74,7 +74,7 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    virtual KIcon icon() const { return KIcon(); }
+    virtual KIcon icon() const { return KIcon("tools-report-bug"); }
     virtual QString id() const { return "debug"; }
     virtual QString name() const { return i18n("Debug"); }
 };
@@ -83,7 +83,7 @@ class ProfileMode : public ILaunchMode
 {
 public:
     ProfileMode() {}
-    virtual KIcon icon() const { return KIcon(); }
+    virtual KIcon icon() const { return KIcon("office-chart-area"); }
     virtual QString id() const { return "profile"; }
     virtual QString name() const { return i18n("Profile"); }
 };
@@ -377,7 +377,10 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     ILauncher* launcher = run->type()->launcherForId( launcherId );
 
     if( !launcher ) {
-        kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration.", launcherId );
+        KMessageBox::error(
+            qApp->activeWindow(), 
+            i18n("The current launch configuration does not support the '%1' mode.", runMode),
+            "");
         return 0;
     }
 
@@ -409,7 +412,7 @@ void RunController::setupActions()
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
-    d->dbgAction = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
+    d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18n("Debug current Launch"));
@@ -586,7 +589,13 @@ void KDevelop::RunController::checkState()
 
 void KDevelop::RunController::stopAllProcesses()
 {
+    // composite jobs might remove child jobs, see also:
+    // https://bugs.kde.org/show_bug.cgi?id=258904
+    // foreach already iterates over a copy
     foreach (KJob* job, d->jobs.keys()) {
+        // now we check the real list whether it was deleted
+        if (!d->jobs.contains(job))
+            continue;
         if (job->capabilities() & KJob::Killable)
             job->kill(KJob::EmitResult);
     }
@@ -824,7 +833,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
 {
     delete d->launchAsMapper;
     d->launchAsMapper = new QSignalMapper( this );
-    kDebug() << "connected launchmapper:" << connect( d->launchAsMapper, SIGNAL( mapped( int ) ), SLOT( launchAs( int ) ) );
+    connect( d->launchAsMapper, SIGNAL( mapped( int ) ), SLOT( launchAs( int ) ) );
     d->launchAsInfo.clear();
     d->contextItem = 0;
     ContextMenuExtension ext;
@@ -854,7 +863,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                         act->setText( type->name() );
                         kDebug() << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
                         d->launchAsMapper->setMapping( act, i );
-                        kDebug() << "action connected:" << connect( act, SIGNAL( triggered() ), d->launchAsMapper, SLOT( map() ) );
+                        connect( act, SIGNAL( triggered() ), d->launchAsMapper, SLOT( map() ) );
                         menu->addAction(act);
                         i++;
                     }

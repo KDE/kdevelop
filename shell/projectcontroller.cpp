@@ -74,6 +74,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/job.h>
 #include "sessioncontroller.h"
 #include "session.h"
+#include <QApplication>
 
 namespace KDevelop
 {
@@ -88,8 +89,8 @@ public:
 //     IProject* m_currentProject;
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
-    QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
     QPointer<KAction> m_openProject;
+    QPointer<KAction> m_fetchProject;
     QPointer<KAction> m_closeProject;
     QPointer<KAction> m_openConfig;
     IProjectDialogProvider* dialog;
@@ -118,31 +119,28 @@ public:
         Project* proj = qobject_cast<Project*>(obj);
         if( !proj )
             return;
-        if( !m_cfgDlgs.contains( proj ) )
-        {
-            //@FIXME: compute a blacklist, based on a query for all KDevelop
-            //plugins implementing IProjectManager, removing from that the
-            //plugin that manages this project. Set this as blacklist on the
-            //dialog
-            //@FIXME: Currently it is important to set a parentApp on the kcms
-            //that's different from the component name of the application, else
-            //the plugin will show up on all projects settings dialogs.
 
-            QStringList pluginsForPrj = findPluginsForProject( proj );
-            kDebug() << "Using pluginlist:" << pluginsForPrj;
-            pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
-            m_cfgDlgs[proj] = new KSettings::Dialog( pluginsForPrj,
-                                                     m_core->uiController()->activeMainWindow() );
-            m_cfgDlgs[proj]->setKCMArguments( QStringList()
-                                              << proj->developerTempFile()
-                                              << proj->projectTempFile()
-                                              << proj->projectFileUrl().url()
-                                              << proj->developerFileUrl().url()
-                                              << proj->name() );
-        }
+        //@FIXME: compute a blacklist, based on a query for all KDevelop
+        //plugins implementing IProjectManager, removing from that the
+        //plugin that manages this project. Set this as blacklist on the
+        //dialog
+        //@FIXME: Currently it is important to set a parentApp on the kcms
+        //that's different from the component name of the application, else
+        //the plugin will show up on all projects settings dialogs.
+
+        QStringList pluginsForPrj = findPluginsForProject( proj );
+        kDebug() << "Using pluginlist:" << pluginsForPrj;
+        pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
+        KSettings::Dialog cfgDlg( pluginsForPrj, m_core->uiController()->activeMainWindow() );
+        cfgDlg.setKCMArguments( QStringList()
+                                    << proj->developerTempFile()
+                                    << proj->projectTempFile()
+                                    << proj->projectFileUrl().url()
+                                    << proj->developerFileUrl().url()
+                                    << proj->name() );
         m_configuringProject = proj;
-        m_cfgDlgs[proj]->setWindowTitle( i18n("Configure Project %1", proj->name()) );
-        m_cfgDlgs[proj]->exec();
+        cfgDlg.setWindowTitle( i18n("Configure Project %1", proj->name()) );
+        cfgDlg.exec();
         proj->projectConfiguration()->sync();
         m_configuringProject = 0;
     }
@@ -169,8 +167,11 @@ public:
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
+            const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
+            if (info.property("X-KDevelop-Category").toString() != "Project")
+                continue;
             if( !iface || plugin == project->managerPlugin() )
-                pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
+                pluginnames << info.pluginName();
         }
 
         return pluginnames;
@@ -218,14 +219,23 @@ public:
     
     }
     
-    void importProject(const KUrl& url)
+    void importProject(const KUrl& url_)
     {
+        KUrl url(url_);
+        if ( url.isLocalFile() )
+        {
+            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
+            if ( !path.isEmpty() )
+                url.setPath( path );
+        }
+
         if ( !url.isValid() )
         {
             KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
                             i18n("Invalid Location: %1", url.prettyUrl()));
             return;
         }
+
         if ( m_currentlyOpening.contains(url))
         {
             kDebug() << "Already opening " << url << ". Aborting.";
@@ -300,44 +310,93 @@ bool projectFileExists( const KUrl& u )
     }
 }
 
+bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
+{
+    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
+    KConfigGroup grp = cfg->group( "Project" );
+    QString defaultName = dlg->projectFileUrl().upUrl().fileName();
+    return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
+           grp.readEntry( "Manager", QString() ) == dlg->projectManager();
+}
+
 KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& startUrl)
 {
     Q_ASSERT(d);
     OpenProjectDialog dlg( fetch, startUrl, Core::self()->uiController()->activeMainWindow() );
     if(dlg.exec() == QDialog::Rejected)
         return KUrl();
-    
+
     KUrl projectFileUrl = dlg.projectFileUrl();
     kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
-    if( !projectFileExists( projectFileUrl ) )
+    if( projectFileExists( projectFileUrl ) )
     {
+        // check whether config is equal
+        bool shouldAsk = true;
         if( projectFileUrl.isLocalFile() )
         {
-            bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
-                            dlg.projectName(),
-                            dlg.projectManager() );
-            if (!ok)
-                return KUrl();
-        } else
-        {
-            KTemporaryFile tmp;
-            ///TODO: do we really want to set setAutoRemove to false??
-            tmp.setAutoRemove( false );
-            tmp.open();
-            bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
-                            dlg.projectName(),
-                            dlg.projectManager() );
-            if (!ok)
-                return KUrl();
-
-            ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
-            if (!ok) {
-                KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
-                    i18n("Unable to create configuration file %1", projectFileUrl.url()));
-                return KUrl();
+            shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
+        } else {
+            QString tmpFile;
+            if ( KIO::NetAccess::download( projectFileUrl, tmpFile, qApp->activeWindow() ) ) {
+                shouldAsk = !equalProjectFile( tmpFile, &dlg );
+                QFile::remove(tmpFile);
+            } else {
+                shouldAsk = false;
             }
         }
+
+        if ( shouldAsk )
+        {
+            KGuiItem yes = KStandardGuiItem::yes();
+            yes.setText(i18n("Override"));
+            yes.setToolTip(i18n("Continue to open the project and use the just provided project configuration."));
+            yes.setIcon(KIcon());
+            KGuiItem no = KStandardGuiItem::no();
+            no.setText(i18n("Open Existing File"));
+            no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
+            no.setIcon(KIcon());
+            KGuiItem cancel = KStandardGuiItem::cancel();
+            cancel.setToolTip(i18n("Cancel and don't open the project."));
+            int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
+                i18n("There already exists a project configuration file at %1.\n"
+                     "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
+                i18n("Override existing project configuration"), yes, no, cancel );
+            if ( ret == KMessageBox::No )
+            {
+                // no: reuse existing project file
+                return projectFileUrl;
+            } else if ( ret == KMessageBox::Cancel )
+            {
+                return KUrl();
+            } // else fall through and write new file
+        }
     }
+
+    if( projectFileUrl.isLocalFile() )
+    {
+        bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
+                        dlg.projectName(),
+                        dlg.projectManager() );
+        if (!ok)
+            return KUrl();
+    } else
+    {
+        KTemporaryFile tmp;
+        tmp.open();
+        bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
+                        dlg.projectName(),
+                        dlg.projectManager() );
+        if (!ok)
+            return KUrl();
+
+        ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        if (!ok) {
+            KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
+                i18n("Unable to create configuration file %1", projectFileUrl.url()));
+            return KUrl();
+        }
+    }
+
     return projectFileUrl;
 }
 
@@ -394,10 +453,10 @@ void ProjectController::setupActions()
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     
-    d->m_openProject = action = ac->addAction( "project_fetch" );
+    d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18n( "Fetch Project..." ) );
     action->setToolTip( i18n( "Fetch Project" ) );
-    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Fetches a project from either a Version Control System or somewhere else and puts into the disk and lets </p>" ) );
+    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fetchProject() ) );
 
@@ -651,6 +710,7 @@ void ProjectController::projectImportingFinished( IProject* project )
         config->sync();
     }
 
+    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFileUrl()));
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
@@ -721,18 +781,25 @@ void ProjectController::initializePluginCleanup(IProject* proj)
 
 void ProjectController::closeProject(IProject* proj_)
 {
-    if(!proj_ || d->m_projects.indexOf(proj_) == -1)
+    if (!proj_)
     {
         return;
     }
-    
+
+    // loading might have failed
+    d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
+
+    if(d->m_projects.indexOf(proj_) == -1)
+    {
+        return;
+    }
+
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
     if( !proj ) 
     {
         kWarning() << "Unknown Project subclass found!";
         return;
     }
-    
     d->m_projects.removeAll(proj);
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
@@ -816,9 +883,23 @@ KUrl ProjectController::projectsBaseDirectory() const
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
 
-QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
+QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
+    
+    if(!project)
+    {
+        // Find a project with the correct base directory at least
+        foreach(IProject* candidateProject, Core::self()->projectController()->projects())
+        {
+            if(candidateProject->folder().isParentOf(url))
+            {
+                project = candidateProject;
+                break;
+            }
+        }
+    }
+    
     QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
     if (project) {
         if (format == FormatHtml) {
@@ -831,6 +912,12 @@ QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) co
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
     }
+    return prefixText;
+}
+
+QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
+{
+    QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
         return prefixText + "<b>" + url.fileName() + "</b>";
     } else {
@@ -844,8 +931,8 @@ ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
     if ( ctx->type() != Context::ProjectItemContext || !static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
         return ext;
     }
-    
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
+    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_fetchProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentAction);
     return ext;
 }

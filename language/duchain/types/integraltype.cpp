@@ -128,6 +128,8 @@ QString IntegralType::toString() const
 
   if (modifiers() & ShortModifier)
     name.prepend("short ");
+  else if (modifiers() & LongLongModifier)
+    name.prepend("long long ");
   else if (modifiers() & LongModifier)
     name.prepend("long ");
 

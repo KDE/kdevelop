@@ -116,7 +116,7 @@ public:
     IProject* project;
     ProjectBaseItem* parent;
     int row;
-    QList<ProjectBaseItem*> childs;
+    QList<ProjectBaseItem*> children;
     QString text;
     ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
@@ -146,28 +146,34 @@ ProjectBaseItem::~ProjectBaseItem()
     } else if( model() ) {
         model()->takeRow( d->row );
     }
-    removeRows(0, d->childs.size());
+    removeRows(0, d->children.size());
     delete d;
 }
 
 ProjectBaseItem* ProjectBaseItem::child( int row ) const
 {
     Q_D(const ProjectBaseItem);
-    if( row < 0 || row >= d->childs.length() ) {
+    if( row < 0 || row >= d->children.length() ) {
         return 0;
     }
-    return d->childs.at( row );
+    return d->children.at( row );
+}
+
+QList< ProjectBaseItem* > ProjectBaseItem::children() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->children;
 }
 
 ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 {
     Q_D(ProjectBaseItem);
-    Q_ASSERT(row >= 0 && row < d->childs.size());
+    Q_ASSERT(row >= 0 && row < d->children.size());
     
     if( model() ) {
         QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
-    ProjectBaseItem* olditem = d->childs.takeAt( row );
+    ProjectBaseItem* olditem = d->children.takeAt( row );
     olditem->d_func()->parent = 0;
     olditem->d_func()->row = -1;
     olditem->setModel( 0 );
@@ -190,8 +196,43 @@ void ProjectBaseItem::removeRow( int row )
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    for( ; count > 0; count-- ) {
-        removeRow( row );
+    if (!count) {
+        return;
+    }
+
+    Q_D(ProjectBaseItem);
+    Q_ASSERT(row >= 0 && row + count <= d->children.size());
+
+    if( model() ) {
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+    }
+    QList<ProjectBaseItem*> toRemove;
+#if QT_VERSION >= 0x040700
+    toRemove.reserve(count);
+#endif
+    if (row == 0 && count == d->children.size()) {
+        // optimize shutdown for big projects
+        toRemove = d->children;
+        d->children.clear();
+    } else {
+        for (int i = row; i < count; ++i) {
+            toRemove << d->children.takeAt( row );
+        }
+        for(int i = row; i < d->children.size(); ++i) {
+            d->children.at(i)->d_func()->row--;
+            Q_ASSERT(child(i)->d_func()->row==i);
+        }
+    }
+
+    foreach(ProjectBaseItem* item, toRemove) {
+        item->d_func()->parent = 0;
+        item->d_func()->row = -1;
+        item->setModel( 0 );
+        delete item;
+    }
+
+    if( model() ) {
+        QMetaObject::invokeMethod( model(), "rowsRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
 }
 
@@ -206,7 +247,7 @@ QModelIndex ProjectBaseItem::index() const
 int ProjectBaseItem::rowCount() const
 {
     Q_D(const ProjectBaseItem);
-    return d->childs.count();
+    return d->children.count();
 }
 
 int ProjectBaseItem::type() const
@@ -250,7 +291,7 @@ void ProjectBaseItem::setModel( ProjectModel* model )
 {
     Q_D(ProjectBaseItem);
     d->model = model;
-    foreach( ProjectBaseItem* item, d->childs ) {
+    foreach( ProjectBaseItem* item, d->children ) {
         item->setModel( model );
     }
 }
@@ -330,11 +371,11 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     }
     int startrow,endrow;
     if( model() ) {
-        startrow = endrow = d->childs.count();
+        startrow = endrow = d->children.count();
         QMetaObject::invokeMethod( model(), "rowsAboutToBeInserted", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, startrow), Q_ARG(int, endrow) );
     }
-    d->childs.append( item );
-    item->setRow( d->childs.count() - 1 );
+    d->children.append( item );
+    item->setRow( d->children.count() - 1 );
     item->d_func()->parent = this;
     item->setModel( model() );
     if( model() ) {
@@ -348,11 +389,17 @@ KUrl ProjectBaseItem::url( ) const
     return d->m_url;
 }
 
+QString ProjectBaseItem::baseName() const
+{
+    return text();
+}
+
 void ProjectBaseItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectBaseItem);
     d->m_url = url;
-    setText( d->m_url.fileName() );
+    const QString baseName = url.fileName();
+    setText( baseName );
 }
 
 Qt::ItemFlags ProjectBaseItem::flags()
@@ -417,9 +464,8 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         ProjectBaseItem* item = child( i );
-        Q_ASSERT(item);
-        if ( item && ( item->type() == Target || item->type() == LibraryTarget ||
-             item->type() == ExecutableTarget ) )
+        
+        if ( item->type() == Target || item->type() == LibraryTarget || item->type() == ExecutableTarget )
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
             if ( kdevitem )
@@ -469,6 +515,15 @@ ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
+void ProjectFolderItem::setUrl( const KUrl& url )
+{
+    KUrl copy(url);
+    copy.adjustPath(KUrl::AddTrailingSlash);
+    ProjectBaseItem::setUrl(copy);
+    
+    propagateRename(url);
+}
+
 ProjectFolderItem *ProjectFolderItem::folder() const
 {
     return const_cast<ProjectFolderItem*>(this);
@@ -481,9 +536,24 @@ int ProjectFolderItem::type() const
 
 QString ProjectFolderItem::folderName() const
 {
-    return url().fileName();
+    return baseName();
 }
 
+void ProjectFolderItem::propagateRename(const KUrl& newBase) const
+{
+    KUrl url = newBase;
+    url.addPath("dummy");
+    foreach( KDevelop::ProjectBaseItem* child, children() )
+    {
+        url.setFileName( child->text() );
+        child->setUrl( url );
+        
+        const ProjectFolderItem* folder = child->folder();
+        if ( folder ) {
+            folder->propagateRename( url );
+        }
+    }
+}
 
 ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 {
@@ -498,9 +568,9 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
         {
             if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
             {
-                setUrl( dest );
                 return ProjectBaseItem::RenameOk;
-            } else
+            }
+            else
             {
                 return ProjectBaseItem::ProjectManagerRenameFailed;
             }
@@ -516,16 +586,13 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
-    for ( int i = 0; i < rowCount(); ++i )
+    foreach ( ProjectBaseItem* item, children() )
     {
-        ProjectBaseItem* item = child( i );
-        if ( ProjectFileItem* file = dynamic_cast<ProjectFileItem*>(item))
-            if (file->fileName() == name)
-                return true;
-
-        if ( ProjectFolderItem* folder = dynamic_cast<ProjectFolderItem*>(item))
-            if (folder->folderName() == name)
-                return true;
+        if ( (item->type() == Folder || item->type() == File || item->type() == BuildFolder)
+             && name == item->baseName() )
+        {
+            return true;
+        }
     }
     return false;
 }
@@ -590,9 +657,9 @@ ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
         {
             if( !project() || project()->projectFileManager()->renameFile(this, dest) )
             {
-                setUrl( dest );
                 return ProjectBaseItem::RenameOk;
-            } else
+            }
+            else
             {
                 return ProjectBaseItem::ProjectManagerRenameFailed;
             }
@@ -608,7 +675,7 @@ ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
 
 QString ProjectFileItem::fileName() const
 {
-    return url().fileName();
+    return baseName();
 }
 
 void ProjectFileItem::setUrl( const KUrl& url )
@@ -774,10 +841,14 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
         ProjectBaseItem* item = itemFromIndex( index );
         
         if( item ) {
-            if( role == Qt::DecorationRole ) {
-                return item->iconName();
+            switch(role) {
+                case Qt::DecorationRole:
+                    return item->iconName();
+                case Qt::ToolTipRole:
+                    return item->url().prettyUrl();
+                default:
+                    return item->text();
             }
-            return item->text();
         }
     }
     return QVariant();
@@ -801,11 +872,9 @@ ProjectVisitor::ProjectVisitor()
 
 QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if( hasIndex( row, column, parent ) ) {
-        ProjectBaseItem* parentItem = d->itemFromIndex( parent );
-        if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
-            return createIndex( row, column, parentItem );
-        }
+    ProjectBaseItem* parentItem = d->itemFromIndex( parent );
+    if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
+        return createIndex( row, column, parentItem );
     }
     return QModelIndex();
 }

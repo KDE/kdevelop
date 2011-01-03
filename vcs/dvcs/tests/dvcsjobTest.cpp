@@ -25,39 +25,32 @@
 #include <KDE/KUrl>
 
 #include <vcs/dvcs/dvcsjob.h>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
+using namespace KDevelop;
+
+void DVcsJobTest::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore* testCore = new KDevelop::TestCore();
+    testCore->initialize(KDevelop::Core::NoUi);
+}
 
 void DVcsJobTest::testJob()
 {
-
-    DVcsJob* job = new DVcsJob(0);
+    KDevelop::DVcsJob* job = new KDevelop::DVcsJob(QDir::temp());
     QVERIFY(job);
-    QVERIFY(job->status() == DVcsJob::JobNotStarted);
-
-    //makes sence for bug 172309. With default (true) we have crash, with false — dead lock
-    //should be removed after we fix the problem
-    job->setAutoDelete(false);
+    QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
 
     //try the command like "echo -n test"
     //should fail, because command and arg are in one string. We can change opearator<<(QString) to split,
     //but it will be a wrong style to work with jobs.
     const QString echoCommand("echo -n test");
     *job << echoCommand;
-    job->setDirectory(QDir::temp()); //working directory ("") is deprecated by DVCSjob
     QVERIFY(!job->exec());
-    QVERIFY(job->status() == DVcsJob::JobFailed);
-    QCOMPARE(job->dvcsCommand(), echoCommand);
-
-    //check our clear() method. It's simple, but having bugs here is dangerous
-    job->clear();
-    QVERIFY(job);
-    QVERIFY(!job->isRunning());
-    QVERIFY(job->status() == DVcsJob::JobNotStarted);
-    QVERIFY(job->fetchResults().isNull());
-    QVERIFY(job->getChildproc());
-    QCOMPARE(job->dvcsCommand(), QString());
-    QCOMPARE(job->getDirectory(), QDir::temp());
-    QCOMPARE(job->output(), QString());
-
+    QVERIFY(job->status() == KDevelop::VcsJob::JobFailed);
+    QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
 }
 
 

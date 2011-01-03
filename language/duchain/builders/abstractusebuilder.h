@@ -25,9 +25,6 @@
 #include "../duchain.h"
 #include "../duchainlock.h"
 
-#include <language/editor/editorintegrator.h>
-#include <ktexteditor/smartinterface.h>
-
 namespace KDevelop {
 
 /**
@@ -45,8 +42,13 @@ class AbstractUseBuilder: public LanguageSpecificUseBuilderBase
 {
 public:
   /// Constructor.
+  template<class ParseSession>
+  AbstractUseBuilder(ParseSession* session) : LanguageSpecificUseBuilderBase(session), m_finishContext(true)
+  {
+  }
+
   AbstractUseBuilder()
-    : m_finishContext(true)
+  : m_finishContext(true)
   {
   }
 
@@ -78,22 +80,21 @@ protected:
    */
   
   struct ContextUseTracker {
-    QSet<KTextEditor::SmartRange*> reuseRanges;
-    QList<QPair<KDevelop::Use, KTextEditor::SmartRange*> > createUses;
+    QVector<KDevelop::Use> createUses;
   };
   
   void newUse(NameT* name)
   {
     QualifiedIdentifier id = identifierForNode(name);
 
-    SimpleRange newRange = editorFindRange(name, name);
+    RangeInRevision newRange = editorFindRange(name, name);
 
-    DUChainWriteLocker lock(DUChain::lock()); ///@todo Don't call findDeclarations during write-lock, it can lead to UI lockups
-    QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
+    DUChainReadLocker lock(DUChain::lock());
+    QList<DeclarationPointer> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
     foreach (Declaration* declaration, declarations)
       if (!declaration->isForwardDeclaration()) {
         declarations.clear();
-        declarations.append(declaration);
+        declarations.append(DeclarationPointer(declaration));
         break;
       }
     // If we don't break, there's no non-forward declaration
@@ -110,7 +111,7 @@ protected:
    * \param node Node which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, KDevelop::Declaration* declaration)
+  void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
     newUse(node, editorFindRange(node, node), declaration);
   }
@@ -121,24 +122,19 @@ protected:
    * \param newRange Text range which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, const SimpleRange& newRange, Declaration* declaration)
+  void newUse(T* node, const RangeInRevision& newRange, const DeclarationPointer& _declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
+    Declaration* declaration = _declaration.data();
+    
+    if(!declaration)
+      return; // The declaration was deleted in the meantime
 
-    bool encountered = false; ///@todo This can cause I/O, so it would be better if it was possible with only a read-lock
+    bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
 
     {
-      //We've got to consider the translated range, and while we use it, the smart-mutex needs to be locked
-      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
-      SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(iface, newRange);
-      
-//       if(iface)
-//         kDebug() << "translated by" << (translated.start.textCursor() - newRange.start.textCursor()) << (translated.end.textCursor() - newRange.end.textCursor()) << "to revision" << iface->currentRevision();
-      
-      KTextEditor::Range textTranslated  = translated.textRange();
-
       /*
       * We need to find a context that this use fits into, which must not necessarily be the current one.
       * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
@@ -147,52 +143,25 @@ protected:
       * into the context that surrounds the SOME_MACRO invocation.
       * */
       DUContext* newContext = LanguageSpecificUseBuilderBase::currentContext();
-      while (!newContext->range().contains(translated) && contextUpSteps < (LanguageSpecificUseBuilderBase::contextStack().size()-1)) {
+      while (!newContext->range().contains(newRange) && contextUpSteps < (LanguageSpecificUseBuilderBase::contextStack().size()-1)) {
         ++contextUpSteps;
         newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
       }
       
-      KTextEditor::SmartRange* use = 0;
-
       if (contextUpSteps) {
-        LanguageSpecificUseBuilderBase::editor()->setCurrentRange(iface, newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
         m_finishContext = false;
         openContext(newContext);
         m_finishContext = true;
         currentUseTracker() = m_trackerStack.at(m_trackerStack.size()-contextUpSteps-2);
-
-        Q_ASSERT(m_contexts[m_trackerStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
       }
 
-      if (LanguageSpecificUseBuilderBase::recompiling() && this->currentContext()->smartRange()) {
-
-        //Find a smart-range that we can reuse
-        KTextEditor::SmartRange* containerRange = this->currentContext()->smartRange();
-        KTextEditor::SmartRange* child  = containerRange->mostSpecificRange(textTranslated);
-        while(child && child->parentRange() != containerRange)
-          child = child->parentRange();
-        
-        //Solution for multiple equal ranges or ranges ending at the same position
-        while(child && child->end() == textTranslated.end() && (!currentUseTracker().reuseRanges.contains(child) || *child != textTranslated))
-          child = containerRange->childAfter(child);
-        
-        if(child && *child == textTranslated && currentUseTracker().reuseRanges.contains(child)) {
-          //We found a range to re-use
-          currentUseTracker().reuseRanges.remove(child);
-          use = child;
-        }
-      }
       if (!encountered) {
-        if(!use) {
-          use = LanguageSpecificUseBuilderBase::editor()->currentRange(iface) ? LanguageSpecificUseBuilderBase::editor()->createRange(iface, newRange.textRange()) : 0;
-          LanguageSpecificUseBuilderBase::editor()->exitCurrentRange(iface);
-        }
-        
+       
         if (LanguageSpecificUseBuilderBase::m_mapAst)
           LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
-            node, qMakePair<DUContextPointer, SimpleRange>(DUContextPointer(newContext), newRange));
+            node, qMakePair<DUContextPointer, RangeInRevision>(DUContextPointer(newContext), newRange));
 
-        currentUseTracker().createUses << qMakePair(KDevelop::Use(newRange, declarationIndex), use);
+        currentUseTracker().createUses << KDevelop::Use(newRange, declarationIndex);
       }
     }
 
@@ -212,13 +181,7 @@ protected:
   {
     LanguageSpecificUseBuilderBase::openContext(newContext);
 
-    DUChainWriteLocker lock(DUChain::lock());
-    LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
-    
     ContextUseTracker newTracker;
-    foreach(KTextEditor::SmartRange* range, newContext->useRanges())
-      newTracker.reuseRanges.insert(range);
-    
     m_trackerStack.push(newTracker);
     m_contexts.push(newContext);
   }
@@ -231,36 +194,12 @@ protected:
     if(m_finishContext) {
       DUChainWriteLocker lock(DUChain::lock());
 
-      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
-      //Delete all ranges that were not re-used
-      if(this->currentContext()->smartRange() && iface) {
-        this->currentContext()->takeUseRanges();
-        foreach(KTextEditor::SmartRange* range, currentUseTracker().reuseRanges) {
-#ifdef DEBUG_UPDATE_MATCHING
-          if(!range->isEmpty()) //we cannot find empty ranges, so don't give warnings for them
-            kDebug() << "deleting not re-used range:" << *range;
-#endif
-          delete range;
-        }
-      }
-      
       this->currentContext()->deleteUses();
-      
-      Q_ASSERT(this->currentContext()->usesCount() == 0);
       
       ContextUseTracker& tracker(currentUseTracker());
       for(int a = 0; a < tracker.createUses.size(); ++a) {
-        KTextEditor::SmartRange* range = 0;
-        
-        if(this->currentContext()->smartRange() && iface) {
-          range = tracker.createUses[a].second;
-          Q_ASSERT(range);
-        }
-        
-        Q_ASSERT(this->currentContext()->usesCount() == a);
-        this->currentContext()->createUse(tracker.createUses[a].first.m_declarationIndex, tracker.createUses[a].first.m_range, range);
+        this->currentContext()->createUse(tracker.createUses[a].m_declarationIndex, tracker.createUses[a].m_range);
       }
-      
     }
 
     LanguageSpecificUseBuilderBase::closeContext();

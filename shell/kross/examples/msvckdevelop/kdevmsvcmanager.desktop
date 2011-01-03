@@ -67,5 +67,5 @@ X-KDE-Library=KDevMSVCManager/KDevMSVCManager.py
 X-KDE-PluginInfo-Name=KDevMSVCManager
 X-KDevelop-PluginType=Kross
 X-KDevelop-FileManager=MSVC
-X-KDevelop-Version=10
+X-KDevelop-Version=11
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager

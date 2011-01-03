@@ -28,7 +28,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
-#include <ktexteditor/smartinterface.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
@@ -43,17 +42,14 @@
 #include <qtimer.h>
 #include <qapplication.h>
 
+#include "contextbrowser.h"
+
 using namespace KDevelop;
 using namespace KTextEditor;
 
-static QWidget* masterWidget(QWidget* w) {
-  while(w && w->parentWidget())
-    w = w->parentWidget();
-  return w;
-}
-
-EditorViewWatcher::EditorViewWatcher(QWidget* sameWindow) : m_childrenOf(masterWidget(sameWindow)) {
-    
+EditorViewWatcher::EditorViewWatcher(QObject* parent)
+    : QObject(parent)
+{
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentCreated(KDevelop::IDocument*)));
     foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
         documentCreated(document);
@@ -65,8 +61,7 @@ void EditorViewWatcher::documentCreated( KDevelop::IDocument* document ) {
         connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
         foreach(KTextEditor::View* view, textDocument->views()) {
             Q_ASSERT(view->parentWidget());
-//             if(!m_childrenOf || masterWidget(view) == m_childrenOf)
-                addViewInternal(view);
+            addViewInternal(view);
         }
     }
 }
@@ -86,9 +81,7 @@ void EditorViewWatcher::viewDestroyed(QObject* view) {
 
 void EditorViewWatcher::viewCreated(KTextEditor::Document* /*doc*/, KTextEditor::View* view) {
     Q_ASSERT(view->parentWidget());
-    //The test doesn't work porperly at this point
-//     if(!m_childrenOf || masterWidget(view) == m_childrenOf)
-        addViewInternal(view);
+    addViewInternal(view);
 }
 
 QList<KTextEditor::View*> EditorViewWatcher::allViews() {
@@ -100,7 +93,7 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
         emit startDelayedBrowsing(m_browingStartedInView);
 }
 
-BrowseManager::BrowseManager(ContextBrowserView* controller) : QObject(controller), m_view(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
+BrowseManager::BrowseManager(ContextBrowserPlugin* controller) : QObject(controller), m_plugin(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
     
@@ -158,7 +151,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
         
         if(!m_browsing)
-            m_view->setAllowBrowsing(true); 
+            m_plugin->setAllowBrowsing(true); 
         
     }
     
@@ -168,7 +161,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) || 
        (focusEvent && focusEvent->lostFocus())) {
         if(!m_browsing)
-            m_view->setAllowBrowsing(false);
+            m_plugin->setAllowBrowsing(false);
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
     }
@@ -190,9 +183,6 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         
         KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
         if(textCursor.isValid()) {
-            SmartInterface* iface = dynamic_cast<SmartInterface*>(view->document());
-            if (!iface) return false;
-            
             ///@todo find out why this is needed, fix the code in kate
             if(textCursor.column() > 0)
                 textCursor.setColumn(textCursor.column()-1);
@@ -215,7 +205,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 KDevelop::DUChainReadLocker lock( DUChain::lock() );
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
                 
-                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains(SimpleCursor(textCursor))) {
+                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(SimpleCursor(textCursor)))) {
                     ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
 
                     bool foundBetter = false;
@@ -248,7 +238,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 
                 if( foundDeclaration ) {
                     jumpTo.first = foundDeclaration->url().toUrl();
-                    jumpTo.second = foundDeclaration->range().start;
+                    jumpTo.second = foundDeclaration->rangeInCurrentRevision().start;
                 }
             }
             if(jumpTo.first.isValid() && jumpTo.second.isValid()) {
@@ -306,12 +296,12 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
 
-    connect(view, SIGNAL(navigateLeft()), m_view, SLOT(navigateLeft()));
-    connect(view, SIGNAL(navigateRight()), m_view, SLOT(navigateRight()));
-    connect(view, SIGNAL(navigateUp()), m_view, SLOT(navigateUp()));
-    connect(view, SIGNAL(navigateDown()), m_view, SLOT(navigateDown()));
-    connect(view, SIGNAL(navigateAccept()), m_view, SLOT(navigateAccept()));
-    connect(view, SIGNAL(navigateBack()), m_view, SLOT(navigateBack()));
+    connect(view, SIGNAL(navigateLeft()), m_plugin, SLOT(navigateLeft()));
+    connect(view, SIGNAL(navigateRight()), m_plugin, SLOT(navigateRight()));
+    connect(view, SIGNAL(navigateUp()), m_plugin, SLOT(navigateUp()));
+    connect(view, SIGNAL(navigateDown()), m_plugin, SLOT(navigateDown()));
+    connect(view, SIGNAL(navigateAccept()), m_plugin, SLOT(navigateAccept()));
+    connect(view, SIGNAL(navigateBack()), m_plugin, SLOT(navigateBack()));
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
@@ -334,7 +324,8 @@ void BrowseManager::setBrowsing(bool enabled) {
     }
 }
 
-BrowseManager::Watcher::Watcher(BrowseManager* manager) : EditorViewWatcher(masterWidget(manager->m_view)), m_manager(manager) {
+BrowseManager::Watcher::Watcher(BrowseManager* manager)
+    : EditorViewWatcher(manager), m_manager(manager) {
     foreach(KTextEditor::View* view, allViews())
         m_manager->applyEventFilter(view, true);
 }

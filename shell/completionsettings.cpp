@@ -24,3 +24,8 @@ CompletionSettings& CompletionSettings::self() {
     return settings;
 }
 
+QStringList CompletionSettings::todoMarkerWords() const
+{
+    KConfigGroup group(KGlobal::config(), "Language Support");
+    return group.readEntry("todoMarkerWords", m_todoMarkerWords);
+}

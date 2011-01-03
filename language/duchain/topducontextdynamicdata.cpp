@@ -141,7 +141,7 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
 TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_deleting(false), m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_mappedFile(0), m_mappedData(0), m_mappedDataSize(0), m_itemRetrievalForbidden(false) {
 }
 
-void KDevelop::TopDUContextDynamicData::clearContextsAndDeclartions() {
+void KDevelop::TopDUContextDynamicData::clearContextsAndDeclarations() {
   //Due to template specialization it's possible that a declaration is not reachable through the normal context structure.
   //For that reason we have to check here, and delete all remaining declarations.
   for(int a = 0; a < m_temporaryContexts.size(); ++a)
@@ -158,7 +158,7 @@ void KDevelop::TopDUContextDynamicData::clearContextsAndDeclartions() {
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
-  clearContextsAndDeclartions();
+  clearContextsAndDeclarations();
   unmap();
 }
 

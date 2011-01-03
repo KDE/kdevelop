@@ -74,6 +74,7 @@ public:
  */
 class NativeAppConfigType : public KDevelop::LaunchConfigurationType
 {
+Q_OBJECT
 public:
     NativeAppConfigType();
 
@@ -87,8 +88,11 @@ public:
                                    KDevelop::ProjectBaseItem* item ) const;
     void configureLaunchFromCmdLineArguments ( KConfigGroup cfg,
                                                const QStringList& args ) const;
+    QMenu* launcherSuggestions();
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
+public slots:
+    void suggestionTriggered();
 };
 #endif
 

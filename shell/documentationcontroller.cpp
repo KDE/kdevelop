@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 #include "documentationcontroller.h"
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
+#include <interfaces/idocumentationproviderprovider.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -28,11 +30,11 @@
 #include <KDebug>
 #include <QAction>
 
-#include "documentationview.h"
-#include <language/interfaces/codecontext.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <documentation/documentationview.h>
 
 using namespace KDevelop;
 
@@ -122,15 +124,29 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {
     QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProvider");
+    QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProviderProvider");
     
     QList<IDocumentationProvider*> ret;
+    foreach(IPlugin* p, pluginsProvider)
+    {
+        IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
+        if (!docProvider) {
+            kWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca4";
+            continue;
+        }
+        ret.append(docProvider->providers());
+    }
     
     foreach(IPlugin* p, plugins)
     {
-        IDocumentationProvider *doc=dynamic_cast<IDocumentationProvider*>(p);
-        Q_ASSERT(doc);
+        IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
+        if (!doc) {
+            kWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca4";
+            continue;
+        }
         ret.append(doc);
     }
+
     return ret;
 }
 
@@ -148,6 +164,11 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
         return;
     }
     view->showDocumentation(doc);
+}
+
+void DocumentationController::changedDocumentationProviders()
+{
+    emit providersChanged();
 }
 
 #include "documentationcontroller.moc"

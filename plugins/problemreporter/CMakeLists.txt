@@ -9,11 +9,12 @@ set(kdevproblemreporter_PART_SRCS
     problemwidget.cpp
     problemmodel.cpp
     problemhighlighter.cpp
+    watcheddocumentset.cpp
 #modeltest.cpp
 )
 
 kde4_add_plugin(kdevproblemreporter ${kdevproblemreporter_PART_SRCS})
-target_link_libraries(kdevproblemreporter ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatformlanguage kdevplatforminterfaces kdevplatformutil)
+target_link_libraries(kdevproblemreporter ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatformlanguage kdevplatforminterfaces kdevplatformutil kdevplatformproject)
 
 install(TARGETS kdevproblemreporter DESTINATION ${PLUGIN_INSTALL_DIR})
 

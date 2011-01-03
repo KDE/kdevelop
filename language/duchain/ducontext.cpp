@@ -25,9 +25,6 @@
 #include <QSet>
 
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
-
-#include "../editor/editorintegrator.h"
 
 #include "ducontextdata.h"
 #include "declaration.h"
@@ -72,6 +69,10 @@ DEFINE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, LocalIndexedDeclarat
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 REGISTER_DUCHAIN_ITEM(DUContext);
+
+DUChainVisitor::~DUChainVisitor()
+{
+}
 
 //We leak here, to prevent a possible crash during destruction, as the destructor of Identifier is not safe to be called after the duchain has been destroyed
 Identifier& globalImportIdentifier() {
@@ -222,73 +223,6 @@ DUContext* IndexedDUContext::context() const {
   return ctx->m_dynamicData->getContextForIndex(m_contextIndex);
 }
 
-void DUContext::synchronizeUsesFromSmart() const
-{
-  DUCHAIN_D(DUContext);
-
-  if(m_dynamicData->m_rangesForUses.isEmpty() || !m_dynamicData->m_rangesChanged)
-    return;
-
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
-
-  for(unsigned int a = 0; a < d->m_usesSize(); a++)
-    if(m_dynamicData->m_rangesForUses[a]) ///@todo somehow signalize the change
-      const_cast<Use&>(d->m_uses()[a]).m_range = SimpleRange(*m_dynamicData->m_rangesForUses[a]);
-
-  m_dynamicData->m_rangesChanged = false;
-}
-
-void DUContext::synchronizeUsesToSmart() const
-{
-  DUCHAIN_D(DUContext);
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-    return;
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
-
-  // TODO: file close race? from here
-  KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( smartRange()->document() );
-  Q_ASSERT(iface);
-
-  // TODO: file close race to here
-  QMutexLocker l(iface->smartMutex());
-
-  for(unsigned int a = 0; a < d->m_usesSize(); a++) {
-    if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
-      l.unlock();
-      l.relock();
-    }
-    if(m_dynamicData->m_rangesForUses[a]) {
-      m_dynamicData->m_rangesForUses[a]->start() = d->m_uses()[a].m_range.start.textCursor();
-      m_dynamicData->m_rangesForUses[a]->end() = d->m_uses()[a].m_range.end.textCursor();
-    }else{
-      kDebug() << "bad smart-range";
-    }
-  }
-}
-
-void DUContext::rangePositionChanged(KTextEditor::SmartRange* range)
-{
-  if(range != smartRange())
-    m_dynamicData->m_rangesChanged = true;
-}
-
-void DUContext::rangeDeleted(KTextEditor::SmartRange* range)
-{
-  if(range == smartRange()) {
-    DocumentRangeObject::rangeDeleted(range);
-  } else {
-    range->removeWatcher(this);
-    int index = m_dynamicData->m_rangesForUses.indexOf(range);
-    if(index != -1) {
-      d_func_dynamic()->m_usesList()[index].m_range = SimpleRange(*range);
-      m_dynamicData->m_rangesForUses[index] = 0;
-    }
-
-    if(m_dynamicData->m_rangesForUses.count(0) == m_dynamicData->m_rangesForUses.size())
-      m_dynamicData->m_rangesForUses.clear();
-  }
-}
-
 void DUContextDynamicData::enableLocalDeclarationsHash(DUContext* ctx, const Identifier& currentIdentifier, Declaration* currentDecl)
 {
   m_hasLocalDeclarationsHash = true;
@@ -363,6 +297,10 @@ void DUContextDynamicData::removeDeclarationFromHash(const Identifier& identifie
       disableLocalDeclarationsHash();
 }
 
+inline bool isContextTemporary(uint index) {
+  return index > (0xffffffff/2);
+}
+
 void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 {
   // The definition may not have its identifier set when it's assigned... allow dupes here, TODO catch the error elsewhere
@@ -371,16 +309,10 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 
 //     m_localDeclarations.append(newDeclaration);
 
-  if(m_indexInTopContext < (0xffffffff/2)) {
-    //If this context is not temporary, added declarations shouldn't be either
-    Q_ASSERT(newDeclaration->ownIndex() < (0xffffffff/2));
-  }
-  if(m_indexInTopContext > (0xffffffff/2)) {
-    //If this context is temporary, added declarations should be as well
-    Q_ASSERT(newDeclaration->ownIndex() > (0xffffffff/2));
-  }
+  //If this context is temporary, added declarations should be as well, and viceversa
+  Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(newDeclaration->ownIndex()));
 
-  SimpleCursor start = newDeclaration->range().start;
+  CursorInRevision start = newDeclaration->range().start;
 ///@todo Do binary search to find the position
   bool inserted = false;
   for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
@@ -437,14 +369,8 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   LocalIndexedDUContext indexed(context->m_dynamicData->m_indexInTopContext);
 
-  if(m_indexInTopContext < (0xffffffff/2)) {
-    //If this context is not temporary, added declarations shouldn't be either
-    Q_ASSERT(indexed.localIndex() < (0xffffffff/2));
-  }
-  if(m_indexInTopContext > (0xffffffff/2)) {
-    //If this context is temporary, added declarations should be as well
-    Q_ASSERT(indexed.localIndex() > (0xffffffff/2));
-  }
+  //If this context is temporary, added declarations should be as well, and viceversa
+  Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(indexed.localIndex()));
 
   bool inserted = false;
 
@@ -530,7 +456,7 @@ DUContext::DUContext(DUContextData& data) : DUChainBase(data), m_dynamicData(new
 }
 
 
-DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous)
+DUContext::DUContext(const RangeInRevision& range, DUContext* parent, bool anonymous)
   : DUChainBase(*new DUContextData(), range), m_dynamicData(new DUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
@@ -565,7 +491,7 @@ bool DUContext::isAnonymous() const {
   return d_func()->m_anonymousInParent || (m_dynamicData->m_parentContext && m_dynamicData->m_parentContext->isAnonymous());
 }
 
-DUContext::DUContext( DUContextData& dd, const SimpleRange& range, DUContext * parent, bool anonymous )
+DUContext::DUContext( DUContextData& dd, const RangeInRevision& range, DUContext * parent, bool anonymous )
   : DUChainBase(dd, range), m_dynamicData(new DUContextDynamicData(this))
 {
   if(parent)
@@ -619,8 +545,6 @@ DUContext::~DUContext( )
 
   if(!topContext()->deleting() || !topContext()->isOnDisk())
     deleteUses();
-  else
-    clearUseSmartRanges();
 
   deleteLocalDeclarations();
 
@@ -703,7 +627,7 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier, const CursorInRevision & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
 {
   ENSURE_CAN_READ
 
@@ -722,13 +646,13 @@ bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* conte
     return false;
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
   {
      QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
      struct Checker {
-       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const SimpleCursor & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
+       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const CursorInRevision & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
        }
 
        Declaration* check(Declaration* declaration) {
@@ -758,7 +682,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
 
        SearchFlags m_flags;
        const AbstractType::Ptr& m_dataType;
-       const SimpleCursor& m_position;
+       const CursorInRevision& m_position;
        DUContext::ContextType m_ownType;
      };
 
@@ -826,7 +750,7 @@ bool DUContext::foundEnough( const DeclarationList& ret, SearchFlags flags ) con
     return false;
 }
 
-bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const
+bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const CursorInRevision & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const
 {
   if(depth > maxParentDepth) {
     kDebug() << "maximum depth reached in" << scopeIdentifier(true);
@@ -906,7 +830,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(KDevelop::QualifiedIde
   const DUContext* current = this;
   while(current) {
     SearchItem::PtrList aliasedIdentifiers;
-    current->applyAliases(identifiers, aliasedIdentifiers, SimpleCursor::invalid(), true, false);
+    current->applyAliases(identifiers, aliasedIdentifiers, CursorInRevision::invalid(), true, false);
     current->applyUpwardsAliases(identifiers, source);
     
     current = current->parentContext();
@@ -919,7 +843,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(KDevelop::QualifiedIde
   return ret;
 }
 
-QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -932,7 +856,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   return ret.toList();
 }
 
-bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*/ ) const
+bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*position*/ ) const
 {
   ENSURE_CAN_READ
 
@@ -957,7 +881,7 @@ bool DUContext::addIndirectImport(const DUContext::Import& import) {
   return false;
 }
 
-void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool /*temporary*/ )
+void DUContext::addImportedParentContext( DUContext * context, const CursorInRevision& position, bool anonymous, bool /*temporary*/ )
 {
   ENSURE_CAN_WRITE
 
@@ -982,7 +906,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  Import import(context, this, SimpleCursor::invalid());
+  Import import(context, this, CursorInRevision::invalid());
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a] == import) {
@@ -1030,7 +954,7 @@ QVector<DUContext*> DUContext::importers() const
   return ret;
 }
 
-DUContext * DUContext::findContext( const SimpleCursor& position, DUContext* parent) const
+DUContext * DUContext::findContext( const CursorInRevision& position, DUContext* parent) const
 {
   ENSURE_CAN_READ
 
@@ -1062,7 +986,7 @@ bool DUContext::parentContextOf(DUContext* context) const
   return false;
 }
 
-QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents) const
+QList< QPair<Declaration*, int> > DUContext::allDeclarations(const CursorInRevision& position, const TopDUContext* topContext, bool searchInParents) const
 {
   ENSURE_CAN_READ
 
@@ -1089,7 +1013,7 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   return ret;
 }
 
-void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
+void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const CursorInRevision& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
 {
   if((currentDepth > 300 && currentDepth < 1000) || currentDepth > 1300) {
     kDebug() << "too much depth";
@@ -1138,7 +1062,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         if( position.isValid() && import->position.isValid() && position < import->position )
           continue;
 
-        context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
+        context->mergeDeclarationsInternal(definitions, CursorInRevision::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
       }
     }
     
@@ -1259,7 +1183,7 @@ void DUContext::setType(ContextType type)
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
-QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const SimpleCursor& position, const TopDUContext* topContext, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const CursorInRevision& position, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -1275,38 +1199,6 @@ void DUContext::deleteUse(int index)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_usesList().remove(index);
-
-  if(!m_dynamicData->m_rangesForUses.isEmpty()) {
-    if(m_dynamicData->m_rangesForUses[index]) {
-      EditorIntegrator editor;
-      editor.setCurrentUrl(url(), (bool)smartRange());
-      LockedSmartInterface iface = editor.smart();
-      if (iface) {
-        m_dynamicData->m_rangesForUses[index]->removeWatcher(this);
-        EditorIntegrator::releaseRange(m_dynamicData->m_rangesForUses[index]);
-      }
-    }
-    m_dynamicData->m_rangesForUses.remove(index);
-  }
-}
-
-QVector<KTextEditor::SmartRange*> DUContext::takeUseRanges()
-{
-  ENSURE_CAN_WRITE
-  QVector<KTextEditor::SmartRange*> ret = m_dynamicData->m_rangesForUses;
-
-  foreach(KTextEditor::SmartRange* range, ret)
-    if(range)
-      range->removeWatcher(this);
-
-  m_dynamicData->m_rangesForUses.clear();
-  return ret;
-}
-
-QVector<KTextEditor::SmartRange*> DUContext::useRanges()
-{
-  ENSURE_CAN_READ
-  return m_dynamicData->m_rangesForUses;
 }
 
 void DUContext::deleteUses()
@@ -1315,8 +1207,6 @@ void DUContext::deleteUses()
 
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_usesList().clear();
-
-  clearUseSmartRanges();
 }
 
 void DUContext::deleteUsesRecursively()
@@ -1341,15 +1231,15 @@ DUContext* DUContext::specialize(IndexedInstantiationInformation /*specializatio
   return this;
 }
 
-SimpleCursor DUContext::importPosition(const DUContext* target) const
+CursorInRevision DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  Import import(const_cast<DUContext*>(target), this, SimpleCursor::invalid());
+  Import import(const_cast<DUContext*>(target), this, CursorInRevision::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
-  return SimpleCursor::invalid();
+    return CursorInRevision::invalid();
 }
 
 QVector<DUContext::Import> DUContext::importedParentContexts() const
@@ -1361,7 +1251,7 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
   return ret;
 }
 
-void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
+void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const CursorInRevision& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
   findLocalDeclarationsInternal(globalImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
@@ -1387,7 +1277,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
             NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
             identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
           }else{
-            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().textRange();
+            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange().textRange();
           }
         }
       }
@@ -1458,7 +1348,6 @@ const Use* DUContext::uses() const
 {
   ENSURE_CAN_READ
 
-  synchronizeUsesFromSmart();
   return d_func()->m_uses();
 }
 
@@ -1472,7 +1361,7 @@ bool usesRangeLessThan(const Use& left, const Use& right)
   return left.m_range.start < right.m_range.start;
 }
 
-int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore)
+int DUContext::createUse(int declarationIndex, const RangeInRevision& range, int insertBefore)
 {
   DUCHAIN_D_DYNAMIC(DUContext);
   ENSURE_CAN_WRITE
@@ -1494,77 +1383,14 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
   }
 
   d->m_usesList().insert(insertBefore, use);
-  if(smartRange) {
-    ///When this assertion triggers, then the updated context probably was not smart-converted before processing. @see SmartConverter
-    Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);
-    m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
-    smartRange->addWatcher(this);
-//     smartRange->setWantsDirectChanges(true);
-
-    d->m_usesList()[insertBefore].m_range = SimpleRange(*smartRange);
-  }else{
-    // This can happen eg. when a document is closed during its parsing, and has no ill effects.
-    //Q_ASSERT(m_dynamicData->m_rangesForUses.isEmpty());
-  }
 
   return insertBefore;
 }
 
-KTextEditor::SmartRange* DUContext::useSmartRange(int useIndex)
-{
-  ENSURE_CAN_READ
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-    return 0;
-  else{
-    if(useIndex >= 0 && useIndex < m_dynamicData->m_rangesForUses.size())
-      return m_dynamicData->m_rangesForUses.at(useIndex);
-    else
-      return 0;
-  }
-}
-
-
-void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
+void DUContext::changeUseRange(int useIndex, const KDevelop::RangeInRevision& range)
 {
   ENSURE_CAN_WRITE
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-      m_dynamicData->m_rangesForUses.insert(0, d_func()->m_usesSize(), 0);
-
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d_func()->m_usesSize());
-
-  if(m_dynamicData->m_rangesForUses[useIndex]) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl(url(), (bool)range);
-    LockedSmartInterface iface = editor.smart();
-    if (iface) {
-      m_dynamicData->m_rangesForUses[useIndex]->removeWatcher(this);
-      EditorIntegrator::releaseRange(m_dynamicData->m_rangesForUses[useIndex]);
-    }
-  }
-
-  m_dynamicData->m_rangesForUses[useIndex] = range;
-  d_func_dynamic()->m_usesList()[useIndex].m_range = SimpleRange(*range);
-  range->addWatcher(this);
-//   range->setWantsDirectChanges(true);
-}
-
-void DUContext::clearUseSmartRanges()
-{
-  ENSURE_CAN_WRITE
-
-  if (!m_dynamicData->m_rangesForUses.isEmpty()) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl(url(), (bool)smartRange());
-    LockedSmartInterface iface = editor.smart();
-    if (iface) {
-      foreach (SmartRange* range, m_dynamicData->m_rangesForUses) {
-        range->removeWatcher(this);
-        EditorIntegrator::releaseRange(range);
-      }
-    }
-
-    m_dynamicData->m_rangesForUses.clear();
-  }
+  d_func_dynamic()->m_usesList()[useIndex].m_range = range;
 }
 
 void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
@@ -1574,7 +1400,7 @@ void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 }
 
 
-DUContext * DUContext::findContextAt(const SimpleCursor & position, bool includeRightBorder) const
+DUContext * DUContext::findContextAt(const CursorInRevision & position, bool includeRightBorder) const
 {
   ENSURE_CAN_READ
   
@@ -1592,7 +1418,7 @@ DUContext * DUContext::findContextAt(const SimpleCursor & position, bool include
   return const_cast<DUContext*>(this);
 }
 
-Declaration * DUContext::findDeclarationAt(const SimpleCursor & position) const
+Declaration * DUContext::findDeclarationAt(const CursorInRevision & position) const
 {
   ENSURE_CAN_READ
 
@@ -1606,7 +1432,7 @@ Declaration * DUContext::findDeclarationAt(const SimpleCursor & position) const
   return 0;
 }
 
-DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
+DUContext* DUContext::findContextIncluding(const RangeInRevision& range) const
 {
   ENSURE_CAN_READ
 
@@ -1620,11 +1446,9 @@ DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
   return const_cast<DUContext*>(this);
 }
 
-int DUContext::findUseAt(const SimpleCursor & position) const
+int DUContext::findUseAt(const CursorInRevision & position) const
 {
   ENSURE_CAN_READ
-
-  synchronizeUsesFromSmart();
 
   if (!range().contains(position))
     return -1;
@@ -1690,16 +1514,13 @@ QWidget* DUContext::createNavigationWidget(Declaration* /*decl*/, TopDUContext* 
 
 void DUContext::squeeze()
 {
-  if(!m_dynamicData->m_rangesForUses.isEmpty())
-    m_dynamicData->m_rangesForUses.squeeze();
-
   FOREACH_FUNCTION(const LocalIndexedDUContext& child, d_func()->m_childContexts)
     child.data(topContext())->squeeze();
 }
 
-QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
+QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
 {
-  QList<SimpleRange> ret;
+  QList<RangeInRevision> ret;
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == declarationIndex)
       if(!noEmptyUses || !context->uses()[a].m_range.isEmpty())
@@ -1707,25 +1528,6 @@ QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmpt
 
   foreach(DUContext* child, context->childContexts())
     ret += allUses(child, declarationIndex, noEmptyUses);
-
-  return ret;
-}
-
-QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex)
-{
-  QList<KTextEditor::SmartRange*> ret;
-
-  const Use* uses(context->uses());
-
-  for(int a = 0; a < context->usesCount(); ++a)
-    if(uses[a].m_declarationIndex == declarationIndex) {
-      KTextEditor::SmartRange* range = context->useSmartRange(a);
-      if(range)
-        ret << range;
-    }
-
-  foreach(DUContext* child, context->childContexts())
-    ret += allSmartUses(child, declarationIndex);
 
   return ret;
 }
@@ -1842,7 +1644,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
     next[a]->addToEachNode(other);
 }
 
-DUContext::Import::Import(DUContext* _context, const DUContext* importer, const SimpleCursor& _position) : position(_position) {
+DUContext::Import::Import(DUContext* _context, const DUContext* importer, const CursorInRevision& _position) : position(_position) {
   if(_context && _context->owner() && (_context->owner()->specialization().index() || (importer && importer->topContext() != _context->topContext()))) {
     m_declaration = _context->owner()->id();
   }else{
@@ -1850,7 +1652,7 @@ DUContext::Import::Import(DUContext* _context, const DUContext* importer, const 
   }
 }
 
-DUContext::Import::Import(const DeclarationId& id, const SimpleCursor& _position) : position(_position) {
+DUContext::Import::Import(const DeclarationId& id, const CursorInRevision& _position) : position(_position) {
   m_declaration = id;
 }
 
@@ -1868,6 +1670,23 @@ DUContext* DUContext::Import::context(const KDevelop::TopDUContext* topContext, 
 
 bool DUContext::Import::isDirect() const {
   return m_context.isValid();
+}
+
+void DUContext::visit(DUChainVisitor& visitor)
+{
+  visitor.visit(this);
+  
+  TopDUContext* top = topContext();
+  
+  {
+    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+    
+    FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
+      visitor.visit(decl.data(top));
+  }
+    
+  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
+  ctx.data(top)->visit(visitor);
 }
 
 }

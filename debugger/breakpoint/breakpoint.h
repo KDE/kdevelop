@@ -27,7 +27,7 @@
 
 class KConfigGroup;
 namespace KTextEditor {
-class SmartCursor;
+class MovingCursor;
 }
 namespace KDevelop
 {
@@ -90,8 +90,8 @@ public:
     
     bool enabled() const;
     
-    void setSmartCursor(KTextEditor::SmartCursor *cursor);
-    KTextEditor::SmartCursor *smartCursor() const;
+    void setMovingCursor(KTextEditor::MovingCursor *cursor);
+    KTextEditor::MovingCursor *movingCursor() const;
 
     void setIgnoreHits(int c);
     int ignoreHits() const;
@@ -120,7 +120,7 @@ protected:
     KUrl m_url;
     int m_line;
     QString m_condition;
-    KTextEditor::SmartCursor *m_smartCursor;
+    KTextEditor::MovingCursor *m_movingCursor;
     int m_ignoreHits;
     QString m_expression;
 

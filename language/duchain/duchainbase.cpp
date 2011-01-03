@@ -23,10 +23,19 @@
 #include <QThreadStorage>
 
 #include "duchainpointer.h"
+#include "parsingenvironment.h"
 #include "indexedstring.h"
 #include "topducontext.h"
 #include "duchainregister.h"
 #include <qthread.h>
+#include <editor/simplerange.h>
+#include <interfaces/foregroundlock.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <backgroundparser/backgroundparser.h>
+#include <backgroundparser/documentchangetracker.h>
+#include <ktexteditor/movinginterface.h>
+#include <editor/persistentmovingrange.h>
 
 namespace KDevelop
 {
@@ -36,25 +45,28 @@ uint DUChainBaseData::classSize() const {
   return DUChainItemSystem::self().dataClassSize(*this);
 }
 
-DUChainBase::DUChainBase(const SimpleRange& range)
-  : KDevelop::DocumentRangeObject(*new DUChainBaseData, range), m_ptr( 0L )
+DUChainBase::DUChainBase(const RangeInRevision& range)
+  : d_ptr(new DUChainBaseData), m_ptr( 0L )
 {
+  d_func_dynamic()->m_range = range;
   d_func_dynamic()->setClassId(this);
 }
 
-DUChainBase::DUChainBase( DUChainBaseData & dd, const SimpleRange& range )
-  : KDevelop::DocumentRangeObject( dd, range ), m_ptr( 0 )
+DUChainBase::DUChainBase( DUChainBaseData & dd, const RangeInRevision& range )
+  : d_ptr( &dd ), m_ptr( 0 )
 {
+  d_func_dynamic()->m_range = range;
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd )
-  : KDevelop::DocumentRangeObject( dd ), m_ptr( 0 )
+  : d_ptr( &dd ), m_ptr( 0 )
 {
 }
 
 DUChainBase::DUChainBase( DUChainBase& rhs )
-  : KDevelop::DocumentRangeObject( rhs ), m_ptr( 0 )
+  : d_ptr( new DUChainBaseData(*rhs.d_func()) ), m_ptr( 0 )
 {
+  d_func_dynamic()->setClassId(this);
 }
 
 IndexedString DUChainBase::url() const
@@ -66,33 +78,47 @@ IndexedString DUChainBase::url() const
     return IndexedString();
 }
 
-void DUChainBase::setData(DocumentRangeObjectData* data, bool constructorCalled)
+void DUChainBase::setData(DUChainBaseData* data, bool constructorCalled)
 {
+  Q_ASSERT(data);
+  Q_ASSERT(d_ptr);
+  
   if(constructorCalled)
     KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
   
-  DocumentRangeObject::setData(data, constructorCalled);
+  if(d_ptr->m_dynamic) // If the data object isn't dynamic, then it is part of a central repository, and cannot be deleted here.
+    delete d_ptr;
+  
+  d_ptr = data;
 }
 
 DUChainBase::~DUChainBase()
 {
-  if(d_func()->m_dynamic)
-    KDevelop::DUChainItemSystem::self().callDestructor(d_func_dynamic());
-  
   if (m_ptr)
     m_ptr->m_base = 0;
+
+  if(d_ptr->m_dynamic)
+  {
+    KDevelop::DUChainItemSystem::self().callDestructor(d_ptr);
+    delete d_ptr;
+    d_ptr = 0;
+  }
 }
 
 TopDUContext* DUChainBase::topContext() const
 {
+  ///@todo Move the reference to the top-context right into this class, as it's common to all inheriters
   return 0;
 }
 
+namespace {
+  QMutex weakPointerMutex;
+};
+
 const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
 {
-  QMutexLocker lock(mutex());
-
   if (!m_ptr) {
+    QMutexLocker lock(&weakPointerMutex); // The mutex is used to make sure we don't create m_ptr twice at the same time
     m_ptr = new DUChainPointerData(const_cast<DUChainBase*>(this));
     m_ptr->m_base = const_cast<DUChainBase*>(this);
   }
@@ -104,14 +130,6 @@ void DUChainBase::rebuildDynamicData(DUContext* parent, uint ownIndex)
 {
     Q_UNUSED(parent)
     Q_UNUSED(ownIndex)
-}
-
-void DUChainBase::aboutToWriteData() {
-  makeDynamic();
-}
-
-bool DUChainBase::canWriteData() const {
-  return d_func()->m_dynamic;
 }
 
 void DUChainBase::makeDynamic() {
@@ -131,12 +149,94 @@ void DUChainBase::makeDynamic() {
   }
 }
 
+RangeInRevision DUChainBase::range() const
+{
+    return d_func()->m_range;
+}
+
+SimpleRange DUChainBase::rangeInCurrentRevision() const
+{
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
+    
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
+    {
+      qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
+      return tracker->transformToCurrentRevision(d_func()->m_range, revision);
+    }
+    
+    // If the document is not open, we can simply cast the range over, as no translation can be done
+    return d_func()->m_range.castToSimpleRange();
+}
+
+PersistentMovingRange::Ptr DUChainBase::createRangeMoving() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    return PersistentMovingRange::Ptr(new PersistentMovingRange(rangeInCurrentRevision(), url()));
+}
+
+CursorInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleCursor& cursor) const
+{
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
+    
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
+    {
+      qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
+      return tracker->transformToRevision(cursor, revision);
+    }
+    
+    return CursorInRevision::castFromSimpleCursor(cursor);
+}
+
+RangeInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleRange& range) const
+{
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
+    
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
+    {
+      qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
+      return tracker->transformToRevision(range, revision);
+    }
+    
+    return RangeInRevision::castFromSimpleRange(range);
+}
+
+SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevision& range) const
+{
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
+    
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
+    {
+      qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
+      return tracker->transformToCurrentRevision(range, revision);
+    }
+    
+    return range.castToSimpleRange();
+}
+
+SimpleCursor DUChainBase::transformFromLocalRevision(const KDevelop::CursorInRevision& cursor) const
+{
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
+    
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
+    {
+      qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
+      return tracker->transformToCurrentRevision(cursor, revision);
+    }
+    
+    return cursor.castToSimpleCursor();
+}
+
+void DUChainBase::setRange(const RangeInRevision& range)
+{
+    d_func_dynamic()->m_range = range;
+}
+
 QMutex shouldCreateConstantDataStorageMutex;
-QSet<Qt::HANDLE> shouldCreateConstantDataStorage;
+QSet<QThread*> shouldCreateConstantDataStorage;
 
 bool DUChainBaseData::shouldCreateConstantData() {
   shouldCreateConstantDataStorageMutex.lock();
-  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThreadId() );
+  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThread() );
   shouldCreateConstantDataStorageMutex.unlock();
   return ret;
 }
@@ -145,9 +245,9 @@ void DUChainBaseData::setShouldCreateConstantData(bool should) {
   shouldCreateConstantDataStorageMutex.lock();
   
   if(should)
-    shouldCreateConstantDataStorage.insert(QThread::currentThreadId());
+    shouldCreateConstantDataStorage.insert(QThread::currentThread());
   else
-    shouldCreateConstantDataStorage.remove(QThread::currentThreadId());
+    shouldCreateConstantDataStorage.remove(QThread::currentThread());
   
   shouldCreateConstantDataStorageMutex.unlock();
 }

@@ -49,8 +49,10 @@ class ExternalScriptJob : public KDevelop::OutputJob
 public:
   ExternalScriptJob( ExternalScriptItem* item, QObject* parent );
   virtual void start();
-  virtual bool doKill();
   KDevelop::OutputModel* model();
+
+protected:
+  virtual bool doKill();
 
 private slots:
   void processError( QProcess::ProcessError );

@@ -84,7 +84,6 @@ void CodeCompletion::documentUrlChanged(KDevelop::IDocument* document)
   
   if(textDocument)
   {
-    unregisterDocument(textDocument);
     checkDocument(textDocument);
   }
 }
@@ -106,6 +105,8 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
 
 void CodeCompletion::checkDocument(Document* textDocument)
 {
+  unregisterDocument(textDocument);
+
   QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
   
   bool found=false;

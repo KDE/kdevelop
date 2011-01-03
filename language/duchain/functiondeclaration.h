@@ -60,9 +60,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public FunctionDeclarati
 {
 public:
   FunctionDeclaration(const FunctionDeclaration& rhs);
-  FunctionDeclaration(const SimpleRange& range, DUContext* context);
+  FunctionDeclaration(const RangeInRevision& range, DUContext* context);
   FunctionDeclaration(FunctionDeclarationData& data);
-  FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::SimpleRange&);
+  FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
   virtual ~FunctionDeclaration();
 
   virtual void setAbstractType(AbstractType::Ptr type);

@@ -23,8 +23,6 @@ Boston, MA 02110-1301, USA.
 */
 #include "iplugincontroller.h"
 
-#include <QtDesigner/QExtensionManager>
-
 #include <kservicetypetrader.h>
 #include "iplugin.h"
 

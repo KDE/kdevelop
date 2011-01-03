@@ -20,15 +20,18 @@
 #ifndef DUCHAINBASE_H
 #define DUCHAINBASE_H
 
-#include "../editor/documentrangeobject.h"
-#include "../editor/hashedstring.h"
+#include <language/editor/simplerange.h>
+#include <language/editor/rangeinrevision.h>
 #include "../languageexport.h"
 #include "appendedlist.h"
 #include "duchainpointer.h"
+#include <language/editor/persistentmovingrange.h>
 
 namespace KDevelop
 {
-
+class PersistentMovingRange;
+class SimpleCursor;
+class SimpleRange;
 class DUContext;
 class TopDUContext;
 class DUChainBase;
@@ -52,16 +55,31 @@ class IndexedString;
 ///This also means that every item that is "semantically" deleted, _MUST_ have dynamic data before its destruction.
 ///This also means that DUChainBaseData based items should never be cloned using memcpy, but rather always using the copy-constructor,
 ///even if both sides are constant.
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectData {
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData {
 public:
 
     DUChainBaseData() : classId(0) {
+      initializeAppendedLists();
     }
-    DUChainBaseData(const DUChainBaseData& rhs) : DocumentRangeObjectData(rhs), classId(rhs.classId) {
+    
+    DUChainBaseData(const DUChainBaseData& rhs) : m_range(rhs.m_range), classId(rhs.classId) {
+      initializeAppendedLists();
     }
+    
+    ~DUChainBaseData() {
+      freeAppendedLists();
+    }
+    
+    RangeInRevision m_range;
+    
+    APPENDED_LISTS_STUB(DUChainBaseData)
     
     uint classId;
 
+    bool isDynamic() const {
+      return m_dynamic;
+    }
+    
     /**
     * Internal setup for the data structure.
     *
@@ -80,11 +98,16 @@ public:
     void freeDynamicData() {
     }
     
-  ///Used to decide whether a constructed item should create constant data.
-  ///The default is "false", so dynamic data is created by default.
-  ///This is stored thread-locally.
-  static bool shouldCreateConstantData();
-  static void setShouldCreateConstantData(bool);
+    ///Used to decide whether a constructed item should create constant data.
+    ///The default is "false", so dynamic data is created by default.
+    ///This is stored thread-locally.
+    static bool shouldCreateConstantData();
+    static void setShouldCreateConstantData(bool);
+    
+    ///Returns whether initialized objects should be created as dynamic objects
+    static bool appendedListDynamicDefault() {
+      return !shouldCreateConstantData();
+    }
 };
 
 /**
@@ -94,7 +117,7 @@ public:
  * while the DUChain mutex is not held (\see DUChainPointer)
  */
 
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase : public KDevelop::DocumentRangeObject
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainBase
 {
 public:
   /**
@@ -103,7 +126,7 @@ public:
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    */
-  DUChainBase(const SimpleRange& range);
+  DUChainBase(const RangeInRevision& range);
   /// Destructor
   virtual ~DUChainBase();
 
@@ -131,8 +154,39 @@ public:
   
   ///This must only be used to change the storage-location or storage-kind(dynamic/constant) of the data, but
   ///the data must always be equal!
-  virtual void setData(DocumentRangeObjectData*, bool constructorCalled = true);
+  virtual void setData(DUChainBaseData*, bool constructorCalled = true);
   
+  ///Returns the range assigned to this object, in the document revision when this document was last parsed.
+  RangeInRevision range() const;
+
+  ///Changes the range assigned to this object, in the document revision when this document is parsed.
+  void setRange(const RangeInRevision& range);
+  
+  ///Returns the range assigned to this object, transformed into the current revision of the document.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  SimpleRange rangeInCurrentRevision() const;
+
+  ///Returns the range assigned to this object, transformed into the current revision of the document.
+  ///The returned object is unique at each call, so you can use it and change it in whatever way you want.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  PersistentMovingRange::Ptr createRangeMoving() const;
+  
+  ///Transforms the given cursor in the current document revision to its according position
+  ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
+  ///range() members in the duchain, but only for one duchain locking cycle.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  CursorInRevision transformToLocalRevision(const SimpleCursor& cursor) const;
+
+  ///Transforms the given range in the current document revision to its according position
+  ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
+  ///range() members in the duchain, but only for one duchain locking cycle.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  RangeInRevision transformToLocalRevision(const SimpleRange& range) const;
+
+  SimpleCursor transformFromLocalRevision(const CursorInRevision& cursor) const;
+  
+  SimpleRange transformFromLocalRevision(const RangeInRevision& range) const;
+
 protected:
   /**
    * Creates a duchain object that uses the data of the given one, and will not delete it on destruction.
@@ -147,15 +201,13 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  DUChainBase( DUChainBaseData& dd, const SimpleRange& range );
+  DUChainBase( DUChainBaseData& dd, const RangeInRevision& range );
 
   ///Called after loading to rebuild the dynamic data. If this is a context, this should recursively work on all sub-contexts.
   virtual void rebuildDynamicData(DUContext* parent, uint ownIndex);
   
-  void aboutToWriteData();
-  
-  //Reimplemented to make prevent DocumentRangeObject from writing the data when it is un-writable
-  virtual bool canWriteData() const;
+  /// Data pointer that is shared across all the inheritance hierarchy
+  DUChainBaseData* d_ptr;
 private:
   
   mutable KSharedPtr<DUChainPointerData> m_ptr;

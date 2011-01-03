@@ -58,3 +58,8 @@ void StandardVcsLocationWidget::textChanged(const QString& str)
 {
     emit changed();
 }
+
+QString KDevelop::StandardVcsLocationWidget::projectName() const
+{
+    return m_urlWidget->url().fileName();
+}

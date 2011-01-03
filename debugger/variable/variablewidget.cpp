@@ -255,6 +255,7 @@ void VariableTree::setupActions()
 
 Variable* VariableTree::selectedVariable() const
 {
+    if (selectionModel()->selectedRows().isEmpty()) return 0;
     TreeItem* item = collection()->itemForIndex(selectionModel()->selectedRows().first());
     if (!item) return 0;
     return dynamic_cast<Variable*>(item);

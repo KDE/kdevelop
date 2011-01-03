@@ -199,6 +199,16 @@ void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*windo
 {
 }
 
+bool KDevelop::IPlugin::hasError() const
+{
+    return false;
+}
+
+QString KDevelop::IPlugin::errorDescription() const
+{
+    return QString();
+}
+
 #include "iplugin.moc"
 
 

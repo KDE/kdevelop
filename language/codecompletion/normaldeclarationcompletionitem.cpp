@@ -33,13 +33,11 @@
 
 namespace KDevelop {
 
-const int normalBestMatchesCount = 5;
-
-///@todo Implement a proper duchain based shortening-scheme, and use it throughout the completion
+const int NormalDeclarationCompletionItem::normalBestMatchesCount = 5;
 //If this is true, the return-values of argument-hints will be just written as "..." if they are too long
-const bool shortenArgumentHintReturnValues = true;
-const int maximumArgumentHintReturnValueLength = 30;
-const int desiredTypeLength = 20;
+const bool NormalDeclarationCompletionItem::shortenArgumentHintReturnValues = true;
+const int NormalDeclarationCompletionItem::maximumArgumentHintReturnValueLength = 30;
+const int NormalDeclarationCompletionItem::desiredTypeLength = 20;
 
 NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl, KSharedPtr<CodeCompletionContext> context, int inheritanceDepth)
   : m_completionContext(context), m_declaration(decl), m_inheritanceDepth(inheritanceDepth) {
@@ -93,8 +91,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 
   document->replaceText(word, newText);
+  KTextEditor::Range newRange = word;
+  newRange.end().setColumn(newRange.start().column() + newText.length());
   
-  executed(document, word);
+  executed(document, newRange);
 }
 
 QWidget* NormalDeclarationCompletionItem::createExpandingWidget(const KDevelop::CodeCompletionModel* model) const
@@ -127,6 +127,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
+  
+  if(!m_declaration)
+    return QVariant();
 
   switch (role) {
     case Qt::DisplayRole:
@@ -201,7 +204,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       }
       break;
     }
-
   }
   return QVariant();
 }

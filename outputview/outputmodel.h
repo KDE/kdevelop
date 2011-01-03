@@ -34,9 +34,14 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QStandardItemModel
     Q_OBJECT
     public:
         OutputModel( QObject* parent = 0 );
+        virtual ~OutputModel();
+        
     public Q_SLOTS:
         void appendLine( const QString& );
         void appendLines( const QStringList& );
+        
+        void addPending();
+        
     private:
       class OutputModelPrivate* const d;
 };

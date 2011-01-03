@@ -50,15 +50,17 @@
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
+#include "workingsets/workingset.h"
 
 namespace KDevelop {
 
 class UiControllerPrivate {
 public:
     UiControllerPrivate(UiController *controller)
-    : cfgDlg(0), areasRestored(false), m_controller(controller)
+    : areasRestored(false), m_controller(controller)
     {
-        Core::self()->workingSetControllerInternal()->initializeController(m_controller);
+        if (Core::self()->workingSetControllerInternal())
+            Core::self()->workingSetControllerInternal()->initializeController(m_controller);
 
         QMap<QString, Sublime::Position> desired;
 
@@ -126,8 +128,6 @@ public:
 
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
-    KSettings::Dialog* cfgDlg;
-
     Sublime::MainWindow* activeSublimeWindow;
     QList<Sublime::MainWindow*> sublimeWindows;
     bool areasRestored;
@@ -150,6 +150,10 @@ public:
         return m_factory->create(parent);
     }
 
+    virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const
+    {
+        return m_factory->contextMenuActions( viewWidget );
+    }
 
     QList<QAction*> toolBarActions( QWidget* viewWidget ) const
     {
@@ -181,33 +185,6 @@ UiController::UiController(Core *core)
     connect( QApplication::instance(),
              SIGNAL( focusChanged( QWidget*, QWidget* ) ),
             this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
-
-    KActionCollection * actions = defaultMainWindow()->actionCollection();
-
-    KAction* assistantaction1 = actions->addAction("assistant_action_1");
-    assistantaction1->setText( i18n("&Assistant Action 1") );
-    assistantaction1->setShortcut( Qt::ALT | Qt::Key_1 );
-    connect(assistantaction1, SIGNAL(triggered(bool)), this, SLOT(assistantAction1()));
-
-    KAction* assistantaction2 = actions->addAction("assistant_action_2");
-    assistantaction2->setText( i18n("&Assistant Action 2") );
-    assistantaction2->setShortcut( Qt::ALT | Qt::Key_2 );
-    connect(assistantaction2, SIGNAL(triggered(bool)), this, SLOT(assistantAction2(bool)));
-
-    KAction* assistantaction3 = actions->addAction("assistant_action_3");
-    assistantaction3->setText( i18n("&Assistant Action 3") );
-    assistantaction3->setShortcut( Qt::ALT | Qt::Key_3 );
-    connect(assistantaction3, SIGNAL(triggered(bool)), this, SLOT(assistantAction3(bool)));
-
-    KAction* assistantaction4 = actions->addAction("assistant_action_4");
-    assistantaction4->setText( i18n("&Assistant Action 4") );
-    assistantaction4->setShortcut( Qt::ALT | Qt::Key_4 );
-    connect(assistantaction4, SIGNAL(triggered(bool)), this, SLOT(assistantAction4(bool)));
-
-    KAction* assistantactionhide = actions->addAction("assistant_action_hide");
-    assistantactionhide->setText( i18n("&Hide Assistant") );
-    assistantactionhide->setShortcut( Qt::ALT | Qt::Key_0 );
-    connect(assistantactionhide, SIGNAL(triggered(bool)), this, SLOT(assistantHide()));
 }
 
 UiController::~UiController()
@@ -415,18 +392,16 @@ void UiController::addNewToolView(MainWindow *mw)
 void UiController::showSettingsDialog()
 {
     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
-    kDebug() << "blacklist" << blacklist;
-    if(!d->cfgDlg)
-    {
-        d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",
-                                           activeMainWindow() );
-        d->cfgDlg->setComponentBlacklist( blacklist );
+    foreach(const KPluginInfo& info, d->core->pluginControllerInternal()->allPluginInfos()) {
+        if (!blacklist.contains(info.pluginName()) && !info.isPluginEnabled()) {
+            blacklist << info.pluginName();
+        }
     }
-// The following doesn't work for some reason if the parent != activeMainWin,
-// the show() call doesn't show the dialog
-//     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )
-//         d->cfgDlg->dialog()->setParent( activeMainWindow() );
-    d->cfgDlg->exec();
+    kDebug() << "blacklist" << blacklist;
+    KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
+                                        activeMainWindow() );
+    cfgDlg.setComponentBlacklist( blacklist );
+    cfgDlg.exec();
 }
 
 Sublime::Controller* UiController::controller()
@@ -442,14 +417,19 @@ KParts::MainWindow *UiController::activeMainWindow()
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
-    Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet())->saveFromArea(area, area->rootIndex());
+    if (!area->workingSet().isEmpty()) {
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        set->saveFromArea(area, area->rootIndex());
+    }
 }
 
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
     area->load(group);
-    WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
-    Q_ASSERT(set->isConnected(area));
+    if (!area->workingSet().isEmpty()) {
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        Q_ASSERT(set->isConnected(area));
+    }
 }
 
 void UiController::saveAllAreas(KSharedConfig::Ptr config)
@@ -659,25 +639,6 @@ const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDo
     return d->factoryDocuments;
 }
 
-void UiController::assistantAction1() {
-    if(d->currentShownAssistant)
-        d->currentShownAssistant->executeAction1();
-}
-
-void UiController::assistantAction2(bool) {
-    if(d->currentShownAssistant)
-        d->currentShownAssistant->executeAction2();
-}
-
-void UiController::assistantAction3(bool) {
-    if(d->currentShownAssistant)
-        d->currentShownAssistant->executeAction3();
-}
-void UiController::assistantAction4(bool) {
-    if(d->currentShownAssistant)
-        d->currentShownAssistant->executeAction4();
-}
-
 void UiController::assistantHide() {
     if(d->currentShownAssistant)
         hideAssistant(d->currentShownAssistant->assistant());
@@ -687,7 +648,6 @@ void UiController::assistantActionsChanged() {
     if(d->currentShownAssistant)
         popUpAssistant(d->currentShownAssistant->assistant());
 }
-
 
 }
 

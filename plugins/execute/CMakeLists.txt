@@ -19,6 +19,7 @@ kde4_add_ui_files( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
 kde4_add_plugin(kdevexecute ${kdevexecute_PART_SRCS}  )
 target_link_libraries(kdevexecute 
     ${KDE4_KDEUI_LIBS} 
+    ${KDE4_KCMUTILS_LIBS}
     kdevplatforminterfaces 
     kdevplatformutil 
     kdevplatformproject 

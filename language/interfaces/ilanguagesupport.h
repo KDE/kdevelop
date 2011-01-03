@@ -33,6 +33,7 @@ class DocumentRange;
 class SimpleCursor;
 class SimpleRange;
 class ICodeHighlighting;
+class DocumentChangeTracker;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
@@ -63,8 +64,13 @@ public:
     /**
       * Should return a code-highlighting instance for this language, or zero.
       */
-    virtual const ICodeHighlighting* codeHighlighting() const;
+    virtual ICodeHighlighting* codeHighlighting() const;
 
+    /**
+     * Should return a document change-tracker for this language that tracks the changes in the given document 
+     * */
+    virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
+    
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
      * In C++, they are used to allow highlighting and navigation of macro-uses.

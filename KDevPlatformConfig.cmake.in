@@ -51,6 +51,7 @@ _kdevplatform_set_lib_vars( SUBLIME sublime )
 _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
+_kdevplatform_set_lib_vars( DOCUMENTATION kdevplatformdocumentation )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
@@ -65,5 +66,6 @@ mark_as_advanced(
     KDEVPLATFORM_UTIL_LIBRARIES
     KDEVPLATFORM_VCS_LIBRARIES
     KDEVPLATFORM_DEBUGGER_LIBRARIES
+    KDEVPLATFORM_DOCUMENTATION_LIBRARIES
     KDEVPLATFORM_TESTS_LIBRARIES
 )

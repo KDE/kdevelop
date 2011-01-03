@@ -24,17 +24,22 @@
 #include <KDE/KDebug>
 
 #include "commitView.h"
+#include <dvcs/dvcsplugin.h>
 
-CommitLogModel::CommitLogModel(const QList<DVcsEvent> revisions, QObject* parent)
-    : QAbstractItemModel(parent)
+CommitLogModel::CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin, const QString& repo, QObject* parent)
+    : QAbstractItemModel(parent), m_repo(repo), m_plugin(plugin)
 {
     headerInfo << "Graph" << "Short Log" << "Author" << "Date";
-    revs = revisions;
-    rowCnt = revs.count();
-    kDebug() << "revisins count is: " << rowCnt;
+    QMetaObject::invokeMethod(this, "initializeModel", Qt::QueuedConnection);
+}
+
+void CommitLogModel::initializeModel()
+{
+    revs = m_plugin->getAllCommits(m_repo);
     if (!revs.isEmpty() )
         branchCnt = revs.last().getProperties().count(); //num of branch (size of properties of initial commit)
-    reset(); //to set header
+    
+    reset();
 }
 
 Qt::ItemFlags CommitLogModel::flags(const QModelIndex&) const 
@@ -52,7 +57,7 @@ QVariant CommitLogModel::headerData(int section, Qt::Orientation orientation, in
 
 QModelIndex CommitLogModel::index(int row, int column, const QModelIndex&) const 
 {
-    if (row < 0 || row >= rowCnt)
+    if (row < 0 || row >= rowCount())
         return QModelIndex();
 
     return createIndex(row, column, 0);
@@ -87,7 +92,7 @@ QModelIndex CommitLogModel::parent(const QModelIndex& index) const
 
 int CommitLogModel::rowCount(const QModelIndex& parent) const
 {
-    return (!parent.isValid() ? rowCnt : 0);
+    return (!parent.isValid() ? revs.size() : 0);
 }
 
 int CommitLogModel::columnCount(const QModelIndex&) const 

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2008 Andreas Pakulat <apaku@gmx.de>
+Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QStringList>
+#include <QtCore/QTimer>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -49,10 +51,22 @@ Boston, MA 02110-1301, USA.
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QTimer>
+#include <QStandardItemModel>
+#include <QTreeView>
+#include <QHeaderView>
 #include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
+#include <QLabel>
+
+
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(4,5,60)
+    #define HAVE_RECOVERY_INTERFACE
+    #include <ktexteditor/recoveryinterface.h>
+#endif
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -89,37 +103,56 @@ static bool removeDirectory(const QDir &aDir)
   return !has_err;
 }
 
+namespace {
+    int argc = 0;
+    char** argv = 0; 
+};
+
+void SessionController::setArguments(int _argc, char** _argv)
+{
+    argc = _argc;
+    argv = _argv;
+}
+
 static QStringList standardArguments()
 {
     QStringList ret;
-    for(int a = 0; a < QApplication::argc(); ++a)
+    for(int a = 0; a < argc; ++a)
     {
-        QString arg = QString::fromLocal8Bit(QApplication::argv()[a]);
-        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
+        QString arg = QString::fromLocal8Bit(argv[a]);
+        kWarning() << "ARG:" << "" + arg + "";
+/*        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
         {
             ret << arg;
-        }else if(arg.startsWith("--graphicssystem") || arg.startsWith("--style"))
+        }else */
+        if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
         {
-            ret << arg;
-            if(a+1 < QApplication::argc())
-                ret << QString::fromLocal8Bit(QApplication::argv()[a+1]);
+            ret << "-" + arg;
+            if(a+1 < argc)
+                ret << QString::fromLocal8Bit(argv[a+1]);
         }
     }
+    
+    kWarning() << "ARGUMENTS: " << ret << "from" << argc;
+    
     return ret;
 }
-
-///@todo The whole recovery stuff is only safe if we allow only one process per session
 
 class SessionControllerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    SessionControllerPrivate( SessionController* s ) : q(s), activeSession(0), recoveryDirectoryIsOwn(false) {
+    SessionControllerPrivate( SessionController* s )
+        : q(s)
+        , activeSession(0)
+        , grp(0)
+        , recoveryDirectoryIsOwn(false)
+    {
         recoveryTimer.setInterval(recoveryStorageInterval * 1000);
         connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
         
         // Try the recovery only after the initialization has finished
-        connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(performRecovery()), Qt::QueuedConnection);
+        connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(lateInitialization()), Qt::QueuedConnection);
         
         recoveryTimer.setSingleShot(false);
         recoveryTimer.start();
@@ -153,6 +186,7 @@ public:
     
     void newSession()
     {
+        qsrand(QDateTime::currentDateTime().toTime_t());
         Session* session = new Session( QUuid::createUuid() );
         
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
@@ -245,13 +279,6 @@ public:
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 bool loaded = loadSessionExternally( s );
-                
-                if(loaded)
-                {
-                    //Terminate this instance of kdevelop if the user agrees
-                    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
-                        window->close();
-                }
                 break;
             }
         }
@@ -287,6 +314,7 @@ public:
     bool recoveryDirectoryIsOwn;
     
     QTimer recoveryTimer;
+    QMap<KUrl, QStringList > currentRecoveryFiles;
 
     
     QString ownSessionDirectory() const
@@ -303,8 +331,28 @@ public:
             removeDirectory(recoveryDir);
     }
     
-private slots:
+public slots:
+    void documentSaved( KDevelop::IDocument* document )
+    {
+        if(currentRecoveryFiles.contains(document->url()))
+        {
+            kDebug() << "deleting recovery-info for" << document->url();
+            foreach(const QString& recoveryFileName, currentRecoveryFiles[document->url()])
+            {
+                bool result = QFile::remove(recoveryFileName);
+                kDebug() << "deleted" << recoveryFileName << result;
+            }
+            currentRecoveryFiles.remove(document->url());
+        }
+    }
     
+private slots:
+    void lateInitialization()
+    {
+        performRecovery();
+        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)));
+        
+    }
     void performRecovery()
     {
         kDebug() << "Checking recovery";
@@ -341,8 +389,18 @@ private slots:
                 if(!urlList.isEmpty())
                 {
                     //Either recover, or delete the recovery directory
-                    int choice = KMessageBox::warningContinueCancelList(ICore::self()->uiController()->activeMainWindow(), i18n("This session crashed at %1, but recovery copies of the following modified files are available.\n\nPush Continue to recover the modified files.\n\nPush Cancel to lose the modifications.", date), urlList, i18n("Recovery"));
-                    
+                    ///TODO: user proper runtime locale for date, it might be different
+                    ///      from what was used when the recovery file was saved
+                    KGuiItem recover = KStandardGuiItem::cont();
+                    recover.setIcon(KIcon("edit-redo"));
+                    recover.setText(i18n("Recover"));
+                    KGuiItem discard = KStandardGuiItem::discard();
+                    int choice = KMessageBox::warningContinueCancelList(qApp->activeWindow(),
+                        i18nc("%1: date of the last snapshot",
+                              "The session crashed the last time it was used. "
+                              "The following modified files can be recovered from a backup from %1.", date),
+                        urlList, i18n("Crash Recovery"), recover, discard );
+
                     if(choice == KMessageBox::Continue)
                     {
                         #if 0
@@ -382,7 +440,19 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                doc->textDocument()->setText(text);
+                                #ifdef HAVE_RECOVERY_INTERFACE
+                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                
+                                if(recovery && recovery->isDataRecoveryAvailable())
+                                    // Use the recovery from the kate swap-file if possible
+                                    recovery->recoverData();
+                                else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #endif
                             }
                         }
                     }
@@ -404,6 +474,8 @@ private slots:
     {
         if(!recoveryDirectoryIsOwn)
             return;
+        
+        currentRecoveryFiles.clear();
         
         QDir recoveryDir(ownSessionDirectory() + "/recovery");
         
@@ -450,13 +522,19 @@ private slots:
                         
                         if(!text.isEmpty())
                         {
-                            QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
+                            QString urlFilePath = recoveryCurrentDir.path() + QString("/%1_url").arg(num);
+                            QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().pathOrUrl().toUtf8());
                             
-                            QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
+                            QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
+                            QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
+                            
+                            currentRecoveryFiles[document->url()] =
+                                        QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
+                                                      << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
                             
                             ++num;
                         }
@@ -549,6 +627,7 @@ void SessionController::cleanup()
 void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionController::sessionDirectory() );
+    
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
     {
         QUuid id( s );
@@ -608,8 +687,15 @@ QList< const KDevelop::Session* > SessionController::sessions() const
 
 Session* SessionController::createSession( const QString& name )
 {
-    Session* s = new Session( QUuid::createUuid() );
-    s->setName( name );
+    Session* s;
+    if(name.startsWith("{"))
+    {
+        s = new Session( QUuid(name) );
+    }else{
+        qsrand(QDateTime::currentDateTime().toTime_t());
+        s = new Session( QUuid::createUuid() );
+        s->setName( name );
+    }
     d->addSession( s );
     return s;
 }
@@ -624,9 +710,11 @@ void SessionController::deleteSession( const QString& nameOrId )
     Q_ASSERT( it != d->sessionActions.end() );
 
     unplugActionList( "available_sessions" );
-    d->grp->removeAction(*it);
     actionCollection()->removeAction(*it);
-    plugActionList( "available_sessions", d->grp->actions() );
+    if (d->grp) { // happens in unit tests
+        d->grp->removeAction(*it);
+        plugActionList( "available_sessions", d->grp->actions() );
+    }
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
     d->sessionActions.remove(s);
@@ -661,6 +749,7 @@ Session* SessionController::session( const QString& nameOrId ) const
 QString SessionController::cloneSession( const QString& nameOrid )
 {
     Session* origSession = session( nameOrid );
+    qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
     KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
                              KUrl( sessionDirectory() + '/' + id.toString() ), 
@@ -720,10 +809,169 @@ QString SessionController::sessionDirectory()
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
-bool SessionController::tryLockSession(QString id)
+SessionController::LockSessionState SessionController::tryLockSession(QString id)
 {
-    KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
-    return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
+    LockSessionState ret;
+    
+    ret.lockFile = sessionDirectory() + "/" + id + "/lock";
+
+    if(!QFileInfo(ret.lockFile).exists())
+    {
+        // Maybe the session doesn't exist yet
+        ret.success = true;
+        return ret;
+    }
+    
+    KLockFile::Ptr lock(new KLockFile(ret.lockFile));
+    ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
+    if(!ret.success) {
+        lock->getLockInfo(ret.holderPid, ret.holderHostname, ret.holderApp);
+    }
+    return ret;
+}
+
+// Internal helper class
+class SessionChooserDialog : public KDialog {
+    Q_OBJECT
+public:
+    SessionChooserDialog(QTreeView* view, QStandardItemModel* model);
+    
+public Q_SLOTS:
+    void updateState();
+    void doubleClicked(QModelIndex);
+private:
+    QStandardItemModel* m_model;
+    QTimer m_updateStateTimer;
+};
+
+SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model) : m_model(model) {
+    m_updateStateTimer.setInterval(5000);
+    m_updateStateTimer.setSingleShot(false);
+    m_updateStateTimer.start();
+    connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(updateState()));
+    connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+}
+
+void SessionChooserDialog::doubleClicked(QModelIndex index)
+{
+    QStandardItem* item = m_model->itemFromIndex(index);
+    if(item && item->isEnabled())
+        accept();
+}
+
+void SessionChooserDialog::updateState() {
+    // Sometimes locking may take some time, so we stop the timer, to prevent an 'avalanche' of events
+    m_updateStateTimer.stop();
+    for(int row = 0; row < m_model->rowCount(); ++row)
+    {
+        QString session = m_model->index(row, 0).data().toString();
+        
+        if(session == i18n("Create New Session"))
+            continue;
+        
+        bool running = false;
+        QString state;
+        SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
+        if(!lockState)
+        {
+            state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
+                         lockState.holderApp, lockState.holderHostname);
+            running = true;
+        }
+        
+        if(m_model->item(row, 2))
+            m_model->item(row, 2)->setText(state);
+        
+        for(int col = 0; col < 3; ++col)
+            if(m_model->item(row, col))
+                m_model->item(row, col)->setEnabled(!running);
+    }
+    
+    m_updateStateTimer.start();
+}
+
+QString SessionController::showSessionChooserDialog(QString headerText)
+{
+    QTreeView* view = new QTreeView;
+    QStandardItemModel* model = new QStandardItemModel(view);
+    SessionChooserDialog dialog(view, model);
+    view->setRootIsDecorated(false);
+    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    QVBoxLayout layout(dialog.mainWidget());
+    if(!headerText.isEmpty())
+        layout.addWidget(new QLabel(headerText));
+    
+    model->setColumnCount(3);
+    model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
+    model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
+    model->setHeaderData(2, Qt::Horizontal,i18n("State"));
+    view->setModel(model);
+    layout.addWidget(view);
+    
+    int row = 0;
+    int defaultRow = 0;
+    
+    QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
+    
+    
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+    {
+        if ( si.name.isEmpty() && si.projects.isEmpty() ) {
+            continue;
+        }
+        
+        if(si.uuid.toString() == defaultSession)
+            defaultRow = row;
+        
+        model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
+        model->setItem(row, 1, new QStandardItem(si.description));
+        
+        QString state;
+        bool running = false;
+        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+            running = true;
+        
+        model->setItem(row, 2, new QStandardItem(""));
+        
+        if(defaultRow == row && running)
+            ++defaultRow;
+        
+        ++row;
+    }
+    
+    model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+
+    dialog.updateState();
+    
+    view->selectionModel()->setCurrentIndex(model->index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    
+    view->resizeColumnToContents(0);
+    view->resizeColumnToContents(1);
+    view->resizeColumnToContents(2);
+    view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
+    dialog.setInitialSize(QSize(900, 600));
+
+    if(dialog.exec() != QDialog::Accepted)
+    {
+        return QString();
+    }
+    
+    QModelIndex selected = view->selectionModel()->currentIndex();
+    if(selected.isValid())
+    {
+        selected = selected.sibling(selected.row(), 0);
+        QString ret = selected.data().toString();
+        if(ret == i18n("Create New Session"))
+        {
+            qsrand(QDateTime::currentDateTime().toTime_t());
+            ret = QUuid::createUuid().toString();
+        }
+        return ret;
+    }
+    
+    return QString();
 }
 
 }

@@ -27,13 +27,23 @@
 #include <QSet>
 #include <QMap>
 #include <QList>
-#include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
-#include <language/editor/simplerange.h>
 #include <language/duchain/declaration.h>
+#include <KUrl>
+#include <language/editor/persistentmovingrange.h>
+#include <language/interfaces/iquickopen.h>
+#include <QToolButton>
+#include <QMenu>
+#include <QHBoxLayout>
+#include <language/editor/documentcursor.h>
+#include <KTextEditor/Document>
+
+namespace Sublime {
+  class MainWindow;
+}
 
 namespace KDevelop {
   class IDocument;
@@ -42,20 +52,35 @@ namespace KDevelop {
   class DUContext;
   class TopDUContext;
   class DUChainBase;
+  class AbstractNavigationWidget;
 }
 
 namespace KTextEditor {
   class View;
 }
 
+//TODO: move into kdevelop namespace
 using namespace KDevelop;
 
 class ContextBrowserViewFactory;
 class ContextBrowserView;
+class BrowseManager;
 
 QWidget* masterWidget(QWidget* w);
 
-class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRangeWatcher
+struct ViewHighlights
+{
+  ViewHighlights() : keep(false) {
+  }
+  // Whether the same highlighting should be kept highlighted (usually during typing)
+  bool keep;
+  // The declaration that is highlighted for this view
+  IndexedDeclaration declaration;
+  // Highlighted ranges. Those may also be contained by different views.
+  QList<PersistentMovingRange::Ptr> highlights;
+};
+
+class ContextBrowserPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
   public:
@@ -69,8 +94,16 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
-    QWidget* toolbarWidgetForMainWindow(QWidget* widgetInWindow);
-    
+    virtual KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window );
+
+    ///duchain must be locked
+    ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
+    void updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& cursorPosition,
+                       bool force = false);
+
+    void updateDeclarationListBox(KDevelop::DUContext* context);
+    void setAllowBrowsing(bool allow);
+
   public Q_SLOTS:
     void previousContextShortcut();
     void nextContextShortcut();
@@ -97,49 +130,72 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void findUses();
     
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
-    
+    void selectionChanged(KTextEditor::View*);
+
+  private slots:
+    // history browsing
+    void documentJumpPerformed( KDevelop::IDocument* newDocument,
+                                const KTextEditor::Cursor& newCursor,
+                                KDevelop::IDocument* previousDocument,
+                                const KTextEditor::Cursor& previousCursor);
+
+    void historyNext();
+    void historyPrevious();
+    void nextMenuAboutToShow();
+    void previousMenuAboutToShow();
+    void actionTriggered();
+
+    void navigateLeft();
+    void navigateRight();
+    void navigateUp();
+    void navigateDown();
+    void navigateAccept();
+    void navigateBack();
+
   private:
-    
-    virtual void createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions);
+    QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
+    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
+                                            KActionCollection& actions);
     void switchUse(bool forward);
     void clearMouseHover();
-    virtual void rangeDeleted (KTextEditor::SmartRange *range);
-    virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
-    virtual void mouseExitedRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
 
-    void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration, bool mouseHighlight );
-    void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight );
-
-    void watchRange(KTextEditor::SmartRange* range);
-    void ignoreRange(KTextEditor::SmartRange* range);
-
-    void registerAsRangeWatcher(KDevelop::DUChainBase* base);
-    void registerAsRangeWatcher(KDevelop::DUContext* ctx);
+    void addHighlight( KTextEditor::View* view, KDevelop::Declaration* decl );
 
     /** helper for updateBrowserView().
      *  Tries to find a 'specialLanguageObject' (eg macro) in @p view under cursor @c.
      *  If found returns true and sets @p pickedLanguage to the language this object belongs to */
-    bool findSpecialObject(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*& pickedLanguage);
     KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KDevelop::SimpleCursor&, bool mouseHighlight);
-    bool showDeclarationView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::Declaration* dcl, KDevelop::DUContext*);
-    bool showSpecialObjectView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*, KDevelop::DUContext*);
-    void showContextView(KTextEditor::View* view, const SimpleCursor& cursor, KDevelop::DUContext*);
-    void updateBrowserWidgetFor(KTextEditor::View* view);
+    void updateForView(KTextEditor::View* view);
+
+    // history browsing
+    bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor) const;
+    QString actionTextFor(int historyIndex) const;
+    void updateButtonState();
+    void openDocument(int historyIndex);
+    void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
+
+    enum NavigationActionType {
+      Accept,
+      Back,
+      Down,
+      Up,
+      Left,
+      Right
+    };
+    void doNavigate(NavigationActionType action);
 
   private:
-    //Unhighlights all currently highlighted declarations
-    void unHighlightAll(KTextEditor::View* selectView = 0);
+    
+    // Returns the currently active and visible context browser view that belongs
+    // to the same context (mainwindow and area) as the given widget
+    ContextBrowserView* browserViewForWidget(QWidget* widget);
+    
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
-    //Must be locked before doing anything with m_backups, and _after_ the relevant smart-mutex has been locked
-    QMutex m_backupsMutex;
+    
     //Contains the range, the old attribute, and the attribute it was replaced with
-    QMap<KTextEditor::SmartRange*, QPair<KTextEditor::Attribute::Ptr,KTextEditor::Attribute::Ptr> > m_backups;
     QSet<KTextEditor::View*> m_updateViews;
-    QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
-    QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range
-
-    QSet<KTextEditor::SmartRange*> m_watchedRanges;
+    QMap<KTextEditor::View*, ViewHighlights > m_highlightedRanges;
 
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
@@ -152,17 +208,47 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     SimpleCursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
+    QPointer<QWidget> m_currentNavigationWidget;
     IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
     
-    //This is just a marker, only used for comparison. Never expect it to be valid!
-    KTextEditor::Document* m_lastInsertionDocument;
+    QPointer<KTextEditor::Document> m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
-    QSet<KTextEditor::View*> m_keepHighlightedDeclaration;
-    QList<QPointer<QWidget> > m_toolbarWidgets;
-};
 
-DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);
+    // outline toolbar
+    QPointer<KDevelop::IQuickOpenLine> m_outlineLine;
+    QPointer<QHBoxLayout> m_toolbarWidgetLayout;
+    QPointer<QWidget> m_toolbarWidget;
+
+    // history browsing
+    struct HistoryEntry {
+        //Duchain must be locked
+        HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
+        HistoryEntry(KDevelop::DocumentCursor pos);
+        //Duchain must be locked
+        void setCursorPosition(const KDevelop::SimpleCursor& cursorPosition);
+
+        //Duchain does not need to be locked
+        KDevelop::DocumentCursor computePosition() const;
+
+        KDevelop::IndexedDUContext context;
+        KDevelop::DocumentCursor absoluteCursorPosition;
+        KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
+        QString alternativeString;
+    };
+
+    QVector<HistoryEntry> m_history;
+    QPointer<QToolButton> m_previousButton;
+    QPointer<QToolButton> m_nextButton;
+    QPointer<QMenu> m_previousMenu, m_nextMenu;
+    QPointer<QToolButton> m_browseButton;
+    QList<KDevelop::IndexedDeclaration> m_listDeclarations;
+    KDevelop::IndexedString m_listUrl;
+    BrowseManager* m_browseManager;
+    //Used to not record jumps triggered by the context-browser as history entries
+    QPointer<QWidget> m_focusBackWidget;
+    int m_nextHistoryIndex;
+};
 
 #endif // CONTEXTBROWSERPLUGIN_H
 

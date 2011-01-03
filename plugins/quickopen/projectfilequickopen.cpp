@@ -31,6 +31,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/projectmodel.h>
 
+#include "../openwith/iopenwith.h"
+
 using namespace KDevelop;
 
 ProjectFileData::ProjectFileData( const ProjectFile& file ) : m_file(file) {
@@ -51,7 +53,7 @@ QString ProjectFileData::htmlDescription() const {
 }
 
 bool ProjectFileData::execute( QString& /*filterText*/ ) {
-  ICore::self()->documentController()->openDocument( totalUrl() );
+  IOpenWith::openFiles(KUrl::List() << totalUrl());
   return true;
 }
 
@@ -115,7 +117,19 @@ ProjectFileDataProvider::ProjectFileDataProvider() {
 }
 
 void ProjectFileDataProvider::setFilterText( const QString& text ) {
-  Base::setFilter( text.split('/'), QChar('/') );
+  QString filterText = text;
+  if (filterText.startsWith(QLatin1String("./")) || filterText.startsWith(QLatin1String("../")) ) {
+    // assume we want to filter relative to active document's url
+    IDocument* doc = ICore::self()->documentController()->activeDocument();
+    if (doc) {
+      KUrl url = doc->url().upUrl();
+      url.addPath(text);
+      url.cleanPath();
+      url.adjustPath(KUrl::RemoveTrailingSlash);
+      filterText = url.pathOrUrl();
+    }
+  }
+  Base::setFilter( filterText.split('/', QString::SkipEmptyParts), QChar('/') );
 }
 
 namespace

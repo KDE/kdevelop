@@ -29,10 +29,9 @@ REGISTER_DUCHAIN_ITEM(NamespaceAliasDeclaration);
 
 NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs) 
   : Declaration(*new NamespaceAliasDeclarationData(*rhs.d_func())) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context)
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context)
   : Declaration(*new NamespaceAliasDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

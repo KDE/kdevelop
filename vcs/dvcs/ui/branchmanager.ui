@@ -1,127 +1,68 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>BranchDialogBase</class>
- <widget class="QDialog" name="BranchDialogBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="BranchDialogBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>249</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Branch Manager</string>
-  </property>
-  <property name="locale" >
-   <locale country="UnitedStates" language="English" />
-  </property>
-  <property name="modal" >
-   <bool>false</bool>
-  </property>
-  <widget class="QWidget" name="layoutWidget" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>341</width>
-     <height>221</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" >
-    <item>
-     <widget class="QListWidget" name="branchWidget" />
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout" >
-      <item>
-       <widget class="QPushButton" name="newButton" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
-        <property name="toolTip" >
-         <string>Creates new branch based on the selected branch</string>
-        </property>
-        <property name="text" >
-         <string>New</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="deleteButton" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
-        <property name="toolTip" >
-         <string>The same as git branch -D</string>
-        </property>
-        <property name="text" >
-         <string>Delete</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="checkoutButton" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
-        <property name="toolTip" >
-         <string>Checkout to the selected branch</string>
-        </property>
-        <property name="text" >
-         <string>Checkout</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="cancelButton" >
-        <property name="text" >
-         <string>Cancel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="newButton">
+       <property name="toolTip">
+        <string>Creates new branch based on the selected branch</string>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deleteButton">
+       <property name="toolTip">
+        <string>The same as git branch -D</string>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="checkoutButton">
+       <property name="toolTip">
+        <string>Checkout to the selected branch</string>
+       </property>
+       <property name="text">
+        <string>Checkout</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListView" name="branchView"/>
+   </item>
+  </layout>
  </widget>
- <tabstops>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>newButton</tabstop>
-  <tabstop>deleteButton</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>BranchDialogBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>364</x>
-     <y>221</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>211</x>
-     <y>124</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkoutButton</sender>
-   <signal>clicked()</signal>
-   <receiver>BranchDialogBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>263</x>
-     <y>221</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>211</x>
-     <y>124</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

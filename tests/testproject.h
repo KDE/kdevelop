@@ -62,10 +62,10 @@ public:
 
     void set_projectFileUrl(const KUrl& url);
 public Q_SLOTS:
-    const KUrl folder() const { return KUrl(); }
+    const KUrl folder() const;
     QString name() const { return "Test Project"; }
     KUrl relativeUrl(const KUrl& ) const { return KUrl(); }
-    bool inProject(const KUrl &) const { return false; }
+    bool inProject(const KUrl &) const;
 private:
     QSet<IndexedString> m_fileSet;
     KUrl m_projectFileUrl;

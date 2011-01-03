@@ -111,10 +111,6 @@ public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
 
 private Q_SLOTS:
-    void assistantAction1();
-    void assistantAction2(bool);
-    void assistantAction3(bool);
-    void assistantAction4(bool);
     void assistantHide();
     void assistantActionsChanged();
 

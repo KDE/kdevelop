@@ -355,8 +355,24 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
       if ( parentNode != 0 )
       {
         // Create the new node and add it.
-        newNode = new ClassNode(id, m_model);
-        parentNode->addNode( newNode );
+        IndexedDeclaration decl;
+        uint count = 0;
+        const IndexedDeclaration* declarations;
+        DUChainReadLocker lock;
+        PersistentSymbolTable::self().declarations(item.id, count, declarations);
+        for ( int i = 0; i < count; ++i )
+        {
+          if (declarations[i].indexedTopContext().url() == a_file)
+          {
+            decl = declarations[i];
+            break;
+          }
+        }
+        if (decl.isValid())
+        {
+          newNode = new ClassNode(decl.declaration(), m_model);
+          parentNode->addNode( newNode );
+        }
       }
 
       // Insert it to the map - newNode can be 0 - meaning the class is hidden.

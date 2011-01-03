@@ -38,13 +38,15 @@
 
 #include "documentswitchertreeview.h"
 #include <QStandardItemModel>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/idocument.h>
+#include <QDir>
 
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
 K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
 
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
-//TODO: Better placement, at cursor position might not be ideal, maybe on the right side of the central widget
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
     :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
@@ -122,8 +124,27 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
     model->clear();
     QList<QStandardItem*> views;
     foreach( Sublime::View* v, documentLists[window][window->area()] )
-    {   
-        model->appendRow( new QStandardItem( v->document()->statusIcon(), v->document()->title() ) );
+    {
+        QString txt = v->document()->title();
+        KDevelop::IDocument* doc = dynamic_cast<KDevelop::IDocument*>( v->document() );
+        if( doc ) {
+            QString path = KDevelop::ICore::self()->projectController()->prettyFilePath( doc->url(), KDevelop::IProjectController::FormatPlain );
+            // Remove trailing '/' as that looks ugly and creates empty string with lastIndexOf
+            if( path.endsWith( '/' ) ) {
+                path = path.left( path.length() - 1 );
+            }
+            // Relative path means we've got a project in front, so remove the 'inner' parts of the path to make it short
+            // and display in a useful way
+            if( QFileInfo( path ).isRelative() ) {
+                path = path.left( path.indexOf( "/" ) + 1 ) + "..." + path.mid( path.lastIndexOf( '/' ) );
+            } else {
+                // Absolute, so try a very simple approach of using the first 6 and last 20 characters and elide the rest
+                // On absolute paths the first letters won't be that useful, so make use of more of the suffix
+                path = path.left( 6 ) + "..." + path.mid( path.length() - 20 );
+            }
+            txt = txt + " (" + path + ")";
+        }
+        model->appendRow( new QStandardItem( v->document()->statusIcon(), txt ) );
     }
     
 }

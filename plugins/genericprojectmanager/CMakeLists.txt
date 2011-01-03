@@ -6,7 +6,6 @@ add_subdirectory(test)
 ########### next target ###############
 
 set(kdevgenericmanager_PART_SRCS
-    genericmanagerlistjob.cpp
     genericmanager.cpp
 )
 
@@ -34,8 +33,7 @@ set( genericprojectmanagersettings_cfg_UI
 kde4_add_ui_files( genericprojectmanagersettings_cfg_SRCS ${genericprojectmanagersettings_cfg_UI} )
 kde4_add_kcfg_files( genericprojectmanagersettings_cfg_SRCS genericprojectmanagersettings.kcfgc )
 kde4_add_plugin( kcm_kdev_genericprojectmanagersettings ${genericprojectmanagersettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_genericprojectmanagersettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformproject kdevplatformutil kdevplatforminterfaces)
+target_link_libraries( kcm_kdev_genericprojectmanagersettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformproject kdevplatformutil kdevplatforminterfaces)
 
-install( FILES igenericprojectmanager.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/genericprojectmanager COMPONENT Devel)
 install( TARGETS kcm_kdev_genericprojectmanagersettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_genericprojectmanagersettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

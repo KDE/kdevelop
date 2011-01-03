@@ -2,6 +2,8 @@
  *   Copyright 1999-2001 Bernd Gehrmann and the KDevelop Team              *
  *   bernd@kdevelop.org                                                    *
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
+ *   Copyright 2010 Julien Desgats <julien.desgats@gmail.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,61 +16,81 @@
 #define GREPOUTPUTMODEL_H
 
 #include <QStandardItemModel>
-#include <QRegExp>
-#include <outputview/ioutputviewmodel.h>
+#include <QList>
 
-#include <language/editor/editorrevisiontracker.h>
+#include <language/codegen/documentchangeset.h>
 
 class QModelIndex;
+class QRegExp;
 
-using namespace KDevelop;
+namespace KDevelop {
+    class IStatus;
+}
 
 class GrepOutputItem : public QStandardItem
 {
 public:
-    GrepOutputItem(const QString &fileName, const QString &lineNumber,
-                   const QString &text, bool showFilename);
+    typedef QList<GrepOutputItem> List;
+
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
+    GrepOutputItem(const QString &filename, const QString &text);
     ~GrepOutputItem();
 
-    QString m_fileName, m_lineNumber, m_text;
-    bool m_showFilename;
+    QString filename() const ;
+    int lineNumber() const ;
+    KDevelop::DocumentChangePointer change() const ;
+    bool isText() const ;
+    /// Recursively apply check state to children
+    void propagateState() ;
+    /// Check children to determine current state
+    void refreshState() ;
+
+    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+
+private:
+    KDevelop::DocumentChangePointer m_change;
 };
 
-class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+Q_DECLARE_METATYPE(GrepOutputItem::List);
+
+class GrepOutputModel : public QStandardItemModel
 {
     Q_OBJECT
 
 public:
-    enum ItemType
-    {
-        Text,
-        File
-    };
     explicit GrepOutputModel( QObject *parent = 0 );
     ~GrepOutputModel();
 
-    void setRegExp(const QString& regExp);
-
-    void activate( const QModelIndex &idx );
-    QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
-    QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
-
+    void setRegExp(const QRegExp& re);
+    void setReplacementTemplate(const QString &tmpl);
+    /// applies replacement on given text
+    QString replacementFor(const QString &text);
+    void clear();  // resets file & match counts
+ 
+    QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
+    QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
+    
 public Q_SLOTS:
-    void appendOutputs( const QStringList &lines );
-    void appendErrors( const QStringList &lines );
-    void slotCompleted();
-    void slotFailed();
+    void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
+    void activate( const QModelIndex &idx );
+    void doReplacements();
+    void setReplacement(const QString &repl);
 
-private:
+Q_SIGNALS:
+    void showErrorMessage(const QString & message, int timeout = 0);
     
-    /** Check whether idx points to a row in the current model. */
-    bool isValidIndex( const QModelIndex& idx ) const;
-    
-//     int m_matchCount;
-    QString _lastfilename;
+private:    
     QRegExp m_regExp;
-    QString m_pattern;
-    EditorRevisionTracker m_tracker;
+    QString m_replacement;
+    QString m_replacementTemplate;
+    QString m_finalReplacement;
+    bool m_finalUpToDate;  /// says if m_finalReplacement is up to date or must be regenerated
+    GrepOutputItem *m_rootItem;
+    int m_fileCount;
+    int m_matchCount;
+
+private slots:
+    void updateCheckState(QStandardItem*);
 };
 
 #endif

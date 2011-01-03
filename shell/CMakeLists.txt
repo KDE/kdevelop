@@ -5,6 +5,13 @@ add_subdirectory(tests)
 
 set(kdevplatformshell_LIB_SRCS
     workingsetcontroller.cpp
+    workingsets/workingset.cpp
+    workingsets/workingsetfilelabel.cpp
+    workingsets/workingsettoolbutton.cpp
+    workingsets/workingsettooltipwidget.cpp
+    workingsets/workingsetwidget.cpp
+    workingsets/closedworkingsetswidget.cpp
+    workingsets/workingsethelpers.cpp
     assistantpopup.cpp
     mainwindow.cpp
     mainwindow_p.cpp
@@ -34,7 +41,6 @@ set(kdevplatformshell_LIB_SRCS
     projectinfopage.cpp
     selectioncontroller.cpp
     documentationcontroller.cpp
-    documentationview.cpp
     debugcontroller.cpp
     dashboardcontroller.cpp
     launchconfiguration.cpp
@@ -91,7 +97,7 @@ kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell
         ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
-        ${KDE4_KUTILS_LIBS}
+        ${KDE4_KCMUTILS_LIBS}
         ${KDE4_KPARTS_LIBS}
         ${KDE4_KNOTIFYCONFIG_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
@@ -104,12 +110,13 @@ target_link_libraries(kdevplatformshell
         sublime
         kdevplatformutil
         kdevplatformoutputview
-        kdevplatformdebugger)
+        kdevplatformdebugger
+        kdevplatformdocumentation)
 # need to add kdevplatform* once those are exported targets
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_KDECORE_LIBS}
-	kdevplatforminterfaces)
+        kdevplatformoutputview
+        sublime
+        kdevplatformdebugger)
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 install(FILES

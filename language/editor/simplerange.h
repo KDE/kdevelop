@@ -24,6 +24,13 @@
 #include "../languageexport.h"
 #include "simplecursor.h"
 
+/**
+ * Represents a range (start- and end-cursor) within a text document. Generally this is
+ * a more efficient version of KTextEditor::Range.
+ * In KDevelop, this object is used when referencing the most current document revision
+ * (the document in its current version)
+ */
+
 namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
 public:
@@ -79,6 +86,14 @@ public:
 
     KTextEditor::Range textRange() const {
         return KTextEditor::Range( KTextEditor::Cursor(start.line, start.column), KTextEditor::Cursor(end.line, end.column) );
+    }
+
+    /**
+     * kDebug() stream operator.  Writes this range to the debug output in a nicely formatted way.
+     */
+    inline friend QDebug operator<< (QDebug s, const SimpleRange& range) {
+      s.nospace() << '[' << range.start << ", " << range.end << ']';
+      return s.space();
     }
 };
 }

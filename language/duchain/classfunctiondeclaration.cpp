@@ -36,12 +36,17 @@ REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs)
     : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
-  if(!( !type || dynamic_cast<FunctionType*>(type.unsafeData()) )) {
-    kWarning(9505) << "WARNING: Non-function type assigned to function declaration";
+  ///TODO: write testcase for typealias case which used to trigger this warning:
+  ///      typedef bool (*EventFilter)(void *message, long *result);
+  ///      in e.g. qcoreapplication.h:172
+  if(type && !dynamic_cast<FunctionType*>(type.unsafeData()) && type->whichType() != AbstractType::TypeAlias) {
+    kWarning(9505) << "WARNING: Non-function type assigned to function declaration. Type is: "
+                      << type->toString() << "whichType:" << type->whichType()
+                      << "Declaration is:" << toString()
+                      << topContext()->url().str() << range().castToSimpleRange();
   }
   ClassMemberDeclaration::setAbstractType(type);
 }
@@ -52,7 +57,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData&
 {
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUContext* context)
+ClassFunctionDeclaration::ClassFunctionDeclaration(const RangeInRevision& range, DUContext* context)
   : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
@@ -60,7 +65,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUC
     setContext( context );
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const SimpleRange& range, DUContext* context)
+ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const RangeInRevision& range, DUContext* context)
   : ClassFunctionDeclarationBase(data, range)
 {
   if( context )

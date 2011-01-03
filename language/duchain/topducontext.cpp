@@ -24,7 +24,6 @@
 
 #include <QtCore/QThread>
 
-#include "../editor/hashedstring.h"
 #include "../interfaces/iproblem.h"
 
 #include <util/kdevvarlengtharray.h>
@@ -163,10 +162,10 @@ public:
     }
   }
 
-  mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
+  mutable QHash<QThread*, TopDUContext::CacheData*> m_threadCaches;
 
   TopDUContext::CacheData* currentCache() const {
-    QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
+    QHash<QThread*, TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThread());
     if(it != m_threadCaches.end())
       return *it;
     else
@@ -515,7 +514,7 @@ public:
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
 ///The import-structure needs to be constructed and locked when this is used
-TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
+TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
   : createVisibleCache(_createVisibleCache)
   , top(_top)
   , topDFunc(_top->d_func())
@@ -663,7 +662,7 @@ void TopDUContext::updateImportsCache() {
   }
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
-  Q_ASSERT(imports(this, SimpleCursor::invalid()));
+  Q_ASSERT(imports(this, CursorInRevision::invalid()));
   
   if(parsingEnvironmentFile())
     parsingEnvironmentFile()->setImportsCache(d_func()->m_importsCache);
@@ -673,11 +672,11 @@ bool TopDUContext::usingImportsCache() const {
   return !d_func()->m_importsCache.isEmpty();
 }
 
-SimpleCursor TopDUContext::importPosition(const DUContext* target) const
+CursorInRevision TopDUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  Import import(const_cast<DUContext*>(target), const_cast<TopDUContext*>(this), SimpleCursor::invalid());
+  Import import(const_cast<DUContext*>(target), const_cast<TopDUContext*>(this), CursorInRevision::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
@@ -745,7 +744,7 @@ uint TopDUContext::ownIndex() const
 TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, data.m_ownIndex)), m_dynamicData(new TopDUContextDynamicData(this)) {
 }
 
-TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
+TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file)
   : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
@@ -787,7 +786,7 @@ TopDUContext::~TopDUContext( )
   }
   deleteChildContextsRecursively();
   deleteLocalDeclarations();
-  m_dynamicData->clearContextsAndDeclartions();
+  m_dynamicData->clearContextsAndDeclarations();
 }
 
 void TopDUContext::deleteSelf() {
@@ -933,7 +932,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   QFlags< KDevelop::DUContext::SearchFlag > flags;
 };
 
-bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags, uint /*depth*/) const
+bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags, uint /*depth*/) const
 {
   ENSURE_CAN_READ
 
@@ -979,7 +978,7 @@ struct TopDUContext::ApplyAliasesBuddyInfo {
 
 ///@todo Implement a cache so at least the global import checks don't need to be done repeatedly. The cache should be thread-local, using DUChainPointer for the hashed items, and when an item was deleted, it should be discarded
 template<class Acceptor>
-bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
+bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
 {
   if(recursionDepth > maxApplyAliasesRecursion) {
     QList<QualifiedIdentifier> searches = identifier->toList();
@@ -1136,7 +1135,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 }
 
 template<class Acceptor>
-void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const
+void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const CursorInRevision& position, bool canBeNamespace ) const
 {
   QualifiedIdentifier emptyId;
   
@@ -1199,12 +1198,12 @@ QVector<DUContext::Import> TopDUContext::importedParentContexts() const
   return DUContext::importedParentContexts();
 }
 
-bool TopDUContext::imports(const DUContext * origin, const SimpleCursor& position) const
+bool TopDUContext::imports(const DUContext * origin, const CursorInRevision& position) const
 {
   return importsPrivate(origin, position);
 }
 
-bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& position) const
+bool TopDUContext::importsPrivate(const DUContext * origin, const CursorInRevision& position) const
 {
   Q_UNUSED(position);
 
@@ -1241,10 +1240,10 @@ void TopDUContext::clearImportedParentContexts() {
 
   Q_ASSERT(m_local->m_indexedRecursiveImports.count() == 1);
 
-  Q_ASSERT(imports(this, SimpleCursor::invalid()));
+  Q_ASSERT(imports(this, CursorInRevision::invalid()));
 }
 
-void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous, bool temporary) {
+void TopDUContext::addImportedParentContext(DUContext* context, const CursorInRevision& position, bool anonymous, bool temporary) {
   if(context == this)
     return;
 
@@ -1267,8 +1266,8 @@ void TopDUContext::removeImportedParentContext(DUContext* context) {
   m_local->removeImportedContextRecursively(static_cast<TopDUContext*>(context), true);
 }
 
-void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary) {
-  typedef QPair<TopDUContext*, SimpleCursor> Pair;
+void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary) {
+  typedef QPair<TopDUContext*, CursorInRevision> Pair;
 
   foreach(const Pair &pair, contexts)
     addImportedParentContext(pair.first, pair.second, false, temporary);
@@ -1374,16 +1373,8 @@ if(!declaration)
   return d_func()->m_usedDeclarationIdsSize()-1;
 }
 
-QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration) {
-  QList<KTextEditor::SmartRange*> ret;
-  int declarationIndex = context->indexForUsedDeclaration(declaration, false);
-  if(declarationIndex == std::numeric_limits<int>::max())
-    return ret;
-  return allSmartUses(context, declarationIndex);
-}
-
-QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges) {
-  QList<SimpleRange> ret;
+QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges) {
+  QList<RangeInRevision> ret;
   int declarationIndex = context->indexForUsedDeclaration(declaration, false);
   if(declarationIndex == std::numeric_limits<int>::max())
     return ret;
@@ -1394,13 +1385,13 @@ QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool
 TopDUContext::Cache::Cache(TopDUContextPointer context) : d(new CacheData(context)) {
   DUChainWriteLocker lock(DUChain::lock());
   if(d->context)
-    d->context->m_local->m_threadCaches.insert(QThread::currentThreadId(), d);
+    d->context->m_local->m_threadCaches.insert(QThread::currentThread(), d);
 }
 
 TopDUContext::Cache::~Cache() {
   DUChainWriteLocker lock(DUChain::lock());
-  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThreadId()] == d)
-    d->context->m_local->m_threadCaches.remove(QThread::currentThreadId());
+  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThread()] == d)
+    d->context->m_local->m_threadCaches.remove(QThread::currentThread());
 
   delete d;
 }

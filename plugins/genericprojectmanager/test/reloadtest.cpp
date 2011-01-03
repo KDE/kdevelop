@@ -66,7 +66,7 @@ void ProjectLoadTest::cleanup()
     delete m_core;
 }
 
-void ProjectLoadTest::addRemoveFiles()
+QPair<QString, KUrl> makeProject()
 {
     QString path;
     QString projectName;
@@ -88,33 +88,40 @@ void ProjectLoadTest::addRemoveFiles()
     projectFile.write(projectFileContents.join("\n").toAscii());
     projectFile.close();
 
-    QFile f(path+"/sdf");
+    return qMakePair(path, projecturl);
+}
+
+void ProjectLoadTest::addRemoveFiles()
+{
+    const QPair<QString, KUrl> p = makeProject();
+
+    QFile f(p.first+"/sdf");
     f.open(QIODevice::WriteOnly);
     f.close();
 
-    KDevelop::ICore::self()->projectController()->openProject(projecturl);
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
     QTest::qWait(500);
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    Q_ASSERT(project->projectFileUrl() == projecturl);
+    Q_ASSERT(project->projectFileUrl() == p.second);
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
-        QFile f2(path+"/blub"+QString::number(i));
+        QFile f2(p.first+"/blub"+QString::number(i));
         f2.open(QIODevice::WriteOnly);
         f2.close();
     }
     for (int i=0; i<50; ++i) {
-        QFile f2(path+"/blub"+QString::number(i));
+        QFile f2(p.first+"/blub"+QString::number(i));
         f2.remove();
     }
     QTest::qWait(500);
 
-    QCOMPARE(project->filesForUrl(path+"/blub"+QString::number(50)).count(), 1);
-    KDevelop::ProjectFileItem* file = project->filesForUrl(path+"/blub"+QString::number(50)).first();
-    project->projectFileManager()->removeFile(file); //message box has to be accepted manually :(
+    QCOMPARE(project->filesForUrl(p.first+"/blub"+QString::number(50)).count(), 1);
+    KDevelop::ProjectFileItem* file = project->filesForUrl(p.first+"/blub"+QString::number(50)).first();
+    project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
-        QFile f2(path+"/blub"+QString::number(i));
+        QFile f2(p.first+"/blub"+QString::number(i));
         f2.remove();
     }
 
@@ -124,9 +131,8 @@ void ProjectLoadTest::addRemoveFiles()
     foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
         KDevelop::ICore::self()->projectController()->closeProject(p);
     }
-
     QTest::qWait(500);
-    exec("rm -r "+path);
+    exec("rm -r "+p.first);
 }
 
 void _writeRandomStructure(QString path, int files)
@@ -153,47 +159,55 @@ void _writeRandomStructure(QString path, int files)
     }
 }
 
+void fillProject(int filesPerDir, int Dirs, const QPair<QString, KUrl> project, bool wait)
+{
+    QDir(project.first).mkdir("foou");
+    _writeRandomStructure(project.first+"/foou", 50);
+    for(int i=0; i < 100; ++i) {
+        exec("bash -c \"cp -r foou foox"+QString::number(i)+" > /dev/null 2>&1 & \"");
+        if (wait) {
+            QTest::qWait(100);
+        }
+    }
+}
+
 void ProjectLoadTest::addLotsOfFiles()
 {
-    QString path;
-    QString projectName;
-    do {
-        projectName = QString("testproject%1").arg(qrand());
-        path = QDir::currentPath().append("/").append(projectName);
-    } while(QFile::exists(path));
-    QDir::current().mkdir(projectName);
+    QPair<QString, KUrl> p = makeProject();
 
-    QDir::setCurrent(path);
-
-    QStringList projectFileContents;
-    projectFileContents
-    << "[Project]"
-    << QString("Name=") + projectName
-    << "Manager=KDevGenericManager";
-
-    KUrl projecturl( path + "/simpleproject.kdev4" );
-    QFile projectFile(projecturl.toLocalFile());
-    projectFile.open(QIODevice::WriteOnly);
-    projectFile.write(projectFileContents.join("\n").toAscii());
-    projectFile.close();
-
-    KDevelop::ICore::self()->projectController()->openProject(projecturl);
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
     QTest::qWait(2000);
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    Q_ASSERT(project->projectFileUrl() == projecturl);
+    Q_ASSERT(project->projectFileUrl() == p.second);
 
-    QDir(path).mkdir("foou");
-    _writeRandomStructure(path+"/foou", 50);
-    for(int i=0; i < 100; ++i) {
-        exec("bash -c \"cp -r foou foox"+QString::number(i)+" > /dev/null 2>&1 & \"");
-        QTest::qWait(100);
-    }
+    fillProject(50, 100, p, true);
 
     foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
         KDevelop::ICore::self()->projectController()->closeProject(p);
     }
 
     QTest::qWait(500);
-    exec("rm -r "+path);
+    exec("rm -r "+p.first);
+}
+
+void ProjectLoadTest::addMultipleJobs()
+{
+    QPair<QString, KUrl> p1 = makeProject();
+    fillProject(10, 25, p1, false);
+    QPair<QString, KUrl> p2 = makeProject();
+    fillProject(10, 25, p2, false);
+
+    KDevelop::ICore::self()->projectController()->openProject(p1.second);
+    KDevelop::ICore::self()->projectController()->openProject(p2.second);
+
+    QTest::qWait(2000);
+
+    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
+        KDevelop::ICore::self()->projectController()->closeProject(p);
+    }
+
+    QTest::qWait(500);
+    exec("rm -r "+p1.first);
+    exec("rm -r "+p2.first);
 }

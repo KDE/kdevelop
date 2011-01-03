@@ -49,11 +49,10 @@ class CodeCompletionWorker;
 class CompletionWorkerThread;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
-, public KTextEditor::CodeCompletionModelControllerInterface2
+, public KTextEditor::CodeCompletionModelControllerInterface3
 {
   Q_OBJECT
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
+  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface3)
 
   public:
     CodeCompletionModel(QObject* parent);
@@ -95,7 +94,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
     
-    virtual QString filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position);
+    virtual MatchReaction matchingItem(const QModelIndex& matched);
+    
+    virtual QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position);
     
     void clear();
     

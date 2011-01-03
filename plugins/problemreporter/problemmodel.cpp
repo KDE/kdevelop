@@ -21,20 +21,50 @@
 
 #include "problemmodel.h"
 
+#include <QTimer>
 #include <klocale.h>
 
-#include <language/editor/hashedstring.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
+#include <language/duchain/topducontext.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 #include "problemreporterplugin.h"
+#include "watcheddocumentset.h"
 
 using namespace KDevelop;
 
 ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
-  : QAbstractItemModel(parent)
+  : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_severity(ProblemData::Hint), m_documentSet(0)
 {
+    m_minTimer = new QTimer(this);
+    m_minTimer->setInterval(MinTimeout);
+    m_minTimer->setSingleShot(true);
+    connect(m_minTimer, SIGNAL(timeout()), SLOT(timerExpired()));
+    m_maxTimer = new QTimer(this);
+    m_maxTimer->setInterval(MaxTimeout);
+    m_maxTimer->setSingleShot(true);
+    connect(m_maxTimer, SIGNAL(timeout()), SLOT(timerExpired()));
+    setScope(CurrentDocument);
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
+    // CompletionSettings include a list of todo markers we care for, so need to update
+    connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), SLOT(forceFullUpdate()));
+
+    if (ICore::self()->documentController()->activeDocument()) {
+        setCurrentDocument(ICore::self()->documentController()->activeDocument());
+    }
 }
+
+const int ProblemModel::MinTimeout = 1000;
+const int ProblemModel::MaxTimeout = 5000;
 
 ProblemModel::~ ProblemModel()
 {
@@ -78,6 +108,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
 //     DUChainReadLocker lock(DUChain::lock());
 
     ProblemPointer p = problemForIndex(index);
+    KUrl baseDirectory = m_currentDocument.upUrl();
 
     if (!index.internalId()) {
         // Top level
@@ -90,15 +121,15 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return p->description();
                     case File: {
-                        return getDisplayUrl(p->finalLocation().document().str(), m_base);
+                        return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
                     }
                     case Line:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().line() + 1);
+                            return QString::number(p->finalLocation().start.line + 1);
                         break;
                     case Column:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().column() + 1);
+                            return QString::number(p->finalLocation().start.column + 1);
                         break;
                 }
                 break;
@@ -117,14 +148,14 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File: {
-                        return getDisplayUrl(p->locationStack().at(index.row()).document().str(), m_base);
+                        return getDisplayUrl(p->locationStack().at(index.row()).document.str(), baseDirectory);
                     } case Line:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().line() + 1);
+                            return QString::number(p->finalLocation().start.line + 1);
                         break;
                     case Column:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().column() + 1);
+                            return QString::number(p->finalLocation().start.column + 1);
                         break;
                 }
                 break;
@@ -179,11 +210,6 @@ int ProblemModel::columnCount(const QModelIndex & parent) const
     return LastColumn;
 }
 
-ProblemReporterPlugin * ProblemModel::plugin() const
-{
-    return static_cast<ProblemReporterPlugin*>(const_cast<QObject*>(sender()));
-}
-
 KDevelop::ProblemPointer ProblemModel::problemForIndex(const QModelIndex & index) const
 {
     if (index.internalId())
@@ -192,29 +218,9 @@ KDevelop::ProblemPointer ProblemModel::problemForIndex(const QModelIndex & index
         return m_problems.at(index.row());
 }
 
-void ProblemModel::addProblem(KDevelop::ProblemPointer problem)
+ProblemReporterPlugin* ProblemModel::plugin()
 {
-    beginInsertRows(QModelIndex(), m_problems.count(), m_problems.count());
-    m_problems.append(problem);
-    endInsertRows();
-}
-
-void ProblemModel::setProblems(const QList<KDevelop::ProblemPointer>& problems, KUrl base)
-{
-  m_base = base;
-  m_problems = problems;
-  reset();
-}
-
-QList< ProblemPointer > ProblemModel::allProblems() const
-{
-    return m_problems;
-}
-
-void ProblemModel::clear()
-{
-  m_problems.clear();
-  reset();
+    return m_plugin;
 }
 
 QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -238,4 +244,154 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
     }
 
     return QVariant();
+}
+
+void ProblemModel::problemsUpdated(const KDevelop::IndexedString& url)
+{
+    QReadLocker locker(&m_lock);
+    if (m_documentSet->get().contains(url)) {
+        // m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
+        m_minTimer->start();
+        // m_maxTimer will expire unconditionally in MaxTimeout
+        if (!m_maxTimer->isActive()) {
+            m_maxTimer->start();
+        }
+    }
+}
+
+void ProblemModel::timerExpired()
+{
+    m_minTimer->stop();
+    m_maxTimer->stop();
+    rebuildProblemList();
+}
+
+QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports)
+{
+    QList<ProblemPointer> result;
+    QSet<TopDUContext*> visitedContexts;
+    DUChainReadLocker lock;
+    getProblemsInternal(DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
+    return result;
+}
+
+QList< ProblemPointer > ProblemModel::getProblems(QSet< IndexedString > urls, bool showImports)
+{
+    QList<ProblemPointer> result;
+    QSet<TopDUContext*> visitedContexts;
+    DUChainReadLocker lock;
+    foreach(const IndexedString& url, urls) {
+        getProblemsInternal(DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
+    }
+    return result;
+}
+
+void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, QSet<TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result)
+{
+    if (!context || visitedContexts.contains(context)) {
+        return;
+    }
+    foreach(ProblemPointer p, context->problems()) {
+        if (p->severity() <= m_severity) {
+            result.append(p);
+        }
+    }
+    visitedContexts.insert(context);
+    if (showImports) {
+        bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
+        foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
+            if(!ctx.indexedContext().indexedTopContext().isLoaded())
+                continue;
+            TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
+            if(topCtx) {
+                //If we are starting at a proxy-context, only recurse into other proxy-contexts,
+                //because those contain the problems.
+                if(!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
+                    getProblemsInternal(topCtx, showImports, visitedContexts, result);
+            }
+        }
+    }
+}
+
+void ProblemModel::rebuildProblemList()
+{
+    // No locking here, because it may be called from an already locked context
+    m_problems = getProblems(m_documentSet->get(), m_showImports);
+    reset();
+}
+
+void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
+{
+    QWriteLocker locker(&m_lock);
+    m_currentDocument = document->url();
+    m_documentSet->setCurrentDocument(IndexedString(m_currentDocument));
+    reset();
+}
+
+void ProblemModel::setShowImports(bool showImports)
+{
+    if (m_showImports != showImports) {
+        QWriteLocker locker(&m_lock);
+        m_showImports = showImports;
+        rebuildProblemList();
+    }
+}
+
+void ProblemModel::setScope(int scope)
+{
+    Scope cast_scope = static_cast<Scope>(scope);
+    QWriteLocker locker(&m_lock);
+    if (!m_documentSet || m_documentSet->getScope() != cast_scope) {
+        if (m_documentSet) {
+            delete m_documentSet;
+        }
+        switch (cast_scope) {
+        case CurrentDocument:
+            m_documentSet = new CurrentDocumentSet(IndexedString(m_currentDocument), this);
+            break;
+        case OpenDocuments:
+            m_documentSet = new OpenDocumentSet(this);
+            break;
+        case CurrentProject:
+            m_documentSet = new CurrentProjectSet(IndexedString(m_currentDocument), this);
+            break;
+        case AllProjects:
+            m_documentSet = new AllProjectSet(this);
+            break;
+        }
+        connect(m_documentSet, SIGNAL(changed()), this, SLOT(documentSetChanged()));
+        rebuildProblemList();
+    }
+}
+
+void ProblemModel::setSeverity(int severity)
+{
+    ProblemData::Severity cast_severity = static_cast<ProblemData::Severity>(severity);
+    if (m_severity != cast_severity) {
+        QWriteLocker locker(&m_lock);
+        m_severity = cast_severity;
+        rebuildProblemList();
+    }
+}
+
+void ProblemModel::documentSetChanged()
+{
+    rebuildProblemList();
+}
+
+void ProblemModel::forceFullUpdate()
+{
+    m_lock.lockForRead();
+    QSet<IndexedString> documents = m_documentSet->get();
+    m_lock.unlock();
+    DUChainReadLocker lock(DUChain::lock());
+    foreach(const IndexedString& document, documents) {
+        if (document.isEmpty())
+            continue;
+
+        TopDUContext::Features updateType = TopDUContext::ForceUpdate;
+        if(documents.size() == 1)
+            updateType = TopDUContext::ForceUpdateRecursive;
+        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::VisibleDeclarationsAndContexts));
+    }
 }

@@ -32,8 +32,9 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
-#include <language/editor/editorintegrator.h>
-#include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/repositories/itemrepository.h>
+#include <language/duchain/duchain.h>
 
 #include "shellextension.h"
 
@@ -57,6 +58,9 @@
 #include "dashboardcontroller.h"
 #include <KMessageBox>
 
+#include <KTextEditor/Document>
+#include <ktexteditor/movinginterface.h>
+
 namespace KDevelop {
 
 Core *Core::m_self = 0;
@@ -75,7 +79,7 @@ KAboutData aboutData()
     aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     
     aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
-    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and ident support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and indent support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
     //Veritas is outside in playground currently.
     //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
@@ -92,7 +96,7 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
-bool CorePrivate::initialize(Core::Setup mode, const QString& session )
+bool CorePrivate::initialize(Core::Setup mode, QString session )
 {
     m_mode=mode;
     if( !sessionController )
@@ -117,6 +121,23 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     if( !partController && !(mode & Core::NoUi))
     {
         partController = new PartController(m_core, uiController->defaultMainWindow());
+
+        {
+            // check features of kate and report to user if it does not fit
+            KTextEditor::Document* doc = partController->createTextPart();
+
+            if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
+                KMessageBox::error(QApplication::activeWindow(),
+                                   i18n("The installed Kate version does not support the MovingInterface which is crucial for "
+                                        "KDevelop starting from version 4.2.\n\n"
+                                        "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is used instead "
+                                        "of the MovingInterface, you need KDevelop 4.1 or lower."));
+                delete doc;
+                return false;
+            }
+
+            delete doc;
+        }
     }
 
     if( !projectController )
@@ -124,14 +145,16 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         projectController = new ProjectController(m_core);
     }
 
-    if( !languageController )
-    {
-        languageController = new LanguageController(m_core);
-    }
-
     if( !documentController )
     {
         documentController = new DocumentController(m_core);
+    }
+
+    if( !languageController )
+    {
+        // Must be initialized after documentController, because the background parser depends
+        // on the document controller.
+        languageController = new LanguageController(m_core);
     }
 
     if( !runController )
@@ -170,12 +193,20 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     }
 
     kDebug() << "initializing ui controller";
+    
+    if( !session.isEmpty() && !SessionController::tryLockSession(session) && !(mode & Core::NoUi) )
+    {
+        QString errmsg = i18n("The session %1 is already active in another running instance. Choose another session or close the running instance.", session );
+        session = SessionController::showSessionChooserDialog(errmsg);
+        if(session.isEmpty())
+            return false;
+    }
+    
     sessionController->initialize( session );
 
     if(!sessionController->lockSession())
     {
-        QString errmsg = i18n("This session (%1) is already active in another running instance",
-                              sessionController->activeSession() ? sessionController->activeSession()->description() : "null" );
+        QString errmsg = i18n("Failed to lock the session %1, probably it is already active in another running instance", session );
         if( mode & Core::NoUi ) {
             QTextStream qerr(stderr);
             qerr << endl << errmsg << endl;
@@ -184,11 +215,11 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         }
         return false;
     }
-    // Initialize the item repository as first thing after loading the session,
+
     // TODO: Is this early enough, or should we put the loading of the session into
     // the controller construct
-    globalItemRepositoryRegistry();
-    
+    DUChain::initialize();
+
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
     projectController->initialize();

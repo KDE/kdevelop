@@ -36,9 +36,7 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 
-#ifdef HAVE_HIGHLIGHTIFACE
-  #include <KTextEditor/HighlightInterface>
-#endif
+#include <KTextEditor/HighlightInterface>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -91,32 +89,30 @@ ColorCache::ColorCache(QObject* parent)
   updateColorsFromScheme(); // default / fallback
   updateColorsFromSettings();
 
+  m_defaultColors = new CodeHighlightingColors(this);
+
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
            this, SLOT(updateColorsFromSettings()), Qt::QueuedConnection);
 
-  #ifdef HAVE_HIGHLIGHTIFACE
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-            this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
+          this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
 
-    if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
-      if ( doc->textDocument() ) {
-        updateColorsFromDocument(doc->textDocument());
-      }
+  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
+    if ( doc->textDocument() ) {
+      updateColorsFromDocument(doc->textDocument());
     }
-  #else
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(updateColorsFromScheme()), Qt::QueuedConnection);
-  #endif
+  }
+
+  updateInternal();
 
   m_self = this;
-
-  update();
 }
 
 ColorCache::~ColorCache()
 {
   m_self = 0;
   delete m_defaultColors;
+  m_defaultColors = 0;
 }
 
 ColorCache* ColorCache::self()
@@ -172,12 +168,16 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
   }
 
   QColor foreground(QColor::Invalid);
+  QColor background(QColor::Invalid);
 
   // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
 
-  #ifdef HAVE_HIGHLIGHTIFACE
   if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
-    foreground = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->foreground().color();
+    KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
+    foreground = style->foreground().color();
+    if (style->hasProperty(QTextFormat::BackgroundBrush)) {
+      background = style->background().color();
+    }
 //     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
     //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
     if ( KTextEditor::View* view = m_view.data() ) {
@@ -186,14 +186,20 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
     }
     connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
     m_view = doc->activeView();
+
+    if(!background.isValid()) {
+      // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()
+      background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
+    }
   }
-  #endif
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
     updateColorsFromScheme();
-  } else if ( m_foregroundColor != foreground ) {
+  } else if ( m_foregroundColor != foreground || m_backgroundColor != background ) {
     m_foregroundColor = foreground;
+    m_backgroundColor = background;
+
     update();
   }
 }
@@ -203,9 +209,11 @@ void ColorCache::updateColorsFromScheme()
   KColorScheme scheme(QPalette::Normal, KColorScheme::View);
 
   QColor foreground = scheme.foreground(KColorScheme::NormalText).color();
+  QColor background = scheme.background(KColorScheme::NormalBackground).color();
 
-  if ( foreground != m_foregroundColor ) {
+  if ( foreground != m_foregroundColor || background != m_backgroundColor ) {
     m_foregroundColor = foreground;
+    m_backgroundColor = background;
     update();
   }
 }
@@ -224,16 +232,22 @@ void ColorCache::updateColorsFromSettings()
 
 void ColorCache::update()
 {
+  if ( !m_self ) {
+    // don't update on startup, updateInternal is called directly there
+    return;
+  }
+
   QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
 }
 
 void ColorCache::updateInternal()
 {
-  if ( !m_self ) { // don't update during startup
+  generateColors();
+
+  if ( !m_self ) {
+    // don't do anything else fancy on startup
     return;
   }
-
-  generateColors();
 
   emit colorsGotChanged();
 
@@ -248,7 +262,7 @@ void ColorCache::updateInternal()
         TopDUContext* top = langSupport->standardContext(doc->url());
 
         if(top) {
-          if ( const ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
+          if ( ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
             highlighting->highlightDUChain(top);
           }
         }
@@ -259,12 +273,23 @@ void ColorCache::updateInternal()
 
 QColor ColorCache::blend(QColor color, uchar ratio) const
 {
+  Q_ASSERT(m_foregroundColor.isValid());
   if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
   }
   // adapt contrast
   return KColorUtils::mix( m_foregroundColor, color, float(ratio) / float(0xff) );
+}
+
+QColor ColorCache::blendBackground(QColor color, uchar ratio) const
+{
+/*  if ( KColorUtils::luma(m_backgroundColor) >= 0.5 ) {
+    // for dark color schemes, produce a fitting color first
+    color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
+  }*/
+  // adapt contrast
+  return KColorUtils::mix( m_backgroundColor, color, float(ratio) / float(0xff) );
 }
 
 QColor ColorCache::blendGlobalColor(QColor color) const
@@ -279,6 +304,7 @@ QColor ColorCache::blendLocalColor(QColor color) const
 
 CodeHighlightingColors* ColorCache::defaultColors() const
 {
+  Q_ASSERT(m_defaultColors);
   return m_defaultColors;
 }
 

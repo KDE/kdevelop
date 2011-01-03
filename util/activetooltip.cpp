@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Vladimir Prus
+   Copyright 2009-2010 David Nolden
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,8 @@
 #include <QPointer>
 #include <qdesktopwidget.h>
 #include <qmenu.h>
+#include <qstylepainter.h>
+#include <qstyleoption.h>
 
 namespace KDevelop
 {
@@ -46,6 +49,7 @@ public:
 ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     : QWidget(parent, Qt::ToolTip), d(new ActiveToolTipPrivate)
 {
+    Q_ASSERT(parent);
     d->mouseOut_ = 0;
     d->previousDistance_ = std::numeric_limits<uint>::max();
     setMouseTracking(true);
@@ -54,8 +58,14 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     move(position);
 
     QPalette p;
+    
+    // adjust background color to use tooltip colors
     p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
     p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
+
+    // adjust foreground color to use tooltip colors
+    p.setColor(foregroundRole(), p.color(QPalette::ToolTipText));
+    p.setColor(QPalette::Text, p.color(QPalette::ToolTipText));
     setPalette(p);
 
     qApp->installEventFilter(this);
@@ -75,7 +85,8 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     {
         if(insideThis(object))
             return false;
-        kDebug() << "closing because of window activation";
+        if(isVisible())
+            kDebug() << "closing because of window activation";
         close();
     }
     case QEvent::MouseButtonPress:
@@ -91,7 +102,8 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
                 return false;
         }
         if (!insideThis(object)) {
-            kDebug() << "closing because of click into" << object;
+            if(isVisible())
+                kDebug() << "closing because of click into" << object;
             close();
         }
 
@@ -117,11 +129,15 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
                 
                 //Additional test: When the cursor has been moved towards the tooltip, don't close it.
                 if(distance > (int)d->previousDistance_)
+                {
                     ++d->mouseOut_;
-                else
+                    emit mouseOut();
+                }else
                     d->previousDistance_ = distance;
-            } else               
+            } else{
                 d->mouseOut_ = 0;
+                emit mouseIn();
+            }
             if (d->mouseOut_ == 2) {
                 kDebug() << "closing because of mouse move";
                 close();
@@ -174,12 +190,29 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
     
+    // set mask from style
+    QStyleOptionFrame opt;
+    opt.init(this);
+
+    QStyleHintReturnMask mask;
+    if( style()->styleHint( QStyle::SH_ToolTip_Mask, &opt, this, &mask ) && !mask.region.isEmpty() )
+    { setMask( mask.region ); }
+
     emit resized();
 
     updateMouseDistance();
 }
 
-void ActiveToolTip::addExtendRect(QRect rect)
+void ActiveToolTip::paintEvent(QPaintEvent* event)
+{
+    QStylePainter painter( this );
+    painter.setClipRegion( event->region() );
+    QStyleOptionFrame opt;
+    opt.init(this);
+    painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
+}
+
+void ActiveToolTip::addExtendRect(const QRect& rect)
 {
     d->rectExtensions_ += rect;
 }
@@ -193,9 +226,9 @@ void ActiveToolTip::adjustRect()
     updateMouseDistance();
 }
 
-void ActiveToolTip::setBoundingGeometry(QRect r) {
-    r.adjust(-10, -10, 10, 10);
-    d->rect_ = r;
+void ActiveToolTip::setBoundingGeometry(const QRect& geometry) {
+    d->rect_ = geometry;
+    d->rect_.adjust(-10, -10, 10, 10);
 }
 
 namespace {
@@ -251,13 +284,13 @@ void ActiveToolTipManager::doVisibility() {
         if(fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
             fullGeometry.moveBottom(fullGeometry.top()-10);
-            if(fullGeometry.bottom() > QCursor::pos().y() - 20)
+            if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveBottom(QCursor::pos().y() - 20);
         }
         if(fullGeometry.right() > screenGeometry.right()) {
             //Move to left, avoiding the mouse-cursor
             fullGeometry.moveRight(fullGeometry.left()-10);
-            if(fullGeometry.right() > QCursor::pos().x() - 20)
+            if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
         }
         

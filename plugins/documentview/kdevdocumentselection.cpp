@@ -18,9 +18,8 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "kdevdocumentselection.h"
-#include "kdevdocumentmodel.h"
 
-KDevDocumentSelection::KDevDocumentSelection( KDevDocumentModel * model )
+KDevDocumentSelection::KDevDocumentSelection( QAbstractItemModel * model )
         : QItemSelectionModel( model )
 {}
 

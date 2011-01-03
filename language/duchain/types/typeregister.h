@@ -174,6 +174,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
     void callDestructor(AbstractTypeData* data) const;
 
+    ///Returns true if the factory for this data type is loaded.
+    ///If false is returned, then any of the other calls will fail.
+    bool isFactoryLoaded(const AbstractTypeData& data) const;
+    
     /// Access the static TypeSystem instance.
     static TypeSystem& self();
 

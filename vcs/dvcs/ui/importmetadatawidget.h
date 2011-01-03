@@ -27,14 +27,16 @@
 
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 
-#include "ui_importmetadatawidget.h"
+namespace Ui {
+class ImportMetadataWidget;
+}
 
 /**
  * Asks the user for all options needed to import an existing directory into
  * a Git repository
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class ImportMetadataWidget : public KDevelop::VcsImportMetadataWidget, private Ui::ImportMetadataWidget
+class ImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
 {
     Q_OBJECT
 public:

@@ -21,7 +21,7 @@
 
 #include <limits>
 
-#include "../editor/simplerange.h"
+#include "../editor/rangeinrevision.h"
 
 #include "../languageexport.h"
 
@@ -49,12 +49,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT Use
 {
 public:
 
-  Use(const SimpleRange& range = SimpleRange::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
+  Use(const RangeInRevision& range = RangeInRevision::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
   }
   
-  Declaration* usedDeclaration(TopDUContext* topContext);
+  Declaration* usedDeclaration(TopDUContext* topContext) const;
 
-  SimpleRange m_range;
+  RangeInRevision m_range;
   int m_declarationIndex;
 };
 

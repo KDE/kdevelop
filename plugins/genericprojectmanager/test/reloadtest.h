@@ -37,6 +37,8 @@ private slots:
 
   void addRemoveFiles();
   void addLotsOfFiles();
+  void addMultipleJobs();
+
 private:
   KDevelop::TestCore* m_core;
 };

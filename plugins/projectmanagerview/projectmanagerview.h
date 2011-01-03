@@ -22,8 +22,10 @@
 #define KDEVPROJECTMANAGERVIEW_H
 
 #include <QtGui/QWidget>
+#include <KAction>
 
-class KAction;
+class QModelIndex;
+
 class KUrl;
 
 namespace Ui
@@ -40,6 +42,19 @@ class ProjectBaseItem;
 
 class ProjectManagerViewPlugin;
 
+class ProjectManagerFilterAction : public KAction {
+    Q_OBJECT
+
+public:
+    explicit ProjectManagerFilterAction( QObject* parent );
+
+signals:
+    void filterChanged(const QString& filter);
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent );
+};
+
 class ProjectManagerView: public QWidget
 {
     Q_OBJECT
@@ -54,6 +69,7 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void openUrl( const KUrl& );
+    void filterChanged(const QString&);
 
 private:
     QAction* m_syncAction;

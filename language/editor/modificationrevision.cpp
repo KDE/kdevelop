@@ -22,7 +22,6 @@
 #include <QFileInfo>
 
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
 
 #if defined(Q_CC_MSVC)
 #include <hash_map>
@@ -43,11 +42,11 @@ class  hash_map : public std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> { }
 #endif
 
 
-#include "editorintegrator.h"
-#include "hashedstring.h"
 #include "../duchain/indexedstring.h"
 #include "modificationrevisionset.h"
 #include <sys/time.h>
+
+///@todo Listen to filesystem changes (together with the project manager) and call fileModificationCache().clear(...) when a file has changed
 
 namespace KDevelop {
 
@@ -83,8 +82,14 @@ FileModificationMap& fileModificationCache() {
   return cache;
 }
 
+typedef hash_map<KDevelop::IndexedString, int, IndexedStringHash> OpenDocumentRevisionsMap;
+
+OpenDocumentRevisionsMap& openDocumentsRevisionMap() {
+  static OpenDocumentRevisionsMap map;
+  return map;
+}
+
 QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
-  QMutexLocker lock(&fileModificationTimeCacheMutex);
   
   timeval currentTime;
   gettimeofday(&currentTime, 0);
@@ -105,7 +110,7 @@ QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName) {
-  ModificationRevisionSet::clearCache();
+  ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
   
   QMutexLocker lock(&fileModificationTimeCacheMutex);
 
@@ -116,16 +121,34 @@ void ModificationRevision::clearModificationCache(const IndexedString& fileName)
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url) {
 
+  QMutexLocker lock(&fileModificationTimeCacheMutex);
+  
   ModificationRevision ret(fileModificationTimeCached(url));
 
-  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(url);
-  if( doc ) {
-    KTextEditor::SmartInterface* smart =   dynamic_cast<KTextEditor::SmartInterface*>(doc);
-    if( smart )
-      ret.revision = smart->currentRevision();
-  }
+  OpenDocumentRevisionsMap::const_iterator it = openDocumentsRevisionMap().find(url);
+  if(it != openDocumentsRevisionMap().end())
+    ret.revision = (*it).second;
   
   return ret;
+}
+
+void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedString& url)
+{
+  ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
+  
+  QMutexLocker lock(&fileModificationTimeCacheMutex);
+  if(openDocumentsRevisionMap().find(url) != openDocumentsRevisionMap().end())
+    openDocumentsRevisionMap().erase(url);
+}
+
+void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedString& url, int revision)
+{
+  ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
+  
+  QMutexLocker lock(&fileModificationTimeCacheMutex);
+  openDocumentsRevisionMap().erase(url);
+  openDocumentsRevisionMap().insert(std::make_pair(url, revision));
+  Q_ASSERT(revisionForFile(url).revision == revision);
 }
 
 ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime.toTime_t()), revision(revision_) {

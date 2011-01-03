@@ -60,12 +60,14 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     setXMLFile( "kdevcodeutils.rc" );
 
     KAction *action = actionCollection()->addAction( "document_declaration" );
+    // i18n: action name; 'Document' is a verb
     action->setText( i18n( "Document Declaration" ) );
     action->setShortcut( i18n( "Alt+Shift+d" ) );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( documentDeclaration() ) );
     action->setToolTip( i18n( "Add Doxygen skeleton for declaration under cursor." ) );
+    // i18n: translate title same as the action name
     action->setWhatsThis( i18n( "<b>Document Declaration</b><p>"
-                                "Adds a basic Doxygen comment sekeleton in front of "
+                                "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function."
                                 "</p>" ) );
@@ -117,7 +119,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     ///TODO: handle existing comments
     stream << indentation << "/**\n";
-    stream << indentation << " * ${" << i18n( "..." ) << "}\n";
+    stream << indentation << " * @brief ${" << i18n( "..." ) << "}\n";
 
     if (dec->isFunctionDeclaration()) {
         AbstractFunctionDeclaration* funDec = dynamic_cast<AbstractFunctionDeclaration*>(dec);

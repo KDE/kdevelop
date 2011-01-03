@@ -23,42 +23,63 @@
 
 #include <QtGui/QStringListModel>
 #include <KDE/KDialog>
+#include <QStandardItemModel>
 
-#include "ui_branchmanager.h"
-
-///TODO: maybe KDevelop's progressBar?
-
+class BranchesListModel;
 class KJob;
+namespace Ui { class BranchDialogBase; }
 
 namespace KDevelop
 {
     class DistributedVersionControlPlugin;
 }
 
-class BranchManager : public KDialog, public Ui::BranchDialogBase
+class BranchManager : public KDialog
 {
     Q_OBJECT
 public:
     BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
     ~BranchManager();
+    
+    bool isValid() const { return m_valid; }
 
 signals:
     void checkedOut(KJob*);
 
 private slots:
     void createBranch();
-    void renameBranch(QListWidgetItem * item);
     void delBranch();
     void checkoutBranch();
 
-    void currentActivatedData(QListWidgetItem * item);
-    void activateButtons(const QItemSelection&, const QItemSelection&);
-
 private:
     QString repo;
-    QString lastActivated;
     KDevelop::DistributedVersionControlPlugin* d;
 
+    Ui::BranchDialogBase* m_ui;
+    BranchesListModel* m_model;
+    bool m_valid;
+    
 };
+
+class BranchesListModel : public QStandardItemModel
+{
+    Q_OBJECT
+    public:
+        BranchesListModel(KDevelop::DistributedVersionControlPlugin* dvcsplugin, const QString& repo, QObject* parent = 0);
+        
+        void createBranch(const QString& baseBranch, const QString& newBranch);
+        void removeBranch(const QString& branch);
+        
+        KDevelop::DistributedVersionControlPlugin* dvcsPlugin() const { return dvcsplugin; }
+        QString repository() const { return repo; }
+        
+    public slots:
+        void resetCurrent();
+        
+    private:
+        KDevelop::DistributedVersionControlPlugin* dvcsplugin;
+        QString repo;
+};
+
 
 #endif

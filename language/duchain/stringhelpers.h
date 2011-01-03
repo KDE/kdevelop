@@ -82,6 +82,20 @@ QString KDEVPLATFORMLANGUAGE_EXPORT formatComment( const QString& comment );
 QByteArray KDEVPLATFORMLANGUAGE_EXPORT formatComment( const QByteArray& comment );
 
 /**
+ * Remove characters in @ref str from the end of @ref from
+ *
+ * @return number of stripped characters
+ * */
+int KDEVPLATFORMLANGUAGE_EXPORT rStrip( const QByteArray& str, QByteArray& from );
+
+/**
+ * Remove characters in @ref str from the beginning of @ref from
+ *
+ * @return number of stripped characters
+ * */
+int KDEVPLATFORMLANGUAGE_EXPORT strip( const QByteArray& str, QByteArray& from );
+
+/**
  * Can be used to iterate through different kinds of parameters, for example template-parameters(By giving it "<>:")
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator

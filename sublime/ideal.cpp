@@ -134,7 +134,8 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
 
         // paint text and icon
         option.text = text();
-        QPixmap ic = icon().pixmap(option.iconSize, QIcon::Normal, QIcon::On);
+        QIcon::Mode iconMode = (option.state & QStyle::State_MouseOver) ? QIcon::Active : QIcon::Normal;
+        QPixmap ic = icon().pixmap(option.iconSize, iconMode, QIcon::On);
         QTransform tf;
         if(_area == Qt::LeftDockWidgetArea) {
             tf = tf.rotate(90);
@@ -153,6 +154,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     , _corner(0)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setToolTip(i18n("Right click to add new tool views."));
 
     if (area == Qt::BottomDockWidgetArea)
     {
@@ -275,6 +277,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _buttons.insert(action, button);
 
             button->setText(action->text());
+            button->setToolTip(i18n("Toggle '%1' tool view.", action->text()));
             button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
@@ -341,6 +344,7 @@ IdealDockWidget::IdealDockWidget(IdealMainWidget *parent)
       m_maximized(false),
       m_mainWidget(parent)
 {
+    setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(contextMenuRequested(QPoint)));
@@ -456,8 +460,17 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     KMenu menu;
     menu.addTitle(windowIcon(), windowTitle());
 
+    menu.addActions(m_view->contextMenuActions());
+    menu.addSeparator();
+
+    ///TODO: can this be cleaned up?
+    if(QToolBar* toolBar = widget()->findChild<QToolBar*>()) {
+        menu.addAction(toolBar->toggleViewAction());
+        menu.addSeparator();
+    }
+
     /// start position menu
-    QMenu* positionMenu = menu.addMenu(i18n("Position"));
+    QMenu* positionMenu = menu.addMenu(i18n("Toolview Position"));
 
     QActionGroup *g = new QActionGroup(this);
 
@@ -484,28 +497,15 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
     QAction *setShortcut = menu.addAction(KIcon("configure-shortcuts"), i18n("Assign Shortcut..."));
+    setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the toolview."));
 
     menu.addSeparator();
-    QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove"));
+    QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove Toolview"));
     QAction* toggleAnchored;
     if ( isAnchored() ) {
-        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock"));
+        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock Toolview"));
     } else {
-        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock"));
-    }
-
-    if ( QMainWindow* toolView = qobject_cast<QMainWindow*>(widget()) ) {
-        menu.addSeparator();
-        QToolBar* bar = 0;
-        foreach( QObject* child, toolView->children() ) {
-            if ( (bar = qobject_cast<QToolBar*>(child)) ) {
-                break;
-            }
-        }
-        Q_ASSERT(bar);
-        menu.addActions(bar->actions());
-        menu.addSeparator();
-        menu.addAction(bar->toggleViewAction());
+        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock Toolview"));
     }
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));

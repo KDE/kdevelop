@@ -26,11 +26,13 @@
 #include <QFile>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
+#include <KMessageBox>
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
@@ -41,7 +43,6 @@
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/factory.h>
-#include <ktexteditor/smartinterface.h>
 
 #include "core.h"
 
@@ -113,8 +114,13 @@ KTextEditor::Editor* PartController::editorPart() const
             "KTextEditor/Document",
             "KTextEditor::Editor" ));
 
-        //TODO: turn into KMessageBox with translatable error message
-        Q_ASSERT_X(editorFactory, "PartController::createTextPart", "could not find KTextEditor::Factory, check your installation");
+        if (!editorFactory) {
+            KMessageBox::error(qApp->activeWindow(), i18n("System Configuration Error"),
+                               i18n("Could not find KTextEditor::Factory, check your installation.\n"
+                                    "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ));
+            qApp->quit();
+            return 0;
+        }
 
         d->m_textEditor = editorFactory->editor();
     }
@@ -133,26 +139,6 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
     }
 
     return doc;
-}
-
-void PartController::removePart( KParts::Part *part )
-{
-#if 0
-    if ( KTextEditor::Document * doc = qobject_cast<KTextEditor::Document *>( part ) )
-    {
-        if ( KTextEditor::SmartInterface * smart = dynamic_cast<KTextEditor::SmartInterface*>( doc ) )
-        {
-            // FIXME not supposed to delete locked mutexes...
-            QMutexLocker lock ( smart->smartMutex() );
-            KParts::PartManager::removePart( part );
-            return ;
-        }
-
-        kWarning() << "Deleting text editor" << doc << "which does not have a smart interface." ;
-    }
-#endif
-
-    KParts::PartManager::removePart( part );
 }
 
 KParts::Part* PartController::createPart( const QString & mimeType,

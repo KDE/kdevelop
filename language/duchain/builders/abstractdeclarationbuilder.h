@@ -25,7 +25,6 @@
 #include "../forwarddeclaration.h"
 #include "../types/identifiedtype.h"
 #include "../functiondeclaration.h"
-#include "../../editor/editorintegrator.h"
 
 namespace KDevelop
 {
@@ -72,10 +71,7 @@ protected:
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    SimpleRange newRange = editorFindRange(name ? name : range, name ? name : range);
-
-    if (newRange.start >= newRange.end)
-      kWarning() << "Range collapsed";
+    RangeInRevision newRange = editorFindRange(name ? name : range, name ? name : range);
 
     QualifiedIdentifier id = identifierForNode(name);
 
@@ -92,7 +88,7 @@ protected:
    * \param isDefinition whether the new declaration is also a definition.
    */
   template<class DeclarationT>
-  DeclarationT* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, DeclarationFlags flags = NoFlags)
+  DeclarationT* openDeclaration(const QualifiedIdentifier& id, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
   {
     Identifier localId;
 
@@ -105,18 +101,13 @@ protected:
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration
 
-      // Translate cursor to take into account any changes the user may have made since the text was retrieved
-      LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
-      SimpleRange translated = LanguageSpecificDeclarationBuilderBase::editor()->translate(iface, newRange);
-
-      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
+      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, CursorInRevision::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
       foreach( Declaration* dec, declarations ) {
 
         if( LanguageSpecificDeclarationBuilderBase::wasEncountered(dec) )
           continue;
 
-        //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
-        if (dec->range() == translated &&
+        if (dec->range() == newRange &&
             (localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
             typeid(*dec) == typeid(DeclarationT)
             //&& extraDeclarationComparisons()
@@ -132,14 +123,9 @@ protected:
     if (!declaration) {
       declaration = new DeclarationT(newRange, LanguageSpecificDeclarationBuilderBase::currentContext());
 
-      LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
-      KTextEditor::SmartRange* range = LanguageSpecificDeclarationBuilderBase::editor()->createRange(iface, newRange.textRange());
-      declaration->setSmartRange(range);
       if (flags & DeclarationIsDefinition)
         declaration->setDeclarationIsDefinition(true);
       declaration->setIdentifier(localId);
-
-      LanguageSpecificDeclarationBuilderBase::editor()->exitCurrentRange(iface);
     }
 
     declaration->setComment(m_lastComment);
@@ -161,7 +147,7 @@ protected:
 
   /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
   template<class DeclarationT>
-  DeclarationT* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange)
+  DeclarationT* openDefinition(const QualifiedIdentifier& id, const RangeInRevision& newRange)
   {
     return openDeclaration<DeclarationT>(id, newRange, DeclarationIsDefinition);
   }

@@ -70,6 +70,9 @@
 #include <qlabel.h>
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
+#include <interfaces/isession.h>
+#include "vcsevent.h"
+#include <KCompositeJob>
 
 namespace KDevelop
 {
@@ -87,6 +90,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffToHeadAction;
     KAction * diffToBaseAction;
     KAction * revertAction;
+    KAction * diffForRevAction;
     
     void createActions(QObject * parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
@@ -97,6 +101,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
+        diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
@@ -106,6 +111,17 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
         connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
+        connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
+    }
+    
+    bool allLocalFiles(const KUrl::List& urls)
+    {
+        bool ret=true;
+        foreach(const KUrl& url, urls) {
+            QFileInfo info(url.toLocalFile());
+            ret &= info.isFile();
+        }
+        return ret;
     }
     
     QMenu* createMenu()
@@ -136,7 +152,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
-        annotationAction->setEnabled(singleVersionedFile);
+        annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
         diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
@@ -226,6 +242,7 @@ void VcsPluginHelper::revert()
 void VcsPluginHelper::diffToHead()
 {
     SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
     KDevelop::VcsJob* job = iface->diff(url,
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head),
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
@@ -234,48 +251,52 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-QStringList locationListToString(const QList<VcsLocation>& locations)
-{
-    QStringList ret;
-    foreach(const VcsLocation& loc, locations) {
-        ret.append(loc.localUrl().prettyUrl());
-    }
-    return ret;
-}
-
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
-    KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
+    KDevelop::VcsJob* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
     Q_ASSERT(vcsjob);
 
-    if (vcsjob) {
-        if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
-            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            if(d.isEmpty())
-                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                   i18n("Cannot show the differences because there were none."),
-                                   i18n("VCS support"));
-            else {
-                VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
-                showVcsDiff(patch);
-            }
-        } else {
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
+    if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
+        KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+        if(d.isEmpty())
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                i18n("There are no differences."),
+                                i18n("VCS support"));
+        else {
+            VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
+            showVcsDiff(patch);
         }
-
-        vcsjob->disconnect(this);
+    } else {
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
     }
 }
 
 void VcsPluginHelper::diffToBase()
 {
     SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
     KDevelop::VcsJob* job = iface->diff(url,
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
     ICore::self()->runController()->registerJob(job);
+}
+
+void VcsPluginHelper::diffForRev()
+{
+    QAction* action = qobject_cast<QAction*>( sender() );
+    Q_ASSERT(action);
+    Q_ASSERT(action->data().canConvert<VcsRevision>());
+    VcsRevision rev = action->data().value<VcsRevision>();
+
+    SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
+    VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
+    KDevelop::VcsJob* job = iface->diff(url, prev, rev );
+
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
+    d->plugin->core()->runController()->registerJob(job);
 }
 
 void VcsPluginHelper::history()
@@ -319,6 +340,9 @@ void VcsPluginHelper::annotation()
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
+            connect(doc->textDocument()->activeView(),
+                    SIGNAL(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )),
+                    this, SLOT(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -327,6 +351,19 @@ void VcsPluginHelper::annotation()
         KMessageBox::error(0, i18n("Cannot execute annotate action because the "
                                    "document was not found, or was not a text document:\n%1", url.pathOrUrl()));
     }
+}
+
+void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
+{
+    KTextEditor::AnnotationInterface* annotateiface =
+        qobject_cast<KTextEditor::AnnotationInterface*>(view->document());
+
+    VcsAnnotationModel* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
+    Q_ASSERT(model);
+
+    VcsRevision rev = model->revisionForLine(line);
+    d->diffForRevAction->setData(QVariant::fromValue(rev));
+    menu->addAction(d->diffForRevAction);
 }
 
 void VcsPluginHelper::update()
@@ -342,27 +379,62 @@ void VcsPluginHelper::add()
 void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
-    KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog(d->plugin, d->plugin->core()->uiController()->activeMainWindow());
-//     KConfigGroup vcsGroup(KSharedConfig::openConfig(componentData()), "VcsCommon");
-//     dlg->setOldMessages(vcsGroup.readEntry("OldCommitMessages", QStringList()));
-//     dlg->setRecursive(true);
-    connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
-    connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
-    dlg->setCommitCandidatesAndShow(d->ctxUrls.first());
+    ICore::self()->documentController()->saveAllDocuments();
+
+    KUrl url = d->ctxUrls.first();
+    QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
+    QMap<KUrl, VcsStatusInfo::State> changes;
+    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
+    {
+        QVariant varlist = statusJob->fetchResults();
+
+        foreach( const QVariant &var, varlist.toList() )
+        {
+            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            
+            if(info.state()!=VcsStatusInfo::ItemUpToDate)
+                changes[info.url()] = info.state();
+        }
+    }
+    else
+        kDebug() << "Couldn't get status for urls: " << url;
+    
+    QScopedPointer<VcsJob> diffJob(d->vcs->diff(url,
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
+
+    VcsDiff diff;
+    bool correctDiff = diffJob->exec();
+    if(correctDiff)
+        diff = diffJob->fetchResults().value<VcsDiff>();
+    
+    if(!correctDiff)
+        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+
+    // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
+    
+    bool ret = showVcsDiff(patchSource);
+    
+    Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
+    if(ret) {
+        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
+        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
+    } else {
+        delete patchSource;
+    }
 }
 
-void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
+void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
 {
-    KConfigGroup vcsGroup(KSharedConfig::openConfig(d->plugin->componentData()), "VcsCommon");
-    QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
-    oldMessages << dlg->message();
-    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
+    VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
+    d->plugin->core()->runController()->registerJob(job);
+    addOldCommitMessage(message);
+}
 
-    KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
-    d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->determineUrlsForCheckin(),
-            dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive));
-
-    dlg->deleteLater();
+void VcsPluginHelper::commitReviewCancelled(QString message)
+{
+    addOldCommitMessage(message);
 }
 
 void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
@@ -370,6 +442,35 @@ void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
     dlg->deleteLater();
 }
 
+QStringList retrieveOldCommitMessages()
+{
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    return vcsGroup.readEntry("OldCommitMessages", QStringList());
 }
+
+namespace {
+    int maxMessages = 10;
+}
+
+void addOldCommitMessage(QString message)
+{
+    if(ICore::self()->shuttingDown())
+        return;
+    
+    QStringList oldMessages = retrieveOldCommitMessages();
+    
+    if(oldMessages.contains(message))
+        oldMessages.removeAll(message);
+    
+    oldMessages.push_front(message);
+    while(oldMessages.size() > maxMessages)
+        oldMessages.pop_back();
+    
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
+}
+
+}
+
 
 #include "vcspluginhelper.moc"

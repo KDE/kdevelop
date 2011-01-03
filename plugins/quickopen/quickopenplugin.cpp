@@ -52,7 +52,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include <language/editor/hashedstring.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -73,10 +72,12 @@
 #include <util/activetooltip.h>
 #include <qboxlayout.h>
 #include <language/util/navigationtooltip.h>
+#include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 
 using namespace KDevelop;
 
-const uint rowCountForDisablingScrollBar = 5000;
+const int rowCountForDisablingScrollBar = 5000;
 
 const bool noHtmlDestriptionInOutline = true;
 
@@ -206,7 +207,7 @@ Declaration* cursorContextDeclaration() {
 
   SimpleCursor cursor(view->cursorPosition());
 
-  DUContext* subCtx = ctx->findContext(cursor);
+  DUContext* subCtx = ctx->findContext(ctx->transformToLocalRevision(cursor));
 
   while(subCtx && !subCtx->owner())
     subCtx = subCtx->parentContext();
@@ -726,17 +727,17 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    KAction* quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
-    quickOpenDeclaration->setText( i18n("Jump to Declaration") );
-    quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
-    quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
-    connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
+    m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
+    m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
+    m_quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
+    m_quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
+    connect(m_quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()), Qt::QueuedConnection);
 
-    KAction* quickOpenDefinition = actions.addAction("quick_open_jump_definition");
-    quickOpenDefinition->setText( i18n("Jump to Definition") );
-    quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
-    quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
-    connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
+    m_quickOpenDefinition = actions.addAction("quick_open_jump_definition");
+    m_quickOpenDefinition->setText( i18n("Jump to Definition") );
+    m_quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
+    m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 
     KAction* quickOpenLine = actions.addAction("quick_open_line");
     quickOpenLine->setText( i18n("Embedded Quick Open") );
@@ -811,6 +812,32 @@ QuickOpenPlugin::~QuickOpenPlugin()
 
 void QuickOpenPlugin::unload()
 {
+}
+
+ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context)
+{
+  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
+
+  KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+
+  if (!codeContext)
+      return menuExt;
+
+  DUChainReadLocker readLock;
+  Declaration* decl(codeContext->declaration().data());
+
+  if (decl) {
+    const bool isDef = FunctionDefinition::definition(decl);
+    if (codeContext->use().isValid() || !isDef) {
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDeclaration);
+    }
+
+    if(isDef) {
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDefinition);
+    }
+  }
+
+  return menuExt;
 }
 
 void QuickOpenPlugin::showQuickOpen(const QStringList& items)
@@ -946,7 +973,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   decl->activateSpecialization();
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->range().start;
+  SimpleCursor c = decl->rangeInCurrentRevision().start;
 
   if(u.str().isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
@@ -1032,11 +1059,11 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->range().start;
+  SimpleCursor c = decl->rangeInCurrentRevision().start;
   if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
     def->activateSpecialization();
     u = def->url();
-    c = def->range().start;
+    c = def->rangeInCurrentRevision().start;
   }else{
     kDebug() << "Found no definition for declaration";
     decl->activateSpecialization();
@@ -1145,7 +1172,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   OutlineFilter filter(items, OutlineFilter::Functions);
   DUChainUtils::collectItems( context, filter );
 
-  SimpleCursor cursor = SimpleCursor(doc->cursorPosition());
+  CursorInRevision cursor = context->transformToLocalRevision(SimpleCursor(doc->cursorPosition()));
   if (!cursor.isValid())
     return;
 
@@ -1167,15 +1194,19 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     }
   }
 
-  SimpleCursor c = SimpleCursor::invalid();
+  CursorInRevision c = CursorInRevision::invalid();
   if (direction == QuickOpenPlugin::NextFunction && nearestDeclAfter)
     c = nearestDeclAfter->range().start;
   else if (direction == QuickOpenPlugin::PreviousFunction && nearestDeclBefore)
     c = nearestDeclBefore->range().start;
 
-  lock.unlock();
+  KTextEditor::Cursor textCursor = KTextEditor::Cursor::invalid();
   if (c.isValid())
-    core()->documentController()->openDocument(doc->url(), c.textCursor());
+    textCursor = context->transformFromLocalRevision(c).textCursor();
+
+  lock.unlock();
+  if (textCursor.isValid())
+    core()->documentController()->openDocument(doc->url(), textCursor);
   else
     kDebug() << "No declaration to jump to";
 }
@@ -1307,6 +1338,8 @@ QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget
 
     deactivate();
     setDefaultText(i18n("Quick Open..."));
+    setToolTip(i18n("Search for files, classes, functions and more,"
+                    " allowing you to quickly navigate in your source code."));
     setObjectName(m_widgetCreator->objectNameForLine());
     setFocusPolicy(Qt::ClickFocus);
 }

@@ -36,12 +36,13 @@
 #include <vcs/vcsstatusinfo.h>
 #include <outputview/outputjob.h>
 
+class QMenu;
 class QString;
 class KDevDVCSViewFactory;
-class DVcsJob;
 
 namespace KDevelop
 {
+class DVcsJob;
 class VcsJob;
 class ContextMenuExtension;
 struct DistributedVersionControlPluginPrivate;
@@ -63,13 +64,6 @@ public:
     virtual ~DistributedVersionControlPlugin();
 
     // Begin: KDevelop::IBasicVersionControl
-
-    virtual VcsJob* log(const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        unsigned long limit) = 0;
-    virtual VcsJob* log(const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        const VcsRevision& limit);
 
     /** Used in KDevelop's appwizardplugin (creates import widget) */
     virtual VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
@@ -105,7 +99,17 @@ public:
     /** Returns the list of branches. */
     virtual QStringList branches(const QString &repository) = 0;
     // End: In tree branch-management
+    
+    /** Returns the list of all commits (in all branches).
+     * @see CommitView and CommitViewDelegate to see how this list is used.
+     */
+    virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
 
+    /**
+     * When a plugin wants to add elements to the vcs menu, this method can be
+     * overriden.
+     */
+    virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
 public Q_SLOTS:
     //slots for context menu
     void ctxPush();
@@ -115,11 +119,6 @@ public Q_SLOTS:
 
     // slots for menu
     void slotInit();
-
-    /**
-     * Updates project state after checkout (simply reloads it now)
-     */
-    void checkoutFinished(KJob*);
 
 Q_SIGNALS:
     /**
@@ -138,56 +137,16 @@ Q_SIGNALS:
      * soon as it has finished.
      */
     void addNewTabToMainView(QWidget* tab, QString label);
-
+    
 protected:
     ///////////////////
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
-    // Additional interface to be implemented by derived plugins
-    //commit dialog helpers:
-    /** Returns the list of modified files (diff between workdir and index). */
-    virtual QList<QVariant> getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    /** Returns the list of already cached files (diff between index and HEAD). */
-    virtual QList<QVariant> getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    /** Files are not in the repo, but in the repository location. */
-    virtual QList<QVariant> getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-
     /** empty_cmd is used when something is not implemented, but has to return any job */
     virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    /** Returns the list of all commits (in all branches).
-     * @see CommitView and CommitViewDelegate to see how this list is used.
-     */
-    virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
-
     KDevDVCSViewFactory * dvcsViewFactory() const;
-
-    /** RequestedOperation is used to know if we should check the repo with isValidDirectory
-     * or we want to create new repo (init/clone).
-     */
-    enum RequestedOperation {
-        NormalOperation, /**< add/commit/etc, check if we are in the repo */
-        Init             /**< we need init/clone, so don't call isValidDirectory, we're not in the repo, but yet ;) */
-    };
-
-    /** This method checks RequestedOperation, clears the job and sets working directory.
-     * Returns false only if op == NormalOperation and we are not in the repository.
-     * @param job the DVCSjob to be prepared
-     * @param repository working directiry
-     * @param op shows if the method should run isValidDirectory
-     */
-    virtual bool prepareJob(DVcsJob* job, const QString& repository,
-                            enum RequestedOperation op = NormalOperation);
-    /** Add files as args to the job. It changes absolute pathes to relatives */
-    static bool addFileList(DVcsJob* job, const KUrl::List& urls);
-
-    /** Always returns directory path.
-     * @param path a path of a file or a directory.
-     * @return if path argument if file then returns parent directory, otherwise path arg is returned.
-     * @todo it will be nice to change prepareJob() so it can change its repository argument.
-     */
-    static QString stripPathToDir(const QString &path);
 
 private:
     DistributedVersionControlPluginPrivate * const d;

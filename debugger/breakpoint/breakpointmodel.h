@@ -32,7 +32,6 @@ class KUrl;
 namespace KParts { class Part; }
 namespace KTextEditor {
 class Cursor;
-class SmartCursor;
 }
 
 namespace KDevelop
@@ -117,7 +116,7 @@ private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
-    void cursorDeleted(KTextEditor::SmartCursor* cursor);    
+    void aboutToDeleteMovingInterfaceContent(KTextEditor::Document *document);
 private:
     static const QPixmap* breakpointPixmap();
     static const QPixmap* pendingBreakpointPixmap();

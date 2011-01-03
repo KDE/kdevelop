@@ -111,11 +111,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   QByteArray byteArray() const;
 
   IndexedString& operator=(const IndexedString&);
-  
+
+  ///Fast index-based comparison
   bool operator == ( const IndexedString& rhs ) const {
     return m_index == rhs.m_index;
   }
 
+  ///Fast index-based comparison
   bool operator != ( const IndexedString& rhs ) const {
     return m_index != rhs.m_index;
   }

@@ -42,7 +42,6 @@ void LocalPatchSource::update()
     if(!m_command.isEmpty()) {
         KTemporaryFile temp;
         temp.setSuffix(".diff");
-        temp.setAutoRemove(false);
         if(temp.open()) {
         temp.setAutoRemove(false);
         QString filename = temp.fileName();
@@ -61,7 +60,9 @@ void LocalPatchSource::update()
             kWarning() << "returned with bad exit code";
             return;
         }
-        
+        if (!m_filename.isEmpty()) {
+            QFile::remove(m_filename.toLocalFile());
+        }
         m_filename = KUrl(filename);
         kDebug() << "success, diff: " << m_filename;
         
@@ -69,6 +70,13 @@ void LocalPatchSource::update()
         kWarning() << "PROBLEM";
         }
         emit patchChanged();
+    }
+}
+
+LocalPatchSource::~LocalPatchSource()
+{
+    if (!m_filename.isEmpty()) {
+        QFile::remove(m_filename.toLocalFile());
     }
 }
 

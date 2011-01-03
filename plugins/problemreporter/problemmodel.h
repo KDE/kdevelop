@@ -23,10 +23,20 @@
 #define PROBLEMMODEL_H
 
 #include <QtCore/QAbstractItemModel>
+#include <QReadWriteLock>
 
 #include <language/interfaces/iproblem.h>
+#include <KUrl>
 
+namespace KDevelop {
+    class IDocument;
+    class ParseJob;
+    class TopDUContext;
+}
+
+class QTimer;
 class ProblemReporterPlugin;
+class WatchedDocumentSet;
 
 class ProblemModel : public QAbstractItemModel
 {
@@ -44,12 +54,16 @@ public:
         Column,
         LastColumn
     };
-    
-    void addProblem(KDevelop::ProblemPointer problem);
-    void setProblems(const QList<KDevelop::ProblemPointer>& problems, KUrl base);
-    QList<KDevelop::ProblemPointer> allProblems() const;
-  
-    void clear();
+
+    /**
+     * Which set of files should the model track for errors. See @WatchedDocumentSet for more details.
+     */
+    enum Scope {
+        CurrentDocument,
+        OpenDocuments,
+        CurrentProject,
+        AllProjects
+    };
 
     virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
@@ -59,12 +73,49 @@ public:
     virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     KDevelop::ProblemPointer problemForIndex(const QModelIndex& index) const;
+    /**
+     * Get problems for @ref url.
+     */
+    QList<KDevelop::ProblemPointer> getProblems(KDevelop::IndexedString url, bool showImports);
+    /**
+     * Get merged list of problems for all @ref urls.
+     */
+    QList<KDevelop::ProblemPointer> getProblems(QSet<KDevelop::IndexedString> urls, bool showImports);
+    ProblemReporterPlugin* plugin();
+
+public slots:
+    void setShowImports(bool showImports);
+    void setScope(int scope);   // Use int to be able to use QSignalMapper
+    void setSeverity(int severity); // Use int to be able to use QSignalMapper
+    /**
+     * List of problems for @ref url has been updated
+     */
+    void problemsUpdated(const KDevelop::IndexedString& url);
+    void forceFullUpdate();
+
+private slots:
+    void documentSetChanged();
+    void setCurrentDocument(KDevelop::IDocument* doc);
+    void timerExpired();
 
 private:
-    ProblemReporterPlugin* plugin() const;
+    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result);
+    void rebuildProblemList();
+
+    ProblemReporterPlugin* m_plugin;
 
     QList<KDevelop::ProblemPointer> m_problems;
-    KUrl m_base;
+
+    QReadWriteLock m_lock;  // guards access to m_documentSet
+    KUrl m_currentDocument;  // current document
+    bool m_showImports; // include problems from imported documents
+    KDevelop::ProblemData::Severity m_severity;
+    WatchedDocumentSet* m_documentSet;
+
+    QTimer* m_minTimer;
+    QTimer* m_maxTimer;
+    const static int MinTimeout;
+    const static int MaxTimeout;
 };
 
 #endif // PROBLEMMODEL_H

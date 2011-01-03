@@ -54,7 +54,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param context context in which this declaration occurred
    */
-  AliasDeclaration(const SimpleRange& range, DUContext* context);
+  AliasDeclaration(const RangeInRevision& range, DUContext* context);
   
   AliasDeclaration(AliasDeclarationData& data);
   /// Destructor

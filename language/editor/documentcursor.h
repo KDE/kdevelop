@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,55 +20,30 @@
 #define KDEVDOCUMENTCURSOR_H
 
 #include "../languageexport.h"
-
-#include <kurl.h>
-
-#include <ktexteditor/cursor.h>
-
-namespace KTextEditor { class SmartCursor; }
+#include "simplecursor.h"
+#include <language/duchain/indexedstring.h>
+#include "cursorinrevision.h"
 
 namespace KDevelop
 {
-class HashedString;
-
 /**
- * Extends KTextEditor::Range with information about the URL to which the range
+ * Lightweight object that extends a cursor with information about the document URL to which the range
  * refers.
- *
- * \todo override comparison operators and take them into account
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public KTextEditor::Cursor
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public SimpleCursor
 {
 public:
-    explicit DocumentCursor(const HashedString& document, const KTextEditor::Cursor& cursor = KTextEditor::Cursor::invalid());
-    ~DocumentCursor();
+    DocumentCursor() {
+    }
+    
+    DocumentCursor(const IndexedString& document, const SimpleCursor& cursor) : SimpleCursor(cursor), document(document) {
+    }
 
-    enum Position {
-        Start /**< cursor is at the start of the range */ ,
-        End /**< cursor is at the end of the range */
-    };
+    inline bool operator==(const DocumentCursor& rhs) const {
+      return document == rhs.document && SimpleCursor::operator==(rhs);
+    }
 
-    /// Constructor for information extraction only, does not take ownership of the cursor.
-    /// \a range must be either a DocumentRange or a KTextEditor::SmartRange.
-    DocumentCursor(const HashedString& document, KTextEditor::Range* range, Position position);
-
-    /// Constructor for information extraction only, does not take ownership of the cursor.
-    /// \a cursor must be either a DocumentCursor or a KTextEditor::SmartCursor.
-    DocumentCursor(KTextEditor::Cursor* cursor);
-
-    DocumentCursor(const DocumentCursor& copy);
-    DocumentCursor();
-
-    /// Returns the associated document.
-    const HashedString& document() const;
-
-    /// Sets the associated document. Should be formatted from an url using pathOrUrl()
-    void setDocument(const HashedString& document);
-
-    DocumentCursor& operator=(const DocumentCursor& rhs);
-
-private:
-    class DocumentCursorPrivate* const d;
+    IndexedString document;
 };
 
 }

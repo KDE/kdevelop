@@ -37,23 +37,32 @@ namespace KDevelop {
  */
 struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 {
-  Colorizer(const QString& color, bool bold=false, bool italic=false) : m_color(color), m_bold(bold), m_italic(italic) {
+  enum FormattingFlag {
+    Nothing = 0x0,
+    Bold = 0x1,
+    Italic = 0x2
+  };
+  Q_DECLARE_FLAGS(Formatting, FormattingFlag)
+  Colorizer(const QString& color, Formatting formatting = Nothing)
+    : m_color(color), m_formatting(formatting)
+  {
   }
 
   QString operator()(const QString& str) const
   {
     QString ret = "<font color=\"#" + m_color + "\">" + str + "</font>";
-    if( m_bold )
+    if( m_formatting & Bold )
       ret = "<b>"+ret+"</b>";
 
-    if( m_italic )
+    if( m_formatting & Italic )
       ret = "<i>"+ret+"</i>";
     return ret;
   }
 
   QString m_color;
-  bool m_bold, m_italic;
+  Formatting m_formatting;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting);
 
 class AbstractNavigationContext;
 typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;

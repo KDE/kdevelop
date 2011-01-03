@@ -58,6 +58,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChain : public QObject
 
 public:
   /**
+   * Initializes common static item repositories.
+   * Must be called once for multi threaded applications to work reliably.
+   */
+  static void initialize();
+
+  /**
    * Return a list of all chains available
    */
   Q_SCRIPTABLE QList<TopDUContext*> allChains() const;
@@ -276,10 +282,9 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);
-  void documentAboutToBeDeleted(KTextEditor::Document* doc);
-  void documentAboutToBeDeletedFinal(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void documentRenamed(KDevelop::IDocument* document);
+  void documentClosed(KDevelop::IDocument*);
   void aboutToQuit();
 private:
   TopDUContext* loadChain(uint index);

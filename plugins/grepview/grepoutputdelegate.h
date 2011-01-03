@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
  *   Copyright (C) 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2010 Julien Desgats <julien.desgats@gmail.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -21,18 +22,19 @@
 #ifndef GREPOUTPUTDELEGATE_H
 #define GREPOUTPUTDELEGATE_H
 
-#include <QtGui/QItemDelegate>
-#include <kcolorscheme.h>
+#include <QtGui/QStyledItemDelegate>
 
-class GrepOutputDelegate : public QItemDelegate
+class GrepOutputDelegate : public QStyledItemDelegate
 {
 public:
+    explicit GrepOutputDelegate(QObject* parent);
+    virtual ~GrepOutputDelegate();
+
     static GrepOutputDelegate* self();
-    GrepOutputDelegate(QObject* = 0);
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 private:
-    KStatefulBrush textBrush;
-    KStatefulBrush fileBrush;
+    static GrepOutputDelegate* m_self;
 };
 
 #endif

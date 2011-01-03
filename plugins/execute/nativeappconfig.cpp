@@ -31,6 +31,7 @@
 
 #include "nativeappjob.h"
 #include <interfaces/iproject.h>
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
@@ -45,6 +46,11 @@
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 #include "projecttargetscombobox.h"
+#include <QMenu>
+
+#include <KCModuleProxy>
+#include <KConfigDialog>
+#include <kcmoduleinfo.h>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -74,8 +80,8 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
-    //TODO: Implement external terminal support
-    //runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
+    runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
+    terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( const QVariant& dep, deps ) {
@@ -115,9 +121,10 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     environment->addItems( env.groups() );
     browseProject->setIcon(KIcon("folder-document"));
 
+    configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
-    connect( projectTarget, SIGNAL(textChanged(const QString&)), SIGNAL(changed()) );
+    connect( projectTarget, SIGNAL(currentIndexChanged(const QString&)), SIGNAL(changed()) );
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executablePath->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
@@ -136,8 +143,9 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
     connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    //TODO: Implement external terminal support
-    //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( terminal, SIGNAL(editTextChanged(QString)), SIGNAL(changed()) );
+    connect( terminal, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
     connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
@@ -257,8 +265,8 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecutePlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecutePlugin::environmentGroupEntry, environment->currentProfile() );
-    //TODO: Implement external terminal support
-    //cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
+    cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
+    cfg.writeEntry( ExecutePlugin::terminalEntry, terminal->currentText() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
     QVariantList deps;
     for( int i = 0; i < dependencies->count(); i++ )
@@ -394,5 +402,65 @@ void NativeAppConfigType::configureLaunchFromCmdLineArguments ( KConfigGroup cfg
     cfg.sync();
 }
 
+QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem* folder)
+{
+    QList<KDevelop::ProjectTargetItem*> ret;
+    foreach(KDevelop::ProjectFolderItem* f, folder->folderList())
+        ret += targetsInFolder(f);
+    
+    ret += folder->targetList();
+    return ret;
+}
+
+QMenu* NativeAppConfigType::launcherSuggestions()
+{
+    QMenu* ret = new QMenu;
+    ret->setTitle(tr("Project Executables"));
+    
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    
+    foreach(KDevelop::IProject* project, projects) {
+        if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
+            QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
+            
+            QMenu* projectMenu = ret->addMenu(project->name());
+            foreach(KDevelop::ProjectTargetItem* target, targets) {
+                if(target->executable()) {
+                    QString path = KDevelop::joinWithEscaping(model->pathFromIndex(target->index()),'/','\\');
+                    QAction* act = projectMenu->addAction(path);
+                    act->setData(path);
+                    connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                }
+            }
+            projectMenu->setEnabled(!projectMenu->isEmpty());
+        }
+    }
+    
+    return ret;
+}
+
+void NativeAppConfigType::suggestionTriggered()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    KDevelop::ProjectTargetItem* pitem = dynamic_cast<KDevelop::ProjectTargetItem*>(itemForPath(KDevelop::splitWithEscaping(action->data().toString(),'/', '\\'), model));
+    if(pitem) {
+        QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
+        KDevelop::IProject* p = pitem->project();
+        
+        KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, pitem->text());
+        KConfigGroup cfg = config->config();
+        
+        QStringList splittedPath = model->pathFromIndex(pitem->index());
+//         QString path = KDevelop::joinWithEscaping(splittedPath,'/','\\');
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, splittedPath );
+        cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariantList() << splittedPath ) );
+        cfg.writeEntry( ExecutePlugin::dependencyActionEntry, "Build" );
+        cfg.sync();
+        
+        emit signalAddLaunchConfiguration(config);
+    }
+}
 
 #include "nativeappconfig.moc"

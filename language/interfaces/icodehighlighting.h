@@ -24,10 +24,11 @@
 namespace KDevelop
 {
 
-class TopDUContext;
+class ReferencedTopDUContext;
 class Declaration;
 class DUContext;
 class Use;
+class IndexedString;
 
 /**
   @short KDevelop text highlighting support interface
@@ -39,7 +40,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ICodeHighlighting
 public:
     virtual ~ICodeHighlighting() {}
 
-    virtual void highlightDUChain(TopDUContext* context) const = 0;
+    virtual void highlightDUChain(ReferencedTopDUContext context) = 0;
+    virtual bool hasHighlighting(IndexedString url) const = 0;
+    
 };
 
 }

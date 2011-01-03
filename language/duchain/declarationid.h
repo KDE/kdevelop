@@ -19,8 +19,7 @@
 #ifndef DECLARATION_ID_H
 #define DECLARATION_ID_H
 
-#include "../editor/hashedstring.h"
-#include "../editor/simplecursor.h"
+#include "../editor/cursorinrevision.h"
 
 #include "identifier.h"
 #include "indexeditems.h"

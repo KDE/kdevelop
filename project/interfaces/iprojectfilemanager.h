@@ -38,7 +38,6 @@ class IProject;
 class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectFileItem;
-class KDialogBase;
 
 /**
  * @short An interface to project file management
@@ -110,24 +109,15 @@ public:
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
      */
-    virtual ProjectFileItem* addFile(const KUrl& folder, ProjectFolderItem *parent) = 0;
+    virtual ProjectFileItem* addFile(const KUrl& file, ProjectFolderItem *parent) = 0;
 
     /**
-     * Remove a folder from the project and remove it from disk.
+     * Remove files or folders from the project and delete them from disk
      *
-     * Removes the folder specified by @p folder from folder @p parent and
+     * Removes the files or folders specified by @p items and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeFolder(ProjectFolderItem *folder) = 0;
-
-    /**
-     * Remove a file from the project and remove it from disk.
-     *
-     * Removes the file specified by @p file and
-     * modifies the underlying build system if needed. If the file being
-     * removed is also part of a target, it should be removed from the target as well
-     */
-    virtual bool removeFile(ProjectFileItem *file) = 0;
+    virtual bool removeFilesAndFolders( QList<ProjectBaseItem*> items) = 0;
 
     /**
      * Rename a file in the project

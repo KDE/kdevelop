@@ -34,6 +34,7 @@ namespace KTextEditor { class Document; }
 namespace KDevelop { class IDocument; class ParseJob; }
 
 class ProblemHighlighter;
+class ProblemModel;
 
 class ProblemReporterPlugin : public KDevelop::IPlugin
 {
@@ -48,16 +49,20 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     // KDevelop::Plugin methods
     virtual void unload();
 
+    ProblemModel* getModel() const;
+
   private Q_SLOTS:
     void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
-    void documentAboutToBeDeleted(KTextEditor::Document* doc);
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
   private:
     class ProblemReporterFactory* m_factory;
+    class ProblemModel* m_model;
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
+public slots:
+    void documentClosed(KDevelop::IDocument*);
 };
 
 #endif // PROBLEMREPORTERPLUGIN_H

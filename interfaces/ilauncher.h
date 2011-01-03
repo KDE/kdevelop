@@ -46,9 +46,9 @@ public:
     virtual ~ILauncher();
 
     /**
-        * a unique identifier for the launcher, used for example for ILaunchConfigurationType::launcherForId()
-        * @returns an identifier for this launcher
-        */
+     * Returns a unique identifier for the launcher,
+     * used for example for ILaunchConfigurationType::launcherForId().
+     */
     virtual QString id() = 0;
 
     /**

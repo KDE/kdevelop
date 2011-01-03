@@ -29,10 +29,9 @@
 
 #include "ui_cvsgenericoutputview.h"
 
-class DVcsJob;
-
 namespace KDevelop
 {
+    class DVcsJob;
     class DistributedVersionControlPlugin;
 }
 
@@ -48,7 +47,7 @@ namespace KDevelop
 class DVCSgenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
 public:
-    explicit DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, DVcsJob* job=0, QWidget* parent=0);
+    explicit DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, KDevelop::DVcsJob* job=0, QWidget* parent=0);
     virtual ~DVCSgenericOutputView();
 
 public slots:

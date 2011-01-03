@@ -39,7 +39,6 @@
 #include "../duchain/duchain.h"
 #include "../duchain/namespacealiasdeclaration.h"
 #include "../duchain/parsingenvironment.h"
-#include "../editor/editorintegrator.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/duchainbase.h"
 #include "../duchain/topducontext.h"
@@ -161,17 +160,17 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
     kDebug() << "could not lock du-chain in time";
     return;
   }
-
+  
   TopDUContext* top = DUChainUtils::standardContextForUrl( url );
   if(!top) {
     return;
   }
   setCurrentTopContext(TopDUContextPointer(top));
 
+  RangeInRevision rangeInRevision = top->transformToLocalRevision(SimpleRange(range));
+  
   if (top) {
     kDebug() << "completion invoked for context" << (DUContext*)top;
-
-    kDebug() << top->localScopeIdentifier().toString() << top->range().textRange();
 
     if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
       kDebug() << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
@@ -180,26 +179,17 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
     DUContextPointer thisContext;
     {
       kDebug() << "apply specialization:" << range.start();
-      {
-        if ( DUContext* ctx = top->findContextAt(SimpleCursor(range.start())) ) {
-          kDebug() << "context at" << range.start() << ":" << ctx << ctx->localScopeIdentifier().toString() << ctx->range().textRange();
-        }
-      }
-      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
+      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
 
       if ( thisContext ) {
-        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->range().textRange();
+        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision().textRange();
       }
 
       if(!thisContext)
         thisContext = top;
 
        kDebug() << "context is set to" << thisContext.data();
-        if( thisContext ) {
-/*          kDebug() << "================== duchain for the context =======================";
-          DumpChain dump;
-          dump.dump(thisContext.data());*/
-        } else {
+        if( !thisContext ) {
           kDebug() << "================== NO CONTEXT FOUND =======================";
           m_completionItems.clear();
           m_navigationWidgets.clear();
@@ -280,6 +270,11 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
     } else {*/
 /*    }
   }*/
+}
+
+CodeCompletionModelControllerInterface3::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched)
+{
+    return None;
 }
 
 void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
@@ -365,7 +360,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
   
   //In minimal completion mode, hide all columns except the "name" one
-  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name)
+  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (treeElement.asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
     return QVariant();
   
   QVariant ret = treeElement.asItem()->data(index, role, this);
@@ -442,9 +437,9 @@ int CodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   }
 }
 
-QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position)
+QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position)
 {
-  m_filterString = KTextEditor::CodeCompletionModelControllerInterface::filterString(view, range, position);
+  m_filterString = KTextEditor::CodeCompletionModelControllerInterface3::filterString(view, range, position);
   return m_filterString;
 }
 

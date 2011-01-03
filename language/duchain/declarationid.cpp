@@ -19,7 +19,7 @@
 #include "declarationid.h"
 #include "ducontext.h"
 #include "topducontext.h"
-#include "../editor/simplecursor.h"
+#include "../editor/cursorinrevision.h"
 #include "duchain.h"
 #include "declaration.h"
 #include "persistentsymboltable.h"
@@ -105,7 +105,9 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       }
     }
   }else{
-    ret.append(direct.declaration());
+    Declaration* decl = direct.declaration();
+    if(decl)
+      ret.append(decl);
   }
   
   if(!ret.isEmpty() && m_specialization.index()) {

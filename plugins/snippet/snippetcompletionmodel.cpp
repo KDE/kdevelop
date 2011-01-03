@@ -23,11 +23,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include "snippetfeatures.h"
-
-#ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
-    #include <KTextEditor/HighlightInterface>
-#endif
+#include <KTextEditor/HighlightInterface>
 
 #include "snippetstore.h"
 #include "snippetrepository.h"
@@ -89,11 +85,9 @@ void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KT
 void SnippetCompletionModel::initData(KTextEditor::View* view)
 {
     QString mode;
-    #ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
-        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
+    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
             mode = iface->highlightingModeAt(view->cursorPosition());
-        }
-    #endif // SNIPPETS_HAVE_HIGHLIGHTIFACE
+    }
 
     if ( mode.isEmpty() ) {
         mode = view->document()->highlightingMode();
@@ -178,7 +172,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
     return range;
 }
 
-bool SnippetCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion)
+bool SnippetCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion)
 {
     if(view->cursorPosition() < range.start() || view->cursorPosition() > range.end()) {
         return true; //Always abort when the completion-range has been left

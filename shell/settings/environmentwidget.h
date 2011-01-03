@@ -50,6 +50,7 @@ public:
     void loadSettings( KConfig* config );
     void saveSettings( KConfig* config );
     void defaults( KConfig* config );
+    void setActiveGroup( const QString& group );
 
 Q_SIGNALS:
     void changed();

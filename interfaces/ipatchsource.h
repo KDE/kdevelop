@@ -23,6 +23,7 @@
 #include <kurl.h>
 #include <qpointer.h>
 #include "interfacesexport.h"
+#include <vcs/vcsstatusinfo.h>
 
 namespace KDevelop {
 
@@ -81,7 +82,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         
         ///May return an additional list of selectable files together with short description strings for this patch
         ///The default implementation returns an empty list
-        virtual QMap<KUrl, QString> additionalSelectableFiles() const;
+        virtual QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const;
         
     Q_SIGNALS:
         ///Should be emitted whenever the patch has changed.

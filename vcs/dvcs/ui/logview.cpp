@@ -23,7 +23,7 @@
 #include "../dvcsplugin.h"
 #include "../dvcsjob.h"
 
-LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, DVcsJob* job, QWidget *parent)
+LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, KDevelop::DVcsJob* job, QWidget *parent)
     : QWidget(parent), Ui::LogViewBase(), m_plugin(plugin)
 {
     Ui::LogViewBase::setupUi(this);
@@ -46,7 +46,7 @@ void LogView::slotJobFinished(KJob* job)
         return;
     }
 
-    DVcsJob * dvcsJob = dynamic_cast<DVcsJob*>(job);
+    KDevelop::DVcsJob * dvcsJob = dynamic_cast<KDevelop::DVcsJob*>(job);
     if (!dvcsJob) {
         return;
     }

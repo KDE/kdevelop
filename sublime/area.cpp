@@ -163,12 +163,6 @@ void Area::setActiveView(View* view)
 
 void Area::addView(View *view, AreaIndex *index)
 {
-    addViewSilently(view, index);
-    emit viewAdded(index, view);
-}
-
-void Area::addViewSilently(View *view, AreaIndex *index)
-{
     View *after = 0;
     if (controller()->openAfterCurrent()) {
         after = activeView();
@@ -177,6 +171,7 @@ void Area::addViewSilently(View *view, AreaIndex *index)
     connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
     kDebug() << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+    emit viewAdded(index, view);
 }
 
 void Area::addView(View *view, View *after)
@@ -426,22 +421,53 @@ void Area::setWorkingSet(QString name)
 
 bool Area::closeView(View* view)
 {
-    QPointer<Document> doc = view->document();
-                
-    //if(doc && doc->views().count() == 1) {    
-    if (doc && doc->uniqueView(this, view)) {
-        if(!doc->closeDocument())
-            return false;
-        else
-            return true;
-    }
+    static QSet<View*> alreadyClosingViews;
     
-    //close only one active view
-    removeView(view);
-    delete view;
+    if(alreadyClosingViews.contains(view))
+        return false; // The view is already being closed, so ignore the closeView request
 
-    if(doc && doc->views().count() == 0)
-        doc->closeDocument(); //close the document instead
+    QPointer<Document> doc = view->document();
+
+    
+    if(doc)
+    {
+        int otherViewsInCurrentWorkingSet = 0;
+        int viewsInOtherWorkingSet = 0;
+
+        foreach(View* otherView, doc->views())
+        {
+            Area* area = controller()->areaForView(otherView);
+            if(area == this && otherView != view)
+                otherViewsInCurrentWorkingSet += 1;
+            if(!area || (area != this && area->workingSet() != workingSet()))
+                viewsInOtherWorkingSet += 1;
+        }
+
+        if(otherViewsInCurrentWorkingSet == 0 && viewsInOtherWorkingSet == 0)
+        {
+            // only one view in one working-set remaining
+            // let the user decide whether he wants to close the document or not
+            
+            // Eventually, the document will automatically delete all of its views.
+            // So, record the views, and make sure that the working-set controller
+            // doesn't try to delete the view twice while synchronizing the areas.
+            
+            alreadyClosingViews = doc->views().toSet();
+            bool ret = doc->closeDocument();
+            alreadyClosingViews.clear();
+            return ret;
+        }
+    }
+
+    // otherwise we can silently close the view,
+    // the document will still have an opened view somewhere
+    AreaIndex *index = indexOf(view);
+    Q_ASSERT(index);
+
+    emit aboutToRemoveView(index, view);
+    index->remove(view);
+    delete view;
+    emit viewRemoved(index, view);
 
     return true;
 }

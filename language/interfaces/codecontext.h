@@ -77,7 +77,7 @@ public:
      * @param context If this represents a use, then this should be the context 
      *              surrounding the use. Else it should be the context surrounding the declaration.
      */
-    DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange(), const IndexedDUContext& context = IndexedDUContext());
+    DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange::invalid(), const IndexedDUContext& context = IndexedDUContext());
     ///Computes the items under the cursor
     DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position);
 

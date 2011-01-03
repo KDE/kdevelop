@@ -1,6 +1,11 @@
+find_package(Threads)
+find_library(RT_LIBRARY rt)
+
+add_subdirectory(tests)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
+    foregroundlock.cpp
     ipatchsource.cpp
     ipatchexporter.cpp
     iassistant.cpp
@@ -25,6 +30,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     icompletionsettings.cpp
     iselectioncontroller.cpp
     idocumentationprovider.cpp
+    idocumentationproviderprovider.cpp
     idocumentation.cpp
     idocumentationcontroller.cpp
     idebugcontroller.cpp
@@ -37,25 +43,32 @@ set(kdevplatforminterfaces_LIB_SRCS
 	iprojectprovider.cpp
 )
 
-
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces 
         ${KDE4_KIO_LIBS} 
-        ${KDE4_KUTILS_LIBS} 
+        ${KDE4_KCMUTILS_LIBS} 
         ${KDE4_KPARTS_LIBS} 
         ${KDE4_KNOTIFYCONFIG_LIBS} 
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES} 
-        ${QT_QTDESIGNER_LIBRARY} 
         ${KDE4_KROSSCORE_LIBS})
+
+if( RT_LIBRARY )
+    target_link_libraries( kdevplatforminterfaces ${RT_LIBRARY} )
+endif( RT_LIBRARY )
+
+if( Threads_FOUND )
+    target_link_libraries( kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT} )
+endif( Threads_FOUND )
+
 target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
         ${KDE4_KPARTS_LIBS} 
-        ${KDE4_KTEXTEDITOR_LIBS} 
-        ${QT_QTDESIGNER_LIBRARY})
+        ${KDE4_KTEXTEDITOR_LIBS})
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
+    foregroundlock.h
     iassistant.h
     context.h
     contextmenuextension.h
@@ -86,6 +99,7 @@ install(FILES
     iselectioncontroller.h
     idocumentation.h
     idocumentationprovider.h
+    idocumentationproviderprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
     idashboardcontroller.h

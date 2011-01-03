@@ -27,11 +27,14 @@ namespace KDevelop {
 class AbstractNavigationWidget;
 
 ///A tooltip that just emebed the given widget.
+///
+///TODO: 4.3 - cleanup indentation
+///      introduce getter for widget, use that in context browser
 class KDEVPLATFORMLANGUAGE_EXPORT NavigationToolTip : public ActiveToolTip
 {
     Q_OBJECT
 public:
-    ///@param parent The parent.
+    ///@param parent The parent. Must not be zero, because else the tooltip will never be shown.
     ///@param point Global coordinate of the point where the tooltip should be shown.
     ///@param navigationWidget The widget that should be embedded.
     NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget);

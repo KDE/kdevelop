@@ -1,17 +1,13 @@
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
+add_subdirectory(highlighting/tests)
+
 set(kdevplatformlanguage_LIB_SRCS
+    editor/persistentmovingrangeprivate.cpp
+    editor/persistentmovingrange.cpp
     editor/modificationrevisionset.cpp
-    editor/documentrange.cpp
     editor/documentrangeobject.cpp
-    editor/documentcursor.cpp
-    editor/documentcursorobject.cpp
-    editor/editorintegrator.cpp
-    editor/editorintegratorstatic.cpp
-    editor/hashedstring.cpp
     editor/modificationrevision.cpp
-    editor/editorrevisiontracker.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
@@ -34,7 +30,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/classfunctiondeclaration.cpp
     duchain/classdeclaration.cpp
     duchain/use.cpp
-    duchain/smartconverter.cpp
     duchain/forwarddeclaration.cpp
     duchain/duchainbase.cpp
     duchain/duchainlock.cpp
@@ -117,7 +112,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/utilities.cpp
 
     util/setrepository.cpp
-	util/includeitem.cpp
+    util/includeitem.cpp
     util/navigationtooltip.cpp
 
     highlighting/colorcache.cpp
@@ -144,8 +139,7 @@ target_link_libraries(kdevplatformlanguage
         kdevplatformutil)
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
 target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
-        ${KDE4_KTEXTEDITOR_LIBS}
-        ${KDE4_THREADWEAVER_LIBRARIES})
+        kdevplatforminterfaces)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -170,17 +164,16 @@ install(FILES
 )
 
 install(FILES
+    editor/persistentmovingrange.h
     editor/documentrange.h
     editor/documentrangeobject.h
     editor/documentcursor.h
-    editor/documentcursorobject.h
-    editor/editorintegrator.h
-    editor/hashedstring.h
     editor/simplecursor.h
     editor/simplerange.h
+    editor/cursorinrevision.h
+    editor/rangeinrevision.h
     editor/modificationrevision.h
     editor/modificationrevisionset.h
-    editor/editorrevisiontracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor COMPONENT Devel
 )
 
@@ -220,7 +213,6 @@ install(FILES
     duchain/classdeclaration.h
     duchain/functiondefinition.h
     duchain/use.h
-    duchain/smartconverter.h
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
     duchain/duchainpointer.h

@@ -120,6 +120,16 @@ QList<QAction*> View::toolBarActions() const
     return QList<QAction*>();
 }
 
+QList< QAction* > View::contextMenuActions() const
+{
+    ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
+    if( tooldoc )
+    {
+        return tooldoc->factory()->contextMenuActions( d->widget );
+    }
+    return QList<QAction*>();
+}
+
 QString View::viewStatus() const
 {
     return QString();

@@ -9,6 +9,7 @@ X-KDE-FactoryName=kcm_kdev_bgsettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
+X-KDE-Weight=4
 
 Name=Background Parser
 Name[bg]=Фонов анализатор на синтаксиса
@@ -56,6 +57,7 @@ Comment[nl]=Achtergrondontleder instellen
 Comment[pl]=Konfiguracja parsera w tle
 Comment[pt]=Configurar o Processamento em Segundo Plano
 Comment[pt_BR]=Configurar o processamento em segundo plano
+Comment[ru]=Настройка фонового анализа кода
 Comment[sl]=Nastavite razhroščevalnik v ozadju
 Comment[sv]=Anpassa bakgrundstolk
 Comment[uk]=Налаштування інструменту фонової обробки

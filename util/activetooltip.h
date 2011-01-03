@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Vladimir Prus
+   Copyright 2009-2010 David Nolden
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +47,8 @@ class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
 Q_OBJECT
 public:
-    /* position must be in global coordinates.  */
+    ///@param parent Parent widget. Must not be zero, else the widget won't be shown.
+    /// @param position Position where to show the tooltip, in global coordinates.
     ActiveToolTip(QWidget *parent, const QPoint& position);
     ~ActiveToolTip();
 
@@ -71,18 +73,24 @@ public:
     
     void moveEvent(QMoveEvent*);
 
+    void paintEvent(QPaintEvent*);
+
     void adjustRect();
     
     ///Clicks within the friend widget are allowed
     void addFriendWidget(QWidget* widget);
     
     ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
-    void addExtendRect(QRect rect);
+    void addExtendRect(const QRect& rect);
     
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
-    void setBoundingGeometry(QRect geometry);
+    void setBoundingGeometry(const QRect& geometry);
 Q_SIGNALS:
-    void resized();    
+    void resized();
+    // Emitted whenever mouse-activity is noticed within the tooltip area
+    void mouseIn();
+    // Emitted whenever mouse-activity is noticed outside of the tooltip area
+    void mouseOut();
 private:
     virtual void closeEvent(QCloseEvent* );
     void updateMouseDistance();

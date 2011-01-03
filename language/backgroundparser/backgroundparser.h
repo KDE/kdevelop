@@ -28,11 +28,8 @@
 #include <QtCore/QPair>
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
-#include <QtCore/QPointer>
 
 #include <KDE/KUrl>
-
-#include <KDE/KTextEditor/SmartRangeWatcher>
 
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
@@ -49,11 +46,14 @@ class Job;
 namespace KDevelop
 {
 
+class DocumentChangeTracker;
+
+class IDocument;
 class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
-class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus, public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
@@ -102,22 +102,17 @@ public:
     Q_SCRIPTABLE void setDelay(int miliseconds);
 
     /**
-     * Inform the background parser that \a document has a given top smart \a range.
-     *
-     * This will be watched for modifications and background jobs scheduled accordingly.
-     */
-    Q_SCRIPTABLE void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
-
-    /**
      * Returns all documents that were added through addManagedTopRange. This is typically the currently
      * open documents.
      */
-    Q_SCRIPTABLE QList<KUrl> managedDocuments();
-    
+    Q_SCRIPTABLE QList<IndexedString> managedDocuments();
+
     /**
-     * Remove an associated top \a range from modification watching.
-     */
-    Q_SCRIPTABLE void removeManagedTopRange(KTextEditor::SmartRange* range);
+     * Returns the tracker for the given url if the document is being tracked, else returns zero.
+     * This function is thread-safe, but the returned object also isn't, so you must not use it
+     * when you're in a background thread without the foreground lock acquired.
+     * */
+    DocumentChangeTracker* trackerForUrl(const IndexedString& url) const;
 
 Q_SIGNALS:
     /** 
@@ -142,7 +137,7 @@ public Q_SLOTS:
      * Suspends execution of the background parser
      */
     void suspend();
-
+    
     /**
      * Resumes execution of the background parser
      */
@@ -199,21 +194,18 @@ public Q_SLOTS:
 
     ///Returns the number of currently active or queued jobs
     int queuedCount() const;
+    
+    void documentClosed(KDevelop::IDocument*);
+    void documentLoaded(KDevelop::IDocument*);
+    void documentUrlChanged(KDevelop::IDocument*);
 
-protected:
-    void loadSettings(bool projectIsLoaded);
-    void saveSettings(bool projectIsLoaded);
+    void loadSettings();
 
 protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer();
     void aboutToQuit();
-
-protected:
-    // Receive changed notifications
-    using KTextEditor::SmartRangeWatcher::rangeContentsChanged;
-    virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild);
 
 private:
     friend class BackgroundParserPrivate;

@@ -43,6 +43,7 @@ public:
     virtual ~BGPreferences();
 
     virtual void save();
+    virtual void load();
 
     virtual KUrl localNonShareableFile() const
     {

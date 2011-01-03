@@ -47,13 +47,13 @@ KDevelop::IndexedString KDevelop::Problem::url() const
 
 DocumentRange Problem::finalLocation() const
 {
-    return DocumentRange(d_func()->url.str(), range().textRange());
+    return DocumentRange(d_func()->url, rangeInCurrentRevision());
 }
 
 void Problem::setFinalLocation(const DocumentRange & location)
 {
-    setRange(SimpleRange(location));
-    d_func_dynamic()->url = IndexedString(location.document().str());
+    setRange(transformToLocalRevision(location));
+    d_func_dynamic()->url = location.document;
 }
 
 QStack< DocumentCursor > Problem::locationStack() const
@@ -140,6 +140,8 @@ QString Problem::sourceString() const
             return i18n("Definition-Use Chain");
         case ProblemData::SemanticAnalysis:
             return i18n("Semantic Analysis");
+        case ProblemData::ToDo:
+            return i18n("TODO");
         case ProblemData::Unknown:
         default:
             return i18n("Unknown");

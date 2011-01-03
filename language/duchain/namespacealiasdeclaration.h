@@ -52,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclaration : public Declaration
 {
 public:
   NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs);
-  NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context);
+  NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context);
   NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
 
   virtual ~NamespaceAliasDeclaration();

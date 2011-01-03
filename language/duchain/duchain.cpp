@@ -20,25 +20,29 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
+#include <unistd.h>
+
 #include <QtCore/QCoreApplication>
 #include <QApplication>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
 #include <QtCore/QTimer>
 #include <QtCore/QReadWriteLock>
-#include <QtCore/qatomic.h>
+#include <QtCore/QAtomicInt>
+#include <QtCore/QThread>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
 
-#include <kglobal.h>
-
-#include <KDE/KTextEditor/Document>
-#include <KDE/KTextEditor/SmartInterface>
+#include <KGlobal>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/foregroundlock.h>
 
-#include "../editor/editorintegrator.h"
+#include <util/google/dense_hash_map>
+
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
 #include "../backgroundparser/backgroundparser.h"
@@ -53,17 +57,12 @@
 #include "use.h"
 #include "uses.h"
 #include "abstractfunctiondeclaration.h"
-#include "smartconverter.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "repositories/itemrepository.h"
-#include <util/google/dense_hash_map>
-#include <QtCore/qthread.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qmutex.h>
-#include <unistd.h>
 #include "waitforupdate.h"
 #include "referencecounting.h"
+#include "importers.h"
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
@@ -280,11 +279,13 @@ class DUChainPrivate
     private:
       void run() {
         while(1) {
-          m_waitMutex.lock();
-          if(m_stopRunning)
-            break;
-          m_wait.wait(&m_waitMutex, 1000 * cleanupEverySeconds);
-          m_waitMutex.unlock();
+          for(uint s = 0; s < cleanupEverySeconds; ++s) {
+            if(m_stopRunning)
+              break;
+            m_waitMutex.lock();
+            m_wait.wait(&m_waitMutex, 1000);
+            m_waitMutex.unlock();
+          }
           if(m_stopRunning)
             break;
 
@@ -355,6 +356,7 @@ public:
     }
   }
   ~DUChainPrivate() {
+    kDebug() << "Destroying";
     DUChain::m_deleted = true;
     m_cleanup->stopThread();
     delete m_cleanup;
@@ -402,9 +404,6 @@ public:
     Q_ASSERT(m_chainsByUrl.contains(context->url(), context));
     
     m_chainsByUrl.remove(context->url(), context);
-
-    if (context->smartRange())
-      ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
 
     if(!context->isOnDisk())
       instance->removeFromEnvironmentManager(context);
@@ -785,7 +784,7 @@ public:
             QMutexLocker l(&m_referenceCountsMutex);
             //Test if the context is imported by a referenced one
             foreach(TopDUContext* context, m_referenceCounts.keys()) {
-              if(context == unload || context->imports(unload, SimpleCursor())) {
+              if(context == unload || context->imports(unload, CursorInRevision())) {
                 workOnContexts.remove(unload);
                 hasReference = true;
               }
@@ -1107,13 +1106,13 @@ DUChain::DUChain()
 {
   connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeletedFinal(KTextEditor::Document*)), SLOT(documentAboutToBeDeletedFinal(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
+    
   }
 }
 
@@ -1125,6 +1124,41 @@ DUChain::~DUChain()
 DUChain* DUChain::self()
 {
   return sdDUChainPrivate->instance;
+}
+
+extern void initModificationRevisionSetRepository();
+extern void initDeclarationRepositories();
+extern void initIdentifierRepository();
+extern void initTypeRepository();
+extern void initInstantiationInformationRepository();
+extern void initReferenceCounting();
+
+void DUChain::initialize()
+{
+  // Initialize the global item repository as first thing after loading the session
+  globalItemRepositoryRegistry();
+
+  initReferenceCounting();
+
+  // This needs to be initialized here too as the function is not threadsafe, but can
+  // sometimes be called from different threads. This results in the underlying QFile
+  // being 0 and hence crashes at some point later when accessing the contents via 
+  // read. See https://bugs.kde.org/show_bug.cgi?id=250779
+  RecursiveImportRepository::repository();
+  RecursiveImportCacheRepository::repository();
+
+  // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
+  initDeclarationRepositories();
+
+  initModificationRevisionSetRepository();
+  initIdentifierRepository();
+  initTypeRepository();
+  initInstantiationInformationRepository();
+
+  Importers::self();
+ 
+  globalImportIdentifier();
+  globalAliasIdentifier();
 }
 
 DUChainLock* DUChain::lock()
@@ -1173,10 +1207,6 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
 //   kDebug(9505) << "duchain: adding document" << chain->url().str() << " " << chain;
   Q_ASSERT(chain);
-  if (chain->smartRange()) {
-    Q_ASSERT(!chain->smartRange()->parentRange());
-    ICore::self()->languageController()->backgroundParser()->addManagedTopRange(KUrl(chain->url().str()), chain->smartRange());
-  }
 
   Q_ASSERT(!sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
@@ -1196,19 +1226,6 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   Q_ASSERT(sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
   
-/*  {
-    //This is just for debugging, and should be disabled later.
-    int realChainCount = 0;
-    int proxyChainCount = 0;
-    for(QMap<IdentifiedFile, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it) {
-      if((*it)->flags() & TopDUContext::ProxyContextFlag)
-        ++proxyChainCount;
-      else
-        ++realChainCount;
-    }
-
-    kDebug(9505) << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount;
-  }*/
   chain->setInDuChain(true);
   
   l.unlock();
@@ -1217,8 +1234,8 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 
-  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(chain->url());
-  if(doc) {
+  if(ICore::self() && ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
+  {
     //Make sure the context stays alive at least as long as the context is open
     ReferencedTopDUContext ctx(chain);
     sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
@@ -1464,47 +1481,16 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
-static void deconvertDUChainInternal(DUContext* context)
-{
-  foreach (Declaration* dec, context->localDeclarations())
-    dec->clearSmartRange();
-
-  context->clearUseSmartRanges();
-
-  foreach (DUContext* child, context->childContexts())
-    deconvertDUChainInternal(child);
-
-  context->clearSmartRange();
-}
-
-void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
+void DUChain::documentClosed(IDocument* document)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
   
-  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  IndexedString url(document->url());
 
-  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
-  if(!smart)
-    return;
-  
-  foreach (TopDUContext* top, chains) {
-    
-    QMutexLocker lockSmart(smart->smartMutex());
-    
-    deconvertDUChainInternal(top);
-  }
-}
-
-void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
-{
-  if(sdDUChainPrivate->m_destroyed)
-    return;
-
-  foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts) {
-    if(top->url().str() == doc->url().pathOrUrl())
+  foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts)
+    if(top->url() == url)
       sdDUChainPrivate->m_openDocumentContexts.remove(top);
-  }
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
@@ -1514,11 +1500,6 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   DUChainWriteLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  // Convert any duchains to the smart equivalent first
-  EditorIntegrator editor;
-  if(doc->textDocument())
-    editor.insertLoadedDocument(doc->textDocument()); //Make sure the editor-integrator knows the document
-
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
@@ -1526,20 +1507,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
-
-    {
-      ///Make the standard-context editor-smart
-      SmartConverter sc(&editor);
-      
-      if(standardContext->smartRange()) {
-        Q_ASSERT(standardContext->smartRange()->document() == doc->textDocument());
-        kWarning() << "Strange: context already has smart-range! Probably another document is already open for it. Deconverting";
-        sc.deconvertDUChain(standardContext);
-      }
-      sc.convertDUChain(standardContext);
-      Q_ASSERT(standardContext->smartRange());
-      ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
-    }
+    Q_ASSERT((standardContext->url().toUrl() == doc->url()));
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 
@@ -1682,15 +1650,20 @@ TopDUContext* contentContextFromProxyContext(TopDUContext* top)
     return 0;
   if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
     if(!top->importedParentContexts().isEmpty())
-      return top->importedParentContexts()[0].context(0)->topContext();
+    {
+      TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
+      if(ret->url() != top->url())
+        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
+      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
+        return ret;
+    }
     else {
       kDebug() << "Proxy-context imports no content-context";
-      return 0;
     }
   } else
     return top;
+  return 0;
 }
-
 KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext) {
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
@@ -1707,6 +1680,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
+    TemporarilyReleaseForegroundLock release;
     ///@todo When we don't do this, the backgroundparser doesn't process anything.
     ///      The background-parser should be moved into an own thread, so we wouldn't need to do this.
     QApplication::processEvents();

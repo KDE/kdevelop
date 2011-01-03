@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,45 +20,35 @@
 #define KDEVDOCUMENTRANGE_H
 
 #include "../languageexport.h"
-
-#include <kurl.h>
-
-#include <ktexteditor/range.h>
+#include "simplerange.h"
+#include <language/duchain/indexedstring.h>
+#include "rangeinrevision.h"
 
 namespace KDevelop
 {
-class HashedString;
+class IndexedString;
 
 /**
- * Extends KTextEditor::Range with information about the URL to which the range
- * refers.
- *
- * \todo parent/child relationships here too?
+ * Lightweight object that extends a range with information about the URL to which the range refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public KTextEditor::Range
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public SimpleRange
 {
 public:
-    DocumentRange();
-    DocumentRange(const HashedString& document, const KTextEditor::Cursor& start, const KTextEditor::Cursor& end, KTextEditor::Range* parent = 0);
-    explicit DocumentRange(const HashedString& document, const KTextEditor::Range& range = KTextEditor::Range::invalid(), KTextEditor::Range* parent = 0);
-    DocumentRange(const DocumentRange& copy);
-    virtual ~DocumentRange();
+    DocumentRange() {
+    }
+  
+    inline DocumentRange(const IndexedString& document, const SimpleRange& range)  : SimpleRange(range), document(document) {
+    }
 
-    /// Returns the associated document.
-    const HashedString& document() const;
+    inline bool operator==(const DocumentRange& rhs) const {
+      return document == rhs.document && SimpleRange::operator==(rhs);
+    }
 
-    /// Sets the associated document.
-    void setDocument(const HashedString& document);
+    static DocumentRange invalid() {
+      return DocumentRange(IndexedString(), SimpleRange::invalid());
+    }
 
-    KTextEditor::Range* parentRange() const;
-    void setParentRange(KTextEditor::Range* parent);
-
-    const QList<DocumentRange*>& childRanges() const;
-
-    DocumentRange& operator=(const DocumentRange& rhs);
-
-private:
-    class DocumentRangePrivate* const d;
+    IndexedString document;
 };
 
 }

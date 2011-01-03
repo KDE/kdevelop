@@ -4,3 +4,5 @@ Singleton=true
 UseEnumTypes=true
 SetUserTexts=true
 ItemAccessors=true
+Inherits=KDevelop::SessionConfigSkeleton
+IncludeFiles=sessionconfigskeleton.h

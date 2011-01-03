@@ -27,7 +27,6 @@
 
 #include "indexedstring.h"
 
-#include "../editor/hashedstring.h"
 #include "../languageexport.h"
 #include "duchainbase.h"
 #include "topducontext.h"

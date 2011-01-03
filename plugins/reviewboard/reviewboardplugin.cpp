@@ -38,6 +38,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include "reviewpatchdialog.h"
+#include "reviewboardjobs.h"
 
 using namespace KDevelop;
 
@@ -74,30 +75,29 @@ QByteArray urlToData(const KUrl& url)
 
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
-    IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
-    KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
-    
     ReviewPatchDialog d;
-//     QString repo;
-//     if(versionedConfig.hasKey("repository"))
-//         repo = versionedConfig.readEntry("repository", QString());
-//     else if(p->versionControlPlugin()) {
-//         IBasicVersionControl* vcs = p->versionControlPlugin()->extension<IBasicVersionControl>();
-//         VcsJob* job=vcs->repositoryLocation(p->folder());
-//         bool ret = job->exec();
-//         
-//         if(ret)
-//             repo = job->fetchResults().toString();
-//         delete job;
-//     }
-//     
-//     d.setRepository(repo);
-    d.setServer(versionedConfig.readEntry("server", KUrl("http://reviewboard.kde.org")));
-    d.setUsername(versionedConfig.readEntry("username", QString()));
-//     d.setPatch(source->file());
+   
+    IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
+    
+    if(p) {
+        KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
+    
+        d.setServer(versionedConfig.readEntry("server", KUrl("http://reviewboard.kde.org")));
+        d.setUsername(versionedConfig.readEntry("username", QString()));
+    }
     
     int ret = d.exec();
     if(ret==KDialog::Accepted) {
-//         postReview(Service(ui.server->text(), ui.username->text(), ui.password->text()), source->file());
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), source->file(), d.baseDir());
+        bool corr = job->exec();
+        if(corr) {
+            KUrl url=d.server();
+            url.setUserInfo(QString());
+            QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
+            
+            KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl));
+        } else {
+            KMessageBox::error(0, job->errorText());
+        }
     }
 }

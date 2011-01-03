@@ -28,6 +28,8 @@ class QWidget;
 
 namespace KDevelop
 {
+
+class DocumentationFindWidget;
 class IDocumentationProvider;
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
@@ -43,9 +45,12 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
         virtual QString description() const = 0;
         
         /** @returns a widget with all the needed documentation information.
-            \param parent defines the widget's parent
+            @param parent defines the widget's parent
+            @param findWidget can be used to tell how do we want to deal with Search
+                inside the documentation widget. The implementation will have to enable the
+                widget if it means to support the search feature.
         */
-        virtual QWidget* documentationWidget(QWidget* parent=0);
+        virtual QWidget* documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent=0) = 0;
         
         virtual IDocumentationProvider* provider() const = 0;
 };

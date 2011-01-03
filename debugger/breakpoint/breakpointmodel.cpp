@@ -28,14 +28,13 @@
 #include <KDebug>
 #include <KLocale>
 #include <KTextEditor/Document>
-#include <KTextEditor/SmartInterface>
+#include <ktexteditor/movinginterface.h>
 
 #include "../interfaces/icore.h"
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
 #include "../interfaces/ipartcontroller.h"
 #include "breakpoint.h"
-#include <KTextEditor/SmartCursorNotifier>
 #include <KConfigGroup>
 
 #define IF_DEBUG(x)
@@ -264,12 +263,12 @@ void BreakpointModel::markChanged(
             return;
         }
         Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
-        KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(document);
-        if (smart) {
-            KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(mark.line, 0));
-            connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
-                        SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
-            breakpoint->setSmartCursor(cursor);
+        KTextEditor::MovingInterface *moving = qobject_cast<KTextEditor::MovingInterface*>(document);
+        if (moving) {
+            KTextEditor::MovingCursor* cursor = moving->newMovingCursor(KTextEditor::Cursor(mark.line, 0));
+            connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
+                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+            breakpoint->setMovingCursor(cursor);
         }
     } else {
         // Find this breakpoint and delete it
@@ -396,20 +395,20 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     IF_DEBUG( kDebug(); )
     foreach (Breakpoint *breakpoint, m_breakpoints) {
-            if (breakpoint->smartCursor()) {
-            if (breakpoint->smartCursor()->document() != doc->textDocument()) continue;
-            if (breakpoint->smartCursor()->line() == breakpoint->line()) continue;
+        if (breakpoint->movingCursor()) {
+            if (breakpoint->movingCursor()->document() != doc->textDocument()) continue;
+            if (breakpoint->movingCursor()->line() == breakpoint->line()) continue;
             m_dontUpdateMarks = true;
-            breakpoint->setLine(breakpoint->smartCursor()->line());
+            breakpoint->setLine(breakpoint->movingCursor()->line());
             m_dontUpdateMarks = false;
         }
     }
 }
-void BreakpointModel::cursorDeleted(KTextEditor::SmartCursor* cursor)
+void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
     foreach (Breakpoint *breakpoint, m_breakpoints) {
-        if (breakpoint->smartCursor() == cursor) {
-            breakpoint->setSmartCursor(0);
+        if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
+            breakpoint->setMovingCursor(0);
         }
     }
 }

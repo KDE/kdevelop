@@ -88,21 +88,23 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
 DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
 {
     DUChainReadLocker lock(DUChain::lock());
-    DocumentRange useRange;
+    DocumentRange useRange = DocumentRange::invalid();
     IndexedDeclaration declaration;
     IndexedDUContext context;
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     if(topContext) {
-        DUContext* specific = topContext->findContextAt(SimpleCursor(position));
+        CursorInRevision localRevisionCursor = topContext->transformToLocalRevision(SimpleCursor(position));
+        
+        DUContext* specific = topContext->findContextAt(localRevisionCursor);
         context = IndexedDUContext(specific);
         if(specific) {
-            int use = specific->findUseAt(SimpleCursor(position));
+            int use = specific->findUseAt(localRevisionCursor);
             if(use != -1) {
                 //Found a use under the cursor:
-                useRange = DocumentRange(HashedString(specific->url().str()), specific->uses()[use].m_range.textRange());
+                useRange = DocumentRange(IndexedString(specific->url().str()), topContext->transformFromLocalRevision(specific->uses()[use].m_range));
                 declaration = IndexedDeclaration(specific->topContext()->usedDeclarationForIndex( specific->uses()[use].m_declarationIndex ));
             }else{
-                declaration = IndexedDeclaration(specific->findDeclarationAt(SimpleCursor(position)));
+                declaration = IndexedDeclaration(specific->findDeclarationAt(localRevisionCursor));
             }
         }
     }

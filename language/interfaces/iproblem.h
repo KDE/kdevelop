@@ -45,7 +45,8 @@ public:
         Lexer          /**< problem while lexing the file */,
         Parser         /**< problem while parsing the file */,
         DUChainBuilder /**< problem while building the duchain */,
-        SemanticAnalysis /**< problem during semantic analysis */
+        SemanticAnalysis /**< problem during semantic analysis */,
+        ToDo           /**< TODO item in a comment */
     };
 
     enum Severity {
@@ -104,6 +105,7 @@ public:
 
     /**
      * Location where this problem occurred
+     * @warning Must only be called from the foreground
      * */
     DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange & location);

@@ -123,6 +123,10 @@ public:
         by its index, @p mainWindow.  */
     Area *area(int mainWindow, const QString& id);
 
+    /** Returns the area that contains the given view.
+     * */
+    Area* areaForView(View* view) const;
+
     /**Shows an @p area in @p mainWindow. @todo Remove this method */
     void showArea(Area *area, MainWindow *mainWindow);
 

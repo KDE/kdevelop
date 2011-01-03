@@ -183,7 +183,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
     /*          if(action.decl->internalContext())
                 cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
               else*/
-                cursor = action.decl->range().textRange().start();
+                cursor = action.decl->rangeInCurrentRevision().start.textCursor();
             }
 
             action.decl->activateSpecialization();
@@ -371,10 +371,11 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
   else if( decl->kind() == Declaration::Type ) {
     if( decl->type<StructureType>() )
       kind = i18n("Class");
-  }
-
-  if( decl->kind() == Declaration::Instance )
+  } else if( decl->kind() == Declaration::Instance ) {
     kind = i18n("Variable");
+  } else if ( decl->kind() == Declaration::Namespace ) {
+    kind = i18n("Namespace");
+  }
 
   if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data()) ) {
     if( alias->identifier().isEmpty() )
@@ -462,8 +463,8 @@ const Colorizer AbstractNavigationContext::labelHighlight("000000");
 const Colorizer AbstractNavigationContext::codeHighlight("005000");
 const Colorizer AbstractNavigationContext::propertyHighlight("009900");
 const Colorizer AbstractNavigationContext::navigationHighlight("000099");
-const Colorizer AbstractNavigationContext::importantHighlight("000000", true, true);
-const Colorizer AbstractNavigationContext::commentHighlight("000000", false, true);
-const Colorizer AbstractNavigationContext::nameHighlight("000000", true, false);
+const Colorizer AbstractNavigationContext::importantHighlight("000000", Colorizer::Bold | Colorizer::Italic);
+const Colorizer AbstractNavigationContext::commentHighlight("000000", Colorizer::Italic);
+const Colorizer AbstractNavigationContext::nameHighlight("000000", Colorizer::Bold);
 
 }

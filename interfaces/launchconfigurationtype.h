@@ -25,12 +25,14 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
+class QMenu;
 class KIcon;
 class KUrl;
 class KConfigGroup;
 
 namespace KDevelop
 {
+class ILaunchConfiguration;
 class ProjectBaseItem;
 class ILauncher;
 class LaunchConfigurationPageFactory;
@@ -42,8 +44,9 @@ class LaunchConfigurationPageFactory;
  * for the configuration as well as which config pages are needed
  * to setup the launch configuration
  */
-class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationType
+class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationType : public QObject
 {
+Q_OBJECT
 public:
     LaunchConfigurationType();
     virtual ~LaunchConfigurationType();
@@ -101,7 +104,7 @@ public:
     
     /**
      * Check wether this launch configuration type can launch the given project item
-     * @param item the project tree item to test
+     * @param item the project tree item to test 
      * @returns true if this configuration type can launch the given item, false otherwise
      */
     virtual bool canLaunch( KDevelop::ProjectBaseItem* item ) const = 0;
@@ -128,6 +131,16 @@ public:
     * @returns true if this configuration type can launch the given file, false otherwise
     */
     virtual bool canLaunch( const KUrl& file ) const = 0;
+    
+    /**
+     * Returns a menu that will be added to the UI where the interface will be
+     * able to add any suggestion it needs, like default targets.
+     */
+    virtual QMenu* launcherSuggestions() { return 0; }
+    
+signals:
+    void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
+    
 private:
     class LaunchConfigurationTypePrivate* const d;
 };

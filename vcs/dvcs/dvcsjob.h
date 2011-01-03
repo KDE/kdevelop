@@ -5,6 +5,7 @@
  *                                                                         *
  *   Adapted for DVCS                                                      *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -46,80 +47,54 @@ class DVcsJobPrivate;
  * How to create DVcsJob:
  * @code
  * DVcsJob* job = new DVcsJob(vcsplugin);
- * if (job)
- * {
- *     job->setDirectory(workDir);
- *     *job << "git-rev-parse";
- *     foreach(const QString &arg, args) // *job << args can be used instead!
+ * 
+ * job->setDirectory(workDir);
+ * *job << "git-rev-parse";
+ * foreach(const QString &arg, args) // *job << args can be used instead!
  *     *job << arg;
- *     return job;
- * }
- * if (job) delete job;
- * return NULL;
+ * return job;
+ * 
+ * return error_cmd(i18n("could not create the job"));
  * @endcode
  * 
  * Usage example 1:
  * @code
- * VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
- * DVcsJob* job = dynamic_cast<DVCSjob*>(j);
- * if (job) {
- *     connect(job, SIGNAL(result(KJob*) ),
- *             this, SIGNAL(jobFinished(KJob*) ));
- *     job->start();
- * }
+ * VcsJob* j = add(KUrl::List() << a << b << c, IBasicVersionControl::Recursive);
+ * DVcsJob* job = qobject_cast<DVCSjob*>(j);
+ * connect(job, SIGNAL(result(KJob*) ),
+ *         this, SIGNAL(jobFinished(KJob*) ));
+ * ICore::self()->runController()->registerJob(job);
  * @endcode
  * 
- * Usage example 2:
+ * Usage example 2, asyunchronous:
  * @code
  * DVcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
- * DVcsJob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
- * if (job)
- * {
- *     job->exec();
- *     if (job->status() == KDevelop::VcsJob::JobSucceeded)
- *         return true;
- *     else
+ * 
+ * if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+ *     return true;
+ * else
  *     //something, maybe even just
- *         return false
- * }
+ *     return false
  * @endcode
  * 
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
+
+namespace KDevelop
+{
+
 class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    DVcsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~DVcsJob();
-
-    /**
-     * Call this method to clear the job (for example, before setting another job).
-     */
-    void clear();
-
-    /**
-     * It's not used in any DVCS plugin.
-     */
-    void setServer(const QString& server);
-
-    /**
-     * Sets working directory.
-     * @param directory Should contain only absolute path. Relative paths or "" (working dir) are deprecated and will make the job fail.
-     * @note In DVCS plugins directory variable is used to get relative paths.
-     */
-    void setDirectory(const QDir & directory);
-
-    /**
-     * Sets standard input file.
-     */
-    void setStandardInputFile(const QString &fileName);
 
     /**
      * Returns current working directory.
      */
-    QDir getDirectory() const;
+    QDir directory() const;
 
     /**
      * Call this method to set command to execute and its arguments.
@@ -138,6 +113,19 @@ public:
      * @see operator<<(const QString& arg).
      */
     DVcsJob& operator<<(const QStringList& args);
+    
+    /**
+     * Overloaded operator << for url's, can be used to pass files and
+     * makes arguments absolute to the process working directory
+     * 
+     * Override if you need to treat paths beffore adding them as parameters.
+     */
+    virtual DVcsJob& operator<<(const KUrl& arg);
+    
+    /**
+     * @see operator<<(const KUrl& arg).
+     */
+    DVcsJob& operator<<(const QList<KUrl>& args);
 
     /**
      * Call this method to start this job.
@@ -159,7 +147,7 @@ public:
     /**
      * @return The command that is executed when calling start().
      */
-    QString dvcsCommand() const;
+    QStringList dvcsCommand() const;
 
     /**
      * @return The whole output of the job as a string. (Might fail on binary data)
@@ -188,15 +176,6 @@ public:
     virtual QVariant fetchResults();
 
     /**
-     * Sets exit status (d->failed variable).
-     * Since only executors can parse the job to set result, they can connect parsers to readyForParsing(DVCSjob) using
-     * Qt::DirectConnection to set the result. For example git-status can return exit status 1.
-     * If you don't set exit status in your parser then you will have JobFailed in status() result.
-     * @note First result is set in slotProcessExited() or slotProcessError().
-     */
-    virtual void setExitStatus(const bool exitStatus);
-
-    /**
      * Returns JobStatus
      * @see KDevelop::VcsJob::JobStatus
      */
@@ -208,7 +187,7 @@ public:
     virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
     
-    KProcess *getChildproc();
+    KProcess *process();
     
     void displayOutput(const QString& output);
 
@@ -218,13 +197,8 @@ public Q_SLOTS:
      */
     void cancel();
 
-    /**
-     * Returns if the job is running.
-     */
-    bool isRunning() const;
-
 Q_SIGNALS:
-    void readyForParsing(DVcsJob *job);
+    void readyForParsing(KDevelop::DVcsJob *job);
 
 private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );
@@ -232,9 +206,11 @@ private Q_SLOTS:
     void slotReceivedStdout();
 
 private:
+    
     void jobIsReady();
     DVcsJobPrivate* const d;
-    QVariant results;
 };
+
+}
 
 #endif

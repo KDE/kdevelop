@@ -2,6 +2,7 @@
     Copyright 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
     Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2010 Milian Wolff <mail@milianw.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,34 +23,20 @@
 #define DUMPCHAIN_H
 
 #include "../languageexport.h"
-#include <QtCore/QString>
-#include <QtCore/QSet>
-
-namespace KTextEditor {
-  class SmartRange;
-}
 
 namespace KDevelop
 {
 class DUContext;
-class TopDUContext;
 
-class KDEVPLATFORMLANGUAGE_EXPORT DumpChain
-{
-public:
-  DumpChain();
-  virtual ~DumpChain();
+/**
+ * Debugging utility function to dump a DUContext including contained declarations.
+ *
+ * NOTE: The DUChain must be readlocked when this is called.
+ *
+ * @param context The context to dump
+ * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT void dumpDUContext(DUContext* context, int allowedDepth = 0);
 
-  ///@param context The context to dump
-  ///@param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
-  void dump(DUContext* context, int allowedDepth = 0);
-  
-  QString dumpRanges(KTextEditor::SmartRange* range, QString indent = QString());
-
-private:
-  int indent;
-  TopDUContext* top;
-  QSet<DUContext*> had;
-};
 }
 #endif // DUMPCHAIN_H

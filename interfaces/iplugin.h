@@ -42,7 +42,7 @@ namespace Sublime {
  * to make sure old source (or binary) incompatible plugins are not loaded.
  * Increase this if it is necessary that old plugins stop working.
  */
-#define KDEVELOP_PLUGIN_VERSION 10
+#define KDEVELOP_PLUGIN_VERSION 11
 
 /**
  * This macro adds an extension interface to register with the extension manager
@@ -79,6 +79,7 @@ class ContextMenuExtension;
  * X-KDE-PluginInfo-Author=
  * X-KDE-PluginInfo-Version=
  * X-KDE-PluginInfo-License=
+ * X-KDE-PluginInfo-Category=
  * X-KDevelop-Version=
  * X-KDevelop-Category=
  * X-KDevelop-Mode=GUI
@@ -97,7 +98,7 @@ class ContextMenuExtension;
  * - <i>Comment</i> is a short description about the plugin (optional);
  * - <i>Icon</i> is a plugin icon (preferred);
  *   <i>X-KDE-library</i>this is the name of the .so file to load for this plugin (required);
- * - <i>X-KDE-PluginInfo-Name</i> is a non-translateable user-readable plugin
+ * - <i>X-KDE-PluginInfo-Name</i> is a non-translatable user-readable plugin
  *   identifier used in KTrader queries (required);
  * - <i>X-KDE-PluginInfo-Author</i> is a non-translateable name of the plugin
  *   author (optional);
@@ -105,7 +106,11 @@ class ContextMenuExtension;
  * - <i>X-KDE-PluginInfo-License</i> is a license (optional). can be: GPL,
  * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
  * considered as unknown;
- * - <i>X-KDevelop-Plugin-Version</i> is the KDevPlatform API version this plugin
+ * - <i>X-KDE-PluginInfo-Category</i> is used to categorize plugins (optional). can be:
+ *    Core, Project Management, Version Control, Utilities, Documentation,
+ *    Language Support, Debugging, Other
+ *   If this property is not set, "Other" is assumed
+ * - <i>X-KDevelop-Version</i> is the KDevPlatform API version this plugin
  *   works with (required);
  * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
  * plugin implements (optional);
@@ -117,7 +122,7 @@ class ContextMenuExtension;
  *   support for (optional);
  * - <i>X-KDevelop-SupportedMimeTypes</i> is a list of mimetypes that the 
  *   language-parser in this plugin supports (optional);
- * - <i>X-KDevelop-Mode</i> is either GUI or NoGUI to indicate wether a plugin can run
+ * - <i>X-KDevelop-Mode</i> is either GUI or NoGUI to indicate whether a plugin can run
  *   with the GUI components loaded or not (required);
  * - <i>X-KDevelop-Category</i> is a scope of a plugin (see below for
  * explanation) (required);
@@ -138,7 +143,7 @@ class ContextMenuExtension;
  * information then this is a project plugin.
  *
  *
- * @sa Core class documentation for an information about features which are available to
+ * @sa Core class documentation for information about features available to
  * plugins from shell applications.
  */
 class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClient
@@ -182,7 +187,7 @@ public:
     }
     
     /**
-     * ask the plugin for a ContextActionContainer, which contains actions
+     * Ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.
      * @param context the context describing where the context menu was requested
      * @returns a container describing which actions to merge into which context menu part
@@ -213,6 +218,17 @@ public:
      * @param actions Add your actions here. A new set of actions has to be created for each mainwindow.
      */
     virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions );
+
+    /**
+     * This function is necessary because there is no proper way to signal errors from plugin constructor.
+     * @returns True if the plugin has encountered an error, false otherwise.
+     */
+    virtual bool hasError() const;
+
+    /**
+     * Description of the last encountered error, of an empty string if none.
+     */
+    virtual QString errorDescription() const;
 public Q_SLOTS:
     /**
      * Re-initialize the global icon loader
@@ -223,7 +239,7 @@ protected:
     void addExtension( const QString& );
 
     /**
-     * Initialize the XML Gui State.
+     * Initialize the XML GUI State.
      */
     virtual void initializeGuiState();
 

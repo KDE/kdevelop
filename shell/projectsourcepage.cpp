@@ -74,7 +74,7 @@ void ProjectSourcePage::sourceChanged(int index)
     if(vcIface) {
         found=true;
         m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
-        connect(m_locationWidget, SIGNAL(changed()), SLOT(reevaluateCorrection()));
+        connect(m_locationWidget, SIGNAL(changed()), SLOT(locationChanged()));
         
         remoteWidgetLayout->addWidget(m_locationWidget);
     } else {
@@ -184,11 +184,27 @@ void ProjectSourcePage::reevaluateCorrection()
     m_ui->creationProgress->setEnabled(validToCheckout);
     
     if(!correct)
-        setStatus(i18n("You need to specify a valid or unexistent directory to check out a project"));
+        setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
     else if(!m_ui->get->isEnabled())
         setStatus(i18n("You need to specify a valid location for the project"));
     else
         validStatus();
+}
+
+void ProjectSourcePage::locationChanged()
+{
+    Q_ASSERT(m_locationWidget);
+    if(m_locationWidget->isCorrect()) {
+        QString currentUrl = m_ui->workingDir->text();
+        currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
+        
+        KUrl current = currentUrl;
+        current.addPath(m_locationWidget->projectName());
+        
+        m_ui->workingDir->setUrl(current);
+    }
+    else
+        reevaluateCorrection();
 }
 
 void ProjectSourcePage::setStatus(const QString& message)

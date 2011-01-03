@@ -27,6 +27,19 @@ SnippetFilterProxyModel::~SnippetFilterProxyModel()
 {
 }
 
+QVariant SnippetFilterProxyModel::data(const QModelIndex& index, int role) const
+{
+    if (role == Qt::DisplayRole && index.parent().isValid()) {
+        // in the view, also show prefix, postfix and arguments
+        Snippet* snippet = dynamic_cast<Snippet*>( SnippetStore::self()->itemFromIndex(mapToSource(index)) );
+        if (snippet) {
+            QString ret = snippet->prefix() + " " + snippet->text() + snippet->arguments() + " " + snippet->postfix();
+            return ret.trimmed();
+        }
+    }
+    return QSortFilterProxyModel::data(index, role);
+}
+
 void SnippetFilterProxyModel::changeFilter(const QString& filter)
 {
     filter_ = filter;

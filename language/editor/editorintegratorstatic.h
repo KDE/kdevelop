@@ -29,11 +29,6 @@
 #include "../duchain/indexedstring.h"
 #include "documentcursor.h"
 
-namespace KTextEditor
-{
-   class SmartRange;
-      }
-
 class QMutex;
 
 namespace KDevelop

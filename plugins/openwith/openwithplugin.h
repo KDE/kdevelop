@@ -24,7 +24,8 @@
 #include <interfaces/iplugin.h>
 #include <QVariantList>
 #include <kservice.h>
-#include <kurl.h>
+
+#include "iopenwith.h"
 
 class QSignalMapper;
 namespace KDevelop
@@ -33,20 +34,24 @@ class ContextMenuExtension;
 class Context;
 }
 
-class OpenWithPlugin : public KDevelop::IPlugin
+class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IOpenWith )
 public:
     OpenWithPlugin ( QObject* parent, const QVariantList& args  );
     virtual ~OpenWithPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context );
+protected:
+    virtual void openFilesInternal( const KUrl::List& files );
 private slots:
     void open( const QString& );
     void openDefault();
 private:
     QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref );
-    QSignalMapper* actionMap;
-    QList<KUrl> urls;
+    QSignalMapper* m_actionMap;
+    KUrl::List m_urls;
+    QString m_mimeType;
 };
 
 #endif // OPENWITHPLUGIN_H

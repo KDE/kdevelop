@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QDropEvent>
 #include <QtGui/QMenuBar>
 #include <QtCore/QMimeData>
+#include <QtDBus/QDBusConnection>
 
 #include <KDE/KApplication>
 #include <KDE/KActionCollection>
@@ -42,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <kshortcutsdialog.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
+#include <KWindowSystem>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -75,12 +77,15 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
 
 QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
 {
-    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, true, area);
+    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, area);
 }
 
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
+    QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",
+        this, QDBusConnection::ExportScriptableSlots );
+
     setAreaSwitcherCornerWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(this));
     setAcceptDrops( true );
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
@@ -127,6 +132,18 @@ MainWindow::~ MainWindow()
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
 }
 
+void MainWindow::ensureVisible()
+{
+    if (isMinimized()) {
+        if (isMaximized()) {
+            showMaximized();
+        } else {
+            showNormal();
+        }
+    }
+    KWindowSystem::forceActiveWindow(winId());
+}
+
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
 {
     QAction* before = 0L;
@@ -147,20 +164,6 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     }
 
     return KXMLGUIBuilder::createCustomElement(parent, index, element);
-}
-
-QWidget* MainWindow::createContainer(QWidget* parent, int index,
-    const QDomElement& element, QAction*& containerAction)
-{
-#if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 0)
-    //for KDE < 4.4 we need to remove "Editor" toplevel menu - it will
-    //always be empty because our custom katepartui.rc is not used
-    const QString tagName = element.tagName().toLower();
-    if (tagName == QLatin1String("menu") &&
-            element.attribute(QLatin1String("name")).toUtf8() == "editor")
-        return 0;
-#endif
-    return KXMLGUIBuilder::createContainer(parent, index, element, containerAction);
 }
 
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
@@ -262,15 +265,18 @@ void MainWindow::configureShortcuts()
 void MainWindow::shortcutsChanged()
 {
     //propagate shortcut changes to all the opened text documents by reloading the UI XML file
-    KTextEditor::Document *activeDocument = Core::self()->documentController()->activeDocument()->textDocument();
-    if (activeDocument) {
+    IDocument* activeDoc = Core::self()->documentController()->activeDocument();
+    if (!activeDoc || !activeDoc->textDocument()) {
+        return;
+    }
 
-        KTextEditor::View *activeClient = activeDocument->activeView();
-        
-        foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
-            KTextEditor::Document *textDocument = doc->textDocument();
+    KTextEditor::View *activeClient = activeDoc->textDocument()->activeView();
+
+    foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
+        KTextEditor::Document *textDocument = doc->textDocument();
+        if (textDocument) {
             foreach(KTextEditor::View *client, textDocument->views()) {
-                 if (client != activeClient) {
+                if (client != activeClient) {
                     client->reloadXML();
                 }
             }
@@ -370,14 +376,6 @@ void MainWindow::initializeStatusBar()
 {
     d->setupStatusBar();
 }
-
-
-void MainWindow::setupAreaSelector()
-{
-    Sublime::MainWindow::setupAreaSelector();
-    d->setupAreaSelector();
-}
-
 
 void MainWindow::showErrorMessage(const QString& message, int timeout)
 {

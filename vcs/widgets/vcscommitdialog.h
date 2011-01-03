@@ -52,11 +52,16 @@ Q_SIGNALS:
     void doCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );
 private:
+    
+    void executeCommit();
+    
     Q_PRIVATE_SLOT( d, void ok() )
     Q_PRIVATE_SLOT( d, void cancel() )
     void getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const;
     friend class VcsCommitDialogPrivate;
     class VcsCommitDialogPrivate* const d;
+public slots:
+    void reviewCancalled(QString);
 };
 
 }

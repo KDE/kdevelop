@@ -26,7 +26,7 @@
 #include "../dvcsplugin.h"
 #include "../dvcsjob.h"
 
-DVCSgenericOutputView::DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, DVcsJob* job, QWidget* parent)
+DVCSgenericOutputView::DVCSgenericOutputView(KDevelop::DistributedVersionControlPlugin *plugin, KDevelop::DVcsJob* job, QWidget* parent)
     : QWidget(parent), Ui::CvsGenericOutputViewBase(), m_plugin(plugin)
 {
     Ui::CvsGenericOutputViewBase::setupUi(this);
@@ -48,9 +48,9 @@ void DVCSgenericOutputView::appendText(const QString& text)
 
 void DVCSgenericOutputView::slotJobFinished(KJob * job)
 {
-    DVcsJob * gitjob = dynamic_cast<DVcsJob*>(job);
+    KDevelop::DVcsJob * gitjob = dynamic_cast<KDevelop::DVcsJob*>(job);
     if (gitjob) {
-        appendText( gitjob->dvcsCommand() );
+        appendText( gitjob->dvcsCommand().join(" ") );
         appendText( gitjob->output() );
         if (job->error() == 0) {
             appendText( i18n("Job exited normally") );

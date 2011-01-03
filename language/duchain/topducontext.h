@@ -109,7 +109,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
-  explicit TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file = 0);
+  explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = 0);
   explicit TopDUContext(TopDUContextData& data);
   
   ///Call this to destroy a top-context.
@@ -182,7 +182,7 @@ public:
    * 
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
-  virtual bool imports(const DUContext* origin, const SimpleCursor& position) const;
+  virtual bool imports(const DUContext* origin, const CursorInRevision& position) const;
 
   /**
    * Returns the trace of imports from this context top the given target.
@@ -292,12 +292,12 @@ public:
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
   ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
-  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor(), bool anonymous=false, bool temporary=false);
+  virtual void addImportedParentContext(DUContext* context, const CursorInRevision& position = CursorInRevision(), bool anonymous=false, bool temporary=false);
   ///Use this for mass-adding of imported contexts, it is faster than adding them individually.
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
   ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
-  virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary=false);
+  virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary=false);
 
   ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
   virtual void removeImportedParentContext(DUContext* context);
@@ -317,7 +317,7 @@ public:
   ///Returns all currently loade importers
   virtual QList<DUContext*> loadedImporters() const;
   
-  virtual SimpleCursor importPosition(const DUContext* target) const;
+  virtual CursorInRevision importPosition(const DUContext* target) const;
   
   class CacheData;
 
@@ -358,7 +358,7 @@ public:
   
   bool usingImportsCache() const;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
 
@@ -368,7 +368,7 @@ protected:
    * If this is true, namespace-aliasing is applied to the last elements of the identifiers.
    * */
   template<class Acceptor>
-  void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const;
+  void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace ) const;
 
 protected:
 
@@ -385,9 +385,9 @@ protected:
   struct ApplyAliasesBuddyInfo;
 
   template<class Acceptor>
-  bool applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const;
+  bool applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& acceptor, const CursorInRevision& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const;
   //Same as imports, without the slow access-check, for internal usage
-  bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
+  bool importsPrivate(const DUContext * origin, const CursorInRevision& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
   
   //Most of these classes need access to m_dynamicData
@@ -413,12 +413,7 @@ protected:
 /**
   * Returns all uses of the given declaration within this top-context and all sub-contexts
   * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges = false);
-
-/**
-  * Returns the smart-ranges of all uses
-  * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration);
+KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges = false);
 
 inline uint qHash(const ReferencedTopDUContext& ctx) {
   return ctx.hash();

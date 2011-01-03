@@ -43,25 +43,24 @@ namespace KDevelop {
 
 class EditorViewWatcher : QObject {
     Q_OBJECT
-    public:
+public:
     ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
-    EditorViewWatcher(QWidget* sameWindow = 0);
+    EditorViewWatcher(QObject* parent = 0);
     QList<KTextEditor::View*> allViews();
-    private:
+private:
     ///Called for every added view. Reimplement this to catch them.
     virtual void viewAdded(KTextEditor::View*);
     
-    private slots:
+private slots:
     void viewDestroyed(QObject* view);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void documentCreated( KDevelop::IDocument* document );
-    private:
+private:
     void addViewInternal(KTextEditor::View* view);
     QList<KTextEditor::View*> m_views;
-    QWidget* m_childrenOf;
 };
 
-class ContextBrowserView;
+class ContextBrowserPlugin;
 
 /**
  * Integrates the context-browser with the editor views, by listening for navigation events, and implementing html-like source browsing
@@ -70,10 +69,8 @@ class ContextBrowserView;
 class BrowseManager : public QObject {
     Q_OBJECT
     public:
-        BrowseManager(ContextBrowserView* controller);
+        BrowseManager(ContextBrowserPlugin* controller);
     Q_SIGNALS:
-        //Emitted whenever the shift-key has been pressed + released without any other key in between
-        void shiftKeyTriggered();
         //Emitted when browsing was started using the magic-modifier
         void startDelayedBrowsing(KTextEditor::View* view);
         void stopDelayedBrowsing();
@@ -86,10 +83,10 @@ class BrowseManager : public QObject {
         void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
             public:
-            Watcher(BrowseManager* manager);
-            virtual void viewAdded(KTextEditor::View*);
+                Watcher(BrowseManager* manager);
+                virtual void viewAdded(KTextEditor::View*);
             private:
-            BrowseManager* m_manager;
+                BrowseManager* m_manager;
         };
         
         void resetChangedCursor();
@@ -98,7 +95,7 @@ class BrowseManager : public QObject {
         //Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
         virtual bool eventFilter(QObject * watched, QEvent * event) ;
-        ContextBrowserView* m_view;
+        ContextBrowserPlugin* m_plugin;
         bool m_browsing;
         int m_browsingByKey; //Whether the browsing was started because of a key
         Watcher m_watcher;

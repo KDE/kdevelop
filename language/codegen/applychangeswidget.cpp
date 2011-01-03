@@ -55,7 +55,7 @@ public:
         qDeleteAll(m_temps);
     }
     
-    void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
+    void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type, const QString& removedText = QString());
     void jump( const QModelIndex & idx);
     void createEditPart(const KDevelop::IndexedString& url);
     void updateButtonLabel();
@@ -105,6 +105,11 @@ ApplyChangesWidget::~ApplyChangesWidget()
     delete d;
 }
 
+bool ApplyChangesWidget::hasDocuments() const
+{
+    return d->m_editParts.size() > 0;
+}
+
 KTextEditor::Document* ApplyChangesWidget::document() const
 {
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
@@ -151,15 +156,15 @@ Q_DECLARE_METATYPE(KTextEditor::Range)
 namespace KDevelop
 {
 
-void ApplyChangesWidgetPrivate::addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type)
+void ApplyChangesWidgetPrivate::addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type, const QString& removedText)
 {
     bool isFirst=mit->rowCount()==0;
     QStringList edition=document->textLines(range);
     if(edition.first().isEmpty())
-        edition.takeFirst();
-    QStandardItem* it= new QStandardItem(edition.join("\n"));
+        edition.removeFirst();
+    QStandardItem* it= new QStandardItem(edition.join("\n").append(removedText));
     QStandardItem* action= new QStandardItem(type);
-    
+
     it->setData(qVariantFromValue(range));
     it->setEditable(false);
     action->setEditable(false);
@@ -246,8 +251,8 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
             parent, SLOT(change (KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range)));
     QObject::connect(m_editParts[m_index], SIGNAL(textInserted(KTextEditor::Document*, KTextEditor::Range)),
             parent, SLOT(insertion (KTextEditor::Document*, KTextEditor::Range)));
-    QObject::connect(m_editParts[m_index], SIGNAL(textRemoved(KTextEditor::Document*, KTextEditor::Range)),
-            parent, SLOT(removal (KTextEditor::Document*, KTextEditor::Range)));
+    QObject::connect(m_editParts[m_index], SIGNAL(textRemoved(KTextEditor::Document*, KTextEditor::Range, const QString&)),
+            parent, SLOT(removal (KTextEditor::Document*, KTextEditor::Range, const QString&)));
     QObject::connect(changesView, SIGNAL(activated(QModelIndex)),
             parent, SLOT(jump(QModelIndex)));
 }
@@ -263,9 +268,9 @@ void ApplyChangesWidget::insertion(KTextEditor::Document *document, const KTextE
     d->addItem(d->m_changes[d->m_index], document, range, i18n("Insert"));
 }
 
-void ApplyChangesWidget::removal(KTextEditor::Document *document, const KTextEditor::Range &range)
+void ApplyChangesWidget::removal(KTextEditor::Document *document, const KTextEditor::Range &range, const QString &oldText)
 {
-    d->addItem(d->m_changes[d->m_index], document, range, i18n("Remove"));
+    d->addItem(d->m_changes[d->m_index], document, range, i18n("Remove"), oldText);
 }
 
 void ApplyChangesWidget::switchEditView()

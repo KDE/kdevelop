@@ -94,11 +94,14 @@ QVariant Snippet::data(int role) const
 {
     if ( role == Qt::ToolTipRole ) {
         return m_snippet;
-    } else if ( role == Qt::ForegroundRole && !parent()->isEnabled() ) {
+    } else if ( (role == Qt::ForegroundRole || role == Qt::BackgroundRole) &&  parent()->checkState() != Qt::Checked ) {
         ///TODO: make the selected items also "disalbed" so the toggle action is seen directly
         KColorScheme scheme(QPalette::Disabled, KColorScheme::View);
-        QColor c = scheme.foreground(KColorScheme::ActiveText).color();
-        return QVariant(c);
+        if (role == Qt::ForegroundRole) {
+            return scheme.foreground(KColorScheme::ActiveText).color();
+        } else {
+            return scheme.background(KColorScheme::ActiveBackground).color();
+        }
     }
     return QStandardItem::data(role);
 }

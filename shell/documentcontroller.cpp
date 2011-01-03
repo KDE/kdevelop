@@ -52,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "savedialog.h"
 #include <kmessagebox.h>
+#include <KIO/Job>
 
 #include <config-kdevplatform.h>
 #if HAVE_KOMPARE
@@ -112,7 +113,8 @@ struct DocumentControllerPrivate {
         KUrl dir;
         if( controller->activeDocument() )
         {
-            dir = KUrl( controller->activeDocument()->url().directory() );
+            dir = KUrl( controller->activeDocument()->url() );
+            dir.setFileName(QString());
         }else
         {
             dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
@@ -226,6 +228,16 @@ struct DocumentControllerPrivate {
                 }
 
                 mimeType = KMimeType::findByUrl( url );
+                
+                if( !url.isLocalFile() && mimeType->isDefault() )
+                {
+                    // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
+                    // using a syncronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
+                    // this function without it having returned in the first place
+                    // and this function is *not* reentrant, see assert below:
+                    // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
+                    mimeType = KMimeType::mimeType("text/plain");
+                }
             }
 
             // is the URL pointing to a directory?
@@ -265,7 +277,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18n("Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
@@ -633,6 +645,7 @@ QList<IDocument*> DocumentController::openDocuments() const
 void DocumentController::activateDocument( IDocument * document, const KTextEditor::Range& range )
 {
     // TODO avoid some code in openDocument?
+    Q_ASSERT(document);
     openDocument(document->url(), range);
 }
 
@@ -691,7 +704,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsInWindow(MainWindow 
     return list;
 }
 
-QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(MainWindow * mw) const
+QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(MainWindow * mw, bool currentAreaOnly) const
 {
     // Gather a list of all documents which have views only in the given main window
     QList<IDocument*> checkSave;
@@ -702,7 +715,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
 
             foreach (Sublime::View* view, sdoc->views()) {
                 foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows())
-                    if(window != mw && window->containsView(view))
+                    if(window->containsView(view) && (window != mw || (currentAreaOnly && window == mw && !mw->area()->views().contains(view))))
                         inOtherWindow = true;
             }
 
@@ -722,9 +735,9 @@ QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList
     return ret;
 }
 
-bool DocumentController::saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode)
+bool DocumentController::saveAllDocumentsForWindow(KDevelop::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
 {
-    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw);
+    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw, currentAreaOnly);
 
     return saveSomeDocuments(checkSave, mode);
 }
@@ -839,7 +852,7 @@ IDocumentFactory* DocumentController::factory(const QString& mime) const
 KTextEditor::Document* DocumentController::globalTextEditorInstance()
 {
     if(!d->globalTextEditorInstance)
-        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart(QString());
+        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart();
     return d->globalTextEditorInstance;
 }
 

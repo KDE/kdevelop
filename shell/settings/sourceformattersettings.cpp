@@ -296,6 +296,7 @@ void SourceFormatterSettings::selectStyle( int row )
     }
     SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
     SourceFormatter fmt = l.formatters[ l.selectedFmt ];
+    styleList->setCurrentRow( row );
     fmt.selectedStyle = styleList->item( row )->data( STYLE_ROLE ).toString();
     l.formatters[ l.selectedFmt ] = fmt;
     languages[ cbLanguages->currentText() ] = l;
@@ -378,6 +379,10 @@ void SourceFormatterSettings::newStyle()
 
 void SourceFormatterSettings::styleNameChanged( QListWidgetItem* item )
 {
+    if ( !item->isSelected() ) {
+        return;
+    }
+
     SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
     SourceFormatter fmt = l.formatters[ l.selectedFmt ];
 

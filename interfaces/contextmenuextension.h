@@ -56,10 +56,10 @@ public:
     /** menu group to contain project actions */
     static const QString ProjectGroup;
 
-    /** menu group that can contain any extension menu,
-      * actions for this extension will always be at the end
-      * of the menu and plugins using that should think about
-      * providing a menu-action so it doesn't get cluttered
+    /** menu group that can contain any extension menu.
+      * Actions for this extension will always be at the end
+      * of the menu. Plugins using this should think about
+      * providing a submenu, so the context menu doesn't get cluttered.
       */
     static const QString ExtensionGroup;
 
@@ -73,14 +73,14 @@ public:
     ContextMenuExtension& operator=( const ContextMenuExtension& rhs );
 
     /**
-     * add an action to the given menu group
+     * Add an action to the given menu group
      * @param group the menu group to which the action should be added
      * @param action the action to add to the menu group
      */
     void addAction( const QString& group, QAction* action );
 
     /**
-     * return all actions that are in the menu group
+     * Return all actions that are in the menu group
      * @param group the menu group from which to get the actions
      * @returns a list of actions for that menu group
      */

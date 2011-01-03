@@ -28,6 +28,8 @@ namespace KDevelop
 class ProjectModel;
 }
 
+class ModelTest;
+
 class ProjectModelTest : public QObject
 {
 Q_OBJECT
@@ -47,8 +49,12 @@ private slots:
     void testWithProject();
     void testTakeRow();
     void testAddItemInThread();
+
+    // benchmarking
+    void testDeleteLots();
 private:
     KDevelop::ProjectModel* model;
+    ModelTest* modelTest;
 };
 
 Q_DECLARE_METATYPE( QModelIndex )

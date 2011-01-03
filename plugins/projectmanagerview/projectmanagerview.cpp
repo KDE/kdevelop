@@ -21,7 +21,6 @@
 
 #include "projectmanagerview.h"
 
-#include <QtCore/QDebug>
 #include <QtGui/QHeaderView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
@@ -35,10 +34,10 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 #include <kfadewidgeteffect.h>
 #include <kcombobox.h>
 #include <kjob.h>
+#include <KLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
@@ -52,6 +51,8 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 
+#include "../openwith/iopenwith.h"
+
 #include <KParts/MainWindow>
 #include <sublime/mainwindow.h>
 
@@ -61,6 +62,28 @@
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
+
+//BEGIN ProjectManagerFilterAction
+
+ProjectManagerFilterAction::ProjectManagerFilterAction( QObject* parent )
+    : KAction( parent )
+{
+    setIcon(KIcon("view-filter"));
+    setText(i18n("Filter..."));
+    setToolTip(i18n("Insert wildcard patterns to filter the project view"
+                    " for files and targets for matching items."));
+}
+
+QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
+{
+    KLineEdit* edit = new KLineEdit(parent);
+    edit->setClickMessage(i18n("Filter..."));
+    edit->setClearButtonShown(true);
+    connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
+    return edit;
+}
+
+//END ProjectManagerFilterAction
 
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidget *parent )
         : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
@@ -75,6 +98,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_syncAction->setText(i18n("Locate Current Document"));
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
     m_syncAction->setIcon(KIcon("dirsync"));
+    m_syncAction->setShortcut(Qt::ControlModifier + Qt::Key_Less);
     connect(m_syncAction, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
     addAction(m_syncAction);
     updateSyncAction();
@@ -93,10 +117,15 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->buildSetView->setProjectView( this );
 
     m_modelFilter = new ProjectProxyModel( this );
+    m_modelFilter->setDynamicSortFilter( true );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
+    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
+    connect(filterAction, SIGNAL(filterChanged(QString)),
+            this, SLOT(filterChanged(QString)));
+    addAction(filterAction);
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
@@ -188,8 +217,12 @@ void ProjectManagerView::locateCurrentDocument()
 
 void ProjectManagerView::openUrl( const KUrl& url )
 {
-        ICore::self()->documentController()->openDocument( url );
+    IOpenWith::openFiles(KUrl::List() << url);
+}
+
+void ProjectManagerView::filterChanged(const QString &text)
+{
+    m_modelFilter->setFilterString(text);
 }
 
 #include "projectmanagerview.moc"
-

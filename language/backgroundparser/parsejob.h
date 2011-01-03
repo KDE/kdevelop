@@ -23,7 +23,7 @@
 #ifndef PARSEJOB_H
 #define PARSEJOB_H
 
-#include <QtCore/QPointer>
+#include <QtCore/QWeakPointer>
 #include <KDE/KUrl>
 
 #include <threadweaver/JobSequence.h>
@@ -31,6 +31,7 @@
 #include "../duchain/indexedstring.h"
 #include "documentchangetracker.h"
 #include <language/duchain/topducontext.h>
+#include <language/editor/modificationrevision.h>
 
 namespace KDevelop
 {
@@ -40,46 +41,66 @@ class ReferencedTopDUContext;
 
 /**
  * The base class for background parser jobs.
+ *
+ * In your language plugin, don't forget to use acquire an UrlParseLock before starting to the actual parsing.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence, public DocumentChangeTracker
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
+
 public:
     ParseJob( const KUrl &url );
+    /**
+     * _No_ mutexes/locks are allowed to be locked when this object is destroyed (except for optionally the foreground lock)
+     * */
     virtual ~ParseJob();
 
     Q_SCRIPTABLE BackgroundParser* backgroundParser() const;
     Q_SCRIPTABLE void setBackgroundParser(BackgroundParser* parser);
 
-    Q_SCRIPTABLE virtual int priority() const;
-
+    struct Contents {
+        // Modification-time of the read content
+        ModificationRevision modification;
+        // The contents in utf-8 format
+        QByteArray contents;
+    };
+    
     /**
-     * Determine whether the editor can provide the contents of the document or not.
-     * Once this is called, the editor integrator saves the revision token, and no changes will
-     * be made to the changedRanges().
-     * You can then just call KTextEditor::SmartRange::text() on each of the changedRanges().
-     * Or, you can parse the whole document, the text of which is available from contentsFromEditor().
-     *
-     * @NOTE: When this is called, make sure you call @p cleanupSmartRevision() properly.
-     */
-    Q_SCRIPTABLE bool contentsAvailableFromEditor();
-
+     * _No_ mutexes/locks are allowed to be locked when this is called (except for optionally the foreground lock)
+     * 
+     * Locks the document revision so that mapping from/to the revision in the editor using MovingInterface will be possible.
+     * 
+     * Returns an invalid pointer if the call succeeds, and a valid one if the reading fails.
+     * */
+    KDevelop::ProblemPointer readContents();
+    
     /**
-     * Cleanup SmartRange revision after the job has run. 
-     * You must call this before exiting your @p run() method.
-     * @p abortJob() will call this automatically.
+     * After reading the contents, you can call this to retrieve it.
+     * */
+    const Contents& contents() const;
+    
+    /**
+     * Translates the given context from its previous revision to the revision that has
+     * been retrieved during readContents(). The top-context meta-data will be updated
+     * with the revision.
+     * 
+     * This can be done after reading the context before updating, so
+     * that the correct ranges are matched onto each other during the update.
+     * 
+     * _No_ mutexes/locks are allowed to be locked when this is called (except for optionally the foreground lock)
      */
-    virtual void cleanupSmartRevision();
-
-    /// Retrieve the contents of the file from the currently open editor.
-    /// Ensure it is loaded by calling editorLoaded() first.
-    /// The editor integrator seamlessly saves the revision token and applies it
-    Q_SCRIPTABLE QString contentsFromEditor();
-
-    /// Returns the revision token issued by the document's smart interface,
-    /// or -1 if there was a problem.
-    Q_SCRIPTABLE int revisionToken() const;
-
+    void translateDUChainToRevision(TopDUContext* context);
+    
+    /**
+     * Assigns a document change tracker to this job.
+     * */
+    void setTracker(DocumentChangeTracker* tracker);
+    
+    /**
+     * Returns the document change tracker for this job. May be zero if the document is not open in an editor.
+     * */
+    DocumentChangeTracker* tracker() const;
+    
     /// \returns the indexed url of the document to be parsed.
     Q_SCRIPTABLE KDevelop::IndexedString document() const;
 
@@ -89,7 +110,7 @@ public:
     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
     * The given top-context may be invalid if the update failed.
     */
-    Q_SCRIPTABLE void setNotifyWhenReady(QList<QPointer<QObject> > notify);
+    Q_SCRIPTABLE void setNotifyWhenReady(QList<QWeakPointer<QObject> > notify);
     
     /// Sets the du-context that was created by this parse-job
     Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);

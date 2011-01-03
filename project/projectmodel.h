@@ -41,6 +41,7 @@ class ProjectTargetItem;
 class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 class ProjectModel;
+class IndexedString;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectVisitor
 {
@@ -120,6 +121,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
+        /** @returns the list of children of this item. */
+        QList<ProjectBaseItem*> children() const;
         /** @returns a valid QModelIndex for usage with the model API for this item. */
         QModelIndex index() const;
         /** @returns The parent item if this item has one, else it return 0. */
@@ -128,11 +131,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         QString text() const;
         /** @returns the row in the list of children of this items parent, or -1. */
         int row() const;
-        /**
-         * Allows to change the displayed text of this item.
-         * @param text the new text
-         */
-        void setText( const QString& text );
 
         /** @returns the number of children of this item, or 0 if there are none. */
         int rowCount() const;
@@ -176,6 +174,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         /** Get the url of this item (if any) */
         KUrl url() const;
 
+        /** Gets the basename of this url (if any)
+         *  convenience function, returns the same as @c text() for most items
+         */
+        QString baseName() const;
+
         /**
          * Renames the item to the new name.
          * @returns status information wether the renaming succeeded.
@@ -197,6 +200,15 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         void setFlags(Qt::ItemFlags flags);
 
     protected:
+        /**
+         * Allows to change the displayed text of this item.
+         *
+         * Most items assume text == baseName so this is *not* public.
+         *
+         * @param text the new text
+         */
+        void setText( const QString& text );
+
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
         void setRow( int row );
@@ -217,6 +229,8 @@ public:
 
     virtual ~ProjectFolderItem();
 
+    virtual void setUrl(const KUrl& );
+
     virtual ProjectFolderItem *folder() const;
 
     ///Reimplemented from QStandardItem
@@ -230,6 +244,8 @@ public:
     
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
+    
+    void propagateRename( const KUrl& newBase ) const;
 };
 
 

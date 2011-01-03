@@ -34,14 +34,13 @@ DEFINE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedStr
 FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data) : FunctionDeclarationBase(data) {
 }
 
-FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data, const SimpleRange& range) : FunctionDeclarationBase(data, range) {
+FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data, const RangeInRevision& range) : FunctionDeclarationBase(data, range) {
 }
 
 FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : FunctionDeclarationBase(*new FunctionDeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
-FunctionDeclaration::FunctionDeclaration(const SimpleRange& range, DUContext* context)
+FunctionDeclaration::FunctionDeclaration(const RangeInRevision& range, DUContext* context)
   : FunctionDeclarationBase(*new FunctionDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

@@ -25,7 +25,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
-KDevelop::Declaration* Use::usedDeclaration(KDevelop::TopDUContext* topContext) {
+KDevelop::Declaration* Use::usedDeclaration(KDevelop::TopDUContext* topContext) const {
   return topContext->usedDeclarationForIndex(m_declarationIndex);
 }
 
