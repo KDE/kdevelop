@@ -52,6 +52,7 @@ GenericName[x-test]=xxProject Managerxx
 GenericName[zh_CN]=工程管理器
 GenericName[zh_TW]=專案管理員
 Comment=Allows KDevelop to manage CMake-based projects
+Comment[da]=Lader KDevelop håndtere CMake-baserede projekter
 Comment[de]=Erlaubt das Verwalten CMake-basierter Projekte mit KDevelop
 Comment[en_GB]=Allows KDevelop to manage CMake-based projects
 Comment[es]=Permite que KDevelop gestione proyectos basados en CMake
