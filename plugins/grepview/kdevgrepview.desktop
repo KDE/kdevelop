@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.
+Comment[da]=Muliggør hurtig søgning af flere filer med brug af mønstre eller regulære udtryk - og muliggør også erstatning.
 Comment[es]=Permite búsquedas rápidas de múltiples archivos usando patrones o expresiones regulares. También permite sustituciones.
 Comment[et]=Lubab mustreid või regulaaravaldisi kasutades kiiresti paljudes failides teksti otsida, samuti asendada.
 Comment[fr]=Permet la recherche rapide de fichiers multiples à l'aide de motifs ou d'expressions rationnelles, et d'effectuer le remplacement aussi.
@@ -15,6 +16,7 @@ Comment[uk]=Надає можливості швидкого пошуку та �
 Comment[x-test]=xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx
 Comment[zh_TW]=允許使用樣式或正規表示式來快速搜尋與取代多個檔案。
 Name=Find/Replace In Files
+Name[da]=Find/erstat i filer
 Name[en_GB]=Find/Replace In Files
 Name[es]=Buscar/sustituir en archivos
 Name[et]=Failides otsimine ja asendamine
