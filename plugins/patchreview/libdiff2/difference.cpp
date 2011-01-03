@@ -16,6 +16,7 @@
 ***************************************************************************/
 
 #include "difference.h"
+#include "differencestringpair.h"
 #include "levenshteintable.h"
 
 using namespace Diff2;
@@ -85,15 +86,16 @@ void Difference::determineInlineDifferences()
 	if ( slc != destinationLineCount() )
 		return;
 
-	LevenshteinTable table;
+	LevenshteinTable<DifferenceStringPair> table;
 
 	for ( int i = 0; i < slc; ++i )
 	{
 		DifferenceString* sl = sourceLineAt( i );
 		DifferenceString* dl = destinationLineAt( i );
+        DifferenceStringPair* pair = new DifferenceStringPair(sl, dl);
 
 		// return value 0 means something went wrong creating the table so dont bother finding markers
-		if ( table.createTable( sl, dl ) != 0 )
+		if ( table.createTable( pair ) != 0 )
 			table.createListsOfMarkers();
 	}
 }

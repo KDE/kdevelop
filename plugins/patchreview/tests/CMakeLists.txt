@@ -11,9 +11,9 @@ set(patchReviewTest_SRCS
     ../libdiff2/diffparser.cpp
     ../libdiff2/komparemodellist.cpp
     ../libdiff2/kompareprocess.cpp
-    ../libdiff2/levenshteintable.cpp
     ../libdiff2/parser.cpp
     ../libdiff2/parserbase.cpp
+    ../libdiff2/stringlistpair.cpp
     ../settings/diffsettings.cpp
     ../settings/settingsbase.cpp
 )
@@ -25,3 +25,14 @@ target_link_libraries(patchreviewtest
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )
 
+set(levenshteinTest_SRCS
+    levenshteintest.cpp
+    ../libdiff2/difference.cpp
+    ../libdiff2/stringlistpair.cpp
+)
+
+kde4_add_unit_test(levenshteintest ${levenshteinTest_SRCS})
+target_link_libraries(levenshteintest
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+)

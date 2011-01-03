@@ -21,12 +21,8 @@
 #include "patchreviewtest.h"
 
 #include <QTest>
-#include <QtCore/QFile>
-#include <KDebug>
 #include "../libdiff2/diffmodel.h"
 #include "../libdiff2/parser.h"
-#include "../libdiff2/komparemodellist.h"
-#include "../settings/diffsettings.h"
 
 using namespace Diff2;
 

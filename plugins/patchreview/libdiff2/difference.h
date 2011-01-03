@@ -22,46 +22,12 @@
 
 #include <kdebug.h>
 #include "diff2export.h"
+#include "marker.h"
 
 class QString;
 
 namespace Diff2
 {
-
-
-class DIFF2_EXPORT Marker
-{
-public:
-	enum Type { Start = 0, End = 1 };
-
-public:
-	Marker()
-	{
-		m_type = Marker::Start;
-		m_offset = 0;
-	}
-	Marker( enum Marker::Type type, unsigned int offset )
-	{
-		m_type = type;
-		m_offset = offset;
-	}
-	~Marker() {}
-
-public:
-	enum Marker::Type type()   const { return m_type;   }
-	unsigned int      offset() const { return m_offset; }
-
-	void setType  ( enum Marker::Type type ) { m_type   = type;   }
-	void setOffset( unsigned int offset )    { m_offset = offset; }
-
-private:
-	enum Marker::Type m_type;
-	unsigned int      m_offset;
-};
-
-typedef QList<Marker*> MarkerList;
-typedef QList<Marker*>::iterator MarkerListIterator;
-typedef QList<Marker*>::const_iterator MarkerListConstIterator;
 
 class DIFF2_EXPORT DifferenceString
 {

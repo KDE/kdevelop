@@ -18,24 +18,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PATCHREVIEWTEST_H
-#define PATCHREVIEWTEST_H
+#ifndef LEVENSHTEINTEST_H
+#define LEVENSHTEINTEST_H
 
 #include <QtCore/QObject>
 
-#include "../libdiff2/difference.h"
-
-class PatchReviewTest : public QObject
+class LevenshteinTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void testOneLineChange();
-    void testLineNumbers_data();
-    void testLineNumbers();
-    void testDifferenceContents_data();
-    void testDifferenceContents();
-private:
-    void CompareDifferenceStringList(const Diff2::DifferenceStringList& actual, const QStringList& expected);
+    void testDifferenceStrings();
+    void testStringLists();
+    void testSmth();
 };
 
-#endif //  PATCHREVIEWTEST_H
+#endif //  LEVENSHTEINTEST_H
