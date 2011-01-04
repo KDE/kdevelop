@@ -145,6 +145,30 @@ void PatchReviewTest::testDifferenceContents_data()
         patch <<
         "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
         "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,4 +1,5 @@\n" <<
+        " abcd\n" <<
+        "-delete1\n" <<
+        "-delete2\n" <<
+        "+insert1\n" <<
+        "+insert2\n" <<
+        "+insert3\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "delete2\n";
+        QStringList oldLines;
+        oldLines << "insert2\n";
+        DifferenceHash expectedDifferences;
+        expectedDifferences.insert(0, qMakePair(QStringList() << "delete1\n", QStringList() << "insert1\n"));
+        expectedDifferences.insert(1, qMakePair(QStringList(), QStringList() << "insert3\n"));
+
+        QTest::newRow("Partial reversion") << patch << oldLines << newLines << 3 << 2 << expectedDifferences;
+    }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
         "@@ -1,4 +1,4 @@\n" <<
         " abcd\n" <<
         "-delete1\n" <<
@@ -320,10 +344,49 @@ void PatchReviewTest::testLineNumbers_data()
         // Line numbers assigned to new difference when it is inserted before all existing differences
         QTest::newRow("First edit line number") << patch << oldLines << newLines << 5 << 2 << expectedLineNumbers;
     }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,3 +1,4 @@\n" <<
+        " abcd\n" <<
+        "-delete1\n" <<
+        "+insert1\n" <<
+        "+insert2\n" <<
+        " efgh\n" <<
+        "@@ -11,4 +12,5 @@\n" <<
+        " abcd\n" <<
+        "-delete2\n" <<
+        "-delete3\n" <<
+        "+insert3\n" <<
+        "+insert4\n" <<
+        "+insert5\n" <<
+        " efgh\n" <<
+        "@@ -21,4 +23,3 @@\n" <<
+        " abcd\n" <<
+        "-delete4\n" <<
+        "-delete5\n" <<
+        "+insert6\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "delete2\n";
+        QStringList oldLines;
+        oldLines << "insert4\n";
+        LineNumberHash expectedLineNumbers;
+        expectedLineNumbers.insert(0, qMakePair(2, 2));
+        expectedLineNumbers.insert(1, qMakePair(12, 13));
+        expectedLineNumbers.insert(2, qMakePair(13, 15));
+        expectedLineNumbers.insert(3, qMakePair(22, 24));
+
+        QTest::newRow("Partial reversion") << patch << oldLines << newLines << 14 << 4 << expectedLineNumbers;
+    }
 }
 
 void PatchReviewTest::testLineNumbers()
 {
+    kWarning() << "OLOLO";
     QFETCH(QStringList, patch);
     Parser parser(0);
     DiffModelList* models = parser.parse(patch);

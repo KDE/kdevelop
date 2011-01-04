@@ -109,6 +109,8 @@ public:
 private:
 	void splitSourceInPathAndFileName();
 	void splitDestinationInPathAndFileName();
+    void computeDiffType(Difference* diff);
+    void processStartMarker(Difference* diff, const QStringList& lines, MarkerListConstIterator& currentMarker, int& currentListLine, bool isSource);
 
 private:
 	QString m_source;
