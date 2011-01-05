@@ -49,6 +49,47 @@ bool operator == (const Marker& first, const Marker& second) {
     return first.type() == second.type() && first.offset() == second.offset();
 }
 
+void LevenshteinTest::testFirstEmptyString()
+{
+    DifferenceString* string1 = new DifferenceString(QString("12345"));
+    DifferenceString* string2 = new DifferenceString(QString(""));
+    DifferenceStringPair* pair = new DifferenceStringPair(string1, string2);
+    LevenshteinTable<DifferenceStringPair> table;
+    table.createTable(pair);
+    table.createListsOfMarkers();
+    MarkerList markersFirstExpected;
+    markersFirstExpected << new Marker(Marker::Start, 0) << new Marker(Marker::End, 5);
+    for (int i = 0; i < markersFirstExpected.size(); ++i) {
+        QCOMPARE(*string1->markerList()[i], *markersFirstExpected[i]);
+    }
+    MarkerList markersSecondExpected;
+    markersSecondExpected << new Marker(Marker::Start, 0) << new Marker(Marker::End, 0);
+    for (int i = 0; i < markersSecondExpected.size(); ++i) {
+        QCOMPARE(*string2->markerList()[i], *markersSecondExpected[i]);
+    }
+}
+
+void LevenshteinTest::testSecondEmptyString()
+{
+    DifferenceString* string1 = new DifferenceString(QString(""));
+    DifferenceString* string2 = new DifferenceString(QString("12345"));
+    DifferenceStringPair* pair = new DifferenceStringPair(string1, string2);
+    LevenshteinTable<DifferenceStringPair> table;
+    table.createTable(pair);
+    table.createListsOfMarkers();
+    MarkerList markersFirstExpected;
+    markersFirstExpected << new Marker(Marker::Start, 0) << new Marker(Marker::End, 0);
+    for (int i = 0; i < markersFirstExpected.size(); ++i) {
+        QCOMPARE(*string1->markerList()[i], *markersFirstExpected[i]);
+    }
+    MarkerList markersSecondExpected;
+    markersSecondExpected << new Marker(Marker::Start, 0) << new Marker(Marker::End, 5);
+    for (int i = 0; i < markersSecondExpected.size(); ++i) {
+        QCOMPARE(*string2->markerList()[i], *markersSecondExpected[i]);
+    }
+}
+
+
 void LevenshteinTest::testDifferenceStrings()
 {
     DifferenceString* string1 = new DifferenceString(QString("aaabcddefghik"));

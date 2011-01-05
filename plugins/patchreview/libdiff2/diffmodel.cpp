@@ -361,25 +361,30 @@ bool DiffModel::setSelectedDifference( Difference* diff )
 	return true;
 }
 
-void DiffModel::linesChanged(const QStringList& oldLines, const QStringList& newLines, int editLineNumber)
+QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QStringList& oldLines, const QStringList& newLines, int editLineNumber)
 {
+    // These two will be returned as the function result
+    QList<Difference*> inserted;
+    QList<Difference*> removed;
     if (oldLines.size() == 0 && newLines.size() == 0) {
-        return;
+        return qMakePair(QList<Difference*>(), QList<Difference*>());
     }
     int editLineEnd = editLineNumber + oldLines.size();
     // Find the range of differences [iterBegin, iterEnd) that should be updated
     // TODO: assume that differences are ordered by starting line. Check that this is always the case
-    DifferenceListIterator iterBegin; // first diff ending not later a line before editLineNo or later
+    DifferenceListIterator iterBegin; // first diff ending a line before editLineNo or later
     for (iterBegin = m_differences.begin(); iterBegin != m_differences.end(); ++iterBegin) {
         // If the difference ends a line before the edit starts, they should be merged anyway
-        if ((*iterBegin)->destinationLineEnd() >= editLineNumber - 1) {
+        int lineAfterLast = (*iterBegin)->destinationLineEnd();
+        if (lineAfterLast > editLineNumber || ((*iterBegin)->applied() && lineAfterLast == editLineNumber)) {
             break;
         }
     }
     DifferenceListIterator iterEnd;
     for (iterEnd = iterBegin; iterEnd != m_differences.end(); ++iterEnd) {
-        // If the difference starts a line after the edit ends, they should be merged anyway
-        if ((*iterEnd)->destinationLineNumber() > editLineEnd) {
+        // If the difference starts a line after the edit ends, they should be merged if that difference is applied
+        int firstLine = (*iterEnd)->destinationLineNumber();
+        if (firstLine > editLineEnd || (!(*iterEnd)->applied() && firstLine == editLineEnd)) {
             break;
         }
     }
@@ -395,7 +400,7 @@ void DiffModel::linesChanged(const QStringList& oldLines, const QStringList& new
         } else {
             sourceLineNumber = destinationLineNumber;
         }
-    } else if ((*iterBegin)->destinationLineNumber() >= editLineNumber) {
+    } else if (!(*iterBegin)->applied() || (*iterBegin)->destinationLineNumber() >= editLineNumber) {
         destinationLineNumber = editLineNumber;
         sourceLineNumber = (*iterBegin)->sourceLineNumber() - ((*iterBegin)->destinationLineNumber() - editLineNumber);
     } else {
@@ -403,37 +408,31 @@ void DiffModel::linesChanged(const QStringList& oldLines, const QStringList& new
         destinationLineNumber = (*iterBegin)->destinationLineNumber();
     }
 
+    QStringList sourceLines;
+    QStringList destinationLines;
+    DifferenceListIterator insertPosition;
     if (iterBegin == iterEnd) {
-        // No diffs are intersected, just insert the new one and update line numbers on the following ones
-        Difference* diff = new Difference(sourceLineNumber, destinationLineNumber);
-        foreach(const QString& str, newLines) {
-            diff->addDestinationLine(str);
-        }
-        foreach(const QString& str, oldLines) {
-            diff->addSourceLine(str);
-        }
-        computeDiffType(diff);
-        Q_ASSERT(diff->type() != Difference::Unchanged);
-        DifferenceListIterator iter = m_differences.insert(iterBegin, diff);
-        for (++iter; iter != m_differences.end(); ++iter) {
-            (*iter)->setDestinationLineNumber((*iter)->destinationLineNumber() + (newLines.size() - oldLines.size()));
-        }
+        destinationLines = newLines;
+        sourceLines = oldLines;
+        insertPosition = iterBegin;
     } else {
-        QStringList sourceLines;
-        QStringList destinationLines;
         // Create the destination part of the new diff
-        int firstDestinationLineNumber = (*iterBegin)->destinationLineNumber();
-        for (int lineNumber = firstDestinationLineNumber; lineNumber < editLineNumber; ++lineNumber) {
-            destinationLines.append((*iterBegin)->destinationLineAt(firstDestinationLineNumber - lineNumber)->string());
+        if ((*iterBegin)->applied()) {
+            int firstDestinationLineNumber = (*iterBegin)->destinationLineNumber();
+            for (int lineNumber = firstDestinationLineNumber; lineNumber < editLineNumber; ++lineNumber) {
+                destinationLines.append((*iterBegin)->destinationLineAt(lineNumber - firstDestinationLineNumber)->string());
+            }
         }
         foreach(const QString& line, newLines) {
             destinationLines.append(line);
         }
         DifferenceListIterator iterLast = iterEnd;
         --iterLast;
-        int lastDestinationLineNumber = (*iterLast)->destinationLineNumber();
-        for (int lineNumber = editLineEnd; lineNumber < (*iterLast)->destinationLineEnd(); ++lineNumber) {
-            destinationLines.append((*iterLast)->destinationLineAt(lineNumber - lastDestinationLineNumber)->string());
+        if ((*iterLast)->applied()) {
+            int lastDestinationLineNumber = (*iterLast)->destinationLineNumber();
+            for (int lineNumber = editLineEnd; lineNumber < (*iterLast)->destinationLineEnd(); ++lineNumber) {
+                destinationLines.append((*iterLast)->destinationLineAt(lineNumber - lastDestinationLineNumber)->string());
+            }
         }
 
         // Create the source part of the new diff
@@ -445,10 +444,15 @@ void DiffModel::linesChanged(const QStringList& oldLines, const QStringList& new
 
         QStringList::const_iterator oldLinesIter = oldLines.begin();
         for (DifferenceListConstIterator iter = iterBegin; iter != iterEnd;) {
-            for(int i = 0; i < (*iter)->sourceLineCount(); ++i) {
-                sourceLines.append((*iter)->sourceLineAt(i)->string());
+            int startPos = (*iter)->destinationLineNumber();
+            if ((*iter)->applied()) {
+                for(int i = 0; i < (*iter)->sourceLineCount(); ++i) {
+                    sourceLines.append((*iter)->sourceLineAt(i)->string());
+                }
+                startPos = (*iter)->destinationLineEnd();
+            } else if (startPos < editLineNumber) {
+                startPos = editLineNumber;
             }
-            int startPos = (*iter)->destinationLineEnd();
             ++iter;
             int endPos = (iter == iterEnd) ? editLineEnd : (*iter)->destinationLineNumber();
             for (int i = startPos; i < endPos; ++i) {
@@ -456,51 +460,60 @@ void DiffModel::linesChanged(const QStringList& oldLines, const QStringList& new
             }
         }
 
-        // Compute the Levenshtein table for two line lists and construct the shortest possible edit script
-        StringListPair* pair = new StringListPair(sourceLines, destinationLines);
-        LevenshteinTable<StringListPair> table;
-        table.createTable(pair);
-        table.createListsOfMarkers();
-        MarkerList sourceMarkers = pair->markerListFirst();
-        MarkerList destinationMarkers = pair->markerListSecond();
-
-        int currentSourceListLine = 0;
-        int currentDestinationListLine = 0;
-        MarkerListConstIterator sourceMarkerIter = sourceMarkers.begin();
-        MarkerListConstIterator destinationMarkerIter = destinationMarkers.begin();
-        const int terminatorLineNumber = sourceLines.size() + destinationLines.size() + 1;    // A virtual offset for simpler computation - stands for infinity
-
+        for (DifferenceListIterator iter = iterBegin; iter != iterEnd; ++iter) {
+            removed << *iter;
+        }
         // TODO: This is a leak. differences are handled by hunks, so not so easy to fix
-        DifferenceListIterator insertPosition = m_differences.erase(iterBegin, iterEnd);
-        // Process marker lists, converting markers into differences.
-        // Marker in source listonly stands for deletion, in source and destination lists - for change, in destination list only - for insertion.
-        while(sourceMarkerIter != sourceMarkers.end() || destinationMarkerIter != destinationMarkers.end()) {
-            int nextSourceListLine = sourceMarkerIter != sourceMarkers.end() ? (*sourceMarkerIter)->offset() : terminatorLineNumber;
-            int nextDestinationListLine = destinationMarkerIter != destinationMarkers.end() ? (*destinationMarkerIter)->offset() : terminatorLineNumber;
-
-            // Advance to the nearest marker
-            int linesToSkip = qMin(nextDestinationListLine - currentDestinationListLine, nextSourceListLine - currentSourceListLine);
-            currentSourceListLine += linesToSkip;
-            currentDestinationListLine += linesToSkip;
-            Difference* diff = new Difference(sourceLineNumber + currentSourceListLine, destinationLineNumber + currentDestinationListLine);
-            if (nextSourceListLine == currentSourceListLine) {
-                processStartMarker(diff, sourceLines, sourceMarkerIter, currentSourceListLine, true);
-            }
-            if (nextDestinationListLine == currentDestinationListLine) {
-                processStartMarker(diff, destinationLines, destinationMarkerIter, currentDestinationListLine, false);
-            }
-            computeDiffType(diff);
-            Q_ASSERT(diff->type() != Difference::Unchanged);
-            insertPosition = m_differences.insert(insertPosition, diff);
-            ++insertPosition;
-        }
-        for (; insertPosition != m_differences.end(); ++insertPosition) {
-            (*insertPosition)->setDestinationLineNumber((*insertPosition)->destinationLineNumber() + (newLines.size() - oldLines.size()));
-        }
+        insertPosition = m_differences.erase(iterBegin, iterEnd);
+        // TODO: split functions, so that different data does not interfere
     }
+
+    // Compute the Levenshtein table for two line lists and construct the shortest possible edit script
+    StringListPair* pair = new StringListPair(sourceLines, destinationLines);
+    LevenshteinTable<StringListPair> table;
+    table.createTable(pair);
+    table.createListsOfMarkers();
+    MarkerList sourceMarkers = pair->markerListFirst();
+    MarkerList destinationMarkers = pair->markerListSecond();
+
+    int currentSourceListLine = 0;
+    int currentDestinationListLine = 0;
+    MarkerListConstIterator sourceMarkerIter = sourceMarkers.begin();
+    MarkerListConstIterator destinationMarkerIter = destinationMarkers.begin();
+    const int terminatorLineNumber = sourceLines.size() + destinationLines.size() + 1;    // A virtual offset for simpler computation - stands for infinity
+
+    // Process marker lists, converting markers into differences.
+    // Marker in source listonly stands for deletion, in source and destination lists - for change, in destination list only - for insertion.
+    while(sourceMarkerIter != sourceMarkers.end() || destinationMarkerIter != destinationMarkers.end()) {
+        int nextSourceListLine = sourceMarkerIter != sourceMarkers.end() ? (*sourceMarkerIter)->offset() : terminatorLineNumber;
+        int nextDestinationListLine = destinationMarkerIter != destinationMarkers.end() ? (*destinationMarkerIter)->offset() : terminatorLineNumber;
+
+        // Advance to the nearest marker
+        int linesToSkip = qMin(nextDestinationListLine - currentDestinationListLine, nextSourceListLine - currentSourceListLine);
+        currentSourceListLine += linesToSkip;
+        currentDestinationListLine += linesToSkip;
+        Difference* diff = new Difference(sourceLineNumber + currentSourceListLine, destinationLineNumber + currentDestinationListLine);
+        if (nextSourceListLine == currentSourceListLine) {
+            processStartMarker(diff, sourceLines, sourceMarkerIter, currentSourceListLine, true);
+        }
+        if (nextDestinationListLine == currentDestinationListLine) {
+            processStartMarker(diff, destinationLines, destinationMarkerIter, currentDestinationListLine, false);
+        }
+        computeDiffStats(diff);
+        Q_ASSERT(diff->type() != Difference::Unchanged);
+        diff->apply(true);
+        insertPosition = m_differences.insert(insertPosition, diff);
+        ++insertPosition;
+        inserted << diff;
+    }
+    for (; insertPosition != m_differences.end(); ++insertPosition) {
+        (*insertPosition)->setDestinationLineNumber((*insertPosition)->destinationLineNumber() + (newLines.size() - oldLines.size()));
+    }
+    return qMakePair(inserted, removed);
 }
 
-void DiffModel::computeDiffType(Difference* diff)
+// Some common computing after diff contents have been filled.
+void DiffModel::computeDiffStats(Difference* diff)
 {
     if (diff->sourceLineCount() > 0 && diff->destinationLineCount() > 0) {
         diff->setType(Difference::Change);
@@ -509,6 +522,7 @@ void DiffModel::computeDiffType(Difference* diff)
     } else if (diff->destinationLineCount() > 0) {
         diff->setType(Difference::Insert);
     }
+    diff->determineInlineDifferences();
 }
 
 // Helper method to extract duplicate code from DiffModel::linesChanged

@@ -30,10 +30,14 @@ class PatchReviewTest : public QObject
     Q_OBJECT
 private slots:
     void testOneLineChange();
+    void testSameLine();
     void testLineNumbers_data();
     void testLineNumbers();
     void testDifferenceContents_data();
     void testDifferenceContents();
+    void testAppliedTouch();
+    void testAppliedIntersect();
+    void testExistingAndApplied();
 private:
     void CompareDifferenceStringList(const Diff2::DifferenceStringList& actual, const QStringList& expected);
 };

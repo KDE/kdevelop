@@ -150,12 +150,6 @@ template<class SequencePair> unsigned int LevenshteinTable<SequencePair>::create
 	unsigned int m = m_sequences->lengthFirst();
 	unsigned int n = m_sequences->lengthSecond();
 
-	if ( m == 1 )
-		return --n;
-
-	if ( n == 1 )
-		return --m;
-
 	if ( !setSize( m, n ) )
 		return 0;
 

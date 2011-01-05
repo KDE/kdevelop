@@ -64,6 +64,22 @@ void PatchReviewTest::testOneLineChange()
     QCOMPARE(diff->type(), int(Difference::Change));
 }
 
+void PatchReviewTest::testSameLine()
+{
+    DiffModel* model = new DiffModel();
+    QStringList newLines;
+    newLines << "oldline2\n";
+    QStringList oldLines;
+    oldLines << "oldline1\n" << "oldline2\n";
+    model->linesChanged(oldLines, newLines, 2);;
+
+    QCOMPARE(model->differenceCount(), 1);
+    const Difference* diff = model->differenceAt(0);
+    CompareDifferenceStringList(diff->sourceLines(), QStringList() << "oldline1\n");
+    CompareDifferenceStringList(diff->destinationLines(), QStringList());
+    QCOMPARE(diff->type(), int(Difference::Delete));
+}
+
 void PatchReviewTest::testDifferenceContents()
 {
     QFETCH(QStringList, patch);
@@ -71,6 +87,7 @@ void PatchReviewTest::testDifferenceContents()
     DiffModelList* models = parser.parse(patch);
     QCOMPARE(models->size(), 1);
     DiffModel* model = models->at(0);
+    model->applyAllDifferences(true);
 
     QFETCH(QStringList, oldLines);
     QFETCH(QStringList, newLines);
@@ -128,6 +145,33 @@ void PatchReviewTest::testDifferenceContents_data()
         patch <<
         "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
         "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,4 +1,4 @@\n" <<
+        " abcd\n" <<
+        "-delete1\n" <<
+        "-delete2\n" <<
+        "+insert1\n" <<
+        "+insert2\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "newline1\n";
+        QStringList oldLines;
+        oldLines << "efgh\n";
+        QStringList sourceLines;
+        sourceLines << "delete1\n" << "delete2\n" << "efgh\n";
+        QStringList destinationLines;
+        destinationLines << "insert1\n" << "insert2\n" << "newline1\n";
+        DifferenceHash expectedDifferences;
+        expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
+
+        // Append a line to a multiline diff
+        QTest::newRow("Append multiline") << patch << oldLines << newLines << 4 << 1 << expectedDifferences;
+    }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
         "@@ -1,3 +1,3 @@\n" <<
         " abcd\n" <<
         "-delete1\n" <<
@@ -139,6 +183,22 @@ void PatchReviewTest::testDifferenceContents_data()
         QStringList oldLines;
         oldLines << "insert1\n";
         QTest::newRow("Revert existing difference") << patch << oldLines << newLines << 2 << 0 << DifferenceHash();
+    }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,3 +1,2 @@\n" <<
+        " abcd\n" <<
+        "-delete1\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "abcd\n" << "delete1\n";
+        QStringList oldLines;
+        oldLines << "abcd\n";
+        QTest::newRow("Revert deletion") << patch << oldLines << newLines << 1 << 0 << DifferenceHash();
     }
     {
         QStringList patch;
@@ -217,6 +277,25 @@ void PatchReviewTest::testDifferenceContents_data()
 
         // The first existing difference intersects with the edit
         QTest::newRow("First intersects") << patch << oldLines << newLines << 3 << 1 << expectedDifferences;
+    }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,2 +1,3 @@\n" <<
+        " abcd\n" <<
+        "+\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "a\n";
+        QStringList oldLines;
+        oldLines << "\n";
+        DifferenceHash expectedDifferences;
+        expectedDifferences.insert(0, qMakePair(QStringList(), QStringList() << "a\n"));
+
+        QTest::newRow("Replace empty line") << patch << oldLines << newLines << 2 << 1 << expectedDifferences;
     }
 }
 
@@ -386,12 +465,12 @@ void PatchReviewTest::testLineNumbers_data()
 
 void PatchReviewTest::testLineNumbers()
 {
-    kWarning() << "OLOLO";
     QFETCH(QStringList, patch);
     Parser parser(0);
     DiffModelList* models = parser.parse(patch);
     QCOMPARE(models->size(), 1);
     DiffModel* model = models->at(0);
+    model->applyAllDifferences(true);
 
     QFETCH(QStringList, oldLines);
     QFETCH(QStringList, newLines);
@@ -406,6 +485,81 @@ void PatchReviewTest::testLineNumbers()
         QCOMPARE(diff->sourceLineNumber(), iter.value().first);
         QCOMPARE(diff->destinationLineNumber(), iter.value().second);
     }
+}
+
+// When the new diff and an existing unapplied one are on neighbour lines, do not merge the unapplied with the new.
+void PatchReviewTest::testAppliedTouch()
+{
+    Difference* first = new Difference(2, 2);
+    first->addSourceLine(QString("delete1"));
+    first->addDestinationLine(QString("insert1"));
+    first->apply(false);
+    Difference* second = new Difference(4, 4);
+    second->addSourceLine(QString("delete2"));
+    second->addDestinationLine(QString("insert2"));
+    second->apply(false);
+    DiffModel model;
+    model.addDiff(first);
+    model.addDiff(second);
+    model.linesChanged(QStringList() << "oldline\n", QStringList() << "newline\n", 3);
+    QCOMPARE(model.differenceCount(), 3);
+    QCOMPARE(model.differenceAt(0), first);
+    QCOMPARE(model.differenceAt(2), second);
+}
+
+// When the new diff and an existing unapplied one intersect, the unapplied one should be removed
+void PatchReviewTest::testAppliedIntersect()
+{
+    Difference* first = new Difference(2, 2);
+    first->addSourceLine(QString("delete1"));
+    first->addSourceLine(QString("delete2"));
+    first->addDestinationLine(QString("insert1"));
+    first->addDestinationLine(QString("insert2"));
+    first->apply(false);
+    Difference* second = new Difference(5, 5);
+    second->addSourceLine(QString("delete3"));
+    second->addSourceLine(QString("delete4"));
+    second->addDestinationLine(QString("insert3"));
+    second->addDestinationLine(QString("insert4"));
+    second->apply(false);
+    DiffModel model;
+    model.addDiff(first);
+    model.addDiff(second);
+    QStringList removedLines;
+    removedLines << "delete2\n" << "oldline1\n" << "delete3\n";
+    QStringList insertedLines;
+    insertedLines << "newline1\n";
+    model.linesChanged(removedLines, insertedLines, 3);
+    QCOMPARE(model.differenceCount(), 1);
+    const Difference* newDiff = model.differenceAt(0);
+    QCOMPARE(newDiff->applied(), true);
+    QCOMPARE(newDiff->sourceLineNumber(), 3);
+    QCOMPARE(newDiff->destinationLineNumber(), 3);
+    CompareDifferenceStringList(newDiff->sourceLines(), removedLines);
+    CompareDifferenceStringList(newDiff->destinationLines(), insertedLines);
+}
+
+void PatchReviewTest::testExistingAndApplied()
+{
+    Difference* first = new Difference(2, 2);
+    first->addSourceLine(QString("delete1"));
+    first->addDestinationLine(QString("insert1"));
+    first->apply(true);
+    Difference* second = new Difference(3, 3);
+    second->addSourceLine(QString("delete2"));
+    second->addDestinationLine(QString("insert2"));
+    second->apply(false);
+    DiffModel model;
+    model.addDiff(first);
+    model.addDiff(second);
+    QStringList removedLines;
+    removedLines << "delete1\n";
+    QStringList insertedLines;
+    insertedLines << "newline1\n";
+    model.linesChanged(removedLines, insertedLines, 2);
+    QCOMPARE(model.differenceCount(), 2);
+    QVERIFY(model.differenceAt(0)->applied());
+    QVERIFY(!model.differenceAt(1)->applied());
 }
 
 QTEST_MAIN(PatchReviewTest);

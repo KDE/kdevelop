@@ -104,12 +104,12 @@ public:
 	bool isBlended() const { return m_blended; }
 	void setBlended( bool blended ) { m_blended = blended; }
 
-	void linesChanged(const QStringList& oldLines, const QStringList& newLines, int startPos);
+	QPair<QList<Difference*>, QList<Difference*> > linesChanged(const QStringList& oldLines, const QStringList& newLines, int startPos);
 
 private:
 	void splitSourceInPathAndFileName();
 	void splitDestinationInPathAndFileName();
-    void computeDiffType(Difference* diff);
+    void computeDiffStats(Difference* diff);
     void processStartMarker(Difference* diff, const QStringList& lines, MarkerListConstIterator& currentMarker, int& currentListLine, bool isSource);
 
 private:
