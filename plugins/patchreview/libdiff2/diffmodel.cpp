@@ -374,23 +374,24 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
     // TODO: assume that differences are ordered by starting line. Check that this is always the case
     DifferenceListIterator iterBegin; // first diff ending a line before editLineNo or later
     for (iterBegin = m_differences.begin(); iterBegin != m_differences.end(); ++iterBegin) {
-        // If the difference ends a line before the edit starts, they should be merged anyway
+        // If the difference ends a line before the edit starts, they should be merged if this difference is applied.
+        // Also it should be merged if it starts on editLineNumber, otherwise there will be two markers for the same line
         int lineAfterLast = (*iterBegin)->destinationLineEnd();
-        if (lineAfterLast > editLineNumber || ((*iterBegin)->applied() && lineAfterLast == editLineNumber)) {
+        if (lineAfterLast > editLineNumber || (lineAfterLast == editLineNumber &&
+            ((*iterBegin)->applied() || (*iterBegin)->destinationLineNumber() == editLineNumber))) {
             break;
         }
     }
     DifferenceListIterator iterEnd;
     for (iterEnd = iterBegin; iterEnd != m_differences.end(); ++iterEnd) {
-        // If the difference starts a line after the edit ends, they should be merged if that difference is applied
+        // If the difference starts a line after the edit ends, it should still be merged if it is applied
         int firstLine = (*iterEnd)->destinationLineNumber();
         if (firstLine > editLineEnd || (!(*iterEnd)->applied() && firstLine == editLineEnd)) {
             break;
         }
     }
 
-    // Merge all diffs touched by the edit into one new diff
-    // TODO: check for applied and what they will mean to logic
+    // Compute line numbers in source and destination to which the for diff line sequences (will be created later)
     int sourceLineNumber;
     int destinationLineNumber;
     if (iterBegin == m_differences.constEnd()) {    // All existing diffs are after the change
@@ -408,15 +409,16 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
         destinationLineNumber = (*iterBegin)->destinationLineNumber();
     }
 
+    // Now create a sequence of lines for the destination file and the corresponding lines in source
     QStringList sourceLines;
     QStringList destinationLines;
-    DifferenceListIterator insertPosition;
+    DifferenceListIterator insertPosition;  // where to insert the created diffs
     if (iterBegin == iterEnd) {
         destinationLines = newLines;
         sourceLines = oldLines;
         insertPosition = iterBegin;
     } else {
-        // Create the destination part of the new diff
+        // Create the destination line sequence
         if ((*iterBegin)->applied()) {
             int firstDestinationLineNumber = (*iterBegin)->destinationLineNumber();
             for (int lineNumber = firstDestinationLineNumber; lineNumber < editLineNumber; ++lineNumber) {
@@ -435,7 +437,7 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
             }
         }
 
-        // Create the source part of the new diff
+        // Create the source line sequence
         if ((*iterBegin)->destinationLineNumber() >= editLineNumber && (*iterBegin)->destinationLineNumber() <= editLineEnd) {
             for (int i = editLineNumber; i < (*iterBegin)->destinationLineNumber(); ++i) {
                 sourceLines.append(oldLines.at(i - editLineNumber));
@@ -465,10 +467,9 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
         }
         // TODO: This is a leak. differences are handled by hunks, so not so easy to fix
         insertPosition = m_differences.erase(iterBegin, iterEnd);
-        // TODO: split functions, so that different data does not interfere
     }
 
-    // Compute the Levenshtein table for two line lists and construct the shortest possible edit script
+    // Compute the Levenshtein table for two line sequences and construct the shortest possible edit script
     StringListPair* pair = new StringListPair(sourceLines, destinationLines);
     LevenshteinTable<StringListPair> table;
     table.createTable(pair);
@@ -482,8 +483,8 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
     MarkerListConstIterator destinationMarkerIter = destinationMarkers.begin();
     const int terminatorLineNumber = sourceLines.size() + destinationLines.size() + 1;    // A virtual offset for simpler computation - stands for infinity
 
-    // Process marker lists, converting markers into differences.
-    // Marker in source listonly stands for deletion, in source and destination lists - for change, in destination list only - for insertion.
+    // Process marker lists, converting pairs of Start-End markers into differences.
+    // Marker in source list only stands for deletion, in source and destination lists - for change, in destination list only - for insertion.
     while(sourceMarkerIter != sourceMarkers.end() || destinationMarkerIter != destinationMarkers.end()) {
         int nextSourceListLine = sourceMarkerIter != sourceMarkers.end() ? (*sourceMarkerIter)->offset() : terminatorLineNumber;
         int nextDestinationListLine = destinationMarkerIter != destinationMarkers.end() ? (*destinationMarkerIter)->offset() : terminatorLineNumber;
@@ -506,6 +507,7 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
         ++insertPosition;
         inserted << diff;
     }
+    // Update line numbers for differences that are after the edit
     for (; insertPosition != m_differences.end(); ++insertPosition) {
         (*insertPosition)->setDestinationLineNumber((*insertPosition)->destinationLineNumber() + (newLines.size() - oldLines.size()));
     }

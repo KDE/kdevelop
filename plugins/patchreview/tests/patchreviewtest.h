@@ -38,6 +38,7 @@ private slots:
     void testAppliedTouch();
     void testAppliedIntersect();
     void testExistingAndApplied();
+    void testOneLineDeletionUnapplied();
 private:
     void CompareDifferenceStringList(const Diff2::DifferenceStringList& actual, const QStringList& expected);
 };

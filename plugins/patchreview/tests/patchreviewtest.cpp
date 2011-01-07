@@ -562,4 +562,22 @@ void PatchReviewTest::testExistingAndApplied()
     QVERIFY(!model.differenceAt(1)->applied());
 }
 
+void PatchReviewTest::testOneLineDeletionUnapplied()
+{
+    Difference* unappliedDeletion = new Difference(1, 1);
+    unappliedDeletion->addSourceLine("delete1\n");
+    unappliedDeletion->apply(false);
+    DiffModel model;
+    model.addDiff(unappliedDeletion);
+    QStringList removedLines;
+    removedLines << "delete1\n";
+    QStringList insertedLines;
+    insertedLines << "newline1\n";
+    model.linesChanged(removedLines, insertedLines, 1);
+    QCOMPARE(model.differenceCount(), 1);
+    const Difference* actual = model.differenceAt(0);
+    CompareDifferenceStringList(actual->sourceLines(), removedLines);
+    CompareDifferenceStringList(actual->destinationLines(), insertedLines);
+}
+
 QTEST_MAIN(PatchReviewTest);
