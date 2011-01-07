@@ -138,7 +138,12 @@ private:
   void parseStorageSpecifiers(const ListNode<uint>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<uint>* function_specifiers);
 
-  inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return ((KDevelop::Declaration::AccessPolicy)((m_accessPolicyStack.top() & (~((uint)FunctionIsSignal))) & (~((uint)FunctionIsSlot)))); }
+  inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() {
+    if(m_accessPolicyStack.isEmpty())
+      return KDevelop::Declaration::Public;
+    else
+      return ((KDevelop::Declaration::AccessPolicy)((m_accessPolicyStack.top() & (~((uint)FunctionIsSignal))) & (~((uint)FunctionIsSlot))));
+  }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   Cpp::InstantiationInformation createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext);
