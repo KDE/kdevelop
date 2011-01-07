@@ -930,6 +930,7 @@ void PatchHighlighter::performContentChange(KTextEditor::Document* doc, const QS
       m_ranges.remove(r);
       m_differencesForRanges.remove(r);
       delete r;
+      delete diff;
     }
   }
 

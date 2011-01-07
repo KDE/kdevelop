@@ -74,6 +74,7 @@ DiffModel::~DiffModel()
 	m_selectedDifference = 0;
 
 	qDeleteAll( m_hunks );
+    qDeleteAll( m_differences );
 }
 
 void DiffModel::splitSourceInPathAndFileName()
@@ -465,7 +466,6 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
         for (DifferenceListIterator iter = iterBegin; iter != iterEnd; ++iter) {
             removed << *iter;
         }
-        // TODO: This is a leak. differences are handled by hunks, so not so easy to fix
         insertPosition = m_differences.erase(iterBegin, iterEnd);
     }
 
