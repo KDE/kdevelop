@@ -251,8 +251,6 @@ bool KDevelop::ForegroundLock::isLocked() const
 }
 
 namespace KDevelop {
-    const int __fg_dummy1 = 0, __fg_dummy2 = 0, __fg_dummy3 = 0, __fg_dummy4 = 0, __fg_dummy5 = 0, __fg_dummy6 = 0, __fg_dummy7 = 0, __fg_dummy8 = 0, __fg_dummy9 = 0;
-
     void DoInForeground::doIt() {
         if(QThread::currentThread() == QApplication::instance()->thread())
         {
