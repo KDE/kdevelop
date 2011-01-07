@@ -173,7 +173,12 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
       //Do some intelligent stuff for functions with the parens:
       lock.unlock();
-      insertFunctionParenText(document, end, m_declaration, jumpForbidden);
+      KTextEditor::Cursor insertionPosition = end;
+      if (removeInSecondStep.get()) {
+        KTextEditor::Range removeRange = removeInSecondStep->toRange();
+        insertionPosition += removeRange.end() - removeRange.start();
+      }
+      insertFunctionParenText(document, insertionPosition, m_declaration, jumpForbidden);
     }
   }
   
