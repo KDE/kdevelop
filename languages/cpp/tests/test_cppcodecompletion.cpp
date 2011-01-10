@@ -304,18 +304,19 @@ void TestCppCodeCompletion::testSubClassVisibility() {
 
 void TestCppCodeCompletion::testMacrosInCodeCompletion()
 {
-  QByteArray test = "#define test foo\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee; }";
+  QByteArray test = "#define test foo\n #define testfunction(X) x\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee;\n }";
   TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
   QCOMPARE(context->childContexts().size(), 3);
   
-  QCOMPARE(CompletionItemTester(context->childContexts()[2], "foo.", QString(), CursorInRevision(2, 0)).names, QStringList() << "mem");
-  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test.", QString(), CursorInRevision(2, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "foo.", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test.", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
   
-  QCOMPARE(CompletionItemTester(context->childContexts()[2], "fee->", QString(), CursorInRevision(2, 0)).names, QStringList() << "mem");
-  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test2->", QString(), CursorInRevision(2, 0)).names, QStringList() << "mem");
-  
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "fee->", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test2->", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "testfunction2(", QString(), CursorInRevision(4, 0)).names.toSet(), QSet<QString>() << "testfunction2(" << "A" << "foo" << "fee");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "testfunction(", QString(), CursorInRevision(4, 0)).names.toSet(), QSet<QString>() << "testfunction(" << "A" << "foo" << "fee");
   
   release(context);
 }
