@@ -24,7 +24,6 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include <QPointer>
 #include <QByteArray>
 #include <QLabel>
 #include <QtCore/QVariant>

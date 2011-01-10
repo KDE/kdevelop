@@ -175,6 +175,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList dependees(const QString& s) const;
         int declareFunction(Macro m, const CMakeFileContent& content, int initial, const QString& end);
 
+        QStringList traverseGlob(const QString& startPath, const QString& expression,
+            bool recursive = false, bool followSymlinks = false);
+
         CMakeProperties m_props;
         QStringList m_modulePath;
         QString m_projectName;

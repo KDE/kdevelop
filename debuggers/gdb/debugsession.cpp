@@ -324,10 +324,10 @@ void DebugSession::stopDebugger()
 
     // Get gdb's attention if it's busy. We need gdb to be at the
     // command line so we can stop it.
-    if (!m_gdb->isReady())
+    if (!m_gdb.data()->isReady())
     {
         kDebug(9012) << "gdb busy on shutdown - interruping";
-        m_gdb->interrupt();
+        m_gdb.data()->interrupt();
     }
 
     // If the app is attached then we release it here. This doesn't stop
@@ -357,7 +357,7 @@ void DebugSession::interruptDebugger()
 
     setStateOn(s_explicitBreakInto);
 
-    m_gdb->interrupt();
+    m_gdb.data()->interrupt();
 }
 
 void DebugSession::runToCursor()
@@ -590,7 +590,7 @@ bool DebugSession::executeCmd()
 {
     Q_ASSERT(m_gdb);
 
-    if (!m_gdb->isReady())
+    if (!m_gdb.data()->isReady())
         return false;
 
     GDBCommand* currentCmd = commandQueue_->nextCommand();
@@ -637,7 +637,7 @@ bool DebugSession::executeCmd()
         return executeCmd();
     }
 
-    m_gdb->execute(currentCmd);
+    m_gdb.data()->execute(currentCmd);
     return true;
 }
 
@@ -796,8 +796,8 @@ void DebugSession::programNoApp(const QString& msg)
     delete tty_;
     tty_ = 0;
 
-    m_gdb->kill();
-    m_gdb->deleteLater();
+    m_gdb.data()->kill();
+    m_gdb.data()->deleteLater();
 
     setStateOn(s_dbgNotStarted);
 
@@ -845,11 +845,12 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 
     if(m_gdb) {
         kWarning() << "m_gdb object still existed";
-        delete m_gdb;
-        m_gdb = 0;
+        delete m_gdb.data();
+        m_gdb.clear();
     }
 
-    m_gdb = new GDB(this);
+    GDB* gdb = new GDB(this);
+    m_gdb = gdb;
 
     // FIXME: here, we should wait until GDB is up and waiting for input.
     // Then, clear s_dbgNotStarted
@@ -859,24 +860,24 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     /** FIXME: connect ttyStdout. It takes QByteArray, so
         I'm not sure what to do.  */
 #if 0
-    connect(m_gdb, SIGNAL(applicationOutput(const QString&)),
+    connect(gdb, SIGNAL(applicationOutput(const QString&)),
             this, SIGNAL(ttyStdout(const QString &)));
 #endif
-    connect(m_gdb, SIGNAL(userCommandOutput(const QString&)), this,
+    connect(gdb, SIGNAL(userCommandOutput(const QString&)), this,
             SIGNAL(gdbUserCommandStdout(const QString&)));
-    connect(m_gdb, SIGNAL(internalCommandOutput(const QString&)), this,
+    connect(gdb, SIGNAL(internalCommandOutput(const QString&)), this,
             SIGNAL(gdbInternalCommandStdout(const QString&)));
 
-    connect(m_gdb, SIGNAL(ready()), this, SLOT(gdbReady()));
-    connect(m_gdb, SIGNAL(gdbExited()), this, SLOT(gdbExited()));
-    connect(m_gdb, SIGNAL(programStopped(const GDBMI::ResultRecord&)),
+    connect(gdb, SIGNAL(ready()), this, SLOT(gdbReady()));
+    connect(gdb, SIGNAL(gdbExited()), this, SLOT(gdbExited()));
+    connect(gdb, SIGNAL(programStopped(const GDBMI::ResultRecord&)),
             this, SLOT(slotProgramStopped(const GDBMI::ResultRecord&)));
-    connect(m_gdb, SIGNAL(programStopped(const GDBMI::ResultRecord&)),
+    connect(gdb, SIGNAL(programStopped(const GDBMI::ResultRecord&)),
             this, SIGNAL(programStopped(const GDBMI::ResultRecord&)));
-    connect(m_gdb, SIGNAL(programRunning()),
+    connect(gdb, SIGNAL(programRunning()),
             this, SLOT(programRunning()));
 
-    connect(m_gdb, SIGNAL(streamRecord(const GDBMI::StreamRecord&)),
+    connect(gdb, SIGNAL(streamRecord(const GDBMI::StreamRecord&)),
             this, SLOT(parseStreamRecord(const GDBMI::StreamRecord&)));
 
     // Start gdb. Do this after connecting all signals so that initial
@@ -886,14 +887,14 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     if (cfg)
     {
         KConfigGroup config = cfg->config();
-        m_gdb->start(config);
+        m_gdb.data()->start(config);
     }
     else
     {
         // FIXME: this is hack, I am not sure there's any way presently
         // to edit this via GUI.
         KConfigGroup config(KGlobal::config(), "GDB Debugger");
-        m_gdb->start(config);
+        m_gdb.data()->start(config);
     }
 
     setStateOff(s_dbgNotStarted);
@@ -1104,7 +1105,7 @@ void DebugSession::slotKillGdb()
     if (!stateIsOn(s_programExited) && stateIsOn(s_shuttingDown))
     {
         kDebug(9012) << "gdb not shutdown - killing";
-        m_gdb->kill();
+        m_gdb.data()->kill();
 
         setState(s_dbgNotStarted | s_appNotStarted);
 
@@ -1191,7 +1192,7 @@ void DebugSession::defaultErrorHandler(const GDBMI::ResultRecord& result)
     //
     // Also, don't reload state on errors appeared during state
     // reloading!
-    if (!m_gdb->currentCommand()->stateReloading())
+    if (!m_gdb.data()->currentCommand()->stateReloading())
         raiseEvent(program_state_changed);
 }
 
@@ -1274,7 +1275,7 @@ void DebugSession::slotUserGDBCmd(const QString& cmd)
 
 void DebugSession::explainDebuggerStatus()
 {
-    GDBCommand* currentCmd_ = m_gdb->currentCommand();
+    GDBCommand* currentCmd_ = m_gdb.data()->currentCommand();
     QString information =
         i18np("1 command in queue\n", "%1 commands in queue\n", commandQueue_->count()) +
         i18ncp("Only the 0 and 1 cases need to be translated", "1 command being processed by gdb\n", "%1 commands being processed by gdb\n", (currentCmd_ ? 1 : 0)) +

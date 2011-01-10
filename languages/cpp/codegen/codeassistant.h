@@ -29,7 +29,7 @@
 #include <QTimer>
 #include "renameassistant.h"
 
-typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
+typedef QWeakPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KTextEditor {
 class Document;
@@ -62,7 +62,7 @@ class StaticCodeAssistant : public QObject {
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
     void startAssistant(KSharedPtr< KDevelop::IAssistant > assistant);
-    QPointer<KTextEditor::View> m_currentView;
+    QWeakPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;

@@ -81,7 +81,7 @@ void StaticCodeAssistant::eventuallyStartAssistant() {
   if(!m_eventualDocument)
     return;
 
-  KTextEditor::View* view = m_eventualDocument->activeView();
+  KTextEditor::View* view = m_eventualDocument.data()->activeView();
   //Eventually pop up an assistant
   if(!view)
     return;
@@ -104,7 +104,7 @@ void StaticCodeAssistant::eventuallyStartAssistant() {
   if (!renameAssistant) {
     renameAssistant =  new RenameAssistant(view);
     m_renameAssistants[view].attach(renameAssistant);
-    connect(m_eventualDocument, SIGNAL(aboutToClose(KTextEditor::Document*)),
+    connect(m_eventualDocument.data(), SIGNAL(aboutToClose(KTextEditor::Document*)),
             SLOT(deleteRenameAssistantsForDocument(KTextEditor::Document*)));
   }
 
@@ -116,7 +116,7 @@ void StaticCodeAssistant::eventuallyStartAssistant() {
 
   // optimize, esp. for setText() calls as done in e.g. reformat source
   // only start the assitant once for multiple textRemoved/textInserted signals
-  m_eventualDocument = 0;
+  m_eventualDocument.clear();
   m_eventualRange = KTextEditor::Range::invalid();
   m_eventualRemovedText.clear();
 }
@@ -141,7 +141,7 @@ void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assi
     connect(m_activeAssistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
     ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
     
-    m_assistantStartedAt =  m_currentView->cursorPosition();
+    m_assistantStartedAt =  m_currentView.data()->cursorPosition();
   }
 }
 
@@ -175,20 +175,20 @@ void StaticCodeAssistant::documentActivated(KDevelop::IDocument* doc) {
     m_currentDocument = KDevelop::IndexedString(doc->url());
   
   if(m_currentView) {
-    disconnect(m_currentView, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
-    m_currentView = 0;
+    disconnect(m_currentView.data(), SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+    m_currentView.clear();
   }
   
   if(doc->textDocument()) {
     m_currentView = doc->textDocument()->activeView();
     if(m_currentView)
-      connect(m_currentView, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+      connect(m_currentView.data(), SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
   }
 }
 
 void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top) {
     foreach(KDevelop::ProblemPointer problem, top->problems()) {
-      if(m_currentView && m_currentView->cursorPosition().line() == problem->range().start.line) {
+      if(m_currentView && m_currentView.data()->cursorPosition().line() == problem->range().start.line) {
         IAssistant::Ptr solution = problem->solutionAssistant();
         if(solution) {
           startAssistant(solution);

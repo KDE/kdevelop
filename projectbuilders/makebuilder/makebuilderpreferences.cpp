@@ -46,6 +46,7 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
     m_prefsUi->kcfg_environmentProfile->addItems( env.groups() );
+    m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
 
     addConfig( MakeBuilderSettings::self(), w );
 

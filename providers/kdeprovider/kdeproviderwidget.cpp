@@ -29,66 +29,22 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include "ui_kdeconfig.h"
 #include "kdeconfig.h"
+#include <QStandardItemModel>
+#include "kdeprojectsmodel.h"
+#include "kdeprojectsreader.h"
 
 using namespace KDevelop;
-
-struct Source
-{
-    enum VcsType { Git, SVN };
-    Source(const QString& anIcon, const QString& aName, VcsType aType, const QString& aUrl)
-    : name(aName), icon(anIcon), type(aType), url(aUrl) {}
-    
-    QString name;
-    QString icon;
-    VcsType type;
-    QString url;
-    
-    QString plugin() const { return type==SVN ? "kdevsubversion" : "kdevgit"; }
-    
-    static VcsLocation svnLocation(const Source& s)
-    {
-        QString svnPrefix=KDEProviderSettings::self()->svnPrefix();
-        QString path = QString(s.url).replace("%PREFIX", svnPrefix);
-        return VcsLocation(path);
-    }
-    VcsLocation location() const { return type==SVN ? svnLocation(*this) : VcsLocation(KUrl(url)); }
-};
-
-namespace
-{
-
-const uint nOfKDEProjects = 15;
-Source kdeProjects[nOfKDEProjects] = {
-    //SVN - kde modules
-    Source("applications-system", "kdebase", Source::SVN, "%PREFIX/trunk/KDE/kdebase"),
-    Source("", "kdebindings", Source::SVN, "%PREFIX/trunk/KDE/kdebindings"),
-    Source("applications-education-university", "kdeedu", Source::SVN, "%PREFIX/trunk/KDE/kdeedu"),
-    Source("applications-games", "kdegames", Source::SVN, "%PREFIX/trunk/KDE/kdegames"),
-    Source("applications-graphics", "kdegraphics", Source::SVN, "%PREFIX/trunk/KDE/kdegraphics"),
-    Source("", "kdelibs", Source::SVN, "%PREFIX/trunk/KDE/kdelibs"),
-    Source("applications-multimedia", "kdemultimedia", Source::SVN, "%PREFIX/trunk/KDE/kdemultimedia"),
-    Source("applications-internet", "kdenetwork", Source::SVN, "%PREFIX/trunk/KDE/kdenetwork"),
-    Source("kontact", "kdepim", Source::SVN, "%PREFIX/trunk/KDE/kdepim"),
-    Source("", "kdepimlibs", Source::SVN, "%PREFIX/trunk/KDE/kdepimlibs"),
-    Source("plasma", "kdeplasma-addons", Source::SVN, "%PREFIX/trunk/KDE/kdeplasma-addons"),
-    Source("applications-development", "kdesdk", Source::SVN, "%PREFIX/trunk/KDE/kdesdk"),
-    Source("", "kdesupport", Source::SVN, "%PREFIX/trunk/kdesupport"),
-    
-    //GIT
-    Source("", "kdevplatform", Source::Git, "git@gitorious.org:kdevplatform/kdevplatform.git"),
-    Source("kdevelop", "kdevelop", Source::Git, "git@gitorious.org:kdevelop/kdevelop.git")
-};
-}
 
 KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     : IProjectProviderWidget(parent)
 {
     setLayout(new QHBoxLayout(this));
     m_projects = new QComboBox(this);
-    for(uint i=0; i<nOfKDEProjects; ++i) {
-        const Source& s = kdeProjects[i];
-        m_projects->addItem(KIcon(s.icon), s.name);
-    }
+    KDEProjectsModel* model = new KDEProjectsModel(this);
+    KDEProjectsReader* reader = new KDEProjectsReader(model, model);
+    connect(reader, SIGNAL(downloadDone()), reader, SLOT(deleteLater()));
+    m_projects->setModel(model);
+    
     layout()->addWidget(m_projects);
     
     QPushButton* settings=new QPushButton(KIcon("configure"), i18n("Settings"), this);
@@ -106,16 +62,30 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     connect(m_dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
 }
 
+VcsLocation extractLocation(const QVariantMap& urls)
+{
+    if(urls.contains("svn")) {
+        QString svnPrefix=KDEProviderSettings::self()->svnPrefix();
+        QString path = QString(urls["ssh"].toString()).replace("%PREFIX", svnPrefix);
+        return VcsLocation(path);
+    } else {
+        QString gitUrl=KDEProviderSettings::self()->gitProtocol();
+        return VcsLocation(gitUrl);
+    }
+}
+
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
 {
     int pos = m_projects->currentIndex();
     if(pos<0)
         return 0;
     
-    const Source& s = kdeProjects[pos];
-    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", s.plugin());
+    QModelIndex idx = m_projects->model()->index(pos, 0);
+    Q_ASSERT(idx.isValid());
+    
+    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", idx.data(KDEProjectsModel::PluginRole).toString());
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-    VcsJob* ret = vcIface->createWorkingCopy(s.location(), destinationDirectory);
+    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(idx.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
     
     return ret;
 }

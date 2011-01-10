@@ -1,8 +1,6 @@
-/*
-   This file is part of KDevelop
-   Copyright 2009 Ramon Zarazua <killerfox512+kde@gmail.com>
-   Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+/* This file is part of KDevelop
+    Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -18,28 +16,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TEST_CPPCODEGEN_H
-#define TEST_CPPCODEGEN_H
+#ifndef KDEPROJECTSREADERTEST_H
+#define KDEPROJECTSREADERTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
-class TestCppCodegen : public QObject
+
+class KDEProjectsReaderTest : public QObject
 {
     Q_OBJECT
-    
-  private slots:
-    void initTestCase();
-    void cleanupTestCase();
-    
-    // Tests
-    void testAssistants();
-    
-    void testSimplifiedUpdating();
-    void testUpdateIndices();
-    
-    void testAstDuChainMapping();
-    void testClassGeneration();
-    void testPrivateImplementation();
+    private slots:
+        void testsProperParse();
 };
 
-#endif // TEST_CPPCODEGEN_H
+#endif // KDEPROJECTSREADERTEST_H
