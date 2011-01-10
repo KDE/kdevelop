@@ -46,6 +46,9 @@ private slots:
     void testFinder();
     void testFinder_data();
 
+    void testGlobs();
+    void testGlobs_data();
+
     void testForeachLines();
 private:
     QStringList modulePath;    

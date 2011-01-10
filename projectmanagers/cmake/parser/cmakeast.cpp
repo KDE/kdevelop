@@ -1077,9 +1077,26 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             addOutputArgument(func.arguments[2]);
             break;
         case Glob:
+            addOutputArgument(func.arguments[1]);
+            m_variable = func.arguments[1].value;
+            it=func.arguments.constBegin()+2;
+            itEnd=func.arguments.constEnd();
+
+            for(; it!=itEnd; ++it) {
+                if(it->value=="RELATIVE") {
+                    it++;
+                    if(it==itEnd)
+                        return false;
+                    else
+                        m_path = it->value;
+                } else
+                    m_globbingExpressions << it->value;
+            }
+            break;
         case GlobRecurse:
             addOutputArgument(func.arguments[1]);
             m_variable = func.arguments[1].value;
+            m_isFollowingSymlinks = false;
             it=func.arguments.constBegin()+2;
             itEnd=func.arguments.constEnd();
             
@@ -1090,6 +1107,8 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                         return false;
                     else
                         m_path = it->value;
+                } else if(it->value=="FOLLOW_SYMLINKS") {
+                    m_isFollowingSymlinks = true;
                 } else
                     m_globbingExpressions << it->value;
             }

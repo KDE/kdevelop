@@ -1409,66 +1409,59 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "FileAst: read ";
         }
             break;
-        case FileAst::Glob: {
-            QStringList matches;
-            QString currentPath=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-            QString relativeto=file->path();
-            if(!relativeto.isEmpty()) {
-                if(KUrl::isRelativeUrl(relativeto))
-                    currentPath += '/'+relativeto;
-                else
-                    currentPath = relativeto;
-            }
-            
-            foreach(const QString& glob, file->globbingExpressions())
-            {
-                QStringList globs;
-                QString current(currentPath);
-                int lastSlash = glob.lastIndexOf('/');
-                
-                if(lastSlash>=0) {
-                    QString path = glob.left(lastSlash);
-                    if(KUrl::isRelativeUrl(glob))
-                        current+='/'+path;
-                    else
-                        current = path;
-                    
-                    globs.append(glob.right(glob.size()-lastSlash-1));
-                } else {
-                    globs.append(glob);
-                }
-                
-                QDir d(current);
-                QStringList matching=d.entryList(globs, QDir::NoDotAndDotDot | QDir::AllEntries);
-                
-                foreach(const QString& match, matching)
-                    matches += d.absoluteFilePath(match);
-            }
-            m_vars->insert(file->variable(), matches);
-            kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
-        } break;
+        case FileAst::Glob:
         case FileAst::GlobRecurse: {
-            QString current;
-            if(file->path().isEmpty())
-                current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-            else
-                current=file->path();
-            QQueue<QString> candidates;
-            candidates.enqueue(current);
-            QStringList directories;
-            while(!candidates.isEmpty())
+            QStringList matches;
+            foreach(QString expr, file->globbingExpressions())
             {
-                QString dir=candidates.dequeue();
-                directories.append(dir);
-                QDir direc(dir);
-                candidates += direc.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
+                if (expr.isEmpty())
+                    continue;
+                QString pathPrefix;
+                if (QDir::isRelativePath(expr))
+                    pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+                // pathPrefix must start from '/' if not empty when calling traverseRecursiveGlob()
+                if (expr[0] == '/')
+                {
+                    //moving slash to pathPrefix (it should be empty before)
+                    expr = expr.mid(1);
+                    pathPrefix += '/';
+                }
+                else
+                {
+                    if (!pathPrefix.isEmpty())
+                        pathPrefix += '/';
+                }
+                if (file->type() == FileAst::Glob)
+                {
+                    matches.append(traverseGlob(pathPrefix, expr));
+                }
+                else
+                {
+                    matches.append(traverseGlob(pathPrefix, expr, true, file->isFollowingSymlinks()));
+                }
             }
-
-            QDir d(current);
-            QStringList matches=d.entryList(file->globbingExpressions(), QDir::NoDotAndDotDot | QDir::AllEntries);
+            if (!file->path().isEmpty())
+            {
+                // RELATIVE was specified, so we need to make all paths relative to file->path()
+                QDir relative(file->path());
+                QStringList::iterator endIt = matches.end();
+                for(QStringList::iterator it = matches.begin(); it != endIt; ++it)
+                {
+                    *it = relative.relativeFilePath(*it);
+                }
+            }
             m_vars->insert(file->variable(), matches);
-            kDebug(9042) << "file glob_recurse" << file->path() << file->globbingExpressions() << matches;
-        }   break;
+            QString kind = file->type() == FileAst::Glob ? "file glob" : "file glob_recurse";
+            QString followSymlinksMsg;
+            QString relativeMsg;
+            if (file->type() == FileAst::GlobRecurse && file->isFollowingSymlinks())
+                followSymlinksMsg = " FOLLOW_SYMLINKS: true";
+            if (!file->path().isEmpty())
+                relativeMsg = " RELATIVE " + file->path();
+            kDebug(9042) << kind << relativeMsg << followSymlinksMsg << " " << file->globbingExpressions()
+                << ": " << matches;
+        }
+            break;
         case FileAst::Remove:
         case FileAst::RemoveRecurse:
             kDebug(9042) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
@@ -2313,3 +2306,90 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     return ret;
 }
 
+QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath,
+    const QString& expression, bool recursive, bool followSymlinks)
+{
+    kDebug(9042) << "Starting from (" << startPath << ", " << expression << ", " << followSymlinks << ")";
+    QString expr = expression;
+    int firstSlash = expr.indexOf('/');
+    int slashShift = 0;
+    while (firstSlash == slashShift) //skip trailing slashes
+    {
+        slashShift++;
+        firstSlash = expr.indexOf('/', slashShift);
+    }
+    expr = expr.mid(slashShift);
+    if (firstSlash == -1)
+    {
+        //We're in place. Lets match files from startPath dir.
+        kDebug(9042) << "Matching files in " << startPath << " with glob " << expr;
+        QStringList nameFilters;
+        nameFilters << expr;
+        QStringList dirsToSearch;
+        if (recursive)
+        {
+            QDir::Filters dirFilters = QDir::NoDotAndDotDot | QDir::Dirs;
+            bool CMP0009IsSetToNew = true; // TODO: Obey CMP0009 policy when policies are implemented.
+            if (!(CMP0009IsSetToNew && followSymlinks))
+                dirFilters |= QDir::NoSymLinks;
+            QQueue<QString> dirsToExpand;
+            dirsToExpand.enqueue(startPath);
+            while (!dirsToExpand.empty())
+            {
+                QString dir = dirsToExpand.dequeue();
+                kDebug(9042) << "Enqueueing " << dir;
+                dirsToSearch << dir;
+                QDir d(dir);
+                QStringList dirNames = d.entryList(dirFilters);
+                foreach(QString dirName, dirNames)
+                {
+                    dirsToExpand << d.filePath(dirName);
+                }
+            }
+        }
+        else
+            dirsToSearch << startPath;
+        QStringList filePaths;
+        foreach (QString dirToSearch, dirsToSearch)
+        {
+            QDir dir(dirToSearch);
+            QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
+            foreach (QString fileName, fileNames)
+            {
+                filePaths << dir.filePath(fileName);
+            }
+        }
+        return filePaths;
+    }
+    firstSlash -= slashShift;
+    QString dirGlob = expr.left(firstSlash);
+    QString rightExpression = expr.mid(firstSlash + 1);
+    //Now we must find match for a directory specified in dirGlob
+    QStringList matchedDirs;
+    if (dirGlob.contains('*') || dirGlob.contains('?') || dirGlob.contains('['))
+    {
+        kDebug(9042) << "Got a dir glob " << dirGlob;
+        if (startPath.isEmpty())
+            return QStringList();
+        //it's really a glob, not just dir name
+        QStringList nameFilters;
+        nameFilters << dirGlob;
+        matchedDirs = QDir(startPath).entryList(nameFilters, QDir::NoDotAndDotDot | QDir::Dirs);
+    }
+    else
+    {
+        //just a directory name. Add it as a match.
+        kDebug(9042) << "Got a simple folder " << dirGlob;
+        matchedDirs << dirGlob;
+    }
+    QStringList matches;
+    QString path = startPath;
+    if (!path.isEmpty() && !path.endsWith('/'))
+        path += '/';
+    foreach(QString dirName, matchedDirs)
+    {
+        kDebug(9042) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
+        matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));
+    }
+    return matches;
+}

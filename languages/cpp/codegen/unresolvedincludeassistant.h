@@ -28,31 +28,33 @@ namespace Cpp {
 
 class AddCustomIncludePathAction : public KDevelop::IAssistantAction {
   Q_OBJECT
-  public:
-    AddCustomIncludePathAction(KDevelop::IndexedString url, QString directive);
-    virtual QString description() const;
-    virtual void execute();
-    private:
-    KDevelop::IndexedString m_url;
-    QString m_directive;
+
+public:
+  AddCustomIncludePathAction(KDevelop::IndexedString url, QString directive);
+  virtual QString description() const;
+  virtual void execute();
+
+private:
+  KDevelop::IndexedString m_url;
+  QString m_directive;
 };
 
 class OpenProjectForFileAssistant : public KDevelop::IAssistantAction {
-  public:
-    OpenProjectForFileAssistant(KUrl);
-    virtual QString description() const;
-    virtual void execute();
-    private:
-    KUrl m_url;
+public:
+  OpenProjectForFileAssistant(KUrl);
+  virtual QString description() const;
+  virtual void execute();
+
+private:
+  KUrl m_url;
 };
 
-class MissingIncludePathAssistant : public KDevelop::IAssistant
-{
+class MissingIncludePathAssistant : public KDevelop::IAssistant {
 public:
   MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive);
   virtual QString title() const;
   virtual QList< KDevelop::IAssistantAction::Ptr > actions() const;
-  private:
+private:
   KDevelop::IndexedString m_url;
   QString m_directive;
 };
