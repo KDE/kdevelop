@@ -92,10 +92,11 @@ public:
      return s.space();
  }
 };
-}
 
 inline uint qHash(const KDevelop::SimpleCursor& cursor) {
     return cursor.line * 53 + cursor.column * 47;
 }
+
+} // namespace KDevelop
 
 #endif
