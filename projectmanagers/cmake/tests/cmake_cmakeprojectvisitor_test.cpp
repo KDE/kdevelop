@@ -710,7 +710,7 @@ void CMakeProjectVisitorTest::testGlobs()
     }
 
     KDevelop::ReferencedTopDUContext fakeContext=
-        new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
+        new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
     DUChain::self()->addDocumentChain(fakeContext);
 
     KTemporaryFile file;
