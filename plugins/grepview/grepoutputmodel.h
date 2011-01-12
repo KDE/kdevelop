@@ -75,8 +75,14 @@ public Q_SLOTS:
     void activate( const QModelIndex &idx );
     void doReplacements();
     void setReplacement(const QString &repl);
+    //receive status message from GrepJob, and store it
+    void showMessageSlot( KDevelop::IStatus*, const QString& message );
+    //emit stored message as signal 'showMessage' to GrepOutputView.
+    //called when user selects a search with the combobox
+    void showMessageEmit();
 
 Q_SIGNALS:
+    void showMessage( KDevelop::IStatus*, const QString& message );
     void showErrorMessage(const QString & message, int timeout = 0);
     
 private:    
@@ -88,6 +94,8 @@ private:
     GrepOutputItem *m_rootItem;
     int m_fileCount;
     int m_matchCount;
+    QString m_savedMessage;
+    KDevelop::IStatus *m_savedIStatus;
 
 private slots:
     void updateCheckState(QStandardItem*);

@@ -378,5 +378,19 @@ void GrepOutputModel::doReplacements()
     }
 }
 
+void GrepOutputModel::showMessageSlot(IStatus* status, const QString& message)
+{
+    m_savedMessage = message;
+    m_savedIStatus = status;
+    showMessageEmit();
+}
+
+void GrepOutputModel::showMessageEmit()
+{
+    emit showMessage(m_savedIStatus, m_savedMessage);
+}
+
+
+
 #include "grepoutputmodel.moc"
 
