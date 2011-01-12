@@ -66,9 +66,11 @@ public:
     /// applies replacement on given text
     QString replacementFor(const QString &text);
     void clear();  // resets file & match counts
+    bool hasResults();
  
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
     QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
+    const GrepOutputItem *getRootItem() const;
     
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );

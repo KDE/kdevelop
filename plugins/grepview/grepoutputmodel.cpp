@@ -299,6 +299,11 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     return currentIdx;
 }
 
+const GrepOutputItem *GrepOutputModel::getRootItem() const {
+    return m_rootItem;
+}
+
+
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
     if(items.isEmpty())
@@ -388,6 +393,11 @@ void GrepOutputModel::showMessageSlot(IStatus* status, const QString& message)
 void GrepOutputModel::showMessageEmit()
 {
     emit showMessage(m_savedIStatus, m_savedMessage);
+}
+
+bool GrepOutputModel::hasResults()
+{
+    return(m_matchCount > 0);
 }
 
 

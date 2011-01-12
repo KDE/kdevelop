@@ -120,7 +120,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name)
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
-    connect(newModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    
     
     // appends new model to history
     QString displayName = QTime::currentTime().toString("[hh:mm] ")+name;
@@ -139,6 +139,8 @@ void GrepOutputView::changeModel(int index)
 {
     disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
                this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+               this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
     
     QVariant var = modelSelector->itemData(index);
     GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
@@ -146,7 +148,12 @@ void GrepOutputView::changeModel(int index)
     
     connect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
             this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+            this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
     model()->showMessageEmit();
+    applyButton->setEnabled(model()->hasResults() && 
+                            model()->getRootItem() && 
+                            model()->getRootItem()->checkState() != Qt::Unchecked);
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
