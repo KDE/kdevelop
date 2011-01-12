@@ -120,6 +120,369 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testOnlyShow()
+{
+  QByteArray method = "template<class T1> class T { }; namespace A { struct B {}; } struct C { }; int testMe() { }";
+  TopDUContext* top = parse(method, DumpAll);
+  int fctxt = 5;
+  int sctxt = 3;
+  int nctxt = 2;
+  DUChainWriteLocker lock(DUChain::lock());
+
+  CompletionItemTester implementationHelpers(top, "void ");
+  QVERIFY(implementationHelpers.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowImplementationHelpers);
+
+  CompletionItemTester showTypes(top->childContexts()[fctxt], "A::B* b = new ");
+  QVERIFY(showTypes.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes2(top->childContexts()[fctxt], "A::B* b = const_cast< ");
+  QVERIFY(showTypes2.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes3(top->childContexts()[fctxt], "A::B* b = static_cast< ");
+  QVERIFY(showTypes3.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes4(top->childContexts()[fctxt], "A::B* b = dynamic_cast< ");
+  QVERIFY(showTypes4.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes5(top->childContexts()[fctxt], "A::B* b = reinterpret_cast< ");
+  QVERIFY(showTypes5.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes6(top->childContexts()[fctxt], "const ");
+  QVERIFY(showTypes6.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes7(top, "typedef ");
+  QVERIFY(showTypes7.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes8(top->childContexts()[sctxt], "public  ");
+  QVERIFY(showTypes8.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes9(top->childContexts()[sctxt], "protected ");
+  QVERIFY(showTypes9.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes10(top->childContexts()[sctxt], "private ");
+  QVERIFY(showTypes10.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes11(top->childContexts()[sctxt], "virtual ");
+  QVERIFY(showTypes11.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+
+  CompletionItemTester showTypes12(top->childContexts()[fctxt], "T<");
+  QVERIFY(showTypes12.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+
+  CompletionItemTester showTypes13(top, "");
+  QVERIFY(showTypes13.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes14(top->childContexts()[sctxt], "");
+  QVERIFY(showTypes14.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester showTypes15(top->childContexts()[nctxt], "");
+  QVERIFY(showTypes15.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+
+  CompletionItemTester dontShowTypes(top, "int i = ");
+  QVERIFY(dontShowTypes.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+  CompletionItemTester dontShowTypes2(top->childContexts()[sctxt], "int i = ");
+  QVERIFY(dontShowTypes2.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+  CompletionItemTester dontShowTypes3(top->childContexts()[nctxt], "int i = ");
+  QVERIFY(dontShowTypes3.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+  CompletionItemTester dontShowTypes4(top, "int i = i +");
+  QVERIFY(dontShowTypes4.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+  CompletionItemTester dontShowTypes5(top->childContexts()[sctxt], "int i = i +");
+  QVERIFY(dontShowTypes5.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+  CompletionItemTester dontShowTypes6(top->childContexts()[nctxt], "int i = i +");
+  QVERIFY(dontShowTypes6.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowAll);
+
+  release(top);
+}
+
+
+void TestCppCodeCompletion::testInvalidContexts()
+{
+  QByteArray method = "namespace A { struct B {}; } int testMe() { }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  DUChainWriteLocker lock(DUChain::lock());
+
+  //TODO: these expressions should generally result in an invalid context, but
+  // the ExpressionParser doesn't seem to think that "asdf" is an invalid exp.
+  // Either the expressionParser should be fixed, or testContextValidity() in
+  // context.cpp should be updated
+  
+  CompletionItemTester invalidExp(top->childContexts()[ctxt], "asdf->");
+  //Should be invalid (and is, but not as soon as it should be)
+  QVERIFY(!invalidExp.completionContext->isValid());
+  
+  CompletionItemTester invalidExp2(top->childContexts()[ctxt], "asdf.");
+  //Should be invalid, but isn't, because asdf evals to true
+  QEXPECT_FAIL("", "Should be invalid, but ExpressionParser needs to be fixed", Continue);
+  QVERIFY(!invalidExp2.completionContext->isValid());
+  
+  CompletionItemTester invalidExp3(top->childContexts()[ctxt], "asdf::");
+  //Should be valid in case it's a namespace, but asdf should eval to false
+  QVERIFY(invalidExp3.completionContext->isValid());
+
+  CompletionItemTester invalidExp31(top->childContexts()[ctxt], "A::");
+  //Should be valid as namespace, but A should evaluate to false
+  QVERIFY(invalidExp31.completionContext->isValid());
+
+  CompletionItemTester invalidExp4(top->childContexts()[ctxt], "asdf(");
+  //kept valid for MissingIncludeCompletion, but asdf should eval to false
+  QVERIFY(invalidExp4.completionContext->parentContext()->isValid());
+
+  CompletionItemTester invalidExp5(top->childContexts()[ctxt], "asdf<");
+  //TODO: testContextValidity() says templateAccess should be kept valid even with invalid expression
+  // as it could get MissingIncludeCompletion, but this is considered a "less than", since an invalid
+  // expression will not create a templateAccess context
+  QEXPECT_FAIL("", "Test mimics an unknown template expression, but there's no way to differentiate it from a less than operator with an unknown expression, which it gets considered to be. If it were a template, it would be valid.", Continue);
+  QVERIFY(invalidExp5.completionContext->parentContext()->isValid());
+
+  CompletionItemTester invalidExp6(top->childContexts()[ctxt], "asdf &&");
+  QVERIFY(!invalidExp6.completionContext->parentContext()->isValid());
+  CompletionItemTester invalidExp7(top->childContexts()[ctxt], "void "); 
+  QVERIFY(!invalidExp7.completionContext->isValid());
+  CompletionItemTester invalidExp71(top->childContexts()[ctxt], "int* ");
+  QVERIFY(!invalidExp71.completionContext->isValid());
+  CompletionItemTester invalidExp8(top->childContexts()[ctxt], "A::B &&");
+  QVERIFY(!invalidExp8.completionContext->parentContext()->isValid());
+  CompletionItemTester invalidExp9(top->childContexts()[ctxt], ".");
+  QVERIFY(!invalidExp9.completionContext->isValid());
+  CompletionItemTester invalidExp10(top->childContexts()[ctxt], "->");
+  QVERIFY(!invalidExp10.completionContext->isValid());
+  CompletionItemTester invalidExp11(top->childContexts()[ctxt], "::");
+  QVERIFY(!invalidExp11.completionContext->isValid());
+  release(top);
+}
+
+void TestCppCodeCompletion::testMemberAccess()
+{
+  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; }; class X { public: X(){}; int a(int a, T<int,int> b); int b;}; T<int,int> t; X* getX() { }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 4;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester testDot(top->childContexts()[ctxt], "t.");
+  QCOMPARE(testDot.names, QStringList() << "ta");
+  QCOMPARE(testDot.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
+  CompletionItemTester testDot2(top->childContexts()[ctxt], "(*getX()).");
+  QCOMPARE(testDot2.names, QStringList() << "a" << "b");
+  QCOMPARE(testDot2.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
+  CompletionItemTester testArrow(top->childContexts()[ctxt], "getX()->");
+  QCOMPARE(testArrow.names, QStringList() << "a" << "b");
+  QCOMPARE(testArrow.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
+  CompletionItemTester testArrow2(top->childContexts()[ctxt], "(&t)->");
+  QCOMPARE(testArrow2.names, QStringList() << "ta");
+  QCOMPARE(testArrow2.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
+  CompletionItemTester testColons(top->childContexts()[ctxt], "X::");
+  QCOMPARE(testColons.names, QStringList() << "X" << "a" << "b");
+  QCOMPARE(testColons.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
+  CompletionItemTester testColons2(top->childContexts()[ctxt], "T::U::");
+  QCOMPARE(testColons2.names, QStringList() << "V");
+  QCOMPARE(testColons2.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
+  release(top);
+}
+
+void TestCppCodeCompletion::testParentContexts()
+{
+  //Binary operators (also parent contexts) are tested in testBinaryOperators
+  QByteArray method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a(int a, Templ<int,int> b); int b;}; X::X() { }";
+  TopDUContext* top = parse(method, DumpAll);
+  int ctxt = 4;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester templateContext(top->childContexts()[ctxt], "Templ<");
+  QCOMPARE(templateContext.names, QStringList() << "Templ" << "Templ" << "X");
+  QCOMPARE(templateContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  CompletionItemTester templateContext2(top->childContexts()[ctxt], "Templ<int, ");
+  QCOMPARE(templateContext2.names, QStringList() << "Templ" << "Templ" << "X");
+  QCOMPARE(templateContext2.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  CompletionItemTester templateContext3(top->childContexts()[ctxt], "Templ< int , int > t = new Templ<");
+  QCOMPARE(templateContext3.names, QStringList() << "Templ" << "Templ" << "X");
+  QCOMPARE(templateContext3.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  CompletionItemTester templateContext4(top->childContexts()[ctxt], "Templ< int , int > t = new Templ<int,");
+  QCOMPARE(templateContext4.names, QStringList() << "Templ" << "Templ" << "X");
+  QCOMPARE(templateContext4.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  CompletionItemTester templateContext5(top->childContexts()[ctxt], "Templ< int , Templ<");
+  QCOMPARE(templateContext5.names, QStringList() << "Templ" << "Templ" << "Templ" << "X");
+  QCOMPARE(templateContext5.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  QCOMPARE(templateContext5.completionContext->parentContext()->parentContext()->accessType(), Cpp::CodeCompletionContext::TemplateAccess);
+  CompletionItemTester notATemplate(top->childContexts()[ctxt], "if ( a > b < a > this->");
+  QCOMPARE(notATemplate.names, QStringList() << "a" << "b");
+  QCOMPARE(notATemplate.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::BinaryOpFunctionCallAccess);
+  CompletionItemTester functionContext(top->childContexts()[ctxt], "a(");
+  QCOMPARE(functionContext.names, QStringList() << "a" << "X" << "a" << "b" << "Templ" << "this");
+  QCOMPARE(functionContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::FunctionCallAccess);
+  CompletionItemTester functionContext2(top->childContexts()[ctxt], "a(0, ");
+  QCOMPARE(functionContext2.names, QStringList() << "a" << "X" << "a" << "b" << "Templ" << "this");
+  QCOMPARE(functionContext2.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::FunctionCallAccess);
+  CompletionItemTester functionContext3(top->childContexts()[ctxt], "a(a(100, ");
+  QCOMPARE(functionContext3.names, QStringList() << "a" << "a" << "X" << "a" << "b" << "Templ" << "this");
+  QCOMPARE(functionContext3.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::FunctionCallAccess);
+  CompletionItemTester functionContext4(top->childContexts()[ctxt], "a(a(100, Templ<int,int>), ");
+  QCOMPARE(functionContext4.names, QStringList() << "a" << "X" << "a" << "b" << "Templ" << "this");
+  QCOMPARE(functionContext4.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::FunctionCallAccess);
+  //See also testKeywords
+  CompletionItemTester returnContext(top->childContexts()[ctxt], "return ");
+  QCOMPARE(returnContext.names, QStringList() << "X" << "a" << "b" << "Templ" << "this");
+  QCOMPARE(returnContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::ReturnAccess);
+  release(top);
+}
+
+void TestCppCodeCompletion::testUnaryOperators()
+{
+  QByteArray method = "class X { X(); int a; int b;}; int x,*z; X::X() { }";
+  TopDUContext* top = parse(method, DumpAll);
+  DUChainWriteLocker lock(DUChain::lock());
+  int ctxt = 2;
+  CompletionItemTester plusplus(top->childContexts()[ctxt], "x *= ++");
+  QCOMPARE(plusplus.names, QStringList() << "int x *=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plusplus2(top->childContexts()[ctxt], "x *= *z + ++");
+  QCOMPARE(plusplus2.names, QStringList() << "int* z +" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plusplus3(top->childContexts()[ctxt], "a + b = - ++");
+  QCOMPARE(plusplus3.names, QStringList() << "int b =" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plusplus4(top->childContexts()[ctxt], "x *= &*++");
+  QCOMPARE(plusplus4.names, QStringList() << "int x *=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minusminus(top->childContexts()[ctxt], "x ~= --");
+  QCOMPARE(minusminus.names, QStringList() << "int x ~=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minusminus2(top->childContexts()[ctxt], "x + *z + --");
+  QCOMPARE(minusminus2.names, QStringList() << "int* z +" << "X" << "a" << "b" << "x" << "z" << "this");
+  //TODO: should get "int b -" hint, but binary operators don't work behind paren
+  CompletionItemTester minusminus3(top->childContexts()[ctxt], "a + b -(----");
+  QCOMPARE(minusminus3.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minusminus4(top->childContexts()[ctxt], "x ^= ++--");
+  QCOMPARE(minusminus4.names, QStringList() << "int x ^=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester notop(top->childContexts()[ctxt], "!++");
+  QCOMPARE(notop.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester notop2(top->childContexts()[ctxt], "!a & !");
+  QCOMPARE(notop2.names, QStringList() << "int a &" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester notop3(top->childContexts()[ctxt], "b != !");
+  QCOMPARE(notop3.names, QStringList() << "int b !=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester notop4(top->childContexts()[ctxt], "x *= ~!");
+  QCOMPARE(notop4.names, QStringList() << "int x *=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester bitnot(top->childContexts()[ctxt], "~--");
+  QCOMPARE(bitnot.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester bitnot2(top->childContexts()[ctxt], "++~");
+  QCOMPARE(bitnot2.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester bitnot3(top->childContexts()[ctxt], "b ~= ~");
+  QCOMPARE(bitnot3.names, QStringList() << "int b ~=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester bitnot4(top->childContexts()[ctxt], "a * ~~~");
+  QCOMPARE(bitnot4.names, QStringList() << "int a *" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plus(top->childContexts()[ctxt], "*z = +");
+  QCOMPARE(plus.names, QStringList() << "int* z =" << "X" << "a" << "b" << "x" << "z" << "this");
+  //TODO: same as minusminus3
+  CompletionItemTester plus2(top->childContexts()[ctxt], "a + b +(+");
+  QCOMPARE(plus2.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plus3(top->childContexts()[ctxt], "b ~= +b + -+");
+  QCOMPARE(bitnot3.names, QStringList() << "int b ~=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester plus4(top->childContexts()[ctxt], "a * +");
+  QCOMPARE(plus4.names, QStringList() << "int a *" << "X" << "a" << "b" << "x" << "z" << "this");
+  //TODO: same as minusminus3
+  CompletionItemTester minus(top->childContexts()[ctxt], "*z -(-");
+  QCOMPARE(minus.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minus2(top->childContexts()[ctxt], "a ^ -(-");
+  QCOMPARE(minus2.names, QStringList() << "int a ^" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minus3(top->childContexts()[ctxt], "b ~= -");
+  QCOMPARE(minus3.names, QStringList() << "int b ~=" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester minus4(top->childContexts()[ctxt], "a * +-");
+  QCOMPARE(minus4.names, QStringList() << "int a *" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester refderef1(top->childContexts()[ctxt], "**&(&");
+  QCOMPARE(refderef1.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  //TODO: same as minusminus3
+  CompletionItemTester refderef2(top->childContexts()[ctxt], "a & b & (&");
+  QCOMPARE(refderef2.names, QStringList() << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester refderef3(top->childContexts()[ctxt], "a * x * *z * *");
+  QCOMPARE(refderef3.names, QStringList() << "int* z *" << "X" << "a" << "b" << "x" << "z" << "this");
+  CompletionItemTester refderef4(top->childContexts()[ctxt], "b & b & *");
+  QCOMPARE(refderef4.names, QStringList() << "int b &" << "X" << "a" << "b" << "x" << "z" << "this");
+  release(top);
+}
+
+void TestCppCodeCompletion::testBinaryOperators()
+{
+  QByteArray method = "class X { X(); int a; int b;}; X::X() { }";
+  TopDUContext* top = parse(method, DumpAll);
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester gt(top->childContexts()[2], "if (a > ");
+  QCOMPARE(gt.names, QStringList() << "int a >" << "X" << "a" << "b" << "this");
+  CompletionItemTester lt(top->childContexts()[2], "if (a < ");
+  QCOMPARE(lt.names, QStringList() << "int a <" << "X" << "a" << "b" << "this");
+  CompletionItemTester plus(top->childContexts()[2], "if (a + ");
+  QCOMPARE(plus.names, QStringList() << "int a +" << "X" << "a" << "b" << "this");
+  CompletionItemTester minus(top->childContexts()[2], "if (a - ");
+  QCOMPARE(minus.names, QStringList() << "int a -" << "X" << "a" << "b" << "this");
+  CompletionItemTester multiply(top->childContexts()[2], "if (a * ");
+  QCOMPARE(multiply.names, QStringList() << "int a *" << "X" << "a" << "b" << "this");
+  CompletionItemTester divide(top->childContexts()[2], "if (a / ");
+  QCOMPARE(divide.names, QStringList() << "int a /" << "X" << "a" << "b" << "this");
+  CompletionItemTester modulus(top->childContexts()[2], "if (a % ");
+  QCOMPARE(modulus.names, QStringList() << "int a %" << "X" << "a" << "b" << "this");
+  CompletionItemTester xorop(top->childContexts()[2], "if (a ^ ");
+  QCOMPARE(xorop.names, QStringList() << "int a ^" << "X" << "a" << "b" << "this");
+  CompletionItemTester bitandop(top->childContexts()[2], "if (a & ");
+  QCOMPARE(bitandop.names, QStringList() << "int a &" << "X" << "a" << "b" << "this");
+  CompletionItemTester bitorop(top->childContexts()[2], "if (a | ");
+  QCOMPARE(bitorop.names, QStringList() << "int a |" << "X" << "a" << "b" << "this");
+  CompletionItemTester notequal(top->childContexts()[2], "if (a != ");
+  QCOMPARE(notequal.names, QStringList() << "int a !=" << "X" << "a" << "b" << "this");
+  CompletionItemTester ltequal(top->childContexts()[2], "if (a <= ");
+  QCOMPARE(ltequal.names, QStringList() << "int a <=" << "X" << "a" << "b" << "this");
+  CompletionItemTester gtequal(top->childContexts()[2], "if (a >= ");
+  QCOMPARE(gtequal.names, QStringList() << "int a >=" << "X" << "a" << "b" << "this");
+  CompletionItemTester plusequal(top->childContexts()[2], "if (a += ");
+  QCOMPARE(plusequal.names, QStringList() << "int a +=" << "X" << "a" << "b" << "this");
+  CompletionItemTester minusequal(top->childContexts()[2], "if (a -= ");
+  QCOMPARE(minusequal.names, QStringList() << "int a -=" << "X" << "a" << "b" << "this");
+  CompletionItemTester multiplyequal(top->childContexts()[2], "if (a *= ");
+  QCOMPARE(multiplyequal.names, QStringList() << "int a *=" << "X" << "a" << "b" << "this");
+  CompletionItemTester divideequal(top->childContexts()[2], "if (a /= ");
+  QCOMPARE(divideequal.names, QStringList() << "int a /=" << "X" << "a" << "b" << "this");
+  CompletionItemTester modulusequal(top->childContexts()[2], "if (a %= ");
+  QCOMPARE(modulusequal.names, QStringList() << "int a %=" << "X" << "a" << "b" << "this");
+  CompletionItemTester xorequal(top->childContexts()[2], "if (a ^= ");
+  QCOMPARE(xorequal.names, QStringList() << "int a ^=" << "X" << "a" << "b" << "this");
+  CompletionItemTester bitandequal(top->childContexts()[2], "if (a &= ");
+  QCOMPARE(bitandequal.names, QStringList() << "int a &=" << "X" << "a" << "b" << "this");
+  CompletionItemTester bitorequal(top->childContexts()[2], "if (a |= ");
+  QCOMPARE(bitorequal.names, QStringList() << "int a |=" << "X" << "a" << "b" << "this");
+  CompletionItemTester bitnotequal(top->childContexts()[2], "if (a ~= ");
+  QCOMPARE(bitnotequal.names, QStringList() << "int a ~=" << "X" << "a" << "b" << "this");
+  CompletionItemTester leftshift(top->childContexts()[2], "if (a << ");
+  QCOMPARE(leftshift.names, QStringList() << "int a <<" << "X" << "a" << "b" << "this");
+  CompletionItemTester rightshift(top->childContexts()[2], "if (a >> ");
+  QCOMPARE(rightshift.names, QStringList() << "int a >>" << "X" << "a" << "b" << "this");
+  CompletionItemTester leftshifteq(top->childContexts()[2], "if (a <<= ");
+  QCOMPARE(leftshifteq.names, QStringList() << "int a <<=" << "X" << "a" << "b" << "this");
+  CompletionItemTester rightshifteq(top->childContexts()[2], "if (a >>= ");
+  QCOMPARE(rightshifteq.names, QStringList() << "int a >>=" << "X" << "a" << "b" << "this");
+  CompletionItemTester equal(top->childContexts()[2], "if (a == ");
+  QCOMPARE(equal.names, QStringList() << "int a ==" << "X" << "a" << "b" << "this");
+  CompletionItemTester andop(top->childContexts()[2], "if (a && ");
+  QCOMPARE(andop.names, QStringList() << "int a &&" << "X" << "a" << "b" << "this");
+  CompletionItemTester orop(top->childContexts()[2], "if (a || ");
+  QCOMPARE(orop.names, QStringList() << "int a ||" << "X" << "a" << "b" << "this");
+  CompletionItemTester bracket(top->childContexts()[2], "if (a[ ");
+  QCOMPARE(bracket.names, QStringList() << "int a []" << "X" << "a" << "b" << "this");
+  CompletionItemTester assign(top->childContexts()[2], "if (a = ");
+  QCOMPARE(assign.names, QStringList() << "int a =" << "X" << "a" << "b" << "this");
+  CompletionItemTester assign2(top->childContexts()[2], "X z = ");
+  QCOMPARE(assign2.names, QStringList() << "class X =" << "X" << "a" << "b" << "this");
+  CompletionItemTester assign3(top->childContexts()[2], "X *z = new");
+  QCOMPARE(assign3.names, QStringList() << "class X =" << "X");
+  release(top);
+}
+
+void TestCppCodeCompletion::testDeclarationIsInitialization()
+{
+  QByteArray method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a; int b;}; X::X() { }";
+  TopDUContext* top = parse(method, DumpAll);
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester notActuallyADecl(top->childContexts()[4], "int g; if (a > this->");
+  QCOMPARE(notActuallyADecl.names, QStringList() << "int a >" << "a" << "b");
+  CompletionItemTester notActuallyADecl2(top->childContexts()[4], "int g; if (a < a > this->");
+  QCOMPARE(notActuallyADecl2.names, QStringList() << "int a >" << "a" << "b");
+  CompletionItemTester notTemplateEqOp(top->childContexts()[4], "int g = 1; int h =");
+  QCOMPARE(notTemplateEqOp.names, QStringList() << "int =" << "X" << "a" << "b" << "Templ" << "this");
+  CompletionItemTester isTemplateEqOp(top->childContexts()[4], "int g = 1; Templ<int,int> h =");
+  QCOMPARE(isTemplateEqOp.names, QStringList() << "class Templ< int, int > =" << "X" << "a" << "b" << "Templ" << "this");
+  CompletionItemTester isTemplate(top->childContexts()[4], "int g = 1; Templ<int,int> h(");
+  QCOMPARE(isTemplate.names, QStringList() << "Templ< int, int >(" << "X" << "a" << "b" << "Templ" << "this");
+  CompletionItemTester isTemplate2(top->childContexts()[4], "Templ<int,int> h(");
+  QCOMPARE(isTemplate2.names, isTemplate.names);
+  CompletionItemTester isTemplate3(top->childContexts()[4], "int g; Templ<int,int> h(");
+  QCOMPARE(isTemplate2.names, isTemplate.names);
+  CompletionItemTester constructInit(top->childContexts()[4], "int g = 1; X myx(");
+  QCOMPARE(constructInit.names, QStringList() << "X" << "X(" << "X" << "a" << "b" << "Templ" << "this");
+  CompletionItemTester ptr(top->childContexts()[4], "int g = 1; int* test =");
+  QCOMPARE(ptr.names, QStringList() << "int* =" << "X" << "a" << "b" << "Templ" << "this");
+  CompletionItemTester ptr2(top->childContexts()[4], "int g = 1; int** test =");
+  QCOMPARE(ptr2.names, QStringList() << "int** =" << "X" << "a" << "b" << "Templ" << "this");
+  release(top);
+}
+
+
 void TestCppCodeCompletion::testNoMemberAccess() {
   QByteArray test = "class MyClass{ public:\n int myint; };\n\n";
   
@@ -182,56 +545,107 @@ void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
 }
 
 void TestCppCodeCompletion::testKeywords() {
-  QByteArray test = "struct Values { int Value1; int Value2; struct Sub { int SubValue; }; }; int test(int a) {}";
+  QByteArray test = "struct Values { int Value1; int Value2; struct Sub { int SubValue; }; }; Values v; int test(int a) {}";
 
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(context->childContexts().count(), 3);
-  
-  CompletionItemTester testCase(context->childContexts()[2], "switch (a) { case ");
+
+  int ctxt = 2;
+  CompletionItemTester constcast(context->childContexts()[ctxt], "Values* y = const_cast<");
+  QVERIFY(constcast.completionContext->isValid());
+  QCOMPARE(constcast.names, QStringList() << "struct Values =" << "Values");
+  CompletionItemTester staticcast(context->childContexts()[ctxt], "Values* y = static_cast<");
+  QVERIFY(staticcast.completionContext->isValid());
+  QCOMPARE(staticcast.names, QStringList() << "struct Values =" << "Values");
+  CompletionItemTester dynamiccast(context->childContexts()[ctxt], "Values* y = dynamic_cast<");
+  QVERIFY(dynamiccast.completionContext->isValid());
+  QCOMPARE(dynamiccast.names, QStringList() << "struct Values =" << "Values");
+  CompletionItemTester reinterpretcast(context->childContexts()[ctxt], "Values* y = reinterpret_cast<");
+  QVERIFY(reinterpretcast.completionContext->isValid());
+  QCOMPARE(reinterpretcast.names, QStringList() << "struct Values =" << "Values");
+  CompletionItemTester testConst(context->childContexts()[ctxt], "const ");
+  QVERIFY(testConst.completionContext->isValid());
+  QCOMPARE(testConst.names, QStringList() << "Values");
+  CompletionItemTester testTypedef(context->childContexts()[ctxt], "typedef ");
+  QVERIFY(testTypedef.completionContext->isValid());
+  QCOMPARE(testTypedef.names, QStringList() << "Values");
+  CompletionItemTester testPublic(context->childContexts()[ctxt], "public ");
+  QVERIFY(testPublic.completionContext->isValid());
+  QCOMPARE(testPublic.names, QStringList() << "Values");
+  CompletionItemTester testFakePublic(context->childContexts()[ctxt], "fakepublic ");
+  QVERIFY(!testFakePublic.completionContext->isValid());
+  CompletionItemTester testProtected(context->childContexts()[ctxt], "protected ");
+  QVERIFY(testProtected.completionContext->isValid());
+  QCOMPARE(testProtected.names, QStringList() << "Values");
+  CompletionItemTester testFakeProtected(context->childContexts()[ctxt], "fakeprotected ");
+  QVERIFY(!testFakeProtected.completionContext->isValid());
+  CompletionItemTester testPrivate(context->childContexts()[ctxt], "private ");
+  QVERIFY(testPrivate.completionContext->isValid());
+  QCOMPARE(testPrivate.names, QStringList() << "Values");
+  CompletionItemTester testVirtual(context->childContexts()[ctxt], "virtual ");
+  QVERIFY(testVirtual.completionContext->isValid());
+  QCOMPARE(testVirtual.names, QStringList() << "Values");
+  //TODO: fix ShowSignals, make this show only signals, and move emit tests to where it matters
+  CompletionItemTester testEmit(context->childContexts()[ctxt], "emit ");
+  QVERIFY(testEmit.completionContext->isValid());
+  QCOMPARE(testEmit.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testQEmit(context->childContexts()[ctxt], "Q_EMIT ");
+  QVERIFY(testQEmit.completionContext->isValid());
+  QCOMPARE(testQEmit.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testCase(context->childContexts()[ctxt], "switch (a) { case ");
   QVERIFY(testCase.completionContext->isValid());
-  QCOMPARE(testCase.names, QStringList() << "a" << "Values" << "test");
-  CompletionItemTester testCase2(context->childContexts()[2], "switch (a) { case Values.");
+  QCOMPARE(testCase.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testCase2(context->childContexts()[ctxt], "switch (a) { case v.");
   QVERIFY(testCase2.completionContext->isValid());
   QCOMPARE(testCase2.names, QStringList() << "Value1" << "Value2");
-  
-  CompletionItemTester testReturn(context->childContexts()[2], "return ");
+  CompletionItemTester testReturn(context->childContexts()[ctxt], "return ");
   QVERIFY(testReturn.completionContext->isValid());
-  QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "test");
-  CompletionItemTester testReturn2(context->childContexts()[2], "return Values.");
+  QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "v" << "test");
+  CompletionItemTester testReturn2(context->childContexts()[ctxt], "return v.");
   QVERIFY(testReturn2.completionContext->isValid());
   QCOMPARE(testReturn2.names, QStringList() << "return int" << "Value1" << "Value2");
-  
-  CompletionItemTester testNew(context->childContexts()[2], "Values b = new ");
+  CompletionItemTester testNew(context->childContexts()[ctxt], "Values* b = new ");
   QVERIFY(testNew.completionContext->isValid());
-  QVERIFY(testNew.names.contains("Values"));
-  CompletionItemTester testNew2(context->childContexts()[2], "Values::Sub b = new Values::");
+  QCOMPARE(testNew.names, QStringList() << "struct Values =" << "Values");
+  //TODO: make "new" onlyShow types in this case, and then skip it to create return context
+  CompletionItemTester testNew2(context->childContexts()[ctxt], "Values::Sub* b = new Values::");
   QVERIFY(testNew2.completionContext->isValid());
-  QCOMPARE(testNew2.names, QStringList() << "Value1" << "Value2" << "Sub" ); //A little odd to see Value1 & 2 here
-  
-  CompletionItemTester testElse(context->childContexts()[2], "if (a) {} else ");
+  QCOMPARE(testNew2.names, QStringList() << "Value1" << "Value2" << "Sub" );
+  CompletionItemTester testFakeNew(context->childContexts()[ctxt], "mynew ");
+  QVERIFY(!testFakeNew.completionContext->isValid());
+  CompletionItemTester testElse(context->childContexts()[ctxt], "if (a) {} else ");
   QVERIFY(testElse.completionContext->isValid());
-  QCOMPARE(testElse.names, QStringList() << "a" << "Values" << "test");
-  CompletionItemTester testElse2(context->childContexts()[2], "if (a) {} else Values::");
+  QCOMPARE(testElse.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testElse2(context->childContexts()[ctxt], "if (a) {} else Values::");
   QVERIFY(testElse2.completionContext->isValid());
   QCOMPARE(testElse2.names, QStringList() << "Value1" << "Value2" << "Sub" );
-#if 0  
-  CompletionItemTester testThrow(context->childContexts()[2], "throw ");
+  CompletionItemTester testThrow(context->childContexts()[ctxt], "throw ");
   QVERIFY(testThrow.completionContext->isValid());
-  QCOMPARE(testThrow.names, QStringList() << "a" << "Values" << "test");
-  CompletionItemTester testThrow2(context->childContexts()[2], "thow Values::");
+  QCOMPARE(testThrow.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testThrow2(context->childContexts()[ctxt], "thow Values::");
   QVERIFY(testThrow2.completionContext->isValid());
   QCOMPARE(testThrow2.names, QStringList() << "Value1" << "Value2" << "Sub" );
-#endif
-  CompletionItemTester testDelete(context->childContexts()[2], "delete ");
+  CompletionItemTester testThrowNew(context->childContexts()[ctxt], "throw new");
+  QVERIFY(testThrowNew.completionContext->isValid());
+  QCOMPARE(testThrowNew.names, QStringList() << "Values");
+  //TODO: suboptimal results, see also testNew2
+  CompletionItemTester testThrowNew2(context->childContexts()[ctxt], "throw new Values::");
+  QVERIFY(testThrowNew2.completionContext->isValid());
+  QCOMPARE(testThrowNew2.names, QStringList() << "Value1" << "Value2" << "Sub");
+  CompletionItemTester testDelete(context->childContexts()[ctxt], "delete ");
   QVERIFY(testDelete.completionContext->isValid());
-  QCOMPARE(testDelete.names, QStringList() << "a" << "Values" << "test");
-  CompletionItemTester testDelete2(context->childContexts()[2], "delete Values::");
+  QCOMPARE(testDelete.names, QStringList() << "a" << "Values" << "v" << "test");
+  CompletionItemTester testDelete2(context->childContexts()[ctxt], "delete Values::");
   QVERIFY(testDelete2.completionContext->isValid());
   QCOMPARE(testDelete2.names, QStringList() << "Value1" << "Value2" << "Sub" );
-  
-  //TODO: emit, Q_EMIT;
-  
+  CompletionItemTester testDelete3(context->childContexts()[ctxt], "delete [ ] ");
+  QVERIFY(testDelete3.completionContext->isValid());
+  CompletionItemTester testFakeDelete(context->childContexts()[ctxt], "fakedelete ");
+  QVERIFY(!testFakeDelete.completionContext->isValid());
+  CompletionItemTester testFakeDelete2(context->childContexts()[ctxt], "fakedelete [] ");
+  QVERIFY(!testFakeDelete2.completionContext->isValid());
+  QCOMPARE(testDelete3.names, QStringList() << "a" << "Values" << "v" << "test");
   release(context);
 }
 
@@ -357,7 +771,7 @@ void TestCppCodeCompletion::testConstructorCompletion() {
       QVERIFY(tester.completionContext->parentContext()->parentContext()); //There must be a type-hinting context
       QVERIFY(!tester.completionContext->isConstructorInitialization());
       QVERIFY(!tester.completionContext->parentContext()->isConstructorInitialization());
-      QVERIFY(tester.completionContext->parentContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+      QVERIFY(tester.completionContext->parentContext()->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess);
       QVERIFY(tester.completionContext->parentContext()->parentContext()->isConstructorInitialization());
     }
     
@@ -384,7 +798,6 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names.toSet(), (QStringList() << "connect" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()" << "signal2").toSet());
-
     QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), ").names.toSet()).isEmpty());
     QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SIGNAL(").names.toSet()).isEmpty());
     QVERIFY(((QStringList() << "connect" << "slot1" << "slot2" << "slot3"<< "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SLOT(").names.toSet()).isEmpty());
@@ -573,7 +986,7 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     QVERIFY(!CompletionItemTester(top->childContexts()[2], "Test<").names.contains("t2"));
     
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "if((t).").names, QStringList() << "m");
-    QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test t(&t2->").names, QStringList() << "m");
+    QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test t(&t2->").names, QStringList() << "Test(" << "m");
 
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test(\"(\").").names, QStringList() << "m");
     
@@ -700,8 +1113,7 @@ void TestCppCodeCompletion::testTemplateFunction() {
     DUChainWriteLocker lock(DUChain::lock());
 
     QCOMPARE(top->childContexts().count(), 4);
-    
-    bool abort = false;
+
     {
       CompletionItemTester tester1(top->childContexts()[3], "test<");
       QVERIFY(tester1.completionContext->parentContext());
@@ -1089,14 +1501,14 @@ void TestCppCodeCompletion::testCompletionContext() {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, ", QString(), CursorInRevision::invalid() ) );
     Cpp::CodeCompletionContext& c(*cptr);
     QVERIFY( c.isValid() );
-    QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
+    QVERIFY( c.accessType() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
 
     //globalHonk is of type Honk. Check whether all matching functions were rated correctly by the overload-resolution.
     //The preferred parent-function in the list should be "Honk globalFunction( const Honk&, const Heinz& h )", because the first argument maches globalHonk
     Cpp::CodeCompletionContext* function = c.parentContext();
     QVERIFY(function);
-    QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+    QVERIFY(function->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess);
     QVERIFY(!function->functions().isEmpty());
 
     lock.lock();
@@ -1116,7 +1528,7 @@ void TestCppCodeCompletion::testCompletionContext() {
 
     function = function->parentContext();
     QVERIFY(function);
-    QVERIFY(function->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+    QVERIFY(function->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess);
     QVERIFY(!function->functions().isEmpty());
     QVERIFY(!function->parentContext());
     QVERIFY(function->functions().size() == 4);
@@ -1132,7 +1544,7 @@ void TestCppCodeCompletion::testCompletionContext() {
     DUContextPointer contPtr(context);
     Cpp::CodeCompletionContext c(contPtr, "{", QString(), CursorInRevision::invalid() );
     QVERIFY( c.isValid() );
-    QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
+    QVERIFY( c.accessType() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );
   }
 
@@ -2278,31 +2690,31 @@ void TestCppCodeCompletion::testProperties()
   {
   CompletionItemTester complCtx(top, "");
   QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
   {
   CompletionItemTester complCtx(top, "aStack.");
   QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::MemberAccess);
+  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
   {
   CompletionItemTester complCtx(top, "aHeap->");
   QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::ArrowMemberAccess);
+  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
   {
   CompletionItemTester complCtx(top->childContexts().first(), "");
   QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
   {
   CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "");
   QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
 
@@ -2383,7 +2795,7 @@ public:
   TestPreprocessor( TestCppCodeCompletion* _cc, IncludeFileList& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
 
-  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
+  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType /*type*/, int sourceLine, bool /*skipCurrentPath*/)
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.constFind(fileName);
     if( it != cc->fakeIncludes.constEnd() || !pp ) {
@@ -2406,7 +2818,7 @@ public:
       stream.toEnd();
   }
   
-  virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName) {
+  virtual void foundHeaderGuard(rpp::Stream& /*stream*/, KDevelop::IndexedString guardName) {
     environmentFile->setHeaderGuard(guardName);
   }
 };

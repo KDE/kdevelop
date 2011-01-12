@@ -53,7 +53,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
     ctx = item.completionContext()->duContext();
   }
 
-  if( item.completionContext() && item.completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext()->functions().count() > item.listOffset )
+  if( item.completionContext() && item.completionContext()->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext()->functions().count() > item.listOffset )
     f = item.completionContext()->functions()[item.listOffset];
 
   QTextFormat normalFormat(QTextFormat::CharFormat);
@@ -288,7 +288,7 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
     {
       *highlighting <<  QVariant(textFormatStart);
       *highlighting << QVariant(ret.length() - textFormatStart);
-      if(item.completionContext() && item.completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::TemplateAccess && num == item.completionContext()->matchPosition())
+      if(item.completionContext() && item.completionContext()->accessType() == Cpp::CodeCompletionContext::TemplateAccess && num == item.completionContext()->matchPosition())
         *highlighting << highlightFormat;
       else
         *highlighting << normalFormat;
