@@ -126,7 +126,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name)
     QString displayName = QTime::currentTime().toString("[hh:mm] ")+name;
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
     
-    modelSelector->setCurrentItem(displayName);
+    modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);
     
     return newModel;
 }
