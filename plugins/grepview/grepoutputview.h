@@ -71,6 +71,7 @@ private:
     QAction* m_prev;
     QAction* m_collapseAll;
     QAction* m_expandAll;
+    QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
     
 private slots:

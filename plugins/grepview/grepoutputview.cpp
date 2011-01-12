@@ -23,6 +23,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
+#include <QWidgetAction>
 
 using namespace KDevelop;
 
@@ -73,6 +74,15 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     addAction(m_expandAll);
     addAction(separator);
     addAction(change_criteria);
+    
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+    
+    QWidgetAction *cusomWidget = new QWidgetAction(this);
+    m_statusLabel = new QLabel(this);
+    cusomWidget->setDefaultWidget(m_statusLabel);
+    addAction(cusomWidget);
     
     modelSelector->setEditable(false);
     connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
@@ -149,7 +159,7 @@ void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
 
 void GrepOutputView::setMessage(const QString& msg)
 {
-    messageLabel->setText(msg);
+    m_statusLabel->setText(msg);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
