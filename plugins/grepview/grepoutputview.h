@@ -51,7 +51,7 @@ public:
      * sometimes continues to feed the model.
      * @return pointer to the new model
      */
-    GrepOutputModel* renewModel();
+    GrepOutputModel* renewModel(QString name);
     
     void setMessage(const QString& msg);
     void setPlugin(GrepViewPlugin *plugin);
@@ -60,11 +60,13 @@ public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void changeModel(int index);
 
 Q_SIGNALS:
     void outputViewIsClosed();
     
 private:
+    static const int HISTORY_SIZE;
     QAction* m_next;
     QAction* m_prev;
     QAction* m_collapseAll;

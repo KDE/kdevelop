@@ -20,15 +20,12 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="messageLabel">
+         <widget class="KComboBox" name="modelSelector">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>4</horstretch>
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>5</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
           </property>
          </widget>
         </item>
@@ -78,6 +75,19 @@
          </widget>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="messageLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
       </widget>
      </item>
      <item>

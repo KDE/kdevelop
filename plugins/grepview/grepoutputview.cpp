@@ -18,6 +18,7 @@
 #include "greputil.h"
 
 #include <QtGui/QAction>
+#include <QtGui/QStringListModel>
 #include <KMessageBox>
 
 #include <interfaces/icore.h>
@@ -42,6 +43,9 @@ QString GrepOutputViewFactory::id() const
 {
     return "org.kdevelop.GrepOutputView";
 }
+
+
+const int GrepOutputView::HISTORY_SIZE = 5;
 
 GrepOutputView::GrepOutputView(QWidget* parent)
   : QWidget(parent)
@@ -70,7 +74,9 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     addAction(separator);
     addAction(change_criteria);
     
-    renewModel();
+    modelSelector->setEditable(false);
+    connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
+    
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
 
@@ -95,14 +101,16 @@ GrepOutputView::~GrepOutputView()
     emit outputViewIsClosed();
 }
 
-GrepOutputModel* GrepOutputView::renewModel()
+GrepOutputModel* GrepOutputView::renewModel(QString name)
 {
-    if (model()) {
-        model()->deleteLater();
+    // Crear oldest model
+    while(modelSelector->count() > GrepOutputView::HISTORY_SIZE) {
+        QVariant var = modelSelector->itemData(GrepOutputView::HISTORY_SIZE - 1);
+        qvariant_cast<QObject*>(var)->deleteLater();
+        modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
     }
 
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
-    resultsTreeView->setModel(newModel);
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
@@ -113,6 +121,11 @@ GrepOutputModel* GrepOutputView::renewModel()
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     connect(newModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    
+    // appends new model to history
+    QString displayName = QTime::currentTime().toString("[hh:mm] ")+name;
+    modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
+    changeModel(0);
     return newModel;
 }
 
@@ -120,6 +133,13 @@ GrepOutputModel* GrepOutputView::renewModel()
 GrepOutputModel* GrepOutputView::model()
 {
     return static_cast<GrepOutputModel*>(resultsTreeView->model());
+}
+
+void GrepOutputView::changeModel(int index)
+{
+    QVariant var = modelSelector->itemData(index);
+    GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
+    resultsTreeView->setModel(resultModel);
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
