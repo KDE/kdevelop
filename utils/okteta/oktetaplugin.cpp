@@ -107,8 +107,12 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 
     FileContext* fileContext = dynamic_cast<FileContext*>( context );
     ProjectItemContext* projectItemContext = dynamic_cast<ProjectItemContext*>( context );
-    if( fileContext )
-        mContextUrls = fileContext->urls();
+    if( fileContext && fileContext->urls().count() > 0 ) {
+        KMimeType::Ptr mimetype = KMimeType::findByUrl( fileContext->urls().first() );
+        if(!mimetype->is("inode/directory")){
+            mContextUrls << fileContext->urls().first();
+        }
+    }
     else if( projectItemContext ) 
     {
         foreach( ProjectBaseItem* item, projectItemContext->items() )
