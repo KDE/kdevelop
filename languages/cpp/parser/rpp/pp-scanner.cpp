@@ -171,7 +171,7 @@ uint pp_skip_identifier::operator()(Stream& input)
 void pp_skip_number::operator()(Stream& input, Stream& output)
 {
   while (!input.atEnd()) {
-    if (!isLetterOrNumber(input.current()) && input != '_')
+    if (isCharacter(input.current()) && !isLetterOrNumber(input.current()) && input != '_')
         return;
 
     output << input;
