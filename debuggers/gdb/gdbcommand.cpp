@@ -21,19 +21,19 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_this(0), commandHandler_(0),
+: type_(type), command_(command), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_this(0), commandHandler_(0),
+: type_(type), command_(QString::number(index)), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
-: type_(type), command_(arguments), handler_this(0), commandHandler_(handler),
+: type_(type), command_(arguments), commandHandler_(handler),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
     handlesError_ = handler->handlesError();
@@ -73,7 +73,7 @@ bool
 GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
 {
     if (handler_this) {
-        (handler_this->*handler_method)(r);
+        (handler_this.data()->*handler_method)(r);
         return true;
     } else if (commandHandler_) {
         bool autoDelete = commandHandler_->autoDelete(); //ask before calling handler as it might deleted itself in handler
@@ -136,7 +136,7 @@ bool CliCommand::invokeHandler(const GDBMI::ResultRecord& r)
         return true;
 
     if (cli_handler_this) {
-        (cli_handler_this->*cli_handler_method)(allStreamOutput());
+        (cli_handler_this.data()->*cli_handler_method)(allStreamOutput());
         return true;
     }
     else {

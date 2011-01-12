@@ -1,19 +1,22 @@
 [Desktop Entry]
 Icon=qtlogo
 Type=Service
-X-KDE-ServiceTypes=KCModule
-X-KDE-Library=kdevqthelp
+ServiceTypes=KCModule
+X-KDE-ModuleType=Library
+X-KDE-Library=kdevqthelp_config
 X-KDE-FactoryName=kdevqthelp_config
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform,kdevqthelp
 X-KDE-CfgDlgHierarchy=DOCUMENTATION
 X-KDE-Weight=150
 Name=QtHelp Documentation
+Name[da]=QtHelp-dokumentation
 Name[de]=Qt-Hilfe-Dokumentation
 Name[en_GB]=QtHelp Documentation
 Name[es]=Documentación de QtHelp
 Name[et]=QtHelpi dokumentatsioon
 Name[fr]=Documentation de QtHelp
+Name[nb]=QtHelp-dokumentasjon
 Name[nl]=QtHelp-documentatie
 Name[pt]=Documentação do QtHelp
 Name[pt_BR]=Documentação do QtHelp

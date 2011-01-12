@@ -1,6 +1,10 @@
-set(kdevkdeprovider_PART_SRCS
+add_subdirectory(tests)
+
+set(kdevkdeprovider_PART_SRCS kdeprojectsmodel.cpp
     kdeproviderwidget.cpp
     kdeproviderplugin.cpp
+    kdeprojectsmodel.cpp
+    kdeprojectsreader.cpp
 )
 kde4_add_kcfg_files(kdevkdeprovider_PART_SRCS kdeconfig.kcfgc)
 kde4_add_ui_files(kdevkdeprovider_PART_SRCS kdeconfig.ui)

@@ -422,6 +422,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             }
             path.adjustPath(KUrl::AddTrailingSlash);
             
+            if(QDir(path.toLocalFile()).exists())
             {
                 alreadyAdded.append(subf.name);
                 CMakeFolderItem* parent=folder;

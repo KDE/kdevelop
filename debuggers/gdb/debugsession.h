@@ -26,7 +26,7 @@
 #ifndef GDB_DEBUGSESSION_H
 #define GDB_DEBUGSESSION_H
 
-#include <QPointer>
+#include <QWeakPointer>
 
 #include <KConfigGroup>
 
@@ -126,7 +126,7 @@ private:
     DebuggerState m_sessionState;
     bool justRestarted_;
     KConfigGroup m_config;
-    QPointer<GDB> m_gdb;
+    QWeakPointer<GDB> m_gdb;
 
 
 

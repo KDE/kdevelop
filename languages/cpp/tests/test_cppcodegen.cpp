@@ -48,10 +48,13 @@
 #include <language/duchain/classdeclaration.h>
 #include <cppducontext.h>
 #include <interfaces/iassistant.h>
+#include <interfaces/foregroundlock.h>
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
 using namespace KDevelop;
+
+ForegroundLock* gloalTestLock = 0;
 
 void TestCppCodegen::initTestCase()
 {
@@ -62,11 +65,15 @@ void TestCppCodegen::initTestCase()
   Core::self()->languageController()->backgroundParser()->setDelay(1);
   
   CodeRepresentation::setDiskChangesForbidden(true);
+  
+  gloalTestLock = new ForegroundLock;
 }
 
 void TestCppCodegen::cleanupTestCase()
 {
   Core::self()->cleanup();
+  delete gloalTestLock;
+  gloalTestLock = 0;
 }
 
 void dumpAST(InsertIntoDUChain& code)
@@ -109,6 +116,78 @@ void TestCppCodegen::testAssistants()
     //Make sure the assistant has inserted the correct solution
     kDebug() << code.m_insertedCode.text();
     QVERIFY(code.m_insertedCode.text().contains("Honk val = Hank;"));
+  }  
+}
+
+void TestCppCodegen::testUpdateIndices()
+{
+  /// @todo Extend this test to make sure t hat all kinds of declarations retain their indices when they are updated
+  {
+    InsertIntoDUChain code1("duchaintest_1.h", "class QW{}; struct A { struct Member2; struct Member1; }; class Oq{};");
+    InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_1.h>\n struct C : public A { Member1 m1; Member2 m2; A test(int arg) { int v1; \n{}\n { int v2, *v3; }} int test(); };");
+    kWarning() << "********************* Parsing step 1";
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    IndexedDeclaration CDecl = code3.getDeclaration("C");
+    QVERIFY(CDecl.isValid());
+    IndexedDeclaration ADecl = code3.getDeclaration("A");
+    QVERIFY(ADecl.isValid());
+
+    IndexedDeclaration C_m1 = code3.getDeclaration("C::m1");
+    QVERIFY(C_m1.isValid());
+    IndexedDeclaration C_m2 = code3.getDeclaration("C::m2");
+    QVERIFY(C_m2.isValid());
+    
+    QVERIFY(CDecl.declaration()->internalContext());
+    QCOMPARE(CDecl.declaration()->internalContext()->localDeclarations().size(), 4);
+    
+    IndexedDeclaration C_test = CDecl.declaration()->internalContext()->localDeclarations()[2];
+    QVERIFY(C_test.isValid());
+    DUContext* testCtx = C_test.data()->internalContext();
+    QVERIFY(testCtx);
+    QCOMPARE(testCtx->localDeclarations().size(), 1);
+    
+    IndexedDeclaration C_test_v1 = testCtx->localDeclarations()[0];
+    
+    QCOMPARE(testCtx->childContexts().size(), 2);
+    DUContext* child = testCtx->childContexts()[1];
+    
+    QCOMPARE(child->localDeclarations().size(), 2);
+    
+    IndexedDeclaration C_test_v2 = child->localDeclarations()[0];
+    IndexedDeclaration C_test_v3 = child->localDeclarations()[1];
+    
+    QCOMPARE(C_test_v1.declaration()->identifier(), Identifier("v1"));
+    QCOMPARE(C_test_v2.declaration()->identifier(), Identifier("v2"));
+    QCOMPARE(C_test_v3.declaration()->identifier(), Identifier("v3"));
+    QCOMPARE(C_m1.declaration()->identifier(), Identifier("m1"));
+    QCOMPARE(C_m2.declaration()->identifier(), Identifier("m2"));
+    QCOMPARE(C_test.declaration()->identifier(), Identifier("test"));
+    QCOMPARE(CDecl.declaration()->identifier(), Identifier("C"));
+    QCOMPARE(ADecl.declaration()->identifier(), Identifier("A"));
+    
+    lock.unlock();
+    code1.m_insertedCode.setText("struct A { struct Member2; struct Member1; };");
+    code3.m_insertedCode.setText("#include <duchaintest_1.h>\n class Q{}; struct C : public A { Member2 m2; int c; A test(int arg) { int w1; int v1;\n\n { int     *v3; }} int test(); };");
+    code3.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive, true);
+    
+    lock.lock();
+    QVERIFY(ADecl.declaration());
+    QCOMPARE(ADecl.declaration()->identifier(), Identifier("A"));
+    QVERIFY(CDecl.declaration());
+    QCOMPARE(CDecl.declaration()->identifier(), Identifier("C"));
+    QVERIFY(!C_m1.declaration());
+    QVERIFY(C_m2.declaration());
+    QCOMPARE(C_m2.declaration()->identifier(), Identifier("m2"));
+    QVERIFY(C_test.declaration());
+    QCOMPARE(C_test.declaration()->identifier(), Identifier("test"));
+    QVERIFY(C_test_v1.declaration());
+    QCOMPARE(C_test_v1.declaration()->identifier(), Identifier("v1"));
+    QVERIFY(!C_test_v2.declaration());
+    QVERIFY(C_test_v3.declaration());
+    QCOMPARE(C_test_v3.declaration()->identifier(), Identifier("v3"));
   }  
 }
 

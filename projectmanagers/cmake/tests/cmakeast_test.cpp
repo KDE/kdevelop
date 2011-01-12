@@ -126,7 +126,7 @@ void CMakeAstTest::testAddExecutableGoodParse_data()
     func2.addArguments( argList2 );
 
     CMakeFunctionDesc func3;
-    func3.name = "ADD_EXECUTABLE";
+    func3.name = "add_executable";
     QStringList argList3;
     argList3 << "foo" << "MACOSX_BUNDLE" << "${mysrcs_SRCS}";
     func3.addArguments( argList3 );
@@ -291,7 +291,7 @@ void CMakeAstTest::testAddSubdirectoryGoodParse()
 void CMakeAstTest::testAddSubdirectoryGoodParse_data()
 {
     CMakeFunctionDesc func, func2, func3, func4;
-    func.name = "ADD_SUBDIRECTORY";
+    func.name = "add_subdirectory";
     func.addArguments( QStringList( "foodir" ) );
 
     func2.name = "add_subdirectory";
@@ -348,7 +348,7 @@ void CMakeAstTest::testAddTestGoodParse()
 void CMakeAstTest::testAddTestGoodParse_data()
 {
     CMakeFunctionDesc func1, func2;
-    func1.name = "ADD_TEST";
+    func1.name = "add_test";
     func2.name = "add_test";
 
     QStringList argList1, argList2;
@@ -411,19 +411,16 @@ void CMakeAstTest::testAuxSourceDirectoryGoodParse()
 
 void CMakeAstTest::testAuxSourceDirectoryGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2;
-    func1.name = "AUX_SOURCE_DIRECTORY";
-    func2.name = "aux_source_directory";
+    CMakeFunctionDesc func1;
+    func1.name = "aux_source_directory";
 
     QStringList argList;
     argList << "foo1" << "foo2";
 
     func1.addArguments( argList );
-    func2.addArguments( argList );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "good uppercase" ) << func1;
-    QTest::newRow( "good lowercase" ) << func2;
 }
 
 void CMakeAstTest::testAuxSourceDirectoryBadParse()
@@ -497,8 +494,7 @@ void CMakeAstTest::testBuildCommandGoodParse()
 void CMakeAstTest::testBuildCommandGoodParse_data()
 {
     CMakeFunctionDesc func1, func2;
-    func1.name = "build_command";
-    func2.name = func1.name.toUpper();
+    func2.name = func1.name = "build_command";
 
     QStringList argList;
     argList << "mybuildtool" << "my_cool_build";
@@ -558,7 +554,7 @@ void CMakeAstTest::testBuildNameGoodParse_data()
 {
     CMakeFunctionDesc func1, func2;
     func1.name = "build_name";
-    func2.name = func1.name.toUpper();
+    func2.name = func1.name;
 
     QStringList argList;
     argList << "my_cool_build";
@@ -614,8 +610,7 @@ void CMakeAstTest::testCMakeMinimumRequiredGoodParse()
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
-    func1.name = "CMAKE_MINIMUM_REQUIRED";
-    func2.name = func3.name = func4.name = func1.name.toLower();
+    func2.name = func3.name = func4.name = func1.name = "cmake_minimum_required";
     QStringList argList1, argList2, argList3, argList4;
 
     argList1 << "VERSION" << "2.4";
@@ -681,8 +676,7 @@ void CMakeAstTest::testCMakePolicyGoodParse()
 void CMakeAstTest::testCMakePolicyGoodParse_data()
 {
     CMakeFunctionDesc func[4];
-    func[0].name = "CMAKE_POLICY";
-    func[1].name = func[2].name = func[3].name = func[0].name.toLower();
+    func[1].name = func[2].name = func[3].name = func[0].name = "cmake_policy";
     QStringList argList[4];
 
     argList[0] << "VERSION" << "2.4";
@@ -751,8 +745,7 @@ void CMakeAstTest::testConfigureFileGoodParse()
 void CMakeAstTest::testConfigureFileGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4, func5;
-    func1.name = "CONFIGURE_FILE";
-    func2.name = func1.name.toLower();
+    func1.name = func2.name = "configure_file";
     func3.name = func4.name = func5.name = func2.name;
 
     QStringList argList1, argList2, argList3, argList4;
@@ -991,10 +984,7 @@ void CMakeAstTest::testCreateTestSourcelistGoodParse()
 void CMakeAstTest::testCreateTestSourcelistGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
-    func1.name = "create_test_sourcelist";
-    func2.name = func1.name;
-    func3.name = func2.name.toUpper();
-    func4.name = func3.name;
+    func4.name = func3.name = func2.name = func1.name = "create_test_sourcelist";
 
     QStringList argList1, argList2, argList3, argList4;
     argList1 << "$(TESTDRIVER_SRCS)" << "test_driver" << "$(TEST_SRCS)";
@@ -1031,7 +1021,7 @@ void CMakeAstTest::testCreateTestSourcelistBadParse_data()
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "create_test_sourcelists";
     func2.name = "create_test_sourcelist";
-    func3.name = func2.name.toUpper();
+    func3.name = func2.name;
     func4.name = func3.name;
 
     QStringList argList1, argList2, argList3, argList4;
@@ -1074,7 +1064,7 @@ void CMakeAstTest::testEnableLanguageGoodParse()
 void CMakeAstTest::testEnableLanguageGoodParse_data()
 {
     CMakeFunctionDesc func1, func2;
-    func1.name = "ENABLE_LANGUAGE";
+    func1.name = "enable_language";
     func2.name = "enable_language";
 
     QStringList argList1, argList2;
@@ -1192,7 +1182,7 @@ void CMakeAstTest::testExecProgramGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "exec_program";
-    func2.name = func1.name.toUpper();
+    func2.name = func1.name;
     func3.name = func4.name = func1.name;
 
     QStringList argList1, argList2, argList3, argList4;
@@ -1437,7 +1427,7 @@ void CMakeAstTest::testFileGoodParse_data()
     QStringList args[NUM_TESTDATA];
 
     for ( int i = 0; i < NUM_TESTDATA; i++ )
-        funcs[i].name = "FILE";
+        funcs[i].name = "file";
 
     //write file command
     args[0] << "WRITE" << "somefile.cpp" << "\"the things to write\"";
@@ -2177,8 +2167,7 @@ void CMakeAstTest::testIncludeGoodParse()
 void CMakeAstTest::testIncludeGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4, func5;
-    func1.name = "INCLUDE";
-    func2.name = func3.name = func4.name = func5.name = func1.name.toLower();
+    func2.name = func3.name = func4.name = func5.name = func1.name = "include";
 
     QStringList argList1, argList2, argList3, argList4;
     argList1 << "SomeFile";
@@ -2263,6 +2252,8 @@ void CMakeAstTest::testIncludeDirectoriesGoodParse_data()
 
 void CMakeAstTest::testIncludeDirectoriesBadParse()
 {
+    TDD_TODO;
+    
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("include_directories");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -2273,10 +2264,6 @@ void CMakeAstTest::testIncludeDirectoriesBadParse_data()
 {
     QTest::addColumn<CMakeFunctionDesc>("function");
     
-    CMakeFunctionDesc l;
-    l.name = "include_directories";
-    l.addArguments(QStringList() << "AFTER" << "BEFORE" << "lol");
-    QTest::newRow("can't have after and before in include_directories") << l;
 }
 
 
@@ -2684,8 +2671,7 @@ void CMakeAstTest::testMacroGoodParse()
 void CMakeAstTest::testMacroGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3;
-    func1.name = "MACRO";
-    func2.name = func3.name = func1.name.toLower();
+    func2.name = func3.name = func1.name = "macro";
 
     QStringList argList1, argList2;
     argList1 << "MY_NEATO_MACRO";
@@ -2737,8 +2723,7 @@ void CMakeAstTest::testFunctionGoodParse()
 void CMakeAstTest::testFunctionGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3;
-    func1.name = "FUNCTION";
-    func2.name = func3.name = func1.name.toLower();
+    func2.name = func3.name = func1.name = "function";
 
     QStringList argList1, argList2;
     argList1 << "MY_NEATO_MACRO";
@@ -3076,8 +3061,7 @@ void CMakeAstTest::testProjectGoodParse()
 void CMakeAstTest::testProjectGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4, func5, func6;
-    func1.name = "PROJECT";
-    func2.name = func3.name = func4.name = func5.name = func6.name = func1.name.toLower();
+    func2.name = func3.name = func4.name = func5.name = func6.name = func1.name = "project";
 
     QStringList argList1, argList2, argList3, argList4, argList5;
     argList1 << "myproject";
@@ -3360,8 +3344,7 @@ void CMakeAstTest::testSetGoodParse()
 void CMakeAstTest::testSetGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4, func5;
-    func1.name = "SET";
-    func2.name = func3.name = func4.name = func5.name = func1.name.toLower();
+    func2.name = func3.name = func4.name = func5.name = func1.name = "set";
 
     QStringList argList1, argList2, argList3, argList4, argList5;
     argList1 << "MYVAR";
@@ -3835,8 +3818,8 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse()
 void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
 {
     CMakeFunctionDesc func1, func2, func3;
-    func1.name = "TARGET_LINK_LIBRARIES";
-    func2.name = func3.name = func1.name.toLower();
+    func1.name = "target_link_libraries";
+    func2.name = func3.name = func1.name;
 
     QStringList argList1, argList2, argList3;
 
@@ -3892,7 +3875,7 @@ void CMakeAstTest::testTargetLinkLibrariesMembers()
 {
     CMakeAst* ast = AstFactory::self()->createAst("target_link_libraries");
     CMakeFunctionDesc func;
-    func.name = "TARGET_LINK_LIBRARIES";
+    func.name = "target_link_libraries";
     QStringList argList;
     argList << "mytarget" << "mylibrary";
     func.addArguments(argList);

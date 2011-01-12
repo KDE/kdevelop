@@ -683,6 +683,10 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
             topctx->deleteChildContextsRecursively();
             topctx->deleteUses();
         }
+        
+        foreach(DUContext* importer, topctx->importers())
+            importer->removeImportedParentContext(topctx);
+        topctx->clearImportedParentContexts();
     }
     else
     {
@@ -699,10 +703,6 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     ///      for example a standard import like FindKDE4.cmake, because it creates a cross-dependency
     ///      between the topducontext's of independent projects, like for example kdebase and kdevplatform
     ///@todo Solve that by creating unique versions of all used top-context on a per-project basis using ParsingEnvironmentFile for disambiguation.
-    
-    foreach(DUContext* importer, topctx->importers())
-        importer->removeImportedParentContext(topctx);
-    topctx->clearImportedParentContexts();
     
     topctx->addImportedParentContext(aux);
 
@@ -1002,8 +1002,9 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         return;
     QString id=def.arguments.first().value.toLower();
     
+    Identifier identifier(id);
     DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
+    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
     int idx;
@@ -1016,7 +1017,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     else
     {
         Declaration *d = new Declaration(sr, m_topctx);
-        d->setIdentifier( Identifier(id) );
+        d->setIdentifier( identifier );
 
         FunctionType* func=new FunctionType();
         foreach(const QString& arg, args)
@@ -1198,7 +1199,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     QList<int> ini;
     for(; it!=itEnd; ++it, lines++)
     {
-        QString funcName=it->name.toLower();
+        QString funcName=it->name;
 //         kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
         if(funcName=="if")
         {
@@ -1408,66 +1409,59 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "FileAst: read ";
         }
             break;
-        case FileAst::Glob: {
-            QStringList matches;
-            QString currentPath=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-            QString relativeto=file->path();
-            if(!relativeto.isEmpty()) {
-                if(KUrl::isRelativeUrl(relativeto))
-                    currentPath += '/'+relativeto;
-                else
-                    currentPath = relativeto;
-            }
-            
-            foreach(const QString& glob, file->globbingExpressions())
-            {
-                QStringList globs;
-                QString current(currentPath);
-                int lastSlash = glob.lastIndexOf('/');
-                
-                if(lastSlash>=0) {
-                    QString path = glob.left(lastSlash);
-                    if(KUrl::isRelativeUrl(glob))
-                        current+='/'+path;
-                    else
-                        current = path;
-                    
-                    globs.append(glob.right(glob.size()-lastSlash-1));
-                } else {
-                    globs.append(glob);
-                }
-                
-                QDir d(current);
-                QStringList matching=d.entryList(globs, QDir::NoDotAndDotDot | QDir::AllEntries);
-                
-                foreach(const QString& match, matching)
-                    matches += d.absoluteFilePath(match);
-            }
-            m_vars->insert(file->variable(), matches);
-            kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
-        } break;
+        case FileAst::Glob:
         case FileAst::GlobRecurse: {
-            QString current;
-            if(file->path().isEmpty())
-                current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-            else
-                current=file->path();
-            QQueue<QString> candidates;
-            candidates.enqueue(current);
-            QStringList directories;
-            while(!candidates.isEmpty())
+            QStringList matches;
+            foreach(QString expr, file->globbingExpressions())
             {
-                QString dir=candidates.dequeue();
-                directories.append(dir);
-                QDir direc(dir);
-                candidates += direc.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
+                if (expr.isEmpty())
+                    continue;
+                QString pathPrefix;
+                if (QDir::isRelativePath(expr))
+                    pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+                // pathPrefix must start from '/' if not empty when calling traverseRecursiveGlob()
+                if (expr[0] == '/')
+                {
+                    //moving slash to pathPrefix (it should be empty before)
+                    expr = expr.mid(1);
+                    pathPrefix += '/';
+                }
+                else
+                {
+                    if (!pathPrefix.isEmpty())
+                        pathPrefix += '/';
+                }
+                if (file->type() == FileAst::Glob)
+                {
+                    matches.append(traverseGlob(pathPrefix, expr));
+                }
+                else
+                {
+                    matches.append(traverseGlob(pathPrefix, expr, true, file->isFollowingSymlinks()));
+                }
             }
-
-            QDir d(current);
-            QStringList matches=d.entryList(file->globbingExpressions(), QDir::NoDotAndDotDot | QDir::AllEntries);
+            if (!file->path().isEmpty())
+            {
+                // RELATIVE was specified, so we need to make all paths relative to file->path()
+                QDir relative(file->path());
+                QStringList::iterator endIt = matches.end();
+                for(QStringList::iterator it = matches.begin(); it != endIt; ++it)
+                {
+                    *it = relative.relativeFilePath(*it);
+                }
+            }
             m_vars->insert(file->variable(), matches);
-            kDebug(9042) << "file glob_recurse" << file->path() << file->globbingExpressions() << matches;
-        }   break;
+            QString kind = file->type() == FileAst::Glob ? "file glob" : "file glob_recurse";
+            QString followSymlinksMsg;
+            QString relativeMsg;
+            if (file->type() == FileAst::GlobRecurse && file->isFollowingSymlinks())
+                followSymlinksMsg = " FOLLOW_SYMLINKS: true";
+            if (!file->path().isEmpty())
+                relativeMsg = " RELATIVE " + file->path();
+            kDebug(9042) << kind << relativeMsg << followSymlinksMsg << " " << file->globbingExpressions()
+                << ": " << matches;
+        }
+            break;
         case FileAst::Remove:
         case FileAst::RemoveRecurse:
             kDebug(9042) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
@@ -1693,11 +1687,11 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
             for(; depth>0 && it!=itEnd; ++it, lines++)
             {
-                if(it->name.toLower()=="foreach")
+                if(it->name=="foreach")
                 {
                     depth++;
                 }
-                else if(it->name.toLower()=="endforeach")
+                else if(it->name=="endforeach")
                 {
                     depth--;
                 }
@@ -1715,11 +1709,11 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
             for(; depth>0 && it!=itEnd; ++it, lines++)
             {
-                if(it->name.toLower()=="foreach")
+                if(it->name=="foreach")
                 {
                     depth++;
                 }
-                else if(it->name.toLower()=="endforeach")
+                else if(it->name=="endforeach")
                 {
                     depth--;
                 }
@@ -2062,7 +2056,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     int lines=0, inside=1;
     for(; inside>0 && it!=itEnd; ++it, lines++)
     {
-        QString funcName=it->name.toLower();
+        QString funcName=it->name;
         if(funcName=="while")
             inside++;
         else if(funcName=="endwhile")
@@ -2095,13 +2089,13 @@ enum RecursivityType { No, Yes, End, Break };
 
 RecursivityType recursivity(const QString& functionName)
 {
-    QString upperFunctioName=functionName.toUpper();
-    if(upperFunctioName=="IF" || upperFunctioName=="WHILE" ||
-       upperFunctioName=="FOREACH" || upperFunctioName=="MACRO")
+    QString upperFunctioName=functionName;
+    if(upperFunctioName=="if" || upperFunctioName=="while" ||
+       upperFunctioName=="foreach" || upperFunctioName=="macro")
         return Yes;
-    else if(upperFunctioName=="ELSE" || upperFunctioName=="ELSEIF" || upperFunctioName.startsWith("END"))
+    else if(upperFunctioName=="else" || upperFunctioName=="elseif" || upperFunctioName.startsWith("end"))
         return End;
-    else if(upperFunctioName=="BREAK")
+    else if(upperFunctioName=="break")
         return Break;
     return No;
 }
@@ -2216,11 +2210,13 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
+        Identifier id(arg.value);
+        
+        QList<Declaration*> decls=m_topctx->findDeclarations(id);
         if(decls.isEmpty())
         {
             Declaration *d = new Declaration(arg.range(), m_topctx);
-            d->setIdentifier( Identifier(arg.value) );
+            d->setIdentifier(id);
         }
         else
         {
@@ -2310,3 +2306,90 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     return ret;
 }
 
+QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath,
+    const QString& expression, bool recursive, bool followSymlinks)
+{
+    kDebug(9042) << "Starting from (" << startPath << ", " << expression << ", " << followSymlinks << ")";
+    QString expr = expression;
+    int firstSlash = expr.indexOf('/');
+    int slashShift = 0;
+    while (firstSlash == slashShift) //skip trailing slashes
+    {
+        slashShift++;
+        firstSlash = expr.indexOf('/', slashShift);
+    }
+    expr = expr.mid(slashShift);
+    if (firstSlash == -1)
+    {
+        //We're in place. Lets match files from startPath dir.
+        kDebug(9042) << "Matching files in " << startPath << " with glob " << expr;
+        QStringList nameFilters;
+        nameFilters << expr;
+        QStringList dirsToSearch;
+        if (recursive)
+        {
+            QDir::Filters dirFilters = QDir::NoDotAndDotDot | QDir::Dirs;
+            bool CMP0009IsSetToNew = true; // TODO: Obey CMP0009 policy when policies are implemented.
+            if (!(CMP0009IsSetToNew && followSymlinks))
+                dirFilters |= QDir::NoSymLinks;
+            QQueue<QString> dirsToExpand;
+            dirsToExpand.enqueue(startPath);
+            while (!dirsToExpand.empty())
+            {
+                QString dir = dirsToExpand.dequeue();
+                kDebug(9042) << "Enqueueing " << dir;
+                dirsToSearch << dir;
+                QDir d(dir);
+                QStringList dirNames = d.entryList(dirFilters);
+                foreach(QString dirName, dirNames)
+                {
+                    dirsToExpand << d.filePath(dirName);
+                }
+            }
+        }
+        else
+            dirsToSearch << startPath;
+        QStringList filePaths;
+        foreach (QString dirToSearch, dirsToSearch)
+        {
+            QDir dir(dirToSearch);
+            QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
+            foreach (QString fileName, fileNames)
+            {
+                filePaths << dir.filePath(fileName);
+            }
+        }
+        return filePaths;
+    }
+    firstSlash -= slashShift;
+    QString dirGlob = expr.left(firstSlash);
+    QString rightExpression = expr.mid(firstSlash + 1);
+    //Now we must find match for a directory specified in dirGlob
+    QStringList matchedDirs;
+    if (dirGlob.contains('*') || dirGlob.contains('?') || dirGlob.contains('['))
+    {
+        kDebug(9042) << "Got a dir glob " << dirGlob;
+        if (startPath.isEmpty())
+            return QStringList();
+        //it's really a glob, not just dir name
+        QStringList nameFilters;
+        nameFilters << dirGlob;
+        matchedDirs = QDir(startPath).entryList(nameFilters, QDir::NoDotAndDotDot | QDir::Dirs);
+    }
+    else
+    {
+        //just a directory name. Add it as a match.
+        kDebug(9042) << "Got a simple folder " << dirGlob;
+        matchedDirs << dirGlob;
+    }
+    QStringList matches;
+    QString path = startPath;
+    if (!path.isEmpty() && !path.endsWith('/'))
+        path += '/';
+    foreach(QString dirName, matchedDirs)
+    {
+        kDebug(9042) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
+        matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));
+    }
+    return matches;
+}

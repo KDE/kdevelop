@@ -1,6 +1,6 @@
 /*  This file is part of KDevelop
 
-    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2010 Milian Wolff <mail@milianw.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,39 +18,19 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef QTHELPCONFIG_H
-#define QTHELPCONFIG_H
+#ifndef QTHELP_CONFIG_SHARED_H
+#define QTHELP_CONFIG_SHARED_H
 
-#include <KCModule>
+#include <QtCore/QStringList>
 
-namespace Ui
-{
-    class QtHelpConfigUI;
-}
+void qtHelpReadConfig(QStringList& iconList,
+                      QStringList& nameList,
+                      QStringList& pathList,
+                      bool& loadQtDoc);
 
-class QtHelpConfig : public KCModule
-{
-public:
-    Q_OBJECT
+void qtHelpWriteConfig(const QStringList& iconList,
+                       const QStringList& nameList,
+                       const QStringList& pathList,
+                       const bool loadQtDoc);
 
-    public:
-      explicit QtHelpConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
-      virtual ~QtHelpConfig();
-
-      virtual void save();
-      virtual void load();
-      virtual void defaults();
-
-    private slots:
-      void add();
-      void remove();
-      void up();
-      void down();
-      void modify();
-      void selectionChanged();
-    private:
-      bool checkQtHelpFile(bool modify);
-      Ui::QtHelpConfigUI* m_configWidget;
-};
-
-#endif // QTHELPCONFIG_H
+#endif // QTHELP_CONFIG_SHARED_H

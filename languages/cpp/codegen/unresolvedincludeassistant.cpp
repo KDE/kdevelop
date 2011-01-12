@@ -37,10 +37,10 @@ Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(KDevelop::IndexedStr
 
 void Cpp::AddCustomIncludePathAction::execute() {
   Ui::CustomIncludePaths o;
-  QPointer<KDialog> dialog = new KDialog(KDevelop::ICore::self()->uiController()->activeMainWindow());
-  dialog->setInitialSize(QSize(600, 600));
-  dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-  o.setupUi(dialog->mainWidget());
+  KDialog dialog(KDevelop::ICore::self()->uiController()->activeMainWindow());
+  dialog.setInitialSize(QSize(600, 600));
+  dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+  o.setupUi(dialog.mainWidget());
   
   KUrl current = m_url.toUrl().upUrl();
   
@@ -68,8 +68,8 @@ void Cpp::AddCustomIncludePathAction::execute() {
       o.customIncludePaths->appendPlainText("\n");
   }
 
-  dialog->setWindowTitle(i18n("Setup Custom Include Paths"));
-  int result = dialog->exec();
+  dialog.setWindowTitle(i18n("Setup Custom Include Paths"));
+  int result = dialog.exec();
   if(result == QDialog::Accepted) {
     kDebug() << "storing settings";
     if((o.storageDirectory->text().isEmpty() || 
@@ -99,7 +99,6 @@ void Cpp::AddCustomIncludePathAction::execute() {
   }
   
   CppTools::IncludePathResolver::clearCache();
-  delete dialog;
   
   //Trigger an update, so the user sees the progress
   KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(m_url.toUrl());

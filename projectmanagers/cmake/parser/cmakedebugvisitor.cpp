@@ -96,7 +96,7 @@ int CMakeAstDebugVisitor::visit( const MessageAst * ast )
 
 int CMakeAstDebugVisitor::visit( const FileAst * ast )
 {
-    WRITEOUT << "FILE: " << "(type,variable,directory,path,globbingExpressions,message,directories) = (" << ast->type() << "," << ast->variable() << "," << ast->directory() << "," << ast->path() << "," << ast->globbingExpressions() << "," << ast->message() << "," << ast->directories() << ")";
+    WRITEOUT << "FILE: " << "(type,variable,directory,path,globbingExpressions,message,directories,followSymlinks) = (" << ast->type() << "," << ast->variable() << "," << ast->directory() << "," << ast->path() << "," << ast->globbingExpressions() << "," << ast->message() << "," << ast->directories() << "," << ast->isFollowingSymlinks() << ")";
     return 1;
 }
 

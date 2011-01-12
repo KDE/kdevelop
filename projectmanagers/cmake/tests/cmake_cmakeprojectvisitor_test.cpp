@@ -32,6 +32,8 @@
 #include <tests/autotestshell.h>
 #include <astfactory.h>
 #include <cmakeprojectdata.h>
+#include <KTempDir>
+#include <KTemporaryFile>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -532,6 +534,252 @@ void CMakeProjectVisitorTest::testFinder()
     {
         KDevelop::DUChainWriteLocker lock(DUChain::lock());
         DUChain::self()->removeDocumentChain(fakeContext);
+    }
+}
+
+void CMakeProjectVisitorTest::testGlobs_data()
+{
+    // This test case covers some usages of file(GLOB ...) and file(GLOB_RECURSE ...) in the way
+    // they're currently supported in KDevelop. The following things are not implemented yet:
+    // 1. file(GLOB_RECURSE ...) behavior regarding symlinks must depend on the cmake policy CMP0009,
+    // but policies are not implemented yet. Current implementation works according to cmake 2.8 with CMP0009 set to NEW.
+    // 2. CMP0009 is automatically set to OLD unless cmake_minimum_required(2.6.3) and higher is specified.
+    // Because cmake_minimum_required is not implemented yet, it also doesn't affect GLOB_RECURSE behavior.
+    //
+    // This test covers implemented parts only.
+
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QStringList>("files");
+    QTest::addColumn<QList<StringPair> >("symlinks");
+    QTest::addColumn<QStringList>("expectedFiles");
+
+    {
+        QStringList files;
+        files << "subdir/a.cpp";
+        files << "subdir/b.cpp";
+        files << "subdir/aa.c";
+        files << "subdir/bb.cpp_";
+        files << "subdir/1/c.cpp";
+        files << "subdir/1/d.cpp";
+        files << "2/e.cpp";
+        files << "2/f.cpp";
+
+        QList<StringPair> symlinks;
+        symlinks << StringPair("2", "subdir/2");
+
+        QStringList expectedResults;
+        expectedResults << "subdir/a.cpp";
+        expectedResults << "subdir/b.cpp";
+
+        QTest::newRow("glob_simple") <<
+                "project(simpletest)\n"
+                "cmake_minimum_required(VERSION 2.8)\n"
+                "file(GLOB RESULT \"subdir/*.cpp\")"
+                "message(STATUS \"RESULT:\" ${RESULT})"
+                << files << symlinks << expectedResults;
+    }
+
+    {
+        QStringList files;
+        files << "subdir/a.cpp";
+        files << "subdir/b.cpp";
+        files << "subdir/1/c.cpp";
+        files << "subdir/1/d.cpp";
+        files << "subdir1/e.cpp";
+        files << "subdir1/f.cpp";
+        files << "subdir1/2/g.cpp";
+        files << "subdir1/2/h.cpp";
+        files << "1/j.cpp";
+        files << "1/k.cpp";
+        files << "2/l.cpp";
+        files << "2/n.cpp";
+
+        QList<StringPair> symlinks;
+        symlinks << StringPair("1", "subdir1/1");
+        symlinks << StringPair("2", "subdir/2");
+
+        QStringList expectedResults;
+        expectedResults << "subdir/a.cpp";
+        expectedResults << "subdir/b.cpp";
+        expectedResults << "subdir1/e.cpp";
+        expectedResults << "subdir1/f.cpp";
+
+        QTest::newRow("glob_advanced_relative") <<
+                "project(simpletest)\n"
+                "cmake_minimum_required(VERSION 2.8)\n"
+                "file(GLOB RESULT RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} \"subd?r*/*.cpp\")"
+                "message(STATUS \"RESULT:\" ${RESULT})"
+                << files << symlinks << expectedResults;
+    }
+
+    {
+        QStringList files;
+        files << "subdir/a.cpp";
+        files << "subdir/b.cpp";
+        files << "subdir/aa.c";
+        files << "subdir/bb.cpp_";
+        files << "subdir/1/c.cpp";
+        files << "subdir/1/d.cpp";
+        files << "subdir1/e.cpp";
+        files << "1/j.cpp";
+        files << "1/k.cpp";
+        files << "2/l.cpp";
+        files << "2/n.cpp";
+
+        QList<StringPair> symlinks;
+        symlinks << StringPair("1", "subdir1/1");
+        symlinks << StringPair("2", "subdir/2");
+
+        QStringList expectedResults;
+        expectedResults << "subdir/a.cpp";
+        expectedResults << "subdir/b.cpp";
+        expectedResults << "subdir/1/c.cpp";
+        expectedResults << "subdir/1/d.cpp";
+
+        QTest::newRow("glob_recurse_1") <<
+                "project(simpletest)\n"
+                "cmake_minimum_required(VERSION 2.8)\n"
+                "file(GLOB_RECURSE RESULT \"subdir/*.cpp\")"
+                "message(STATUS \"RESULT:\" ${RESULT})"
+                << files << symlinks << expectedResults;
+    }
+
+    {
+        QStringList files;
+        files << "subdir/a.cpp";
+        files << "subdir1/e.cpp";
+        files << "subdir1/f.cpp";
+        files << "subdir1/2/g.cpp";
+        files << "subdir1/2/h.cpp";
+        files << "1/j.cpp";
+        files << "1/k.cpp";
+        files << "2/l.cpp";
+        files << "2/n.cpp";
+
+        QList<StringPair> symlinks;
+        symlinks << StringPair("1", "subdir1/1");
+        symlinks << StringPair("2", "subdir/2");
+
+        QStringList expectedResults;
+        expectedResults << "subdir1/e.cpp";
+        expectedResults << "subdir1/f.cpp";
+        expectedResults << "subdir1/2/g.cpp";
+        expectedResults << "subdir1/2/h.cpp";
+        expectedResults << "subdir1/1/j.cpp";
+        expectedResults << "subdir1/1/k.cpp";
+
+        QTest::newRow("glob_recurse_2_relative") <<
+                "project(simpletest)\n"
+                "cmake_minimum_required(VERSION 2.8)\n"
+                "file(GLOB_RECURSE RESULT FOLLOW_SYMLINKS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} \"subdir1/*.cpp\")"
+                "message(STATUS \"RESULT:\" ${RESULT})"
+                << files << symlinks << expectedResults;
+    }
+}
+
+void CMakeProjectVisitorTest::testGlobs()
+{
+    QFETCH(QString, input);
+    QFETCH(QStringList, files);
+    QFETCH(QList<StringPair>, symlinks);
+    QFETCH(QStringList, expectedFiles);
+
+    KTempDir dir;
+    foreach(QString relativeFilePath, files)
+    {
+        QString fileName = dir.name() + relativeFilePath;
+        QFile file(fileName);
+        QDir fileDir(fileName.left(fileName.lastIndexOf('/')));
+        if (!fileDir.exists())
+            QVERIFY2(fileDir.mkpath(fileDir.path()),
+                ("Failed to create dir " + fileDir.path()).toLatin1());
+        QVERIFY2(file.open(QIODevice::WriteOnly | QIODevice::Truncate),
+            ("Failed to create file" + fileName).toLatin1());
+        file.close(); //write nothing
+    }
+    foreach(StringPair pair, symlinks)
+    {
+        QFile file(dir.name() + pair.first);
+        QVERIFY2(file.exists(),
+            ("File doesn't exist: " + file.fileName()).toLatin1());
+        QVERIFY2(file.link(dir.name() + pair.second),
+            ("Failed to create a link: " + dir.name() + pair.second).toLatin1());
+    }
+
+    KDevelop::ReferencedTopDUContext fakeContext=
+        new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
+    DUChain::self()->addDocumentChain(fakeContext);
+
+    KTemporaryFile file;
+    QVERIFY(file.open());
+
+    QTextStream out(&file);
+    out << input;
+    file.close();
+    CMakeFileContent code = CMakeListsParser::readCMakeFile(file.fileName());
+    QVERIFY(code.count() != 0);
+
+    MacroMap mm;
+    VariableMap vm;
+    CacheValues val;
+
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(dir.name()));
+
+    CMakeProjectVisitor v(file.fileName(), fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues( &val );
+    v.walk(code, 0);
+
+    VariableMap::const_iterator it = v.variables()->find("RESULT");
+    QVERIFY2(it != v.variables()->end(), "RESULT variable doesn't exist");
+    QStringList filesFound = it.value();
+    filesFound.sort();
+    QDir baseDir(dir.name());
+    for (int i = 0; i < filesFound.size(); i++)
+    {
+        QString file = filesFound[i];
+        if (!QDir::isRelativePath(file))
+            filesFound[i] = baseDir.relativeFilePath(file);
+    }
+
+    expectedFiles.sort();
+
+    int i = 0;
+    int iCount = filesFound.size();
+    int iNormal = 0;
+    int iNormalCount = expectedFiles.size();
+    while (i != iCount && iNormal != iNormalCount)
+    {
+        int res = filesFound[i].compare(expectedFiles[iNormal]);
+        if (res == 0)
+        {
+            filesFound.removeAt(i);
+            expectedFiles.removeAt(iNormal);
+            iCount--;
+            iNormalCount--;
+        }
+        else if (res > 0)
+        {
+            iNormal++;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    if (!filesFound.empty() || !expectedFiles.empty())
+    {
+        QWARN((QString("During ") + QTest::currentDataTag() + ":").toLatin1());
+        foreach(QString file, filesFound)
+        {
+            QWARN(("This file was found, but it shouldn't: " + file).toLatin1());
+        }
+        foreach(QString file, expectedFiles)
+        {
+            QWARN(("This file wasn't found: " + file).toLatin1());
+        }
+        QFAIL("Results are incorrect");
     }
 }
 

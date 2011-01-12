@@ -68,7 +68,7 @@ struct CMakeFunctionArgument
     bool quoted;
     quint32 line;
     quint32 column;
-    static QMap<QChar, QChar> scapings;
+    static const QMap<QChar, QChar> scapings;
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 

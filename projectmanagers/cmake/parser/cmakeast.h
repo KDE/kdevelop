@@ -252,6 +252,7 @@ CMAKE_ADD_AST_MEMBER( QString, variable )
 CMAKE_ADD_AST_MEMBER( QString, directory )
 CMAKE_ADD_AST_MEMBER( QString, message )
 CMAKE_ADD_AST_MEMBER( QStringList, globbingExpressions )
+CMAKE_ADD_AST_MEMBER( bool, isFollowingSymlinks )
 CMAKE_ADD_AST_MEMBER( QStringList, directories )
 
 CMAKE_ADD_AST_MEMBER( KUrl, url )
