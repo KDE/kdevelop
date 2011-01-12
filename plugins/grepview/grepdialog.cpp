@@ -314,8 +314,14 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),
             toolView, SLOT(showErrorMessage(QString)));
+    //the GrepOutputModel gets the 'showMessage' signal to store it and forward
+    //it to toolView
     connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            toolView, SLOT(showMessage(KDevelop::IStatus*, QString)));
+            toolView->model(), SLOT(showMessageSlot(KDevelop::IStatus*, QString)));    
+    connect(toolView->model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)),
+            toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    
+    
     connect(toolView, SIGNAL(outputViewIsClosed()),
             job, SLOT(kill()));
     
