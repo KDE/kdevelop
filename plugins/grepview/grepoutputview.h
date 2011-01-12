@@ -46,9 +46,8 @@ public:
     GrepOutputModel* model();
     
     /**
-     * This causes the creation of a new model, the old one is deleted.
-     * This is necessary because the previous job, if any, is not killed instantly and
-     * sometimes continues to feed the model.
+     * This causes the creation of a new model, the old one is kept in model history.
+     * Oldest models are deleted if needed.
      * @return pointer to the new model
      */
     GrepOutputModel* renewModel(QString name);
