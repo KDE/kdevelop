@@ -137,9 +137,16 @@ GrepOutputModel* GrepOutputView::model()
 
 void GrepOutputView::changeModel(int index)
 {
+    disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
+               this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    
     QVariant var = modelSelector->itemData(index);
     GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
     resultsTreeView->setModel(resultModel);
+    
+    connect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
+            this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    model()->showMessageEmit();
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
