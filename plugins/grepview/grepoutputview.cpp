@@ -166,6 +166,10 @@ void GrepOutputView::changeModel(int index)
     applyButton->setEnabled(model()->hasResults() && 
                             model()->getRootItem() && 
                             model()->getRootItem()->checkState() != Qt::Unchecked);
+    if(model()->hasResults())
+    {
+        expandRootElement(QModelIndex());
+    }
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
