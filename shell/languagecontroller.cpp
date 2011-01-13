@@ -259,7 +259,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     }
 
     if(!extension.isEmpty())
+    {
         languages = d->fileExtensionCache.value(extension);
+        if(languages.isEmpty() && d->fileExtensionCache.contains(extension))
+            return languages; // Nothing found, but was in the cache
+    }
 
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes

@@ -1351,6 +1351,7 @@ void PatchReviewPlugin::cancelReview()
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
+      setUniqueWorkingSet(); // Make the working-set unique, so that we don't affect other areas
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1385,6 +1386,35 @@ void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMod
   QMetaObject::invokeMethod(this, "updateReview", Qt::QueuedConnection);
 }
 
+void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique()
+{
+  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  if (w->area()->objectName() != "review")
+    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
+  setUniqueWorkingSet();
+}
+
+bool PatchReviewPlugin::isWorkingSetUnique() const
+{
+  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  foreach(Sublime::Area* area, w->areas())
+    if(area != w->area() && area->workingSet() == w->area()->workingSet())
+      return false;
+  return true;
+}
+
+void PatchReviewPlugin::setUniqueWorkingSet()
+{
+  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  
+  if(!w->area()->workingSet().startsWith("review"))
+    w->area()->setWorkingSet("review");
+  
+  while(!isWorkingSetUnique())
+    w->area()->setWorkingSet(QString("review_%1").arg(rand() % 10000));
+}
+
 void PatchReviewPlugin::updateReview()
 {
   if(!m_patch)
@@ -1393,12 +1423,7 @@ void PatchReviewPlugin::updateReview()
   m_updateKompareTimer->stop();
   updateKompareModel();
 
-  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-  if (w->area()->objectName() != "review")
-    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
-
-  if(!w->area()->workingSet().startsWith("review"))
-    w->area()->setWorkingSet("review");
+  switchAreaAndMakeWorkingSetUique();
   
   if(!m_modelList.get())
     return;
@@ -1455,6 +1480,7 @@ void PatchReviewPlugin::updateReview()
     }
   }
 
+  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
   // Close views for documents that were loaded from the working set, but are not in the patch
   QList<IDocument*> documentsList = documents.values();
   foreach(Sublime::View* view, w->area()->views()) {
