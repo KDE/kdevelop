@@ -198,6 +198,14 @@ private Q_SLOTS:
     void exporterSelected(QAction* action);
     
 private:
+    // Switches to the review area, 
+    // makes sure that the working set active in the current area starts with "review" and
+    // is not active in any other area. Creates new working sets if required.
+    void switchAreaAndMakeWorkingSetUique();
+    // Returns whether the current working set is active only in this area
+    bool isWorkingSetUnique() const;
+    // Makes sure that this working set is active only in this area, and that its name starts with "review".
+    void setUniqueWorkingSet();
   
     QList<KDevelop::IPatchSource::Ptr> m_knownPatches;
 
