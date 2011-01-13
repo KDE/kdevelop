@@ -88,7 +88,6 @@ private:
     QMap<int, ToolViewData*> toolviews;
     QList<int> ids;
     QMap<KDevelop::IOutputView::StandardToolView,int> standardViews;
-    friend class StandardOutputViewViewFactory;
 };
 
 #endif // STANDARDOUTPUTVIEW_H

@@ -95,7 +95,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)), this, SLOT(removeSublimeView(Sublime::View*)));
 
 }
-
+    
 void StandardOutputView::removeSublimeView( Sublime::View* v )
 {
     foreach( ToolViewData* d, toolviews )

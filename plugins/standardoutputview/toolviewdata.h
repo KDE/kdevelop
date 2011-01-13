@@ -48,7 +48,6 @@ public:
     QAbstractItemModel* model;
     bool ownsModel;
     ToolViewData* toolView;
-    KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     int id;
     void setModel( QAbstractItemModel* model, bool takeOwnership);
@@ -73,6 +72,7 @@ public:
     QString title;
     KIcon icon;
     int toolViewId;
+    KDevelop::IOutputView::Behaviours behaviour;
 signals:
     void outputAdded( int );
 };

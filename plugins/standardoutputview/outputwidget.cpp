@@ -77,13 +77,16 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
-    addAction(activateOnSelect);
-    activateOnSelect->setChecked( true );
-    focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
-    addAction(focusOnSelect);
-    focusOnSelect->setChecked( false );
-
+    if( tvdata->behaviour & KDevelop::IOutputView::ShowItemsButton)
+    {
+        activateOnSelect = new KToggleAction( KIcon("go-previous"), i18n("Select activated Item"), this );
+        addAction(activateOnSelect);
+        activateOnSelect->setChecked( true );
+        focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
+        addAction(focusOnSelect);
+        focusOnSelect->setChecked( false );
+    }
+    
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     addAction(separator);
@@ -156,7 +159,7 @@ void OutputWidget::changeModel( int id )
 
         disconnect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), this,
                     SLOT(rowsInserted(const QModelIndex&, int, int)) );
-        if( od->behaviour & KDevelop::IOutputView::AutoScroll )
+        if( data->behaviour & KDevelop::IOutputView::AutoScroll )
         {
             connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                      SLOT(rowsInserted(const QModelIndex&, int, int)) );
@@ -211,7 +214,7 @@ void OutputWidget::closeActiveView()
         if( views.value(id) == widget )
         {
             OutputData* od = data->outputdata.value(id);
-            if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
+            if( data->behaviour & KDevelop::IOutputView::AllowUserClose )
             {
                 removeOutput( id );
             }

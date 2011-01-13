@@ -43,7 +43,8 @@ public:
     {
         AllowUserClose = 0x1 /**< allow the user to close the view */,
         AlwaysShowView = 0x2 /**< always show the view */,
-        AutoScroll     = 0x4 /**< automatically scroll the view */
+        AutoScroll     = 0x4 /**< automatically scroll the view */,
+        ShowItemsButton= 0x8
     };
     Q_DECLARE_FLAGS(Behaviours, Behaviour)
 

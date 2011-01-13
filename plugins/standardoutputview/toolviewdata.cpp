@@ -49,6 +49,8 @@ void OutputData::setDelegate( QAbstractItemDelegate* del, bool takeOwnership )
 ToolViewData::ToolViewData( QObject* parent )
     : QObject( parent ), plugin(0), toolViewId(-1)
 {
+    showItemsButtons = false;
+    behaviour = 0x0;
 }
 
 ToolViewData::~ToolViewData()
@@ -58,10 +60,10 @@ ToolViewData::~ToolViewData()
 OutputData* ToolViewData::addOutput( int id, const QString& title,
                                      KDevelop::IOutputView::Behaviours behave )
 {
+    behaviour = behave;
     OutputData* d = new OutputData( this );
     d->id = id;
     d->title = title;
-    d->behaviour = behave;
     d->toolView = this;
     outputdata.insert( id, d );
     emit outputAdded( id );
