@@ -443,7 +443,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         QList<pp_actual> actuals;
         ++input; // skip '('
         
-        RETURN_IF_INPUT_BROKEN
+        if(input.atEnd())
+        {
+          // If the input has ended too early, seek back, and flush the input into the output
+          input.seek(openingPosition);
+          input.setInputPosition(openingPositionCursor);
+          while(!input.atEnd())
+          {
+            output << input;
+            ++input;
+          }
+          
+          kDebug() << "too early end while expanding" << macro->name.str();
+          return;
+        }
 
         pp_macro_expander expand_actual(m_engine, m_frame);
         skip_actual_parameter(input, *macro, actuals, expand_actual);
@@ -452,7 +465,21 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         {
           ++input; // skip ','
           
-          RETURN_IF_INPUT_BROKEN
+          if(input.atEnd())
+          {
+            // If the input has ended too early, seek back, and flush the input into the output
+            input.seek(openingPosition);
+            input.setInputPosition(openingPositionCursor);
+            while(!input.atEnd())
+            {
+              output << input;
+              ++input;
+            }
+            
+            kDebug() << "too early end while expanding" << macro->name.str();
+            return;
+          }
+          
           skip_actual_parameter(input, *macro, actuals, expand_actual);
         }
 

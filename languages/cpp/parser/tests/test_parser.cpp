@@ -449,6 +449,7 @@ private slots:
     QCOMPARE(preprocess("#if ~1\n#define NUMBER 10\n#else\n#define NUMBER 20\n#endif\nNUMBER").trimmed(), QString("10"));
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO\n(aa, bb)").trimmed(), QString("ab"));
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO(aa,\n bb)").trimmed(), QString("ab"));
+    QCOMPARE(preprocess("#if 0x1\n #define NUMBER 10\n#else\n#define NUMBER 20\n#endif\nNUMBER\n").trimmed(), QString("10"));
   }
 
   void testPreprocessorStringify() {
