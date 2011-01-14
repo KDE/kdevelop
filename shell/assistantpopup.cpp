@@ -18,11 +18,11 @@
 
 #include "assistantpopup.h"
 #include <QVBoxLayout>
-#include <QToolButton>
 #include <QLabel>
 #include <klocalizedstring.h>
 #include <KAction>
 #include <QApplication>
+#include <util/richtexttoolbutton.h>
 
 const int SPACING_FROM_PARENT_BOTTOM = 5;
 
@@ -31,13 +31,20 @@ void AssistantPopup::updateActions() {
     palette.setBrush(QPalette::Background, palette.toolTipBase());
     setPalette(palette);
     m_assistantActions = m_assistant->actions();
+    bool haveTitle = false;
     if (!m_assistant->title().isEmpty()) {
+        haveTitle = true;
         QLabel* title = new QLabel("<b>" + m_assistant->title() + ":<b>");
         title->setTextFormat(Qt::RichText);
         addWidget(title);
     }
+    ///@todo Add some intelligent layouting to make sure the widget doesn't become too wide
     foreach(KDevelop::IAssistantAction::Ptr action, m_assistantActions)
+    {
+        if(haveTitle || action != m_assistantActions.first())
+            addSeparator();
         addWidget(widgetForAction(action));
+    }
     addSeparator();
     addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
     resize(sizeHint());
@@ -51,22 +58,24 @@ AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assist
 }
 
 QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action) {
-    QToolButton* button = new QToolButton;
+    KDevelop::RichTextToolButton* button = new KDevelop::RichTextToolButton;
     KAction* realAction;
     QString buttonText;
     int index = m_assistantActions.indexOf(action);
     if(index == -1) {
         realAction = new KAction(button);
-        buttonText = "&0 - " + i18n("Hide");
+        buttonText = "<u>0</u> - " + i18n("Hide");
     }
     else {
         realAction = action->toKAction();
-        buttonText = QString("&%1 - ").arg(index+1) + action->description();
+        buttonText = QString("<u>%1</u> - ").arg(index+1) + action->description();
     }
     realAction->setParent(button);
     connect(realAction, SIGNAL(triggered(bool)), SLOT(executeHideAction()));
     button->setDefaultAction(realAction);
-    button->setText(buttonText);
+    
+    button->setText(QString("&%1").arg(index+1)); // Let the button care about the shortcut
+    button->setHtml(buttonText);
     return button;
 }
 

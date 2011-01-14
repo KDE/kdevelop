@@ -3,6 +3,8 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
+    richtextpushbutton.cpp
+    richtexttoolbutton.cpp
     kdevstringhandler.cpp
     focusedtreeview.cpp
     processlinemaker.cpp
@@ -38,6 +40,8 @@ install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DE
 ########### install files ###############
 
 install( FILES
+    richtextpushbutton.h
+    richtexttoolbutton.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h
