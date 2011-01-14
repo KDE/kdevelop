@@ -52,8 +52,9 @@ namespace DUChainUtils {
   /** Asks the language-plugins for standard-contexts for the given url, and returns one if available.
     * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain.
     * NOTE: The DUChain needs to be read or write locked when you call this.
+    * @param proxyContext Whether the returned context should be a proxy context. When no proxy-context is found, a normal context is returned.
     */
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url, bool preferProxyContext = false);
   /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
    * Must only be called from the foreground or with the foreground lock held.
    * If the item under the cursor is a use, the declaration is returned. */

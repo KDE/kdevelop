@@ -218,8 +218,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
         }
     }
         
-    ModificationRevisionSet::clearCache();
-
     d->updateFiles();
     
     if(d->activationPolicy == Activate)
@@ -385,7 +383,27 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
 
 void DocumentChangeSetPrivate::updateFiles()
 {
+    ModificationRevisionSet::clearCache();
+    foreach(const IndexedString& file, changes.keys())
+        ModificationRevision::clearModificationCache(file);
+    
     if(updatePolicy != DocumentChangeSet::NoUpdate && ICore::self())
+    {
+        // The active document should be updated first, so that the user sees the results instantly
+        if(ICore::self()->documentController()->activeDocument())
+            ICore::self()->languageController()->backgroundParser()->addDocument(ICore::self()->documentController()->activeDocument()->url());
+        
+        // If there are currently open documents that now need an update, update them too
+        foreach(const IndexedString& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+            DUChainReadLocker lock(DUChain::lock());
+            TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl(), true);
+            if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
+                lock.unlock();
+                ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
+            }
+        }
+        
+        // Eventually update _all_ affected files
         foreach(const IndexedString &file, changes.keys())
         {
                 if(!file.toUrl().isValid()) {
@@ -394,15 +412,8 @@ void DocumentChangeSetPrivate::updateFiles()
                 }
                 
                 ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
-                foreach(const IndexedString& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
-                    DUChainReadLocker lock(DUChain::lock());
-                    TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl());
-                    if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
-                        lock.unlock();
-                        ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
-                    }
-                }
         }
+    }
 }
 
 }
