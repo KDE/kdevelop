@@ -136,7 +136,7 @@ void IncludePathComputer::computeBackground() {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {
               
-              TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)));
+              TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)), true);
               if(context && context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->language() == KDevelop::IndexedString("C++") && !context->parsingEnvironmentFile()->needsUpdate()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
                 Q_ASSERT(envFile);
