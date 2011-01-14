@@ -1,7 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -22,6 +22,7 @@
 
 #include <interfaces/idocumentationcontroller.h>
 #include <QObject>
+#include <KAction>
 
 class DocumentationViewFactory;
 class QAction;
@@ -39,14 +40,14 @@ class DocumentationController : public KDevelop::IDocumentationController
         Q_OBJECT
     public:
         DocumentationController(Core* core);
-        
+
         void initialize();
-        
+
         virtual QList<IDocumentationProvider*> documentationProviders() const;
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
         ContextMenuExtension contextMenuExtension( Context* context );
-        
+
     public slots:
         virtual void changedDocumentationProviders();
     private slots:
@@ -54,7 +55,7 @@ class DocumentationController : public KDevelop::IDocumentationController
     private:
         DocumentationViewFactory* m_factory;
 
-        QAction* m_showDocumentation;
+        KAction* m_showDocumentation;
 };
 
 }
