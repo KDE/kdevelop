@@ -95,7 +95,6 @@ int expressionAt( const QString& _text, int index ) {
       last = T_IDE;
     } else if ( last != T_IDE && ch == ')' ) {
       int count = 0;
-      //int parenStart = index;
       while ( index > 0 ) {
         QChar ch = text[ index ];
         if ( ch == '(' ) {
@@ -109,10 +108,6 @@ int expressionAt( const QString& _text, int index ) {
           break;
         }
       }
-      /*if (index == 0 && count != 0) {
-        index = parenStart + 1;
-        break; //No expression behind unmatched paren
-      }*/
     } else if ( last != T_IDE && ch == '>' && ch2 != "->" ) {
       int count = 0;
       int tempStart = index;
@@ -130,8 +125,9 @@ int expressionAt( const QString& _text, int index ) {
         }
       }
       if (index == 0 && count != 0) {
+        //Didn't find matching '<', so the '>' must have been the operator
         index = tempStart + 1;
-        break; //No expression behind unmatched template bracket (could be '>' operator)
+        break;
       }
     } else if ( ch == ']' ) {
       int count = 0;
