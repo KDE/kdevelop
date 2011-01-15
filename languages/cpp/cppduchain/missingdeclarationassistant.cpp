@@ -31,11 +31,22 @@
 #include "cppduchain.h"
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <QTextDocument>
 
 using namespace Cpp;
 using namespace KDevelop;
 
-class CreateLocalDeclarationAction : public IAssistantAction {
+class MissingDeclarationAction : public IAssistantAction {
+public:
+  // returns a full string representing the resulting declaration, without scope or access specifiers.
+  virtual QString getDeclarationString() const = 0;
+  // returns a full string representing the container of the resulting declaration (only if it is a class/struct)
+  virtual QString getContainerString() const {
+    return QString();
+  }
+};
+
+class CreateLocalDeclarationAction : public MissingDeclarationAction {
     public:
         CreateLocalDeclarationAction(KSharedPtr< Cpp::MissingDeclarationProblem > _problem) : problem(_problem) {
         }
@@ -51,13 +62,16 @@ class CreateLocalDeclarationAction : public IAssistantAction {
           }
         }
         virtual QString description() const {
-          return i18n("local %1", typeString(20));
+          return i18n("<b>local</b> variable");
         }
         virtual QString toolTip() const {
-          return i18n("Create local declaration %1 %2", typeString(20), problem->type->identifier().toString());
+          return i18n("Create local declaration %1", getDeclarationString());
         }
-    private:
-      
+        
+        virtual QString getDeclarationString() const {
+          return typeString() + " " + problem->type->identifier().toString();
+        }
+        
         QString typeString(int maxSize = 10000) const {
           DUChainReadLocker lock(DUChain::lock());
           if(DUContext* searchFrom = problem->type->searchStartContext.data())
@@ -65,6 +79,8 @@ class CreateLocalDeclarationAction : public IAssistantAction {
           else
             return QString();
         }
+        
+    private:
       
         AbstractType::Ptr type() const {
           AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(problem->type->assigned.type.abstractType(), problem->topContext()))->indexed().abstractType();
@@ -76,7 +92,7 @@ class CreateLocalDeclarationAction : public IAssistantAction {
         QString m_description;
 };
 
-class CreateMemberDeclarationAction : public IAssistantAction {
+class CreateMemberDeclarationAction : public MissingDeclarationAction {
     public:
         CreateMemberDeclarationAction(KSharedPtr< Cpp::MissingDeclarationProblem > _problem, Declaration::AccessPolicy access = Declaration::Public) : problem(_problem), m_access(access) {
         }
@@ -114,19 +130,35 @@ class CreateMemberDeclarationAction : public IAssistantAction {
               ICore::self()->languageController()->backgroundParser()->addDocument(changeUrl);
               ICore::self()->languageController()->backgroundParser()->addDocument(localUrl);
             }
-            
           }
         }
         virtual QString description() const {
-          return accessString() + " " + returnString();
+          if(problem->type->isFunction)
+            return i18n("<b>%1</b> function in <i>%2</i>", accessString(), Qt::escape(getContainerString()));
+          else
+            return i18n("<b>%1</b> variable in <i>%2</i>", accessString(), Qt::escape(getContainerString()));
         }
-        virtual QString toolTip() const {
+        
+        virtual QString getContainerString() const {
           DUChainReadLocker lock(DUChain::lock());
           DUContext* container = useContainer();
           if(container)
-            return i18n("Declare %1 %2 %3",  accessString(), returnString(), container->scopeIdentifier(true).toString() + "::" + problem->type->identifier().toString() + signatureString());
+            return container->scopeIdentifier(true).toString();
           else
             return QString();
+        }
+        
+        virtual QString getDeclarationString() const {
+          DUChainReadLocker lock(DUChain::lock());
+          DUContext* container = useContainer();
+          if(container)
+            return QString("%2 %3").arg(returnString(), problem->type->identifier().toString() + signatureString());
+          else
+            return QString();
+        }
+        
+        virtual QString toolTip() const {
+          return QString("Declare %2 %3").arg(returnString(), getContainerString() + "::" + problem->type->identifier().toString() + signatureString());
         }
     private:
         QString accessString() const {
@@ -226,7 +258,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
   DUChainReadLocker lock(DUChain::lock());
   if(p->type->identifier().identifier().identifier().isEmpty())
     return;
-  kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();;
+  kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();
   
   if(DUContext* searchFrom = type->searchStartContext.data()) {
     if(!type->containerContext.data() && searchFrom->type() == DUContext::Other && (type->assigned.type.abstractType() || type->isFunction))
@@ -234,7 +266,8 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
       //Action to just copy in the type
       if(!type->assigned.type.type<KDevelop::DelayedType>() && !type->isFunction && !type->convertedTo.isValid())
         addAction(KDevelop::IAssistantAction::Ptr(new CreateLocalDeclarationAction(problem)));
-      Declaration* localClass =Cpp::localClassFromCodeContext(searchFrom);
+      
+      Declaration* localClass = Cpp::localClassFromCodeContext(searchFrom);
       
       //Action to create a declaration within the local class
       if(localClass && localClass->internalContext()) {
@@ -248,9 +281,11 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
         addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem)));
     }
   }
-
-  if (p->type->isFunction)
-    m_title = i18n("Declare function \"%1\" as", type->identifier().toString());
-  else
-    m_title = i18n("Declare \"%1\" as", type->identifier().toString());
+  
+  if(!actions().isEmpty())
+  {
+    MissingDeclarationAction* action = dynamic_cast<MissingDeclarationAction*>(actions().last().data());
+    Q_ASSERT(action);
+    m_title = i18n("Declare <big><tt>'%1'</tt></big> as", action->getDeclarationString());
+  }
 }
