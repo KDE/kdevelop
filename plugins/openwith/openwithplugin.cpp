@@ -44,7 +44,6 @@
 #include <KMessageBox>
 #include <QApplication>
 #include <KConfigGroup>
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
@@ -90,32 +89,34 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
     {
         m_actionMap = new QSignalMapper( this );
         connect( m_actionMap, SIGNAL(mapped(const QString&)), SLOT(open(const QString&)) );
-        
+
         // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
         // TODO: Think about possible alternatives to using the mimetype of the first url.
         KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-        m_mimeType = mimetype->name();
-        KService::List apps = KMimeTypeTrader::self()->query( m_mimeType );
-        KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( m_mimeType );
-        KService::List parts = KMimeTypeTrader::self()->query( m_mimeType, "KParts/ReadOnlyPart" );
-        KService::Ptr preferredpart = KMimeTypeTrader::self()->preferredService( m_mimeType,
-                                                                                 "KParts/ReadOnlyPart" );
-        
-        // Now setup a menu with actions for each part and app
-        KMenu* menu = new KMenu( i18n("Open With" ) );
-        menu->setIcon( SmallIcon( "document-open" ) );
-        
-        menu->addActions( actionsForServices( parts, preferredpart ) );
-        menu->addActions( actionsForServices( apps, preferredapp ) );
-        
-        KAction* openAction = new KAction( i18n( "Open" ), this );
-        openAction->setIcon( SmallIcon( "document-open" ) );
-        connect( openAction, SIGNAL( triggered() ), SLOT( openDefault() ) );
+        if(!mimetype->is("inode/directory")){
+            m_mimeType = mimetype->name();
+            KService::List apps = KMimeTypeTrader::self()->query( m_mimeType );
+            KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( m_mimeType );
+            KService::List parts = KMimeTypeTrader::self()->query( m_mimeType, "KParts/ReadOnlyPart" );
+            KService::Ptr preferredpart = KMimeTypeTrader::self()->preferredService( m_mimeType,
+                                                                                     "KParts/ReadOnlyPart" );
 
-        KDevelop::ContextMenuExtension ext;
-        ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
-        ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
-        return ext;
+            // Now setup a menu with actions for each part and app
+            KMenu* menu = new KMenu( i18n("Open With" ) );
+            menu->setIcon( SmallIcon( "document-open" ) );
+
+            menu->addActions( actionsForServices( parts, preferredpart ) );
+            menu->addActions( actionsForServices( apps, preferredapp ) );
+
+            KAction* openAction = new KAction( i18n( "Open" ), this );
+            openAction->setIcon( SmallIcon( "document-open" ) );
+            connect( openAction, SIGNAL( triggered() ), SLOT( openDefault() ) );
+
+            KDevelop::ContextMenuExtension ext;
+            ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+            ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
+            return ext;
+        }
     }
     return KDevelop::IPlugin::contextMenuExtension ( context );
 }

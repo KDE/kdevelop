@@ -1475,7 +1475,7 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
   //If yes, update it.
   DUChainReadLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url(), true);
   if(ctx && ctx->parsingEnvironmentFile())
     if(ctx->parsingEnvironmentFile()->needsUpdate())
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());

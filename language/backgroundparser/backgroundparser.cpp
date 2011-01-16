@@ -99,7 +99,6 @@ public:
         QHashIterator<KUrl, ParseJob*> it = m_parseJobs;
         while (it.hasNext()) {
             it.next();
-            it.value()->setBackgroundParser(0);
             delete it.value();
         }
     }
@@ -191,9 +190,7 @@ public:
             }
 
             job->setMinimumFeatures(features);
-            job->setBackgroundParser(m_parser);
             job->setNotifyWhenReady(notifyWhenReady);
-            job->setTracker(m_parser->trackerForUrl(IndexedString(url)));
 
             QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
@@ -509,8 +506,6 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
                 d->m_parseJobs.remove(parseJob->document().str());
     
                 d->m_jobProgress.remove(parseJob);
-    
-                parseJob->setBackgroundParser(0);
     
                 ++d->m_doneParseJobs;
                 updateProgressBar();
