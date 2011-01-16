@@ -59,12 +59,11 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
-    m_showDocumentation = new KAction(i18n("Show Documentation"), this);
+    m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
+    m_showDocumentation->setText(i18n("Show Documentation"));
     m_showDocumentation->setShortcut(Qt::CTRL | Qt::ALT | Qt::Key_D);
     m_showDocumentation->setIcon(KIcon("documentation"));
     connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
-
-    core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation", m_showDocumentation);
 }
 
 void DocumentationController::initialize()
