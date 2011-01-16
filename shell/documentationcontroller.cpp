@@ -26,13 +26,17 @@
 #include <interfaces/iuicontroller.h>
 #include <shell/core.h>
 #include <sublime/view.h>
-
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 #include <KDebug>
 
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include <language/interfaces/codecontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <documentation/documentationview.h>
 #include <KParts/MainWindow>
 #include <KActionCollection>
@@ -76,9 +80,26 @@ void DocumentationController::initialize()
 
 void KDevelop::DocumentationController::doShowDocumentation()
 {
-    KSharedPtr< IDocumentation > doc = m_showDocumentation->data().value<KSharedPtr<KDevelop::IDocumentation> >();
-    if(doc)
-        showDocumentation(doc);
+    IDocument* doc = ICore::self()->documentController()->activeDocument();
+    if(!doc)
+      return;
+  
+    KTextEditor::Document* textDoc = doc->textDocument();
+    if(!textDoc)
+      return;
+  
+    KTextEditor::View* view = textDoc->activeView();
+    if(!view)
+      return;
+  
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+  
+    Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+    
+    KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);
+    if(documentation) {
+        showDocumentation(documentation);
+    }
 }
 
 
@@ -98,7 +119,6 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
 
         KSharedPtr< IDocumentation > doc = documentationForDeclaration(ctx->declaration().data());
         if(doc) {
-            m_showDocumentation->setData(QVariant::fromValue(doc));
             menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);;
         }
     }
