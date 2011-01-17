@@ -84,10 +84,10 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     separator->setSeparator(true);
     addAction(separator);
     
-    QWidgetAction *cusomWidget = new QWidgetAction(this);
+    QWidgetAction *statusWidget = new QWidgetAction(this);
     m_statusLabel = new QLabel(this);
-    cusomWidget->setDefaultWidget(m_statusLabel);
-    addAction(cusomWidget);
+    statusWidget->setDefaultWidget(m_statusLabel);
+    addAction(statusWidget);
     
     modelSelector->setEditable(false);
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
