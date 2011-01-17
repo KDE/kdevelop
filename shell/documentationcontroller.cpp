@@ -27,14 +27,20 @@
 #include <shell/core.h>
 #include <sublime/view.h>
 
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 #include <KDebug>
-#include <QAction>
 
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include <language/interfaces/codecontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <documentation/documentationview.h>
+#include <KParts/MainWindow>
+#include <KActionCollection>
 
 using namespace KDevelop;
 
@@ -58,8 +64,10 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
-    Q_UNUSED( core );
-    m_showDocumentation = new QAction(i18n("Show Documentation"), this);
+    m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
+    m_showDocumentation->setText(i18n("Show Documentation"));
+    m_showDocumentation->setShortcut(Qt::CTRL | Qt::ALT | Qt::Key_D);
+    m_showDocumentation->setIcon(KIcon("documentation"));
     connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
 }
 
@@ -73,9 +81,26 @@ void DocumentationController::initialize()
 
 void KDevelop::DocumentationController::doShowDocumentation()
 {
-    KSharedPtr< IDocumentation > doc = m_showDocumentation->data().value<KSharedPtr<KDevelop::IDocumentation> >();
-    if(doc)
-        showDocumentation(doc);
+    IDocument* doc = ICore::self()->documentController()->activeDocument();
+    if(!doc)
+      return;
+    
+    KTextEditor::Document* textDoc = doc->textDocument();
+    if(!textDoc)
+      return;
+    
+    KTextEditor::View* view = textDoc->activeView();
+    if(!view)
+      return;
+    
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    
+    Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+    
+    KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);
+    if(documentation) {
+        showDocumentation(documentation);
+    }
 }
 
 
@@ -95,7 +120,6 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
         
         KSharedPtr< IDocumentation > doc = documentationForDeclaration(ctx->declaration().data());
         if(doc) {
-            m_showDocumentation->setData(QVariant::fromValue(doc));
             menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);;
         }
     }
@@ -146,7 +170,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
         }
         ret.append(doc);
     }
-
+    
     return ret;
 }
 

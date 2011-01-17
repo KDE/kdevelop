@@ -97,6 +97,17 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         }
     }
 
+    if(context->type() == KDevelop::Context::FileContext) {
+        KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
+        KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
+        if(mimetype->is("inode/directory")) {
+            KAction* action = new KAction( i18n( "Find and replace in this folder" ), this );
+            action->setIcon(KIcon("edit-find"));
+            m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
+            connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
+            extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
+        }
+    }
     return extension;
 }
 

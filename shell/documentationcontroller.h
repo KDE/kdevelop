@@ -22,6 +22,7 @@
 
 #include <interfaces/idocumentationcontroller.h>
 #include <QObject>
+#include <KAction>
 
 class DocumentationViewFactory;
 class QAction;
@@ -54,7 +55,7 @@ class DocumentationController : public KDevelop::IDocumentationController
     private:
         DocumentationViewFactory* m_factory;
 
-        QAction* m_showDocumentation;
+        KAction* m_showDocumentation;
 };
 
 }
