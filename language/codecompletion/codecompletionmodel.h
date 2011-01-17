@@ -126,7 +126,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
-    //Should create a completion-worker. The worker must be created right within this function, so it is assigned to the correct rhread.
+    /// Should create a completion-worker. The worker must have no parent object,
+    /// because else its thread-affinity can not be changed.
     virtual CodeCompletionWorker* createCompletionWorker() = 0;
     friend class CompletionWorkerThread;
     

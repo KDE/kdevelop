@@ -40,12 +40,12 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-CodeCompletionWorker::CodeCompletionWorker(QObject* parent) :
-    QObject(parent)
-  , m_hasFoundDeclarations(false)
+CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* model) :
+  m_hasFoundDeclarations(false)
   , m_mutex(new QMutex())
   , m_abort(false)
   , m_fullCompletion(true)
+  , m_model(model)
 {
 }
 
@@ -79,6 +79,10 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     m_abort = false;
   }
 
+  ///@todo It's not entirely safe to pass KTextEditor::View* through a queued connection
+  // We access the view/document which is not thread-safe, so we need the foreground lock
+  ForegroundLock foreground;
+  
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
   if( !doc ) {
@@ -90,20 +94,20 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   KTextEditor::Range range;
   QString text;
   {
-    {
-      ForegroundLock lockForeground;
-      QMutexLocker lock(m_mutex);
-      DUChainReadLocker lockDUChain;
-      
-      if(context) {
-        kDebug() << context->localScopeIdentifier().toString();
-        range = KTextEditor::Range(context->rangeInCurrentRevision().start.textCursor(), position);
-      }
-      else
-        range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
-
-      text = doc->text(range);
+    ForegroundLock lockForeground;
+    QMutexLocker lock(m_mutex);
+    DUChainReadLocker lockDUChain;
+    
+    if(context) {
+      kDebug() << context->localScopeIdentifier().toString();
+      range = KTextEditor::Range(context->rangeInCurrentRevision().start.textCursor(), position);
     }
+    else
+      range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
+
+    updateContextRange(range, view, context);
+    
+    text = doc->text(range);
   }
 
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
@@ -114,8 +118,15 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     return;
   }
   m_hasFoundDeclarations = false;
+
+  KTextEditor::Cursor cursorPosition = view->cursorPosition();
+  QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
+  if(position < cursorPosition)
+    followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
   
-  computeCompletions(context, position, view, range, text);
+  foreground.unlock();
+  
+  computeCompletions(context, position, followingText, range, text);
   
   if(!m_hasFoundDeclarations)
     failed();
@@ -133,13 +144,9 @@ CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::D
   return 0;
 }
 
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
+void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText)
 {
   Q_UNUSED(contextRange);
-  KTextEditor::Cursor cursorPosition = view->cursorPosition();
-  QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
-  if(position < cursorPosition)
-    followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
   
   kDebug() << "added text:" << followingText;
   
@@ -204,7 +211,14 @@ bool& CodeCompletionWorker::aborting()
 
 KDevelop::CodeCompletionModel* CodeCompletionWorker::model() const
 {
-  return const_cast<KDevelop::CodeCompletionModel*>(static_cast<const KDevelop::CodeCompletionModel*>(parent()));
+  return m_model;
+}
+
+void CodeCompletionWorker::updateContextRange(Range& contextRange, View* view, DUContextPointer context) const
+{
+  Q_UNUSED(contextRange);
+  Q_UNUSED(view);
+  Q_UNUSED(context);
 }
 
 #include "codecompletionworker.moc"
