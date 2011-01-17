@@ -616,12 +616,8 @@ extra merge rectangle in master. If there are no extra commits in branch2, but t
 
 QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 {
-    static bool hasHash = false;
-    if (!hasHash)
-    {
-        initBranchHash(repo);
-        hasHash = true;
-    }
+    initBranchHash(repo);
+    
     QStringList args;
     args << "--all" << "--pretty" << "--parents";
     QScopedPointer<DVcsJob> job(gitRevList(repo, args));
@@ -637,8 +633,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     //used to keep where we have empty/cross/branch entry
     //true if it's an active branch (then cross or branch) and false if not
     QVector<bool> additionalFlags(branchesShas.count());
-    foreach(int flag, additionalFlags)
-        flag = false;
+    additionalFlags.fill(false);
 
     //parse output
     for(int i = 0; i < commits.count(); ++i)
