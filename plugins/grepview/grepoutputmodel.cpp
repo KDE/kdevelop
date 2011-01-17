@@ -225,7 +225,6 @@ void GrepOutputModel::activate( const QModelIndex &idx )
         KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
         QString actualText = tdoc->text(matchRange);
         QString expectedText = grepitem->change()->m_oldText;
-        qDebug() << actualText << expectedText;
         if (actualText == expectedText) {
             range = matchRange;
         }
