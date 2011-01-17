@@ -222,13 +222,12 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if(!doc)
         return;
     if (KTextEditor::Document* tdoc = doc->textDocument()) {
-        QString text = tdoc->line(line);
-        int index = m_regExp.indexIn(text);
-        if (index!=-1) {
-            range.setBothLines(line);
-            range.start().setColumn(index);
-            range.end().setColumn(index+m_regExp.matchedLength());
-            doc->setTextSelection( range );
+        KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
+        QString actualText = tdoc->text(matchRange);
+        QString expectedText = grepitem->change()->m_oldText;
+        qDebug() << actualText << expectedText;
+        if (actualText == expectedText) {
+            range = matchRange;
         }
     }
 
