@@ -70,6 +70,7 @@ private:
     QAction* m_prev;
     QAction* m_collapseAll;
     QAction* m_expandAll;
+    QAction* m_clearSearchHistory;
     QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
     
@@ -82,6 +83,8 @@ private slots:
     void showDialog();
     void expandRootElement( const QModelIndex & parent );
     void rowsRemoved();
+    void clearSearchHistory();
+    void modelSelectorContextMenu(const QPoint& pos);
 };
 
 #endif // GREPOUTPUTVIEW_H

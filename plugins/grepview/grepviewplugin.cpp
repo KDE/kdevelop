@@ -181,7 +181,7 @@ void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
     m_directory = directory;
 }
 
-GrepJob* GrepViewPlugin::grepJob()
+GrepJob* GrepViewPlugin::newGrepJob()
 {
     if(m_currentJob != 0)
     {
@@ -189,6 +189,11 @@ GrepJob* GrepViewPlugin::grepJob()
     }
     m_currentJob = new GrepJob();
     connect(m_currentJob, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    return m_currentJob;
+}
+
+GrepJob* GrepViewPlugin::grepJob() 
+{
     return m_currentJob;
 }
 

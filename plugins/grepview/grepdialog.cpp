@@ -304,7 +304,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     }
     
     
-    GrepJob* job = m_plugin->grepJob();
+    GrepJob* job = m_plugin->newGrepJob();
     
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->

@@ -37,6 +37,7 @@ public:
      * Returns a new instance of GrepJob. Since the plugin supports only one job at the same time,
      * previous job, if any, is killed before creating a new job.
      */
+    GrepJob *newGrepJob();
     GrepJob *grepJob();
 
 private Q_SLOTS:
