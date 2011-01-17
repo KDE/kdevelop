@@ -121,7 +121,7 @@ KTextEditor::CodeCompletionModelControllerInterface3::MatchReaction MissingInclu
   return None;
 }
 
-MissingIncludeCompletionWorker::MissingIncludeCompletionWorker(QObject* parent) : KDevelop::CodeCompletionWorker(parent), mutex(QMutex::Recursive) {
+MissingIncludeCompletionWorker::MissingIncludeCompletionWorker(KDevelop::CodeCompletionModel* model) : KDevelop::CodeCompletionWorker(model), mutex(QMutex::Recursive) {
 }
 
 MissingIncludeCompletionWorker::~MissingIncludeCompletionWorker() {

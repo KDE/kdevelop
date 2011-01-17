@@ -63,7 +63,7 @@ protected:
 
 class MissingIncludeCompletionWorker : public KDevelop::CodeCompletionWorker {
   public:
-  MissingIncludeCompletionWorker(QObject* parent);
+  MissingIncludeCompletionWorker(KDevelop::CodeCompletionModel* model);
   ~MissingIncludeCompletionWorker();
   
   QMutex mutex;

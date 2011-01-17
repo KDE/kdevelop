@@ -48,8 +48,8 @@ using namespace TypeUtils;
 
 namespace Cpp {
 
-CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* parent)
-  : KDevelop::CodeCompletionWorker(parent)
+CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* model)
+  : KDevelop::CodeCompletionWorker(model)
 {
 }
 KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const KDevelop::CursorInRevision& position) const
@@ -57,7 +57,18 @@ KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(K
   return new Cpp::CodeCompletionContext( context, contextText, followingText, position );
 }
 
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& _contextRange, const QString& _contextText)
+void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const
+{
+  if(context && context->owner() && context->owner()->type<FunctionType>()) {
+    if(!context->owner()->type<FunctionType>()->returnType()) {
+      //For constructor completion, we need some more context
+      contextRange.start().setLine(contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0);
+      contextRange.start().setColumn(0);
+    }
+  }
+}
+
+void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& _contextRange, const QString& _contextText)
 {
   KTextEditor::Range contextRange(_contextRange);
   QString contextText(_contextText);
@@ -75,29 +86,11 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     }
   }
   
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    if(context && context->owner() && context->owner()->type<FunctionType>()) {
-      if(!context->owner()->type<FunctionType>()->returnType()) {
-        //For constructor completion, we need some more context
-        contextRange.start().setLine(contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0);
-        contextRange.start().setColumn(0);
-        contextText = view->document()->text(contextRange);
-      }
-    }
-  }
-  
-  
   //We will have some caching in TopDUContext until this objects lifetime is over
   TopDUContext::Cache cache(topContext);
   Cpp::TypeConversionCacheEnabler enableConversionCache;
 
-  KDevelop::CodeCompletionWorker::computeCompletions(context, position, view, contextRange, contextText);
-}
-
-CodeCompletionModel* CodeCompletionWorker::model() const
-{
-  return const_cast<CodeCompletionModel*>(static_cast<const CodeCompletionModel*>(parent()));
+  KDevelop::CodeCompletionWorker::computeCompletions(context, position, followingText, contextRange, contextText);
 }
 
 }

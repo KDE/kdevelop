@@ -34,13 +34,14 @@ class CodeCompletionWorker : public KDevelop::CodeCompletionWorker
   Q_OBJECT
 
   public:
-    CodeCompletionWorker(CodeCompletionModel* parent);
+    CodeCompletionWorker(CodeCompletionModel* model);
     
     CodeCompletionModel* model() const;
 
   protected:
-    virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
+    virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& _contextRange, const QString& _contextText);
     virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const CursorInRevision &position) const;
+    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const;
 };
 
 }
