@@ -305,8 +305,45 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
             QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
 
-            if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges)
+            if(formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation))
+            {
+                QString oldNewText = change.m_newText;
                 change.m_newText = formatter->formatSource(change.m_newText, mime, leftContext, rightContext);
+                
+                if(formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation)
+                {
+                    // Reproduce the previous indentation
+                    QStringList oldLines = oldNewText.split("\n");
+                    QStringList newLines = change.m_newText.split("\n");
+                    
+                    if(oldLines.size() == newLines.size())
+                    {
+                        for(uint line = 0; line < newLines.size(); ++line)
+                        {
+                            // Keep the previous indentation
+                            QString oldIndentation;
+                            for(uint a = 0; a < oldLines[line].size(); ++a)
+                                if(oldLines[line][a].isSpace())
+                                    oldIndentation.append(oldLines[line][a]);
+                                else
+                                    break;
+
+                            int newIndentationLength = 0;
+
+                            for(int a = 0; a < newLines[line].size(); ++a)
+                                if(change.m_newText[a].isSpace())
+                                    newIndentationLength = a;
+                                else
+                                    break;
+                            
+                            newLines[line].replace(0, newIndentationLength, oldIndentation);
+                        }
+                        change.m_newText = newLines.join("\n");
+                    }else{
+                        kDebug() << "Cannot keep the indentation because the line count has changed" << oldNewText;
+                    }
+                }
+            }
             
             textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
         }else{
