@@ -119,7 +119,7 @@ class ControlFlowToDot
     {
       bool r = true;
       int i=0;
-      *m_dev << "digraph " << name << " {\n";
+      *m_dev << "digraph G {\n";
       for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it, ++i) {
         *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
         r &= exportNode(*it);
@@ -217,7 +217,7 @@ void CodeAnalysisTest::testControlFlowCreation()
     walkNodesRecursively(*it, visited);
   
   {//Graph exporting
-    QFile file(QString(QTest::currentDataTag())+".dot");
+    QFile file(QString(QTest::currentDataTag()).replace(' ', '_')+".dot");
     QVERIFY(file.open(QFile::WriteOnly));
     QTextStream st(&file);
     ControlFlowToDot exporter(&st, code.toUtf8());
