@@ -303,15 +303,26 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
                     QTableWidgetItem *itemIconName = new QTableWidgetItem("documentation");
                     m_configWidget->qchTable->setItem(row, 2, itemIconName);
                     m_configWidget->qchTable->setCurrentCell(row, 0);
-                    emit changed(true);
                 } else {
                     kDebug() << "namespace error";
                 }
             }
         } else if(e.status() ==  KNS3::Entry::Deleted) {
-            kDebug() << "uninstall"<<e.name();
+            if(e.uninstalledFiles().size() == 1) {
+                int row = -1;
+                for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
+                    if(e.uninstalledFiles().at(0) == m_configWidget->qchTable->item(i,1)->text()){
+                        row = i;
+                        break;
+                    }
+                }
+                if(row != -1) {
+                    m_configWidget->qchTable->removeRow(row);
+                }
+            }
         }
     }
+    emit changed(true);
 }
 
 #include "qthelpconfig.moc"
