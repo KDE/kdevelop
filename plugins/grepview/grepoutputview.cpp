@@ -308,11 +308,6 @@ void GrepOutputView::clearSearchHistory()
         modelSelector->removeItem(0);
     }
     applyButton->setEnabled(false);
-    
-    // clear list of recently used search patterns
-    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
-    cg.writeEntry("LastSearchItems", QStringList());
-    
     m_statusLabel->setText(QString());
 }
 

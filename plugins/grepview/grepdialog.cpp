@@ -108,6 +108,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     setButtons( SearchButton | KDialog::Cancel );
     setButtonText( SearchButton, i18n("Search...") );
+    setButtonIcon( SearchButton, KIcon("edit-find") );
     setCaption( i18n("Find/Replace In Files") );
     setDefaultButton( SearchButton );
 
