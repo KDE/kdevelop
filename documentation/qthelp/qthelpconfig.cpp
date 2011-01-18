@@ -66,6 +66,7 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     // Add GHNS button
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get new documentation"), "kdevelop-qthelp.knsrc", m_configWidget->qchManage);
     m_configWidget->verticalLayout->insertWidget(1, knsButton);
+    connect(knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(knsUpdate(KNS3::Entry::List)));
     connect(m_configWidget->loadQtDocsCheckBox, SIGNAL(toggled(bool)), this, SLOT(changed()));
     l->addWidget( w );
     load();
@@ -198,24 +199,29 @@ void QtHelpConfig::modify()
 
 bool QtHelpConfig::checkQtHelpFile(bool modify)
 {
-    QString qtHelpNamespace = QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text());
     //verify if the file is valid and if there is a name
     if(m_configWidget->qchName->text().isEmpty()){
         KMessageBox::error(this, i18n("Name cannot be empty."));
-        return false;
-    }
-    if (qtHelpNamespace.isEmpty()) {
-        // Open error message (not valid Qt Compressed Help file)
-        KMessageBox::error(this, i18n("Qt Compressed Help file is not valid."));
         return false;
     }
     int modifyIndex = -1;
     if(modify){
         modifyIndex = m_configWidget->qchTable->currentRow();
     }
+    return checkNamespace(m_configWidget->qchRequester->text(), modifyIndex);
+}
+
+bool QtHelpConfig::checkNamespace(const QString &filename, int modifiedIndex)
+{
+    QString qtHelpNamespace = QHelpEngineCore::namespaceName(filename);
+    if (qtHelpNamespace.isEmpty()) {
+        // Open error message (not valid Qt Compressed Help file)
+        KMessageBox::error(this, i18n("Qt Compressed Help file is not valid."));
+        return false;
+    }
     // verify if it's the namespace it's not already in the list
     for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
-        if(i != modifyIndex){
+        if(i != modifiedIndex){
             if(qtHelpNamespace == QHelpEngineCore::namespaceName(m_configWidget->qchTable->item(i,1)->text())){
                 // Open error message, documentation already imported
                 KMessageBox::error(this, i18n("Documentation already imported"));
@@ -281,5 +287,31 @@ void QtHelpConfig::down()
     }
 }
 
+void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
+{
+    foreach (const KNS3::Entry& e, list) {
+        if(e.status() == KNS3::Entry::Installed) {
+            if(e.installedFiles().size() == 1) {
+                QString filename = e.installedFiles().at(0);
+                if(checkNamespace(filename, -1)){
+                    int row = m_configWidget->qchTable->rowCount();
+                    m_configWidget->qchTable->insertRow(row);
+                    QTableWidgetItem *itemName = new QTableWidgetItem(KIcon("documentation"), e.name());
+                    m_configWidget->qchTable->setItem(row, 0, itemName);
+                    QTableWidgetItem *itemPath = new QTableWidgetItem(filename);
+                    m_configWidget->qchTable->setItem(row, 1, itemPath);
+                    QTableWidgetItem *itemIconName = new QTableWidgetItem("documentation");
+                    m_configWidget->qchTable->setItem(row, 2, itemIconName);
+                    m_configWidget->qchTable->setCurrentCell(row, 0);
+                    emit changed(true);
+                } else {
+                    kDebug() << "namespace error";
+                }
+            }
+        } else if(e.status() ==  KNS3::Entry::Deleted) {
+            kDebug() << "uninstall"<<e.name();
+        }
+    }
+}
 
 #include "qthelpconfig.moc"
