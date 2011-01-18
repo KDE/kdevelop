@@ -49,7 +49,6 @@ void OutputData::setDelegate( QAbstractItemDelegate* del, bool takeOwnership )
 ToolViewData::ToolViewData( QObject* parent )
     : QObject( parent ), plugin(0), toolViewId(-1)
 {
-    showItemsButtons = false;
     behaviour = 0x0;
 }
 

@@ -32,6 +32,7 @@ class QString;
 class QModelIndex;
 class QAbstractItemDelegate;
 class OutputWidget;
+class ToolViewData;
 
 /**
 @author Andreas Pakulat
@@ -41,8 +42,6 @@ namespace Sublime
 {
 class View;
 }
-
-class ToolViewData;
 
 class StandardOutputView : public KDevelop::IPlugin, public KDevelop::IOutputView
 {
