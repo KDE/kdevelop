@@ -212,8 +212,6 @@ void StandardOutputView::raiseOutput(int id)
         if( toolviews.value( _id )->outputdata.contains( id ) )
         {
             foreach( Sublime::View* v, toolviews.value( _id )->views ) {
-                OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
-                w->raiseOutput( id );
                 v->requestRaise();
             }
         }
