@@ -104,7 +104,9 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(m_expandAll, SIGNAL(triggered(bool)), this, SLOT(expandAllItems()));
     connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
     connect(m_clearSearchHistory, SIGNAL(triggered(bool)), this, SLOT(clearSearchHistory()));
-    
+    connect(resultsTreeView, SIGNAL(collapsed(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
+    connect(resultsTreeView, SIGNAL(expanded(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
+
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
@@ -317,4 +319,9 @@ void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
     QMenu myMenu;
     myMenu.addAction(m_clearSearchHistory);
     myMenu.exec(globalPos);
+}
+
+void GrepOutputView::updateScrollArea(const QModelIndex& index)
+{
+    resultsTreeView->resizeColumnToContents( index.column() );
 }
