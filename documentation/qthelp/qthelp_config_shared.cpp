@@ -25,22 +25,24 @@
 #include <KConfigGroup>
 
 void qtHelpReadConfig(QStringList& iconList, QStringList& nameList,
-                      QStringList& pathList, bool& loadQtDoc)
+                      QStringList& pathList, QStringList& ghnsList, bool& loadQtDoc)
 {
     KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
     iconList = cg.readEntry("iconList", QStringList());
     nameList = cg.readEntry("nameList", QStringList());
     pathList = cg.readEntry("pathList", QStringList());
+    ghnsList = cg.readEntry("ghnsList", QStringList());
 
     loadQtDoc = cg.readEntry("loadQtDocs", true);
 }
 
 void qtHelpWriteConfig(const QStringList& iconList, const QStringList& nameList,
-                       const QStringList& pathList, const bool loadQtDoc)
+                       const QStringList& pathList, const QStringList& ghnsList, const bool loadQtDoc)
 {
     KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
     cg.writeEntry("iconList", iconList);
     cg.writeEntry("nameList", nameList);
     cg.writeEntry("pathList", pathList);
+    cg.writeEntry("ghnsList", ghnsList);
     cg.writeEntry("loadQtDocs", loadQtDoc);
 }

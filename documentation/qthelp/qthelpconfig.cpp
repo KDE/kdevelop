@@ -61,6 +61,7 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     m_configWidget->qchTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_configWidget->qchTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_configWidget->qchTable->setColumnHidden(2, true);
+    m_configWidget->qchTable->setColumnHidden(3, true);
     m_configWidget->qchTable->horizontalHeader()->setStretchLastSection(true);
 
     // Add GHNS button
@@ -80,15 +81,16 @@ QtHelpConfig::~QtHelpConfig()
 
 void QtHelpConfig::save()
 {
-    QStringList iconList, nameList, pathList;
+    QStringList iconList, nameList, pathList, ghnsList;
     for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
         nameList << m_configWidget->qchTable->item(i,0)->text();
         pathList << m_configWidget->qchTable->item(i,1)->text();
         iconList << m_configWidget->qchTable->item(i,2)->text();
+        ghnsList << m_configWidget->qchTable->item(i,3)->text();
     }
     bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
 
-    qtHelpWriteConfig(iconList, nameList, pathList, loadQtDoc);
+    qtHelpWriteConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
 
     KSettings::Dispatcher::reparseConfiguration( componentData().componentName() );
 
@@ -101,11 +103,11 @@ void QtHelpConfig::load()
         m_configWidget->qchTable->removeRow(0);
     }
 
-    QStringList iconList, nameList, pathList;
+    QStringList iconList, nameList, pathList, ghnsList;
     bool loadQtDoc;
-    qtHelpReadConfig(iconList, nameList, pathList, loadQtDoc);
+    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
 
-    const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
+    const int size = qMin(qMin(qMin(iconList.size(), nameList.size()), pathList.size()), ghnsList.size());
     for(int i = 0; i < size; ++i) {
         m_configWidget->qchTable->insertRow(i);
         QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(iconList.at(i)), nameList.at(i));
@@ -114,6 +116,8 @@ void QtHelpConfig::load()
         m_configWidget->qchTable->setItem(i, 1, itemPath);
         QTableWidgetItem *itemIconName = new QTableWidgetItem(iconList.at(i));
         m_configWidget->qchTable->setItem(i, 2, itemIconName);
+        QTableWidgetItem *itemGhns = new QTableWidgetItem(ghnsList.at(i));
+        m_configWidget->qchTable->setItem(i, 3, itemGhns);
     }
 
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
@@ -147,8 +151,13 @@ void QtHelpConfig::selectionChanged()
     } else {
         int row = m_configWidget->qchTable->selectedItems().at(0)->row();
         int nbRow = m_configWidget->qchTable->rowCount();
-        m_configWidget->removeButton->setEnabled(true);
-        m_configWidget->editButton->setEnabled(true);
+        if (m_configWidget->qchTable->item(row, 3)->text() != "0") {
+            m_configWidget->removeButton->setEnabled(false);
+            m_configWidget->editButton->setEnabled(false);
+        } else {
+            m_configWidget->removeButton->setEnabled(true);
+            m_configWidget->editButton->setEnabled(true);
+        }
         m_configWidget->qchName->setText(m_configWidget->qchTable->item(row, 0)->text());
         m_configWidget->qchRequester->setText(m_configWidget->qchTable->item(row, 1)->text());
         m_configWidget->qchIcon->setIcon(m_configWidget->qchTable->item(row, 2)->text());
@@ -178,6 +187,8 @@ void QtHelpConfig::add()
     m_configWidget->qchTable->setItem(row, 1, itemPath);
     QTableWidgetItem *itemIconName = new QTableWidgetItem(m_configWidget->qchIcon->icon());
     m_configWidget->qchTable->setItem(row, 2, itemIconName);
+    QTableWidgetItem *itemGhns = new QTableWidgetItem("0");
+    m_configWidget->qchTable->setItem(row, 3, itemGhns);
     m_configWidget->qchTable->setCurrentCell(row, 0);
     emit changed(true);
 }
@@ -249,15 +260,19 @@ void QtHelpConfig::up()
             QTableWidgetItem *currentItemName = m_configWidget->qchTable->takeItem(row, 0);
             QTableWidgetItem *currentItemPath = m_configWidget->qchTable->takeItem(row, 1);
             QTableWidgetItem *currentItemIconName = m_configWidget->qchTable->takeItem(row, 2);
+            QTableWidgetItem *currentItemGhns = m_configWidget->qchTable->takeItem(row, 3);
             QTableWidgetItem *previousItemName = m_configWidget->qchTable->takeItem(row-1, 0);
             QTableWidgetItem *previousItemPath = m_configWidget->qchTable->takeItem(row-1, 1);
             QTableWidgetItem *previousItemIconName = m_configWidget->qchTable->takeItem(row-1, 2);
+            QTableWidgetItem *previousItemGhns = m_configWidget->qchTable->takeItem(row-1, 3);
             m_configWidget->qchTable->setItem(row, 0, previousItemName);
             m_configWidget->qchTable->setItem(row, 1, previousItemPath);
             m_configWidget->qchTable->setItem(row, 2, previousItemIconName);
+            m_configWidget->qchTable->setItem(row, 3, previousItemGhns);
             m_configWidget->qchTable->setItem(row-1, 0, currentItemName);
             m_configWidget->qchTable->setItem(row-1, 1, currentItemPath);
             m_configWidget->qchTable->setItem(row-1, 2, currentItemIconName);
+            m_configWidget->qchTable->setItem(row-1, 3, currentItemGhns);
             m_configWidget->qchTable->setCurrentCell(row-1, 0);
             emit changed(true);
         }
@@ -272,15 +287,19 @@ void QtHelpConfig::down()
             QTableWidgetItem *currentItemName = m_configWidget->qchTable->takeItem(row, 0);
             QTableWidgetItem *currentItemPath = m_configWidget->qchTable->takeItem(row, 1);
             QTableWidgetItem *currentItemIconName = m_configWidget->qchTable->takeItem(row, 2);
+            QTableWidgetItem *currentItemGhns = m_configWidget->qchTable->takeItem(row, 3);
             QTableWidgetItem *nextItemName = m_configWidget->qchTable->takeItem(row+1, 0);
             QTableWidgetItem *nextItemPath = m_configWidget->qchTable->takeItem(row+1, 1);
             QTableWidgetItem *nextItemIconName = m_configWidget->qchTable->takeItem(row+1, 2);
+            QTableWidgetItem *nextItemGhns = m_configWidget->qchTable->takeItem(row+1, 3);
             m_configWidget->qchTable->setItem(row, 0, nextItemName);
             m_configWidget->qchTable->setItem(row, 1, nextItemPath);
             m_configWidget->qchTable->setItem(row, 2, nextItemIconName);
+            m_configWidget->qchTable->setItem(row, 3, nextItemGhns);
             m_configWidget->qchTable->setItem(row+1, 0, currentItemName);
             m_configWidget->qchTable->setItem(row+1, 1, currentItemPath);
             m_configWidget->qchTable->setItem(row+1, 2, currentItemIconName);
+            m_configWidget->qchTable->setItem(row+1, 3, currentItemGhns);
             m_configWidget->qchTable->setCurrentCell(row+1, 0);
             emit changed(true);
         }
@@ -302,6 +321,8 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
                     m_configWidget->qchTable->setItem(row, 1, itemPath);
                     QTableWidgetItem *itemIconName = new QTableWidgetItem("documentation");
                     m_configWidget->qchTable->setItem(row, 2, itemIconName);
+                    QTableWidgetItem *itemGhns = new QTableWidgetItem("1");
+                    m_configWidget->qchTable->setItem(row, 3, itemGhns);
                     m_configWidget->qchTable->setCurrentCell(row, 0);
                 } else {
                     kDebug() << "namespace error";
