@@ -27,7 +27,7 @@
 #include <KAboutData>
 #include <KDebug>
 #include <KSettings/Dispatcher>
-
+#include <knewstuff3/knewstuffbutton.h>
 #include <qhelpenginecore.h>
 
 #include "ui_qthelpconfig.h"
@@ -63,6 +63,9 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     m_configWidget->qchTable->setColumnHidden(2, true);
     m_configWidget->qchTable->horizontalHeader()->setStretchLastSection(true);
 
+    // Add GHNS button
+    KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get new documentation"), "kdevelop-qthelp.knsrc", m_configWidget->qchManage);
+    m_configWidget->verticalLayout->insertWidget(1, knsButton);
     connect(m_configWidget->loadQtDocsCheckBox, SIGNAL(toggled(bool)), this, SLOT(changed()));
     l->addWidget( w );
     load();
