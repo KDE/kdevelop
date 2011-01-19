@@ -153,13 +153,13 @@ void QtHelpConfig::selectionChanged()
         int nbRow = m_configWidget->qchTable->rowCount();
         if (m_configWidget->qchTable->item(row, 3)->text() != "0") {
             m_configWidget->removeButton->setEnabled(false);
-            m_configWidget->editButton->setEnabled(false);
+            m_configWidget->qchRequester->setText(i18n("Documentation provided by GHNS"));
         } else {
             m_configWidget->removeButton->setEnabled(true);
-            m_configWidget->editButton->setEnabled(true);
+            m_configWidget->qchRequester->setText(m_configWidget->qchTable->item(row, 1)->text());
         }
+        m_configWidget->editButton->setEnabled(true);
         m_configWidget->qchName->setText(m_configWidget->qchTable->item(row, 0)->text());
-        m_configWidget->qchRequester->setText(m_configWidget->qchTable->item(row, 1)->text());
         m_configWidget->qchIcon->setIcon(m_configWidget->qchTable->item(row, 2)->text());
         if (row==0) {
             m_configWidget->upButton->setEnabled(false);
@@ -195,16 +195,25 @@ void QtHelpConfig::add()
 
 void QtHelpConfig::modify()
 {
-    if(!checkQtHelpFile(true)){
-        return;
-    }
     if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
         int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
-        m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
-        m_configWidget->qchTable->item(row, 1)->setText(m_configWidget->qchRequester->text());
-        m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
-        emit changed(true);
+        if(m_configWidget->qchTable->item(row, 3)->text() == "0") {
+            // Not from GHNS
+            if(!checkQtHelpFile(true)){
+                return;
+            }
+            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
+            m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
+            m_configWidget->qchTable->item(row, 1)->setText(m_configWidget->qchRequester->text());
+            m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
+            emit changed(true);
+        } else {
+            // From GHNS
+            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
+            m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
+            m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
+            emit changed(true);
+        }
     }
 }
 
