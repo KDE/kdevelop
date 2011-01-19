@@ -30,6 +30,8 @@
 #include <QtGui/QTextCharFormat>
 #include <QtCore/QRegExp>
 #include <KLocalizedString>
+#include <cmath>
+#include <algorithm>
 
 GrepOutputDelegate* GrepOutputDelegate::m_self = 0;
 
@@ -73,7 +75,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
                                 ? QPalette::HighlightedText : QPalette::Text;
     QTextCharFormat fmt = cur.charFormat();
     fmt.setFont(options.font);
-    
+
     if(item && item->isText())
     {
         // Use custom manual highlighting
@@ -126,7 +128,22 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 
 QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
+    const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
+
     QSize ret = QStyledItemDelegate::sizeHint(option, index);
     ret.setHeight(ret.height()+2); // We slightly increase the vertical size, else the view looks too crowded
+
+    //take account of additional width required for highlighting (bold text)
+    //and line numbers. These are not included in the default Qt size calculation.
+    if(item && item->isText())
+    {
+        const KDevelop::SimpleRange rng = item->change()->m_range;
+        int nBoldChars = rng.end.column - rng.start.column;
+        int lineNo = std::max(rng.start.line, 1);
+        int lineNoDigits = std::log10(lineNo) + 1;
+        int additionalWidth =  nBoldChars*2  +  lineNoDigits*9  +  55;
+        ret.setWidth(ret.width() + additionalWidth);
+    }
     return ret;
 }

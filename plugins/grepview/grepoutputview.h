@@ -85,6 +85,7 @@ private slots:
     void rowsRemoved();
     void clearSearchHistory();
     void modelSelectorContextMenu(const QPoint& pos);
+    void updateScrollArea( const QModelIndex &index );
 };
 
 #endif // GREPOUTPUTVIEW_H
