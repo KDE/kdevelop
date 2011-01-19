@@ -73,6 +73,7 @@ public:
     KIcon icon;
     int toolViewId;
     KDevelop::IOutputView::Behaviours behaviour;
+    QList<QAction*> actionList;
 signals:
     void outputAdded( int );
 };

@@ -28,6 +28,7 @@ class QString;
 class QAbstractItemModel;
 class QModelIndex;
 class QAbstractItemDelegate;
+class QAction;
 
 /**
 @author Andreas Pakulat
@@ -82,7 +83,7 @@ public:
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon() ) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), QList<QAction*> actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends

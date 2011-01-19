@@ -99,7 +99,9 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
-
+    
+    addActions(data->actionList);
+    
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
 

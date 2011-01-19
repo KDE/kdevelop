@@ -159,7 +159,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type,
-                                          const KIcon& icon)
+                                          const KIcon& icon, QList<QAction*> actionList)
 {
     int newid = -1;
     if( ids.isEmpty() )
@@ -180,6 +180,7 @@ int StandardOutputView::registerToolView( const QString& title,
     tvdata->title = title;
     tvdata->icon = icon;
     tvdata->plugin = this;
+    tvdata->actionList = actionList;
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
     ids << newid;
     toolviews[newid] = tvdata;
