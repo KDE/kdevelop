@@ -73,7 +73,7 @@ private:
     ToolViewData *m_data;
 };
 
-StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
+StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args)
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )

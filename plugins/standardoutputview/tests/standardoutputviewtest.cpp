@@ -17,6 +17,9 @@
 */
 
 #include <QTest>
+#include <QtGui>
+
+#include <qtest_kde.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -35,7 +38,7 @@ namespace KDevelop
 
 const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
 
-void StandardOutputViewTest::initTestCase()
+void StandardOutputViewTest::init()
 {
     KDevelop::AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
@@ -83,4 +86,4 @@ void StandardOutputViewTest::testRegisterAndRemoveToolView()
     QVERIFY(!toolviewExist(toolviewTitle));
 }
 
-QTEST_MAIN(StandardOutputViewTest);
+QTEST_KDEMAIN(StandardOutputViewTest, GUI)
