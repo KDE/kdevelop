@@ -18,3 +18,5 @@ install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kdevstandardoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevstandardoutputview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevstandardoutputview )
 
+
+add_subdirectory(tests)

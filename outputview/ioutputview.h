@@ -138,7 +138,6 @@ public:
     /**
      * remove an output view from a toolview. Don't forget to emit outputRemoved
      * when you implement this.
-     * @param toolviewId the id of the toolview containing the output
      * @param id the id of the outputview to remove
      */
     virtual void removeOutput( int id ) = 0;
