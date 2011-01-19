@@ -94,7 +94,6 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   KTextEditor::Range range;
   QString text;
   {
-    ForegroundLock lockForeground;
     QMutexLocker lock(m_mutex);
     DUChainReadLocker lockDUChain;
     
