@@ -139,11 +139,15 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     if(item && item->isText())
     {
         const KDevelop::SimpleRange rng = item->change()->m_range;
-        int nBoldChars = rng.end.column - rng.start.column;
-        int lineNo = std::max(rng.start.line, 1);
-        int lineNoDigits = std::log10(lineNo) + 1;
-        int additionalWidth =  nBoldChars*2  +  lineNoDigits*9  +  55;
-        ret.setWidth(ret.width() + additionalWidth);
+        QFont font = option.font;
+        font.setBold(true);
+        QFontMetrics bMetrics(font);
+
+        //TODO: calculate width with more accuracy: here the whole text is considerated as bold
+        int width =  bMetrics.width(item->text()) +
+                     option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
+                     std::max(option.decorationSize.width(), 0);
+        ret.setWidth(width);
     }
     return ret;
 }
