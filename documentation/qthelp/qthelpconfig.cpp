@@ -107,7 +107,7 @@ void QtHelpConfig::load()
     bool loadQtDoc;
     qtHelpReadConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
 
-    const int size = qMin(qMin(qMin(iconList.size(), nameList.size()), pathList.size()), ghnsList.size());
+    const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
         m_configWidget->qchTable->insertRow(i);
         QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(iconList.at(i)), nameList.at(i));
@@ -116,7 +116,7 @@ void QtHelpConfig::load()
         m_configWidget->qchTable->setItem(i, 1, itemPath);
         QTableWidgetItem *itemIconName = new QTableWidgetItem(iconList.at(i));
         m_configWidget->qchTable->setItem(i, 2, itemIconName);
-        QTableWidgetItem *itemGhns = new QTableWidgetItem(ghnsList.at(i));
+        QTableWidgetItem *itemGhns = new QTableWidgetItem(ghnsList.size()>i?ghnsList.at(i):"0");
         m_configWidget->qchTable->setItem(i, 3, itemGhns);
     }
 
