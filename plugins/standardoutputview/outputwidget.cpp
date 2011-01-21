@@ -80,7 +80,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    if( data->behaviour & KDevelop::IOutputView::ShowItemsButton)
+    if( data->option & KDevelop::IOutputView::ShowItemsButton)
     {
         activateOnSelect = new KToggleAction( KIcon("go-previous"), i18n("Select activated Item"), this );
         addAction(activateOnSelect);
@@ -103,7 +103,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
     
-    if( data->behaviour & KDevelop::IOutputView::AddFilterAction)
+    if( data->option & KDevelop::IOutputView::AddFilterAction)
     {
         addAction(separator);
         KLineEdit *filterInput = new KLineEdit();
@@ -177,7 +177,7 @@ void OutputWidget::changeModel( int id )
 
         disconnect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), this,
                     SLOT(rowsInserted(const QModelIndex&, int, int)) );
-        if( data->behaviour & KDevelop::IOutputView::AutoScroll )
+        if( od->behaviour & KDevelop::IOutputView::AutoScroll )
         {
             connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                      SLOT(rowsInserted(const QModelIndex&, int, int)) );
@@ -232,7 +232,7 @@ void OutputWidget::closeActiveView()
         if( views.value(id) == widget )
         {
             OutputData* od = data->outputdata.value(id);
-            if( data->behaviour & KDevelop::IOutputView::AllowUserClose )
+            if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
             {
                 removeOutput( id );
             }

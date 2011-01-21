@@ -55,7 +55,9 @@ public:
     int standardToolView( KDevelop::IOutputView::StandardToolView view );
     int registerToolView( const QString& title,
                           KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
-                          const KIcon& icon = KIcon(), QList<QAction*> actionList = QList<QAction*>());
+                          const KIcon& icon = KIcon(),
+                          KDevelop::IOutputView::Options option = 0x0,
+                          QList<QAction*> actionList = QList<QAction*>());
 
     int registerOutputInToolView( int toolviewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour

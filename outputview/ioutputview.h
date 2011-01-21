@@ -44,12 +44,17 @@ public:
     {
         AllowUserClose = 0x1 /**< allow the user to close the view */,
         AlwaysShowView = 0x2 /**< always show the view */,
-        AutoScroll     = 0x4 /**< automatically scroll the view */,
-        ShowItemsButton= 0x8,
-        AddFilterAction=0x16 /**< add a filter action */
+        AutoScroll     = 0x4 /**< automatically scroll the view */
     };
     Q_DECLARE_FLAGS(Behaviours, Behaviour)
-
+    
+    enum Option
+    {
+        ShowItemsButton = 0x1 /**< show the two buttons (select and focus) */,
+        AddFilterAction = 0x2 /**< add a filter action */
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+    
     enum ViewType
     {
         OneView      = 0 /**< there's only one outputview, newly registered outputs will replace existing ones */,
@@ -81,10 +86,13 @@ public:
      * If there already exists a toolview with this title and type return the existing id
      * @param title the Title to be displayed on the toolview
      * @param type the type of view that should be created
+     * @param icon the icon of the toolview
+     * @param option the options of the toolview
+     * @param actionList list of actions adding to the toolbar
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), QList<QAction*> actionList = QList<QAction*>()) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), Options option = 0x0, QList<QAction*> actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends

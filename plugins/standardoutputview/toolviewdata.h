@@ -50,6 +50,7 @@ public:
     ToolViewData* toolView;
     QString title;
     int id;
+    KDevelop::IOutputView::Behaviours behaviour;
     void setModel( QAbstractItemModel* model, bool takeOwnership);
     void setDelegate( QAbstractItemDelegate* delegate, bool takeOwnership);
 signals:
@@ -72,7 +73,7 @@ public:
     QString title;
     KIcon icon;
     int toolViewId;
-    KDevelop::IOutputView::Behaviours behaviour;
+    KDevelop::IOutputView::Options option;
     QList<QAction*> actionList;
 signals:
     void outputAdded( int );
