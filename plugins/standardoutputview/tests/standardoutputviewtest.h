@@ -57,7 +57,7 @@ private:
     static const QString toolviewTitle;
     
 private slots:
-    void init();
+    void initTestCase();
     void cleanupTestCase();
     void testRegisterAndRemoveToolView();
 };

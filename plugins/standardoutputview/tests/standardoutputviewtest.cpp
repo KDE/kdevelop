@@ -30,6 +30,7 @@
 #include <sublime/mainwindow.h>
 
 #include "standardoutputviewtest.h"
+#include <interfaces/iplugincontroller.h>
 
 namespace KDevelop
 {
@@ -38,18 +39,18 @@ namespace KDevelop
 
 const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
 
-void StandardOutputViewTest::init()
+void StandardOutputViewTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
     m_testCore->initialize(KDevelop::Core::Default);
-    QTest::qWait(500);
-     
+    
     m_controller = new KDevelop::UiController(m_testCore);
     m_area = new Sublime::Area( m_controller, "Area" );
     Sublime::MainWindow* mw = new Sublime::MainWindow(m_controller);
-    m_controller->showArea(m_area, mw); 
+    m_controller->showArea(m_area, mw);
     
+    QTest::qWait(500);
 }
 
 void StandardOutputViewTest::cleanupTestCase()
@@ -62,11 +63,9 @@ void StandardOutputViewTest::cleanupTestCase()
 
 bool StandardOutputViewTest::toolviewExist(QString toolviewTitle)
 {
-    //KDevelop::UiController* uiController = dynamic_cast<KDevelop::UiController*>(m_testCore->uiController());
     QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
     foreach(Sublime::View* view, views) {
         Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
-        //if(doc && doc->title() == name && view->widget()) {
         if(doc)
         {
             if(doc->title() == toolviewTitle) return true;
@@ -77,7 +76,15 @@ bool StandardOutputViewTest::toolviewExist(QString toolviewTitle)
 
 void StandardOutputViewTest::testRegisterAndRemoveToolView()
 {
-    m_stdOutputView = new StandardOutputView(m_testCore);
+    m_stdOutputView = 0;
+    KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
+    
+    QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
+    foreach(KDevelop::IPlugin* plugin, plugins) {
+        if(plugin_controller->pluginInfo(plugin).pluginName() == "KDevStandardOutputView")
+           m_stdOutputView =  dynamic_cast<StandardOutputView*>(plugin);
+    }
+    Q_ASSERT(m_stdOutputView);
     
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, KIcon());
     QVERIFY(toolviewExist(toolviewTitle));
