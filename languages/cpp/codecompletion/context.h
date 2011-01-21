@@ -67,31 +67,22 @@ namespace Cpp {
 
       typedef QList<Function> FunctionList;
 
-      enum MemberAccessOperation {
-        NoMemberAccess,  ///With NoMemberAccess, a global completion should be done
-        MemberAccess,      ///klass.
-        ArrowMemberAccess, ///klass->
-        StaticMemberChoose, /// Class::
-        MemberChoose, /// klass->ParentClass::
-        FunctionCallAccess,  ///"function(". Will never appear as initial access-operation, but as parentContext() access-operation.
-        TemplateAccess,  ///bla<. Will never appear as initial access-operation, but as parentContext() access-operation.
-        SignalAccess,  ///All signals from MemberAccessContainer should be listed
-        SlotAccess,     ///All slots from MemberAccessContainer should be listed
-        IncludeListAccess, ///A list of include-files should be presented. Get the list through includeItems()
-        ReturnAccess,
-        DeleteAccess   /// Any item which can be deleted or provide deletable results should be listed
-      };
-      
-      /**
-       * The first context created will never be a FunctionCallAccess
-       * context. Instead it will at least be a NoMemberAccess. The result completion-list types/return-types should then be matched
-       * against any parent FunctionCallAccess'es
-       * */
+      enum AccessType {
+        NoMemberAccess,       /// With NoMemberAccess, a global completion should be done
+        MemberAccess,         /// "Class."
+        ArrowMemberAccess,    /// "Class->"
+        StaticMemberChoose,   /// "Class::"
+        MemberChoose,         /// "Class->ParentClass::"
+        SignalAccess,         /// All signals from MemberAccessContainer should be listed
+        SlotAccess,           /// All slots from MemberAccessContainer should be listed
 
-      enum AdditionalContextType {
-        Normal,
-        FunctionCall,
-        BinaryOperatorFunctionCall
+        IncludeListAccess,    /// A list of include-files should be presented. Get the list through includeItems()
+
+        /// The following will never appear as initial accessType, but as a parentContext()
+        FunctionCallAccess,   /// "function("
+        BinaryOpFunctionCallAccess, /// "var1 {somebinaryoperator} "
+        TemplateAccess,       /// "bla<."
+        ReturnAccess,         /// "return " -- Takes into account return type
       };
 
       /**
@@ -104,16 +95,14 @@ namespace Cpp {
       CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, const KDevelop::CursorInRevision& position, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
       ~CodeCompletionContext();
 
-      AdditionalContextType additionalContextType() const;
-
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
        * */
-      CodeCompletionContext* parentContext();
+      CodeCompletionContext* parentContext() const;
 
       ///@return the used access-operation
-      MemberAccessOperation memberAccessOperation() const;
+      AccessType accessType() const;
 
       /**
        * When the access-operation is a MemberAccess or ArrowMemberAccess, this
@@ -157,17 +146,6 @@ namespace Cpp {
        * When memberAccessOperation is IncludeListAccess, then this contains all the files to be listed.
       * */
       QList<KDevelop::IncludeItem> includeItems() const;
-      /**
-       *
-       * Returns additional potential match-types based on builtin operators(like the = operator)
-       *
-       * The other match-types are given by functions(), they are the argument-types at the offset Function::matchedArguments.
-       *
-       * All those types should used to highlight the best matching item in the list created.
-       * */
-//       QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
-
-      int matchPosition() const;
 
       KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const;
       
@@ -179,9 +157,13 @@ namespace Cpp {
       
       ///If this is a function call context, this returns the arguments to the function that are already known
       QList<ExpressionEvaluationResult> knownArgumentTypes() const;
-      
+
+      ///Returns position of the argument being matched
+      int matchPosition() const;
+
+#ifndef TEST_COMPLETION
     private:
-      
+#endif
       enum OnlyShow {
         ShowAll,
         ShowTypes,
@@ -190,7 +172,46 @@ namespace Cpp {
         ShowVariables,
         ShowImplementationHelpers
       };
-      
+#ifdef TEST_COMPLETION
+      OnlyShow onlyShow() { return m_onlyShow; };
+    private:
+#endif
+      ///Preprocess m_text (replace macros with their body etc.)
+      void preprocessText(int line);
+
+      ///looks at @param str to determine current context
+      AccessType findAccessType(const QString &str) const;
+
+      ///Get local class from m_duContext, if available
+      DUContextPointer findLocalClass() const;
+
+      ///Find if this context should limit completions to certain kinds
+      OnlyShow findOnlyShow(const QString &accessStr) const;
+
+      ///Get the types for m_knownArgumentExpressions
+      QList<ExpressionEvaluationResult> getKnownArgumentTypes() const;
+
+      ///Looks in m_text to find @param expression, @param expressionPrefix,
+      ///and whether the expression @param istypeprefix
+      void findExpressionAndPrefix(QString &expression, QString &expressionPrefix, bool &isTypePrefix) const;
+
+      ///Create and return a parent context for the given @param expressionPrefix
+      KSharedPtr<KDevelop::CodeCompletionContext> getParentContext(const QString &expressionPrefix) const;
+
+      ///Evaluate m_expression
+      ExpressionEvaluationResult evaluateExpression() const;
+
+      ///Remove unary operators from the end of m_text, setting m_pointerConversionsBeforeMatching accordingly
+      void skipUnaryOperators(QString &str, int &pointerConversions) const;
+
+      ///test if the context is valid for its accessType
+      bool testContextValidity() const;
+
+      ///Specialized processing for access types
+      void processArrowMemberAccess();
+      void processFunctionCallAccess();
+      void processAllMemberAccesses();
+
       QList<CompletionTreeItemPointer> keywordCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
@@ -202,13 +223,11 @@ namespace Cpp {
       ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
       void standardAccessCompletionItems(QList<CompletionTreeItemPointer>& items);
 
-      void processFunctionCallAccess();
-
-      //Creates the group and adds it to m_storedUngroupedItems if items is not empty
+      ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
       void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
       
-      //Returns the required prefix that is needed in order to find the givne declaration from the current context.
-      //In worst case, it is the scope prefix of the declaration.
+      ///Returns the required prefix that is needed in order to find the givne declaration from the current context.
+      ///In worst case, it is the scope prefix of the declaration.
       QualifiedIdentifier requiredPrefix(Declaration* decl) const;
 
       ///@param type The type of the argument the items are matched to.
@@ -220,63 +239,56 @@ namespace Cpp {
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
       ///Returns whether this is a valid context for implementation helpers
-      bool isImplementationHelperValid();
-      ///Should preprocess the given text(replace macros with their body etc.)
-      void preprocessText( int line );
-      void processIncludeDirective(QString line);
-      ///Returns whether the given strings ends with an overloaded operator that can form a parent-context
-      bool endsWithOperator( const QString& str ) const;
+      bool isImplementationHelperValid() const;
+
       /**
-       * Returns the operator used for an operator function that matches the given string end
-       *
-       * Example: For "bla[" it returns "[]", for "1 %" it returns "%"
-       * */
-      QString getEndFunctionOperator( const QString& str ) const;
-      /**
-       * Returns the exact end of the string that is an operator.
-       * Example: For "bla[" it returns "["
-       * */
-      QString getEndOperator( const QString& str ) const;
-      
-      ///Does specialized code-completion for constructor-initializers
-      ///Returns true if constructor completion is done, and no other completion should be applied
+       * Specialized completion functions, if these completion types are
+       * valid, no need to continue searching for information about this context
+       **/
+      ///Handle SIGNAL/SLOT in connect/disconnect, \returns true if valid
+      bool doSignalSlotCompletion();
+      ///Handle include path completion, \returns true if valid
+      bool doIncludeCompletion();
+      ///Handle code-completion for constructor-initializers, \returns true if valid
       bool doConstructorCompletion();
-      ///Should map a position in m_text to a position in the underlying document
-      MemberAccessOperation m_memberAccessOperation;
+
+      AccessType m_accessType;
       QString m_expression;
       QString m_followingText;
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
       ExpressionEvaluationResult m_expressionResult;
 
-      QList<KDevelop::IncludeItem> m_includeItems;
-
-      QString m_functionName;
-
       //Here known argument-expressions and their types, that may have come from sub-contexts, are stored
       QStringList m_knownArgumentExpressions;
       QList<ExpressionEvaluationResult> m_knownArgumentTypes;
+      QString m_functionName;
+      QList<Function> m_matchingFunctionOverloads;
 
-      AdditionalContextType m_contextType;
-
-      QList<Function> m_functions;
-
-      IndexedDeclaration m_connectedSignal;
       //If a signal/slot access is performed, and a slot is being connected to a signal, this contains the identifier and the signature
       Identifier m_connectedSignalIdentifier;
       QByteArray m_connectedSignalNormalizedSignature;
+      IndexedDeclaration m_connectedSignal;
 
-      DUContextPointer m_localClass;
-      
-      int m_pointerConversionsBeforeMatching; //0 = No conversion, +1, +2, .. = increase pointer level = &, -1, -2, .. = decrease pointer level = *
-      
-      QList<KDevelop::CompletionTreeElementPointer> m_storedUngroupedItems;
-      
-      QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
-      bool m_useStoredItems; //If this is true, m_storedItems will be used instead of computing items, no matter whether it is empty or not.
-      OnlyShow m_onlyShow; //A specific completion item type to show, or ShowAll, see enum OnlyShow
-      bool m_isDeclarationTypePrefix;//True if the expression is set to the type-part of a declaration like "int i"
+      //true if constructor completion is performed
       bool m_isConstructorCompletion;
+
+      //include completion items for include completion
+      QList<KDevelop::IncludeItem> m_includeItems;
+
+      //0 = No conversion, +1, +2, .. = increase pointer level = &, -1, -2, .. = decrease pointer level = *
+      int m_pointerConversionsBeforeMatching; 
+
+      QList<KDevelop::CompletionTreeElementPointer> m_storedUngroupedItems;
+      //Used to store pre-computed local completion-items.
+      QList<CompletionTreeItemPointer> m_storedItems;
+      //If this is true, m_storedItems will be used instead of computing items, no matter whether it is empty or not.
+      bool m_useStoredItems;
+       //A specific completion item type to show, or ShowAll, see enum OnlyShow
+      OnlyShow m_onlyShow;
+      //Expression is set to the type part in something like: {type}{varname}{initialization}
+      bool m_expressionIsTypePrefix;
       bool m_doAccessFiltering;
+      DUContextPointer m_localClass;
 
       friend class ImplementationHelperItem;
   };

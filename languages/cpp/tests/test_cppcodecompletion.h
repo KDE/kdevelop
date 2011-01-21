@@ -64,6 +64,13 @@ public:
 
 private slots:
   void initTestCase();
+  void testOnlyShow();
+  void testInvalidContexts();
+  void testMemberAccess();
+  void testParentContexts();
+  void testUnaryOperators();
+  void testBinaryOperators();
+  void testDeclarationIsInitialization();
   void testNoMemberAccess();
   void testFunctionImplementation();
   void testAliasDeclarationAccessPolicy();

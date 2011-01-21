@@ -472,11 +472,8 @@ void CPPInternalParseJob::run()
         DUChainWriteLocker lock(DUChain::lock());
       if(!parentJob()->keepDuchain() &&
         ((!parentJob()->masterJob()->wasUpdated(contentContext) && parentJob()->needUpdateEverything())
-          || !proxyContext)) {
-
-          foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
-            contentContext->removeImportedParentContext(ctx.context(0));
-          }
+          || !proxyContext))
+            contentContext->clearImportedParentContexts();
           ///@todo Make this possible without a permanent write-lock
           contentContext->updateImportsCache();
     }

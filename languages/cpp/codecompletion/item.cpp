@@ -321,7 +321,7 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
 
 QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMatching() const {
   QList<KDevelop::IndexedType> ret;
-  if( m_declaration && completionContext() && completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+  if( m_declaration && completionContext() && completionContext()->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess )
   {
     if(listOffset < completionContext()->functions().count()) {
       Cpp::CodeCompletionContext::Function f( completionContext()->functions()[listOffset] );

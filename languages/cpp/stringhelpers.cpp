@@ -70,7 +70,7 @@ bool isLeftParen( QChar c1 ) {
 }
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
-
+///FIXME: move the bracket detectors into a function
 int expressionAt( const QString& _text, int index ) {
   QString text = KDevelop::clearStrings(_text);
   
@@ -104,40 +104,50 @@ int expressionAt( const QString& _text, int index ) {
         }
         --index;
         if ( count == 0 ) {
-          //index;
           last = T_PAREN;
           break;
         }
       }
     } else if ( last != T_IDE && ch == '>' && ch2 != "->" ) {
       int count = 0;
+      int tempStart = index;
       while ( index > 0 ) {
         QChar ch = text[ index ];
         if ( ch == '<' ) {
           ++count;
         } else if ( ch == '>' ) {
           --count;
-        } else if ( count == 0 ) {
-          //--index;
+        }
+        --index;
+        if ( count == 0 ) {
           last = T_TEMP;
           break;
         }
-        --index;
+      }
+      if (index == 0 && count != 0) {
+        //Didn't find matching '<', so the '>' must have been the operator
+        index = tempStart + 1;
+        break;
       }
     } else if ( ch == ']' ) {
       int count = 0;
+      int bracketStart = index;
       while ( index > 0 ) {
         QChar ch = text[ index ];
         if ( ch == '[' ) {
           ++count;
         } else if ( ch == ']' ) {
           --count;
-        } else if ( count == 0 ) {
-          //--index;
+        }
+        --index;
+        if ( count == 0 ) {
           last = T_BRACKET;
           break;
         }
-        --index;
+      }
+      if (index == 0 && count != 0) {
+        index = bracketStart + 1;
+        break; //No expression behind unmatched bracket
       }
     } else if ( ch == '.' ) {
       --index;
