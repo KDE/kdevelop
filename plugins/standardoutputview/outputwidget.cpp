@@ -32,6 +32,7 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QApplication>
 #include <QtGui/QClipboard>
+#include <QtGui/QWidgetAction>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -40,6 +41,8 @@
 #include <kicon.h>
 #include <ktabwidget.h>
 #include <kstandardaction.h>
+#include <klineedit.h>
+
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
@@ -77,7 +80,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    if( tvdata->behaviour & KDevelop::IOutputView::ShowItemsButton)
+    if( data->behaviour & KDevelop::IOutputView::ShowItemsButton)
     {
         activateOnSelect = new KToggleAction( KIcon("go-previous"), i18n("Select activated Item"), this );
         addAction(activateOnSelect);
@@ -99,6 +102,19 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
+    
+    if( data->behaviour & KDevelop::IOutputView::AddFilterAction)
+    {
+        addAction(separator);
+        KLineEdit *filterInput = new KLineEdit();
+        filterInput->setMaximumWidth(150);
+        filterInput->setMinimumWidth(100);
+        filterInput->setClickMessage("Enter a filter here");
+        filterInput->setToolTip("Filter");
+        filterAction = new QWidgetAction(this);
+        filterAction->setDefaultWidget(filterInput);
+        addAction(filterAction);
+    }
     
     addActions(data->actionList);
     

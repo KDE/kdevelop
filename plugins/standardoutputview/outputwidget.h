@@ -30,11 +30,13 @@ class QSignalMapper;
 class QStackedWidget;
 class QTreeView;
 class QToolButton;
+class QWidgetAction;
 class ToolViewData;
 class KTabWidget;
 class KToggleAction;
 class QModelIndex;
 class KAction;
+
 
 class OutputWidget : public QWidget
 {
@@ -79,6 +81,7 @@ private:
     KAction* previousAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
+    QWidgetAction* filterAction;
 };
 
 #endif
