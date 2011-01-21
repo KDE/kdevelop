@@ -93,15 +93,13 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
     contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
-    if (item.isFile()) {
-        KDevelop::FileContext context(item.url());
-        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-        KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
-        QMenu* tmpMenu = new QMenu();
-        KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
-        contextActions.append(tmpMenu->actions());
-        delete tmpMenu;
-    }
+    KDevelop::FileContext context(item.url());
+    QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+    KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
+    QMenu* tmpMenu = new QMenu();
+    KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
+    contextActions.append(tmpMenu->actions());
+    delete tmpMenu;
 }
 
 void FileManager::openFile(const KFileItem& file)
@@ -110,7 +108,7 @@ void FileManager::openFile(const KFileItem& file)
 }
 
 
-void FileManager::gotoUrl( const KUrl& url ) 
+void FileManager::gotoUrl( const KUrl& url )
 {
      dirop->setUrl( url, true );
 }
@@ -169,7 +167,7 @@ void FileManager::createNewFile()
 
 void FileManager::syncCurrentDocumentDirectory()
 {
-    if( KDevelop::IDocument* activeDoc = 
+    if( KDevelop::IDocument* activeDoc =
                     KDevelop::ICore::self()->documentController()->activeDocument() )
         updateNav( activeDoc->url().upUrl() );
 }

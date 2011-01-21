@@ -29,7 +29,6 @@
 #include <threadweaver/JobSequence.h>
 
 #include "../duchain/indexedstring.h"
-#include "documentchangetracker.h"
 #include <language/duchain/topducontext.h>
 #include <language/editor/modificationrevision.h>
 
@@ -54,9 +53,6 @@ public:
      * _No_ mutexes/locks are allowed to be locked when this object is destroyed (except for optionally the foreground lock)
      * */
     virtual ~ParseJob();
-
-    Q_SCRIPTABLE BackgroundParser* backgroundParser() const;
-    Q_SCRIPTABLE void setBackgroundParser(BackgroundParser* parser);
 
     struct Contents {
         // Modification-time of the read content
@@ -91,16 +87,6 @@ public:
      */
     void translateDUChainToRevision(TopDUContext* context);
     
-    /**
-     * Assigns a document change tracker to this job.
-     * */
-    void setTracker(DocumentChangeTracker* tracker);
-    
-    /**
-     * Returns the document change tracker for this job. May be zero if the document is not open in an editor.
-     * */
-    DocumentChangeTracker* tracker() const;
-    
     /// \returns the indexed url of the document to be parsed.
     Q_SCRIPTABLE KDevelop::IndexedString document() const;
 
@@ -127,9 +113,6 @@ public:
     /// Overridden to convey whether the job succeeded or not.
     Q_SCRIPTABLE virtual bool success() const;
 
-    /// Overridden to set the DependencyPolicy on subjobs.
-    Q_SCRIPTABLE virtual void addJob(Job* job);
-
     /// Set the minimum features the resulting top-context should have
     Q_SCRIPTABLE void setMinimumFeatures(TopDUContext::Features features);
     
@@ -151,14 +134,6 @@ public:
     
     /// Returns whether there is minimum features set up for some url
     static bool hasStaticMinimumFeatures();
-    
-    /**
-     * Attempt to add \a dependency as a dependency of \a actualDependee, which must
-     * be a subjob of this job, or null (in which case, the dependency is added
-     * to this job).  If a circular dependency is detected, the dependency will
-     * not be added and the method will return false.
-     */
-    Q_SCRIPTABLE bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%

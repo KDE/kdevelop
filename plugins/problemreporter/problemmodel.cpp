@@ -232,15 +232,15 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
 
     switch (section) {
         case Source:
-            return i18n("Source");
+            return i18nc("@title:column source of problem", "Source");
         case Error:
-            return i18n("Problem");
+            return i18nc("@title:column problem description", "Problem");
         case File:
-            return i18n("File");
+            return i18nc("@title:column file where problem was found", "File");
         case Line:
-            return i18n("Line");
+            return i18nc("@title:column line number with problem", "Line");
         case Column:
-            return i18n("Column");
+            return i18nc("@title:column column number with problem", "Column");
     }
 
     return QVariant();

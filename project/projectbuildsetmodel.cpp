@@ -141,10 +141,10 @@ QVariant ProjectBuildSetModel::headerData( int section, Qt::Orientation orientat
     switch( section )
     {
         case 0:
-            return i18n("Name");
+            return i18nc("@title:column buildset item name", "Name");
             break;
         case 1:
-            return i18n("Path");
+            return i18nc("@title:column buildset item path", "Path");
             break;
     }
     return QVariant();

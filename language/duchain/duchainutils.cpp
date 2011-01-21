@@ -235,7 +235,7 @@ QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)
   return iconForProperties(completionProperties(dec));
 }
 
-TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
+TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url, bool preferProxyContext) {
   KDevelop::TopDUContext* chosen = 0;
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
@@ -245,13 +245,16 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
     if(!chosen)
     {
       if (language->languageSupport())
-        chosen = language->languageSupport()->standardContext(url);
+        chosen = language->languageSupport()->standardContext(url, preferProxyContext);
     }
   }
 
   if(!chosen)
-    return DUChain::self()->chainForDocument(IndexedString(url.pathOrUrl()));
+    chosen = DUChain::self()->chainForDocument(IndexedString(url.pathOrUrl()), preferProxyContext);
 
+  if(!chosen && preferProxyContext)
+    return standardContextForUrl(url, false); // Fall back to a normal context
+  
   return chosen;
 }
 

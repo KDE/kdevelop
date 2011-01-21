@@ -49,17 +49,18 @@ public:
       * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
      * 
-     * @param allowProxyContext Whether proxy-contexts are allowed to be returned. In C++, a proxy-contexts has no direct content.
-     *                          It mainly just imports an actual content-context, and represents multiple different versions
-     *                          of the same content in the eyes of the preprocessor. Also, a proxy-context may contain the problem-
-     *                          descriptions of preprocessor problems, so it should be used by anything that is interested in those
-     *                          problems.
+     * @param proxyContext      Whether the returned context should be a proxy-contexts. In C++, a proxy-contexts has no direct content.
+     *                          It mainly just imports an actual content-context, and it holds all the imports. It can also represent
+     *                          multiple different versions of the same content in the eyes of the preprocessor. Also, a proxy-context may contain the problem-
+     *                          descriptions of preprocessor problems.
+     *                          The proxy-context should be preferred whenever the problem-list is required, or for deciding whether a document needs to be updated
+     *                          (only the proxy-context knows about all the dependencies, since it contains most of the imports)
      *
      *  @warning The DUChain must be locked before calling this, @see KDevelop::DUChainReadLocker
      * 
      *  @return the standard context used by this language for the given @param url.
       * */
-    virtual TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
+    virtual TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
 
     /**
       * Should return a code-highlighting instance for this language, or zero.

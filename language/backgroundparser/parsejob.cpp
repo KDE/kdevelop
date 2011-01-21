@@ -110,16 +110,6 @@ ParseJob::ParseJob( const KUrl &url )
         d(new ParseJobPrivate(url))
 {}
 
-void ParseJob::setTracker ( DocumentChangeTracker* tracker )
-{
-    d->tracker = tracker;
-}
-
-DocumentChangeTracker* ParseJob::tracker() const
-{
-    return d->tracker.data();
-}
-
 ParseJob::~ParseJob()
 {
     typedef QWeakPointer<QObject> QObjectPointer;
@@ -179,46 +169,6 @@ ReferencedTopDUContext ParseJob::duChain() const
     return d->duContext;
 }
 
-void ParseJob::addJob(Job* job)
-{
-    if (backgroundParser())
-        job->assignQueuePolicy(backgroundParser()->dependencyPolicy());
-
-    JobSequence::addJob(job);
-}
-
-BackgroundParser* ParseJob::backgroundParser() const
-{
-    return d->backgroundParser;
-}
-
-void ParseJob::setBackgroundParser(BackgroundParser* parser)
-{
-    if (parser) {
-        assignQueuePolicy(parser->dependencyPolicy());
-
-        for (int i = 0; i < jobListLength(); ++i)
-            jobAt(i)->assignQueuePolicy(parser->dependencyPolicy());
-
-    } else if (d->backgroundParser) {
-
-        removeQueuePolicy(d->backgroundParser->dependencyPolicy());
-
-        for (int i = 0; i < jobListLength(); ++i)
-            jobAt(i)->removeQueuePolicy(d->backgroundParser->dependencyPolicy());
-    }
-
-    d->backgroundParser = parser;
-}
-
-bool ParseJob::addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee)
-{
-    if (!backgroundParser())
-        return false;
-
-    return backgroundParser()->dependencyPolicy()->addDependency(dependency, this, actualDependee);
-}
-
 bool ParseJob::abortRequested() const
 {
     QMutexLocker lock(d->abortMutex);
@@ -267,6 +217,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
     QDateTime lastModified = fileInfo.lastModified();
     
     ForegroundLock lock;
+
+    d->tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document());
     
     //Try using an artificial code-representation, which overrides everything else
     if(artificialCodeRepresentationExists(document())) {
@@ -326,6 +278,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
         file.close();
     }
 
+    // To make the parsing more robust, we add some zeroes to the end of the buffer.
     d->contents.contents.push_back((char)0);
     d->contents.contents.push_back((char)0);
     d->contents.contents.push_back((char)0);
