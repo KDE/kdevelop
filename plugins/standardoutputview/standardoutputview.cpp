@@ -76,6 +76,7 @@ private:
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args)
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
+    Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
     setXMLFile("kdevstandardoutputview.rc");
@@ -206,11 +207,11 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
     return newid;
 }
 
-void StandardOutputView::raiseOutput(int id)
+void StandardOutputView::raiseOutput(int outputId)
 {
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* v, toolviews.value( _id )->views ) {
                 v->requestRaise();
@@ -219,49 +220,49 @@ void StandardOutputView::raiseOutput(int id)
     }
 }
 
-void StandardOutputView::setModel( int id, QAbstractItemModel* model, Ownership takeOwnership )
+void StandardOutputView::setModel( int outputId, QAbstractItemModel* model, Ownership takeOwnership )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             tvid = _id;
             break;
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( id )->setModel( model, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setModel( model, takeOwnership == TakeOwnership );
     }
 }
 
-void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate, Ownership takeOwnership )
+void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate, Ownership takeOwnership )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             tvid = _id;
             break;
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( id )->setDelegate( delegate, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate, takeOwnership == TakeOwnership );
     }
 }
 
-void StandardOutputView::removeToolView( int id )
+void StandardOutputView::removeToolView( int toolviewId )
 {
-    if( toolviews.contains(id) )
+    if( toolviews.contains(toolviewId) )
     {
-        ToolViewData* td = toolviews.value(id);
+        ToolViewData* td = toolviews.value(toolviewId);
         foreach( Sublime::View* view, td->views )
         {
             OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
@@ -275,16 +276,16 @@ void StandardOutputView::removeToolView( int id )
             }
         }
         delete td;
-        toolviews.remove(id);
-        emit toolViewRemoved(id);
+        toolviews.remove(toolviewId);
+        emit toolViewRemoved(toolviewId);
     }
 }
 
-OutputWidget* StandardOutputView::outputWidgetForId( int id ) const
+OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
 {
     foreach( ToolViewData* td, toolviews )
     {
-        if( td->outputdata.contains( id ) )
+        if( td->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* view, td->views )
             {
@@ -295,19 +296,19 @@ OutputWidget* StandardOutputView::outputWidgetForId( int id ) const
     return 0;
 }
 
-void StandardOutputView::scrollOutputTo( int id, const QModelIndex& idx )
+void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 {
-    OutputWidget* widget = outputWidgetForId( id );
+    OutputWidget* widget = outputWidgetForId( outputId );
     if( widget )
         widget->scrollToIndex( idx );
 }
 
-void StandardOutputView::removeOutput( int id )
+void StandardOutputView::removeOutput( int outputId )
 {
-    OutputWidget* widget = outputWidgetForId( id );
+    OutputWidget* widget = outputWidgetForId( outputId );
     if( widget ) 
     {
-        widget->removeOutput( id );
+        widget->removeOutput( outputId );
     }
 }
 

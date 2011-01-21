@@ -45,8 +45,8 @@ class View;
 
 class StandardOutputView : public KDevelop::IPlugin, public KDevelop::IOutputView
 {
-Q_OBJECT
-Q_INTERFACES( KDevelop::IOutputView )
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IOutputView )
 
 public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
@@ -59,19 +59,19 @@ public:
 
     int registerOutputInToolView( int toolviewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour
-                                        = KDevelop::IOutputView::AllowUserClose );
+                                  = KDevelop::IOutputView::AllowUserClose );
 
     void raiseOutput( int id );
     void setModel( int id, QAbstractItemModel*, Ownership takeOwnership );
 
     void setDelegate( int id, QAbstractItemDelegate*, Ownership takeOwnership );
 
-    OutputWidget* outputWidgetForId( int id ) const;
+    OutputWidget* outputWidgetForId( int outputId ) const;
 
-    virtual void removeToolView( int id );
-    virtual void removeOutput( int id );
+    virtual void removeToolView( int toolviewId );
+    virtual void removeOutput( int outputId );
 
-    virtual void scrollOutputTo( int id, const QModelIndex& idx );
+    virtual void scrollOutputTo( int outputId, const QModelIndex& idx );
 
 public Q_SLOTS:
     void removeSublimeView( Sublime::View* );
@@ -80,7 +80,7 @@ Q_SIGNALS:
     void activated( const QModelIndex& );
     void selectNextItem();
     void selectPrevItem();
-    void outputRemoved( int toolviewId, int id );
+    void outputRemoved( int toolviewId, int outputId );
     void toolViewRemoved( int toolviewId );
 
 private:
