@@ -77,13 +77,15 @@ private slots:
     void slotRunQMake();
     void slotDirty(const QString& path);
 
-private:
+private:    
     KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KUrl& url );
     KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KUrl& url,
                                                   KDevelop::ProjectBaseItem* parent );
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
     QString findBasicMkSpec( const QString& mkspecdir ) const;
     QMakeCache* findQMakeCache( const QString& projectfile ) const;
+    bool projectNeedsConfiguration(KDevelop::IProject* project);
+    
     IQMakeBuilder* m_builder;
     mutable QString m_qtIncludeDir;
     QAction* m_runQmake;
