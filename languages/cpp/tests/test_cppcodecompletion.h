@@ -124,6 +124,7 @@ private slots:
   void testOverrideCtor();
   void testFilterVoid();
   void testCompletedIncludeFilePath();
+  void testMultipleIncludeCompletionItems();
 
 public:
   enum DumpArea {

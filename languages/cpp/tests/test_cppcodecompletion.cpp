@@ -2564,4 +2564,24 @@ void TestCppCodeCompletion::testCompletedIncludeFilePath()
   QCOMPARE(includeItems[0].basePath, KUrl(innerDir.absolutePath()));
 }
 
+/**
+ * Check that there are no multiple include completion items referring to the same file
+ */
+void TestCppCodeCompletion::testMultipleIncludeCompletionItems()
+{
+  KTempDir tempDir;
+  QDir dir(tempDir.name());
+  QString innerDirName1 = "directory1abcde";
+  dir.mkdir(innerDirName1);
+  QString innerDirName2 = "directory2abcde";
+  dir.mkdir(innerDirName2);
+  QDir innerDir1(tempDir.name() + innerDirName1);
+  QString filename = "xxxxx.h";
+  QFile file(innerDir1.absoluteFilePath(filename));
+  QVERIFY(file.open(QIODevice::ReadWrite));
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, "../" + innerDirName1, KUrl::List() << (tempDir.name() + innerDirName1) << (tempDir.name() + innerDirName2));
+  QCOMPARE(includeItems.size(), 1);
+  QCOMPARE(includeItems[0].basePath, KUrl(innerDir1.absolutePath()));
+}
+
 #include "test_cppcodecompletion.moc"
