@@ -123,6 +123,7 @@ private slots:
   void testAnonStruct();
   void testOverrideCtor();
   void testFilterVoid();
+  void testCompletedIncludeFilePath();
 
 public:
   enum DumpArea {

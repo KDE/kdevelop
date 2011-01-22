@@ -63,6 +63,8 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+#include <KTempDir>
+
 using namespace KTextEditor;
 
 using namespace KDevelop;
@@ -2545,6 +2547,21 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
   delete session;
 
   return top;
+}
+
+void TestCppCodeCompletion::testCompletedIncludeFilePath()
+{
+  KTempDir tempDir;
+  QDir dir(tempDir.name());
+  QString innerDirName = "directoryabcde";
+  dir.mkdir(innerDirName);
+  QDir innerDir(tempDir.name() + innerDirName);
+  QString filename = "xxxxx.h";
+  QFile file(innerDir.absoluteFilePath(filename));
+  QVERIFY(file.open(QIODevice::ReadWrite));
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(tempDir.name() + "source.cpp", true, innerDirName, KUrl::List() << tempDir.name());
+  QCOMPARE(includeItems.size(), 1);
+  QCOMPARE(includeItems[0].basePath, KUrl(innerDir.absolutePath()));
 }
 
 #include "test_cppcodecompletion.moc"

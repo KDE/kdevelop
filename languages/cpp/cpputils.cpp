@@ -366,11 +366,14 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
             if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && (!allowSourceFiles || !sourceExtensions.contains(suffix)))
               continue;
             
-            if(prependAddedPathToName)
+            if(prependAddedPathToName) {
               item.name = addPath + item.name;
+              item.basePath = absoluteBase;
+            } else {
+              item.basePath = QDir(absoluteBase).absoluteFilePath(addPath);
+            }
             
             item.isDirectory = dirContent.fileInfo().isDir();
-            item.basePath = absoluteBase;
             item.pathNumber = pathNumber;
 
             ret << item;
