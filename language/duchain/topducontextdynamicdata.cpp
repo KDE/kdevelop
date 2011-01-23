@@ -353,7 +353,6 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
 
     return ret;
   }else{
-    kWarning() << "Cannot open top-context for reading:" << fileName;
     return 0;
   }
 }

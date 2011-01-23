@@ -175,6 +175,7 @@ void DocumentationView::emptyHistory()
     mForward->setEnabled(false);
     if(mProviders->count() > 0) {
         mProviders->setCurrentIndex(0);
+        changedProvider(0);
     }
 }
 
