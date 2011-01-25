@@ -41,6 +41,9 @@ set(kdevplatforminterfaces_LIB_SRCS
 	ilaunchconfiguration.cpp
 	ilaunchmode.cpp
 	iprojectprovider.cpp
+	
+    ilanguagecheck.cpp
+    ilanguagecheckprovider.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
@@ -105,6 +108,8 @@ install(FILES
     ipartcontroller.h
     ilaunchmode.h
     iprojectprovider.h
+    ilanguagecheck.h
+    ilanguagecheckprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
