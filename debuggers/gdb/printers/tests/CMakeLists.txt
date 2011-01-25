@@ -1,3 +1,5 @@
+add_definitions("-DPRINTER_BIN_DIR=\\\"${CMAKE_CURRENT_BINARY_DIR}\\\"")
+
 add_executable(qstring qstring.cpp)
 target_link_libraries(qstring ${QT_QTCORE_LIBRARY})
 

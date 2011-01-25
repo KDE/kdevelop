@@ -23,6 +23,8 @@
 #include <QDebug>
 #include <QDir>
 
+const QString BINARY_PATH(PRINTER_BIN_DIR);
+
 namespace GDBDebugger
 {
 
@@ -32,9 +34,10 @@ public:
     GdbProcess(const QString &program) : QProcess()
     {
         setProcessChannelMode(MergedChannels);
-        QProcess::start("gdb", (QStringList() << program));
+        QProcess::start("gdb", (QStringList() << (BINARY_PATH + '/' + program)));
         waitForStarted();
-        waitForPrompt();
+        QByteArray prompt = waitForPrompt();
+        QVERIFY(!prompt.contains("No such file or directory"));
         execute("set confirm off");
         execute("set print pretty on");
         QList<QByteArray> p;
