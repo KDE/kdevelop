@@ -44,8 +44,6 @@ public:
     QStringList subProjects() const;
     bool hasSubProject(const QString& file) const;
 
-    QString buildDirectory() const;
-
     KUrl::List files() const;
     KUrl::List filesForTarget( const QString& ) const;
     KUrl::List includeDirectories() const;

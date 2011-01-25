@@ -20,17 +20,22 @@
 
 
 #include "qmakejob.h"
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 #include <KProcess>
 #include <KLocalizedString>
+#include <KUrl>
+#include <KDebug>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
 #include <outputview/ioutputview.h>
 
 using namespace KDevelop;
 
-QMakeJob::QMakeJob( const QString& wd, QObject* parent )
+QMakeJob::QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent )
     : OutputJob( parent ),
-      m_wd(wd),
+      m_srcDir(srcDir),
+      m_buildDir(buildDir),
       m_process(0),
       m_model(0)
 {
@@ -38,7 +43,7 @@ QMakeJob::QMakeJob( const QString& wd, QObject* parent )
   setStandardToolView( IOutputView::RunView );
   setBehaviours( IOutputView::AllowUserClose | IOutputView::AutoScroll );
 
-  setObjectName(i18n("Run QMake in %1", m_wd));
+  setObjectName(i18n("Run QMake in %1", m_buildDir));
 }
 
 QMakeJob::~QMakeJob()
@@ -54,12 +59,19 @@ void QMakeJob::start()
     startOutput();
 
     QStringList args;
-    args << "qmake" << "CONFIG+=debug" << "-r";
+    args << "qmake" << "CONFIG+=debug" << "-r" << m_srcDir;
 
-    m_model->appendLine(m_wd + ": " + args.join(" "));
+    m_model->appendLine(m_buildDir + ": " + args.join(" "));
+
+    if( !QFileInfo(m_buildDir).exists() ) {
+        KUrl dirUrl(m_buildDir);
+        kDebug() << "creating" << dirUrl.fileName() << "in" << dirUrl.directory();
+        QDir d(dirUrl.directory());
+        d.mkdir( dirUrl.fileName() );
+    }
 
     m_process = new KProcess(this);
-    m_process->setWorkingDirectory(m_wd);
+    m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(args);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     ProcessLineMaker* lineMaker = new KDevelop::ProcessLineMaker( m_process, this );

@@ -36,7 +36,7 @@ class QMakeJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QMakeJob( const QString& workingDir, QObject* parent = 0 );
+    QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent = 0 );
     virtual void start();
     virtual ~QMakeJob();
 
@@ -50,7 +50,8 @@ private slots:
   void processFinished( int exitCode, QProcess::ExitStatus status );
 
 private:
-    QString m_wd;
+    QString m_srcDir;
+    QString m_buildDir;
     KProcess* m_process;
     KDevelop::OutputModel* m_model;
 };

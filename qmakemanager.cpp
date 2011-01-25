@@ -72,6 +72,20 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
     return p;
 }
 
+/**
+ * Returns the directory where srcDir will be built.
+ * srcDir must contain a *.pro file !
+ */
+KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
+    QString relative = KUrl::relativeUrl(project->folder(), srcDir);
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
+    if(buildDir.isValid()) {
+        buildDir.resolved(relative);
+    }
+    return buildDir;
+}
+
 //END Helpers
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
@@ -144,11 +158,14 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
     QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
     if ( qmakeItem ) {
         if (!item->parent()) {
-            return qmakeItem->projectFiles().first()->buildDirectory();
+            // build root item
+            return buildDirFromSrc(item->project(), item->url());
         }
+        // build sub-item
         foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
             if ( pro->hasSubProject( item->url().toLocalFile() ) ) {
-                return pro->buildDirectory();
+                // get path from project root and it to buildDir
+                return buildDirFromSrc(item->project(), pro->absoluteDir());
             }
         }
     }
@@ -501,8 +518,9 @@ void QMakeProjectManager::slotRunQMake()
 {
     Q_ASSERT(m_actionItem);
 
-    ///TODO: support shadow builds
-    QMakeJob* job = new QMakeJob( m_actionItem->url().toLocalFile(), this );
+    KUrl srcDir = m_actionItem->url();
+    KUrl buildDir = buildDirFromSrc(m_actionItem->project(), srcDir);
+    QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
 
     KDevelop::ICore::self()->runController()->registerJob( job );
 }

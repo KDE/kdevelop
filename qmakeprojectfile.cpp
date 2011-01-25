@@ -322,12 +322,6 @@ QStringList QMakeProjectFile::targets() const
     return list;
 }
 
-QString QMakeProjectFile::buildDirectory() const
-{
-    //TODO: this is a tempoary fix, once import dialog will be finished, this code has to be changed.
-    return absoluteDir();
-}
-
 QMakeProjectFile::~QMakeProjectFile()
 {
     //TODO: delete cache, specs, ...?
