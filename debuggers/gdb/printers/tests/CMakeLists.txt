@@ -6,32 +6,8 @@ target_link_libraries(qstring ${QT_QTCORE_LIBRARY})
 add_executable(qbytearray qbytearray.cpp)
 target_link_libraries(qbytearray ${QT_QTCORE_LIBRARY})
 
-add_executable(qlistint qlistint.cpp)
-target_link_libraries(qlistint ${QT_QTCORE_LIBRARY})
-
-add_executable(qliststring qliststring.cpp)
-target_link_libraries(qliststring ${QT_QTCORE_LIBRARY})
-
-add_executable(qliststruct qliststruct.cpp)
-target_link_libraries(qliststruct ${QT_QTCORE_LIBRARY})
-
-add_executable(qlistpointer qlistpointer.cpp)
-target_link_libraries(qlistpointer ${QT_QTCORE_LIBRARY})
-
-add_executable(qvectorint qvectorint.cpp)
-target_link_libraries(qvectorint ${QT_QTCORE_LIBRARY})
-
-add_executable(qvectorstring qvectorstring.cpp)
-target_link_libraries(qvectorstring ${QT_QTCORE_LIBRARY})
-
-add_executable(qvectorstruct qvectorstruct.cpp)
-target_link_libraries(qvectorstruct ${QT_QTCORE_LIBRARY})
-
-add_executable(qvectorpointer qvectorpointer.cpp)
-target_link_libraries(qvectorpointer ${QT_QTCORE_LIBRARY})
-
-add_executable(qqueue qqueue.cpp)
-target_link_libraries(qqueue ${QT_QTCORE_LIBRARY})
+add_executable(qlistcontainer qlistcontainer.cpp)
+target_link_libraries(qlistcontainer ${QT_QTCORE_LIBRARY})
 
 add_executable(qmapint qmapint.cpp)
 target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})

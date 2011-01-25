@@ -105,136 +105,36 @@ void QtPrintersTest::testQByteArray()
     QVERIFY(gdb.execute("print ba").contains("\"test byte arrayx\""));
 }
 
-void QtPrintersTest::testQListInt()
+void QtPrintersTest::testQListContainer_data()
 {
-    GdbProcess gdb("qlistint");
-    gdb.execute("break qlistint.cpp:6");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QList<int>"));
-    QVERIFY(out.contains("[0] = 10"));
-    QVERIFY(out.contains("[1] = 20"));
-    gdb.execute("next");
-    QVERIFY(gdb.execute("print l").contains("[2] = 30"));
+    QTest::addColumn<QString>("container");
+
+    QTest::newRow("QList") << "QList";
+    QTest::newRow("QQueue") << "QQueue";
+    QTest::newRow("QVector") << "QVector";
 }
 
-void QtPrintersTest::testQListString()
+void QtPrintersTest::testQListContainer()
 {
-    GdbProcess gdb("qliststring");
-    gdb.execute("break qliststring.cpp:6");
+    QFETCH(QString, container);
+    GdbProcess gdb("qlistcontainer");
+    gdb.execute("break main");
     gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QStringList"));
-    QVERIFY(out.contains("[0] = \"a\""));
-    QVERIFY(out.contains("[1] = \"b\""));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[2] = \"c\""));
-}
-
-void QtPrintersTest::testQListStruct()
-{
-    GdbProcess gdb("qliststruct");
-    gdb.execute("break qliststruct.cpp:15");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QList<A>"));
-    QVERIFY(out.contains("[0] = {"));
-    QVERIFY(out.contains("a = \"a\""));
-    QVERIFY(out.contains("c = 100"));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[1] = {"));
-}
-
-void QtPrintersTest::testQListPointer()
-{
-    GdbProcess gdb("qlistpointer");
-    gdb.execute("break qlistpointer.cpp:7");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QList<int *>"));
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[2] = 0x"));
-}
-
-void QtPrintersTest::testQVectorInt()
-{
-    GdbProcess gdb("qvectorint");
-    gdb.execute("break qvectorint.cpp:6");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QVector<int>"));
-    QVERIFY(out.contains("[0] = 10"));
-    QVERIFY(out.contains("[1] = 20"));
-    gdb.execute("next");
-    QVERIFY(gdb.execute("print l").contains("[2] = 30"));
-}
-
-void QtPrintersTest::testQVectorString()
-{
-    GdbProcess gdb("qvectorstring");
-    gdb.execute("break qvectorstring.cpp:7");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QVector<QString>"));
-    QVERIFY(out.contains("[0] = \"a\""));
-    QVERIFY(out.contains("[1] = \"b\""));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[2] = \"c\""));
-}
-
-void QtPrintersTest::testQVectorStruct()
-{
-    GdbProcess gdb("qvectorstruct");
-    gdb.execute("break qvectorstruct.cpp:15");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QVector<A>"));
-    QVERIFY(out.contains("[0] = {"));
-    QVERIFY(out.contains("a = \"a\""));
-    QVERIFY(out.contains("c = 100"));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[1] = {"));
-}
-
-void QtPrintersTest::testQVectorPointer()
-{
-    GdbProcess gdb("qvectorpointer");
-    gdb.execute("break qvectorpointer.cpp:7");
-    gdb.execute("run");
-    QByteArray out = gdb.execute("print l");
-    QVERIFY(out.contains("QVector<int *>"));
-    QVERIFY(out.contains("[0] = 0x"));
-    QVERIFY(out.contains("[1] = 0x"));
-    gdb.execute("next");
-    out = gdb.execute("print l");
-    QVERIFY(out.contains("[2] = 0x"));
-}
-
-void QtPrintersTest::testQQueue()
-{
-    GdbProcess gdb("qqueue");
-    gdb.execute("break qqueue.cpp:12");
-    gdb.execute("run");
+    gdb.execute(QString("break 'doStuff<%1>()'").arg(container).toLocal8Bit());
+    gdb.execute("cont");
     { // <int>
     gdb.execute("next");
     QByteArray out = gdb.execute("print intList");
-    QVERIFY(out.contains("empty QQueue<int>"));
+    QVERIFY(out.contains(QString("empty %1<int>").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print intList");
-    QVERIFY(out.contains("QQueue<int>"));
+    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = 10"));
     QVERIFY(out.contains("[1] = 20"));
     QVERIFY(!out.contains("[2] = 30"));
     gdb.execute("next");
     out = gdb.execute("print intList");
-    QVERIFY(out.contains("QQueue<int>"));
+    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = 10"));
     QVERIFY(out.contains("[1] = 20"));
     QVERIFY(out.contains("[2] = 30"));
@@ -242,16 +142,16 @@ void QtPrintersTest::testQQueue()
     { // <QString>
     gdb.execute("next");
     QByteArray out = gdb.execute("print stringList");
-    QVERIFY(out.contains("empty QQueue<QString>"));
+    QVERIFY(out.contains(QString("empty %1<QString>").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print stringList");
-    QVERIFY(out.contains("QQueue<QString>"));
+    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = \"a\""));
     QVERIFY(out.contains("[1] = \"bc\""));
     QVERIFY(!out.contains("[2] = \"d\""));
     gdb.execute("next");
     out = gdb.execute("print stringList");
-    QVERIFY(out.contains("QQueue<QString>"));
+    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = \"a\""));
     QVERIFY(out.contains("[1] = \"bc\""));
     QVERIFY(out.contains("[2] = \"d\""));
@@ -259,27 +159,27 @@ void QtPrintersTest::testQQueue()
     { // <struct A>
     gdb.execute("next");
     QByteArray out = gdb.execute("print structList");
-    QVERIFY(out.contains("empty QQueue<A>"));
+    QVERIFY(out.contains(QString("empty %1<A>").arg(container).toLocal8Bit()));
     gdb.execute("next");
     gdb.execute("next");
     gdb.execute("next");
     out = gdb.execute("print structList");
-    QVERIFY(out.contains("QQueue<A>"));
+    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = {"));
     QVERIFY(out.contains("a = \"a\""));
     QVERIFY(out.contains("c = 100"));
     gdb.execute("next");
     out = gdb.execute("print structList");
-    QVERIFY(out.contains("QQueue<A>"));
+    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[1] = {"));
     }
     { // <int*>
     gdb.execute("next");
     QByteArray out = gdb.execute("print pointerList");
-    QVERIFY(out.contains("empty QQueue<int *>"));
+    QVERIFY(out.contains(QString("empty %1<int *>").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print pointerList");
-    QVERIFY(out.contains("QQueue<int *>"));
+    QVERIFY(out.contains(QString("%1<int *>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = 0x"));
     QVERIFY(out.contains("[1] = 0x"));
     QVERIFY(!out.contains("[2] = 0x"));
