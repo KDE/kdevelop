@@ -262,8 +262,9 @@ class QMapPrinter:
             return result
 
 
-    def __init__(self, val):
+    def __init__(self, val, container):
         self.val = val
+        self.container = container
 
     def children(self):
         return self._iterator(self.val)
@@ -274,7 +275,7 @@ class QMapPrinter:
         else:
             empty = ""
 
-        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
@@ -371,8 +372,9 @@ class QHashPrinter:
             self.count = self.count + 1
             return ('[%d]' % self.count, item)
 
-    def __init__(self, val):
+    def __init__(self, val, container):
         self.val = val
+        self.container = container
 
     def children(self):
         return self._iterator(self.val)
@@ -383,7 +385,7 @@ class QHashPrinter:
         else:
             empty = ""
 
-        return "%sQHash<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
@@ -513,7 +515,7 @@ class QSetPrinter:
             return ('[%d]' % (self.count-1), item)
 
     def children(self):
-        hashPrinter = QHashPrinter(self.val['q_hash'])
+        hashPrinter = QHashPrinter(self.val['q_hash'], None)
         hashIterator = hashPrinter._iterator(self.val['q_hash'])
         return self._iterator(hashIterator)
 
@@ -580,8 +582,10 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
     pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
     pretty_printers_dict[re.compile('^QLinkedList<.*>$')] = lambda val: QLinkedListPrinter(val)
-    pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
-    pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
+    pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val, 'QMap')
+    pretty_printers_dict[re.compile('^QMultiMap<.*>$')] = lambda val: QMapPrinter(val, 'QMultiMap')
+    pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val, 'QHash')
+    pretty_printers_dict[re.compile('^QMultiHash<.*>$')] = lambda val: QHashPrinter(val, 'QMultiHash')
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
