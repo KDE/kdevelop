@@ -3,18 +3,29 @@
 #include <QQueue>
 #include <QStack>
 #include <QLinkedList>
+#include <QSet>
 #include <QString>
+#include <QDebug>
 
 struct A {
     A(const QString& _a = QString(), const QString& _b = QString(),
       int _c = -1, int _d = -1)
     : a(_a), b(_b), c(_c), d(_d)
     {}
+    bool operator==(const A& other) const
+    {
+        return a == other.a && b == other.b && c == other.c && d == other.d;
+    }
     QString a;
     QString b;
     int c;
     int d;
 };
+
+uint qHash(const A& a)
+{
+    return qHash(a.a) + qHash(a.b);
+}
 
 template<template <typename> class Container>
 void doStuff()
@@ -44,6 +55,6 @@ int main()
     doStuff<QQueue>();
     doStuff<QStack>();
     doStuff<QLinkedList>();
-    doStuff<QStack>();
+    doStuff<QSet>();
     return 0;
 }

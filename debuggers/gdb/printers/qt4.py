@@ -518,7 +518,12 @@ class QSetPrinter:
         return self._iterator(hashIterator)
 
     def to_string(self):
-        return 'QSet'
+        if self.val['q_hash']['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQSet<%s>" % ( empty , self.val.type.template_argument(0) )
 
 
 class QCharPrinter:
