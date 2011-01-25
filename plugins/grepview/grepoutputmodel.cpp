@@ -222,13 +222,11 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if(!doc)
         return;
     if (KTextEditor::Document* tdoc = doc->textDocument()) {
-        QString text = tdoc->line(line);
-        int index = m_regExp.indexIn(text);
-        if (index!=-1) {
-            range.setBothLines(line);
-            range.start().setColumn(index);
-            range.end().setColumn(index+m_regExp.matchedLength());
-            doc->setTextSelection( range );
+        KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
+        QString actualText = tdoc->text(matchRange);
+        QString expectedText = grepitem->change()->m_oldText;
+        if (actualText == expectedText) {
+            range = matchRange;
         }
     }
 
@@ -298,6 +296,11 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     }
     return currentIdx;
 }
+
+const GrepOutputItem *GrepOutputModel::getRootItem() const {
+    return m_rootItem;
+}
+
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
@@ -377,6 +380,25 @@ void GrepOutputModel::doReplacements()
                         .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
     }
 }
+
+void GrepOutputModel::showMessageSlot(IStatus* status, const QString& message)
+{
+    m_savedMessage = message;
+    m_savedIStatus = status;
+    showMessageEmit();
+}
+
+void GrepOutputModel::showMessageEmit()
+{
+    emit showMessage(m_savedIStatus, m_savedMessage);
+}
+
+bool GrepOutputModel::hasResults()
+{
+    return(m_matchCount > 0);
+}
+
+
 
 #include "grepoutputmodel.moc"
 

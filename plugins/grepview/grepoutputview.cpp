@@ -16,12 +16,17 @@
 #include "grepviewplugin.h"
 #include "grepdialog.h"
 #include "greputil.h"
+#include "grepjob.h"
 
 #include <QtGui/QAction>
+#include <QtGui/QStringListModel>
 #include <KMessageBox>
+#include <kdebug.h>
+#include <QMenu>
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
+#include <QWidgetAction>
 
 using namespace KDevelop;
 
@@ -43,6 +48,9 @@ QString GrepOutputViewFactory::id() const
     return "org.kdevelop.GrepOutputView";
 }
 
+
+const int GrepOutputView::HISTORY_SIZE = 5;
+
 GrepOutputView::GrepOutputView(QWidget* parent)
   : QWidget(parent)
 {
@@ -62,6 +70,7 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
+    m_clearSearchHistory = new QAction(KIcon("edit-clear-list"), i18n("Clear search history"), this);
     
     addAction(m_prev);
     addAction(m_next);
@@ -69,8 +78,23 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     addAction(m_expandAll);
     addAction(separator);
     addAction(change_criteria);
+    addAction(m_clearSearchHistory);
     
-    renewModel();
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+    
+    QWidgetAction *statusWidget = new QWidgetAction(this);
+    m_statusLabel = new QLabel(this);
+    statusWidget->setDefaultWidget(m_statusLabel);
+    addAction(statusWidget);
+    
+    modelSelector->setEditable(false);
+    modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(modelSelector, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(modelSelectorContextMenu(const QPoint&)));
+    connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
+    
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
 
@@ -79,7 +103,10 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(m_collapseAll, SIGNAL(triggered(bool)), this, SLOT(collapseAllItems()));
     connect(m_expandAll, SIGNAL(triggered(bool)), this, SLOT(expandAllItems()));
     connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
-    
+    connect(m_clearSearchHistory, SIGNAL(triggered(bool)), this, SLOT(clearSearchHistory()));
+    connect(resultsTreeView, SIGNAL(collapsed(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
+    connect(resultsTreeView, SIGNAL(expanded(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
+
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
@@ -95,14 +122,16 @@ GrepOutputView::~GrepOutputView()
     emit outputViewIsClosed();
 }
 
-GrepOutputModel* GrepOutputView::renewModel()
+GrepOutputModel* GrepOutputView::renewModel(QString name)
 {
-    if (model()) {
-        model()->deleteLater();
+    // Crear oldest model
+    while(modelSelector->count() > GrepOutputView::HISTORY_SIZE) {
+        QVariant var = modelSelector->itemData(GrepOutputView::HISTORY_SIZE - 1);
+        qvariant_cast<QObject*>(var)->deleteLater();
+        modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
     }
 
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
-    resultsTreeView->setModel(newModel);
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
@@ -112,7 +141,14 @@ GrepOutputModel* GrepOutputView::renewModel()
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
-    connect(newModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    
+    
+    // appends new model to history
+    QString displayName = QTime::currentTime().toString("[hh:mm] ")+name;
+    modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
+    
+    modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);
+    
     return newModel;
 }
 
@@ -122,6 +158,35 @@ GrepOutputModel* GrepOutputView::model()
     return static_cast<GrepOutputModel*>(resultsTreeView->model());
 }
 
+void GrepOutputView::changeModel(int index)
+{
+    disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
+               this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+               this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    
+    //after deleting the whole search history, index is -1
+    if(index >= 0)
+    {
+        QVariant var = modelSelector->itemData(index);
+        GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
+        resultsTreeView->setModel(resultModel);
+        
+        connect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
+                this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+        connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+                this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+        model()->showMessageEmit();
+        applyButton->setEnabled(model()->hasResults() && 
+                                model()->getRootItem() && 
+                                model()->getRootItem()->checkState() != Qt::Unchecked);
+        if(model()->hasResults())
+        {
+            expandRootElement(QModelIndex());
+        }
+    }
+}
+
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
 {
     m_plugin = plugin;
@@ -129,7 +194,7 @@ void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
 
 void GrepOutputView::setMessage(const QString& msg)
 {
-    messageLabel->setText(msg);
+    m_statusLabel->setText(msg);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
@@ -146,18 +211,21 @@ void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 
 void GrepOutputView::onApply()
 {
-    Q_ASSERT(model()->rowCount());
-    // ask a confirmation before an empty string replacement
-    if(replacementCombo->currentText().length() == 0 &&
-       KMessageBox::questionYesNo(this, i18n("Would you want to replace by empty string?"),
-                                        i18n("Start replacement")) == KMessageBox::No)
+    if(model()) 
     {
-        return;
-    }
+        Q_ASSERT(model()->rowCount());
+        // ask a confirmation before an empty string replacement
+        if(replacementCombo->currentText().length() == 0 &&
+           KMessageBox::questionYesNo(this, i18n("Would you want to replace by empty string?"),
+                                            i18n("Start replacement")) == KMessageBox::ButtonCode::No)
+        {
+            return;
+        }
 
-    setEnabled(false);
-    model()->doReplacements();
-    setEnabled(true);
+        setEnabled(false);
+        model()->doReplacements();
+        setEnabled(true);
+    }
 }
 
 void GrepOutputView::showDialog()
@@ -226,4 +294,34 @@ void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIn
     {
         applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked);
     }
+}
+
+void GrepOutputView::clearSearchHistory()
+{
+    GrepJob *runningJob = m_plugin->grepJob();
+    if(runningJob)
+    {
+        runningJob->kill();
+    }
+    while(modelSelector->count() > 0)
+    {
+        QVariant var = modelSelector->itemData(0);
+        qvariant_cast<QObject*>(var)->deleteLater();
+        modelSelector->removeItem(0);
+    }
+    applyButton->setEnabled(false);
+    m_statusLabel->setText(QString());
+}
+
+void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
+{
+    QPoint globalPos = modelSelector->mapToGlobal(pos);
+    QMenu myMenu;
+    myMenu.addAction(m_clearSearchHistory);
+    myMenu.exec(globalPos);
+}
+
+void GrepOutputView::updateScrollArea(const QModelIndex& index)
+{
+    resultsTreeView->resizeColumnToContents( index.column() );
 }
