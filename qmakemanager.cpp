@@ -55,6 +55,7 @@
 #include "qmakemkspecs.h"
 #include "qmakejob.h"
 #include "qmakebuilddirchooser.h"
+#include "qmakeconfig.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
@@ -322,7 +323,12 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     
     if(projectNeedsConfiguration(project)) {
         QMakeBuildDirChooser *chooser = new QMakeBuildDirChooser(project);
-        chooser->show();
+        if(chooser->exec() == QDialog::Rejected)
+        {
+            kDebug() << "User stopped project import";
+            //TODO: return 0 has no effect.
+            return 0;
+        }
     }
 
     return ret;
@@ -503,9 +509,9 @@ void QMakeProjectManager::slotRunQMake()
 
 bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
 {
-    KConfigGroup cg(project->projectConfiguration(), "QMake Builder");
-    bool qmakeValid = cg.readEntry<KUrl>("QMake Binary", KUrl("")).isValid();
-    bool buildDirValid = cg.readEntry<KUrl>("Build Directory", KUrl("")).isValid();
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    bool qmakeValid = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl("")).isValid();
+    bool buildDirValid = cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, KUrl("")).isValid();
     kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
     return( !(qmakeValid && buildDirValid) );
 }

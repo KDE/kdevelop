@@ -1,3 +1,6 @@
+#ifndef QMAKEBUILDDIRCHOOSER_H
+#define QMAKEBUILDDIRCHOOSER_H
+
 #include <KDialog>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/abstractfilemanagerplugin.h>
@@ -18,5 +21,16 @@ public:
     virtual ~QMakeBuildDirChooser();
 
 private:
+    bool isValid();
+    
     KDevelop::IProject* m_project;
+
+protected slots:
+    virtual void slotButtonClicked(int button);
+    
+private slots:
+    void validate();
+    void saveConfig();
 };
+
+#endif
