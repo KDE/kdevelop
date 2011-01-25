@@ -137,6 +137,42 @@ class QListPrinter:
 
         return "%sQList<%s>" % ( empty , self.itype )
 
+class QVectorPrinter:
+    "Print a QVector"
+
+    class _iterator:
+        def __init__(self, nodetype, d, p):
+            self.nodetype = nodetype
+            self.d = d
+            self.p = p
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.count >= self.p['size']:
+                raise StopIteration
+            count = self.count
+
+            self.count = self.count + 1
+            return ('[%d]' % count, self.p['array'][count])
+
+    def __init__(self, val):
+        self.val = val
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['d'], self.val['p'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQVector<%s>" % ( empty , self.itype )
+
 class QMapPrinter:
     "Print a QMap"
 
@@ -495,6 +531,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
+    pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val)
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)

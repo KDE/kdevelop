@@ -161,6 +161,61 @@ void QtPrintersTest::testQListPointer()
     QVERIFY(out.contains("[2] = 0x"));
 }
 
+void QtPrintersTest::testQVectorInt()
+{
+    GdbProcess gdb("qvectorint");
+    gdb.execute("break qvectorint.cpp:6");
+    gdb.execute("run");
+    QByteArray out = gdb.execute("print l");
+    QVERIFY(out.contains("QVector<int>"));
+    QVERIFY(out.contains("[0] = 10"));
+    QVERIFY(out.contains("[1] = 20"));
+    gdb.execute("next");
+    QVERIFY(gdb.execute("print l").contains("[2] = 30"));
+}
+
+void QtPrintersTest::testQVectorString()
+{
+    GdbProcess gdb("qvectorstring");
+    gdb.execute("break qvectorstring.cpp:7");
+    gdb.execute("run");
+    QByteArray out = gdb.execute("print l");
+    QVERIFY(out.contains("QVector<QString>"));
+    QVERIFY(out.contains("[0] = \"a\""));
+    QVERIFY(out.contains("[1] = \"b\""));
+    gdb.execute("next");
+    out = gdb.execute("print l");
+    QVERIFY(out.contains("[2] = \"c\""));
+}
+
+void QtPrintersTest::testQVectorStruct()
+{
+    GdbProcess gdb("qvectorstruct");
+    gdb.execute("break qvectorstruct.cpp:15");
+    gdb.execute("run");
+    QByteArray out = gdb.execute("print l");
+    QVERIFY(out.contains("QVector<A>"));
+    QVERIFY(out.contains("[0] = {"));
+    QVERIFY(out.contains("a = \"a\""));
+    QVERIFY(out.contains("c = 100"));
+    gdb.execute("next");
+    out = gdb.execute("print l");
+    QVERIFY(out.contains("[1] = {"));
+}
+
+void QtPrintersTest::testQVectorPointer()
+{
+    GdbProcess gdb("qvectorpointer");
+    gdb.execute("break qvectorpointer.cpp:7");
+    gdb.execute("run");
+    QByteArray out = gdb.execute("print l");
+    QVERIFY(out.contains("QVector<int *>"));
+    QVERIFY(out.contains("[0] = 0x"));
+    QVERIFY(out.contains("[1] = 0x"));
+    gdb.execute("next");
+    out = gdb.execute("print l");
+    QVERIFY(out.contains("[2] = 0x"));
+}
 void QtPrintersTest::testQMapInt()
 {
     GdbProcess gdb("qmapint");

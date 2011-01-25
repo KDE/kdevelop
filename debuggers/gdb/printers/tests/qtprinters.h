@@ -34,6 +34,10 @@ private Q_SLOTS:
     void testQListString();
     void testQListStruct();
     void testQListPointer();
+    void testQVectorInt();
+    void testQVectorString();
+    void testQVectorStruct();
+    void testQVectorPointer();
     void testQMapInt();
     void testQMapString();
     void testQDate();

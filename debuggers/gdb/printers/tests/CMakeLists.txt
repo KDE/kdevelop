@@ -18,6 +18,18 @@ target_link_libraries(qliststruct ${QT_QTCORE_LIBRARY})
 add_executable(qlistpointer qlistpointer.cpp)
 target_link_libraries(qlistpointer ${QT_QTCORE_LIBRARY})
 
+add_executable(qvectorint qvectorint.cpp)
+target_link_libraries(qvectorint ${QT_QTCORE_LIBRARY})
+
+add_executable(qvectorstring qvectorstring.cpp)
+target_link_libraries(qvectorstring ${QT_QTCORE_LIBRARY})
+
+add_executable(qvectorstruct qvectorstruct.cpp)
+target_link_libraries(qvectorstruct ${QT_QTCORE_LIBRARY})
+
+add_executable(qvectorpointer qvectorpointer.cpp)
+target_link_libraries(qvectorpointer ${QT_QTCORE_LIBRARY})
+
 add_executable(qmapint qmapint.cpp)
 target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})
 
