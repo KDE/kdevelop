@@ -43,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <kconfig.h>
+#include <KSharedConfig>
 
 namespace KDevelop {
 
@@ -701,6 +702,12 @@ OutputPage::OutputPage(CreateClassWizard* parent)
 
 void OutputPage::initializePage()
 {
+     //Read the setting for lower case filenames
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
+    d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->setChecked(lower);
+
     updateFileNames();
     QWizardPage::initializePage();
 }
@@ -708,6 +715,11 @@ void OutputPage::initializePage()
 void OutputPage::updateFileNames() {
     d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
     d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
+
+    //Save the setting for next time
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    codegenGroup.writeEntry( "LowerCaseFilenames", d->output->lowerFilenameCheckBox->isChecked() );
 }
 
 void OutputPage::updateHeaderRanges(const QString & url)

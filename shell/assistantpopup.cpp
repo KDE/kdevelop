@@ -36,6 +36,8 @@ void AssistantPopup::updateActions() {
         haveTitle = true;
         QLabel* title = new QLabel("<b>" + m_assistant->title() + ":<b>");
         title->setTextFormat(Qt::RichText);
+        // We need some margin at the left, and also an overall margin makes the popup look nicer
+        title->setMargin(2);
         addWidget(title);
     }
     ///@todo Add some intelligent layouting to make sure the widget doesn't become too wide

@@ -145,7 +145,9 @@ void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
     
-    if(!QApplication::instance() || QThread::currentThread() == QApplication::instance()->thread())
+    if(!QApplication::instance() || // Initialization isn't complete yet
+        QThread::currentThread() == QApplication::instance()->thread() || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
+        holderThread == QThread::currentThread())  // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
     {
         lockForegroundMutexInternal();
     }else{

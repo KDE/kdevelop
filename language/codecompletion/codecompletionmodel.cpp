@@ -66,7 +66,11 @@ public:
    CompletionWorkerThread(CodeCompletionModel* model)
      : QThread(model), m_model(model), m_worker(m_model->createCompletionWorker())
    {
+     Q_ASSERT(m_worker->parent() == 0); // Must be null, else we cannot change the thread affinity!
+     m_worker->moveToThread(this);
+     Q_ASSERT(m_worker->thread() == this);
    }
+   
    ~CompletionWorkerThread() {
      delete m_worker;
    }
@@ -153,6 +157,7 @@ void CodeCompletionModel::clear() {
 
 void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
 {
+  Q_ASSERT(m_thread == worker()->thread());
   Q_UNUSED(invocationType)
 
   DUChainReadLocker lock(DUChain::lock(), 400);
