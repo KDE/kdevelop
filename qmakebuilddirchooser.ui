@@ -29,12 +29,12 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>cmakeBin</cstring>
+      <cstring>qmakeBin</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KUrlRequester" name="cmakeBin">
+    <widget class="KUrlRequester" name="qmakeBin">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -107,6 +107,9 @@
    </item>
    <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="status">
+     <property name="styleSheet">
+      <string notr="true">QLabel { color : red; }</string>
+     </property>
      <property name="text">
       <string notr="true">Status Message...</string>
      </property>
@@ -131,16 +134,6 @@
      <item>
       <property name="text">
        <string notr="true">Release</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">RelWithDebInfo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">MinSizeRel</string>
       </property>
      </item>
     </widget>
