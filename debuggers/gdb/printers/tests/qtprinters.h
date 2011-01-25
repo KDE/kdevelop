@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testQVectorString();
     void testQVectorStruct();
     void testQVectorPointer();
+    void testQQueue();
     void testQMapInt();
     void testQMapString();
     void testQDate();

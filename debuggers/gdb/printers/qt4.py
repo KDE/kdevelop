@@ -119,8 +119,9 @@ class QListPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, node['v'].cast(self.nodetype))
 
-    def __init__(self, val, itype):
+    def __init__(self, val, container, itype):
         self.val = val
+        self.container = container
         if itype == None:
             self.itype = self.val.type.template_argument(0)
         else:
@@ -135,7 +136,7 @@ class QListPrinter:
         else:
             empty = ""
 
-        return "%sQList<%s>" % ( empty , self.itype )
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
 
 class QVectorPrinter:
     "Print a QVector"
@@ -529,8 +530,9 @@ def lookup_function (val):
 def build_dictionary ():
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
-    pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
-    pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
+    pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
+    pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
+    pretty_printers_dict[re.compile('^QQueue')] = lambda val: QListPrinter(val, 'QQueue', None)
     pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val)
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)

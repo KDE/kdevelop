@@ -30,6 +30,9 @@ target_link_libraries(qvectorstruct ${QT_QTCORE_LIBRARY})
 add_executable(qvectorpointer qvectorpointer.cpp)
 target_link_libraries(qvectorpointer ${QT_QTCORE_LIBRARY})
 
+add_executable(qqueue qqueue.cpp)
+target_link_libraries(qqueue ${QT_QTCORE_LIBRARY})
+
 add_executable(qmapint qmapint.cpp)
 target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})
 
