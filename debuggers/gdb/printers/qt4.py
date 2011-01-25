@@ -159,8 +159,9 @@ class QVectorPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, self.p['array'][count])
 
-    def __init__(self, val):
+    def __init__(self, val, container):
         self.val = val
+        self.container = container
         self.itype = self.val.type.template_argument(0)
 
     def children(self):
@@ -172,7 +173,7 @@ class QVectorPrinter:
         else:
             empty = ""
 
-        return "%sQVector<%s>" % ( empty , self.itype )
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
 
 class QMapPrinter:
     "Print a QMap"
@@ -533,7 +534,8 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
     pretty_printers_dict[re.compile('^QQueue')] = lambda val: QListPrinter(val, 'QQueue', None)
-    pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val)
+    pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
+    pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)

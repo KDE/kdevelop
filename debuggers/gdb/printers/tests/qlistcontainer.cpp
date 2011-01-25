@@ -2,8 +2,14 @@
 #include <QVector>
 #include <QQueue>
 #include <QStack>
+#include <QLinkedList>
 #include <QString>
+
 struct A {
+    A(const QString& _a = QString(), const QString& _b = QString(),
+      int _c = -1, int _d = -1)
+    : a(_a), b(_b), c(_c), d(_d)
+    {}
     QString a;
     QString b;
     int c;
@@ -22,9 +28,7 @@ void doStuff()
     stringList << "d";
 
     Container<A> structList;
-    structList << A();
-    structList[0].a = "a";
-    structList[0].c = 100;
+    structList << A("a", "b", 100, -200);
     structList << A();
 
     Container<int*> pointerList;
@@ -38,6 +42,8 @@ int main()
     doStuff<QList>();
     doStuff<QVector>();
     doStuff<QQueue>();
+    doStuff<QStack>();
+    doStuff<QLinkedList>();
     doStuff<QStack>();
     return 0;
 }

@@ -112,6 +112,7 @@ void QtPrintersTest::testQListContainer_data()
     QTest::newRow("QList") << "QList";
     QTest::newRow("QQueue") << "QQueue";
     QTest::newRow("QVector") << "QVector";
+    QTest::newRow("QStack") << "QStack";
 }
 
 void QtPrintersTest::testQListContainer()
@@ -161,13 +162,13 @@ void QtPrintersTest::testQListContainer()
     QByteArray out = gdb.execute("print structList");
     QVERIFY(out.contains(QString("empty %1<A>").arg(container).toLocal8Bit()));
     gdb.execute("next");
-    gdb.execute("next");
-    gdb.execute("next");
     out = gdb.execute("print structList");
     QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = {"));
     QVERIFY(out.contains("a = \"a\""));
+    QVERIFY(out.contains("b = \"b\""));
     QVERIFY(out.contains("c = 100"));
+    QVERIFY(out.contains("d = -200"));
     gdb.execute("next");
     out = gdb.execute("print structList");
     QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
