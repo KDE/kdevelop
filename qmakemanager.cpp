@@ -54,6 +54,7 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 #include "qmakejob.h"
+#include "qmakebuilddirchooser.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
@@ -318,6 +319,11 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
 
     connect(projectWatcher(project), SIGNAL(dirty(QString)),
             this, SLOT(slotDirty(QString)));
+    
+    if(projectNeedsConfiguration(project)) {
+        QMakeBuildDirChooser *chooser = new QMakeBuildDirChooser(project);
+        chooser->show();
+    }
 
     return ret;
 }
@@ -494,5 +500,15 @@ void QMakeProjectManager::slotRunQMake()
 
     KDevelop::ICore::self()->runController()->registerJob( job );
 }
+
+bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
+{
+    KConfigGroup cg(project->projectConfiguration(), "QMake Builder");
+    bool qmakeValid = cg.readEntry<KUrl>("QMake Binary", KUrl("")).isValid();
+    bool buildDirValid = cg.readEntry<KUrl>("Build Directory", KUrl("")).isValid();
+    kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
+    return( !(qmakeValid && buildDirValid) );
+}
+
 
 #include "qmakemanager.moc"
