@@ -119,8 +119,9 @@ class QListPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, node['v'].cast(self.nodetype))
 
-    def __init__(self, val, itype):
+    def __init__(self, val, container, itype):
         self.val = val
+        self.container = container
         if itype == None:
             self.itype = self.val.type.template_argument(0)
         else:
@@ -135,7 +136,82 @@ class QListPrinter:
         else:
             empty = ""
 
-        return "%sQList<%s>" % ( empty , self.itype )
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
+
+class QVectorPrinter:
+    "Print a QVector"
+
+    class _iterator:
+        def __init__(self, nodetype, d, p):
+            self.nodetype = nodetype
+            self.d = d
+            self.p = p
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.count >= self.p['size']:
+                raise StopIteration
+            count = self.count
+
+            self.count = self.count + 1
+            return ('[%d]' % count, self.p['array'][count])
+
+    def __init__(self, val, container):
+        self.val = val
+        self.container = container
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['d'], self.val['p'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
+
+class QLinkedListPrinter:
+    "Print a QLinkedList"
+
+    class _iterator:
+        def __init__(self, nodetype, begin, size):
+            self.nodetype = nodetype
+            self.it = begin
+            self.pos = 0
+            self.size = size
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.pos >= self.size:
+                raise StopIteration
+
+            pos = self.pos
+            val = self.it['t']
+            self.it = self.it['n']
+            self.pos = self.pos + 1
+            return ('[%d]' % pos, val)
+
+    def __init__(self, val):
+        self.val = val
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['e']['n'], self.val['d']['size'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQLinkedList<%s>" % ( empty, self.itype )
 
 class QMapPrinter:
     "Print a QMap"
@@ -442,7 +518,12 @@ class QSetPrinter:
         return self._iterator(hashIterator)
 
     def to_string(self):
-        return 'QSet'
+        if self.val['q_hash']['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQSet<%s>" % ( empty , self.val.type.template_argument(0) )
 
 
 class QCharPrinter:
@@ -493,8 +574,12 @@ def lookup_function (val):
 def build_dictionary ():
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
-    pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
-    pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
+    pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, 'QList', None)
+    pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QStringList', 'QString')
+    pretty_printers_dict[re.compile('^QQueue')] = lambda val: QListPrinter(val, 'QQueue', None)
+    pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
+    pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
+    pretty_printers_dict[re.compile('^QLinkedList<.*>$')] = lambda val: QLinkedListPrinter(val)
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)

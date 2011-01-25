@@ -1,20 +1,13 @@
+add_definitions("-DPRINTER_BIN_DIR=\\\"${CMAKE_CURRENT_BINARY_DIR}\\\"")
+
 add_executable(qstring qstring.cpp)
 target_link_libraries(qstring ${QT_QTCORE_LIBRARY})
 
 add_executable(qbytearray qbytearray.cpp)
 target_link_libraries(qbytearray ${QT_QTCORE_LIBRARY})
 
-add_executable(qlistint qlistint.cpp)
-target_link_libraries(qlistint ${QT_QTCORE_LIBRARY})
-
-add_executable(qliststring qliststring.cpp)
-target_link_libraries(qliststring ${QT_QTCORE_LIBRARY})
-
-add_executable(qliststruct qliststruct.cpp)
-target_link_libraries(qliststruct ${QT_QTCORE_LIBRARY})
-
-add_executable(qlistpointer qlistpointer.cpp)
-target_link_libraries(qlistpointer ${QT_QTCORE_LIBRARY})
+add_executable(qlistcontainer qlistcontainer.cpp)
+target_link_libraries(qlistcontainer ${QT_QTCORE_LIBRARY})
 
 add_executable(qmapint qmapint.cpp)
 target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})
