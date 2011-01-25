@@ -113,6 +113,7 @@ void QtPrintersTest::testQListContainer_data()
     QTest::newRow("QQueue") << "QQueue";
     QTest::newRow("QVector") << "QVector";
     QTest::newRow("QStack") << "QStack";
+    QTest::newRow("QLinkedList") << "QLinkedList";
 }
 
 void QtPrintersTest::testQListContainer()

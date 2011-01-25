@@ -175,6 +175,44 @@ class QVectorPrinter:
 
         return "%s%s<%s>" % ( empty, self.container, self.itype )
 
+class QLinkedListPrinter:
+    "Print a QLinkedList"
+
+    class _iterator:
+        def __init__(self, nodetype, begin, size):
+            self.nodetype = nodetype
+            self.it = begin
+            self.pos = 0
+            self.size = size
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.pos >= self.size:
+                raise StopIteration
+
+            pos = self.pos
+            val = self.it['t']
+            self.it = self.it['n']
+            self.pos = self.pos + 1
+            return ('[%d]' % pos, val)
+
+    def __init__(self, val):
+        self.val = val
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['e']['n'], self.val['d']['size'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQLinkedList<%s>" % ( empty, self.itype )
+
 class QMapPrinter:
     "Print a QMap"
 
@@ -536,6 +574,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QQueue')] = lambda val: QListPrinter(val, 'QQueue', None)
     pretty_printers_dict[re.compile('^QVector<.*>$')] = lambda val: QVectorPrinter(val, 'QVector')
     pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QVectorPrinter(val, 'QStack')
+    pretty_printers_dict[re.compile('^QLinkedList<.*>$')] = lambda val: QLinkedListPrinter(val)
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
