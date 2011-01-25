@@ -324,13 +324,8 @@ QStringList QMakeProjectFile::targets() const
 
 QString QMakeProjectFile::buildDirectory() const
 {
-    QStringList dir = variableValues("DESTDIR");
-    if (!dir.isEmpty()) {
-        ifDebug(kDebug(9024) << "found DESTDIR:" << dir;)
-        return resolveToSingleFileName(dir.first());
-    } else {
-        return absoluteDir();
-    }
+    //TODO: this is a tempoary fix, once import dialog will be finished, this code has to be changed.
+    return absoluteDir();
 }
 
 QMakeProjectFile::~QMakeProjectFile()
