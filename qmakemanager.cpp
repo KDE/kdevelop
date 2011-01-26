@@ -522,6 +522,16 @@ void QMakeProjectManager::slotRunQMake()
     KUrl buildDir = buildDirFromSrc(m_actionItem->project(), srcDir);
     QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
 
+    KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KUrl qmakePath = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(""));
+    if(!qmakePath.isEmpty())
+        job->setQMakePath(qmakePath.path());
+    KUrl installPrefix = cg.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl(""));
+    if(!installPrefix.isEmpty())
+        job->setInstallPrefix(installPrefix.path());
+    job->setBuildType( cg.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
+    job->setExtraArguments( cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS, "") );
+
     KDevelop::ICore::self()->runController()->registerJob( job );
 }
 
