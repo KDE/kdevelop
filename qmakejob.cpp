@@ -63,11 +63,9 @@ void QMakeJob::start()
 
     m_model->appendLine(m_buildDir + ": " + args.join(" "));
 
-    if( !QFileInfo(m_buildDir).exists() ) {
-        KUrl dirUrl(m_buildDir);
-        kDebug() << "creating" << dirUrl.fileName() << "in" << dirUrl.directory();
-        QDir d(dirUrl.directory());
-        d.mkdir( dirUrl.fileName() );
+    QDir build(m_buildDir);
+    if( !build.exists() ) {
+        build.mkpath(build.absolutePath());
     }
 
     m_process = new KProcess(this);

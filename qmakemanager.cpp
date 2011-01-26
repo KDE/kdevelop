@@ -81,7 +81,7 @@ KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
     KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
     if(buildDir.isValid()) {
-        buildDir.resolved(relative);
+        buildDir.addPath(relative);
     }
     return buildDir;
 }
@@ -156,21 +156,26 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
     ///TODO: support includes by some other parent or sibling in a different file-tree-branch
     QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
+    KUrl dir;
     if ( qmakeItem ) {
         if (!item->parent()) {
             // build root item
-            return buildDirFromSrc(item->project(), item->url());
+            dir = buildDirFromSrc(item->project(), item->url());
         }
         // build sub-item
         foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
             if ( pro->hasSubProject( item->url().toLocalFile() ) ) {
                 // get path from project root and it to buildDir
-                return buildDirFromSrc(item->project(), pro->absoluteDir());
+                dir = buildDirFromSrc(item->project(), pro->absoluteDir());
             }
         }
     }
 
-    return KUrl();
+    if(dir.isValid() && QFileInfo(dir.toLocalFile()).exists()) {
+        return dir;
+    } else {
+        return KUrl();
+    }
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
