@@ -39,6 +39,11 @@ public:
     QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent = 0 );
     virtual void start();
     virtual ~QMakeJob();
+    void setQMakePath(const QString& path);
+    void setInstallPrefix(const QString& prefix);
+    void setBuildType(int comboboxSelectedIndex); // --> qmakebuilddirchooser.ui
+    void setExtraArguments(const QString& args);
+    
 
     virtual QString errorString() const;
 
@@ -52,6 +57,10 @@ private slots:
 private:
     QString m_srcDir;
     QString m_buildDir;
+    QString m_qmakePath;
+    QString m_installPrefix;
+    int m_buildType;
+    QString m_extraArguments;
     KProcess* m_process;
     KDevelop::OutputModel* m_model;
 };

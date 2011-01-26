@@ -136,6 +136,11 @@
        <string notr="true">Release</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>(Use default from .pro file)</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>
@@ -152,6 +157,13 @@
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>qmakeBin</tabstop>
+  <tabstop>buildFolder</tabstop>
+  <tabstop>installPrefix</tabstop>
+  <tabstop>buildType</tabstop>
+  <tabstop>extraArguments</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
