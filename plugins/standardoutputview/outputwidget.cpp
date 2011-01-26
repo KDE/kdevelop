@@ -23,6 +23,7 @@
 
 #include "standardoutputview.h"
 #include <QtCore/QTimer>
+#include <QtCore/QRegExp>
 #include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QTreeView>
@@ -33,6 +34,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QClipboard>
 #include <QtGui/QWidgetAction>
+#include <QtGui/QSortFilterProxyModel>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -114,6 +116,12 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
         addAction(filterAction);
+
+        proxyModel = new QSortFilterProxyModel;
+        proxyModel->setDynamicSortFilter(true);
+
+        connect(filterInput, SIGNAL(userTextChanged(QString)),
+                                    this, SLOT(filterModel(QString)) );
     }
     
     addActions(data->actionList);
@@ -503,6 +511,20 @@ void OutputWidget::selectAll()
     view->selectAll();
 }
 
-
+void OutputWidget::filterModel(QString filter)
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) ) {
+        proxyModel->setSourceModel(view->model());
+        view->setModel(proxyModel);
+    }
+    QRegExp regExp(filter);
+    proxyModel->setFilterRegExp(regExp);
+}
 
 #include "outputwidget.moc"

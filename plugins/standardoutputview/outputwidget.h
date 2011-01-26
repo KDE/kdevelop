@@ -36,7 +36,7 @@ class KTabWidget;
 class KToggleAction;
 class QModelIndex;
 class KAction;
-
+class QSortFilterProxyModel;
 
 class OutputWidget : public QWidget
 {
@@ -64,6 +64,7 @@ private slots:
     void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
     void selectAll();
+    void filterModel(QString filter);
 
 private:
     QTreeView* createListView(int id);
@@ -82,6 +83,7 @@ private:
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
     QWidgetAction* filterAction;
+    QSortFilterProxyModel* proxyModel;
 };
 
 #endif

@@ -130,17 +130,17 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         case KDevelop::IOutputView::BuildView:
         {
-            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build") );
+            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::RunView:
         {
-            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run") );
+            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::DebugView:
         {
-            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger") );
+            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:
