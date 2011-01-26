@@ -117,9 +117,6 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         filterAction->setDefaultWidget(filterInput);
         addAction(filterAction);
 
-        proxyModel = new QSortFilterProxyModel;
-        proxyModel->setDynamicSortFilter(true);
-
         connect(filterInput, SIGNAL(userTextChanged(QString)),
                                     this, SLOT(filterModel(QString)) );
     }
@@ -152,6 +149,19 @@ void OutputWidget::addOutput( int id )
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
     
     enableActions();
+    if( data->option & KDevelop::IOutputView::AddFilterAction)
+    {
+        int index = 0;
+        if( data->type & KDevelop::IOutputView::MultipleView )
+        {
+            index = tabwidget->currentIndex();
+        } else if( data->type & KDevelop::IOutputView::HistoryView )
+        {
+            index = stackwidget->currentIndex();
+        }
+        proxyModels.insert(index,new QSortFilterProxyModel());
+        proxyModels[index]->setDynamicSortFilter(true);
+    }
 }
 
 void OutputWidget::setCurrentWidget( QTreeView* view )
@@ -519,12 +529,20 @@ void OutputWidget::filterModel(QString filter)
     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
     if( !view )
         return;
-    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) ) {
-        proxyModel->setSourceModel(view->model());
-        view->setModel(proxyModel);
+    int index = 0;
+    if( data->type & KDevelop::IOutputView::MultipleView )
+    {
+        index = tabwidget->currentIndex();
+    } else if( data->type & KDevelop::IOutputView::HistoryView )
+    {
+        index = stackwidget->currentIndex();
     }
-    QRegExp regExp(filter);
-    proxyModel->setFilterRegExp(regExp);
+    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) ) {
+        proxyModels[index]->setSourceModel(view->model());
+        view->setModel(proxyModels[index]);
+    }
+    QRegExp regExp(filter,Qt::CaseInsensitive);
+    proxyModels[index]->setFilterRegExp(regExp);
 }
 
 #include "outputwidget.moc"

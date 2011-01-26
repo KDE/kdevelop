@@ -78,6 +78,7 @@ private:
 
     QMap<int, QTreeView*> views;
     QMap<int, QTimer*> scrollTimers;
+    QMap<int, QSortFilterProxyModel*> proxyModels;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     ToolViewData* data;
@@ -87,7 +88,6 @@ private:
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
     QWidgetAction* filterAction;
-    QSortFilterProxyModel* proxyModel;
 };
 
 #endif
