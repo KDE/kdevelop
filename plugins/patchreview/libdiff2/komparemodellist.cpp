@@ -919,9 +919,14 @@ bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 		{
 			model = *modelIt;
 			kDebug(8101) << "Model : " << model << endl;
-			QString filename = model->sourcePath() + model->sourceFile();
+			QString filename;
+			if (!model->sourcePath().isEmpty()) {
+				filename = QDir(model->sourcePath()).filePath(model->sourceFile());
+			} else {
+				filename = model->sourceFile();
+			}
 			if ( !filename.startsWith( localURL ) )
-				filename.prepend( localURL );
+				filename = QDir(localURL).filePath(filename);
 			QFileInfo fi2( filename );
 			if ( fi2.exists() )
 			{
