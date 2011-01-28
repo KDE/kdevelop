@@ -20,6 +20,7 @@
 #include <QtGui>
 
 #include <qtest_kde.h>
+#include <kdebug.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -30,6 +31,8 @@
 #include <sublime/mainwindow.h>
 
 #include "standardoutputviewtest.h"
+#include "../standardoutputview.h"
+#include "../outputwidget.h"
 #include <interfaces/iplugincontroller.h>
 
 namespace KDevelop
@@ -50,32 +53,8 @@ void StandardOutputViewTest::initTestCase()
     Sublime::MainWindow* mw = new Sublime::MainWindow(m_controller);
     m_controller->showArea(m_area, mw);
     
-    QTest::qWait(500);
-}
-
-void StandardOutputViewTest::cleanupTestCase()
-{
-//     m_testCore->cleanup();
-//     delete m_testCore;
-    delete m_area;
-    delete m_controller;
-}
-
-bool StandardOutputViewTest::toolviewExist(QString toolviewTitle)
-{
-    QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
-    foreach(Sublime::View* view, views) {
-        Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
-        if(doc)
-        {
-            if(doc->title() == toolviewTitle) return true;
-        }
-    }
-    return false;
-}
-
-void StandardOutputViewTest::testRegisterAndRemoveToolView()
-{
+    QTest::qWait(1000);
+    
     m_stdOutputView = 0;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
     
@@ -85,12 +64,70 @@ void StandardOutputViewTest::testRegisterAndRemoveToolView()
            m_stdOutputView =  dynamic_cast<StandardOutputView*>(plugin);
     }
     Q_ASSERT(m_stdOutputView);
-    
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, KIcon());
-    QVERIFY(toolviewExist(toolviewTitle));
+}
+
+void StandardOutputViewTest::cleanupTestCase()
+{
+     m_testCore->cleanup();
+     delete m_testCore;
+    //delete m_area;
+}
+
+OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
+{
+    QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
+    foreach(Sublime::View* view, views) {
+        Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
+        if(doc)
+        {
+            if(doc->title() == toolviewTitle) {
+                return dynamic_cast<OutputWidget*>(view->widget());
+            }
+        }
+    }
+    return 0;
+}
+
+void StandardOutputViewTest::testRegisterAndRemoveToolView()
+{    
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView);
+    QVERIFY(toolviewPointer(toolviewTitle));
     
     m_stdOutputView->removeToolView(toolviewId);
-    QVERIFY(!toolviewExist(toolviewTitle));
+    QVERIFY(!toolviewPointer(toolviewTitle));
+}
+
+void StandardOutputViewTest::testActions()
+{
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
+    OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
+    QVERIFY(outputWidget);
+    
+    QList<QAction*> actions = outputWidget->actions();
+    QCOMPARE(actions.takeFirst()->text(), QString(""));
+    QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
+    QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
+    
+    m_stdOutputView->removeToolView(toolviewId);
+    QVERIFY(!toolviewPointer(toolviewTitle));
+    
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, 
+                                                   KIcon(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
+    outputWidget = toolviewPointer(toolviewTitle);
+    QVERIFY(outputWidget);
+    
+    actions = outputWidget->actions();
+    QCOMPARE(actions.takeFirst()->text(), QString("Previous"));
+    QCOMPARE(actions.takeFirst()->text(), QString("Next"));
+    QCOMPARE(actions.takeFirst()->text(), QString("Select activated Item"));
+    QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
+    QCOMPARE(actions.takeFirst()->text(), QString(""));
+    QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
+    QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
+    QCOMPARE(actions.takeFirst()->text(), QString("Filter"));
+    
+    m_stdOutputView->removeToolView(toolviewId);
+    QVERIFY(!toolviewPointer(toolviewTitle));
 }
 
 QTEST_KDEMAIN(StandardOutputViewTest, GUI)

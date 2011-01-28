@@ -170,6 +170,7 @@ Q_SIGNALS:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
+Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Options)
 
 }
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )

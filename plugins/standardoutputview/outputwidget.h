@@ -37,10 +37,14 @@ class KToggleAction;
 class QModelIndex;
 class KAction;
 class QSortFilterProxyModel;
+class StandardOutputViewTest;
 
 class OutputWidget : public QWidget
 {
 Q_OBJECT
+
+    friend class StandardOutputViewTest;
+
 public:
     OutputWidget(QWidget* parent, ToolViewData* data);
     void removeOutput( int id );

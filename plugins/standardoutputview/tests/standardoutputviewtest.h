@@ -22,7 +22,6 @@
 
 #include <QtCore/QObject>
 
-#include "../standardoutputview.h"
 #include <shell/uicontroller.h>
 
 namespace KDevelop
@@ -38,6 +37,9 @@ namespace Sublime
     class Area;
 }
 
+class StandardOutputView;
+class OutputWidget;
+
 class StandardOutputViewTest: public QObject
 {
     Q_OBJECT
@@ -45,7 +47,7 @@ class StandardOutputViewTest: public QObject
 public:   
 
 private:
-    bool toolviewExist(QString toolviewTitle);
+    OutputWidget* toolviewPointer(QString toolviewTitle);
     KDevelop::TestCore* m_testCore;
     StandardOutputView* m_stdOutputView;
     //Sublime::Controller* m_controller;
@@ -60,6 +62,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testRegisterAndRemoveToolView();
+    void testActions();
 };
 
 #endif // STANDARDOUTPUTVIEWTEST_H
