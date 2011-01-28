@@ -93,7 +93,8 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
-    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)), this, SLOT(removeSublimeView(Sublime::View*)));
+    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)),
+            this, SLOT(removeSublimeView(Sublime::View*)));
 
 }
     
