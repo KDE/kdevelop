@@ -86,10 +86,16 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
             this, SLOT(showDialog()));
 }
 
+EnvironmentConfigureButton::~EnvironmentConfigureButton()
+{
+    delete d;
+}
+
 void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* widget)
 {
     d->selectionWidget = widget;
 }
+
 
 }
 

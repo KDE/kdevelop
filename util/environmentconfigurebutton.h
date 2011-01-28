@@ -40,6 +40,7 @@ class KDEVPLATFORMUTIL_EXPORT EnvironmentConfigureButton : public QPushButton
     Q_OBJECT
 public:
     explicit EnvironmentConfigureButton(QWidget* parent = 0);
+    ~EnvironmentConfigureButton();
 
     void setSelectionWidget(EnvironmentSelectionWidget* widget);
 
