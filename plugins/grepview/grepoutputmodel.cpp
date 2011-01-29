@@ -315,7 +315,11 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     m_fileCount  += 1;
     m_matchCount += items.length();
-    m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
+
+    const QString matchText = i18np("1 match", "%1 matches", m_matchCount);
+    const QString fileText = i18np("1 file", "%1 files", m_fileCount);
+
+    m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "%1 in %2", matchText, fileText));
     
     QString fnString = i18np("%2 <i>(one match)</i>", "%2 <i>(%1 matches)</i>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
 
