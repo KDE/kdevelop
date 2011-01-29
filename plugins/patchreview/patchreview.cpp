@@ -103,20 +103,25 @@ void PatchReviewToolView::patchChanged()
 PatchReviewToolView::~PatchReviewToolView() {
 }
 
-void PatchReviewToolView::updatePatchFromEdit() {
-
+LocalPatchSource* PatchReviewToolView::GetLocalPatchSource()
+{
     IPatchSource::Ptr ips = m_plugin->patch();
 
     if ( !ips )
-        return;
-    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ips.data());
+        return 0;
+    return dynamic_cast<LocalPatchSource*>(ips.data());
+}
+
+void PatchReviewToolView::updatePatchFromEdit() {
+    LocalPatchSource* lpatch = GetLocalPatchSource();
     if(!lpatch)
       return;
 
     lpatch->m_command = m_editPatch.command->text();
     lpatch->m_filename = m_editPatch.filename->url();
     lpatch->m_baseDir = m_editPatch.baseDir->url();
-//     lpatch->m_depth = m_editPatch.depth->value();
+    lpatch->m_depth = m_editPatch.depth->value();
+    lpatch->setAlreadyApplied(m_editPatch.applied->checkState() == Qt::Checked);
 
     m_plugin->notifyPatchChanged();
 }
@@ -167,17 +172,28 @@ void PatchReviewToolView::fillEditFromPatch() {
       m_editPatch.tabWidget->hide();
       m_editPatch.baseDir->hide();
       m_editPatch.label->hide();
+      m_editPatch.depth->hide();
+      m_editPatch.depthLabel->hide();
+      m_editPatch.applied->hide();
       return;
     }else{
       m_editPatch.tabWidget->show();
       m_editPatch.baseDir->show();
       m_editPatch.label->show();
+      m_editPatch.depth->show();
+      m_editPatch.depthLabel->show();
+      m_editPatch.applied->show();
     }
     
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
-//     m_editPatch.depth->setValue( lpatch->m_depth );
+    m_editPatch.depth->setValue( lpatch->m_depth );
+    if (lpatch->isAlreadyApplied()) {
+      m_editPatch.applied->setCheckState(Qt::Checked);
+    } else {
+      m_editPatch.applied->setCheckState(Qt::Unchecked);
+    }
 
     if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
@@ -190,6 +206,22 @@ void PatchReviewToolView::patchSelectionChanged(int selection)
   m_editPatch.filesList->clear();
     if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
       m_plugin->setPatch(m_plugin->knownPatches()[selection]);
+    }
+}
+
+void PatchReviewToolView::slotDepthChanged(int newDepth)
+{
+    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
+        lpatch->m_depth = newDepth;
+        m_plugin->notifyPatchChanged();
+    }
+}
+
+void PatchReviewToolView::slotAppliedChanged(int newState)
+{
+    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
+        lpatch->setAlreadyApplied(newState == Qt::Checked);
+        m_plugin->notifyPatchChanged();
     }
 }
 
@@ -240,7 +272,8 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
-//     connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(updatePatchFromEdit()) );
+    connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(slotDepthChanged(int)) );
+    connect( m_editPatch.applied, SIGNAL(stateChanged(int)), SLOT(slotAppliedChanged(int)) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.baseDir, SIGNAL(textChanged(QString)), SLOT(updatePatchFromEdit()) );
 
@@ -1296,6 +1329,8 @@ void PatchReviewPlugin::updateKompareModel() {
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination=m_patch->file().toLocalFile();
         m_kompareInfo->localSource=m_patch->baseDir().toLocalFile();
+        m_kompareInfo->depth = m_patch->depth();
+        m_kompareInfo->applied = m_patch->isAlreadyApplied();
         
         m_modelList.reset(new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ));
         m_modelList->slotKompareInfo(m_kompareInfo.get());

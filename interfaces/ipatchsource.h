@@ -83,7 +83,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         ///May return an additional list of selectable files together with short description strings for this patch
         ///The default implementation returns an empty list
         virtual QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const;
-        
+
+        /// 
+        virtual uint depth() const;
     Q_SIGNALS:
         ///Should be emitted whenever the patch has changed.
         void patchChanged();

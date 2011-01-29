@@ -117,6 +117,8 @@ private slots:
     void slotEditCommandChanged();
 
     void slotEditFileNameChanged();
+    void slotDepthChanged(int newDepth);
+    void slotAppliedChanged(int newState);
 
     void finishReview();
     
@@ -126,6 +128,8 @@ private:
     void showEditDialog();
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
+    /// Retrieve the patch from plugin and perform all necessary casts
+    LocalPatchSource* GetLocalPatchSource();
 
     Ui_EditPatch m_editPatch;
 
