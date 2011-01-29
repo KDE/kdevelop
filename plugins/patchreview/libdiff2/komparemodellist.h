@@ -166,6 +166,7 @@ private: // Helper methods
 	bool hasNextDiff() const;
 
 	QStringList split( const QString& diff );
+	void setDepthAndApplied();
 
 private:
 	KTemporaryFile*       m_diffTemp;

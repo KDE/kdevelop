@@ -92,7 +92,9 @@ namespace Kompare
 			QString _localSource = "",
 			QString _localDestination = "",
 			KTempDir* _sourceKTempDir = 0,
-			KTempDir* _destinationKTempDir = 0
+			KTempDir* _destinationKTempDir = 0,
+			uint _depth = 0,
+			bool _applied = true
 		)
 		{
 			mode = _mode;
@@ -105,6 +107,8 @@ namespace Kompare
 			localDestination = _localDestination;
 			sourceKTempDir = _sourceKTempDir;
 			destinationKTempDir = _destinationKTempDir;
+			depth = _depth;
+			applied = _applied;
 		}
 		void swapSourceWithDestination()
 		{
@@ -130,6 +134,8 @@ namespace Kompare
 		QString        localDestination;
 		KTempDir*      sourceKTempDir;
 		KTempDir*      destinationKTempDir;
+		uint           depth;
+		bool           applied;
 	};
 } // End of namespace Kompare
 
