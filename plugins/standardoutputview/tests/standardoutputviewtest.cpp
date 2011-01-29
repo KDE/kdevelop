@@ -18,7 +18,6 @@
 
 #include <QTest>
 #include <QtGui>
-#include <QSignalSpy>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -47,11 +46,8 @@ void StandardOutputViewTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
-    QSignalSpy spy(m_testCore, SIGNAL(initializationCompleted()));
-    m_testCore->initialize(KDevelop::Core::Default);
-    QCOMPARE(spy.count(), 1); // make sure the signal was emitted exactly one time
-    
-    m_controller = new KDevelop::UiController(m_testCore);
+    m_testCore->initialize(KDevelop::Core::Default, "test");
+    m_controller = dynamic_cast<KDevelop::UiController*>(m_testCore->uiController());
     m_area = new Sublime::Area( m_controller, "Area" );
     Sublime::MainWindow* mw = new Sublime::MainWindow(m_controller);
     m_controller->showArea(m_area, mw);
@@ -124,7 +120,6 @@ void StandardOutputViewTest::testActions()
     QCOMPARE(actions.takeFirst()->text(), QString("Next"));
     QCOMPARE(actions.takeFirst()->text(), QString("Select activated Item"));
     QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
-    //QCOMPARE(actions.takeFirst()->text(), QString(""));
     QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
     QCOMPARE(actions.takeFirst()->text(), QString(""));
