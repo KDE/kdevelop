@@ -36,6 +36,7 @@ class KTabWidget;
 class KToggleAction;
 class QModelIndex;
 class KAction;
+class KLineEdit;
 class QSortFilterProxyModel;
 class StandardOutputViewTest;
 
@@ -68,7 +69,8 @@ private slots:
     void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
     void selectAll();
-    void filterModel(QString filter);
+    void outputFilter(QString filter);
+    void updateFilter(int index);
 
 private:
     QTreeView* createListView(int id);
@@ -79,6 +81,7 @@ private:
     QMap<int, QTreeView*> views;
     QMap<int, QTimer*> scrollTimers;
     QMap<int, QSortFilterProxyModel*> proxyModels;
+    QMap<int, QString> filters;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     ToolViewData* data;
@@ -87,6 +90,7 @@ private:
     KAction* previousAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
+    KLineEdit *filterInput;
     QWidgetAction* filterAction;
 };
 

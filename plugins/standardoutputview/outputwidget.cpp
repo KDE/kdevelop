@@ -108,17 +108,27 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     if( data->option & KDevelop::IOutputView::AddFilterAction)
     {
         addAction(separator);
-        KLineEdit *filterInput = new KLineEdit();
+        filterInput = new KLineEdit();
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
         filterInput->setClickMessage("Enter a filter here");
         filterInput->setToolTip("Filter");
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
+        filterAction->setText("Filter"); // used for testing
         addAction(filterAction);
 
         connect(filterInput, SIGNAL(userTextChanged(QString)),
-                                    this, SLOT(filterModel(QString)) );
+                this, SLOT(outputFilter(QString)) );
+        if( data->type & KDevelop::IOutputView::MultipleView )
+        {
+            connect(tabwidget, SIGNAL(currentChanged(int)),
+                    this, SLOT(updateFilter(int)));
+        } else if ( data->type == KDevelop::IOutputView::HistoryView )
+        {
+            connect(stackwidget, SIGNAL(currentChanged(int)),
+                    this, SLOT(updateFilter(int)));
+        }
     }
     
     addActions(data->actionList);
@@ -149,19 +159,6 @@ void OutputWidget::addOutput( int id )
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
     
     enableActions();
-    if( data->option & KDevelop::IOutputView::AddFilterAction)
-    {
-        int index = 0;
-        if( data->type & KDevelop::IOutputView::MultipleView )
-        {
-            index = tabwidget->currentIndex();
-        } else if( data->type & KDevelop::IOutputView::HistoryView )
-        {
-            index = stackwidget->currentIndex();
-        }
-        proxyModels.insert(index,new QSortFilterProxyModel());
-        proxyModels[index]->setDynamicSortFilter(true);
-    }
 }
 
 void OutputWidget::setCurrentWidget( QTreeView* view )
@@ -220,9 +217,20 @@ void OutputWidget::removeOutput( int id )
                 if( idx != -1 )
                 {
                     tabwidget->removeTab( idx );
+                    if(proxyModels.contains(idx))
+                    {
+                        delete proxyModels[idx];
+                        filters.remove(idx);
+                    }
                 }
             } else
             {
+                int idx = stackwidget->indexOf( w );
+                if( idx != -1 && proxyModels.contains(idx))
+                {
+                    delete proxyModels[idx];
+                    filters.remove(idx);
+                }
                 stackwidget->removeWidget( w );
             }
             delete w;
@@ -231,6 +239,10 @@ void OutputWidget::removeOutput( int id )
         {
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
+            if(proxyModels.contains(0)) {
+                delete proxyModels[0];
+                filters.remove(0);
+            }
         }
         disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                     this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
@@ -521,7 +533,7 @@ void OutputWidget::selectAll()
     view->selectAll();
 }
 
-void OutputWidget::filterModel(QString filter)
+void OutputWidget::outputFilter(QString filter)
 {
     QWidget* widget = currentWidget();
     if( !widget )
@@ -537,12 +549,28 @@ void OutputWidget::filterModel(QString filter)
     {
         index = stackwidget->currentIndex();
     }
-    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) ) {
-        proxyModels[index]->setSourceModel(view->model());
-        view->setModel(proxyModels[index]);
+    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) )
+    {
+        QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel();
+        _proxyModel->setDynamicSortFilter(true);
+        _proxyModel->setSourceModel(view->model());
+        proxyModels.insert(index, _proxyModel);
+        view->setModel(_proxyModel);
     }
     QRegExp regExp(filter,Qt::CaseInsensitive);
     proxyModels[index]->setFilterRegExp(regExp);
+    filters[index] = filter;
+}
+
+void OutputWidget::updateFilter(int index)
+{
+    if(filters.contains(index))
+    {
+        filterInput->setText(filters[index]);
+    } else
+    {
+        filterInput->clear();
+    }
 }
 
 #include "outputwidget.moc"
