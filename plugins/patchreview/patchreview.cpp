@@ -841,7 +841,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
     QString currentText = doc->text(range->toRange());
     Diff2::Difference* diff = m_differencesForRanges[range];
     
-    removeLineMarker(range, diff);
+    removeLineMarker(range);
     
     QString sourceText;
     QString targetText;
@@ -959,7 +959,7 @@ void PatchHighlighter::performContentChange(KTextEditor::Document* doc, const QS
   foreach(KTextEditor::MovingRange* r, m_differencesForRanges.keys()) {
     Diff2::Difference* diff = m_differencesForRanges[r];
     if (removed.contains(diff)) {
-      removeLineMarker(r, diff);
+      removeLineMarker(r);
       m_ranges.remove(r);
       m_differencesForRanges.remove(r);
       delete r;
@@ -1115,7 +1115,7 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
 {
 //     connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( kdoc->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)) );
-    bool result = connect( kdoc->textDocument(), SIGNAL(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)), this, SLOT(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)) );
+    connect( kdoc->textDocument(), SIGNAL(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)), this, SLOT(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)) );
     connect( kdoc->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)), this, SLOT(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
 
@@ -1130,7 +1130,7 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
 
-void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* difference)
+void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range)
 {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
     if ( !moving )

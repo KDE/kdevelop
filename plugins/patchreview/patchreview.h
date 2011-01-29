@@ -68,7 +68,7 @@ private slots:
 private:
 
     void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
-    void removeLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
+    void removeLineMarker(KTextEditor::MovingRange* range);
     QStringList splitAndAddNewlines(const QString& text) const;
     void performContentChange(KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
   
