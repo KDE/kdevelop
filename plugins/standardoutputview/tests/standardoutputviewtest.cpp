@@ -61,10 +61,10 @@ void StandardOutputViewTest::initTestCase()
     m_controller = dynamic_cast<KDevelop::UiController*>(m_testCore->uiController());
     
     QTest::qWait(500);
-    
+
     m_stdOutputView = 0;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
-    
+
     QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
     foreach(KDevelop::IPlugin* plugin, plugins) {
         if(plugin_controller->pluginInfo(plugin).pluginName() == "KDevStandardOutputView")
@@ -96,11 +96,14 @@ OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
 }
 
 void StandardOutputViewTest::testRegisterAndRemoveToolView()
-{    
+{
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView);
     QVERIFY(toolviewPointer(toolviewTitle));
-    
+
+    QSignalSpy removingSpy(m_stdOutputView, SIGNAL(toolViewRemoved(int)));
     m_stdOutputView->removeToolView(toolviewId);
+    QVERIFY(removingSpy.count() == 1);
+    QCOMPARE(removingSpy.takeFirst().at(0).toInt(), toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
 
@@ -109,19 +112,19 @@ void StandardOutputViewTest::testActions()
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     QList<QAction*> actions = outputWidget->actions();
     QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
-    
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, 
+
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
                                                    KIcon(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
     outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     actions = outputWidget->actions();
     QCOMPARE(actions.takeFirst()->text(), QString("Previous"));
     QCOMPARE(actions.takeFirst()->text(), QString("Next"));
