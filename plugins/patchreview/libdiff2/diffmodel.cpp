@@ -74,7 +74,7 @@ DiffModel::~DiffModel()
 	m_selectedDifference = 0;
 
 	qDeleteAll( m_hunks );
-    qDeleteAll( m_differences );
+	qDeleteAll( m_differences );
 }
 
 void DiffModel::splitSourceInPathAndFileName()
@@ -298,6 +298,7 @@ void DiffModel::addHunk( DiffHunk* hunk )
 void DiffModel::addDiff( Difference* diff )
 {
 	m_differences.append( diff );
+	connect(diff, SIGNAL(differenceApplied(Difference*)), SLOT(slotDifferenceApplied(Difference*)));
 }
 
 bool DiffModel::hasUnsavedChanges( void ) const
@@ -316,12 +317,39 @@ bool DiffModel::hasUnsavedChanges( void ) const
 
 void DiffModel::applyDifference( bool apply )
 {
+	bool appliedState = m_selectedDifference->applied();
+	if ( appliedState == apply )
+	{
+		return;
+	}
 	if ( apply && !m_selectedDifference->applied() )
 		m_appliedCount++;
 	else if ( !apply && m_selectedDifference->applied() )
 		m_appliedCount--;
 
 	m_selectedDifference->apply( apply );
+}
+
+int GetDifferenceDelta(Difference* diff)
+{
+	int delta = diff->destinationLineCount() - diff->sourceLineCount();
+	if ( !diff->applied() )
+	{
+		delta = -delta;
+	}
+	return delta;
+}
+
+void DiffModel::slotDifferenceApplied(Difference* diff)
+{
+	int delta = GetDifferenceDelta(diff);
+	foreach( Difference* current, m_differences )
+	{
+		if ( current->destinationLineNumber() > diff->destinationLineNumber() )
+		{
+			current->setTrackingDestinationLineNumber(current->trackingDestinationLineNumber() + delta);
+		}
+	}
 }
 
 void DiffModel::applyAllDifferences( bool apply )
@@ -338,9 +366,18 @@ void DiffModel::applyAllDifferences( bool apply )
 	DifferenceListIterator diffIt = m_differences.begin();
 	DifferenceListIterator dEnd   = m_differences.end();
 
+	int totalDelta = 0;
 	for ( ; diffIt != dEnd; ++diffIt )
 	{
-		(*diffIt)->apply( apply );
+		(*diffIt)->setTrackingDestinationLineNumber((*diffIt)->trackingDestinationLineNumber() + totalDelta);
+		bool appliedState = (*diffIt)->applied();
+		if ( appliedState == apply )
+		{
+			continue;
+		}
+		(*diffIt)->applyQuietly( apply );
+		int currentDelta = GetDifferenceDelta(*diffIt);
+		totalDelta += currentDelta;
 	}
 }
 
@@ -373,22 +410,26 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
     int editLineEnd = editLineNumber + oldLines.size();
     // Find the range of differences [iterBegin, iterEnd) that should be updated
     // TODO: assume that differences are ordered by starting line. Check that this is always the case
+    DifferenceList applied;
     DifferenceListIterator iterBegin; // first diff ending a line before editLineNo or later
     for (iterBegin = m_differences.begin(); iterBegin != m_differences.end(); ++iterBegin) {
         // If the difference ends a line before the edit starts, they should be merged if this difference is applied.
         // Also it should be merged if it starts on editLineNumber, otherwise there will be two markers for the same line
-        int lineAfterLast = (*iterBegin)->destinationLineEnd();
+        int lineAfterLast = (*iterBegin)->trackingDestinationLineEnd();
         if (lineAfterLast > editLineNumber || (lineAfterLast == editLineNumber &&
-            ((*iterBegin)->applied() || (*iterBegin)->destinationLineNumber() == editLineNumber))) {
+            ((*iterBegin)->applied() || (*iterBegin)->trackingDestinationLineNumber() == editLineNumber))) {
             break;
         }
     }
     DifferenceListIterator iterEnd;
     for (iterEnd = iterBegin; iterEnd != m_differences.end(); ++iterEnd) {
         // If the difference starts a line after the edit ends, it should still be merged if it is applied
-        int firstLine = (*iterEnd)->destinationLineNumber();
+        int firstLine = (*iterEnd)->trackingDestinationLineNumber();
         if (firstLine > editLineEnd || (!(*iterEnd)->applied() && firstLine == editLineEnd)) {
             break;
+        }
+        if ((*iterEnd)->applied()) {
+            applied.append(*iterEnd);
         }
     }
 
@@ -398,76 +439,75 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
     if (iterBegin == m_differences.constEnd()) {    // All existing diffs are after the change
         destinationLineNumber = editLineNumber;
         if (!m_differences.isEmpty()) {
-            sourceLineNumber = m_differences.last()->sourceLineEnd() - (m_differences.last()->destinationLineEnd() - editLineNumber);
+            sourceLineNumber = m_differences.last()->sourceLineEnd() - (m_differences.last()->trackingDestinationLineEnd() - editLineNumber);
         } else {
             sourceLineNumber = destinationLineNumber;
         }
-    } else if (!(*iterBegin)->applied() || (*iterBegin)->destinationLineNumber() >= editLineNumber) {
+    } else if (!(*iterBegin)->applied() || (*iterBegin)->trackingDestinationLineNumber() >= editLineNumber) {
         destinationLineNumber = editLineNumber;
-        sourceLineNumber = (*iterBegin)->sourceLineNumber() - ((*iterBegin)->destinationLineNumber() - editLineNumber);
+        sourceLineNumber = (*iterBegin)->sourceLineNumber() - ((*iterBegin)->trackingDestinationLineNumber() - editLineNumber);
     } else {
         sourceLineNumber = (*iterBegin)->sourceLineNumber();
-        destinationLineNumber = (*iterBegin)->destinationLineNumber();
+        destinationLineNumber = (*iterBegin)->trackingDestinationLineNumber();
     }
+
+    // Only the applied differences are of interest, unapplied can be safely removed
+    DifferenceListConstIterator appliedBegin = applied.constBegin();
+    DifferenceListConstIterator appliedEnd = applied.constEnd();
 
     // Now create a sequence of lines for the destination file and the corresponding lines in source
     QStringList sourceLines;
     QStringList destinationLines;
     DifferenceListIterator insertPosition;  // where to insert the created diffs
-    if (iterBegin == iterEnd) {
+    if (appliedBegin == appliedEnd) {
         destinationLines = newLines;
         sourceLines = oldLines;
-        insertPosition = iterBegin;
     } else {
         // Create the destination line sequence
-        if ((*iterBegin)->applied()) {
-            int firstDestinationLineNumber = (*iterBegin)->destinationLineNumber();
-            for (int lineNumber = firstDestinationLineNumber; lineNumber < editLineNumber; ++lineNumber) {
-                destinationLines.append((*iterBegin)->destinationLineAt(lineNumber - firstDestinationLineNumber)->string());
-            }
+        int firstDestinationLineNumber = (*appliedBegin)->trackingDestinationLineNumber();
+        for (int lineNumber = firstDestinationLineNumber; lineNumber < editLineNumber; ++lineNumber) {
+            destinationLines.append((*appliedBegin)->destinationLineAt(lineNumber - firstDestinationLineNumber)->string());
         }
         foreach(const QString& line, newLines) {
             destinationLines.append(line);
         }
-        DifferenceListIterator iterLast = iterEnd;
-        --iterLast;
-        if ((*iterLast)->applied()) {
-            int lastDestinationLineNumber = (*iterLast)->destinationLineNumber();
-            for (int lineNumber = editLineEnd; lineNumber < (*iterLast)->destinationLineEnd(); ++lineNumber) {
-                destinationLines.append((*iterLast)->destinationLineAt(lineNumber - lastDestinationLineNumber)->string());
-            }
+        DifferenceListConstIterator appliedLast = appliedEnd;
+        --appliedLast;
+        int lastDestinationLineNumber = (*appliedLast)->trackingDestinationLineNumber();
+        for (int lineNumber = editLineEnd; lineNumber < (*appliedLast)->trackingDestinationLineEnd(); ++lineNumber) {
+            destinationLines.append((*appliedLast)->destinationLineAt(lineNumber - lastDestinationLineNumber)->string());
         }
 
         // Create the source line sequence
-        if ((*iterBegin)->destinationLineNumber() >= editLineNumber && (*iterBegin)->destinationLineNumber() <= editLineEnd) {
-            for (int i = editLineNumber; i < (*iterBegin)->destinationLineNumber(); ++i) {
+        if ((*appliedBegin)->trackingDestinationLineNumber() >= editLineNumber) {
+            for (int i = editLineNumber; i < (*appliedBegin)->trackingDestinationLineNumber(); ++i) {
                 sourceLines.append(oldLines.at(i - editLineNumber));
             }
         }
 
         QStringList::const_iterator oldLinesIter = oldLines.begin();
-        for (DifferenceListConstIterator iter = iterBegin; iter != iterEnd;) {
-            int startPos = (*iter)->destinationLineNumber();
+        for (DifferenceListConstIterator iter = appliedBegin; iter != appliedEnd;) {
+            int startPos = (*iter)->trackingDestinationLineNumber();
             if ((*iter)->applied()) {
                 for(int i = 0; i < (*iter)->sourceLineCount(); ++i) {
                     sourceLines.append((*iter)->sourceLineAt(i)->string());
                 }
-                startPos = (*iter)->destinationLineEnd();
+                startPos = (*iter)->trackingDestinationLineEnd();
             } else if (startPos < editLineNumber) {
                 startPos = editLineNumber;
             }
             ++iter;
-            int endPos = (iter == iterEnd) ? editLineEnd : (*iter)->destinationLineNumber();
+            int endPos = (iter == appliedEnd) ? editLineEnd : (*iter)->trackingDestinationLineNumber();
             for (int i = startPos; i < endPos; ++i) {
                 sourceLines.append(oldLines.at(i - editLineNumber));
             }
         }
-
-        for (DifferenceListIterator iter = iterBegin; iter != iterEnd; ++iter) {
-            removed << *iter;
-        }
-        insertPosition = m_differences.erase(iterBegin, iterEnd);
     }
+
+    for (DifferenceListIterator iter = iterBegin; iter != iterEnd; ++iter) {
+        removed << *iter;
+    }
+    insertPosition = m_differences.erase(iterBegin, iterEnd);
 
     // Compute the Levenshtein table for two line sequences and construct the shortest possible edit script
     StringListPair* pair = new StringListPair(sourceLines, destinationLines);
@@ -502,14 +542,15 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
         }
         computeDiffStats(diff);
         Q_ASSERT(diff->type() != Difference::Unchanged);
-        diff->apply(true);
+        diff->applyQuietly(true);
+        diff->setTrackingDestinationLineNumber(diff->destinationLineNumber());
         insertPosition = m_differences.insert(insertPosition, diff);
         ++insertPosition;
         inserted << diff;
     }
     // Update line numbers for differences that are after the edit
     for (; insertPosition != m_differences.end(); ++insertPosition) {
-        (*insertPosition)->setDestinationLineNumber((*insertPosition)->destinationLineNumber() + (newLines.size() - oldLines.size()));
+        (*insertPosition)->setTrackingDestinationLineNumber((*insertPosition)->trackingDestinationLineNumber() + (newLines.size() - oldLines.size()));
     }
     return qMakePair(inserted, removed);
 }

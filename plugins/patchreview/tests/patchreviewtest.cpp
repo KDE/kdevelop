@@ -71,7 +71,7 @@ void PatchReviewTest::testSameLine()
     newLines << "oldline2\n";
     QStringList oldLines;
     oldLines << "oldline1\n" << "oldline2\n";
-    model->linesChanged(oldLines, newLines, 2);;
+    model->linesChanged(oldLines, newLines, 2);
 
     QCOMPARE(model->differenceCount(), 1);
     const Difference* diff = model->differenceAt(0);
@@ -87,11 +87,12 @@ void PatchReviewTest::testDifferenceContents()
     DiffModelList* models = parser.parse(patch);
     QCOMPARE(models->size(), 1);
     DiffModel* model = models->at(0);
-    model->applyAllDifferences(true);
 
     QFETCH(QStringList, oldLines);
     QFETCH(QStringList, newLines);
     QFETCH(int, editLineNumber);
+    QFETCH(bool, isAlreadyApplied);
+    model->applyAllDifferences(isAlreadyApplied);
     model->linesChanged(oldLines, newLines, editLineNumber);
     QFETCH(int, expectedDifferenceCount);
     QCOMPARE(model->differenceCount(), expectedDifferenceCount);
@@ -110,6 +111,7 @@ void PatchReviewTest::testDifferenceContents_data()
     QTest::addColumn<QStringList>("oldLines");     // lines that are replaced
     QTest::addColumn<QStringList>("newLines");     // replacement lines
     QTest::addColumn<int>("editLineNumber");
+    QTest::addColumn<bool>("isAlreadyApplied");
     QTest::addColumn<int>("expectedDifferenceCount");
     QTest::addColumn<DifferenceHash>("expectedDifferences");
 
@@ -138,7 +140,7 @@ void PatchReviewTest::testDifferenceContents_data()
         DifferenceHash expectedDifferences;
         expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
 
-        QTest::newRow("Merge adjacent differences") << patch << oldLines << newLines << 3 << 1 << expectedDifferences;
+        QTest::newRow("Merge adjacent differences") << patch << oldLines << newLines << 3 << true << 1 << expectedDifferences;
     }
     {
         QStringList patch;
@@ -165,7 +167,7 @@ void PatchReviewTest::testDifferenceContents_data()
         expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
 
         // Append a line to a multiline diff
-        QTest::newRow("Append multiline") << patch << oldLines << newLines << 4 << 1 << expectedDifferences;
+        QTest::newRow("Append multiline") << patch << oldLines << newLines << 4 << true << 1 << expectedDifferences;
     }
     {
         QStringList patch;
@@ -182,7 +184,7 @@ void PatchReviewTest::testDifferenceContents_data()
         newLines << "delete1\n";
         QStringList oldLines;
         oldLines << "insert1\n";
-        QTest::newRow("Revert existing difference") << patch << oldLines << newLines << 2 << 0 << DifferenceHash();
+        QTest::newRow("Revert existing difference") << patch << oldLines << newLines << 2 << true << 0 << DifferenceHash();
     }
     {
         QStringList patch;
@@ -198,7 +200,7 @@ void PatchReviewTest::testDifferenceContents_data()
         newLines << "abcd\n" << "delete1\n";
         QStringList oldLines;
         oldLines << "abcd\n";
-        QTest::newRow("Revert deletion") << patch << oldLines << newLines << 1 << 0 << DifferenceHash();
+        QTest::newRow("Revert deletion") << patch << oldLines << newLines << 1 << true << 0 << DifferenceHash();
     }
     {
         QStringList patch;
@@ -222,7 +224,7 @@ void PatchReviewTest::testDifferenceContents_data()
         expectedDifferences.insert(0, qMakePair(QStringList() << "delete1\n", QStringList() << "insert1\n"));
         expectedDifferences.insert(1, qMakePair(QStringList(), QStringList() << "insert3\n"));
 
-        QTest::newRow("Partial reversion") << patch << oldLines << newLines << 3 << 2 << expectedDifferences;
+        QTest::newRow("Partial reversion") << patch << oldLines << newLines << 3 << true << 2 << expectedDifferences;
     }
     {
         QStringList patch;
@@ -249,7 +251,7 @@ void PatchReviewTest::testDifferenceContents_data()
         expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
 
         // The first exisiting difference inside the edit
-        QTest::newRow("First inside") << patch << oldLines << newLines << 1 << 1 << expectedDifferences;
+        QTest::newRow("First inside") << patch << oldLines << newLines << 1 << true << 1 << expectedDifferences;
     }
     {
         QStringList patch;
@@ -276,7 +278,7 @@ void PatchReviewTest::testDifferenceContents_data()
         expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
 
         // The first existing difference intersects with the edit
-        QTest::newRow("First intersects") << patch << oldLines << newLines << 3 << 1 << expectedDifferences;
+        QTest::newRow("First intersects") << patch << oldLines << newLines << 3 << true << 1 << expectedDifferences;
     }
     {
         QStringList patch;
@@ -295,7 +297,35 @@ void PatchReviewTest::testDifferenceContents_data()
         DifferenceHash expectedDifferences;
         expectedDifferences.insert(0, qMakePair(QStringList(), QStringList() << "a\n"));
 
-        QTest::newRow("Replace empty line") << patch << oldLines << newLines << 2 << 1 << expectedDifferences;
+        QTest::newRow("Replace empty line") << patch << oldLines << newLines << 2 << true << 1 << expectedDifferences;
+    }
+    {
+        QStringList patch;
+        patch <<
+        "--- file1\t2011-01-01 20:23:45.000000000 +0300\n" <<
+        "+++ file2\t2011-01-01 20:24:02.000000000 +0300\n" <<
+        "@@ -1,3 +1,3 @@\n" <<
+        " abcd\n" <<
+        "+insert1\n" <<
+        "+insert2\n" <<
+        "+insert3\n" <<
+        "+insert4\n" <<
+        "+insert5\n" <<
+        " efgh\n" <<
+        "@@ -10,3 +15,3 @@\n" <<
+        " abcd\n" <<
+        "-delete1\n" <<
+        "+insert1\n" <<
+        " efgh\n";
+
+        QStringList newLines;
+        newLines << "newline1\n";
+        QStringList oldLines;
+        oldLines << "delete1\n";
+        DifferenceHash expectedDifferences;
+        expectedDifferences.insert(1, qMakePair(QStringList() << "delete1\n", QStringList() << "newline1\n"));
+
+        QTest::newRow("Replace line in source") << patch << oldLines << newLines << 11 << false << 2 << expectedDifferences;
     }
 }
 
@@ -483,7 +513,7 @@ void PatchReviewTest::testLineNumbers()
     for (LineNumberHash::ConstIterator iter = expectedLineNumbers.begin(); iter != expectedLineNumbers.end(); ++iter) {
         const Difference* diff = model->differenceAt(iter.key());
         QCOMPARE(diff->sourceLineNumber(), iter.value().first);
-        QCOMPARE(diff->destinationLineNumber(), iter.value().second);
+        QCOMPARE(diff->trackingDestinationLineNumber(), iter.value().second);
     }
 }
 
@@ -534,7 +564,7 @@ void PatchReviewTest::testAppliedIntersect()
     const Difference* newDiff = model.differenceAt(0);
     QCOMPARE(newDiff->applied(), true);
     QCOMPARE(newDiff->sourceLineNumber(), 3);
-    QCOMPARE(newDiff->destinationLineNumber(), 3);
+    QCOMPARE(newDiff->trackingDestinationLineNumber(), 3);
     CompareDifferenceStringList(newDiff->sourceLines(), removedLines);
     CompareDifferenceStringList(newDiff->destinationLines(), insertedLines);
 }
@@ -578,6 +608,120 @@ void PatchReviewTest::testOneLineDeletionUnapplied()
     const Difference* actual = model.differenceAt(0);
     CompareDifferenceStringList(actual->sourceLines(), removedLines);
     CompareDifferenceStringList(actual->destinationLines(), insertedLines);
+}
+
+void PatchReviewTest::testApplyUnapply()
+{
+    QStringList patch;
+    patch <<
+    "--- file1\t2011-01-01 20:23:45 +0300\n" <<
+    "+++ file2\t2011-01-01 20:24:02 +0300\n" <<
+    "@@ -1,3 +1,4 @@\n" <<
+    " line1\n" <<
+    "-delete1\n" <<
+    "+insert1\n" <<
+    "+insert2\n" <<
+    " line2\n" <<
+    "@@ -11,4 +12,5 @@\n" <<
+    " line3\n" <<
+    "-delete2\n" <<
+    "-delete3\n" <<
+    "+insert3\n" <<
+    "+insert4\n" <<
+    "+insert5\n" <<
+    " line4\n" <<
+    "@@ -21,4 +23,2 @@\n" <<
+    " line5\n" <<
+    "-delete4\n" <<
+    "-delete5\n" <<
+    " line6\n" <<
+    "@@ -31,3 +31,3 @@\n" <<
+    " line7\n" <<
+    "-delete6\n" <<
+    "+insert6\n" <<
+    " line8\n";
+    Parser parser(0);
+    DiffModelList* models = parser.parse(patch);
+    QCOMPARE(models->size(), 1);
+    DiffModel* model = models->at(0);
+    QCOMPARE(model->differenceCount(), 4);
+    model->applyAllDifferences(true);
+
+    foreach( Difference* diff, *model->differences() )
+    {
+        QVERIFY(diff->applied());
+    }
+    model->applyAllDifferences(false);
+    QVERIFY(!model->differenceAt(0)->applied());
+    QCOMPARE(model->differenceAt(0)->sourceLineNumber(), 2);
+    QCOMPARE(model->differenceAt(0)->trackingDestinationLineNumber(), 2);
+    QVERIFY(!model->differenceAt(1)->applied());
+    QCOMPARE(model->differenceAt(1)->sourceLineNumber(), 12);
+    QCOMPARE(model->differenceAt(1)->trackingDestinationLineNumber(), 12);
+    QVERIFY(!model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 22);
+    QVERIFY(!model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 32);
+
+    model->differenceAt(1)->apply(true);
+    QVERIFY(model->differenceAt(1)->applied());
+    QCOMPARE(model->differenceAt(1)->sourceLineNumber(), 12);
+    QCOMPARE(model->differenceAt(1)->trackingDestinationLineNumber(), 12);
+    QVERIFY(!model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 23);
+    QVERIFY(!model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 33);
+
+    model->differenceAt(1)->apply(true);
+    QVERIFY(model->differenceAt(1)->applied());
+    QCOMPARE(model->differenceAt(1)->sourceLineNumber(), 12);
+    QCOMPARE(model->differenceAt(1)->trackingDestinationLineNumber(), 12);
+    QVERIFY(!model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 23);
+    QVERIFY(!model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 33);
+
+    model->differenceAt(2)->apply(true);
+    QVERIFY(model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 23);
+    QVERIFY(!model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 31);
+
+    model->applyAllDifferences(true);
+    QVERIFY(model->differenceAt(0)->applied());
+    QCOMPARE(model->differenceAt(0)->sourceLineNumber(), 2);
+    QCOMPARE(model->differenceAt(0)->trackingDestinationLineNumber(), 2);
+    QVERIFY(model->differenceAt(1)->applied());
+    QCOMPARE(model->differenceAt(1)->sourceLineNumber(), 12);
+    QCOMPARE(model->differenceAt(1)->trackingDestinationLineNumber(), 13);
+    QVERIFY(model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 24);
+    QVERIFY(model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 32);
+
+    model->applyAllDifferences(true);
+    QVERIFY(model->differenceAt(0)->applied());
+    QCOMPARE(model->differenceAt(0)->sourceLineNumber(), 2);
+    QCOMPARE(model->differenceAt(0)->trackingDestinationLineNumber(), 2);
+    QVERIFY(model->differenceAt(1)->applied());
+    QCOMPARE(model->differenceAt(1)->sourceLineNumber(), 12);
+    QCOMPARE(model->differenceAt(1)->trackingDestinationLineNumber(), 13);
+    QVERIFY(model->differenceAt(2)->applied());
+    QCOMPARE(model->differenceAt(2)->sourceLineNumber(), 22);
+    QCOMPARE(model->differenceAt(2)->trackingDestinationLineNumber(), 24);
+    QVERIFY(model->differenceAt(3)->applied());
+    QCOMPARE(model->differenceAt(3)->sourceLineNumber(), 32);
+    QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 32);
 }
 
 QTEST_MAIN(PatchReviewTest);

@@ -118,8 +118,9 @@ typedef QVector<DifferenceString*> DifferenceStringList;
 typedef QVector<DifferenceString*>::iterator DifferenceStringListIterator;
 typedef QVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
 
-class DIFF2_EXPORT Difference
+class DIFF2_EXPORT Difference : public QObject
 {
+	Q_OBJECT
 public:
 	enum Type { Change, Insert, Delete, Unchanged };
 
@@ -133,17 +134,20 @@ public:
 	int sourceLineNumber() const { return m_sourceLineNo; }
 	int destinationLineNumber() const { return m_destinationLineNo; }
 
-	void setSourceLineNumber(int i) { m_sourceLineNo = i; }
-	void setDestinationLineNumber(int i) { m_destinationLineNo = i; }
-
 	int sourceLineCount() const;
 	int destinationLineCount() const;
 
 	int sourceLineEnd() const;
 	int destinationLineEnd() const;
 
-	DifferenceString* sourceLineAt( int i ) { return m_sourceLines[ i ]; }
-	DifferenceString* destinationLineAt( int i ) { return m_destinationLines[ i ]; }
+	/// Destination line number that tracks applying/unapplying of other differences
+	/// Essentially a line number in a patch consisting of applied diffs only
+	int trackingDestinationLineNumber() const { return m_trackingDestinationLineNo; }
+	int trackingDestinationLineEnd() const;
+	void setTrackingDestinationLineNumber( int i ) { m_trackingDestinationLineNo = i; }
+
+	DifferenceString* sourceLineAt( int i ) const { return m_sourceLines[ i ]; }
+	DifferenceString* destinationLineAt( int i ) const { return m_destinationLines[ i ]; }
 
 	const DifferenceStringList sourceLines() const { return m_sourceLines; }
 	const DifferenceStringList destinationLines() const { return m_destinationLines; }
@@ -167,6 +171,8 @@ public:
 	}
 
 	void apply( bool apply );
+	/// Apply without emitting any signals
+	void applyQuietly( bool apply );
 	bool applied() const { return m_applied; }
 
 	void setType( int type ) { m_type = type; }
@@ -179,11 +185,15 @@ public:
 
 	QString recreateDifference() const;
 
+signals:
+	void differenceApplied( Difference* );
+
 private:
 	int                   m_type;
 
 	int                   m_sourceLineNo;
 	int                   m_destinationLineNo;
+	int                   m_trackingDestinationLineNo;
 
 	DifferenceStringList  m_sourceLines;
 	DifferenceStringList  m_destinationLines;
