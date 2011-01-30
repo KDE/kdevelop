@@ -65,11 +65,11 @@ StringListPair::StringListPair(const QStringList& first, const QStringList& seco
     m_hashesSecond = new unsigned int[m_lengthSecond];
 
     m_hashesFirst[0] = qHash(QString(""));
-    for (int i = 1; i < m_lengthFirst; ++i) {
+    for (unsigned int i = 1; i < m_lengthFirst; ++i) {
         m_hashesFirst[i] = qHash(first[i - 1]);
     }
     m_hashesSecond[0] = qHash(QString(""));
-    for (int i = 1; i < m_lengthSecond; ++i) {
+    for (unsigned int i = 1; i < m_lengthSecond; ++i) {
         m_hashesSecond[i] = qHash(second[i - 1]);
     }
 }
@@ -91,7 +91,7 @@ bool StringListPair::equal(unsigned int firstIndex, unsigned int secondIndex) co
     return m_first[firstIndex - 1] == m_second[secondIndex - 1];
 }
 
-bool StringListPair::needFineGrainedOutput(unsigned int difference) const
+bool StringListPair::needFineGrainedOutput(unsigned int) const
 {
     return true;
 }
