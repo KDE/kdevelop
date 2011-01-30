@@ -23,9 +23,9 @@
 
 #include <QtCore/QObject>
 
-#include "../libdiff2/difference.h"
+#include "../difference.h"
 
-class PatchReviewTest : public QObject
+class InteractiveDiffTest : public QObject
 {
     Q_OBJECT
 private slots:

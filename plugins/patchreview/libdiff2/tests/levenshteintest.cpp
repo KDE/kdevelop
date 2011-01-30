@@ -21,10 +21,10 @@
 #include "levenshteintest.h"
 
 #include <QTest>
-#include "../libdiff2/difference.h"
-#include "../libdiff2/differencestringpair.h"
-#include "../libdiff2/levenshteintable.h"
-#include "../libdiff2/stringlistpair.h"
+#include "../difference.h"
+#include "../differencestringpair.h"
+#include "../levenshteintable.h"
+#include "../stringlistpair.h"
 
 using namespace Diff2;
 

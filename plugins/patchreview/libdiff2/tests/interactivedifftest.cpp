@@ -18,11 +18,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "patchreviewtest.h"
+#include "interactivedifftest.h"
 
 #include <QTest>
-#include "../libdiff2/diffmodel.h"
-#include "../libdiff2/parser.h"
+#include "../diffmodel.h"
+#include "../parser.h"
 
 using namespace Diff2;
 
@@ -31,7 +31,7 @@ Q_DECLARE_METATYPE(DifferenceHash);
 typedef QHash<int, QPair<int, int> > LineNumberHash;
 Q_DECLARE_METATYPE(LineNumberHash);
 
-void PatchReviewTest::CompareDifferenceStringList(const DifferenceStringList& actual, const QStringList& expected)
+void InteractiveDiffTest::CompareDifferenceStringList(const DifferenceStringList& actual, const QStringList& expected)
 {
     DifferenceStringListConstIterator actualIter;
     QStringList::const_iterator expectedIter;
@@ -47,7 +47,7 @@ void PatchReviewTest::CompareDifferenceStringList(const DifferenceStringList& ac
 }
 
 // The most basic test - something is actually working
-void PatchReviewTest::testOneLineChange()
+void InteractiveDiffTest::testOneLineChange()
 {
     DiffModel* model = new DiffModel();
     QStringList newLines;
@@ -64,7 +64,7 @@ void PatchReviewTest::testOneLineChange()
     QCOMPARE(diff->type(), int(Difference::Change));
 }
 
-void PatchReviewTest::testSameLine()
+void InteractiveDiffTest::testSameLine()
 {
     DiffModel* model = new DiffModel();
     QStringList newLines;
@@ -80,7 +80,7 @@ void PatchReviewTest::testSameLine()
     QCOMPARE(diff->type(), int(Difference::Delete));
 }
 
-void PatchReviewTest::testDifferenceContents()
+void InteractiveDiffTest::testDifferenceContents()
 {
     QFETCH(QStringList, patch);
     Parser parser(0);
@@ -105,7 +105,7 @@ void PatchReviewTest::testDifferenceContents()
     }
 }
 
-void PatchReviewTest::testDifferenceContents_data()
+void InteractiveDiffTest::testDifferenceContents_data()
 {
     QTest::addColumn<QStringList>("patch");
     QTest::addColumn<QStringList>("oldLines");     // lines that are replaced
@@ -329,7 +329,7 @@ void PatchReviewTest::testDifferenceContents_data()
     }
 }
 
-void PatchReviewTest::testLineNumbers_data()
+void InteractiveDiffTest::testLineNumbers_data()
 {
     QTest::addColumn<QStringList>("patch");
     QTest::addColumn<QStringList>("oldLines");     // lines that are replaced
@@ -493,7 +493,7 @@ void PatchReviewTest::testLineNumbers_data()
     }
 }
 
-void PatchReviewTest::testLineNumbers()
+void InteractiveDiffTest::testLineNumbers()
 {
     QFETCH(QStringList, patch);
     Parser parser(0);
@@ -518,7 +518,7 @@ void PatchReviewTest::testLineNumbers()
 }
 
 // When the new diff and an existing unapplied one are on neighbour lines, do not merge the unapplied with the new.
-void PatchReviewTest::testAppliedTouch()
+void InteractiveDiffTest::testAppliedTouch()
 {
     Difference* first = new Difference(2, 2);
     first->addSourceLine(QString("delete1"));
@@ -538,7 +538,7 @@ void PatchReviewTest::testAppliedTouch()
 }
 
 // When the new diff and an existing unapplied one intersect, the unapplied one should be removed
-void PatchReviewTest::testAppliedIntersect()
+void InteractiveDiffTest::testAppliedIntersect()
 {
     Difference* first = new Difference(2, 2);
     first->addSourceLine(QString("delete1"));
@@ -569,7 +569,7 @@ void PatchReviewTest::testAppliedIntersect()
     CompareDifferenceStringList(newDiff->destinationLines(), insertedLines);
 }
 
-void PatchReviewTest::testExistingAndApplied()
+void InteractiveDiffTest::testExistingAndApplied()
 {
     Difference* first = new Difference(2, 2);
     first->addSourceLine(QString("delete1"));
@@ -592,7 +592,7 @@ void PatchReviewTest::testExistingAndApplied()
     QVERIFY(!model.differenceAt(1)->applied());
 }
 
-void PatchReviewTest::testOneLineDeletionUnapplied()
+void InteractiveDiffTest::testOneLineDeletionUnapplied()
 {
     Difference* unappliedDeletion = new Difference(1, 1);
     unappliedDeletion->addSourceLine("delete1\n");
@@ -610,7 +610,7 @@ void PatchReviewTest::testOneLineDeletionUnapplied()
     CompareDifferenceStringList(actual->destinationLines(), insertedLines);
 }
 
-void PatchReviewTest::testApplyUnapply()
+void InteractiveDiffTest::testApplyUnapply()
 {
     QStringList patch;
     patch <<
@@ -724,4 +724,4 @@ void PatchReviewTest::testApplyUnapply()
     QCOMPARE(model->differenceAt(3)->trackingDestinationLineNumber(), 32);
 }
 
-QTEST_MAIN(PatchReviewTest);
+QTEST_MAIN(InteractiveDiffTest);
