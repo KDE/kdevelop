@@ -40,6 +40,8 @@ namespace KDevelop
     class IUiController;
 }
 
+QTEST_KDEMAIN(StandardOutputViewTest, GUI)
+
 const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
 
 void StandardOutputViewTest::initTestCase()
@@ -103,7 +105,6 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
     
     QList<QAction*> actions = outputWidget->actions();
-    QCOMPARE(actions.takeFirst()->text(), QString(""));
     QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
     
@@ -128,5 +129,3 @@ void StandardOutputViewTest::testActions()
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
-
-QTEST_KDEMAIN(StandardOutputViewTest, GUI)
