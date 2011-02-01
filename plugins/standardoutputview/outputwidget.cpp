@@ -84,7 +84,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 
     if( data->option & KDevelop::IOutputView::ShowItemsButton)
     {
-        activateOnSelect = new KToggleAction( KIcon("go-previous"), i18n("Select activated Item"), this );
+        activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
         addAction(activateOnSelect);
         activateOnSelect->setChecked( true );
         focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
@@ -94,8 +94,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    addAction(separator);
-    
+
     KAction *selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);

@@ -267,10 +267,10 @@ void StandardOutputView::removeToolView( int toolviewId )
         ToolViewData* td = toolviews.value(toolviewId);
         foreach( Sublime::View* view, td->views )
         {
-            OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
+            OutputWidget* outputView = qobject_cast<OutputWidget*>( view );
             foreach( int outid, td->outputdata.keys() )
             {
-                widget->removeOutput( outid );
+                outputView->removeOutput( outid );
             }
             foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->allAreas() )
             {
@@ -291,7 +291,7 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
         {
             foreach( Sublime::View* view, td->views )
             {
-                return qobject_cast<OutputWidget*>( view->widget() );
+                return qobject_cast<OutputWidget*>( view );
             }
         }
     }
