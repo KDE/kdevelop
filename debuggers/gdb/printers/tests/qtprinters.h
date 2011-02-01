@@ -30,10 +30,8 @@ class QtPrintersTest : public QObject
 private Q_SLOTS:
     void testQString();
     void testQByteArray();
-    void testQListInt();
-    void testQListString();
-    void testQListStruct();
-    void testQListPointer();
+    void testQListContainer_data();
+    void testQListContainer();
     void testQMapInt();
     void testQMapString();
     void testQDate();

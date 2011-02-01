@@ -337,6 +337,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
     paths = makeListUnique<KUrl>(paths);
     int pathNumber = 0;
 
+    QSet<QString> hadIncludePaths;
     foreach(const KUrl& path, paths)
     {
         if(!hadPaths.contains(path)) {
@@ -366,11 +367,20 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
             if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && (!allowSourceFiles || !sourceExtensions.contains(suffix)))
               continue;
             
-            if(prependAddedPathToName)
+            QString fullPath = dirContent.fileInfo().canonicalFilePath();
+            if (hadIncludePaths.contains(fullPath)) {
+              continue;
+            } else {
+              hadIncludePaths.insert(fullPath);
+            }
+            if(prependAddedPathToName) {
               item.name = addPath + item.name;
+              item.basePath = absoluteBase;
+            } else {
+              item.basePath = searchPath;
+            }
             
             item.isDirectory = dirContent.fileInfo().isDir();
-            item.basePath = absoluteBase;
             item.pathNumber = pathNumber;
 
             ret << item;

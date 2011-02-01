@@ -198,7 +198,7 @@ bool QtHelpConfig::checkQtHelpFile(bool modify)
     QString qtHelpNamespace = QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text());
     //verify if the file is valid and if there is a name
     if(m_configWidget->qchName->text().isEmpty()){
-        KMessageBox::error(this, i18n("Name can't be empty."));
+        KMessageBox::error(this, i18n("Name cannot be empty."));
         return false;
     }
     if (qtHelpNamespace.isEmpty()) {

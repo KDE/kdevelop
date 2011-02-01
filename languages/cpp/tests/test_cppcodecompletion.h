@@ -130,6 +130,8 @@ private slots:
   void testAnonStruct();
   void testOverrideCtor();
   void testFilterVoid();
+  void testCompletedIncludeFilePath();
+  void testMultipleIncludeCompletionItems();
 
 public:
   enum DumpArea {

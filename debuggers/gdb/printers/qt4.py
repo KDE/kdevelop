@@ -119,8 +119,9 @@ class QListPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, node['v'].cast(self.nodetype))
 
-    def __init__(self, val, itype):
+    def __init__(self, val, container, itype):
         self.val = val
+        self.container = container
         if itype == None:
             self.itype = self.val.type.template_argument(0)
         else:
@@ -135,7 +136,82 @@ class QListPrinter:
         else:
             empty = ""
 
-        return "%sQList<%s>" % ( empty , self.itype )
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
+
+class QVectorPrinter:
+    "Print a QVector"
+
+    class _iterator:
+        def __init__(self, nodetype, d, p):
+            self.nodetype = nodetype
+            self.d = d
+            self.p = p
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.count >= self.p['size']:
+                raise StopIteration
+            count = self.count
+
+            self.count = self.count + 1
+            return ('[%d]' % count, self.p['array'][count])
+
+    def __init__(self, val, container):
+        self.val = val
+        self.container = container
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['d'], self.val['p'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%s%s<%s>" % ( empty, self.container, self.itype )
+
+class QLinkedListPrinter:
+    "Print a QLinkedList"
+
+    class _iterator:
+        def __init__(self, nodetype, begin, size):
+            self.nodetype = nodetype
+            self.it = begin
+            self.pos = 0
+            self.size = size
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.pos >= self.size:
+                raise StopIteration
+
+            pos = self.pos
+            val = self.it['t']
+            self.it = self.it['n']
+            self.pos = self.pos + 1
+            return ('[%d]' % pos, val)
+
+    def __init__(self, val):
+        self.val = val
+        self.itype = self.val.type.template_argument(0)
+
+    def children(self):
+        return self._iterator(self.itype, self.val['e']['n'], self.val['d']['size'])
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQLinkedList<%s>" % ( empty, self.itype )
 
 class QMapPrinter:
     "Print a QMap"
@@ -186,8 +262,9 @@ class QMapPrinter:
             return result
 
 
-    def __init__(self, val):
+    def __init__(self, val, container):
         self.val = val
+        self.container = container
 
     def children(self):
         return self._iterator(self.val)
@@ -198,7 +275,7 @@ class QMapPrinter:
         else:
             empty = ""
 
-        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
@@ -295,8 +372,9 @@ class QHashPrinter:
             self.count = self.count + 1
             return ('[%d]' % self.count, item)
 
-    def __init__(self, val):
+    def __init__(self, val, container):
         self.val = val
+        self.container = container
 
     def children(self):
         return self._iterator(self.val)
@@ -307,7 +385,7 @@ class QHashPrinter:
         else:
             empty = ""
 
-        return "%sQHash<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
@@ -437,12 +515,17 @@ class QSetPrinter:
             return ('[%d]' % (self.count-1), item)
 
     def children(self):
-        hashPrinter = QHashPrinter(self.val['q_hash'])
+        hashPrinter = QHashPrinter(self.val['q_hash'], None)
         hashIterator = hashPrinter._iterator(self.val['q_hash'])
         return self._iterator(hashIterator)
 
     def to_string(self):
-        return 'QSet'
+        if self.val['q_hash']['d']['size'] == 0:
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQSet<%s>" % ( empty , self.val.type.template_argument(0) )
 
 
 class QCharPrinter:

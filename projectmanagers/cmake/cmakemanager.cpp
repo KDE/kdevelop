@@ -729,20 +729,24 @@ void CMakeManager::deletedWatched(const QString& path)
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     
     if(p) {
-        dirurl.adjustPath(KUrl::AddTrailingSlash);
-        if(p->folder()==dirurl)
-            ICore::self()->projectController()->closeProject(p);
-        else if(!isReloading(p)) {
-            KUrl url(path);
-            
-            if(path.endsWith("/CMakeLists.txt")) {
-                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
-                foreach(ProjectFolderItem* folder, folders) 
-                    reload(folder);
-                
+        if(!isReloading(p)) {
+            dirurl.adjustPath(KUrl::AddTrailingSlash);
+            if(p->folder()==dirurl) {
+                ICore::self()->projectController()->closeProject(p);
             } else {
-                qDeleteAll(p->itemsForUrl(url));
+                KUrl url(path);
+                
+                if(path.endsWith("/CMakeLists.txt")) {
+                    QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
+                    foreach(ProjectFolderItem* folder, folders) 
+                        reload(folder);
+                    
+                } else {
+                    qDeleteAll(p->itemsForUrl(url));
+                }
             }
+        } else {
+            QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
         }
     }
 }
