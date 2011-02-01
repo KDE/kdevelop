@@ -108,6 +108,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     setButtons( SearchButton | KDialog::Cancel );
     setButtonText( SearchButton, i18n("Search...") );
+    setButtonIcon( SearchButton, KIcon("edit-find") );
     setCaption( i18n("Find/Replace In Files") );
     setDefaultButton( SearchButton );
 
@@ -304,22 +305,28 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     }
     
     
-    GrepJob* job = m_plugin->grepJob();
+    GrepJob* job = m_plugin->newGrepJob();
     
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
-    toolView->renewModel();
+    GrepOutputModel* outputModel = toolView->renewModel(patternString());
     toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),
             toolView, SLOT(showErrorMessage(QString)));
+    //the GrepOutputModel gets the 'showMessage' signal to store it and forward
+    //it to toolView
     connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            toolView, SLOT(showMessage(KDevelop::IStatus*, QString)));
+            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*, QString)));    
+    connect(outputModel, SIGNAL(showMessage(KDevelop::IStatus*,QString)),
+            toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    
+    
     connect(toolView, SIGNAL(outputViewIsClosed()),
             job, SLOT(kill()));
     
-    job->setOutputModel(toolView->model());
+    job->setOutputModel(outputModel);
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());

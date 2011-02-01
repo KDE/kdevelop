@@ -97,9 +97,11 @@ void KDevelop::DocumentationController::doShowDocumentation()
     
     Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
     
-    KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);
-    if(documentation) {
-        showDocumentation(documentation);
+    if(dec) {
+        KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);
+        if(documentation) {
+            showDocumentation(documentation);
+        }
     }
 }
 

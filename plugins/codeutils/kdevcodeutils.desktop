@@ -70,6 +70,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcodeutils
 X-KDE-PluginInfo-Name=kdevcodeutils
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=11
+X-KDevelop-Version=12
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI
