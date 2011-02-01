@@ -222,13 +222,11 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if(!doc)
         return;
     if (KTextEditor::Document* tdoc = doc->textDocument()) {
-        QString text = tdoc->line(line);
-        int index = m_regExp.indexIn(text);
-        if (index!=-1) {
-            range.setBothLines(line);
-            range.start().setColumn(index);
-            range.end().setColumn(index+m_regExp.matchedLength());
-            doc->setTextSelection( range );
+        KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
+        QString actualText = tdoc->text(matchRange);
+        QString expectedText = grepitem->change()->m_oldText;
+        if (actualText == expectedText) {
+            range = matchRange;
         }
     }
 
@@ -299,6 +297,11 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     return currentIdx;
 }
 
+const GrepOutputItem *GrepOutputModel::getRootItem() const {
+    return m_rootItem;
+}
+
+
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
     if(items.isEmpty())
@@ -312,7 +315,11 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     m_fileCount  += 1;
     m_matchCount += items.length();
-    m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
+
+    const QString matchText = i18np("1 match", "%1 matches", m_matchCount);
+    const QString fileText = i18np("1 file", "%1 files", m_fileCount);
+
+    m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "%1 in %2", matchText, fileText));
     
     QString fnString = i18np("%2 <i>(one match)</i>", "%2 <i>(%1 matches)</i>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
 
@@ -377,6 +384,25 @@ void GrepOutputModel::doReplacements()
                         .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
     }
 }
+
+void GrepOutputModel::showMessageSlot(IStatus* status, const QString& message)
+{
+    m_savedMessage = message;
+    m_savedIStatus = status;
+    showMessageEmit();
+}
+
+void GrepOutputModel::showMessageEmit()
+{
+    emit showMessage(m_savedIStatus, m_savedMessage);
+}
+
+bool GrepOutputModel::hasResults()
+{
+    return(m_matchCount > 0);
+}
+
+
 
 #include "grepoutputmodel.moc"
 

@@ -140,16 +140,13 @@ public:
         UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        setSizePolicy(QSizePolicy::Maximum, sizePolicy().verticalPolicy());
+        setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     }
 
     virtual QSize minimumSizeHint() const
     {
         QRect rect = style()->itemTextRect(fontMetrics(), QRect(), Qt::AlignRight, true, i18n("Line: 00000 Col: 000"));
-        QStyleOptionTab tabOverlap;
-        tabOverlap.shape = m_tabBar->shape();
-        int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
-        rect.setHeight(rect.height()+overlap);
+        rect.setHeight(m_tabBar->height());
         return rect.size();
     }
 };

@@ -356,7 +356,7 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
             no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
             no.setIcon(KIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
-            cancel.setToolTip(i18n("Cancel and don't open the project."));
+            cancel.setToolTip(i18n("Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
                      "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),

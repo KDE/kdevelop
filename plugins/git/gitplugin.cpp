@@ -164,7 +164,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 {
     if (KStandardDirs::findExe("git").isEmpty()) {
         m_hasError = true;
-        m_errorDescription = "git is not installed";
+        m_errorDescription = i18n("git is not installed");
         return;
     }
 

@@ -392,6 +392,7 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& inst
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
 {
+    delete d;
 }
 
 IProjectFileManager::Features AbstractFileManagerPlugin::features() const
