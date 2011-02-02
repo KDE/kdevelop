@@ -39,8 +39,15 @@ set(kdevqmakemanager_PART_SRCS
     qmakecache.cpp
     variablereferenceparser.cpp
     qmakejob.cpp
+    qmakebuilddirchooser.cpp
+    qmakeconfig.cpp
 )
 
+set(kdevqmakemanager_PART_UI
+    qmakebuilddirchooser.ui
+)
+
+kde4_add_ui_files( kdevqmakemanager_PART_SRCS ${kdevqmakemanager_PART_UI} )
 
 kde4_add_plugin(kdevqmakemanager ${kdevqmakemanager_PART_SRCS})
 target_link_libraries( kdevqmakemanager

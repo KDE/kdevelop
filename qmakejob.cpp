@@ -20,25 +20,34 @@
 
 
 #include "qmakejob.h"
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 #include <KProcess>
 #include <KLocalizedString>
+#include <KUrl>
+#include <KShell>
+#include <KDebug>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
 #include <outputview/ioutputview.h>
 
 using namespace KDevelop;
 
-QMakeJob::QMakeJob( const QString& wd, QObject* parent )
+QMakeJob::QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent )
     : OutputJob( parent ),
-      m_wd(wd),
+      m_srcDir(srcDir),
+      m_buildDir(buildDir),
+      m_qmakePath("qmake"),
+      m_buildType(0),
       m_process(0),
       m_model(0)
+
 {
   setCapabilities( Killable );
   setStandardToolView( IOutputView::RunView );
   setBehaviours( IOutputView::AllowUserClose | IOutputView::AutoScroll );
 
-  setObjectName(i18n("Run QMake in %1", m_wd));
+  setObjectName(i18n("Run QMake in %1", m_buildDir));
 }
 
 QMakeJob::~QMakeJob()
@@ -46,20 +55,67 @@ QMakeJob::~QMakeJob()
 
 }
 
+void QMakeJob::setQMakePath(const QString& path)
+{
+    m_qmakePath = path;
+}
+
+void QMakeJob::setInstallPrefix(const QString& prefix)
+{
+    m_installPrefix = prefix;
+}
+
+void QMakeJob::setBuildType(int comboboxSelectedIndex)
+{
+    m_buildType = comboboxSelectedIndex;
+}
+
+void QMakeJob::setExtraArguments(const QString& args)
+{
+    m_extraArguments = args;
+}
+
+
 void QMakeJob::start()
 {
+    static const char *BUILD_TYPES[] = { "debug", "build", "(don't specify)" };
+    
     m_model = new OutputModel(this);
     setModel( m_model, IOutputView::TakeOwnership );
 
     startOutput();
 
     QStringList args;
-    args << "qmake" << "CONFIG+=debug" << "-r";
+    args << m_qmakePath;
+    if(m_buildType < 2)
+        args << QString("CONFIG+=") + BUILD_TYPES[m_buildType];
+    if(!m_installPrefix.isEmpty())
+        args << "target.path=" + m_installPrefix;
+    if(!m_extraArguments.isEmpty()) {
+        KShell::Errors err;
+        QStringList tmp = KShell::splitArgs( m_extraArguments, KShell::TildeExpand | KShell::AbortOnMeta, &err );
+        if( err == KShell::NoError ) {
+            args += tmp;
+        } else {
+            kWarning() << "Ignoring qmake Extra arguments";
+            if( err == KShell::BadQuoting ) {
+                kWarning() << "QMake arguments badly quoted:" << m_extraArguments;
+            } else {
+                kWarning() << "QMake arguments had meta character:" << m_extraArguments;
+            }
+        }
+    }
+    args << "-r" << m_srcDir;
 
-    m_model->appendLine(m_wd + ": " + args.join(" "));
+    m_model->appendLine(m_buildDir + ": " + args.join(" "));
+
+    QDir build(m_buildDir);
+    if( !build.exists() ) {
+        build.mkpath(build.absolutePath());
+    }
 
     m_process = new KProcess(this);
-    m_process->setWorkingDirectory(m_wd);
+    m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(args);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     ProcessLineMaker* lineMaker = new KDevelop::ProcessLineMaker( m_process, this );

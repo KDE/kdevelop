@@ -54,6 +54,8 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 #include "qmakejob.h"
+#include "qmakebuilddirchooser.h"
+#include "qmakeconfig.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
@@ -68,6 +70,20 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
         item = item->parent();
     }
     return p;
+}
+
+/**
+ * Returns the directory where srcDir will be built.
+ * srcDir must contain a *.pro file !
+ */
+KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
+    QString relative = KUrl::relativeUrl(project->folder(), srcDir);
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
+    if(buildDir.isValid()) {
+        buildDir.addPath(relative);
+    }
+    return buildDir;
 }
 
 //END Helpers
@@ -140,18 +156,28 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
     ///TODO: support includes by some other parent or sibling in a different file-tree-branch
     QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
+    KUrl dir;
     if ( qmakeItem ) {
         if (!item->parent()) {
-            return qmakeItem->projectFiles().first()->buildDirectory();
+            // build root item
+            dir = buildDirFromSrc(item->project(), item->url());
         }
+        // build sub-item
         foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
-            if ( pro->hasSubProject( item->url().toLocalFile() ) ) {
-                return pro->buildDirectory();
+            if ( QDir(pro->absoluteDir()) == QFileInfo(item->url().toLocalFile()).absoluteDir() ||
+                 pro->hasSubProject( item->url().toLocalFile() ) ) {
+                // get path from project root and it to buildDir
+                dir = buildDirFromSrc(item->project(), pro->absoluteDir());
             }
         }
     }
 
-    return KUrl();
+    kDebug(9204) << "Building " << item->text() << "in" << dir.toLocalFile();
+    if(dir.isValid() && QFileInfo(dir.toLocalFile()).exists()) {
+        return dir;
+    } else {
+        return KUrl();
+    }
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
@@ -318,6 +344,16 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
 
     connect(projectWatcher(project), SIGNAL(dirty(QString)),
             this, SLOT(slotDirty(QString)));
+    
+    if(projectNeedsConfiguration(project)) {
+        QMakeBuildDirChooser *chooser = new QMakeBuildDirChooser(project);
+        if(chooser->exec() == QDialog::Rejected)
+        {
+            kDebug() << "User stopped project import";
+            //TODO: return 0 has no effect.
+            return 0;
+        }
+    }
 
     return ret;
 }
@@ -489,10 +525,31 @@ void QMakeProjectManager::slotRunQMake()
 {
     Q_ASSERT(m_actionItem);
 
-    ///TODO: support shadow builds
-    QMakeJob* job = new QMakeJob( m_actionItem->url().toLocalFile(), this );
+    KUrl srcDir = m_actionItem->url();
+    KUrl buildDir = buildDirFromSrc(m_actionItem->project(), srcDir);
+    QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
+
+    KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KUrl qmakePath = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(""));
+    if(!qmakePath.isEmpty())
+        job->setQMakePath(qmakePath.path());
+    KUrl installPrefix = cg.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl(""));
+    if(!installPrefix.isEmpty())
+        job->setInstallPrefix(installPrefix.path());
+    job->setBuildType( cg.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
+    job->setExtraArguments( cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS, "") );
 
     KDevelop::ICore::self()->runController()->registerJob( job );
 }
+
+bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
+{
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    bool qmakeValid = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl("")).isValid();
+    bool buildDirValid = cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, KUrl("")).isValid();
+    kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
+    return( !(qmakeValid && buildDirValid) );
+}
+
 
 #include "qmakemanager.moc"
