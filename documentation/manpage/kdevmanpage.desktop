@@ -2,6 +2,7 @@
 Type=Service
 Icon=x-office-address-book
 Comment=This plugin provides Manual Pages integration
+Comment[ca]=Aquest connector proporciona la integració de les pàgines del manual
 Comment[da]=Dette plugin giver integration af manualsider
 Comment[en_GB]=This plugin provides Manual Pages integration
 Comment[es]=Este complemento proporciona integración de las páginas de manual
@@ -18,6 +19,7 @@ Comment[uk]=За допомогою цього додатка здійснюєт
 Comment[x-test]=xxThis plugin provides Manual Pages integrationxx
 Comment[zh_TW]=此外掛程式提供 Man Page 整合
 Name=Man Pages
+Name[ca]=Pàgines man
 Name[da]=Man-sider
 Name[en_GB]=Man Pages
 Name[es]=Páginas man
