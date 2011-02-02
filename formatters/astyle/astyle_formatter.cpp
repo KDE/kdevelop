@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include "astyle_stringiterator.h"
 
 AStyleFormatter::AStyleFormatter()
+: ASFormatter()
 {
 }
 
@@ -212,6 +213,10 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setBracketFormatMode(astyle::ATTACH_MODE);
     else if(s == "Linux")
         AStyleFormatter::setBracketFormatMode(astyle::BDAC_MODE);
+    else if(s == "Stroustrup")
+        AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
+    else if(s == "Horstmann")
+        AStyleFormatter::setBracketFormatMode(astyle::HORSTMANN_MODE);
     else
         AStyleFormatter::setBracketFormatMode(astyle::NONE_MODE);
 
@@ -449,7 +454,8 @@ void AStyleFormatter::setMaxInStatementIndentLength(int max)
 void AStyleFormatter::setMinConditionalIndentLength(int min)
 {
     m_options["MinConditional"] = min;
-    ASFormatter::setMinConditionalIndentLength(min);
+    ASFormatter::setMinConditionalIndentOption(min);
+    ASFormatter::setMinConditionalIndentLength();
 }
 
 void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
@@ -466,6 +472,12 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
         break;
     case astyle::BDAC_MODE:
         m_options["Brackets"] = "Linux";
+        break;
+    case astyle::STROUSTRUP_MODE:
+        m_options["Brackets"] = "Stroustrup";
+        break;
+    case astyle::HORSTMANN_MODE:
+        m_options["Brackets"] = "Horstmann";
         break;
     }
     ASFormatter::setBracketFormatMode(mode);

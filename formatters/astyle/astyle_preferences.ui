@@ -329,6 +329,16 @@ from their immediately preceding closing brackets.</string>
                 <string>Linux</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Stroustrup</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Horstmann</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>

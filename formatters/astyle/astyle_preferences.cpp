@@ -56,6 +56,8 @@ Boston, MA 02110-1301, USA.
 #define BRACKET_ATTACH 1
 #define BRACKET_BREAK 2
 #define BRACKET_LINUX 3
+#define BRACKET_STROUSTRUP 4
+#define BRACKET_HORSTMANN 5
 
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
     : KDevelop::SettingsWidget(parent), m_lang(lang)
@@ -297,6 +299,8 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_ATTACH: m_formatter->setBracketFormatMode(astyle::ATTACH_MODE); break;
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
         case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::BDAC_MODE); break;
+        case BRACKET_STROUSTRUP: m_formatter->setBracketFormatMode(astyle::STROUSTRUP_MODE); break;
+        case BRACKET_HORSTMANN: m_formatter->setBracketFormatMode(astyle::HORSTMANN_MODE); break;
     }
 
     m_formatter->setBreakClosingHeaderBracketsMode(chkBracketsCloseHeaders->isChecked());

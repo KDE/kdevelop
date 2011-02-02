@@ -173,7 +173,8 @@ QString AStylePlugin::formattingSample()
     "\n\ta=bar((b-c)*a,*d--);\nif(  isFoo( a,b ) )\n\tbar(a, b);"
     "\nif (isFoo) {isFoo=false;cat << isFoo <<endl;}\nif(isFoo)DoBar();"
     "if (isFoo){\n\tbar();\n}\n\telse if(isBar())"
-    "{\n\tannotherBar();\n}\n}\n";
+    "{\n\tannotherBar();\n}\n}\n"
+    "namespace A {\nnamespace B {\nvoid foo() {\n  if (true) {\n    func();\n  } else {\n    // bla\n  }\n}\n}\n}\n";
 }
 
 QString AStylePlugin::indentingSample()
