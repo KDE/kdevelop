@@ -32,15 +32,6 @@
 
 namespace astyle
 {
-// static member variables
-int ASBeautifier::beautifierFileType = 9;		// initialized with an invalid type
-vector<const string*>* ASBeautifier::headers = NULL;
-vector<const string*>* ASBeautifier::nonParenHeaders = NULL;
-vector<const string*>* ASBeautifier::preBlockStatements;
-vector<const string*>* ASBeautifier::assignmentOperators = NULL;
-vector<const string*>* ASBeautifier::nonAssignmentOperators;
-vector<const string*>* ASBeautifier::indentableHeaders;
-
 
 /**
  * ASBeautifier's constructor
@@ -81,13 +72,19 @@ ASBeautifier::ASBeautifier()
 	setCStyle();
 	setPreprocessorIndent(false);
 
-	// initialize ASBeautifier static member vectors
+	// initialize ASBeautifier member vectors
 	beautifierFileType = 9;		// reset to an invalid type
+	headers = NULL;
 	initVector(headers);
+    nonParenHeaders = NULL;
 	initVector(nonParenHeaders);
+    assignmentOperators = NULL;
 	initVector(assignmentOperators);
+    nonAssignmentOperators = NULL;
 	initVector(nonAssignmentOperators);
+    preBlockStatements = NULL;
 	initVector(preBlockStatements);
+    indentableHeaders = NULL;
 	initVector(indentableHeaders);
 }
 

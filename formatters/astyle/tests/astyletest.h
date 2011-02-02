@@ -31,6 +31,7 @@ private slots:
     void renameVariable();
     void overrideHelper();
     void varTypeAssistant();
+    void testMultipleFormatters();
 
 private:
     AStyleFormatter* m_formatter;

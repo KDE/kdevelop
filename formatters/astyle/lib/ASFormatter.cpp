@@ -33,16 +33,6 @@
 
 namespace astyle
 {
-// static member variables
-int ASFormatter::formatterFileType = 9;		// initialized with an invalid type
-vector<const string*>* ASFormatter::headers = NULL;
-vector<const string*>* ASFormatter::nonParenHeaders = NULL;
-vector<const string*>* ASFormatter::preDefinitionHeaders = NULL;
-vector<const string*>* ASFormatter::preCommandHeaders = NULL;
-vector<const string*>* ASFormatter::operators = NULL;
-vector<const string*>* ASFormatter::assignmentOperators = NULL;
-vector<const string*>* ASFormatter::castOperators = NULL;
-
 /**
  * Constructor of ASFormatter
  */
@@ -76,14 +66,21 @@ ASFormatter::ASFormatter()
 	shouldAddBrackets = false;
 	shouldAddOneLineBrackets = false;
 
-	// initialize ASFormatter static member vectors
+	// initialize ASFormatter member vectors
 	formatterFileType = 9;		// reset to an invalid type
+    headers = NULL;
 	initVector(headers);
+    nonParenHeaders = NULL;
 	initVector(nonParenHeaders);
+    preDefinitionHeaders = NULL;
 	initVector(preDefinitionHeaders);
+    preCommandHeaders = NULL;
 	initVector(preCommandHeaders);
+    operators = NULL;
 	initVector(operators);
+    assignmentOperators = NULL;
 	initVector(assignmentOperators);
+    castOperators = NULL;
 	initVector(castOperators);
 
 	// the following prevents warning messages with cppcheck
@@ -102,8 +99,8 @@ ASFormatter::~ASFormatter()
 	deleteContainer(parenStack);
 	deleteContainer(structStack);
 
-	// delete static member vectors using swap to eliminate memory leak reporting
-	// delete ASFormatter static member vectors
+	// delete member vectors using swap to eliminate memory leak reporting
+	// delete ASFormatter member vectors
 	formatterFileType = 9;		// reset to an invalid type
 	deleteVector(headers);
 	deleteVector(nonParenHeaders);
@@ -113,7 +110,7 @@ ASFormatter::~ASFormatter()
 	deleteVector(assignmentOperators);
 	deleteVector(castOperators);
 
-	// delete ASBeautifier static member vectors
+	// delete ASBeautifier member vectors
 	// must be done when the ASFormatter object is deleted (not ASBeautifier)
 	ASBeautifier::deleteStaticVectors();
 

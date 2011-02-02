@@ -363,13 +363,13 @@ class ASBeautifier : protected ASResource, protected ASBase
 		                               int tabIncrementIn, int minIndent, bool updateParenStack);
 		string preLineWS(int spaceTabCount, int tabCount);
 
-		static int beautifierFileType;
-		static vector<const string*>* headers;
-		static vector<const string*>* nonParenHeaders;
-		static vector<const string*>* preBlockStatements;
-		static vector<const string*>* assignmentOperators;
-		static vector<const string*>* nonAssignmentOperators;
-		static vector<const string*>* indentableHeaders;
+		int beautifierFileType;
+		vector<const string*>* headers;
+		vector<const string*>* nonParenHeaders;
+		vector<const string*>* preBlockStatements;
+		vector<const string*>* assignmentOperators;
+		vector<const string*>* nonAssignmentOperators;
+		vector<const string*>* indentableHeaders;
 
 		ASSourceIterator* sourceIterator;
 		vector<ASBeautifier*> *waitingBeautifierStack;
@@ -630,14 +630,14 @@ class ASFormatter : public ASBeautifier
 		string peekNextText(const string& firstLine, bool endOnEmptyLine=false, bool shouldReset=false) const;
 
 	private:  // variables
-		static int formatterFileType;
-		static vector<const string*>* headers;
-		static vector<const string*>* nonParenHeaders;
-		static vector<const string*>* preDefinitionHeaders;
-		static vector<const string*>* preCommandHeaders;
-		static vector<const string*>* operators;
-		static vector<const string*>* assignmentOperators;
-		static vector<const string*>* castOperators;
+		int formatterFileType;
+		vector<const string*>* headers;
+		vector<const string*>* nonParenHeaders;
+		vector<const string*>* preDefinitionHeaders;
+		vector<const string*>* preCommandHeaders;
+		vector<const string*>* operators;
+		vector<const string*>* assignmentOperators;
+		vector<const string*>* castOperators;
 
 		ASSourceIterator* sourceIterator;
 		ASEnhancer* enhancer;

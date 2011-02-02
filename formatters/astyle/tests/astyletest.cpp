@@ -96,4 +96,13 @@ void AstyleTest::varTypeAssistant()
 
 }
 
+void AstyleTest::testMultipleFormatters()
+{
+    // just test that multiple formatters can exist at the same time
+    AStyleFormatter* formatter1 = new AStyleFormatter;
+    AStyleFormatter* formatter2 = new AStyleFormatter;
+    delete formatter1;
+    delete formatter2;
+}
+
 #include "astyletest.moc"
