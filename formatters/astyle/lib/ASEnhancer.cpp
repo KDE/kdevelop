@@ -1,59 +1,30 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- *   ASEnhancer.cpp
+ *   Copyright (C) 2006-2010 by Jim Pattee <jimp03@email.com>
+ *   Copyright (C) 1998-2002 by Tal Davidson
+ *   <http://www.gnu.org/licenses/lgpl-3.0.html>
  *
- *   This file is a part of "Artistic Style" - an indentation and
+ *   This file is a part of Artistic Style - an indentation and
  *   reformatting tool for C, C++, C# and Java source files.
- *   http://astyle.sourceforge.net
+ *   <http://astyle.sourceforge.net>
  *
- *   The "Artistic Style" project, including all files needed to
- *   compile it, is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later
- *   version.
+ *   Artistic Style is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published
+ *   by the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *   This program is distributed in the hope that it will be useful,
+ *   Artistic Style is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this project; if not, write to the
- *   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- *   Boston, MA  02110-1301, USA.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Artistic Style.  If not, see <http://www.gnu.org/licenses/>.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 
-// can trace only if NDEBUG is not defined
-#ifndef NDEBUG
-// #define TRACEswitch
-// #define TRACEcase
-// #define TRACEmisc
-#endif
-
 #include "astyle.h"
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-#ifdef TRACEswitch
-#define TRswitch(a,b)   *traceOut << lineNumber << a << b << endl;
-#else
-#define TRswitch(a,b)   ((void)0)
-#endif // TRACEswitch
-#ifdef TRACEcase
-#define TRcase(a,b)     *traceOut << lineNumber << a << b << endl;
-#else
-#define TRcase(a,b)     ((void)0)
-#endif // TRACEcase
-#ifdef TRACEmisc
-#define TRmisc(a)       *traceOut << lineNumber << a << endl;
-#else
-#define TRmisc(a)       ((void)0)
-#endif // TRACEmisc
 
 
 namespace astyle
@@ -66,38 +37,16 @@ namespace astyle
  */
 ASEnhancer::ASEnhancer()
 {
-	// variables are initialized by init()
-	traceOut = new stringstream;
+	// the following prevents warning messages with cppcheck
+	// it will NOT compile if activated
+//	init();
 }
 
 /**
  * Destructor of ASEnhancer
- * Display the TRACE entries.
  */
 ASEnhancer::~ASEnhancer()
 {
-#if defined(TRACEswitch) || defined(TRACEcase) || defined(TRACEmisc)
-	string line;
-	string msg = "TRACE Entries\n\n";
-	char countLine[50];
-	int count = 0;
-
-	while (getline(*traceOut, line))
-	{
-		msg += line + '\n';
-		count++;
-	}
-	sprintf(countLine, "\n%d Entries", count);
-	msg += countLine;
-	// write a text file to "My Documents" (Windows)
-	char filename [_MAX_PATH + _MAX_FNAME + _MAX_EXT + 1];   // full path and filename
-	strcpy(filename, getenv("USERPROFILE"));
-	strcat(filename, "\\My Documents\\tracee.txt");
-	ofstream outfile(filename);
-	outfile << msg;
-	outfile.close();
-#endif
-	delete traceOut;
 }
 
 /**
@@ -105,25 +54,25 @@ ASEnhancer::~ASEnhancer()
  *
  * init() is called each time an ASFormatter object is initialized.
  */
-void ASEnhancer::init(int _indentLength,
+void ASEnhancer::init(int fileType,
+                      int _indentLength,
                       string _indentString,
-                      bool _isCStyle,
-                      bool _isJavaStyle,
-                      bool _isSharpStyle,
                       bool _caseIndent,
+                      bool _preprocessorIndent,
                       bool _emptyLineFill)
 {
 	// formatting variables from ASFormatter and ASBeautifier
-	indentLengthX = _indentLength;
-	if (_indentString.compare(0, 1, "\t") == 0)
-		useTabsX = true;
+	ASBase::init(fileType);
+	indentLength = _indentLength;
+	if (_indentString == "\t")
+		useTabs = true;
 	else
-		useTabsX = false;
-	isCStyleX      = _isCStyle;
-	isJavaStyleX   = _isJavaStyle;
-	isSharpStyleX  = _isSharpStyle;
-	caseIndentX    = _caseIndent;
-	emptyLineFillX = _emptyLineFill;
+		useTabs = false;
+
+	caseIndent    = _caseIndent;
+	preprocessorIndent = _preprocessorIndent;
+	emptyLineFill = _emptyLineFill;
+	quoteChar = '\'';
 
 	// unindent variables
 	lineNumber = 0;
@@ -138,14 +87,13 @@ void ASEnhancer::init(int _indentLength,
 	sw.switchBracketCount = 0;
 	sw.unindentDepth = 0;
 	sw.unindentCase = false;
-	swVector.clear();
+	switchStack.clear();
 
-	nextLineIsEventTable = false;
+	// other variables
+	nextLineIsEventIndent = false;
 	isInEventTable = false;
-
-#if defined(TRACEswitch) || defined(TRACEcase) || defined(TRACEmisc)
-	*traceOut << "New file -------------" << endl;
-#endif
+	nextLineIsDeclareIndent = false;
+	isInDeclareSection = false;
 }
 
 /**
@@ -157,24 +105,30 @@ void ASEnhancer::init(int _indentLength,
  *
  * @param line       the original formatted line will be updated if necessary.
  */
-void ASEnhancer::enhance(string &line)
+void ASEnhancer::enhance(string& line, bool isInPreprocessor, bool isInSQL)
 {
-	bool   isSpecialChar = false;
-	size_t  lineLength;                             // length of the line being parsed
+	bool isSpecialChar = false;			// is a backslash escape character
 
 	lineNumber++;
-	lineLength = line.length();
 
 	// check for beginning of event table
-	if (nextLineIsEventTable)
+	if (nextLineIsEventIndent)
 	{
 		isInEventTable = true;
-		nextLineIsEventTable = false;
+		nextLineIsEventIndent = false;
 	}
 
-	if (lineLength == 0
+	// check for beginning of SQL declare section
+	if (nextLineIsDeclareIndent)
+	{
+		isInDeclareSection = true;
+		nextLineIsDeclareIndent = false;
+	}
+
+	if (line.length() == 0
 	        && ! isInEventTable
-	        && ! emptyLineFillX)
+	        && ! isInDeclareSection
+	        && ! emptyLineFill)
 		return;
 
 	// test for unindent on attached brackets
@@ -183,17 +137,16 @@ void ASEnhancer::enhance(string &line)
 		sw.unindentDepth++;
 		sw.unindentCase = true;
 		unindentNextLine = false;
-		TRcase(" unindent case ", sw.unindentDepth);
 	}
 
 	// parse characters in the current line.
 
-	for (size_t i = 0; i < lineLength; i++)
+	for (size_t i = 0; i < line.length(); i++)
 	{
 		char ch = line[i];
 
 		// bypass whitespace
-		if (isWhiteSpaceX(ch))
+		if (isWhiteSpace(ch))
 			continue;
 
 		// handle special characters (i.e. backslash+character such as \n, \t, ...)
@@ -214,7 +167,7 @@ void ASEnhancer::enhance(string &line)
 		}
 
 		// handle quotes (such as 'x' and "Hello Dolly")
-		if (!(isInComment) && (ch == '"' || ch == '\''))
+		if (!isInComment && (ch == '"' || ch == '\''))
 		{
 			if (!isInQuote)
 			{
@@ -258,182 +211,351 @@ void ASEnhancer::enhance(string &line)
 
 		// if we have reached this far then we are NOT in a comment or string of special characters
 
-		if (line[i] == '{')                                 // if open bracket
+		if (line[i] == '{')
 			bracketCount++;
 
-		if (line[i] == '}')                     // if close bracket
+		if (line[i] == '}')
 			bracketCount--;
 
-		// ----------------  process event tables  --------------------------------------
+		bool isPotentialKeyword = isCharPotentialHeader(line, i);
 
-		// check for event table begin
-		if (findKeyword(line, i, "BEGIN_EVENT_TABLE")
-		        || findKeyword(line, i, "BEGIN_MESSAGE_MAP"))
-			nextLineIsEventTable = true;
+		// ----------------  wxWidgets and MFC macros  ----------------------------------
 
-		// check for event table end
-		if (findKeyword(line, i, "END_EVENT_TABLE")
-		        || findKeyword(line, i, "END_MESSAGE_MAP"))
-			isInEventTable = false;
+		if (isPotentialKeyword)
+		{
+			if (findKeyword(line, i, "BEGIN_EVENT_TABLE")
+			        || findKeyword(line, i, "BEGIN_DISPATCH_MAP")
+			        || findKeyword(line, i, "BEGIN_EVENT_MAP")
+			        || findKeyword(line, i, "BEGIN_MESSAGE_MAP")
+			        || findKeyword(line, i, "BEGIN_PROPPAGEIDS"))
+			{
+				nextLineIsEventIndent = true;
+				break;
+			}
+			if (findKeyword(line, i, "END_EVENT_TABLE")
+			        || findKeyword(line, i, "END_DISPATCH_MAP")
+			        || findKeyword(line, i, "END_EVENT_MAP")
+			        || findKeyword(line, i, "END_MESSAGE_MAP")
+			        || findKeyword(line, i, "END_PROPPAGEIDS"))
+			{
+				isInEventTable = false;
+				break;
+			}
+		}
+
+		// ----------------  process SQL  -----------------------------------------------
+
+		if (isInSQL)
+		{
+			if (isBeginDeclareSectionSQL(line, i))
+				nextLineIsDeclareIndent = true;
+			if (isEndDeclareSectionSQL(line, i))
+				isInDeclareSection = false;
+			break;
+		}
 
 		// ----------------  process switch statements  ---------------------------------
 
-		if (findKeyword(line, i, "switch"))                 // if switch statement
+		if (isPotentialKeyword && findKeyword(line, i, "switch"))
 		{
-			switchDepth++;                                  // bump switch depth
-			TRswitch(" switch ", switchDepth);
-			swVector.push_back(sw);                         // save current variables
+			switchDepth++;
+			switchStack.push_back(sw);                      // save current variables
 			sw.switchBracketCount = 0;
 			sw.unindentCase = false;                        // don't clear case until end of switch
 			i += 5;                                         // bypass switch statement
 			continue;
 		}
 
-		// just want switch statements from this point
+		// just want unindented switch statements from this point
 
-		if (caseIndentX || switchDepth == 0)               // from here just want switch statements
-			continue;                                      // get next char
-
-		if (line[i] == '{')                                 // if open bracket
+		if (caseIndent
+		        || switchDepth == 0
+		        || (isInPreprocessor && !preprocessorIndent))
 		{
-			sw.switchBracketCount++;
-			if (lookingForCaseBracket)                      // if 1st after case statement
+			// bypass the entire word
+			if (isPotentialKeyword)
 			{
-				sw.unindentCase = true;                     // unindenting this case
-				sw.unindentDepth++;                         // bump depth
-				lookingForCaseBracket = false;              // not looking now
-				TRcase(" unindent case ", sw.unindentDepth);
+				string name = getCurrentWord(line, i);
+				i += name.length() - 1;
 			}
 			continue;
 		}
 
-		lookingForCaseBracket = false;                      // no opening bracket, don't indent
+		i = processSwitchBlock(line, i);
 
-		if (line[i] == '}')                                 // if close bracket
+	}   // end of for loop * end of for loop * end of for loop * end of for loop
+
+	if (isInEventTable || isInDeclareSection)
+	{
+		if (line.length() == 0 || line[0] != '#')
+			indentLine(line, 1);
+	}
+
+	if (sw.unindentDepth > 0)
+		unindentLine(line, sw.unindentDepth);
+}
+
+/**
+ * find the colon following a 'case' statement
+ *
+ * @param line          a reference to the line.
+ * @param i             the line index of the case statement.
+ * @return              the line index of the colon.
+ */
+size_t ASEnhancer::findCaseColon(string&  line, size_t caseIndex) const
+{
+	size_t i = caseIndex;
+	bool isInQuote_ = false;
+	char quoteChar_ = ' ';
+	for (; i < line.length(); i++)
+	{
+		if (isInQuote_)
 		{
-			sw.switchBracketCount--;
-			if (sw.switchBracketCount == 0)                 // if end of switch statement
+			if (line[i] == '\\')
 			{
-				TRswitch("  endsw ", switchDepth);
-				switchDepth--;                              // one less switch
-				sw = swVector.back();                       // restore sw struct
-				swVector.pop_back();                        // remove last entry from stack
+				i++;
+				continue;
 			}
+			else if (line[i] == quoteChar_)          // check ending quote
+			{
+				isInQuote_ = false;
+				quoteChar_ = ' ';
+				continue;
+			}
+			else
+			{
+				continue;                           // must close quote before continuing
+			}
+		}
+		if (line[i] == '\'' || line[i] == '\"')		// check opening quote
+		{
+			isInQuote_ = true;
+			quoteChar_ = line[i];
 			continue;
 		}
-
-		// look for case or default header
-
-		if (findKeyword(line, i, "case") || findKeyword(line, i, "default"))
+		if (line[i] == ':')
 		{
-			if (sw.unindentCase)                            // if unindented last case
-			{
-				sw.unindentCase = false;                    // stop unindenting previous case
-				sw.unindentDepth--;                         // reduce depth
-			}
-			bool isInQuote = false;
-			char quoteChar = ' ';
-			for (; i < lineLength; i++)                     // find colon
-			{
-				if (isInQuote)
-				{
-					if (line[i] == '\\')
-					{
-						i++;								// bypass next char
-						continue;
-					}
-					else if (line[i] == quoteChar)			// check ending quote
-					{
-						isInQuote = false;
-						quoteChar = ' ';
-						continue;
-					}
-					else
-					{
-						continue;							// must close quote before continuing
-					}
-				}
-				if (line[i] == '\'' || line[i] == '\"')	// check opening quote
-				{
-					isInQuote = true;
-					quoteChar = line[i];
-					continue;
-				}
-				if (line[i] == ':')
-				{
-					if ((i + 1 < lineLength) && (line[i + 1] == ':'))
-						i++;								// bypass scope resolution operator
-					else
-						break;								// found it
-				}
-			}
-			i++;
-			for (; i < lineLength; i++)                     // bypass whitespace
-			{
-				if (!(isWhiteSpaceX(line[i])))
-					break;
-			}
-			if (i < lineLength)                             // check for bracket
-			{
-				if (line[i] == '{')                         // if bracket found
-				{
-					sw.switchBracketCount++;
-					unindentNextLine = true;                // start unindenting on next line
-					continue;
-				}
-			}
-			lookingForCaseBracket = true;                   // bracket must be on next line
-			i--;                                            // need to check for comments
-			continue;
+			if ((i + 1 < line.length()) && (line[i + 1] == ':'))
+				i++;                                // bypass scope resolution operator
+			else
+				break;                              // found it
 		}
-	}   // end of for loop
-
-	if (isInEventTable) 									// if need to indent
-		indentLine(line, 1);               					//    do it
-
-	if (sw.unindentDepth > 0)                               // if need to unindent
-		unindentLine(line, sw.unindentDepth);               //    do it
+	}
+	return i;
 }
 
 /**
  * indent a line by a given number of tabsets
  *    by inserting leading whitespace to the line argument.
  *
- * @param line          a pointer to the line to indent.
+ * @param line          a reference to the line to indent.
  * @param unindent      the number of tabsets to insert.
  * @return              the number of characters inserted.
  */
-int ASEnhancer::indentLine(string  &line, const int indent) const
+int ASEnhancer::indentLine(string&  line, int indent) const
 {
 	if (line.length() == 0
-	        && ! emptyLineFillX)
+	        && ! emptyLineFill)
 		return 0;
 
-	size_t charsToInsert;                   	// number of chars to insert
+	size_t charsToInsert;                       // number of chars to insert
 
-	if (useTabsX)                    			// if formatted with tabs
+	if (useTabs)                                // if formatted with tabs
 	{
-		charsToInsert = indent;             	// tabs to insert
-		line.insert((size_t) 0, charsToInsert, '\t');    // insert the tabs
+		charsToInsert = indent;                 // tabs to insert
+		line.insert(0U, charsToInsert, '\t');    // insert the tabs
 	}
 	else
 	{
-		charsToInsert = indent * indentLengthX;  // compute chars to insert
-		line.insert((size_t)0, charsToInsert, ' ');     // insert the spaces
+		charsToInsert = indent * indentLength;  // compute chars to insert
+		line.insert(0U, charsToInsert, ' ');     // insert the spaces
 	}
 
 	return charsToInsert;
 }
 
 /**
+ * check for SQL "BEGIN DECLARE SECTION".
+ * must compare case insensitive and allow any spacing between words.
+ *
+ * @param line          a reference to the line to indent.
+ * @param index         the current line index.
+ * @return              true if a hit.
+ */
+bool ASEnhancer::isBeginDeclareSectionSQL(string&  line, size_t index) const
+{
+	string word;
+	size_t hits = 0;
+	size_t i;
+	for (i = index; i < line.length(); i++)
+	{
+		i = line.find_first_not_of(" \t", i);
+		if (i == string::npos)
+			return false;
+		if (line[i] == ';')
+			break;
+		if (!isCharPotentialHeader(line, i))
+			continue;
+		word = getCurrentWord(line, i);
+		for (size_t j = 0; j < word.length(); j++)
+			word[j] = (char) toupper(word[j]);
+		if (word == "EXEC" || word == "SQL")
+		{
+			i += word.length() - 1;
+			continue;
+		}
+		if (word == "DECLARE" || word == "SECTION")
+		{
+			hits++;
+			i += word.length() - 1;
+			continue;
+		}
+		if (word == "BEGIN")
+		{
+			hits++;
+			i += word.length() - 1;
+			continue;
+		}
+		return false;
+	}
+	if (hits == 3)
+		return true;
+	return false;
+}
+
+/**
+ * check for SQL "END DECLARE SECTION".
+ * must compare case insensitive and allow any spacing between words.
+ *
+ * @param line          a reference to the line to indent.
+ * @param index         the current line index.
+ * @return              true if a hit.
+ */
+bool ASEnhancer::isEndDeclareSectionSQL(string&  line, size_t index) const
+{
+	string word;
+	size_t hits = 0;
+	size_t i;
+	for (i = index; i < line.length(); i++)
+	{
+		i = line.find_first_not_of(" \t", i);
+		if (i == string::npos)
+			return false;
+		if (line[i] == ';')
+			break;
+		if (!isCharPotentialHeader(line, i))
+			continue;
+		word = getCurrentWord(line, i);
+		for (size_t j = 0; j < word.length(); j++)
+			word[j] = (char) toupper(word[j]);
+		if (word == "EXEC" || word == "SQL")
+		{
+			i += word.length() - 1;
+			continue;
+		}
+		if (word == "DECLARE" || word == "SECTION")
+		{
+			hits++;
+			i += word.length() - 1;
+			continue;
+		}
+		if (word == "END")
+		{
+			hits++;
+			i += word.length() - 1;
+			continue;
+		}
+		return false;
+	}
+	if (hits == 3)
+		return true;
+	return false;
+}
+
+/**
+ * process the character at the current index in a switch block.
+ *
+ * @param line          a reference to the line to indent.
+ * @param index         the current line index.
+ * @return              the new line index.
+ */
+size_t ASEnhancer::processSwitchBlock(string& line, size_t index)
+{
+	size_t i = index;
+	bool isPotentialKeyword = isCharPotentialHeader(line, i);
+
+	if (line[i] == '{')
+	{
+		sw.switchBracketCount++;
+		if (lookingForCaseBracket)                      // if 1st after case statement
+		{
+			sw.unindentCase = true;                     // unindenting this case
+			sw.unindentDepth++;
+			lookingForCaseBracket = false;              // not looking now
+		}
+		return i;
+	}
+	lookingForCaseBracket = false;                      // no opening bracket, don't indent
+
+	if (line[i] == '}')                                 // if close bracket
+	{
+		sw.switchBracketCount--;
+		if (sw.switchBracketCount == 0)                 // if end of switch statement
+		{
+			switchDepth--;
+			sw = switchStack.back();
+			switchStack.pop_back();
+		}
+		return i;
+	}
+
+	if (isPotentialKeyword
+	        && (findKeyword(line, i, "case") || findKeyword(line, i, "default")))
+	{
+		if (sw.unindentCase)                            // if unindented last case
+		{
+			sw.unindentCase = false;                    // stop unindenting previous case
+			sw.unindentDepth--;                         // reduce depth
+		}
+
+		i = findCaseColon(line, i);
+
+		i++;
+		for (; i < line.length(); i++)                  // bypass whitespace
+		{
+			if (!isWhiteSpace(line[i]))
+				break;
+		}
+		if (i < line.length())
+		{
+			if (line[i] == '{')
+			{
+				sw.switchBracketCount++;
+				unindentNextLine = true;
+				return i;
+			}
+		}
+		lookingForCaseBracket = true;                   // bracket must be on next line
+		i--;                                            // need to check for comments
+		return i;
+	}
+	if (isPotentialKeyword)
+	{
+		string name = getCurrentWord(line, i);          // bypass the entire name
+		i += name.length() - 1;
+	}
+	return i;
+}
+
+/**
  * unindent a line by a given number of tabsets
  *    by erasing the leading whitespace from the line argument.
  *
- * @param line          a pointer to the line to unindent.
+ * @param line          a reference to the line to unindent.
  * @param unindent      the number of tabsets to erase.
  * @return              the number of characters erased.
  */
-int ASEnhancer::unindentLine(string  &line, const int unindent) const
+int ASEnhancer::unindentLine(string&  line, int unindent) const
 {
 	size_t whitespace = line.find_first_not_of(" \t");
 
@@ -445,7 +567,7 @@ int ASEnhancer::unindentLine(string  &line, const int unindent) const
 
 	size_t charsToErase;                    // number of chars to erase
 
-	if (useTabsX)                    		// if formatted with tabs
+	if (useTabs)                            // if formatted with tabs
 	{
 		charsToErase = unindent;            // tabs to erase
 		if (charsToErase <= whitespace)     // if there is enough whitespace
@@ -455,7 +577,7 @@ int ASEnhancer::unindentLine(string  &line, const int unindent) const
 	}
 	else
 	{
-		charsToErase = unindent * indentLengthX; // compute chars to erase
+		charsToErase = unindent * indentLength; // compute chars to erase
 		if (charsToErase <= whitespace)         // if there is enough whitespace
 			line.erase(0, charsToErase);        // erase the spaces
 		else
@@ -463,78 +585,6 @@ int ASEnhancer::unindentLine(string  &line, const int unindent) const
 	}
 
 	return charsToErase;
-}
-
-/**
- * check if a specific line position contains a keyword.
- *
- * @return    true if the word was found. false if the word was not found.
- */
-bool ASEnhancer::findKeyword(const string &line, int i, const char *keyword) const
-{
-	if (line.compare(i, strlen(keyword), keyword) == 0)
-	{
-		// check that this is a header and not a part of a longer word
-		// (e.g. not at its beginning, not at its middle...)
-
-		int lineLength = line.length();
-		int wordEnd = i + strlen(keyword);
-		char startCh = keyword[0];      // first char of header
-		char endCh = 0;                // char just after header
-		char prevCh = 0;               // char just before header
-
-		if (wordEnd < lineLength)
-		{
-			endCh = line[wordEnd];
-		}
-		if (i > 0)
-		{
-			prevCh = line[i-1];
-		}
-
-		if (prevCh != 0
-		        && isLegalNameCharX(startCh)
-		        && isLegalNameCharX(prevCh))
-		{
-			return false;
-		}
-		else if (wordEnd >= lineLength
-		         || !isLegalNameCharX(startCh)
-		         || !isLegalNameCharX(endCh))
-		{
-			// is not a keyword if part of a definition
-			char peekChar = peekNextChar(line, wordEnd - 1);
-			if (peekChar == ',' || peekChar == ')')
-				return false;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	return false;
-}
-
-/**
-* peek at the next unread character.
-*
-* @return     	the next unread character.
-* @param line   the line to check.
-* @param i      the current char position on the line.
-*/
-char ASEnhancer::peekNextChar(const string &line, int i) const
-{
-	char ch = ' ';
-	size_t peekNum = line.find_first_not_of(" \t", i + 1);
-
-	if (peekNum == string::npos)
-		return ch;
-
-	ch = line[peekNum];
-
-	return ch;
 }
 
 

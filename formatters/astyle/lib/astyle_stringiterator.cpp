@@ -41,8 +41,9 @@ bool AStyleStringIterator::hasMoreLines() const
 }
 
 
-string AStyleStringIterator::nextLine()
+string AStyleStringIterator::nextLine(bool emptyLineWasDeleted)
 {
+  Q_UNUSED(emptyLineWasDeleted)
   return m_is->readLine().toUtf8().data();
 }
 
