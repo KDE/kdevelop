@@ -1452,7 +1452,9 @@ void PatchReviewPlugin::updateReview()
   } else {
     futureActiveDoc = documents.take(m_patch->file());
   }
+  futureActiveDoc->textDocument()->setReadWrite(false);
 #endif
+  futureActiveDoc->setPrettyName(i18n("Overview"));
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
