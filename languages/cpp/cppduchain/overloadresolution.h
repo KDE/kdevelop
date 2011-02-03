@@ -52,7 +52,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
       }
       AbstractType::Ptr type;
       bool lValue;
-      Declaration * declaration; // if the parameter value is a function name, ADL needs to know it
+      IndexedDeclaration declaration; // if the parameter value is a function name, ADL needs to know it
 
       ///duchain must be locked
       QString toString() const {
@@ -63,9 +63,9 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
           ret += type->toString();
         else
           ret += "<notype>";
-        if (declaration) {
+        if (declaration.data()) {
           ret += " (refs declaration ";
-          ret += declaration->toString();
+          ret += declaration.data()->toString();
           ret += ")";
         }
         return ret;

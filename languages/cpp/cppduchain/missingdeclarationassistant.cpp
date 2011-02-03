@@ -111,10 +111,33 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
             if(problem->type->isFunction) {
               QList<Cpp::SourceCodeInsertion::SignatureItem> signature;
               int num = 1;
+              QSet<QString> hadNames;
               foreach(const OverloadResolver::Parameter& arg, problem->type->arguments) {
                 Cpp::SourceCodeInsertion::SignatureItem item;
                 item.type = type(arg.type);
                 item.name = QString("arg%1").arg(num);
+                kDebug() << "have declaration: " << arg.declaration.data();
+                
+                if(arg.declaration.data())
+                {
+                  // Find a unique name
+                  QString baseName = arg.declaration.data()->identifier().identifier().str();
+                  for(int a = 1; a < 1000; ++a)
+                  {
+                    if(!hadNames.contains(baseName))
+                    {
+                      item.name = baseName;
+                      break;
+                    }
+                    QString name = (baseName + "%1").arg(a);
+                    if(!hadNames.contains(name))
+                    {
+                      item.name = name;
+                      break;
+                    }
+                  }
+                }
+                
                 signature << item;
                 ++num;
               }
