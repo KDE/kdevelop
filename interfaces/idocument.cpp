@@ -32,6 +32,7 @@ public:
 
     KDevelop::ICore* m_core;
     QObject *scriptWrapper;
+    QString m_prettyName;
 
     /* Internal access to the wrapper script object */
     static inline QObject *&getWrapper(IDocument *doc)
@@ -107,6 +108,16 @@ QString IDocument::textLine() const
 QString IDocument::textWord() const
 {
     return QString();
+}
+
+QString IDocument::prettyName() const
+{
+    return d->m_prettyName;
+}
+
+void IDocument::setPrettyName(QString name)
+{
+    d->m_prettyName = name;
 }
 
 void IDocument::notifyUrlChanged()

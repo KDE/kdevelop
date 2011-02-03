@@ -60,6 +60,8 @@ public:
     virtual bool isActive() const;
     virtual DocumentState state() const;
 
+    virtual void setPrettyName(QString name);
+    
     virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow);
 
     virtual KTextEditor::Cursor cursorPosition() const;
