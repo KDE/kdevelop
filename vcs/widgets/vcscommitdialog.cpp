@@ -228,7 +228,7 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
     job->exec();
     }
     
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(d->diff, d->urls, vcsiface, d->m_oldMessages);
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcsiface, url), d->urls, vcsiface, d->m_oldMessages);
     
     if(showVcsDiff(patchSource))
     {

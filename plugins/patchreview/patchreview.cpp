@@ -1191,9 +1191,12 @@ void PatchReviewPlugin::updateKompareModel() {
         
         emit patchChanged();
 
-        if ( m_patch->file().isEmpty() )
-            return;
-        
+        {
+            IDocument* patchDoc = ICore::self()->documentController()->documentForUrl(m_patch->file());
+            if(patchDoc)
+              patchDoc->reload();
+        }
+
         qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
