@@ -314,6 +314,69 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setBracketFormatMode(astyle::ATTACH_MODE);
         setSwitchIndent(false);
         return true;
+    } else if (style == "Stroustrup") {
+        resetStyle();
+        setBracketFormatMode(astyle::STROUSTRUP_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        if (!getIndentManuallySet())
+        {
+            if (getIndentString() == "\t")
+                setTabIndentation(5, getForceTabIndentation());
+            else
+                setSpaceIndentation(5);
+        }
+        setClassIndent(false);
+        setSwitchIndent(false);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Horstmann") {
+        resetStyle();
+        setBracketFormatMode(astyle::HORSTMANN_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        setSwitchIndent(true);
+        if (!getIndentManuallySet())
+        {
+            if (getIndentString() == "\t")
+                setTabIndentation(3, getForceTabIndentation());
+            else
+                setSpaceIndentation(3);
+        }
+        setClassIndent(false);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Whitesmith") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::BREAK_MODE);
+        setBlockIndent(false);
+        setBracketIndent(true);
+        setClassIndent(true);
+        setSwitchIndent(true);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Banner") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::ATTACH_MODE);
+        setBlockIndent(false);
+        setBracketIndent(true);
+        setClassIndent(true);
+        setSwitchIndent(true);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "1TBS") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::LINUX_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        setAddBracketsMode(true);
+        setClassIndent(false);
+        setSwitchIndent(false);
+        setNamespaceIndent(false);
+        return true;
     }
 
     return false;

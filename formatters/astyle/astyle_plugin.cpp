@@ -100,37 +100,30 @@ QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
     return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
 }
 
+KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
+{
+    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( name );
+    st.setCaption( caption.isEmpty() ? name : caption );
+    AStyleFormatter fmt;
+    fmt.predefinedStyle( name );
+    st.setContent( fmt.saveStyle() );
+    return st;
+}
+
 QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
 
-    AStyleFormatter fmt;
-    
-    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "ANSI" );
-    st.setCaption( "ANSI" );
-    fmt.predefinedStyle( "ANSI" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "GNU" );
-    st.setCaption( "GNU" );
-    fmt.predefinedStyle( "GNU" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "Java" );
-    st.setCaption( "Java" );
-    fmt.predefinedStyle( "Java" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "K&R" );
-    st.setCaption( "Kernighan & Ritchie" );
-    fmt.predefinedStyle( "K&R" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "Linux" );
-    st.setCaption( "Linux" );
-    fmt.predefinedStyle( "Linux" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
+    styles << predefinedStyle("ANSI");
+    styles << predefinedStyle("GNU");
+    styles << predefinedStyle("Java");
+    styles << predefinedStyle("K&R", "Kernighan & Ritchie");
+    styles << predefinedStyle("Linux");
+    styles << predefinedStyle("Stroustrup");
+    styles << predefinedStyle("Horstmann");
+    styles << predefinedStyle("Whitesmith");
+    styles << predefinedStyle("Banner");
+    styles << predefinedStyle("1TBS", "One True Bracket Style");
 
     return styles;
 }
