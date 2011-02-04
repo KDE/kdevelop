@@ -25,6 +25,7 @@
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <interfaces/ibuddydocumentfinder.h>
 #include "environmentmanager.h"
 #include <QThread>
 
@@ -72,10 +73,12 @@ protected:
      uint m_msecs;
 };
 
-class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
+class CppLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport,
+                           public KDevelop::IBuddyDocumentFinder
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::ILanguageSupport )
+
 public:
     explicit CppLanguageSupport( QObject* parent, const QVariantList& args = QVariantList() );
     virtual ~CppLanguageSupport();
@@ -106,6 +109,9 @@ public:
 * */
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
   
+    virtual bool areBuddies(const KUrl& url1, const KUrl& url2);
+    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2);
+
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
 
@@ -130,6 +136,8 @@ private:
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
+    static QPair<QString, QChar> basePathAndType(const QString& path);
+
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
@@ -141,6 +149,8 @@ private:
     UIBlockTester* m_blockTester;
     
     Cpp::StaticCodeAssistant * m_assistant;
+
+    static const QStringList s_mimeTypes;
 };
 
 #endif
