@@ -207,6 +207,7 @@ void GrepOutputView::changeModel(int index)
     }
     
     updateCheckable();
+    updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
@@ -313,16 +314,16 @@ void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIn
 {
     Q_UNUSED(bottomRight);
     // we only care about root item
-    if(!topLeft.parent().isValid())
+    if(!topLeft.parent().isValid() && model())
     {
-        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && !replacementCombo->currentText().isEmpty());
+        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
     }
 }
 
 void GrepOutputView::updateCheckable()
 {
     if(model())
-        model()->makeItemsCheckable(!replacementCombo->currentText().isEmpty());
+        model()->makeItemsCheckable(!replacementCombo->currentText().isEmpty() || model()->itemsCheckable());
 }
 
 void GrepOutputView::clearSearchHistory()

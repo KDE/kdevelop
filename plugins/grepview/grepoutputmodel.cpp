@@ -305,6 +305,11 @@ const GrepOutputItem *GrepOutputModel::getRootItem() const {
     return m_rootItem;
 }
 
+bool GrepOutputModel::itemsCheckable() const
+{
+    return m_itemsCheckable;
+}
+
 void GrepOutputModel::makeItemsCheckable(bool checkable)
 {
     if(m_itemsCheckable == checkable)

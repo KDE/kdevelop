@@ -73,6 +73,7 @@ public:
     const GrepOutputItem *getRootItem() const;
 
     void makeItemsCheckable(bool checkable);
+    bool itemsCheckable() const;
     
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
