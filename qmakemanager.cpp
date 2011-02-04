@@ -83,6 +83,8 @@ KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
     if(buildDir.isValid()) {
         buildDir.addPath(relative);
     }
+
+    buildDir.cleanPath();
     return buildDir;
 }
 
@@ -172,12 +174,9 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         }
     }
 
+    dir.cleanPath();
     kDebug(9204) << "Building " << item->text() << "in" << dir.toLocalFile();
-    if(dir.isValid() && QFileInfo(dir.toLocalFile()).exists()) {
-        return dir;
-    } else {
-        return KUrl();
-    }
+    return dir;
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,

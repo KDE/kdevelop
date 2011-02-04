@@ -1,0 +1,12 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x1a\x00b\x00a\x00s\x00i\x00c\x00_\x00p\x00r\x00o\x00j\x00e\x00c\x00t)
+
+[Project]
+VersionControlSupport=kdevgit
+
+[QMake_Builder]
+Build_Folder=file:///home/julien/BE/src/kdev-qmake/tests/manual/basic_project/build
+Build_Type=0
+Extra_Arguments=
+Install_Prefix=
+QMake_Binary=file:///usr/bin/qmake
