@@ -53,6 +53,13 @@ GrepOutputDelegate::~GrepOutputDelegate()
     m_self = 0;
 }
 
+QColor GrepOutputDelegate::blendColor(QColor color1, QColor color2, double blend) const
+{
+    return QColor(color1.red() * blend + color2.red() * (1-blend),
+                  color1.green() * blend + color2.green() * (1-blend),
+                  color1.blue() * blend + color2.blue() * (1-blend));
+}
+
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
     // there is no function in QString to left-trim. A call to remove this this regexp does the job
@@ -91,7 +98,12 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         cur.insertText(item->text().left(rng.start.column).remove(leftspaces), fmt);
         
         fmt.setFontWeight(QFont::Bold);
+        // Blend the highlighted background color
+        // For some reason, it is extremely slow to use alpha-blending directly here
+        QColor bgHighlight = blendColor(option.palette.brush(QPalette::Highlight).color(), option.palette.brush(QPalette::Base).color(), 0.3);
+        fmt.setBackground(bgHighlight);
         cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), fmt);
+        fmt.clearBackground();
         
         fmt.setFontWeight(QFont::Normal);
         cur.insertText(item->text().right(item->text().length() - rng.end.column), fmt);
@@ -132,7 +144,6 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
 
     QSize ret = QStyledItemDelegate::sizeHint(option, index);
-    ret.setHeight(ret.height()+2); // We slightly increase the vertical size, else the view looks too crowded
 
     //take account of additional width required for highlighting (bold text)
     //and line numbers. These are not included in the default Qt size calculation.
@@ -148,6 +159,22 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
                      option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
                      std::max(option.decorationSize.width(), 0);
         ret.setWidth(width);
+    }else{
+        // This is only used for titles, so not very performance critical
+        QString text;
+        if(item)
+            text = item->text();
+        else
+            text = index.data().toString();
+        
+        QTextDocument doc;
+        doc.setDocumentMargin(0);
+        doc.setHtml(text);
+        QSize newSize = doc.size().toSize();
+        if(newSize.height() > ret.height())
+            ret.setHeight(newSize.height());
     }
+
+    ret.setHeight(ret.height()+2); // We slightly increase the vertical size, else the view looks too crowded
     return ret;
 }
