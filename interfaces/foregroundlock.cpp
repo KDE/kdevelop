@@ -280,3 +280,6 @@ namespace KDevelop {
         m_wait.wakeAll();
     }
 }
+
+// Important: The foreground lock has to be held by default
+ForegroundLock lock;
