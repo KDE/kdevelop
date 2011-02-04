@@ -414,8 +414,7 @@ void GrepOutputModel::doReplacements()
     {
         DocumentChangePointer ch = result.m_reasonChange;
         if(ch)
-            emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
-                        .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
+            emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5", Qt::escape(ch->m_oldText), Qt::escape(ch->m_newText), ch->m_document.toUrl().toLocalFile(), ch->m_range.start.line + 1, ch->m_range.start.column + 1));
     }
 }
 

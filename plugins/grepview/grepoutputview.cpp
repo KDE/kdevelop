@@ -142,6 +142,8 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, KUrl url)
         modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
     }
 
+    replacementCombo->clearEditText();
+
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
     applyButton->setEnabled(false);
     // text may be already present
@@ -180,6 +182,8 @@ void GrepOutputView::changeModel(int index)
                this, SLOT(showMessage(KDevelop::IStatus*,QString)));
     disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
                this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+
+    replacementCombo->clearEditText();
     
     //after deleting the whole search history, index is -1
     if(index >= 0)
