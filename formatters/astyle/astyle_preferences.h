@@ -55,6 +55,7 @@ class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePref
         void blocksChanged();
         void paddingChanged();
         void onelinersChanged();
+        void pointerAlignChanged();
 
     private:
         AStyleFormatter *m_formatter;

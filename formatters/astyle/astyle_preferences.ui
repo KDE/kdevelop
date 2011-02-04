@@ -506,6 +506,46 @@ multiple single-statement lines.</string>
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="gpOther">
+         <property name="title">
+          <string>Other</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblPointerAlign">
+            <property name="text">
+             <string>Pointer Alignment</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="cbPointerAlign">
+            <item>
+             <property name="text">
+              <string>No change</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Middle</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Type</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

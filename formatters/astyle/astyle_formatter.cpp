@@ -235,6 +235,17 @@ void AStyleFormatter::updateFormatter()
     // oneliner
     AStyleFormatter::setBreakOneLineBlocksMode(!m_options["KeepBlocks"].toBool());
     AStyleFormatter::setSingleStatementsMode(!m_options["KeepStatements"].toBool());
+
+    // pointer
+    s = m_options["PointerAlign"].toString();
+    if(s == "Name")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NAME);
+    else if(s == "Middle")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_MIDDLE);
+    else if(s == "Type")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_TYPE);
+    else
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NONE);
 }
 
 void AStyleFormatter::resetStyle()
@@ -606,3 +617,21 @@ void AStyleFormatter::setSingleStatementsMode(bool state)
     ASFormatter::setSingleStatementsMode(state);
 }
 
+void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
+{
+    switch (alignment) {
+        case astyle::ALIGN_NONE:
+            m_options["PointerAlign"] = "None";
+            break;
+        case astyle::ALIGN_NAME:
+            m_options["PointerAlign"] = "Name";
+            break;
+        case astyle::ALIGN_MIDDLE:
+            m_options["PointerAlign"] = "Middle";
+            break;
+        case astyle::ALIGN_TYPE:
+            m_options["PointerAlign"] = "Type";
+            break;
+    }
+    ASFormatter::setPointerAlignment(alignment);
+}

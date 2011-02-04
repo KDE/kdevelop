@@ -59,6 +59,11 @@ Boston, MA 02110-1301, USA.
 #define BRACKET_STROUSTRUP 4
 #define BRACKET_HORSTMANN 5
 
+#define POINTERALIGN_NOCHANGE 0
+#define POINTERALIGN_NAME 1
+#define POINTERALIGN_MIDDLE 2
+#define POINTERALIGN_TYPE 3
+
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
     : KDevelop::SettingsWidget(parent), m_lang(lang)
 {
@@ -106,6 +111,9 @@ void AStylePreferences::init()
 
     connect(chkKeepStatements, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
     connect(chkKeepBlocks, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
+
+    connect(cbPointerAlign, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(pointerAlignChanged()));
 }
 
 void AStylePreferences::load(const KDevelop::SourceFormatterStyle &style)
@@ -199,6 +207,17 @@ void AStylePreferences::updateWidgets()
     // oneliner
     chkKeepStatements->setChecked(m_formatter->option("KeepStatements").toBool());
     chkKeepBlocks->setChecked(m_formatter->option("KeepBlocks").toBool());
+
+    // pointer align
+    s = m_formatter->option("PointerAlign").toString();
+    if (s == "Name")
+        cbPointerAlign->setCurrentIndex(POINTERALIGN_NAME);
+    if (s == "Type")
+        cbPointerAlign->setCurrentIndex(POINTERALIGN_TYPE);
+    if (s == "Middle")
+        cbPointerAlign->setCurrentIndex(POINTERALIGN_MIDDLE);
+    else
+        cbPointerAlign->setCurrentIndex(POINTERALIGN_NOCHANGE);
 
     m_enableWidgetSignals = true; // re enable signals
 }
@@ -364,6 +383,29 @@ void AStylePreferences::onelinersChanged()
         return;
     m_formatter->setSingleStatementsMode(!chkKeepStatements->isChecked());
     m_formatter->setBreakOneLineBlocksMode(!chkKeepBlocks->isChecked());
+
+    updatePreviewText();
+}
+
+void AStylePreferences::pointerAlignChanged()
+{
+    if(!m_enableWidgetSignals)
+        return;
+    switch (cbPointerAlign->currentIndex()) {
+        case POINTERALIGN_NAME:
+            m_formatter->setPointerAlignment(astyle::ALIGN_NAME);
+            break;
+        case POINTERALIGN_TYPE:
+            m_formatter->setPointerAlignment(astyle::ALIGN_TYPE);
+            break;
+        case POINTERALIGN_MIDDLE:
+            m_formatter->setPointerAlignment(astyle::ALIGN_MIDDLE);
+            break;
+        default:
+        case POINTERALIGN_NOCHANGE:
+            m_formatter->setPointerAlignment(astyle::ALIGN_NONE);
+            break;
+    }
 
     updatePreviewText();
 }

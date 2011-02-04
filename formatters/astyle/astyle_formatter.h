@@ -84,6 +84,8 @@ class AStyleFormatter : public astyle::ASFormatter
         //oneliners
         void setBreakOneLineBlocksMode(bool state);
         void setSingleStatementsMode(bool state);
+        //pointer
+        void setPointerAlignment(astyle::PointerAlign alignment);
 
     protected:
         void updateFormatter();
