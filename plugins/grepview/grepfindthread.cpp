@@ -104,12 +104,14 @@ KUrl::List GrepFindFilesThread::files() const {
 QStringList GrepFindFilesThread::parseExclude(QString excl)
 {
     QStringList exclude;
-    foreach(const QString &sub, excl.split(',', QString::SkipEmptyParts))
+    // Split around commas or spaces
+    foreach(const QString &sub, excl.split(QRegExp(",|\\s"), QString::SkipEmptyParts))
         exclude << QString("*%1*").arg(sub);
     return exclude;
 }
 
 QStringList GrepFindFilesThread::parseInclude(QString inc)
 {
-    return inc.split(',', QString::SkipEmptyParts);
+    // Split around commas or spaces
+    return inc.split(QRegExp(",|\s"), QString::SkipEmptyParts);
 }

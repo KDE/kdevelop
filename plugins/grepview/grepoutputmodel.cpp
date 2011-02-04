@@ -29,24 +29,28 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text, bool checkable)
     : QStandardItem(), m_change(change)
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     
-    setCheckable(true);
-    setCheckState(Qt::Checked);
+    setCheckable(checkable);
+    if(checkable)
+        setCheckState(Qt::Checked);
 }
 
-GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
+GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
     : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    setCheckable(true);
-    setTristate(true);
-    setCheckState(Qt::Checked);
+    setCheckable(checkable);
+    if(checkable)
+    {
+        setTristate(true);
+        setCheckState(Qt::Checked);
+    }
 }
 
 int GrepOutputItem::lineNumber() const 
@@ -157,7 +161,7 @@ GrepOutputItem::~GrepOutputItem()
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
     : QStandardItemModel( parent ), m_regExp(""), m_replacement(""), m_replacementTemplate(""), m_finalReplacement(""),
-      m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0)
+      m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
 {
     connect(this, SIGNAL(itemChanged(QStandardItem*)),
               this, SLOT(updateCheckState(QStandardItem*)));
@@ -301,6 +305,27 @@ const GrepOutputItem *GrepOutputModel::getRootItem() const {
     return m_rootItem;
 }
 
+void GrepOutputModel::makeItemsCheckable(bool checkable)
+{
+    if(m_itemsCheckable == checkable)
+        return;
+    if(m_rootItem)
+        makeItemsCheckable(checkable, m_rootItem);
+    m_itemsCheckable = checkable;
+}
+
+void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
+{
+    item->setCheckable(checkable);
+    if(checkable)
+    {
+        item->setCheckState(Qt::Checked);
+        if(item->rowCount() && checkable)
+            item->setTristate(true);
+    }
+    for(int row = 0; row < item->rowCount(); ++row)
+        makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
+}
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
@@ -309,7 +334,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     if(rowCount() == 0)
     {
-        m_rootItem = new GrepOutputItem("", "");
+        m_rootItem = new GrepOutputItem("", "", m_itemsCheckable);
         appendRow(m_rootItem);
     }
     
@@ -323,12 +348,21 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     QString fnString = i18np("%2 <i>(one match)</i>", "%2 <i>(%1 matches)</i>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString);
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
-        fileItem->appendRow(new GrepOutputItem(item));
+        GrepOutputItem* copy = new GrepOutputItem(item);
+        copy->setCheckable(m_itemsCheckable);
+        if(m_itemsCheckable)
+        {
+            copy->setCheckState(Qt::Checked);
+            if(copy->rowCount())
+                copy->setTristate(true);
+        }
+        
+        fileItem->appendRow(copy);
     }
 }
 

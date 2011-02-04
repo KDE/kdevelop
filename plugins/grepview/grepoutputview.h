@@ -50,7 +50,7 @@ public:
      * Oldest models are deleted if needed.
      * @return pointer to the new model
      */
-    GrepOutputModel* renewModel(QString name);
+    GrepOutputModel* renewModel(QString name, KUrl url);
     
     void setMessage(const QString& msg);
     void setPlugin(GrepViewPlugin *plugin);
@@ -60,6 +60,7 @@ public Q_SLOTS:
     void showMessage( KDevelop::IStatus*, const QString& message );
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
+    void replacementTextChanged(QString);
 
 Q_SIGNALS:
     void outputViewIsClosed();
@@ -81,11 +82,12 @@ private slots:
     void expandAllItems();
     void onApply();
     void showDialog();
-    void expandRootElement( const QModelIndex & parent );
+    void expandElements( const QModelIndex & parent );
     void rowsRemoved();
     void clearSearchHistory();
     void modelSelectorContextMenu(const QPoint& pos);
     void updateScrollArea( const QModelIndex &index );
+    void updateCheckable();
 };
 
 #endif // GREPOUTPUTVIEW_H
