@@ -73,7 +73,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }
   
   if( m_previousContext ) {
-    modifyHtml() += navigationHighlight("Back to ");
+    modifyHtml() += navigationHighlight(i18n("Back to "));
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
     modifyHtml() += "<br>";
   }
@@ -98,7 +98,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         //Do not show the own name as type of typedefs
         if(useType.cast<TypeAliasType>())
           useType = useType.cast<TypeAliasType>()->type();
-      }
+      } 
       
       eventuallyMakeTypeLinks( useType );
 
