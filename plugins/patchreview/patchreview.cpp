@@ -103,20 +103,25 @@ void PatchReviewToolView::patchChanged()
 PatchReviewToolView::~PatchReviewToolView() {
 }
 
-void PatchReviewToolView::updatePatchFromEdit() {
-
+LocalPatchSource* PatchReviewToolView::GetLocalPatchSource()
+{
     IPatchSource::Ptr ips = m_plugin->patch();
 
     if ( !ips )
-        return;
-    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ips.data());
+        return 0;
+    return dynamic_cast<LocalPatchSource*>(ips.data());
+}
+
+void PatchReviewToolView::updatePatchFromEdit() {
+    LocalPatchSource* lpatch = GetLocalPatchSource();
     if(!lpatch)
       return;
 
     lpatch->m_command = m_editPatch.command->text();
     lpatch->m_filename = m_editPatch.filename->url();
     lpatch->m_baseDir = m_editPatch.baseDir->url();
-//     lpatch->m_depth = m_editPatch.depth->value();
+    lpatch->m_depth = m_editPatch.depth->value();
+    lpatch->setAlreadyApplied(m_editPatch.applied->checkState() == Qt::Checked);
 
     m_plugin->notifyPatchChanged();
 }
@@ -167,17 +172,28 @@ void PatchReviewToolView::fillEditFromPatch() {
       m_editPatch.tabWidget->hide();
       m_editPatch.baseDir->hide();
       m_editPatch.label->hide();
+      m_editPatch.depth->hide();
+      m_editPatch.depthLabel->hide();
+      m_editPatch.applied->hide();
       return;
     }else{
       m_editPatch.tabWidget->show();
       m_editPatch.baseDir->show();
       m_editPatch.label->show();
+      m_editPatch.depth->show();
+      m_editPatch.depthLabel->show();
+      m_editPatch.applied->show();
     }
     
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
-//     m_editPatch.depth->setValue( lpatch->m_depth );
+    m_editPatch.depth->setValue( lpatch->m_depth );
+    if (lpatch->isAlreadyApplied()) {
+      m_editPatch.applied->setCheckState(Qt::Checked);
+    } else {
+      m_editPatch.applied->setCheckState(Qt::Unchecked);
+    }
 
     if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
@@ -190,6 +206,22 @@ void PatchReviewToolView::patchSelectionChanged(int selection)
   m_editPatch.filesList->clear();
     if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
       m_plugin->setPatch(m_plugin->knownPatches()[selection]);
+    }
+}
+
+void PatchReviewToolView::slotDepthChanged(int newDepth)
+{
+    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
+        lpatch->m_depth = newDepth;
+        m_plugin->notifyPatchChanged();
+    }
+}
+
+void PatchReviewToolView::slotAppliedChanged(int newState)
+{
+    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
+        lpatch->setAlreadyApplied(newState == Qt::Checked);
+        m_plugin->notifyPatchChanged();
     }
 }
 
@@ -240,7 +272,8 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
-//     connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(updatePatchFromEdit()) );
+    connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(slotDepthChanged(int)) );
+    connect( m_editPatch.applied, SIGNAL(stateChanged(int)), SLOT(slotAppliedChanged(int)) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.baseDir, SIGNAL(textChanged(QString)), SLOT(updatePatchFromEdit()) );
 
@@ -356,7 +389,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
             throw "no model";
 
         for (int a = 0; a < modelList()->modelCount(); ++a) {
-            const Diff2::DiffModel* model = modelList()->modelAt(a);
+            Diff2::DiffModel* model = modelList()->modelAt(a);
             if ( !model )
                 continue;
 
@@ -790,6 +823,7 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* 
 
 void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark mark, bool& handled)
 {
+  m_applying = true;
   if(handled)
     return;
   
@@ -807,7 +841,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
     QString currentText = doc->text(range->toRange());
     Diff2::Difference* diff = m_differencesForRanges[range];
     
-    removeLineMarker(range, diff);
+    removeLineMarker(range);
     
     QString sourceText;
     QString targetText;
@@ -859,6 +893,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
     bool h = false;
     markToolTipRequested(doc, mark, QCursor::pos(), h);
   }
+  m_applying = false;
 }
 
 KTextEditor::MovingRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
@@ -899,6 +934,79 @@ bool PatchHighlighter::isInsertion(Diff2::Difference* diff)
 bool PatchHighlighter::isRemoval(Diff2::Difference* diff)
 {
     return diff->destinationLineCount() == 0;
+}
+
+QStringList PatchHighlighter::splitAndAddNewlines(const QString& text) const
+{
+  QStringList result = text.split('\n', QString::KeepEmptyParts);
+  for(QStringList::iterator iter = result.begin(); iter != result.end(); ++iter) {
+    iter->append('\n');
+  }
+  if (!result.isEmpty()) {
+    QString & last = result.last();
+    last.remove(last.size() - 1, 1);
+  }
+  return result;
+}
+
+void PatchHighlighter::performContentChange(KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber)
+{
+  QPair<QList<Diff2::Difference*>, QList<Diff2::Difference*> > diffChange = m_model->linesChanged(oldLines, newLines, editLineNumber);
+  QList<Diff2::Difference*> inserted = diffChange.first;
+  QList<Diff2::Difference*> removed = diffChange.second;
+
+  // Remove all ranges that are in the same line (the line markers)
+  foreach(KTextEditor::MovingRange* r, m_differencesForRanges.keys()) {
+    Diff2::Difference* diff = m_differencesForRanges[r];
+    if (removed.contains(diff)) {
+      removeLineMarker(r);
+      m_ranges.remove(r);
+      m_differencesForRanges.remove(r);
+      delete r;
+      delete diff;
+    }
+  }
+
+  KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+  if ( !moving )
+      return;
+
+  foreach(Diff2::Difference* diff, inserted) {
+    int lineStart = diff->destinationLineNumber();
+    if (lineStart > 0) {
+      --lineStart;
+    }
+    int lineEnd = diff->destinationLineEnd();
+    if (lineEnd > 0) {
+      --lineEnd;
+    }
+    KTextEditor::Range newRange(lineStart, 0, lineEnd, 0);
+    KTextEditor::MovingRange * r = moving->newMovingRange( newRange );
+
+    m_differencesForRanges[r] = diff;
+    m_ranges.insert(r);
+    addLineMarker(r, diff);
+  }
+}
+
+void PatchHighlighter::textRemoved(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& oldText)
+{
+  if (m_applying) {   // Do not interfere with patch application
+    return;
+  }
+  kDebug() << "removal range" << range;
+  kDebug() << "removed text" << oldText;
+  QStringList removedLines = splitAndAddNewlines(oldText);
+  int startLine = range.start().line();
+  QString remainingLine = doc->line(startLine);
+  remainingLine += '\n';
+  QString prefix = remainingLine.mid(0, range.start().column());
+  QString suffix = remainingLine.mid(range.start().column());
+  if (!removedLines.empty()) {
+    removedLines.first() = prefix + removedLines.first();
+    removedLines.last() = removedLines.last() + suffix;
+  }
+  performContentChange(doc, removedLines, QStringList() << remainingLine, startLine + 1);
 }
 
 void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Range range)
@@ -980,14 +1088,35 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
         }
     }
 
+    } else {
+      if (m_applying) {   // Do not interfere with patch application
+        return;
+      }
+      kDebug() << "insertion range" << range;
+      QString text = doc->text(range);
+      kDebug() << "inserted text" << text;
+      QStringList insertedLines = splitAndAddNewlines(text);
+      int startLine = range.start().line();
+      int endLine = range.end().line();
+      QString prefix = doc->line(startLine).mid(0, range.start().column());
+      QString suffix = doc->line(endLine).mid(range.end().column());
+      suffix += '\n';
+      QString removedLine = prefix + suffix;
+      if (!insertedLines.empty()) {
+        insertedLines.first() = prefix + insertedLines.first();
+        insertedLines.last() = insertedLines.last() + suffix;
+      }
+      performContentChange(doc, QStringList() << removedLine, insertedLines, startLine + 1);
     }
 }
 
-PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
-  : m_doc( kdoc ), m_plugin(plugin), m_model(model)
+PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
+  : m_doc( kdoc ), m_plugin(plugin), m_model(model), m_applying(false)
 {
 //     connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( kdoc->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)) );
+    connect( kdoc->textDocument(), SIGNAL(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)), this, SLOT(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)) );
+    connect( kdoc->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)), this, SLOT(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
 
     KTextEditor::Document* doc = kdoc->textDocument();
@@ -1001,7 +1130,7 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
 
-void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* difference)
+void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range)
 {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
     if ( !moving )
@@ -1025,6 +1154,7 @@ void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::
       {
         delete r;
         m_ranges.remove(r);
+        m_differencesForRanges.remove(r);
       }
     }
 }
@@ -1202,6 +1332,8 @@ void PatchReviewPlugin::updateKompareModel() {
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination=m_patch->file().toLocalFile();
         m_kompareInfo->localSource=m_patch->baseDir().toLocalFile();
+        m_kompareInfo->depth = m_patch->depth();
+        m_kompareInfo->applied = m_patch->isAlreadyApplied();
         
         m_modelList.reset(new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ));
         m_modelList->slotKompareInfo(m_kompareInfo.get());

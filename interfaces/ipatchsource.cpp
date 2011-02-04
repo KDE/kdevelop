@@ -68,5 +68,10 @@ QWidget* IPatchSource::customWidget() const
     return 0;
 }
 
+uint IPatchSource::depth() const
+{
+    return 0;
+}
+
 
 #include "ipatchsource.moc"

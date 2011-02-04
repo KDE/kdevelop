@@ -86,6 +86,7 @@ public:
 	int appliedCount() const;
 
 	const DiffModel* modelAt( int i ) const { return m_models->at( i ); };
+    DiffModel* modelAt( int i ) { return m_models->at( i ); };
 	int              findModel( DiffModel* model ) const { return m_models->indexOf( model ); };
 
 	bool hasUnsavedChanges() const;
@@ -165,6 +166,7 @@ private: // Helper methods
 	bool hasNextDiff() const;
 
 	QStringList split( const QString& diff );
+	void setDepthAndApplied();
 
 private:
 	KTemporaryFile*       m_diffTemp;

@@ -18,12 +18,12 @@ set(patchreview_PART_SRCS
     libdiff2/diffmodel.cpp
     libdiff2/difference.cpp
     libdiff2/diffhunk.cpp
-    libdiff2/levenshteintable.cpp
     libdiff2/parser.cpp
     libdiff2/parserbase.cpp
     libdiff2/cvsdiffparser.cpp
     libdiff2/diffparser.cpp
     libdiff2/perforceparser.cpp
+    libdiff2/stringlistpair.cpp
 )
 
 set (patchreview_UI
@@ -42,3 +42,5 @@ install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES kdevpatchreview.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevpatchreview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevpatchreview)
+
+add_subdirectory(libdiff2)
