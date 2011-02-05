@@ -918,7 +918,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
 QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
-    if(project && project->folder().equals(url))
+    if(project && project->folder().equals(url, KUrl::CompareWithoutTrailingSlash))
     {
         if (format == FormatHtml) {
             return "<i>" +  project->name() + "</i>";
