@@ -32,6 +32,7 @@ private slots:
     void overrideHelper();
     void varTypeAssistant();
     void testMultipleFormatters();
+    void testMacroFormatting();
 
 private:
     AStyleFormatter* m_formatter;

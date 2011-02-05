@@ -203,6 +203,15 @@ ASBeautifier::ASBeautifier(const ASBeautifier& other) : ASBase(other)
 	currentNonSpaceCh = other.currentNonSpaceCh;
 	currentNonLegalCh = other.currentNonLegalCh;
 	prevNonLegalCh = other.prevNonLegalCh;
+
+    // share kinda-static members:
+    beautifierFileType = other.beautifierFileType;
+    headers = other.headers;
+    nonParenHeaders = other.nonParenHeaders;
+    assignmentOperators = other.assignmentOperators;
+    nonAssignmentOperators = other.nonAssignmentOperators;
+    preBlockStatements = other.preBlockStatements;
+    indentableHeaders = other.indentableHeaders;
 }
 
 /**
