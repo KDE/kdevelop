@@ -113,5 +113,5 @@ QStringList GrepFindFilesThread::parseExclude(QString excl)
 QStringList GrepFindFilesThread::parseInclude(QString inc)
 {
     // Split around commas or spaces
-    return inc.split(QRegExp(",|\s"), QString::SkipEmptyParts);
+    return inc.split(QRegExp(",|\\s"), QString::SkipEmptyParts);
 }
