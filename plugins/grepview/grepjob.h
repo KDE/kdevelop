@@ -57,7 +57,7 @@ public:
     void setReplacementTemplateString(const QString &replTmplString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
-    void setDirectory(const KUrl &directory);
+    void setDirectoryChoice(const QList<KUrl> &choice);
     void setRecursive(bool recursive);
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
@@ -106,7 +106,7 @@ private:
     QString m_replacementTemplateString;
     QString m_filesString;
     QString m_excludeString;
-    KUrl m_directory;
+    QList<KUrl> m_directoryChoice;
 
     bool m_useProjectFilesFlag;
     bool m_regexpFlag;

@@ -50,7 +50,7 @@ public:
      * Oldest models are deleted if needed.
      * @return pointer to the new model
      */
-    GrepOutputModel* renewModel(QString name, KUrl url);
+    GrepOutputModel* renewModel(QString name, QString descriptionOrUrl);
     
     void setMessage(const QString& msg);
     void setPlugin(GrepViewPlugin *plugin);

@@ -134,7 +134,7 @@ GrepOutputView::~GrepOutputView()
     emit outputViewIsClosed();
 }
 
-GrepOutputModel* GrepOutputView::renewModel(QString name, KUrl url)
+GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrUrl)
 {
     // Crear oldest model
     while(modelSelector->count() > GrepOutputView::HISTORY_SIZE) {
@@ -156,11 +156,14 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, KUrl url)
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandElements(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     
+    QString prettyUrl = descriptionOrUrl;
+    if(descriptionOrUrl.startsWith("/"))
+        prettyUrl = ICore::self()->projectController()->prettyFileName(descriptionOrUrl, KDevelop::IProjectController::FormatPlain);
     
     // appends new model to history
     QString displayName = QString("Search %1 in %2 (at time %3)")
                               .arg(name)
-                              .arg(ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain))
+                              .arg(prettyUrl)
                               .arg(QTime::currentTime().toString("hh:mm"));
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
     

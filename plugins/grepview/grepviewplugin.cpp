@@ -149,7 +149,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed)
         dlg->enableButtonOk( !pattern.isEmpty() );
     }
 
-    if (!m_directory.isEmpty() && QFileInfo(m_directory).isDir()) {
+    if (!m_directory.isEmpty()) {
         dlg->setDirectory(m_directory);
     } else {
         KUrl currentUrl;

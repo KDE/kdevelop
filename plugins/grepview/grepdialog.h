@@ -42,7 +42,6 @@ public:
     QString replacementTemplateString() const;
     QString filesString() const;
     QString excludeString() const;
-    KUrl directory() const;
 
     bool useProjectFilesFlag() const;
     bool regexpFlag() const;
@@ -52,11 +51,20 @@ public:
 private Q_SLOTS:
     void performAction(KDialog::ButtonCode button);
     void templateTypeComboActivated(int);
-    void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
     void directoryChanged(const QString &dir);
+    QMenu* createSyncButtonMenu();
+    void addUrlToMenu(QMenu* ret, KUrl url);
+    void addStringToMenu(QMenu* ret, QString string);
+    void synchronizeDirActionTriggered(bool);
 
 private:
+    // Returns the chosen directories or files (only the top directories, not subfiles)
+    QList< KUrl > getDirectoryChoice() const;
+    // Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
+    // This is slow, so don't call it too often
+    bool isPartOfChoice(KUrl url) const;
+    
     GrepViewPlugin * m_plugin;
 };
 
