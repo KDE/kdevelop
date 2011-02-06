@@ -94,25 +94,17 @@ void ContextMenuExtension::addAction( const QString& group, QAction* action )
 
 void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions)
 {
-    foreach( const ContextMenuExtension &ext, extensions )
-    {
-        foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
-        {
-            menu->addAction( act );
-        }
-        menu->addSeparator();
-        foreach( QAction* act, ext.actions( ContextMenuExtension::EditGroup ) )
-        {
-            menu->addAction( act );
-        }
-    }
-
+    QList<QAction*> buildActions;
     QList<QAction*> vcsActions;
     QList<QAction*> extActions;
     QList<QAction*> refactorActions;
     QList<QAction*> debugActions;
     foreach( const ContextMenuExtension &ext, extensions )
     {
+        foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
+        {
+            buildActions << act;
+        }
 
         foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
         {
@@ -133,9 +125,29 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
         {
             debugActions << act;
         }
-
+    }
+    
+    if(!buildActions.isEmpty())
+    {
+        foreach(QAction* action, buildActions)
+            menu->addAction(action);
+        
+        menu->addSeparator();
     }
 
+    foreach( const ContextMenuExtension &ext, extensions )
+    {
+        foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
+        {
+            menu->addAction( act );
+        }
+        menu->addSeparator();
+        foreach( QAction* act, ext.actions( ContextMenuExtension::EditGroup ) )
+        {
+            menu->addAction( act );
+        }
+    }
+    
     QMenu* debugmenu = menu;
     if( debugActions.count() > 1 )
     {
