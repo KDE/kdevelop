@@ -33,8 +33,6 @@ namespace Sublime
 {
     class View;
     class Controller;
-    class ToolDocument;
-    class Area;
 }
 
 class StandardOutputView;
@@ -50,19 +48,17 @@ private:
     OutputWidget* toolviewPointer(QString toolviewTitle);
     KDevelop::TestCore* m_testCore;
     StandardOutputView* m_stdOutputView;
-    //Sublime::Controller* m_controller;
     KDevelop::UiController* m_controller;
-    Sublime::Area* m_area;
-    Sublime::ToolDocument* m_tool;
     int toolviewId;
-    int ouputId;
+    int outputId[5];
     static const QString toolviewTitle;
     
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
+    void init();
+    void cleanup();
     void testRegisterAndRemoveToolView();
     void testActions();
+    void testRegisterAndRemoveOutput();
 };
 
 #endif // STANDARDOUTPUTVIEWTEST_H

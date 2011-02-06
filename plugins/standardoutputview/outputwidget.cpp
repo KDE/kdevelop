@@ -216,19 +216,19 @@ void OutputWidget::removeOutput( int id )
                 if( idx != -1 )
                 {
                     tabwidget->removeTab( idx );
-                    if(proxyModels.contains(idx))
+                    if( proxyModels.contains( idx ) )
                     {
                         delete proxyModels[idx];
-                        filters.remove(idx);
+                        filters.remove( idx );
                     }
                 }
             } else
             {
                 int idx = stackwidget->indexOf( w );
-                if( idx != -1 && proxyModels.contains(idx))
+                if( idx != -1 && proxyModels.contains( idx ) )
                 {
                     delete proxyModels[idx];
-                    filters.remove(idx);
+                    filters.remove( idx );
                 }
                 stackwidget->removeWidget( w );
             }
@@ -238,14 +238,16 @@ void OutputWidget::removeOutput( int id )
         {
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
-            if(proxyModels.contains(0)) {
+            if( proxyModels.contains( 0 ) ) {
                 delete proxyModels[0];
-                filters.remove(0);
+                filters.remove( 0 );
             }
         }
         disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                     this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
         
+        data->outputdata.remove( id );
+        views.remove( id );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
