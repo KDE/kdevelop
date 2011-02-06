@@ -59,6 +59,9 @@
 #include <interfaces/icompletionsettings.h>
 
 #include <kdeversion.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/projectutils.h>
 
 namespace KDevelop {
 
@@ -96,7 +99,7 @@ struct TextDocumentPrivate {
         Q_UNUSED(document);
         m_textDocument->notifyContentChanged();
     }
-
+    
     void populateContextMenu( KTextEditor::View* v, QMenu* menu )
     {
         if (m_addedContextMenu) {
@@ -106,12 +109,24 @@ struct TextDocumentPrivate {
             delete m_addedContextMenu;
         }
 
+        m_addedContextMenu = new QMenu();
+
         Context* c = new EditorContext( v, v->cursorPosition() );
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
-        menu->addSeparator();
-
-        m_addedContextMenu = new QMenu();
+        
         ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
+        
+        {
+            KUrl url = v->document()->url();
+            IProject* project = Core::self()->projectController()->findProjectForUrl( url );
+            if(project)
+            {
+                QList< ProjectBaseItem* > items = project->itemsForUrl( url );
+                if(!items.isEmpty())
+                    populateParentItemsMenu( items.front(), m_addedContextMenu );
+            }
+        }
+        
         foreach ( QAction* action, m_addedContextMenu->actions() ) {
             menu->addAction(action);
         }

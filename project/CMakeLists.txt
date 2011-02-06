@@ -2,6 +2,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9503 )
 set(kdevplatformproject_LIB_SRCS
+    projectutils.cpp
     projectmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
@@ -42,6 +43,7 @@ install(FILES
  )
 
 install(FILES
+    projectutils.h
     importprojectjob.h
     projectconfigskeleton.h
     projectmodel.h
