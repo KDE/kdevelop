@@ -236,6 +236,9 @@ bool KompareModelList::openDirAndDiff()
 {
 	clear();
 
+	if ( m_info->localDestination.isEmpty() )
+		return false;
+
 	if ( parseDiffOutput( readFile( m_info->localDestination ) ) != 0 )
 	{
 		emit error( i18n( "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff file.</qt>", m_info->destination.url() ) );
