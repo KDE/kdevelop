@@ -69,6 +69,9 @@ class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
  * Use this object if you want to temporarily release the foreground lock,
  * for example when sleeping in the foreground thread, or when waiting in the foreground
  * thread for a background thread which should get the chance to lock the foreground.
+ * 
+ * While this object is alive, you _must not_ access any non-threadsafe resources
+ * that belong to the foreground, and you must not start an event-loop.
  */
 class KDEVPLATFORMINTERFACES_EXPORT TemporarilyReleaseForegroundLock {
 public:
