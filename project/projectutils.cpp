@@ -29,6 +29,29 @@
 
 namespace KDevelop {
 
+class Populator : public QObject {
+    Q_OBJECT
+    KDevelop::ProjectBaseItem* m_item;
+    QPoint m_pos;
+    QString m_text;
+public:
+    Populator(KDevelop::ProjectBaseItem* item, QAction* action, QPoint pos, QString text) : m_item(item), m_pos(pos), m_text(text) {
+        connect(action, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
+        connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
+    }
+public Q_SLOTS:
+    void populate() {
+        QMenu menu(m_text);
+        menu.addAction(m_text)->setEnabled(false);;
+        ProjectItemContext* context = new ProjectItemContext(QList< ProjectBaseItem* >() << m_item);
+        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( context );
+        ContextMenuExtension::populateMenu(&menu, extensions);
+        menu.exec(m_pos);
+        delete context;
+        
+    }
+};
+
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
 {
     if(!item)
@@ -54,14 +77,14 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
             else
                 text = i18n("Project %1", prettyName);
             
-            QMenu* submenu = menu->addMenu(text);
-            ProjectItemContext* parentContext = new ProjectItemContext(QList< ProjectBaseItem* >() << parent);
-            QList<ContextMenuExtension> parentExtensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( parentContext );
-            ContextMenuExtension::populateMenu(submenu, parentExtensions);
-            delete parentContext;
+            QAction* action = menu->addAction(text);
+            // The populator will either spawn a menu when the action is triggered, or it will delete itself
+            new Populator(parent, action, QCursor::pos(), text);
         }
         
         parent = parent->parent();
     }        
 }
 }
+
+#include "projectutils.moc"
