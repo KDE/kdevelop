@@ -44,7 +44,9 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
         // We have a vcs and the file/folder is controller, need to make the rename through vcs
         if(vcs->isVersionControlled(url)) {
             VcsJob* job=vcs->remove(KUrl::List() << url);
-            return job->exec();
+            if(job) {
+                return job->exec();
+            }
         }
     }
 
@@ -97,11 +99,13 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname,
     IPlugin* vcsplugin=project->versionControlPlugin();
     if(vcsplugin) {
         IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
-    
+
         // We have a vcs and the file/folder is controller, need to make the rename through vcs
         if(vcs->isVersionControlled(oldname)) {
             VcsJob* job=vcs->move(oldname, newname);
-            return job->exec();
+            if(job) {
+                return job->exec();
+            }
         }
     }
     // Fallback for the case of no vcs, or not-vcs-managed file/folder
