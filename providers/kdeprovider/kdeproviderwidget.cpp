@@ -43,6 +43,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     KDEProjectsModel* model = new KDEProjectsModel(this);
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
     connect(reader, SIGNAL(downloadDone()), reader, SLOT(deleteLater()));
+    connect(m_projects, SIGNAL(currentIndexChanged(QString)), this, SIGNAL(changed(QString)));
     m_projects->setModel(model);
     
     layout()->addWidget(m_projects);
@@ -70,7 +71,7 @@ VcsLocation extractLocation(const QVariantMap& urls)
         return VcsLocation(path);
     } else {
         QString gitUrl=KDEProviderSettings::self()->gitProtocol();
-        return VcsLocation(gitUrl);
+        return VcsLocation(urls["git"].toUrl());
     }
 }
 
