@@ -41,6 +41,7 @@ class ProjectSourcePage : public QWidget
         void progressChanged(KJob*, unsigned long);
         void infoMessage(KJob*, const QString& text, const QString& rich);
         void locationChanged();
+        void projectChanged(const QString& name);
         
     signals:
         void isCorrect(bool);
