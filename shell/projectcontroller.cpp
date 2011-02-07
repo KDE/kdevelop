@@ -524,11 +524,16 @@ void ProjectController::initialize()
     KConfigGroup group = config->group( "General Options" );
     KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
-    foreach (const KUrl& url, openProjects)
-        openProject(url);
-
+    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(KUrl::List, openProjects));
+    
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
+}
+
+void ProjectController::openProjects(const KUrl::List& projects)
+{
+    foreach (const KUrl& url, projects)
+        openProject(url);
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )

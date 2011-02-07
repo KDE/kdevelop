@@ -100,6 +100,7 @@ public Q_SLOTS:
     void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
+    void openProjects(const KUrl::List& projects);
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
