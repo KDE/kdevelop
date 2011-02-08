@@ -27,6 +27,7 @@
 #include <kurlrequester.h>
 
 #include "ui_qmakeconfig.h"
+#include "../qmakebuilddirchooser.h"
 #include "qmakebuilderconfig.h"
 
 K_PLUGIN_FACTORY(QMakeBuilderPreferencesFactory, registerPlugin<QMakeBuilderPreferences>(); )
@@ -42,14 +43,19 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariant
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::QMakeConfig;
     m_prefsUi->setupUi( w );
+    m_chooserUi = new QMakeBuildDirChooser(m_prefsUi->groupBox, project());
     l->addWidget( w );
     addConfig( QMakeBuilderSettings::self(), w );
-    load();
-
 }
 
 QMakeBuilderPreferences::~QMakeBuilderPreferences()
 {
+    // not a QObject !
+    delete m_chooserUi;
 }
 
+void QMakeBuilderPreferences::save()
+{
+    KCModule::save();
+}
 

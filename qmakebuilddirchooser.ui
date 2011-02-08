@@ -29,12 +29,12 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>qmakeBin</cstring>
+      <cstring>kcfg_qmakeBin</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KUrlRequester" name="qmakeBin">
+    <widget class="KUrlRequester" name="kcfg_qmakeBin">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -52,12 +52,12 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>buildFolder</cstring>
+      <cstring>kcfg_buildDir</cstring>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KUrlRequester" name="buildFolder"/>
+    <widget class="KUrlRequester" name="kcfg_buildDir"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label">
@@ -68,12 +68,12 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>installPrefix</cstring>
+      <cstring>kcfg_installPrefix</cstring>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KUrlRequester" name="installPrefix">
+    <widget class="KUrlRequester" name="kcfg_installPrefix">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -91,7 +91,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>buildType</cstring>
+      <cstring>kcfg_buildType</cstring>
      </property>
     </widget>
    </item>
@@ -103,7 +103,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="KLineEdit" name="extraArguments"/>
+    <widget class="KLineEdit" name="kcfg_extraArgs"/>
    </item>
    <item row="5" column="0" colspan="2">
     <widget class="QLabel" name="status">
@@ -119,9 +119,9 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QComboBox" name="buildType">
+    <widget class="QComboBox" name="kcfg_buildType">
      <property name="editable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -158,11 +158,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>qmakeBin</tabstop>
-  <tabstop>buildFolder</tabstop>
-  <tabstop>installPrefix</tabstop>
-  <tabstop>buildType</tabstop>
-  <tabstop>extraArguments</tabstop>
+  <tabstop>kcfg_qmakeBin</tabstop>
+  <tabstop>kcfg_buildDir</tabstop>
+  <tabstop>kcfg_installPrefix</tabstop>
+  <tabstop>kcfg_buildType</tabstop>
+  <tabstop>kcfg_extraArgs</tabstop>
  </tabstops>
  <resources/>
  <connections/>

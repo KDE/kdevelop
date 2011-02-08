@@ -26,7 +26,11 @@
 class QWidget;
 class QStringList;
 class QMakeBuilderSettings;
-namespace Ui { class QMakeConfig; }
+class QMakeBuildDirChooser;
+namespace Ui {
+    class QMakeConfig;
+    class QMakeBuildDirChooser;
+}
 
 /**
  * @author Andreas Pakulat <apaku@gmx.de>
@@ -37,11 +41,12 @@ public:
     explicit QMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~QMakeBuilderPreferences();
 
-private Q_SLOTS:
-    void settingsChanged();
+public Q_SLOTS:
+    virtual void save();
 
 private:
     Ui::QMakeConfig* m_prefsUi;
+    QMakeBuildDirChooser* m_chooserUi;
 };
 
 #endif

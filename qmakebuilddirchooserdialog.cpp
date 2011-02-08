@@ -19,46 +19,56 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QMAKEBUILDDIRCHOOSER_H
-#define QMAKEBUILDDIRCHOOSER_H
+#include "qmakebuilddirchooserdialog.h"
+#include <KDebug>
 
-#include "ui_qmakebuilddirchooser.h"
-#include <interfaces/iproject.h>
-#include <qtextstream.h>
-
-namespace KDevelop {
-    class IProject;
+QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent) :
+    KDialog(parent),
+    QMakeBuildDirChooser(mainWidget(), project)
+{
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    setCaption( i18n("Configure QMake build settings") );
+    setDefaultButton( KDialog::Ok );
+        
+    connect(kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    connect(kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    connect(kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    //connect(extraArguments, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    
+    loadConfig();
+    //save; like this, we can be sure to have a qmake binary and build path set
+    //(even if user clicks Cancel)
+    saveConfig();
 }
 
-/**
- * Handles QMake project configuration on both project creation/import and
- * regular project configuration.
- */
-class QMakeBuildDirChooser : public Ui::QMakeBuildDirChooser
+QMakeBuildDirChooserDialog::~QMakeBuildDirChooserDialog()
 {
-public:
-    explicit QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project);
-    virtual ~QMakeBuildDirChooser();
 
-public:
-    bool isValid();
-    void saveConfig();
-    void loadConfig();
-    
-    KUrl qmakeBin() const;
-    KUrl buildDir() const;
-    KUrl installPrefix() const;
-    int buildType() const;
-    QString extraArgs() const;
-    
-    void setQmakeBin(const KUrl &url);
-    void setBuildDir(const KUrl &url);
-    void setInstallPrefix(const KUrl &url);
-    void setBuildType(int type);
-    void setExtraArgs(const QString &args);
-    
-private:
-    KDevelop::IProject* m_project;
-};
+}
 
-#endif
+void QMakeBuildDirChooserDialog::slotButtonClicked(int button)
+{
+    if(button == KDialog::Ok) 
+    {
+        if(isValid())
+        {
+            accept();
+            saveConfig();
+        }
+        else
+        {
+            kDebug() << "OK-button not accepted, input invalid";
+        }
+    }
+    else
+    {
+        kDebug() << "button != OK";
+        KDialog::slotButtonClicked(button);
+    }
+}
+
+void QMakeBuildDirChooserDialog::validate()
+{
+    button(KDialog::Ok)->setEnabled(isValid());
+}
+

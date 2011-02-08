@@ -27,10 +27,13 @@ install(TARGETS kdevqmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### next target ###############
 set( qmakebuilder_cfg_SRCS
     qmakebuilderpreferences.cpp
+    ../qmakebuilddirchooser.cpp
+    ../qmakeconfig.cpp
 )
 
 set( qmakebuilder_cfg_UI
     qmakeconfig.ui
+    ../qmakebuilddirchooser.ui
 )
 
 

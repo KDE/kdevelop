@@ -40,6 +40,7 @@ set(kdevqmakemanager_PART_SRCS
     variablereferenceparser.cpp
     qmakejob.cpp
     qmakebuilddirchooser.cpp
+    qmakebuilddirchooserdialog.cpp
     qmakeconfig.cpp
 )
 

@@ -19,46 +19,27 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef QMAKEBUILDDIRCHOOSER_H
-#define QMAKEBUILDDIRCHOOSER_H
+#ifndef QMAKEBUILDDIRCHOOSERDIALOG_H
+#define QMAKEBUILDDIRCHOOSERDIALOG_H
 
-#include "ui_qmakebuilddirchooser.h"
-#include <interfaces/iproject.h>
-#include <qtextstream.h>
+#include "qmakebuilddirchooser.h"
+#include <KDialog>
 
 namespace KDevelop {
     class IProject;
 }
 
-/**
- * Handles QMake project configuration on both project creation/import and
- * regular project configuration.
- */
-class QMakeBuildDirChooser : public Ui::QMakeBuildDirChooser
+class QMakeBuildDirChooserDialog : public KDialog, private QMakeBuildDirChooser
 {
+    Q_OBJECT
+    
 public:
-    explicit QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project);
-    virtual ~QMakeBuildDirChooser();
-
-public:
-    bool isValid();
-    void saveConfig();
-    void loadConfig();
+    explicit QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget *parent = 0);
+    virtual ~QMakeBuildDirChooserDialog();
     
-    KUrl qmakeBin() const;
-    KUrl buildDir() const;
-    KUrl installPrefix() const;
-    int buildType() const;
-    QString extraArgs() const;
-    
-    void setQmakeBin(const KUrl &url);
-    void setBuildDir(const KUrl &url);
-    void setInstallPrefix(const KUrl &url);
-    void setBuildType(int type);
-    void setExtraArgs(const QString &args);
-    
-private:
-    KDevelop::IProject* m_project;
+protected slots:
+    virtual void slotButtonClicked(int button);
+    void validate();
 };
 
 #endif

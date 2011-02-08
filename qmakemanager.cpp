@@ -54,7 +54,7 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 #include "qmakejob.h"
-#include "qmakebuilddirchooser.h"
+#include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
@@ -174,7 +174,6 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         }
     }
 
-    dir.cleanPath();
     kDebug(9204) << "Building " << item->text() << "in" << dir.toLocalFile();
     return dir;
 }
@@ -345,7 +344,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
             this, SLOT(slotDirty(QString)));
     
     if(projectNeedsConfiguration(project)) {
-        QMakeBuildDirChooser *chooser = new QMakeBuildDirChooser(project);
+        QMakeBuildDirChooserDialog *chooser = new QMakeBuildDirChooserDialog(project);
         if(chooser->exec() == QDialog::Rejected)
         {
             kDebug() << "User stopped project import";
