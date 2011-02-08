@@ -4033,6 +4033,22 @@ void TestDUChain::testSimplifiedTypeString()
 
   }
   {
+    QByteArray method("namespace A { namespace B { struct C {}; C* foo(); } };");
+    LockedTopDUContext top = parse(method, DumpNone);
+
+    QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::foo"));
+    QCOMPARE(decls.size(), 1);
+    FunctionDeclaration* fooDecl = dynamic_cast<FunctionDeclaration*>(decls.first());
+    QVERIFY(fooDecl);
+
+    FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
+    QVERIFY(fooType);
+
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C*"));
+  }
+  {
     QByteArray method("typedef int *honk, **honk2; honk k;");
     LockedTopDUContext top = parse(method, DumpNone);
 
