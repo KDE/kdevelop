@@ -436,7 +436,7 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
 	// Compute line numbers in source and destination to which the for diff line sequences (will be created later)
 	int sourceLineNumber;
 	int destinationLineNumber;
-	if (iterBegin == m_differences.constEnd()) {    // All existing diffs are after the change
+	if (iterBegin == m_differences.end()) {    // All existing diffs are after the change
 		destinationLineNumber = editLineNumber;
 		if (!m_differences.isEmpty()) {
 			sourceLineNumber = m_differences.last()->sourceLineEnd() - (m_differences.last()->trackingDestinationLineEnd() - editLineNumber);
@@ -519,15 +519,15 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
 
 	int currentSourceListLine = 0;
 	int currentDestinationListLine = 0;
-	MarkerListConstIterator sourceMarkerIter = sourceMarkers.begin();
-	MarkerListConstIterator destinationMarkerIter = destinationMarkers.begin();
+	MarkerListConstIterator sourceMarkerIter = sourceMarkers.constBegin();
+	MarkerListConstIterator destinationMarkerIter = destinationMarkers.constBegin();
 	const int terminatorLineNumber = sourceLines.size() + destinationLines.size() + 1;    // A virtual offset for simpler computation - stands for infinity
 
 	// Process marker lists, converting pairs of Start-End markers into differences.
 	// Marker in source list only stands for deletion, in source and destination lists - for change, in destination list only - for insertion.
-	while(sourceMarkerIter != sourceMarkers.end() || destinationMarkerIter != destinationMarkers.end()) {
-		int nextSourceListLine = sourceMarkerIter != sourceMarkers.end() ? (*sourceMarkerIter)->offset() : terminatorLineNumber;
-		int nextDestinationListLine = destinationMarkerIter != destinationMarkers.end() ? (*destinationMarkerIter)->offset() : terminatorLineNumber;
+	while(sourceMarkerIter != sourceMarkers.constEnd() || destinationMarkerIter != destinationMarkers.constEnd()) {
+		int nextSourceListLine = sourceMarkerIter != sourceMarkers.constEnd() ? (*sourceMarkerIter)->offset() : terminatorLineNumber;
+		int nextDestinationListLine = destinationMarkerIter != destinationMarkers.constEnd() ? (*destinationMarkerIter)->offset() : terminatorLineNumber;
 
 		// Advance to the nearest marker
 		int linesToSkip = qMin(nextDestinationListLine - currentDestinationListLine, nextSourceListLine - currentSourceListLine);

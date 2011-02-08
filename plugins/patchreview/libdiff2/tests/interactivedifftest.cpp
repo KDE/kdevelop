@@ -98,7 +98,7 @@ void InteractiveDiffTest::testDifferenceContents()
     QCOMPARE(model->differenceCount(), expectedDifferenceCount);
 
     QFETCH(DifferenceHash, expectedDifferences);
-    for (DifferenceHash::ConstIterator iter = expectedDifferences.begin(); iter != expectedDifferences.end(); ++iter) {
+    for (DifferenceHash::ConstIterator iter = expectedDifferences.constBegin(); iter != expectedDifferences.constEnd(); ++iter) {
         const Difference* diff = model->differenceAt(iter.key());
         CompareDifferenceStringList(diff->sourceLines(), iter.value().first);
         CompareDifferenceStringList(diff->destinationLines(), iter.value().second);
@@ -510,7 +510,7 @@ void InteractiveDiffTest::testLineNumbers()
     QCOMPARE(model->differenceCount(), expectedDifferenceCount);
 
     QFETCH(LineNumberHash, expectedLineNumbers);
-    for (LineNumberHash::ConstIterator iter = expectedLineNumbers.begin(); iter != expectedLineNumbers.end(); ++iter) {
+    for (LineNumberHash::ConstIterator iter = expectedLineNumbers.constBegin(); iter != expectedLineNumbers.constEnd(); ++iter) {
         const Difference* diff = model->differenceAt(iter.key());
         QCOMPARE(diff->sourceLineNumber(), iter.value().first);
         QCOMPARE(diff->trackingDestinationLineNumber(), iter.value().second);
