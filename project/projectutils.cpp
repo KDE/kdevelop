@@ -54,10 +54,6 @@ public Q_SLOTS:
 
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
 {
-    ///FIXME: project manager view will reset d->ctxProjectItemList to the last item (alwasy the project dir)
-    ///this can result in data loss when trying to remove a file as it will pruge the whole project folder...
-    return;
-
     if(!item)
         return;
     
