@@ -66,12 +66,12 @@ void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers speci
 
 IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index) const {
   FunctionType::Ptr fType = dynamic_cast<const Declaration*>(this)->type<FunctionType>();
-  if(index >= 0 && index < fType->arguments().size()) {
+  if(fType && index >= 0 && index < fType->arguments().size()) {
     index -= (fType->arguments().size() - defaultParametersSize());
     if(index >= 0 && index < (int)defaultParametersSize())
       return defaultParameters()[index];
   }
-  
+
   return IndexedString();
 }
 
