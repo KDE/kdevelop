@@ -216,7 +216,12 @@ void StandardOutputView::raiseOutput(int outputId)
         if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* v, toolviews.value( _id )->views ) {
-                v->requestRaise();
+                if( v->hasWidget() )
+                {
+                    OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
+                    w->raiseOutput( outputId );
+                    v->requestRaise();
+                }
             }
         }
     }
@@ -267,10 +272,13 @@ void StandardOutputView::removeToolView( int toolviewId )
         ToolViewData* td = toolviews.value(toolviewId);
         foreach( Sublime::View* view, td->views )
         {
-            OutputWidget* outputView = qobject_cast<OutputWidget*>( view );
-            foreach( int outid, td->outputdata.keys() )
+            if( view->hasWidget() )
             {
-                outputView->removeOutput( outid );
+                OutputWidget* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
+                foreach( int outid, td->outputdata.keys() )
+                {
+                    outputWidget->removeOutput( outid );
+                }
             }
             foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->allAreas() )
             {
@@ -291,7 +299,8 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
         {
             foreach( Sublime::View* view, td->views )
             {
-                return qobject_cast<OutputWidget*>( view );
+                if( view->hasWidget() )
+                    return qobject_cast<OutputWidget*>( view->widget() );
             }
         }
     }
