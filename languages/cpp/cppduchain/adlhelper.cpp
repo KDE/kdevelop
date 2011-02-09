@@ -102,9 +102,9 @@ void ADLTypeVisitor::endVisit(const FunctionType * /*type*/)
     associated with its (non-dependent) parameter types and return type.
     */
 
-    if (m_helper.m_possibleFunctionName && m_helper.m_possibleFunctionName->isFunctionDeclaration())
+    if (m_helper.m_possibleFunctionName.data() && m_helper.m_possibleFunctionName.data()->isFunctionDeclaration())
     {
-        Declaration * declaration = m_helper.m_possibleFunctionName;
+        Declaration * declaration = m_helper.m_possibleFunctionName.data();
 
 #ifdef DEBUG_ADL
         kDebug() << "    function name = " << declaration->toString() << " ; identifier = " << declaration->qualifiedIdentifier().toString();
@@ -165,8 +165,7 @@ bool ADLTypeVisitor::seen(const KDevelop::AbstractType* type)
 ADLHelper::ADLHelper(DUContextPointer context, TopDUContextPointer topContext)
         : m_context(context), m_topContext(topContext),
         m_typeVisitor(*this),
-        m_templateArgsDepth(0),
-        m_possibleFunctionName(NULL)
+        m_templateArgsDepth(0)
 {
 }
 

@@ -43,6 +43,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <QProgressBar>
 
@@ -95,6 +96,17 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
     if (dec->topContext()->parsingEnvironmentFile()->language() != cppLanguage) {
         return KSharedPtr<IDocumentation>();
     }
+    
+    // Don't show man-page documentation for files that are part of our project
+    if(core()->projectController()->findProjectForUrl(dec->topContext()->url().toUrl()))
+        return KSharedPtr<IDocumentation>();
+
+    // Don't show man-page documentation for files that are not in /usr/include, because then we
+    // most probably will be confusing the global function-name with a local one
+    if(!dec->topContext()->url().str().startsWith("/usr/"))
+        return KSharedPtr<IDocumentation>();
+    
+    ///@todo Do more verification to make sure that we're showing the correct documentation for the declaration
 
     QString identifier = dec->identifier().toString();
     if(m_model->containsIdentifier(identifier)){

@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include "astyle_stringiterator.h"
 
 AStyleFormatter::AStyleFormatter()
+: ASFormatter()
 {
 }
 
@@ -212,6 +213,10 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setBracketFormatMode(astyle::ATTACH_MODE);
     else if(s == "Linux")
         AStyleFormatter::setBracketFormatMode(astyle::BDAC_MODE);
+    else if(s == "Stroustrup")
+        AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
+    else if(s == "Horstmann")
+        AStyleFormatter::setBracketFormatMode(astyle::HORSTMANN_MODE);
     else
         AStyleFormatter::setBracketFormatMode(astyle::NONE_MODE);
 
@@ -230,6 +235,17 @@ void AStyleFormatter::updateFormatter()
     // oneliner
     AStyleFormatter::setBreakOneLineBlocksMode(!m_options["KeepBlocks"].toBool());
     AStyleFormatter::setSingleStatementsMode(!m_options["KeepStatements"].toBool());
+
+    // pointer
+    s = m_options["PointerAlign"].toString();
+    if(s == "Name")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NAME);
+    else if(s == "Middle")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_MIDDLE);
+    else if(s == "Type")
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_TYPE);
+    else
+        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NONE);
 }
 
 void AStyleFormatter::resetStyle()
@@ -308,6 +324,69 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::ATTACH_MODE);
         setSwitchIndent(false);
+        return true;
+    } else if (style == "Stroustrup") {
+        resetStyle();
+        setBracketFormatMode(astyle::STROUSTRUP_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        if (!getIndentManuallySet())
+        {
+            if (getIndentString() == "\t")
+                setTabIndentation(5, getForceTabIndentation());
+            else
+                setSpaceIndentation(5);
+        }
+        setClassIndent(false);
+        setSwitchIndent(false);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Horstmann") {
+        resetStyle();
+        setBracketFormatMode(astyle::HORSTMANN_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        setSwitchIndent(true);
+        if (!getIndentManuallySet())
+        {
+            if (getIndentString() == "\t")
+                setTabIndentation(3, getForceTabIndentation());
+            else
+                setSpaceIndentation(3);
+        }
+        setClassIndent(false);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Whitesmith") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::BREAK_MODE);
+        setBlockIndent(false);
+        setBracketIndent(true);
+        setClassIndent(true);
+        setSwitchIndent(true);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "Banner") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::ATTACH_MODE);
+        setBlockIndent(false);
+        setBracketIndent(true);
+        setClassIndent(true);
+        setSwitchIndent(true);
+        setNamespaceIndent(false);
+        return true;
+    } else if (style == "1TBS") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::LINUX_MODE);
+        setBlockIndent(false);
+        setBracketIndent(false);
+        setAddBracketsMode(true);
+        setClassIndent(false);
+        setSwitchIndent(false);
+        setNamespaceIndent(false);
         return true;
     }
 
@@ -449,7 +528,8 @@ void AStyleFormatter::setMaxInStatementIndentLength(int max)
 void AStyleFormatter::setMinConditionalIndentLength(int min)
 {
     m_options["MinConditional"] = min;
-    ASFormatter::setMinConditionalIndentLength(min);
+    ASFormatter::setMinConditionalIndentOption(min);
+    ASFormatter::setMinConditionalIndentLength();
 }
 
 void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
@@ -466,6 +546,12 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
         break;
     case astyle::BDAC_MODE:
         m_options["Brackets"] = "Linux";
+        break;
+    case astyle::STROUSTRUP_MODE:
+        m_options["Brackets"] = "Stroustrup";
+        break;
+    case astyle::HORSTMANN_MODE:
+        m_options["Brackets"] = "Horstmann";
         break;
     }
     ASFormatter::setBracketFormatMode(mode);
@@ -531,3 +617,21 @@ void AStyleFormatter::setSingleStatementsMode(bool state)
     ASFormatter::setSingleStatementsMode(state);
 }
 
+void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
+{
+    switch (alignment) {
+        case astyle::ALIGN_NONE:
+            m_options["PointerAlign"] = "None";
+            break;
+        case astyle::ALIGN_NAME:
+            m_options["PointerAlign"] = "Name";
+            break;
+        case astyle::ALIGN_MIDDLE:
+            m_options["PointerAlign"] = "Middle";
+            break;
+        case astyle::ALIGN_TYPE:
+            m_options["PointerAlign"] = "Type";
+            break;
+    }
+    ASFormatter::setPointerAlignment(alignment);
+}

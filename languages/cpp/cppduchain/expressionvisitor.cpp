@@ -1526,11 +1526,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     {
       //Dereference
       m_lastType = pt->baseType();
-      m_lastInstance = Instance( getDeclaration(m_lastType) );
+      m_lastInstance.isInstance = true;
       return true;
     }else if( ArrayType::Ptr pt = realLastType().cast<ArrayType>() ) {
       m_lastType = pt->elementType();
-      m_lastInstance = Instance( getDeclaration(m_lastType) );
+      m_lastInstance.isInstance = true;
       return true;
     }else{
       return false;

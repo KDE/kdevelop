@@ -96,4 +96,22 @@ void AstyleTest::varTypeAssistant()
 
 }
 
+void AstyleTest::testMultipleFormatters()
+{
+    // just test that multiple formatters can exist at the same time
+    AStyleFormatter* formatter1 = new AStyleFormatter;
+    AStyleFormatter* formatter2 = new AStyleFormatter;
+    delete formatter1;
+    delete formatter2;
+}
+
+void AstyleTest::testMacroFormatting()
+{
+    AStyleFormatter fmt;
+    fmt.setSpaceIndentation(2);
+    fmt.setPreprocessorIndent(true);
+    QString formatted = fmt.formatSource("#define asdf\\\nfoobar\n");
+    QCOMPARE(formatted, QString("#define asdf\\\n  foobar\n"));
+}
+
 #include "astyletest.moc"

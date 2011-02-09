@@ -35,7 +35,7 @@ class AStyleStringIterator : public astyle::ASSourceIterator
         virtual ~AStyleStringIterator();
 
         virtual bool hasMoreLines() const;
-        virtual string nextLine();
+        virtual string nextLine(bool emptyLineWasDeleted = false);
         virtual string peekNextLine();
         virtual void peekReset();
 

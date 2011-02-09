@@ -100,37 +100,30 @@ QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
     return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
 }
 
+KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
+{
+    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( name );
+    st.setCaption( caption.isEmpty() ? name : caption );
+    AStyleFormatter fmt;
+    fmt.predefinedStyle( name );
+    st.setContent( fmt.saveStyle() );
+    return st;
+}
+
 QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
 
-    AStyleFormatter fmt;
-    
-    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "ANSI" );
-    st.setCaption( "ANSI" );
-    fmt.predefinedStyle( "ANSI" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "GNU" );
-    st.setCaption( "GNU" );
-    fmt.predefinedStyle( "GNU" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "Java" );
-    st.setCaption( "Java" );
-    fmt.predefinedStyle( "Java" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "K&R" );
-    st.setCaption( "Kernighan & Ritchie" );
-    fmt.predefinedStyle( "K&R" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
-    st = KDevelop::SourceFormatterStyle( "Linux" );
-    st.setCaption( "Linux" );
-    fmt.predefinedStyle( "Linux" );
-    st.setContent( fmt.saveStyle() );
-    styles << st;
+    styles << predefinedStyle("ANSI");
+    styles << predefinedStyle("GNU");
+    styles << predefinedStyle("Java");
+    styles << predefinedStyle("K&R", "Kernighan & Ritchie");
+    styles << predefinedStyle("Linux");
+    styles << predefinedStyle("Stroustrup");
+    styles << predefinedStyle("Horstmann");
+    styles << predefinedStyle("Whitesmith");
+    styles << predefinedStyle("Banner");
+    styles << predefinedStyle("1TBS", "One True Bracket Style");
 
     return styles;
 }
@@ -169,24 +162,90 @@ int AStylePlugin::indentationLength()
 
 QString AStylePlugin::formattingSample()
 {
-    return "void func(){\n\tif(isFoo(a,b))\n\tbar(a,b);\nif(isFoo)"
-    "\n\ta=bar((b-c)*a,*d--);\nif(  isFoo( a,b ) )\n\tbar(a, b);"
-    "\nif (isFoo) {isFoo=false;cat << isFoo <<endl;}\nif(isFoo)DoBar();"
-    "if (isFoo){\n\tbar();\n}\n\telse if(isBar())"
-    "{\n\tannotherBar();\n}\n}\n";
+    return 
+    "void func(){\n"
+    "\tif(isFoo(a,b))\n"
+    "\tbar(a,b);\n"
+    "if(isFoo)\n"
+    "\ta=bar((b-c)*a,*d--);\n"
+    "if(  isFoo( a,b ) )\n"
+    "\tbar(a, b);\n"
+    "if (isFoo) {isFoo=false;cat << isFoo <<endl;}\n"
+    "if(isFoo)DoBar();if (isFoo){\n"
+    "\tbar();\n"
+    "}\n"
+    "\telse if(isBar()){\n"
+    "\tannotherBar();\n"
+    "}\n"
+    "int var = 1;\n"
+    "int *ptr = &var;\n"
+    "int &ref = i;\n"
+    "\n"
+    "QList<int>::const_iterator it = list.begin();\n"
+    "}\n"
+    "namespace A {\n"
+    "namespace B {\n"
+    "void foo() {\n"
+    "  if (true) {\n"
+    "    func();\n"
+    "  } else {\n"
+    "    // bla\n"
+    "  }\n"
+    "}\n"
+    "}\n"
+    "}\n";
 }
 
 QString AStylePlugin::indentingSample()
 {
-    return "#define foobar(A)\\\n{Foo();Bar();}\n#define"
-    "anotherFoo(B)\\\nreturn Bar()\n\nnamespace Bar\n{\nclass Foo"
-    "\n{public:\nFoo();\nvirtual ~Foo();\n};\nswitch (foo)\n"
-    "{\ncase 1:\na+=1;\nbreak;\ncase 2:\n{\na += 2;\n break;\n}"
-    "\n}\nif (isFoo)\n{\nbar();\n}\nelse\n{\nanotherBar();\n}"
-    "\nint foo()\n\twhile(isFoo)\n\t\t{\n\t\t\t...\n\t\t\tgoto error;"
-    "\n\t\t....\n\t\terror:\n\t\t\t...\n\t\t}\n\t}\nfooArray[]"
-    "={ red,\n\tgreen,\n\tdarkblue};\nfooFunction(barArg1,"
-    "\n\tbarArg2,\n\tbarArg3);\n";
+    return
+    "#define foobar(A)\\\n"
+    "{Foo();Bar();}\n"
+    "#define anotherFoo(B)\\\n"
+    "return Bar()\n"
+    "\n"
+    "namespace Bar\n"
+    "{\n"
+    "class Foo\n"
+    "{public:\n"
+    "Foo();\n"
+    "virtual ~Foo();\n"
+    "};\n"
+    "switch (foo)\n"
+    "{\n"
+    "case 1:\n"
+    "a+=1;\n"
+    "break;\n"
+    "case 2:\n"
+    "{\n"
+    "a += 2;\n"
+    " break;\n"
+    "}\n"
+    "}\n"
+    "if (isFoo)\n"
+    "{\n"
+    "bar();\n"
+    "}\n"
+    "else\n"
+    "{\n"
+    "anotherBar();\n"
+    "}\n"
+    "int foo()\n"
+    "\twhile(isFoo)\n"
+    "\t\t{\n"
+    "\t\t\t...\n"
+    "\t\t\tgoto error;\n"
+    "\t\t....\n"
+    "\t\terror:\n"
+    "\t\t\t...\n"
+    "\t\t}\n"
+    "\t}\n"
+    "fooArray[]={ red,\n"
+    "\tgreen,\n"
+    "\tdarkblue};\n"
+    "fooFunction(barArg1,\n"
+    "\tbarArg2,\n"
+    "\tbarArg3);\n";
 }
 
 #include "astyle_plugin.moc"

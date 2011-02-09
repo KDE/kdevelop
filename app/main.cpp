@@ -59,7 +59,6 @@
 #include <shell/session.h>
 #include <interfaces/ilauncher.h>
 #include <interfaces/iproject.h>
-#include <interfaces/foregroundlock.h>
 
 #include "kdevideextension.h"
 
@@ -80,23 +79,12 @@ public:
             sm.setRestartCommand(QStringList() << "kdevelop" << "-s" << KDevelop::Core::self()->sessionController()->activeSession()->id().toString());
         KApplication::saveState(sm);
     }
-
-    virtual bool notify(QObject* receiver, QEvent* event);
 };
-
-bool KDevelopApplication::notify(QObject* receiver, QEvent* event)
-{
-    KDevelop::ForegroundLock lock(QThread::currentThread() == qApp->thread());
-    return KApplication::notify(receiver, event);
-}
 
 int main( int argc, char *argv[] )
 {
-    KDevelop::ForegroundLock lock;
-    
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
-    KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
-                          i18n("%1", QString(VERSION) ).toUtf8(), ki18n(description), KAboutData::License_GPL,
+    KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), KAboutData::License_GPL,
                           ki18n( "Copyright 1999-2010, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
@@ -464,6 +452,5 @@ int main( int argc, char *argv[] )
         args->clear();
     }
 
-    lock.unlock();
     return app.exec();
 }

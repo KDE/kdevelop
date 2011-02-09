@@ -140,7 +140,7 @@ class ADLHelper
      * May be @c NULL .
      * See the comments inside @code ADLTypeVisitor::endVisit(const FunctionType *) @endcode for details.
      */
-    Declaration* m_possibleFunctionName;
+    IndexedDeclaration m_possibleFunctionName;
 };
 
 }
