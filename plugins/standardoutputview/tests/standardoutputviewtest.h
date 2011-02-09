@@ -54,11 +54,12 @@ private:
     static const QString toolviewTitle;
     
 private slots:
-    void init();
-    void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
     void testRegisterAndRemoveToolView();
     void testActions();
     void testRegisterAndRemoveOutput();
+    void testSetModelAndDelegate();
 };
 
 #endif // STANDARDOUTPUTVIEWTEST_H

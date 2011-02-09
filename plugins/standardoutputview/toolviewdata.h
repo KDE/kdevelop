@@ -32,11 +32,11 @@ class View;
 }
 
 class QItemDelegate;
-class ToolViewData;
 class QString;
 class QAbstractItemModel;
 class QListView;
 class StandardOutputView;
+class ToolViewData;
 
 class OutputData : public QObject
 {
