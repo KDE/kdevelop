@@ -246,7 +246,6 @@ void OutputWidget::removeOutput( int id )
         disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                     this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
         
-        data->outputdata.remove( id );
         views.remove( id );
         emit outputRemoved( data->toolViewId, id );
     }
@@ -265,7 +264,7 @@ void OutputWidget::closeActiveView()
             OutputData* od = data->outputdata.value(id);
             if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
             {
-                removeOutput( id );
+                data->plugin->removeOutput( id );
             }
         }
     }

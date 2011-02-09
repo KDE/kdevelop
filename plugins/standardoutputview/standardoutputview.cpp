@@ -306,12 +306,19 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 }
 
 void StandardOutputView::removeOutput( int outputId )
-{
-    OutputWidget* widget = outputWidgetForId( outputId );
-    if( widget ) 
+{ 
+    foreach( ToolViewData* td, toolviews )
     {
-        widget->removeOutput( outputId );
-    }
+        if( td->outputdata.contains( outputId ) )
+        {
+            foreach( Sublime::View* view, td->views )
+            {
+                if( view->hasWidget() )
+                    qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
+            }
+            td->outputdata.remove( outputId );
+        }
+    } 
 }
 
 #include "standardoutputview.moc"
