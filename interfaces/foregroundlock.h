@@ -31,7 +31,7 @@ namespace KDevelop {
 
 /**
  * A locking object that locks the resources that are associated to the main thread. When this lock is held,
- * you can call any thread-unsafe functions.
+ * you can call any thread-unsafe functions, because the foreground thread is locked in an event.
  *
  * The lock always becomes available when the foreground thread stops processing events.
  *
@@ -44,24 +44,6 @@ namespace KDevelop {
  *                  which seriously affects the objects functionality regarding signals/slots.
  *                 The foreground lock does not change the thread affinity, so holding the foreground lock does not fully equal being in the foreground.
  *                 It may generally be unsafe to call foreground functions that create QObjects from within the background.
- *                 @note In order to circumvent this problem, better use the DO_IN_FOREGROUND macro!
- *
- * 
- * Implementation:
- * In order to make this object work properly in your application,
- * you have to redefine the QCoreApplication::notify(..) function so that it locks the foreground mutex:
- *
- * <example>
- * static QThread* mainThread = QThread::currentThread();
- *
- * bool KDevelopApplication::notify(QObject* receiver, QEvent* event)
- * {
- *    KDevelop::ForegroundLock lock(QThread::currentThread() == mainThread);
- *    return KApplication::notify(receiver, event);
- * }
- * </example>
- *
- * Also make sure to lock the foreground lock during initialization before the event loop starts.
  */
 class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
 {
@@ -85,7 +67,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
 
 /**
  * Use this object if you want to temporarily release the foreground lock,
- * for example when entering a local event-loop from within the foreground thread.
+ * for example when sleeping in the foreground thread, or when waiting in the foreground
+ * thread for a background thread which should get the chance to lock the foreground.
+ * 
+ * While this object is alive, you _must not_ access any non-threadsafe resources
+ * that belong to the foreground, and you must not start an event-loop.
  */
 class KDEVPLATFORMINTERFACES_EXPORT TemporarilyReleaseForegroundLock {
 public:

@@ -209,15 +209,53 @@ bool KompareModelList::compare(Kompare::Mode mode)
 	return true;
 }
 
+QString lstripSeparators( const QString & from, uint count )
+{
+	int position = 0;
+	for ( uint i = 0; i < count; ++i )
+	{
+		position = from.indexOf('/', position);
+		if ( position == -1 )
+		{
+			break;
+		}
+	}
+	if ( position == -1 )
+	{
+		return "";
+	}
+	else
+	{
+		return from.mid(position);
+	}
+}
+
+void KompareModelList::setDepthAndApplied()
+{
+	// Splice to avoid calling ~DiffModelList
+	QList<Diff2::DiffModel*> splicedModelList(*m_models);
+	foreach(DiffModel* model, splicedModelList)
+	{
+		 model->setSourceFile( lstripSeparators(model->source(), m_info->depth) );
+		 model->setDestinationFile( lstripSeparators(model->destination(), m_info->depth) );
+		 model->applyAllDifferences(m_info->applied);
+	}
+}
+
 bool KompareModelList::openFileAndDiff()
 {
 	clear();
+
+	if ( m_info->localDestination.isEmpty() )
+		return false;
 
 	if ( parseDiffOutput( readFile( m_info->localDestination ) ) != 0 )
 	{
 		emit error( i18n( "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff file.</qt>", m_info->destination.url() ) );
 		return false;
 	}
+
+	setDepthAndApplied();
 
 	if ( !blendOriginalIntoModelList( m_info->localSource ) )
 	{
@@ -241,6 +279,8 @@ bool KompareModelList::openDirAndDiff()
 		emit error( i18n( "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff file.</qt>", m_info->destination.url() ) );
 		return false;
 	}
+
+	setDepthAndApplied();
 
 	// Do our thing :)
 	if ( !blendOriginalIntoModelList( m_info->localSource ) )
@@ -919,9 +959,9 @@ bool KompareModelList::blendOriginalIntoModelList( const QString& localURL )
 		{
 			model = *modelIt;
 			kDebug(8101) << "Model : " << model << endl;
-			QString filename = model->sourcePath() + model->sourceFile();
+			QString filename = model->source();
 			if ( !filename.startsWith( localURL ) )
-				filename.prepend( localURL );
+				filename = QDir(localURL).filePath(filename);
 			QFileInfo fi2( filename );
 			if ( fi2.exists() )
 			{

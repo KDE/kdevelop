@@ -77,7 +77,7 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
 {
     if (isRichText) {
         QStylePainter p(this);
- 
+
         QRect buttonRect = rect();
         QPoint point;
  
@@ -96,7 +96,9 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
  
         buttonRect.translate(point.x() - richTextPixmap.width() / 2, point.y() - richTextPixmap.height() / 2);
  
-        p.drawControl(QStyle::CE_PushButton, getStyleOption());
+        QStyleOptionButton opt = getStyleOption();
+        p.drawControl(QStyle::CE_PushButtonBevel, opt);
+        p.drawPrimitive(QStyle::PE_FrameFocusRect, opt);
         p.drawPixmap(buttonRect.left(), buttonRect.top(), richTextPixmap.width(), richTextPixmap.height(),richTextPixmap);
     } else
         QToolButton::paintEvent(event);

@@ -38,7 +38,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Replace with: </string>
+           <string>Replacement Text:</string>
           </property>
          </widget>
         </item>
@@ -70,7 +70,7 @@
            <string>Apply replacement on selected items.</string>
           </property>
           <property name="text">
-           <string>Apply</string>
+           <string>Replace</string>
           </property>
          </widget>
         </item>

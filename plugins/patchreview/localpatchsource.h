@@ -35,6 +35,10 @@ public:
     virtual KUrl file() const {
         return m_filename;
     }
+
+    virtual uint depth() const {
+        return m_depth;
+    }
     
     virtual void update();
     
@@ -42,11 +46,15 @@ public:
     KUrl m_baseDir;
     uint m_depth;
     QString m_command;
-    virtual bool isAlreadyApplied() const { return false; }
+    virtual bool isAlreadyApplied() const { return m_applied; }
+    void setAlreadyApplied(bool applied) { m_applied = applied; }
 
     LocalPatchSource()  : m_depth(0) {
     }
     virtual ~LocalPatchSource();
+
+private:
+    bool m_applied;
 };
 
 #endif // LOCALPATCHSOURCE_H

@@ -196,7 +196,19 @@ KUrl PartDocument::url() const
 void PartDocument::setUrl(const KUrl& newUrl)
 {
     Sublime::UrlDocument::setUrl(newUrl);
+    if(!prettyName().isEmpty())
+        setTitle(prettyName());
     notifyUrlChanged();
+}
+
+void PartDocument::setPrettyName(QString name)
+{
+    KDevelop::IDocument::setPrettyName(name);
+    // Re-set the url, to trigger the whole chain
+    if(!name.isEmpty())
+        setTitle(name);
+    else
+        setTitle(url().fileName());
 }
 
 QMap<QWidget*, KParts::Part*> PartDocument::partForView() const

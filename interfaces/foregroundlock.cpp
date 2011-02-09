@@ -35,7 +35,8 @@ using namespace KDevelop;
 class SimplePThreadMutex {
 public:
     SimplePThreadMutex() {
-        m_mutex = PTHREAD_MUTEX_INITIALIZER;
+	// this is not nessary because pthread_mutex_init() does the work, also it causes compile error on some systems
+        //m_mutex = PTHREAD_MUTEX_INITIALIZER;
         int result = pthread_mutex_init(&m_mutex, 0);
         Q_ASSERT(result == 0);
     }
@@ -280,3 +281,6 @@ namespace KDevelop {
         m_wait.wakeAll();
     }
 }
+
+// Important: The foreground lock has to be held by default
+ForegroundLock lock;

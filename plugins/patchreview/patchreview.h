@@ -56,7 +56,7 @@ class IDocument;
 class PatchHighlighter : public QObject {
     Q_OBJECT
 public:
-    PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
+    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
     QList<KTextEditor::MovingRange*> ranges() const {
@@ -68,7 +68,9 @@ private slots:
 private:
 
     void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
-    void removeLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
+    void removeLineMarker(KTextEditor::MovingRange* range);
+    QStringList splitAndAddNewlines(const QString& text) const;
+    void performContentChange(KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
   
     KTextEditor::MovingRange* rangeForMark(KTextEditor::Mark mark);
 
@@ -77,7 +79,8 @@ private:
     QMap<KTextEditor::MovingRange*, Diff2::Difference*> m_differencesForRanges;
     KDevelop::IDocument* m_doc;
     PatchReviewPlugin* m_plugin;
-    const Diff2::DiffModel* m_model;
+    Diff2::DiffModel* m_model;
+    bool m_applying;
 public slots:
     void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
     void showToolTipForMark(QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
@@ -85,6 +88,7 @@ public slots:
     bool isInsertion(Diff2::Difference*);
     void markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
+    void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText);
 };
 
 class DiffSettings;
@@ -113,6 +117,8 @@ private slots:
     void slotEditCommandChanged();
 
     void slotEditFileNameChanged();
+    void slotDepthChanged(int newDepth);
+    void slotAppliedChanged(int newState);
 
     void finishReview();
     
@@ -122,6 +128,8 @@ private:
     void showEditDialog();
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
+    /// Retrieve the patch from plugin and perform all necessary casts
+    LocalPatchSource* GetLocalPatchSource();
 
     Ui_EditPatch m_editPatch;
 

@@ -48,6 +48,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/util/navigationtooltip.h>
+#include <project/projectutils.h>
 
 using namespace KDevelop;
 
@@ -212,6 +213,9 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         projectActions << projectConfig;
     }
     appendActions(menu, projectActions);
+    
+    if(!itemlist.isEmpty())
+        KDevelop::populateParentItemsMenu(itemlist.front(), &menu);
 
     if ( !menu.isEmpty() ) {
         menu.exec( mapToGlobal( pos ) );

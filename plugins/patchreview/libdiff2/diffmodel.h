@@ -31,8 +31,9 @@ namespace Diff2
 class DiffHunk;
 class Difference;
 
-class DIFF2_EXPORT DiffModel
+class DIFF2_EXPORT DiffModel : public QObject
 {
+	Q_OBJECT
 public:
 
 	DiffModel( const QString& srcBaseURL, const QString& destBaseURL );
@@ -40,7 +41,7 @@ public:
 	~DiffModel();
 
 private:
-	DiffModel( const DiffModel& ) {};
+	DiffModel( const DiffModel& ) : QObject() {};
 
 public:
 	int parseDiff( enum Kompare::Format format, const QStringList& list );
@@ -52,7 +53,8 @@ public:
 	int appliedCount() const    { return m_appliedCount; }
 
 	DiffHunk* hunkAt( int i )               { return ( m_hunks.at( i ) ); }
-	const Difference* differenceAt( int i ) { return ( m_differences.at( i ) ); }
+	const Difference* differenceAt( int i ) const { return ( m_differences.at( i ) ); }
+	Difference* differenceAt( int i ) { return ( m_differences.at( i ) ); }
 
 	DiffHunkList*         hunks()             { return &m_hunks; }
 	const DiffHunkList*   hunks() const       { return &m_hunks; }
@@ -104,9 +106,18 @@ public:
 	bool isBlended() const { return m_blended; }
 	void setBlended( bool blended ) { m_blended = blended; }
 
+	/**
+	 * @p oldlines - lines that were removed.
+	 * @p newLines - lines that were inserted.
+	 * @p startPos - number of line at which the change occured
+	 */
+	QPair<QList<Difference*>, QList<Difference*> > linesChanged(const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
+
 private:
 	void splitSourceInPathAndFileName();
 	void splitDestinationInPathAndFileName();
+	void computeDiffStats(Difference* diff);
+	void processStartMarker(Difference* diff, const QStringList& lines, MarkerListConstIterator& currentMarker, int& currentListLine, bool isSource);
 
 private:
 	QString m_source;
@@ -133,6 +144,9 @@ private:
 	Difference*  m_selectedDifference;
 
 	bool m_blended;
+
+private slots:
+	void slotDifferenceApplied( Difference* diff );
 };
 
 } // End of namespace Diff2

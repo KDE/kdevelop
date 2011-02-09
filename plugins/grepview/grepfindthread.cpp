@@ -10,6 +10,7 @@
 #include <interfaces/icore.h>
 
 #include <language/duchain/indexedstring.h>
+#include <kdebug.h>
 
 using KDevelop::IndexedString;
 
@@ -19,6 +20,7 @@ using KDevelop::IndexedString;
 static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const QStringList include,
                                          const QStringList exlude, volatile bool &abort)
 {
+    ///@todo This is not thread-safe!
     KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl( dir );
     KUrl::List res;
     if(!project)
@@ -30,10 +32,13 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
         if(abort)
             break;
         KUrl url = item.toUrl();
-        if( recursive && !dir.isParentOf(url) )
-            continue;
-        if( !recursive && !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash))
-            continue;
+        if( !url.equals(dir) )
+        {
+            if( recursive && !dir.isParentOf(url) )
+                continue;
+            if( !recursive && !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash))
+                continue;
+        }
         if( QDir::match(include, url.fileName()) && !QDir::match(exlude, url.toLocalFile()) )
             res << url;
     }
@@ -45,6 +50,10 @@ static KUrl::List thread_findFiles(const QDir& dir, bool recursive, const QStrin
                                            const QStringList& exclude, volatile bool &abort)
 {
     QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
+    
+    if(!QFileInfo(dir.path()).isDir())
+        infos << QFileInfo(dir.path());
+    
     KUrl::List dirFiles;
     foreach(const QFileInfo &currFile, infos)
     {
@@ -68,8 +77,8 @@ static KUrl::List thread_findFiles(const QDir& dir, bool recursive, const QStrin
     return dirFiles;
 }
 
-GrepFindFilesThread::GrepFindFilesThread(QObject* parent, const KUrl& startDir, bool recursive, const QString& pats, const QString& excl, bool onlyProject)
-    : QThread(parent), m_directory(startDir), m_patString(pats), m_exclString(excl), m_recursive(recursive), m_project(onlyProject), m_tryAbort(false)
+GrepFindFilesThread::GrepFindFilesThread(QObject* parent, const QList<KUrl>& startDirs, bool recursive, const QString& pats, const QString& excl, bool onlyProject)
+    : QThread(parent), m_startDirs(startDirs), m_patString(pats), m_exclString(excl), m_recursive(recursive), m_project(onlyProject), m_tryAbort(false)
 {
     setTerminationEnabled(false);
 }
@@ -89,10 +98,17 @@ void GrepFindFilesThread::run()
     QStringList include = GrepFindFilesThread::parseInclude(m_patString);
     QStringList exclude = GrepFindFilesThread::parseExclude(m_exclString);
 
-    if(m_project)
-        m_files = thread_getProjectFiles(m_directory, m_recursive, include, exclude, m_tryAbort);
-    else
-        m_files = thread_findFiles(m_directory.toLocalFile(), m_recursive, include, exclude, m_tryAbort);
+    kDebug() << "running with start dir" << m_startDirs;
+    
+    foreach(KUrl directory, m_startDirs)
+    {
+        if(m_project)
+            m_files += thread_getProjectFiles(directory, m_recursive, include, exclude, m_tryAbort);
+        else
+        {
+            m_files += thread_findFiles(directory.toLocalFile(), m_recursive, include, exclude, m_tryAbort);
+        }
+    }
 
     qSort(m_files);
 }
@@ -104,12 +120,14 @@ KUrl::List GrepFindFilesThread::files() const {
 QStringList GrepFindFilesThread::parseExclude(QString excl)
 {
     QStringList exclude;
-    foreach(const QString &sub, excl.split(',', QString::SkipEmptyParts))
+    // Split around commas or spaces
+    foreach(const QString &sub, excl.split(QRegExp(",|\\s"), QString::SkipEmptyParts))
         exclude << QString("*%1*").arg(sub);
     return exclude;
 }
 
 QStringList GrepFindFilesThread::parseInclude(QString inc)
 {
-    return inc.split(',', QString::SkipEmptyParts);
+    // Split around commas or spaces
+    return inc.split(QRegExp(",|\\s"), QString::SkipEmptyParts);
 }

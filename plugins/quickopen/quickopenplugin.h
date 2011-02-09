@@ -165,6 +165,7 @@ class QuickOpenWidget : public QMenu {
   void updateScrollBarState();
   
   private:
+  virtual void showEvent(QShowEvent *);
   void callRowSelected();
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );

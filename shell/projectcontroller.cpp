@@ -524,11 +524,16 @@ void ProjectController::initialize()
     KConfigGroup group = config->group( "General Options" );
     KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
-    foreach (const KUrl& url, openProjects)
-        openProject(url);
-
+    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(KUrl::List, openProjects));
+    
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
+}
+
+void ProjectController::openProjects(const KUrl::List& projects)
+{
+    foreach (const KUrl& url, projects)
+        openProject(url);
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
@@ -907,7 +912,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
         } else {
             prefixText = project->name() + '/';
         }
-        QString relativePath = project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);;
+        QString relativePath = project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
         if(relativePath.startsWith("./"))
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
@@ -917,6 +922,16 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
 
 QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
 {
+    IProject* project = Core::self()->projectController()->findProjectForUrl(url);
+    if(project && project->folder().equals(url, KUrl::CompareWithoutTrailingSlash))
+    {
+        if (format == FormatHtml) {
+            return "<i>" +  project->name() + "</i>";
+        } else {
+            return project->name();
+        }
+    }
+    
     QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
         return prefixText + "<b>" + url.fileName() + "</b>";

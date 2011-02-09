@@ -32,8 +32,8 @@ class GrepOutputItem : public QStandardItem
 public:
     typedef QList<GrepOutputItem> List;
 
-    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
-    GrepOutputItem(const QString &filename, const QString &text);
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString& text, bool checkable);
+    GrepOutputItem(const QString &filename, const QString &text, bool checkable);
     ~GrepOutputItem();
 
     QString filename() const ;
@@ -71,6 +71,9 @@ public:
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
     QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
     const GrepOutputItem *getRootItem() const;
+
+    void makeItemsCheckable(bool checkable);
+    bool itemsCheckable() const;
     
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
@@ -88,6 +91,8 @@ Q_SIGNALS:
     void showErrorMessage(const QString & message, int timeout = 0);
     
 private:    
+    void makeItemsCheckable(bool checkable, GrepOutputItem* item);
+    
     QRegExp m_regExp;
     QString m_replacement;
     QString m_replacementTemplate;
@@ -98,6 +103,7 @@ private:
     int m_matchCount;
     QString m_savedMessage;
     KDevelop::IStatus *m_savedIStatus;
+    bool m_itemsCheckable;
 
 private slots:
     void updateCheckState(QStandardItem*);

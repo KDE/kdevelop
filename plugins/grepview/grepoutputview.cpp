@@ -27,6 +27,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <QWidgetAction>
+#include <interfaces/iprojectcontroller.h>
 
 using namespace KDevelop;
 
@@ -97,6 +98,7 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
+    resultsTreeView->setUniformRowHeights(false);
 
     connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
@@ -112,7 +114,17 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     applyButton->setIcon(KIcon("dialog-ok-apply"));
     
+    connect(replacementCombo, SIGNAL(editTextChanged(QString)), SLOT(replacementTextChanged(QString)));
+    
     connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+    
+    updateCheckable();
+}
+
+void GrepOutputView::replacementTextChanged(QString)
+{
+    updateCheckable();
+    updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
 GrepOutputView::~GrepOutputView()
@@ -122,7 +134,7 @@ GrepOutputView::~GrepOutputView()
     emit outputViewIsClosed();
 }
 
-GrepOutputModel* GrepOutputView::renewModel(QString name)
+GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrUrl)
 {
     // Crear oldest model
     while(modelSelector->count() > GrepOutputView::HISTORY_SIZE) {
@@ -130,6 +142,8 @@ GrepOutputModel* GrepOutputView::renewModel(QString name)
         qvariant_cast<QObject*>(var)->deleteLater();
         modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
     }
+
+    replacementCombo->clearEditText();
 
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
     applyButton->setEnabled(false);
@@ -139,15 +153,23 @@ GrepOutputModel* GrepOutputView::renewModel(QString name)
             this, SLOT(rowsRemoved()));
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
-    connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
+    connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandElements(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     
+    QString prettyUrl = descriptionOrUrl;
+    if(descriptionOrUrl.startsWith("/"))
+        prettyUrl = ICore::self()->projectController()->prettyFileName(descriptionOrUrl, KDevelop::IProjectController::FormatPlain);
     
     // appends new model to history
-    QString displayName = QTime::currentTime().toString("[hh:mm] ")+name;
+    QString displayName = QString("Search %1 in %2 (at time %3)")
+                              .arg(name)
+                              .arg(prettyUrl)
+                              .arg(QTime::currentTime().toString("hh:mm"));
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
     
     modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);
+    
+    updateCheckable();
     
     return newModel;
 }
@@ -164,6 +186,8 @@ void GrepOutputView::changeModel(int index)
                this, SLOT(showMessage(KDevelop::IStatus*,QString)));
     disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
                this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+
+    replacementCombo->clearEditText();
     
     //after deleting the whole search history, index is -1
     if(index >= 0)
@@ -179,12 +203,14 @@ void GrepOutputView::changeModel(int index)
         model()->showMessageEmit();
         applyButton->setEnabled(model()->hasResults() && 
                                 model()->getRootItem() && 
-                                model()->getRootItem()->checkState() != Qt::Unchecked);
+                                model()->getRootItem()->checkState() != Qt::Unchecked &&
+                                !replacementCombo->currentText().isEmpty());
         if(model()->hasResults())
-        {
-            expandRootElement(QModelIndex());
-        }
+            expandElements(QModelIndex());
     }
+    
+    updateCheckable();
+    updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
@@ -233,18 +259,14 @@ void GrepOutputView::showDialog()
     m_plugin->showDialog(true);
 }
 
-void GrepOutputView::expandRootElement(const QModelIndex& parent)
+void GrepOutputView::expandElements(const QModelIndex&)
 {
-    if(!parent.isValid())
-    {
-        resultsTreeView->setExpanded(model()->index(0,0), true);
-    }
-
     m_prev->setEnabled(true);
     m_next->setEnabled(true);
     m_collapseAll->setEnabled(true);
     m_expandAll->setEnabled(true);
-    applyButton->setEnabled(true);
+    
+    resultsTreeView->expandAll();
 }
 
 void GrepOutputView::selectPreviousItem()
@@ -272,7 +294,12 @@ void GrepOutputView::selectNextItem()
 
 void GrepOutputView::collapseAllItems()
 {
-    resultsTreeView->collapseAll();
+    // Collapse the first children, which correspond to the files.
+    QModelIndex base = resultsTreeView->model()->index(0, 0);
+    
+    int rows = resultsTreeView->model()->rowCount(base);
+    for(int row = 0; row < rows; ++row)
+        resultsTreeView->collapse(base.child(row, 0));
 }
 
 void GrepOutputView::expandAllItems()
@@ -290,10 +317,16 @@ void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIn
 {
     Q_UNUSED(bottomRight);
     // we only care about root item
-    if(!topLeft.parent().isValid())
+    if(!topLeft.parent().isValid() && model())
     {
-        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked);
+        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
     }
+}
+
+void GrepOutputView::updateCheckable()
+{
+    if(model())
+        model()->makeItemsCheckable(!replacementCombo->currentText().isEmpty() || model()->itemsCheckable());
 }
 
 void GrepOutputView::clearSearchHistory()

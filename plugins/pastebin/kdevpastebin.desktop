@@ -3,6 +3,7 @@ Type=Service
 Icon=edit-paste
 Exec=blubb
 Comment=This plugin helps you upload your patches to Pastebin service
+Comment[ca]=Aquest connector ajuda a exportar pedaços al servei Pastebin
 Comment[da]=Dette plugin hjælper dig med at uploade dine rettelser til en pastebin-tjeneste
 Comment[de]=Dieses Modul hilft Ihnen, Ihre Patches zu einen Pastebin-Dienst hochzuladen.
 Comment[en_GB]=This plugin helps you upload your patches to Pastebin service

@@ -275,12 +275,9 @@ void VcsPluginHelper::diffToBase()
 {
     SINGLEURL_SETUP_VARS
     ICore::self()->documentController()->saveAllDocuments();
-    KDevelop::VcsJob* job = iface->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
 
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
+    VCSDiffPatchSource* patch =new VCSDiffPatchSource(new VCSStandardDiffUpdater(iface, url));
+    showVcsDiff(patch);
 }
 
 void VcsPluginHelper::diffForRev()
@@ -399,20 +396,9 @@ void VcsPluginHelper::commit()
     else
         kDebug() << "Couldn't get status for urls: " << url;
     
-    QScopedPointer<VcsJob> diffJob(d->vcs->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
-
-    VcsDiff diff;
-    bool correctDiff = diffJob->exec();
-    if(correctDiff)
-        diff = diffJob->fetchResults().value<VcsDiff>();
     
-    if(!correctDiff)
-        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
-
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), changes, d->vcs, retrieveOldCommitMessages());
     
     bool ret = showVcsDiff(patchSource);
     

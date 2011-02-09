@@ -487,20 +487,25 @@ private slots:
                 return;
         }
 
-        recoveryDir.mkpath("backup"); //Just to make sure that the recovery directory actually exists
         {
-            //Clear the backup dir
+            // Clear the old backup recovery directory, as we will create a new one
             QDir recoveryBackupDir(recoveryDir.path() + "/backup");
-            foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
+            if(recoveryBackupDir.exists())
             {
-                QFile::remove(file.absoluteFilePath());
+                //Clear the backup dir
+                foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
+                    QFile::remove(file.absoluteFilePath());
+                
+                if(!recoveryDir.rmdir("backup"))
+                {
+                    kWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
+                    return;
+                }
             }
-            
-            bool removed = recoveryDir.rmdir("backup");
-            Q_ASSERT(removed);
         }
         
         //Make the current recovery dir the backup dir, so we always have a recovery available
+        //This may fail, because "current" might be nonexistent
         recoveryDir.rename("current", "backup");
 
         {
@@ -526,16 +531,27 @@ private slots:
                             QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().pathOrUrl().toUtf8());
+                            urlFile.close();
                             
                             QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
+                            f.close();
                             
                             currentRecoveryFiles[document->url()] =
                                         QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
                                                       << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
                             
+                            if(urlFile.error() != QFile::NoError || f.error() != QFile::NoError)
+                            {
+                                kWarning() << "RECOVERY ERROR: Failed to write recovery for" << document->url() << "to" << textFilePath;
+                                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                                    i18n("Failed to write recovery copies to %1. Please make sure that your home directory is writable and not full. This application requires available space in the home directory to run stable. You may experience application crashes until you free up some space.", recoveryCurrentDir.path()),
+                                                    i18n("Recovery Error"));
+                                return;
+                            }
+                                                      
                             ++num;
                         }
                     }

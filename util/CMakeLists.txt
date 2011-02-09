@@ -29,7 +29,7 @@ kde4_add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
 target_link_libraries(kdevplatformutil 
         ${KDE4_KDEUI_LIBS} 
         ${KDE4_KCMUTILS_LIBRARY} 
-        kdevplatforminterfaces 
+        kdevplatforminterfaces
     )
 # Might want to add kdevplatform* when they're exported targets
 target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES 

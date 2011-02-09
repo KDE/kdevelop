@@ -71,10 +71,6 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
-    //KDirOperator emits fileSelected() twice because both activated() and doubleClicked() emit fileClicked().
-    //activated() should be enough, so disconnect doubleClicked()
-    disconnect(dirop->view(), SIGNAL(doubleClicked(const QModelIndex&)),
-            dirop, SLOT(_k_slotDoubleClicked(const QModelIndex&)));
     l->addWidget(dirop);
 
     connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
