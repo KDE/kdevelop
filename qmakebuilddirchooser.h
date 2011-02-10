@@ -41,7 +41,13 @@ public:
     virtual ~QMakeBuildDirChooser();
 
 public:
-    bool isValid();
+    /**
+     * Validate user input. Returns true is data is valid.
+     * If provided, message is filled with error message, if any.
+     * Error message is displayed in dialog anyway.
+     */
+    bool isValid(QString *message=0);
+
     /**
      * Saves current date to builds hash (not to current values).
      */

@@ -48,6 +48,7 @@ public slots:
     void loadOtherConfig(const QString &config);
     void addBuildConfig();
     void removeBuildConfig();
+    void validate();
 
 private:
     Ui::QMakeConfig* m_prefsUi;

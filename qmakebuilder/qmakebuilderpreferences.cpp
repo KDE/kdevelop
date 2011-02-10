@@ -63,6 +63,7 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariant
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
     connect(m_prefsUi->addButton, SIGNAL(pressed()), this, SLOT(addBuildConfig()));
     connect(m_prefsUi->removeButton, SIGNAL(pressed()), this, SLOT(removeBuildConfig()));
+    connect(this, SIGNAL(changed(bool)), this, SLOT(validate()));
 
     // there is no Default values
     setButtons(buttons() & (~KCModule::Default));
@@ -96,8 +97,25 @@ void QMakeBuilderPreferences::load()
 void QMakeBuilderPreferences::save()
 {
     kDebug() << "Saving data";
-    KCModule::save();
-    m_chooserUi->saveConfig();
+    QString errormsg;
+
+    if(m_chooserUi->isValid(&errormsg))
+    {
+        // data is valid: save
+        KCModule::save();
+        m_chooserUi->saveConfig();
+    }
+    else
+    {
+        // invalid data: message box
+        KMessageBox::error(0, errormsg, "Data is invalid!");
+        //FIXME dialog behaves like if save really happend (no apply not defaults) even if changed signal is emitted
+    }
+}
+
+void QMakeBuilderPreferences::validate()
+{
+    m_chooserUi->isValid();
 }
 
 void QMakeBuilderPreferences::loadOtherConfig(const QString& config)

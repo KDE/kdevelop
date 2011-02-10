@@ -84,54 +84,72 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
     status->setText("");
 }
 
-bool QMakeBuildDirChooser::isValid()
+bool QMakeBuildDirChooser::isValid(QString *message)
 {
     bool valid = true;
+    QString msg;
     if(qmakeBin().isEmpty())
     {
-        status->setText(i18n("Please specify path to QMake binary"));
+        msg = i18n("Please specify path to QMake binary.");
         valid = false;
     }
     else if(!qmakeBin().isValid())
     {
-        status->setText(i18n("QMake binary path is invalid"));
+        msg =  i18n("QMake binary path is invalid.");
         valid = false;
     }
     else if(!qmakeBin().isLocalFile())
     {
-        status->setText(i18n("QMake binary must be a local path"));
-        valid = false;        
+        msg = i18n("QMake binary must be a local path.");
+        valid = false;
+    }
+    else
+    {
+        QFileInfo info(qmakeBin().toLocalFile());
+        if(!info.isFile())
+        {
+            msg = i18n("QMake binary is not a file.");
+            valid = false;
+        }
+        else if(!info.isExecutable())
+        {
+            msg = i18n("QMake binary is not executable.");
+            valid = false;
+        }
     }
     
     if(buildDir().isEmpty())
     {
-        status->setText(i18n("Please specify a build folder"));
+        msg = i18n("Please specify a build folder.");
         valid = false;
     }
     else if(!buildDir().isValid())
     {
-        status->setText(i18n("Build folder is invalid"));
+        msg = i18n("Build folder is invalid.");
         valid = false;
     }
     else if(!buildDir().isLocalFile())
     {
-        status->setText(i18n("Build folder must be a local path"));
+        msg = i18n("Build folder must be a local path.");
         valid = false;
     }
 
     if(!installPrefix().isEmpty() && !installPrefix().isValid())
     {
-        status->setText(i18n("Install prefix is invalid (may also be left empty)"));
+        msg = i18n("Install prefix is invalid (may also be left empty).");
         valid = false;
     }
     if(!installPrefix().isEmpty() && !installPrefix().isLocalFile())
     {
-        status->setText(i18n("Install prefix must be a local path (may also be left empty)"));
+        msg = i18n("Install prefix must be a local path (may also be left empty).");
         valid = false;        
     }
     
-    if(valid)
-        status->setText("");
+    if (message)
+    {
+        *message = msg;
+    }
+    status->setText(msg);
     kDebug() << "VALID == " << valid;
     return valid;
 }
