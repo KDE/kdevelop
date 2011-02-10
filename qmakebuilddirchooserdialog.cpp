@@ -21,6 +21,7 @@
 
 #include "qmakebuilddirchooserdialog.h"
 #include <KDebug>
+#include "qmakeconfig.h"
 
 QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent) :
     KDialog(parent),
@@ -45,6 +46,19 @@ QMakeBuildDirChooserDialog::~QMakeBuildDirChooserDialog()
 {
 
 }
+
+void QMakeBuildDirChooserDialog::saveConfig()
+{
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    cg.writeEntry<KUrl>(QMakeConfig::QMAKE_BINARY, qmakeBin());
+    cg.writeEntry<KUrl>(QMakeConfig::BUILD_FOLDER, buildDir());
+    cg.writeEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, installPrefix());
+    cg.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
+    cg.writeEntry<int>(QMakeConfig::BUILD_TYPE, buildType());
+    cg.sync();
+    QMakeBuildDirChooser::saveConfig();
+}
+
 
 void QMakeBuildDirChooserDialog::slotButtonClicked(int button)
 {

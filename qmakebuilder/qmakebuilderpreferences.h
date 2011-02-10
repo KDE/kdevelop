@@ -37,12 +37,17 @@ namespace Ui {
  */
 class QMakeBuilderPreferences : public ProjectKCModule<QMakeBuilderSettings>
 {
+    Q_OBJECT
 public:
     explicit QMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~QMakeBuilderPreferences();
 
-public Q_SLOTS:
+public slots:
     virtual void save();
+    virtual void load();
+    void loadOtherConfig(const QString &config);
+    void addBuildConfig();
+    void removeBuildConfig();
 
 private:
     Ui::QMakeConfig* m_prefsUi;

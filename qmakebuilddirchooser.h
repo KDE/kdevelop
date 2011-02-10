@@ -42,9 +42,21 @@ public:
 
 public:
     bool isValid();
-    void saveConfig();
+    /**
+     * Saves current date to builds hash (not to current values).
+     */
+    virtual void saveConfig();
+
+    /**
+     * Loads current config (or a new one) into fields.
+     */
     void loadConfig();
-    
+
+    /**
+     * Loads given config into fields.
+     */
+    void loadConfig(const QString &config);
+
     KUrl qmakeBin() const;
     KUrl buildDir() const;
     KUrl installPrefix() const;
@@ -57,7 +69,7 @@ public:
     void setBuildType(int type);
     void setExtraArgs(const QString &args);
     
-private:
+protected:
     KDevelop::IProject* m_project;
 };
 

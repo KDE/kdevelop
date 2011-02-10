@@ -11,7 +11,8 @@ public:
         *BUILD_FOLDER,
         *INSTALL_PREFIX,
         *EXTRA_ARGUMENTS,
-        *BUILD_TYPE;
+        *BUILD_TYPE,
+        *ALL_BUILDS;
 };
 
 #endif

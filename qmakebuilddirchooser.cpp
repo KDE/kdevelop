@@ -33,6 +33,9 @@ QMakeBuildDirChooser::QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* 
 {
     setupUi(parent);
     status->setText("");
+    kcfg_buildDir->setMode(KFile::Directory | KFile::LocalOnly);
+    kcfg_installPrefix->setMode(KFile::Directory);
+    kcfg_qmakeBin->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
 }
 
 QMakeBuildDirChooser::~QMakeBuildDirChooser()
@@ -46,27 +49,40 @@ void QMakeBuildDirChooser::saveConfig()
 {
     kDebug() << "Writing config";
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    cg.writeEntry<KUrl>(QMakeConfig::QMAKE_BINARY, qmakeBin());
-    cg.writeEntry<KUrl>(QMakeConfig::BUILD_FOLDER, buildDir());
-    cg.writeEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, installPrefix());
-    cg.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
-    cg.writeEntry<int>(QMakeConfig::BUILD_TYPE, buildType());
+
+    // Write entries to builds group
+    // current entries are handled by KConfig in config dialog, import dialog handles it itself
+    KConfigGroup currentBuild = cg.group(buildDir().toLocalFile());
+    currentBuild.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin());
+    currentBuild.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix());
+    currentBuild.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
+    currentBuild.writeEntry(QMakeConfig::BUILD_TYPE, buildType());
+    currentBuild.sync();
     cg.sync();
 }
 
 void QMakeBuildDirChooser::loadConfig()
 {
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    setQmakeBin( cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(KStandardDirs::findExe("qmake"))) );
     KUrl proposedBuildUrl( m_project->folder().toLocalFile() + "/build" );
     proposedBuildUrl.cleanPath();
-    setBuildDir( cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, proposedBuildUrl) );
-    setInstallPrefix( cg.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl("")) );
-    setExtraArgs( cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS) );
-    setBuildType( cg.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
-    status->setText("");
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    loadConfig(cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, proposedBuildUrl).toLocalFile());
 }
 
+void QMakeBuildDirChooser::loadConfig(const QString& config)
+{
+    // get correct group
+    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    const KConfigGroup build = cg.group(config);
+
+    // sets values into fields
+    setQmakeBin( build.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(KStandardDirs::findExe("qmake"))) );
+    setBuildDir( KUrl(config) );
+    setInstallPrefix( build.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl("")) );
+    setExtraArgs( build.readEntry<QString>(QMakeConfig::EXTRA_ARGUMENTS, ""));
+    setBuildType( build.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
+    status->setText("");
+}
 
 bool QMakeBuildDirChooser::isValid()
 {
