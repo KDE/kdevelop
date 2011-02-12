@@ -170,7 +170,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     QMap<QString, NavigationAction> m_links;
     QMap<int, int> m_linkLines; //Holds the line for each link
     QMap<int, NavigationAction> m_intLinks;
-    AbstractNavigationContext* m_previousContext;
+    NavigationContextPointer m_previousContext;
     QString m_prefix, m_suffix;
     KDevelop::TopDUContextPointer m_topContext;
 
