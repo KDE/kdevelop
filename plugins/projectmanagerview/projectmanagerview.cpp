@@ -186,9 +186,13 @@ void ProjectManagerView::locateCurrentDocument()
 
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
-    // We should _never_ get a null pointer for the document, as
-    // the action is only enabled when there is an active document.
-    Q_ASSERT(doc);
+    if (!doc) {
+        // in theory we should never get a null pointer as the action is only enabled
+        // when there is an active document.
+        // but: in practice it can happen that you close the last document and press
+        // the shortcut to locate a doc or vice versa... so just do the failsafe thing here...
+        return;
+    }
 
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
