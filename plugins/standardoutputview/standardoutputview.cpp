@@ -21,6 +21,7 @@
 
 #include "standardoutputview.h"
 #include "outputwidget.h"
+#include "toolviewdata.h"
 
 #include <QtCore/QList>
 #include <QtDesigner/QExtensionFactory>
@@ -44,7 +45,6 @@
 #include <sublime/controller.h>
 #include <sublime/document.h>
 
-#include "toolviewdata.h"
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
@@ -77,6 +77,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
     Q_UNUSED(args);
+    kDebug() << "SOV KComponentData " << componentData().componentName() << componentData().aboutData();
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
     setXMLFile("kdevstandardoutputview.rc");

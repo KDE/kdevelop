@@ -48,9 +48,32 @@ namespace KDevelop
 class QAbstractItemDelegate;
 class QStandardItemModel;
 
-QTEST_KDEMAIN(StandardOutputViewTest, GUI)
+//QTEST_KDEMAIN(StandardOutputViewTest, GUI)
 
 const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
+
+// this is the method define for the macro QTEST_KDEMAIN, but with setenv("KDE_SKIP_KDERC", "1", 1); commented
+int main(int argc, char *argv[])
+{
+    setenv("LC_ALL", "C", 1);
+    assert( !QDir::homePath().isEmpty() );
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test") ), 1);
+    setenv("XDG_DATA_HOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test/xdg/local") ), 1);
+    setenv("XDG_CONFIG_HOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test/xdg/config") ), 1);
+    setenv("KDE_SKIP_KDERC", "1", 1); //this need to be comment
+    unsetenv("KDE_COLOR_DEBUG");
+    QFile::remove(QDir::homePath() + QLatin1String("/.kde-unit-test/share/config/qttestrc"));
+    KAboutData aboutData( QByteArray("qttest"), QByteArray(), ki18n("KDE Test Program"), QByteArray("version") );
+    KComponentData cData(&aboutData);
+    kDebug() << "KComponentData " << cData.componentName() << cData.aboutData();
+    QApplication app( argc, argv, 1 );
+    app.setApplicationName( QLatin1String("qttest") );
+    qRegisterMetaType<KUrl>(); /*as done by kapplication*/
+    qRegisterMetaType<KUrl::List>();
+    StandardOutputViewTest tc;
+    KGlobal::ref(); /* don't quit qeventloop after closing a mainwindow */
+    return QTest::qExec( &tc, argc, argv );
+}
 
 void StandardOutputViewTest::initTestCase()
 {
@@ -94,25 +117,6 @@ OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
     return 0;
 }
 
-QList<OutputWidget*> StandardOutputViewTest::toolviewPointers(QString toolviewTitle)
-{
-    QList<OutputWidget*> list;
-    QList< Sublime::Area* > areas = m_controller->allAreas();
-    foreach(Sublime::Area* area, areas) {
-        QList< Sublime::View* > views = area->toolViews();        
-        foreach(Sublime::View* view, views) {
-            Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
-            if(doc)
-            {
-                if(doc->title() == toolviewTitle && view->hasWidget()) {
-                    list.append(dynamic_cast<OutputWidget*>(view->widget()));
-                }
-            }
-        }
-    }
-    return list;
-}
-
 void StandardOutputViewTest::testRegisterAndRemoveToolView()
 {
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView);
@@ -154,9 +158,9 @@ void StandardOutputViewTest::testActions()
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
     QCOMPARE(actions.takeFirst()->text(), QString(""));
     QCOMPARE(actions.takeFirst()->text(), QString("Filter"));
-    
-    //TODO test added actions
-    
+    QCOMPARE(actions.takeFirst()->text(), addedActions[0]->text());
+    QCOMPARE(actions.takeFirst()->text(), addedActions[1]->text());
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
@@ -198,7 +202,6 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     for(int i = 0; i < 5; i++)
     {
         QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QString("output" + i));
-        //QCOMPARE(outputWidget->stackwidget->currentIndex(), i);
     }
     for(int i = 0; i < 5; i++)
     {

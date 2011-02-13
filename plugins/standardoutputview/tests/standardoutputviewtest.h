@@ -42,11 +42,11 @@ class StandardOutputViewTest: public QObject
 {
     Q_OBJECT
 
-public:   
+public:
+     int main(int argc, char *argv[]);  
 
 private:
     OutputWidget* toolviewPointer(QString toolviewTitle);
-    QList<OutputWidget*> toolviewPointers(QString toolviewTitle);
     KDevelop::TestCore* m_testCore;
     StandardOutputView* m_stdOutputView;
     KDevelop::UiController* m_controller;
