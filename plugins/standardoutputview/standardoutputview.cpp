@@ -73,11 +73,9 @@ private:
     ToolViewData *m_data;
 };
 
-StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args)
+StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
 {
-    Q_UNUSED(args);
-    kDebug() << "SOV KComponentData " << componentData().componentName() << componentData().aboutData();
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
     setXMLFile("kdevstandardoutputview.rc");
@@ -98,7 +96,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &args
             this, SLOT(removeSublimeView(Sublime::View*)));
 
 }
-    
+
 void StandardOutputView::removeSublimeView( Sublime::View* v )
 {
     foreach( ToolViewData* d, toolviews )
@@ -316,7 +314,7 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 }
 
 void StandardOutputView::removeOutput( int outputId )
-{ 
+{
     foreach( ToolViewData* td, toolviews )
     {
         if( td->outputdata.contains( outputId ) )
@@ -328,7 +326,7 @@ void StandardOutputView::removeOutput( int outputId )
             }
             td->outputdata.remove( outputId );
         }
-    } 
+    }
 }
 
 #include "standardoutputview.moc"

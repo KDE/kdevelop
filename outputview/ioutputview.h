@@ -47,14 +47,14 @@ public:
         AutoScroll     = 0x4 /**< automatically scroll the view */
     };
     Q_DECLARE_FLAGS(Behaviours, Behaviour)
-    
+
     enum Option
     {
         ShowItemsButton = 0x1 /**< show the two buttons (select and focus) */,
         AddFilterAction = 0x2 /**< add a filter action */
     };
     Q_DECLARE_FLAGS(Options, Option)
-    
+
     enum ViewType
     {
         OneView      = 0 /**< there's only one outputview, newly registered outputs will replace existing ones */,

@@ -60,8 +60,8 @@ OutputData* ToolViewData::addOutput( int id, const QString& title,
 {
     OutputData* d = new OutputData( this );
     d->id = id;
-    d->behaviour = behave;
     d->title = title;
+    d->behaviour = behave;
     d->toolView = this;
     outputdata.insert( id, d );
     emit outputAdded( id );

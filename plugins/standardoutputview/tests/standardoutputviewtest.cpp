@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     setenv("KDEHOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test") ), 1);
     setenv("XDG_DATA_HOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test/xdg/local") ), 1);
     setenv("XDG_CONFIG_HOME", QFile::encodeName( QDir::homePath() + QLatin1String("/.kde-unit-test/xdg/config") ), 1);
-    setenv("KDE_SKIP_KDERC", "1", 1); //this need to be comment
+    //setenv("KDE_SKIP_KDERC", "1", 1); //this need to be comment
     unsetenv("KDE_COLOR_DEBUG");
     QFile::remove(QDir::homePath() + QLatin1String("/.kde-unit-test/share/config/qttestrc"));
     KAboutData aboutData( QByteArray("qttest"), QByteArray(), ki18n("KDE Test Program"), QByteArray("version") );
@@ -80,10 +80,10 @@ void StandardOutputViewTest::initTestCase()
     KDevelop::AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
     m_testCore->initialize(KDevelop::Core::Default);
-    
+
     m_controller = dynamic_cast<KDevelop::UiController*>(m_testCore->uiController());
-    
-    QTest::qWait(500);
+
+    QTest::qWait(500); // makes sure that everything is loaded (don't know if it's required)
 
     m_stdOutputView = 0;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
@@ -121,7 +121,7 @@ void StandardOutputViewTest::testRegisterAndRemoveToolView()
 {
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView);
     QVERIFY(toolviewPointer(toolviewTitle));
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
@@ -138,11 +138,11 @@ void StandardOutputViewTest::testActions()
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
-    
+
     QList<QAction*> addedActions;
-    addedActions.append(new QAction("Action1", 0)); 
+    addedActions.append(new QAction("Action1", 0));
     addedActions.append(new QAction("Action2", 0));
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, 
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
                                                    KIcon(),
                                                    KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,
                                                    addedActions);
@@ -170,7 +170,7 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     for(int i = 0; i < 5; i++)
     {
         outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, "output" + i);
@@ -186,15 +186,15 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
         QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
     }
     QCOMPARE(outputWidget->tabwidget->count(), 0);
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
-    
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, 
-                                                   KIcon(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
+
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
+                                                    KIcon(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
     outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     for(int i = 0; i < 5; i++)
     {
         outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, "output" + i);
@@ -209,7 +209,7 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
         QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
     }
     QCOMPARE(outputWidget->stackwidget->count(), 0);
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
@@ -219,37 +219,36 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
     QAbstractItemModel* model = new QStandardItemModel();
     m_stdOutputView->setModel(outputId[0], model, KDevelop::IOutputView::KeepOwnership);
     QAbstractItemDelegate* delegate = new QItemDelegate();
     m_stdOutputView->setDelegate(outputId[0], delegate, KDevelop::IOutputView::KeepOwnership);
-    
+
     QCOMPARE(outputWidget->views.value(outputId[0])->model(), model);
     QCOMPARE(outputWidget->views.value(outputId[0])->itemDelegate(), delegate);
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
-    
+
     QVERIFY(!model->parent()); // they don't have any parent, so parent() == 0x0
     QVERIFY(!delegate->parent());
-    
+
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, KIcon());
     outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
-    
+
     outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
     m_stdOutputView->setModel(outputId[0], model, KDevelop::IOutputView::TakeOwnership);
     m_stdOutputView->setDelegate(outputId[0], delegate, KDevelop::IOutputView::TakeOwnership);
-    
+
     QCOMPARE(outputWidget->views.value(outputId[0])->model(), model);
     QCOMPARE(outputWidget->views.value(outputId[0])->itemDelegate(), delegate);
 
     QVERIFY(model->parent()); // they have a parent (the outputdata), so parent() != 0x0
     QVERIFY(delegate->parent());
-    
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
-    
 }

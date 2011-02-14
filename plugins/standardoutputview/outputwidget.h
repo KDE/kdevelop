@@ -31,13 +31,13 @@ class QStackedWidget;
 class QTreeView;
 class QToolButton;
 class QWidgetAction;
+class QSortFilterProxyModel;
+class QModelIndex;
 class ToolViewData;
 class KTabWidget;
 class KToggleAction;
-class QModelIndex;
 class KAction;
 class KLineEdit;
-class QSortFilterProxyModel;
 class StandardOutputViewTest;
 
 class OutputWidget : public QWidget

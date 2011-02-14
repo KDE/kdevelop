@@ -61,7 +61,7 @@ public:
 
     int registerOutputInToolView( int toolviewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour
-                                  = KDevelop::IOutputView::AllowUserClose );
+                                    = KDevelop::IOutputView::AllowUserClose );
 
     void raiseOutput( int id );
     void setModel( int id, QAbstractItemModel*, Ownership takeOwnership );

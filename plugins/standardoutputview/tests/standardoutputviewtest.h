@@ -43,7 +43,7 @@ class StandardOutputViewTest: public QObject
     Q_OBJECT
 
 public:
-     int main(int argc, char *argv[]);  
+     int main(int argc, char *argv[]);
 
 private:
     OutputWidget* toolviewPointer(QString toolviewTitle);
@@ -53,7 +53,7 @@ private:
     int toolviewId;
     int outputId[5];
     static const QString toolviewTitle;
-    
+
 private slots:
     void initTestCase();
     void cleanupTestCase();

@@ -48,9 +48,9 @@ public:
     QAbstractItemModel* model;
     bool ownsModel;
     ToolViewData* toolView;
+    KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     int id;
-    KDevelop::IOutputView::Behaviours behaviour;
     void setModel( QAbstractItemModel* model, bool takeOwnership);
     void setDelegate( QAbstractItemDelegate* delegate, bool takeOwnership);
 signals:

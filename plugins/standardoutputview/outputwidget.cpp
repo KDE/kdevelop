@@ -45,7 +45,6 @@
 #include <kstandardaction.h>
 #include <klineedit.h>
 
-
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
 
@@ -91,7 +90,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(focusOnSelect);
         focusOnSelect->setChecked( false );
     }
-    
+
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
 
@@ -103,7 +102,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
-    
+
     if( data->option & KDevelop::IOutputView::AddFilterAction)
     {
         addAction(separator);
@@ -129,9 +128,9 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
                     this, SLOT(updateFilter(int)));
         }
     }
-    
+
     addActions(data->actionList);
-    
+
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
 
