@@ -1778,11 +1778,13 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     return false;
   
   static IndexedIdentifier friendIdentifier(Identifier("friend"));
+  static IndexedIdentifier globalImport(globalImportIdentifier());
   
   if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
     return false;
-  
-  if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier())
+
+  if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier()
+     || decl->indexedIdentifier() == globalImport)
     return false;
   
   if(excludeReservedIdentifiers)
