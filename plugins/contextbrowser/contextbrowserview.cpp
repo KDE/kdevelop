@@ -290,6 +290,8 @@ void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
     if (!isLocked() && isVisible()) {
         Q_ASSERT(widget);
         updateMainWidget(widget);
+    } else if(widget) {
+        widget->deleteLater();
     }
 }
 
