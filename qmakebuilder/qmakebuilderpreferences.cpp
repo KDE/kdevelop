@@ -109,7 +109,7 @@ void QMakeBuilderPreferences::save()
     {
         // invalid data: message box
         KMessageBox::error(0, errormsg, "Data is invalid!");
-        //FIXME dialog behaves like if save really happend (no apply not defaults) even if changed signal is emitted
+        //FIXME dialog behaves like if save really happend (dialog closes if user click ok) even if changed signal is emitted
     }
 }
 
