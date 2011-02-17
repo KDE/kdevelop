@@ -164,6 +164,12 @@ void TestCppCodeCompletion::testExpressionBefore()
   QCOMPARE(Cpp::expressionBefore(exp19, exp19.length()), 6);
   QString exp20 = "x = y<";
   QCOMPARE(Cpp::expressionBefore(exp20, exp20.length()), 6);
+  QString exp21 = " ";
+  QCOMPARE(Cpp::expressionBefore(exp21, exp21.length()), 1);
+  QString exp22 = "";
+  QCOMPARE(Cpp::expressionBefore(exp22, exp22.length()), 0);
+  QString exp23 = "   ";
+  QCOMPARE(Cpp::expressionBefore(exp23, exp23.length()), 3);
 }
 
 void TestCppCodeCompletion::testOnlyShow()
