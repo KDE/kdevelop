@@ -66,6 +66,10 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
     
+    foreach(IProject *p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
+    }
+
     // opens project with kdevelop
     KUrl url(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
     ICore::self()->projectController()->openProject(url);
