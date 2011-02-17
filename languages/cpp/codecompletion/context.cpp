@@ -262,6 +262,9 @@ int expressionBefore( const QString& _text, int index )
     while ( index >= 0 && text[ index ].isSpace() )
       --index;
 
+    if ( index < 0 )
+      break;
+
     QChar ch = text[ index ];
     QString memberAccess = getEndingFromSet( text.left ( index + 1 ),
                                              MEMBER_ACCESS_STRINGS,
