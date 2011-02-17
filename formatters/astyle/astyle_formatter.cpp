@@ -388,6 +388,26 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
+    } else if (style == "KDELibs") {
+        resetStyle();
+        setSpaceIndentation(4);
+        setBracketFormatMode(astyle::LINUX_MODE);
+        setLabelIndent(true);
+        setOperatorPaddingMode(true);
+        setParensUnPaddingMode(true);
+        setSingleStatementsMode(false);
+        setTabSpaceConversionMode(true);
+        setPreprocessorIndent(true);
+        setSwitchIndent(false);
+        return true;
+    } else if (style == "Qt") {
+        resetStyle();
+        setPointerAlignment(astyle::ALIGN_NAME);
+        setOperatorPaddingMode(true);
+        setParensOutsidePaddingMode(true);
+        setBracketFormatMode(astyle::LINUX_MODE);
+        setSwitchIndent(false);
+        return true;
     }
 
     return false;

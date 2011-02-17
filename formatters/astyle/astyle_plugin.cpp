@@ -123,7 +123,9 @@ QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
     styles << predefinedStyle("Horstmann");
     styles << predefinedStyle("Whitesmith");
     styles << predefinedStyle("Banner");
-    styles << predefinedStyle("1TBS", "One True Bracket Style");
+    styles << predefinedStyle("1TBS");
+    styles << predefinedStyle("KDELibs");
+    styles << predefinedStyle("Qt");
 
     return styles;
 }
