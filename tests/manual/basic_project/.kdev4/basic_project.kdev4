@@ -5,7 +5,7 @@ BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x
 VersionControlSupport=kdevgit
 
 [QMake_Builder]
-Build_Folder=file:///home/julien/BE/src/kdev-qmake/tests/manual/basic_project/build
+Build_Folder=/tmp/some/path
 Build_Type=0
 Extra_Arguments=
 Install_Prefix=

@@ -43,6 +43,7 @@ TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
 {
     AutoTestShell::init();
     Core::initialize(0, Core::Default, "QMake_test_session");
+    QTest::qWait(500); //wait for previously loaded projects
 }
 
 TestQMakeProject::~TestQMakeProject()
@@ -65,14 +66,23 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, projectName);
     QFETCH(QString, target);
     QFETCH(QString, expected);
+    const QString BASE_DIR = "/tmp/some/path";  // some dummy directory to build (nothing will be built anyway)
     
     foreach(IProject *p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
     }
 
+    // setup project config
+    {
+        KConfig cfg(QString("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+        KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
+        group.writeEntry(QMakeConfig::BUILD_FOLDER, BASE_DIR);
+        group.sync();
+    }
+
     // opens project with kdevelop
-    KUrl url(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
-    ICore::self()->projectController()->openProject(url);
+    KUrl projectUrl(QString("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+    ICore::self()->projectController()->openProject(projectUrl);
     
     // wait for loading finished
     //TODO: this pops the configuration dialog! Find a fox for that!
@@ -81,15 +91,17 @@ void TestQMakeProject::testBuildDirectory()
     
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);
     
-    // reads build directory from configuration
-    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
-    buildDir.addPath(expected);
-    buildDir.cleanPath();
+    // adds expected directory to our base path
+    KUrl expectedUrl(BASE_DIR);
+    expectedUrl.addPath(expected);
     
-    ProjectBaseItem *rootItem = project->projectItem();
+    // path for files to build
+    KUrl buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
+    QList<ProjectFolderItem*> buidItem = project->foldersForUrl(buildUrl);
+    QCOMPARE(buidItem.size(), 1);
     IBuildSystemManager *buildManager = project->buildSystemManager();
-    QString actual = buildManager->buildDirectory(rootItem).directory();
-    expected = buildDir.directory();
-    QCOMPARE(actual, expected);
+    KUrl actual = buildManager->buildDirectory(buidItem.first());
+
+    // trailing slash mess with KUrl's == operator
+    QCOMPARE(actual.toLocalFile(KUrl::RemoveTrailingSlash), expectedUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
