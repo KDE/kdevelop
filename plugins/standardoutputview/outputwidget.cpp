@@ -109,11 +109,10 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         filterInput = new KLineEdit();
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
-        filterInput->setClickMessage("Enter a filter here");
-        filterInput->setToolTip("Filter");
+        filterInput->setClickMessage("search...");
+        filterInput->setToolTip("Enter a wild card string to filter the output view");
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
-        filterAction->setText("Filter"); // used for testing
         addAction(filterAction);
 
         connect(filterInput, SIGNAL(userTextChanged(QString)),
@@ -550,7 +549,7 @@ void OutputWidget::outputFilter(QString filter)
     }
     if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) )
     {
-        QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel();
+        QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel(view->model());
         _proxyModel->setDynamicSortFilter(true);
         _proxyModel->setSourceModel(view->model());
         proxyModels.insert(index, _proxyModel);

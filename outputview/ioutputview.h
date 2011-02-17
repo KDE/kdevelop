@@ -50,6 +50,7 @@ public:
 
     enum Option
     {
+        NoOptions = 0x0,
         ShowItemsButton = 0x1 /**< show the two buttons (select and focus) */,
         AddFilterAction = 0x2 /**< add a filter action */
     };
@@ -92,7 +93,7 @@ public:
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), Options option = 0x0, QList<QAction*> actionList = QList<QAction*>()) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), Options option = ShowItemsButton, QList<QAction*> actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends

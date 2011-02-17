@@ -133,6 +133,8 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
+    QCOMPARE(actions.takeFirst()->text(), QString("Select activated Item"));
+    QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
     QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
 
@@ -156,8 +158,8 @@ void StandardOutputViewTest::testActions()
     QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
     QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
     QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
-    QCOMPARE(actions.takeFirst()->text(), QString(""));
-    QCOMPARE(actions.takeFirst()->text(), QString("Filter"));
+    QCOMPARE(actions.takeFirst()->text(), QString("")); // separator
+    QCOMPARE(actions.takeFirst()->text(), QString("")); // filter
     QCOMPARE(actions.takeFirst()->text(), addedActions[0]->text());
     QCOMPARE(actions.takeFirst()->text(), addedActions[1]->text());
 

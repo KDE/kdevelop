@@ -56,7 +56,7 @@ public:
     int registerToolView( const QString& title,
                           KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
                           const KIcon& icon = KIcon(),
-                          KDevelop::IOutputView::Options option = 0x0,
+                          KDevelop::IOutputView::Options option = ShowItemsButton,
                           QList<QAction*> actionList = QList<QAction*>());
 
     int registerOutputInToolView( int toolviewId, const QString& title,
