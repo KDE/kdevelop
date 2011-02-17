@@ -3217,11 +3217,11 @@ bool Parser::parseSwitchStatement(StatementAST *&node)
   ADVANCE(')', ")");
 
   StatementAST *stmt = 0;
-  if (!parseCompoundStatement(stmt))
-    {
-      syntaxError();
-      return false;
-    }
+  if (!parseStatement(stmt))
+  {
+    reportError(("Statement expected"));
+    return false;
+  }
 
   SwitchStatementAST *ast = CreateNode<SwitchStatementAST>(session->mempool);
   ast->condition = cond;

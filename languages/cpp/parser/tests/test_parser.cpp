@@ -685,6 +685,28 @@ private slots:
     QVERIFY(hasKind(funcAst, AST::Kind_InitDeclarator));
   }
 
+  void testSwitchStatement()
+  {
+    int problemCount = control.problems().count();
+    pool mem_pool;
+
+    QByteArray switchTest("int main() { switch(0); }");
+    parse(switchTest, &mem_pool);
+    QCOMPARE(control.problems().count(), ++problemCount);
+    QByteArray switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
+    parse(switchTest2, &mem_pool);
+    QCOMPARE(control.problems().count(), ++problemCount);
+    QByteArray switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
+    parse(switchTest3, &mem_pool);
+    QCOMPARE(control.problems().count(), ++problemCount);
+    QByteArray switchTest4("int main() { switch (0) while(true) return false; }");
+    parse(switchTest4, &mem_pool);
+    QCOMPARE(control.problems().count(), ++problemCount);
+    QByteArray switchTest5("int main() { switch (0) { case 0: return 0; } }");
+    parse(switchTest5, &mem_pool);
+    QCOMPARE(control.problems().count(), ++problemCount);
+  }
+
 private:
   ParseSession* lastSession;
 
