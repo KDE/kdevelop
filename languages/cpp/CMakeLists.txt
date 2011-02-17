@@ -33,7 +33,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     preprocessjob.cpp
     cpphighlighting.cpp
     cpputils.cpp
-    stringhelpers.cpp
     includepathresolver.cpp
     setuphelpers.cpp
     quickopen.cpp

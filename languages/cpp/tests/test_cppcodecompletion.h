@@ -64,6 +64,7 @@ public:
 
 private slots:
   void initTestCase();
+  void testExpressionBefore();
   void testOnlyShow();
   void testInvalidContexts();
   void testMemberAccess();

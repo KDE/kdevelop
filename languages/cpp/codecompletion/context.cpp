@@ -42,7 +42,6 @@
 #include "../cppduchain/viablefunctions.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/cpptypes.h"
-#include "../stringhelpers.h"
 #include "../cppduchain/templatedeclaration.h"
 #include "../cpplanguagesupport.h"
 #include "../cpputils.h"
@@ -110,9 +109,10 @@ const QSet<QString> ACCESS_STRINGS = KEYWORD_ACCESS_STRINGS + PARENT_ACCESS_STRI
 
 ///Pass these to getEndingFromSet in order to specify longest valid match for above sets
 const int ACCESS_STR_MATCH = 17; //reinterpret_cast<
+const int MEMBER_ACCESS_STR_MATCH = 2; //::
 const int PARENT_ACCESS_STR_MATCH = 6; //return
 const int BINARY_OPERATOR_MATCH = 3; //>>=
-const int UNARY_OPERATOR_MATCH = 8; //delete[]
+const int UNARY_OPERATOR_MATCH = 2; //++
 
 //Whether identifiers starting with "__" or "_Uppercase" and that are not declared in the current file should be excluded from the code completion
 const bool excludeReservedIdentifiers = true;
@@ -122,20 +122,7 @@ using namespace KDevelop;
 namespace Cpp {
 
 ///@todo move these together with those from expressionvisitor into an own file, or make them unnecessary
-QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
-  QList<DeclarationPointer> ret;
-  foreach( Declaration* decl, list )
-    ret << DeclarationPointer(decl);
-  return ret;
-}
-QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
-  QList<Declaration*> ret;
-  foreach( const DeclarationPointer &decl, list )
-    if( decl )
-      ret << decl.data();
-  return ret;
-}
-QList<Declaration*> convert( const QList<DeclarationId>& decls, uint count, TopDUContext* top ) {
+QList<Declaration*> declIdsToDeclPtrs( const QList<DeclarationId>& decls, uint count, TopDUContext* top ) {
 
   QList<Declaration*> ret;
   for(uint a = 0; a < count; ++a) {
@@ -146,9 +133,6 @@ QList<Declaration*> convert( const QList<DeclarationId>& decls, uint count, TopD
 
   return ret;
 }
-
-typedef PushValue<int> IntPusher;
-
 
 bool isLegalIdentifier( const QChar &theChar ) {
   return theChar.isLetterOrNumber() || theChar == '_';
@@ -174,24 +158,6 @@ QString getEndingFromSet( const QString &str, const QSet<QString> &set, int maxM
 QString getEndFunctionOperator( const QString &str ) {
   QString ret = getEndingFromSet( str, BINARY_OPERATORS, BINARY_OPERATOR_MATCH );
   return ret == "[" ? "[]" : str;
-}
-
-QString getUnaryOperator(const QString &context)
-{
-  QString unOp = getEndingFromSet( context, UNARY_OPERATORS, UNARY_OPERATOR_MATCH );
-  QString binOp = getEndingFromSet( context, BINARY_OPERATORS, BINARY_OPERATOR_MATCH );
-  if (!binOp.isEmpty()) {
-    if (binOp == unOp) {
-      int exprStart = Utils::expressionAt(context, context.length() - binOp.length());
-      QString exp = context.mid(exprStart, context.length() - exprStart - binOp.length()).trimmed();
-      if ( !exp.isEmpty() && !KEYWORD_ACCESS_STRINGS.contains(exp) &&
-           !UNARY_OPERATORS.contains(exp) )
-        return QString();
-    }
-    else if (binOp.contains(unOp)) //ie "&&"
-      return QString();
-  }
-  return unOp;
 }
 
 //Gets rid of uneeded whitespace following a legal identifier
@@ -240,6 +206,111 @@ QString lastNLines( const QString& str, int n ) {
 
   //return the position after the newline, or whole str if no newline
   return str.mid( nthLine + 1 );
+}
+
+bool skipToOpening( const QString& text, int &index)
+{
+  QChar closing = text[ index ];
+  QChar opening;
+  if ( closing == ')' )
+    opening = '(';
+  else if ( closing == '>' )
+    opening = '<';
+  else if ( closing == ']' )
+    opening = '[';
+
+  int count = 0;
+  int start = index;
+  while ( index >= 0 ) {
+    QChar ch = text[ index ];
+    --index;
+
+    if ( ch == opening )
+      ++count;
+    else if ( ch == closing )
+      --count;
+
+    if ( count == 0 )
+      return true;
+  }
+
+  index = start;
+  return false;
+}
+
+/**
+ * This function should search backwards in \p _text from \p index and return
+ * the index where the expression begins (if there is one)
+ * An expression is any legal identifier + member accesses + complete brackets
+ * Examples (expression begins at "|"):
+ * n = |(x + y)
+ * n = |x(y, z)
+ * n = x(|y
+ * n = |x()->y[].x<>::
+ * n = |x("whatever", ++y, x - u)
+ * Notes: Doesn't know about keywords
+**/
+int expressionBefore( const QString& _text, int index )
+{
+  QString text = KDevelop::clearStrings( _text );
+  bool lastWasIdentifier = false;
+
+  --index;
+
+  while ( index >= 0 )
+  {
+    while ( index >= 0 && text[ index ].isSpace() )
+      --index;
+
+    QChar ch = text[ index ];
+    QString memberAccess = getEndingFromSet( text.left ( index + 1 ),
+                                             MEMBER_ACCESS_STRINGS,
+                                             MEMBER_ACCESS_STR_MATCH );
+    if ( !memberAccess.isEmpty() )
+    {
+      index -= memberAccess.length();
+      lastWasIdentifier = false;
+    }
+    else if ( !lastWasIdentifier && isLegalIdentifier( ch ) )
+    {
+      while ( index >= 0 && isLegalIdentifier( text[ index ] ) )
+        --index;
+      lastWasIdentifier = true;
+    }
+    else if ( !lastWasIdentifier && ( ch == ')' || ch == '>' || ch == ']' ) )
+    {
+      if ( skipToOpening ( text, index ) )
+        lastWasIdentifier = false;
+      else
+        break;
+    }
+    else
+      break;
+  }
+
+  ++index;
+
+  while ( index < text.length() && text[ index ].isSpace() )
+    ++index;
+
+  return index;
+}
+
+QString getUnaryOperator(const QString &context)
+{
+  QString unOp = getEndingFromSet( context, UNARY_OPERATORS, UNARY_OPERATOR_MATCH );
+  QString binOp = getEndingFromSet( context, BINARY_OPERATORS, BINARY_OPERATOR_MATCH );
+  if (!binOp.isEmpty()) {
+    if (binOp == unOp) {
+      int exprStart = expressionBefore(context, context.length() - binOp.length());
+      QString exp = context.mid(exprStart, context.length() - exprStart - binOp.length()).trimmed();
+      if ( !exp.isEmpty() && !KEYWORD_ACCESS_STRINGS.contains(exp) )
+        return QString();
+    }
+    else if (binOp.contains(unOp)) //ie "&&"
+      return QString();
+  }
+  return unOp;
 }
 
 CodeCompletionContext::
@@ -621,7 +692,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   while(!text.isEmpty() && text.endsWith(',')) {
     text = text.left(text.length()-1).trimmed();
     //Skip initializer expression
-    int start_expr = Utils::expressionAt( text, text.length() );
+    int start_expr = expressionBefore( text, text.length() );
     QString skip = text.mid(start_expr, text.length() - start_expr);
     
     if(skip.contains('('))
@@ -645,7 +716,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   if(argumentsStart <= 0)
     return false;
   
-  int identifierStart = Utils::expressionAt( text, argumentsStart-1 );
+  int identifierStart = expressionBefore( text, argumentsStart-1 );
   if(identifierStart < 0 || identifierStart == argumentsStart)
     return false;
   
@@ -738,7 +809,7 @@ CodeCompletionContext::AccessType CodeCompletionContext::findAccessType( const Q
     if (accessStr == "<" ) {
       //We need to check here whether this really is a template access, or whether
       //it is a "less than" operator, which is a BinaryOpFunctionCallAccess
-      int start_expr = Utils::expressionAt( m_text, m_text.length()-1 );
+      int start_expr = expressionBefore( m_text, m_text.length()-1 );
 
       QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();
 
@@ -764,7 +835,7 @@ CodeCompletionContext::AccessType CodeCompletionContext::findAccessType( const Q
 void CodeCompletionContext::
 findExpressionAndPrefix(QString& expression, QString& expressionPrefix, bool &isTypePrefix) const {
   int start_expr;
-  start_expr = Utils::expressionAt( m_text, m_text.length() );
+  start_expr = expressionBefore( m_text, m_text.length() );
   expression = m_text.mid( start_expr ).trimmed();
 
   if ( KEYWORD_ACCESS_STRINGS.contains( expression ) ) {
@@ -785,7 +856,7 @@ findExpressionAndPrefix(QString& expression, QString& expressionPrefix, bool &is
     int  ptrs = 0;
     while ( expressionPrefix.endsWith( QString( "*" ).repeated( ptrs + 1 ) ) )
       ++ptrs;
-    int newExpressionStart = Utils::expressionAt(expressionPrefix, expressionPrefix.length() - ptrs);
+    int newExpressionStart = expressionBefore(expressionPrefix, expressionPrefix.length() - ptrs);
     QString newExpression = expressionPrefix.mid( newExpressionStart ).trimmed();
 
     //Make sure it's not picking up something like "if (a < a > b)"
@@ -891,7 +962,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   } else {
     ///Simply take all the declarations that were found by the expression-parser
 
-    helper.setFunctions(convert(m_expressionResult.allDeclarations, m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
+    helper.setFunctions(declIdsToDeclPtrs(m_expressionResult.allDeclarations, m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
 
     if(m_expressionResult.allDeclarationsSize()) {
       Declaration* decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());

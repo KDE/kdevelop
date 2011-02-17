@@ -48,6 +48,10 @@ namespace Cpp {
   class OverloadResolutionFunction;
   class ImplementationHelperItem;
 
+  #ifdef TEST_COMPLETION
+    int expressionBefore( const QString& _text, int index );
+  #endif
+
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */

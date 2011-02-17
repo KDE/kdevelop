@@ -122,6 +122,50 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testExpressionBefore()
+{
+  QString exp1 = "int x";
+  QCOMPARE(Cpp::expressionBefore(exp1, exp1.length()), 4);
+  QString exp2 = "x = x().";
+  QCOMPARE(Cpp::expressionBefore(exp2, exp2.length()), 4);
+  QString exp3 = "x = (x().)";
+  QCOMPARE(Cpp::expressionBefore(exp3, exp3.length()), 4);
+  QString exp4 = "x = ((x().))";
+  QCOMPARE(Cpp::expressionBefore(exp4, exp4.length()), 4);
+  QString exp5 = "x = asdfasdf";
+  QCOMPARE(Cpp::expressionBefore(exp5, exp5.length()), 4);
+  QString exp6 = "++asdfasdf";
+  QCOMPARE(Cpp::expressionBefore(exp6, exp6.length()), 2);
+  QString exp7 = "(asd)";
+  QCOMPARE(Cpp::expressionBefore(exp7, exp7.length()), 0);
+  QString exp8 = "x = x[]->";
+  QCOMPARE(Cpp::expressionBefore(exp8, exp8.length()), 4);
+  QString exp9 = "x = x()::";
+  QCOMPARE(Cpp::expressionBefore(exp9, exp9.length()), 4);
+  QString exp10 = "x = x.y.z->x::a[]->h()[q]::S<n>";
+  QCOMPARE(Cpp::expressionBefore(exp10, exp10.length()), 4);
+  QString exp11 = "x >";
+  QCOMPARE(Cpp::expressionBefore(exp11, exp11.length()), 3);
+  QString exp12 = "x = *(*y)";
+  QCOMPARE(Cpp::expressionBefore(exp12, exp12.length()), 5);
+  QString exp13 = "q > xyz";
+  QCOMPARE(Cpp::expressionBefore(exp13, exp13.length()), 4);
+  QString exp14 = "q>x()[asdf].";
+  QCOMPARE(Cpp::expressionBefore(exp14, exp14.length()), 2);
+  QString exp15 = "x = y(\"(\")";
+  QCOMPARE(Cpp::expressionBefore(exp15, exp15.length()), 4);
+  QString exp16 = "x = y<\"<\">";
+  QCOMPARE(Cpp::expressionBefore(exp16, exp16.length()), 4);
+  QString exp17 = "x = y[z(\"[\")]";
+  QCOMPARE(Cpp::expressionBefore(exp17, exp17.length()), 4);
+  QString exp18 = "x = y(";
+  QCOMPARE(Cpp::expressionBefore(exp18, exp18.length()), 6);
+  QString exp19 = "x = y[";
+  QCOMPARE(Cpp::expressionBefore(exp19, exp19.length()), 6);
+  QString exp20 = "x = y<";
+  QCOMPARE(Cpp::expressionBefore(exp20, exp20.length()), 6);
+}
+
 void TestCppCodeCompletion::testOnlyShow()
 {
   QByteArray method = "template<class T1> class T { }; namespace A { struct B {}; } struct C { }; int testMe() { }";
