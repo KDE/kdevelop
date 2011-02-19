@@ -82,7 +82,7 @@ private Q_SLOTS:
     void closeRequest(int idx);
     void tabMoved(int from, int to);
     void wheelScroll(int);
-    void contextMenu(int,QPoint);
+    void contextMenu(int, const QPoint&);
 
 private:
 

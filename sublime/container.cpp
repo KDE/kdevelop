@@ -425,7 +425,7 @@ void Container::tabMoved(int from, int to)
     d->viewForWidget[w]->notifyPositionChanged(to);
 }
 
-void Container::contextMenu( int currentTab, QPoint pos )
+void Container::contextMenu( int currentTab, const QPoint& pos )
 {
     KMenu menu;
 
