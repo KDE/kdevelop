@@ -435,7 +435,11 @@ private slots:
   QString preprocess(const QString& contents) {
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
-    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", contents.toUtf8())));
+    QByteArray qba = stringFromContents(pp.processFile("anonymous", contents.toUtf8()));
+    if(pp.problems().empty())
+      return QString::fromUtf8(qba);
+    else
+      return "*ERROR*";
   }
 
   void testPreprocessor() {
@@ -459,6 +463,8 @@ private slots:
     QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OO)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("2 2 2"));
     QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OOO)\n").replace(QRegExp("[\n\t ]+"), ""), QString("OOOO(2)"));
     
+    QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
+    
     QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
     QCOMPARE(preprocess("bla \\\n#define foobar oc\nfoobar\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("bla #define foobar oc foobar"));
     
@@ -474,9 +480,14 @@ private slots:
     QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
     QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(NC(pair<a,b>), c)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("pair<a,b> c pair<a,b>"));
     
-//     TODO: expect error
-//     QCOMPARE(preprocess("#define bla(x,y)\nbla(1,2,3)\n"), QString("ERROR"));
-//     QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(pair<a,b>, c)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("ERROR"));
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define bla(x,y)\nbla(1,2,3)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\nPUT_BETWEEN(pair<a,b>, c)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for macro-redefinition", Continue);
+    QCOMPARE(preprocess("#define A B\n#define A C\n"), QString("*ERROR*"));
   }
 
   void testPreprocessorStringify() {
