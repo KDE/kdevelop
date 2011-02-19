@@ -417,7 +417,7 @@ void MainWindow::tabContextMenuRequested(View* , KMenu* )
     // do nothing
 }
 
-void MainWindow::tabToolTipRequested(View*, QPoint)
+void MainWindow::tabToolTipRequested(View*, Container*, int)
 {
     // do nothing
 }

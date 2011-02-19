@@ -469,8 +469,20 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
 
 void Container::showTooltipForTab(int tab)
 {
-    emit tabToolTipRequested(viewForWidget(widget(tab)), QCursor::pos());
+    emit tabToolTipRequested(viewForWidget(widget(tab)), this, tab);
 }
+
+bool Container::isCurrentTab(int tab) const
+{
+    return d->tabBar->currentIndex() == tab;
+}
+
+QRect Container::tabRect(int tab) const
+{
+    return d->tabBar->tabRect(tab).translated(d->tabBar->mapToGlobal(QPoint(0, 0)));
+}
+
+
 
 }
 

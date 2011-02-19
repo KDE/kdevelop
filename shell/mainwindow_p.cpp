@@ -65,6 +65,11 @@ Boston, MA 02110-1301, USA.
 #include "textdocument.h"
 #include "sessioncontroller.h"
 
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/topducontext.h>
+#include <sublime/container.h>
+
 namespace KDevelop {
 
 bool MainWindowPrivate::s_quitRequested = false;
@@ -406,6 +411,38 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, KMenu* menu
 
         action = menu->addAction(KIcon("view-refresh"), i18n("Reload All"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(reloadAll()));
+    }
+}
+
+void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab)
+{
+    if (m_tabTooltip.second) {
+        if (m_tabTooltip.first == view) {
+            // tooltip already shown, don't do anything. prevents flicker when moving mouse over same tab
+            return;
+        } else {
+            m_tabTooltip.second.data()->close();
+        }
+    }
+
+    DUChainReadLocker lock;
+
+    Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
+
+    if (urlDoc) {
+        TopDUContext* top = DUChainUtils::standardContextForUrl(urlDoc->url());
+
+        if (top) {
+            if ( QWidget* navigationWidget = top->createNavigationWidget() ) {
+                NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(m_mainWindow, QCursor::pos() + QPoint(20, 20), navigationWidget);
+                tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
+                tooltip->addExtendRect(container->tabRect(tab));
+
+                m_tabTooltip.first = view;
+                m_tabTooltip.second = tooltip;
+                ActiveToolTip::showToolTip(m_tabTooltip.second.data());
+            }
+        }
     }
 }
 

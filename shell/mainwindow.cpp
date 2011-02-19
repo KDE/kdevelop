@@ -61,10 +61,6 @@ Boston, MA 02110-1301, USA.
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
-#include <language/util/navigationtooltip.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/topducontext.h>
-#include <language/duchain/duchainutils.h>
 
 namespace KDevelop
 {
@@ -388,32 +384,9 @@ void MainWindow::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
     d->tabContextMenuRequested(view, menu);
 }
 
-void MainWindow::tabToolTipRequested(Sublime::View* view, QPoint point)
+void MainWindow::tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab)
 {
-    Q_UNUSED(point);
-    static QPointer<NavigationToolTip> toolTip;
-    
-    if(toolTip)
-        toolTip->close();
-    
-    DUChainReadLocker lock;
-    
-    Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
-    
-    if(urlDoc) {
-        TopDUContext* top = DUChainUtils::standardContextForUrl(urlDoc->url());
-                
-        if(top)
-        {
-            QWidget* navigationWidget = top->createNavigationWidget();
-            if( navigationWidget )
-            {
-                toolTip = new KDevelop::NavigationToolTip(this, QCursor::pos() + QPoint(20, 20), navigationWidget);
-                toolTip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
-                ActiveToolTip::showToolTip(toolTip);
-            }
-        }
-    }
+    d->tabToolTipRequested(view, container, tab);
 }
 
 void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
