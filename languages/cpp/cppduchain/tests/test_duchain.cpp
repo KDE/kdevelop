@@ -4050,6 +4050,27 @@ void TestDUChain::testSimplifiedTypeString()
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C*"));
   }
   {
+    // a bit artificial, but similar to what you could reach with #include
+    QByteArray method("namespace A { namespace B { namespace C { struct D {}; D* foo(); } } }\nnamespace A { using namespace B::C; };");
+    LockedTopDUContext top = parse(method, DumpNone);
+
+    QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::C::foo"));
+    QCOMPARE(decls.size(), 1);
+    FunctionDeclaration* fooDecl = dynamic_cast<FunctionDeclaration*>(decls.first());
+    QVERIFY(fooDecl);
+
+    FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
+    QVERIFY(fooType);
+
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]->childContexts()[0]), QString("D*"));
+
+    // now the interesting part: the namespace with the "using namespace B::C"
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[1]), QString("D*"));
+  }
+  {
     QByteArray method("typedef int *honk, **honk2; honk k;");
     LockedTopDUContext top = parse(method, DumpNone);
 
