@@ -435,7 +435,11 @@ private slots:
   QString preprocess(const QString& contents) {
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
-    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", contents.toUtf8())));
+    QByteArray qba = stringFromContents(pp.processFile("anonymous", contents.toUtf8()));
+    if(pp.problems().empty())
+      return QString::fromUtf8(qba);
+    else
+      return "*ERROR*";
   }
 
   void testPreprocessor() {
@@ -450,24 +454,63 @@ private slots:
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO\n(aa, bb)").trimmed(), QString("ab"));
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO(aa,\n bb)").trimmed(), QString("ab"));
     QCOMPARE(preprocess("#if 0x1\n #define NUMBER 10\n#else\n#define NUMBER 20\n#endif\nNUMBER\n").trimmed(), QString("10"));
+    QCOMPARE(preprocess("#define AA BB\n#define BB CC\nAA\n").trimmed(), QString("CC"));
+    QCOMPARE(preprocess("#define bla(x) bla(x)\n#define foo(x) foo##x\n#define choose(x) x(a) x(b)\nchoose(bla)\n").replace(QRegExp("[\n\t ]+"), ""), QString("bla(a)bla(b)"));
+    QCOMPARE(preprocess("#define bla(x) bla(x)\n#define foo(x) foo##x\n#define choose(x) x(a) x(b)\nchoose(foo)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("fooa foob"));
+    QCOMPARE(preprocess("#define XX YY\n#define YY(x) z x\nXX(x)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("z x"));
+    QCOMPARE(preprocess("#define PP(x) Q##x\n#define QQ 12\nPP(Q)\n").trimmed(), QString("12"));
+    QCOMPARE(preprocess("#define MM(x) NN\n#define OO(NN) MM(NN)\nOO(2)\n").trimmed(), QString("NN"));
+    QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OO)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("2 2 2"));
+    QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OOO)\n").replace(QRegExp("[\n\t ]+"), ""), QString("OOOO(2)"));
+    
+    QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
+    QCOMPARE(preprocess("bla \\\n#define foobar oc\nfoobar\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("bla #define foobar oc foobar"));
+    
+    QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define foo(x) foo##x\n#define bla fo\\\no(2)\n").trimmed(), QString("foo2"));
+    
+    QEXPECT_FAIL("", "Empty expansions incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define foo(x) foo##x\n#define _A\n\n#define CALL(X, Y) X _A (Y)\nCALL(foo, 13)\n").replace(QRegExp("[\n\t ]+"), ""), QString("foo(13)"));
+    
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(preprocess("#define NC(...) __VA_ARGS__\nNC(bla,bla)\n").replace(QRegExp("[\n\t ]+"), ""), QString("bla,bla"));
+    
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(NC(pair<a,b>), c)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("pair<a,b> c pair<a,b>"));
+    
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define bla(x,y)\nbla(1,2,3)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\nPUT_BETWEEN(pair<a,b>, c)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for macro-redefinition", Continue);
+    QCOMPARE(preprocess("#define A B\n#define A C\n"), QString("*ERROR*"));
   }
 
   void testPreprocessorStringify() {
     QCOMPARE(preprocess("#define STR(s) #s\n#define MACRO string\nSTR(MACRO)").trimmed(), QString("\"MACRO\""));
     QCOMPARE(preprocess("#define STR(s) #s\n#define XSTR(s) STR(s)\n#define MACRO string\nXSTR(MACRO)").simplified(), QString("\"string\""));
+    
+    QEXPECT_FAIL("", "# incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define CONCAT(x,y) x ## y\n#define test #CONCAT(1,2)\ntest\n").trimmed(), QString("#12"));
   }
 
   void testStringConcatenation()
   {
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(var1, )").trimmed(), QString("var1"));
-    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1 ## Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )").simplified(), QString("\nHelloYou YouHello").simplified());
 
     QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
     QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\n#define LOW LOW world\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
     QCOMPARE(preprocess("#define GLUE(a, b) a ##b\n#define XGLUE(a, b) GLUE(a, b)\n#define HIGHLOW hello\n#define LOW LOW world\nXGLUE(HIGH, LOW)").simplified(), QString("hello world")); // TODO: simplified -> trimmed
     QCOMPARE(preprocess("#define GLUE(a, b, c) k ## l ## m\nGLUE(a, b, c)").trimmed(), QString("klm"));
+    
+    QCOMPARE(preprocess("#define foo(x) foo##x\nint foo\n(13)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("int foo13"));
   }
 
   void testEmptyInclude()
