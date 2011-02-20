@@ -160,21 +160,21 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
     QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
     KUrl dir;
     if ( qmakeItem ) {
-        if (!item->parent()) {
+        if (!qmakeItem->parent()) {
             // build root item
-            dir = buildDirFromSrc(item->project(), item->url());
+            dir = buildDirFromSrc(qmakeItem->project(), qmakeItem->url());
         }
         // build sub-item
         foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
-            if ( QDir(pro->absoluteDir()) == QFileInfo(item->url().toLocalFile()).absoluteDir() ||
-                 pro->hasSubProject( item->url().toLocalFile() ) ) {
+            if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->url().toLocalFile()).absoluteDir() ||
+                 pro->hasSubProject( qmakeItem->url().toLocalFile() ) ) {
                 // get path from project root and it to buildDir
-                dir = buildDirFromSrc(item->project(), pro->absoluteDir());
+                dir = buildDirFromSrc(qmakeItem->project(), pro->absoluteDir());
             }
         }
     }
 
-    kDebug(9204) << "Building " << item->text() << "in" << dir.toLocalFile();
+    kDebug(9204) << "Building " << item->text() << item->url() << "in" << dir.toLocalFile();
     return dir;
 }
 
