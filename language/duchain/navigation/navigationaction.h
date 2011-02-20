@@ -53,10 +53,10 @@ struct NavigationAction {
     type = JumpToSource;
   }
 
-  NavigationAction(KSharedPtr<AbstractNavigationContext> _targetContext) : targetContext(_targetContext) {
+  NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {
   }
 
-  KSharedPtr<AbstractNavigationContext> targetContext; //If this is set, this action does nothing else than jumping to that context
+  AbstractNavigationContext* targetContext; //If this is set, this action does nothing else than jumping to that context
 
   DeclarationPointer decl;
   Type type;

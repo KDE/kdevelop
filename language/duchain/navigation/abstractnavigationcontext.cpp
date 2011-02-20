@@ -164,7 +164,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
       break;
     case NavigationAction::NavigateDeclaration:
     {
-      AbstractDeclarationNavigationContext* ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(m_previousContext.data());
+      AbstractDeclarationNavigationContext* ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(m_previousContext);
       if( ctx && ctx->declaration() == action.decl )
         return NavigationContextPointer( m_previousContext );
       return AbstractNavigationContext::registerChild(action.decl);

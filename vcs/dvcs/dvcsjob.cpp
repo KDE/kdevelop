@@ -54,6 +54,7 @@ struct DVcsJobPrivate
     KProcess*   childproc;
     VcsJob::JobStatus status;
     QByteArray  output;
+    QByteArray  errorOutput;
     IPlugin* vcsplugin;
     
     QVariant results;
@@ -126,6 +127,11 @@ QString DVcsJob::output() const
 QByteArray DVcsJob::rawOutput() const
 {
     return d->output;
+}
+
+QByteArray DVcsJob::errorOutput() const
+{
+    return d->errorOutput;
 }
 
 void DVcsJob::setResults(const QVariant &res)
@@ -219,7 +225,8 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
     
-    displayOutput(d->childproc->readAllStandardError());
+    d->errorOutput = d->childproc->readAllStandardError();
+    displayOutput(d->errorOutput);
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
     //Even if it was a silent process we want to provide some feedback to the user about what went wrong

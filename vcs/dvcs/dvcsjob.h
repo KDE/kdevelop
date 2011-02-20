@@ -159,6 +159,11 @@ public:
      */
     QByteArray rawOutput() const;
 
+    /**
+     * @return The whole binary stderr output of the job.
+     */
+    QByteArray errorOutput() const;
+
     // Begin:  KDevelop::VcsJob
 
     /** 

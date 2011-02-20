@@ -119,7 +119,7 @@ void VcsEventModel::addEvents( const QList<KDevelop::VcsEvent>& list )
     if( rowCount() > 0 )
         beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
     else
-        beginInsertRows( QModelIndex(), rowCount(), list.count() );
+        beginInsertRows( QModelIndex(), rowCount(), list.count()-1 );
     d->m_events += list;
     endInsertRows();
 }
