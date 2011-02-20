@@ -323,7 +323,9 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     }
     if(child == newDeclaration)
       return;
-    if (start > child->range().start) {
+    //TODO: All declarations in a macro will have the same empty range, and just get appended
+    //that may not be Good Enough in complex cases.
+    if (start >= child->range().start) {
       m_context->d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
       if(!m_context->d_func()->m_localDeclarations()[i+1].data(m_topContext))
         kFatal() << "Inserted a not addressable declaration";
