@@ -897,16 +897,12 @@ void SessionChooserDialog::updateState() {
         
         if(m_model->item(row, 2))
             m_model->item(row, 2)->setText(state);
-        
-        for(int col = 0; col < 3; ++col)
-            if(m_model->item(row, col))
-                m_model->item(row, col)->setEnabled(!running);
     }
     
     m_updateStateTimer.start();
 }
 
-QString SessionController::showSessionChooserDialog(QString headerText)
+QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
 {
     QTreeView* view = new QTreeView;
     QStandardItemModel* model = new QStandardItemModel(view);
@@ -936,7 +932,14 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         if ( si.name.isEmpty() && si.projects.isEmpty() ) {
             continue;
         }
+
+        bool running = false;
+        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+            running = true;
         
+        if(onlyRunning && !running)
+            continue;
+
         if(si.uuid.toString() == defaultSession)
             defaultRow = row;
         
@@ -944,9 +947,6 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         model->setItem(row, 1, new QStandardItem(si.description));
         
         QString state;
-        bool running = false;
-        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
-            running = true;
         
         model->setItem(row, 2, new QStandardItem(""));
         
@@ -956,7 +956,8 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         ++row;
     }
     
-    model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+    if(!onlyRunning)
+        model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
 
     dialog.updateState();
     
