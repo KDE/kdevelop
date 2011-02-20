@@ -354,3 +354,22 @@ QMakeCache* QMakeProjectFile::qmakeCache() const
     return m_cache;
 }
 
+QList< QMakeProjectFile::DefinePair > QMakeProjectFile::defines() const
+{
+    QList< DefinePair > d;
+    foreach(QString def, variableMap()["DEFINES"])
+    {
+        int pos = def.indexOf('=');
+        if(pos >= 0)
+        {
+            // a value is attached to define
+            d.append(DefinePair( def.left(pos), def.right(def.length() - (pos+1)) ));
+        }
+        else
+        {
+            // a value-less define
+            d.append(DefinePair( def, "" ));
+        }
+    }
+    return d;
+}

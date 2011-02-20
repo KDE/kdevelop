@@ -33,7 +33,7 @@ class QMakeCache;
 class QMakeProjectFile : public QMakeFile
 {
 public:
-
+    typedef QPair< QString, QString > DefinePair;
     static const QStringList FileVariables;
 
     QMakeProjectFile( const QString& projectfile );
@@ -59,6 +59,7 @@ public:
     void setQMakeCache( QMakeCache* cache );
     QMakeCache* qmakeCache() const;
     QStringList resolveVariables( const QString& variable ) const;
+    QList< DefinePair > defines() const;
 private:
     void addUrlsForVariable(const QString& variable, KUrl::List* list) const;
 
