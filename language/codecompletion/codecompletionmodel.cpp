@@ -277,7 +277,7 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
   }*/
 }
 
-CodeCompletionModelControllerInterface3::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched)
+CodeCompletionModelControllerInterface3::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& /*matched*/)
 {
     return None;
 }

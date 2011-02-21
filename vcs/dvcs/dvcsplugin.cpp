@@ -135,7 +135,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
 }
 
-void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
+void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const KUrl::List& /*urls*/)
 {}
 
 void DistributedVersionControlPlugin::slotInit()

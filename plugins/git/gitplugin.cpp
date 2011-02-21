@@ -323,7 +323,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 }
 
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
-                        VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
+                        VcsDiff::Type /*type*/, IBasicVersionControl::RecursionMode recursion)
 {
     //TODO: control different types
     

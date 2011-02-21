@@ -101,7 +101,7 @@ void OpenProjectPage::setUrl(const KUrl& url)
     fileWidget->setUrl(url, false);
 }
 
-void OpenProjectPage::dirChanged(const KUrl& url)
+void OpenProjectPage::dirChanged(const KUrl& /*url*/)
 {
     if(fileWidget->selectedFiles().isEmpty()) {
         KFileItemList items=fileWidget->dirOperator()->dirLister()->items();
