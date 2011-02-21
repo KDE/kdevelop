@@ -187,6 +187,8 @@ int main( int argc, char *argv[] )
                        "The binary that should be debugged must follow - including arguments.\n"
                        "Example: kdevelop --debug gdb myapp --foo bar"));
 
+    options.add("pid");
+           
     options.add("+files", ki18n( "Files to load" ));
 
     options.add(":", ki18n("Deprecated options:"));
@@ -225,7 +227,8 @@ int main( int argc, char *argv[] )
     
     if(args->isSet("ps"))
     {
-        session = KDevelop::SessionController::showSessionChooserDialog();
+        bool onlyRunning = args->isSet("pid");
+        session = KDevelop::SessionController::showSessionChooserDialog(QString(), onlyRunning);
         if(session.isEmpty())
             return 1;
     }
@@ -280,6 +283,22 @@ int main( int argc, char *argv[] )
 
     forever {
         KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession(sessionId);
+        
+        if(args->isSet("pid"))
+        {
+            if(state.success)
+            {
+                kError() << session << sessionId << "is not running";
+                return 5;
+            }
+            if(args->isSet("pid"))
+            {
+                // Print the PID and we're ready
+                std::cout << state.holderPid << std::endl;
+                return 0;
+            }
+        }
+        
         if(!state) {
             QDBusInterface interface(QString("org.kdevelop.kdevelop-%1").arg(state.holderPid),
                                      "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
