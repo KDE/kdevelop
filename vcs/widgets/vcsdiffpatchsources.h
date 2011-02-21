@@ -41,12 +41,14 @@ class QWidget;
 
 class VCSDiffUpdater {
 public:
+    virtual ~VCSDiffUpdater();
     virtual KDevelop::VcsDiff update() const = 0;
 };
 
 class VCSStandardDiffUpdater : public VCSDiffUpdater {
 public:
     VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, KUrl url);
+    virtual ~VCSStandardDiffUpdater();
     virtual KDevelop::VcsDiff update() const;
 private:
     KDevelop::IBasicVersionControl* m_vcs;

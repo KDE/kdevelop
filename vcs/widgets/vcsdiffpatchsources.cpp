@@ -234,4 +234,10 @@ VcsDiff VCSStandardDiffUpdater::update() const {
 VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, KUrl url) : m_vcs(vcs), m_url(url) {
 }
 
+VCSStandardDiffUpdater::~VCSStandardDiffUpdater() {
+}
+
+VCSDiffUpdater::~VCSDiffUpdater() {
+}
+
 #include "vcsdiffpatchsources.moc"
