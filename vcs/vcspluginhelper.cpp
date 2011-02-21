@@ -259,9 +259,9 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
         KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
         if(d.isEmpty())
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                i18n("There are no differences."),
-                                i18n("VCS support"));
+            KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
+                                     i18n("There are no differences."),
+                                     i18n("VCS support"));
         else {
             VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
             showVcsDiff(patch);
