@@ -135,6 +135,10 @@ public Q_SLOTS:
     void closeAllOtherDocuments();
     void reloadAllDocuments();
 
+    // DBUS-compatible versions of openDocument
+    virtual Q_SCRIPTABLE bool openDocumentSimple( QString url );
+    virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
+    
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
 

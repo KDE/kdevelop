@@ -48,6 +48,8 @@ public:
     bool recursiveFlag() const;
     bool caseSensitiveFlag() const;
 
+    void start();
+    
 private Q_SLOTS:
     void performAction(KDialog::ButtonCode button);
     void templateTypeComboActivated(int);

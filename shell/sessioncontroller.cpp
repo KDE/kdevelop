@@ -66,6 +66,7 @@ Boston, MA 02110-1301, USA.
 #if KDE_IS_VERSION(4,5,60)
     #define HAVE_RECOVERY_INTERFACE
     #include <ktexteditor/recoveryinterface.h>
+#include <QDBusConnection>
 #endif
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
@@ -594,6 +595,9 @@ SessionController::SessionController( QObject *parent )
     
     setXMLFile("kdevsessionui.rc");
 
+    QDBusConnection::sessionBus().registerObject( "/kdevelop/SessionController",
+        this, QDBusConnection::ExportScriptableSlots );
+
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
     KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
@@ -990,6 +994,14 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     
     return QString();
 }
+
+QString SessionController::sessionName()
+{
+    if(!activeSession())
+        return QString();
+    return activeSession()->description();
+}
+
 
 }
 #include "sessioncontroller.moc"

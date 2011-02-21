@@ -41,6 +41,7 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
+#include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
@@ -50,6 +51,8 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 {
     setXMLFile("kdevgrepview.rc");
 
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/GrepViewPlugin",
+        this, QDBusConnection::ExportScriptableSlots );
 
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/replace in Fi&les..."));
@@ -70,6 +73,12 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
 GrepViewPlugin::~GrepViewPlugin()
 {
+}
+
+void GrepViewPlugin::startSearch(QString pattern, QString directory, bool showOptions)
+{
+    m_directory = directory;
+    showDialog(false, pattern, showOptions);
 }
 
 KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
@@ -111,12 +120,16 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     return extension;
 }
 
-void GrepViewPlugin::showDialog(bool setLastUsed)
+void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOptions)
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), setLastUsed );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     
-    if(!setLastUsed)
+    if(!pattern.isEmpty())
+    {
+        dlg->setPattern(pattern);
+    }
+    else if(!setLastUsed)
     {
         QString pattern;
         if( doc )
@@ -173,7 +186,12 @@ void GrepViewPlugin::showDialog(bool setLastUsed)
         }
     }
 
-    dlg->show();
+    if(showOptions)
+        dlg->show();
+    else{
+        dlg->start();
+        dlg->deleteLater();
+    }
 }
 
 void GrepViewPlugin::showDialogFromMenu()

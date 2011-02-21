@@ -178,7 +178,7 @@ p, li { white-space: pre-wrap; }
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Directory:</string>
+      <string>Location(s):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -197,7 +197,7 @@ p, li { white-space: pre-wrap; }
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Select in which directory you want to search.</string>
+      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated list of directories/files.</string>
      </property>
     </widget>
    </item>

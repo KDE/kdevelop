@@ -62,6 +62,9 @@ public Q_SLOTS:
     void showErrorMessage(const QString& message, int timeout);
 
     virtual Q_SCRIPTABLE void ensureVisible();
+    virtual Q_SCRIPTABLE QString windowTitle() {
+        return Sublime::MainWindow::windowTitle();
+    }
 
 public Q_SLOTS:
     virtual void setVisible( bool visible );

@@ -550,6 +550,16 @@ IDocument* DocumentController::openDocumentFromText( const QString& data )
     return d;
 }
 
+bool DocumentController::openDocumentFromTextSimple( QString text )
+{
+    return (bool)openDocumentFromText( text );
+}
+
+bool DocumentController::openDocumentSimple( QString url )
+{
+    return (bool)openDocument( KUrl(url) );
+}
+
 IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString& prefName )
 {
     return d->openDocumentInternal( inputUrl, prefName );

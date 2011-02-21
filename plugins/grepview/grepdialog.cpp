@@ -347,7 +347,16 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
         foreach(IProject* project, ICore::self()->projectController()->projects())
             ret << project->folder();
     }else{
-        ret << directoryRequester->url();
+        QStringList semicolonSeparatedFileList = text.split(";");
+        if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
+        {
+            // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
+            // a semicolon in the name.
+            foreach(QString file, semicolonSeparatedFileList)
+                ret << KUrl::fromPath(file);
+        }else{
+            ret << directoryRequester->url();
+        }
     }
     return ret;
 }
@@ -358,6 +367,11 @@ bool GrepDialog::isPartOfChoice(KUrl url) const
         if(choice.isParentOf(url) || choice.equals(url))
             return true;
     return false;
+}
+
+void GrepDialog::start()
+{
+    performAction(SearchButton);
 }
 
 void GrepDialog::performAction(KDialog::ButtonCode button)
@@ -391,11 +405,15 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepJob* job = m_plugin->newGrepJob();
     
     QString descriptionOrUrl(directoryRequester->lineEdit()->text());
+    QString description = descriptionOrUrl;
+    // Shorten the description
+    if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
+        description = i18n("%1, and %2 more items", choice[0].pathOrUrl(), choice.size()-1);
     
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_factory, IUiController::CreateAndRaise);
-    GrepOutputModel* outputModel = toolView->renewModel(patternString(), descriptionOrUrl);
+    GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
     toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),

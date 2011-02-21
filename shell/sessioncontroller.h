@@ -116,6 +116,10 @@ public:
         emit quitSession();
     }
     
+public Q_SLOTS:
+    // Returns the pretty name of the currently active session
+    virtual Q_SCRIPTABLE QString sessionName();
+
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
