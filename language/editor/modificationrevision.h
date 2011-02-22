@@ -52,8 +52,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
     ///Otherwise, the on-disk modification-times are re-used for a specific amount of time
 	static void clearModificationCache(const IndexedString& fileName);
 
-	///The default-revision is 1, because that is the kate moving-revision for cleanly opened documents
-	ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 1 );
+	///The default-revision is 0, because that is the kate moving-revision for cleanly opened documents
+	ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
 
 	bool operator <( const ModificationRevision& rhs ) const;
 
@@ -64,7 +64,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 	QString toString() const;
 
 	uint modificationTime;  //On-disk modification-time of a document in time_t format
-    int revision;        //MovingInterface revision of a document(0 if the document is not loaded)
+    int revision;        //MovingInterface revision of a document
     
 private:
   friend class DocumentChangeTracker;
