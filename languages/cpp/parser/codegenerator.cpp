@@ -612,8 +612,7 @@ void CodeGenerator::visitPtrOperator(PtrOperatorAST* node)
 
 void CodeGenerator::visitPtrToMember(PtrToMemberAST* node)
 {
-  // TODO fix AST
-  Q_UNUSED(node);
+  visit(node->class_type);
   printToken(Token_scope);
   m_output << "*";
 }

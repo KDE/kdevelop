@@ -320,9 +320,9 @@ void DefaultVisitor::visitPtrOperator(PtrOperatorAST *node)
   visit(node->mem_ptr);
 }
 
-void DefaultVisitor::visitPtrToMember(PtrToMemberAST *)
+void DefaultVisitor::visitPtrToMember(PtrToMemberAST *node)
 {
-  // nothing to do
+  visit(node->class_type);
 }
 
 void DefaultVisitor::visitReturnStatement(ReturnStatementAST *node)

@@ -728,6 +728,27 @@ private slots:
     QVERIFY(hasKind(funcAst, AST::Kind_InitDeclarator));
   }
 
+  void testPtrToMemberAst() {
+    pool memPool;
+    TranslationUnitAST* ast = parse("\nstruct AA {"
+                                    "\n  int j;"
+                                    "\n};"
+                                    "\nstruct BB{"
+                                    "\n  int AA::* pj;"
+                                    "\n};"
+                                    "\nvoid f(){"
+                                    "\n  int AA::* BB::* ppj=&BB::pj;"
+                                    "\n}"
+                                    , &memPool);
+    QVERIFY(ast!=0);
+    QCOMPARE(ast->declarations->count(), 3);
+    QVERIFY(hasKind(ast,AST::Kind_PtrToMember));
+    FunctionDefinitionAST* f_ast=static_cast<FunctionDefinitionAST*>(getAST(ast,AST::Kind_FunctionDefinition));
+    QVERIFY(hasKind(f_ast,AST::Kind_PtrToMember));
+    DeclaratorAST* d_ast=static_cast<DeclaratorAST*>(getAST(f_ast->function_body,AST::Kind_Declarator));
+    QCOMPARE(d_ast-> ptr_ops->count(),2);
+  }
+
   void testSwitchStatement()
   {
     int problemCount = control.problems().count();

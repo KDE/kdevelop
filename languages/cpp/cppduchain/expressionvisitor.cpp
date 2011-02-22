@@ -1178,6 +1178,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(fail || !constructedType) {
         DefaultVisitor::visitInitDeclarator(node);
         return;
+      } else {
+        visitNodes(this,node->declarator->ptr_ops);
       }
 
       DeclarationPointer chosenFunction;
@@ -1225,7 +1227,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     visit(node->parameter_declaration_clause);
     visit(node->exception_spec);
-
+    {
     LOCKDUCHAIN;
     if( node->array_dimensions && oldLastType ) {
       ArrayType::Ptr p( new ArrayType() );
@@ -1237,7 +1239,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = oldLastType;
       m_lastInstance = oldLastInstance;
     }
-
+    }
     visitNodes(this, node->ptr_ops);
   }
 
@@ -1262,7 +1264,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastType = lastType;
     m_lastInstance = instance;
 
-    LOCKDUCHAIN;
     visit(node->ptr_op);
   }
 
@@ -1294,17 +1295,22 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
-    if( !m_lastType ) {
+    if( !m_lastType )
       problem(node, "Pointer-operator used without type");
-      return;
-    }
 
-    if( m_lastInstance ) {
+    if( m_lastInstance )
       problem(node, "Pointer-operator used on an instance instead of a type");
-      return;
-    }
 
-    LOCKDUCHAIN;
+
+    ///pointer-to-member
+    if(node->op==0){
+      PtrToMemberType::Ptr p( new PtrToMemberType() );
+      p->setBaseType( m_lastType );
+      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+      visit( node->mem_ptr->class_type );
+      p->setClassType( m_lastType );
+      m_lastType = p.cast<AbstractType>();
+    } else {
 
     static IndexedString ref("&");
     static IndexedString ptr("*");
@@ -1325,6 +1331,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
 
       m_lastType = p.cast<AbstractType>();
+    }
     }
     m_lastInstance = Instance(false);
   }

@@ -26,6 +26,7 @@ set(kdevcppduchain_LIB_SRCS
     cppeditorintegrator.cpp
     dumpchain.cpp
     cpptypes.cpp
+    ptrtomembertype.cpp
     dumptypes.cpp
     environmentmanager.cpp
     cppduchain.cpp

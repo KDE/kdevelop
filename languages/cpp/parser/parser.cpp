@@ -561,8 +561,11 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
       if (!ast) 
         ast = CreateNode<NameAST>(session->mempool);
 
-      if (session->token_stream->lookAhead() == Token_scope)
+      if (session->token_stream->lookAhead() == Token_scope &&
+        //ptr-to-member
+        session->token_stream->lookAhead(1) != '*')
         {
+
           advance();
 
           ast->qualified_names
@@ -2637,25 +2640,11 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 
 bool Parser::parsePtrToMember(PtrToMemberAST *&node)
 {
-#if defined(__GNUC__)
-#warning "implemente me (AST)"
-#endif
-
   uint start = session->token_stream->cursor();
 
-  uint global_scope = 0;
-  if (session->token_stream->lookAhead() == Token_scope)
-    {
-      global_scope = session->token_stream->cursor();
-      advance();
-    }
+  TypeSpecifierAST* type_ast = 0;
 
-  UnqualifiedNameAST *name = 0;
-  while (session->token_stream->lookAhead() == Token_identifier)
-    {
-      if (!parseUnqualifiedName(name))
-        break;
-
+  if(parseTypeSpecifier(type_ast)){
       if (session->token_stream->lookAhead() == Token_scope
           && session->token_stream->lookAhead(1) == '*')
         {
@@ -2663,14 +2652,11 @@ bool Parser::parsePtrToMember(PtrToMemberAST *&node)
           advance();
 
           PtrToMemberAST *ast = CreateNode<PtrToMemberAST>(session->mempool);
+      ast->class_type=type_ast;
           UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
-
           return true;
         }
-
-      if (session->token_stream->lookAhead() == Token_scope)
-        advance();
     }
 
   rewind(start);

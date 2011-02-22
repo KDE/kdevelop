@@ -58,7 +58,8 @@ void TypeASTVisitor::run(TypeIdAST *node)
         do
           {
             PtrOperatorAST* ptrOp = it->element;
-            if (ptrOp && ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
+            if (ptrOp){
+              if(ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
               IndexedString op = m_session->token_stream->token(ptrOp->op).symbol();
               static IndexedString ref("&");
               static IndexedString ptr("*");
@@ -74,6 +75,15 @@ void TypeASTVisitor::run(TypeIdAST *node)
                   pointer->setBaseType(m_type);
                   m_type = pointer.cast<AbstractType>();
                 }
+              }
+              } else{ ///ptr-to-member
+                PtrToMemberType::Ptr pointer(new PtrToMemberType);
+                pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
+                pointer->setBaseType(m_type);
+                PtrToMemberAST * ast=ptrOp->mem_ptr;
+                visit(ast);
+                pointer->setClassType(m_type);
+                m_type=pointer.cast<AbstractType>();
               }
             }
             it = it->next;
