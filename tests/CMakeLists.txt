@@ -17,14 +17,3 @@ target_link_libraries(qmakefiletest
     ${KDE4_KDECORE_LIBS}
     kdev4qmakeparser
     )
-
-set(qmakeprojectfiletest_SRCS test_qmakeprojectfile.cpp
-    ../qmakeprojectfile.cpp ../qmakefile.cpp ../qmakeincludefile.cpp ../qmakeprojectfile.cpp
-    ../variablereferenceparser.cpp ../qmakemkspecs.cpp )
-
-kde4_add_unit_test(qmakeprojectfiletest ${qmakeprojectfiletest_SRCS})
-target_link_libraries(qmakeprojectfiletest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    kdev4qmakeparser
-    )

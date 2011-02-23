@@ -35,7 +35,10 @@
 
 QTEST_MAIN(TestQMakeFile);
 
+typedef QHash<QString, QString> DefineHash;
+
 Q_DECLARE_METATYPE(QMakeFile::VariableMap)
+Q_DECLARE_METATYPE(DefineHash)
 
 namespace QTest {
 
@@ -220,6 +223,60 @@ void TestQMakeFile::libTarget_data()
     QTest::newRow("simple") << "MyLib" << "MyLib";
     QTest::newRow("qtLibraryTarget") << "$$qtLibraryTarget(MyLib)" << "MyLib";
     QTest::newRow("qtLibraryTarget-Var") << "MyLib\nTARGET = $$qtLibraryTarget($$TARGET)" << "MyLib";
+}
+
+void TestQMakeFile::defines()
+{
+    QFETCH(QString, fileContents);
+    QFETCH(DefineHash, expectedDefines);
+    KTemporaryFile tmpfile;
+    tmpfile.open();
+    QTextStream stream(&tmpfile);
+    stream << fileContents;
+    stream << flush;
+    tmpfile.close();
+
+    QMakeProjectFile file(tmpfile.fileName());
+
+    QHash<QString,QString> qmvars = queryQMake( tmpfile.fileName() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    QVERIFY(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+    QVERIFY(file.read());
+
+    QList<QMakeProjectFile::DefinePair> list=file.defines();
+    QCOMPARE(list.size(), expectedDefines.size());
+    foreach(QMakeProjectFile::DefinePair define, list) {
+        QVERIFY(expectedDefines.find(define.first) != expectedDefines.end());
+        QCOMPARE(define.second, expectedDefines[define.first]);
+    }
+}
+
+void TestQMakeFile::defines_data()
+{
+    QTest::addColumn<QString>("fileContents");
+    QTest::addColumn<DefineHash>("expectedDefines");
+    {
+        DefineHash list;
+        list.insert("VAR1", "");
+        QTest::newRow("Simple define")  << "DEFINES += VAR1"
+                                << list;
+    }
+    {
+        DefineHash list;
+        list.insert("ANSWER", "42");
+        QTest::newRow("Define with value")  << "DEFINES += ANSWER=42"
+                                << list;
+    }
+    {
+        DefineHash list;
+        list.insert("ANSWER", "42");
+        list.insert("ANOTHER_DEFINE", "");
+        QTest::newRow("Multiple defines")  << "DEFINES += ANSWER=42 ANOTHER_DEFINE"
+                                << list;
+    }
 }
 
 
