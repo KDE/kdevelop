@@ -215,7 +215,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     QHash<QString,QString> qmvars = queryQMake( project );
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
     mkspecs->read();
-    QMakeCache* cache = findQMakeCache( projecturl.toLocalFile() );
+    QMakeCache* cache = findQMakeCache( project );
     if( cache ) {
         cache->setMkSpecs( mkspecs );
         cache->read();
@@ -484,16 +484,17 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     return hash;
 }
 
-QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) const
+QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project ) const
 {
-    QDir curdir( QFileInfo( projectfile ).canonicalPath() );
+    QDir curdir( buildDirFromSrc(project, project->folder()).toLocalFile() );
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() )
     {
-        curdir.cdUp();
+        kDebug() << curdir;
     }
 
     if( curdir.exists(".qmake.cache") )
     {
+        kDebug() << "Found QMake cache in " << curdir.absolutePath();
         return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
     }
     return 0;
