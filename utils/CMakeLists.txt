@@ -3,7 +3,7 @@ macro_optional_find_package( LibOkteta )
 macro_optional_find_package( LibKasten )
 
 macro_log_feature( LIBOKTETAKASTEN_FOUND
-  "libkasten" "Okteta Kasten libraries" "kdeutils/okteta/kasten" FALSE
+  "liboktetakasten" "Okteta Kasten libraries" "kdeutils/okteta/kasten" FALSE
   "" "Required for building Okteta KDevelop plugin."
 )
 macro_log_feature( LIBOKTETA_FOUND
