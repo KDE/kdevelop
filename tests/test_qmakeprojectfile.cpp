@@ -33,6 +33,7 @@ void TestQMakeProjectFile::defines()
     QList<QMakeProjectFile::DefinePair> list=file.defines();
     
 //     QVERIFY(file.read());
+    QCOMPARE(list.size(), variable.size());
     foreach(QMakeProjectFile::DefinePair define, list) {
         QVERIFY(variable.find(define.first) != variable.end());
         QCOMPARE(define.second, variable[define.first]);
@@ -44,15 +45,12 @@ void TestQMakeProjectFile::defines_data()
     QTest::addColumn<QString>("fileContents");
     QTest::addColumn<DefineHash>("variable");
     {
-        QPair<QString, QString> var;
         DefineHash list;
         list.insert("VAR1", "");
         QTest::newRow("Test1")  << "DEFINE += VAR1"
                                 << list;
     }
-    
     {
-        QPair<QString, QString> var;
         DefineHash list;
         list.insert("VAR1", "");
         QTest::newRow("")  << "DEFINE += VAR1"
@@ -60,13 +58,10 @@ void TestQMakeProjectFile::defines_data()
         QTest::newRow("")  << "DEFINE += VAR2"
                                 << list;
     }
-    
     {
-        QPair<QString, QString> var;
         DefineHash list;
         list.insert("VAR1", "VAR2");
         QTest::newRow("Test3")  << "DEFINE += VAR1 VAR2"
                                 << list;
     }
-
 }
