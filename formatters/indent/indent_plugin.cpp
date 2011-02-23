@@ -151,7 +151,7 @@ QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
         st.setCaption( "Kernighan & Ritchie" );
         styles << st;
         st = KDevelop::SourceFormatterStyle( "orig" );
-        st.setCaption( "Original Berkeley indent style" );
+        st.setCaption( i18n("Original Berkeley indent style") );
         styles << st;
 	return styles;
 }
