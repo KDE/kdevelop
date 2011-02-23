@@ -54,16 +54,18 @@ void TestQMakeProjectFile::defines_data()
     {
         QPair<QString, QString> var;
         DefineHash list;
-        list.insert("X", "EQU 1");
-        QTest::newRow("Test2")  << "DEFINE += X EQU 1"
+        list.insert("VAR1", "");
+        QTest::newRow("")  << "DEFINE += VAR1"
+                                << list;
+        QTest::newRow("")  << "DEFINE += VAR2"
                                 << list;
     }
     
     {
         QPair<QString, QString> var;
         DefineHash list;
-        list.insert("double(int i)", "return(2*i)");
-        QTest::newRow("Test3")  << "DEFINE += double(int i) return(2*i);"
+        list.insert("VAR1", "VAR2");
+        QTest::newRow("Test3")  << "DEFINE += VAR1 VAR2"
                                 << list;
     }
 
