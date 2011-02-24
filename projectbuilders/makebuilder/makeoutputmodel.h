@@ -39,7 +39,8 @@ public:
         WarningItem = 2,
         ActionItem = 3,
         CustomItem = 4,
-        StandardItem = 5
+        StandardItem = 5,
+        InformationItem = 6
     };
 
     static const int MakeItemTypeRole;

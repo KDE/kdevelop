@@ -237,8 +237,13 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 if(txt.contains("warning", Qt::CaseInsensitive))
                     itemType = WarningItem;
 
-                if(!txt.contains("note"))
+                if(txt.contains("note", Qt::CaseInsensitive))
+                    itemType = InformationItem;
+
+                // Make the item clickable if it comes with the necessary file & line number information
+                if (errFormat.fileGroup > 0 && errFormat.lineGroup > 0)
                     item.isActivatable = true;
+
                 matched = true;
                 break;
             }

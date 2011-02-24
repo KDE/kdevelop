@@ -28,6 +28,7 @@
 MakeOutputDelegate::MakeOutputDelegate( QObject* parent )
     : QItemDelegate(parent), errorBrush( KColorScheme::View, KColorScheme::NegativeText ),
       warningBrush( KColorScheme::View, KColorScheme::NeutralText ),
+      informationBrush( KColorScheme::View, KColorScheme::NeutralText ),
       builtBrush( KColorScheme::View, KColorScheme::PositiveText )
 {
 }
@@ -46,6 +47,9 @@ void MakeOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         }else if( type == MakeOutputModel::WarningItem )
         {
             opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
+        }else if( type == MakeOutputModel::InformationItem )
+        {
+            opt.palette.setBrush( QPalette::Text, informationBrush.brush( option.palette ) );
         }else if( type == MakeOutputModel::ActionItem )
         {
             opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );

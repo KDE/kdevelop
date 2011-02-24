@@ -32,6 +32,7 @@ class MakeOutputDelegate : public QItemDelegate
 private:
     KStatefulBrush errorBrush;
     KStatefulBrush warningBrush;
+    KStatefulBrush informationBrush;
     KStatefulBrush builtBrush;
 };
 
