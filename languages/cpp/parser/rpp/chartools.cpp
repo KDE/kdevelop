@@ -77,7 +77,8 @@ PreprocessedContents convertFromByteArray(const QByteArray& array) {
 
 PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
   PreprocessedContents to;
-  
+  ///testing indicates that 9/10 is about the optimal value
+  to.reserve(array.size()/10);//assuming that about every 10 chars is a token.
   const char* data = array.constData();
   const char* dataEnd = data + array.size();
   //unsigned int* target = to.data();
@@ -121,6 +122,6 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
 /*  kDebug() << QString::fromUtf8(stringFromContents(to));
   kDebug() << QString::fromUtf8(array);
   Q_ASSERT(stringFromContents(to) == array);*/
-  
+  to.squeeze(); 
   return to;
 }
