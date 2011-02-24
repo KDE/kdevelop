@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
+#include <QDBusConnection>
 
 
 #include <kdeversion.h>
@@ -66,7 +67,6 @@ Boston, MA 02110-1301, USA.
 #if KDE_IS_VERSION(4,5,60)
     #define HAVE_RECOVERY_INTERFACE
     #include <ktexteditor/recoveryinterface.h>
-#include <QDBusConnection>
 #endif
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
