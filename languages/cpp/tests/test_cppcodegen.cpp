@@ -55,7 +55,7 @@ QTEST_KDEMAIN(TestCppCodegen, GUI )
 
 using namespace KDevelop;
 
-ForegroundLock* gloalTestLock = 0;
+ForegroundLock* globalTestLock = 0;
 
 void TestCppCodegen::initTestCase()
 {
@@ -67,14 +67,14 @@ void TestCppCodegen::initTestCase()
   
   CodeRepresentation::setDiskChangesForbidden(true);
   
-  gloalTestLock = new ForegroundLock;
+  globalTestLock = new ForegroundLock;
 }
 
 void TestCppCodegen::cleanupTestCase()
 {
   Core::self()->cleanup();
-  delete gloalTestLock;
-  gloalTestLock = 0;
+  delete globalTestLock;
+  globalTestLock = 0;
 }
 
 void dumpAST(InsertIntoDUChain& code)
