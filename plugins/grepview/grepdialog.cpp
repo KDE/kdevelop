@@ -197,13 +197,22 @@ QMenu* GrepDialog::createSyncButtonMenu()
         url.cd("..");
         while(m_plugin->core()->projectController()->findProjectForUrl(url))
         {
+            url.adjustPath(KUrl::RemoveTrailingSlash);
             if(hadUrls.contains(url))
                 break;
-            url.adjustPath(KUrl::RemoveTrailingSlash);
             hadUrls.insert(url);
             addUrlToMenu(ret, url);
             if(!url.cd(".."))
                 break;
+        }
+
+        // if the current file's parent directory is not in the project, add it
+        url = doc->url().upUrl();
+        url.adjustPath(KUrl::RemoveTrailingSlash);
+        if(!hadUrls.contains(url))
+        {
+            hadUrls.insert(url);
+            addUrlToMenu(ret, url);
         }
     }
     
