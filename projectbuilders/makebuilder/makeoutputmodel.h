@@ -26,6 +26,8 @@
 #include <kurl.h>
 #include <outputview/ioutputviewmodel.h>
 #include <set>
+#include <QLinkedList>
+#include <QMap>
 #include <QVector>
 
 class FilteredItem;
@@ -63,10 +65,13 @@ private:
     KUrl urlForFile( const QString& ) const;
     bool isValidIndex( const QModelIndex& ) const;
     QList<FilteredItem> items;
-    QMap<QString, KUrl> fileUrlMap;
     // We use std::set because that is ordered
     std::set<int> errorItems; // Indices of all items that are errors
-    QVector<QString> currentDirs;
+
+    QLinkedList<QString> currentDirs;
+    typedef QMap<QString, QLinkedList<QString>::iterator> PositionMap;
+    PositionMap positionInCurrentDirs;
+
     KUrl buildDir;
 };
 
