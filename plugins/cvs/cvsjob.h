@@ -19,77 +19,41 @@
 #include <QStringList>
 #include <KProcess>
 
-#include <vcs/vcsjob.h>
+#include <vcs/dvcs/dvcsjob.h>
 
 /**
  * This class is capable of running our cvs commands
  * Connect to Kjob::result(KJob*) to be notified when the job finished.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CvsJob : public KDevelop::VcsJob
+class CvsJob : public KDevelop::DVcsJob
 {
     Q_OBJECT
 public:
-    CvsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    virtual ~CvsJob();
+    CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    void clear();
-    void setRSH(const QString& rsh);
-    void setServer(const QString& server);
-    void setDirectory(const QString& directory);
-
-    QString getDirectory();
-
-    CvsJob& operator<<(const QString& arg);
-    CvsJob& operator<<(const char* arg);
-    CvsJob& operator<<(const QStringList& args);
-
-    /**
-     * Call this mehod to start this job.
-     * @note Default communiaction mode is KProcess::AllOutput.
-     * @see Use setCommunicationMode() to override the default communication mode.
-     */
-    virtual void start();
-
-    /**
-     * In some cases it's needed to specify the communisation mode between the
-     * process and the job object. This is for instance done for the "cvs status"
-     * command. If stdout and stderr are processed as separate streams their signals
-     * do not always get emmited in correct order by KProcess. Which will lead to a
-     * screwed up output.
-     * @note Default communiaction mode is KProcess::SeparateChannels.
-     */
-    void setCommunicationMode(KProcess::OutputChannelMode comm);
+    KDE_DEPRECATED CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     /**
      * @return The command that is executed when calling start()
      */
-    QString cvsCommand() const;
+    QString cvsCommand();
+    void clear();
+    void setDirectory(const QString& directory);
+    KDE_DEPRECATED QString getDirectory();
+
+    void setRSH(const QString& rsh);
+    void setServer(const QString& server);
 
     /**
-     * @return The whole output of the job
+     * Call this method to start this job.
+     * @note Default communication mode is KProcess::AllOutput.
+     * @see Use setCommunicationMode() to override the default communication mode.
      */
-    QString output() const;
-
-    // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults();
-    virtual KDevelop::VcsJob::JobStatus status() const;
-    virtual KDevelop::IPlugin* vcsPlugin() const;
-    // End:  KDevelop::VcsJob
-
-public slots:
-    void cancel();
-    bool isRunning() const;
-
-private slots:
-    void slotProcessError(QProcess::ProcessError err);
-    void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
-    void slotReceivedStdout(const QStringList&);
-    void slotReceivedStderr(const QStringList&);
+    virtual void start();
 
 private:
-    struct Private;
-    Private* d;
+    class CvsJobPrivate* const d;
 };
 
 #endif
