@@ -37,8 +37,10 @@ class ExecutablePathsVisitor
     : public ProjectVisitor
 {
     public:
+        ExecutablePathsVisitor(bool exec) : m_onlyExecutables(exec) {}
         virtual void visit(ProjectExecutableTargetItem* eit) {
-            m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), '/', '\\');
+            if(!m_onlyExecutables || eit->type()==ProjectTargetItem::ExecutableTarget)
+                m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), '/', '\\');
         }
         virtual void visit(IProject* p) { ProjectVisitor::visit(p); }
         virtual void visit(ProjectBuildFolderItem* it) { ProjectVisitor::visit(it); }
@@ -49,11 +51,12 @@ class ExecutablePathsVisitor
         QStringList paths() const { return m_paths; }
         
     private:
+        bool m_onlyExecutables;
         QStringList m_paths;
 };
 
 
-void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item)
+void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
 {
     clear();
 
@@ -66,7 +69,7 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item)
         }
     }
     
-    ExecutablePathsVisitor walker;
+    ExecutablePathsVisitor walker(exec);
     foreach(ProjectFolderItem* item, items) {
         walker.visit(item);
     }
