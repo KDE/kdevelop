@@ -139,7 +139,9 @@ Q_SIGNALS:
     /**
      * emitted right before a project is started to be loaded.
      * At this point all sanity checks have been done, so the project
-     * is really going to be loaded.
+     * is really going to be loaded. Will be followed by @ref projectOpened signal
+     * when loading completes or by @ref projectClosed if there are errors during loading
+     * or it is aborted.
      * @note the given project won't be very useful as it doesn't have all things
      * setup properly
      * @param url the url of the project that is about to be opened.
@@ -152,13 +154,15 @@ Q_SIGNALS:
      */
     void projectOpened( KDevelop::IProject* project );
     /**
-     * emitted when starting to close a project.
+     * emitted when starting to close a project that has been completely loaded before
+     * (the @ref projectOpened signal has been emitted).
      * @param project the project that is going to be closed.
      */
     void projectClosing( KDevelop::IProject* project );
     /**
-     * emitted when a project has been closed completely. At this
-     * point the project object is still valid, the deletion will be done
+     * emitted when a project has been closed completely or project loading
+     * encountered errors or was aborted. If the project was loaded cleanly,
+     * the project object is still valid, the deletion will be done
      * delayed during the next run of the event loop.
      * @param project the project that has been closed.
      */
