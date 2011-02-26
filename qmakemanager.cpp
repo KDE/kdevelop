@@ -487,7 +487,8 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
 QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project ) const
 {
     QDir curdir( buildDirFromSrc(project, project->folder()).toLocalFile() );
-    while( !curdir.exists(".qmake.cache") && !curdir.isRoot() )
+    curdir.makeAbsolute();
+    while( !curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp() )
     {
         kDebug() << curdir;
     }
