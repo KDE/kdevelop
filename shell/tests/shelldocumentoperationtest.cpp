@@ -28,6 +28,7 @@
 #include <kparts/mainwindow.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/movinginterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -112,6 +113,7 @@ void ShellDocumentOperationTest::testKateDocumentAndViewCreation()
     //assure we have only one kate view for the newly created document
     KTextEditor::Document *doc = documentController->openDocuments()[0]->textDocument();
     QCOMPARE(doc->views().count(), 1);
+    QCOMPARE(dynamic_cast<KTextEditor::MovingInterface*>(doc)->revision(), qint64(0));
 
     //also assure the view's xmlgui is plugged in
     KParts::MainWindow *main = Core::self()->uiControllerInternal()->activeMainWindow();

@@ -794,34 +794,31 @@ void ProjectController::closeProject(IProject* proj_)
     // loading might have failed
     d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
 
-    if(d->m_projects.indexOf(proj_) == -1)
-    {
-        return;
-    }
-
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
     if( !proj ) 
     {
         kWarning() << "Unknown Project subclass found!";
         return;
     }
-    d->m_projects.removeAll(proj);
-    emit projectClosing(proj);
-    //Core::self()->saveSettings();     // The project file is being closed.
-                                        // Now we can save settings for all of the Core
-                                        // objects including this one!!
-    unloadUnusedProjectPlugins(proj);
-    closeAllOpenedFiles(proj);
-    proj->close();
-    proj->deleteLater();                //be safe when deleting
-    if (d->m_projects.isEmpty())
-    {
-        initializePluginCleanup(proj);
+    if (proj_->isReady()) {
+        d->m_projects.removeAll(proj);
+        emit projectClosing(proj);
+        //Core::self()->saveSettings();     // The project file is being closed.
+                                            // Now we can save settings for all of the Core
+                                            // objects including this one!!
+        unloadUnusedProjectPlugins(proj);
+        closeAllOpenedFiles(proj);
+        proj->close();
+        proj->deleteLater();                //be safe when deleting
+        if (d->m_projects.isEmpty())
+        {
+            initializePluginCleanup(proj);
+        }
+
+        if(!d->m_cleaningUp)
+            d->saveListOfOpenedProjects();
     }
-    
-    if(!d->m_cleaningUp)
-        d->saveListOfOpenedProjects();
-    
+
     emit projectClosed(proj);
     return;
 }

@@ -57,6 +57,7 @@
 #include <qcoreapplication.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/isession.h>
+#include <interfaces/iprojectcontroller.h>
 
 const bool separateThreadForHighPriority = true;
 
@@ -334,6 +335,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
     // The url for each managed document. Those may temporarily differ from the real url.
     QHash<KTextEditor::Document*, IndexedString> m_managedTextDocumentUrls;
+    // Projects currently in progress of loading
+    QSet<IProject*> m_loadingProjects;
 
     ThreadWeaver::Weaver m_weaver;
     ParserDependencyPolicy m_dependencyPolicy;
@@ -354,6 +357,13 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
+
+    bool connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)), this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
+    Q_ASSERT(connected);
+    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
+    Q_ASSERT(connected);
+    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), this, SLOT(projectClosed(KDevelop::IProject*)));
+    Q_ASSERT(connected);
 }
 
 void BackgroundParser::aboutToQuit()
@@ -488,6 +498,10 @@ void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
 
 void BackgroundParser::parseDocuments()
 {
+    if (!d->m_loadingProjects.empty()) {
+        startTimer();
+        return;
+    }
     QMutexLocker lock(&d->m_mutex);
 
     d->parseDocumentsInternal();
@@ -691,6 +705,21 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
 
 void BackgroundParser::startTimer() {
     d->m_timer.start(d->m_delay);
+}
+
+void BackgroundParser::projectAboutToBeOpened(IProject* project)
+{
+    d->m_loadingProjects.insert(project);
+}
+
+void BackgroundParser::projectOpened(IProject* project)
+{
+    d->m_loadingProjects.remove(project);
+}
+
+void BackgroundParser::projectClosed(IProject* project)
+{
+    d->m_loadingProjects.remove(project);
 }
 
 }
