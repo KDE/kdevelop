@@ -276,8 +276,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
         ///TODO: cleanup
         if ( parentPro) {
             // subdir
-            if( d.exists(".qmake.cache") ) {
-                QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
+            if( QMakeCache* cache = findQMakeCache(project, KUrl::fromPath(d.canonicalPath())) ) {
                 cache->setMkSpecs( parentPro->mkSpecs() );
                 cache->read();
                 qmscope->setQMakeCache( cache );
@@ -484,9 +483,9 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     return hash;
 }
 
-QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project ) const
+QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const KUrl& path ) const
 {
-    QDir curdir( buildDirFromSrc(project, project->folder()).toLocalFile() );
+    QDir curdir( buildDirFromSrc(project, path.isEmpty() ? project->folder() : path).toLocalFile() );
     curdir.makeAbsolute();
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp() )
     {

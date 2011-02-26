@@ -83,7 +83,7 @@ private:
                                                   KDevelop::ProjectBaseItem* parent );
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
     QString findBasicMkSpec( const QString& mkspecdir ) const;
-    QMakeCache* findQMakeCache( KDevelop::IProject* project ) const;
+    QMakeCache* findQMakeCache( KDevelop::IProject* project, const KUrl &path = KUrl() ) const;
     bool projectNeedsConfiguration(KDevelop::IProject* project);
     
     IQMakeBuilder* m_builder;
