@@ -123,10 +123,7 @@ private slots:
     TranslationUnitAST* ast = parse(templatetest, &mem_pool);
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
-    for (int i = 0; i < control.problems().count(); i++)
-    {
-      QVERIFY(control.problems().at(i)->description() == "Unexpected end of file");
-    }
+    QVERIFY(control.problems().isEmpty());
   }
   
   void testManyComparisons()
@@ -250,6 +247,8 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
+    QVERIFY(control.problems().isEmpty());
+    
     QVERIFY(ast != 0);
     QVERIFY(hasKind(ast, AST::Kind_ForStatement));
     QVERIFY(hasKind(ast, AST::Kind_Condition));
@@ -269,6 +268,8 @@ private slots:
     QByteArray method("void A::t() { if (1 < 2) { } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    QVERIFY(control.problems().isEmpty());
     QVERIFY(hasKind(ast, AST::Kind_Condition));
     QVERIFY(hasKind(ast, AST::Kind_BinaryExpression));
   }
@@ -389,7 +390,7 @@ private slots:
     QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
 
     QList<KDevelop::ProblemPointer> problem_list = control.problems();
-    QCOMPARE(problem_list.size(), initial_size + 6); // 5 to-dos + additional 'Unexpected end of file' problem
+    QCOMPARE(problem_list.size(), initial_size + 5); // 5 to-dos
     KDevelop::ProblemPointer problem = problem_list[initial_size];
     QCOMPARE(problem->description(), QString("FIXME comment"));
     QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
@@ -519,7 +520,7 @@ private slots:
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
     pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
-    QCOMPARE(pp.problems().count(), 1);
+    QCOMPARE(pp.problems().size(), 1);
     qDebug() << pp.problems().first()->description();
     QCOMPARE(pp.problems().first()->finalLocation().start, KDevelop::SimpleCursor(0, 8));
     QCOMPARE(pp.problems().first()->finalLocation().end, KDevelop::SimpleCursor(0, 8));
@@ -756,19 +757,19 @@ private slots:
 
     QByteArray switchTest("int main() { switch(0); }");
     parse(switchTest, &mem_pool);
-    QCOMPARE(control.problems().count(), ++problemCount);
+    QCOMPARE(control.problems().count(), problemCount);
     QByteArray switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
     parse(switchTest2, &mem_pool);
-    QCOMPARE(control.problems().count(), ++problemCount);
+    QCOMPARE(control.problems().count(), problemCount);
     QByteArray switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
     parse(switchTest3, &mem_pool);
-    QCOMPARE(control.problems().count(), ++problemCount);
+    QCOMPARE(control.problems().count(), problemCount);
     QByteArray switchTest4("int main() { switch (0) while(true) return false; }");
     parse(switchTest4, &mem_pool);
-    QCOMPARE(control.problems().count(), ++problemCount);
+    QCOMPARE(control.problems().count(), problemCount);
     QByteArray switchTest5("int main() { switch (0) { case 0: return 0; } }");
     parse(switchTest5, &mem_pool);
-    QCOMPARE(control.problems().count(), ++problemCount);
+    QCOMPARE(control.problems().count(), problemCount);
   }
 
 private:
@@ -776,6 +777,7 @@ private:
 
   TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
   {
+    control = Control(); // Clear the problems
     Parser parser(&control);
     lastSession = new ParseSession();
     lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
