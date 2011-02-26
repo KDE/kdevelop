@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
-*  Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2011 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -23,21 +24,28 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <QTextStream>
+#include <QTemporaryFile>
 #include <KDebug>
 #include <KProcess>
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
+#include <auto_ptr.h>
+#include <QDir>
+#include <util/formattinghelpers.h>
 
 using namespace KDevelop;
 
+static QPointer<IndentPlugin> indentPluginSingleton;
+
 K_PLUGIN_FACTORY(IndentFactory, registerPlugin<IndentPlugin>();)
-K_EXPORT_PLUGIN(IndentFactory(KAboutData("kdevindent","kdevformatters", ki18n("Indent Formatter"), "0.1", ki18n("A formatter using indent"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(IndentFactory(KAboutData("kdevindent","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
 
 IndentPlugin::IndentPlugin(QObject *parent, const QVariantList&)
 		: IPlugin(IndentFactory::componentData(), parent)
 {
 	KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
         m_currentStyle = predefinedStyles().at(0);
+	indentPluginSingleton = this;
 }
 
 IndentPlugin::~IndentPlugin()
@@ -52,28 +60,18 @@ QString IndentPlugin::name()
 
 QString IndentPlugin::caption()
 {
-	return "GNU Indent";
+	return "Custom Script Formatter";
 }
 
 QString IndentPlugin::description()
 {
-	// check if indent is installed
-	KProcess proc;
-	QStringList args;
-	args << "--version";
-	proc.setProgram("indent", args);
-	int res = proc.execute();
-
-	if(res >= 0) //indent was found
-		return i18n("<b>Indent and Format C Program Source.</b><br />"
-		"The `indent' program can be used to make code easier to read."
-		" It can also convert from one style of writing C to another.<br />"
-		"<b>indent</b> understands a substantial amount about the syntax of C,"
-		" but it also attempts to cope with incomplete and misformed syntax.<br />"
-		"Home Page: <a href=\"http://www.gnu.org/software/indent/\">"
-		"http://www.gnu.org/software/indent/</a>");
-	else
-		return ISourceFormatter::missingExecutableMessage("indent");
+	return i18n("<b>Indent and Format Source Code.</b><br />"
+				"This plugin allows using powerful external formatting tools"
+				"that can be invoked through the command-line.<br />"
+				"For example the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b>"
+				"formatters can be used.<br />"
+				"The advantage of command-line formatters is that formatting configurations"
+				"can be easily shared by all team members, independent of their preferred IDE.");
 }
 
 QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
@@ -84,20 +82,30 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 
 QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
-
-	if (style.content().isEmpty()) {
-		m_options.clear();
-		if(style.name() == "KR")
-			m_options << "-kr";
-		else if(style.name() == "orig")
-			m_options << "-orig";
-	}
-	else
-		m_options = style.content().split(' ');
 	KProcess proc;
 	QTextStream ios(&proc);
-	proc.setProgram("indent", m_options);
-	proc.setOutputChannelMode(KProcess::MergedChannels);
+	
+	std::auto_ptr<QTemporaryFile> tmpFile;
+	
+	QString command = style.content();
+	if(command.contains("$TMPFILE"))
+	{
+		tmpFile = std::auto_ptr<QTemporaryFile>(new QTemporaryFile(QDir::tempPath() + "/code"));
+		tmpFile->setAutoRemove(true);
+		if(tmpFile->open())
+		{
+			kDebug() << "using temporary file" << tmpFile->fileName();
+			command.replace("$TMPFILE", tmpFile->fileName());
+			tmpFile->write(text.toUtf8());
+		}else{
+			kWarning() << "Failed to create a temporary file";
+			return text;
+		}
+	}
+	
+	kDebug() << "using shell command for indentation: " << style.content();
+	proc.setShellCommand(style.content());
+	proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
 	
 	proc.start();
 	if(!proc.waitForStarted()) {
@@ -113,27 +121,26 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	if(rightContext.startsWith("\n"))
 		useText = useText + rightContext;
 	
-	proc.write(useText.toLocal8Bit());
+	if(!tmpFile.get())
+		proc.write(useText.toLocal8Bit());
+	
 	proc.closeWriteChannel();
 	if(!proc.waitForFinished()) {
 		kDebug() << "Process doesn't finish" << endl;
 		return text;
 	}
-	///@todo Be able to detect errors in formatting, since indent returns the error as the output
 	
-	QStringList output = ios.readAll().split("\n");
+	QString output;
 	
-	///@todo Correctly remove the contexts, if the context originally had a different ammount of lines
-	///as it does after formatting, this will chop off the incorrect text portion
-	//Remove right context
-	if(rightContext.startsWith("\n"))
-		output = output.mid(0, (leftContext + text).split("\n").count());
-	
-	//Remove left context
-	if(leftContext.endsWith("\n"))
-		output = output.mid(leftContext.split("\n").count());
-	
-	return output.join("\n");
+	if(tmpFile.get())
+	{
+		tmpFile->seek(0);
+		output = QString::fromUtf8(tmpFile->readAll());
+	}else{
+		output = ios.readAll();
+	}
+
+    return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
 QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
@@ -144,14 +151,17 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
 QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
         QList<KDevelop::SourceFormatterStyle> styles;
-        KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU" );
-        st.setCaption( "GNU" );
+        KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU_indent_GNU" );
+        st.setCaption( "Gnu Indent: GNU" );
+		st.setContent("indent");
         styles << st;
-        st = KDevelop::SourceFormatterStyle( "KR" );
-        st.setCaption( "Kernighan & Ritchie" );
+        st = KDevelop::SourceFormatterStyle( "GNU_indent_KR" );
+        st.setCaption( "Gnu Indent: Kernighan & Ritchie" );
+		st.setContent("indent -kr");
         styles << st;
-        st = KDevelop::SourceFormatterStyle( "orig" );
-        st.setCaption( i18n("Original Berkeley indent style") );
+        st = KDevelop::SourceFormatterStyle( "GNU_indent_orig" );
+        st.setCaption( i18n("Gnu Indent: Original Berkeley indent style") );
+		st.setContent("indent -orig");
         styles << st;
 	return styles;
 }
@@ -159,18 +169,107 @@ QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
 	Q_UNUSED(mime);
-// 	return new IndentPreferences();
-	return 0;
+	return new IndentPreferences();
+}
+
+static QString formattingSample()
+{
+    return 
+    "// Formatting\n"
+	"void func(){\n"
+    "\tif(isFoo(a,b))\n"
+    "\tbar(a,b);\n"
+    "if(isFoo)\n"
+    "\ta=bar((b-c)*a,*d--);\n"
+    "if(  isFoo( a,b ) )\n"
+    "\tbar(a, b);\n"
+    "if (isFoo) {isFoo=false;cat << isFoo <<endl;}\n"
+    "if(isFoo)DoBar();if (isFoo){\n"
+    "\tbar();\n"
+    "}\n"
+    "\telse if(isBar()){\n"
+    "\tannotherBar();\n"
+    "}\n"
+    "int var = 1;\n"
+    "int *ptr = &var;\n"
+    "int &ref = i;\n"
+    "\n"
+    "QList<int>::const_iterator it = list.begin();\n"
+    "}\n"
+    "namespace A {\n"
+    "namespace B {\n"
+    "void foo() {\n"
+    "  if (true) {\n"
+    "    func();\n"
+    "  } else {\n"
+    "    // bla\n"
+    "  }\n"
+    "}\n"
+    "}\n"
+    "}\n";
+}
+
+static QString indentingSample()
+{
+    return
+    "// Indentation\n"
+    "#define foobar(A)\\\n"
+    "{Foo();Bar();}\n"
+    "#define anotherFoo(B)\\\n"
+    "return Bar()\n"
+    "\n"
+    "namespace Bar\n"
+    "{\n"
+    "class Foo\n"
+    "{public:\n"
+    "Foo();\n"
+    "virtual ~Foo();\n"
+    "};\n"
+    "switch (foo)\n"
+    "{\n"
+    "case 1:\n"
+    "a+=1;\n"
+    "break;\n"
+    "case 2:\n"
+    "{\n"
+    "a += 2;\n"
+    " break;\n"
+    "}\n"
+    "}\n"
+    "if (isFoo)\n"
+    "{\n"
+    "bar();\n"
+    "}\n"
+    "else\n"
+    "{\n"
+    "anotherBar();\n"
+    "}\n"
+    "int foo()\n"
+    "\twhile(isFoo)\n"
+    "\t\t{\n"
+    "\t\t\t...\n"
+    "\t\t\tgoto error;\n"
+    "\t\t....\n"
+    "\t\terror:\n"
+    "\t\t\t...\n"
+    "\t\t}\n"
+    "\t}\n"
+    "fooArray[]={ red,\n"
+    "\tgreen,\n"
+    "\tdarkblue};\n"
+    "fooFunction(barArg1,\n"
+    "\tbarArg2,\n"
+    "\tbarArg3);\n";
 }
 
 QString IndentPlugin::previewText(const KMimeType::Ptr &)
 {
-	return "int foo (){puts(\"Hi\");}\n/* The procedure bar is even less interesting.  */\n"
-	"char * bar () { puts(\"Hello\");}";
+	return formattingSample() + "\n\n" + indentingSample();
 }
 
 ISourceFormatter::IndentationType IndentPlugin::indentationType()
 {
+	///@todo Format a sample, and extract the indentation type
 	if(m_options.contains("-nut"))
 		return ISourceFormatter::IndentWithSpaces;
 	else
@@ -179,10 +278,63 @@ ISourceFormatter::IndentationType IndentPlugin::indentationType()
 
 int IndentPlugin::indentationLength()
 {
+	///@todo Format a sample, and extract the indentation length
 	int idx = m_options.indexOf("^-i\\d+");
 	if(idx < 0)
 		return 2;
 	return m_options[idx].mid(2).toInt();
+}
+
+void IndentPreferences::updateTimeout()
+{
+    QString formatted = indentPluginSingleton->formatSourceWithStyle ( m_style, indentPluginSingleton->previewText ( KMimeType::Ptr() ), KMimeType::Ptr() );
+    emit previewTextChanged ( formatted );
+}
+
+IndentPreferences::IndentPreferences()
+{
+    m_updateTimer = new QTimer ( this );
+    m_updateTimer->setSingleShot ( true );
+    connect ( m_updateTimer, SIGNAL ( timeout() ), SLOT ( updateTimeout() ) );
+    m_vLayout = new QVBoxLayout ( this );
+    m_captionLabel = new QLabel;
+    m_vLayout->addWidget ( m_captionLabel );
+    m_vLayout->addSpacing ( 10 );
+    m_hLayout = new QHBoxLayout;
+    m_vLayout->addLayout ( m_hLayout );
+    m_commandLabel = new QLabel;
+    m_hLayout->addWidget ( m_commandLabel );
+    m_commandEdit = new QLineEdit;
+    m_hLayout->addWidget ( m_commandEdit );
+    m_commandLabel->setText ( "Command: " );
+    m_vLayout->addSpacing ( 10 );
+    m_bottomLabel = new QLabel;
+    m_vLayout->addWidget ( m_bottomLabel );
+    m_bottomLabel->setTextFormat ( Qt::RichText );
+    m_bottomLabel->setText (
+        i18n ( "<i>You can enter an arbitrary shell command.<p/>"
+               "Normally, the source-code to format will be reached<p/>"
+               "to the command through the standard-input, and the<p/>"
+               "result will be read from its standard-output.<p/><p/>"
+               "If you add <b>$TMPFILE</b> into the command, then<p/>"
+               "the code will be written into a temporary file, the temporary<p/>"
+               "file will be substituted into that position, and the result<p/>"
+               "will be read out of that file instead." ) );
+    connect ( m_commandEdit, SIGNAL ( textEdited ( QString ) ), SLOT ( textEdited ( QString ) ) );
+}
+
+void IndentPreferences::load ( const KDevelop::SourceFormatterStyle& style )
+{
+    m_style = style;
+    m_commandEdit->setText ( style.content() );
+    m_captionLabel->setText ( i18n ( "Style: %1", style.caption() ) );
+
+    updateTimeout();
+}
+
+QString IndentPreferences::save()
+{
+    return m_commandEdit->text();
 }
 
 #include "indent_plugin.moc"
