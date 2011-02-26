@@ -3,6 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
+    formattinghelpers.cpp
     richtextpushbutton.cpp
     richtexttoolbutton.cpp
     kdevstringhandler.cpp
@@ -42,6 +43,7 @@ install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWN
 ########### install files ###############
 
 install( FILES
+    formattinghelpers.h
     richtextpushbutton.h
     richtexttoolbutton.h
     kdevstringhandler.h
