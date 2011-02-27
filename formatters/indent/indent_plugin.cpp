@@ -66,11 +66,11 @@ QString IndentPlugin::caption()
 QString IndentPlugin::description()
 {
 	return i18n("<b>Indent and Format Source Code.</b><br />"
-				"This plugin allows using powerful external formatting tools"
+				"This plugin allows using powerful external formatting tools "
 				"that can be invoked through the command-line.<br />"
-				"For example the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b>"
+				"For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b>"
 				"formatters can be used.<br />"
-				"The advantage of command-line formatters is that formatting configurations"
+				"The advantage of command-line formatters is that formatting configurations "
 				"can be easily shared by all team members, independent of their preferred IDE.");
 }
 
@@ -312,13 +312,13 @@ IndentPreferences::IndentPreferences()
     m_vLayout->addWidget ( m_bottomLabel );
     m_bottomLabel->setTextFormat ( Qt::RichText );
     m_bottomLabel->setText (
-        i18n ( "<i>You can enter an arbitrary shell command.<p/>"
-               "Normally, the source-code to format will be reached<p/>"
-               "to the command through the standard-input, and the<p/>"
-               "result will be read from its standard-output.<p/><p/>"
-               "If you add <b>$TMPFILE</b> into the command, then<p/>"
-               "the code will be written into a temporary file, the temporary<p/>"
-               "file will be substituted into that position, and the result<p/>"
+        i18n ( "<i>You can enter an arbitrary shell command.</i><br />"
+               "Normally, the source-code to format will be reached<br />"
+               "to the command through the standard-input, and the<br />"
+               "result will be read from its standard-output.<br /><br />"
+               "If you add <b>$TMPFILE</b> into the command, then<br />"
+               "the code will be written into a temporary file, the temporary<br />"
+               "file will be substituted into that position, and the result<br />"
                "will be read out of that file instead." ) );
     connect ( m_commandEdit, SIGNAL ( textEdited ( QString ) ), SLOT ( textEdited ( QString ) ) );
 }
