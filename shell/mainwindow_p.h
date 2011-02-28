@@ -26,12 +26,14 @@ Boston, MA 02110-1301, USA.
 #include <QPointer>
 #include <qwidget.h>
 #include <kxmlguiclient.h>
+#include <language/util/navigationtooltip.h>
 
 class KActionCollection;
 class KMenu;
 
 namespace Sublime {
 class View;
+class Container;
 }
 
 namespace KParts {
@@ -62,6 +64,7 @@ public:
     void registerStatus(QObject*);
 
     void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
+    void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
 
 public Q_SLOTS:
@@ -137,6 +140,7 @@ private:
     bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;
+    QPair<Sublime::View*, QWeakPointer<NavigationToolTip> > m_tabTooltip;
 };
 
 }

@@ -144,7 +144,7 @@ bool DocumentChangeTracker::needUpdate() const
     return m_needUpdate;
 }
 
-bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range, QString oldText, QString newText)
+bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range, QString /*oldText*/, QString /*newText*/)
 {
     ///@todo Improve this so that it notices when we wrapped in/out of a line-comment
     ///@todo Improve this so that it really checks whether some merge-able tokens have been moved together
@@ -230,7 +230,7 @@ void DocumentChangeTracker::textInserted( Document* document, Range range )
     updateChangedRange(range);
 }
 
-void DocumentChangeTracker::textRemoved( Document* document, Range oldRange, QString oldText )
+void DocumentChangeTracker::textRemoved( Document* /*document*/, Range oldRange, QString oldText )
 {
     QString text = oldText;
     

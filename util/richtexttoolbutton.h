@@ -37,7 +37,7 @@ public:
     void setText(const QString &text);
     QString text() const;
 
-    virtual QSize sizeHint() const;    
+    virtual QSize sizeHint() const;
 signals:
  
 public slots:

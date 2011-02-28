@@ -68,11 +68,20 @@ public:
     void setLeftCornerWidget(QWidget* widget);
     void showTooltipForTab(int tab);
 
+    bool isCurrentTab(int tab) const;
+    /// @return Rect in global position of the tab identified by index @p tab
+    QRect tabRect(int tab) const;
+
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void closeRequest(QWidget *w);
     void tabContextMenuRequested(Sublime::View* view, KMenu* menu);
-    void tabToolTipRequested(Sublime::View* view, QPoint pos);
+    /**
+     * @p view The view represented by the tab that was hovered
+     * @p Container The tab container that triggered the event
+     * @p idx The index of the tab that was hovered
+     */
+    void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int idx);
 
 private Q_SLOTS:
     void widgetActivated(int idx);
@@ -82,7 +91,7 @@ private Q_SLOTS:
     void closeRequest(int idx);
     void tabMoved(int from, int to);
     void wheelScroll(int);
-    void contextMenu(int,QPoint);
+    void contextMenu(int, const QPoint&);
 
 private:
 

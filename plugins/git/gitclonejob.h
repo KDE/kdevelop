@@ -28,10 +28,10 @@ class GitCloneJob : public KDevelop::DVcsJob
     Q_OBJECT
     public:
         GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-        
+
     public slots:
-        void receivedStderr();
-        
+        void processResult();
+
     private:
         uint m_steps;
 };

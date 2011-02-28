@@ -334,9 +334,6 @@ void VcsBlackBoxTest::initTestCase()
             kDebug() << "Component: \"" << p->componentData().componentName() << "\" Name: \"" << idistr->name() << '"';
             QVERIFY2(!idistr->name().isEmpty(), "IBasicVersionControl may not return an empty name");
 
-            if (idistr->name() == "Git") // Needs some fixing first
-                continue;
-
             m_primary.push_back(RepoPtr(new DRepo(idistr)));
 
             m_secondary.push_back(RepoPtr(new DRepo(idistr)));

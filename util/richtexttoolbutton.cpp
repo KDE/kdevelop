@@ -19,7 +19,7 @@
 */
 
 #include "richtextpushbutton.h"
- 
+
 #include <QPainter>
 #include <QPixmap>
 #include <QTextDocument>
@@ -34,7 +34,7 @@ RichTextPushButton::RichTextPushButton(QWidget *parent) :
     QPushButton(parent)
 {
 }
- 
+
 void RichTextPushButton::setHtml(const QString &text)
 {
     htmlText = text;
@@ -44,14 +44,13 @@ void RichTextPushButton::setHtml(const QString &text)
     palette.setBrush(QPalette::ButtonText, Qt::transparent);
     setPalette(palette);
 }
- 
+
 void RichTextPushButton::setText(const QString &text)
 {
     isRichText = false;
     QPushButton::setText(text);
 }
- 
- 
+
 QString RichTextPushButton::text() const
 {
     if (isRichText) {
@@ -72,7 +71,7 @@ QSize RichTextPushButton::sizeHint() const
         return richTextLabel.size().toSize();
     }
 }
- 
+
 void RichTextPushButton::paintEvent(QPaintEvent *event)
 {
     if (isRichText) {
@@ -101,7 +100,7 @@ void RichTextPushButton::paintEvent(QPaintEvent *event)
     } else
         QPushButton::paintEvent(event);
 }
- 
+
 QStyleOptionButton RichTextPushButton::getStyleOption() const
 {
     QStyleOptionButton opt;

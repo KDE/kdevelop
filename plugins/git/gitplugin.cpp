@@ -323,12 +323,12 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 }
 
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
-                        VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
+                        VcsDiff::Type /*type*/, IBasicVersionControl::RecursionMode recursion)
 {
     //TODO: control different types
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "diff" << "--no-prefix";
+    *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
     QString revstr = revisionInterval(srcRevision, dstRevision);
     if(!revstr.isEmpty())
         *job << revstr;

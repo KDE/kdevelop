@@ -159,7 +159,7 @@ void _writeRandomStructure(QString path, int files)
     }
 }
 
-void fillProject(int filesPerDir, int Dirs, const QPair<QString, KUrl> project, bool wait)
+void fillProject(int /*filesPerDir*/, int /*Dirs*/, const QPair<QString, KUrl> project, bool wait)
 {
     QDir(project.first).mkdir("foou");
     _writeRandomStructure(project.first+"/foou", 50);

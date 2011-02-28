@@ -543,7 +543,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
-void UiController::addToolViewToDockArea(const QString& name,
+void UiController::addToolViewToDockArea(const QString& /*name*/,
                                          IToolViewFactory* factory,
                                          Qt::DockWidgetArea area)
 {
