@@ -362,7 +362,7 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     Q_ASSERT(connected);
     connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), this, SLOT(projectClosed(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpeningAborted(KDevelop::IProject*)), this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
     Q_ASSERT(connected);
 }
 
@@ -717,7 +717,7 @@ void BackgroundParser::projectOpened(IProject* project)
     d->m_loadingProjects.remove(project);
 }
 
-void BackgroundParser::projectClosed(IProject* project)
+void BackgroundParser::projectOpeningAborted(IProject* project)
 {
     d->m_loadingProjects.remove(project);
 }

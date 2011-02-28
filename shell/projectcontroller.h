@@ -94,6 +94,7 @@ public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );
     virtual void fetchProject();
     virtual void openProject( const KUrl &KDev4ProjectFile = KUrl() );
+    virtual void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
     virtual void closeProject( IProject* );
     virtual void configureProject( IProject* );

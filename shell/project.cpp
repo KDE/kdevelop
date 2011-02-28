@@ -240,7 +240,7 @@ public:
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
         } else {
-            projCtrl->closeProject(project);
+            projCtrl->abortOpeningProject(project);
         }
     }
 
