@@ -32,7 +32,7 @@
         <item>
          <widget class="QRadioButton" name="projectTargetRadio">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -505,6 +505,22 @@
     <hint type="destinationlabel">
      <x>152</x>
      <y>38</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>executableRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>projectTarget</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>106</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>45</y>
     </hint>
    </hints>
   </connection>
