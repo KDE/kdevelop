@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# This file is part of KDevelop
+# Copyright 2011 David Nolden <david.nolden.kdevelop@art-master.de>
+# 
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
+# 
+# You should have received a copy of the GNU Library General Public License
+# along with this library; see the file COPYING.LIB.  If not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+# Boston, MA 02110-1301, USA.
+
+export KDEV_BASEDIR=$(dirname $0)
+export APPLICATION=KDevelop
+
+if ! [ "$KDEV_ATTACHED_PID" ]; then
+    export KDEV_ATTACHED_PID=$($KDEV_BASEDIR/kdevelop $@ --pid)
+fi
+
+if ! [ "$KDEV_ATTACHED_PID" ]; then
+    echo "Error: Failed retrieving a pid."
+    exit 5
+fi
+
+# Make sure we didn't capture garbage instead of the pid (must be 1 word only)
+if [ "$(echo $KDEV_ATTACHED_PID | wc -w)" != 1 ]; then
+    echo "Error: Got no valid pid."
+    exit 6
+fi
+
+if ! [ "$(which qdbus)" ]; then
+    echo "Error: The qdbus utility is missing."
+    exit 7
+fi
+
+export KDEV_DBUS_ID="org.kdevelop.kdevelop-$KDEV_ATTACHED_PID"
+
+bash  --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i

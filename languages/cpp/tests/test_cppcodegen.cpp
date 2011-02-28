@@ -49,12 +49,13 @@
 #include <cppducontext.h>
 #include <interfaces/iassistant.h>
 #include <interfaces/foregroundlock.h>
+#include <language/duchain/use.h>
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
 using namespace KDevelop;
 
-ForegroundLock* gloalTestLock = 0;
+ForegroundLock* globalTestLock = 0;
 
 void TestCppCodegen::initTestCase()
 {
@@ -66,14 +67,14 @@ void TestCppCodegen::initTestCase()
   
   CodeRepresentation::setDiskChangesForbidden(true);
   
-  gloalTestLock = new ForegroundLock;
+  globalTestLock = new ForegroundLock;
 }
 
 void TestCppCodegen::cleanupTestCase()
 {
   Core::self()->cleanup();
-  delete gloalTestLock;
-  gloalTestLock = 0;
+  delete globalTestLock;
+  globalTestLock = 0;
 }
 
 void dumpAST(InsertIntoDUChain& code)
@@ -660,6 +661,26 @@ void TestCppCodegen::testPrivateImplementation()
   QCOMPARE(newHeader->problems().size(), 1);
   QCOMPARE(newImplementation->problems().size(), 1);
 #endif
+}
+
+void TestCppCodegen::testMacroDeclarationOrder()
+{
+  InsertIntoDUChain source("thefile.h",
+    "#define DECLARE_MY_ITERATOR\
+     template <class Key, class T> class MyIteratorMacro { T value(); Key key(); };\n\
+     DECLARE_MY_ITERATOR\n\
+     template <class Key, class T> class MyIteratorDirect { Key key(); T value(); };");
+  source.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+  DUChainReadLocker lock;
+  ReferencedTopDUContext top = source.m_topContext;
+  Declaration* macroKey = top->findDeclarations(QualifiedIdentifier("MyIteratorMacro<int,char>::key")).first();
+  Declaration* macroVal = top->findDeclarations(QualifiedIdentifier("MyIteratorMacro<int,char>::value")).first();
+  Declaration* directKey = top->findDeclarations(QualifiedIdentifier("MyIteratorDirect<int,char>::key")).first();
+  Declaration* directVal = top->findDeclarations(QualifiedIdentifier("MyIteratorDirect<int,char>::value")).first();
+  QVERIFY(directKey->abstractType()->toString() == "function int ()");
+  QVERIFY(directVal->abstractType()->toString() == "function char ()");
+  QVERIFY(macroKey->abstractType()->toString() == "function int ()");
+  QVERIFY(macroVal->abstractType()->toString() == "function char ()");
 }
 
 #include "test_cppcodegen.moc"

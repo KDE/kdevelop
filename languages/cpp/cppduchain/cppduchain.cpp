@@ -637,18 +637,17 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
         }else{
           newTypeName = decl->qualifiedIdentifier();
         }
-
         //Strip unneded prefixes of the scope
-        while(newTypeName.count() > 1) {
-          KDevelop::QualifiedIdentifier candidate = newTypeName.mid(1);
+        KDevelop::QualifiedIdentifier candidate = newTypeName;
+        while(candidate.count() > 1) {
+          candidate = candidate.mid(1);
           QList< KDevelop::Declaration* > decls = ctx->findDeclarations(candidate);
           if(decls.isEmpty())
-            break;
+            continue; // type aliases might be available for nested sub scopes, hence we must not break early
           if(decls[0]->kind() != Declaration::Type || decls[0]->indexedType() != type->indexed())
             break;
           newTypeName = candidate;
         }
-        
         if(newTypeName == decl->qualifiedIdentifier())
           return type;
         

@@ -36,6 +36,7 @@
 #include "cppduchainexport.h"
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/types/typesystem.h>
+#include "ptrtomembertype.h"
 
 namespace KDevelop
 {

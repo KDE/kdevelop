@@ -594,6 +594,16 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     closeType();
 }
 
+void TypeBuilder::visitPtrToMember(PtrToMemberAST *node)
+{
+  PtrToMemberType::Ptr pointer(new PtrToMemberType);
+  pointer->setBaseType(lastType());
+  ContextBuilder::visitPtrToMember(node);
+  pointer->setClassType(lastType());
+  openType(pointer);
+  closeType();
+}
+
 FunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
 {
   FunctionType* functionType = new FunctionType();

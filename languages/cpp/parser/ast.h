@@ -833,6 +833,8 @@ class PtrToMemberAST : public AST
 public:
 
   DECLARE_AST_NODE(PtrToMember)
+
+  TypeSpecifierAST *class_type;
 };
 
 class JumpStatementAST : public StatementAST

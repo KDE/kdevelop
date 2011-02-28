@@ -123,10 +123,7 @@ private slots:
     TranslationUnitAST* ast = parse(templatetest, &mem_pool);
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
-    for (int i = 0; i < control.problems().count(); i++)
-    {
-      QVERIFY(control.problems().at(i)->description() == "Unexpected end of file");
-    }
+    QVERIFY(control.problems().isEmpty());
   }
   
   void testManyComparisons()
@@ -250,6 +247,8 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
+    QVERIFY(control.problems().isEmpty());
+    
     QVERIFY(ast != 0);
     QVERIFY(hasKind(ast, AST::Kind_ForStatement));
     QVERIFY(hasKind(ast, AST::Kind_Condition));
@@ -269,6 +268,8 @@ private slots:
     QByteArray method("void A::t() { if (1 < 2) { } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    QVERIFY(control.problems().isEmpty());
     QVERIFY(hasKind(ast, AST::Kind_Condition));
     QVERIFY(hasKind(ast, AST::Kind_BinaryExpression));
   }
@@ -389,7 +390,7 @@ private slots:
     QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
 
     QList<KDevelop::ProblemPointer> problem_list = control.problems();
-    QCOMPARE(problem_list.size(), initial_size + 6); // 5 to-dos + additional 'Unexpected end of file' problem
+    QCOMPARE(problem_list.size(), initial_size + 5); // 5 to-dos
     KDevelop::ProblemPointer problem = problem_list[initial_size];
     QCOMPARE(problem->description(), QString("FIXME comment"));
     QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
@@ -435,7 +436,11 @@ private slots:
   QString preprocess(const QString& contents) {
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
-    return QString::fromUtf8(stringFromContents(pp.processFile("anonymous", contents.toUtf8())));
+    QByteArray qba = stringFromContents(pp.processFile("anonymous", contents.toUtf8()));
+    if(pp.problems().empty())
+      return QString::fromUtf8(qba);
+    else
+      return "*ERROR*";
   }
 
   void testPreprocessor() {
@@ -450,24 +455,63 @@ private slots:
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO\n(aa, bb)").trimmed(), QString("ab"));
     QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO(aa,\n bb)").trimmed(), QString("ab"));
     QCOMPARE(preprocess("#if 0x1\n #define NUMBER 10\n#else\n#define NUMBER 20\n#endif\nNUMBER\n").trimmed(), QString("10"));
+    QCOMPARE(preprocess("#define AA BB\n#define BB CC\nAA\n").trimmed(), QString("CC"));
+    QCOMPARE(preprocess("#define bla(x) bla(x)\n#define foo(x) foo##x\n#define choose(x) x(a) x(b)\nchoose(bla)\n").replace(QRegExp("[\n\t ]+"), ""), QString("bla(a)bla(b)"));
+    QCOMPARE(preprocess("#define bla(x) bla(x)\n#define foo(x) foo##x\n#define choose(x) x(a) x(b)\nchoose(foo)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("fooa foob"));
+    QCOMPARE(preprocess("#define XX YY\n#define YY(x) z x\nXX(x)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("z x"));
+    QCOMPARE(preprocess("#define PP(x) Q##x\n#define QQ 12\nPP(Q)\n").trimmed(), QString("12"));
+    QCOMPARE(preprocess("#define MM(x) NN\n#define OO(NN) MM(NN)\nOO(2)\n").trimmed(), QString("NN"));
+    QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OO)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("2 2 2"));
+    QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OOO)\n").replace(QRegExp("[\n\t ]+"), ""), QString("OOOO(2)"));
+    
+    QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
+    QCOMPARE(preprocess("bla \\\n#define foobar oc\nfoobar\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("bla #define foobar oc foobar"));
+    
+    QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define foo(x) foo##x\n#define bla fo\\\no(2)\n").trimmed(), QString("foo2"));
+    
+    QEXPECT_FAIL("", "Empty expansions incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define foo(x) foo##x\n#define _A\n\n#define CALL(X, Y) X _A (Y)\nCALL(foo, 13)\n").replace(QRegExp("[\n\t ]+"), ""), QString("foo(13)"));
+    
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(preprocess("#define NC(...) __VA_ARGS__\nNC(bla,bla)\n").replace(QRegExp("[\n\t ]+"), ""), QString("bla,bla"));
+    
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(NC(pair<a,b>), c)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("pair<a,b> c pair<a,b>"));
+    
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define bla(x,y)\nbla(1,2,3)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for missmatching macro-parameter-lists", Continue);
+    QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\nPUT_BETWEEN(pair<a,b>, c)\n"), QString("*ERROR*"));
+    
+    QEXPECT_FAIL("", "No problems reported for macro-redefinition", Continue);
+    QCOMPARE(preprocess("#define A B\n#define A C\n"), QString("*ERROR*"));
   }
 
   void testPreprocessorStringify() {
     QCOMPARE(preprocess("#define STR(s) #s\n#define MACRO string\nSTR(MACRO)").trimmed(), QString("\"MACRO\""));
     QCOMPARE(preprocess("#define STR(s) #s\n#define XSTR(s) STR(s)\n#define MACRO string\nXSTR(MACRO)").simplified(), QString("\"string\""));
+    
+    QEXPECT_FAIL("", "# incorrectly handled", Continue);
+    QCOMPARE(preprocess("#define CONCAT(x,y) x ## y\n#define test #CONCAT(1,2)\ntest\n").trimmed(), QString("#12"));
   }
 
   void testStringConcatenation()
   {
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(var1, )").trimmed(), QString("var1"));
-    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1 ## Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )").simplified(), QString("\nHelloYou YouHello").simplified());
 
     QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
     QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\n#define LOW LOW world\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
     QCOMPARE(preprocess("#define GLUE(a, b) a ##b\n#define XGLUE(a, b) GLUE(a, b)\n#define HIGHLOW hello\n#define LOW LOW world\nXGLUE(HIGH, LOW)").simplified(), QString("hello world")); // TODO: simplified -> trimmed
     QCOMPARE(preprocess("#define GLUE(a, b, c) k ## l ## m\nGLUE(a, b, c)").trimmed(), QString("klm"));
+    
+    QCOMPARE(preprocess("#define foo(x) foo##x\nint foo\n(13)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("int foo13"));
   }
 
   void testEmptyInclude()
@@ -476,7 +520,7 @@ private slots:
     rpp::Preprocessor preprocessor;
     rpp::pp pp(&preprocessor);
     pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
-    QCOMPARE(pp.problems().count(), 1);
+    QCOMPARE(pp.problems().size(), 1);
     qDebug() << pp.problems().first()->description();
     QCOMPARE(pp.problems().first()->finalLocation().start, KDevelop::SimpleCursor(0, 8));
     QCOMPARE(pp.problems().first()->finalLocation().end, KDevelop::SimpleCursor(0, 8));
@@ -685,11 +729,55 @@ private slots:
     QVERIFY(hasKind(funcAst, AST::Kind_InitDeclarator));
   }
 
+  void testPtrToMemberAst() {
+    pool memPool;
+    TranslationUnitAST* ast = parse("\nstruct AA {"
+                                    "\n  int j;"
+                                    "\n};"
+                                    "\nstruct BB{"
+                                    "\n  int AA::* pj;"
+                                    "\n};"
+                                    "\nvoid f(){"
+                                    "\n  int AA::* BB::* ppj=&BB::pj;"
+                                    "\n}"
+                                    , &memPool);
+    QVERIFY(ast!=0);
+    QCOMPARE(ast->declarations->count(), 3);
+    QVERIFY(hasKind(ast,AST::Kind_PtrToMember));
+    FunctionDefinitionAST* f_ast=static_cast<FunctionDefinitionAST*>(getAST(ast,AST::Kind_FunctionDefinition));
+    QVERIFY(hasKind(f_ast,AST::Kind_PtrToMember));
+    DeclaratorAST* d_ast=static_cast<DeclaratorAST*>(getAST(f_ast->function_body,AST::Kind_Declarator));
+    QCOMPARE(d_ast-> ptr_ops->count(),2);
+  }
+
+  void testSwitchStatement()
+  {
+    int problemCount = control.problems().count();
+    pool mem_pool;
+
+    QByteArray switchTest("int main() { switch(0); }");
+    parse(switchTest, &mem_pool);
+    QCOMPARE(control.problems().count(), problemCount);
+    QByteArray switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
+    parse(switchTest2, &mem_pool);
+    QCOMPARE(control.problems().count(), problemCount);
+    QByteArray switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
+    parse(switchTest3, &mem_pool);
+    QCOMPARE(control.problems().count(), problemCount);
+    QByteArray switchTest4("int main() { switch (0) while(true) return false; }");
+    parse(switchTest4, &mem_pool);
+    QCOMPARE(control.problems().count(), problemCount);
+    QByteArray switchTest5("int main() { switch (0) { case 0: return 0; } }");
+    parse(switchTest5, &mem_pool);
+    QCOMPARE(control.problems().count(), problemCount);
+  }
+
 private:
   ParseSession* lastSession;
 
   TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
   {
+    control = Control(); // Clear the problems
     Parser parser(&control);
     lastSession = new ParseSession();
     lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));

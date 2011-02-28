@@ -191,7 +191,7 @@ private slots:
   void testAutoTypes();
 
   void testCommentAfterFunctionCall();
-
+  void testPointerToMember();
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 

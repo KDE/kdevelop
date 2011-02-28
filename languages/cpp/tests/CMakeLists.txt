@@ -13,7 +13,6 @@ set(cppcodecompletiontest_SRCS
   test_cppcodecompletion.cpp
   
   ../codecompletion/context.cpp
-  ../stringhelpers.cpp
   ../codecompletion/item.cpp
   ../codecompletion/helpers.cpp
   ../codecompletion/implementationhelperitem.cpp
@@ -37,7 +36,6 @@ set(cppcodegentest_SRCS
   test_cppcodegen.cpp
   
   ../codecompletion/context.cpp
-  ../stringhelpers.cpp
   ../codecompletion/item.cpp
   ../codecompletion/helpers.cpp
   ../codecompletion/implementationhelperitem.cpp

@@ -253,6 +253,8 @@ void Lexer::tokenize(ParseSession* _session)
 
   cursor.current = session->contents();
   endCursor = session->contents() + session->contentsVector().size();
+  while(endCursor-1 >= session->contents() && (*(endCursor-1)) == 0)
+    --endCursor;
 
   while (cursor < endCursor) {
     size_t previousIndex = index;
@@ -348,7 +350,7 @@ void Lexer::initialize_scan_table()
 
 void Lexer::scan_preprocessor()
 {
-  while (cursor != endCursor && *cursor && *cursor != '\n')
+  while (cursor < endCursor && *cursor && *cursor != '\n')
     ++cursor;
 
   if (*cursor != '\n')
@@ -364,7 +366,7 @@ void Lexer::scan_char_constant()
   //const char *begin = cursor;
 
   ++cursor;
-  while (cursor != endCursor && *cursor && *cursor != '\'')
+  while (cursor < endCursor && *cursor && *cursor != '\'')
     {
       if (*cursor == '\n')
         {
@@ -402,7 +404,7 @@ void Lexer::scan_string_constant()
   //const char *begin = cursor;
 
   ++cursor;
-  while (cursor != endCursor && *cursor && *cursor != '"')
+  while (cursor < endCursor && *cursor && *cursor != '"')
     {
        if (*cursor == '\n')
         {
@@ -443,7 +445,7 @@ void Lexer::scan_newline()
 
 void Lexer::scan_white_spaces()
 {
-  while (cursor != endCursor && isspace(*cursor))
+  while (cursor < endCursor && isspace(*cursor))
     {
       if (*cursor == '\n')
 	scan_newline();
@@ -502,9 +504,12 @@ void Lexer::scan_identifier_or_keyword()
     }
   }
 
-  m_leaveSize = true; //Since we may have skipped input tokens while mergin, we have to make sure that the size stays 1(the merged tokens will be empty)
-  (*session->token_stream)[index].size = 1;
-  (*session->token_stream)[index++].kind = Token_identifier;
+  if(*cursor.current != 0) // If the index is zero, then the string is empty. Never create empty identifier tokens.
+  {
+    m_leaveSize = true; //Since we may have skipped input tokens while mergin, we have to make sure that the size stays 1(the merged tokens will be empty)
+    (*session->token_stream)[index].size = 1;
+    (*session->token_stream)[index++].kind = Token_identifier;
+  }
   
   cursor = nextCursor;
 }
@@ -519,7 +524,7 @@ void Lexer::scan_int_constant()
 
   //const char *begin = cursor;
 
-  while (cursor != endCursor &&  (isalnum(*cursor) || *cursor == '.'))
+  while (cursor < endCursor &&  (isalnum(*cursor) || *cursor == '.'))
     ++cursor;
 
   //(*session->token_stream)[index].extra.symbol =

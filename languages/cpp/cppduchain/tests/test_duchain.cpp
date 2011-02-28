@@ -499,6 +499,7 @@ void TestDUChain::testIntegralTypes()
   //Even if reference/pointer types have an invalid target, they should still preserve the pointer
   QVERIFY(AbstractType::Ptr(new ReferenceType)->toString().endsWith("&"));
   QVERIFY(AbstractType::Ptr(new PointerType)->toString().endsWith("*"));
+  QVERIFY(AbstractType::Ptr(new PtrToMemberType)->toString().endsWith("::*"));
 
 }
 
@@ -4033,6 +4034,43 @@ void TestDUChain::testSimplifiedTypeString()
 
   }
   {
+    QByteArray method("namespace A { namespace B { struct C {}; C* foo(); } };");
+    LockedTopDUContext top = parse(method, DumpNone);
+
+    QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::foo"));
+    QCOMPARE(decls.size(), 1);
+    FunctionDeclaration* fooDecl = dynamic_cast<FunctionDeclaration*>(decls.first());
+    QVERIFY(fooDecl);
+
+    FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
+    QVERIFY(fooType);
+
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C*"));
+  }
+  {
+    // a bit artificial, but similar to what you could reach with #include
+    QByteArray method("namespace A { namespace B { namespace C { struct D {}; D* foo(); } } }\nnamespace A { using namespace B::C; };");
+    LockedTopDUContext top = parse(method, DumpNone);
+
+    QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::C::foo"));
+    QCOMPARE(decls.size(), 1);
+    FunctionDeclaration* fooDecl = dynamic_cast<FunctionDeclaration*>(decls.first());
+    QVERIFY(fooDecl);
+
+    FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
+    QVERIFY(fooType);
+
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C::D*"));
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]->childContexts()[0]), QString("D*"));
+
+    // now the interesting part: the namespace with the "using namespace B::C"
+    QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[1]), QString("D*"));
+  }
+  {
     QByteArray method("typedef int *honk, **honk2; honk k;");
     LockedTopDUContext top = parse(method, DumpNone);
 
@@ -5844,6 +5882,70 @@ void TestDUChain::testCommentAfterFunctionCall()
 
   QVERIFY(top->childContexts().last()->localDeclarations().isEmpty());
   QCOMPARE(m_view->uses().size(), 1);
+}
+void TestDUChain::testPointerToMember()
+{
+  //                                         1         2         3
+  //                                123456789012345678901234567890
+  LockedTopDUContext top = parse(  "struct AA {"
+                                 "\n  int j;"
+                                 "\n};"
+                                 "\nstruct BB{"
+                                 "\n  int AA::* pj;"
+                                 "\n};"
+                                 "\nvoid f(int AA::* par){"
+                                 "\n  BB b;"
+                                 "\n  int AA::* BB::* ppj=&BB::pj;"
+                                 "\n  b.*ppj=par;"
+                                 "\n}",DumpAll
+                           );
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->childContexts().size(),4);
+  QCOMPARE(top->localDeclarations().size(),3);
+
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin()->size(),3);
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin()->size(),3);
+
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin()->at(0),RangeInRevision(4,6,4,8));
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin()->at(1),RangeInRevision(6,11,6,13));
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin()->at(2),RangeInRevision(8,6,8,8));
+
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin()->at(0),RangeInRevision(7,2,7,4));
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin()->at(1),RangeInRevision(8,12,8,14));
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin()->at(2),RangeInRevision(8,23,8,25));
+
+  {
+    DUContext* ctx = top->childContexts().at(1);
+    Declaration* dec = ctx->localDeclarations().first();
+    PtrToMemberType::Ptr type = dec->abstractType().cast<PtrToMemberType>();
+    QVERIFY(type);
+    StructureType::Ptr structType = type->classType().cast<StructureType>();
+    QVERIFY(structType);
+    QCOMPARE(structType->qualifiedIdentifier().toString(), QString("AA"));
+  }
+  {
+    DUContext* ctx = top->childContexts().at(3);
+    Declaration* dec = ctx->localDeclarations().at(1);
+    PtrToMemberType::Ptr type = dec->abstractType().cast<PtrToMemberType>();
+
+    {
+      QVERIFY(type);
+      StructureType::Ptr structType = type->classType().cast<StructureType>();
+      QVERIFY(structType);
+      QCOMPARE(structType->qualifiedIdentifier().toString(), QString("BB"));
+    }
+
+    PtrToMemberType::Ptr ptype = type->baseType().cast<PtrToMemberType>();
+    {
+      QVERIFY(ptype);
+      StructureType::Ptr structType = ptype->classType().cast<StructureType>();
+      QVERIFY(structType);
+      QCOMPARE(structType->qualifiedIdentifier().toString(), QString("AA"));
+    }
+  }
+
 }
 
 QVector<const Use*> usesForContext(DUContext* c)

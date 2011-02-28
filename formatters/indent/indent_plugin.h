@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
-*  Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2011 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -23,6 +24,10 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/isourceformatter.h>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTimer>
 
 class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 {
@@ -70,8 +75,35 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
 	private:
 		QStringList m_options;
-                KDevelop::SourceFormatterStyle m_currentStyle;
+		KDevelop::SourceFormatterStyle m_currentStyle;
 };
+
+class IndentPreferences : public KDevelop::SettingsWidget {
+Q_OBJECT
+public:
+	IndentPreferences() ;
+		
+    virtual void load ( const KDevelop::SourceFormatterStyle& style ) ;
+    
+    virtual QString save() ;
+private:
+	QVBoxLayout* m_vLayout;
+	QLabel* m_captionLabel;
+	QHBoxLayout* m_hLayout;
+	QLabel* m_commandLabel;
+	QLineEdit* m_commandEdit;
+	QLabel* m_bottomLabel;
+	QTimer* m_updateTimer;
+	KDevelop::SourceFormatterStyle m_style;
+	
+private slots:
+	void textEdited ( QString ) {
+		m_updateTimer->start(1000);
+	}
+	
+	void updateTimeout() ;
+};
+
 
 #endif // INDENTPLUGIN_H
 

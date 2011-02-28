@@ -192,7 +192,7 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
       KDialog d;
       QWidget *w=new QWidget(&d);
       w->setLayout(new QVBoxLayout);
-      w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
+      w->layout()->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
       QListWidget* targetsWidget=new QListWidget(w);
       targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
       foreach(ProjectTargetItem* it, t) {
