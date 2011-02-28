@@ -328,7 +328,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     //TODO: control different types
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this);
-    *job << "git" << "diff" << "--no-prefix";
+    *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
     QString revstr = revisionInterval(srcRevision, dstRevision);
     if(!revstr.isEmpty())
         *job << revstr;
