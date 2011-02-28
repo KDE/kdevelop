@@ -93,13 +93,13 @@ QHash<QString,QString> queryQMake( const QString& path )
         p.setWorkingDirectory( info.absolutePath() );
         //To be implemented when there's an API to fetch Env from Project
         //p.setEnv();
-        p << "qmake-qt4" << "-query" << var;
+        p << "qmake" << "-query" << var;
         p.execute();
         QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
         if( result != "**Unknown**")
             hash[var] = result;
     }
-    qDebug() << "Ran qmake-qt4, found:" << hash;
+    qDebug() << "Ran qmake, found:" << hash;
     return hash;
 }
 
