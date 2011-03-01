@@ -29,7 +29,7 @@
 #include <KProcess>
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <auto_ptr.h>
+#include <memory>
 #include <QDir>
 #include <util/formattinghelpers.h>
 
