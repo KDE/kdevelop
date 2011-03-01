@@ -21,6 +21,8 @@
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
 
+#include <iterator>
+
 #include <interfaces/idocumentcontroller.h>
 
 #include <language/interfaces/ilanguagesupport.h>
