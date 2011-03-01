@@ -790,13 +790,11 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* source) {
   return getTemplateContext(internal, source);
 }
 
-QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
+QualifiedIdentifier stripPrefixes(DUContext* ctx, const QualifiedIdentifier& id)
 {
   if(!ctx)
     return id;
-  
-  QualifiedIdentifier basicId = id;
-  
+
   QList<QualifiedIdentifier> imports = ctx->fullyApplyAliases(QualifiedIdentifier(), ctx->topContext());
   if(imports.contains(id))
     return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
@@ -806,15 +804,15 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   if(basicDecls.isEmpty())
     return id;
   
-  while(!id.isEmpty())
+  QualifiedIdentifier newId = id;
+  while(!newId.isEmpty())
   {
-    QualifiedIdentifier newId = id.mid(1);
+    newId = newId.mid(1);
     QList< Declaration* > foundDecls = ctx->findDeclarations(newId, CursorInRevision::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
-    
+
     if(foundDecls == basicDecls)
-      id = newId;
-    else
-      break;
+      id = newId; // must continue to find the shortest possible identifier
+                  // esp. for cases where nested namespaces are used (e.g. using namespace a::b::c;)
   }
 
   return id;
