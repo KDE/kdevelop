@@ -804,15 +804,16 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   if(basicDecls.isEmpty())
     return id;
   
-  QualifiedIdentifier newId = id;
+  QualifiedIdentifier newId = id.mid(1);
   while(!newId.isEmpty())
   {
-    newId = newId.mid(1);
     QList< Declaration* > foundDecls = ctx->findDeclarations(newId, CursorInRevision::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
 
     if(foundDecls == basicDecls)
       id = newId; // must continue to find the shortest possible identifier
                   // esp. for cases where nested namespaces are used (e.g. using namespace a::b::c;)
+
+    newId = newId.mid(1);
   }
 
   return id;
