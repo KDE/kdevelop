@@ -282,5 +282,9 @@ namespace KDevelop {
     }
 }
 
-// Important: The foreground lock has to be held by default
-ForegroundLock lock;
+// Important: The foreground lock has to be held by default, so lock it during static initialization
+static struct StaticLock {
+    StaticLock() {
+        lockForegroundMutexInternal();
+    }
+} staticLock;
