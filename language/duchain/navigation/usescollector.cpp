@@ -33,6 +33,7 @@
 #include "../abstractfunctiondeclaration.h"
 #include "../functiondefinition.h"
 #include <interfaces/iuicontroller.h>
+#include <codegen/coderepresentation.h>
 
 using namespace KDevelop;
 
@@ -233,6 +234,30 @@ void UsesCollector::startCollecting() {
         
         if(checker(file))
           collected.insert(file);
+        
+        {
+          QSet<ParsingEnvironmentFile*> filteredCollected;
+          QMap<IndexedString, bool> grepCache;
+          // Filter the collected files by performing a grep
+          foreach(ParsingEnvironmentFile* file, collected)
+          {
+            IndexedString url = file->url();
+            QMap< IndexedString, bool >::iterator grepCacheIt = grepCache.find(url);
+            if(grepCacheIt == grepCache.end())
+            {
+              CodeRepresentation::Ptr repr = KDevelop::createCodeRepresentation( url );
+              if(repr)
+              {
+                QVector<SimpleRange> found = repr->grep(decl->identifier().identifier().str());
+                grepCacheIt = grepCache.insert(url, !found.isEmpty());
+              }
+            }
+            if(grepCacheIt.value())
+              filteredCollected << file;
+          }
+          kDebug() << "Collected contexts for full re-parse, before filtering: " << collected.size() << " after filtering: " << filteredCollected.size();
+          collected = filteredCollected;
+        }
 
         ///We have all importers now. However since we can tell parse-jobs to also update all their importers, we only need to
         ///update the "root" top-contexts that open the whole set with their imports.
@@ -253,9 +278,9 @@ void UsesCollector::startCollecting() {
         emit maximumProgressSignal(rootFiles.size());
         maximumProgress(rootFiles.size());
 
-        //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This we only
-        //set the minimum-features selectively on the files we encountered.
-        foreach(ParsingEnvironmentFile* file, visited)
+        //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This way we only
+        //set the minimum-features selectively on the files we really require them on.
+        foreach(ParsingEnvironmentFile* file, collected)
           m_staticFeaturesManipulated.insert(file->url());
         m_staticFeaturesManipulated.insert(decl->url());
 

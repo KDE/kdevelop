@@ -23,6 +23,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <editor/modificationrevision.h>
+#include <ktexteditor/movinginterface.h>
 
 namespace KDevelop {
     
@@ -45,11 +46,40 @@ QString CodeRepresentation::rangeText(KTextEditor::Range range) const
     return rangedText;
 }
 
+static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<SimpleRange>& ret, bool surroundedByBoundary)
+{
+    int pos = 0;
+    while(true)
+    {
+        pos = lineText.indexOf(identifier, pos);
+        if(pos == -1)
+            break;
+        int start = pos;
+        pos += identifier.length();
+        int end = pos;
+        
+        if(!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != '_')
+                                        && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != '_')) )
+        {
+            ret << SimpleRange(lineNumber, start, lineNumber, end);
+        }
+    }
+    
+}
+
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
   EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
       m_url = IndexedString(m_document->url());
   }
+  
+  virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+      QVector< SimpleRange > ret;
+      for(int line = 0; line < m_document->lines(); ++line)
+        grepLine(identifier, m_document->line(line), line, ret, surroundedByBoundary);
+      return ret;
+  }
+  
   QString line(int line) const {
         if(line < 0 || line >= m_document->lines())
             return QString();
@@ -123,6 +153,13 @@ class FileCodeRepresentation : public CodeRepresentation {
       return lineData.at(line);
     }
     
+    virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+        QVector< SimpleRange > ret;
+        for(int line = 0; line < lineData.count(); ++line)
+            grepLine(identifier, lineData.at(line), line, ret, surroundedByBoundary);
+        return ret;
+    }
+    
     virtual int lines() const {
         return lineData.count();
     }
@@ -173,9 +210,10 @@ class ArtificialStringData : public QSharedData {
     QString data() const {
         return m_data;
     }
-    QStringList lines() const {
+    const QStringList& lines() const {
         return m_lineData;
     }
+    
     private:
     QString m_data;
     QStringList m_lineData;
@@ -209,6 +247,13 @@ class StringCodeRepresentation : public CodeRepresentation {
     
     bool fileExists(){
         return false;
+    }
+    
+    virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+        QVector< SimpleRange > ret;
+        for(int line = 0; line < data->lines().count(); ++line)
+            grepLine(identifier, data->lines().at(line), line, ret, surroundedByBoundary);
+        return ret;
     }
     
   private:
