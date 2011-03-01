@@ -285,6 +285,8 @@ namespace KDevelop {
 // Important: The foreground lock has to be held by default, so lock it during static initialization
 static struct StaticLock {
     StaticLock() {
+        // Only lock, without unlocking, because otherwise important variables like
+        // QThread::currentThread() might already be invalid during destruction.
         lockForegroundMutexInternal();
     }
 } staticLock;
