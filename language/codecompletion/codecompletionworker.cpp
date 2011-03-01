@@ -40,7 +40,7 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* model) :
+CodeCompletionWorker::CodeCompletionWorker(KDevelop::CodeCompletionModel* model) :
   m_hasFoundDeclarations(false)
   , m_mutex(new QMutex())
   , m_abort(false)
