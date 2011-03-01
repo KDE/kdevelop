@@ -115,9 +115,10 @@ KTextEditor::Editor* PartController::editorPart() const
             "KTextEditor::Editor" ));
 
         if (!editorFactory) {
-            KMessageBox::error(qApp->activeWindow(), i18n("System Configuration Error"),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("Could not find KTextEditor::Factory, check your installation.\n"
-                                    "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ));
+                                    "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ),
+                               i18n("System Configuration Error"));
             qApp->quit();
             return 0;
         }
