@@ -790,7 +790,7 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* source) {
   return getTemplateContext(internal, source);
 }
 
-QualifiedIdentifier stripPrefixes(DUContext* ctx, const QualifiedIdentifier& id)
+QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
 {
   if(!ctx)
     return id;
