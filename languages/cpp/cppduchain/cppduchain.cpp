@@ -703,10 +703,16 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 
   bool isReference = false;
   bool isConstReference = false;
-  if(type.cast<ReferenceType>()) {
+  if(ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
     isReference = true;
-    isConstReference = type.cast<ReferenceType>()->modifiers() & AbstractType::ConstModifier;
+    isConstReference = refType->baseType() && refType->baseType()->modifiers() & AbstractType::ConstModifier;
     type = type.cast<ReferenceType>()->baseType();
+    if (isConstReference) {
+      // remove const modifier
+      // TODO: should this maybe handled gracefully in stripType ?
+      type = type->clone();
+      type->setModifiers(type->modifiers() & ~AbstractType::ConstModifier);
+    }
   }
 
   type = shortenTypeForViewing(type);

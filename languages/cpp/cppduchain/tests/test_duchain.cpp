@@ -4034,7 +4034,7 @@ void TestDUChain::testSimplifiedTypeString()
 
   }
   {
-    QByteArray method("namespace A { namespace B { struct C {}; C* foo(); } };");
+    QByteArray method("namespace A { namespace B { struct C {}; C* foo(const C& ref); } };");
     LockedTopDUContext top = parse(method, DumpNone);
 
     QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::foo"));
@@ -4044,10 +4044,21 @@ void TestDUChain::testSimplifiedTypeString()
 
     FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
     QVERIFY(fooType);
+    QCOMPARE(fooType->arguments().size(), 1);
 
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C*"));
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C*"));
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C*"));
+
+    // test stripping of const-ref
+    AbstractType::Ptr refType = fooType->arguments().at(0);
+    QVERIFY(refType.cast<ReferenceType>());
+    QVERIFY(refType.cast<ReferenceType>()->baseType());
+    QVERIFY(refType.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+
+    QCOMPARE(Cpp::shortenedTypeString(refType, top), QString("const A::B::C&"));
+    QCOMPARE(Cpp::shortenedTypeString(refType, top->childContexts()[0]), QString("const B::C&"));
+    QCOMPARE(Cpp::shortenedTypeString(refType, top->childContexts()[0]->childContexts()[0]), QString("const C&"));
   }
   {
     // a bit artificial, but similar to what you could reach with #include
