@@ -43,7 +43,7 @@ namespace TypeUtils {
    * @return return-value will only be zero if type is zero
    */
   ///@todo remove all parameters except type
-  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext = 0, bool* constant = 0);
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext = 0);
 
   /**
    * Returns the dereferenced type, keeping typedef types.
@@ -133,6 +133,8 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr decreasePointerDepth(KDevelop::AbstractType::Ptr type, KDevelop::TopDUContext* top, bool useOperator = false);
 
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr increasePointerDepth(KDevelop::AbstractType::Ptr type);
+  
+  KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedType removeConstModifier(const KDevelop::IndexedType& type);
   
   ///Transforms from constants like '5' to their underlying types like 'int' (Or from enumerators to their enumeration-types)
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr removeConstants(KDevelop::AbstractType::Ptr type, const KDevelop::TopDUContext* source);

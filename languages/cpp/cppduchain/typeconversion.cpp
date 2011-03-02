@@ -338,7 +338,6 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   ///Try lvalue-transformation category
   if( (categories & LValueTransformationCategory) ) {
 
-    bool constRef = false;
     if( isReferenceType(from) ) {
       ///Transform lvalue to rvalue. Iso c++ draft 4.1 modeled roughly
       
@@ -350,22 +349,18 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       
       ConversionRank ret = standardConversion( fromNonConstant, to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
       maximizeRank( bestRank, ret );
-    }else if( ArrayType::Ptr array = realType(from, m_topContext, &constRef).cast<ArrayType>() ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
+    }else if( ArrayType::Ptr array = realType(from, m_topContext).cast<ArrayType>() ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
       ///Transform array to pointer. Iso c++ draft 4.2 modeled roughly.
       PointerType::Ptr p( new PointerType() );
-      if (constRef)
-        p->setModifiers(AbstractType::ConstModifier);
       p->setBaseType(array->elementType());
       ConversionRank rank = standardConversion( p.cast<AbstractType>(), to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
 
       maximizeRank( bestRank, worseRank(rank, ExactMatch ) );
-    } else if( FunctionType::Ptr function = realType(from, m_topContext, &constRef).cast<FunctionType>() ) {
+    } else if( FunctionType::Ptr function = realType(from, m_topContext).cast<FunctionType>() ) {
       ///Transform lvalue-function. Iso c++ draft 4.3
       //This code is nearly the same as the above array-to-pointer conversion. Maybe it should be merged.
 
       PointerType::Ptr p( new PointerType() );
-      if (constRef)
-        p->setModifiers(AbstractType::ConstModifier);
       p->setBaseType( function.cast<AbstractType>() );
 
       ConversionRank rank = standardConversion( p.cast<AbstractType>(), to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
@@ -521,8 +516,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
    **/
   ConversionRank bestRank = NoMatch;
 
-  bool fromConst = false;
-  AbstractType::Ptr realFrom( realType(from, m_topContext, &fromConst) );
+  AbstractType::Ptr realFrom( realType(from, m_topContext) );
   CppClassType::Ptr fromClass = realFrom.cast<CppClassType>();
   {
     ///Try user-defined conversion using a conversion-function, iso c++ 12.3
@@ -531,7 +525,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     {
       ///Search for a conversion-function that has a compatible output
       QHash<FunctionType::Ptr, ClassFunctionDeclaration*> conversionFunctions;
-      getMemberFunctions(fromClass, m_topContext, conversionFunctions, "operator{...cast...}", fromConst);
+      getMemberFunctions(fromClass, m_topContext, conversionFunctions, "operator{...cast...}", fromClass->modifiers() & AbstractType::ConstModifier);
 
       for( QHash<FunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.constBegin(); it != conversionFunctions.constEnd(); ++it )
       {

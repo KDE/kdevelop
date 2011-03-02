@@ -276,7 +276,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     LOCKDUCHAIN;
 
-    base = realType(base, topContext(), &isConst);
+    base = realType(base, topContext());
 
     clearLast();
 
@@ -403,7 +403,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
   AbstractType::Ptr ExpressionVisitor::realLastType(bool* constant) const {
     LOCKDUCHAIN;
-    return AbstractType::Ptr(realType( m_lastType, topContext(), constant ));
+    return AbstractType::Ptr(realType( m_lastType, topContext() ));
   }
 
   bool ExpressionVisitor::getPointerTarget( AST* node, bool* constant )  {
@@ -465,9 +465,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     if( m_memberAccess ) {
       LOCKDUCHAIN;
-      bool isConst = false; //@todo get this from upside
+      bool isConst = false;
 
-      m_lastType = realType(m_lastType, topContext(), &isConst);
+      m_lastType = realType(m_lastType, topContext());
 
       isConst |= isConstant(m_lastType);
 

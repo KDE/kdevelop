@@ -113,15 +113,14 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
   for ( QList<Declaration*>::const_iterator it = declarations.constBegin(); it != declarations.constEnd(); ++it )
   {
     Declaration* decl = *it;
-    bool isConstant = false;
 
-    if ( CppClassType::Ptr klass = TypeUtils::realType( decl->abstractType(), m_topContext.data(), &isConstant ).cast<CppClassType>() )
+    if ( CppClassType::Ptr klass = TypeUtils::realType( decl->abstractType(), m_topContext.data() ).cast<CppClassType>() )
     {
       if ( decl->kind() == Declaration::Instance || m_forceIsInstance )
       {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> decls;
-        TypeUtils::getMemberFunctions( klass, m_topContext.data(), decls, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_topContext.data(), decls, "operator()", klass->modifiers() & AbstractType::ConstModifier );
 
         foreach( Declaration* decl, decls )
         newDeclarations.insert( decl );
@@ -148,15 +147,14 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
   for ( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.constBegin(); it != declarations.constEnd(); ++it )
   {
     QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
-    bool isConstant = false;
 
-    if ( CppClassType::Ptr klass = TypeUtils::realType( decl.second->abstractType(), m_topContext.data(), &isConstant ).cast<CppClassType>() )
+    if ( CppClassType::Ptr klass = TypeUtils::realType( decl.second->abstractType(), m_topContext.data() ).cast<CppClassType>() )
     {
       if ( decl.second->kind() == Declaration::Instance || m_forceIsInstance )
       {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> functions;
-        TypeUtils::getMemberFunctions( klass, m_topContext.data(), functions, "operator()", isConstant );
+        TypeUtils::getMemberFunctions( klass, m_topContext.data(), functions, "operator()", klass->modifiers() & AbstractType::ConstModifier );
         foreach( Declaration* f, functions )
         newDeclarations.insert( f, decl.first );
       }

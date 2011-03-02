@@ -28,10 +28,8 @@
 namespace TypeUtils {
 using namespace KDevelop;
 
-  AbstractType::Ptr realType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
+  AbstractType::Ptr realType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/) {
 
-    if(constant)
-      *constant = false;
     AbstractType::Ptr base = _base;
     ReferenceType::Ptr ref = base.cast<ReferenceType>();
     TypeAliasType::Ptr alias = base.cast<TypeAliasType>();
@@ -276,6 +274,17 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
     PointerType::Ptr newPointer(new PointerType());
     newPointer->setBaseType( oldType );
     return newPointer.cast<AbstractType>();
+}
+
+IndexedType removeConstModifier(const IndexedType& indexedType)
+{
+    AbstractType::Ptr type = indexedType.abstractType();
+    if(type && type->modifiers() & AbstractType::ConstModifier)
+    {
+      type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
+      return type->indexed();
+    }
+    return indexedType;
 }
 
 AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* source) {
