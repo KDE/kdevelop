@@ -181,7 +181,7 @@ QString AStylePlugin::formattingSample()
     "}\n"
     "int var = 1;\n"
     "int *ptr = &var;\n"
-    "int &ref = i;\n"
+    "int& ref = i;\n"
     "\n"
     "QList<int>::const_iterator it = list.begin();\n"
     "}\n"
