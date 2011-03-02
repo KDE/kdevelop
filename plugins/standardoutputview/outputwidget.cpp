@@ -81,7 +81,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    if( data->option & KDevelop::IOutputView::ShowItemsButton)
+    if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {
         activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
         addAction(activateOnSelect);
@@ -103,7 +103,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 
-    if( data->option & KDevelop::IOutputView::AddFilterAction)
+    if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
         addAction(separator);
         filterInput = new KLineEdit();
@@ -531,7 +531,7 @@ void OutputWidget::selectAll()
     view->selectAll();
 }
 
-void OutputWidget::outputFilter(QString filter)
+void OutputWidget::outputFilter(const QString filter)
 {
     QWidget* widget = currentWidget();
     if( !widget )

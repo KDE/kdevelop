@@ -160,7 +160,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type,
-                                          const KIcon& icon, Options option, QList<QAction*> actionList)
+                                          const KIcon& icon, Options option, const QList<QAction*> actionList)
 {
     int newid = -1;
     if( ids.isEmpty() )
