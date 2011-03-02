@@ -212,9 +212,9 @@ void AStylePreferences::updateWidgets()
     s = m_formatter->option("PointerAlign").toString();
     if (s == "Name")
         cbPointerAlign->setCurrentIndex(POINTERALIGN_NAME);
-    if (s == "Type")
+    else if (s == "Type")
         cbPointerAlign->setCurrentIndex(POINTERALIGN_TYPE);
-    if (s == "Middle")
+    else if (s == "Middle")
         cbPointerAlign->setCurrentIndex(POINTERALIGN_MIDDLE);
     else
         cbPointerAlign->setCurrentIndex(POINTERALIGN_NOCHANGE);
