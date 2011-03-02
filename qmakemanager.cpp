@@ -413,10 +413,8 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
 QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) const
 {
     QHash<QString,QString> d;
-    QMakeFolderItem *folder = 0;
-    while(!(folder = dynamic_cast<QMakeFolderItem*>(item))) {
-        item = item->parent();
-    }
+    QMakeFolderItem *folder = findQMakeFolderParent(item);
+    Q_ASSERT(folder);
     foreach(QMakeProjectFile *pro, folder->projectFiles()) {
         foreach(QMakeProjectFile::DefinePair def, pro->defines()) {
             d.insert(def.first, def.second);
