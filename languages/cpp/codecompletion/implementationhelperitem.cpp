@@ -29,6 +29,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <sourcemanipulation.h>
 #include <cppduchain.h>
+#include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 
 namespace Cpp {
 
@@ -397,6 +399,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     lock.unlock();
 
+    ///TODO: format these changes as well?
     if(!insertion.changes().applyAllChanges()) {
       kDebug() << "failed";
       return;
@@ -418,6 +421,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       rangeToReplace = KTextEditor::Range(word.start().line(), noReplace + 1, word.end().line(), word.end().column());
       replacementText = "\n" + replacementText;
     }
+
+    ISourceFormatter* formatter = ICore::self()->sourceFormatterController()->formatterForUrl(document->url());
+    if (formatter) {
+      formatter->formatSource(replacementText, KMimeType::mimeType(document->mimeType()));
+    }
+
     DocumentChangeSet changes;
     changes.addChange(DocumentChange(IndexedString(document->url()), rangeToReplace, document->text(rangeToReplace), replacementText));
     changes.applyAllChanges();
