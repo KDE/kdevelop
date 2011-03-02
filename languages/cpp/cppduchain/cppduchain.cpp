@@ -644,7 +644,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           QList< KDevelop::Declaration* > decls = ctx->findDeclarations(candidate);
           if(decls.isEmpty())
             continue; // type aliases might be available for nested sub scopes, hence we must not break early
-          if(decls[0]->kind() != Declaration::Type || decls[0]->indexedType() != type->indexed())
+          if(decls[0]->kind() != Declaration::Type || TypeUtils::removeConstModifier(decls[0]->indexedType()) != TypeUtils::removeConstModifier(type->indexed()))
             break;
           newTypeName = candidate;
         }
@@ -702,17 +702,9 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 {
 
   bool isReference = false;
-  bool isConstReference = false;
   if(ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
     isReference = true;
-    isConstReference = refType->baseType() && refType->baseType()->modifiers() & AbstractType::ConstModifier;
-    type = type.cast<ReferenceType>()->baseType();
-    if (isConstReference) {
-      // remove const modifier
-      // TODO: should this maybe handled gracefully in stripType ?
-      type = type->clone();
-      type->setModifiers(type->modifiers() & ~AbstractType::ConstModifier);
-    }
+    type = refType->baseType();
   }
 
   type = shortenTypeForViewing(type);
@@ -728,11 +720,8 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
     identifier = type.cast<DelayedType>()->identifier();
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
 
-  if(isReference) {
+  if(isReference)
     identifier.setIsReference(true);
-    if(isConstReference)
-      identifier.setIsConstant(true);
-  }
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
