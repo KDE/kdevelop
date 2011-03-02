@@ -443,6 +443,19 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
     return list;
 }
 
+QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) const
+{
+    QHash<QString,QString> d;
+    QMakeFolderItem *folder = findQMakeFolderParent(item);
+    Q_ASSERT(folder);
+    foreach(QMakeProjectFile *pro, folder->projectFiles()) {
+        foreach(QMakeProjectFile::DefinePair def, pro->defines()) {
+            d.insert(def.first, def.second);
+        }
+    }
+    return d;
+}
+
 QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
 {
     QFileInfo fi( mkspecdir+"/default/qmake.conf" );

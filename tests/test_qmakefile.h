@@ -35,6 +35,9 @@ private slots:
 
     void libTarget_data();
     void libTarget();
+
+    void defines_data();
+    void defines();
 };
 
 #endif // TEST_QMAKEFILE_H
