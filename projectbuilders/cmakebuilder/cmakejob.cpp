@@ -99,7 +99,7 @@ void CMakeJob::start()
     }
     m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
-    connect( m_executor, SIGNAL( failed( QProcess::Error ) ), this, SLOT( slotFailed( QProcess::Error ) ) );
+    connect( m_executor, SIGNAL( failed(QProcess::ProcessError)), this, SLOT( slotFailed( QProcess::ProcessError ) ) );
     connect( m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
     m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
