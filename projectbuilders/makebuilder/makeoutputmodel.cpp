@@ -267,17 +267,11 @@ void MakeOutputModel::addLines( const QStringList& lines )
                         positionInCurrentDirs.insert( regEx.cap( actFormat.fileGroup ) , pos );
                     }
 
-                    // Special case for cmake: we want to parse the "Compiling <objectfile>" expression
-                    // also for the "potential_cd" case below, so continue parsing
+                    // Special case for cmake: we parse the "Compiling <objectfile>" expression
+                    // and use it to find out about the build paths encountered during a build.
+                    // They are later searched by urlForFile to find source files corresponding to
+                    // compiler errors.
                     if ( actFormat.action == i18n("compiling") && actFormat.tool == "cmake")
-                    {
-                        matched = true;
-                        continue;
-                    }
-                    // This is a special action triggered whenever cmake compiles an object file. We use
-                    // it to find out about the build paths encountered during a build. They are later
-                    // searched by urlForFile to find source files referenced in compiler errors.
-                    if ( actFormat.action == "potential_cd" )
                     {
                         KUrl url = buildDir;
                         url.addPath(regEx.cap( actFormat.fileGroup ));
