@@ -1073,7 +1073,6 @@ QWidgetItem * IdealMainLayout::DockArea::first() const
 void IdealMainLayout::DockArea::addWidget(QWidget * widget)
 {
     m_items.append(new QWidgetItem(widget));
-    m_heights.append(-1);
 }
 
 void IdealMainLayout::DockArea::removeWidget(QWidget * widget)
@@ -1086,13 +1085,10 @@ void IdealMainLayout::DockArea::removeWidget(QWidget * widget)
     }
 
     Q_ASSERT(index < m_items.count());
-    Q_ASSERT(m_heights.count() == m_items.count());
 
     QWidgetItem* item = m_items.takeAt(index);
     item->widget()->hide();
     delete item;
-
-    m_heights.removeAt(index);
 }
 
 IdealMainLayout::DockArea::~DockArea()
