@@ -93,7 +93,9 @@ public:
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon(), Options option = ShowItemsButton, QList<QAction*> actionList = QList<QAction*>()) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView,
+                                  const KIcon& icon = KIcon(), Options option = ShowItemsButton,
+                                  const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends
@@ -103,7 +105,8 @@ public:
      * @param behaviour the Behaviour of the output
      * @returns the id of the output to supply to the other methods
      */
-    virtual int registerOutputInToolView( int toolviewId, const QString& title, Behaviours behaviour = AllowUserClose ) = 0;
+    virtual int registerOutputInToolView( int toolviewId, const QString& title,
+                                          Behaviours behaviour = AllowUserClose ) = 0;
 
     /**
      * Raise a given view
