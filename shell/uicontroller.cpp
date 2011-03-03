@@ -129,7 +129,6 @@ public:
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
     Sublime::MainWindow* activeSublimeWindow;
-    QList<Sublime::MainWindow*> sublimeWindows;
     bool areasRestored;
 
     //Currently shown assistant popup.
