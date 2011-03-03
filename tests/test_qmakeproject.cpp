@@ -34,6 +34,7 @@
 #include <KUrl>
 #include <KConfigGroup>
 #include <KDebug>
+#include <kio/deletejob.h>
 
 QTEST_KDEMAIN(TestQMakeProject, GUI);
 
@@ -41,8 +42,12 @@ using namespace KDevelop;
 
 TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
 {
+    // be sure that we crate a new session (reuse an existing session makes the test crash)
+    KIO::DeleteJob *job = KIO::del(KUrl(QString(getenv("KDEHOME")) + "/share/apps/qttest/sessions"));
+    QTest::kWaitForSignal(job, SIGNAL(result(KJob*)), 10000);
+
     AutoTestShell::init();
-    Core::initialize(0, Core::Default, "QMake_test_session");
+    Core::initialize(0, Core::Default);
     QTest::qWait(500); //wait for previously loaded projects
 }
 
