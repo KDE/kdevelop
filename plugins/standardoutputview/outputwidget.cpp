@@ -51,7 +51,17 @@
 #include "toolviewdata.h"
 
 OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
-    : QWidget( parent ), tabwidget(0), data(tvdata)
+    : QWidget( parent )
+    , tabwidget(0)
+    , data(tvdata)
+    , stackwidget(0)
+    , m_closeButton(0)
+    , nextAction(0)
+    , previousAction(0)
+    , activateOnSelect(0)
+    , focusOnSelect(0)
+    , filterInput(0)
+    , filterAction(0)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
