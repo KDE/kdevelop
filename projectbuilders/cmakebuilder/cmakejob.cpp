@@ -158,6 +158,11 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
         {
             args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
         }
+#ifdef Q_OS_WIN
+        // Visual Studio solution is the standard generator under windows, but we dont want to use
+        // the VS IDE, so we need nmake makefiles
+        args << QString("-G") << QString("NMake Makefiles");
+#endif
         if( !CMake::currentExtraArguments(project).isEmpty() ) {
             KShell::Errors err;
             QString cmakeargs = CMake::currentExtraArguments(project);
