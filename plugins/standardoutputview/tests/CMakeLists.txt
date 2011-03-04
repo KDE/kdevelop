@@ -1,6 +1,5 @@
 set(standardOutputViewTest_SRCS
     standardoutputviewtest.cpp
-    ../standardoutputview.cpp
     ../outputwidget.cpp
     ../toolviewdata.cpp
 )

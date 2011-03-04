@@ -33,10 +33,9 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 #include <interfaces/iplugincontroller.h>
-
+#include <outputview/ioutputview.h>
 
 #include "standardoutputviewtest.h"
-#include "../standardoutputview.h"
 #include "../outputwidget.h"
 #include "../toolviewdata.h"
 
@@ -67,8 +66,10 @@ void StandardOutputViewTest::initTestCase()
 
     QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
     foreach(KDevelop::IPlugin* plugin, plugins) {
-        if(plugin_controller->pluginInfo(plugin).pluginName() == "KDevStandardOutputView")
-           m_stdOutputView =  dynamic_cast<StandardOutputView*>(plugin);
+        if(plugin_controller->pluginInfo(plugin).pluginName() == "KDevStandardOutputView") {
+           m_stdOutputView =  dynamic_cast<KDevelop::IOutputView*>(plugin);
+           break;
+        }
     }
     Q_ASSERT(m_stdOutputView);
 }
@@ -84,8 +85,7 @@ OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
     QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
     foreach(Sublime::View* view, views) {
         Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
-        if(doc)
-        {
+        if(doc) {
             if(doc->title() == toolviewTitle && view->hasWidget()) {
                 return dynamic_cast<OutputWidget*>(view->widget());
             }

@@ -27,6 +27,7 @@
 namespace KDevelop
 {
     class TestCore;
+    class IOutputView;
 }
 
 namespace Sublime
@@ -35,7 +36,6 @@ namespace Sublime
     class Controller;
 }
 
-class StandardOutputView;
 class OutputWidget;
 
 class StandardOutputViewTest: public QObject
@@ -48,7 +48,7 @@ public:
 private:
     OutputWidget* toolviewPointer(QString toolviewTitle);
     KDevelop::TestCore* m_testCore;
-    StandardOutputView* m_stdOutputView;
+    KDevelop::IOutputView* m_stdOutputView;
     KDevelop::UiController* m_controller;
     int toolviewId;
     int outputId[5];
