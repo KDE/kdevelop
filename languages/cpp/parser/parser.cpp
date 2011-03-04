@@ -26,6 +26,7 @@
 #include "control.h"
 #include "parsesession.h"
 #include "commentformatter.h"
+#include "memorypool.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -62,6 +63,15 @@
       (_node)->start_token = start; \
       (_node)->end_token = end; \
   } while (0)
+
+template <class _Tp>
+inline _Tp *CreateNode(pool *memory_pool)
+{
+  _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
+  node->kind = _Tp::__node_kind;
+  return node;
+}
+
 
 void Parser::addComment( CommentAST* ast, const Comment& comment ) {
   if( comment ) {

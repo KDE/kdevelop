@@ -44,7 +44,7 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/movingrange.h>
 #include <ktexteditor/movinginterface.h>
-
+#include <memory>
 using namespace KDevelop;
 
 namespace Cpp {

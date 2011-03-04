@@ -43,6 +43,7 @@
 #include "parser/parser.h"
 #include "parser/control.h"
 #include "parser/dumptree.h"
+#include "parser/memorypool.h"
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/duchainlock.h>
