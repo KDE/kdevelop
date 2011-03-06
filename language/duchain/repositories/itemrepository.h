@@ -199,7 +199,7 @@ template<class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = tru
 struct RepositoryManager : public AbstractRepositoryManager{
   public:
     ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
-    RepositoryManager(QString name, int version = 1, AbstractRepositoryManager* (*shareMutex)() = 0, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(registry), m_shareMutex(shareMutex) {
+    RepositoryManager(QString name, int version = 1, AbstractRepositoryManager* (*shareMutex)() = 0, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(&registry), m_shareMutex(shareMutex) {
       if(!lazy)
         createRepository();
     }
@@ -224,9 +224,9 @@ struct RepositoryManager : public AbstractRepositoryManager{
 
     void createRepository() const {
       if(!m_repository) {
-        QMutexLocker lock(&m_registry.mutex());
+        QMutexLocker lock(&m_registry->mutex());
         if(!m_repository) {
-          m_repository = new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
+          m_repository = new ItemRepositoryType(m_name, m_registry, m_version, const_cast<RepositoryManager*>(this));
           if(m_shareMutex)
             (*this)->setMutex(m_shareMutex()->repositoryMutex());
           (*this)->setUnloadingEnabled(unloadingEnabled);
@@ -236,7 +236,7 @@ struct RepositoryManager : public AbstractRepositoryManager{
 
     QString m_name;
     int m_version;
-    mutable ItemRepositoryRegistry& m_registry;
+    mutable ItemRepositoryRegistry* m_registry;
     AbstractRepositoryManager* (*m_shareMutex)();
 };
 

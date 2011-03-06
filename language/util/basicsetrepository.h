@@ -129,7 +129,7 @@ public:
   SetNodeData data;
   
   uint m_hash;
-  mutable SetDataRepository& repository;
+  mutable SetDataRepository* repository;
   mutable BasicSetRepository* setRepository; //May be zero when no notifications are wanted
   mutable bool m_created;
 };
