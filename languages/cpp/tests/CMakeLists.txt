@@ -22,6 +22,7 @@ set(cppcodecompletiontest_SRCS
   ../codegen/simplerefactoring.cpp
   ../includepathresolver.cpp
   ../setuphelpers.cpp
+  ../setuphelpers_gcc.cpp
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
@@ -31,6 +32,9 @@ set(cppcodecompletiontest_SRCS
   ../codecompletion/missingincludemodel.cpp
   ../codecompletion/missingincludeitem.cpp
 )
+if(MSVC)
+    list(APPEND cppcodecompletiontest_SRCS ../setuphelpers_msvc.cpp)
+endif(MSVC)
 
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
@@ -45,6 +49,7 @@ set(cppcodegentest_SRCS
   ../codegen/simplerefactoring.cpp
   ../includepathresolver.cpp
   ../setuphelpers.cpp
+  ../setuphelpers_gcc.cpp
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
@@ -54,6 +59,9 @@ set(cppcodegentest_SRCS
   ../codecompletion/missingincludemodel.cpp
   ../codecompletion/missingincludeitem.cpp
 )
+if(MSVC)
+    list(APPEND cppcodegentest_SRCS ../setuphelpers_msvc.cpp)
+endif(MSVC)
 
 add_definitions(-DBUILD_TESTS)
 
