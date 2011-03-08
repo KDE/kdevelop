@@ -30,7 +30,7 @@
 #include <interfaces/idocumentationcontroller.h>
 
 static QString modules [] = {
-    i18n("Commands"), i18n("Variable"), i18n("Module"), i18n("Property"), i18n("Policy")
+    i18n("Commands"), i18n("Variables"), i18n("Modules"), i18n("Properties"), i18n("Policies")
 };
 
 CMakeContentsModel::CMakeContentsModel(QObject* parent)
