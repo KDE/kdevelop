@@ -81,10 +81,20 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
         QString cline=d->line(l);
-        QString line=cline.mid(0, cline.indexOf('#'));
+        QString line=cline.left(cline.indexOf('#'));
         
-        bool out=line.lastIndexOf(')')>=0;
-        m_inside= !out && line.indexOf('(')>=0;
+        int close=line.lastIndexOf(')'), open=line.indexOf('(');
+        
+        if(close>=0 && open>=0) {
+            m_inside=open>close;
+            break;
+        } else if(open>=0) {
+            m_inside=true;
+            break;
+        } else if(close>=0) {
+            m_inside=false;
+            break;
+        }
     }
     
     int numRows = 0;
