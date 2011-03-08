@@ -242,9 +242,13 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
 {
     switch(indexType(row))
     {
-        case Path:
-            document->replaceText(word, data(index(row, Name, QModelIndex())).toString());
-            break;
+        case Path: {
+            Range r=word;
+            for(QChar c=document->character(r.end()); c.isLetterOrNumber() || c=='.'; c=document->character(r.end())) {
+                r.end().setColumn(r.end().column()+1);
+            }
+            document->replaceText(r, data(index(row, Name, QModelIndex())).toString());
+        }   break;
         case Macro:
         case Command: {
             QString code=data(index(row, Name, QModelIndex())).toString();
