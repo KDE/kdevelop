@@ -97,5 +97,14 @@ MakeBuilderPreferences::~MakeBuilderPreferences()
 {
 }
 
+QString MakeBuilderPreferences::standardMakeComannd()
+{
+#if _MSC_VER
+    return QLatin1String("nmake");
+#else
+    return QLatin1String("make");
+#endif
+}
+
 #include "makebuilderpreferences.moc"
 

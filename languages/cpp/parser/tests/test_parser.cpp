@@ -11,6 +11,7 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "commentformatter.h"
+#include "memorypool.h"
 
 #include "testconfig.h"
 
