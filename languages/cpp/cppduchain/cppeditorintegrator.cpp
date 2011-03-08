@@ -21,7 +21,6 @@
 #include <ktexteditor/document.h>
 
 #include <language/editor/documentrange.h>
-#include <language/editor/documentrangeobject.h>
 #include <language/duchain/indexedstring.h>
 
 #include "ast.h"
