@@ -232,6 +232,13 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   m_lock = repo.second;
 }
 
+void setCrashCounter(QFile& crashesFile, int count) {
+  crashesFile.close();
+  crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+  QDataStream writeStream(&crashesFile);
+  writeStream << count;
+}
+
 bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Ptr lock) {
   QMutexLocker mlock(&m_mutex);
   if(m_path == path && !clear)
@@ -276,22 +283,24 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
       
       if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
       {
-        ///@todo Ask the user
-        kWarning() << "kdevelop crashed" << count << "times in a row with the duchain repository" << m_path << ", clearing it";
-        clear = true;
+        int userAnswer = KMessageBox::questionYesNo(0,
+          i18n("The crash may be caused by a corruption of cached data. Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
+          i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+          KStandardGuiItem::ok(),
+          KStandardGuiItem::cancel());
+        if (userAnswer == KMessageBox::Yes) {
+          clear = true;
+          kDebug() << "User chose to clean repository";
+        } else {
+          setCrashCounter(crashesFile, 1);
+          kDebug() << "User chose to reset crash counter";
+        }
       }else{
-        ///Increase the crash-count. It will be reset of kdevelop is shut down cleanly.
-        ++count;
-        crashesFile.close();
-        crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        QDataStream writeStream(&crashesFile);
-        writeStream << count;
+        ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
+        setCrashCounter(crashesFile, ++count);
       }
     }else{
-        ///Increase the crash-count. It will be reset of kdevelop is shut down cleanly.
-        crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        QDataStream writeStream(&crashesFile);
-        writeStream << 1;
+      setCrashCounter(crashesFile, 1);
     }
     
     if(clear) {
