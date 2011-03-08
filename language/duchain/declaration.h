@@ -24,7 +24,6 @@
 #include <QtCore/QMap>
 //#include <QtCore/qcontainerfwd.h>
 
-#include "../editor/documentrangeobject.h"
 #include "identifier.h"
 #include "indexedstring.h"
 #include "types/abstracttype.h"
