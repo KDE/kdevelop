@@ -95,7 +95,7 @@ void CMakeJob::start()
     {
         kDebug() << "creating" << buildDirUrl.fileName() << "in" << buildDirUrl.directory();
         QDir d(buildDirUrl.directory());
-        d.mkdir( buildDirUrl.fileName() );
+        d.mkpath( buildDirUrl.fileName() );
     }
     m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
