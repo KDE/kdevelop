@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-subdirs="debugger interfaces language outputview project shell sublime util vcs"
+subdirs="debugger interfaces language outputview project shell sublime util vcs documentation"
 rcfiles="`find $subdirs -name \*.rc`"
 uifiles="`find $subdirs -name \*.ui`"
 kcfgfiles="`find $subdirs -name \*.kcfg`"
