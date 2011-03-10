@@ -306,7 +306,7 @@ IndentPreferences::IndentPreferences()
     m_hLayout->addWidget ( m_commandLabel );
     m_commandEdit = new QLineEdit;
     m_hLayout->addWidget ( m_commandEdit );
-    m_commandLabel->setText ( "Command: " );
+    m_commandLabel->setText ( i18n("Command: ") );
     m_vLayout->addSpacing ( 10 );
     m_bottomLabel = new QLabel;
     m_vLayout->addWidget ( m_bottomLabel );
