@@ -306,7 +306,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
     if(m_policies.testFlag(MoveInitializationToPrivate))
     {
         if(constructors.size() > 1)
-            KMessageBox::warningContinueCancel(0, "Warning. It is not recommended to move initialization lists to private constructor when multiple constructors are defined.",
+            KMessageBox::warningContinueCancel(0, i18n("Warning. It is not recommended to move initialization lists to private constructor when multiple constructors are defined."),
                                                "PIMPL Generation", KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "PIMPL multiple constructor warning");
         foreach(Declaration * constructor, constructors)
         {
