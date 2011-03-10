@@ -152,11 +152,11 @@ QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
         QList<KDevelop::SourceFormatterStyle> styles;
         KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU_indent_GNU" );
-        st.setCaption( "Gnu Indent: GNU" );
+        st.setCaption( i18n("Gnu Indent: GNU") );
 		st.setContent("indent");
         styles << st;
         st = KDevelop::SourceFormatterStyle( "GNU_indent_KR" );
-        st.setCaption( "Gnu Indent: Kernighan & Ritchie" );
+        st.setCaption( i18n("Gnu Indent: Kernighan & Ritchie") );
 		st.setContent("indent -kr");
         styles << st;
         st = KDevelop::SourceFormatterStyle( "GNU_indent_orig" );
