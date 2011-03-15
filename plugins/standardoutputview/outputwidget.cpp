@@ -302,7 +302,7 @@ void OutputWidget::selectNextItem()
     if( !widget || !widget->isVisible() )
         return;
 
-    if( focusOnSelect->isChecked() && !widget->hasFocus() )
+    if( focusOnSelect && focusOnSelect->isChecked() && !widget->hasFocus() )
     {
         widget->setFocus( Qt::OtherFocusReason );
     }
@@ -321,7 +321,7 @@ void OutputWidget::selectNextItem()
         {
             view->setCurrentIndex( index );
             view->scrollTo( index );
-            if( activateOnSelect->isChecked() )
+            if( activateOnSelect && activateOnSelect->isChecked() )
             {
                 iface->activate( index );
             }
@@ -338,7 +338,7 @@ void OutputWidget::selectPrevItem()
     if( !view )
         return;
 
-    if( focusOnSelect->isChecked() && !widget->hasFocus() )
+    if( focusOnSelect && focusOnSelect->isChecked() && !widget->hasFocus() )
     {
         widget->setFocus( Qt::OtherFocusReason );
     }
@@ -353,7 +353,7 @@ void OutputWidget::selectPrevItem()
         {
             view->setCurrentIndex( index );
             view->scrollTo( index );
-            if( activateOnSelect->isChecked() )
+            if( activateOnSelect && activateOnSelect->isChecked() )
             {
                 iface->activate( index );
             }
