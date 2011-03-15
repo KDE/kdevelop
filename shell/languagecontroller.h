@@ -53,6 +53,9 @@ public:
     virtual QList<ILanguage*> loadedLanguages() const;
     
     virtual ICompletionSettings *completionSettings() const;
+
+    QList<ILanguage*> languagesForMimetype(const QString& mime);
+    QList<QString> mimetypesForLanguageName(const QString& languageName);
     
 private:
 
