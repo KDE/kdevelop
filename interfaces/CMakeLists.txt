@@ -41,6 +41,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 	ilaunchconfiguration.cpp
 	ilaunchmode.cpp
 	iprojectprovider.cpp
+	ibuddydocumentfinder.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
@@ -105,6 +106,7 @@ install(FILES
     ipartcontroller.h
     ilaunchmode.h
     iprojectprovider.h
+    ibuddydocumentfinder.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2011 Martin Heide <martin.heide@gmx.net>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,48 +16,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAREAOPERATIONTEST_H
-#define SUBLIMEAREAOPERATIONTEST_H
+#ifndef SHELLBUDDYTEST_H
+#define SHELLBUDDYTEST_H
 
 #include <QObject>
+#include <tests/autotestshell.h>
+#include <KTempDir>
+#include <sublime/view.h>
+#include "../documentcontroller.h"
+#include "../uicontroller.h"
 
-namespace Sublime {
-    class Area;
-    class View;
-    class Controller;
-    class MainWindow;
-}
+using namespace KDevelop;
 
-class AreaOperationTest: public QObject {
+class ShellBuddyTest: public QObject {
     Q_OBJECT
 private slots:
     void init();
     void cleanup();
 
-    void areaConstruction();
-    void mainWindowConstruction();
-    void areaCloning();
-    void areaSwitchingInSameMainwindow();
-    void simpleViewAdditionAndDeletion();
-    void complexViewAdditionAndDeletion();
-    void toolViewAdditionAndDeletion();
-    void testAddingViewAfter();
+    void testDeclarationDefinitionOrder();
+    void testMultiDotFilenames();
+    void testActivation();
+    void testDisableBuddies();
+    void testDisableOpenAfterCurrent();
+    void testDisableAll();
+
+    void testMultipleFolders();
 
 private:
-    void checkArea1(Sublime::MainWindow *mw);
-    void checkArea2(Sublime::MainWindow *mw);
-    /*! @param location short descriptive message printed on failure. */
-    void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
-        const QString &areas, int containers, int splitters, QString location=QString());
+    void verifyFilename(Sublime::View *view, const QString& endOfFilename);
+    void createFile(const KTempDir& dir, const QString& filename);
+    void enableBuddies(bool enable = true);
+    void enableOpenAfterCurrent(bool enable = true);
 
-    Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
-
-    Sublime::Controller *m_controller;
-
-    Sublime::Area *m_area1;
-    Sublime::Area *m_area2;
-    Sublime::Area *m_area3;
-
+    IDocumentController *m_documentController;
+    UiController *m_uiController;
 };
 
 #endif

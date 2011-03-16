@@ -110,19 +110,24 @@ public:
     
     virtual bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-                              DocumentActivationParams activationParams = 0);
-                              
+                              DocumentActivationParams activationParams = 0,
+                              IDocument* buddy = 0);
+
     virtual KTextEditor::Document* globalTextEditorInstance();
     
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
     @param range The location information, if applicable.
-    @param activationParams Indicates whether to fully activate the document.*/
+    @param activationParams Indicates whether to fully activate the document.
+    @param buddy The buddy document
+    @return The opened document
+    */
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
-            const QString& encoding = "");
+            const QString& encoding = "",
+            IDocument* buddy = 0 );
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
     

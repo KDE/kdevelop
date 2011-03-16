@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2011 Yannick Motta   <yannick.motta@gmail.com>              *
+ *                  Martin Heide    <martin.heide@gmx.net>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,49 +17,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAREAOPERATIONTEST_H
-#define SUBLIMEAREAOPERATIONTEST_H
+#include "ibuddydocumentfinder.h"
+namespace KDevelop {
 
-#include <QObject>
+//Our private data is entirely static, so don't need to create an
+//instance of the private data class
+struct IBuddyDocumentFinder::Private
+{
+    static QMap<QString, IBuddyDocumentFinder*> s_finders;
+};
+QMap<QString, IBuddyDocumentFinder*> IBuddyDocumentFinder::Private::s_finders;
 
-namespace Sublime {
-    class Area;
-    class View;
-    class Controller;
-    class MainWindow;
+
+
+// ---------------- "Registry" interface --------------------------------------------
+void IBuddyDocumentFinder::addFinder(QString mimeType, IBuddyDocumentFinder *finder)
+{
+    Private::s_finders[mimeType] = finder;
 }
 
-class AreaOperationTest: public QObject {
-    Q_OBJECT
-private slots:
-    void init();
-    void cleanup();
+void IBuddyDocumentFinder::removeFinder(QString mimeType)
+{
+    Private::s_finders.remove(mimeType);
+}
 
-    void areaConstruction();
-    void mainWindowConstruction();
-    void areaCloning();
-    void areaSwitchingInSameMainwindow();
-    void simpleViewAdditionAndDeletion();
-    void complexViewAdditionAndDeletion();
-    void toolViewAdditionAndDeletion();
-    void testAddingViewAfter();
+IBuddyDocumentFinder* IBuddyDocumentFinder::finderForMimeType(QString mimeType)
+{
+    return Private::s_finders.value(mimeType, 0);
+}
 
-private:
-    void checkArea1(Sublime::MainWindow *mw);
-    void checkArea2(Sublime::MainWindow *mw);
-    /*! @param location short descriptive message printed on failure. */
-    void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
-        const QString &areas, int containers, int splitters, QString location=QString());
-
-    Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
-
-    Sublime::Controller *m_controller;
-
-    Sublime::Area *m_area1;
-    Sublime::Area *m_area2;
-    Sublime::Area *m_area3;
-
-};
-
-#endif
-
+}

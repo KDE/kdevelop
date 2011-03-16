@@ -19,7 +19,6 @@
 #include "areaoperationtest.h"
 
 #include <QtTest/QtTest>
-
 #include <QDockWidget>
 #include <QListView>
 #include <QTextEdit>
@@ -119,6 +118,21 @@ void AreaOperationTest::init()
     view = tool3->createView();
     view->setObjectName("toolview2.3.2");
     m_area2->addToolView(view, Sublime::Top);
+
+    m_area3 = new Area(m_controller, "Area 3");
+    View *view0 = doc1->createView();
+    view0->setObjectName("view3.1.1");
+    m_area3->addView(view0);
+    View *view1 = doc2->createView();
+    view1->setObjectName("view3.1.2");
+    m_area3->addView(view1, view0);
+    View *view2 = doc3->createView();
+    view2->setObjectName("view3.1.3");
+    m_area3->addView(view2, view1);
+    View *view3 = doc4->createView();
+    view3->setObjectName("view3.1.4");
+    m_area3->addView(view3, view1);
+
 }
 
 void AreaOperationTest::cleanup()
@@ -180,8 +194,8 @@ void AreaOperationTest::mainWindowConstruction()
     m_controller->showArea(m_area1, &mw1);
     checkArea1(&mw1);
 
-
-    //====== check for m_area2 ======
+/////////////
+ //====== check for m_area2 ======
     MainWindow mw2(m_controller);
     m_controller->showArea(m_area2, &mw2);
     checkArea2(&mw2);
@@ -341,6 +355,16 @@ void AreaOperationTest::areaSwitchingInSameMainwindow()
 
 void AreaOperationTest::simpleViewAdditionAndDeletion()
 {
+    // set TabBarOpenAfterCurrent=0, otherwise we'd have a different order of tabs
+    int oldTabBarOpenAfterCurrent;
+    {
+        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        oldTabBarOpenAfterCurrent = uiGroup.readEntry("TabBarOpenAfterCurrent", 1);
+        uiGroup.writeEntry("TabBarOpenAfterCurrent", 0);
+        uiGroup.sync();
+    }
+    m_controller->loadSettings();
+
     MainWindow mw(m_controller);
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
@@ -378,6 +402,13 @@ void AreaOperationTest::simpleViewAdditionAndDeletion()
     checkAreaViewsDisplay(&mw, m_area1,
         QString("\n[ view1.5.1 ]\n"), 
         1, 1, "Added a single view to previously emptied mainwindow.");
+
+    {
+        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        uiGroup.writeEntry("TabBarOpenAfterCurrent", oldTabBarOpenAfterCurrent);
+        uiGroup.sync();
+    }
+    m_controller->loadSettings();
 }
 
 void AreaOperationTest::complexViewAdditionAndDeletion()
@@ -505,6 +536,17 @@ toolview1.2.2 [ bottom ]\n\
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 }
 
+
+
+void AreaOperationTest::testAddingViewAfter()
+{
+
+    QList<View*> list(m_area3->views());
+    foreach (View *view, list){
+        kDebug() << "name of view : " << view->objectName() << " , it's index : " << m_area3->views().indexOf(view);
+    }
+
+}
 void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     const QString &printedAreas, int containerCount, int splitterCount, QString location)
 {
@@ -557,6 +599,7 @@ View *AreaOperationTest::findNamedView(Area *area, const QString &name)
     return 0;
 }
 
+///////////
 QTEST_KDEMAIN(AreaOperationTest, GUI)
 #include "areaoperationtest.moc"
 

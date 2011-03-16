@@ -44,6 +44,7 @@ Boston, MA 02110-1301, USA.
 #include <sublime/view.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/ibuddydocumentfinder.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -55,6 +56,7 @@ Boston, MA 02110-1301, USA.
 #include <KIO/Job>
 
 #include <config-kdevplatform.h>
+
 #if HAVE_KOMPARE
     #include "patchdocument.h"
 #endif
@@ -159,9 +161,22 @@ struct DocumentControllerPrivate {
         }
     }
 
+    KDevelop::IDocument* findBuddyDocument(const KUrl &url, IBuddyDocumentFinder* finder)
+    {
+        QList<KDevelop::IDocument*> allDocs = controller->openDocuments();
+        foreach( KDevelop::IDocument* doc, allDocs ) {
+            if(finder->areBuddies(url, doc->url())) {
+                return doc;
+            }
+        }
+        return 0;
+    }
+
+
     IDocument* openDocumentInternal( const KUrl & inputUrl, const QString& prefName = QString(),
         const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = "",
-        DocumentController::DocumentActivationParams activationParams = 0 )
+        DocumentController::DocumentActivationParams activationParams = 0,
+        IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
         KTextEditor::Cursor previousActivePosition;
@@ -289,7 +304,7 @@ struct DocumentControllerPrivate {
         // The url in the document must equal the current url, else the housekeeping will get broken
         Q_ASSERT(!doc || doc->url() == url);
         
-        if(doc && openDocumentInternal(doc, range, activationParams))
+        if(doc && openDocumentInternal(doc, range, activationParams, buddy))
             return doc;
         else
             return 0;
@@ -298,7 +313,8 @@ struct DocumentControllerPrivate {
     
     bool openDocumentInternal(IDocument* doc,
                                 const KTextEditor::Range& range,
-                                DocumentController::DocumentActivationParams activationParams)
+                                DocumentController::DocumentActivationParams activationParams,
+                                IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
         KTextEditor::Cursor previousActivePosition;
@@ -360,8 +376,111 @@ struct DocumentControllerPrivate {
             }
             
             if(addView) {
-                //add view to the area
-                area->addView(partView, uiController->activeSublimeWindow()->activeView());
+                // This code is never executed when restoring session on startup,
+                // only when opening a file manually
+
+                Sublime::View* buddyView = 0;
+                bool placeAfterBuddy = true;
+                if(Core::self()->uiControllerInternal()->arrangeBuddies()) {
+                    // If buddy is not set, look for a (usually) plugin which handles this URL's mimetype
+                    // and use its IBuddyDocumentFinder, if available, to find a buddy document
+                    if(!buddy && doc->mimeType()) {
+                        QString mime = doc->mimeType()->name();
+                        IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
+                        if(buddyFinder) {
+                            buddy = findBuddyDocument(url, buddyFinder);
+                            if(buddy) {
+                                placeAfterBuddy = buddyFinder->buddyOrder(buddy->url(), doc->url());
+                            }
+                        }
+                    }
+
+                    if(buddy) {
+                        Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
+
+                        if(sublimeDocBuddy) {
+                            Sublime::AreaIndex* activeViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
+
+                            // try to find existing View of buddy document:
+                            //   * only in the same AreaIndex if flag DoNotForceCurrentView is not set,
+                            //   * in all AreaIndices of the current Area, if flag is set (TODO: test this case)
+                            foreach (Sublime::View *view, sublimeDocBuddy->views())
+                            {
+                                if (area->views().contains(view) &&
+                                    (activationParams.testFlag(DocumentController::DoNotForceCurrentView) ||
+                                     area->indexOf(view) == activeViewIndex))
+                                {
+                                    buddyView = view;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // add view to the area
+                if(buddyView && area->indexOf(buddyView)) {
+                    if(placeAfterBuddy) {
+                        // Adding new view after buddy view, simple case
+                        area->addView(partView, area->indexOf(buddyView), buddyView);
+                    }
+                    else {
+                        // First new view, then buddy view
+                        area->addView(partView, area->indexOf(buddyView), buddyView);
+                        // move buddyView tab after the new document
+                        area->removeView(buddyView);
+                        area->addView(buddyView, area->indexOf(partView), partView);
+                    }
+                }
+                else {
+                    // no buddy found for new document / plugin does not support buddies / buddy feature disabled
+                    Sublime::View *activeView = uiController->activeSublimeWindow()->activeView();
+                    Sublime::UrlDocument *activeDoc = 0;
+                    IBuddyDocumentFinder *buddyFinder = 0;
+                    if(activeView)
+                        activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
+                    if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
+                        QString mime = KMimeType::findByUrl(activeDoc->url())->name();
+                        buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
+                    }
+
+                    if(Core::self()->uiControllerInternal()->openAfterCurrent() &&
+                       Core::self()->uiControllerInternal()->arrangeBuddies() &&
+                       buddyFinder)
+                    {
+                        // Check if active document's buddy is directly next to it.
+                        // For example, we have the already-open tabs | *foo.h* | foo.cpp | , foo.h is active.
+                        // When we open a new document here (and the buddy feature is enabled),
+                        // we do not want to separate foo.h and foo.cpp, so we take care and avoid this.
+                        Sublime::AreaIndex *activeAreaIndex = area->indexOf(activeView);
+                        int pos = activeAreaIndex->views().indexOf(activeView);
+                        Sublime::View *afterActiveView = activeAreaIndex->views().value(pos+1, 0);
+
+                        Sublime::UrlDocument *activeDoc = 0, *afterActiveDoc = 0;
+                        if(activeView && afterActiveView) {
+                            activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
+                            afterActiveDoc = dynamic_cast<Sublime::UrlDocument *>(afterActiveView->document());
+                        }
+                        if(activeDoc && afterActiveDoc &&
+                           buddyFinder->areBuddies(activeDoc->url(), afterActiveDoc->url()))
+                        {
+                            // don't insert in between of two buddies, but after them
+                            area->addView(partView, activeAreaIndex, afterActiveView);
+                        }
+                        else {
+                            // The active document's buddy is not directly after it
+                            // => no ploblem, insert after active document
+                            area->addView(partView, activeView);
+                        }
+                    }
+                    else {
+                        // Opening as last tab won't disturb our buddies
+                        // Same, if buddies are disabled, we needn't care about them.
+
+                        // this method places the tab according to openAfterCurrent()
+                        area->addView(partView, activeView);
+                    }
+                }
             }
             
             if (!activationParams.testFlag(IDocumentController::DoNotActivate))
@@ -425,7 +544,6 @@ struct DocumentControllerPrivate {
     void addHistoryEntry();
     void jumpTo( const HistoryEntry & );*/
 };
-
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
@@ -568,17 +686,18 @@ IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Range& range,
         DocumentActivationParams activationParams,
-        const QString& encoding)
+        const QString& encoding, IDocument* buddy)
 {
-    return d->openDocumentInternal( inputUrl, "", range, encoding, activationParams );
+    return d->openDocumentInternal( inputUrl, "", range, encoding, activationParams, buddy);
 }
 
 
 bool DocumentController::openDocument(IDocument* doc,
                                       const KTextEditor::Range& range,
-                                      DocumentActivationParams activationParams)
+                                      DocumentActivationParams activationParams,
+                                      IDocument* buddy)
 {
-    return d->openDocumentInternal( doc, range, activationParams );
+    return d->openDocumentInternal( doc, range, activationParams, buddy);
 }
 
 
