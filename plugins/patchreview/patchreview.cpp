@@ -1182,7 +1182,13 @@ void PatchReviewPlugin::forceUpdate()
 }
 
 void PatchReviewPlugin::updateKompareModel() {
-  
+    if (!m_patch) {
+      ///TODO: this method should be cleaned up, it can be called by the timer and
+      ///      e.g. https://bugs.kde.org/show_bug.cgi?id=267187 shows how it could
+      ///      lead to asserts before...
+      return;
+    }
+
     kDebug() << "updating model";
     try {
         removeHighlighting();
@@ -1368,8 +1374,11 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     emit patchChanged();
     
-    if(!dynamic_cast<LocalPatchSource*>(m_patch.data()))
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data())) {
       delete m_patch;
+      // make sure "show" button still openes the file dialog to open a custom patch file
+      setPatch(new LocalPatchSource);
+    }
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
@@ -1453,6 +1462,11 @@ void PatchReviewPlugin::updateReview()
     futureActiveDoc = documents.take(m_patch->file());
   }
 #endif
+  if (!futureActiveDoc || !futureActiveDoc->textDocument()) {
+    // might happen if e.g. openDocument dialog was cancelled by user
+    // or under the theoretic possibility of a non-text document getting opened
+    return;
+  }
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
@@ -1499,8 +1513,17 @@ void PatchReviewPlugin::updateReview()
 
 void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
+  if (patch == m_patch) {
+    return;
+  }
+
   if(m_patch) {
     disconnect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
+    if (qobject_cast<LocalPatchSource*>(m_patch)) {
+      // make sure we don't leak this
+      // TODO: what about other patch sources?
+      delete m_patch;
+    }
   }
   m_patch = patch;
 
