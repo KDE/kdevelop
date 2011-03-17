@@ -377,7 +377,7 @@ bool TextDocument::save(DocumentSaveMode mode)
     }
 
     KUrl urlBeforeSave = d->document->url();
-    if (d->document->save())
+    if (d->document->documentSave())
     {
         if (d->document->url() != urlBeforeSave)
             notifyUrlChanged();
