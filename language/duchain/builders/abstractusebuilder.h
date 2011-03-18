@@ -130,7 +130,6 @@ protected:
     if(!declaration)
       return; // The declaration was deleted in the meantime
 
-    bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
 
@@ -155,14 +154,11 @@ protected:
         currentUseTracker() = m_trackerStack.at(m_trackerStack.size()-contextUpSteps-2);
       }
 
-      if (!encountered) {
-       
-        if (LanguageSpecificUseBuilderBase::m_mapAst)
-          LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
-            node, qMakePair<DUContextPointer, RangeInRevision>(DUContextPointer(newContext), newRange));
+      if (LanguageSpecificUseBuilderBase::m_mapAst)
+        LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
+          node, qMakePair<DUContextPointer, RangeInRevision>(DUContextPointer(newContext), newRange));
 
-        currentUseTracker().createUses << KDevelop::Use(newRange, declarationIndex);
-      }
+      currentUseTracker().createUses << KDevelop::Use(newRange, declarationIndex);
     }
 
     if (contextUpSteps) {
