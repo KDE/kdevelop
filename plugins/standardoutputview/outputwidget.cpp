@@ -91,14 +91,14 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
+    activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
+    activateOnSelect->setChecked( true );
+    focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
+    focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {
-        activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
         addAction(activateOnSelect);
-        activateOnSelect->setChecked( true );
-        focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
         addAction(focusOnSelect);
-        focusOnSelect->setChecked( false );
     }
 
     QAction *separator = new QAction(this);
@@ -302,7 +302,7 @@ void OutputWidget::selectNextItem()
     if( !widget || !widget->isVisible() )
         return;
 
-    if( focusOnSelect && focusOnSelect->isChecked() && !widget->hasFocus() )
+    if( focusOnSelect->isChecked() && !widget->hasFocus() )
     {
         widget->setFocus( Qt::OtherFocusReason );
     }
@@ -321,7 +321,7 @@ void OutputWidget::selectNextItem()
         {
             view->setCurrentIndex( index );
             view->scrollTo( index );
-            if( activateOnSelect && activateOnSelect->isChecked() )
+            if( activateOnSelect->isChecked() )
             {
                 iface->activate( index );
             }
@@ -338,7 +338,7 @@ void OutputWidget::selectPrevItem()
     if( !view )
         return;
 
-    if( focusOnSelect && focusOnSelect->isChecked() && !widget->hasFocus() )
+    if( focusOnSelect->isChecked() && !widget->hasFocus() )
     {
         widget->setFocus( Qt::OtherFocusReason );
     }
@@ -353,7 +353,7 @@ void OutputWidget::selectPrevItem()
         {
             view->setCurrentIndex( index );
             view->scrollTo( index );
-            if( activateOnSelect && activateOnSelect->isChecked() )
+            if( activateOnSelect->isChecked() )
             {
                 iface->activate( index );
             }
