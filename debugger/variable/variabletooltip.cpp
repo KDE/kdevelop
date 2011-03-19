@@ -156,7 +156,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 void VariableToolTip::variableCreated(bool hasValue)
 {
     if (hasValue) {
-        show();
+        ActiveToolTip::showToolTip(this, 0.0);
     } else {
         close();
     }
