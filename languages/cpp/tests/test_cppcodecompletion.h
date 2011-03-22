@@ -133,7 +133,8 @@ private slots:
   void testFilterVoid();
   void testCompletedIncludeFilePath();
   void testMultipleIncludeCompletionItems();
-
+  void testParentConstructor_data();
+  void testParentConstructor();
 public:
   enum DumpArea {
     DumpNone = 0,

@@ -216,35 +216,74 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       if(classFunction && classFunction->isConstructor()) {
         KDevelop::DUContext* funCtx = classFunction->internalFunctionContext();
         if(funCtx) {
-          int argsGiven = 0;
+          typedef QMultiMap<IndexedType, QString> TypeNamesMap;  // type -> names of arguments with this type
+          TypeNamesMap namesForType;
+          typedef QMap<QString, IndexedType> NameTypeMap;
+          NameTypeMap typeForName;     // argument name -> type
+          foreach (const Declaration* arg, funCtx->localDeclarations()) {
+            namesForType.insert(arg->indexedType(), arg->identifier().toString());
+            typeForName.insert(arg->identifier().toString(), arg->indexedType());
+          }
           bool started = false;
           const QVector< KDevelop::DUContext::Import > imports = classFunction->context()->importedParentContexts();
-          for(QVector<KDevelop::DUContext::Import>::const_iterator it = imports.begin(); it != imports.end() && argsGiven < funCtx->localDeclarations().size(); ++it) {
-            KDevelop::DUContext* ctx = it->context(topContext);
+          foreach(const DUContext::Import& import, imports) {
+            KDevelop::DUContext* ctx = import.context(topContext);
             if(ctx && ctx->type() == DUContext::Class && ctx->owner()) {
-              Declaration* parentClassDecl = ctx->owner();
-
-              if(!started)
-                newText += ": ";
-              else
-                newText += ", ";
-              started = true;
-              if (!forceParentScope.isEmpty()) {
-                //HACK: for the new class dialog use the direct declaration's identifier for the ctor call,
-                //      as otherwise we'd try to call a indirect parent's ctor
-                newText += m_declaration->identifier().toString();
-              } else {
-                newText += parentClassDecl->identifier().toString();
+              const int MaxMismatchCount = 20; // hope there won't be more than 20 arguments
+              int bestMismatchCount = MaxMismatchCount;
+              QString bestBaseCallText;
+              bool isBestDefault = false;
+              foreach (Declaration* decl, ctx->localDeclarations()) {
+                ClassFunctionDeclaration* func = dynamic_cast<ClassFunctionDeclaration*>(decl);
+                if (!func || !func->isConstructor()) {
+                  continue;
+                }
+                QString baseCallText;
+                int mismatchCount = 0;   // Matched arguments for base constructor
+                if(!started)
+                  baseCallText += ": ";
+                else
+                  baseCallText += ", ";
+                if (!forceParentScope.isEmpty()) {
+                  //HACK: for the new class dialog use the direct declaration's identifier for the ctor call,
+                  //      as otherwise we'd try to call a indirect parent's ctor
+                  baseCallText += m_declaration->identifier().toString();
+                } else {
+                  baseCallText += ctx->owner()->identifier().toString();
+                }
+                baseCallText += '(';
+                QVector<Declaration*> parentArgs = func->internalFunctionContext()->localDeclarations();
+                for(int a = 0; a < parentArgs.size(); ++a) {
+                  if(a)
+                    baseCallText += ", ";
+                  Declaration* parentArg = parentArgs[a];
+                  NameTypeMap::const_iterator byName = typeForName.constFind(parentArg->identifier().toString());
+                  if (byName != typeForName.constEnd() && byName.value() == parentArg->indexedType()) {
+                    // Both type and name match - good
+                    baseCallText += byName.key();
+                  } else {
+                    TypeNamesMap::const_iterator byType = namesForType.constFind(parentArg->indexedType());
+                    if (byType != namesForType.constEnd()) {
+                      // Anything with a suitable type will do
+                      baseCallText += byType.value();
+                    } else {
+                      ++mismatchCount;
+                    }
+                  }
+                }
+                if (mismatchCount < bestMismatchCount || (mismatchCount == bestMismatchCount && isBestDefault)) {
+                  bestMismatchCount = mismatchCount;
+                  bestBaseCallText = baseCallText + ')';
+                  isBestDefault = (parentArgs.size() == 0);
+                  if (mismatchCount == 0 && !isBestDefault) {
+                    break;
+                  }
+                }
               }
-              newText += '(';
-              int take = funCtx->localDeclarations().size()-argsGiven; ///@todo Allow distributing the arguments among multiple parents in multipe-inheritance case
-              for(int a = 0; a < take; ++a) {
-                if(a)
-                  newText += ", ";
-                newText += funCtx->localDeclarations()[argsGiven]->identifier().toString();
-                ++argsGiven;
+              if (bestMismatchCount < MaxMismatchCount && !isBestDefault) {   // There was an actual match
+                started = true;
+                newText += bestBaseCallText;
               }
-              newText += ")";
             }
           }
         }

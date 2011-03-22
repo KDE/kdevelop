@@ -1637,7 +1637,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
   QList<CompletionTreeItemPointer> ret;
-#ifndef TEST_COMPLETION
   TopDUContext* searchInContext = m_duContext->topContext();
   
   if(searchInContext)
@@ -1646,12 +1645,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
     KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
     searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
+    if(searchInContext)
+      ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
   }
- 
-  if(searchInContext)
-    ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
 
-#endif
   return ret;
 }
 
