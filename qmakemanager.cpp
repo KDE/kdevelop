@@ -431,7 +431,6 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
 {
     KUrl::List list;
     QMakeFolderItem* folder = findQMakeFolderParent(item);
-
     if ( folder ) {
         foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
             if (pro->files().contains(item->url())) {
@@ -442,6 +441,21 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
                     }
                 }
             }
+        }
+        if (list.isEmpty()) {
+            // fallback for new files, use all possible include dirs
+            foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
+                foreach(const KUrl& url, pro->includeDirectories()) {
+                    Q_ASSERT(url.isValid());
+                    if (!list.contains(url)) {
+                        list << url;
+                    }
+                }
+            }
+        }
+        // make sure the base dir is included
+        if (!list.contains(folder->url())) {
+            list << folder->url();
         }
 //         kDebug(9024) << "include dirs for" << item->url() << ":" << list;
     }
