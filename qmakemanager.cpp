@@ -72,14 +72,19 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
     return p;
 }
 
+///NOTE: KConfig is not thread safe
+QMutex s_buildDirMutex;
+
 /**
  * Returns the directory where srcDir will be built.
  * srcDir must contain a *.pro file !
  */
 KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
     QString relative = KUrl::relativeUrl(project->folder(), srcDir);
+    QMutexLocker lock(&s_buildDirMutex);
     KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
+    lock.unlock();
     if(buildDir.isValid()) {
         buildDir.addPath(relative);
     }
