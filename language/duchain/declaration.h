@@ -127,6 +127,15 @@ public:
   bool isFinal() const;
   /// Set whether the declaration is final. \param final true if the declaration is final, otherwise false.
   void setFinal(bool final);
+  
+  /**
+   * Changes weather this declaration must be direct in all cases or not. Needed for some languages, i.e. Python.
+   * "false" is the default.
+   * \param direct true to force direct, false otherwise.
+   * */
+  void setAlwaysForceDirect(bool direct);
+  /// Access weather this declaration must always be direct.
+  bool alwaysForceDirect() const;
 
   /**
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
@@ -367,7 +376,8 @@ public:
 
   /**
    * @see DeclarationId
-   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context
+   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context.
+   * The same goes for Declarations that have @c alwaysForceDirect() set to true.
    * */
   virtual DeclarationId id(bool forceDirect = false) const;
 

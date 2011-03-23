@@ -53,7 +53,7 @@ REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
   : m_comment(0), m_isDefinition(false), m_inSymbolTable(false),
-    m_isTypeAlias(false), m_anonymousInContext(false), m_isFinal(false)
+    m_isTypeAlias(false), m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false)
 {
   m_kind = Declaration::Instance;
 }
@@ -69,7 +69,8 @@ m_isDefinition(rhs.m_isDefinition),
 m_inSymbolTable(rhs.m_inSymbolTable),
 m_isTypeAlias(rhs.m_isTypeAlias),
 m_anonymousInContext(rhs.m_anonymousInContext),
-m_isFinal(rhs.m_isFinal)
+m_isFinal(rhs.m_isFinal),
+m_alwaysForceDirect(rhs.m_alwaysForceDirect)
 {
 }
 
@@ -577,6 +578,16 @@ void Declaration::setFinal(bool final)
   d_func_dynamic()->m_isFinal = final;
 }
 
+bool Declaration::alwaysForceDirect() const
+{
+  return d_func()->m_alwaysForceDirect;
+}
+
+void Declaration::setAlwaysForceDirect(bool direct)
+{
+  d_func_dynamic()->m_alwaysForceDirect = direct;
+}
+
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
 bool Declaration::isTypeAlias() const {
   DUCHAIN_D(Declaration);
@@ -604,7 +615,7 @@ void Declaration::activateSpecialization()
 DeclarationId Declaration::id(bool forceDirect) const
 {
   ENSURE_CAN_READ
-  if(inSymbolTable() && !forceDirect)
+  if(inSymbolTable() && !forceDirect && !alwaysForceDirect())
     return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
     return DeclarationId(IndexedDeclaration(const_cast<Declaration*>(this)), specialization());
