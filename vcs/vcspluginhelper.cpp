@@ -381,9 +381,11 @@ void VcsPluginHelper::commit()
     KUrl url = d->ctxUrls.first();
     QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
     QMap<KUrl, VcsStatusInfo::State> changes;
+    QVariant varlist;
+
     if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
     {
-        QVariant varlist = statusJob->fetchResults();
+        varlist = statusJob->fetchResults();
 
         foreach( const QVariant &var, varlist.toList() )
         {
@@ -401,14 +403,15 @@ void VcsPluginHelper::commit()
     VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), changes, d->vcs, retrieveOldCommitMessages());
     
     bool ret = showVcsDiff(patchSource);
-    
-    Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
-    if(ret) {
-        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
-        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
-    } else {
-        delete patchSource;
+
+    if(!ret) {
+        VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+        commitDialog->setCommitCandidates(varlist);
+        commitDialog->show();
     }
+
+    connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
+    connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
 }
 
 void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
