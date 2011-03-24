@@ -626,6 +626,9 @@ CursorInRevision position;
 
   ///Returns the count of uses that can be accessed through uses()
   int usesCount() const;
+  
+  /// Determines weather the given declaration has uses or not
+  static bool declarationHasUses(Declaration* decl);
 
   /**
    * Find the use which encompasses \a position, if one exists.

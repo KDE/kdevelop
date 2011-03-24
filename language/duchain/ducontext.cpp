@@ -41,6 +41,7 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "importers.h"
+#include "uses.h"
 
 ///It is fine to use one global static mutex here
 
@@ -1353,6 +1354,11 @@ const Use* DUContext::uses() const
   return d_func()->m_uses();
 }
 
+bool DUContext::declarationHasUses(KDevelop::Declaration* decl)
+{
+  return DUChain::uses()->hasUses(decl->id());
+}
+
 int DUContext::usesCount() const
 {
   return d_func()->m_usesSize();
@@ -1492,9 +1498,10 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
 {
   ENSURE_CAN_WRITE
 
-  foreach (Declaration* dec, localDeclarations())
-    if (!encountered.contains(dec))
+  foreach (Declaration* dec, localDeclarations()) {
+    if (!encountered.contains(dec) && (!dec->isAutoDeclaration() && !dec->hasUses()))
       delete dec;
+  }
     
   //Copy since the array may change during the iteration
   KDevVarLengthArray<LocalIndexedDUContext, 10> childrenCopy = d_func_dynamic()->m_childContextsList();

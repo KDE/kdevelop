@@ -60,6 +60,7 @@ public:
   bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
   bool m_isFinal       : 1;
   bool m_alwaysForceDirect : 1;
+  bool m_isAutoDeclaration : 1;
 };
 }
 

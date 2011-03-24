@@ -170,6 +170,13 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
   }
 }
 
+bool Uses::hasUses(const DeclarationId& id) const
+{
+  UsesItem item;
+  item.declaration = id;
+  return (bool) d->m_uses.findIndex(item);
+}
+
 KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) const
 {
   KDevVarLengthArray<IndexedTopDUContext> ret;
