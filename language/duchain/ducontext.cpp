@@ -1499,7 +1499,7 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   ENSURE_CAN_WRITE
 
   foreach (Declaration* dec, localDeclarations()) {
-    if (!encountered.contains(dec) && (!dec->isAutoDeclaration() && !dec->hasUses()))
+    if (!encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses()))
       delete dec;
   }
     
