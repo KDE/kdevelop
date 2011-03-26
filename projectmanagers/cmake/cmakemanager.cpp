@@ -336,6 +336,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
+        cfg->sync();
     }
     return m_rootItem;
 }

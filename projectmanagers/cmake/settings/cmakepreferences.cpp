@@ -291,7 +291,7 @@ void CMakePreferences::removeBuildDir()
 
 void CMakePreferences::configure()
 {
-    KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(m_srcFolder);
+    KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(m_subprojFolder);
     KDevelop::ProjectFolderItem* it=p->projectItem();
     KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
     KJob* job=b->configure(p);
