@@ -28,6 +28,7 @@
 #include <netinet/in.h>
 #include <netdb.h> 
 #include <fcntl.h>
+#include <cerrno>
 #include <assert.h>
 
 /**
@@ -316,9 +317,9 @@ int main(int argc, char** argv)
                 std::cout << "connecting to port " << port << std::endl;
         }
         
-        int res;
-        if ((res = connect(sockfd, useAddr, addrSize)) < 0)
+        if (connect(sockfd, useAddr, addrSize) < 0)
         {
+            int res = errno;
             if(res == ECONNREFUSED)
                 std::cerr << "ERROR while connecting: connection refused" << std::endl;
             else if(res == ENOENT)
