@@ -103,96 +103,122 @@ public:
     
     Q_SCRIPTABLE virtual KTextEditor::Document* globalTextEditorInstance()=0;
 public Q_SLOTS:
-    /**Opens a new or existing document.
-    @param url The full Url of the document to open.
-    @param range The location information, if applicable.
-    @param activate Indicates whether to fully activate the document.*/
+    /**
+     * Opens a new or existing document.
+     *
+     * @param url The full Url of the document to open.
+     * @param range The location information, if applicable.
+     * @param activate Indicates whether to fully activate the document.
+     */
     KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& cursor,
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "");
 
-    /** Opens a new or existing document.
-
-    A buddy document can be specified. Typically, the document view will be opened
-    next to its buddy.
-    @param url The full Url of the document to open.
-    @param range The range of text to select, if applicable.
-    @param activate Indicates whether to fully activate the document
-    @param buddy The buddy document. If 0, the registered IBuddyDocumentFinder
-           for the URL's mimetype will be queried to find a buddy document among
-           the open documents.
-    @return The opened document
-    */
+    /**
+     * Opens a new or existing document.
+     *
+     * @param url The full Url of the document to open.
+     * @param range The range of text to select, if applicable.
+     * @param activate Indicates whether to fully activate the document
+     * @param buddy Optional buddy document. If 0, the registered IBuddyDocumentFinder
+     *              for the URL's mimetype will be queried to find a fitting buddy.
+     *              If a buddy was found (or passed) @p url will be opened next
+     *              to its buddy.
+     *
+     * @return The opened document
+     */
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "",
             IDocument* buddy = 0) = 0;
 
-    /** Opens a document from the IDocument instance.
-
-    A buddy document can be specified. Typically, the document view will be opened
-    next to its buddy.
-    @param doc The IDocument to add
-    @param range The location information, if applicable.
-    @param activationParams Indicates whether to fully activate the document.
-    @param buddy The buddy document. If 0, the registered IBuddyDocumentFinder
-           for doc->mimeType() will be queried to find a buddy document among
-           the open documents.
-    */
+    /**
+     * Opens a document from the IDocument instance.
+     *
+     * @param doc The IDocument to add
+     * @param range The location information, if applicable.
+     * @param activationParams Indicates whether to fully activate the document.
+     * @param buddy Optional buddy document. If 0, the registered IBuddyDocumentFinder
+     *              for the Documents mimetype will be queried to find a fitting buddy.
+     *              If a buddy was found (or passed) @p url will be opened next
+     *              to its buddy.
+     */
     virtual Q_SCRIPTABLE bool openDocument(IDocument* doc,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             IDocument* buddy = 0) = 0;
 
-    /**Opens a new or existing document.
-    @param url The full Url of the document to open.
-    @param prefName The name of the preferred KPart to open that document,*/
+    /**
+     * Opens a new or existing document.
+     *
+     * @param url The full Url of the document to open.
+     * @param prefName The name of the preferred KPart to open that document
+     */
     virtual KDevelop::IDocument* openDocument( const KUrl &url, const QString& prefname ) = 0;
 
     virtual void closeAllDocuments() = 0;
 
 Q_SIGNALS:
-    /**Emitted when the document has been activated.*/
+    /// Emitted when the document has been activated.
     void documentActivated( KDevelop::IDocument* document );
 
-    ///Emitted whenever the active cursor jumps from one document+cursor to another, caused by a call to openDocument(..)
-    ///This is also emitted when a document is only activated, then previousDocument is zero
-    void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
+    /**
+     * Emitted whenever the active cursor jumps from one document+cursor to another,
+     * as e.g. caused by a call to openDocument(..).
+     *
+     * This is also emitted when a document is only activated. Then previousDocument is zero.
+     */
+    void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor,
+                                KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
     
-    /**Emitted when a document has been saved.*/
+    /// Emitted when a document has been saved.
     void documentSaved( KDevelop::IDocument* document );
 
-    /**Emitted when a document has been opened.
-    The document may not be loaded from disk/network at this point.
-    Note, no views exist for the document at the time this signal is emitted.*/
+    /**
+     * Emitted when a document has been opened.
+     *
+     * NOTE: The document may not be loaded from disk/network at this point.
+     * NOTE: No views exist for the document at the time this signal is emitted.
+     */
     void documentOpened( KDevelop::IDocument* document );
 
-    /**Emitted when a document has been loaded.
-    Note, no views exist for the document at the time this signal is emitted.*/
+    /**
+     * Emitted when a document has been loaded.
+     *
+     * NOTE: No views exist for the document at the time this signal is emitted.
+     */
     void documentLoaded( KDevelop::IDocument* document );
 
-    /**Emitted when a text document has been loaded, and the text document created.
-    Note, no views exist for the document at the time this signal is emitted.*/
+    /**
+     * Emitted when a text document has been loaded, and the text document created.
+     *
+     * NOTE: no views exist for the document at the time this signal is emitted.
+     */
     void textDocumentCreated( KDevelop::IDocument* document );
 
-    /**Emitted when a document has been closed.*/
+    /// Emitted when a document has been closed.
     void documentClosed( KDevelop::IDocument* document );
 
-    /**This is emitted when the document state(the relationship
-     * between the file in the editor and the file stored on disk) changes.*/
+    /**
+     * This is emitted when the document state(the relationship
+     * between the file in the editor and the file stored on disk) changes.
+     */
     void documentStateChanged( KDevelop::IDocument* document );
 
-    /**This is emitted when the document content changed.*/
+    /// This is emitted when the document content changed.
     void documentContentChanged( KDevelop::IDocument* document );
 
-    /**Emitted when a document has been loaded, but before documentLoaded(..) is emitted.
-     * this allows parts of kdevplatform to prepare data-structures that can be used by other parts
-     * during documentLoaded(..).*/
+    /**
+     * Emitted when a document has been loaded, but before documentLoaded(..) is emitted.
+     * 
+     * This allows parts of kdevplatform to prepare data-structures that can be used by other parts
+     * during documentLoaded(..).
+     */
     void documentLoadedPrepare( KDevelop::IDocument* document );
 
-    /**Emitted when a document url has changed.*/
+    /// Emitted when a document url has changed.
     void documentUrlChanged( KDevelop::IDocument* document );
 
     friend class IDocument;
