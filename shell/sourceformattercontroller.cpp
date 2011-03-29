@@ -438,7 +438,7 @@ SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeTyp
 	QStringList formatter = configuration().readEntry( mime->name(), "" ).split( "||", QString::SkipEmptyParts );
 	if( formatter.count() == 2 )
 	{
-		SourceFormatterStyle s( formatter.at( 0 ) );
+		SourceFormatterStyle s( formatter.at( 1 ) );
 		KConfigGroup fmtgrp = configuration().group( formatter.at(0) );
 		if( fmtgrp.hasGroup( formatter.at(1) ) ) {
 			KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
