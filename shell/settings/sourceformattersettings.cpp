@@ -63,25 +63,6 @@ LanguageSettings::LanguageSettings()
     : selectedFormatter(0), selectedStyle(0) {
 }
 
-// Name of first language for this mimetype, or mimetype itself if there are no languages for it
-QString languageNameForMimetype(const QString& mimetype) {
-    QList<KDevelop::ILanguage*> languages = Core::self()->languageControllerInternal()->languagesForMimetype(mimetype);
-    if (!languages.empty()) {
-        return languages.first()->name();
-    } else {
-        return mimetype;
-    }
-}
-
-// List of mimetypes for language name, or the argument itself if no languages correspond to it.
-QList<QString> mimetypesForLanguageName(const QString& language) {
-    QList<QString> result = Core::self()->languageControllerInternal()->mimetypesForLanguageName(language);
-    if (result.empty()) {
-        result.append(language);    // arg is a mimetype with no corresponding language support
-    }
-    return result;
-}
-
 SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
     : KCModule(SourceFormatterSettingsFactory::componentData(), parent, args)
 {
@@ -162,8 +143,11 @@ void SourceFormatterSettings::load()
         }
         foreach( const QString& mime, info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList() )
         {
-            QString languageName = languageNameForMimetype(mime);
-            languages[languageName].formatters.insert( formatter );
+            KMimeType::Ptr mimePtr = KMimeType::mimeType(mime);
+            QString languageName = formatter->formatter->highlightModeForMime(mimePtr);
+            LanguageSettings& l = languages[languageName];
+            l.mimetypes.append( mimePtr );
+            l.formatters.insert( formatter );
         }
     }
     foreach( const QString& name, languages.keys() )
@@ -171,28 +155,25 @@ void SourceFormatterSettings::load()
         // Pick the first appropriate mimetype for this language
         KConfigGroup grp = fmtctrl->configuration();
         LanguageSettings& l = languages[name];
-        QList<QString> mimetypes = mimetypesForLanguageName(name);
-        foreach (const QString& mimetype, mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry( mimetype, "" ).split( "||", QString::KeepEmptyParts );
-            if ( formatterAndStyleName.size() == 2 ) {
-                FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
-                if (formatterIter == formatters.constEnd()) {
-                    kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
-                    Q_ASSERT(!l.formatters.empty());        // otherwise there should be no entry for 'name'
-                    l.selectedFormatter = *l.formatters.begin();
+        foreach (const KMimeType::Ptr& mimetype, l.mimetypes) {
+            QStringList formatterAndStyleName = grp.readEntry( mimetype->name(), "" ).split( "||", QString::KeepEmptyParts );
+            FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
+            if (formatterIter == formatters.constEnd()) {
+                kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
+                Q_ASSERT(!l.formatters.empty());        // otherwise there should be no entry for 'name'
+                l.selectedFormatter = *l.formatters.begin();
+                selectAvailableStyle(l);
+            } else {
+                l.selectedFormatter = formatterIter.value();
+                SourceFormatter::StyleMap::const_iterator styleIter = l.selectedFormatter->styles.constFind(formatterAndStyleName.at( 1 ));
+                if (styleIter == l.selectedFormatter->styles.constEnd()) {
+                    kDebug() << "No style" << formatterAndStyleName.at( 1 ) << "found for formatter" << formatterAndStyleName.first();
                     selectAvailableStyle(l);
                 } else {
-                    l.selectedFormatter = formatterIter.value();
-                    SourceFormatter::StyleMap::const_iterator styleIter = l.selectedFormatter->styles.constFind(formatterAndStyleName.at( 1 ));
-                    if (styleIter == l.selectedFormatter->styles.constEnd()) {
-                        kDebug() << "No style" << formatterAndStyleName.at( 1 ) << "found for formatter" << formatterAndStyleName.first();
-                        selectAvailableStyle(l);
-                    } else {
-                        l.selectedStyle = styleIter.value();
-                    }
+                    l.selectedStyle = styleIter.value();
                 }
-                break;
             }
+            break;
         }
         if (!l.selectedFormatter) {
             Q_ASSERT(!l.formatters.empty());
@@ -237,8 +218,8 @@ void SourceFormatterSettings::save()
     KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
 
     for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
-        foreach( const QString& mime, mimetypesForLanguageName(iter.key()) ) {
-            grp.writeEntry( mime, QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg( iter.value().selectedStyle->name() ) );
+        foreach( const KMimeType::Ptr& mime, iter.value().mimetypes ) {
+            grp.writeEntry( mime->name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg( iter.value().selectedStyle->name() ) );
         }
     }
     foreach( SourceFormatter* fmt, formatters )
@@ -274,7 +255,7 @@ void SourceFormatterSettings::enableStyleButtons()
     QString languageName = cbLanguages->currentText();
     LanguageSettings& l = languages[languageName];
     ISourceFormatter* fmt = l.selectedFormatter->formatter;
-    bool hasEditWidget = ( fmt && fmt->editStyleWidget( KMimeType::mimeType( mimetypesForLanguageName(languageName).first() ) ) );
+    bool hasEditWidget = ( fmt && fmt->editStyleWidget( l.mimetypes.first() ) );
     btnDelStyle->setEnabled( userEntry );
     btnEditStyle->setEnabled( userEntry && hasEditWidget );
     btnNewStyle->setEnabled( cbFormatters->currentIndex() >= 0 && hasEditWidget );
@@ -390,9 +371,9 @@ void SourceFormatterSettings::editStyle()
     LanguageSettings& l = languages[ language ];
     SourceFormatter* fmt = l.selectedFormatter;
 
-    QString mimetype = mimetypesForLanguageName(language).first();
-    if( fmt->formatter->editStyleWidget( KMimeType::mimeType( mimetype ) ) != 0 ) {
-        EditStyleDialog dlg( fmt->formatter, KMimeType::mimeType( mimetype ), *l.selectedStyle, this );
+    KMimeType::Ptr mimetype = l.mimetypes.first();
+    if( fmt->formatter->editStyleWidget( mimetype ) != 0 ) {
+        EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
         if( dlg.exec() == QDialog::Accepted )
         {
             l.selectedStyle->setContent(dlg.content());
@@ -468,7 +449,7 @@ void SourceFormatterSettings::updatePreview()
         SourceFormatter* fmt = l.selectedFormatter;
         SourceFormatterStyle* style = l.selectedStyle;
         ISourceFormatter* ifmt = fmt->formatter;
-        KMimeType::Ptr mime = KMimeType::mimeType( mimetypesForLanguageName(langName).first() );
+        KMimeType::Ptr mime = l.mimetypes.first();
         m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
         m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), mime ) );
     } else

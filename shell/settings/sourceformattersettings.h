@@ -50,6 +50,7 @@ struct SourceFormatter
 
 struct LanguageSettings {
     LanguageSettings();
+    QList<KMimeType::Ptr> mimetypes;
     QSet<SourceFormatter*> formatters;
     // weak pointers to selected formatter and style, no ownership
     SourceFormatter* selectedFormatter;     // Should never be zero
