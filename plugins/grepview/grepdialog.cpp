@@ -131,8 +131,20 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     
     templateTypeCombo->addItems(template_desc);
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
-    templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
-    replacementTemplateEdit->setText( cg.readEntry("LastUsedReplacementTemplateString", repl_template[0]) );
+    templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
+    templateEdit->setEditable(true);
+    templateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    KCompletion* comp = templateEdit->completionObject();
+    connect(templateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    for(int i=0; i<templateEdit->count(); i++)
+        comp->addItem(templateEdit->itemText(i));
+    replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
+    replacementTemplateEdit->setEditable(true);
+    replacementTemplateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    comp = replacementTemplateEdit->completionObject();
+    connect(replacementTemplateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    for(int i=0; i<replacementTemplateEdit->count(); i++)
+        comp->addItem(replacementTemplateEdit->itemText(i));
     
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
@@ -261,15 +273,15 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
-    cg.writeEntry("LastUsedTemplateString", templateEdit->text());
-    cg.writeEntry("LastUsedReplacementTemplateString", replacementTemplateEdit->text());
+    cg.writeEntry("LastUsedTemplateString", qCombo2StringList(templateEdit));
+    cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(templateEdit));
     cg.sync();
 }
 
 void GrepDialog::templateTypeComboActivated(int index)
 {
-    templateEdit->setText(template_str[index]);
-    replacementTemplateEdit->setText(repl_template[index]);
+    templateEdit->setCurrentItem( template_str[index], true );
+    replacementTemplateEdit->setCurrentItem( repl_template[index], true );
 }
 
 void GrepDialog::setEnableProjectBox(bool enable)
@@ -300,12 +312,12 @@ QString GrepDialog::patternString() const
 
 QString GrepDialog::templateString() const
 {
-    return templateEdit->text().isEmpty() ? "%s" : templateEdit->text();
+    return templateEdit->currentText().isEmpty() ? "%s" : templateEdit->currentText();
 }
 
 QString GrepDialog::replacementTemplateString() const
 {
-    return replacementTemplateEdit->text();
+    return replacementTemplateEdit->currentText();
 }
 
 QString GrepDialog::filesString() const
