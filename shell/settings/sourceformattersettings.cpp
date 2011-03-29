@@ -136,9 +136,9 @@ void SourceFormatterSettings::load()
     foreach( const QString& name, languages.keys() )
     {
         KConfigGroup grp = fmtctrl->configuration();
-        QStringList formatter = grp.readEntry( name, "" ).split( "||", QString::SkipEmptyParts );
+        QStringList formatter = grp.readEntry( name, "" ).split( "||", QString::KeepEmptyParts );
         SourceFormatterLanguage l = languages[name];
-        if( formatter.isEmpty() || !l.formatters.contains( formatter.first() ) ) {
+        if( formatter.count() != 2 || !l.formatters.contains( formatter.first() ) ) {
             l.selectedFmt = l.formatters.begin().key();
             SourceFormatter fmt = l.formatters[l.selectedFmt];
             if( !fmt.styles.isEmpty() )
