@@ -173,8 +173,8 @@ void SourceFormatterSettings::load()
         LanguageSettings& l = languages[name];
         QList<QString> mimetypes = mimetypesForLanguageName(name);
         foreach (const QString& mimetype, mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry( mimetype, "" ).split( "||", QString::SkipEmptyParts );
-            if ( !formatterAndStyleName.isEmpty() ) {
+            QStringList formatterAndStyleName = grp.readEntry( mimetype, "" ).split( "||", QString::KeepEmptyParts );
+            if ( formatterAndStyleName.size() == 2 ) {
                 FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
                 if (formatterIter == formatters.constEnd()) {
                     kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
