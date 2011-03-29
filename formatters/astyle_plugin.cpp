@@ -68,7 +68,7 @@ QString AStylePlugin::description()
 
 QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 {
-    if(mime->is("text/x-java-source"))
+    if(mime->is("text/x-java"))
         return "Java";
     else if(mime->is("text/x-csharp"))
         return "C#";
@@ -77,7 +77,7 @@ QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 
 QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext )
 {
-    if(mime->is("text/x-java-source"))
+    if(mime->is("text/x-java"))
         m_formatter->setJavaStyle();
     else if(mime->is("text/x-csharp"))
         m_formatter->setSharpStyle();
@@ -138,7 +138,7 @@ QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
 KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;
-    if(mime->is("text/x-java-source"))
+    if(mime->is("text/x-java"))
         lang = AStylePreferences::Java;
     else if(mime->is("text/x-csharp"))
         lang = AStylePreferences::CSharp;
