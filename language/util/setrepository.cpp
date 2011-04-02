@@ -176,7 +176,7 @@ void SetNodeDataRequest::destroy(SetNodeData* data, KDevelop::AbstractItemReposi
     }
 }
 
-SetNodeDataRequest::SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository, BasicSetRepository* _setRepository) : data(*_data), m_hash(_data->hash()), repository(&_repository), setRepository(_setRepository), m_created(false) {
+SetNodeDataRequest::SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository, BasicSetRepository* _setRepository) : data(*_data), m_hash(_data->hash()), repository(_repository), setRepository(_setRepository), m_created(false) {
     ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
 }
 
@@ -184,9 +184,9 @@ SetNodeDataRequest::~SetNodeDataRequest() {
     //Eventually increase the reference-count of direct children
     if(m_created) {
         if(data.leftNode)
-        ++repository->dynamicItemFromIndex(data.leftNode)->m_refCount;
+        ++repository.dynamicItemFromIndex(data.leftNode)->m_refCount;
         if(data.rightNode)
-        ++repository->dynamicItemFromIndex(data.rightNode)->m_refCount;
+        ++repository.dynamicItemFromIndex(data.rightNode)->m_refCount;
     }
 }
 
@@ -205,8 +205,8 @@ void SetNodeDataRequest::createItem(SetNodeData* item) const {
     //Make sure we split at the correct split position
     if(item->hasSlaves()) {
         uint split = splitPositionForRange(data.start, data.end);
-        const SetNodeData* left = repository->itemFromIndex(item->leftNode);
-        const SetNodeData* right = repository->itemFromIndex(item->rightNode);
+        const SetNodeData* left = repository.itemFromIndex(item->leftNode);
+        const SetNodeData* right = repository.itemFromIndex(item->rightNode);
         Q_ASSERT(split >= left->end && split <= right->start);
     }
     #endif
