@@ -132,8 +132,7 @@ private:
 
     bool m_reversed;
 
-    KUrl urlForFileModel(const Diff2::DiffModel* model);
-    
+
     PatchReviewPlugin* m_plugin;
     
     QPointer<QWidget> m_customWidget;
@@ -176,7 +175,9 @@ public:
     virtual void startReview(KDevelop::IPatchSource* patch, ReviewMode mode);
     
     void finishReview(QList<KUrl> selection);
-    
+
+    KUrl urlForFileModel(const Diff2::DiffModel* model);
+
 Q_SIGNALS:
     void patchChanged();
 
