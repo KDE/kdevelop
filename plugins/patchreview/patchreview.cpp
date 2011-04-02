@@ -327,11 +327,8 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
             if ( !model || !model->differences() )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
-            
+            KUrl file = urlForFileModel( model );
+
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
 
@@ -393,10 +390,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
+            KUrl file = urlForFileModel( model );
 
             if (file != highlightFile)
                 continue;
@@ -434,10 +428,7 @@ void PatchReviewPlugin::highlightPatch() {
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
+            KUrl file = urlForFileModel( model );
 
             addHighlighting(file);
         }
@@ -463,11 +454,8 @@ void PatchReviewToolView::finishReview()
         }else if ( v.canConvert<const Diff2::DiffModel*>() ) {
           const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
 
-          KUrl file = m_plugin->patch()->baseDir();
-          
-          file.addPath( model->destinationPath() );
-          file.addPath( model->destinationFile() );
-          
+          KUrl file = m_plugin->urlForFileModel( model );
+
           selectedUrls << file;
         }
       }
@@ -495,10 +483,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
         if ( !model )
             throw "bad model-value";
 
-        KUrl file = m_plugin->patch()->baseDir();
-        
-        file.addPath( model->destinationPath() );
-        file.addPath( model->destinationFile() );
+        KUrl file = m_plugin->urlForFileModel( model );
 
         kDebug() << "opening" << file.toLocalFile();
 
@@ -512,13 +497,13 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
     }
 }
 
-KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
+KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
 {
-  KUrl file = m_plugin->patch()->baseDir();
-  
+  KUrl file = m_patch->baseDir();
+
   file.addPath( model->destinationPath() );
   file.addPath( model->destinationFile() );
-  
+
   return file;
 }
 
@@ -586,7 +571,7 @@ void PatchReviewToolView::kompareModelChanged()
           if ( diffs )
               cnt = diffs->count();
 
-          KUrl file = urlForFileModel(*it);
+          KUrl file = m_plugin->urlForFileModel(*it);
           haveUrls.insert(file);
 
           if(!QFileInfo(file.toLocalFile()).isReadable())
@@ -684,9 +669,9 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
         QVariant v = item->data( 0, Qt::UserRole );
         if ( v.canConvert<const Diff2::DiffModel*>() ) {
             const Diff2::DiffModel * model = v.value<const Diff2::DiffModel*>();
-            
-            KUrl file = urlForFileModel(model);
-            
+
+            KUrl file = m_plugin->urlForFileModel(model);
+
             if(file == doc->url()) {
               m_editPatch.filesList->setCurrentItem(item);
               return;
@@ -1258,7 +1243,7 @@ void PatchHighlighter::clear()
       markIface->removeMark(line, KTextEditor::MarkInterface::markType26);
       markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
     }
-    
+
     qDeleteAll(m_ranges);
     m_ranges.clear();
     m_differencesForRanges.clear();
