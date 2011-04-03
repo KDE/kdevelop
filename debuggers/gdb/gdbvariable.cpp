@@ -223,6 +223,7 @@ public:
 
         variable->setHasMore(hasMore);
         if (m_activeCommands == 0) {
+            variable->emitAllChildrenFetched();
             delete this;
         }
     }
