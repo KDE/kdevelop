@@ -292,21 +292,31 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         resetStyle();
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::LINUX_MODE);
+        setPointerAlignment(astyle::ALIGN_TYPE);
         setLabelIndent(true);
         setOperatorPaddingMode(true);
+        setParensInsidePaddingMode(false);
+        setParensOutsidePaddingMode(true);
         setParensUnPaddingMode(true);
         setSingleStatementsMode(false);
         setTabSpaceConversionMode(true);
         setPreprocessorIndent(true);
         setSwitchIndent(false);
+        setClassIndent(false);
+        setNamespaceIndent(false);
         return true;
     } else if (style == "Qt") {
         resetStyle();
         setPointerAlignment(astyle::ALIGN_NAME);
         setOperatorPaddingMode(true);
-        setParensOutsidePaddingMode(true);
         setBracketFormatMode(astyle::LINUX_MODE);
         setSwitchIndent(false);
+        setParensInsidePaddingMode(false);
+        setParensOutsidePaddingMode(false);
+        setParensUnPaddingMode(true);
+        setSpaceIndentation(4);
+        setClassIndent(false);
+        setNamespaceIndent(false);
         return true;
     }
 
