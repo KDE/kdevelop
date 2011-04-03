@@ -293,7 +293,14 @@ void ActiveToolTipManager::doVisibility() {
             if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
         }
-        
+        // Now fit this to screen
+        if (fullGeometry.left() < 0) {
+            fullGeometry.setLeft(0);
+        }
+        if (fullGeometry.top() < 0) {
+            fullGeometry.setTop(0);
+        }
+
         QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
         if(!offset.isNull()) {
             for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
