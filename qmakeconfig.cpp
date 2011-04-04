@@ -18,6 +18,10 @@
 
 #include "qmakeconfig.h"
 
+#include <QMutex>
+#include <interfaces/iproject.h>
+#include <KConfigGroup>
+
 const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 
 const char *QMakeConfig::QMAKE_BINARY = "QMake_Binary";
@@ -26,3 +30,23 @@ const char *QMakeConfig::INSTALL_PREFIX = "Install_Prefix";
 const char *QMakeConfig::EXTRA_ARGUMENTS = "Extra_Arguments";
 const char *QMakeConfig::BUILD_TYPE = "Build_Type";
 const char *QMakeConfig::ALL_BUILDS = "All_Builds";
+
+using namespace KDevelop;
+
+///NOTE: KConfig is not thread safe
+QMutex s_buildDirMutex;
+
+KUrl QMakeConfig::buildDirFromSrc(const IProject* project, const KUrl& srcDir)
+{
+    QMutexLocker lock(&s_buildDirMutex);
+    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, project->folder());
+    lock.unlock();
+
+    QString relative = KUrl::relativeUrl(project->folder(), srcDir);
+    if(buildDir.isValid()) {
+        buildDir.addPath(relative);
+        buildDir.cleanPath();
+    }
+    return buildDir;
+}

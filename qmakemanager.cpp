@@ -72,27 +72,6 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
     return p;
 }
 
-///NOTE: KConfig is not thread safe
-QMutex s_buildDirMutex;
-
-/**
- * Returns the directory where srcDir will be built.
- * srcDir must contain a *.pro file !
- */
-KUrl buildDirFromSrc(const IProject *project, const KUrl &srcDir) {
-    QString relative = KUrl::relativeUrl(project->folder(), srcDir);
-    QMutexLocker lock(&s_buildDirMutex);
-    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl(""));
-    lock.unlock();
-    if(buildDir.isValid()) {
-        buildDir.addPath(relative);
-    }
-
-    buildDir.cleanPath();
-    return buildDir;
-}
-
 //END Helpers
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
@@ -167,19 +146,21 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
     if ( qmakeItem ) {
         if (!qmakeItem->parent()) {
             // build root item
-            dir = buildDirFromSrc(qmakeItem->project(), qmakeItem->url());
-        }
-        // build sub-item
-        foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
-            if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->url().toLocalFile()).absoluteDir() ||
-                 pro->hasSubProject( qmakeItem->url().toLocalFile() ) ) {
-                // get path from project root and it to buildDir
-                dir = buildDirFromSrc(qmakeItem->project(), pro->absoluteDir());
+            dir = QMakeConfig::buildDirFromSrc(qmakeItem->project(), qmakeItem->url());
+        } else {
+            // build sub-item
+            foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
+                if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->url().toLocalFile()).absoluteDir() ||
+                    pro->hasSubProject( qmakeItem->url().toLocalFile() ) ) {
+                    // get path from project root and it to buildDir
+                    dir = QMakeConfig::buildDirFromSrc( qmakeItem->project(), pro->absoluteDir() );
+                    break;
+                }
             }
         }
     }
 
-    kDebug(9204) << "Building " << item->text() << item->url() << "in" << dir.toLocalFile();
+    kDebug(9204) << "build dir for" << item->text() << item->url() << "is:" << dir.toLocalFile();
     return dir;
 }
 
@@ -517,7 +498,7 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
 
 QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const KUrl& path ) const
 {
-    QDir curdir( buildDirFromSrc(project, path.isEmpty() ? project->folder() : path).toLocalFile() );
+    QDir curdir( QMakeConfig::buildDirFromSrc(project, path.isEmpty() ? project->folder() : path).toLocalFile() );
     curdir.makeAbsolute();
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp() )
     {
@@ -557,7 +538,7 @@ void QMakeProjectManager::slotRunQMake()
     Q_ASSERT(m_actionItem);
 
     KUrl srcDir = m_actionItem->url();
-    KUrl buildDir = buildDirFromSrc(m_actionItem->project(), srcDir);
+    KUrl buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
     QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
 
     KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
@@ -581,6 +562,5 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
     kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
     return( !(qmakeValid && buildDirValid) );
 }
-
 
 #include "qmakemanager.moc"

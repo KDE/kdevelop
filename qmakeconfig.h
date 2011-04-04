@@ -19,11 +19,17 @@
 #ifndef QMAKECONFIG_H
 #define QMAKECONFIG_H
 
+#include <KUrl>
+
+namespace KDevelop {
+class IProject;
+}
+
 class QMakeConfig
 {
 public:
     static const char *CONFIG_GROUP;
-        
+
     static const char 
         *QMAKE_BINARY,
         *BUILD_FOLDER,
@@ -31,6 +37,12 @@ public:
         *EXTRA_ARGUMENTS,
         *BUILD_TYPE,
         *ALL_BUILDS;
+
+    /**
+     * Returns the directory where srcDir will be built.
+     * srcDir must contain a *.pro file !
+     */
+    static KUrl buildDirFromSrc(const KDevelop::IProject* project, const KUrl& srcDir);
 };
 
 #endif
