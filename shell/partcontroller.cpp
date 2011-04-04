@@ -119,6 +119,7 @@ KTextEditor::Editor* PartController::editorPart() const
                                i18n("Could not find KTextEditor::Factory, check your installation.\n"
                                     "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ));
             qApp->quit();
+	    exit(EXIT_FAILURE);
             return 0;
         }
 
