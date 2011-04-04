@@ -553,7 +553,16 @@ void TestCppCodeCompletion::testNoMemberAccess() {
   CompletionItemTester testCase2(context, " "); //NoMemberAccess with empty expression
   QVERIFY(testCase2.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList()); //Theoretically should have "MyClass", but global completions aren't included
-  
+
+  CompletionItemTester testCase3(context, "public: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
+  CompletionItemTester testCase4(context, "protected: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
+  CompletionItemTester testCase5(context, "private: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
   release(context);
 }
 
@@ -626,16 +635,25 @@ void TestCppCodeCompletion::testKeywords() {
   CompletionItemTester testPublic(context->childContexts()[ctxt], "public ");
   QVERIFY(testPublic.completionContext->isValid());
   QCOMPARE(testPublic.names, QStringList() << "Values");
+  CompletionItemTester testPublic2(context->childContexts()[0], "public: ");
+  QVERIFY(testPublic2.completionContext->isValid());
+  QCOMPARE(testPublic2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testFakePublic(context->childContexts()[ctxt], "fakepublic ");
   QVERIFY(!testFakePublic.completionContext->isValid());
   CompletionItemTester testProtected(context->childContexts()[ctxt], "protected ");
   QVERIFY(testProtected.completionContext->isValid());
   QCOMPARE(testProtected.names, QStringList() << "Values");
+  CompletionItemTester testProtected2(context->childContexts()[0], "protected: ");
+  QVERIFY(testProtected2.completionContext->isValid());
+  QCOMPARE(testProtected2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testFakeProtected(context->childContexts()[ctxt], "fakeprotected ");
   QVERIFY(!testFakeProtected.completionContext->isValid());
   CompletionItemTester testPrivate(context->childContexts()[ctxt], "private ");
   QVERIFY(testPrivate.completionContext->isValid());
   QCOMPARE(testPrivate.names, QStringList() << "Values");
+  CompletionItemTester testPrivate2(context->childContexts()[0], "private: ");
+  QVERIFY(testPrivate2.completionContext->isValid());
+  QCOMPARE(testPrivate2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testVirtual(context->childContexts()[ctxt], "virtual ");
   QVERIFY(testVirtual.completionContext->isValid());
   QCOMPARE(testVirtual.names, QStringList() << "Values");
@@ -874,6 +892,46 @@ void TestCppCodeCompletion::testParentConstructor()
   CompletionItemTester tester(context, "void");  // Force a function context
   Cpp::ImplementationHelperItem* constructorItem = dynamic_cast<Cpp::ImplementationHelperItem*>(tester.items[0].data());
   QCOMPARE(constructorItem->insertionText().simplified(), completion.simplified());
+  release(context);
+}
+
+void TestCppCodeCompletion::testOverride_data()
+{
+  QTest::addColumn<QString>("parentCode");  // code in parent class
+  QTest::addColumn<QString>("prefix");      // completion prefix
+  QTest::addColumn<QString>("completion");  // expected completion contents
+
+  QTest::newRow("empty-prefix") << "virtual void foo();" << "" << "virtual void foo();";
+  QTest::newRow("public") << "virtual void foo();" << "public: " << "virtual void foo();";
+  QTest::newRow("protected") << "virtual void foo();" << "protected: " << "virtual void foo();";
+  QTest::newRow("private") << "virtual void foo();" << "private: " << "virtual void foo();";
+}
+
+void TestCppCodeCompletion::testOverride()
+{
+  QFETCH(QString, parentCode);
+  QFETCH(QString, prefix);
+  QFETCH(QString, completion);
+  QString tmpl = QString(" class A {public: %1  };\n"
+                         " class B : public A { };").arg(parentCode);
+  TopDUContext* context = parse(tmpl.toLocal8Bit(), DumpNone);
+  DUChainWriteLocker lock;
+  DUContext* BCtx = context->childContexts().last();
+  QCOMPARE(BCtx->localScopeIdentifier().toString(), QLatin1String("B"));
+  CompletionItemTester tester(BCtx, prefix);
+  bool found = false;
+  foreach(CompletionItemTester::Item item, tester.items) {
+    Cpp::ImplementationHelperItem* override = dynamic_cast<Cpp::ImplementationHelperItem*>(item.data());
+    if (!override) {
+      continue;
+    }
+    QCOMPARE(override->m_type, Cpp::ImplementationHelperItem::Override);
+    QCOMPARE(override->insertionText().simplified(), completion.simplified());
+    found = true;
+    break;
+  }
+  QVERIFY(found);
+  release(context);
 }
 
 void TestCppCodeCompletion::testSignalSlotCompletion() {
