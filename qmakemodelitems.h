@@ -38,16 +38,18 @@ private:
     QList<QMakeProjectFile*> m_projectFiles;
 };
 
-class QMakeTargetItem : public KDevelop::ProjectTargetItem
+class QMakeTargetItem : public KDevelop::ProjectExecutableTargetItem
 {
 public:
-    QMakeTargetItem( KDevelop::IProject*, const QString& s, KDevelop::ProjectBaseItem* parent );
+    QMakeTargetItem( QMakeProjectFile* pro, KDevelop::IProject*,
+                     const QString& s, KDevelop::ProjectBaseItem* parent );
     ~QMakeTargetItem();
-    KUrl::List includeDirectories() const;
-    QHash<QString, QString> environment() const;
-    QList<QPair<QString,QString> > defines() const;
+
+    virtual KUrl builtUrl() const;
+    virtual KUrl installedUrl() const;
+
 private:
-    struct QMakeTargetItemPrivate* const d;
+    QMakeProjectFile *m_pro;
 };
 
 

@@ -49,36 +49,23 @@ QMakeFolderItem::~QMakeFolderItem()
     qDeleteAll(m_projectFiles);
 }
 
-struct QMakeTargetItemPrivate
-{
-    KUrl::List m_includes;
-    QHash<QString, QString> m_env;
-    QList<QPair<QString,QString> > m_defs;
-};
-
-QMakeTargetItem::QMakeTargetItem( KDevelop::IProject* project, const QString& s,
-                                  KDevelop::ProjectBaseItem* parent )
-    : KDevelop::ProjectTargetItem( project, s, parent ), d(new QMakeTargetItemPrivate)
+QMakeTargetItem::QMakeTargetItem( QMakeProjectFile* pro, KDevelop::IProject* project,
+                                  const QString& s, KDevelop::ProjectBaseItem* parent )
+    : KDevelop::ProjectExecutableTargetItem( project, s, parent )
+    , m_pro(pro)
 {
 }
 
 QMakeTargetItem::~QMakeTargetItem()
 {
-    delete d;
 }
 
-KUrl::List QMakeTargetItem::includeDirectories() const
+KUrl QMakeTargetItem::builtUrl() const
 {
-    return d->m_includes;
+    return m_pro->outPwd().append('/' + text());
 }
 
-QHash<QString, QString> QMakeTargetItem::environment() const
+KUrl QMakeTargetItem::installedUrl() const
 {
-    return d->m_env;
+    return KUrl();
 }
-
-QList<QPair<QString, QString> > QMakeTargetItem::defines() const
-{
-    return d->m_defs;
-}
-

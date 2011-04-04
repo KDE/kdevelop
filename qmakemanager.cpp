@@ -306,7 +306,7 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
     foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
         foreach( const QString& s, pro->targets() ) {
             kDebug(9024) << "adding target:" << s;
-            QMakeTargetItem* target = new QMakeTargetItem( folder->project(), s, folder );
+            QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
             foreach( const KUrl& u, pro->filesForTarget(s) ) {
                 new ProjectFileItem( folder->project(), u, target );
                 ///TODO: signal?
