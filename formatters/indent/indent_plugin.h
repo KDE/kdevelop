@@ -76,6 +76,7 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 	private:
 		QStringList m_options;
 		KDevelop::SourceFormatterStyle m_currentStyle;
+		KDevelop::SourceFormatterStyle predefinedStyle(const QString& name);
 };
 
 class IndentPreferences : public KDevelop::SettingsWidget {

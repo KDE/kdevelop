@@ -86,7 +86,16 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	QTextStream ios(&proc);
 	
 	std::auto_ptr<QTemporaryFile> tmpFile;
-	
+
+	if (style.content().isEmpty())
+	{
+		style = predefinedStyle(style.name());
+		if (style.content().isEmpty())
+		{
+			kWarning() << "Empty contents for style" << style.name() << "for indent plugin";
+			return text;
+		}
+	}
 	QString command = style.content();
 	if(command.contains("$TMPFILE"))
 	{
@@ -140,6 +149,12 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 		output = ios.readAll();
 	}
 
+	if (output.isEmpty())
+	{
+		kWarning() << "indent returned empty text for style" << style.name() << style.content();
+		return text;
+	}
+
     return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
@@ -148,21 +163,29 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
 }
 
+KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name)
+{
+	SourceFormatterStyle result(name);
+	if (name == "GNU_indent_GNU")
+	{
+		result.setCaption(i18n("Gnu Indent: GNU"));
+		result.setContent("indent");
+	} else if (name == "GNU_indent_KR") {
+		result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
+		result.setContent("indent -kr");
+	} else if (name == "GNU_indent_orig") {
+		result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
+		result.setContent("indent -orig");
+	}
+	return result;
+}
+
 QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
-        QList<KDevelop::SourceFormatterStyle> styles;
-        KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU_indent_GNU" );
-        st.setCaption( i18n("Gnu Indent: GNU") );
-		st.setContent("indent");
-        styles << st;
-        st = KDevelop::SourceFormatterStyle( "GNU_indent_KR" );
-        st.setCaption( i18n("Gnu Indent: Kernighan & Ritchie") );
-		st.setContent("indent -kr");
-        styles << st;
-        st = KDevelop::SourceFormatterStyle( "GNU_indent_orig" );
-        st.setCaption( i18n("Gnu Indent: Original Berkeley indent style") );
-		st.setContent("indent -orig");
-        styles << st;
+    QList<KDevelop::SourceFormatterStyle> styles;
+	styles << predefinedStyle("GNU_indent_GNU");
+	styles << predefinedStyle("GNU_indent_KR");
+	styles << predefinedStyle("GNU_indent_orig");
 	return styles;
 }
 
