@@ -75,10 +75,10 @@ bool QMakeProjectFile::read()
     }
 
     ///TODO: more special variables
-    m_variableValues["PWD"] = QStringList() << absoluteDir();
-    m_variableValues["_PRO_FILE_"] = QStringList() << absoluteFile();
-    m_variableValues["_PRO_FILE_PWD_"] = m_variableValues["PWD"];
-    m_variableValues["OUT_PWD"] = QStringList() << buildDir().toLocalFile();
+    m_variableValues["PWD"] = QStringList() << pwd();
+    m_variableValues["_PRO_FILE_"] = QStringList() << proFile();
+    m_variableValues["_PRO_FILE_PWD_"] = QStringList() << proFilePwd();
+    m_variableValues["OUT_PWD"] = QStringList() << outPwd();
 
     if (m_qtIncludeDir.isEmpty()) {
         // Let's cache the Qt include dir
@@ -375,13 +375,26 @@ KDevelop::IProject* QMakeProjectFile::project() const
     return m_project;
 }
 
-KUrl QMakeProjectFile::buildDir() const
+QString QMakeProjectFile::pwd() const
 {
-    const KUrl url(absoluteDir());
+    return absoluteDir();
+}
+
+QString QMakeProjectFile::outPwd() const
+{
     if (!m_project) {
-        return url;
+        return absoluteDir();
     } else {
-        return QMakeConfig::buildDirFromSrc(m_project, url);
+        return QMakeConfig::buildDirFromSrc(m_project, absoluteDir()).toLocalFile();
     }
 }
 
+QString QMakeProjectFile::proFile() const
+{
+    return absoluteFile();
+}
+
+QString QMakeProjectFile::proFilePwd() const
+{
+    return absoluteDir();
+}

@@ -67,7 +67,14 @@ public:
     void setProject(KDevelop::IProject* project);
     KDevelop::IProject* project() const;
 
-    KUrl buildDir() const;
+    /// current pwd, e.g. absoluteDir even for included files
+    virtual QString pwd() const;
+    /// path to build dir for the current .pro file
+    virtual QString outPwd() const;
+    /// path to dir of current .pro file
+    virtual QString proFilePwd() const;
+    /// path to current .pro file
+    virtual QString proFile() const;
 
 private:
     void addUrlsForVariable(const QString& variable, KUrl::List* list) const;

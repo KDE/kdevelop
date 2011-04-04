@@ -19,8 +19,11 @@
 #include "qmakeconfig.h"
 
 #include <QMutex>
-#include <interfaces/iproject.h>
+#include <QDebug>
+
 #include <KConfigGroup>
+
+#include <interfaces/iproject.h>
 
 const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 

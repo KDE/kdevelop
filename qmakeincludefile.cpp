@@ -25,7 +25,7 @@
 #include <QtCore/QStringList>
 
 QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent )
-    : QMakeProjectFile( incfile )
+    : QMakeProjectFile( incfile ), m_parent(parent)
 {
     m_variableValues = parent->variableMap();
 
@@ -38,4 +38,29 @@ QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent )
         QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(parent);
         setMkSpecs( specs );
     }
+}
+
+QString QMakeIncludeFile::pwd() const
+{
+    return absoluteDir();
+}
+
+QString QMakeIncludeFile::outPwd() const
+{
+    QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(m_parent);
+    if (pro) {
+        return pro->outPwd();
+    } else {
+        return absoluteDir();
+    }
+}
+
+QString QMakeIncludeFile::proFile() const
+{
+    return m_parent->absoluteFile();
+}
+
+QString QMakeIncludeFile::proFilePwd() const
+{
+    return m_parent->absoluteDir();
 }
