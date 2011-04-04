@@ -11,7 +11,8 @@ include_directories(
 
 set(qmakefiletest_SRCS test_qmakefile.cpp
     ../qmakefile.cpp ../qmakeincludefile.cpp ../qmakeprojectfile.cpp
-    ../variablereferenceparser.cpp ../qmakemkspecs.cpp )
+    ../variablereferenceparser.cpp ../qmakemkspecs.cpp
+    ../qmakeconfig.cpp )
 
 set(qmakeprojecttest_SRCS test_qmakeproject.cpp
     ../qmakeconfig.cpp )
@@ -22,6 +23,7 @@ kde4_add_unit_test(qmakeprojecttest ${qmakeprojecttest_SRCS})
 target_link_libraries(qmakefiletest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
     kdev4qmakeparser
     )
 

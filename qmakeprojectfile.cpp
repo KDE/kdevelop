@@ -31,6 +31,9 @@
 #include "parser/ast.h"
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
+#include "qmakeconfig.h"
+
+#include <interfaces/iproject.h>
 
 #define ifDebug(x)
 
@@ -42,7 +45,7 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
+    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0), m_project(0)
 {
 }
 
@@ -75,8 +78,7 @@ bool QMakeProjectFile::read()
     m_variableValues["PWD"] = QStringList() << absoluteDir();
     m_variableValues["_PRO_FILE_"] = QStringList() << absoluteFile();
     m_variableValues["_PRO_FILE_PWD_"] = m_variableValues["PWD"];
-    ///TODO: this is supposed to be the build dir!
-    m_variableValues["OUT_PWD"] = QStringList() << absoluteDir();
+    m_variableValues["OUT_PWD"] = QStringList() << buildDir().toLocalFile();
 
     if (m_qtIncludeDir.isEmpty()) {
         // Let's cache the Qt include dir
@@ -362,3 +364,24 @@ QList< QMakeProjectFile::DefinePair > QMakeProjectFile::defines() const
     }
     return d;
 }
+
+void QMakeProjectFile::setProject(KDevelop::IProject* project)
+{
+    m_project = project;
+}
+
+KDevelop::IProject* QMakeProjectFile::project() const
+{
+    return m_project;
+}
+
+KUrl QMakeProjectFile::buildDir() const
+{
+    const KUrl url(absoluteDir());
+    if (!m_project) {
+        return url;
+    } else {
+        return QMakeConfig::buildDirFromSrc(m_project, url);
+    }
+}
+

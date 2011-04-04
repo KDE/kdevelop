@@ -30,6 +30,10 @@ template <typename T> class QList;
 class QMakeMkSpecs;
 class QMakeCache;
 
+namespace KDevelop {
+class IProject;
+}
+
 class QMakeProjectFile : public QMakeFile
 {
 public:
@@ -58,11 +62,19 @@ public:
     QMakeCache* qmakeCache() const;
     QStringList resolveVariables( const QString& variable ) const;
     QList< DefinePair > defines() const;
+
+    /// required for proper build-dir resolution
+    void setProject(KDevelop::IProject* project);
+    KDevelop::IProject* project() const;
+
+    KUrl buildDir() const;
+
 private:
     void addUrlsForVariable(const QString& variable, KUrl::List* list) const;
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
+    KDevelop::IProject* m_project;
     static QString m_qtIncludeDir;
 };
 

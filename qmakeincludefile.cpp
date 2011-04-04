@@ -24,24 +24,18 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-QMakeIncludeFile::QMakeIncludeFile( const QString& incfile,
-                                    const QMap<QString,QStringList>& variables  )
+QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent )
     : QMakeProjectFile( incfile )
 {
-    m_variableValues = variables;
-}
+    m_variableValues = parent->variableMap();
 
-void QMakeIncludeFile::setParent( QMakeFile* file )
-{
-    QMakeProjectFile* parent = dynamic_cast<QMakeProjectFile*>(file);
-    if( parent )
-    {
-        setMkSpecs( parent->mkSpecs() );
-        setQMakeCache( parent->qmakeCache() );
-    }else
-    {
-        QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(file);
+    QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(parent);
+    if( pro ) {
+        setMkSpecs( pro->mkSpecs() );
+        setQMakeCache( pro->qmakeCache() );
+        setProject( pro->project() );
+    } else {
+        QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(parent);
         setMkSpecs( specs );
     }
 }
-

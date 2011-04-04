@@ -207,6 +207,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
         cache->read();
     }
     QMakeProjectFile* scope = new QMakeProjectFile( projecturl.toLocalFile() );
+    scope->setProject( project );
     scope->setMkSpecs( mkspecs );
     if( cache ) {
         scope->setQMakeCache( cache );
@@ -256,6 +257,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
         }
 
         QMakeProjectFile* qmscope = new QMakeProjectFile( absFile );
+        qmscope->setProject( project );
 
         const QFileInfo info( absFile );
         const QDir d = info.dir();
