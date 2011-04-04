@@ -120,6 +120,7 @@ KTextEditor::Editor* PartController::editorPart() const
                                     "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ),
                                i18n("System Configuration Error"));
             qApp->quit();
+	    exit(EXIT_FAILURE);
             return 0;
         }
 
