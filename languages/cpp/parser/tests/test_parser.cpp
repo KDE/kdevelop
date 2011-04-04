@@ -707,6 +707,58 @@ private slots:
     QCOMPARE(control.problems().count(), ++problemCount);
   }
 
+  void testNamedOperators_data()
+  {
+    QTest::addColumn<QString>("code");
+    QTest::newRow("xor") << "int i = 1 xor 2;";
+    QTest::newRow("bitand") << "int i = 1 bitand 2;";
+    QTest::newRow("bitor") << "int i = 1 bitor 2;";
+    QTest::newRow("or") << "int i = 1 or 2;";
+    QTest::newRow("and") << "int i = 1 and 2;";
+    QTest::newRow("compl") << "int i = compl 2;";
+    QTest::newRow("not") << "int i = not 2;";
+    QTest::newRow("xor_eq") << "int i = 1; i xor_eq 2;";
+    QTest::newRow("and_eq") << "int i = 1; i and_eq 2;";
+    QTest::newRow("or_eq") << "int i = 1; i or_eq 2;";
+    QTest::newRow("not_eq") << "int i = 1 not_eq 2;";
+  }
+
+  void testNamedOperators()
+  {
+    pool mem_pool;
+
+    QFETCH(QString, code);
+    code = "int main() { " + code + " }\n";
+    parse(code.toLocal8Bit(), &mem_pool);
+    QVERIFY(control.problems().isEmpty());
+  }
+
+  void testOperators_data()
+  {
+    QTest::addColumn<QString>("code");
+    QTest::newRow("xor") << "int i = 1 ^ 2;";
+    QTest::newRow("bitand") << "int i = 1 & 2;";
+    QTest::newRow("bitor") << "int i = 1 | 2;";
+    QTest::newRow("or") << "int i = 1 || 2;";
+    QTest::newRow("and") << "int i = 1 && 2;";
+    QTest::newRow("compl") << "int i = ~2;";
+    QTest::newRow("not") << "int i = !2;";
+    QTest::newRow("xor_eq") << "int i = 1; i ^= 2;";
+    QTest::newRow("and_eq") << "int i = 1; i &= 2;";
+    QTest::newRow("or_eq") << "int i = 1; i |= 2;";
+    QTest::newRow("not_eq") << "int i = 1 != 2;";
+  }
+
+  void testOperators()
+  {
+    pool mem_pool;
+
+    QFETCH(QString, code);
+    code = "int main() { " + code + " }\n";
+    parse(code.toLocal8Bit(), &mem_pool);
+    QVERIFY(control.problems().isEmpty());
+  }
+
 private:
   ParseSession* lastSession;
 
