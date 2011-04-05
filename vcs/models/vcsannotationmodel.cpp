@@ -111,7 +111,7 @@ VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
 {
     ///FIXME: update the annotation bar on edit/reload somehow
     ///BUG: https://bugs.kde.org/show_bug.cgi?id=269757
-    if (!d->m_annotation.containsLine()) {
+    if (!d->m_annotation.containsLine(line)) {
         return VcsRevision();
     }
 
