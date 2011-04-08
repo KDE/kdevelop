@@ -32,6 +32,9 @@
 #include "../duchain.h"
 #include <interfaces/isession.h>
 
+#include <QApplication>
+#include <QTextStream>
+
 namespace KDevelop {
 
 //If KDevelop crashed this many times consicutively, clean up the repository
@@ -283,11 +286,35 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
       
       if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
       {
-        int userAnswer = KMessageBox::questionYesNo(0,
-          i18n("The crash may be caused by a corruption of cached data. Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
-          i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
-          KStandardGuiItem::ok(),
-          KStandardGuiItem::cancel());
+        int userAnswer = 0;
+        ///NOTE: we don't want to crash our beloved tools when run in no-gui mode
+        ///NOTE 2: create a better, reusable version of the below for other tools
+        if (QApplication::type() == QApplication::Tty) {
+          // no ui-mode e.g. for duchainify and other tools
+          QTextStream out(stdout);
+          out << i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count) << endl;
+          out << endl;
+          QTextStream in(stdin);
+          QString input;
+          while(true) {
+            out << i18n("Clear cache: [Y/n] ") << flush;
+            in >> input;
+            input = input.trimmed();
+            if (input.toLower() == "y" || input.isEmpty()) {
+              userAnswer = KMessageBox::Yes;
+              break;
+            } else if (input.toLower() == "n") {
+              userAnswer = KMessageBox::No;
+              break;
+            }
+          }
+        } else {
+          userAnswer = KMessageBox::questionYesNo(0,
+            i18n("The crash may be caused by a corruption of cached data. Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
+            i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+            KStandardGuiItem::ok(),
+            KStandardGuiItem::cancel());
+        }
         if (userAnswer == KMessageBox::Yes) {
           clear = true;
           kDebug() << "User chose to clean repository";
