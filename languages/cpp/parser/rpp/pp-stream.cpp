@@ -138,11 +138,6 @@ Stream& Stream::operator--()
   return *this;
 }
 
-bool Stream::atEnd() const
-{
-  return c == end;
-}
-
 void Stream::toEnd()
 {
   m_skippedToEnd = true;
