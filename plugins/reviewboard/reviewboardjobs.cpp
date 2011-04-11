@@ -111,15 +111,21 @@ void HttpPostCall::start()
 {
     QNetworkRequest r(m_requrl);
 
-    QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
-    r.setRawHeader("Authorization", head);
+    if(m_requrl.hasUser()) {
+        QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
+        r.setRawHeader("Authorization", head);
+    }
+    
     if(m_multipart) {
         r.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
         r.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_post.size()));
         r.setRawHeader( "Content-Type", "multipart/form-data; boundary=" + m_boundary );
     }
 
-    m_reply=m_manager.post(r, m_post);
+    if(m_post.isEmpty())
+        m_reply=m_manager.get(r);
+    else
+        m_reply=m_manager.post(r, m_post);
 
     connect(m_reply, SIGNAL(finished()), SLOT(finished()));
 
@@ -153,33 +159,15 @@ void HttpPostCall::finished()
     emitResult();
 }
 
-NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& basedir, QObject* parent)
-        : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir)
+NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& projectPath, const QString& basedir, QObject* parent)
+        : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir), m_project(projectPath)
 {
-    m_repositories = new HttpPostCall(server, "/api/json/repositories/", "", false, this);
-    connect(m_repositories, SIGNAL(finished(KJob*)), SLOT(createRequest()));
+    m_newreq = new HttpPostCall(m_server, "/api/review-requests/", "repository="+projectPath.toLatin1(), false, this);
+    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
 }
 
 void NewRequest::start()
 {
-    m_repositories->start();
-}
-
-void NewRequest::createRequest()
-{
-    if (m_repositories->error()) {
-        qDebug() << "Could not check the repository" << m_repositories->errorString();
-        setError(1);
-        setErrorText(i18n("Could not find the repositories"));
-        emitResult();
-        return;
-    }
-    QVariant res = m_repositories->result();
-    QString repo = res.toMap()["repositories"].toList().first().toMap()["path"].toString();
-
-    m_newreq = new HttpPostCall(m_server, "/api/json/reviewrequests/new/", "submit_as="+m_server.userName().toLatin1()+"&repository_path="+repo.toLatin1(), false, this);
-    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
-
     m_newreq->start();
 }
 
@@ -201,7 +189,7 @@ void NewRequest::submitPatch()
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
-    m_uploadpatch = new HttpPostCall(m_server, "/api/json/reviewrequests/"+m_id+"/diff/new/", multipartFormData(vals), true, this);
+    m_uploadpatch = new HttpPostCall(m_server, "/api/review-requests/"+m_id+"/diffs/", multipartFormData(vals), true, this);
     connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
     m_uploadpatch->start();
 }
@@ -219,5 +207,27 @@ void NewRequest::done()
         setErrorText(i18n("Could not upload the patch"));
     }
 
+    emitResult();
+}
+
+ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
+    : KJob(parent)
+{
+    m_req=new HttpPostCall(server, "/api/json/repositories/", "", false, this);
+    connect(m_req, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
+}
+
+void ProjectsListRequest::start()
+{
+    m_req->start();
+}
+
+QVariantList ProjectsListRequest::repositories() const
+{
+    return m_req->result().toMap()["repositories"].toList();
+}
+
+void ProjectsListRequest::done(KJob* job)
+{
     emitResult();
 }

@@ -22,6 +22,7 @@
 #define REVIEWPATCHDIALOG_H
 #include <KDialog>
 
+class KJob;
 namespace Ui {
     class ReviewPatch;
 }
@@ -41,6 +42,12 @@ class ReviewPatchDialog : public KDialog
         
         /** @returns the selected base directory for the patch */
         QString baseDir() const;
+        QString repository() const;
+        
+    private slots:
+        void serverChanged();
+        void receivedProjects(KJob* job);
+        
     private:
         Ui::ReviewPatch* m_ui;
 };

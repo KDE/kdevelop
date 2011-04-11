@@ -45,12 +45,12 @@ int main(int argc, char *argv[])
     QString basedir=args->getOption("basedir");
     
     qDebug() << "patch:" << patch << ", basedir:" << basedir;
-    d.setServer(KUrl("http://reviewboard.kde.org"));
+    d.setServer(KUrl("https://git.reviewboard.kde.org"));
     d.setBaseDir(basedir);
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, d.baseDir());
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, d.repository(), d.baseDir());
         bool corr = job->exec();
         if(corr) {
             url.setUserInfo(QString());
