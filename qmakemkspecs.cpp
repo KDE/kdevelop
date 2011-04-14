@@ -33,16 +33,7 @@ QString QMakeMkSpecs::qmakeInternalVariable( const QString& var ) const
     return m_qmakeInternalVariables.value(var, QString());
 }
 
-QString QMakeMkSpecs::resolveInternalQMakeVariables( const QString& value ) const
+bool QMakeMkSpecs::isQMakeInternalVariable(const QString& var ) const
 {
-    QRegExp mkspecsvar("\\$\\$\\[([^\\]]+)\\]", Qt::CaseSensitive, QRegExp::RegExp2);
-    int pos = 0;
-    QString ret = value;
-    while( -1 != (pos = mkspecsvar.indexIn( value, pos )) )
-    {
-        ret.replace( pos, mkspecsvar.matchedLength(), qmakeInternalVariable( mkspecsvar.cap(1) ) );
-        pos += mkspecsvar.matchedLength();
-    }
-    return ret;
+    return m_qmakeInternalVariables.contains(var);
 }
-

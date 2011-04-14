@@ -60,7 +60,7 @@ public:
     QMakeMkSpecs* mkSpecs() const;
     void setQMakeCache( QMakeCache* cache );
     QMakeCache* qmakeCache() const;
-    QStringList resolveVariables( const QString& variable ) const;
+    virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const;
     QList< DefinePair > defines() const;
 
     /// required for proper build-dir resolution

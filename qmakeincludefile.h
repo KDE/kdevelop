@@ -26,7 +26,7 @@
 class QMakeIncludeFile : public QMakeProjectFile
 {
 public:
-    QMakeIncludeFile( const QString& incfile, QMakeFile* parent );
+    explicit QMakeIncludeFile( const QString& incfile, QMakeFile* parent );
 
     virtual QString pwd() const;
     virtual QString outPwd() const;

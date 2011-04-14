@@ -28,8 +28,6 @@
 
 #include "parser/ast.h"
 #include "qmakedriver.h"
-#include "qmakeincludefile.h"
-#include "variablereferenceparser.h"
 
 #define ifDebug(x)
 
@@ -82,16 +80,6 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
     return result;
 }
 
-QStringList QMakeFile::getValueList( const QList<QMake::ValueAST*>& list ) const
-{
-    QStringList result;
-    foreach( QMake::ValueAST* v, list)
-    {
-        result += resolveVariables( v->value );
-    }
-    return result;
-}
-
 QMakeFile::QMakeFile( const QString& file )
     : m_ast(0), m_projectFile(file)
 {
@@ -131,7 +119,8 @@ bool QMakeFile::read()
     }else
     {
         ifDebug(kDebug(9024) << "found ast:" << m_ast->statements.count() ;)
-        visitNode(m_ast);
+        QMakeFileVisitor visitor(this, this);
+        m_variableValues = visitor.visitFile(m_ast);
         ifDebug(kDebug(9024) << "Variables found:" << m_variableValues ;)
     }
     return true;
@@ -158,101 +147,6 @@ QMake::ProjectAST* QMakeFile::ast() const
     return m_ast;
 }
 
-void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
-{
-    if( node->identifier->value == "include" || node->identifier->value == "!include" )
-    {
-        if( node->args.isEmpty() )
-            return;
-        QStringList arguments = getValueList( node->args );
-        Q_ASSERT(!arguments.isEmpty());
-
-        ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
-        QString argument = arguments.join("").trimmed();
-        if( QFileInfo( argument ).isRelative() )
-        {
-            argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
-        }
-        if (argument.isEmpty()) {
-            kWarning() << "empty include file detected" << absoluteFile() << "line" << node->startLine;
-            if( node->identifier->value.startsWith('!') ) {
-                visitNode( node->body );
-            }
-            return;
-        }
-        ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
-        QMakeIncludeFile includefile( argument, this );
-        bool read = includefile.read();
-        ifDebug(kDebug(9024) << "successfully read:" << read;)
-        if( read )
-        {
-            foreach( const QString& var, includefile.variables() )
-            {
-                if( m_variableValues.value( var ) != includefile.variableValues( var ) )
-                {
-                    m_variableValues[ var ] = includefile.variableValues( var );
-                }
-            }
-            if( !node->identifier->value.startsWith('!') )
-            {
-                visitNode( node->body );
-            }
-        }else if( node->identifier->value.startsWith('!') )
-        {
-            visitNode( node->body );
-        }
-    }else if (node->identifier->value == "defineReplace" && node->body)
-    {
-        QStringList args = getValueList(node->args);
-        if (!args.isEmpty()) {
-            m_userMacros[args.first()] = node->body;
-        } // TODO: else return error
-    }else if (node->identifier->value == "return")
-    {
-        m_lastReturn = getValueList(node->args);
-    }else
-    {
-        kWarning() << "unhandled function call" << node->identifier->value;
-        visitNode( node->body );
-    }
-}
-
-void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
-{
-    QString op = node->op->value;
-    QStringList values = getValueList(node->values);
-    if( op == "=" )
-    {
-        m_variableValues[node->identifier->value] = values;
-    }else if( op == "+=" )
-    {
-        m_variableValues[node->identifier->value] += values;
-    }else if( op == "-=" )
-    {
-        foreach( const QString& value, values )
-        {
-            m_variableValues[node->identifier->value].removeAll(value);
-        }
-    }else if( op == "*=" )
-    {
-        foreach( const QString& value, values )
-        {
-            if( !m_variableValues.value(node->identifier->value).contains(value) )
-            {
-                m_variableValues[node->identifier->value].append(value);
-            }
-        }
-    }else if( op == "~=" )
-    {
-        if( values.isEmpty() )
-            return;
-        QString value = values.first().trimmed();
-        QString regex = value.mid(2,value.indexOf("/", 2));
-        QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        m_variableValues[node->identifier->value].replaceInStrings( QRegExp(regex), replacement );
-    }
-}
-
 QStringList QMakeFile::variables() const
 {
     return m_variableValues.keys();
@@ -273,7 +167,17 @@ QMakeFile::VariableMap QMakeFile::variableMap() const
     return m_variableValues;
 }
 
-QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
+QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::VariableType type) const
+{
+    if (type == VariableInfo::QMakeVariable && m_variableValues.contains(variable)) {
+        return m_variableValues.value(variable);
+    } else {
+        kWarning(9024) << "unresolved variable:" << variable << "type:" << type;
+        return QStringList();
+    }
+}
+
+QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile ) const
 {
     QStringList result;
     foreach( const QString& s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
@@ -305,108 +209,6 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
         result << QFileInfo( s ).canonicalFilePath();
     }
     return result;
-}
-
-/// return 1-n for numeric variable, 0 otherwise
-int functionArgument(const QString& var)
-{
-    bool ok;
-    int arg = var.toInt(&ok);
-    if (!ok) {
-        return 0;
-    } else {
-        return arg;
-    }
-}
-
-QStringList QMakeFile::resolveVariables( const QString& var ) const
-{
-    VariableReferenceParser parser;
-    parser.setContent( var );
-    if( !parser.parse() ) {
-        kWarning(9024) << "Couldn't parse" << var << "to replace variables in it";
-        return QStringList() << var;
-    }
-    if (parser.variableReferences().isEmpty()) {
-        return QStringList() << var;
-    }
-
-    ///TODO: multiple vars in one place will make the offsets go bonkers
-    QString value = var;
-    foreach( const QString& variable, parser.variableReferences() ) {
-        VariableInfo vi = parser.variableInfo( variable );
-        QString varValue;
-
-        switch (vi.type) {
-            case VariableInfo::QMakeVariable:
-                if (int arg = functionArgument(variable)) {
-                    if (arg > 0 && arg <= m_arguments.size()) {
-                        varValue = m_arguments.at(arg - 1);
-                    } else {
-                        kWarning(9024) << "undefined macro argument:" << variable << "skipping";
-                    }
-                } else if (m_variableValues.contains(variable)) {
-                    varValue = m_variableValues.value( variable, QStringList() ).join(" ");
-                } else {
-                    kWarning(9024) << "unknown variable:" << variable << "skipping";
-                    continue;
-                }
-                break;
-            case VariableInfo::ShellVariableResolveQMake:
-            case VariableInfo::ShellVariableResolveMake:
-                ///TODO: make vs qmake time
-                varValue = QProcessEnvironment::systemEnvironment().value(variable);
-                break;
-            case VariableInfo::QtConfigVariable:
-                //should be handled in QMakeProjectfile
-                kWarning(9024) << "QtConfigVariable slipped through:" << variable;
-                continue;
-            case VariableInfo::FunctionCall: {
-                QStringList arguments;
-                foreach(const VariableInfo::Position& pos, vi.positions ) {
-                    int start = pos.start + 3 + variable.length();
-                    QString args = value.mid(start , pos.end - start);
-                    varValue = resolveVariables( args ).join(" ");
-                    arguments << varValue;
-                }
-                value = evaluateMacro(variable, arguments).join(" ");
-                continue;
-            } case VariableInfo::Invalid:
-                kWarning(9024) << "invalid qmake variable:" << variable;
-                continue;
-        }
-
-        foreach(const VariableInfo::Position& pos, vi.positions ) {
-            value.replace(pos.start, pos.end - pos.start + 1, varValue);
-        }
-    }
-
-    QStringList ret = value.split(" ", QString::SkipEmptyParts);
-    ifDebug(kDebug(9024) << "resolved variable" << var << "to" << ret;)
-    return ret;
-}
-
-QStringList QMakeFile::evaluateMacro(const QString& function, const QStringList& arguments) const
-{
-    if (function == QLatin1String("qtLibraryTarget")) {
-        return QStringList() << arguments.first();
-    } ///  TODO: support more built-in qmake functions
-
-    QMap< QString, QMake::ScopeBodyAST* >::const_iterator it = m_userMacros.find(function);
-    if (it != m_userMacros.constEnd()) {
-        VariableMap vars = m_variableValues;
-        ///TODO: find a less-dirty way to achieve this...
-        qDebug() << "calling user macro:" << function << arguments;
-        const_cast<QMakeFile*>(this)->m_arguments = arguments;
-        const_cast<QMakeFile*>(this)->visitNode( it.value() );
-        const_cast<QMakeFile*>(this)->m_variableValues = vars;
-        const_cast<QMakeFile*>(this)->m_arguments.clear();
-        qDebug() << "return value was:" << m_lastReturn;
-        return m_lastReturn;
-    } else {
-        kWarning() << "unhandled macro call:" << function << arguments;
-    }
-    return QStringList();
 }
 
 //kate: hl c++;

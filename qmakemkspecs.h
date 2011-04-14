@@ -31,8 +31,8 @@ public:
     QMakeMkSpecs( const QString& basicmkspec, const QHash<QString, QString>& variables );
 
     QString qmakeInternalVariable( const QString& ) const;
+    bool isQMakeInternalVariable( const QString& ) const;
 
-    QString resolveInternalQMakeVariables( const QString& value ) const;
 private:
     QHash<QString, QString> m_qmakeInternalVariables;
 };

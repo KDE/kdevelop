@@ -21,24 +21,23 @@
 #ifndef QMAKEFILE_H
 #define QMAKEFILE_H
 
-#include "qmakeastdefaultvisitor.h"
 
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
 
 #include <KUrl>
 
+#include "qmakefilevisitor.h"
+
 namespace QMake
 {
     class ProjectAST;
-    class AssignmentAST;
-    class ValueAST;
 }
 
 class Scope;
 class QMakeMkSpecs;
 
-class QMakeFile : QMake::ASTDefaultVisitor
+class QMakeFile : public QMakeVariableResolver
 {
 public:
     QMakeFile( const QString& file );
@@ -48,35 +47,23 @@ public:
     QString absoluteFile() const;
     QMake::ProjectAST* ast() const;
 
-    void visitAssignment( QMake::AssignmentAST* node );
-    void visitFunctionCall( QMake::FunctionCallAST* node );
-
     QStringList variableValues(const QString&) const;
     QStringList variables() const;
-    typedef QMap< QString, QStringList > VariableMap;
     VariableMap variableMap() const;
 
     bool containsVariable( const QString& ) const;
 
-    static QStringList resolveShellGlobbing( const QString& absolutefile );
-    virtual QStringList resolveVariables( const QString& value ) const;
-
+    virtual QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const;
 
 protected:
     VariableMap m_variableValues;
+
+    QStringList resolveShellGlobbing( const QString& absolutefile ) const;
     QStringList resolveFileName( const QString& file ) const;
     QString resolveToSingleFileName( const QString& file ) const;
 private:
-
-    QStringList getValueList( const QList<QMake::ValueAST*>& list ) const;
-
-    QStringList evaluateMacro( const QString& function, const QStringList& arguments ) const;
-
     QMake::ProjectAST* m_ast;
     QString m_projectFile;
-    QMap<QString, QMake::ScopeBodyAST*> m_userMacros;
-    QStringList m_arguments;
-    QStringList m_lastReturn;
 };
 
 #endif

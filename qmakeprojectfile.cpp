@@ -329,10 +329,18 @@ QMakeProjectFile::~QMakeProjectFile()
     //TODO: delete cache, specs, ...?
 }
 
-QStringList QMakeProjectFile::resolveVariables( const QString& value ) const
+QStringList QMakeProjectFile::resolveVariable(const QString& variable, VariableInfo::VariableType type) const
 {
-    QString mkspecresolved = m_mkspecs->resolveInternalQMakeVariables( value );
-    return QMakeFile::resolveVariables( mkspecresolved );
+    if (type == VariableInfo::QtConfigVariable) {
+        if (m_mkspecs->isQMakeInternalVariable(variable)) {
+            return QStringList() << m_mkspecs->qmakeInternalVariable(variable);
+        } else {
+            kWarning(9024) << "unknown QtConfig Variable:" << variable;
+            return QStringList();
+        }
+    }
+
+    return QMakeFile::resolveVariable(variable, type);
 }
 
 QMakeMkSpecs* QMakeProjectFile::mkSpecs() const

@@ -10,7 +10,7 @@ include_directories(
 )
 
 set(qmakefiletest_SRCS test_qmakefile.cpp
-    ../qmakefile.cpp ../qmakeincludefile.cpp ../qmakeprojectfile.cpp
+    ../qmakefile.cpp ../qmakeincludefile.cpp ../qmakeprojectfile.cpp ../qmakefilevisitor.cpp
     ../variablereferenceparser.cpp ../qmakemkspecs.cpp
     ../qmakeconfig.cpp )
 
