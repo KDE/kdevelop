@@ -644,7 +644,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           QList< KDevelop::Declaration* > decls = ctx->findDeclarations(candidate);
           if(decls.isEmpty())
             continue; // type aliases might be available for nested sub scopes, hence we must not break early
-          if(decls[0]->kind() != Declaration::Type || decls[0]->indexedType() != type->indexed())
+          if(decls[0]->kind() != Declaration::Type || TypeUtils::removeConstModifier(decls[0]->indexedType()) != TypeUtils::removeConstModifier(type->indexed()))
             break;
           newTypeName = candidate;
         }
@@ -702,11 +702,9 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 {
 
   bool isReference = false;
-  bool isConstReference = false;
-  if(type.cast<ReferenceType>()) {
+  if(ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
     isReference = true;
-    isConstReference = type.cast<ReferenceType>()->modifiers() & AbstractType::ConstModifier;
-    type = type.cast<ReferenceType>()->baseType();
+    type = refType->baseType();
   }
 
   type = shortenTypeForViewing(type);
@@ -722,11 +720,8 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
     identifier = type.cast<DelayedType>()->identifier();
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
 
-  if(isReference) {
+  if(isReference)
     identifier.setIsReference(true);
-    if(isConstReference)
-      identifier.setIsConstant(true);
-  }
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
@@ -794,9 +789,7 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
 {
   if(!ctx)
     return id;
-  
-  QualifiedIdentifier basicId = id;
-  
+
   QList<QualifiedIdentifier> imports = ctx->fullyApplyAliases(QualifiedIdentifier(), ctx->topContext());
   if(imports.contains(id))
     return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
@@ -806,15 +799,16 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   if(basicDecls.isEmpty())
     return id;
   
-  while(!id.isEmpty())
+  QualifiedIdentifier newId = id.mid(1);
+  while(!newId.isEmpty())
   {
-    QualifiedIdentifier newId = id.mid(1);
     QList< Declaration* > foundDecls = ctx->findDeclarations(newId, CursorInRevision::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
-    
+
     if(foundDecls == basicDecls)
-      id = newId;
-    else
-      break;
+      id = newId; // must continue to find the shortest possible identifier
+                  // esp. for cases where nested namespaces are used (e.g. using namespace a::b::c;)
+
+    newId = newId.mid(1);
   }
 
   return id;

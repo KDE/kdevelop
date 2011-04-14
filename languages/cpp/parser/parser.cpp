@@ -26,6 +26,7 @@
 #include "control.h"
 #include "parsesession.h"
 #include "commentformatter.h"
+#include "memorypool.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -62,6 +63,15 @@
       (_node)->start_token = start; \
       (_node)->end_token = end; \
   } while (0)
+
+template <class _Tp>
+inline _Tp *CreateNode(pool *memory_pool)
+{
+  _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
+  node->kind = _Tp::__node_kind;
+  return node;
+}
+
 
 void Parser::addComment( CommentAST* ast, const Comment& comment ) {
   if( comment ) {
@@ -4038,6 +4048,7 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
     case '!':
     case Token_not:
     case '~':
+    case Token_compl:
       {
         uint op = session->token_stream->cursor();
         advance();
@@ -4437,7 +4448,10 @@ bool Parser::parseEqualityExpression(ExpressionAST *&node, bool templArgs)
     return false;
 
   while (session->token_stream->lookAhead() == Token_eq
-         || session->token_stream->lookAhead() == Token_not_eq)
+         || session->token_stream->lookAhead() == Token_not_eq
+         || session->token_stream->lookAhead() == Token_xor_eq
+         || session->token_stream->lookAhead() == Token_or_eq
+         || session->token_stream->lookAhead() == Token_and_eq)
     {
       uint op = session->token_stream->cursor();
       advance();
@@ -4465,7 +4479,7 @@ bool Parser::parseAndExpression(ExpressionAST *&node, bool templArgs)
   if (!parseEqualityExpression(node, templArgs))
     return false;
 
-  while (session->token_stream->lookAhead() == '&')
+  while (session->token_stream->lookAhead() == '&' || session->token_stream->lookAhead() == Token_bitand)
     {
       uint op = session->token_stream->cursor();
       advance();
@@ -4493,7 +4507,7 @@ bool Parser::parseExclusiveOrExpression(ExpressionAST *&node, bool templArgs)
   if (!parseAndExpression(node, templArgs))
     return false;
 
-  while (session->token_stream->lookAhead() == '^')
+  while (session->token_stream->lookAhead() == '^' || session->token_stream->lookAhead() == Token_xor)
     {
       uint op = session->token_stream->cursor();
       advance();
@@ -4521,7 +4535,7 @@ bool Parser::parseInclusiveOrExpression(ExpressionAST *&node, bool templArgs)
   if (!parseExclusiveOrExpression(node, templArgs))
     return false;
 
-  while (session->token_stream->lookAhead() == '|')
+  while (session->token_stream->lookAhead() == '|' || session->token_stream->lookAhead() == Token_bitor)
     {
       uint op = session->token_stream->cursor();
       advance();

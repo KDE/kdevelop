@@ -45,6 +45,7 @@
 #include <kio/netaccess.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <KDesktopFile>
 #include <language/codecompletion/codecompletion.h>
 
 #include <interfaces/icore.h>
@@ -93,6 +94,7 @@
 #include "codegen/simplerefactoring.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
+
 //#include <valgrind/callgrind.h>
 
 
@@ -150,6 +152,17 @@ public:
 };
 #endif
 
+
+static QStringList mimeTypesList()
+{
+    KDesktopFile desktopFile("services", QString("kdevcppsupport.desktop"));
+    const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
+    QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
+    return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
+}
+const QStringList CppLanguageSupport::s_mimeTypes = mimeTypesList();
+
+
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport(),
@@ -189,6 +202,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #endif
 
     m_assistant = new Cpp::StaticCodeAssistant;
+
+    foreach(QString mimeType, s_mimeTypes){
+        KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);
+    }
 }
 
 void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* window, QString& _xmlFile, KActionCollection& actions)
@@ -392,6 +409,10 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_blockTester;
 #endif
     delete m_assistant;
+
+    foreach(QString mimeType, s_mimeTypes){
+        KDevelop::IBuddyDocumentFinder::removeFinder(mimeType);
+    }
 }
 
 CppLanguageSupport* CppLanguageSupport::self() {
@@ -454,6 +475,55 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
 
   return top;
 }
+
+
+
+// Returns the base path (without extension) and the first character of the
+// file extension in lowercase (or '?' if there is no extension)
+// for path="Folder/File.CPP", returns ("Folder/File", 'c').
+// for path="folder/file", returns ("folder/file", '?')
+QPair<QString, QChar> CppLanguageSupport::basePathAndType(const QString& path)
+{
+    int idxSlash = path.lastIndexOf("/");
+    int idxDot = path.lastIndexOf(".");
+    QString basepath;
+    QChar filetype('?');
+    if(idxSlash >= 0 && idxDot >= 0 && idxDot > idxSlash)
+    {
+        basepath = path.left(idxDot);
+        //QString ext = path.right(path.length() - idxDot);
+        if(idxDot + 1 < path.length())
+            filetype = path[idxDot + 1].toLower();
+    }
+    else
+    {
+        basepath = path;
+    }
+    kDebug() << qMakePair(basepath, filetype);
+    return qMakePair(basepath, filetype);
+}
+
+
+// Bahavior: Considers the URLs as buddy documents if the base path (=without extension)
+// is the same, and one extension starts with h/H and the other one with c/C.
+// For example, foo.hpp and foo.C are buddies.
+bool CppLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
+{
+    QPair<QString, QChar> split1 = basePathAndType(url1.toLocalFile());
+    QPair<QString, QChar> split2 = basePathAndType(url2.toLocalFile());
+    return(split1.first == split2.first && ((split1.second == 'h' && split2.second == 'c') ||
+                                            (split1.second == 'c' && split2.second == 'h')));
+}
+
+// Behavior: places foo.h* / foo.H* left of foo.c* / foo.C*
+bool CppLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
+{
+    QPair<QString, QChar> split1 = basePathAndType(url1.toLocalFile());
+    QPair<QString, QChar> split2 = basePathAndType(url2.toLocalFile());
+    // Precondition is that the two URLs are buddies, so don't check it
+    return(split1.second == 'h' && split2.second == 'c');
+}
+
 
 QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier(const KUrl& url, const SimpleCursor& position) const {
   KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);

@@ -29,7 +29,7 @@
 #include <KProcess>
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <auto_ptr.h>
+#include <memory>
 #include <QDir>
 #include <util/formattinghelpers.h>
 
@@ -68,7 +68,7 @@ QString IndentPlugin::description()
 	return i18n("<b>Indent and Format Source Code.</b><br />"
 				"This plugin allows using powerful external formatting tools "
 				"that can be invoked through the command-line.<br />"
-				"For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b>"
+				"For example, the <b>uncrustify</b>, <b>astyle</b> or <b>indent</b> "
 				"formatters can be used.<br />"
 				"The advantage of command-line formatters is that formatting configurations "
 				"can be easily shared by all team members, independent of their preferred IDE.");
@@ -86,7 +86,16 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	QTextStream ios(&proc);
 	
 	std::auto_ptr<QTemporaryFile> tmpFile;
-	
+
+	if (style.content().isEmpty())
+	{
+		style = predefinedStyle(style.name());
+		if (style.content().isEmpty())
+		{
+			kWarning() << "Empty contents for style" << style.name() << "for indent plugin";
+			return text;
+		}
+	}
 	QString command = style.content();
 	if(command.contains("$TMPFILE"))
 	{
@@ -140,6 +149,12 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 		output = ios.readAll();
 	}
 
+	if (output.isEmpty())
+	{
+		kWarning() << "indent returned empty text for style" << style.name() << style.content();
+		return text;
+	}
+
     return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
@@ -148,21 +163,29 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
 }
 
+KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name)
+{
+	SourceFormatterStyle result(name);
+	if (name == "GNU_indent_GNU")
+	{
+		result.setCaption(i18n("Gnu Indent: GNU"));
+		result.setContent("indent");
+	} else if (name == "GNU_indent_KR") {
+		result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
+		result.setContent("indent -kr");
+	} else if (name == "GNU_indent_orig") {
+		result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
+		result.setContent("indent -orig");
+	}
+	return result;
+}
+
 QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
-        QList<KDevelop::SourceFormatterStyle> styles;
-        KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU_indent_GNU" );
-        st.setCaption( "Gnu Indent: GNU" );
-		st.setContent("indent");
-        styles << st;
-        st = KDevelop::SourceFormatterStyle( "GNU_indent_KR" );
-        st.setCaption( "Gnu Indent: Kernighan & Ritchie" );
-		st.setContent("indent -kr");
-        styles << st;
-        st = KDevelop::SourceFormatterStyle( "GNU_indent_orig" );
-        st.setCaption( i18n("Gnu Indent: Original Berkeley indent style") );
-		st.setContent("indent -orig");
-        styles << st;
+    QList<KDevelop::SourceFormatterStyle> styles;
+	styles << predefinedStyle("GNU_indent_GNU");
+	styles << predefinedStyle("GNU_indent_KR");
+	styles << predefinedStyle("GNU_indent_orig");
 	return styles;
 }
 
@@ -306,19 +329,19 @@ IndentPreferences::IndentPreferences()
     m_hLayout->addWidget ( m_commandLabel );
     m_commandEdit = new QLineEdit;
     m_hLayout->addWidget ( m_commandEdit );
-    m_commandLabel->setText ( "Command: " );
+    m_commandLabel->setText ( i18n("Command: ") );
     m_vLayout->addSpacing ( 10 );
     m_bottomLabel = new QLabel;
     m_vLayout->addWidget ( m_bottomLabel );
     m_bottomLabel->setTextFormat ( Qt::RichText );
     m_bottomLabel->setText (
         i18n ( "<i>You can enter an arbitrary shell command.</i><br />"
-               "Normally, the source-code to format will be reached<br />"
-               "to the command through the standard-input, and the<br />"
+               "Normally, the source-code to format will be reached "
+               "to the command through the standard-input, and the "
                "result will be read from its standard-output.<br /><br />"
-               "If you add <b>$TMPFILE</b> into the command, then<br />"
-               "the code will be written into a temporary file, the temporary<br />"
-               "file will be substituted into that position, and the result<br />"
+               "If you add <b>$TMPFILE</b> into the command, then "
+               "the code will be written into a temporary file, the temporary "
+               "file will be substituted into that position, and the result "
                "will be read out of that file instead." ) );
     connect ( m_commandEdit, SIGNAL ( textEdited ( QString ) ), SLOT ( textEdited ( QString ) ) );
 }

@@ -19,7 +19,6 @@
 #ifndef LISTNODE_H
 #define LISTNODE_H
 
-#include "memorypool.h"
 #include <kdebug.h>
 
 /**
@@ -35,6 +34,7 @@ public:
   int index;
   mutable const ListNode<Tp> *next;
 
+  template<class pool>
   static ListNode *create(const Tp &element, pool *p)
   {
     ListNode<Tp> *node = new (p->allocate(sizeof(ListNode))) ListNode();
@@ -45,6 +45,7 @@ public:
     return node;
   }
 
+  template<class pool>
   static ListNode *create(const ListNode *n1, const Tp &element, pool *p)
   {
     ListNode<Tp> *n2 = ListNode::create(element, p);
@@ -84,7 +85,7 @@ public:
   }
 };
 
-template <class Tp>
+template <class Tp,class pool>
 inline const ListNode<Tp> *snoc(const ListNode<Tp> *list,
 				const Tp &element, pool *p)
 {

@@ -336,6 +336,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
+        cfg->sync();
     }
     return m_rootItem;
 }
@@ -366,6 +367,7 @@ QSet<QString> filterFiles(const QStringList& orig)
 
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
+    Q_ASSERT(isReloading(item->project()));
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
@@ -726,7 +728,11 @@ bool CMakeManager::isReloading(IProject* p)
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
+    IProject* p=0;
+    if(m_busyProjects.isEmpty())
+        p=ICore::self()->projectController()->findProjectForUrl(dirurl);
+    else
+        QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
     
     if(p) {
         if(!isReloading(p)) {
@@ -742,7 +748,14 @@ void CMakeManager::deletedWatched(const QString& path)
                         reload(folder);
                     
                 } else {
+                    QMutexLocker locker(&m_busyProjectsMutex);
+                    m_busyProjects += p->projectItem();
+                    locker.unlock();
+                    
                     qDeleteAll(p->itemsForUrl(url));
+                    
+                    locker.relock();
+                    m_busyProjects -= p->projectItem();
                 }
             }
         } else {
@@ -829,6 +842,8 @@ void CMakeManager::dirtyFile(const QString & dirty)
 
 void CMakeManager::reloadFiles(ProjectFolderItem* item)
 {
+    Q_ASSERT(isReloading(item->project()));
+    
     QDir d(item->url().toLocalFile());
     if(!d.exists()) {
         kDebug() << "Trying to return a directory that doesn't exist:" << item->url();

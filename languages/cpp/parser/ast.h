@@ -20,7 +20,6 @@
 #ifndef AST_H
 #define AST_H
 
-#include "memorypool.h"
 #include "listnode.h"
 
 #define DECLARE_AST_NODE(k) \
@@ -1112,13 +1111,6 @@ public:
   uint modifier;
 };
 
-template <class _Tp>
-_Tp *CreateNode(pool *memory_pool)
-{
-  _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
-  node->kind = _Tp::__node_kind;
-  return node;
-}
 
 template <class _Tp>
 _Tp ast_cast(AST *item)

@@ -4034,7 +4034,7 @@ void TestDUChain::testSimplifiedTypeString()
 
   }
   {
-    QByteArray method("namespace A { namespace B { struct C {}; C* foo(); } };");
+    QByteArray method("namespace A { namespace B { struct C {}; C* foo(const C& ref, const C value); } };");
     LockedTopDUContext top = parse(method, DumpNone);
 
     QList<Declaration*> decls = top->findDeclarations(QualifiedIdentifier("A::B::foo"));
@@ -4044,10 +4044,29 @@ void TestDUChain::testSimplifiedTypeString()
 
     FunctionType::Ptr fooType = fooDecl->type<FunctionType>();
     QVERIFY(fooType);
+    QCOMPARE(fooType->arguments().size(), 2);
 
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top), QString("A::B::C*"));
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]), QString("B::C*"));
     QCOMPARE(Cpp::shortenedTypeString(fooType->returnType(), top->childContexts()[0]->childContexts()[0]), QString("C*"));
+
+    // test stripping of const-ref
+    AbstractType::Ptr refType = fooType->arguments().at(0);
+    QVERIFY(refType.cast<ReferenceType>());
+    QVERIFY(refType.cast<ReferenceType>()->baseType());
+    QVERIFY(refType.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+
+    QCOMPARE(Cpp::shortenedTypeString(refType, top), QString("const A::B::C&"));
+    QCOMPARE(Cpp::shortenedTypeString(refType, top->childContexts()[0]), QString("const B::C&"));
+    QCOMPARE(Cpp::shortenedTypeString(refType, top->childContexts()[0]->childContexts()[0]), QString("const C&"));
+
+    // test stripping of const value
+    AbstractType::Ptr valType = fooType->arguments().at(1);
+    QVERIFY(valType->modifiers() & AbstractType::ConstModifier);
+    
+    QCOMPARE(Cpp::shortenedTypeString(valType, top), QString("const A::B::C"));
+    QCOMPARE(Cpp::shortenedTypeString(valType, top->childContexts()[0]), QString("const B::C"));
+    QCOMPARE(Cpp::shortenedTypeString(valType, top->childContexts()[0]->childContexts()[0]), QString("const C"));
   }
   {
     // a bit artificial, but similar to what you could reach with #include
@@ -4392,8 +4411,8 @@ void TestDUChain::testTemplates3() {
 
     QVERIFY(cvrDecl->abstractType());
     QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
-    QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
-    QCOMPARE(targetType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
+    QCOMPARE(realType(cvrDecl->abstractType(), 0)->toString(), QString("const int"));
+    QCOMPARE(targetType(cvrDecl->abstractType(), 0)->toString(), QString("const int"));
     TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
     QVERIFY(alias);
     QVERIFY(alias->type());
@@ -4407,7 +4426,7 @@ void TestDUChain::testTemplates3() {
     QVERIFY(cvrDecl);
     QVERIFY(cvrDecl->abstractType());
     QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
-    QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("quakka* const"));
+    QCOMPARE(realType(cvrDecl->abstractType(), 0)->toString(), QString("quakka* const"));
     TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
     QVERIFY(alias);
     QVERIFY(alias->type());
@@ -5369,34 +5388,34 @@ void TestDUChain::testConst()
     QCOMPARE(top->localDeclarations().size(), 8);
     PointerType::Ptr a = top->localDeclarations()[1]->type<PointerType>();
     QVERIFY(a);
-    QVERIFY(!a->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(a->modifiers() & AbstractType::ConstModifier));
     IntegralType::Ptr a2 = a->baseType().cast<IntegralType>();
     QVERIFY(a2);
     QVERIFY(a2->modifiers() & AbstractType::ConstModifier);
 
     ReferenceType::Ptr b = top->localDeclarations()[2]->type<ReferenceType>();
     QVERIFY(b);
-    QVERIFY(!b->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(b->modifiers() & AbstractType::ConstModifier));
     IntegralType::Ptr b2 = b->baseType().cast<IntegralType>();
     QVERIFY(b2);
     QVERIFY(b2->modifiers() & AbstractType::ConstModifier);
 
     ReferenceType::Ptr c = top->localDeclarations()[3]->type<ReferenceType>();
     QVERIFY(c);
-    QVERIFY(!c->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(c->modifiers() & AbstractType::ConstModifier));
     PointerType::Ptr c2 = c->baseType().cast<PointerType>();
     QVERIFY(c2);
     QVERIFY(c2->modifiers() & AbstractType::ConstModifier);
     IntegralType::Ptr c3 = c2->baseType().cast<IntegralType>();
     QVERIFY(c3);
-    QVERIFY(!c3->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(c3->modifiers() & AbstractType::ConstModifier));
 
     PointerType::Ptr d = top->localDeclarations()[4]->type<PointerType>();
     QVERIFY(d);
     QVERIFY(d->modifiers() & AbstractType::ConstModifier);
     IntegralType::Ptr d2 = d->baseType().cast<IntegralType>();
     QVERIFY(d2);
-    QVERIFY(!d2->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(d2->modifiers() & AbstractType::ConstModifier));
 
     CppClassType::Ptr e = top->localDeclarations()[5]->type<CppClassType>();
     QVERIFY(e);
@@ -5404,7 +5423,7 @@ void TestDUChain::testConst()
 
     PointerType::Ptr f = top->localDeclarations()[6]->type<PointerType>();
     QVERIFY(f);
-    QVERIFY(!f->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(f->modifiers() & AbstractType::ConstModifier));
     CppClassType::Ptr f2 = f->baseType().cast<CppClassType>();
     QVERIFY(f2);
     QVERIFY(f2->modifiers() & AbstractType::ConstModifier);
@@ -5414,7 +5433,7 @@ void TestDUChain::testConst()
     QVERIFY(g->modifiers() & AbstractType::ConstModifier);
     CppClassType::Ptr g2 = g->baseType().cast<CppClassType>();
     QVERIFY(g2);
-    QVERIFY(!g2->modifiers() & AbstractType::ConstModifier);
+    QVERIFY(!(g2->modifiers() & AbstractType::ConstModifier));
   }
   {
     QByteArray method("class A; template<class T> class B; B<const A*> ca;B<A* const> cb;");

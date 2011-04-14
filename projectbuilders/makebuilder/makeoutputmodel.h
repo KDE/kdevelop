@@ -26,6 +26,8 @@
 #include <kurl.h>
 #include <outputview/ioutputviewmodel.h>
 #include <set>
+#include <QLinkedList>
+#include <QMap>
 #include <QVector>
 
 class FilteredItem;
@@ -39,7 +41,8 @@ public:
         WarningItem = 2,
         ActionItem = 3,
         CustomItem = 4,
-        StandardItem = 5
+        StandardItem = 5,
+        InformationItem = 6
     };
 
     static const int MakeItemTypeRole;
@@ -62,10 +65,13 @@ private:
     KUrl urlForFile( const QString& ) const;
     bool isValidIndex( const QModelIndex& ) const;
     QList<FilteredItem> items;
-    QMap<QString, KUrl> fileUrlMap;
     // We use std::set because that is ordered
     std::set<int> errorItems; // Indices of all items that are errors
-    QVector<QString> currentDirs;
+
+    QLinkedList<QString> currentDirs;
+    typedef QMap<QString, QLinkedList<QString>::iterator> PositionMap;
+    PositionMap positionInCurrentDirs;
+
     KUrl buildDir;
 };
 

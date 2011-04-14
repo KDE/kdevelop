@@ -81,10 +81,20 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
         QString cline=d->line(l);
-        QString line=cline.mid(0, cline.indexOf('#'));
+        QString line=cline.left(cline.indexOf('#'));
         
-        bool out=line.lastIndexOf(')')>=0;
-        m_inside= !out && line.indexOf('(')>=0;
+        int close=line.lastIndexOf(')'), open=line.indexOf('(');
+        
+        if(close>=0 && open>=0) {
+            m_inside=open>close;
+            break;
+        } else if(open>=0) {
+            m_inside=true;
+            break;
+        } else if(close>=0) {
+            m_inside=false;
+            break;
+        }
     }
     
     int numRows = 0;
@@ -205,15 +215,15 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             {
                 DUChainReadLocker lock(DUChain::lock());
                 int pos=index.row();
-                AbstractType::Ptr type; 
+
+                FunctionType::Ptr func;
                 
                 if(m_declarations[pos].data())
-                    type = m_declarations[pos].data()->abstractType();
-                Q_ASSERT(type);
-                FunctionType::Ptr func;
-                func = type.cast<FunctionType>();
-                Q_ASSERT(func);
+                    func = m_declarations[pos].data()->abstractType().cast<FunctionType>();
                 
+                if(!func)
+                    return QVariant();
+
                 QStringList args;
                 foreach(const AbstractType::Ptr& t, func->arguments())
                 {
@@ -232,9 +242,13 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
 {
     switch(indexType(row))
     {
-        case Path:
-            document->replaceText(word, data(index(row, Name, QModelIndex())).toString());
-            break;
+        case Path: {
+            Range r=word;
+            for(QChar c=document->character(r.end()); c.isLetterOrNumber() || c=='.'; c=document->character(r.end())) {
+                r.end().setColumn(r.end().column()+1);
+            }
+            document->replaceText(r, data(index(row, Name, QModelIndex())).toString());
+        }   break;
         case Macro:
         case Command: {
             QString code=data(index(row, Name, QModelIndex())).toString();

@@ -180,6 +180,6 @@ QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWi
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->setFont(KGlobalSettings::fixedFont());
-    view->setHtml("<html><body><code>"+description()+"</code></body></html>");
+    view->setHtml("<html><body style='background:#fff'><code>"+description()+"</code></body></html>");
     return view;
 }

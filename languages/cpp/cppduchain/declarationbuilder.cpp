@@ -23,6 +23,7 @@
 
 #include <QByteArray>
 #include <typeinfo>
+#include <iterator>
 
 #include "templatedeclaration.h"
 

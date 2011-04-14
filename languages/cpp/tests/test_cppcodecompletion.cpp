@@ -48,6 +48,7 @@
 #include "codecompletion/context.h"
 #include "codecompletion/helpers.h"
 #include "codecompletion/item.h"
+#include "codecompletion/implementationhelperitem.h"
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/classdeclaration.h>
 #include "cppduchain/missingdeclarationproblem.h"
@@ -552,7 +553,16 @@ void TestCppCodeCompletion::testNoMemberAccess() {
   CompletionItemTester testCase2(context, " "); //NoMemberAccess with empty expression
   QVERIFY(testCase2.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList()); //Theoretically should have "MyClass", but global completions aren't included
-  
+
+  CompletionItemTester testCase3(context, "public: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
+  CompletionItemTester testCase4(context, "protected: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
+  CompletionItemTester testCase5(context, "private: ");
+  QVERIFY(testCase2.completionContext->isValid());
+
   release(context);
 }
 
@@ -625,16 +635,25 @@ void TestCppCodeCompletion::testKeywords() {
   CompletionItemTester testPublic(context->childContexts()[ctxt], "public ");
   QVERIFY(testPublic.completionContext->isValid());
   QCOMPARE(testPublic.names, QStringList() << "Values");
+  CompletionItemTester testPublic2(context->childContexts()[0], "public: ");
+  QVERIFY(testPublic2.completionContext->isValid());
+  QCOMPARE(testPublic2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testFakePublic(context->childContexts()[ctxt], "fakepublic ");
   QVERIFY(!testFakePublic.completionContext->isValid());
   CompletionItemTester testProtected(context->childContexts()[ctxt], "protected ");
   QVERIFY(testProtected.completionContext->isValid());
   QCOMPARE(testProtected.names, QStringList() << "Values");
+  CompletionItemTester testProtected2(context->childContexts()[0], "protected: ");
+  QVERIFY(testProtected2.completionContext->isValid());
+  QCOMPARE(testProtected2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testFakeProtected(context->childContexts()[ctxt], "fakeprotected ");
   QVERIFY(!testFakeProtected.completionContext->isValid());
   CompletionItemTester testPrivate(context->childContexts()[ctxt], "private ");
   QVERIFY(testPrivate.completionContext->isValid());
   QCOMPARE(testPrivate.names, QStringList() << "Values");
+  CompletionItemTester testPrivate2(context->childContexts()[0], "private: ");
+  QVERIFY(testPrivate2.completionContext->isValid());
+  QCOMPARE(testPrivate2.names, QStringList() << "Sub" << "Values");
   CompletionItemTester testVirtual(context->childContexts()[ctxt], "virtual ");
   QVERIFY(testVirtual.completionContext->isValid());
   QCOMPARE(testVirtual.names, QStringList() << "Values");
@@ -830,6 +849,89 @@ void TestCppCodeCompletion::testConstructorCompletion() {
     
     release(context);
   }
+}
+
+void TestCppCodeCompletion::testParentConstructor_data()
+{
+  QTest::addColumn<QString>("code");        // existing source code
+  QTest::addColumn<QString>("completion");  // completion contents
+
+  // Parent has no constructor
+  QTest::newRow("NoParentConstructor") << "class A {}; class B : public A { B (int i); };" << "B::B(int i) { }";
+  // Argument name mismatch - choose it anyway
+  QTest::newRow("ArgNameMismatch") << "class A { A(int j) {} }; class B : public A { B(int i); };" << "B::B(int i): A(i) { }";
+  // Between two arguments with matching type, prefer one with matching name
+  QTest::newRow("PreferNameMatch") << "class A { A(int i, int j) {} }; class B : public A { B(int j, int i); };" << "B::B(int j, int i): A(i, j) { }";
+  // Argument type mismatch - do not choose anything for this argument
+  QTest::newRow("ArgTypeMismatch") << "class A { A(char i) {} }; class B : public A { B(int i); };" << "B::B(int i): A() { }";
+  // Some arguments match, others do not - leave the latter blank
+  QTest::newRow("SomeArgumentsMatch") << "class A { A(int i, char j) {} }; class B : public A { B(int i, int j); };" << "B::B(int i, int j): A(i, ) { }";
+  // Parent class has multiple constructors - choose the best matching
+  QTest::newRow("MultipleConstructors") << "class A { A(char c) {} A(int i, int j) {} }; class B : public A { B(int i); };" << "B::B(int i): A(i, i) { }";
+  QTest::newRow("MultipleConstructorsNoFullMatch") << "class A { A(char c, long l) {} A(int i, long l) {} }; class B : public A { B(int i); };" << "B::B(int i): A(i, ) { }";
+  // Omit call to default constructor if it is the best match
+  QTest::newRow("BestMatchDefault") << "class A { A() {} A(char c) {} }; class B : public A { B(int i); };" << "B::B(int i) { }";
+
+  // Multiple parents, each has its own matches
+  QTest::newRow("MultipleParents") << "class A { A(int i, char c) {} }; class B { B(char d, long l) {} }; class C : public A, public B { C(int i, long l, char c); };"
+    << "C::C(int i, long int l, char c): A(i, c), B(c, l) { }";
+  // Last check
+  QTest::newRow("ComplexCase") << "class A { A(int i, double d, char c) {} A(int i, double d, long l) {} };"
+    "class B { B(double d, int j) {} B(char c) {} };"
+    "class C { };" 
+    "class D : public A, public B, public C { D(short a1, double a2, long a3, int a4); };" <<
+    "D::D(short int a1, double a2, long int a3, int a4): A(a4, a2, a3), B(a2, a4) { }";
+}
+
+void TestCppCodeCompletion::testParentConstructor()
+{
+  QFETCH(QString, code);
+  QFETCH(QString, completion);
+  TopDUContext* context = parse(code.toAscii(), DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester tester(context, "void");  // Force a function context
+  Cpp::ImplementationHelperItem* constructorItem = dynamic_cast<Cpp::ImplementationHelperItem*>(tester.items[0].data());
+  QCOMPARE(constructorItem->insertionText().simplified(), completion.simplified());
+  release(context);
+}
+
+void TestCppCodeCompletion::testOverride_data()
+{
+  QTest::addColumn<QString>("parentCode");  // code in parent class
+  QTest::addColumn<QString>("prefix");      // completion prefix
+  QTest::addColumn<QString>("completion");  // expected completion contents
+
+  QTest::newRow("empty-prefix") << "virtual void foo();" << "" << "virtual void foo();";
+  QTest::newRow("public") << "virtual void foo();" << "public: " << "virtual void foo();";
+  QTest::newRow("protected") << "virtual void foo();" << "protected: " << "virtual void foo();";
+  QTest::newRow("private") << "virtual void foo();" << "private: " << "virtual void foo();";
+}
+
+void TestCppCodeCompletion::testOverride()
+{
+  QFETCH(QString, parentCode);
+  QFETCH(QString, prefix);
+  QFETCH(QString, completion);
+  QString tmpl = QString(" class A {public: %1  };\n"
+                         " class B : public A { };").arg(parentCode);
+  TopDUContext* context = parse(tmpl.toLocal8Bit(), DumpNone);
+  DUChainWriteLocker lock;
+  DUContext* BCtx = context->childContexts().last();
+  QCOMPARE(BCtx->localScopeIdentifier().toString(), QLatin1String("B"));
+  CompletionItemTester tester(BCtx, prefix);
+  bool found = false;
+  foreach(CompletionItemTester::Item item, tester.items) {
+    Cpp::ImplementationHelperItem* override = dynamic_cast<Cpp::ImplementationHelperItem*>(item.data());
+    if (!override) {
+      continue;
+    }
+    QCOMPARE(override->m_type, Cpp::ImplementationHelperItem::Override);
+    QCOMPARE(override->insertionText().simplified(), completion.simplified());
+    found = true;
+    break;
+  }
+  QVERIFY(found);
+  release(context);
 }
 
 void TestCppCodeCompletion::testSignalSlotCompletion() {
@@ -1445,7 +1547,7 @@ void TestCppCodeCompletion::testSameNamespace() {
   {
     //                 0         1         2         3         4         5         6         7
     //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-    QByteArray method("namespace A { class C { }; void test2(); } namespace A { void test() { } class C {};}");
+    QByteArray method("namespace A { class C { }; void test2() {} } namespace A { void test() { } class C {};}");
 
     TopDUContext* top = parse(method, DumpNone);
 

@@ -27,6 +27,7 @@
 #include <kurl.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -186,14 +187,13 @@ KUrl MakeOutputModel::urlForFile( const QString& filename ) const
             u.addPath( filename );
             return u;
         }
-        
-        int pos = currentDirs.size()-1;
+
+        QLinkedList<QString>::const_iterator it = currentDirs.constEnd() - 1;
         do {
-            u = KUrl( currentDirs[ pos ] );
+            u = KUrl( *it );
             u.addPath( filename );
-            --pos;
-        }while( pos >= 0 && !QFileInfo(u.toLocalFile()).exists() );
-        
+        } while( (it-- !=  currentDirs.constBegin()) && !QFileInfo(u.toLocalFile()).exists() );
+
         return u;
     } else 
     {
@@ -237,8 +237,13 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 if(txt.contains("warning", Qt::CaseInsensitive))
                     itemType = WarningItem;
 
-                if(!txt.contains("note"))
+                if(txt.contains("note", Qt::CaseInsensitive))
+                    itemType = InformationItem;
+
+                // Make the item clickable if it comes with the necessary file & line number information
+                if (errFormat.fileGroup > 0 && errFormat.lineGroup > 0)
                     item.isActivatable = true;
+
                 matched = true;
                 break;
             }
@@ -258,7 +263,35 @@ void MakeOutputModel::addLines( const QStringList& lines )
                     }
                     if( actFormat.action == "cd" )
                     {
-                        currentDirs << regEx.cap( actFormat.fileGroup );
+                        QLinkedList<QString>::iterator pos = currentDirs.insert( currentDirs.end(), regEx.cap( actFormat.fileGroup ) );
+                        positionInCurrentDirs.insert( regEx.cap( actFormat.fileGroup ) , pos );
+                    }
+
+                    // Special case for cmake: we parse the "Compiling <objectfile>" expression
+                    // and use it to find out about the build paths encountered during a build.
+                    // They are later searched by urlForFile to find source files corresponding to
+                    // compiler errors.
+                    if ( actFormat.action == i18n("compiling") && actFormat.tool == "cmake")
+                    {
+                        KUrl url = buildDir;
+                        url.addPath(regEx.cap( actFormat.fileGroup ));
+                        QString dirName = url.toLocalFile();
+                        // Use map to check for duplicates, to avoid O(n^2) behaviour
+                        PositionMap::iterator it = positionInCurrentDirs.find(dirName);
+                        // Encountered new build directory?
+                        if (it == positionInCurrentDirs.end())
+                        {
+                            QLinkedList<QString>::iterator pos = currentDirs.insert( currentDirs.end(), dirName );
+                            positionInCurrentDirs.insert( dirName, pos );
+                        }
+                        else
+                        {
+                            // Build dir already in currentDirs, but move it to back of currentDirs list
+                            // (this gives us most-recently-used semantics in urlForFile)
+                            currentDirs.erase(it.value());
+                            QLinkedList<QString>::iterator pos = currentDirs.insert( currentDirs.end(), dirName );
+                            it.value() = pos;
+                        }
                     }
                     matched = true;
                     break;

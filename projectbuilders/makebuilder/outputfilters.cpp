@@ -62,7 +62,7 @@ QList<ActionFormat> ActionFormat::actionFormats = QList<ActionFormat>()
                      "linking"), 1, 2, "^linking (.*)" )
     //cmake
     << ActionFormat( i18n("built"), -1, 1, "\\[.+%\\] Built target (.*)" )
-    << ActionFormat( i18n("compiling"), -1, 1, "\\[.+%\\] Building .* object (.*)" )
+    << ActionFormat( i18n("compiling"), "cmake", "\\[.+%\\] Building .* object (.*)/CMakeFiles/", 1 )
     << ActionFormat( i18n("generating"), -1, 1, "\\[.+%\\] Generating (.*)" )
     << ActionFormat( i18nc("Linking object files into a library or executable",
                      "linking"), -1, 1, "^Linking (.*)" )

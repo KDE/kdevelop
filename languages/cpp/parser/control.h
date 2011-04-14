@@ -20,7 +20,6 @@
 #define CONTROL_H
 
 #include "symbol.h"
-#include "memorypool.h"
 #include <language/interfaces/iproblem.h>
 #include <cppparserexport.h>
 

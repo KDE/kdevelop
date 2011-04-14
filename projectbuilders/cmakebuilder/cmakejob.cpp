@@ -95,11 +95,11 @@ void CMakeJob::start()
     {
         kDebug() << "creating" << buildDirUrl.fileName() << "in" << buildDirUrl.directory();
         QDir d(buildDirUrl.directory());
-        d.mkdir( buildDirUrl.fileName() );
+        d.mkpath( buildDirUrl.fileName() );
     }
     m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
-    connect( m_executor, SIGNAL( failed( QProcess::Error ) ), this, SLOT( slotFailed( QProcess::Error ) ) );
+    connect( m_executor, SIGNAL( failed(QProcess::ProcessError)), this, SLOT( slotFailed( QProcess::ProcessError ) ) );
     connect( m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
     m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
@@ -158,6 +158,11 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
         {
             args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
         }
+#ifdef Q_OS_WIN
+        // Visual Studio solution is the standard generator under windows, but we dont want to use
+        // the VS IDE, so we need nmake makefiles
+        args << QString("-G") << QString("NMake Makefiles");
+#endif
         if( !CMake::currentExtraArguments(project).isEmpty() ) {
             KShell::Errors err;
             QString cmakeargs = CMake::currentExtraArguments(project);

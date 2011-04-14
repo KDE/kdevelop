@@ -196,7 +196,9 @@ void PreprocessJob::run()
         
         if(parentJob()->masterJob() == parentJob() && updatingEnvironmentFile) {
           //Check whether we need to run at all, or whether the file is already up to date
-          if(updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures()) && updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures())) {
+          bool fileFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures());
+          bool slaveFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures());
+          if(fileFeaturesSatisfied && slaveFeaturesSatisfied) {
             KUrl localPath(parentJob()->document().toUrl());
             localPath.setFileName(QString());
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
@@ -218,6 +220,9 @@ void PreprocessJob::run()
               parentJob()->setNeedsUpdate(false);
               return;
             }
+          } else if (fileFeaturesSatisfied && !slaveFeaturesSatisfied) {
+            // This is strange, because importees should not require more features than the importer
+            kDebug() << "Slaves require more features than file itself" << parentJob()->slaveMinimumFeatures() << updatingEnvironmentFile->features() << parentJob()->document().toUrl();
           }
         }
     }

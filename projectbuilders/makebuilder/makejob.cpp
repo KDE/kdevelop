@@ -24,6 +24,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QProcess>
+#include <QtCore/QFileInfo>
 
 #include <KDebug>
 #include <kshell.h>
@@ -92,6 +93,16 @@ void MakeJob::start()
     if( !buildDir.isValid() ) {
         setError(InvalidBuildDirectoryError);
         setErrorText(i18n("Invalid build directory '%1'", buildDir.prettyUrl()));
+        return emitResult();
+    }
+    else if( !buildDir.isLocalFile() ) {
+        setError(InvalidBuildDirectoryError);
+        setErrorText(i18n("'%1' is not a local path", buildDir.prettyUrl()));
+        return emitResult();
+    }
+    else if ( !QFileInfo(buildDir.toLocalFile()).isDir() ) {
+        setError(InvalidBuildDirectoryError);
+        setErrorText(i18n("'%1' is not a directory", buildDir.prettyUrl()));
         return emitResult();
     }
 
@@ -183,7 +194,11 @@ QStringList MakeJob::computeBuildCommand() const
     KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
+#ifdef _MSC_VER
+    QString makeBin = builderGroup.readEntry("Make Binary", "nmake");
+#else
     QString makeBin = builderGroup.readEntry("Make Binary", "make");
+#endif
     cmdline << makeBin;
 
     if( ! builderGroup.readEntry("Abort on First Error", true) )

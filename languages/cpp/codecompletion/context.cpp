@@ -21,6 +21,8 @@
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
 
+#include <iterator>
+
 #include <interfaces/idocumentcontroller.h>
 
 #include <language/interfaces/ilanguagesupport.h>
@@ -97,7 +99,7 @@ const QSet<QString> BINARY_OPERATORS =
       BINARY_ARITHMETIC_OPERATORS + ARITHMETIC_COMPARISON_OPERATORS;
 //These will be skipped over to find parent contexts
 const QSet<QString> UNARY_OPERATORS = QString("++ -- ! ~ + - & *").split(' ').toSet();
-const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual return else throw emit Q_EMIT case delete delete[] new").split(' ').toSet();
+const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new").split(' ').toSet();
 //When these appear as access strings, only show types
 const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new").split(' ').toSet();
 //A parent context is created for these access strings
@@ -1635,7 +1637,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
   QList<CompletionTreeItemPointer> ret;
-#ifndef TEST_COMPLETION
   TopDUContext* searchInContext = m_duContext->topContext();
   
   if(searchInContext)
@@ -1644,12 +1645,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
     KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
     searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
+    if(searchInContext)
+      ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
   }
- 
-  if(searchInContext)
-    ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
 
-#endif
   return ret;
 }
 

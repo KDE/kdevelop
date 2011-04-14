@@ -60,7 +60,11 @@ class KDEVCPPRPP_EXPORT Stream
 
     bool isNull() const;
 
-    bool atEnd() const;
+    inline bool atEnd() const
+    {
+      return c == end;
+    }
+    
 
     void toEnd();
 
@@ -100,12 +104,12 @@ class KDEVCPPRPP_EXPORT Stream
     
     //Checks whether the current index represents a character, and eventually compares it
     bool operator==(const char otherc) const {
-      return isCharacter(*c) && *c == indexFromCharacter(otherc);
+      return !atEnd() && isCharacter(*c) && *c == indexFromCharacter(otherc);
     }
 
     //Checks whether the current index represents a character, and eventually compares it
     bool operator!=(const char otherc) const {
-      return !isCharacter(*c) || *c != indexFromCharacter(otherc);
+      return atEnd() || !isCharacter(*c) || *c != indexFromCharacter(otherc);
     }
     
     inline const uint& current() const { return *c; } //krazy:exclude=inline
