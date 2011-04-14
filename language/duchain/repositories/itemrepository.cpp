@@ -310,8 +310,8 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
           }
         } else {
           userAnswer = KMessageBox::questionYesNo(0,
-            i18n("The crash may be caused by a corruption of cached data. Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
-            i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+            i18n("The Session crashed %1 times in a row.\n\nThe crash may be caused by a corruption of cached data.\n\nPress OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin.", count),
+            i18n("Session crashed"),
             KStandardGuiItem::ok(),
             KStandardGuiItem::cancel());
         }
