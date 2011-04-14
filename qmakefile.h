@@ -22,8 +22,11 @@
 #define QMAKEFILE_H
 
 #include "qmakeastdefaultvisitor.h"
+
 #include <QtCore/QStack>
-#include <kurl.h>
+#include <QtCore/QStringList>
+
+#include <KUrl>
 
 namespace QMake
 {
@@ -60,14 +63,20 @@ public:
 
 
 protected:
-    QMap<QString, QStringList> m_variableValues;
+    VariableMap m_variableValues;
     QStringList resolveFileName( const QString& file ) const;
     QString resolveToSingleFileName( const QString& file ) const;
 private:
 
     QStringList getValueList( const QList<QMake::ValueAST*>& list ) const;
+
+    QStringList evaluateMacro( const QString& function, const QStringList& arguments ) const;
+
     QMake::ProjectAST* m_ast;
     QString m_projectFile;
+    QMap<QString, QMake::ScopeBodyAST*> m_userMacros;
+    QStringList m_arguments;
+    QStringList m_lastReturn;
 };
 
 #endif

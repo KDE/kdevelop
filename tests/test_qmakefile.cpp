@@ -279,5 +279,31 @@ void TestQMakeFile::defines_data()
     }
 }
 
+void TestQMakeFile::userMacros()
+{
+    KTemporaryFile tmpFile;
+    tmpFile.open();
+    tmpFile.write(
+        "defineReplace(test) {\n"
+        "  FOO = $$1\n"
+        "  return($$FOO)\n"
+        "}\n"
+        "BAR = $$test(asdf)\n"
+    );
+    tmpFile.close();
+
+    QMakeProjectFile file(tmpFile.fileName());
+
+    QHash<QString,QString> qmvars = queryQMake( tmpFile.fileName() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    QVERIFY(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+    QVERIFY(file.read());
+    QCOMPARE(file.variableValues("BAR"), QStringList() << "asdf");
+    QVERIFY(file.variableValues("FOO").isEmpty());
+}
+
 
 #include "test_qmakefile.moc"
