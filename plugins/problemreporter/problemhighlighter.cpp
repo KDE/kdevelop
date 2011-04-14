@@ -58,6 +58,8 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
             this, SLOT(aboutToInvalidateMovingInterfaceContent()));
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
             this, SLOT(aboutToRemoveText(KTextEditor::Range)));
+    connect(m_document, SIGNAL(reloaded(KTextEditor::Document*)),
+            this, SLOT(documentReloaded()));
 }
 
 void ProblemHighlighter::settingsChanged()
@@ -233,6 +235,11 @@ void ProblemHighlighter::aboutToRemoveText( const KTextEditor::Range& range )
             ++it;
         }
     }
+}
+
+void ProblemHighlighter::documentReloaded()
+{
+    setProblems(m_problems);
 }
 
 #include "problemhighlighter.moc"

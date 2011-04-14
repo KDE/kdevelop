@@ -36,6 +36,7 @@ namespace KParts {
 namespace Sublime{
     class Controller;
     class View;
+    class Area;
 }
 
 namespace KDevelop {
@@ -148,6 +149,10 @@ public:
       * @p message The message
       * @p timeout The timeout in seconds how long to show the message */
     virtual void showErrorMessage(const QString& message, int timeout = 1) = 0;
+
+    /** @return area for currently active sublime mainwindow or 0 if
+    no sublime mainwindow is active.*/
+    virtual Sublime::Area *activeArea() = 0;
         
 protected:
     IUiController();

@@ -21,6 +21,8 @@ set (kdevplatformutil_LIB_UI
     runoptions.ui
 )
 
+add_subdirectory(dbus_socket_transformer)
+
 add_subdirectory(duchainify)
 
 add_subdirectory(tests)

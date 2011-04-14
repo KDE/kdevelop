@@ -40,6 +40,7 @@
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/ivariablecontroller.h"
 #include "variabletooltip.h"
+#include <sublime/area.h>
 
 namespace KDevelop {
 
@@ -447,6 +448,9 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
         return;
 
     if (!hasStartedSession())
+        return;
+
+    if (ICore::self()->uiController()->activeArea()->objectName() != "debug")
         return;
 
     // Figure what is the parent widget and what is the text to show

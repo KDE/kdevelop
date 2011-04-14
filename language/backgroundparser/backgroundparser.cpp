@@ -135,7 +135,9 @@ public:
                 }
 
                 kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
-                ParseJob* job = createParseJob(*it, m_documents[*it].features(), m_documents[*it].notifyWhenReady());
+                Q_ASSERT(m_documents.contains(*it));
+                const DocumentParsePlan& parsePlan = m_documents[*it];
+                ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = job; //This parse-job is allocated into the reserved thread
@@ -143,6 +145,12 @@ public:
                 if(job)
                     jobs.append(job);
 
+                // Remove all mentions of this document.
+                foreach(DocumentParseTarget target, parsePlan.targets) {
+                    if (target.priority != it1.key()) {
+                        m_documentsForPriority[target.priority].remove(*it);
+                    }
+                }
                 m_documents.remove(*it);
                 it = it1.value().erase(it);
                 --m_maxParseJobs; //We have added one when putting the document into m_documents
@@ -315,7 +323,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
             return ret;
         }
 
-        QList<QWeakPointer<QObject> > notifyWhenReady() {
+        QList<QWeakPointer<QObject> > notifyWhenReady() const {
             QList<QWeakPointer<QObject> > ret;
 
             foreach(const DocumentParseTarget &target, targets)
@@ -362,7 +370,7 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     Q_ASSERT(connected);
     connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), this, SLOT(projectClosed(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpeningAborted(KDevelop::IProject*)), this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
     Q_ASSERT(connected);
 }
 
@@ -438,27 +446,29 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady)
 {
 //     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
+    KUrl cleanedUrl = url;
+    cleanedUrl.cleanPath();
     QMutexLocker lock(&d->m_mutex);
     {
-        Q_ASSERT(url.isValid());
+        Q_ASSERT(cleanedUrl.isValid());
 
         BackgroundParserPrivate::DocumentParseTarget target;
         target.priority = priority;
         target.features = features;
         target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
 
-        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
+        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
 
-            d->m_documentsForPriority[it.value().priority()].remove(url);
+            d->m_documentsForPriority[it.value().priority()].remove(cleanedUrl);
             it.value().targets << target;
-            d->m_documentsForPriority[it.value().priority()].insert(url);
+            d->m_documentsForPriority[it.value().priority()].insert(cleanedUrl);
         }else{
-//             kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
-            d->m_documents[url].targets << target;
-            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
+//             kDebug(9505) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
+            d->m_documents[cleanedUrl].targets << target;
+            d->m_documentsForPriority[d->m_documents[cleanedUrl].priority()].insert(cleanedUrl);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         }
 
@@ -717,7 +727,7 @@ void BackgroundParser::projectOpened(IProject* project)
     d->m_loadingProjects.remove(project);
 }
 
-void BackgroundParser::projectClosed(IProject* project)
+void BackgroundParser::projectOpeningAborted(IProject* project)
 {
     d->m_loadingProjects.remove(project);
 }

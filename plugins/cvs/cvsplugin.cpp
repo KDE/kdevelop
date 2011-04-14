@@ -249,10 +249,8 @@ void CvsPlugin::ctxEditors()
 {
     KUrl::List const & urls = d->m_common->contextUrlList();
     Q_ASSERT(!urls.empty());
-    ///@todo find a common base directory for the files
-    QFileInfo info(urls.front().toLocalFile());
 
-    CvsJob* job = d->m_proxy->editors(info.absolutePath(),
+    CvsJob* job = d->m_proxy->editors(findWorkingDir(urls.front().toLocalFile()),
                                       urls);
     if (job) {
         KDevelop::ICore::self()->runController()->registerJob(job);
@@ -261,7 +259,17 @@ void CvsPlugin::ctxEditors()
     }
 }
 
+QString CvsPlugin::findWorkingDir(const KUrl& location)
+{
+    QFileInfo fileInfo(location.toLocalFile());
 
+    // find out correct working directory
+    if (fileInfo.isFile()) {
+        return fileInfo.absolutePath();
+    } else {
+        return fileInfo.absoluteFilePath();
+    }
+}
 
 
 // Begin:  KDevelop::IBasicVersionControl
@@ -279,10 +287,7 @@ KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)
 
 KDevelop::VcsJob * CvsPlugin::add(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
-
-    CvsJob* job = d->m_proxy->add(info.absolutePath(),
+    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocations[0].toLocalFile()),
                                   localLocations,
                                   (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
@@ -290,10 +295,7 @@ KDevelop::VcsJob * CvsPlugin::add(const KUrl::List & localLocations, KDevelop::I
 
 KDevelop::VcsJob * CvsPlugin::remove(const KUrl::List & localLocations)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
-
-    CvsJob* job = d->m_proxy->remove(info.absolutePath(),
+    CvsJob* job = d->m_proxy->remove(findWorkingDir(localLocations[0].toLocalFile()),
                                      localLocations);
     return job;
 }
@@ -306,10 +308,7 @@ KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop
 
 KDevelop::VcsJob * CvsPlugin::status(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
-
-    CvsJob* job = d->m_proxy->status(info.absolutePath(),
+    CvsJob* job = d->m_proxy->status(findWorkingDir(localLocations[0].toLocalFile()),
                                      localLocations,
                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
@@ -317,19 +316,14 @@ KDevelop::VcsJob * CvsPlugin::status(const KUrl::List & localLocations, KDevelop
 
 KDevelop::VcsJob * CvsPlugin::unedit(const KUrl & localLocation)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocation.toLocalFile());
-
-    CvsJob* job = d->m_proxy->unedit(info.absolutePath(),
+    CvsJob* job = d->m_proxy->unedit(findWorkingDir(localLocation.toLocalFile()),
                                      localLocation);
     return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::edit(const KUrl & localLocation)
 {
-    QFileInfo info(localLocation.toLocalFile());
-
-    CvsJob* job = d->m_proxy->edit(info.absolutePath(),
+    CvsJob* job = d->m_proxy->edit(findWorkingDir(localLocation.toLocalFile()),
                                    localLocation);
     return job;
 }
@@ -341,11 +335,10 @@ KDevelop::VcsJob * CvsPlugin::copy(const KUrl & localLocationSrc, const KUrl & l
         return NULL;
     }
 
-    QFileInfo infoDstn(localLocationDstn.toLocalFile());
     KUrl::List listDstn;
     listDstn << localLocationDstn;
 
-    CvsJob* job = d->m_proxy->add(infoDstn.absolutePath(),
+    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocationDstn.toLocalFile()),
                                   listDstn, true);
 
     return job;
@@ -358,11 +351,8 @@ KDevelop::VcsJob * CvsPlugin::move(const KUrl &, const KUrl &)
 
 KDevelop::VcsJob * CvsPlugin::revert(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
-
     KDevelop::VcsRevision rev;
-    CvsJob* job = d->m_proxy->update(info.absolutePath(),
+    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0].toLocalFile()),
                                      localLocations,
                                      rev,
                                      "-C",
@@ -373,10 +363,7 @@ KDevelop::VcsJob * CvsPlugin::revert(const KUrl::List & localLocations, KDevelop
 
 KDevelop::VcsJob * CvsPlugin::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
-
-    CvsJob* job = d->m_proxy->update(info.absolutePath(),
+    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0].toLocalFile()),
                                      localLocations,
                                      rev,
                                      "",
@@ -395,10 +382,8 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
             msg = dlg.message();
         }
     }
-    ///@todo find a common base directory for the files
-    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->commit(info.absolutePath(),
+    CvsJob* job = d->m_proxy->commit(findWorkingDir(localLocations[0].toLocalFile()),
                                      localLocations,
                                      msg);
     return job;

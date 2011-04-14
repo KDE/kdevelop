@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>521</width>
     <height>399</height>
    </rect>
   </property>
@@ -155,6 +155,17 @@
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="kcfg_TabBarArrangeBuddies">
+        <property name="toolTip">
+         <string>When enabled, plugins can group related files side by side.
+For example, a header file will be opened next to the implementation file.</string>
+        </property>
+        <property name="text">
+         <string>Arrange related documents side by side</string>
         </property>
        </widget>
       </item>

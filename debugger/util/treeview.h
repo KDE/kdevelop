@@ -37,6 +37,9 @@ class TreeModel;
     public:
         AsyncTreeView(TreeModel* model, QWidget *parent);
 
+        virtual QSize sizeHint() const;
+        void resizeColumns();
+
         // Well, I really, really, need this.
         using QTreeView::indexRowSizeHint;
 
@@ -44,6 +47,7 @@ class TreeModel;
         void slotExpanded(const QModelIndex &index);
         void slotCollapsed(const QModelIndex &index);
         void slotClicked(const QModelIndex &index);
+        void slotExpandedDataReady();
     };
 
 }

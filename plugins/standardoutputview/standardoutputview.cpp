@@ -21,6 +21,7 @@
 
 #include "standardoutputview.h"
 #include "outputwidget.h"
+#include "toolviewdata.h"
 
 #include <QtCore/QList>
 #include <QtDesigner/QExtensionFactory>
@@ -44,7 +45,6 @@
 #include <sublime/controller.h>
 #include <sublime/document.h>
 
-#include "toolviewdata.h"
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
@@ -92,7 +92,8 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
-    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)), this, SLOT(removeSublimeView(Sublime::View*)));
+    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)),
+            this, SLOT(removeSublimeView(Sublime::View*)));
 
 }
 
@@ -129,17 +130,17 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         case KDevelop::IOutputView::BuildView:
         {
-            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build") );
+            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::RunView:
         {
-            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run") );
+            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::DebugView:
         {
-            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger") );
+            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:
@@ -159,7 +160,8 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type,
-                                          const KIcon& icon)
+                                          const KIcon& icon, Options option,
+                                          const QList<QAction*>& actionList )
 {
     int newid = -1;
     if( ids.isEmpty() )
@@ -180,6 +182,8 @@ int StandardOutputView::registerToolView( const QString& title,
     tvdata->title = title;
     tvdata->icon = icon;
     tvdata->plugin = this;
+    tvdata->option = option;
+    tvdata->actionList = actionList;
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
     ids << newid;
     toolviews[newid] = tvdata;
@@ -205,70 +209,76 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
     return newid;
 }
 
-void StandardOutputView::raiseOutput(int id)
+void StandardOutputView::raiseOutput(int outputId)
 {
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* v, toolviews.value( _id )->views ) {
-                OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
-                w->raiseOutput( id );
-                v->requestRaise();
+                if( v->hasWidget() )
+                {
+                    OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
+                    w->raiseOutput( outputId );
+                    v->requestRaise();
+                }
             }
         }
     }
 }
 
-void StandardOutputView::setModel( int id, QAbstractItemModel* model, Ownership takeOwnership )
+void StandardOutputView::setModel( int outputId, QAbstractItemModel* model, Ownership takeOwnership )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             tvid = _id;
             break;
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( id )->setModel( model, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setModel( model, takeOwnership == TakeOwnership );
     }
 }
 
-void StandardOutputView::setDelegate( int id, QAbstractItemDelegate* delegate, Ownership takeOwnership )
+void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate, Ownership takeOwnership )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
     {
-        if( toolviews.value( _id )->outputdata.contains( id ) )
+        if( toolviews.value( _id )->outputdata.contains( outputId ) )
         {
             tvid = _id;
             break;
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << id;
+        kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( id )->setDelegate( delegate, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate, takeOwnership == TakeOwnership );
     }
 }
 
-void StandardOutputView::removeToolView( int id )
+void StandardOutputView::removeToolView( int toolviewId )
 {
-    if( toolviews.contains(id) )
+    if( toolviews.contains(toolviewId) )
     {
-        ToolViewData* td = toolviews.value(id);
+        ToolViewData* td = toolviews.value(toolviewId);
         foreach( Sublime::View* view, td->views )
         {
-            OutputWidget* widget = qobject_cast<OutputWidget*>( view->widget() );
-            foreach( int outid, td->outputdata.keys() )
+            if( view->hasWidget() )
             {
-                widget->removeOutput( outid );
+                OutputWidget* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
+                foreach( int outid, td->outputdata.keys() )
+                {
+                    outputWidget->removeOutput( outid );
+                }
             }
             foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->allAreas() )
             {
@@ -276,39 +286,47 @@ void StandardOutputView::removeToolView( int id )
             }
         }
         delete td;
-        toolviews.remove(id);
-        emit toolViewRemoved(id);
+        toolviews.remove(toolviewId);
+        emit toolViewRemoved(toolviewId);
     }
 }
 
-OutputWidget* StandardOutputView::outputWidgetForId( int id ) const
+OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
 {
     foreach( ToolViewData* td, toolviews )
     {
-        if( td->outputdata.contains( id ) )
+        if( td->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* view, td->views )
             {
-                return qobject_cast<OutputWidget*>( view->widget() );
+                if( view->hasWidget() )
+                    return qobject_cast<OutputWidget*>( view->widget() );
             }
         }
     }
     return 0;
 }
 
-void StandardOutputView::scrollOutputTo( int id, const QModelIndex& idx )
+void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 {
-    OutputWidget* widget = outputWidgetForId( id );
+    OutputWidget* widget = outputWidgetForId( outputId );
     if( widget )
         widget->scrollToIndex( idx );
 }
 
-void StandardOutputView::removeOutput( int id )
+void StandardOutputView::removeOutput( int outputId )
 {
-    OutputWidget* widget = outputWidgetForId( id );
-    if( widget ) 
+    foreach( ToolViewData* td, toolviews )
     {
-        widget->removeOutput( id );
+        if( td->outputdata.contains( outputId ) )
+        {
+            foreach( Sublime::View* view, td->views )
+            {
+                if( view->hasWidget() )
+                    qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
+            }
+            td->outputdata.remove( outputId );
+        }
     }
 }
 

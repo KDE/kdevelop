@@ -63,6 +63,9 @@ public: // QAbstractItemModel overrides
     bool setData(const QModelIndex& index, const QVariant& value,
                  int role);
 
+Q_SIGNALS:
+    void itemChildrenReady();
+
 public:
     TreeItem* itemForIndex(const QModelIndex& index) const;
     QModelIndex indexForItem(TreeItem *item, int column) const;

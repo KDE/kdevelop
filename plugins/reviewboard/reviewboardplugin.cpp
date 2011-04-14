@@ -82,13 +82,13 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
     
-        d.setServer(versionedConfig.readEntry("server", KUrl("http://reviewboard.kde.org")));
+        d.setServer(versionedConfig.readEntry<KUrl>("server", KUrl("https://git.reviewboard.kde.org")));
         d.setUsername(versionedConfig.readEntry("username", QString()));
     }
     
     int ret = d.exec();
     if(ret==KDialog::Accepted) {
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), source->file(), d.baseDir());
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), source->file(), d.repository(), d.baseDir());
         bool corr = job->exec();
         if(corr) {
             KUrl url=d.server();

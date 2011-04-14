@@ -32,6 +32,7 @@ namespace KTextEditor {
 
 namespace KDevelop {
 
+    class SimpleRange;
     class IndexedString;
     
 /**
@@ -45,6 +46,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
     virtual int lines() const = 0;
     virtual QString text() const = 0;
     virtual QString rangeText(KTextEditor::Range range) const;
+    /**
+     * Search for the given identifier in the document, and returns all ranges
+     * where it was found.
+     * @param identifier The identifier to search for
+     * @param surroundedByBoundary Whether only matches that are surrounded by typical word-boundaries
+     *                             should be acceded. Everything except letters, numbers, and the _ character
+     *                             counts as word boundary.
+     * */
+    virtual QVector<SimpleRange> grep(QString identifier, bool surroundedByBoundary = true) const = 0;
     /**
       * Overwrites the text in the file with the new given one
       *

@@ -233,6 +233,11 @@ void TreeItem::setHasMore(bool more)
     }
 }
 
+void TreeItem::emitAllChildrenFetched()
+{
+    emit allChildrenFetched();
+}
+
 void TreeItem::setHasMoreInitial(bool more)
 {
     more_ = more;

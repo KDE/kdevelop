@@ -109,6 +109,12 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 
 VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
 {
+    ///FIXME: update the annotation bar on edit/reload somehow
+    ///BUG: https://bugs.kde.org/show_bug.cgi?id=269757
+    if (!d->m_annotation.containsLine(line)) {
+        return VcsRevision();
+    }
+
     Q_ASSERT(line > 0 && d->m_annotation.containsLine( line ));
     return d->m_annotation.line( line ).revision();
 }

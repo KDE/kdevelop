@@ -28,6 +28,7 @@ class QString;
 class QAbstractItemModel;
 class QModelIndex;
 class QAbstractItemDelegate;
+class QAction;
 
 /**
 @author Andreas Pakulat
@@ -46,6 +47,14 @@ public:
         AutoScroll     = 0x4 /**< automatically scroll the view */
     };
     Q_DECLARE_FLAGS(Behaviours, Behaviour)
+
+    enum Option
+    {
+        NoOptions = 0x0,
+        ShowItemsButton = 0x1 /**< show the two buttons (select and focus) */,
+        AddFilterAction = 0x2 /**< add a filter action */
+    };
+    Q_DECLARE_FLAGS(Options, Option)
 
     enum ViewType
     {
@@ -78,10 +87,15 @@ public:
      * If there already exists a toolview with this title and type return the existing id
      * @param title the Title to be displayed on the toolview
      * @param type the type of view that should be created
+     * @param icon the icon of the toolview
+     * @param option the options of the toolview
+     * @param actionList list of actions adding to the toolbar
      * @returns an toolview id that identifies the new view and is used in the other
      *          methods
      */
-    virtual int registerToolView( const QString& title, ViewType type = OneView, const KIcon& icon = KIcon() ) = 0;
+    virtual int registerToolView( const QString& title, ViewType type = OneView,
+                                  const KIcon& icon = KIcon(), Options option = ShowItemsButton,
+                                  const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**
      * Register a new output view in a given toolview. How this new view is created depends
@@ -89,16 +103,17 @@ public:
      * @param toolviewId the id of the toolview, created by registerToolView
      * @param title the title to use for the new output in the toolview
      * @param behaviour the Behaviour of the output
-     * @returns an id to supply to the other methods
+     * @returns the id of the output to supply to the other methods
      */
-    virtual int registerOutputInToolView( int toolviewId, const QString& title, Behaviours behaviour = AllowUserClose ) = 0;
+    virtual int registerOutputInToolView( int toolviewId, const QString& title,
+                                          Behaviours behaviour = AllowUserClose ) = 0;
 
     /**
      * Raise a given view
      */
-    virtual void raiseOutput( int id ) = 0;
+    virtual void raiseOutput( int outputId ) = 0;
 
-    virtual void scrollOutputTo( int id, const QModelIndex& ) = 0;
+    virtual void scrollOutputTo( int outputId, const QModelIndex& ) = 0;
 
     enum Ownership {
         KeepOwnership,
@@ -114,7 +129,7 @@ public:
      *                      remains with the caller.
      *
      */
-    virtual void setModel( int id, QAbstractItemModel* model, Ownership takeOwnership = KeepOwnership ) = 0;
+    virtual void setModel( int outputId, QAbstractItemModel* model, Ownership takeOwnership = KeepOwnership ) = 0;
 
     /**
      * Sets the item delegate of the registered output identified by id to @p delegate
@@ -125,41 +140,41 @@ public:
      *                      remains with the caller.
      *
      */
-    virtual void setDelegate( int id, QAbstractItemDelegate* model, Ownership takeOwnership = KeepOwnership ) = 0;
+    virtual void setDelegate( int outputId, QAbstractItemDelegate* model, Ownership takeOwnership = KeepOwnership ) = 0;
 
     /**
      * remove a toolview, don't forget to emit toolViewRemoved when you implement this
      *
      * @param id identifies the view to remove
      */
-    virtual void removeToolView( int id ) = 0;
+    virtual void removeToolView( int toolviewId ) = 0;
 
     /**
      * remove an output view from a toolview. Don't forget to emit outputRemoved
      * when you implement this.
-     * @param toolviewId the id of the toolview containing the output
-     * @param id the id of the outputview to remove
+     * @param outputId the id of the outputview to remove
      */
-    virtual void removeOutput( int id ) = 0;
+    virtual void removeOutput( int outputId ) = 0;
 
 Q_SIGNALS:
     /**
      * emitted after a toolview was removed
      *
-     * @param id identifies the removed toolview
+     * @param toolviewId identifies the removed toolview
      */
-    void toolViewRemoved( int id );
+    void toolViewRemoved( int toolviewId );
 
     /**
      * emitted after a toolview was removed
      *
      * @param toolviewId identifies the removed toolview
-     * @param id identifies the removed output
+     * @param outputId identifies the removed output
      */
-    void outputRemoved( int toolviewId, int id );
+    void outputRemoved( int toolviewId, int outputId );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
+Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Options)
 
 }
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )

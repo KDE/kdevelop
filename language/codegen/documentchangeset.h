@@ -100,7 +100,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
         AutoFormatChangesKeepIndentation      ///Same as AutoFormatChanges, except that the indentation of inserted lines is kept equal
     };
     
-    ///@param policy How the changed text should be formatted
+    ///@param policy How the changed text should be formatted. The default is AutoFormatChanges.
     void setFormatPolicy(FormatPolicy policy);
     
     enum DUChainUpdateHandling {

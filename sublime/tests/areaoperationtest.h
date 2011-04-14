@@ -41,6 +41,7 @@ private slots:
     void simpleViewAdditionAndDeletion();
     void complexViewAdditionAndDeletion();
     void toolViewAdditionAndDeletion();
+    void testAddingViewAfter();
 
 private:
     void checkArea1(Sublime::MainWindow *mw);
@@ -55,6 +56,7 @@ private:
 
     Sublime::Area *m_area1;
     Sublime::Area *m_area2;
+    Sublime::Area *m_area3;
 
 };
 

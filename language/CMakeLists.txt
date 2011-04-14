@@ -6,7 +6,6 @@ set(kdevplatformlanguage_LIB_SRCS
     editor/persistentmovingrangeprivate.cpp
     editor/persistentmovingrange.cpp
     editor/modificationrevisionset.cpp
-    editor/documentrangeobject.cpp
     editor/modificationrevision.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
@@ -166,7 +165,6 @@ install(FILES
 install(FILES
     editor/persistentmovingrange.h
     editor/documentrange.h
-    editor/documentrangeobject.h
     editor/documentcursor.h
     editor/simplecursor.h
     editor/simplerange.h

@@ -265,7 +265,8 @@ public:
         emit q->projectAboutToBeOpened( project );
         if ( !project->open( url ) )
         {
-            delete project;
+            q->abortOpeningProject(project);
+            project->deleteLater();
             return;
         }
 
@@ -800,27 +801,31 @@ void ProjectController::closeProject(IProject* proj_)
         kWarning() << "Unknown Project subclass found!";
         return;
     }
-    if (proj_->isReady()) {
-        d->m_projects.removeAll(proj);
-        emit projectClosing(proj);
-        //Core::self()->saveSettings();     // The project file is being closed.
-                                            // Now we can save settings for all of the Core
-                                            // objects including this one!!
-        unloadUnusedProjectPlugins(proj);
-        closeAllOpenedFiles(proj);
-        proj->close();
-        proj->deleteLater();                //be safe when deleting
-        if (d->m_projects.isEmpty())
-        {
-            initializePluginCleanup(proj);
-        }
-
-        if(!d->m_cleaningUp)
-            d->saveListOfOpenedProjects();
+    d->m_projects.removeAll(proj);
+    emit projectClosing(proj);
+    //Core::self()->saveSettings();     // The project file is being closed.
+                                        // Now we can save settings for all of the Core
+                                        // objects including this one!!
+    unloadUnusedProjectPlugins(proj);
+    closeAllOpenedFiles(proj);
+    proj->close();
+    proj->deleteLater();                //be safe when deleting
+    if (d->m_projects.isEmpty())
+    {
+        initializePluginCleanup(proj);
     }
+
+    if(!d->m_cleaningUp)
+        d->saveListOfOpenedProjects();
 
     emit projectClosed(proj);
     return;
+}
+
+void ProjectController::abortOpeningProject(IProject* proj)
+{
+    d->m_currentlyOpening.removeAll(proj->projectFileUrl());
+    emit projectOpeningAborted(proj);
 }
 
 ProjectModel* ProjectController::projectModel()

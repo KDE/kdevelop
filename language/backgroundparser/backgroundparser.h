@@ -216,7 +216,7 @@ private Q_SLOTS:
     /// Tracking of projects in state of loading.
     void projectAboutToBeOpened(KDevelop::IProject* project);
     void projectOpened(KDevelop::IProject* project);
-    void projectClosed(KDevelop::IProject* project);
+    void projectOpeningAborted(KDevelop::IProject* project);
 };
 
 }

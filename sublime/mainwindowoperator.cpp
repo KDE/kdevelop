@@ -34,7 +34,7 @@ void MainWindowOperator::clearArea(MainWindow *w)
 
 void MainWindowOperator::setActiveView(MainWindow *w, View *view)
 {
-    w->setActiveView(view);
+    w->activateView(view);
 }
 
 void MainWindowOperator::setActiveToolView(MainWindow *w, View *view)

@@ -102,15 +102,12 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="1" colspan="3">
-    <widget class="KLineEdit" name="templateEdit">
+    <widget class="KComboBox" name="templateEdit">
      <property name="toolTip">
       <string>This is the regular expression template.</string>
      </property>
      <property name="whatsThis">
       <string>This is the regular expression template. &lt;i&gt;%s&lt;/i&gt; will be replaced by the pattern, while &lt;i&gt;%%&lt;/i&gt; will be replaced by &lt;i&gt;%&lt;/i&gt;.</string>
-     </property>
-     <property name="text">
-      <string>%s</string>
      </property>
     </widget>
    </item>
@@ -389,7 +386,7 @@ p, li { white-space: pre-wrap; }
     </spacer>
    </item>
    <item row="2" column="1" colspan="3">
-    <widget class="KLineEdit" name="replacementTemplateEdit">
+    <widget class="KComboBox" name="replacementTemplateEdit">
      <property name="toolTip">
       <string>Enter the replacement template.</string>
      </property>

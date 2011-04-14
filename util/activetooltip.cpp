@@ -244,7 +244,7 @@ namespace {
 }
 
 void ActiveToolTipManager::doVisibility() {
-    bool hideAll = false;
+    bool exclusive = false;
     int lastBottomPosition = -1;
     int lastLeftPosition = -1;
     QRect fullGeometry; //Geometry of all visible tooltips together
@@ -252,7 +252,7 @@ void ActiveToolTipManager::doVisibility() {
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
         QPointer< ActiveToolTip > w = (*it).first;
         if(w) {
-            if(hideAll) {
+            if(exclusive) {
                 (w)->hide();
             }else{
                 QRect geom = (w)->geometry();
@@ -274,7 +274,7 @@ void ActiveToolTipManager::doVisibility() {
                     fullGeometry = fullGeometry.united((w)->geometry());
             }
             if(it.key() == 0) {
-                hideAll = true;
+                exclusive = true;
             }
         }
     }
@@ -293,7 +293,14 @@ void ActiveToolTipManager::doVisibility() {
             if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
         }
-        
+        // Now fit this to screen
+        if (fullGeometry.left() < 0) {
+            fullGeometry.setLeft(0);
+        }
+        if (fullGeometry.top() < 0) {
+            fullGeometry.setTop(0);
+        }
+
         QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
         if(!offset.isNull()) {
             for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
@@ -313,11 +320,12 @@ void ActiveToolTipManager::doVisibility() {
         }
     }
 
-    //Final step: Show all tooltips
-    if(!hideAll) {
-        for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
-            if(it->first && masterWidget(it->first)->isActiveWindow())
-                (*it).first->show();
+    //Final step: Show tooltips
+    for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
+        if(it->first && masterWidget(it->first)->isActiveWindow())
+            (*it).first->show();
+        if(exclusive)
+            break;
     }
 }
 

@@ -236,7 +236,7 @@ struct RepositoryManager : public AbstractRepositoryManager{
 
     QString m_name;
     int m_version;
-    mutable ItemRepositoryRegistry& m_registry;
+    ItemRepositoryRegistry& m_registry;
     AbstractRepositoryManager* (*m_shareMutex)();
 };
 

@@ -327,11 +327,8 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
             if ( !model || !model->differences() )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
-            
+            KUrl file = urlForFileModel( model );
+
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
 
@@ -393,10 +390,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
+            KUrl file = urlForFileModel( model );
 
             if (file != highlightFile)
                 continue;
@@ -434,10 +428,7 @@ void PatchReviewPlugin::highlightPatch() {
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir();
-            
-            file.addPath( model->destinationPath() );
-            file.addPath( model->destinationFile() );
+            KUrl file = urlForFileModel( model );
 
             addHighlighting(file);
         }
@@ -463,11 +454,8 @@ void PatchReviewToolView::finishReview()
         }else if ( v.canConvert<const Diff2::DiffModel*>() ) {
           const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
 
-          KUrl file = m_plugin->patch()->baseDir();
-          
-          file.addPath( model->destinationPath() );
-          file.addPath( model->destinationFile() );
-          
+          KUrl file = m_plugin->urlForFileModel( model );
+
           selectedUrls << file;
         }
       }
@@ -495,10 +483,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
         if ( !model )
             throw "bad model-value";
 
-        KUrl file = m_plugin->patch()->baseDir();
-        
-        file.addPath( model->destinationPath() );
-        file.addPath( model->destinationFile() );
+        KUrl file = m_plugin->urlForFileModel( model );
 
         kDebug() << "opening" << file.toLocalFile();
 
@@ -512,13 +497,13 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
     }
 }
 
-KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
+KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
 {
-  KUrl file = m_plugin->patch()->baseDir();
-  
+  KUrl file = m_patch->baseDir();
+
   file.addPath( model->destinationPath() );
   file.addPath( model->destinationFile() );
-  
+
   return file;
 }
 
@@ -586,7 +571,7 @@ void PatchReviewToolView::kompareModelChanged()
           if ( diffs )
               cnt = diffs->count();
 
-          KUrl file = urlForFileModel(*it);
+          KUrl file = m_plugin->urlForFileModel(*it);
           haveUrls.insert(file);
 
           if(!QFileInfo(file.toLocalFile()).isReadable())
@@ -684,9 +669,9 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
         QVariant v = item->data( 0, Qt::UserRole );
         if ( v.canConvert<const Diff2::DiffModel*>() ) {
             const Diff2::DiffModel * model = v.value<const Diff2::DiffModel*>();
-            
-            KUrl file = urlForFileModel(model);
-            
+
+            KUrl file = m_plugin->urlForFileModel(model);
+
             if(file == doc->url()) {
               m_editPatch.filesList->setCurrentItem(item);
               return;
@@ -1258,7 +1243,7 @@ void PatchHighlighter::clear()
       markIface->removeMark(line, KTextEditor::MarkInterface::markType26);
       markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
     }
-    
+
     qDeleteAll(m_ranges);
     m_ranges.clear();
     m_differencesForRanges.clear();
@@ -1312,7 +1297,13 @@ void PatchReviewPlugin::forceUpdate()
 }
 
 void PatchReviewPlugin::updateKompareModel() {
-  
+    if (!m_patch) {
+      ///TODO: this method should be cleaned up, it can be called by the timer and
+      ///      e.g. https://bugs.kde.org/show_bug.cgi?id=267187 shows how it could
+      ///      lead to asserts before...
+      return;
+    }
+
     kDebug() << "updating model";
     try {
       Q_ASSERT(m_patch);
@@ -1504,8 +1495,11 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     emit patchChanged();
     
-    if(!dynamic_cast<LocalPatchSource*>(m_patch.data()))
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data())) {
       delete m_patch;
+      // make sure "show" button still openes the file dialog to open a custom patch file
+      setPatch(new LocalPatchSource);
+    }
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
@@ -1588,8 +1582,13 @@ void PatchReviewPlugin::updateReview()
   } else {
     futureActiveDoc = documents.take(m_patch->file());
   }
-  futureActiveDoc->textDocument()->setReadWrite(false);
 #endif
+  if (!futureActiveDoc || !futureActiveDoc->textDocument()) {
+    // might happen if e.g. openDocument dialog was cancelled by user
+    // or under the theoretic possibility of a non-text document getting opened
+    return;
+  }
+  futureActiveDoc->textDocument()->setReadWrite(false);
   futureActiveDoc->setPrettyName(i18n("Overview"));
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
@@ -1637,8 +1636,17 @@ void PatchReviewPlugin::updateReview()
 
 void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
+  if (patch == m_patch) {
+    return;
+  }
+
   if(m_patch) {
     disconnect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
+    if (qobject_cast<LocalPatchSource*>(m_patch)) {
+      // make sure we don't leak this
+      // TODO: what about other patch sources?
+      delete m_patch;
+    }
   }
   m_patch = patch;
 

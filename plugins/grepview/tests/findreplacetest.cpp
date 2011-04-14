@@ -174,6 +174,7 @@ void FindReplaceTest::testReplace()
     
     QVERIFY(job->exec());
     model->setReplacement(replace);
+    model->makeItemsCheckable(true);
     model->doReplacements();
     
     foreach(File fileData, result) 

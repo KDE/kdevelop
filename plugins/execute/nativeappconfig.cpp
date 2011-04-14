@@ -67,14 +67,14 @@ static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop:
 void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project ) 
 {
     bool b = blockSignals( true );
+    projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
+    projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
+    executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     if( cfg.readEntry( ExecutePlugin::isExecutableEntry, false ) ) 
     {
         executableRadio->setChecked( true );
-        executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     } else 
     {
-        projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
-        projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
         projectTargetRadio->setChecked( true );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
@@ -253,15 +253,8 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
 {
     Q_UNUSED( project );
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, executableRadio->isChecked() );
-    if( executableRadio-> isChecked() )
-    {
-        cfg.writeEntry( ExecutePlugin::executableEntry, executablePath->url() );
-        cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
-    } else
-    {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->currentItemPath() );
-        cfg.deleteEntry( ExecutePlugin::executableEntry );
-    }
+    cfg.writeEntry( ExecutePlugin::executableEntry, executablePath->url() );
+    cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->currentItemPath() );
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecutePlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecutePlugin::environmentGroupEntry, environment->currentProfile() );
