@@ -295,10 +295,6 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(forceUpdate()) );
 
     connect( m_editPatch.showButton, SIGNAL(clicked(bool)), m_plugin, SLOT(showPatch()) );
-    
-    bool blocked = blockSignals( true );
-
-    blockSignals( blocked );
 }
 
 void PatchReviewToolView::nextHunk() {
@@ -1319,7 +1315,6 @@ void PatchReviewPlugin::updateKompareModel() {
               patchDoc->reload();
         }
 
-        qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination=m_patch->file().toLocalFile();
@@ -1665,7 +1660,8 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
   m_patch(0), m_factory(new PatchReviewToolViewFactory(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
-  
+    qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
+
     core()->uiController()->addToolView(i18n("Patch Review"), m_factory);
     setXMLFile("kdevpatchreview.rc");
 
