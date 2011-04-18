@@ -1660,68 +1660,42 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     return 1;
 }
 
+int toForeachEnd(const ForeachAst* fea)
+{
+    int lines=fea->line()+1, depth=1;
+    CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
+    CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
+    for(; depth>0 && it!=itEnd; ++it, lines++)
+    {
+        if(it->name=="foreach")
+        {
+            depth++;
+        }
+        else if(it->name=="endforeach")
+        {
+            depth--;
+        }
+    }
+    return lines-1;
+}
+
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
 {
-    kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->range();
-    int end = 1;
-    if(fea->range())
-    {
-        if (fea->ranges().start < fea->ranges().stop)
-        {
+    kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->type();
+    int end = -1;
+    switch(fea->type()) {
+        case ForeachAst::Range:
             for( int i = fea->ranges().start; i < fea->ranges().stop && !m_hitBreak; i += fea->ranges().step )
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->take(fea->loopVar());
+                m_vars->remove(fea->loopVar());
+                if(m_hitBreak)
+                    break;
             }
-        }
-        else
-        {
-            // loop never runs, skip over to matching endforeach
-
-            // FIXME this code is duplicated from the non-range case.
-            // It should be probably factored into a separate helper function.
-
-            int lines=fea->line()+1, depth=1;
-            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
-            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
-            for(; depth>0 && it!=itEnd; ++it, lines++)
-            {
-                if(it->name=="foreach")
-                {
-                    depth++;
-                }
-                else if(it->name=="endforeach")
-                {
-                    depth--;
-                }
-            }
-            end=lines-1;
-        }
-    }
-    else
-    {
-        //Looping in a list of values
-        QStringList args=fea->arguments();
-        if(args.count()==1 && args.first().isEmpty()) { //if the args are empty
-            int lines=fea->line()+1, depth=1;
-            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
-            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
-            for(; depth>0 && it!=itEnd; ++it, lines++)
-            {
-                if(it->name=="foreach")
-                {
-                    depth++;
-                }
-                else if(it->name=="endforeach")
-                {
-                    depth--;
-                }
-            }
-            end=lines-1;
-        }
-        else
-        {
+        break;
+        case ForeachAst::InItems: {
+            QStringList args=fea->arguments();
             foreach(const QString& s, args)
             {
                 m_vars->insert(fea->loopVar(), QStringList(s));
@@ -1730,8 +1704,26 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 if(m_hitBreak)
                     break;
             }
-        }
+        } break;
+        case ForeachAst::InLists: {
+            QStringList args=fea->arguments();
+            foreach(const QString& curr, args) {
+                QStringList list = m_vars->value(curr);
+                foreach(const QString& s, list)
+                {
+                    m_vars->insert(fea->loopVar(), QStringList(s));
+                    kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
+                    end=walk(fea->content(), fea->line()+1);
+                    if(m_hitBreak)
+                        break;
+                }
+            }
+        }   break;
     }
+    
+    if(end<0)
+        end = toForeachEnd(fea);
+    
     m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
     return end-fea->line()+1;
