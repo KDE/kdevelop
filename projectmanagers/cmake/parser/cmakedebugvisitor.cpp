@@ -54,7 +54,7 @@ int CMakeAstDebugVisitor::visit( const StringAst * ast )
 
 int CMakeAstDebugVisitor::visit( const ForeachAst * ast )
 {
-    WRITEOUT << "FOREACH: " << "(loopVar,arguments,range,ranges-start,ranges-stop,ranges-step) = (" << ast->loopVar() << "," << ast->arguments() << "," << ast->range() << "," << ast->ranges().start << "," << ast->ranges().stop << "," << ast->ranges().step << ")";
+    WRITEOUT << "FOREACH: " << "(loopVar,arguments,range,ranges-start,ranges-stop,ranges-step) = (" << ast->loopVar() << "," << ast->arguments() << "," << ast->type() << "," << ast->ranges().start << "," << ast->ranges().stop << "," << ast->ranges().step << ")";
     return 1;
 }
 
