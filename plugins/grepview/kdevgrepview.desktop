@@ -69,5 +69,4 @@ X-KDE-PluginInfo-Name=kdevgrepview
 X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Version=12
 X-KDevelop-Category=Global
-X-KDevelop-IRequired=org.kdevelop.IStatus
 X-KDevelop-Mode=GUI
