@@ -279,17 +279,35 @@ void TestQMakeFile::defines_data()
     }
 }
 
-void TestQMakeFile::userMacros()
+void TestQMakeFile::replaceFunctions_data()
 {
+    QTest::addColumn<QString>("fileContents");
+    QTest::addColumn<QMakeFile::VariableMap>("definedVariables");
+    QTest::addColumn<QStringList>("undefinedVariables");
+
+    {
+        QString contents = "defineReplace(test) {\n"
+                           "  FOO = $$1\n"
+                           "  return($$FOO)\n"
+                           "}\n"
+                           "BAR = $$test(asdf)\n";
+        QMakeFile::VariableMap vars;
+        vars["BAR"] = QStringList() << "asdf";
+        QStringList undefined;
+        undefined << "FOO" << "1";
+        QTest::newRow("defineReplace-1") << contents << vars << undefined;
+    }
+}
+
+void TestQMakeFile::replaceFunctions()
+{
+    QFETCH(QString, fileContents);
+    QFETCH(QMakeFile::VariableMap, definedVariables);
+    QFETCH(QStringList, undefinedVariables);
+
     KTemporaryFile tmpFile;
     tmpFile.open();
-    tmpFile.write(
-        "defineReplace(test) {\n"
-        "  FOO = $$1\n"
-        "  return($$FOO)\n"
-        "}\n"
-        "BAR = $$test(asdf)\n"
-    );
+    tmpFile.write(fileContents.toUtf8());
     tmpFile.close();
 
     QMakeProjectFile file(tmpFile.fileName());
@@ -301,8 +319,15 @@ void TestQMakeFile::userMacros()
     mkspecs->read();
     file.setMkSpecs(mkspecs);
     QVERIFY(file.read());
-    QCOMPARE(file.variableValues("BAR"), QStringList() << "asdf");
-    QVERIFY(file.variableValues("FOO").isEmpty());
+
+    QMakeFile::VariableMap::const_iterator it = definedVariables.constBegin();
+    while(it != definedVariables.constEnd()) {
+        QCOMPARE(file.variableValues(it.key()), it.value());
+        ++it;
+    }
+    foreach(const QString& var, undefinedVariables) {
+       QVERIFY(!file.containsVariable(var));
+    }
 }
 
 

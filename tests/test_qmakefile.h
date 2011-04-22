@@ -39,7 +39,8 @@ private slots:
     void defines_data();
     void defines();
 
-    void userMacros();
+    void replaceFunctions_data();
+    void replaceFunctions();
 };
 
 #endif // TEST_QMAKEFILE_H

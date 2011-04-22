@@ -119,8 +119,8 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
         {
             visitNode( node->body );
         }
-    }else if (node->identifier->value == "defineReplace" && node->body)
-    {
+    }else if (node->body && (node->identifier->value == "defineReplace" || node->identifier->value == "defineTest"))
+    { // TODO: differentiate between replace and test functions?
         QStringList args = getValueList(node->args);
         if (!args.isEmpty()) {
             m_userMacros[args.first()] = node->body;
@@ -129,7 +129,7 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
     {
         m_lastReturn = getValueList(node->args);
     }else
-    {
+    { // TODO: only visit when test function returned true?
         kWarning() << "unhandled function call" << node->identifier->value;
         visitNode( node->body );
     }
