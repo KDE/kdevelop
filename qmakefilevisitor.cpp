@@ -86,16 +86,16 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
 
         ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join("").trimmed();
+        if(!argument.isEmpty() && QFileInfo( argument ).isRelative() )
+        {
+            argument = QFileInfo( m_baseFile->absoluteDir() + '/' + argument ).canonicalFilePath();
+        }
         if (argument.isEmpty()) {
             kWarning() << "empty include file detected in line" << node->startLine;
             if( node->identifier->value.startsWith('!') ) {
                 visitNode( node->body );
             }
             return;
-        }
-        if( QFileInfo( argument ).isRelative() )
-        {
-            argument = QFileInfo( m_baseFile->absoluteDir() + '/' + argument ).canonicalFilePath();
         }
         ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
         QMakeIncludeFile includefile( argument, m_baseFile );
