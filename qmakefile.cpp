@@ -83,6 +83,7 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
 QMakeFile::QMakeFile( const QString& file )
     : m_ast(0), m_projectFile(file)
 {
+    Q_ASSERT(!m_projectFile.isEmpty());
 }
 
 bool QMakeFile::read()
