@@ -116,8 +116,20 @@ public:
      *
      * Removes the files or folders specified by @p items and
      * modifies the underlying build system if needed.
+     *
+     * Note: Do not attempt to move subitems along with their parents
      */
     virtual bool removeFilesAndFolders( QList<ProjectBaseItem*> items) = 0;
+
+    /**
+     * Move files and folders within a given project
+     *
+     * Moves the files or folders specified by @p items to @p newParent and
+     * modifies the underlying build system as needed
+     *
+     * Note: Do not attempt to move subitems along with their parents
+     */
+    virtual bool moveFilesAndFolders( QList< KDevelop::ProjectBaseItem* > items, KDevelop::ProjectFolderItem* newParent ) = 0;
 
     /**
      * Rename a file in the project

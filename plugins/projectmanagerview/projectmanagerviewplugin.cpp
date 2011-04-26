@@ -200,6 +200,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool needsBuildItems = true;
     bool needsFolderItems = true;
     bool needsRemoveAndRename = true;
+    bool needsRemoveTargetFiles = true;
 
     //needsCreateFile if there is one item and it's a folder or target
     needsCreateFile &= (items.count() == 1) && (items.first()->folder() || items.first()->target());
@@ -219,6 +220,9 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 
         //needsRemove if items are limited to non-top-level folders or files that don't belong to targets
         needsRemoveAndRename &= (item->folder() && item->parent()) || (item->file() && !item->parent()->target());
+
+        //needsRemoveTargets if items are limited to file items with target parents
+        needsRemoveTargetFiles &= (item->file() && item->parent()->target());
     }
 
     if ( needsCreateFile ) {
@@ -271,6 +275,12 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         rename->setIcon(KIcon("edit-rename"));
         connect( rename, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, rename );
+    }
+    if ( needsRemoveTargetFiles ) {
+        KAction* remove = new KAction( i18n( "Remove From Target" ), this );
+        remove->setIcon(KIcon("user-trash"));
+        connect( remove, SIGNAL(triggered()), this, SLOT(removeTargetFilesFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
     return menuExt;
 }
@@ -452,16 +462,12 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
     }
 }
 
-bool projectItemUrlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2)
-{
-    return item1->url().path() < item2->url().path();
-}
 void ProjectManagerViewPlugin::removeFromContextMenu()
 {
     //copy the list of selected items and sort it to guarantee parents will come before children
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     filteredItems[0] += d->ctxProjectItemList;
-    qSort(filteredItems[0].begin(), filteredItems[0].end(), projectItemUrlLessThan);
+    qSort(filteredItems[0].begin(), filteredItems[0].end(), ProjectBaseItem::urlLessThan);
 
     KUrl lastFolder;
     QStringList itemPaths;
@@ -503,6 +509,18 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
         if (it.key())
             it.key()->removeFilesAndFolders(it.value());
     }
+}
+
+void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
+{
+    QList<ProjectBaseItem*> items = d->ctxProjectItemList;
+    QMap< IBuildSystemManager*, QList<KDevelop::ProjectFileItem*> > itemsByBuildSystem;
+    foreach(ProjectBaseItem *item, items)
+        itemsByBuildSystem[item->project()->buildSystemManager()].append(item->file());
+
+    QMap< IBuildSystemManager*, QList<KDevelop::ProjectFileItem*> >::iterator it;
+    for (it = itemsByBuildSystem.begin(); it != itemsByBuildSystem.end(); ++it)
+        it.key()->removeFilesFromTargets(it.value());
 }
 
 void ProjectManagerViewPlugin::renameItemFromContextMenu()
@@ -576,7 +594,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
             {
                 ProjectFileItem* f=createFile(folder);
                 if(f)
-                    item->project()->buildSystemManager()->addFileToTarget(f, item->target());
+                    item->project()->buildSystemManager()->addFilesToTarget(QList<ProjectFileItem*>() << f, item->target());
             }
         }
     }
