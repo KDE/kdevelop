@@ -218,16 +218,13 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
   {
     ProjectFileItem* file = p->projectFileManager()->addFile(implementationUrl(), folder);
     ProjectFileItem* header = p->projectFileManager()->addFile(headerUrl(), folder);
+    QList<ProjectFileItem*> itemsToAdd;
+    if (file)
+      itemsToAdd << file;
+    if (header)
+      itemsToAdd << header;
 
-    if(file)
-      p->buildSystemManager()->addFileToTarget(file, target);
-    else
-      kWarning() << "Could not add source file to build manager" << implementationUrl();
-    
-    if(header)
-      p->buildSystemManager()->addFileToTarget(header, target);
-    else
-      kWarning() << "Could not add header file to build-manager" << headerUrl();
+    p->buildSystemManager()->addFilesToTarget(itemsToAdd, target);
   }
 
   return changes;

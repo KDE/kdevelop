@@ -92,9 +92,9 @@ ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevel
     return NULL;
 }
 
-bool CustomMakeManager::addFileToTarget(KDevelop::ProjectFileItem *file, KDevelop::ProjectTargetItem *parent)
+bool CustomMakeManager::addFilesToTarget(QList< ProjectFileItem* > files, ProjectTargetItem* parent)
 {
-    Q_UNUSED( file )
+    Q_UNUSED( files )
     Q_UNUSED( parent )
     return false;
 }
@@ -105,7 +105,7 @@ bool CustomMakeManager::removeTarget(KDevelop::ProjectTargetItem *target)
     return false;
 }
 
-bool CustomMakeManager::removeFilesFromTargets(QList< TargetFilePair > targetFiles)
+bool CustomMakeManager::removeFilesFromTargets(QList< ProjectFileItem* > targetFiles)
 {
     Q_UNUSED( targetFiles )
     return false;
@@ -257,6 +257,13 @@ bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUr
 bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder )
 {
     return KDevelop::renameUrl( oldFolder->project(), oldFolder->url(), newFolder );
+}
+
+bool CustomMakeManager::moveFilesAndFolders(QList< ProjectBaseItem* > items, ProjectFolderItem* newParent)
+{
+    Q_UNUSED(items);
+    Q_UNUSED(newParent);
+    return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////
