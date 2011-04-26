@@ -259,7 +259,7 @@ QStringList MakeJob::computeBuildCommand() const
           arguments << cmdline;
         } else { //default
           suCommandName = "kdesu";   
-          arguments << "-t" << "-c" << cmdline;
+          arguments << "-t" << "--" << cmdline;
         }
         kdesuline << suCommandName << arguments;
         cmdline = kdesuline;
