@@ -253,7 +253,7 @@ void GdbVariable::fetchMoreChildren()
         s->addCommand(
             new GDBCommand(GDBMI::VarListChildren,
                            QString("--all-values \"%1\" %2 %3").arg(varobj_)
-                           .arg(c).arg(c+5),
+                           .arg( c ).arg( c + fetchStep ),  // fetch from .. to ..
                            new FetchMoreChildrenHandler(this, s)));
     }
 }
