@@ -706,7 +706,7 @@ void OutputPage::initializePage()
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup codegenGroup( config, "CodeGeneration" );
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
-    d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->setChecked(lower);
+    d->output->lowerFilenameCheckBox->setChecked(lower);
 
     updateFileNames();
     QWizardPage::initializePage();
