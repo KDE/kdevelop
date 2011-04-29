@@ -116,15 +116,16 @@ void ADLTypeVisitor::endVisit(const FunctionType * /*type*/)
         // name of the function's scope
         DUContext* context = declaration->context();
         while (context) {
-            Declaration* decl = context->owner();
-            
-            if (context->type() == DUContext::Namespace)
+            if (Declaration* decl = context->owner())
             {
-                m_helper.addAssociatedNamespace(decl->qualifiedIdentifier());
-                break;
-            } else if (context->type() == DUContext::Class) {
-                m_helper.addAssociatedClass(decl);
-                break;
+              if (context->type() == DUContext::Namespace)
+              {
+                  m_helper.addAssociatedNamespace(decl->qualifiedIdentifier());
+                  break;
+              } else if (context->type() == DUContext::Class) {
+                  m_helper.addAssociatedClass(decl);
+                  break;
+              }
             }
             context = context->parentContext();
         }
