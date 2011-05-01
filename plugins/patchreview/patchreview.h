@@ -50,6 +50,7 @@ class Info;
 }
 namespace KDevelop {
 class IDocument;
+class VcsFileChangesModel;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
@@ -144,6 +145,8 @@ private:
     PatchReviewPlugin* m_plugin;
     
     QPointer<QWidget> m_customWidget;
+
+    class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated(KDevelop::IDocument*);
     void patchSelectionChanged(int);

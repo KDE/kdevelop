@@ -38,31 +38,13 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QTreeWidget" name="files">
-     <property name="windowTitle">
-      <string>Select Files to commit</string>
+    <widget class="QTreeView" name="files">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
-     <property name="indentation">
-      <number>0</number>
+     <property name="rootIsDecorated">
+      <bool>false</bool>
      </property>
-     <property name="allColumnsShowFocus">
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text">
-       <string/>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Status</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Files to commit</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

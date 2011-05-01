@@ -35,6 +35,7 @@
 #include "../interfaces/idistributedversioncontrol.h"
 #include "../interfaces/icentralizedversioncontrol.h"
 #include "../vcsstatusinfo.h"
+#include "../models/vcsfilechangesmodel.h"
 
 #include "ui_vcscommitdialog.h"
 #include <KComponentData>
@@ -46,47 +47,13 @@ namespace KDevelop
 class VcsCommitDialogPrivate
 {
 public:
-
-    VcsCommitDialogPrivate(VcsCommitDialog* dialog)
-        : dlg(dialog)
-    {}
-
-    void insertRow( const QString& state, const KUrl& url,
-                    const KStatefulBrush &foregroundColor = KStatefulBrush(KColorScheme::View, KColorScheme::NormalText),
-                    Qt::CheckState checkstate = Qt::Checked)
-    {
-        QStringList strings;
-        strings << "" << state << ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-        QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
-        item->setData(0, Qt::UserRole, url);
-        item->setForeground(2,  foregroundColor.brush(dlg));
-        item->setCheckState(0, checkstate);
-    }
-
-    QList< KUrl > selection() {
-        if(!m_selection.isEmpty())
-            return m_selection;
-        
-        QList< KUrl > ret;
-        
-        QTreeWidgetItemIterator it( ui.files, QTreeWidgetItemIterator::Checked );
-        for( ; *it; ++it ){
-            QVariant v = (*it)->data(0, Qt::UserRole);
-            Q_ASSERT(v.canConvert<KUrl>());
-            ret << v.value<KUrl>();
-        }
-        
-        return ret;
-    }
-
-    VcsCommitDialog* dlg;
     Ui::VcsCommitDialog ui;
-    QList< KUrl > m_selection;
     IPatchSource* m_patchSource;
+    VcsFileChangesModel* m_model;
 };
 
 VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
-    : KDialog( parent ), d(new VcsCommitDialogPrivate(this))
+    : KDialog( parent ), d(new VcsCommitDialogPrivate())
 {
     d->ui.setupUi( mainWidget() );
     QWidget *customWidget = patchSource->customWidget();
@@ -97,9 +64,9 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
 
     setButtons( KDialog::Ok | KDialog::Cancel );
 
-    d->ui.files->resizeColumnToContents(0);
-    d->ui.files->resizeColumnToContents(1);
     d->m_patchSource = patchSource;
+    d->m_model = new VcsFileChangesModel( this, true );
+    d->ui.files->setModel( d->m_model );
     connect(this, SIGNAL( okClicked() ), SLOT( ok() ) );
     connect(this, SIGNAL( cancelClicked() ), SLOT( cancel() ) );
 }
@@ -116,47 +83,10 @@ void VcsCommitDialog::setRecursive( bool recursive )
 
 void VcsCommitDialog::setCommitCandidates( const QVariant& statuses )
 {
-    KStatefulBrush deletedRed(KColorScheme::View, KColorScheme::NegativeText);
-    KStatefulBrush newGreen(KColorScheme::View, KColorScheme::ActiveText);
-
     foreach( const QVariant &var, statuses.toList() )
     {
         VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
-
-        QString state;
-        KStatefulBrush brush(KColorScheme::View, KColorScheme::NormalText);
-        Qt::CheckState checked = Qt::Checked;
-
-        switch( info.state() )
-        {
-            case VcsStatusInfo::ItemAdded:
-                state = i18nc("file was added to versioncontrolsystem", "Added");
-                brush = newGreen;
-                break;
-            case VcsStatusInfo::ItemDeleted:
-                state = i18nc("file was deleted from versioncontrolsystem", "Deleted");
-                brush = deletedRed;
-                break;
-            case VcsStatusInfo::ItemModified:
-                state = i18nc("version controlled file was modified", "Modified");
-                break;
-            case VcsStatusInfo::ItemUnknown:
-                state = i18nc("file is not known to versioncontrolsystem", "Unknown");
-                brush = newGreen;
-                checked = Qt::Unchecked;
-                break;
-            default:
-                break;
-        }
-
-        if(!state.isEmpty())
-        {
-            d->insertRow(state, info.url(), brush, checked);
-        }
-    }
-    if( d->ui.files->topLevelItemCount() == 0 )
-    {
-        reject();
+        d->m_model->updateState( info );
     }
 }
 
@@ -167,7 +97,7 @@ bool VcsCommitDialog::recursive() const
 
 void VcsCommitDialog::ok()
 {
-    if( d->m_patchSource->finishReview(d->selection()) )
+    if( d->m_patchSource->finishReview( d->m_model->checkedUrls() ) )
     {
         deleteLater();
     }
