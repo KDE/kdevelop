@@ -35,6 +35,7 @@ class QStandardItemModel;
 class ExternalScriptPlugin : public KDevelop::IPlugin
 {
   Q_OBJECT
+  Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.ExternalScriptPlugin" )
 
 public:
   ExternalScriptPlugin( QObject *parent, const QVariantList &args = QVariantList() );
@@ -65,6 +66,11 @@ public:
 public slots:
   void executeScriptFromActionData() const;
 
+  /**
+   * Executes the command
+   * */
+  Q_SCRIPTABLE bool executeCommand(QString command, QString workingDirectory) const;
+  
 private slots:
   void rowsRemoved( const QModelIndex& parent, int start, int end );
   void rowsInserted( const QModelIndex& parent, int start, int end );

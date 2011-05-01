@@ -31,7 +31,7 @@
 
 ExternalScriptItem::ExternalScriptItem()
   : m_saveMode(SaveNone), m_outputMode(OutputNone), m_errorMode(ErrorNone),
-    m_inputMode(InputNone), m_action( 0 ), m_showOutput( true )
+    m_inputMode(InputNone), m_action( 0 ), m_showOutput( true ), m_performReplacements(true)
 {
 
 }
@@ -44,6 +44,16 @@ QString ExternalScriptItem::command() const
 void ExternalScriptItem::setCommand( const QString& command )
 {
   m_command = command;
+}
+
+void ExternalScriptItem::setWorkingDirectory ( const QString& workingDirectory )
+{
+  m_workingDirectory = workingDirectory;
+}
+
+QString ExternalScriptItem::workingDirectory() const
+{
+  return m_workingDirectory;
 }
 
 ExternalScriptItem::SaveMode ExternalScriptItem::saveMode() const
@@ -115,6 +125,16 @@ bool ExternalScriptItem::showOutput() const
 void ExternalScriptItem::setShowOutput( bool show )
 {
   m_showOutput = show;
+}
+
+bool ExternalScriptItem::performParameterReplacement() const
+{
+  return m_performReplacements;
+}
+
+void ExternalScriptItem::setPerformParameterReplacement ( bool perform )
+{
+  m_performReplacements = perform;
 }
 
 void ExternalScriptItem::save() const

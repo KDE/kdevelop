@@ -235,7 +235,7 @@ int main(int argc, char** argv)
     
     if(argc == 2)
     {
-        if(waitForClients)
+        if(waitForClients && debug)
             std::cout << "forwarding from the local TCP port " << argv[1] << " to the local DBUS session at " << dbusAddress.toLocal8Bit().data() << std::endl;
         
         if(dbusAddress.isEmpty())
@@ -288,7 +288,7 @@ int main(int argc, char** argv)
         }
     }else if(argc == 3)
     {
-        if(waitForClients)
+        if(waitForClients && debug)
             std::cout << "forwarding from the local abstract unix domain socket " << argv[2] << " to the local TCP port " << argv[1] << std::endl;
         // Open a unix domain socket server
         serverfd = socket(AF_UNIX, SOCK_STREAM, 0);
