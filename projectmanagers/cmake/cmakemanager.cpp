@@ -692,11 +692,13 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 {
+    Q_ASSERT(!isReloading(fi->project()));
     KJob *job=createImportJob(fi);
     job->setProperty("projectitem", qVariantFromValue(fi));
     
     QMutexLocker locker(&m_busyProjectsMutex);
-    m_busyProjects += fi;
+    Q_ASSERT(!m_busyProjects.contains(fi->project()));
+    m_busyProjects += fi->project();
     locker.unlock();
     
     connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
@@ -708,8 +710,8 @@ void CMakeManager::reimportDone(KJob* job)
     QMutexLocker locker(&m_busyProjectsMutex);
     ProjectFolderItem* it = job->property("projectitem").value<KDevelop::ProjectFolderItem*>();
     
-    Q_ASSERT(m_busyProjects.contains(it));
-    m_busyProjects.remove(it);
+    Q_ASSERT(m_busyProjects.contains(it->project()));
+    m_busyProjects.remove(it->project());
 }
 
 bool CMakeManager::isReloading(IProject* p)
@@ -718,48 +720,45 @@ bool CMakeManager::isReloading(IProject* p)
         return true;
     
     QMutexLocker locker(&m_busyProjectsMutex);
-    foreach(KDevelop::ProjectFolderItem* it, m_busyProjects) {
-        if(it->project()==p)
-            return true;
-    }
-    return false;
+    
+    return m_busyProjects.contains(p);
 }
 
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
     IProject* p=0;
+    
+    QMutexLocker locker(&m_busyProjectsMutex);
     if(m_busyProjects.isEmpty())
         p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     else
         QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
+    locker.unlock();
     
     if(p) {
-        if(!isReloading(p)) {
-            dirurl.adjustPath(KUrl::AddTrailingSlash);
-            if(p->folder()==dirurl) {
-                ICore::self()->projectController()->closeProject(p);
-            } else {
-                KUrl url(path);
-                
-                if(path.endsWith("/CMakeLists.txt")) {
-                    QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
-                    foreach(ProjectFolderItem* folder, folders) 
-                        reload(folder);
-                    
-                } else {
-                    QMutexLocker locker(&m_busyProjectsMutex);
-                    m_busyProjects += p->projectItem();
-                    locker.unlock();
-                    
-                    qDeleteAll(p->itemsForUrl(url));
-                    
-                    locker.relock();
-                    m_busyProjects -= p->projectItem();
-                }
-            }
+        Q_ASSERT(!isReloading(p));
+        dirurl.adjustPath(KUrl::AddTrailingSlash);
+        if(p->folder()==dirurl) {
+            ICore::self()->projectController()->closeProject(p);
         } else {
-            QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
+            KUrl url(path);
+            
+            if(path.endsWith("/CMakeLists.txt")) {
+                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
+                foreach(ProjectFolderItem* folder, folders) 
+                    reload(folder);
+                
+            } else {
+                QMutexLocker locker(&m_busyProjectsMutex);
+                m_busyProjects += p;
+                locker.unlock();
+                
+                qDeleteAll(p->itemsForUrl(url));
+                
+                locker.relock();
+                m_busyProjects -= p;
+            }
         }
     }
 }
@@ -828,13 +827,13 @@ void CMakeManager::dirtyFile(const QString & dirty)
         
         if(!folders.isEmpty()) {
             QMutexLocker locker(&m_busyProjectsMutex);
-            m_busyProjects += folders.first();
+            m_busyProjects += p;
             locker.unlock();
             
             reloadFiles(folders.first());
             
             locker.relock();
-            m_busyProjects.remove(folders.first());
+            m_busyProjects -= p;
             locker.unlock();
         }
     }
