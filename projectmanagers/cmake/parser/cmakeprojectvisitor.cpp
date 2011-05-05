@@ -1493,7 +1493,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
 
-    QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    QDir dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
     QFileInfo fi(dir, filecomp->fileName());
 
     QString val;
@@ -1501,6 +1501,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     {
         case GetFilenameComponentAst::Path:
             val=fi.canonicalPath();
+            val=dir.relativeFilePath(val);
             break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
