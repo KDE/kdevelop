@@ -1411,7 +1411,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             {
                 if (expr.isEmpty())
                     continue;
-                QString pathPrefix=file->path();
+                QString pathPrefix;
                 if (QDir::isRelativePath(expr) && pathPrefix.isEmpty())
                     pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                 
@@ -1513,7 +1513,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             val=fi.suffix();
             break;
         case GetFilenameComponentAst::NameWe:
-            val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
+            val=fi.baseName();
             break;
         case GetFilenameComponentAst::Program:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
