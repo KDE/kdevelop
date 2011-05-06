@@ -20,8 +20,6 @@
 #define MODIFICATIONSREPOSITORY_H
 #include <language/editor/simplecursor.h>
 #include <cppduchainexport.h>
-#include <language/duchain/identifier.h>
-#include <language/duchain/types/abstracttype.h>
 
 namespace KDevelop
 {
