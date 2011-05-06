@@ -162,7 +162,7 @@ void ControlFlowGraphBuilder::visitConditionalExpression(ConditionalExpressionAS
 
 void ControlFlowGraphBuilder::visitDoStatement(DoStatementAST* node)
 {
-  m_currentNode->setEndCursor(cursorForToken(node->end_token));
+  m_currentNode->setEndCursor(cursorForToken(node->statement->start_token));
   ControlFlowNode* previous = m_currentNode;
   
   ControlFlowNode* nextNode = new ControlFlowNode;
