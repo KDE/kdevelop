@@ -78,7 +78,7 @@ public:
     /**Refers to the document currently active or focused.
     @return The active document.*/
     virtual IDocument* activeDocument() const;
-
+    
     virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() );
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
@@ -143,6 +143,12 @@ public Q_SLOTS:
     // DBUS-compatible versions of openDocument
     virtual Q_SCRIPTABLE bool openDocumentSimple( QString url );
     virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
+    
+    // Returns the currently active document
+    Q_SCRIPTABLE QString activeDocumentPath() const;
+
+    // Returns all open documents in the current area
+    Q_SCRIPTABLE QStringList activeDocumentPaths() const;
     
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);

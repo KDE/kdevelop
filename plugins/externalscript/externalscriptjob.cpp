@@ -111,35 +111,39 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   }
 
   QString command = item->command();
-  QString workingDir;
-
-  command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
+  QString workingDir = item->workingDirectory();
+  
+  if(item->performParameterReplacement())
+    command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
 
   if ( active ) {
     const KUrl url = active->url();
 
-    if ( url.isLocalFile() ) {
+    if ( url.isLocalFile() && workingDir.isEmpty() ) {
       ///TODO: make configurable, use fallback to project dir
       workingDir = active->url().directory();
     }
 
     ///TODO: make those placeholders escapeable
-    command.replace( "%u", KShell::quoteArg( url.pathOrUrl() ) );
+    if(item->performParameterReplacement())
+    {
+      command.replace( "%u", KShell::quoteArg( url.pathOrUrl() ) );
 
-    ///TODO: does that work with remote files?
-    QFileInfo info( url.pathOrUrl() );
+      ///TODO: does that work with remote files?
+      QFileInfo info( url.pathOrUrl() );
 
-    command.replace( "%f", KShell::quoteArg( info.filePath() ) );
-    command.replace( "%b", KShell::quoteArg( info.baseName() ) );
-    command.replace( "%n", KShell::quoteArg( info.fileName() ) );
-    command.replace( "%d", KShell::quoteArg( info.path() ) );
+      command.replace( "%f", KShell::quoteArg( info.filePath() ) );
+      command.replace( "%b", KShell::quoteArg( info.baseName() ) );
+      command.replace( "%n", KShell::quoteArg( info.fileName() ) );
+      command.replace( "%d", KShell::quoteArg( info.path() ) );
 
-    if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
-      command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
-    }
+      if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
+        command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
+      }
 
-    if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
-      command.replace( "%p", project->folder().pathOrUrl() );
+      if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
+        command.replace( "%p", project->folder().pathOrUrl() );
+      }
     }
   }
 

@@ -54,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include "savedialog.h"
 #include <kmessagebox.h>
 #include <KIO/Job>
+#include "workingsetcontroller.h"
 
 #include <config-kdevplatform.h>
 
@@ -930,6 +931,26 @@ IDocument* DocumentController::activeDocument() const
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
+}
+
+QString DocumentController::activeDocumentPath() const
+{
+    IDocument* doc = activeDocument();
+    if(!doc)
+        return QString();
+    return doc->url().pathOrUrl();
+}
+
+QStringList DocumentController::activeDocumentPaths() const
+{
+    UiController *uiController = Core::self()->uiControllerInternal();
+    if( !uiController->activeSublimeWindow() ) return QStringList();
+    
+    QSet<QString> documents;
+    foreach(Sublime::View* view, uiController->activeSublimeWindow()->area()->views())
+        documents.insert(KUrl(view->document()->documentSpecifier()).pathOrUrl());
+    
+    return documents.toList();
 }
 
 void DocumentController::registerDocumentForMimetype( const QString& mimetype,

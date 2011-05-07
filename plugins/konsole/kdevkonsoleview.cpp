@@ -18,6 +18,7 @@
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QUuid>
 
 #include <kurl.h>
 #include <kicon.h>
@@ -29,6 +30,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/isession.h>
 
 #include "kdevkonsoleviewplugin.h"
 
@@ -66,7 +68,10 @@ public:
             TerminalInterface* interface = qobject_cast<TerminalInterface*>(konsolepart);
             Q_ASSERT(interface);
 
+//             interface->startProgram( "/home/nolden/kdedev/install-mini/bin/kdevelop_attach", QStringList() << "-s" << KDevelop::ICore::self()->activeSession()->id().toString() );
             interface->showShellInDir( QString() );
+            interface->sendInput( "kdevelop_attach -s " + KDevelop::ICore::self()->activeSession()->id().toString() + "\n" );
+            
         }else
         {
             kDebug() << "Couldn't create KParts::ReadOnlyPart from konsole factory!";

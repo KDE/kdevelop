@@ -285,15 +285,10 @@
          <number>0</number>
         </property>
         <item row="0" column="0" rowspan="2">
-         <widget class="QTreeWidget" name="filesList">
+         <widget class="QTreeView" name="filesList">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
-          <column>
-           <property name="text">
-            <string notr="true">1</string>
-           </property>
-          </column>
          </widget>
         </item>
        </layout>

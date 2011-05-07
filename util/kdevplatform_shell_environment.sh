@@ -41,19 +41,64 @@ function updateShellPrompt {
     PS1="!$BASE_SHELL_PROMPT" # Just somehow set a mark that this session is attached
 }
 
-function help {
+function help! {
+    if ! [ "$SHORT_HELP" ]; then
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    echo "Available commands:"
-    echo "raise                               - Raise the window"
-    echo "open [file] ...                     - Open the files, referenced by relative or absolute paths"
-    echo "create [file] [[text]]              - Create and open a new file with the given optional text"
-    echo "search [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
-    echo "dsearch [pattern] [[locations]] ... - Same as search, but starts the search instantly instead of showing the dialog."
-    echo "fssh [ssh arguments]                - Connect to a remote host via ssh, keeping the control-connection alive."
-    echo "                                    - The whole dbus environment will be forwarded, KDevelop needs to be installed on both sides."
+    fi
+    echo "Commands:"
+    if ! [ "$SHORT_HELP" ]; then
+    echo "raise!                                 - Raise the window."
+    fi
+    echo "sync!                                  - Synchronize the working directory with the currently open document."
+    echo "open!   [file] ...                     - Open the file(s)."
+    echo "create!  [file] [[text]]               - Create and open a new file."
+    echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
+    echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
+    if ! [ "$SHORT_HELP" ]; then
+    echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
+    echo "                                       - The whole dbus environment will be forwarded, KDevelop needs to be installed on both sides."
+    echo "exec!  [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
+    fi
+    echo "help!                                  - Show extended help."
+    if ! [ "$SHORT_HELP" ]; then
+    echo ""
+    echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
+    fi
     echo ""
 }
+
+# Short versions of the commands:
+
+function r! {
+    raise! $@
+}
+
+function s! {
+    sync! $@
+}
+
+function o! {
+    open! $@
+}
+
+function e! {
+    exec! $@
+}
+
+function c! {
+    create! $@
+}
+
+function se! {
+    search! $@
+}
+
+function ds! {
+    dsearch! $@
+}
+
+# Internals:
 
 function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
@@ -62,26 +107,88 @@ function openDocument {
     fi
 }
 
-# Main functions:
+# First argument: The full command. Second argument: The working directory.
+function executeInApp {
+    local CMD=$1
+    local WD=$2
+    if ! [ "$WD" ]; then
+        WD=$(pwd)
+    fi
+    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommand "$CMD" "$WD")
+    if ! [ "$RESULT" == "true" ]; then
+        echo "Execution failed"
+    fi
+}
 
-function raise {
+# Getter functions:
+
+function getActiveDocument {
+    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath
+}
+
+function getActiveDocuments {
+    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
+}
+
+function raise! {
     qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
-function open {
+
+# Main functions:
+
+function raise! {
+    qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
+}
+
+function sync! {
+    local P=$(getActiveDocument)
+    if [ "$P" ]; then
+        cd $(dirname $P)
+    else
+        echo "Got no path"
+    fi
+}
+
+# Takes a relative file, returns an absolute file/url that should be valid on the client.
+function mapFileToClient {
+    local RELATIVE_FILE=$1
+    FILE=$(readlink -f $RELATIVE_FILE)
+    if ! [ "$FILE" ]; then
+        # Try opening the file anyway, it might be an url or something else we don't understand here
+        FILE=$RELATIVE_FILE
+    else
+        # We are referencing an absolute file, available on the file-system.
+        # If we are forwarding, map it to the client somehow.
+        # TODO: Map through fish protocol, or whatever. Check whether the same file is available
+        #       on the client machine at the same path first.
+        FILE=$FILE
+        
+    fi
+    echo $FILE
+}
+
+function open! {
     FILES=$@
     for RELATIVE_FILE in $FILES; do
         # TODO: Support ':linenumber' at the end of the file
-        FILE=$(readlink -f $RELATIVE_FILE)
-        if ! [ "$FILE" ]; then
-            # Try opening the file anyway, it might be an url or something else we don't understand here
-            FILE=$RELATIVE_FILE
-        fi
+        FILE=$(mapFileToClient $RELATIVE_FILE)
         openDocument "$FILE"
     done
 }
 
-function create {
+function exec! {
+    FILES=$@
+    ARGS=""
+    for RELATIVE_FILE in $FILES; do
+        FILE=$(mapFileToClient $RELATIVE_FILE)
+        ARGS=$ARGS" "$FILE
+    done
+    echo "execute args: " $ARGS
+    executeInApp "$FILES"
+}
+
+function create! {
     FILE=$(readlink -f $1)
     if ! [ "$FILE" ]; then
         echo "Error: Bad arguments."
@@ -95,13 +202,13 @@ function create {
     openDocument $FILE
 }
 
-function search {
+function search! {
     PATTERN=$1
     
-    if ! [ "$PATTERN" ]; then
-        echo "Error: No pattern given."
-        return 1
-    fi
+#     if ! [ "$PATTERN" ]; then
+#         echo "Error: No pattern given."
+#         return 1
+#     fi
 
     LOCATION=$2
 
@@ -124,7 +231,7 @@ function search {
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
 }
 
-function dsearch {
+function dsearch! {
     PATTERN=$1
     
     if ! [ "$PATTERN" ]; then
@@ -172,6 +279,20 @@ export DBUS_FORWARDING_TCP_MAX_LOCAL_PORT=10000
 export DBUS_ABSTRACT_SOCKET_TARGET_INDEX=1
 export DBUS_ABSTRACT_SOCKET_MAX_TARGET_INDEX=1000
 
+# Translates a path through from the current machine to the machine where the kdevelop instance
+# is running, so that the file can be accessed from there.
+function translatePath {
+    PATH=$1
+    
+    if [ "$FORWARD_DBUS_FROM_PORT" ]; then
+        # Step 1: Check if the file is accessible under the same path on the client machine
+        # TODO: Translate...
+        qdbus $KDEV_DBUS_ID 
+    else
+        echo $PATH
+    fi
+}
+
 function getDBusAbstractSocketSuffix {
     # From something like DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-wYmSkVH7FE,guid=b214dad39e0292a4299778d64d761a5b
     # extract the /tmp/dbus-wYmSkVH7FE
@@ -209,18 +330,18 @@ function keepForwardingDBusFromTCPSocket {
     $KDEV_BASEDIR/kdev_dbus_socket_transformer $FORWARD_DBUS_FROM_PORT $PATH&
 }
 
-function fssh {
-    echo "forwarding from $APPLICATION_HOST"
+function ssh! {
+#     echo "forwarding from $APPLICATION_HOST"
     keepForwardingDBusToTCPSocket # Should be automatically terminated when the function exits
-    echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
+#     echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
+#            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     kill %1 # Kill the forwarding loop
 }
 
 if [ "$FORWARD_DBUS_FROM_PORT" ]; then
-    echo "Initializing DBUS forwarding to host $APPLICATION_HOST"
+#     echo "Initializing DBUS forwarding to host $APPLICATION_HOST"
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}${DBUS_SOCKET_SUFFIX}
     keepForwardingDBusFromTCPSocket
 fi
@@ -228,7 +349,7 @@ fi
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 
 updateShellPrompt
-echo "Initialized"
 
-help
+# SHORT_HELP="1" help!
+echo "You are controlling the $APPLICATION session '$(getSessionName)'. Type help! for more information."
 
