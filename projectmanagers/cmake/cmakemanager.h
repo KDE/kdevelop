@@ -146,7 +146,7 @@ private:
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
-    QSet<KDevelop::ProjectFolderItem*> m_busyProjects;
+    QSet<KDevelop::IProject*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     

@@ -1400,11 +1400,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             QFile f(filename.toLocalFile());
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
                 return 1;
-            QString output;
-            while (!f.atEnd()) {
-                QByteArray line = f.readLine();
-                output += line;
-            }
+            QString output=f.readAll();
             m_vars->insert(file->variable(), QStringList(output));
             kDebug(9042) << "FileAst: read ";
         }
@@ -1417,29 +1413,12 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 if (expr.isEmpty())
                     continue;
                 QString pathPrefix;
-                if (QDir::isRelativePath(expr))
+                if (QDir::isRelativePath(expr) && pathPrefix.isEmpty())
                     pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-                // pathPrefix must start from '/' if not empty when calling traverseRecursiveGlob()
-                if (expr[0] == '/')
-                {
-                    //moving slash to pathPrefix (it should be empty before)
-                    expr = expr.mid(1);
-                    pathPrefix += '/';
-                }
-                else
-                {
-                    if (!pathPrefix.isEmpty())
-                        pathPrefix += '/';
-                }
-                if (file->type() == FileAst::Glob)
-                {
-                    matches.append(traverseGlob(pathPrefix, expr));
-                }
-                else
-                {
-                    matches.append(traverseGlob(pathPrefix, expr, true, file->isFollowingSymlinks()));
-                }
+                
+                matches.append(traverseGlob(pathPrefix, expr, file->type() == FileAst::GlobRecurse, file->isFollowingSymlinks()));
             }
+            
             if (!file->path().isEmpty())
             {
                 // RELATIVE was specified, so we need to make all paths relative to file->path()
@@ -1451,15 +1430,11 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 }
             }
             m_vars->insert(file->variable(), matches);
-            QString kind = file->type() == FileAst::Glob ? "file glob" : "file glob_recurse";
-            QString followSymlinksMsg;
-            QString relativeMsg;
-            if (file->type() == FileAst::GlobRecurse && file->isFollowingSymlinks())
-                followSymlinksMsg = " FOLLOW_SYMLINKS: true";
-            if (!file->path().isEmpty())
-                relativeMsg = " RELATIVE " + file->path();
-            kDebug(9042) << kind << relativeMsg << followSymlinksMsg << " " << file->globbingExpressions()
-                << ": " << matches;
+            
+            kDebug(9042) << "glob. recurse:" << (file->type() == FileAst::GlobRecurse)
+                         << "RELATIVE: " << file->path()
+                         << "FOLLOW_SYMLINKS: " << file->isFollowingSymlinks()
+                         << ", " << file->globbingExpressions() << ": " << matches;
         }
             break;
         case FileAst::Remove:
@@ -1519,7 +1494,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
 
-    QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    QDir dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
     QFileInfo fi(dir, filecomp->fileName());
 
     QString val;
@@ -1527,6 +1502,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     {
         case GetFilenameComponentAst::Path:
             val=fi.canonicalPath();
+            val=dir.relativeFilePath(val);
             break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
@@ -1538,7 +1514,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             val=fi.suffix();
             break;
         case GetFilenameComponentAst::NameWe:
-            val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
+            val=fi.baseName();
             break;
         case GetFilenameComponentAst::Program:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
@@ -2298,8 +2274,7 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     return ret;
 }
 
-QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath,
-    const QString& expression, bool recursive, bool followSymlinks)
+QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QString& expression, bool recursive, bool followSymlinks)
 {
     kDebug(9042) << "Starting from (" << startPath << ", " << expression << ", " << followSymlinks << ")";
     QString expr = expression;
