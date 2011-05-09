@@ -30,6 +30,7 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraph
 {
   public:
     typedef QVector<ControlFlowNode*>::const_iterator const_iterator;
+    ~ControlFlowGraph();
     
     void addEntry(ControlFlowNode* n);
     void addDeadNode(ControlFlowNode* n);

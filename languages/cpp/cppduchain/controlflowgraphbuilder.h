@@ -66,7 +66,7 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     KDevelop::ControlFlowNode* m_continueNode;
     
     KDevelop::ControlFlowNode* m_defaultNode;
-    QList<KDevelop::ControlFlowNode*> m_caseNodes;
+    QList<QPair<KDevelop::ControlFlowNode*, KDevelop::ControlFlowNode*> > m_caseNodes;
     QMap<KDevelop::IndexedString, KDevelop::ControlFlowNode*> m_taggedNodes;
     QMap<KDevelop::IndexedString, QList<KDevelop::ControlFlowNode*> > m_pendingGotoNodes;
 };

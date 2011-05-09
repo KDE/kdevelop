@@ -18,25 +18,46 @@
 
 #include "flowgraph.h"
 #include "flownode.h"
+#include <control.h>
 
 using namespace KDevelop;
+
+ControlFlowGraph::~ControlFlowGraph()
+{
+  clear();
+}
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)
 {
   m_graphNodes += n;
 }
 
-
 void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
 {
   m_deadNodes += n;
 }
 
+void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted)
+{
+  if(!node || deleted.contains(node))
+    return;
+  
+  deleted += node;
+  
+  clearNodeRecursively(node->m_next, deleted);
+  clearNodeRecursively(node->m_alternative, deleted);
+  
+  delete node;
+}
+
 void ControlFlowGraph::clear()
 {
-  //TODO: delete recursively!!
-  qDeleteAll(m_graphNodes);
-  qDeleteAll(m_deadNodes);
+  QSet<ControlFlowNode*> deleted;
+  foreach(ControlFlowNode* node, m_graphNodes)
+    clearNodeRecursively(node, deleted);
+  
+  foreach(ControlFlowNode* node, m_deadNodes)
+    clearNodeRecursively(node, deleted);
   
   m_graphNodes.clear();
   m_deadNodes.clear();

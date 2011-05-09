@@ -214,6 +214,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
   //here we create a node with the dead code
   ControlFlowNode* deadNode = new ControlFlowNode;
   deadNode->setStartCursor(m_currentNode->m_nodeRange.end);
+//   deadNode->setEndCursor(cursorForToken(node->end_token));
   m_currentNode=deadNode;
   m_graph->addDeadNode(deadNode);
 }
@@ -230,10 +231,10 @@ void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
   
   ControlFlowNode* switchNode = m_currentNode;
   switchNode->m_next = nextNode;
-  PushValue<QList<ControlFlowNode*> > pushCases(m_caseNodes, QList<ControlFlowNode*>() << switchNode);
+  PushValue<QList< QPair<ControlFlowNode*, ControlFlowNode*> > > pushCases(m_caseNodes, QList<QPair<ControlFlowNode*,ControlFlowNode*> > ());
   visit(node->statement);
   switchNode->m_next = m_defaultNode;
-  switchNode->m_alternative = m_caseNodes[1];
+  switchNode->m_alternative = m_caseNodes.isEmpty() ? 0 : m_caseNodes.first().first;
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
@@ -249,13 +250,15 @@ void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
     condNode->setStartCursor(cursorForToken(node->start_token));
     condNode->setEndCursor(cursorForToken(node->statement->start_token));
     
-    if(!m_caseNodes.last()->m_next->m_next) //if we didn't end the last case with a break, use this one
-      m_caseNodes.last()->m_next->m_next = condNode;
-    
-    m_caseNodes.last()->m_alternative = condNode;
-    m_caseNodes+=condNode;
-    
     condNode->m_next = createCompoundStatement(node->statement, 0);
+    
+    if(!m_caseNodes.isEmpty()) {
+      m_caseNodes.last().first->m_alternative = condNode;
+      if(!m_caseNodes.last().second->m_next)
+        m_caseNodes.last().second->m_next = condNode->m_next;
+    }
+    
+    m_caseNodes+=qMakePair(condNode, m_currentNode);
     
     if(token==Token_default)
       m_defaultNode = condNode;

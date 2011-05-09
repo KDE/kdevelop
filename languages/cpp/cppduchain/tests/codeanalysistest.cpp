@@ -129,7 +129,7 @@ class ControlFlowToDot
       QVector< ControlFlowNode* > deadNodes = graph->deadNodes();
       if(!deadNodes.isEmpty()) {
         *m_dev << "  subgraph cluster_"<< i <<"  {\n";
-        *m_dev << "\tlabel = \"Dead Nodes\";";
+        *m_dev << "\tlabel = \"Dead Nodes\";\n";
         foreach(ControlFlowNode* node, deadNodes) {
           *m_dev << '\t' << nodesName(node) << " [color=green]\n\n";
         }
@@ -170,16 +170,14 @@ private:
     QString nodesName(const ControlFlowNode* node) const
     {
       RangeInRevision range = node->m_nodeRange;
-      if(!node->m_next && !node->m_alternative && range.isEmpty())
+      if(!node->m_next && !node->m_alternative)
         return "Exit";
-      else {
-        if(range.isEmpty()) {
-          static int uniqueId=0;
-          return QString("dummy_%1").arg(uniqueId++);
-        } else {
-          int a=cursorToPos(range.start), b=cursorToPos(range.end);
-          return "\""+m_sources.mid(a, b-a)+"\"";
-        }
+      else if(range.isEmpty()) {
+        static int uniqueId=0;
+        return QString("dummy_%1").arg(uniqueId++);
+      } else {
+        int a=cursorToPos(range.start), b=cursorToPos(range.end);
+        return "\""+m_sources.mid(a, b-a)+"\"";
       }
     }
     
@@ -241,13 +239,14 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 5;
   QTest::newRow("for") << "int f(int a) { for(int i=0; i<a; i++) {i+=54;} return 0; }" << 6;
   QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: f(1); break; case 2: f(2); return; default: f(3); break; } f(4); }" << 9;
-  QTest::newRow("switch2") << "void f(int a) { switch(a) { case 1: f(-1); case 2: f(1); break; case 3: f(2); break;} f(666); }" << 8;
+  QTest::newRow("switch2") << "void f(int a) { switch(a) { case 1: f(-1); case 2: f(1); break; case 3: f(2); break; } f(666); }" << 9;
+  QTest::newRow("switch0") << "void f(int a) { switch(a) {} f(666); }" << 3;
   QTest::newRow("do-while") << "void f(int a) { do {a--; } while(a); }" << 5;
   
   QTest::newRow("loopbreak") << "void f(int i) { while(i) { if(i>20) break; } f(666); }" << 7;
   QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } f(666); }" << 7;
   
-  QTest::newRow("goto") << "void f(int i) { f(0); tag: f(1); if(i) goto tag; f(2); }" << 5;
+  QTest::newRow("goto") << "void f(int i) { f(0); tag: f(1); if(i) goto tag; f(2); f(1); }" << 5;
   QTest::newRow("goto2") << "void f(int i) { f(0); goto tag; f(1); if(i) f(3); tag: f(2); }" << 3;
   
   QTest::newRow("outside") << "enum {Result = 2 ? 1 : 3 };" << 4;
