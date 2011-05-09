@@ -109,12 +109,9 @@ install(FILES
     ipartcontroller.h
     ilaunchmode.h
     iprojectprovider.h
-<<<<<<< HEAD
     ilanguagecheck.h
     ilanguagecheckprovider.h
-=======
     ibuddydocumentfinder.h
->>>>>>> 4b1920a6c891574092edd343ff94c51bd94f4009
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
