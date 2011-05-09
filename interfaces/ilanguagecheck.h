@@ -31,7 +31,7 @@ class CheckData
 {
     public:
         KUrl url;
-        ReferencedTopDUContext top;
+        TopDUContext* top;
 };
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageCheck
