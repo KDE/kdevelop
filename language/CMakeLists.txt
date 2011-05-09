@@ -117,6 +117,10 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/colorcache.cpp
     highlighting/configurablecolors.cpp
     highlighting/codehighlighting.cpp
+
+    checks/dataaccessrepository.cpp
+    checks/flowgraph.cpp
+    checks/flownode.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -322,6 +326,13 @@ install(FILES
     highlighting/colorcache.h
     highlighting/configurablecolors.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
+)
+
+install(FILES
+    checks/dataaccessrepository.h
+    checks/flowgraph.h
+    checks/flownode.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/checks COMPONENT Devel
 )
 
 install(FILES
