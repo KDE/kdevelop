@@ -19,8 +19,8 @@
 #include "codeanalysistest.h"
 #include <QTest>
 #include <language/duchain/duchain.h>
-#include <flowgraph.h>
-#include <flownode.h>
+#include <language/checks/flowgraph.h>
+#include <language/checks/flownode.h>
 
 QTEST_MAIN(CodeAnalysisTest)
 

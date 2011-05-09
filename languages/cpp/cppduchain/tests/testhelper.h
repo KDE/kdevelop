@@ -25,8 +25,8 @@
 #include "dumpchain.h"
 #include "control.h"
 #include <language/duchain/duchainlock.h>
-#include "dataaccessrepository.h"
-#include <flowgraph.h>
+#include <language/checks/dataaccessrepository.h>
+#include <language/checks/flowgraph.h>
 
 namespace KDevelop {
 class TopDUContext;
