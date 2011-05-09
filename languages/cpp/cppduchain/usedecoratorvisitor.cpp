@@ -28,7 +28,7 @@
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/types/referencetype.h>
 #include <util/pushvalue.h>
-#include "dataaccessrepository.h"
+#include <language/checks/dataaccessrepository.h>
 
 using namespace KDevelop;
 

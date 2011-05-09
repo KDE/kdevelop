@@ -54,9 +54,6 @@ set(kdevcppduchain_LIB_SRCS
     navigation/macronavigationcontext.cpp
     
     controlflowgraphbuilder.cpp
-    dataaccessrepository.cpp
-    flownode.cpp
-    flowgraph.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

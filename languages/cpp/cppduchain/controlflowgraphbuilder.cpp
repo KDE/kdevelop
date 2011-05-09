@@ -17,8 +17,8 @@
 */
 
 #include "controlflowgraphbuilder.h"
-#include "flownode.h"
-#include "flowgraph.h"
+#include <language/checks/flownode.h>
+#include <language/checks/flowgraph.h>
 #include <parsesession.h>
 #include <lexer.h>
 #include <tokens.h>
