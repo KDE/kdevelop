@@ -18,8 +18,8 @@
 
 #ifndef MODIFICATIONSREPOSITORY_H
 #define MODIFICATIONSREPOSITORY_H
-#include <language/editor/simplecursor.h>
 #include <language/languageexport.h>
+#include <language/editor/cursorinrevision.h>
 
 namespace KDevelop
 {
@@ -31,10 +31,10 @@ class DataAccess
 {
     public:
         enum Flags { None=0, Read=1, Write=2 };
-        DataAccess(const SimpleCursor& cur, uint flags);
+        DataAccess(const CursorInRevision& cur, uint flags);
         
         uint m_flags;
-        KDevelop::SimpleCursor m_pos;
+        KDevelop::CursorInRevision m_pos;
         //SimpleRange value() const; //nomes per write?
         
         Declaration* declarationForDataAccess() const;
@@ -44,14 +44,14 @@ class DataAccess
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 {
     public:
+        ~DataAccessRepository() { clear(); }
         //Again, cursor/range?
-        void addModification(const KDevelop::SimpleCursor& cursor, uint flags);
+        void addModification(const KDevelop::CursorInRevision& cursor, uint flags);
       
-        void clear() { m_modifications.clear(); }
-        int count() const { return m_modifications.size(); }
-        const DataAccess& at(int i) const { return m_modifications.at(i); }
+        void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
+        
     private:
-        QList<DataAccess> m_modifications;
+        QList<DataAccess*> m_modifications;
 };
 
 }

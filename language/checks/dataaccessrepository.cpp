@@ -20,12 +20,12 @@
 
 namespace KDevelop {
 
-void DataAccessRepository::addModification(const KDevelop::SimpleCursor& cursor, uint flags)
+void DataAccessRepository::addModification(const KDevelop::CursorInRevision& cursor, uint flags)
 {
-    m_modifications.append(DataAccess(cursor, flags));
+    m_modifications.append(new DataAccess(cursor, flags));
 }
 
-DataAccess::DataAccess(const KDevelop::SimpleCursor& cur, uint flags)
+DataAccess::DataAccess(const KDevelop::CursorInRevision& cur, uint flags)
   : m_flags(flags), m_pos(cur)
 {}
 
