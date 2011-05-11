@@ -58,7 +58,6 @@ public:
     virtual bool removeFilesAndFolders( QList<ProjectBaseItem*> items);
     virtual bool renameFolder( ProjectFolderItem *folder, const KUrl& url );
     virtual bool renameFile( ProjectFileItem *file, const KUrl& url );
-    virtual bool moveFilesAndFolders ( QList< KDevelop::ProjectBaseItem* > items, KDevelop::ProjectFolderItem *newParent );
 
     virtual QList<ProjectFolderItem*> parse( ProjectFolderItem *item );
     virtual ProjectFolderItem *import( IProject *project );

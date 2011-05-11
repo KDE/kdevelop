@@ -510,12 +510,6 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(QList<ProjectBaseItem*> it
     return success;
 }
 
-bool AbstractFileManagerPlugin::moveFilesAndFolders(QList< ProjectBaseItem* > items, ProjectFolderItem* newParent)
-{
-    qDebug() << "Implement me";
-    return false;
-}
-
 bool AbstractFileManagerPlugin::isValid( const KUrl& /*url*/, const bool /*isFolder*/,
                                          IProject* /*project*/ ) const
 {

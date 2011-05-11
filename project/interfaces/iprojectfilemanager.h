@@ -117,7 +117,7 @@ public:
      * Removes the files or folders specified by @p items and
      * modifies the underlying build system if needed.
      *
-     * Note: Do not attempt to move subitems along with their parents
+     * Note: Do not attempt to remove subitems along with their parents
      */
     virtual bool removeFilesAndFolders( QList<ProjectBaseItem*> items) = 0;
 
