@@ -15,7 +15,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
-#include <../kdevplatform/shell/project.h>
 
 template <typename T> class QList;
 class QString;
