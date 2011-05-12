@@ -27,7 +27,7 @@
 using namespace KDevelop;
 QString nodeToString(ParseSession* s, AST* node);
 
-ControlFlowGraphBuilder::ControlFlowGraphBuilder(ParseSession* session, ControlFlowGraph* graph)
+ControlFlowGraphBuilder::ControlFlowGraphBuilder(const ParseSession* session, ControlFlowGraph* graph)
   : m_session(session)
   , m_graph(graph)
   , m_currentNode(0)

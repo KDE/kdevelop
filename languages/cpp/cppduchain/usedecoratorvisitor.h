@@ -31,7 +31,7 @@ class DataAccessRepository;
 class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
 {
   public:
-    UseDecoratorVisitor(ParseSession* session, KDevelop::DataAccessRepository* repo);
+    UseDecoratorVisitor(const ParseSession* session, KDevelop::DataAccessRepository* repo);
     
     void run(AST* node);
   protected:
@@ -74,7 +74,7 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
     
   private:
-    ParseSession* m_session;
+    const ParseSession* m_session;
     QStack< QList<KDevelop::AbstractType::Ptr> > m_callStack;
     QStack<int> m_argStack;
     KDevelop::DUContext* m_currentContext;

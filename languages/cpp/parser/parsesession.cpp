@@ -124,7 +124,7 @@ AST* ParseSession::parentAstNode(AST* node)
   return m_AstToParent.value(node, 0);
 }
 
-KDevelop::FunctionType::Ptr ParseSession::typeFromCallAst(AST* ast)
+KDevelop::FunctionType::Ptr ParseSession::typeFromCallAst(AST* ast) const
 {
   return m_AstToType.value(ast);
 }

@@ -63,6 +63,10 @@
 #include "includepathcomputer.h"
 #include <interfaces/iuicontroller.h>
 #include <cpppreprocessenvironment.h>
+#include <language/checks/dataaccessrepository.h>
+#include <language/checks/flowgraph.h>
+#include <controlflowgraphbuilder.h>
+#include <usedecoratorvisitor.h>
 
 //#define DUMP_AST
 //#define DUMP_DUCHAIN
@@ -970,6 +974,22 @@ TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
 
     //The selected minimum features are required on all imported contexts recursively
     return (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::Recursive);
+}
+
+QSharedPointer<ControlFlowGraph> CPPParseJob::controlFlowGraph()
+{
+  QSharedPointer<ControlFlowGraph> ret;
+  ControlFlowGraphBuilder flowvisitor(m_session.data(), ret.data());
+  flowvisitor.run(m_session->topAstNode());
+  return ret;
+}
+
+QSharedPointer<DataAccessRepository> CPPParseJob::dataAccessInformation()
+{
+  QSharedPointer<DataAccessRepository> ret;
+  UseDecoratorVisitor visit(m_session.data(), ret.data());
+  visit.run(m_session->topAstNode());
+  return ret;
 }
 
 #include "cppparsejob.moc"

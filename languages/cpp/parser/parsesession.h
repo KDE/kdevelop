@@ -90,7 +90,7 @@ public:
 
   AST * astNodeFromUse(const SimpleUse &use) const;
   
-  KDevelop::FunctionType::Ptr typeFromCallAst(AST* ast);
+  KDevelop::FunctionType::Ptr typeFromCallAst(AST* ast) const;
 
   /**
    * \brief Access the parent node for a given AST.

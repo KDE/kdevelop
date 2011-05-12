@@ -32,7 +32,7 @@
 
 using namespace KDevelop;
 
-QString nodeToString(ParseSession* s, AST* node)
+QString nodeToString(const ParseSession* s, AST* node)
 {
   QString ret;
   if(!node) { return "<null>";}
@@ -46,7 +46,7 @@ QString nodeToString(ParseSession* s, AST* node)
 #define LOCKDUCHAIN     DUChainWriteLocker lock(DUChain::lock())
 typedef PushPositiveValue<DUContext*> PushPositiveContext;
 
-UseDecoratorVisitor::UseDecoratorVisitor(ParseSession* session, DataAccessRepository* repo)
+UseDecoratorVisitor::UseDecoratorVisitor(const ParseSession* session, DataAccessRepository* repo)
   : m_session(session), m_defaultFlags(DataAccess::Read), m_mods(repo)
 {}
 
@@ -77,7 +77,7 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
     if(type->whichType()==AbstractType::TypeReference && !(type.cast<ReferenceType>() && type.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier)) {
       f |= DataAccess::Write;
     }
-    m_mods->addModification(cursor.castToSimpleCursor(), f);
+    m_mods->addModification(cursor, f);
   }
   
   //further visit
@@ -336,7 +336,7 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
     visit(node->initializer);
     
     CursorInRevision cursor = m_session->positionAt( m_session->token_stream->position(node->declarator->start_token) );
-    m_mods->addModification(cursor.castToSimpleCursor(), DataAccess::Write);
+    m_mods->addModification(cursor, DataAccess::Write);
   }
 }
 

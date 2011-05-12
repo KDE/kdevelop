@@ -33,7 +33,7 @@ class IndexedString;
 class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
 {
   public:
-    ControlFlowGraphBuilder(ParseSession* session, KDevelop::ControlFlowGraph* graph);
+    ControlFlowGraphBuilder(const ParseSession* session, KDevelop::ControlFlowGraph* graph);
     virtual ~ControlFlowGraphBuilder();
     
     void run(AST* node);
@@ -57,7 +57,7 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);
     KDevelop::CursorInRevision cursorForToken(uint token);
     
-    ParseSession* m_session;
+    const ParseSession* m_session;
     KDevelop::ControlFlowGraph* m_graph;
     KDevelop::ControlFlowNode* m_currentNode;
     

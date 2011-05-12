@@ -47,12 +47,12 @@ void CodeAnalysisTest::testUseReadWrite()
   
   DataAccessRepository* repo = &m_modifications;
   
-  QCOMPARE(repo->count(), modFlags.size());
+  QCOMPARE(repo->modifications().count(), modFlags.size());
   
   int i=0;
   foreach(const QVariant& f, modFlags) {
-    qDebug() << "flags" << repo->at(i).m_flags << f;
-    QCOMPARE(repo->at(i).m_flags, f.toUInt());
+    qDebug() << "flags" << repo->modifications().at(i)->m_flags << f;
+    QCOMPARE(repo->modifications().at(i)->m_flags, f.toUInt());
     
     i++;
   }
@@ -120,7 +120,7 @@ class ControlFlowToDot
       bool r = true;
       int i=0;
       *m_dev << "digraph G {\n";
-      for(KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd(); it!=itEnd; ++it, ++i) {
+      for(KDevelop::ControlFlowGraph::const_iterator it=graph->graphNodes().constBegin(), itEnd=graph->graphNodes().constEnd(); it!=itEnd; ++it, ++i) {
         *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
         r &= exportNode(*it);
         *m_dev << "  }\n";
@@ -208,7 +208,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   
-  KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd();
+  KDevelop::ControlFlowGraph::const_iterator it=graph->graphNodes().constBegin(), itEnd=graph->graphNodes().constEnd();
   QSet<ControlFlowNode*> visited;
   int entries=0;
   for(; it!=itEnd; ++it, ++entries)
