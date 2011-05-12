@@ -49,7 +49,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
         void addModification(const KDevelop::CursorInRevision& cursor, uint flags);
       
         void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
-        
+        QList<DataAccess*> modifications() const { return m_modifications; }
     private:
         QList<DataAccess*> m_modifications;
 };

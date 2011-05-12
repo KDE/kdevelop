@@ -29,6 +29,11 @@ DataAccess::DataAccess(const KDevelop::CursorInRevision& cur, uint flags)
   : m_flags(flags), m_pos(cur)
 {}
 
+Declaration* DataAccess::declarationForDataAccess() const
+{
+    Q_ASSERT(false && "TODO!!!!");
+    return 0;
+}
 
 }
 

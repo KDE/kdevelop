@@ -36,12 +36,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
     void addDeadNode(ControlFlowNode* n);
     void clear();
     
-    const_iterator constBegin() const { return m_graphNodes.constBegin(); }
-    const_iterator constEnd() const { return m_graphNodes.constEnd(); }
-    
+    QList<ControlFlowNode*> graphNodes() const { return m_graphNodes; }
     QVector<ControlFlowNode*> deadNodes() const { return m_deadNodes; }
   private:
-    QVector<ControlFlowNode*> m_graphNodes;
+    QList<ControlFlowNode*> m_graphNodes;
     QVector<ControlFlowNode*> m_deadNodes;
 };
 
