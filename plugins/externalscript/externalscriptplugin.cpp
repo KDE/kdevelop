@@ -183,6 +183,8 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setPerformParameterReplacement(false);
   kDebug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
   ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, const_cast<ExternalScriptPlugin*>(this) );
+  // When a command is executed, for example through the terminal, we don't want the command output to be risen
+  job->setVerbosity(KDevelop::OutputJob::Silent);
   
   KDevelop::ICore::self()->runController()->registerJob( job );
   return true;

@@ -249,16 +249,17 @@ function cexec! {
             
             if [[ "$FILE" == fish://* ]]; then
                 # Add a prefix to copy the file into a temporary file
-                PREFIX+="TMP$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$TMP$TMP;"
+                # Keep the baseline as suffix, so that applications can easily recognize the mimetype
+                PREFIX+="FILE$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$FILE$TMP;"
                 # Use the temporary variable instead of the name 
-                FILE="\$TMP$TMP"
+                FILE="\$FILE$TMP"
                 TMP=$(($TMP+1))
             fi
             
             ARGS=$ARGS" "$FILE
         fi
     done
-    echo "Executing: " $PREFIX $ARGS
+    echo "Executing: " $ARGS
     executeInApp "$PREFIX $ARGS"
 }
 
