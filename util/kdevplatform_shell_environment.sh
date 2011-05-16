@@ -137,6 +137,18 @@ function executeInApp {
     fi
 }
 
+# First argument: The full command. Second argument: The working directory.
+# Executes the command silently and synchronously, and returns the output
+function executeInAppSync {
+    local CMD=$1
+    local WD=$2
+    if ! [ "$WD" ]; then
+        WD=$(pwd)
+    fi
+    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommandSync "$CMD" "$WD")
+    echo "$RESULT"
+}
+
 # Getter functions:
 
 function getActiveDocument {
@@ -197,13 +209,28 @@ function sync! {
         elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # This session is being forwarded to another machine, but the current document is not
             # However, we won't complain, because it's possible that the machines share the same file-system
-            # TODO: Check this
-            echo "The host machine does not match"
+            if [ $(isEqualFileOnHostAndClient $P) != "yes" ]; then
+                echo "Cannot synchronize the working directory, because the file systems do not match"
+                return
+            fi
         fi
         
         cd $(dirname $P)
     else
         echo "Got no path"
+    fi
+}
+
+# Take a path, and returns "yes" if the equal file is available on the host and the client
+# The check is performed by comparing inode-numbers
+function isEqualFileOnHostAndClient {
+    FILE=$1
+    INODE_HOST=$(ls -i $FILE | cut -d' ' -f1)
+    INODE_CLIENT=$(executeInAppSync "ls -i $FILE | cut -d' ' -f1" "$(dirname $FILE)")
+    if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
+        echo "yes"
+    else
+        echo ""
     fi
 }
 
@@ -216,28 +243,18 @@ function mapFileToClient {
         FILE=$RELATIVE_FILE
     else
         # We are referencing an absolute file, available on the file-system.
-        # If we are forwarding, map it to the client somehow.
-        # TODO: Map through fish protocol, or whatever. Check whether the same file is available
-        #       on the client machine at the same path first.
-        
-        # Step 1. Check if the same filesystem is available at the client at the same path. If yes: Do nothing
-        # We check by simple comparing the inode number.
-        INODE=$(ls -i $FILE | cut -d' ' -f1)
-        
-        # 2. Check if the we have a valid ssh-map rule, if yes, use that one (TODO: Make this optional).
-        # 3. Copy the file as a read-only copy to the client.
         
         if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
-            # We can eventually map the file using the fish protocol
-            if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
-                # We can only map through fish if the forward-chains contains no comma, which means that
-                # we forward only once.
-                FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+            # If we are forwarding, map it to the client somehow.
+            if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
+                    # We can eventually map the file using the fish protocol
+                    if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
+                        # We can only map through fish if the forward-chains contains no comma, which means that
+                        # we forward only once.
+                        FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+                    fi
             fi
         fi
-        
-        FILE=$FILE
-        
     fi
     echo $FILE
 }
