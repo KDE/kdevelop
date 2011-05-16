@@ -51,14 +51,18 @@ function help! {
     echo "raise!                                 - Raise the window."
     fi
     echo "sync!                                  - Synchronize the working directory with the currently open document."
-    echo "open!   [file] ...                     - Open the file(s)."
+    echo "open!   [file] ...                     - Open the file(s) within the attached application."
+    echo "eopen!  [file] ...                     - Open the file(s) within an external application using kde-open."
     echo "create!  [file] [[text]]               - Create and open a new file."
     echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
     echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
     if ! [ "$SHORT_HELP" ]; then
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
     echo "                                       - The whole dbus environment will be forwarded, KDevelop needs to be installed on both sides."
-    echo "exec!  [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
+    echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files."
+    echo "                                       - The file paths will be re-encoded as fish:// urls as required."
+    echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
+    echo "                                       - The files will be COPIED to the client machine as required."
     fi
     echo "help!                                  - Show extended help."
     if ! [ "$SHORT_HELP" ]; then
@@ -82,8 +86,16 @@ function o! {
     open! $@
 }
 
+function eo! {
+    eopen! $@
+}
+
 function e! {
     exec! $@
+}
+
+function ce! {
+    cexec! $@
 }
 
 function c! {
@@ -199,6 +211,14 @@ function open! {
     done
 }
 
+function eopen! {
+    FILES=$@
+    for RELATIVE_FILE in $FILES; do
+        FILE=$(mapFileToClient $RELATIVE_FILE)
+        executeInApp "kde-open $FILE"
+    done
+}
+
 function exec! {
     FILES=$@
     ARGS=""
@@ -213,6 +233,33 @@ function exec! {
     done
     echo "Executing: " $ARGS
     executeInApp "$ARGS"
+}
+
+function cexec! {
+    FILES=$@
+    ARGS=""
+    PREFIX=""
+    TMP=1
+    for RELATIVE_FILE in $FILES; do
+        if [ "$ARGS" == "" ]; then
+            # Do not transform the command-name
+            ARGS=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+            
+            if [[ "$FILE" == fish://* ]]; then
+                # Add a prefix to copy the file into a temporary file
+                PREFIX+="TMP$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$TMP$TMP;"
+                # Use the temporary variable instead of the name 
+                FILE="\$TMP$TMP"
+                TMP=$(($TMP+1))
+            fi
+            
+            ARGS=$ARGS" "$FILE
+        fi
+    done
+    echo "Executing: " $PREFIX $ARGS
+    executeInApp "$PREFIX $ARGS"
 }
 
 function create! {
