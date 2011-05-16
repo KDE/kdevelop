@@ -98,6 +98,10 @@ function ds! {
     dsearch! $@
 }
 
+function h! {
+    help! $@
+}
+
 # Internals:
 
 function openDocument {
