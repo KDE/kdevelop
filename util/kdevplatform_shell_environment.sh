@@ -158,7 +158,7 @@ function sync! {
 function mapFileToClient {
     local RELATIVE_FILE=$1
     FILE=$(readlink -f $RELATIVE_FILE)
-    if ! [ "$FILE" ]; then
+    if ! [ -e "$FILE" ]; then
         # Try opening the file anyway, it might be an url or something else we don't understand here
         FILE=$RELATIVE_FILE
     else
@@ -166,6 +166,24 @@ function mapFileToClient {
         # If we are forwarding, map it to the client somehow.
         # TODO: Map through fish protocol, or whatever. Check whether the same file is available
         #       on the client machine at the same path first.
+        
+        # Step 1. Check if the same filesystem is available at the client at the same path. If yes: Do nothing
+        # We check by simple comparing the inode number.
+        INODE=$(ls -i $FILE | cut -d' ' -f1)
+        
+        # 2. Check if the we have a valid ssh-map rule, if yes, use that one (TODO: Make this optional).
+        # 3. Copy the file as a read-only copy to the client.
+        
+        if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+            # We can eventually map the file using the fish protocol
+            # TODO: Make this optional
+            if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
+                # We can only map through fish if the forward-chains contains no comma, which means that
+                # we forward only once.
+                FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+            fi
+        fi
+        
         FILE=$FILE
         
     fi
@@ -185,11 +203,16 @@ function exec! {
     FILES=$@
     ARGS=""
     for RELATIVE_FILE in $FILES; do
-        FILE=$(mapFileToClient $RELATIVE_FILE)
-        ARGS=$ARGS" "$FILE
+        if [ "$ARGS" == "" ]; then
+            # Do not transform the command-name
+            ARGS=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+            ARGS=$ARGS" "$FILE
+        fi
     done
-    echo "execute args: " $ARGS
-    executeInApp "$FILES"
+    echo "Executing: " $ARGS
+    executeInApp "$ARGS"
 }
 
 function create! {
@@ -283,17 +306,60 @@ export DBUS_FORWARDING_TCP_MAX_LOCAL_PORT=10000
 export DBUS_ABSTRACT_SOCKET_TARGET_INDEX=1
 export DBUS_ABSTRACT_SOCKET_MAX_TARGET_INDEX=1000
 
-# Translates a path through from the current machine to the machine where the kdevelop instance
-# is running, so that the file can be accessed from there.
-function translatePath {
-    PATH=$1
-    
-    if [ "$FORWARD_DBUS_FROM_PORT" ]; then
-        # Step 1: Check if the file is accessible under the same path on the client machine
-        # TODO: Translate...
-        qdbus $KDEV_DBUS_ID 
+function getPortFromSSHCommand {
+    # The port is given to ssh exclusively in the format "-p PORT"
+    # This regular expression extracts the "4821" from "ssh -q bla1 -p 4821 bla2"
+    local ARGS=$@
+    local RET=$(echo "$@" | sed "s/.*-p \+\([0-9]*\).*/\1/")
+    if [ "$ARGS" == "$RET" ]; then
+        # There was no match
+        echo ""
     else
-        echo $PATH
+        echo ":$RET"
+    fi
+}
+
+function getLoginFromSSHCommand {
+    # The login name can be given to ssh in the format "-l NAME"
+    # This regular expression extracts the "NAME" from "ssh -q bla1 -l NAME bla2"
+    local ARGS=$@
+    local RET=$(echo "$ARGS" | sed "s/.*-l \+\([a-z,A-Z,_,0-9]*\).*/\1/")
+    if [ "$RET" == "$ARGS" ] || [ "$RET" == "" ]; then
+        # There was no match
+        echo ""
+    else
+        echo "$RET@"
+    fi
+}
+
+function getHostFromSSHCommand {
+    # This regular expression extracts the "bla2" from "echo "ssh -q bla1 -p 4821 bla2"
+    # Specifically, it finds the first argument which is not preceded by a "-x" parameter kind specification.
+    
+    local CLEANED=""
+    local NEWCLEANED="$@"
+
+    while ! [ "$NEWCLEANED" == "$CLEANED" ]; do
+        CLEANED="$NEWCLEANED"
+    # This expression removes one "-x ARG" parameter
+        NEWCLEANED="$(echo $CLEANED | sed "s/\(.*\)\(-[a-z,A-Z] \+[a-z,0-9]*\)\ \(.*\)/\1\3/")"
+    done
+
+    # After cleaning, the result should only consist of the host-name followed by an optional command.
+    # Select the host-name, by extracting the forst column.
+    echo $CLEANED | cut --delimiter=" " -f 1
+}
+
+function getSSHForwardOptionsFromCommand {
+    
+    HOST="$(getLoginFromSSHCommand "$@")$(getHostFromSSHCommand "$@")$(getPortFromSSHCommand "$@")"
+    
+    if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+        # We are already forwarding, so we deal with a chain of multiple ssh commands.
+        # We still record it, although it's not sure if we can use it somehow.
+        echo "KDEV_SSH_FORWARD_CHAIN=\"$KDEV_SSH_FORWARD_CHAIN,$HOST\"";
+    else
+        echo "KDEV_SSH_FORWARD_CHAIN=$HOST"
     fi
 }
 
@@ -340,7 +406,7 @@ function ssh! {
 #     echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
 #            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
+           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) $(getSSHForwardOptionsFromCommand "$@") bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     kill %1 # Kill the forwarding loop
 }
 
