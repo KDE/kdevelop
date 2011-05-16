@@ -58,7 +58,8 @@ function help! {
     echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
     if ! [ "$SHORT_HELP" ]; then
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
-    echo "                                       - The whole dbus environment will be forwarded, KDevelop needs to be installed on both sides."
+    echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
+    echo "ssw!  [ssh arguments]                  - Like ssh!, but preserves the current working directory."
     echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files."
     echo "                                       - The file paths will be re-encoded as fish:// urls as required."
     echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
@@ -160,6 +161,46 @@ function raise! {
 function sync! {
     local P=$(getActiveDocument)
     if [ "$P" ]; then
+        
+        if [[ "$P" == fish://* ]]; then
+            # This regular expression filters the user@host:port out of fish:///user@host:port/path/...
+            LOGIN=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\1/")
+            P_ON_HOST=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\2/")
+            if [ "$KDEV_SSH_FORWARD_CHAIN" == "$LOGIN" ]; then
+                P="$P_ON_HOST"
+            else
+                if [ "$KDEV_SSH_FORWARD_CHAIN" == "" ]; then
+                    # Try to ssh to the host machine
+                    # We need to split away the optional ":port" suffix, because the ssh command does not allow that syntax
+                    HOST=$(echo $LOGIN | cut --delimiter=':' -f 1)
+
+                    CMD="ssh!"
+
+                    if [[ "$LOGIN" == *:* ]]; then
+                        # If there is a port, extract it
+                        PORT=$(echo $LOGIN | cut --delimiter=':' -f 2)
+                        CMD="$CMD -p $PORT"
+                    fi
+                    
+                    CMD="$CMD $HOST"
+                    # Execute the ssh command
+                    echo "Executing $CMD"
+                    KDEV_WORKING_DIR="$(dirname $P_ON_HOST)"
+                    $CMD
+                    return
+                else
+                    echo "Cannot synchronize the working directory, because the host-names do not match (app: $LOGIN, shell: $KDEV_SSH_FORWARD_CHAIN)"
+                    return
+                fi
+            fi
+            
+        elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+            # This session is being forwarded to another machine, but the current document is not
+            # However, we won't complain, because it's possible that the machines share the same file-system
+            # TODO: Check this
+            echo "The host machine does not match"
+        fi
+        
         cd $(dirname $P)
     else
         echo "Got no path"
@@ -188,7 +229,6 @@ function mapFileToClient {
         
         if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # We can eventually map the file using the fish protocol
-            # TODO: Make this optional
             if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
                 # We can only map through fish if the forward-chains contains no comma, which means that
                 # we forward only once.
@@ -454,8 +494,14 @@ function ssh! {
 #     echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
 #            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) $(getSSHForwardOptionsFromCommand "$@") bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
+           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST KDEV_WORKING_DIR=$KDEV_WORKING_DIR DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) $(getSSHForwardOptionsFromCommand "$@") bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
     kill %1 # Kill the forwarding loop
+}
+
+# A version of ssh! that preserves the current working directory
+function ssw! {
+    KDEV_WORKING_DIR=$(pwd)
+    ssh! $@
 }
 
 if [ "$FORWARD_DBUS_FROM_PORT" ]; then
@@ -471,3 +517,6 @@ updateShellPrompt
 # SHORT_HELP="1" help!
 echo "You are controlling the $APPLICATION session '$(getSessionName)'. Type help! for more information."
 
+if [ "$KDEV_WORKING_DIR" ]; then
+    cd $KDEV_WORKING_DIR
+fi
