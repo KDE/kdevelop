@@ -20,8 +20,6 @@
 
 source ~/.bashrc
 
-export BASE_SHELL_PROMPT=$PS1
-
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
 fi
@@ -31,45 +29,54 @@ if ! [ "$KDEV_DBUS_ID" ]; then
     exit 5
 fi
 
+# Eventually, if we are forwarding to another host, and kdevplatform_shell_environment.sh
+# has been located through "which kdevplatform_shell_environment.sh", then we need to update KDEV_BASEDIR.
+if ! [ -e "KDEV_BASEDIR/kdevplatform_shell_environment.sh" ]; then
+    KDEV_BASEDIR=$(dirname $(which kdevplatform_shell_environment.sh))
+fi
+
+if ! [ -e "$KDEV_BASEDIR/kdev_dbus_socket_transformer" ]; then
+    echo "The $KDEV_BASEDIR/kdev_dbus_socket_transformer utility is missing, controlling the application across ssh is not possible"
+fi
+
+# Takes a list of tools, and prints a warning of one of them is not available in the path
+function checkToolsInPath {
+    for TOOL in $@; do
+        if ! [ "$(which $TOOL 2> /dev/null)" ]; then
+            echo "The utility $TOOL is not in your path, the shell integration will not work properly."
+        fi
+    done
+}
+
+# Check if all required tools are there
+checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname kioclient
+
+# Queries the session name from the running application instance
 function getSessionName {
     echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
 }
 
-function updateShellPrompt {
-    # Makes the shell prompt show the current name of this session
-#     SESSION_NAME=$(getSessionName)
-    PS1="!$BASE_SHELL_PROMPT" # Just somehow set a mark that this session is attached
-}
-
 function help! {
-    if ! [ "$SHORT_HELP" ]; then
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    fi
     echo "Commands:"
-    if ! [ "$SHORT_HELP" ]; then
     echo "raise!                                 - Raise the window."
-    fi
     echo "sync!                                  - Synchronize the working directory with the currently open document."
     echo "open!   [file] ...                     - Open the file(s) within the attached application."
     echo "eopen!  [file] ...                     - Open the file(s) within an external application using kde-open."
     echo "create!  [file] [[text]]               - Create and open a new file."
     echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
     echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
-    if ! [ "$SHORT_HELP" ]; then
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
     echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
     echo "ssw!  [ssh arguments]                  - Like ssh!, but preserves the current working directory."
     echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files."
-    echo "                                       - The file paths will be re-encoded as fish:// urls as required."
+    echo "                                       - The file paths will be re-encoded as fish:// urls if required."
     echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
-    echo "                                       - The files will be COPIED to the client machine as required."
-    fi
+    echo "                                       - The files will be COPIED to the client machine if required."
     echo "help!                                  - Show extended help."
-    if ! [ "$SHORT_HELP" ]; then
     echo ""
     echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
-    fi
     echo ""
 }
 
@@ -117,6 +124,7 @@ function h! {
 
 # Internals:
 
+# Opens a document in internally in the application
 function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
     if ! [ "$RESULT" == "true" ]; then
@@ -124,6 +132,7 @@ function openDocument {
     fi
 }
 
+# Executes a command on the client machine using the custom-script integration.
 # First argument: The full command. Second argument: The working directory.
 function executeInApp {
     local CMD=$1
@@ -506,13 +515,26 @@ function keepForwardingDBusFromTCPSocket {
 }
 
 function ssh! {
-#     echo "forwarding from $APPLICATION_HOST"
-    keepForwardingDBusToTCPSocket # Should be automatically terminated when the function exits
-#     echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-#            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
+    keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
+    
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST KDEV_WORKING_DIR=$KDEV_WORKING_DIR DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) $(getSSHForwardOptionsFromCommand "$@") bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
-    kill %1 # Kill the forwarding loop
+          "APPLICATION=$APPLICATION \
+           KDEV_BASEDIR=$KDEV_BASEDIR \
+           KDEV_DBUS_ID=$KDEV_DBUS_ID \
+           FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT \
+           APPLICATION_HOST=$APPLICATION_HOST \
+           KDEV_WORKING_DIR=$KDEV_WORKING_DIR \
+           DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) \
+           $(getSSHForwardOptionsFromCommand "$@") \
+              bash --init-file \
+                        \$(if [ -e "$KDEV_BASEDIR/kdevplatform_shell_elnvironment.sh" ]; \
+                                then echo "$KDEV_BASEDIR/kdevplatform_shell_environment.sh"; \
+                           else \
+                                echo \$(which kdevplatform_shell_environment.sh); \
+                           fi) \
+                   -i"
+    
+    kill %1 # Stop the dbus forwarding subprocess
 }
 
 # A version of ssh! that preserves the current working directory
@@ -522,16 +544,16 @@ function ssw! {
 }
 
 if [ "$FORWARD_DBUS_FROM_PORT" ]; then
-#     echo "Initializing DBUS forwarding to host $APPLICATION_HOST"
+    # Start the target-side dbus forwarding, transforming from the ssh pipe to the abstract unix domain socket
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}${DBUS_SOCKET_SUFFIX}
     keepForwardingDBusFromTCPSocket
 fi
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 
-updateShellPrompt
+# Mark that this session is attached, by prepending a '!' character
+PS1="!$PS1"
 
-# SHORT_HELP="1" help!
 echo "You are controlling the $APPLICATION session '$(getSessionName)'. Type help! for more information."
 
 if [ "$KDEV_WORKING_DIR" ]; then
