@@ -31,7 +31,7 @@ fi
 
 # Eventually, if we are forwarding to another host, and kdevplatform_shell_environment.sh
 # has been located through "which kdevplatform_shell_environment.sh", then we need to update KDEV_BASEDIR.
-if ! [ -e "KDEV_BASEDIR/kdevplatform_shell_environment.sh" ]; then
+if ! [ -e "$KDEV_BASEDIR/kdevplatform_shell_environment.sh" ]; then
     KDEV_BASEDIR=$(dirname $(which kdevplatform_shell_environment.sh))
 fi
 
@@ -48,8 +48,13 @@ function checkToolsInPath {
     done
 }
 
-# Check if all required tools are there
-checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname kioclient
+# Check if all required tools are there (on the host machine)
+checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname
+
+if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+    # Check for additional utilities that are required on the client machine
+    checkToolsInPath kioclient
+fi
 
 # Queries the session name from the running application instance
 function getSessionName {
@@ -340,7 +345,8 @@ function create! {
         return 2
     fi
     echo $2 > $FILE
-    openDocument $FILE
+    
+    openDocument $(mapFileToClient $FILE)
 }
 
 function search! {
@@ -357,7 +363,7 @@ function search! {
         LOCATION="."
     fi
     
-    LOCATION=$(readlink -f $LOCATION)
+    LOCATION=$(mapFileToClient $LOCATION)
     
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
@@ -366,7 +372,7 @@ function search! {
         if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(readlink -f $LOC)"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
     
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
@@ -386,7 +392,7 @@ function dsearch! {
         LOCATION="."
     fi
     
-    LOCATION=$(readlink -f $LOCATION)
+    LOCATION=$(mapFileToClient $LOCATION)
     
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
@@ -395,7 +401,7 @@ function dsearch! {
         if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(readlink -f $LOC)"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
     
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
@@ -518,7 +524,7 @@ function ssh! {
     keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
     
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-          "APPLICATION=$APPLICATION \
+         " APPLICATION=$APPLICATION \
            KDEV_BASEDIR=$KDEV_BASEDIR \
            KDEV_DBUS_ID=$KDEV_DBUS_ID \
            FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT \
@@ -527,12 +533,16 @@ function ssh! {
            DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) \
            $(getSSHForwardOptionsFromCommand "$@") \
               bash --init-file \
-                        \$(if [ -e "$KDEV_BASEDIR/kdevplatform_shell_elnvironment.sh" ]; \
-                                then echo "$KDEV_BASEDIR/kdevplatform_shell_environment.sh"; \
+                        \$(if [ -e \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\" ]; \
+                                then echo \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\"; \
+                           elif [ -e \"$(which kdevplatform_shell_environment.sh)\" ]; then
+                                echo \"$(which kdevplatform_shell_environment.sh)\"; \
                            else \
-                                echo \$(which kdevplatform_shell_environment.sh); \
+                                echo \"~/.kdevplatform_shell_environment.sh\"; \
                            fi) \
                    -i"
+
+
     
     kill %1 # Stop the dbus forwarding subprocess
 }

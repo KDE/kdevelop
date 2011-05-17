@@ -18,8 +18,6 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <QString>
-#include <QLocalSocket>
 #include <iostream>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -223,22 +221,22 @@ int main(int argc, char** argv)
     
     bool waitForClients = true;
     
-    if(QString(argv[argc-1]) == "--bind-only")
+    if(std::string(argv[argc-1]) == "--bind-only")
     {
         waitForClients = false;
         argc -= 1;
     }
 
-    QString dbusAddress(getenv("DBUS_SESSION_BUS_ADDRESS"));
+    std::string dbusAddress(getenv("DBUS_SESSION_BUS_ADDRESS"));
 
-    QString path;
+    std::string path;
     
     if(argc == 2)
     {
         if(waitForClients && debug)
-            std::cout << "forwarding from the local TCP port " << argv[1] << " to the local DBUS session at " << dbusAddress.toLocal8Bit().data() << std::endl;
+            std::cout << "forwarding from the local TCP port " << argv[1] << " to the local DBUS session at " << dbusAddress.data() << std::endl;
         
-        if(dbusAddress.isEmpty())
+        if(dbusAddress.empty())
         {
             std::cerr << "The DBUS_SESSION_BUS_ADDRESS environment variable is not set" << std::endl;
             return 1;
@@ -246,17 +244,17 @@ int main(int argc, char** argv)
         
         // Open a TCP server
         
-        QString abstractPrefix("unix:abstract=");
+        std::string abstractPrefix("unix:abstract=");
         
-        if(!dbusAddress.startsWith(abstractPrefix))
+        if(dbusAddress.substr(0, abstractPrefix.size()) != abstractPrefix)
         {
             std::cerr << "DBUS_SESSION_BUS_ADDRESS does not seem to use an abstract unix domain socket as expected" << std::endl;
             return 2;
         }
         
-        path = dbusAddress.mid(abstractPrefix.size());
-        if(path.contains(",guid="))
-            path.truncate(path.indexOf(",guid="));
+        path = dbusAddress.substr(abstractPrefix.size(), dbusAddress.size() - abstractPrefix.size());
+        if(path.find(",guid=") != std::string::npos)
+            path = path.substr(0, path.find(",guid="));
         
         // Mark it as an abstract unix domain socket
         path = path;
@@ -300,18 +298,18 @@ int main(int argc, char** argv)
             return 3;
         }
 
-        path = QString(argv[2]);
+        path = std::string(argv[2]);
 
         sockaddr_un serv_addr;
         bzero((char *) &serv_addr, sizeof(serv_addr));
         serv_addr.sun_family = AF_UNIX;
         serv_addr.sun_path[0] = '\0'; // Mark as an abstract socket
-        strcpy(serv_addr.sun_path+1, path.toLocal8Bit().data());
+        strcpy(serv_addr.sun_path+1, path.data());
         
         if(debug)
-            std::cout << "opening at " << path.toLocal8Bit().data() << std::endl;
+            std::cout << "opening at " << path.data() << std::endl;
         
-        if (bind(serverfd,(sockaddr *) &serv_addr, sizeof (serv_addr.sun_family) + 1 + path.toLocal8Bit().length()) < 0)
+        if (bind(serverfd,(sockaddr *) &serv_addr, sizeof (serv_addr.sun_family) + 1 + path.length()) < 0)
         {
             if(waitForClients)
                 std::cerr << "ERROR opening the server" << std::endl;
@@ -361,12 +359,12 @@ int main(int argc, char** argv)
             bzero((char *) &serv_addru, sizeof(serv_addru));
             serv_addru.sun_family = AF_UNIX;
             serv_addru.sun_path[0] = '\0'; // Mark as an abstract socket
-            strcpy(serv_addru.sun_path+1, path.toLocal8Bit().data());
-            addrSize = sizeof (serv_addru.sun_family) + 1 + path.toLocal8Bit().length();
+            strcpy(serv_addru.sun_path+1, path.data());
+            addrSize = sizeof (serv_addru.sun_family) + 1 + path.size();
             useAddr = (sockaddr*)&serv_addru;
             
             if(debug)
-                std::cout << "connecting to " << path.toLocal8Bit().data() << std::endl;
+                std::cout << "connecting to " << path.data() << std::endl;
         }else{
             sockfd = socket(AF_INET, SOCK_STREAM, 0);
             if (sockfd < 0) 
