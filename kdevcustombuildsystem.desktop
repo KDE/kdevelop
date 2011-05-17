@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[bs]=Vlastiti sistem za gradnju
 Name[el]=Προσαρμοσμένο σύστημα κατασκευής
 Name[en_GB]=Custom BuildSystem
 Name[es]=Sistema de construcción personalizado
@@ -16,6 +17,7 @@ Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Name[zh_TW]=自訂編譯系統
 Comment=KDevelop Custom BuildSystem Support
+Comment[bs]=Podrška za KDevelop vlastiti sistem za gradnju
 Comment[el]=Υποστήριξη προσαρμοσμένου συστήματος κατασκευής KDevelop
 Comment[en_GB]=KDevelop Custom BuildSystem Support
 Comment[es]=Implementación del sistema de construcción personalizado de KDevelop
