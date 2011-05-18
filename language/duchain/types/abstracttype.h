@@ -34,10 +34,12 @@ class IndexedType;
 class TypeVisitor;
 class TypeExchanger;
 
+/// This macro is used to declare type-specific data-access functions within subclasses of AbstractType
 #define TYPE_DECLARE_DATA(Class) \
     inline Class##Data* d_func_dynamic() { makeDynamic(); return reinterpret_cast<Class##Data *>(d_ptr); } \
     inline const Class##Data* d_func() const { return reinterpret_cast<const Class##Data *>(d_ptr); }
 
+/// This function creates a local variable named 'd' pointing to the data type (as shortcut)
 #define TYPE_D(Class) const Class##Data * const d = d_func()
 #define TYPE_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
@@ -50,6 +52,7 @@ class TypeExchanger;
  * - equivalence feature
  * - cloning of types, and
  * - hashing and indexing
+ * - efficient, persistent, and reference-counted storage of types using IndexedType
  *
  *  Type classes are created in a way that allows storing them in memory or on disk
  *  efficiently.  They are classes which can store arbitrary lists immediately after their
@@ -58,19 +61,23 @@ class TypeExchanger;
  *  but the list data is stored in a temporary KDevVarLengthArray from a central repository,
  *  until we save it back to the static memory-region again.
  *
- * When creating an own type, you must:
- * - Implement equals(..), hash(). They should _fully_ distinguish all types, in regard to all stored information.
- *  * implement a copy-constructor in which you copy the data from the source using copyData<YourType>()
- *  * Implement clone() in which you use the copy-constructor to clone the type
+ * When creating an own (sub-) type, you must:
+ * - Override equals(..), hash().
+ *   - The functions should _fully_ distinguish all types,
+ *     in regard to all stored information, and regarding their identity.
+ *   - This can be skipped if you're overriding a base-type which already incorporates
+ *     all of your own types status within its equals/hash functions (eg. you don't add own data).
+ * - Implement a copy-constructor in which you copy the data from the source using copyData<YourType>()
+ * - Override the clone() function in which you use the copy-constructor to clone the type
  * - Add an enumerator "Identity" that contains an arbitrary unique identity value of the type
- * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules(@todo)
- * - Register the type in a source-file using REGISTER_TYPE(..), @see typeregister.h
+ * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules
+ * - Register your type in a source-file using REGISTER_TYPE(..), @see typeregister.h
  * - Add a typedef "Data", that contains the actual data of the type using the mechanisms described in appendedlist.h.
- *   That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
- *   @see AbstractTypeData
- * - When creating a data object in a constructor, use createData<YourType>()
- * - Use TYPE_DECLARE_DATA(YourType) to declare the data access functions, and  then use d_func() and d_func_dynamic() to 
- *   access your type data
+ *  - That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
+ *    @see AbstractTypeData
+ * - Use createData<YourType>() to create the data-object in a constructor (which you then reach to the parent constructor)
+ * - Use TYPE_DECLARE_DATA(YourType) to declare the data access functions d_func and d_func_dynamic,
+ *   and  then use d_func()->.. and d_func_dynamic()->.. to access your type data
  * - Create a constructor that only takes a reference to the type data, and passes it to the parent type
  *
  *   Every type can have only one other type as base-type,
