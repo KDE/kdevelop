@@ -49,7 +49,6 @@ void UseBuilder::buildUses(AST *node)
     topContext = TopDUContextPointer(node->ducontext->topContext());
   }
   //We will have some caching in TopDUContext until this objects lifetime is over
-  TopDUContext::Cache cache(topContext);
   Cpp::TypeConversionCacheEnabler enableConversionCache;
 
   UseBuilderBase::buildUses(node);
