@@ -67,9 +67,14 @@ public slots:
   void executeScriptFromActionData() const;
 
   /**
-   * Executes the command
+   * Executes the command (Used by the shell-integration)
    * */
   Q_SCRIPTABLE bool executeCommand(QString command, QString workingDirectory) const;
+
+  /**
+   * Executes the command synchronously and returns the output text (Used by the shell-integration)
+   * */
+  Q_SCRIPTABLE QString executeCommandSync(QString command, QString workingDirectory) const;
   
 private slots:
   void rowsRemoved( const QModelIndex& parent, int start, int end );

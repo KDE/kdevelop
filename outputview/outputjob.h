@@ -49,6 +49,8 @@ public:
     void startOutput();
 
     OutputJobVerbosity verbosity() const;
+    
+    void setVerbosity(OutputJobVerbosity verbosity);
 
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);

@@ -39,6 +39,7 @@
 #include <KAction>
 #include <interfaces/isession.h>
 #include <QDBusConnection>
+#include <KProcess>
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -183,9 +184,22 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setPerformParameterReplacement(false);
   kDebug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
   ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, const_cast<ExternalScriptPlugin*>(this) );
+  // When a command is executed, for example through the terminal, we don't want the command output to be risen
+  job->setVerbosity(KDevelop::OutputJob::Silent);
   
   KDevelop::ICore::self()->runController()->registerJob( job );
   return true;
+}
+
+QString ExternalScriptPlugin::executeCommandSync ( QString command, QString workingDirectory ) const
+{
+  kDebug() << "executing command " << command << " in working-dir " << workingDirectory;
+  KProcess process;
+  process.setWorkingDirectory( workingDirectory );
+  process.setShellCommand( command );
+  process.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+  process.execute();
+  return QString::fromLocal8Bit(process.readAll());
 }
 
 void ExternalScriptPlugin::executeScriptFromActionData() const

@@ -20,8 +20,6 @@
 
 source ~/.bashrc
 
-export BASE_SHELL_PROMPT=$PS1
-
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
 fi
@@ -31,40 +29,59 @@ if ! [ "$KDEV_DBUS_ID" ]; then
     exit 5
 fi
 
+# Eventually, if we are forwarding to another host, and kdevplatform_shell_environment.sh
+# has been located through "which kdevplatform_shell_environment.sh", then we need to update KDEV_BASEDIR.
+if ! [ -e "$KDEV_BASEDIR/kdevplatform_shell_environment.sh" ]; then
+    KDEV_BASEDIR=$(dirname $(which kdevplatform_shell_environment.sh))
+fi
+
+if ! [ -e "$KDEV_BASEDIR/kdev_dbus_socket_transformer" ]; then
+    echo "The $KDEV_BASEDIR/kdev_dbus_socket_transformer utility is missing, controlling the application across ssh is not possible"
+fi
+
+# Takes a list of tools, and prints a warning of one of them is not available in the path
+function checkToolsInPath {
+    for TOOL in $@; do
+        if ! [ "$(which $TOOL 2> /dev/null)" ]; then
+            echo "The utility $TOOL is not in your path, the shell integration will not work properly."
+        fi
+    done
+}
+
+# Check if all required tools are there (on the host machine)
+checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname
+
+if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+    # Check for additional utilities that are required on the client machine
+    checkToolsInPath kioclient
+fi
+
+# Queries the session name from the running application instance
 function getSessionName {
     echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
 }
 
-function updateShellPrompt {
-    # Makes the shell prompt show the current name of this session
-#     SESSION_NAME=$(getSessionName)
-    PS1="!$BASE_SHELL_PROMPT" # Just somehow set a mark that this session is attached
-}
-
 function help! {
-    if ! [ "$SHORT_HELP" ]; then
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    fi
     echo "Commands:"
-    if ! [ "$SHORT_HELP" ]; then
     echo "raise!                                 - Raise the window."
-    fi
     echo "sync!                                  - Synchronize the working directory with the currently open document."
-    echo "open!   [file] ...                     - Open the file(s)."
+    echo "open!   [file] ...                     - Open the file(s) within the attached application."
+    echo "eopen!  [file] ...                     - Open the file(s) within an external application using kde-open."
     echo "create!  [file] [[text]]               - Create and open a new file."
     echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
     echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
-    if ! [ "$SHORT_HELP" ]; then
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
-    echo "                                       - The whole dbus environment will be forwarded, KDevelop needs to be installed on both sides."
-    echo "exec!  [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
-    fi
+    echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
+    echo "ssw!  [ssh arguments]                  - Like ssh!, but preserves the current working directory."
+    echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files."
+    echo "                                       - The file paths will be re-encoded as fish:// urls if required."
+    echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
+    echo "                                       - The files will be COPIED to the client machine if required."
     echo "help!                                  - Show extended help."
-    if ! [ "$SHORT_HELP" ]; then
     echo ""
     echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
-    fi
     echo ""
 }
 
@@ -82,8 +99,16 @@ function o! {
     open! $@
 }
 
+function eo! {
+    eopen! $@
+}
+
 function e! {
     exec! $@
+}
+
+function ce! {
+    cexec! $@
 }
 
 function c! {
@@ -98,8 +123,13 @@ function ds! {
     dsearch! $@
 }
 
+function h! {
+    help! $@
+}
+
 # Internals:
 
+# Opens a document in internally in the application
 function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
     if ! [ "$RESULT" == "true" ]; then
@@ -107,6 +137,7 @@ function openDocument {
     fi
 }
 
+# Executes a command on the client machine using the custom-script integration.
 # First argument: The full command. Second argument: The working directory.
 function executeInApp {
     local CMD=$1
@@ -118,6 +149,18 @@ function executeInApp {
     if ! [ "$RESULT" == "true" ]; then
         echo "Execution failed"
     fi
+}
+
+# First argument: The full command. Second argument: The working directory.
+# Executes the command silently and synchronously, and returns the output
+function executeInAppSync {
+    local CMD=$1
+    local WD=$2
+    if ! [ "$WD" ]; then
+        WD=$(pwd)
+    fi
+    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommandSync "$CMD" "$WD")
+    echo "$RESULT"
 }
 
 # Getter functions:
@@ -144,9 +187,64 @@ function raise! {
 function sync! {
     local P=$(getActiveDocument)
     if [ "$P" ]; then
+        
+        if [[ "$P" == fish://* ]]; then
+            # This regular expression filters the user@host:port out of fish:///user@host:port/path/...
+            LOGIN=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\1/")
+            P_ON_HOST=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\2/")
+            if [ "$KDEV_SSH_FORWARD_CHAIN" == "$LOGIN" ]; then
+                P="$P_ON_HOST"
+            else
+                if [ "$KDEV_SSH_FORWARD_CHAIN" == "" ]; then
+                    # Try to ssh to the host machine
+                    # We need to split away the optional ":port" suffix, because the ssh command does not allow that syntax
+                    HOST=$(echo $LOGIN | cut --delimiter=':' -f 1)
+
+                    CMD="ssh!"
+
+                    if [[ "$LOGIN" == *:* ]]; then
+                        # If there is a port, extract it
+                        PORT=$(echo $LOGIN | cut --delimiter=':' -f 2)
+                        CMD="$CMD -p $PORT"
+                    fi
+                    
+                    CMD="$CMD $HOST"
+                    # Execute the ssh command
+                    echo "Executing $CMD"
+                    KDEV_WORKING_DIR="$(dirname $P_ON_HOST)"
+                    $CMD
+                    return
+                else
+                    echo "Cannot synchronize the working directory, because the host-names do not match (app: $LOGIN, shell: $KDEV_SSH_FORWARD_CHAIN)"
+                    return
+                fi
+            fi
+            
+        elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+            # This session is being forwarded to another machine, but the current document is not
+            # However, we won't complain, because it's possible that the machines share the same file-system
+            if [ $(isEqualFileOnHostAndClient $P) != "yes" ]; then
+                echo "Cannot synchronize the working directory, because the file systems do not match"
+                return
+            fi
+        fi
+        
         cd $(dirname $P)
     else
         echo "Got no path"
+    fi
+}
+
+# Take a path, and returns "yes" if the equal file is available on the host and the client
+# The check is performed by comparing inode-numbers
+function isEqualFileOnHostAndClient {
+    FILE=$1
+    INODE_HOST=$(ls -i $FILE | cut -d' ' -f1)
+    INODE_CLIENT=$(executeInAppSync "ls -i $FILE | cut -d' ' -f1" "$(dirname $FILE)")
+    if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
+        echo "yes"
+    else
+        echo ""
     fi
 }
 
@@ -154,16 +252,23 @@ function sync! {
 function mapFileToClient {
     local RELATIVE_FILE=$1
     FILE=$(readlink -f $RELATIVE_FILE)
-    if ! [ "$FILE" ]; then
+    if ! [ -e "$FILE" ]; then
         # Try opening the file anyway, it might be an url or something else we don't understand here
         FILE=$RELATIVE_FILE
     else
         # We are referencing an absolute file, available on the file-system.
-        # If we are forwarding, map it to the client somehow.
-        # TODO: Map through fish protocol, or whatever. Check whether the same file is available
-        #       on the client machine at the same path first.
-        FILE=$FILE
         
+        if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+            # If we are forwarding, map it to the client somehow.
+            if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
+                    # We can eventually map the file using the fish protocol
+                    if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
+                        # We can only map through fish if the forward-chains contains no comma, which means that
+                        # we forward only once.
+                        FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+                    fi
+            fi
+        fi
     fi
     echo $FILE
 }
@@ -177,15 +282,56 @@ function open! {
     done
 }
 
+function eopen! {
+    FILES=$@
+    for RELATIVE_FILE in $FILES; do
+        FILE=$(mapFileToClient $RELATIVE_FILE)
+        executeInApp "kde-open $FILE"
+    done
+}
+
 function exec! {
     FILES=$@
     ARGS=""
     for RELATIVE_FILE in $FILES; do
-        FILE=$(mapFileToClient $RELATIVE_FILE)
-        ARGS=$ARGS" "$FILE
+        if [ "$ARGS" == "" ]; then
+            # Do not transform the command-name
+            ARGS=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+            ARGS=$ARGS" "$FILE
+        fi
     done
-    echo "execute args: " $ARGS
-    executeInApp "$FILES"
+    echo "Executing: " $ARGS
+    executeInApp "$ARGS"
+}
+
+function cexec! {
+    FILES=$@
+    ARGS=""
+    PREFIX=""
+    TMP=1
+    for RELATIVE_FILE in $FILES; do
+        if [ "$ARGS" == "" ]; then
+            # Do not transform the command-name
+            ARGS=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+            
+            if [[ "$FILE" == fish://* ]]; then
+                # Add a prefix to copy the file into a temporary file
+                # Keep the baseline as suffix, so that applications can easily recognize the mimetype
+                PREFIX+="FILE$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$FILE$TMP;"
+                # Use the temporary variable instead of the name 
+                FILE="\$FILE$TMP"
+                TMP=$(($TMP+1))
+            fi
+            
+            ARGS=$ARGS" "$FILE
+        fi
+    done
+    echo "Executing: " $ARGS
+    executeInApp "$PREFIX $ARGS"
 }
 
 function create! {
@@ -199,7 +345,8 @@ function create! {
         return 2
     fi
     echo $2 > $FILE
-    openDocument $FILE
+    
+    openDocument $(mapFileToClient $FILE)
 }
 
 function search! {
@@ -216,7 +363,7 @@ function search! {
         LOCATION="."
     fi
     
-    LOCATION=$(readlink -f $LOCATION)
+    LOCATION=$(mapFileToClient $LOCATION)
     
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
@@ -225,7 +372,7 @@ function search! {
         if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(readlink -f $LOC)"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
     
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
@@ -245,7 +392,7 @@ function dsearch! {
         LOCATION="."
     fi
     
-    LOCATION=$(readlink -f $LOCATION)
+    LOCATION=$(mapFileToClient $LOCATION)
     
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
@@ -254,7 +401,7 @@ function dsearch! {
         if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(readlink -f $LOC)"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
     
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
@@ -279,17 +426,60 @@ export DBUS_FORWARDING_TCP_MAX_LOCAL_PORT=10000
 export DBUS_ABSTRACT_SOCKET_TARGET_INDEX=1
 export DBUS_ABSTRACT_SOCKET_MAX_TARGET_INDEX=1000
 
-# Translates a path through from the current machine to the machine where the kdevelop instance
-# is running, so that the file can be accessed from there.
-function translatePath {
-    PATH=$1
-    
-    if [ "$FORWARD_DBUS_FROM_PORT" ]; then
-        # Step 1: Check if the file is accessible under the same path on the client machine
-        # TODO: Translate...
-        qdbus $KDEV_DBUS_ID 
+function getPortFromSSHCommand {
+    # The port is given to ssh exclusively in the format "-p PORT"
+    # This regular expression extracts the "4821" from "ssh -q bla1 -p 4821 bla2"
+    local ARGS=$@
+    local RET=$(echo "$@" | sed "s/.*-p \+\([0-9]*\).*/\1/")
+    if [ "$ARGS" == "$RET" ]; then
+        # There was no match
+        echo ""
     else
-        echo $PATH
+        echo ":$RET"
+    fi
+}
+
+function getLoginFromSSHCommand {
+    # The login name can be given to ssh in the format "-l NAME"
+    # This regular expression extracts the "NAME" from "ssh -q bla1 -l NAME bla2"
+    local ARGS=$@
+    local RET=$(echo "$ARGS" | sed "s/.*-l \+\([a-z,A-Z,_,0-9]*\).*/\1/")
+    if [ "$RET" == "$ARGS" ] || [ "$RET" == "" ]; then
+        # There was no match
+        echo ""
+    else
+        echo "$RET@"
+    fi
+}
+
+function getHostFromSSHCommand {
+    # This regular expression extracts the "bla2" from "echo "ssh -q bla1 -p 4821 bla2"
+    # Specifically, it finds the first argument which is not preceded by a "-x" parameter kind specification.
+    
+    local CLEANED=""
+    local NEWCLEANED="$@"
+
+    while ! [ "$NEWCLEANED" == "$CLEANED" ]; do
+        CLEANED="$NEWCLEANED"
+    # This expression removes one "-x ARG" parameter
+        NEWCLEANED="$(echo $CLEANED | sed "s/\(.*\)\(-[a-z,A-Z] \+[a-z,0-9]*\)\ \(.*\)/\1\3/")"
+    done
+
+    # After cleaning, the result should only consist of the host-name followed by an optional command.
+    # Select the host-name, by extracting the forst column.
+    echo $CLEANED | cut --delimiter=" " -f 1
+}
+
+function getSSHForwardOptionsFromCommand {
+    
+    HOST="$(getLoginFromSSHCommand "$@")$(getHostFromSSHCommand "$@")$(getPortFromSSHCommand "$@")"
+    
+    if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+        # We are already forwarding, so we deal with a chain of multiple ssh commands.
+        # We still record it, although it's not sure if we can use it somehow.
+        echo "KDEV_SSH_FORWARD_CHAIN=\"$KDEV_SSH_FORWARD_CHAIN,$HOST\"";
+    else
+        echo "KDEV_SSH_FORWARD_CHAIN=$HOST"
     fi
 }
 
@@ -331,25 +521,51 @@ function keepForwardingDBusFromTCPSocket {
 }
 
 function ssh! {
-#     echo "forwarding from $APPLICATION_HOST"
-    keepForwardingDBusToTCPSocket # Should be automatically terminated when the function exits
-#     echo "calling" ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-#            "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
+    keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
+    
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
-           "APPLICATION=$APPLICATION KDEV_BASEDIR=$KDEV_BASEDIR KDEV_DBUS_ID=$KDEV_DBUS_ID FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT APPLICATION_HOST=$APPLICATION_HOST DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i"
-    kill %1 # Kill the forwarding loop
+         " APPLICATION=$APPLICATION \
+           KDEV_BASEDIR=$KDEV_BASEDIR \
+           KDEV_DBUS_ID=$KDEV_DBUS_ID \
+           FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT \
+           APPLICATION_HOST=$APPLICATION_HOST \
+           KDEV_WORKING_DIR=$KDEV_WORKING_DIR \
+           DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) \
+           $(getSSHForwardOptionsFromCommand "$@") \
+              bash --init-file \
+                        \$(if [ -e \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\" ]; \
+                                then echo \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\"; \
+                           elif [ -e \"$(which kdevplatform_shell_environment.sh)\" ]; then
+                                echo \"$(which kdevplatform_shell_environment.sh)\"; \
+                           else \
+                                echo \"~/.kdevplatform_shell_environment.sh\"; \
+                           fi) \
+                   -i"
+
+
+    
+    kill %1 # Stop the dbus forwarding subprocess
+}
+
+# A version of ssh! that preserves the current working directory
+function ssw! {
+    KDEV_WORKING_DIR=$(pwd)
+    ssh! $@
 }
 
 if [ "$FORWARD_DBUS_FROM_PORT" ]; then
-#     echo "Initializing DBUS forwarding to host $APPLICATION_HOST"
+    # Start the target-side dbus forwarding, transforming from the ssh pipe to the abstract unix domain socket
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}${DBUS_SOCKET_SUFFIX}
     keepForwardingDBusFromTCPSocket
 fi
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 
-updateShellPrompt
+# Mark that this session is attached, by prepending a '!' character
+PS1="!$PS1"
 
-# SHORT_HELP="1" help!
 echo "You are controlling the $APPLICATION session '$(getSessionName)'. Type help! for more information."
 
+if [ "$KDEV_WORKING_DIR" ]; then
+    cd $KDEV_WORKING_DIR
+fi
