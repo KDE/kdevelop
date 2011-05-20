@@ -64,7 +64,8 @@ function getSessionName {
 function help! {
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    echo "Commands:"
+    if [ "$1" == "" ]; then
+    echo "Standard commands:"
     echo "raise!                                 - Raise the window."
     echo "sync!                                  - Synchronize the working directory with the currently open document."
     echo "open!   [file] ...                     - Open the file(s) within the attached application."
@@ -72,16 +73,26 @@ function help! {
     echo "create!  [file] [[text]]               - Create and open a new file."
     echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
     echo "dsearch!  [pattern] [[locations]] ...  - Same as search, but starts the search instantly instead of showing the dialog (using previous settings)."
+    echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive. See \"help! remote\""
+    echo ""
+    echo "help!                                  - Show help."
+    echo "help! remote                           - Show help about remote shell-integration through ssh."
+    echo ""
+    echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
+    fi
+    
+    if [ "$1" == "remote" ]; then
+    echo "Extended remote commands:"
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
     echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
     echo "ssw!  [ssh arguments]                  - Like ssh!, but preserves the current working directory."
-    echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files."
+    echo "exec! [cmd] [args] [file] . ..         - Execute the given command on the client machine, referencing any number of local files on the host machine."
     echo "                                       - The file paths will be re-encoded as fish:// urls if required."
-    echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files."
+    echo "cexec! [cmd] [args] [file] . ..        - Execute the given command on the client machine, referencing any number of local files on the host machine."
     echo "                                       - The files will be COPIED to the client machine if required."
-    echo "help!                                  - Show extended help."
-    echo ""
-    echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
+    echo "copytohost! [client path] [host path]  - Copy a file/directory through the fish protocol from the client machine th the host machine."
+    echo "copytoclient! [host path] [client path]- Copy a file/directory through the fish protocol from the host machine to the client machine."
+    fi
     echo ""
 }
 
@@ -127,6 +138,14 @@ function h! {
     help! $@
 }
 
+function cth! {
+    copytohost! $@  
+}
+
+function ctc! {
+    copytoclient! $@
+}
+
 # Internals:
 
 # Opens a document in internally in the application
@@ -140,7 +159,7 @@ function openDocument {
 # Executes a command on the client machine using the custom-script integration.
 # First argument: The full command. Second argument: The working directory.
 function executeInApp {
-    local CMD=$1
+    local CMD="$1"
     local WD=$2
     if ! [ "$WD" ]; then
         WD=$(pwd)
@@ -304,6 +323,14 @@ function exec! {
     done
     echo "Executing: " $ARGS
     executeInApp "$ARGS"
+}
+
+function copytohost! {
+    executeInApp "kioclient copy $1 $(mapFileToClient $2)"
+}
+
+function copytoclient! {
+    executeInApp "kioclient copy $(mapFileToClient $1) $2"
 }
 
 function cexec! {
