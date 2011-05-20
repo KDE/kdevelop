@@ -31,6 +31,7 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcsdiffpatchsources.cpp
     widgets/vcslocationwidget.cpp
     widgets/standardvcslocationwidget.cpp
+    widgets/flexibleaction.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsfilechangesmodel.cpp

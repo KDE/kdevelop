@@ -70,9 +70,12 @@
 #include <qlabel.h>
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
+#include "widgets/flexibleaction.h"
 #include <interfaces/isession.h>
 #include "vcsevent.h"
 #include <KCompositeJob>
+#include <QClipboard>
+#include <QApplication>
 
 namespace KDevelop
 {
@@ -296,15 +299,11 @@ void VcsPluginHelper::diffForRev()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-void VcsPluginHelper::history()
+void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob *job = iface->log(url);
-    if( !job ) 
-    {
-        kWarning() << "Couldn't create log job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
-        return;
-    }
+    KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
+    
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
@@ -350,6 +349,30 @@ void VcsPluginHelper::annotation()
     }
 }
 
+class CopyFunction : public AbstractFunction
+{
+    public:
+        CopyFunction(const QString& tocopy)
+            : m_tocopy(tocopy) {}
+        
+        void operator()() { QApplication::clipboard()->setText(m_tocopy); }
+    private:
+        QString m_tocopy;
+};
+
+class HistoryFunction : public AbstractFunction
+{
+    public:
+        HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
+            : m_helper(helper), m_rev(rev) {}
+            
+            void operator()() { m_helper->history(m_rev); }
+        
+    private:
+        VcsPluginHelper* m_helper;
+        VcsRevision m_rev;
+};
+
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
     KTextEditor::AnnotationInterface* annotateiface =
@@ -360,7 +383,10 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
     VcsRevision rev = model->revisionForLine(line);
     d->diffForRevAction->setData(QVariant::fromValue(rev));
+    menu->addSeparator();
     menu->addAction(d->diffForRevAction);
+    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision history..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()

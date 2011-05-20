@@ -15,6 +15,7 @@
 
 #include <kurl.h>
 #include <memory>
+#include "vcsrevision.h"
 
 class KJob;
 class QAction;
@@ -48,11 +49,11 @@ public:
     KUrl::List const & contextUrlList();
     QMenu* commonActions();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void commit();
     void add();
     void revert();
-    void history();
+    void history(const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ));
     void annotation();
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
     void diffToHead();
