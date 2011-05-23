@@ -68,13 +68,14 @@ public:
 
 // BuildSystemManager API
 public:
-    bool addFileToTarget( KDevelop::ProjectFileItem* file, KDevelop::ProjectTargetItem* parent );
+    bool addFilesToTarget( QList<KDevelop::ProjectFileItem*> file, KDevelop::ProjectTargetItem* parent );
     KUrl buildDirectory( KDevelop::ProjectBaseItem* ) const;
     IProjectBuilder* builder( KDevelop::ProjectFolderItem* ) const;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
     KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
-    bool removeFilesFromTargets( QList<QPair<KDevelop::ProjectTargetItem*,KDevelop::ProjectFileItem*> > );
+    bool removeFilesFromTargets( QList<KDevelop::ProjectFileItem*> );
+    bool moveFilesAndFolders( QList<KDevelop::ProjectBaseItem*>, KDevelop::ProjectFolderItem* );
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
