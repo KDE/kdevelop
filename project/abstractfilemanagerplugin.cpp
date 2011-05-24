@@ -482,7 +482,7 @@ bool AbstractFileManagerPlugin::renameFile( ProjectFileItem * file, const KUrl& 
     return d->rename(file, url);
 }
 
-bool AbstractFileManagerPlugin::removeFilesAndFolders(QList<ProjectBaseItem*> items)
+bool AbstractFileManagerPlugin::removeFilesAndFolders(QList<ProjectBaseItem*> &items)
 {
     bool success = true;
     foreach(ProjectBaseItem* item, items)
