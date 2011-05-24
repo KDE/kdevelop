@@ -92,7 +92,7 @@ ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevel
     return NULL;
 }
 
-bool CustomMakeManager::addFilesToTarget(QList< ProjectFileItem* > &files, ProjectTargetItem* parent)
+bool CustomMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &files, ProjectTargetItem* parent)
 {
     Q_UNUSED( files )
     Q_UNUSED( parent )
@@ -105,7 +105,7 @@ bool CustomMakeManager::removeTarget(KDevelop::ProjectTargetItem *target)
     return false;
 }
 
-bool CustomMakeManager::removeFilesFromTargets(QList< ProjectFileItem* > &targetFiles)
+bool CustomMakeManager::removeFilesFromTargets(const QList< ProjectFileItem* > &targetFiles)
 {
     Q_UNUSED( targetFiles )
     return false;
@@ -222,7 +222,7 @@ ProjectFileItem* CustomMakeManager::addFile(const KUrl& file, KDevelop::ProjectF
     return 0;
 }
 
-bool CustomMakeManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> &items)
+bool CustomMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
 {
     foreach(KDevelop::ProjectBaseItem* item, items)
     {
@@ -259,7 +259,7 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
     return KDevelop::renameUrl( oldFolder->project(), oldFolder->url(), newFolder );
 }
 
-bool CustomMakeManager::moveFilesAndFolders(QList< ProjectBaseItem* > &items, ProjectFolderItem* newParent)
+bool CustomMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* newParent)
 {
     Q_UNUSED(items);
     Q_UNUSED(newParent);

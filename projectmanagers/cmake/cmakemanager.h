@@ -88,15 +88,15 @@ public:
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
     virtual KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
-    virtual bool addFilesToTarget( QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target);
+    virtual bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target);
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-    virtual bool removeFilesFromTargets( QList<KDevelop::ProjectFileItem*> &files );
-    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> &items);
+    virtual bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*> &files );
+    virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
 
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
-    virtual bool moveFilesAndFolders( QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
+    virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;

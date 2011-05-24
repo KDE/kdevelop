@@ -1249,7 +1249,7 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
     return ret;
 }
 
-bool CMakeManager::moveFilesAndFolders(QList< ProjectBaseItem* > &items, ProjectFolderItem* toFolder)
+bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* toFolder)
 {
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
@@ -1301,7 +1301,7 @@ bool CMakeManager::moveFilesAndFolders(QList< ProjectBaseItem* > &items, Project
     return true;
 }
 
-bool CMakeManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> &items)
+bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
 {
     //First do CMakeLists changes
     ApplyChangesWidget changesWidget;
@@ -1334,7 +1334,7 @@ bool CMakeManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> &item
     return true;
 }
 
-bool CMakeManager::removeFilesFromTargets(QList<ProjectFileItem*> &files)
+bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
 {
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
@@ -1389,9 +1389,10 @@ KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::Pro
     return created;
 }
 
-bool CMakeManager::addFilesToTarget(QList< ProjectFileItem* > &files, ProjectTargetItem* target)
+bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, ProjectTargetItem* target)
 {
     QSet<QString> headerExt = QSet<QString>() << ".h" << ".hpp" << ".hxx";
+    QList< ProjectFileItem* > files = _files;
     for (int i = files.count() - 1; i >= 0; --i)
     {
         QString fileName = files[i]->fileName();
