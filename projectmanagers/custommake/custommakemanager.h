@@ -74,7 +74,7 @@ public:
      * Adds the file specified by @p file to the target @p parent and modifies
      * the underlying build system if needed.
      */
-    virtual bool addFilesToTarget(QList<KDevelop::ProjectFileItem*> files, KDevelop::ProjectTargetItem *parent);
+    virtual bool addFilesToTarget(QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem *parent);
 
     /**
      * Remove a target
@@ -91,7 +91,7 @@ public:
      * modifies the underlying build system if needed. The file is not removed
      * from the folder it is in
      */
-    virtual bool removeFilesFromTargets(QList<KDevelop::ProjectFileItem*>);
+    virtual bool removeFilesFromTargets(QList<KDevelop::ProjectFileItem*>&);
 
     /**
      * Get the toplevel build directory for the project
@@ -148,7 +148,7 @@ public:
      * Removes the items specified by @p items and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items);
+    virtual bool removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> &items);
 
     /**
      * Rename a file in the project
@@ -166,8 +166,8 @@ public:
     virtual bool renameFolder(KDevelop::ProjectFolderItem* oldFolder,
                               const KUrl& newFolder );
     
-    virtual bool moveFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items,
-                                      KDevelop::ProjectFolderItem* newParent );
+    virtual bool moveFilesAndFolders(QList<KDevelop::ProjectBaseItem*> &items,
+                                     KDevelop::ProjectFolderItem* newParent);
 
     /**
      * Initialize targets by reading Makefile in @arg dir
