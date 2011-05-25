@@ -65,12 +65,12 @@ CustomBuildSystem::~CustomBuildSystem()
 {
 }
 
-bool CustomBuildSystem::moveFilesAndFolders( QList<ProjectBaseItem*>, ProjectFolderItem* )
+bool CustomBuildSystem::moveFilesAndFolders( const QList<ProjectBaseItem*> &, ProjectFolderItem* )
 {
     return false;
 }
 
-bool CustomBuildSystem::addFilesToTarget( QList<ProjectFileItem*>, ProjectTargetItem* )
+bool CustomBuildSystem::addFilesToTarget( const QList<ProjectFileItem*>&, ProjectTargetItem* )
 {
     return false;
 }
@@ -174,7 +174,7 @@ KJob* CustomBuildSystem::prune( IProject* project )
     return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Prune );
 }
 
-bool CustomBuildSystem::removeFilesFromTargets( QList<ProjectFileItem*> )
+bool CustomBuildSystem::removeFilesFromTargets( const QList<ProjectFileItem*>& )
 {
     return false;
 }
