@@ -63,14 +63,18 @@ public:
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return false; }
 
-    virtual bool addFileToTarget( KDevelop::ProjectFileItem*,
-                                  KDevelop::ProjectTargetItem* ) { return false; }
+    virtual bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*>&,
+                                  KDevelop::ProjectTargetItem*) { return false; }
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-    virtual bool removeFilesFromTargets(QList< KDevelop::TargetFilePair > /*targetFiles*/) { return false; }
+    virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&) { return false; }
 
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
     //END IBuildSystemManager
+
+    //FIXME: properly implement in abstractfilemanagerplugin
+    virtual bool moveFilesAndFolders( const QList<KDevelop::ProjectBaseItem*>&,
+                                      KDevelop::ProjectFolderItem* ) { return false; }
 
 private slots:
     void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
