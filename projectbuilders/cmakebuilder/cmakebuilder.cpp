@@ -223,6 +223,12 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
                                  i18n("No Build Directory configured, cannot clear builddir"), i18n("No clearing of builddir possible") );
         return 0;
     }
+    else if (!builddir.isLocalFile() || QDir(builddir.toLocalFile()).exists("CMakeLists.txt"))
+    {
+        KMessageBox::information(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                                 i18n("Wrong build directory, cannot clear the build directory"), i18n("No clearing of builddir possible") );
+        return 0;
+    }
     QDir d( builddir.toLocalFile() );
     KUrl::List urls;
     foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) )
