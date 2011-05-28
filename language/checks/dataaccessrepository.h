@@ -27,11 +27,14 @@ namespace KDevelop
 class Declaration;
 
 //DataAccess
-class DataAccess
+class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 {
     public:
         enum Flags { None=0, Read=1, Write=2 };
         DataAccess(const CursorInRevision& cur, uint flags);
+        
+        bool isRead()  const { return m_flags&Read; }
+        bool isWrite() const { return m_flags&Write; }
         
         uint m_flags;
         KDevelop::CursorInRevision m_pos;
@@ -50,6 +53,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
       
         void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
         QList<DataAccess*> modifications() const { return m_modifications; }
+        DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
     private:
         QList<DataAccess*> m_modifications;
 };

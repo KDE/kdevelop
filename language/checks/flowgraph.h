@@ -20,27 +20,35 @@
 #define CONTROLFLOWGRAPH_H
 
 #include <QVector>
+#include <QMap>
 #include <language/languageexport.h>
 
 namespace KDevelop {
 
+class Declaration;
+class DUContext;
 class ControlFlowNode;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
 {
   public:
-    typedef QVector<ControlFlowNode*>::const_iterator const_iterator;
+    ControlFlowGraph();
     ~ControlFlowGraph();
     
-    void addEntry(ControlFlowNode* n);
+    void addEntry(KDevelop::ControlFlowNode* n);
+    void addEntry(KDevelop::DUContext* ctx, KDevelop::ControlFlowNode* n);
     void addDeadNode(ControlFlowNode* n);
     void clear();
     
-    QList<ControlFlowNode*> graphNodes() const { return m_graphNodes; }
-    QVector<ControlFlowNode*> deadNodes() const { return m_deadNodes; }
+    QList<KDevelop::DUContext*> contexts() const;
+    ControlFlowNode* nodePerContext(DUContext* ctx);
+    
+    QList<ControlFlowNode*> graphNodes() const;
+    QVector<ControlFlowNode*> deadNodes() const;
   private:
-    QList<ControlFlowNode*> m_graphNodes;
-    QVector<ControlFlowNode*> m_deadNodes;
+    ControlFlowGraph(const ControlFlowGraph&);
+    class Private;
+    Private* d;
 };
 
 }

@@ -21,17 +21,22 @@
 #define ILANGUAGECHECK_H
 
 #include "interfacesexport.h"
-#include <language/duchain/topducontext.h>
 #include <KUrl>
 
 namespace KDevelop
 {
+class DataAccessRepository;
+class ControlFlowGraph;
+class TopDUContext;
+class ControlFlowGraph;
 
 class CheckData
 {
     public:
         KUrl url;
         TopDUContext* top;
+        ControlFlowGraph* flow;
+        DataAccessRepository* access;
 };
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageCheck

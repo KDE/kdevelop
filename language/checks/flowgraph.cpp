@@ -21,6 +21,18 @@
 
 using namespace KDevelop;
 
+struct ControlFlowGraph::Private
+{
+    QList<ControlFlowNode*> m_nodes;
+    QMap<KDevelop::DUContext*, ControlFlowNode*> m_funcNodes;
+    QVector<ControlFlowNode*> m_deadNodes;
+};
+
+ControlFlowGraph::ControlFlowGraph()
+    : d(new Private)
+{}
+
+
 ControlFlowGraph::~ControlFlowGraph()
 {
   clear();
@@ -28,12 +40,18 @@ ControlFlowGraph::~ControlFlowGraph()
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)
 {
-  m_graphNodes += n;
+    d->m_nodes += n;
+}
+
+void ControlFlowGraph::addEntry(KDevelop::DUContext* ctx, ControlFlowNode* n)
+{
+  Q_ASSERT(ctx);
+  d->m_funcNodes.insert(ctx, n);
 }
 
 void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
 {
-  m_deadNodes += n;
+  d->m_deadNodes += n;
 }
 
 void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted)
@@ -52,12 +70,36 @@ void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted
 void ControlFlowGraph::clear()
 {
   QSet<ControlFlowNode*> deleted;
-  foreach(ControlFlowNode* node, m_graphNodes)
+  foreach(ControlFlowNode* node, d->m_funcNodes)
     clearNodeRecursively(node, deleted);
   
-  foreach(ControlFlowNode* node, m_deadNodes)
+  foreach(ControlFlowNode* node, d->m_nodes)
     clearNodeRecursively(node, deleted);
   
-  m_graphNodes.clear();
-  m_deadNodes.clear();
+  foreach(ControlFlowNode* node, d->m_deadNodes)
+    clearNodeRecursively(node, deleted);
+  
+  d->m_nodes.clear();
+  d->m_funcNodes.clear();
+  d->m_deadNodes.clear();
+}
+
+QList< ControlFlowNode* > ControlFlowGraph::graphNodes() const
+{
+    return d->m_funcNodes.values()+d->m_nodes;
+}
+
+QVector< ControlFlowNode* > ControlFlowGraph::deadNodes() const
+{
+    return d->m_deadNodes;
+}
+
+QList<DUContext*> ControlFlowGraph::contexts() const
+{
+    return d->m_funcNodes.keys();
+}
+
+ControlFlowNode* ControlFlowGraph::nodePerContext(DUContext* ctx)
+{
+    return d->m_funcNodes[ctx];
 }

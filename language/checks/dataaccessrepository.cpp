@@ -29,6 +29,15 @@ DataAccess::DataAccess(const KDevelop::CursorInRevision& cur, uint flags)
   : m_flags(flags), m_pos(cur)
 {}
 
+DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
+{
+    foreach(DataAccess* a, m_modifications) {
+        if(a->m_pos==cursor)
+            return a;
+    }
+    return 0;
+}
+
 Declaration* DataAccess::declarationForDataAccess() const
 {
     Q_ASSERT(false && "TODO!!!!");
