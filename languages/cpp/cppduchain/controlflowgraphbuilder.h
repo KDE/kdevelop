@@ -21,6 +21,7 @@
 
 #include <cppduchainexport.h>
 #include <parser/default_visitor.h>
+#include <language/duchain/topducontext.h>
 
 namespace KDevelop
 {
@@ -33,7 +34,7 @@ class IndexedString;
 class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
 {
   public:
-    ControlFlowGraphBuilder(const ParseSession* session, KDevelop::ControlFlowGraph* graph);
+    ControlFlowGraphBuilder(const KDevelop::ReferencedTopDUContext& top, const ParseSession* session, KDevelop::ControlFlowGraph* graph);
     virtual ~ControlFlowGraphBuilder();
     
     void run(AST* node);
@@ -69,6 +70,8 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     QList<QPair<KDevelop::ControlFlowNode*, KDevelop::ControlFlowNode*> > m_caseNodes;
     QMap<KDevelop::IndexedString, KDevelop::ControlFlowNode*> m_taggedNodes;
     QMap<KDevelop::IndexedString, QList<KDevelop::ControlFlowNode*> > m_pendingGotoNodes;
+    
+    KDevelop::ReferencedTopDUContext m_top;
 };
 
 #endif // CONTROLFLOWGRAPHBUILDER_H

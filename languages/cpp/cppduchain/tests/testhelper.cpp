@@ -138,7 +138,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   UseDecoratorVisitor visit(session.data(), &m_modifications);
   visit.run(ast);
   
-  ControlFlowGraphBuilder flowvisitor(session.data(), &m_ctlflowGraph);
+  ControlFlowGraphBuilder flowvisitor(ReferencedTopDUContext(top), session.data(), &m_ctlflowGraph);
   flowvisitor.run(ast);
 
   if (dump & DumpDUChain) {

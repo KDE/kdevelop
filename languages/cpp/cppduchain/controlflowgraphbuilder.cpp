@@ -23,17 +23,19 @@
 #include <lexer.h>
 #include <tokens.h>
 #include <util/pushvalue.h>
+#include <language/duchain/topducontext.h>
 
 using namespace KDevelop;
 QString nodeToString(ParseSession* s, AST* node);
 
-ControlFlowGraphBuilder::ControlFlowGraphBuilder(const ParseSession* session, ControlFlowGraph* graph)
+ControlFlowGraphBuilder::ControlFlowGraphBuilder(const KDevelop::ReferencedTopDUContext& top, const ParseSession* session, ControlFlowGraph* graph)
   : m_session(session)
   , m_graph(graph)
   , m_currentNode(0)
   , m_returnNode(0)
   , m_breakNode(0)
   , m_continueNode(0)
+  , m_top(top)
 {}
 
 ControlFlowGraphBuilder::~ControlFlowGraphBuilder()
@@ -71,7 +73,8 @@ void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* nod
 {
   PushValue<ControlFlowNode*> currentNode(m_currentNode);
   m_returnNode = new ControlFlowNode;
-  m_graph->addEntry(createCompoundStatement(node->function_body, m_returnNode));
+  
+  m_graph->addEntry(node->function_body->ducontext, createCompoundStatement(node->function_body, m_returnNode));
 }
 
 void ControlFlowGraphBuilder::visitEnumerator(EnumeratorAST* node)
@@ -199,14 +202,14 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
       m_currentNode->m_next = m_breakNode;
       break;
     case Token_goto: {
-      qDebug() << "goto!";
+//       qDebug() << "goto!";
       IndexedString tag = m_session->token_stream->token(node->identifier).symbol();
       QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.find(tag);
       if(tagIt!=m_taggedNodes.constEnd())
         m_currentNode->m_next = *tagIt;
       else {
         m_pendingGotoNodes[tag] += m_currentNode;
-        m_currentNode->m_next=m_currentNode; //we set itself so that we know it has somewhere to go
+        m_currentNode->m_next=0; //we set null waiting to find a proper node to jump to
       }
     } break;
   }

@@ -120,7 +120,8 @@ class ControlFlowToDot
       bool r = true;
       int i=0;
       *m_dev << "digraph G {\n";
-      for(KDevelop::ControlFlowGraph::const_iterator it=graph->graphNodes().constBegin(), itEnd=graph->graphNodes().constEnd(); it!=itEnd; ++it, ++i) {
+      QList<ControlFlowNode*> n=graph->graphNodes();
+      for(QList<ControlFlowNode*>::const_iterator it=n.constBegin(), itEnd=n.constEnd(); it!=itEnd; ++it, ++i) {
         *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
         r &= exportNode(*it);
         *m_dev << "  }\n";
@@ -208,7 +209,8 @@ void CodeAnalysisTest::testControlFlowCreation()
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   
-  KDevelop::ControlFlowGraph::const_iterator it=graph->graphNodes().constBegin(), itEnd=graph->graphNodes().constEnd();
+  QList<ControlFlowNode*> n=graph->graphNodes();
+  QList<ControlFlowNode*>::const_iterator it=n.constBegin(), itEnd=n.constEnd();
   QSet<ControlFlowNode*> visited;
   int entries=0;
   for(; it!=itEnd; ++it, ++entries)
