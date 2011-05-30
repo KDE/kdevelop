@@ -64,6 +64,7 @@ private slots:
   void testInitListTrailingComma();
   void testAsmVolatile();
   void testIncrIdentifier();
+  void testParseFile();
 
   void testQProperty_data();
   void testQProperty();

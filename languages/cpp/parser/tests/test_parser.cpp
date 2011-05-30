@@ -605,21 +605,17 @@ void TestParser::testIncrIdentifier()
   QVERIFY(funcDecl);
 }
 
-  /* TODO: renable
-  void TestParser::testParseFile()
-  {
-     QFile file(TEST_FILE);
-     QVERIFY(file.open(QFile::ReadOnly));
-     QByteArray contents = file.readAll();
-     file.close();
-     pool mem_pool;
-     Parser parser(&control);
-     ParseSession session;
-     session.setContents(contents);
-     TranslationUnitAST* ast = parser.parse(&session);
-     QVERIFY(ast != 0);
-     QVERIFY(ast->declarations != 0);
-   }*/
+void TestParser::testParseFile()
+{
+  QFile file(TEST_FILE);
+  QVERIFY(file.open(QFile::ReadOnly));
+  QByteArray contents = file.readAll();
+  file.close();
+  pool mem_pool;
+  TranslationUnitAST* ast =parse(contents, &mem_pool);
+  QVERIFY(ast != 0);
+  QVERIFY(ast->declarations != 0);
+}
 
 void TestParser::testQProperty_data()
 {
