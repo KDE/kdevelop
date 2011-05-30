@@ -152,6 +152,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     virtual ~CodeHighlighting();
 
     /// This function is thread-safe
+    /// @warning The duchain must not be locked when this is called (->possible deadlock)
     void highlightDUChain(ReferencedTopDUContext context);
 
     //color should be zero when undecided
