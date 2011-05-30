@@ -31,7 +31,6 @@
 #include "tokens.h"
 #include "parsesession.h"
 #include "commentformatter.h"
-#include "memorypool.h"
 
 #include "testconfig.h"
 
@@ -127,8 +126,7 @@ void TestParser::testTokenTable()
 void TestParser::testParser()
 {
   QByteArray clazz("struct A { int i; A() : i(5) { } virtual void TestParser::test() = 0; };");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(clazz, &mem_pool);
+  TranslationUnitAST* ast = parse(clazz);
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
 }
@@ -136,8 +134,7 @@ void TestParser::testParser()
 void TestParser::testTemplateArguments()
 {
   QByteArray templatetest("template <int N, int M> struct SeriesAdder{ enum { value = N + SeriesAdder< 0 >::value }; };");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(templatetest, &mem_pool);
+  TranslationUnitAST* ast = parse(templatetest);
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
   QVERIFY(control.problems().isEmpty());
@@ -148,16 +145,14 @@ void TestParser::testManyComparisons()
   //Should not crash
   {
     QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 ){ } }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(clazz, &mem_pool);
+    TranslationUnitAST* ast = parse(clazz);
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
     dumper.dump(ast, lastSession->token_stream);
   }
   {
     QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 && val < val4 && val < val5 && val < val6 && val < val7 && val < val8 && val < val9 && val < val10 && val < val11 && val < val12 && val < val13 && val < val14 && val < val15 && val < val16 && val < val17 && val < val18 && val < val19 && val < val20 && val < val21 && val < val22 && val < val23 && val < val24 && val < val25 && val < val26){ } }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(clazz, &mem_pool);
+    TranslationUnitAST* ast = parse(clazz);
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
   }
@@ -166,8 +161,7 @@ void TestParser::testManyComparisons()
 void TestParser::testParserFail()
 {
   QByteArray stuff("foo bar !!! nothing that really looks like valid c++ code");
-  pool mem_pool;
-  TranslationUnitAST *ast = parse(stuff, &mem_pool);
+  TranslationUnitAST *ast = parse(stuff);
   QVERIFY(ast->declarations == 0);
   QVERIFY(control.problems().count() > 3);
 }
@@ -175,30 +169,26 @@ void TestParser::testParserFail()
 void TestParser::testPartialParseFail() {
   {
   QByteArray method("struct C { Something invalid is here };");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_ClassSpecifier));
   }
   {
   QByteArray method("void TestParser::test() { Something invalid is here };");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   }
   {
   QByteArray method("void TestParser::test() { {Something invalid is here };");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   QVERIFY(ast->hadMissingCompoundTokens);
   }
   {
   QByteArray method("void TestParser::test() { case:{};");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   QVERIFY(ast->hadMissingCompoundTokens);
@@ -208,8 +198,7 @@ void TestParser::testPartialParseFail() {
 void TestParser::testParseMethod()
 {
   QByteArray method("void TestParser::A::test() {  }");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
 }
@@ -218,10 +207,9 @@ void TestParser::testParseMethod()
 //   void TestParser::testMethodArgs()
 //   {
 //     QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
-//     pool mem_pool;
 //     Parser parser(&control);
 //     TranslationUnitAST* ast = parser.parse(method.constData(),
-// 					   method.size() + 1, &mem_pool);
+// 					   method.size() + 1);
 //     // return type
 //     SimpleTypeSpecifierAST* retType = static_cast<SimpleTypeSpecifierAST*>
 //       (getAST(ast, AST::Kind_SimpleTypeSpecifier));
@@ -261,8 +249,7 @@ void TestParser::testParseMethod()
 void TestParser::testForStatements()
 {
   QByteArray method("void TestParser::A::t() { for (int i = 0; i < 10; i++) { ; }}");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   QVERIFY(control.problems().isEmpty());
   
@@ -273,7 +260,7 @@ void TestParser::testForStatements()
   QVERIFY(hasKind(ast, AST::Kind_SimpleDeclaration));
 
   QByteArray emptyFor("void TestParser::A::t() { for (;;) { } }");
-  ast = parse(emptyFor, &mem_pool);
+  ast = parse(emptyFor);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_ForStatement));
   QVERIFY(!hasKind(ast, AST::Kind_Condition));
@@ -283,8 +270,7 @@ void TestParser::testForStatements()
 void TestParser::testIfStatements()
 {
   QByteArray method("void TestParser::A::t() { if (1 < 2) { } }");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   QVERIFY(control.problems().isEmpty());
   QVERIFY(hasKind(ast, AST::Kind_Condition));
@@ -294,8 +280,7 @@ void TestParser::testIfStatements()
 void TestParser::testComments()
 {
   QByteArray method("//TranslationUnitComment\n//Hello\nint A; //behind\n /*between*/\n /*Hello2*/\n class B{}; //behind\n//Hello3\n //beforeTest\nvoid TestParser::test(); //testBehind");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   CommentFormatter formatter;
   
@@ -320,8 +305,7 @@ void TestParser::testComments2()
 {
   CommentFormatter formatter;
   QByteArray method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -350,8 +334,7 @@ void TestParser::testComments3()
 {
   CommentFormatter formatter;
   QByteArray method("class Class{\n//Comment\n int val;};");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -375,8 +358,7 @@ void TestParser::testComments4()
 {
   CommentFormatter formatter;
   QByteArray method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -393,9 +375,8 @@ void TestParser::testComments5()
 {
   CommentFormatter formatter;
   QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
-  pool mem_pool;
   int initial_size = control.problems().size();  // Remember existing number of problems
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -441,8 +422,7 @@ void TestParser::testComments5()
 
 void TestParser::testComments6() {
   QByteArray module("//TranslationUnitComment\n/**\n * foo\n **/\nint i;\n");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(module, &mem_pool);
+  TranslationUnitAST* ast = parse(module);
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
   it = it->next;
@@ -535,8 +515,7 @@ void TestParser::testEmptyInclude()
 void TestParser::testCondition()
 {
   QByteArray method("bool i = (small < big || big > small);");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(method, &mem_pool);
+  TranslationUnitAST* ast = parse(method);
   dumper.dump(ast, lastSession->token_stream);
   ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
 }
@@ -545,15 +524,13 @@ void TestParser::testNonTemplateDeclaration()
 {
   /*{
     QByteArray templateMethod("template <int> class a {}; int main() { const int b = 1; const int c = 2; a<b|c> d; }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(templateMethod, &mem_pool);
+    TranslationUnitAST* ast = parse(templateMethod);
     dumper.dump(ast, lastSession->token_stream);
   }*/
 
   //int a, b, c, d; bool e;
   QByteArray declaration("void TestParser::expression() { if (a < b || c > d) {} }");
-  pool mem_pool;
-  TranslationUnitAST* ast = parse(declaration, &mem_pool);
+  TranslationUnitAST* ast = parse(declaration);
   dumper.dump(ast, lastSession->token_stream);
 }
 
@@ -562,8 +539,7 @@ void TestParser::testInitListTrailingComma()
   //see bug https://bugs.kde.org/show_bug.cgi?id=233328
 
   QByteArray code("const int foo [] = {1,};");
-  pool memPool;
-  TranslationUnitAST* ast = parse(code, &memPool);
+  TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
 
   QCOMPARE(ast->declarations->count(), 1);
@@ -580,8 +556,7 @@ void TestParser::testAsmVolatile()
                   "  (__d0), \"=D\" (__d1) : \"a\" (0), \"0\" (sizeof (fd_set) / sizeof (__fd_mask)),"
                   "  \"1\""
                   "  (&((&rfds)->__fds_bits)[0]) : \"memory\");");
-  pool memPool;
-  TranslationUnitAST* ast = parse(code, &memPool);
+  TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
 
   QCOMPARE(ast->declarations->count(), 1);
@@ -596,8 +571,7 @@ void TestParser::testIncrIdentifier()
 {
   //see bug https://bugs.kde.org/show_bug.cgi?id=238772
   QByteArray code("void TestParser::incr();");
-  pool memPool;
-  TranslationUnitAST* ast = parse(code, &memPool);
+  TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
 
   QCOMPARE(ast->declarations->count(), 1);
@@ -611,8 +585,7 @@ void TestParser::testParseFile()
   QVERIFY(file.open(QFile::ReadOnly));
   QByteArray contents = file.readAll();
   file.close();
-  pool mem_pool;
-  TranslationUnitAST* ast =parse(contents, &mem_pool);
+  TranslationUnitAST* ast =parse(contents);
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
 }
@@ -687,8 +660,7 @@ void TestParser::testQProperty()
   QFETCH(bool, isConstant);
   QFETCH(bool, isFinal);
 
-  pool memPool;
-  TranslationUnitAST* ast = parse(code, &memPool);
+  TranslationUnitAST* ast = parse(code);
 
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_QPropertyDeclaration));
@@ -712,10 +684,9 @@ void TestParser::testQProperty()
 
 void TestParser::testCommentAfterFunctionCall() {
   //this is ambigous
-  pool memPool;
   TranslationUnitAST* ast = parse("void TestParser::setView() {\n"
                                   "  setView(m_view); //\n"
-                                  "}\n", &memPool);
+                                  "}\n");
 
   QVERIFY(ast != 0);
 
@@ -732,7 +703,6 @@ void TestParser::testCommentAfterFunctionCall() {
 }
 
 void TestParser::testPtrToMemberAst() {
-  pool memPool;
   TranslationUnitAST* ast = parse("\nstruct AA {"
                                   "\n  int j;"
                                   "\n};"
@@ -742,7 +712,7 @@ void TestParser::testPtrToMemberAst() {
                                   "\nvoid TestParser::f(){"
                                   "\n  int AA::* BB::* ppj=&BB::pj;"
                                   "\n}"
-                                  , &memPool);
+                                  );
   QVERIFY(ast!=0);
   QCOMPARE(ast->declarations->count(), 3);
   QVERIFY(hasKind(ast,AST::Kind_PtrToMember));
@@ -755,22 +725,21 @@ void TestParser::testPtrToMemberAst() {
 void TestParser::testSwitchStatement()
 {
   int problemCount = control.problems().count();
-  pool mem_pool;
 
   QByteArray switchTest("int main() { switch(0); }");
-  parse(switchTest, &mem_pool);
+  parse(switchTest);
   QCOMPARE(control.problems().count(), problemCount);
   QByteArray switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
-  parse(switchTest2, &mem_pool);
+  parse(switchTest2);
   QCOMPARE(control.problems().count(), problemCount);
   QByteArray switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
-  parse(switchTest3, &mem_pool);
+  parse(switchTest3);
   QCOMPARE(control.problems().count(), problemCount);
   QByteArray switchTest4("int main() { switch (0) while(true) return false; }");
-  parse(switchTest4, &mem_pool);
+  parse(switchTest4);
   QCOMPARE(control.problems().count(), problemCount);
   QByteArray switchTest5("int main() { switch (0) { case 0: return 0; } }");
-  parse(switchTest5, &mem_pool);
+  parse(switchTest5);
   QCOMPARE(control.problems().count(), problemCount);
 }
 
@@ -792,11 +761,9 @@ void TestParser::testNamedOperators_data()
 
 void TestParser::testNamedOperators()
 {
-  pool mem_pool;
-
   QFETCH(QString, code);
   code = "int main() { " + code + " }\n";
-  parse(code.toLocal8Bit(), &mem_pool);
+  parse(code.toLocal8Bit());
   QVERIFY(control.problems().isEmpty());
 }
 
@@ -818,15 +785,13 @@ void TestParser::testOperators_data()
 
 void TestParser::testOperators()
 {
-  pool mem_pool;
-
   QFETCH(QString, code);
   code = "int main() { " + code + " }\n";
-  parse(code.toLocal8Bit(), &mem_pool);
+  parse(code.toLocal8Bit());
   QVERIFY(control.problems().isEmpty());
 }
 
-TranslationUnitAST* TestParser::parse(const QByteArray& unit, pool* mem_pool)
+TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems
   Parser parser(&control);

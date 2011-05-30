@@ -84,7 +84,7 @@ private:
 
   ParseSession* lastSession;
 
-  TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool);
+  TranslationUnitAST* parse(const QByteArray& unit);
 };
 
 #endif // TEST_PARSER_H
