@@ -78,6 +78,9 @@ private slots:
   void testOperators_data();
   void testOperators();
 
+  //BEGIN C++2011 support
+  void testRangeBasedFor();
+
 private:
   Control control;
   DumpTree dumper;
