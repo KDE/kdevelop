@@ -978,7 +978,7 @@ TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
 
 QSharedPointer<ControlFlowGraph> CPPParseJob::controlFlowGraph()
 {
-  QSharedPointer<ControlFlowGraph> ret;
+  QSharedPointer<ControlFlowGraph> ret(new ControlFlowGraph);
   ControlFlowGraphBuilder flowvisitor(duChain(), m_session.data(), ret.data());
   flowvisitor.run(m_session->topAstNode());
   return ret;
@@ -986,7 +986,7 @@ QSharedPointer<ControlFlowGraph> CPPParseJob::controlFlowGraph()
 
 QSharedPointer<DataAccessRepository> CPPParseJob::dataAccessInformation()
 {
-  QSharedPointer<DataAccessRepository> ret;
+  QSharedPointer<DataAccessRepository> ret(new DataAccessRepository);
   UseDecoratorVisitor visit(m_session.data(), ret.data());
   visit.run(m_session->topAstNode());
   return ret;

@@ -48,7 +48,9 @@ typedef PushPositiveValue<DUContext*> PushPositiveContext;
 
 UseDecoratorVisitor::UseDecoratorVisitor(const ParseSession* session, DataAccessRepository* repo)
   : m_session(session), m_defaultFlags(DataAccess::Read), m_mods(repo)
-{}
+{
+  Q_ASSERT(repo);
+}
 
 void UseDecoratorVisitor::run(AST* node)
 {
