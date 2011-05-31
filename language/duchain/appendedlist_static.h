@@ -98,7 +98,7 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
       bool empty = KDevVarLengthArray<T, 10>::isEmpty();
       Q_ASSERT(empty);
       for(uint a = 0; a < size; ++a)
-        append(data[a]);
+        this->append(data[a]);
     }
     
     void free(T*) {
