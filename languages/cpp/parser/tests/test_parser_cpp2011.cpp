@@ -21,6 +21,8 @@
 
 #include <QTest>
 
+#include "parsesession.h"
+
 void TestParser::testRangeBasedFor()
 {
   QByteArray code("int main() {\n"
@@ -30,7 +32,9 @@ void TestParser::testRangeBasedFor()
                   "  }\n"
                   " }\n");
   TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
 
-  QEXPECT_FAIL("", "not yet supported", Abort);
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
   QVERIFY(control.problems().isEmpty());
 }

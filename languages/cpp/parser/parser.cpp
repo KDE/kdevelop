@@ -1406,7 +1406,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
   return true;
 }
 
-bool Parser::parseDeclarator(DeclaratorAST *&node)
+bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
 {
   uint start = session->token_stream->cursor();
 
@@ -1433,7 +1433,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
     }
   else
     {
-      if (session->token_stream->lookAhead() == ':')
+      if (allowBitfield && session->token_stream->lookAhead() == ':')
         {
           // unnamed bitfield
         }
@@ -1447,7 +1447,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
           return false;
         }
 
-      if (session->token_stream->lookAhead() == ':')
+      if (allowBitfield && session->token_stream->lookAhead() == ':')
         {
           advance();
 
@@ -3075,16 +3075,21 @@ bool Parser::parseForStatement(StatementAST *&node)
   ADVANCE(Token_for, "for");
   ADVANCE('(', "(");
 
+  ForRangeDeclarationAst *rangeDecl = 0;
   StatementAST *init = 0;
-  if (!parseForInitStatement(init))
-    {
-      reportError(("'for' initialization expected"));
-      return false;
-    }
-
   ConditionAST *cond = 0;
-  parseCondition(cond);
-  ADVANCE(';', ";");
+
+  if (!parseRangeBasedFor(rangeDecl))
+    {
+      if (!parseForInitStatement(init))
+        {
+          reportError(("'for' initialization expected"));
+          return false;
+        }
+
+      parseCondition(cond);
+      ADVANCE(';', ";");
+    }
 
   ExpressionAST *expr = 0;
   parseCommaExpression(expr);
@@ -3096,9 +3101,68 @@ bool Parser::parseForStatement(StatementAST *&node)
 
   ForStatementAST *ast = CreateNode<ForStatementAST>(session->mempool);
   ast->init_statement = init;
+  ast->range_declaration = rangeDecl;
   ast->condition = cond;
   ast->expression = expr;
   ast->statement = body;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseRangeBasedFor(ForRangeDeclarationAst *&node)
+{
+  Comment mcomment = comment();
+  clearComment();
+
+  uint start = session->token_stream->cursor();
+
+  const ListNode<uint> *cv = 0;
+  parseCvQualify(cv);
+
+  const ListNode<uint> *storageSpec = 0;
+  parseStorageClassSpecifier(storageSpec);
+
+  parseCvQualify(cv);
+
+  TypeSpecifierAST *spec = 0;
+  // auto support: right now it is part of the storage spec, put it back
+  if (storageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
+    rewind(storageSpec->toBack()->element);
+  }
+
+  if (!parseTypeSpecifier(spec))
+    {
+      rewind(start);
+      return false;
+    }
+
+  parseCvQualify(cv);
+  spec->cv = cv;
+
+  DeclaratorAST *declarator = 0;
+  if (!parseDeclarator(declarator, false /* no bitfield allowed */))
+    {
+      rewind(start);
+      return false;
+    }
+
+  if (session->token_stream->lookAhead() != ':')
+    {
+      rewind(start);
+      return false;
+    }
+  advance();
+
+  ForRangeDeclarationAst *ast = CreateNode<ForRangeDeclarationAst>(session->mempool);
+  ast->type_specifier = spec;
+  ast->storage_specifiers = storageSpec;
+  ast->declarator = declarator;
+
+  if(mcomment)
+    addComment(ast, mcomment);
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;

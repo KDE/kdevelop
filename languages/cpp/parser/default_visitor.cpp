@@ -157,8 +157,15 @@ void DefaultVisitor::visitForStatement(ForStatementAST *node)
 {
   visit(node->init_statement);
   visit(node->condition);
+  visit(node->range_declaration);
   visit(node->expression);
   visit(node->statement);
+}
+
+void DefaultVisitor::visitForRangeDeclaration(ForRangeDeclarationAst *node)
+{
+  visit(node->type_specifier);
+  visit(node->declarator);
 }
 
 void DefaultVisitor::visitFunctionCall(FunctionCallAST *node)
