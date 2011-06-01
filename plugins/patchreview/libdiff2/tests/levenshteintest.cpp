@@ -45,10 +45,6 @@ template<> char* toString(const Marker& marker)
 
 }
 
-bool operator == (const Marker& first, const Marker& second) {
-    return first.type() == second.type() && first.offset() == second.offset();
-}
-
 void LevenshteinTest::testFirstEmptyString()
 {
     DifferenceString* string1 = new DifferenceString(QString("12345"));
