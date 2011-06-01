@@ -5967,8 +5967,14 @@ void TestDUChain::testNestedNamespace()
   QCOMPARE(v8InternalFunctionCtx->localDeclarations().size(), 1);
 
   Declaration* aDec = v8InternalFunctionCtx->localDeclarations().first();
-  QEXPECT_FAIL("", "wrongly assings type of v8::Isolate instead of v8::internal::Isolate", Abort);
   QVERIFY(aDec->abstractType()->equals(v8InternalIsolateDec->abstractType().constData()));
+
+  QEXPECT_FAIL("", "uses are still associated incorreclty, probably to be fixed in TypeASTVisitor::visitSimpleTypeSpecifier", Abort);
+  QVERIFY(v8IsolateDec->uses().isEmpty());
+  QVERIFY(!v8InternalIsolateDec->uses().isEmpty());
+  QCOMPARE(v8InternalIsolateDec->uses().size(), 1);
+  QCOMPARE(v8InternalIsolateDec->uses().begin()->size(), 1);
+  QCOMPARE(v8InternalIsolateDec->uses().begin()->first().start.line, 5);
 }
 
 void TestDUChain::testPointerToMember()
