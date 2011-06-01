@@ -38,3 +38,14 @@ void TestParser::testRangeBasedFor()
   QVERIFY(ast->declarations);
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testRValueReference()
+{
+  QByteArray code("int&& a = 1;");
+
+  TranslationUnitAST* ast = parse(code);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}

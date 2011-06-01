@@ -80,6 +80,7 @@ private slots:
 
   //BEGIN C++2011 support
   void testRangeBasedFor();
+  void testRValueReference();
 
 private:
   Control control;

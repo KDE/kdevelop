@@ -1305,7 +1305,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
 {
   int tk = session->token_stream->lookAhead();
 
-  if (tk != '&' && tk != '*'
+  if (tk != '&' && tk != '*' && tk != Token_and
       && tk != Token_scope && tk != Token_identifier)
     {
       return false;
@@ -1318,6 +1318,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
     {
     case '&':
     case '*':
+    case Token_and:
       ast->op = session->token_stream->cursor();
       advance();
       break;
