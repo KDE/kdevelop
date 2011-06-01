@@ -398,7 +398,7 @@ void AreaOperationTest::simpleViewAdditionAndDeletion()
 
     checkAreaViewsDisplay(&mw, m_area1,
         QString("\n[ horizontal splitter ]\n"), 
-        1, 1, "Removed all views. Only horizontal splitter should remain.");
+        0, 1, "Removed all views. Only horizontal splitter should remain.");
 
     //add a view again and check that mainwindow is correctly reconstructed
     view = doc5->createView();
@@ -497,7 +497,7 @@ void AreaOperationTest::complexViewAdditionAndDeletion()
     delete m_area2->removeView(findNamedView(area, "view2.3.1"));
     checkAreaViewsDisplay(&mw, area, QString("\n\
 [ horizontal splitter ]\n\
-"), 1, 1);
+"), 0, 1);
 }
 
 void AreaOperationTest::toolViewAdditionAndDeletion()
