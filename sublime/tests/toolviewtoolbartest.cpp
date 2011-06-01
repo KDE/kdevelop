@@ -101,7 +101,6 @@ void ToolViewToolBarTest::assertGoodBar(QToolBar* toolbar, QString actionText)
 {
     QVERIFY( toolbar );
     QVERIFY( !toolbar->isFloatable() );
-    QVERIFY( !toolbar->isMovable() );
     QCOMPARE( toolbar->iconSize(), QSize( 16, 16 ) );
     QList<QAction*> actions = toolbar->actions();
     QCOMPARE( actions.count(), 1 );
