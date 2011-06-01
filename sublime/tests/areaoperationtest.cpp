@@ -133,6 +133,10 @@ void AreaOperationTest::init()
     view3->setObjectName("view3.1.4");
     m_area3->addView(view3, view1);
 
+    m_controller->addDefaultArea(m_area1);
+    m_controller->addDefaultArea(m_area2);
+    m_controller->addDefaultArea(m_area3);
+
 }
 
 void AreaOperationTest::cleanup()
@@ -366,6 +370,8 @@ void AreaOperationTest::simpleViewAdditionAndDeletion()
     m_controller->loadSettings();
 
     MainWindow mw(m_controller);
+    m_controller->addMainWindow(&mw);
+
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
@@ -415,6 +421,8 @@ void AreaOperationTest::complexViewAdditionAndDeletion()
 {
     Area *area = m_area2;
     MainWindow mw(m_controller);
+    m_controller->addMainWindow(&mw);
+
     m_controller->showArea(m_area2, &mw);
 
     Document *doc5 = new UrlDocument(m_controller, KUrl::fromPath("~/new.cpp"));
