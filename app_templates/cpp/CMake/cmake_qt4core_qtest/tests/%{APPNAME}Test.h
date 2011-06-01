@@ -1,9 +1,9 @@
-#ifndef %{APPNAMEID}TEST_H
-#define %{APPNAMEID}TEST_H
+#ifndef %{APPNAME}TEST_H
+#define %{APPNAME}TEST_H
 
 #include <QtCore/QObject>
 
-class %{APPNAMEID}Test : public QObject
+class %{APPNAME}Test : public QObject
 {
 Q_OBJECT
 private slots:

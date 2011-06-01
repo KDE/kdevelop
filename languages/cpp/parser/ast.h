@@ -56,6 +56,7 @@ class ExpressionAST;
 class ExpressionOrDeclarationStatementAST;
 class ExpressionStatementAST;
 class ForStatementAST;
+class ForRangeDeclarationAst;
 class FunctionCallAST;
 class FunctionDefinitionAST;
 class IfStatementAST;
@@ -195,6 +196,7 @@ public:
       Kind_JumpStatement,                       // 76
       Kind_SignalSlotExpression,                // 77
       Kind_QPropertyDeclaration,                // 78
+      Kind_ForRangeDeclaration,                 // 79
       NODE_KIND_COUNT
     };
 
@@ -562,10 +564,31 @@ public:
 
   DECLARE_AST_NODE(ForStatement)
 
+  // either init_statement == 0 or range_declaration == 0
+
+  // c-style for
   StatementAST *init_statement;
   ConditionAST *condition;
+
+  // range-based for
+  ForRangeDeclarationAst *range_declaration;
+
+  // shared between both for
   ExpressionAST *expression;
+
+  // body
   StatementAST *statement;
+};
+
+class ForRangeDeclarationAst : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(ForRangeDeclaration)
+
+  const ListNode<uint> *storage_specifiers;
+  TypeSpecifierAST *type_specifier;
+  DeclaratorAST *declarator;
 };
 
 class IfStatementAST : public StatementAST

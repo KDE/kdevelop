@@ -129,7 +129,7 @@ public:
   bool parseDeclaration(DeclarationAST *&node);
   bool parseDeclarationInternal(DeclarationAST *&node);
   bool parseDeclarationStatement(StatementAST *&node);
-  bool parseDeclarator(DeclaratorAST *&node);
+  bool parseDeclarator(DeclaratorAST *&node, bool allowBitfield = true);
   bool parseDeleteExpression(ExpressionAST *&node);
   bool parseDoStatement(StatementAST *&node);
   bool parseElaboratedTypeSpecifier(TypeSpecifierAST *&node);
@@ -145,6 +145,7 @@ public:
   bool parseExpressionStatement(StatementAST *&node);
   bool parseForInitStatement(StatementAST *&node);
   bool parseForStatement(StatementAST *&node);
+  bool parseRangeBasedFor(ForRangeDeclarationAst *&node);
   bool parseFunctionBody(StatementAST *&node);
   bool parseFunctionSpecifier(const ListNode<uint> *&node);
   bool parseIfStatement(StatementAST *&node);

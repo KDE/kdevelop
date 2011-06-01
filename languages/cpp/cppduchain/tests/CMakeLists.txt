@@ -22,7 +22,7 @@ include_directories(
 
 ########### next target ###############
 
-set(duchaintest_SRCS test_duchain.cpp testhelper.cpp)
+set(duchaintest_SRCS test_duchain.cpp test_duchain_cpp2011.cpp testhelper.cpp)
 
 
 kde4_add_unit_test(duchaintest ${duchaintest_SRCS})

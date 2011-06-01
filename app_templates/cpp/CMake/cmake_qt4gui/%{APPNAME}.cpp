@@ -1,11 +1,11 @@
-#include "%{APPNAMEID}.h"
+#include "%{APPNAME}.h"
 
 #include <QtGui/QLabel>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QAction>
 
-%{APPNAMEID}::%{APPNAMEID}()
+%{APPNAME}::%{APPNAME}()
 {
     QLabel* l = new QLabel( this );
     l->setText( "Hello World!" );
@@ -16,7 +16,7 @@
     menuBar()->addMenu( "File" )->addAction( a );
 }
 
-%{APPNAMEID}::~%{APPNAMEID}()
+%{APPNAME}::~%{APPNAME}()
 {}
 
-#include "%{APPNAMEID}.moc"
+#include "%{APPNAME}.moc"
