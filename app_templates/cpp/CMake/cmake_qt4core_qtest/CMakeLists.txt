@@ -5,9 +5,9 @@ enable_testing()
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
-set(%{APPNAMEID}_SRCS %{APPNAMEID}.cpp main.cpp)
-qt4_automoc(${%{APPNAMEID}_SRCS})
-add_executable(%{APPNAMEID} ${%{APPNAMEID}_SRCS})
-target_link_libraries(%{APPNAMEID} ${QT_QTCORE_LIBRARY})
+set(%{APPNAME}_SRCS %{APPNAME}.cpp main.cpp)
+qt4_automoc(${%{APPNAME}_SRCS})
+add_executable(%{APPNAME} ${%{APPNAME}_SRCS})
+target_link_libraries(%{APPNAME} ${QT_QTCORE_LIBRARY})
 
 add_subdirectory(tests)
