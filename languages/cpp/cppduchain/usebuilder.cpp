@@ -204,7 +204,9 @@ void UseBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 
 void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
-  if(node->init_declarators)
+  // Only perform special-handling for constructors when this isn't a real class specifier, else we
+  // will not properly process the contents of the class.
+  if(node->init_declarators && node->type_specifier && node->type_specifier->kind != AST::Kind_ClassSpecifier)
   {
     //Overridden so we can build uses for constructors like "A a(3);"
     UseExpressionVisitor visitor( editor()->parseSession(), this );

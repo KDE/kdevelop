@@ -569,6 +569,30 @@ void TestDUChain::testProblematicUses()
   TEST_FILE_PARSE_ONLY
 
   {
+    QByteArray method("struct A { A() : a( 0 ) { } int a; };");
+
+    LockedTopDUContext top = parse(method, DumpAll);
+
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2); //a uses
+    QVERIFY(!top->childContexts()[0]->localDeclarations()[1]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    QByteArray method("struct A { A() : a( 0 ) { } int a; } r;");
+
+    LockedTopDUContext top = parse(method, DumpAll);
+
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2); //a uses
+    QVERIFY(!top->childContexts()[0]->localDeclarations()[1]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
     QByteArray method("struct S { int a; }; int c; int q; int a; S* s; void test() { if(s->a < q && a > c) { } if(s->a < q && a > c) { } }");
 
     LockedTopDUContext top = parse(method, DumpNone);
