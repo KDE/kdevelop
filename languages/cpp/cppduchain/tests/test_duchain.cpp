@@ -5926,6 +5926,51 @@ void TestDUChain::testCommentAfterFunctionCall()
   QVERIFY(top->childContexts().last()->localDeclarations().isEmpty());
   QCOMPARE(m_view->uses().size(), 1);
 }
+
+void TestDUChain::testNestedNamespace()
+{
+  // see bug: https://bugs.kde.org/show_bug.cgi?id=273658
+
+  //                                        1         2         3
+  //                               123456789012345678901234567890
+  LockedTopDUContext top = parse( "namespace v8 {\n"
+                                  "  struct Isolate { int bar(); };\n"
+                                  "  namespace internal {\n"
+                                  "    struct Isolate { int foo(); };\n"
+                                  "    void function() {\n"
+                                  "      Isolate a;\n"   // this should be v8::internal::Isolate, but kdevelop thinks it is v8::Isolate
+                                  "      a.foo();\n"
+                                  "    }\n"
+                                  "  }\n"
+                                  "}\n", DumpNone );
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  // namespace v8
+  QCOMPARE(top->childContexts().size(), 1);
+  QCOMPARE(top->localDeclarations().size(), 1);
+
+  DUContext* v8Ctx = top->childContexts().at(0);
+  QCOMPARE(v8Ctx->localDeclarations().size(), 2);
+
+  Declaration* v8IsolateDec = v8Ctx->localDeclarations().first();
+  QCOMPARE(v8IsolateDec->qualifiedIdentifier().toString(), QString("v8::Isolate"));
+
+  DUContext* v8InternalCtx = v8Ctx->childContexts().last();
+  QCOMPARE(v8InternalCtx->localDeclarations().size(), 2);
+
+  Declaration* v8InternalIsolateDec = v8InternalCtx->localDeclarations().first();
+  QCOMPARE(v8InternalIsolateDec->qualifiedIdentifier().toString(), QString("v8::internal::Isolate"));
+
+  DUContext* v8InternalFunctionCtx = v8InternalCtx->childContexts().last();
+  QCOMPARE(v8InternalFunctionCtx->localDeclarations().size(), 1);
+
+  Declaration* aDec = v8InternalFunctionCtx->localDeclarations().first();
+  QEXPECT_FAIL("", "wrongly assings type of v8::Isolate instead of v8::internal::Isolate", Abort);
+  QVERIFY(aDec->abstractType()->equals(v8InternalIsolateDec->abstractType().constData()));
+}
+
 void TestDUChain::testPointerToMember()
 {
   //                                         1         2         3

@@ -191,6 +191,7 @@ private slots:
 
   void testCommentAfterFunctionCall();
   void testPointerToMember();
+  void testNestedNamespace();
 
   //BEGIN C++2011
   void testRangeBasedFor();
