@@ -298,8 +298,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
           QString input;
           while(true) {
             out << i18n("Clear cache: [Y/n] ") << flush;
-            in >> input;
-            input = input.trimmed();
+            input = in.readLine().trimmed();
             if (input.toLower() == "y" || input.isEmpty()) {
               userAnswer = KMessageBox::Yes;
               break;

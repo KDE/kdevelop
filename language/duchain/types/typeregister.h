@@ -35,26 +35,24 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
   /**
    * Create a new type for the given \a data.
    *
-   * \param data Data to assign to the new type.
+   * \param data Data to assign to the new type. The data type must match the class type.
    */
   virtual AbstractType* create(AbstractTypeData* data) const = 0;
 
   /**
-   * Release the \a data from a type which is being destroyed.
-   *
-   * \param data data to destroy.
+   * Call the destructor of the data-type.
    */
   virtual void callDestructor(AbstractTypeData* data) const = 0;
 
-
   /**
-   * Copy data \a from one type \a to another.
+   * Copy contents of type-data \a from one location \a to another.
    *
    * \param from data to copy from
-   * \param to data to copy to
-   * \param constant set to true if \a to is to be a static data type, or false if \a to is to be a dynamic data type.
-   *
-   * \todo David, please check this
+   * \param to data to copy to. This data must not be initialized yet
+   *           (the constructor must not have been called yet)
+   * \param constant set to true if \a to is to be a static unchangeable
+   *                 data type (eg. in the type-repository), or false if
+   *                 \a to is to be a dynamic changeable type data.
    */
   virtual void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const = 0;
 
@@ -96,11 +94,17 @@ class TypeFactory : public AbstractTypeFactory {
       new (&to) Data(*temp); //Call the copy constructor to initialize the target
 
       Q_ASSERT((bool)to.m_dynamic == (bool)!constant);
-      delete temp;
+      destroyData(temp);
     }else{
       new (&to) Data(static_cast<const Data&>(from)); //Call the copy constructor to initialize the target
     }
   }
+  
+  void destroyData(AbstractTypeData* data) const {
+    callDestructor(data);
+    delete[] (char*)data;
+  }
+  
   void callDestructor(AbstractTypeData* data) const {
     Q_ASSERT(data->typeClassId == T::Identity);
     static_cast<Data*>(data)->~Data();
