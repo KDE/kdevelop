@@ -60,7 +60,7 @@ public:
    */
   void buildUses(T *node)
   {
-    TopDUContext* top = dynamic_cast<TopDUContext*>(contextFromNode(node));
+    TopDUContext* top = dynamic_cast<TopDUContext*>(this->contextFromNode(node));
 
     if (top) {
       DUChainWriteLocker lock(DUChain::lock());
@@ -91,10 +91,10 @@ protected:
 
     DUChainReadLocker lock(DUChain::lock());
     QList<DeclarationPointer> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
-    foreach (Declaration* declaration, declarations)
+    foreach (DeclarationPointer declaration, declarations)
       if (!declaration->isForwardDeclaration()) {
         declarations.clear();
-        declarations.append(DeclarationPointer(declaration));
+        declarations.append(declaration);
         break;
       }
     // If we don't break, there's no non-forward declaration
