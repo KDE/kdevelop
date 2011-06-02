@@ -87,8 +87,12 @@ class AreaTabBar : public QTabBar {
     }
     
     void addCustomTab(QString text, QIcon icon, bool isCurrent, QString areaId, QWidget* customButtonWidget) {
-        customButtonWidget->setParent(this);
-        customButtonWidget->show();
+        // plain sublime doens't provide customButtonWidget, only kdevelop shell does
+        // TODO: adymo: refactor
+        if (customButtonWidget) {
+            customButtonWidget->setParent(this);
+            customButtonWidget->show();
+        }
         areaIds << areaId;
         buttons << new AreaTabButton(text, icon, 16, this, isCurrent, customButtonWidget);
         addTab(QString());

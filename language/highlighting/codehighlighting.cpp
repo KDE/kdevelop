@@ -157,6 +157,8 @@ bool CodeHighlighting::hasHighlighting(IndexedString url) const
 
 void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 {
+  ENSURE_CHAIN_NOT_LOCKED
+
   IndexedString url;
 
   {
