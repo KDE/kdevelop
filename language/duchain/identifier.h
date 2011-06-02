@@ -327,6 +327,9 @@ public:
   bool isReference() const;
   void setIsReference(bool);
 
+  bool isRValue() const;
+  void setIsRValue(bool);
+
   bool isConstant() const;
   void setIsConstant(bool);
   
@@ -358,6 +361,7 @@ public:
     IndexedQualifiedIdentifier m_identifier;
     bool m_isConstant : 1;
     bool m_isReference : 1;
+    bool m_isRValue : 1;
     uint m_pointerDepth : 5;
     uint m_pointerConstMask : 25;
 };

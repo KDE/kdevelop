@@ -76,6 +76,16 @@ void ReferenceType::setBaseType(AbstractType::Ptr type)
   d_func_dynamic()->m_baseType = type->indexed();
 }
 
+bool ReferenceType::isRValue() const
+{
+  return d_func()->m_isRValue;
+}
+
+void ReferenceType::setIsRValue(bool isRValue)
+{
+  d_func_dynamic()->m_isRValue = isRValue;
+}
+
 void ReferenceType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
@@ -93,10 +103,11 @@ QString ReferenceType::toString() const
 {
   AbstractType::Ptr base = baseType();
   QString baseString = (base ? base->toString() : "<notype>");
+  const QString ampersands = d_func()->m_isRValue ? "&&" : "&";
   if(base.cast<IntegralType>() || base.cast<StructureType>())
-    return AbstractType::toString(false) + QString("%1&").arg(baseString);
+    return AbstractType::toString(false) + baseString + ampersands;
   else
-    return QString("%1&").arg(baseString + AbstractType::toString(true));
+    return baseString + AbstractType::toString(true) + ampersands;
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
@@ -106,7 +117,7 @@ AbstractType::WhichType ReferenceType::whichType() const
 
 uint ReferenceType::hash() const
 {
-  return AbstractType::hash() + (d_func()->m_baseType.hash()+1) * 29;
+  return AbstractType::hash() + (d_func()->m_baseType.hash()+1) * 29 + (d_func()->m_isRValue ? 43768 : 0);
 }
 
 }

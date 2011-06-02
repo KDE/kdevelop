@@ -61,6 +61,20 @@ public:
    */
   void setBaseType(AbstractType::Ptr baseType);
 
+  /**
+   * Checks whether this type is an rvalue- or lvalue-reference type.
+   * 
+   * \returns true for rvalue-references, false for lvalue-references
+   */
+  bool isRValue() const;
+
+  /**
+   * Sets whether this type is an rvalue- or lvalue-reference type.
+   * 
+   * \param isRValue true for rvalue-references, false for lvalue-references
+   */
+  void setIsRValue(bool isRValue);
+
   virtual QString toString() const;
 
   virtual uint hash() const;

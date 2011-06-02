@@ -134,6 +134,8 @@ public:
   ReferenceTypeData( const ReferenceTypeData& rhs );
   /// Type of data which is referenced
   IndexedType m_baseType;
+  /// True if this is an rvalue-reference, false for lvalue-references
+  bool m_isRValue : 1;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
