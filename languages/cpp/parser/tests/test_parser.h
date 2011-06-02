@@ -81,6 +81,7 @@ private slots:
   //BEGIN C++2011 support
   void testRangeBasedFor();
   void testRValueReference();
+  void testDefaultDeletedFunctions();
 
 private:
   Control control;

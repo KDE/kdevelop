@@ -2617,7 +2617,8 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 
   InitializerClauseAST *ast = 0;
 
-  if (session->token_stream->lookAhead() == '{')
+  const int token = session->token_stream->lookAhead();
+  if (token == '{')
     {
       advance();
       const ListNode<InitializerClauseAST*> *initializer_list = 0;
@@ -2630,6 +2631,13 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 
       ast = CreateNode<InitializerClauseAST>(session->mempool);
       ast->initializer_list = initializer_list;
+    }
+  else if (token == Token_delete || token == Token_default)
+    {
+      advance();
+
+      ast = CreateNode<InitializerClauseAST>(session->mempool);
+      ast->defaultDeleted = token == Token_delete ? InitializerClauseAST::Deleted : InitializerClauseAST::Default;
     }
   else
     {

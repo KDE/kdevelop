@@ -32,7 +32,6 @@ void TestParser::testRangeBasedFor()
                   "  }\n"
                   " }\n");
   TranslationUnitAST* ast = parse(code);
-  dumper.dump(ast, lastSession->token_stream);
 
   QVERIFY(ast);
   QVERIFY(ast->declarations);
@@ -43,6 +42,21 @@ void TestParser::testRValueReference()
 {
   QByteArray code("int&& a = 1;");
 
+  TranslationUnitAST* ast = parse(code);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}
+
+void TestParser::testDefaultDeletedFunctions()
+{
+  QByteArray code("class A{\n"
+                  "  A() = default;\n"
+                  "  A(const A&) = delete;\n"
+                  "};\n"
+                  "bool operator==(const A&, const A&) = default;\n"
+                  "bool operator!=(const A&, const A&) = delete;\n");
   TranslationUnitAST* ast = parse(code);
   QVERIFY(control.problems().isEmpty());
 

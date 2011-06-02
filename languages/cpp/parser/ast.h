@@ -637,12 +637,21 @@ public:
 
   DECLARE_AST_NODE(InitializerClause)
 
-  // either 'expression' or 'initializer_list' or neither are used.
+  // either 'expression' or 'initializer_list' or 'defaultDeleted' or neither are used.
   // neither are used when the clause represents the empty initializer "{}"
 
   // assignment expression
   ExpressionAST *expression;
+  // initializer list
   const ListNode<InitializerClauseAST*> *initializer_list;
+
+  // support for = default or = deleted functions
+  enum DefaultDeleted {
+    NotDefaultOrDeleted,
+    Default,
+    Deleted
+  };
+  DefaultDeleted defaultDeleted;
 };
 
 class LabeledStatementAST : public StatementAST
