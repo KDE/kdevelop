@@ -166,7 +166,7 @@ void FindReplaceTest::testReplace()
     job->setReplacementTemplateString(replaceTemplate);
     job->setFilesString("*");
     job->setExcludeString("");
-    job->setDirectory(dir.path());
+    job->setDirectoryChoice(QList<KUrl>() << KUrl(dir.path()));
     job->setRecursive(true);
     job->setRegexpFlag(true);
     job->setCaseSensitive(true);
@@ -174,6 +174,7 @@ void FindReplaceTest::testReplace()
     
     QVERIFY(job->exec());
     model->setReplacement(replace);
+    model->makeItemsCheckable(true);
     model->doReplacements();
     
     foreach(File fileData, result) 

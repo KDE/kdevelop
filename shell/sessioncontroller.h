@@ -105,7 +105,9 @@ public:
     static QList< SessionInfo > availableSessionInfo();
     
     /// Shows a dialog where the user can choose the session
-    static QString showSessionChooserDialog(QString headerText = QString());
+    /// @param headerText an additional text that will be shown at the top in a label
+    /// @param onlyRunning whether only currently running sessions should be shown
+    static QString showSessionChooserDialog(QString headerText = QString(), bool onlyRunning = false);
     
     void plugActions();
     
@@ -114,6 +116,10 @@ public:
         emit quitSession();
     }
     
+public Q_SLOTS:
+    // Returns the pretty name of the currently active session
+    virtual Q_SCRIPTABLE QString sessionName();
+
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );

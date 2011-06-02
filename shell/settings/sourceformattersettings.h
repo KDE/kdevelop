@@ -24,8 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <KCModule>
 #include <KMimeType>
 
-#include "interfaces/isourceformatter.h"
-
 #include "ui_sourceformattersettings.h"
 
 class QListWidgetItem;
@@ -38,20 +36,25 @@ class Document;
 namespace KDevelop
 {
 class ISourceFormatter;
+class SourceFormatterStyle;
 }
 
 struct SourceFormatter
 {
     KDevelop::ISourceFormatter* formatter;
-    QMap<QString,KDevelop::SourceFormatterStyle> styles;
-    QString selectedStyle;
+    // style name -> style. style objects owned by this
+    typedef QMap<QString,KDevelop::SourceFormatterStyle*> StyleMap;
+    StyleMap styles;
+    ~SourceFormatter();
 };
 
-struct SourceFormatterLanguage
-{
-    QString mimeType;
-    QMap<QString,SourceFormatter> formatters;
-    QString selectedFmt;
+struct LanguageSettings {
+    LanguageSettings();
+    QList<KMimeType::Ptr> mimetypes;
+    QSet<SourceFormatter*> formatters;
+    // weak pointers to selected formatter and style, no ownership
+    SourceFormatter* selectedFormatter;     // Should never be zero
+    KDevelop::SourceFormatterStyle* selectedStyle;  // TODO: can this be zero? Assume that not
 };
 
 /** \short The settings modulefor the Source formatter plugin.
@@ -82,7 +85,12 @@ private:
     QListWidgetItem* addStyle( const KDevelop::SourceFormatterStyle& s );
     static const QString userStylePrefix;
     void enableStyleButtons();
-    QMap<QString,SourceFormatterLanguage> languages;
+    // Language name -> language settings
+    typedef QMap<QString, LanguageSettings> LanguageMap;
+    LanguageMap languages;
+    // formatter name -> formatter. Formatters owned by this
+    typedef QMap<QString, SourceFormatter*> FormatterMap;
+    FormatterMap formatters;
     KTextEditor::Document* m_document;
 };
 

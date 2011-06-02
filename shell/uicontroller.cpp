@@ -129,7 +129,6 @@ public:
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
 
     Sublime::MainWindow* activeSublimeWindow;
-    QList<Sublime::MainWindow*> sublimeWindows;
     bool areasRestored;
 
     //Currently shown assistant popup.
@@ -543,7 +542,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
-void UiController::addToolViewToDockArea(const QString& name,
+void UiController::addToolViewToDockArea(const QString& /*name*/,
                                          IToolViewFactory* factory,
                                          Qt::DockWidgetArea area)
 {

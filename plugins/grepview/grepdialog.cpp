@@ -45,11 +45,15 @@
 #include "grepfindthread.h"
 #include "greputil.h"
 #include <interfaces/isession.h>
+#include <QMenu>
 
 using namespace KDevelop;
 
 namespace {
 
+QString allOpenFilesString = i18n("All Open Files");
+QString allOpenProjectsString = i18n("All Open Projects");
+    
 const QStringList template_desc = QStringList()
     << "verbatim"
     << "word"
@@ -75,7 +79,7 @@ const QStringList repl_template = QStringList()
     << "%s->\\1(";
 
 const QStringList filepatterns = QStringList()
-    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
+    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*y,*ypp,*yxx,*y++,*l"
     << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
     << "*.adb"
@@ -108,6 +112,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     setButtons( SearchButton | KDialog::Cancel );
     setButtonText( SearchButton, i18n("Search...") );
+    setButtonIcon( SearchButton, KIcon("edit-find") );
     setCaption( i18n("Find/Replace In Files") );
     setDefaultButton( SearchButton );
 
@@ -126,8 +131,20 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     
     templateTypeCombo->addItems(template_desc);
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
-    templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
-    replacementTemplateEdit->setText( cg.readEntry("LastUsedReplacementTemplateString", repl_template[0]) );
+    templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
+    templateEdit->setEditable(true);
+    templateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    KCompletion* comp = templateEdit->completionObject();
+    connect(templateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    for(int i=0; i<templateEdit->count(); i++)
+        comp->addItem(templateEdit->itemText(i));
+    replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
+    replacementTemplateEdit->setEditable(true);
+    replacementTemplateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    comp = replacementTemplateEdit->completionObject();
+    connect(replacementTemplateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    for(int i=0; i<replacementTemplateEdit->count(); i++)
+        comp->addItem(replacementTemplateEdit->itemText(i));
     
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
@@ -137,6 +154,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
+    syncButton->setMenu(createSyncButtonMenu());
 
     recursiveCheck->setChecked(cg.readEntry("recursive", true));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
@@ -145,7 +163,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
     connect(this, SIGNAL(buttonClicked(KDialog::ButtonCode)), this, SLOT(performAction(KDialog::ButtonCode)));
-    connect(syncButton, SIGNAL(clicked()), this, SLOT(syncButtonClicked()));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(const QString&)),
@@ -156,17 +173,92 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     connect(directoryRequester, SIGNAL(textChanged(const QString&)), this, SLOT(directoryChanged(const QString&)));
 }
 
+void GrepDialog::addUrlToMenu(QMenu* menu, KUrl url)
+{
+    QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
+    action->setData(QVariant(url.pathOrUrl()));
+    connect(action, SIGNAL(triggered(bool)), SLOT(synchronizeDirActionTriggered(bool)));
+}
+
+void GrepDialog::addStringToMenu(QMenu* menu, QString string)
+{
+    QAction* action = menu->addAction(string);
+    action->setData(QVariant(string));
+    connect(action, SIGNAL(triggered(bool)), SLOT(synchronizeDirActionTriggered(bool)));
+}
+
+void GrepDialog::synchronizeDirActionTriggered(bool)
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    Q_ASSERT(action);
+    setDirectory(action->data().value<QString>());
+}
+
+QMenu* GrepDialog::createSyncButtonMenu()
+{
+    QMenu* ret = new QMenu;
+
+    QAction* action = 0;
+    
+    QSet<KUrl> hadUrls;
+    
+    IDocument *doc = m_plugin->core()->documentController()->activeDocument();
+    if ( doc )
+    {
+        KUrl url = doc->url();
+        url.cd("..");
+        while(m_plugin->core()->projectController()->findProjectForUrl(url))
+        {
+            url.adjustPath(KUrl::RemoveTrailingSlash);
+            if(hadUrls.contains(url))
+                break;
+            hadUrls.insert(url);
+            addUrlToMenu(ret, url);
+            if(!url.cd(".."))
+                break;
+        }
+
+        // if the current file's parent directory is not in the project, add it
+        url = doc->url().upUrl();
+        url.adjustPath(KUrl::RemoveTrailingSlash);
+        if(!hadUrls.contains(url))
+        {
+            hadUrls.insert(url);
+            addUrlToMenu(ret, url);
+        }
+    }
+    
+    foreach(IProject* project, m_plugin->core()->projectController()->projects())
+    {
+        KUrl url = project->folder();
+        url.adjustPath(KUrl::RemoveTrailingSlash);
+        if(hadUrls.contains(url))
+            continue;
+        addUrlToMenu(ret, url);
+    }
+    
+    addStringToMenu(ret, allOpenFilesString);
+    addStringToMenu(ret, allOpenProjectsString);
+    return ret;
+}
+
 void GrepDialog::directoryChanged(const QString& dir)
 {
     setEnableProjectBox(false);
     KUrl currentUrl = dir;
     if( !currentUrl.isValid() )
         return;
-    IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
-    if( proj && proj->folder().isLocalFile() )
+    
+    bool projectAvailable = true;
+    
+    foreach(KUrl url, getDirectoryChoice())
     {
-        setEnableProjectBox(! proj->files().isEmpty() );
+        IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
+        if( !proj || !proj->folder().isLocalFile() )
+            projectAvailable = false;
     }
+    
+    setEnableProjectBox(projectAvailable);
 }
 
 GrepDialog::~GrepDialog()
@@ -181,28 +273,15 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
-    cg.writeEntry("LastUsedTemplateString", templateEdit->text());
-    cg.writeEntry("LastUsedReplacementTemplateString", replacementTemplateEdit->text());
+    cg.writeEntry("LastUsedTemplateString", qCombo2StringList(templateEdit));
+    cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(templateEdit));
     cg.sync();
 }
 
 void GrepDialog::templateTypeComboActivated(int index)
 {
-    templateEdit->setText(template_str[index]);
-    replacementTemplateEdit->setText(repl_template[index]);
-}
-
-void GrepDialog::syncButtonClicked( )
-{
-    IDocument *doc = m_plugin->core()->documentController()->activeDocument();
-    if ( doc )
-    {
-        KUrl url = doc->url();
-        if ( url.isLocalFile() )
-        {
-            setDirectory( url.upUrl().toLocalFile() );
-        }
-    }
+    templateEdit->setCurrentItem( template_str[index], true );
+    replacementTemplateEdit->setCurrentItem( repl_template[index], true );
 }
 
 void GrepDialog::setEnableProjectBox(bool enable)
@@ -218,9 +297,12 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
+    if(dir.startsWith("/"))
+    {
+        directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
+        directoryRequester->completionObject()->setDir( dir );
+    }
     directoryRequester->lineEdit()->setText(dir);
-    directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
-    directoryRequester->completionObject()->setDir( dir );
 }
 
 QString GrepDialog::patternString() const
@@ -230,12 +312,12 @@ QString GrepDialog::patternString() const
 
 QString GrepDialog::templateString() const
 {
-    return templateEdit->text().isEmpty() ? "%s" : templateEdit->text();
+    return templateEdit->currentText().isEmpty() ? "%s" : templateEdit->currentText();
 }
 
 QString GrepDialog::replacementTemplateString() const
 {
-    return replacementTemplateEdit->text();
+    return replacementTemplateEdit->currentText();
 }
 
 QString GrepDialog::filesString() const
@@ -246,11 +328,6 @@ QString GrepDialog::filesString() const
 QString GrepDialog::excludeString() const
 {
     return excludeCombo->currentText();
-}
-
-KUrl GrepDialog::directory() const
-{
-    return directoryRequester->url();
 }
 
 bool GrepDialog::useProjectFilesFlag() const
@@ -278,6 +355,46 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
     enableButton( SearchButton,  !text.isEmpty() );
 }
 
+QList< KUrl > GrepDialog::getDirectoryChoice() const
+{
+    QList< KUrl > ret;
+    QString text = directoryRequester->lineEdit()->text();
+    if(text == allOpenFilesString)
+    {
+        foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
+            ret << doc->url();
+    }else if(text == allOpenProjectsString)
+    {
+        foreach(IProject* project, ICore::self()->projectController()->projects())
+            ret << project->folder();
+    }else{
+        QStringList semicolonSeparatedFileList = text.split(";");
+        if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
+        {
+            // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
+            // a semicolon in the name.
+            foreach(QString file, semicolonSeparatedFileList)
+                ret << KUrl::fromPath(file);
+        }else{
+            ret << directoryRequester->url();
+        }
+    }
+    return ret;
+}
+
+bool GrepDialog::isPartOfChoice(KUrl url) const
+{
+    foreach(KUrl choice, getDirectoryChoice())
+        if(choice.isParentOf(url) || choice.equals(url))
+            return true;
+    return false;
+}
+
+void GrepDialog::start()
+{
+    performAction(SearchButton);
+}
+
 void GrepDialog::performAction(KDialog::ButtonCode button)
 {
     // a click on cancel trigger this signal too
@@ -287,10 +404,11 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     QList<IDocument*> unsavedFiles;
     QStringList include = GrepFindFilesThread::parseInclude(filesString());
     QStringList exclude = GrepFindFilesThread::parseExclude(excludeString());
+    
     foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
     {
         KUrl docUrl = doc->url();
-        if(doc->state() != IDocument::Clean && directory().isParentOf(docUrl) && 
+        if(doc->state() != IDocument::Clean && isPartOfChoice(docUrl) && 
            QDir::match(include, docUrl.fileName()) && !QDir::match(exclude, docUrl.toLocalFile()))
         {
             unsavedFiles << doc;
@@ -303,29 +421,42 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
         return;
     }
     
+    QList<KUrl> choice = getDirectoryChoice();
     
-    GrepJob* job = m_plugin->grepJob();
+    GrepJob* job = m_plugin->newGrepJob();
+    
+    QString descriptionOrUrl(directoryRequester->lineEdit()->text());
+    QString description = descriptionOrUrl;
+    // Shorten the description
+    if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
+        description = i18n("%1, and %2 more items", choice[0].pathOrUrl(), choice.size()-1);
     
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
-                               findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
-    toolView->renewModel();
+                               findToolView(i18n("Find/Replace in Files"), m_factory, IUiController::CreateAndRaise);
+    GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
     toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),
             toolView, SLOT(showErrorMessage(QString)));
+    //the GrepOutputModel gets the 'showMessage' signal to store it and forward
+    //it to toolView
     connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            toolView, SLOT(showMessage(KDevelop::IStatus*, QString)));
+            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*, QString)));    
+    connect(outputModel, SIGNAL(showMessage(KDevelop::IStatus*,QString)),
+            toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    
+    
     connect(toolView, SIGNAL(outputViewIsClosed()),
             job, SLOT(kill()));
     
-    job->setOutputModel(toolView->model());
+    job->setOutputModel(outputModel);
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());
     job->setFilesString(filesString());
     job->setExcludeString(excludeString());
-    job->setDirectory(directory());
+    job->setDirectoryChoice(choice);
 
     job->setProjectFilesFlag( useProjectFilesFlag() );
     job->setRegexpFlag( regexpFlag() );
@@ -334,7 +465,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
 
     ICore::self()->runController()->registerJob(job);
     
-    m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
+    m_plugin->rememberSearchDirectory(descriptionOrUrl);
     
     close();
 }

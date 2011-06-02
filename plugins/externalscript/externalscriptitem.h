@@ -34,14 +34,35 @@ public:
   ExternalScriptItem();
 
   /**
-   * @return The command to execute. Working dir will be that of the active document.
+   * @return The command to execute.
    */
   QString command() const;
   /**
-   * Sets the command to execute. Working dir will be that of the active document.
+   * Sets the command to execute.
    */
   void setCommand( const QString& command );
 
+  /**
+   * @return The working directory where to execute the command.
+   *         If this is empty (default), it should be derived from the active document.
+   */
+  QString workingDirectory() const;
+  
+  /**
+   * Specify the working directory where the command should be executed
+   */
+  void setWorkingDirectory( const QString& workingDirectory );
+  
+  /**
+   * Whether placeholders like %b etc. in the command should be substituted. Default is true.
+   * */
+  bool performParameterReplacement() const;
+  
+  /**
+   * Set whether placeholders like %b etc. in the command should be substituted. Default is true.
+   * */
+  void setPerformParameterReplacement(bool perform);
+  
   enum SaveMode {
     /// Nothing needs to be saved.
     SaveNone,
@@ -168,12 +189,14 @@ public:
   void save() const;
 private:
   QString m_command;
+  QString m_workingDirectory;
   SaveMode m_saveMode;
   OutputMode m_outputMode;
   ErrorMode m_errorMode;
   InputMode m_inputMode;
   KAction* m_action;
   bool m_showOutput;
+  bool m_performReplacements;
 };
 
 Q_DECLARE_METATYPE(ExternalScriptItem*)

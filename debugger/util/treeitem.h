@@ -52,6 +52,7 @@ public: // Methods that the derived classes should implement
     virtual void fetchMoreChildren()=0;
 
     virtual void setColumn(int index, const QVariant& data) { Q_UNUSED(index); Q_UNUSED(data); }
+    void emitAllChildrenFetched();
 
 protected: // Interface for derived classes
 
@@ -96,6 +97,7 @@ protected: // Interface for derived classes
 Q_SIGNALS:
     void expanded();
     void collapsed();
+    void allChildrenFetched();
 
 protected: // Backend implementation of Model/View
     friend class TreeModel;

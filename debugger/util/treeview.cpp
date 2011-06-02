@@ -19,6 +19,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include "treeview.h"
 #include "treemodel.h"
 
@@ -34,6 +37,8 @@ AsyncTreeView::AsyncTreeView(TreeModel* model, QWidget *parent = 0)
              this, SLOT(slotCollapsed(const QModelIndex &)));
     connect (this, SIGNAL(clicked(const QModelIndex &)),
              this, SLOT(slotClicked(const QModelIndex &)));
+    connect (model, SIGNAL(itemChildrenReady()),
+            this, SLOT(slotExpandedDataReady()));
 }
 
 
@@ -45,11 +50,38 @@ void AsyncTreeView::slotExpanded(const QModelIndex &index)
 void AsyncTreeView::slotCollapsed(const QModelIndex &index)
 {
     static_cast<TreeModel*>(model())->collapsed(index);
+    resizeColumns();
 }
 
 void AsyncTreeView::slotClicked(const QModelIndex &index)
 {
     static_cast<TreeModel*>(model())->clicked(index);
+    resizeColumns();
+}
+
+QSize AsyncTreeView::sizeHint() const
+{
+    //Assuming that columns are awlays resized to fit their contents, return a size that will fit all without a scrollbar
+    QMargins margins = contentsMargins();
+    int horizontalSize = margins.left() + margins.right();
+    for (int i = 0; i < model()->columnCount(); ++i) {
+        horizontalSize += columnWidth(i);
+    }
+    horizontalSize = qMin(horizontalSize, QApplication::desktop()->screenGeometry().width()*3/4);
+    return QSize(horizontalSize, margins.top() + margins.bottom() + sizeHintForRow(0));
+}
+
+void AsyncTreeView::resizeColumns()
+{
+    for (int i = 0; i < model()->columnCount(); ++i) {
+        this->resizeColumnToContents(i);
+    }
+    this->updateGeometry();
+}
+
+void AsyncTreeView::slotExpandedDataReady()
+{
+    resizeColumns();
 }
 
 #include "treeview.moc"

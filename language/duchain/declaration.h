@@ -24,7 +24,6 @@
 #include <QtCore/QMap>
 //#include <QtCore/qcontainerfwd.h>
 
-#include "../editor/documentrangeobject.h"
 #include "identifier.h"
 #include "indexedstring.h"
 #include "types/abstracttype.h"
@@ -128,6 +127,24 @@ public:
   bool isFinal() const;
   /// Set whether the declaration is final. \param final true if the declaration is final, otherwise false.
   void setFinal(bool final);
+  
+  /**
+   * Changes weather this declaration must be direct in all cases or not. Needed for some languages, i.e. Python.
+   * "false" is the default.
+   * \param direct true to force direct, false otherwise.
+   * */
+  void setAlwaysForceDirect(bool direct);
+  /// Access weather this declaration must always be direct.
+  bool alwaysForceDirect() const;
+  
+  /**
+   * Changes weather this declaration is "implicitly created", i.e. not declared in the class context, but written somewhere else outside
+   * \param _auto true for implicit, false for default behaviour
+   * */
+  void setAutoDeclaration(bool _auto);
+  /// Access weather this declaration is implicitly created or not.
+  bool isAutoDeclaration() const;
+  
 
   /**
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
@@ -340,6 +357,12 @@ public:
    * This is a non-trivial operation.
    * */
   QMap<IndexedString, QList<RangeInRevision> > uses() const;
+  
+  /**
+   * Determines weather the declaration has any uses or not.
+   * Cheaper than calling uses().
+   * */
+  bool hasUses() const;
 
   /**
    * Returns a list of pairs:
@@ -368,7 +391,8 @@ public:
 
   /**
    * @see DeclarationId
-   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context
+   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context.
+   * The same goes for Declarations that have @c alwaysForceDirect() set to true.
    * */
   virtual DeclarationId id(bool forceDirect = false) const;
 

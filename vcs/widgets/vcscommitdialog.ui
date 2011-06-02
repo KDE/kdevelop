@@ -1,148 +1,54 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>VcsCommitDialog</class>
- <widget class="QWidget" name="VcsCommitDialog" >
-  <property name="modal" stdset="0" >
+ <widget class="QWidget" name="VcsCommitDialog">
+  <property name="modal" stdset="0">
    <bool>false</bool>
   </property>
-  <property name="geometry" >
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>706</width>
-    <height>493</height>
+    <width>497</width>
+    <height>432</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Select Files to commit</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Commit Message:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="KTextEdit" name="message" >
-     <property name="html" >
-      <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:8pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">Insert commit message here&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="acceptRichText" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="KComboBox" name="lastmessages" >
-     <property name="insertPolicy" >
-      <enum>QComboBox::InsertAtBottom</enum>
-     </property>
-     <property name="sizeAdjustPolicy" >
-      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Commit Files:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QTreeWidget" name="files" >
-     <property name="windowTitle" >
-      <string>Select Files to commit</string>
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="recursiveChk">
+     <property name="text">
+      <string>Recursive</string>
      </property>
-     <property name="indentation" >
-      <number>0</number>
-     </property>
-     <property name="allColumnsShowFocus" >
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text" >
-       <string/>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Status</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Files to commit</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>Recursive:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QCheckBox" name="recursiveChk" >
-     <property name="text" >
-      <string/>
-     </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Previous Messages:</string>
+   <item row="2" column="0" colspan="2">
+    <widget class="QTreeView" name="files">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="rootIsDecorated">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
-  <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>lastmessages</sender>
-   <signal>activated(QString)</signal>
-   <receiver>message</receiver>
-   <slot>setPlainText(QString)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>229</x>
-     <y>130</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>249</x>
-     <y>47</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -134,6 +134,7 @@ signals:
 private:
     void setupActions();
     std::auto_ptr<CvsPluginPrivate> d;
+    QString findWorkingDir(const KUrl& location);
 };
 
 #endif

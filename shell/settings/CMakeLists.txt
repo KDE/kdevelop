@@ -101,7 +101,7 @@ kde4_add_ui_files(kcm_kdevsourceformattersettings_SRCS ${kcm_kdevsourceformatter
 kde4_add_plugin(kcm_kdevsourceformattersettings ${kcm_kdevsourceformattersettings_SRCS})
 target_link_libraries(kcm_kdevsourceformattersettings
     ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_KPARTS_LIBS} kdevplatformshell kdevplatformutil)
+    ${KDE4_KPARTS_LIBS} kdevplatformshell kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS  DESTINATION ${PLUGIN_INSTALL_DIR})
 

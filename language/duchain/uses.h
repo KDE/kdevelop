@@ -47,6 +47,10 @@ namespace KDevelop {
      * Removes the given top-context from the list of uses
      * */
     void removeUse(const DeclarationId& id, const IndexedTopDUContext& use);
+    /**
+     * Checks weather the given DeclarationID is is used
+     * */
+    bool hasUses(const DeclarationId& id) const;
 
     ///Gets the top-contexts of all users assigned to the declaration-id
     KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;

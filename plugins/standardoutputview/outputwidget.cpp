@@ -23,6 +23,7 @@
 
 #include "standardoutputview.h"
 #include <QtCore/QTimer>
+#include <QtCore/QRegExp>
 #include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
 #include <QtGui/QTreeView>
@@ -32,6 +33,8 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QApplication>
 #include <QtGui/QClipboard>
+#include <QtGui/QWidgetAction>
+#include <QtGui/QSortFilterProxyModel>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -40,6 +43,7 @@
 #include <kicon.h>
 #include <ktabwidget.h>
 #include <kstandardaction.h>
+#include <klineedit.h>
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
@@ -47,7 +51,17 @@
 #include "toolviewdata.h"
 
 OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
-    : QWidget( parent ), tabwidget(0), data(tvdata)
+    : QWidget( parent )
+    , tabwidget(0)
+    , stackwidget(0)
+    , data(tvdata)
+    , m_closeButton(0)
+    , nextAction(0)
+    , previousAction(0)
+    , activateOnSelect(0)
+    , focusOnSelect(0)
+    , filterInput(0)
+    , filterAction(0)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
@@ -78,16 +92,18 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     }
 
     activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
-    addAction(activateOnSelect);
     activateOnSelect->setChecked( true );
     focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
-    addAction(focusOnSelect);
     focusOnSelect->setChecked( false );
+    if( data->option & KDevelop::IOutputView::ShowItemsButton )
+    {
+        addAction(activateOnSelect);
+        addAction(focusOnSelect);
+    }
 
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    addAction(separator);
-    
+
     KAction *selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -96,6 +112,33 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
+
+    if( data->option & KDevelop::IOutputView::AddFilterAction )
+    {
+        addAction(separator);
+        filterInput = new KLineEdit();
+        filterInput->setMaximumWidth(150);
+        filterInput->setMinimumWidth(100);
+        filterInput->setClickMessage("search...");
+        filterInput->setToolTip("Enter a wild card string to filter the output view");
+        filterAction = new QWidgetAction(this);
+        filterAction->setDefaultWidget(filterInput);
+        addAction(filterAction);
+
+        connect(filterInput, SIGNAL(userTextChanged(QString)),
+                this, SLOT(outputFilter(QString)) );
+        if( data->type & KDevelop::IOutputView::MultipleView )
+        {
+            connect(tabwidget, SIGNAL(currentChanged(int)),
+                    this, SLOT(updateFilter(int)));
+        } else if ( data->type == KDevelop::IOutputView::HistoryView )
+        {
+            connect(stackwidget, SIGNAL(currentChanged(int)),
+                    this, SLOT(updateFilter(int)));
+        }
+    }
+
+    addActions(data->actionList);
 
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
@@ -181,9 +224,20 @@ void OutputWidget::removeOutput( int id )
                 if( idx != -1 )
                 {
                     tabwidget->removeTab( idx );
+                    if( proxyModels.contains( idx ) )
+                    {
+                        delete proxyModels[idx];
+                        filters.remove( idx );
+                    }
                 }
             } else
             {
+                int idx = stackwidget->indexOf( w );
+                if( idx != -1 && proxyModels.contains( idx ) )
+                {
+                    delete proxyModels[idx];
+                    filters.remove( idx );
+                }
                 stackwidget->removeWidget( w );
             }
             delete w;
@@ -192,10 +246,15 @@ void OutputWidget::removeOutput( int id )
         {
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
+            if( proxyModels.contains( 0 ) ) {
+                delete proxyModels[0];
+                filters.remove( 0 );
+            }
         }
         disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                     this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
         
+        views.remove( id );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -213,7 +272,7 @@ void OutputWidget::closeActiveView()
             OutputData* od = data->outputdata.value(id);
             if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
             {
-                removeOutput( id );
+                data->plugin->removeOutput( id );
             }
         }
     }
@@ -482,6 +541,44 @@ void OutputWidget::selectAll()
     view->selectAll();
 }
 
+void OutputWidget::outputFilter(const QString filter)
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+    int index = 0;
+    if( data->type & KDevelop::IOutputView::MultipleView )
+    {
+        index = tabwidget->currentIndex();
+    } else if( data->type & KDevelop::IOutputView::HistoryView )
+    {
+        index = stackwidget->currentIndex();
+    }
+    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) )
+    {
+        QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel(view->model());
+        _proxyModel->setDynamicSortFilter(true);
+        _proxyModel->setSourceModel(view->model());
+        proxyModels.insert(index, _proxyModel);
+        view->setModel(_proxyModel);
+    }
+    QRegExp regExp(filter,Qt::CaseInsensitive);
+    proxyModels[index]->setFilterRegExp(regExp);
+    filters[index] = filter;
+}
 
+void OutputWidget::updateFilter(int index)
+{
+    if(filters.contains(index))
+    {
+        filterInput->setText(filters[index]);
+    } else
+    {
+        filterInput->clear();
+    }
+}
 
 #include "outputwidget.moc"

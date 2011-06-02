@@ -87,6 +87,19 @@ public:
     virtual bool isTextDocument() const;
 
     /**
+     * Set a 'pretty' name for this document. That name will be used when displaying the document in the UI,
+     * instead of the filename and/or path.
+     * @param name The pretty name to use. Give an empty name to reset.
+     * */
+    virtual void setPrettyName(QString name);
+    
+    /**
+     * returns the pretty name of this document that was set through setPrettyName(...).
+     * If no pretty name was set, an empty string is returned.
+     * */
+    virtual QString prettyName() const;
+    
+    /**
      * Returns the text editor, if this is a text document or 0 otherwise.
      */
     virtual KTextEditor::Document* textDocument() const = 0;

@@ -164,7 +164,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 {
     if (KStandardDirs::findExe("git").isEmpty()) {
         m_hasError = true;
-        m_errorDescription = "git is not installed";
+        m_errorDescription = i18n("git is not installed");
         return;
     }
 
@@ -323,12 +323,12 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 }
 
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
-                        VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
+                        VcsDiff::Type /*type*/, IBasicVersionControl::RecursionMode recursion)
 {
     //TODO: control different types
     
-    DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this);
-    *job << "git" << "diff" << "--no-prefix";
+    DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
+    *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
     QString revstr = revisionInterval(srcRevision, dstRevision);
     if(!revstr.isEmpty())
         *job << revstr;
@@ -616,12 +616,8 @@ extra merge rectangle in master. If there are no extra commits in branch2, but t
 
 QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 {
-    static bool hasHash = false;
-    if (!hasHash)
-    {
-        initBranchHash(repo);
-        hasHash = true;
-    }
+    initBranchHash(repo);
+    
     QStringList args;
     args << "--all" << "--pretty" << "--parents";
     QScopedPointer<DVcsJob> job(gitRevList(repo, args));
@@ -637,8 +633,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     //used to keep where we have empty/cross/branch entry
     //true if it's an active branch (then cross or branch) and false if not
     QVector<bool> additionalFlags(branchesShas.count());
-    foreach(int flag, additionalFlags)
-        flag = false;
+    additionalFlags.fill(false);
 
     //parse output
     for(int i = 0; i < commits.count(); ++i)
@@ -1035,7 +1030,7 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 
 DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &args)
 {
-    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    DVcsJob* job = new DVcsJob(QDir(repository), this, KDevelop::OutputJob::Silent);
     {
         *job << "git" << "rev-list" << args;
         return job;

@@ -39,9 +39,28 @@ class VcsCommitDialog;
 
 class QWidget;
 
+class VCSDiffUpdater {
+public:
+    virtual ~VCSDiffUpdater();
+    virtual KDevelop::VcsDiff update() const = 0;
+};
+
+class VCSStandardDiffUpdater : public VCSDiffUpdater {
+public:
+    VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, KUrl url);
+    virtual ~VCSStandardDiffUpdater();
+    virtual KDevelop::VcsDiff update() const;
+private:
+    KDevelop::IBasicVersionControl* m_vcs;
+    KUrl m_url;
+};
+
+
 class VCSDiffPatchSource : public KDevelop::IPatchSource {
     public:
-    VCSDiffPatchSource(const KDevelop::VcsDiff& diff) ;
+    /// The ownership of the updater is taken
+    VCSDiffPatchSource(VCSDiffUpdater* updater);
+    VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
     virtual ~VCSDiffPatchSource();
         
     virtual KUrl baseDir() const ;
@@ -56,12 +75,16 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
     
     KUrl m_base, m_file;
     QString m_name;
+    VCSDiffUpdater* m_updater;
+    private:
+    void updateFromDiff(KDevelop::VcsDiff diff);
 };
 
 class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     Q_OBJECT
     public:
-    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, KDevelop::VcsStatusInfo::State> selectable, KDevelop::IBasicVersionControl* vcs, QStringList oldMessages);
+    /// The ownership of the updater is taken
+    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap<KUrl, KDevelop::VcsStatusInfo::State> selectable, KDevelop::IBasicVersionControl* vcs, QStringList oldMessages);
     
     ~VCSCommitDiffPatchSource() ;
     

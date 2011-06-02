@@ -55,7 +55,7 @@ public:
         return new Widget(parent);
     }
     virtual QList<QAction*> toolBarActions( QWidget* ) const { return QList<QAction*>(); }
-    virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const { return QList<QAction*>(); }
+    virtual QList< QAction* > contextMenuActions(QWidget* /*viewWidget*/) const { return QList<QAction*>(); }
     virtual QString id() const { return m_id; }
     virtual bool viewsWantProgressIndicator() const { return false; }
 private:

@@ -96,10 +96,11 @@ public:
       return s.space();
     }
 };
-}
 
 inline uint qHash(const KDevelop::SimpleRange& range) {
     return qHash(range.start) + qHash(range.end)*41;
 }
+
+} // namespace KDevelop
 
 #endif

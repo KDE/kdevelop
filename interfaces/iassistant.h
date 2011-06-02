@@ -95,6 +95,8 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KSharedO
         virtual QIcon icon() const;
         
         ///May return the title of this assistant
+        ///The text may be html formatted. If it can be confused with HTML,
+        ///use Qt::escape(..).
         virtual QString title() const;
     public Q_SLOTS:
         ///Emits hide(), which causes this assistant to be hidden

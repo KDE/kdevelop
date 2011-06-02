@@ -21,6 +21,7 @@
 #include "reviewpatchdialog.h"
 #include <QDebug>
 #include "ui_reviewpatch.h"
+#include "reviewboardjobs.h"
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     : KDialog(parent)
@@ -29,6 +30,8 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     QWidget* w= new QWidget(this);
     m_ui->setupUi(w);
     setMainWidget(w);
+    
+    connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
 }
 
 void ReviewPatchDialog::setBaseDir(const QString& repo)
@@ -57,4 +60,29 @@ KUrl ReviewPatchDialog::server() const
     server.setUser(m_ui->username->text());
     server.setPassword(m_ui->password->text());
     return server;
+}
+
+void ReviewPatchDialog::serverChanged()
+{
+    ReviewBoard::ProjectsListRequest* repo = new ReviewBoard::ProjectsListRequest(m_ui->server->url(), this);
+    connect(repo, SIGNAL(finished(KJob*)), SLOT(receivedProjects(KJob*)));
+    repo->start();
+}
+
+void ReviewPatchDialog::receivedProjects(KJob* job)
+{
+    ReviewBoard::ProjectsListRequest* pl=dynamic_cast<ReviewBoard::ProjectsListRequest*>(job);
+    QVariantList repos = pl->repositories();
+    foreach(const QVariant& repo, repos) {
+        QVariantMap repoMap=repo.toMap();
+        m_ui->repositories->addItem(repoMap["name"].toString(), repoMap["path"].toString());
+    }
+    
+    m_ui->repositoriesBox->setEnabled(job->error()==0);
+}
+
+QString ReviewPatchDialog::repository() const
+{
+    Q_ASSERT(m_ui->repositories->currentIndex()>=0);
+    return m_ui->repositories->itemData(m_ui->repositories->currentIndex(),Qt::UserRole).toString();
 }

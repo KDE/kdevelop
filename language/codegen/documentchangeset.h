@@ -96,10 +96,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     enum FormatPolicy {
         NoAutoFormat, ///If this option is given, no automatic formatting is applied
-        AutoFormatChanges      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type (default)
+        AutoFormatChanges,      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type (default)
+        AutoFormatChangesKeepIndentation      ///Same as AutoFormatChanges, except that the indentation of inserted lines is kept equal
     };
     
-    ///@param policy How the changed text should be formatted
+    ///@param policy How the changed text should be formatted. The default is AutoFormatChanges.
     void setFormatPolicy(FormatPolicy policy);
     
     enum DUChainUpdateHandling {

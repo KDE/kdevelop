@@ -148,6 +148,7 @@ public:
     void setStatusIcon(Document* document, const QIcon& icon);
 
     bool openAfterCurrent() const;
+    bool arrangeBuddies() const;
 
     void loadSettings();
 public Q_SLOTS:

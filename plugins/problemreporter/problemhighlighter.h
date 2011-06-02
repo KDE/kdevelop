@@ -42,14 +42,14 @@ private slots:
     void textHintRequested(const KTextEditor::Cursor&, QString&);
     void aboutToInvalidateMovingInterfaceContent();
     void aboutToRemoveText(const KTextEditor::Range& range);
+    void documentReloaded();
+
 private:
-
-    void clearHighlights();
-
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::MovingRange*> m_topHLRanges;
     QList<KDevelop::ProblemPointer> m_problems;
     QMap<KTextEditor::MovingRange*, KDevelop::ProblemPointer> m_problemsForRanges;
+
 public slots:
     void settingsChanged();
 };

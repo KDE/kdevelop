@@ -21,6 +21,7 @@
 #define PROJECTTARGETSCOMBOBOX_H
 
 #include <QtGui/QComboBox>
+#include <project/projectmodel.h>
 
 namespace KDevelop {
 class ProjectFolderItem;
@@ -32,7 +33,7 @@ class ProjectTargetsComboBox : public QComboBox
     public:
         ProjectTargetsComboBox(QWidget* parent = 0);
         
-        void setBaseItem(KDevelop::ProjectFolderItem* item);
+        void setBaseItem(KDevelop::ProjectFolderItem* item, bool exec);
         void setCurrentItemPath(const QStringList& str);
         
         QStringList currentItemPath() const;

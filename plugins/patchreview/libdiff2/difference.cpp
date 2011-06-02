@@ -16,14 +16,17 @@
 ***************************************************************************/
 
 #include "difference.h"
+#include "differencestringpair.h"
 #include "levenshteintable.h"
 
 using namespace Diff2;
 
 Difference::Difference( int sourceLineNo, int destinationLineNo, int type ) :
+	QObject(),
 	m_type( type ),
 	m_sourceLineNo( sourceLineNo ),
 	m_destinationLineNo( destinationLineNo ),
+	m_trackingDestinationLineNo( sourceLineNo ),    // The whole patch starts as unapplied
 	m_applied( false ),
 	m_conflicts( false ),
 	m_unsaved( false )
@@ -56,10 +59,38 @@ int Difference::destinationLineCount() const
 	return m_destinationLines.count();
 }
 
+int Difference::sourceLineEnd() const
+{
+	return m_sourceLineNo + m_sourceLines.count();
+}
+
+int Difference::destinationLineEnd() const
+{
+	return m_destinationLineNo + m_destinationLines.count();
+}
+
+int Difference::trackingDestinationLineEnd() const
+{
+	return m_trackingDestinationLineNo + m_destinationLines.count();
+}
+
 void Difference::apply( bool apply )
 {
-	m_applied = apply;
-	m_unsaved = !m_unsaved;
+	if ( apply != m_applied )
+	{
+		m_applied = apply;
+		m_unsaved = !m_unsaved;
+		emit differenceApplied(this);
+	}
+}
+
+void Difference::applyQuietly(bool apply)
+{
+	if ( m_applied != apply )
+	{
+		m_unsaved = !m_unsaved;
+		m_applied = apply;
+	}
 }
 
 void Difference::determineInlineDifferences()
@@ -75,15 +106,16 @@ void Difference::determineInlineDifferences()
 	if ( slc != destinationLineCount() )
 		return;
 
-	LevenshteinTable table;
+	LevenshteinTable<DifferenceStringPair> table;
 
 	for ( int i = 0; i < slc; ++i )
 	{
 		DifferenceString* sl = sourceLineAt( i );
 		DifferenceString* dl = destinationLineAt( i );
+		DifferenceStringPair* pair = new DifferenceStringPair(sl, dl);
 
 		// return value 0 means something went wrong creating the table so dont bother finding markers
-		if ( table.createTable( sl, dl ) != 0 )
+		if ( table.createTable( pair ) != 0 )
 			table.createListsOfMarkers();
 	}
 }

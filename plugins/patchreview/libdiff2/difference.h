@@ -22,46 +22,12 @@
 
 #include <kdebug.h>
 #include "diff2export.h"
+#include "marker.h"
 
 class QString;
 
 namespace Diff2
 {
-
-
-class DIFF2_EXPORT Marker
-{
-public:
-	enum Type { Start = 0, End = 1 };
-
-public:
-	Marker()
-	{
-		m_type = Marker::Start;
-		m_offset = 0;
-	}
-	Marker( enum Marker::Type type, unsigned int offset )
-	{
-		m_type = type;
-		m_offset = offset;
-	}
-	~Marker() {}
-
-public:
-	enum Marker::Type type()   const { return m_type;   }
-	unsigned int      offset() const { return m_offset; }
-
-	void setType  ( enum Marker::Type type ) { m_type   = type;   }
-	void setOffset( unsigned int offset )    { m_offset = offset; }
-
-private:
-	enum Marker::Type m_type;
-	unsigned int      m_offset;
-};
-
-typedef QList<Marker*> MarkerList;
-typedef QList<Marker*>::iterator MarkerListIterator;
-typedef QList<Marker*>::const_iterator MarkerListConstIterator;
 
 class DIFF2_EXPORT DifferenceString
 {
@@ -152,8 +118,9 @@ typedef QVector<DifferenceString*> DifferenceStringList;
 typedef QVector<DifferenceString*>::iterator DifferenceStringListIterator;
 typedef QVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
 
-class DIFF2_EXPORT Difference
+class DIFF2_EXPORT Difference : public QObject
 {
+	Q_OBJECT
 public:
 	enum Type { Change, Insert, Delete, Unchanged };
 
@@ -170,8 +137,17 @@ public:
 	int sourceLineCount() const;
 	int destinationLineCount() const;
 
-	DifferenceString* sourceLineAt( int i ) { return m_sourceLines[ i ]; }
-	DifferenceString* destinationLineAt( int i ) { return m_destinationLines[ i ]; }
+	int sourceLineEnd() const;
+	int destinationLineEnd() const;
+
+	/// Destination line number that tracks applying/unapplying of other differences
+	/// Essentially a line number in a patch consisting of applied diffs only
+	int trackingDestinationLineNumber() const { return m_trackingDestinationLineNo; }
+	int trackingDestinationLineEnd() const;
+	void setTrackingDestinationLineNumber( int i ) { m_trackingDestinationLineNo = i; }
+
+	DifferenceString* sourceLineAt( int i ) const { return m_sourceLines[ i ]; }
+	DifferenceString* destinationLineAt( int i ) const { return m_destinationLines[ i ]; }
 
 	const DifferenceStringList sourceLines() const { return m_sourceLines; }
 	const DifferenceStringList destinationLines() const { return m_destinationLines; }
@@ -195,6 +171,8 @@ public:
 	}
 
 	void apply( bool apply );
+	/// Apply without emitting any signals
+	void applyQuietly( bool apply );
 	bool applied() const { return m_applied; }
 
 	void setType( int type ) { m_type = type; }
@@ -207,11 +185,15 @@ public:
 
 	QString recreateDifference() const;
 
+signals:
+	void differenceApplied( Difference* );
+
 private:
 	int                   m_type;
 
 	int                   m_sourceLineNo;
 	int                   m_destinationLineNo;
+	int                   m_trackingDestinationLineNo;
 
 	DifferenceStringList  m_sourceLines;
 	DifferenceStringList  m_destinationLines;

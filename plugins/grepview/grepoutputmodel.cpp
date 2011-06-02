@@ -29,24 +29,28 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text, bool checkable)
     : QStandardItem(), m_change(change)
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     
-    setCheckable(true);
-    setCheckState(Qt::Checked);
+    setCheckable(checkable);
+    if(checkable)
+        setCheckState(Qt::Checked);
 }
 
-GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
+GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
     : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    setCheckable(true);
-    setTristate(true);
-    setCheckState(Qt::Checked);
+    setCheckable(checkable);
+    if(checkable)
+    {
+        setTristate(true);
+        setCheckState(Qt::Checked);
+    }
 }
 
 int GrepOutputItem::lineNumber() const 
@@ -157,7 +161,7 @@ GrepOutputItem::~GrepOutputItem()
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
     : QStandardItemModel( parent ), m_regExp(""), m_replacement(""), m_replacementTemplate(""), m_finalReplacement(""),
-      m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0)
+      m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
 {
     connect(this, SIGNAL(itemChanged(QStandardItem*)),
               this, SLOT(updateCheckState(QStandardItem*)));
@@ -222,13 +226,11 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if(!doc)
         return;
     if (KTextEditor::Document* tdoc = doc->textDocument()) {
-        QString text = tdoc->line(line);
-        int index = m_regExp.indexIn(text);
-        if (index!=-1) {
-            range.setBothLines(line);
-            range.start().setColumn(index);
-            range.end().setColumn(index+m_regExp.matchedLength());
-            doc->setTextSelection( range );
+        KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
+        QString actualText = tdoc->text(matchRange);
+        QString expectedText = grepitem->change()->m_oldText;
+        if (actualText == expectedText) {
+            range = matchRange;
         }
     }
 
@@ -299,6 +301,37 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     return currentIdx;
 }
 
+const GrepOutputItem *GrepOutputModel::getRootItem() const {
+    return m_rootItem;
+}
+
+bool GrepOutputModel::itemsCheckable() const
+{
+    return m_itemsCheckable;
+}
+
+void GrepOutputModel::makeItemsCheckable(bool checkable)
+{
+    if(m_itemsCheckable == checkable)
+        return;
+    if(m_rootItem)
+        makeItemsCheckable(checkable, m_rootItem);
+    m_itemsCheckable = checkable;
+}
+
+void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
+{
+    item->setCheckable(checkable);
+    if(checkable)
+    {
+        item->setCheckState(Qt::Checked);
+        if(item->rowCount() && checkable)
+            item->setTristate(true);
+    }
+    for(int row = 0; row < item->rowCount(); ++row)
+        makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
+}
+
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
     if(items.isEmpty())
@@ -306,22 +339,35 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     
     if(rowCount() == 0)
     {
-        m_rootItem = new GrepOutputItem("", "");
+        m_rootItem = new GrepOutputItem("", "", m_itemsCheckable);
         appendRow(m_rootItem);
     }
     
     m_fileCount  += 1;
     m_matchCount += items.length();
-    m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
-    
-    QString fnString = i18np("%2 <i>(one match)</i>", "%2 <i>(%1 matches)</i>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString);
+    const QString matchText = i18np("<b>1</b> match", "<b>%1</b> matches", m_matchCount);
+    const QString fileText = i18np("<b>1</b> file", "<b>%1</b> files", m_fileCount);
+
+    m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "<h3>%1 in %2</h3>", matchText, fileText));
+    
+    QString fnString = i18np("<big>%2 <i>(one match)</i></big>", "<big>%2 <i>(%1 matches)</i></big>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
+
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
-        fileItem->appendRow(new GrepOutputItem(item));
+        GrepOutputItem* copy = new GrepOutputItem(item);
+        copy->setCheckable(m_itemsCheckable);
+        if(m_itemsCheckable)
+        {
+            copy->setCheckState(Qt::Checked);
+            if(copy->rowCount())
+                copy->setTristate(true);
+        }
+        
+        fileItem->appendRow(copy);
     }
 }
 
@@ -373,10 +419,28 @@ void GrepOutputModel::doReplacements()
     {
         DocumentChangePointer ch = result.m_reasonChange;
         if(ch)
-            emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
-                        .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
+            emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5", Qt::escape(ch->m_oldText), Qt::escape(ch->m_newText), ch->m_document.toUrl().toLocalFile(), ch->m_range.start.line + 1, ch->m_range.start.column + 1));
     }
 }
+
+void GrepOutputModel::showMessageSlot(IStatus* status, const QString& message)
+{
+    m_savedMessage = message;
+    m_savedIStatus = status;
+    showMessageEmit();
+}
+
+void GrepOutputModel::showMessageEmit()
+{
+    emit showMessage(m_savedIStatus, m_savedMessage);
+}
+
+bool GrepOutputModel::hasResults()
+{
+    return(m_matchCount > 0);
+}
+
+
 
 #include "grepoutputmodel.moc"
 

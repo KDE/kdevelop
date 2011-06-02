@@ -11,13 +11,13 @@ public:
     /**
      * @brief Constructor
      * @param[in] parent Parent
-     * @param[in] startDir Root directory of the search
+     * @param[in] startDirs Root directories or files of the search
      * @param[in] recursive Whether the search should be recursive
      * @param[in] patterns Space-separated list of wildcard patterns to search for
      * @param[in] exclusions Space-separated list of wildcard patterns to exclude. Matches the whole path.
      * @param[in] onlyProject Whether the search should only consider project files.
      */
-    GrepFindFilesThread(QObject *parent, const KUrl &startDir, bool recursive,
+    GrepFindFilesThread(QObject *parent, const QList<KUrl> &startDirs, bool recursive,
                     const QString &patterns, const QString &exclusions,
                     bool onlyProject);
     /**
@@ -50,7 +50,7 @@ public:
 protected:
     void run();
 private:
-    KUrl m_directory;
+    QList<KUrl> m_startDirs;
     QString m_patString;
     QString m_exclString;
     bool m_recursive;

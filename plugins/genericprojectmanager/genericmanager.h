@@ -31,6 +31,7 @@ public:
 
     virtual KJob* createImportJob( KDevelop::ProjectFolderItem* item );
     virtual bool reload( KDevelop::ProjectFolderItem* item );
+    virtual bool moveFilesAndFolders ( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
 
 protected:
     virtual bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project ) const;

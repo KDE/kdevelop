@@ -119,7 +119,7 @@ protected:
 protected Q_SLOTS:
     virtual void setupAreaSelector();
     virtual void tabContextMenuRequested(Sublime::View*, KMenu*);
-    virtual void tabToolTipRequested(Sublime::View* view,QPoint point);
+    virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     /**Called whenever the user requests a context menu on a dockwidget bar.
        You can then e.g. add actions to add dockwidgets.
        Default implementation does nothing.**/

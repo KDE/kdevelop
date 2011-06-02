@@ -45,6 +45,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
          * @param destinationDirectory where the project will be downloaded.
          */
         virtual VcsJob* createWorkingCopy(const KUrl & destinationDirectory) = 0;
+        
+    signals:
+        void changed(const QString& name);
 };
 
 class KDEVPLATFORMINTERFACES_EXPORT IProjectProvider

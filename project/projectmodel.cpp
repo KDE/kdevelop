@@ -352,6 +352,11 @@ bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
     return false;
 }
 
+bool ProjectBaseItem::urlLessThan(ProjectBaseItem* item1, ProjectBaseItem* item2)
+{
+    return item1->url().path() < item2->url().path();
+}
+
 IProject* ProjectBaseItem::project() const
 {
     Q_D(const ProjectBaseItem);
@@ -406,6 +411,11 @@ Qt::ItemFlags ProjectBaseItem::flags()
 {
     Q_D(ProjectBaseItem);
     return d->flags;
+}
+
+Qt::DropActions ProjectModel::supportedDropActions() const
+{
+    return (Qt::DropActions)(Qt::MoveAction);
 }
 
 void ProjectBaseItem::setFlags(Qt::ItemFlags flags)
@@ -508,6 +518,9 @@ void ProjectModel::clear()
 ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, ProjectBaseItem * parent )
         : ProjectBaseItem( project, dir.fileName(), parent )
 {
+    setFlags(flags() | Qt::ItemIsDropEnabled);
+    if (project->folder() != dir)
+        setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( dir );
 }
 
@@ -625,6 +638,7 @@ QString ProjectBuildFolderItem::iconName() const
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
         : ProjectBaseItem( project, file.fileName(), parent )
 {
+    setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( file );
     // Need to this manually here as setUrl() is virtual and hence the above
     // only calls the version in ProjectBaseItem and not ours
@@ -702,6 +716,7 @@ ProjectFileItem *ProjectFileItem::file() const
 ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, ProjectBaseItem *parent )
     : ProjectBaseItem( project, name, parent )
 {
+    setFlags(flags() | Qt::ItemIsDropEnabled);
 }
 
 QString ProjectTargetItem::iconName() const

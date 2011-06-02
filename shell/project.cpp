@@ -235,12 +235,12 @@ public:
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
         
-        loading=false;
         if(job->errorText().isEmpty()) {
+            loading=false;
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
         } else {
-            projCtrl->closeProject(project);
+            projCtrl->abortOpeningProject(project);
         }
     }
 

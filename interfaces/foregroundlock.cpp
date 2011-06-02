@@ -35,7 +35,8 @@ using namespace KDevelop;
 class SimplePThreadMutex {
 public:
     SimplePThreadMutex() {
-        m_mutex = PTHREAD_MUTEX_INITIALIZER;
+	// this is not nessary because pthread_mutex_init() does the work, also it causes compile error on some systems
+        //m_mutex = PTHREAD_MUTEX_INITIALIZER;
         int result = pthread_mutex_init(&m_mutex, 0);
         Q_ASSERT(result == 0);
     }
@@ -145,7 +146,9 @@ void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
     
-    if(!QApplication::instance() || QThread::currentThread() == QApplication::instance()->thread())
+    if(!QApplication::instance() || // Initialization isn't complete yet
+        QThread::currentThread() == QApplication::instance()->thread() || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
+        holderThread == QThread::currentThread())  // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
     {
         lockForegroundMutexInternal();
     }else{
@@ -251,8 +254,6 @@ bool KDevelop::ForegroundLock::isLocked() const
 }
 
 namespace KDevelop {
-    const int __fg_dummy1 = 0, __fg_dummy2 = 0, __fg_dummy3 = 0, __fg_dummy4 = 0, __fg_dummy5 = 0, __fg_dummy6 = 0, __fg_dummy7 = 0, __fg_dummy8 = 0, __fg_dummy9 = 0;
-
     void DoInForeground::doIt() {
         if(QThread::currentThread() == QApplication::instance()->thread())
         {
@@ -280,3 +281,12 @@ namespace KDevelop {
         m_wait.wakeAll();
     }
 }
+
+// Important: The foreground lock has to be held by default, so lock it during static initialization
+static struct StaticLock {
+    StaticLock() {
+        // Only lock, without unlocking, because otherwise important variables like
+        // QThread::currentThread() might already be invalid during destruction.
+        lockForegroundMutexInternal();
+    }
+} staticLock;

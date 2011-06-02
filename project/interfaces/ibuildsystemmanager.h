@@ -33,8 +33,6 @@ namespace KDevelop
 
 class IProjectBuilder;
 class ProjectTargetItem;
-typedef QList<ProjectFileItem*> FileItemList;
-typedef QPair<ProjectTargetItem*, ProjectFileItem*> TargetFilePair;
 /**
  * Manages the build system of the project.
  *
@@ -105,7 +103,7 @@ public:
      * Adds the file specified by @p file to the target @p parent and modifies
      * the underlying build system if needed.
      */
-    virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
+    virtual bool addFilesToTarget(const QList<ProjectFileItem*> &files, ProjectTargetItem *target) = 0;
 
     /**
      * Remove files from targets
@@ -113,7 +111,7 @@ public:
      * Removes the files from the targets they are paired with (@p targetFiles)
      * Files are not removed from the folders or the filesystem.
      */
-    virtual bool removeFilesFromTargets(QList<TargetFilePair> targetFiles) = 0;
+    virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*> &files) = 0;
 
     /**
      * Get the toplevel build directory for the project

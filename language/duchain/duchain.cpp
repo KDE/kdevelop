@@ -1475,7 +1475,7 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
   //If yes, update it.
   DUChainReadLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url(), true);
   if(ctx && ctx->parsingEnvironmentFile())
     if(ctx->parsingEnvironmentFile()->needsUpdate())
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
@@ -1680,12 +1680,8 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
-    TemporarilyReleaseForegroundLock release;
-    ///@todo When we don't do this, the backgroundparser doesn't process anything.
-    ///      The background-parser should be moved into an own thread, so we wouldn't need to do this.
     QApplication::processEvents();
-    usleep(10000);
-//     waiter.m_wait.wait(&waiter.m_waitMutex, 10);
+    usleep(1000);
   }
 
   if(!proxyContext) {

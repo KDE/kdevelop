@@ -52,8 +52,8 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
-  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false),
-    m_isTypeAlias(false), m_anonymousInContext(false), m_isFinal(false)
+  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false), m_isTypeAlias(false),
+    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false)
 {
   m_kind = Declaration::Instance;
 }
@@ -69,7 +69,9 @@ m_isDefinition(rhs.m_isDefinition),
 m_inSymbolTable(rhs.m_inSymbolTable),
 m_isTypeAlias(rhs.m_isTypeAlias),
 m_anonymousInContext(rhs.m_anonymousInContext),
-m_isFinal(rhs.m_isFinal)
+m_isFinal(rhs.m_isFinal),
+m_alwaysForceDirect(rhs.m_alwaysForceDirect),
+m_isAutoDeclaration(rhs.m_isAutoDeclaration)
 {
 }
 
@@ -567,6 +569,16 @@ void Declaration::setDeclarationIsDefinition(bool dd)
 //   }
 }
 
+bool Declaration::isAutoDeclaration() const
+{
+  return d_func()->m_isAutoDeclaration;
+}
+
+void Declaration::setAutoDeclaration(bool _auto)
+{
+  d_func_dynamic()->m_isAutoDeclaration = _auto;
+}
+
 bool Declaration::isFinal() const
 {
   return d_func()->m_isFinal;
@@ -575,6 +587,16 @@ bool Declaration::isFinal() const
 void Declaration::setFinal(bool final)
 {
   d_func_dynamic()->m_isFinal = final;
+}
+
+bool Declaration::alwaysForceDirect() const
+{
+  return d_func()->m_alwaysForceDirect;
+}
+
+void Declaration::setAlwaysForceDirect(bool direct)
+{
+  d_func_dynamic()->m_alwaysForceDirect = direct;
 }
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
@@ -604,7 +626,7 @@ void Declaration::activateSpecialization()
 DeclarationId Declaration::id(bool forceDirect) const
 {
   ENSURE_CAN_READ
-  if(inSymbolTable() && !forceDirect)
+  if(inSymbolTable() && !forceDirect && !alwaysForceDirect())
     return DeclarationId(qualifiedIdentifier(), additionalIdentity(), specialization());
   else
     return DeclarationId(IndexedDeclaration(const_cast<Declaration*>(this)), specialization());
@@ -753,6 +775,14 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
     }
   }
   return ret;
+}
+
+bool Declaration::hasUses() const
+{
+  ENSURE_CAN_READ
+  bool hasUsesInOtherConexts = DUChain::uses()->hasUses(id());
+  bool hasLocalUses = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false) == std::numeric_limits<int>::max() ? false : true;
+  return hasUsesInOtherConexts || hasLocalUses;
 }
 
 QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const

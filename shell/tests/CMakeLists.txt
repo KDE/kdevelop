@@ -14,6 +14,14 @@ include_directories(
 #kde4_add_plugin( kdevnonguiinterfaceplugin ${plugincontrollertest_plugin_SRCS} )
 #target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY} kdevplatforminterfaces )
 
+set(documentcontrollertest_SRCS documentcontrollertest.cpp)
+kde4_add_unit_test(shell-documentcontrollertest ${documentcontrollertest_SRCS})
+target_link_libraries( shell-documentcontrollertest ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+set( shellbuddytest_SRCS shellbuddytest.cpp )
+kde4_add_unit_test(shell-buddytest ${shellbuddytest_SRCS})
+target_link_libraries(shell-buddytest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+
 set( shelldocumentoperationtest_SRCS shelldocumentoperationtest.cpp )
 kde4_add_unit_test(shell-documentoperationtest ${shelldocumentoperationtest_SRCS})
 target_link_libraries(shell-documentoperationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )

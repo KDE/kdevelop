@@ -19,5 +19,8 @@
         <entry name="TabBarOpenAfterCurrent" key="TabBarOpenAfterCurrent" type="Int">
             <default>1</default>
         </entry>
+        <entry name="TabBarArrangeBuddies" key="TabBarArrangeBuddies" type="Int">
+            <default>1</default>
+        </entry>
   </group>
 </kcfg>

@@ -115,6 +115,10 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context, int 
   }
   if(context == m_context && (!context || context->alreadyComputed()))
     return;
+
+  if (!m_startContext)
+    m_startContext = m_context;
+
   m_context = context;
   update();
   

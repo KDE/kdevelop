@@ -30,15 +30,22 @@ class QSignalMapper;
 class QStackedWidget;
 class QTreeView;
 class QToolButton;
+class QWidgetAction;
+class QSortFilterProxyModel;
+class QModelIndex;
 class ToolViewData;
 class KTabWidget;
 class KToggleAction;
-class QModelIndex;
 class KAction;
+class KLineEdit;
+class StandardOutputViewTest;
 
 class OutputWidget : public QWidget
 {
 Q_OBJECT
+
+    friend class StandardOutputViewTest;
+
 public:
     OutputWidget(QWidget* parent, ToolViewData* data);
     void removeOutput( int id );
@@ -62,6 +69,8 @@ private slots:
     void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
     void selectAll();
+    void outputFilter(const QString filter);
+    void updateFilter(int index);
 
 private:
     QTreeView* createListView(int id);
@@ -71,6 +80,8 @@ private:
 
     QMap<int, QTreeView*> views;
     QMap<int, QTimer*> scrollTimers;
+    QMap<int, QSortFilterProxyModel*> proxyModels;
+    QMap<int, QString> filters;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     ToolViewData* data;
@@ -79,6 +90,8 @@ private:
     KAction* previousAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
+    KLineEdit *filterInput;
+    QWidgetAction* filterAction;
 };
 
 #endif

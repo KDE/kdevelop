@@ -49,6 +49,7 @@ namespace KDevelop
 class DocumentChangeTracker;
 
 class IDocument;
+class IProject;
 class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
@@ -210,6 +211,12 @@ protected Q_SLOTS:
 private:
     friend class BackgroundParserPrivate;
     class BackgroundParserPrivate *d;
+
+private Q_SLOTS:
+    /// Tracking of projects in state of loading.
+    void projectAboutToBeOpened(KDevelop::IProject* project);
+    void projectOpened(KDevelop::IProject* project);
+    void projectOpeningAborted(KDevelop::IProject* project);
 };
 
 }

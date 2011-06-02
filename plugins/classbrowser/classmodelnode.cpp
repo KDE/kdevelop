@@ -23,6 +23,8 @@
 #include "classmodelnode.h"
 
 #include <typeinfo>
+#include <KLocalizedString>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -348,7 +350,7 @@ bool FolderNode::getIcon(QIcon& a_resultIcon)
 //////////////////////////////////////////////////////////////////////////////
 
 BaseClassesFolderNode::BaseClassesFolderNode(NodesModelInterface* a_model)
-  : DynamicFolderNode("Base classes", a_model)
+  : DynamicFolderNode(i18n("Base classes"), a_model)
 {
 
 }
@@ -383,7 +385,7 @@ void BaseClassesFolderNode::populateNode()
 //////////////////////////////////////////////////////////////////////////////
 
 DerivedClassesFolderNode::DerivedClassesFolderNode(NodesModelInterface* a_model)
-  : DynamicFolderNode("Derived classes", a_model)
+  : DynamicFolderNode(i18n("Derived classes"), a_model)
 {
 
 }

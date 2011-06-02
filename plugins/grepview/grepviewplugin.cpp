@@ -41,6 +41,7 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
+#include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
@@ -50,6 +51,8 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 {
     setXMLFile("kdevgrepview.rc");
 
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/GrepViewPlugin",
+        this, QDBusConnection::ExportScriptableSlots );
 
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/replace in Fi&les..."));
@@ -70,6 +73,12 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
 GrepViewPlugin::~GrepViewPlugin()
 {
+}
+
+void GrepViewPlugin::startSearch(QString pattern, QString directory, bool showOptions)
+{
+    m_directory = directory;
+    showDialog(false, pattern, showOptions);
 }
 
 KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
@@ -97,15 +106,30 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         }
     }
 
+    if(context->type() == KDevelop::Context::FileContext) {
+        KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
+        KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
+        if(mimetype->is("inode/directory")) {
+            KAction* action = new KAction( i18n( "Find and replace in this folder" ), this );
+            action->setIcon(KIcon("edit-find"));
+            m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
+            connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
+            extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
+        }
+    }
     return extension;
 }
 
-void GrepViewPlugin::showDialog(bool setLastUsed)
+void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOptions)
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), setLastUsed );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     
-    if(!setLastUsed)
+    if(!pattern.isEmpty())
+    {
+        dlg->setPattern(pattern);
+    }
+    else if(!setLastUsed)
     {
         QString pattern;
         if( doc )
@@ -138,7 +162,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed)
         dlg->enableButtonOk( !pattern.isEmpty() );
     }
 
-    if (!m_directory.isEmpty() && QFileInfo(m_directory).isDir()) {
+    if (!m_directory.isEmpty()) {
         dlg->setDirectory(m_directory);
     } else {
         KUrl currentUrl;
@@ -162,7 +186,12 @@ void GrepViewPlugin::showDialog(bool setLastUsed)
         }
     }
 
-    dlg->show();
+    if(showOptions)
+        dlg->show();
+    else{
+        dlg->start();
+        dlg->deleteLater();
+    }
 }
 
 void GrepViewPlugin::showDialogFromMenu()
@@ -181,7 +210,7 @@ void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
     m_directory = directory;
 }
 
-GrepJob* GrepViewPlugin::grepJob()
+GrepJob* GrepViewPlugin::newGrepJob()
 {
     if(m_currentJob != 0)
     {
@@ -189,6 +218,11 @@ GrepJob* GrepViewPlugin::grepJob()
     }
     m_currentJob = new GrepJob();
     connect(m_currentJob, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    return m_currentJob;
+}
+
+GrepJob* GrepViewPlugin::grepJob() 
+{
     return m_currentJob;
 }
 

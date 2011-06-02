@@ -346,10 +346,16 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   updateProviders();
 
   m_model->restart();
-
-  o.list->setColumnWidth( 0, 20 );
 }
 
+
+void QuickOpenWidget::showEvent(QShowEvent* e)
+{
+    QWidget::showEvent(e);
+    
+    // The column width only has an effect _after_ the widget has been shown
+    o.list->setColumnWidth( 0, 20 );
+}
 
 void QuickOpenWidget::setAlternativeSearchField(KLineEdit* alterantiveSearchField)
 {

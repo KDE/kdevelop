@@ -31,7 +31,6 @@ DiffHunk::DiffHunk( int sourceLine, int destinationLine, QString function, Type 
 
 DiffHunk::~DiffHunk()
 {
-	qDeleteAll( m_differences );
 }
 
 void DiffHunk::add( Difference* diff )

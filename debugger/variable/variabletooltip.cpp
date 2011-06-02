@@ -114,6 +114,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     view_->setSelectionBehavior(QAbstractItemView::SelectRows);
     view_->setSelectionMode(QAbstractItemView::SingleSelection);
     view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view_->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     l->addWidget(view_);
 
     itemHeight_ = view_->indexRowSizeHint(model_->indexForItem(var_, 0));
@@ -150,13 +151,13 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     inner->addWidget(g, 0, (Qt::Alignment)(Qt::AlignRight | Qt::AlignBottom));
 
     move(position);
-    resize(310, 100);
 }
 
 void VariableToolTip::variableCreated(bool hasValue)
 {
+    view_->resizeColumns();
     if (hasValue) {
-        show();
+        ActiveToolTip::showToolTip(this, 0.0);
     } else {
         close();
     }

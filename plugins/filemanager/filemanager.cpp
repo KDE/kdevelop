@@ -71,10 +71,6 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
-    //KDirOperator emits fileSelected() twice because both activated() and doubleClicked() emit fileClicked().
-    //activated() should be enough, so disconnect doubleClicked()
-    disconnect(dirop->view(), SIGNAL(doubleClicked(const QModelIndex&)),
-            dirop, SLOT(_k_slotDoubleClicked(const QModelIndex&)));
     l->addWidget(dirop);
 
     connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
@@ -93,15 +89,13 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
     contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
-    if (item.isFile()) {
-        KDevelop::FileContext context(item.url());
-        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-        KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
-        QMenu* tmpMenu = new QMenu();
-        KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
-        contextActions.append(tmpMenu->actions());
-        delete tmpMenu;
-    }
+    KDevelop::FileContext context(item.url());
+    QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+    KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
+    QMenu* tmpMenu = new QMenu();
+    KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
+    contextActions.append(tmpMenu->actions());
+    delete tmpMenu;
 }
 
 void FileManager::openFile(const KFileItem& file)
@@ -110,7 +104,7 @@ void FileManager::openFile(const KFileItem& file)
 }
 
 
-void FileManager::gotoUrl( const KUrl& url ) 
+void FileManager::gotoUrl( const KUrl& url )
 {
      dirop->setUrl( url, true );
 }
@@ -169,7 +163,7 @@ void FileManager::createNewFile()
 
 void FileManager::syncCurrentDocumentDirectory()
 {
-    if( KDevelop::IDocument* activeDoc = 
+    if( KDevelop::IDocument* activeDoc =
                     KDevelop::ICore::self()->documentController()->activeDocument() )
         updateNav( activeDoc->url().upUrl() );
 }

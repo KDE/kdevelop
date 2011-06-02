@@ -3,6 +3,9 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
+    formattinghelpers.cpp
+    richtextpushbutton.cpp
+    richtexttoolbutton.cpp
     kdevstringhandler.cpp
     focusedtreeview.cpp
     processlinemaker.cpp
@@ -18,6 +21,8 @@ set (kdevplatformutil_LIB_UI
     runoptions.ui
 )
 
+add_subdirectory(dbus_socket_transformer)
+
 add_subdirectory(duchainify)
 
 add_subdirectory(tests)
@@ -27,7 +32,7 @@ kde4_add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
 target_link_libraries(kdevplatformutil 
         ${KDE4_KDEUI_LIBS} 
         ${KDE4_KCMUTILS_LIBRARY} 
-        kdevplatforminterfaces 
+        kdevplatforminterfaces
     )
 # Might want to add kdevplatform* when they're exported targets
 target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES 
@@ -35,9 +40,14 @@ target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
+install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ )
+
 ########### install files ###############
 
 install( FILES
+    formattinghelpers.h
+    richtextpushbutton.h
+    richtexttoolbutton.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h

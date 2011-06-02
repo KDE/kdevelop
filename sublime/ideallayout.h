@@ -203,7 +203,6 @@ private:
         IdealMainLayout* m_layout;
         Role m_role;
         QList<QWidgetItem*> m_items;
-        QList<int> m_heights;
         QWidgetItem* m_mainSplitter;
         QList<QWidgetItem*> m_subSplitters;
         QWidgetItem* m_buttonBarItem;

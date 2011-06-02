@@ -409,7 +409,7 @@ m_allDeclarations(allDeclarations) {
     if(topContext.isLoaded())
       usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
 
-    label->setText(i18np("<b>File:</b> %2 &nbsp; <i>(1 use)</i>", "<b>File:</b> %2 &nbsp; <i>(%1 uses)</i>", usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl())));
+    label->setText(i18np("<b>File:</b> %2&nbsp;<i>(1 use)</i>", "<b>File:</b> %2&nbsp;<i>(%1 uses)</i>", usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl())));
 
     m_button->setIcon(KIcon("go-next"));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));

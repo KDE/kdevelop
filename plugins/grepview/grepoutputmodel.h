@@ -32,8 +32,8 @@ class GrepOutputItem : public QStandardItem
 public:
     typedef QList<GrepOutputItem> List;
 
-    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
-    GrepOutputItem(const QString &filename, const QString &text);
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString& text, bool checkable);
+    GrepOutputItem(const QString &filename, const QString &text, bool checkable);
     ~GrepOutputItem();
 
     QString filename() const ;
@@ -66,20 +66,33 @@ public:
     /// applies replacement on given text
     QString replacementFor(const QString &text);
     void clear();  // resets file & match counts
+    bool hasResults();
  
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
     QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
+    const GrepOutputItem *getRootItem() const;
+
+    void makeItemsCheckable(bool checkable);
+    bool itemsCheckable() const;
     
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
     void doReplacements();
     void setReplacement(const QString &repl);
+    //receive status message from GrepJob, and store it
+    void showMessageSlot( KDevelop::IStatus*, const QString& message );
+    //emit stored message as signal 'showMessage' to GrepOutputView.
+    //called when user selects a search with the combobox
+    void showMessageEmit();
 
 Q_SIGNALS:
+    void showMessage( KDevelop::IStatus*, const QString& message );
     void showErrorMessage(const QString & message, int timeout = 0);
     
 private:    
+    void makeItemsCheckable(bool checkable, GrepOutputItem* item);
+    
     QRegExp m_regExp;
     QString m_replacement;
     QString m_replacementTemplate;
@@ -88,6 +101,9 @@ private:
     GrepOutputItem *m_rootItem;
     int m_fileCount;
     int m_matchCount;
+    QString m_savedMessage;
+    KDevelop::IStatus *m_savedIStatus;
+    bool m_itemsCheckable;
 
 private slots:
     void updateCheckState(QStandardItem*);

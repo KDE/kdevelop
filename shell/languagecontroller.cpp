@@ -259,7 +259,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     }
 
     if(!extension.isEmpty())
+    {
         languages = d->fileExtensionCache.value(extension);
+        if(languages.isEmpty() && d->fileExtensionCache.contains(extension))
+            return languages; // Nothing found, but was in the cache
+    }
 
     //Never use findByUrl from within a background thread, and never load a language support
     //from within the backgruond thread. Both is unsafe, and can lead to crashes
@@ -278,18 +282,29 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         // the contents of every single file, which can make the application very unresponsive.
         mimeType = KMimeType::findByUrl(url, 0, false, true);
 
-    LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
+    languages = languagesForMimetype(mimeType->name());
+
+    if(!extension.isEmpty())
+        d->fileExtensionCache.insert(extension, languages);
+
+    return languages;
+}
+
+QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimetype)
+{
+    QList<ILanguage*> languages;
+    LanguageCache::ConstIterator it = d->languageCache.constFind(mimetype);
     if (it != d->languageCache.constEnd()) {
         languages = it.value();
     } else {
         QStringList constraints;
-        constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
+        constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimetype);
         QList<IPlugin*> supports = Core::self()->pluginController()->
             allPluginsForExtension("ILanguageSupport", constraints);
 
         if (supports.isEmpty()) {
-            kDebug(9505) << "no languages for mimetype:" << mimeType->name();
-            d->languageCache.insert(mimeType->name(), QList<ILanguage*>());
+            kDebug(9505) << "no languages for mimetype:" << mimetype;
+            d->languageCache.insert(mimetype, QList<ILanguage*>());
         } else {
             foreach (IPlugin *support, supports) {
                 ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
@@ -299,11 +314,21 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
             }
         }
     }
-
-    if(!extension.isEmpty())
-        d->fileExtensionCache.insert(extension, languages);
-
     return languages;
+}
+
+QList<QString> LanguageController::mimetypesForLanguageName(const QString& languageName)
+{
+    QList<QString> mimetypes;
+    for (LanguageCache::ConstIterator iter = d->languageCache.constBegin(); iter != d->languageCache.constEnd(); ++iter) {
+        foreach (ILanguage* language, iter.value()) {
+            if (language->name() == languageName) {
+                mimetypes << iter.key();
+                break;
+            }
+        }
+    }
+    return mimetypes;
 }
 
 BackgroundParser *LanguageController::backgroundParser() const

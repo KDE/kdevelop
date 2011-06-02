@@ -118,6 +118,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         QList<ProjectFileItem*> fileList() const;
 
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
+        static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
@@ -369,6 +370,7 @@ public:
     virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
     
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual Qt::DropActions supportedDropActions() const;
 
 private:
     class ProjectModelPrivate* const d;

@@ -31,8 +31,8 @@
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs, QStringList oldMessages)
-    : VCSDiffPatchSource(vcsdiff), m_selectable(selectable), m_vcs(vcs)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs, QStringList oldMessages)
+    : VCSDiffPatchSource(updater), m_selectable(selectable), m_vcs(vcs)
 {
     Q_ASSERT(m_vcs);
 
@@ -69,27 +69,22 @@ void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
     }
 }
 
-VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& vcsdiff)
+VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
+    : m_updater(updater)
 {
-    KTemporaryFile temp2;
-    temp2.setSuffix("2.patch");
-    temp2.setAutoRemove(false);
-    temp2.open();
-    QTextStream t2(&temp2);
-    t2 << vcsdiff.diff();
-    kDebug() << "filename:" << temp2.fileName();
-    m_file = KUrl(temp2.fileName());
-    temp2.close();
+    update();
+}
 
-    kDebug() << "using file" << m_file << vcsdiff.diff();
-
-    m_name = "VCS Diff";
-    m_base = vcsdiff.baseDiff();
+VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& diff)
+    : m_updater(0)
+{
+    updateFromDiff(diff);
 }
 
 VCSDiffPatchSource::~VCSDiffPatchSource()
 {
     QFile::remove(m_file.toLocalFile());
+    delete m_updater;
 }
 
 KUrl VCSDiffPatchSource::baseDir() const {
@@ -104,7 +99,38 @@ QString VCSDiffPatchSource::name() const {
     return m_name;
 }
 
+void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
+{
+    if(!m_file.isValid())
+    {
+        KTemporaryFile temp2;
+        temp2.setSuffix("2.patch");
+        temp2.setAutoRemove(false);
+        temp2.open();
+        QTextStream t2(&temp2);
+        t2 << vcsdiff.diff();
+        kDebug() << "filename:" << temp2.fileName();
+        m_file = KUrl(temp2.fileName());
+        temp2.close();
+    }else{
+        QFile file(m_file.path());
+        file.open(QIODevice::WriteOnly);
+        QTextStream t2(&file);
+        t2 << vcsdiff.diff();
+    }
+
+    kDebug() << "using file" << m_file << vcsdiff.diff();
+
+    m_name = "VCS Diff";
+    m_base = vcsdiff.baseDiff();
+    
+    emit patchChanged();
+}
+
 void VCSDiffPatchSource::update() {
+    if(!m_updater)
+        return;
+    updateFromDiff(m_updater->update());
 }
 
 VCSCommitDiffPatchSource::~VCSCommitDiffPatchSource() {
@@ -187,7 +213,31 @@ bool showVcsDiff(IPatchSource* vcsDiff)
         kWarning() << "Patch review plugin not found";
         return false;
     }
+}
 
+VcsDiff VCSStandardDiffUpdater::update() const {
+    QScopedPointer<VcsJob> diffJob(m_vcs->diff(m_url,
+                                   KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                   KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
+
+    VcsDiff diff;
+    bool correctDiff = diffJob->exec();
+    if (correctDiff)
+        diff = diffJob->fetchResults().value<VcsDiff>();
+
+    if (!correctDiff)
+        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+
+    return diff;
+}
+
+VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, KUrl url) : m_vcs(vcs), m_url(url) {
+}
+
+VCSStandardDiffUpdater::~VCSStandardDiffUpdater() {
+}
+
+VCSDiffUpdater::~VCSDiffUpdater() {
 }
 
 #include "vcsdiffpatchsources.moc"

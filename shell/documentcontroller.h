@@ -78,7 +78,7 @@ public:
     /**Refers to the document currently active or focused.
     @return The active document.*/
     virtual IDocument* activeDocument() const;
-
+    
     virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() );
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
@@ -110,19 +110,24 @@ public:
     
     virtual bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-                              DocumentActivationParams activationParams = 0);
-                              
+                              DocumentActivationParams activationParams = 0,
+                              IDocument* buddy = 0);
+
     virtual KTextEditor::Document* globalTextEditorInstance();
     
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
     @param range The location information, if applicable.
-    @param activationParams Indicates whether to fully activate the document.*/
+    @param activationParams Indicates whether to fully activate the document.
+    @param buddy The buddy document
+    @return The opened document
+    */
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
-            const QString& encoding = "");
+            const QString& encoding = "",
+            IDocument* buddy = 0 );
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
     
@@ -135,6 +140,16 @@ public Q_SLOTS:
     void closeAllOtherDocuments();
     void reloadAllDocuments();
 
+    // DBUS-compatible versions of openDocument
+    virtual Q_SCRIPTABLE bool openDocumentSimple( QString url );
+    virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
+    
+    // Returns the currently active document
+    Q_SCRIPTABLE QString activeDocumentPath() const;
+
+    // Returns all open documents in the current area
+    Q_SCRIPTABLE QStringList activeDocumentPaths() const;
+    
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
 

@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
+#include <QDBusConnection>
 
 
 #include <kdeversion.h>
@@ -487,20 +488,25 @@ private slots:
                 return;
         }
 
-        recoveryDir.mkpath("backup"); //Just to make sure that the recovery directory actually exists
         {
-            //Clear the backup dir
+            // Clear the old backup recovery directory, as we will create a new one
             QDir recoveryBackupDir(recoveryDir.path() + "/backup");
-            foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
+            if(recoveryBackupDir.exists())
             {
-                QFile::remove(file.absoluteFilePath());
+                //Clear the backup dir
+                foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
+                    QFile::remove(file.absoluteFilePath());
+                
+                if(!recoveryDir.rmdir("backup"))
+                {
+                    kWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
+                    return;
+                }
             }
-            
-            bool removed = recoveryDir.rmdir("backup");
-            Q_ASSERT(removed);
         }
         
         //Make the current recovery dir the backup dir, so we always have a recovery available
+        //This may fail, because "current" might be nonexistent
         recoveryDir.rename("current", "backup");
 
         {
@@ -526,16 +532,27 @@ private slots:
                             QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().pathOrUrl().toUtf8());
+                            urlFile.close();
                             
                             QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
+                            f.close();
                             
                             currentRecoveryFiles[document->url()] =
                                         QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
                                                       << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
                             
+                            if(urlFile.error() != QFile::NoError || f.error() != QFile::NoError)
+                            {
+                                kWarning() << "RECOVERY ERROR: Failed to write recovery for" << document->url() << "to" << textFilePath;
+                                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                                    i18n("Failed to write recovery copies to %1. Please make sure that your home directory is writable and not full. This application requires available space in the home directory to run stable. You may experience application crashes until you free up some space.", recoveryCurrentDir.path()),
+                                                    i18n("Recovery Error"));
+                                return;
+                            }
+                                                      
                             ++num;
                         }
                     }
@@ -577,6 +594,9 @@ SessionController::SessionController( QObject *parent )
     setComponentData(KComponentData("kdevsession"));
     
     setXMLFile("kdevsessionui.rc");
+
+    QDBusConnection::sessionBus().registerObject( "/kdevelop/SessionController",
+        this, QDBusConnection::ExportScriptableSlots );
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
@@ -881,16 +901,12 @@ void SessionChooserDialog::updateState() {
         
         if(m_model->item(row, 2))
             m_model->item(row, 2)->setText(state);
-        
-        for(int col = 0; col < 3; ++col)
-            if(m_model->item(row, col))
-                m_model->item(row, col)->setEnabled(!running);
     }
     
     m_updateStateTimer.start();
 }
 
-QString SessionController::showSessionChooserDialog(QString headerText)
+QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
 {
     QTreeView* view = new QTreeView;
     QStandardItemModel* model = new QStandardItemModel(view);
@@ -920,7 +936,14 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         if ( si.name.isEmpty() && si.projects.isEmpty() ) {
             continue;
         }
+
+        bool running = false;
+        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+            running = true;
         
+        if(onlyRunning && !running)
+            continue;
+
         if(si.uuid.toString() == defaultSession)
             defaultRow = row;
         
@@ -928,9 +951,6 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         model->setItem(row, 1, new QStandardItem(si.description));
         
         QString state;
-        bool running = false;
-        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
-            running = true;
         
         model->setItem(row, 2, new QStandardItem(""));
         
@@ -940,7 +960,8 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         ++row;
     }
     
-    model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+    if(!onlyRunning)
+        model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
 
     dialog.updateState();
     
@@ -973,6 +994,14 @@ QString SessionController::showSessionChooserDialog(QString headerText)
     
     return QString();
 }
+
+QString SessionController::sessionName()
+{
+    if(!activeSession())
+        return QString();
+    return activeSession()->description();
+}
+
 
 }
 #include "sessioncontroller.moc"

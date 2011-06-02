@@ -42,6 +42,7 @@
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/icore.h>
+#include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
@@ -85,12 +86,26 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
 
 //END ProjectManagerFilterAction
 
+static const char* sessionConfigGroup = "ProjectManagerView";
+static const char* splitterStateConfigKey = "splitterState";
+static const int projectTreeViewStrechFactor = 75; // %
+static const int projectBuildSetStrechFactor = 25; // %
+
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidget *parent )
         : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
 {
     m_ui->setupUi( this );
 
     setWindowIcon( SmallIcon( "project-development" ) );
+
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    if (pmviewConfig.hasKey(splitterStateConfigKey)) {
+        QByteArray geometry = pmviewConfig.readEntry<QByteArray>(splitterStateConfigKey, QByteArray());
+        m_ui->splitter->restoreState(geometry);
+    } else {
+        m_ui->splitter->setStretchFactor(0, projectTreeViewStrechFactor);
+        m_ui->splitter->setStretchFactor(1, projectBuildSetStrechFactor);
+    }
 
     m_syncAction = plugin->actionCollection()->action("locate_document");
     Q_ASSERT(m_syncAction);
@@ -163,6 +178,9 @@ void ProjectManagerView::updateSyncAction()
 
 ProjectManagerView::~ProjectManagerView()
 {
+    KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
+    pmviewConfig.sync();
 }
 
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
@@ -186,9 +204,13 @@ void ProjectManagerView::locateCurrentDocument()
 
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
-    // We should _never_ get a null pointer for the document, as
-    // the action is only enabled when there is an active document.
-    Q_ASSERT(doc);
+    if (!doc) {
+        // in theory we should never get a null pointer as the action is only enabled
+        // when there is an active document.
+        // but: in practice it can happen that you close the last document and press
+        // the shortcut to locate a doc or vice versa... so just do the failsafe thing here...
+        return;
+    }
 
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {

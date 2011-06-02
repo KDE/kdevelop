@@ -265,7 +265,8 @@ public:
         emit q->projectAboutToBeOpened( project );
         if ( !project->open( url ) )
         {
-            delete project;
+            q->abortOpeningProject(project);
+            project->deleteLater();
             return;
         }
 
@@ -356,7 +357,7 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
             no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
             no.setIcon(KIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
-            cancel.setToolTip(i18n("Cancel and don't open the project."));
+            cancel.setToolTip(i18n("Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
                      "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
@@ -524,11 +525,16 @@ void ProjectController::initialize()
     KConfigGroup group = config->group( "General Options" );
     KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
-    foreach (const KUrl& url, openProjects)
-        openProject(url);
-
+    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(KUrl::List, openProjects));
+    
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
+}
+
+void ProjectController::openProjects(const KUrl::List& projects)
+{
+    foreach (const KUrl& url, projects)
+        openProject(url);
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
@@ -789,11 +795,6 @@ void ProjectController::closeProject(IProject* proj_)
     // loading might have failed
     d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
 
-    if(d->m_projects.indexOf(proj_) == -1)
-    {
-        return;
-    }
-
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
     if( !proj ) 
     {
@@ -813,12 +814,18 @@ void ProjectController::closeProject(IProject* proj_)
     {
         initializePluginCleanup(proj);
     }
-    
+
     if(!d->m_cleaningUp)
         d->saveListOfOpenedProjects();
-    
+
     emit projectClosed(proj);
     return;
+}
+
+void ProjectController::abortOpeningProject(IProject* proj)
+{
+    d->m_currentlyOpening.removeAll(proj->projectFileUrl());
+    emit projectOpeningAborted(proj);
 }
 
 ProjectModel* ProjectController::projectModel()
@@ -907,7 +914,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
         } else {
             prefixText = project->name() + '/';
         }
-        QString relativePath = project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);;
+        QString relativePath = project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
         if(relativePath.startsWith("./"))
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
@@ -917,6 +924,16 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
 
 QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
 {
+    IProject* project = Core::self()->projectController()->findProjectForUrl(url);
+    if(project && project->folder().equals(url, KUrl::CompareWithoutTrailingSlash))
+    {
+        if (format == FormatHtml) {
+            return "<i>" +  project->name() + "</i>";
+        } else {
+            return project->name();
+        }
+    }
+    
     QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
         return prefixText + "<b>" + url.fileName() + "</b>";

@@ -70,9 +70,12 @@
 #include <qlabel.h>
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
+#include "widgets/flexibleaction.h"
 #include <interfaces/isession.h>
 #include "vcsevent.h"
 #include <KCompositeJob>
+#include <QClipboard>
+#include <QApplication>
 
 namespace KDevelop
 {
@@ -259,9 +262,9 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
         KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
         if(d.isEmpty())
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                i18n("There are no differences."),
-                                i18n("VCS support"));
+            KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
+                                     i18n("There are no differences."),
+                                     i18n("VCS support"));
         else {
             VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
             showVcsDiff(patch);
@@ -275,12 +278,9 @@ void VcsPluginHelper::diffToBase()
 {
     SINGLEURL_SETUP_VARS
     ICore::self()->documentController()->saveAllDocuments();
-    KDevelop::VcsJob* job = iface->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
 
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
+    VCSDiffPatchSource* patch =new VCSDiffPatchSource(new VCSStandardDiffUpdater(iface, url));
+    showVcsDiff(patch);
 }
 
 void VcsPluginHelper::diffForRev()
@@ -299,15 +299,11 @@ void VcsPluginHelper::diffForRev()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-void VcsPluginHelper::history()
+void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob *job = iface->log(url);
-    if( !job ) 
-    {
-        kWarning() << "Couldn't create log job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
-        return;
-    }
+    KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
+    
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
@@ -353,6 +349,30 @@ void VcsPluginHelper::annotation()
     }
 }
 
+class CopyFunction : public AbstractFunction
+{
+    public:
+        CopyFunction(const QString& tocopy)
+            : m_tocopy(tocopy) {}
+        
+        void operator()() { QApplication::clipboard()->setText(m_tocopy); }
+    private:
+        QString m_tocopy;
+};
+
+class HistoryFunction : public AbstractFunction
+{
+    public:
+        HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
+            : m_helper(helper), m_rev(rev) {}
+            
+            void operator()() { m_helper->history(m_rev); }
+        
+    private:
+        VcsPluginHelper* m_helper;
+        VcsRevision m_rev;
+};
+
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
     KTextEditor::AnnotationInterface* annotateiface =
@@ -363,7 +383,10 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
     VcsRevision rev = model->revisionForLine(line);
     d->diffForRevAction->setData(QVariant::fromValue(rev));
+    menu->addSeparator();
     menu->addAction(d->diffForRevAction);
+    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision history..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()
@@ -384,9 +407,11 @@ void VcsPluginHelper::commit()
     KUrl url = d->ctxUrls.first();
     QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
     QMap<KUrl, VcsStatusInfo::State> changes;
+    QVariant varlist;
+
     if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
     {
-        QVariant varlist = statusJob->fetchResults();
+        varlist = statusJob->fetchResults();
 
         foreach( const QVariant &var, varlist.toList() )
         {
@@ -399,30 +424,20 @@ void VcsPluginHelper::commit()
     else
         kDebug() << "Couldn't get status for urls: " << url;
     
-    QScopedPointer<VcsJob> diffJob(d->vcs->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
-
-    VcsDiff diff;
-    bool correctDiff = diffJob->exec();
-    if(correctDiff)
-        diff = diffJob->fetchResults().value<VcsDiff>();
     
-    if(!correctDiff)
-        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
-
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), changes, d->vcs, retrieveOldCommitMessages());
     
     bool ret = showVcsDiff(patchSource);
-    
-    Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
-    if(ret) {
-        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
-        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
-    } else {
-        delete patchSource;
+
+    if(!ret) {
+        VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+        commitDialog->setCommitCandidates(varlist);
+        commitDialog->show();
     }
+
+    connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
+    connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
 }
 
 void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)

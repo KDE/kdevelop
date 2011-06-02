@@ -161,10 +161,10 @@ void Area::setActiveView(View* view)
     d->activeView = view;
 }
 
-void Area::addView(View *view, AreaIndex *index)
+void Area::addView(View *view, AreaIndex *index, View *after)
 {
-    View *after = 0;
-    if (controller()->openAfterCurrent()) {
+    //View *after = 0;
+    if (!after  &&  controller()->openAfterCurrent()) {
         after = activeView();
     }
     index->add(view, after);
@@ -466,8 +466,8 @@ bool Area::closeView(View* view)
 
     emit aboutToRemoveView(index, view);
     index->remove(view);
-    delete view;
     emit viewRemoved(index, view);
+    delete view;
 
     return true;
 }

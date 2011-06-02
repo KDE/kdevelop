@@ -50,13 +50,14 @@ class Info;
 }
 namespace KDevelop {
 class IDocument;
+class VcsFileChangesModel;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
 class PatchHighlighter : public QObject {
     Q_OBJECT
 public:
-    PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
+    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
     QList<KTextEditor::MovingRange*> ranges() const {
@@ -68,7 +69,9 @@ private slots:
 private:
 
     void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
-    void removeLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
+    void removeLineMarker(KTextEditor::MovingRange* range);
+    QStringList splitAndAddNewlines(const QString& text) const;
+    void performContentChange(KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
   
     KTextEditor::MovingRange* rangeForMark(KTextEditor::Mark mark);
 
@@ -77,7 +80,8 @@ private:
     QMap<KTextEditor::MovingRange*, Diff2::Difference*> m_differencesForRanges;
     KDevelop::IDocument* m_doc;
     PatchReviewPlugin* m_plugin;
-    const Diff2::DiffModel* m_model;
+    Diff2::DiffModel* m_model;
+    bool m_applying;
 public slots:
     void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
     void showToolTipForMark(QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
@@ -85,6 +89,7 @@ public slots:
     bool isInsertion(Diff2::Difference*);
     void markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
+    void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText);
 };
 
 class DiffSettings;
@@ -113,6 +118,8 @@ private slots:
     void slotEditCommandChanged();
 
     void slotEditFileNameChanged();
+    void slotDepthChanged(int newDepth);
+    void slotAppliedChanged(int newState);
 
     void finishReview();
     
@@ -122,6 +129,8 @@ private:
     void showEditDialog();
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
+    /// Retrieve the patch from plugin and perform all necessary casts
+    LocalPatchSource* GetLocalPatchSource();
 
     Ui_EditPatch m_editPatch;
 
@@ -132,11 +141,12 @@ private:
 
     bool m_reversed;
 
-    KUrl urlForFileModel(const Diff2::DiffModel* model);
-    
+
     PatchReviewPlugin* m_plugin;
     
     QPointer<QWidget> m_customWidget;
+
+    class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated(KDevelop::IDocument*);
     void patchSelectionChanged(int);
@@ -176,7 +186,9 @@ public:
     virtual void startReview(KDevelop::IPatchSource* patch, ReviewMode mode);
     
     void finishReview(QList<KUrl> selection);
-    
+
+    KUrl urlForFileModel(const Diff2::DiffModel* model);
+
 Q_SIGNALS:
     void patchChanged();
 
@@ -198,6 +210,14 @@ private Q_SLOTS:
     void exporterSelected(QAction* action);
     
 private:
+    // Switches to the review area, 
+    // makes sure that the working set active in the current area starts with "review" and
+    // is not active in any other area. Creates new working sets if required.
+    void switchAreaAndMakeWorkingSetUique();
+    // Returns whether the current working set is active only in this area
+    bool isWorkingSetUnique() const;
+    // Makes sure that this working set is active only in this area, and that its name starts with "review".
+    void setUniqueWorkingSet();
   
     QList<KDevelop::IPatchSource::Ptr> m_knownPatches;
 

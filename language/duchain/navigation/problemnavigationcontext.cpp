@@ -25,7 +25,7 @@
 #include <interfaces/iassistant.h>
 #include <qmenu.h>
 #include <kaction.h>
-#include <qpushbutton.h>
+#include <util/richtextpushbutton.h>
 
 using namespace KDevelop;
 
@@ -36,11 +36,11 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
   if(solution) {
     m_widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(m_widget);
-    QPushButton* button = new QPushButton;
+    RichTextPushButton* button = new RichTextPushButton;
 //     button->setPopupMode(QToolButton::InstantPopup);
-    button->setText(i18n("Solve"));
+    button->setHtml(i18n("<i>Solve</i>"));
     if(!solution->title().isEmpty())
-      button->setText(i18n("Solve: %1", solution->title()));
+      button->setHtml(i18n("<i>Solve:</i> %1", solution->title()));
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
     foreach(IAssistantAction::Ptr action, solution->actions()) {

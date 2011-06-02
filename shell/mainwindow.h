@@ -62,6 +62,9 @@ public Q_SLOTS:
     void showErrorMessage(const QString& message, int timeout);
 
     virtual Q_SCRIPTABLE void ensureVisible();
+    virtual Q_SCRIPTABLE QString windowTitle() {
+        return Sublime::MainWindow::windowTitle();
+    }
 
 public Q_SLOTS:
     virtual void setVisible( bool visible );
@@ -91,7 +94,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , KMenu* );
-    virtual void tabToolTipRequested(Sublime::View* view, QPoint point);    
+    virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 
 private Q_SLOTS:

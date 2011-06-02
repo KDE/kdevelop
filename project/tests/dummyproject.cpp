@@ -44,7 +44,7 @@ KDevelop::IBuildSystemManager* DummyProject::buildSystemManager() const
     return 0;
 }
 
-ProjectFileItem* DummyProject::fileAt(int pos) const
+ProjectFileItem* DummyProject::fileAt(int /*pos*/) const
 {
     return 0;
 }
@@ -72,17 +72,17 @@ QSet<IndexedString> DummyProject::fileSet() const
     return QSet<IndexedString>();
 }
 
-QList< ProjectFileItem* > DummyProject::filesForUrl(const KUrl& file) const
+QList< ProjectFileItem* > DummyProject::filesForUrl(const KUrl& /*file*/) const
 {
     return QList<ProjectFileItem*>();
 }
 
-QList< KDevelop::ProjectFolderItem* > DummyProject::foldersForUrl(const KUrl& folder) const
+QList< KDevelop::ProjectFolderItem* > DummyProject::foldersForUrl(const KUrl& /*folder*/) const
 {
     return QList<ProjectFolderItem*>();
 }
 
-QList< ProjectBaseItem* > DummyProject::itemsForUrl(const KUrl& url) const
+QList< ProjectBaseItem* > DummyProject::itemsForUrl(const KUrl& /*url*/) const
 {
     return QList<ProjectBaseItem*>();
 }
@@ -92,7 +92,7 @@ void DummyProject::setProjectItem(KDevelop::ProjectFolderItem* item)
     m_projectItem = item;
 }
 
-bool DummyProject::inProject(const KUrl& url) const
+bool DummyProject::inProject(const KUrl& /*url*/) const
 {
     return false;
 }
@@ -132,7 +132,7 @@ KUrl DummyProject::projectFileUrl() const
     return KUrl();
 }
 
-KUrl DummyProject::relativeUrl(const KUrl& absoluteUrl) const
+KUrl DummyProject::relativeUrl(const KUrl& /*absoluteUrl*/) const
 {
     return m_projectItem->url();
 }

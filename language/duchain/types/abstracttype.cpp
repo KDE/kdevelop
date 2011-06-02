@@ -112,7 +112,8 @@ uint AbstractType::hash() const
 {
   // TODO include other items in the hash
 
-  uint hash = 0;
+  uint hash = d_func()->typeClassId;
+  hash = hash *  301 + hash / 3;
 
   uint mod = d_func()->m_modifiers;
   

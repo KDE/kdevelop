@@ -140,16 +140,13 @@ public:
         UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        setSizePolicy(QSizePolicy::Maximum, sizePolicy().verticalPolicy());
+        setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     }
 
     virtual QSize minimumSizeHint() const
     {
         QRect rect = style()->itemTextRect(fontMetrics(), QRect(), Qt::AlignRight, true, i18n("Line: 00000 Col: 000"));
-        QStyleOptionTab tabOverlap;
-        tabOverlap.shape = m_tabBar->shape();
-        int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
-        rect.setHeight(rect.height()+overlap);
+        rect.setHeight(m_tabBar->height());
         return rect.size();
     }
 };
@@ -428,7 +425,7 @@ void Container::tabMoved(int from, int to)
     d->viewForWidget[w]->notifyPositionChanged(to);
 }
 
-void Container::contextMenu( int currentTab, QPoint pos )
+void Container::contextMenu( int currentTab, const QPoint& pos )
 {
     KMenu menu;
 
@@ -472,8 +469,20 @@ void Container::contextMenu( int currentTab, QPoint pos )
 
 void Container::showTooltipForTab(int tab)
 {
-    emit tabToolTipRequested(viewForWidget(widget(tab)), QCursor::pos());
+    emit tabToolTipRequested(viewForWidget(widget(tab)), this, tab);
 }
+
+bool Container::isCurrentTab(int tab) const
+{
+    return d->tabBar->currentIndex() == tab;
+}
+
+QRect Container::tabRect(int tab) const
+{
+    return d->tabBar->tabRect(tab).translated(d->tabBar->mapToGlobal(QPoint(0, 0)));
+}
+
+
 
 }
 

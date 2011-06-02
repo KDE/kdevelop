@@ -34,12 +34,15 @@ struct OutputModelPrivate
     QTimer* timer;
     QVector<QStandardItem*> pending;
     
-    static const int MAX_SIZE;
+    static const int MAX_SIZE_PENDING;
     static const int INTERVAL_MS;
+    static const int MAX_SIZE;
 };
 
-const int OutputModelPrivate::MAX_SIZE=10000;
+const int OutputModelPrivate::MAX_SIZE_PENDING=10000;
 const int OutputModelPrivate::INTERVAL_MS=50;
+
+const int OutputModelPrivate::MAX_SIZE=50000;
 
 OutputModel::OutputModel( QObject* parent )
     : QStandardItemModel( parent ), d(new OutputModelPrivate)
@@ -48,7 +51,7 @@ OutputModel::OutputModel( QObject* parent )
     d->timer->setInterval(OutputModelPrivate::INTERVAL_MS);
     d->timer->setSingleShot(true);
     
-    d->pending.reserve(OutputModelPrivate::MAX_SIZE);
+    d->pending.reserve(OutputModelPrivate::MAX_SIZE_PENDING);
     
     connect(d->timer, SIGNAL(timeout()), SLOT(addPending()));
 }
@@ -65,7 +68,7 @@ void OutputModel::appendLine( const QString& line )
     item->setFont( KGlobalSettings::fixedFont() );
     
     d->pending.append(item);
-    if(d->pending.size()<OutputModelPrivate::MAX_SIZE)
+    if(d->pending.size()<OutputModelPrivate::MAX_SIZE_PENDING)
         d->timer->start();
     else
         addPending();
@@ -81,9 +84,16 @@ void OutputModel::appendLines( const QStringList& lines)
 
 void OutputModel::addPending()
 {
-    if(!d->pending.isEmpty())
+    if(!d->pending.isEmpty()) {
+        const int aboutToAdd = d->pending.size();
+        if (aboutToAdd + invisibleRootItem()->rowCount() > OutputModelPrivate::MAX_SIZE) {
+            // https://bugs.kde.org/show_bug.cgi?id=263050
+            // make sure we don't add too many items
+            invisibleRootItem()->removeRows(0, aboutToAdd + invisibleRootItem()->rowCount() - OutputModelPrivate::MAX_SIZE);
+        }
         invisibleRootItem()->appendRows(d->pending.toList());
-    
+    }
+
     d->pending.clear();
 }
 

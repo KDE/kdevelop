@@ -82,6 +82,7 @@ void ProjectSourcePage::sourceChanged(int index)
         if(providerIface) {
             found=true;
             m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
+            connect(m_providerWidget, SIGNAL(changed(QString)), SLOT(projectChanged(QString)));
             
             remoteWidgetLayout->addWidget(m_providerWidget);   
         }
@@ -152,13 +153,13 @@ void ProjectSourcePage::progressChanged(KJob*, unsigned long value)
     m_ui->creationProgress->setValue(value);
 }
 
-void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& rich)
+void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& /*rich*/)
 {
     m_ui->creationProgress->setFormat(i18nc("Format of the progress bar text. progress and info",
                                             "%1 : %p%", text));
 }
 
-void ProjectSourcePage::projectReceived(KJob* job)
+void ProjectSourcePage::projectReceived(KJob* /*job*/)
 {
     m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
     
@@ -171,7 +172,7 @@ void ProjectSourcePage::reevaluateCorrection()
     //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
     //to support checking out to remote directories
     KUrl cwd=m_ui->workingDir->url();
-    bool correct=!cwd.isEmpty() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
+    bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
     emit isCorrect(correct);
     
     QDir d(cwd.toLocalFile());
@@ -205,6 +206,18 @@ void ProjectSourcePage::locationChanged()
     }
     else
         reevaluateCorrection();
+}
+
+void ProjectSourcePage::projectChanged(const QString& name)
+{
+    Q_ASSERT(m_providerWidget);
+    QString currentUrl = m_ui->workingDir->text();
+    currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
+    
+    KUrl current = currentUrl;
+    current.addPath(name);
+    
+    m_ui->workingDir->setUrl(current);
 }
 
 void ProjectSourcePage::setStatus(const QString& message)

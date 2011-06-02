@@ -94,12 +94,14 @@ public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );
     virtual void fetchProject();
     virtual void openProject( const KUrl &KDev4ProjectFile = KUrl() );
+    virtual void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
     virtual void closeProject( IProject* );
     virtual void configureProject( IProject* );
     void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
+    void openProjects(const KUrl::List& projects);
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

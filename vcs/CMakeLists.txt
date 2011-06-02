@@ -1,4 +1,5 @@
 add_subdirectory(dvcs/tests)
+add_subdirectory(models/tests)
 add_subdirectory(tests)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
@@ -30,8 +31,10 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcsdiffpatchsources.cpp
     widgets/vcslocationwidget.cpp
     widgets/standardvcslocationwidget.cpp
+    widgets/flexibleaction.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
+    models/vcsfilechangesmodel.cpp
     models/vcsitemeventmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
@@ -91,6 +94,7 @@ install(FILES
 install(FILES
     models/vcsannotationmodel.h
     models/vcseventmodel.h
+    models/vcsfilechangesmodel.h
     models/vcsitemeventmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
 )

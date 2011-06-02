@@ -75,8 +75,16 @@ public:
     QString iconName() const;
     void setIconName(const QString &iconName);
 
-    /**Adds the @p view to the list of views at the given area index.*/
-    void addView(View *view, AreaIndex *index);
+
+    /**Adds the @p view to the list of views at the given area index,
+    after the given view @p after.
+
+    If @p after == 0  &&  controller()->openAfterCurrent():
+        @p view is inserted after current view
+    If @p after == 0  &&  !controller()->openAfterCurrent():
+        @p view is inserted at the last position.
+    */
+    void addView(View *view, AreaIndex *index, View *after = 0);
 
     /**Adds the @p view to the list of views at the current area index.*/
     void addView(View *view, View *after = 0);
