@@ -576,12 +576,15 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
   
   bool typeOpened = false;
   if (node->op) {
-    QString op = editor()->tokenToString(node->op);
+    const QString op = editor()->tokenToString(node->op);
     if (!op.isEmpty()) {
       if (op[0] == '&') {
         ReferenceType::Ptr pointer(new ReferenceType());
         pointer->setModifiers(parseConstVolatile(editor()->parseSession(), node->cv));
         pointer->setBaseType(lastType());
+        if (op.size() == 2 && op[1] == '&')
+          pointer->setIsRValue(true);
+
         openType(pointer);
         typeOpened = true;
 
