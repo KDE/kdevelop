@@ -446,6 +446,7 @@ public:
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
+  bool isVariadic;
 };
 
 class DeleteExpressionAST : public ExpressionAST

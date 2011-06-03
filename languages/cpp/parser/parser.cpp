@@ -1441,18 +1441,23 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
     }
   else
     {
-      if (allowBitfield && session->token_stream->lookAhead() == ':')
+      // bitfield can be unnamed
+      if (!allowBitfield || session->token_stream->lookAhead() != ':')
         {
-          // unnamed bitfield
-        }
-      else if (parseName(declId, AcceptTemplate))
-        {
-          ast->id = declId;
-        }
-      else
-        {
-          rewind(start);
-          return false;
+          if (session->token_stream->lookAhead() == Token_ellipsis)
+            {
+              advance();
+              ast->isVariadic = true;
+            }
+          if (parseName(declId, AcceptTemplate))
+            {
+              ast->id = declId;
+            }
+          else
+            {
+              rewind(start);
+              return false;
+            }
         }
 
       if (allowBitfield && session->token_stream->lookAhead() == ':')
