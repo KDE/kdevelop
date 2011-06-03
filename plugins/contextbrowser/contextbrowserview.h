@@ -76,6 +76,9 @@ class ContextBrowserView : public QWidget {
 
         KDevelop::IndexedDeclaration declaration() const;
 
+        ///Returns whether the view is currently locked
+        bool isLocked() const;
+        
     private Q_SLOTS:
         void updateLockIcon(bool); 
         void declarationMenu();
@@ -86,7 +89,6 @@ class ContextBrowserView : public QWidget {
         
         virtual void focusInEvent(QFocusEvent* event);
         virtual void focusOutEvent(QFocusEvent* event);
-        bool isLocked() const;
         void resetWidget();
 
     private:

@@ -383,7 +383,7 @@ void ContextBrowserPlugin::hideTooTip() {
 void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
   
   ContextBrowserView* contextView = browserViewForWidget(view);
-  if(contextView && contextView->isVisible())
+  if(contextView && contextView->isVisible() && !contextView->isLocked())
     return; // If the context-browser view is visible, it will care about updating by itself
   
   KUrl viewUrl(view->document()->url());
