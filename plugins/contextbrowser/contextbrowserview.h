@@ -82,6 +82,7 @@ class ContextBrowserView : public QWidget {
     private Q_SLOTS:
         void updateLockIcon(bool); 
         void declarationMenu();
+        void navigationContextChanged(bool wasInitial, bool isInitial);
 
     private:
         virtual void showEvent(QShowEvent* event);
@@ -107,6 +108,8 @@ class ContextBrowserView : public QWidget {
         KDevelop::IndexedTopDUContext m_lastUsedTopContext;
 
         KDevelop::IndexedDUContext m_context;
+        // Whether the lock-button was activated automatically due to user navigation
+        bool m_autoLocked;
 };
 
 #endif

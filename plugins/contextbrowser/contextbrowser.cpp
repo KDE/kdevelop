@@ -419,7 +419,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
 
     // If we have an invisible context-view, assign the tooltip navigation-widget to it.
     // If the user makes the context-view visible, it will instantly contain the correct widget.
-    if(contextView)
+    if(contextView && !contextView->isLocked())
       contextView->setNavigationWidget(navigationWidget);
       
     if(m_currentToolTip) {

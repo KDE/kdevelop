@@ -81,6 +81,10 @@ namespace KDevelop {
       
     Q_SIGNALS:
       void sizeHintChanged();
+      /// Emitted whenever the current navigation-context has changed
+      /// @param wasInitial whether the previous context was the initial context
+      /// @param isInitial whether the current context is the initial context
+      void contextChanged(bool wasInitial, bool isInitial);
     public slots:
       void navigateDeclaration(KDevelop::IndexedDeclaration decl);
     private slots:
