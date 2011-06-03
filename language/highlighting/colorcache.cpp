@@ -257,9 +257,11 @@ void ColorCache::updateInternal()
 
       if ( ILanguageSupport* langSupport = lang->languageSupport() ) {
 
-        DUChainReadLocker lock;
-
-        TopDUContext* top = langSupport->standardContext(doc->url());
+        ReferencedTopDUContext top;
+        {
+          DUChainReadLocker lock;
+          top = langSupport->standardContext(doc->url());
+        }
 
         if(top) {
           if ( ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
