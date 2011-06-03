@@ -88,7 +88,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dumper.dump(ast, lastSession->token_stream);
-  QEXPECT_FAIL("pack-expansion-params-call", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-mem-initlist-arg", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-initlist", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-throw", "not implemented", Abort);

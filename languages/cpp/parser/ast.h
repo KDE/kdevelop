@@ -543,6 +543,7 @@ public:
   DECLARE_AST_NODE(FunctionCall)
 
   ExpressionAST *arguments;
+  bool isVariadic;
 };
 
 class FunctionDefinitionAST : public DeclarationAST

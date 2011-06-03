@@ -3928,10 +3928,18 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         advance();
         ExpressionAST *expr = 0;
         parseExpression(expr);
+        ///TODO: is this the right place? can't find anything in the last public spec file...
+        bool isVariadic = false;
+        if (session->token_stream->lookAhead() == Token_ellipsis)
+          {
+            advance();
+            isVariadic = true;
+          }
         CHECK(')');
 
         FunctionCallAST *ast = CreateNode<FunctionCallAST>(session->mempool);
         ast->arguments = expr;
+        ast->isVariadic = isVariadic;
 
         UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
