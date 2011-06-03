@@ -63,3 +63,41 @@ void TestParser::testDefaultDeletedFunctions()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testVariadicTemplates_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("template-pack-class") << "template<class ... Arg> class A {};\n";
+  QTest::newRow("template-pack-typename") << "template<typename ... Arg> class A {};\n";
+  QTest::newRow("pack-expansion-baseclass") << "template<class ... Arg> class A : public Arg... {};\n";
+  QTest::newRow("pack-expansion-tplarg") << "template<class ... Arg> class A { A() { A<Arg...>(); } };\n";
+  QTest::newRow("pack-expansion-mem-initlist") << "template<class ... Mixins> class A : public Mixins... { A(Mixins... args) : Mixins(args)... {} };\n";
+  QTest::newRow("pack-expansion-params") << "template<typename ... Arg> void A(Arg ... params) {};\n";
+  QTest::newRow("pack-expansion-params-call") << "template<typename ... Arg> void A(Arg ... params) { A(params...); };\n";
+  QTest::newRow("pack-expansion-initlist") << "template<typename ... Arg> void A(Arg ... params) { SomeList list = { params... }; };\n";
+  QTest::newRow("pack-expansion-throw") << "template<typename ... Arg> void A() throw(Arg...) {};\n";
+  ///TODO: attribute-list?
+  ///TODO: alignment-specifier?
+  ///TODO: capture-list?
+}
+
+void TestParser::testVariadicTemplates()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  QEXPECT_FAIL("template-pack-class", "false-positive parsing", Abort);
+  QEXPECT_FAIL("template-pack-typename", "false-positive parsing", Abort);
+  QEXPECT_FAIL("pack-expansion-baseclass", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-tplarg", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-mem-initlist", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-params", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-params-call", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-initlist", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-throw", "not implemented", Abort);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}

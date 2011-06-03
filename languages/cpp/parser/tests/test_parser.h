@@ -82,6 +82,8 @@ private slots:
   void testRangeBasedFor();
   void testRValueReference();
   void testDefaultDeletedFunctions();
+  void testVariadicTemplates_data();
+  void testVariadicTemplates();
 
 private:
   Control control;
