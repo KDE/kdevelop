@@ -351,7 +351,7 @@ struct DocumentControllerPrivate {
             Sublime::View *partView = 0;
             foreach (Sublime::View *view, sdoc->views())
             {
-                if (area->views().contains(view) && (activationParams.testFlag(DocumentController::DoNotForceCurrentView) || area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView())))
+                if (area->views().contains(view) && area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView()))
                 {
                     partView = view;
                     break;
@@ -403,13 +403,9 @@ struct DocumentControllerPrivate {
                             Sublime::AreaIndex* activeViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
 
                             // try to find existing View of buddy document:
-                            //   * only in the same AreaIndex if flag DoNotForceCurrentView is not set,
-                            //   * in all AreaIndices of the current Area, if flag is set (TODO: test this case)
                             foreach (Sublime::View *view, sublimeDocBuddy->views())
                             {
-                                if (area->views().contains(view) &&
-                                    (activationParams.testFlag(DocumentController::DoNotForceCurrentView) ||
-                                     area->indexOf(view) == activeViewIndex))
+                                if (area->views().contains(view))
                                 {
                                     buddyView = view;
                                     break;
