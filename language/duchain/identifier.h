@@ -363,7 +363,7 @@ public:
     bool m_isReference : 1;
     bool m_isRValue : 1;
     uint m_pointerDepth : 5;
-    uint m_pointerConstMask : 25;
+    uint m_pointerConstMask : 24;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);
