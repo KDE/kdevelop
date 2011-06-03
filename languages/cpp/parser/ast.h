@@ -965,7 +965,7 @@ public:
 
   TypeIdAST *type_id;
   ExpressionAST *expression;
-  bool isTemplateParameterPack;
+  bool isVariadic;
 };
 
 class TemplateDeclarationAST : public DeclarationAST
@@ -1070,6 +1070,7 @@ public:
   TypeIdAST *type_id;
   const ListNode<TemplateParameterAST*> *template_parameters;
   NameAST *template_name;
+  bool isVariadic;
 };
 
 class TypedefAST : public DeclarationAST

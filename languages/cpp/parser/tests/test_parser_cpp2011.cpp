@@ -87,8 +87,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dumper.dump(ast, lastSession->token_stream);
-  QEXPECT_FAIL("template-pack-class", "false-positive parsing", Abort);
-  QEXPECT_FAIL("template-pack-typename", "false-positive parsing", Abort);
   QEXPECT_FAIL("pack-expansion-baseclass", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-mem-initlist", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-params", "not implemented", Abort);

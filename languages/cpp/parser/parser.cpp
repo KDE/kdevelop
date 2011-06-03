@@ -1369,16 +1369,16 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
     }
   }
 
-  bool isTemplateParameterPack = false;
+  bool isVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis) {
-    isTemplateParameterPack = true;
+    isVariadic = true;
     advance();
   }
 
   TemplateArgumentAST *ast = CreateNode<TemplateArgumentAST>(session->mempool);
   ast->type_id = typeId;
   ast->expression = expr;
-  ast->isTemplateParameterPack = isTemplateParameterPack;
+  ast->isVariadic = isVariadic;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -1782,6 +1782,12 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
       {
         advance(); // skip class
 
+        if(session->token_stream->lookAhead() == Token_ellipsis)
+          {
+            advance();
+            ast->isVariadic = true;
+          }
+
         // parse optional name
         if(parseName(ast->name, AcceptTemplate))
           {
@@ -1815,6 +1821,8 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
           return false;
 
         ADVANCE('>', ">");
+
+        // TODO: can a template-template parameter be variadic?
 
         // TODO add to AST
         if (session->token_stream->lookAhead() == Token_class)
