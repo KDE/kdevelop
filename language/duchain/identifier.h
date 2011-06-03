@@ -359,6 +359,8 @@ public:
   bool operator!=(const IndexedTypeIdentifier& rhs) const;
   private:
     IndexedQualifiedIdentifier m_identifier;
+    // The overall number of bits shared by these bit-fields should not exceed 32,
+    // so that we don't waste space. IndexedTypeIdentifer should be as compact as possible.
     bool m_isConstant : 1;
     bool m_isReference : 1;
     bool m_isRValue : 1;
