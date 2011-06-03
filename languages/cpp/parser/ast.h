@@ -965,6 +965,7 @@ public:
 
   TypeIdAST *type_id;
   ExpressionAST *expression;
+  bool isTemplateParameterPack;
 };
 
 class TemplateDeclarationAST : public DeclarationAST

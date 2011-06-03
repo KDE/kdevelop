@@ -90,7 +90,6 @@ void TestParser::testVariadicTemplates()
   QEXPECT_FAIL("template-pack-class", "false-positive parsing", Abort);
   QEXPECT_FAIL("template-pack-typename", "false-positive parsing", Abort);
   QEXPECT_FAIL("pack-expansion-baseclass", "not implemented", Abort);
-  QEXPECT_FAIL("pack-expansion-tplarg", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-mem-initlist", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-params", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-params-call", "not implemented", Abort);

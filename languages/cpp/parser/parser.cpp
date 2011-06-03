@@ -1369,9 +1369,16 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
     }
   }
 
+  bool isTemplateParameterPack = false;
+  if (session->token_stream->lookAhead() == Token_ellipsis) {
+    isTemplateParameterPack = true;
+    advance();
+  }
+
   TemplateArgumentAST *ast = CreateNode<TemplateArgumentAST>(session->mempool);
   ast->type_id = typeId;
   ast->expression = expr;
+  ast->isTemplateParameterPack = isTemplateParameterPack;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
