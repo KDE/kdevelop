@@ -2593,6 +2593,12 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
   if (!parseName(ast->name, AcceptTemplate))
     reportError(("Class name expected"));
 
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      ast->isVariadic = true;
+    }
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 

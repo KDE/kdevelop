@@ -279,6 +279,7 @@ public:
   uint virt;
   uint access_specifier;
   NameAST *name;
+  bool isVariadic;
 };
 
 class BinaryExpressionAST : public ExpressionAST
