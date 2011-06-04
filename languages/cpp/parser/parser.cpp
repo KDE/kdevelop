@@ -2522,19 +2522,26 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
   ADVANCE('(', "(");
   ExpressionAST *expr = 0;
   parseCommaExpression(expr);
-  ADVANCE(')', ")");
-
-  bool isVariadic = false;
+  bool expressionIsVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {
       advance();
-      isVariadic = true;
+      expressionIsVariadic = true;
+    }
+  ADVANCE(')', ")");
+
+  bool initializerIsVariadic = false;
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      initializerIsVariadic = true;
     }
 
   MemInitializerAST *ast = CreateNode<MemInitializerAST>(session->mempool);
   ast->initializer_id = initId;
   ast->expression = expr;
-  ast->isVariadic = isVariadic;
+  ast->initializerIsVariadic = initializerIsVariadic;
+  ast->expressionIsVariadic = expressionIsVariadic;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;

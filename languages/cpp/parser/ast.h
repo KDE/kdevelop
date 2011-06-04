@@ -697,7 +697,10 @@ public:
 
   NameAST *initializer_id;
   ExpressionAST *expression;
-  bool isVariadic;
+  // : foo(args)...
+  bool initializerIsVariadic : 1;
+  // : foo(args...)
+  bool expressionIsVariadic : 1;;
 };
 
 class NameAST : public AST

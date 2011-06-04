@@ -78,6 +78,8 @@ void TestParser::testVariadicTemplates_data()
   QTest::newRow("pack-expansion-mem-initlist") << "template<class ... Mixins> class A : public Mixins... { A(Mixins... args) : Mixins(args)... {} };\n";
   QTest::newRow("pack-expansion-mem-initlist-arg") << "template<class ... Args> class A : public B<Args...> { A(Args... args) : B<Args...>(args...) {} };\n";
   QTest::newRow("pack-expansion-initlist") << "template<typename ... Arg> void A(Arg ... params) { SomeList list = { params... }; };\n";
+  QTest::newRow("pack-expansion-initlist2") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { params... }; };\n";
+  QTest::newRow("pack-expansion-initlist3") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { (params+10)... }; };\n";
   QTest::newRow("pack-expansion-throw") << "template<typename ... Arg> void A() throw(Arg...) {};\n";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
@@ -89,8 +91,9 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dumper.dump(ast, lastSession->token_stream);
-  QEXPECT_FAIL("pack-expansion-mem-initlist-arg", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-initlist", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-initlist2", "not implemented", Abort);
+  QEXPECT_FAIL("pack-expansion-initlist3", "not implemented", Abort);
   QEXPECT_FAIL("pack-expansion-throw", "not implemented", Abort);
   if (!control.problems().isEmpty()) {
     foreach(const KDevelop::ProblemPointer&p, control.problems()) {
