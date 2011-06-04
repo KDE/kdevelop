@@ -70,12 +70,13 @@ void TestParser::testVariadicTemplates_data()
 
   QTest::newRow("template-pack-class") << "template<class ... Arg> class A {};\n";
   QTest::newRow("template-pack-typename") << "template<typename ... Arg> class A {};\n";
-  QTest::newRow("pack-expansion-baseclass") << "template<class ... Arg> class A : public Arg... {};\n";
+  QTest::newRow("pack-expansion-baseclasses") << "template<class ... Arg> class A : public Arg... {};\n";
+  QTest::newRow("pack-expansion-baseclass") << "template<class ... Arg> class A : public B<Arg...> {};\n";
   QTest::newRow("pack-expansion-tplarg") << "template<class ... Arg> class A { A() { A<Arg...>(); } };\n";
   QTest::newRow("pack-expansion-params") << "template<typename ... Arg> void A(Arg ... params) {};\n";
   QTest::newRow("pack-expansion-params-call") << "template<typename ... Arg> void A(Arg ... params) { A(params...); };\n";
   QTest::newRow("pack-expansion-mem-initlist") << "template<class ... Mixins> class A : public Mixins... { A(Mixins... args) : Mixins(args)... {} };\n";
-  QTest::newRow("pack-expansion-mem-initlist-arg") << "template<class ... Mixins> class A : public B{ A(Mixins... args) : B(args...) {} };\n";
+  QTest::newRow("pack-expansion-mem-initlist-arg") << "template<class ... Args> class A : public B<Args...> { A(Args... args) : B<Args...>(args...) {} };\n";
   QTest::newRow("pack-expansion-initlist") << "template<typename ... Arg> void A(Arg ... params) { SomeList list = { params... }; };\n";
   QTest::newRow("pack-expansion-throw") << "template<typename ... Arg> void A() throw(Arg...) {};\n";
   ///TODO: attribute-list?
