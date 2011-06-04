@@ -66,8 +66,9 @@ using namespace KDevelop;
 
 //BEGIN ProjectManagerFilterAction
 
-ProjectManagerFilterAction::ProjectManagerFilterAction( QObject* parent )
+ProjectManagerFilterAction::ProjectManagerFilterAction(  const QString &initialFilter, QObject* parent )
     : KAction( parent )
+    , m_intialFilter(initialFilter)
 {
     setIcon(KIcon("view-filter"));
     setText(i18n("Filter..."));
@@ -81,6 +82,10 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
     edit->setClickMessage(i18n("Filter..."));
     edit->setClearButtonShown(true);
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
+    if (!m_intialFilter.isEmpty()) {
+        edit->setText(m_intialFilter);
+    }
+
     return edit;
 }
 
@@ -88,6 +93,7 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
 
 static const char* sessionConfigGroup = "ProjectManagerView";
 static const char* splitterStateConfigKey = "splitterState";
+static const char* filterConfigKey = "filter";
 static const int projectTreeViewStrechFactor = 75; // %
 static const int projectBuildSetStrechFactor = 25; // %
 
@@ -137,7 +143,13 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
-    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
+    QString filterText;
+
+    if (pmviewConfig.hasKey(filterConfigKey)) {
+        filterText = pmviewConfig.readEntry(filterConfigKey, QString());
+    }
+
+    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(filterText, this);
     connect(filterAction, SIGNAL(filterChanged(QString)),
             this, SLOT(filterChanged(QString)));
     addAction(filterAction);
@@ -180,6 +192,7 @@ ProjectManagerView::~ProjectManagerView()
 {
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
+    pmviewConfig.writeEntry(filterConfigKey, m_filterString);
     pmviewConfig.sync();
 }
 
@@ -244,6 +257,7 @@ void ProjectManagerView::openUrl( const KUrl& url )
 
 void ProjectManagerView::filterChanged(const QString &text)
 {
+    m_filterString = text;
     m_modelFilter->setFilterString(text);
 }
 

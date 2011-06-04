@@ -119,9 +119,12 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context, int 
   if (!m_startContext)
     m_startContext = m_context;
 
+  bool wasInitial = (m_context == m_startContext);
+  
   m_context = context;
   update();
   
+  emit contextChanged(wasInitial, m_context == m_startContext);
   emit sizeHintChanged();
 }
 

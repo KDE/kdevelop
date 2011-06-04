@@ -971,11 +971,16 @@ void QualifiedIdentifier::prepareWrite() {
 }
 
 uint IndexedTypeIdentifier::hash() const {
-    return m_identifier.getIndex() * 13 + (m_isConstant ? 17 : 0) + (m_isReference ? 12371 : 0) + m_pointerConstMask * 89321 + m_pointerDepth * 1023;
+    return m_identifier.getIndex() * 13 + (m_isConstant ? 17 : 0) + (m_isReference ? 12371 : 0) + (m_isRValue ? 4543 : 0) + m_pointerConstMask * 89321 + m_pointerDepth * 1023;
 }
 
 bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {
-    return m_identifier == rhs.m_identifier && m_isConstant == rhs.m_isConstant && m_isReference == rhs.m_isReference && m_pointerConstMask == rhs.m_pointerConstMask && m_pointerDepth == rhs.m_pointerDepth;
+    return m_identifier == rhs.m_identifier
+        && m_isConstant == rhs.m_isConstant
+        && m_isReference == rhs.m_isReference
+        && m_isRValue == rhs.m_isRValue
+        && m_pointerConstMask == rhs.m_pointerConstMask
+        && m_pointerDepth == rhs.m_pointerDepth;
 }
 
 bool IndexedTypeIdentifier::operator!=(const IndexedTypeIdentifier& rhs) const {
@@ -988,6 +993,14 @@ bool IndexedTypeIdentifier::isReference() const {
 
 void IndexedTypeIdentifier::setIsReference(bool isRef) {
   m_isReference = isRef;
+}
+
+bool IndexedTypeIdentifier::isRValue() const {
+  return m_isRValue;
+}
+
+void IndexedTypeIdentifier::setIsRValue(bool isRVal) {
+  m_isRValue = isRVal;
 }
 
 bool IndexedTypeIdentifier::isConstant() const {
@@ -1040,11 +1053,23 @@ QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
   return ret;
 }
 
-IndexedTypeIdentifier::IndexedTypeIdentifier(KDevelop::IndexedQualifiedIdentifier identifier) : m_identifier(identifier), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstMask(0) {
-}
+IndexedTypeIdentifier::IndexedTypeIdentifier(KDevelop::IndexedQualifiedIdentifier identifier)
+: m_identifier(identifier)
+, m_isConstant(false)
+, m_isReference(false)
+, m_isRValue(false)
+, m_pointerDepth(0)
+, m_pointerConstMask(0)
+{ }
 
-IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isExpression) : m_identifier(QualifiedIdentifier(identifier, isExpression)), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstMask(0) {
-}
+IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isExpression)
+: m_identifier(QualifiedIdentifier(identifier, isExpression))
+, m_isConstant(false)
+, m_isReference(false)
+, m_isRValue(false)
+, m_pointerDepth(0)
+, m_pointerConstMask(0)
+{ }
 
 IndexedIdentifier::IndexedIdentifier() : index(emptyConstantIdentifierPrivateIndex()) {
   if(shouldDoDUChainReferenceCounting(this)) {

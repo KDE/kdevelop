@@ -353,8 +353,13 @@ void Container::setCurrentWidget(QWidget* w)
     if (View *view = d->viewForWidget[w])
     {
         statusChanged(view);
-        statusIconChanged( view->document() );
-        documentTitleChanged( view->document() );
+        if (!d->tabBar->isVisible())
+        {
+            // repaint icon and document title only in tabbar-less mode
+            // tabbar will do repainting for us
+            statusIconChanged( view->document() );
+            documentTitleChanged( view->document() );
+        }
     }
 }
 
@@ -374,7 +379,9 @@ void Sublime::Container::removeWidget(QWidget *w)
         int widgetIdx = d->stack->indexOf(w);
         d->stack->removeWidget(w);
         d->tabBar->removeTab(widgetIdx);
-        if (d->tabBar->currentIndex() != -1) {
+        if (d->tabBar->currentIndex() != -1 && !d->tabBar->isVisible()) {
+            // repaint icon and document title only in tabbar-less mode
+            // tabbar will do repainting for us
             QWidget* w = widget( d->tabBar->currentIndex() );
             if( w ) {
                 statusIconChanged( d->viewForWidget[w]->document() );

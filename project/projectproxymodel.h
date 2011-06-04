@@ -49,6 +49,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
         KDevelop::ProjectModel* projectModel() const;
         bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
         QList<QSharedPointer<QRegExp> > mFilenameFilters; 
+        QList<QSharedPointer<QRegExp> > mFilenameExcludeFilters;
 };
 
 #endif

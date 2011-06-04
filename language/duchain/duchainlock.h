@@ -36,9 +36,11 @@ namespace KDevelop
 #if !defined(NDEBUG) && !defined(NO_DUCHAIN_LOCK_TESTING)
 #define ENSURE_CHAIN_READ_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasReadLock() || DUChain::lock()->currentThreadHasWriteLock());
 #define ENSURE_CHAIN_WRITE_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasWriteLock());
+#define ENSURE_CHAIN_NOT_LOCKED Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
 #else
 #define ENSURE_CHAIN_READ_LOCKED
 #define ENSURE_CHAIN_WRITE_LOCKED
+#define ENSURE_CHAIN_NOT_LOCKED
 #endif
 
 /**

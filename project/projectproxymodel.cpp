@@ -64,7 +64,7 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
 
 bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const
 {
-    if (mFilenameFilters.isEmpty()) {
+    if (mFilenameFilters.isEmpty() && mFilenameExcludeFilters.empty()) {
         return true;
     }
 
@@ -77,7 +77,13 @@ bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & s
         if (item->type() != KDevelop::ProjectBaseItem::Folder &&
             item->type() != KDevelop::ProjectBaseItem::BuildFolder)
         {
-            retval = false; // Do not show until it is matched to filter
+
+            if (mFilenameFilters.isEmpty() && !mFilenameExcludeFilters.isEmpty()) {
+                // Exclude filter is specified only -> show all by default
+                retval = true;
+            } else {
+                retval = false; // Do not show until it is matched to filter
+            }
 
             QSharedPointer<QRegExp> filter;
 
@@ -88,6 +94,15 @@ bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & s
                     break;
                 }
             }
+            if (retval) {
+                foreach(filter, mFilenameExcludeFilters) {
+                    if (filter->exactMatch(item->text())) {
+                        retval = false;
+                        break;
+                    }
+                }
+            }
+
         }
     }
     return retval;
@@ -97,10 +112,13 @@ void ProjectProxyModel::setFilterString(const QString &filters)
 {
     QStringList patterns(filters.split(QRegExp("[; ]"), QString::SkipEmptyParts));
 
-    // Check for special case: single pattern without special chars -> force prefixed search (qwerty ->qwerty*)
-    if (patterns.size() == 1) {
-        QString pattern(patterns.front());
+    QString pattern;
+    mFilenameFilters.clear();
+    mFilenameExcludeFilters.clear();
 
+    foreach(pattern, patterns)
+    {
+        // Check for special case: single pattern without special chars -> force prefixed search (qwerty ->qwerty*)
         if (!pattern.contains('*') &&
             !pattern.contains('?') &&
             !pattern.contains('[') &&
@@ -110,16 +128,13 @@ void ProjectProxyModel::setFilterString(const QString &filters)
             pattern += '*';
         }
 
-        patterns.clear();
-        patterns << pattern;
-    }
+        if (pattern.startsWith('!')) {
+            pattern = pattern.mid(1); // Strip '!'
 
-    QString pattern;
-    mFilenameFilters.clear();
-
-    foreach(pattern, patterns)
-    {
-        mFilenameFilters.push_back(QSharedPointer<QRegExp>(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)));
+            mFilenameExcludeFilters.push_back(QSharedPointer<QRegExp>(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)));
+        } else {
+            mFilenameFilters.push_back(QSharedPointer<QRegExp>(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)));
+        }
     }
 
     invalidateFilter();

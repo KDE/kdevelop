@@ -76,9 +76,13 @@ class ContextBrowserView : public QWidget {
 
         KDevelop::IndexedDeclaration declaration() const;
 
+        ///Returns whether the view is currently locked
+        bool isLocked() const;
+        
     private Q_SLOTS:
         void updateLockIcon(bool); 
         void declarationMenu();
+        void navigationContextChanged(bool wasInitial, bool isInitial);
 
     private:
         virtual void showEvent(QShowEvent* event);
@@ -86,7 +90,6 @@ class ContextBrowserView : public QWidget {
         
         virtual void focusInEvent(QFocusEvent* event);
         virtual void focusOutEvent(QFocusEvent* event);
-        bool isLocked() const;
         void resetWidget();
 
     private:
@@ -105,6 +108,8 @@ class ContextBrowserView : public QWidget {
         KDevelop::IndexedTopDUContext m_lastUsedTopContext;
 
         KDevelop::IndexedDUContext m_context;
+        // Whether the lock-button was activated automatically due to user navigation
+        bool m_autoLocked;
 };
 
 #endif

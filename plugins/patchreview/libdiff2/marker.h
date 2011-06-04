@@ -51,6 +51,10 @@ public:
     void setType  ( enum Marker::Type type ) { m_type   = type;   }
     void setOffset( unsigned int offset )    { m_offset = offset; }
 
+    bool operator == (const Marker& rhs) const {
+        return this->type() == rhs.type() && this->offset() == rhs.offset();
+    }
+
 private:
     enum Marker::Type m_type;
     unsigned int      m_offset;

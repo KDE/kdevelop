@@ -109,7 +109,7 @@ void ContextBrowserView::updateLockIcon(bool checked) {
     m_lockButton->setIcon(KIcon(checked ? "document-encrypt" : "document-decrypt"));
 }
 
-ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new KTextBrowser()) {
+ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new KTextBrowser()), m_autoLocked(false) {
     setWindowIcon( KIcon("applications-development-web") );
 
     m_allowLockedUpdate = false;
@@ -233,6 +233,22 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
         m_layout->insertWidget(1, widget, 1);
         m_allowLockedUpdate = false;
         setUpdatesEnabled(true);
+        connect(widget, SIGNAL(contextChanged(bool, bool)), this, SLOT(navigationContextChanged(bool, bool)));
+    }
+}
+
+void ContextBrowserView::navigationContextChanged(bool wasInitial, bool isInitial)
+{
+    if(wasInitial && !isInitial && !m_lockButton->isChecked())
+    {
+        m_autoLocked = true;
+        m_lockButton->setChecked(true);
+    }else if(!wasInitial && isInitial && m_autoLocked)
+    {
+        m_autoLocked = false;
+        m_lockButton->setChecked(false);
+    }else if(isInitial) {
+        m_autoLocked = false;
     }
 }
 
