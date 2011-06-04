@@ -93,13 +93,8 @@ bool PartController::isTextType( KMimeType::Ptr mimeType )
         isTextType = true;
     }
 
-    bool isKDEText = false;
-    QVariant v = mimeType->property( "X-KDE-text" );
-    if ( v.isValid() )
-        isKDEText = v.toBool();
-
     // is this regular text - open in editor
-    return ( isTextType || isKDEText
+    return ( isTextType
              || mimeType->is( "text/plain" )
              || mimeType->is( "text/html" )
              || mimeType->is( "application/x-zerosize" ) );
