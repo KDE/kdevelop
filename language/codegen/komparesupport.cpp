@@ -46,7 +46,7 @@ namespace KDevelop
 struct KompareWidgetsPrivate
 {
     KompareWidgetsPrivate();
-    KParts::Factory * factory;
+    KPluginFactory * factory;
     QList<KParts::Part *> m_parts;
     QBitArray m_usedWidgets;
     
@@ -77,7 +77,7 @@ KompareWidgets::~KompareWidgets()
 
 bool KompareWidgetsPrivate::createWidget(int index, QWidget * widget)
 {
-    KParts::Part * part = factory->createPart(widget, 0, "KomparePart");
+    KParts::Part * part = factory->create<KomparePart>(widget, 0);
     if(!part)
     {
         kWarning() << "Kompare factory did not return a part";
