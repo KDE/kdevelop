@@ -464,21 +464,22 @@ void GdbTest::testBreakOnReadBreakpoint2()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint(debugeeFileName, 27);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 24);
 
     session->startProgram(&cfg);
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 27);
+    QCOMPARE(session->line(), 24);
 
-    breakpoints()->addReadWatchpoint("foo::i");
-
-    session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    breakpoints()->addReadWatchpoint("i");
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 22);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 24);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
