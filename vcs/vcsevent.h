@@ -67,7 +67,6 @@ public:
     QString repositoryLocation() const;
     QString repositoryCopySourceLocation() const; // may be empty
     VcsRevision repositoryCopySourceRevision() const; // may be invalid, even if rCSL is not
-    VcsRevision revision() const; // the FileNumber revision, may be the same as the GlobalNumber
     Actions actions() const;
 
     void setRepositoryLocation( const QString& );
