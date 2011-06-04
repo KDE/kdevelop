@@ -148,14 +148,14 @@ KParts::Part* PartController::createPart( const QString & mimeType,
         const QString & className,
         const QString & preferredName )
 {
-    KParts::Factory * editorFactory = findPartFactory(
+    KPluginFactory * editorFactory = findPartFactory(
                                           mimeType,
                                           partType,
                                           preferredName );
 
     if ( !className.isEmpty() && editorFactory )
     {
-        return editorFactory->createPart(
+        return editorFactory->create<KParts::Part>(
                    0,
                    this,
                    className.toLatin1() );
