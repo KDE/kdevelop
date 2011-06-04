@@ -43,6 +43,8 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionMode(ContiguousSelection);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setTextElideMode(Qt::ElideLeft);
+    setWordWrap(true);
     
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(popupContextMenu(QPoint)));
     
