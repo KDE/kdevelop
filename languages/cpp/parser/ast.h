@@ -655,6 +655,7 @@ public:
     Deleted
   };
   DefaultDeleted defaultDeleted;
+  bool initializer_isVariadic;
 };
 
 class LabeledStatementAST : public StatementAST

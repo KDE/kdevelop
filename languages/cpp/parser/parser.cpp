@@ -2668,10 +2668,17 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
         {
             return false;
         }
+      bool isVariadic = false;
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          advance();
+          isVariadic = true;
+        }
       ADVANCE('}',"}");
 
       ast = CreateNode<InitializerClauseAST>(session->mempool);
       ast->initializer_list = initializer_list;
+      ast->initializer_isVariadic = isVariadic;
     }
   else if (token == Token_delete || token == Token_default)
     {
