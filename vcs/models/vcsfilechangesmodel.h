@@ -20,8 +20,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef FILECHANGESMODEL_H
-#define FILECHANGESMODEL_H
+#ifndef VCSFILECHANGESMODEL_H
+#define VCSFILECHANGESMODEL_H
 
 #include <QStandardItemModel>
 
