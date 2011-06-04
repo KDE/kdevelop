@@ -35,6 +35,7 @@ class IProject;
 class ProjectBuildSetModel;
 class ProjectModel;
 class ProjectBaseItem;
+class ProjectChangesModel;
 
 /**
  * @class IProjectController
@@ -55,6 +56,13 @@ public:
      * @returns the model containing the projects and their items
      */
     Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
+    
+    
+    /**
+     * @returns an instance to the model that keeps track of the state 
+     * of the files per project.
+     */
+    Q_SCRIPTABLE virtual ProjectChangesModel* changesModel() = 0;
 
     Q_SCRIPTABLE virtual ProjectBuildSetModel* buildSetModel() = 0;
 

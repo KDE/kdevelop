@@ -75,6 +75,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QApplication>
+#include <vcs/models/projectchangesmodel.h>
 
 namespace KDevelop
 {
@@ -100,6 +101,7 @@ public:
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
+    QPointer<ProjectChangesModel> m_changesModel;
 
     ProjectControllerPrivate( ProjectController* p )
         : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false), m_cleaningUp(false)
@@ -957,6 +959,14 @@ ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
 ProjectBuildSetModel* ProjectController::buildSetModel()
 {
     return d->buildset;
+}
+
+ProjectChangesModel* ProjectController::changesModel()
+{
+    if(!d->m_changesModel)
+        d->m_changesModel=new ProjectChangesModel(this);
+    
+    return d->m_changesModel;
 }
 
 }

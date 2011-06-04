@@ -75,6 +75,7 @@ public:
 
     virtual ProjectBuildSetModel* buildSetModel();
     virtual ProjectModel* projectModel();
+    virtual ProjectChangesModel* changesModel();
     virtual QItemSelectionModel* projectSelectionModel();
     virtual IProject* findProjectByName( const QString& name );
     IProject* findProjectForUrl( const KUrl& ) const;
