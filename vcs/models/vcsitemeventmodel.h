@@ -22,7 +22,7 @@
 #define VCSITEMEVENTMODEL_H
 
 
-#include <QtCore/QAbstractTableModel>
+#include <QtGui/QStandardItemModel>
 #include "../vcsexport.h"
 
 template <typename T> class QList;
@@ -32,21 +32,15 @@ namespace KDevelop
 {
 class VcsItemEvent;
 
-class KDEVPLATFORMVCS_EXPORT VcsItemEventModel : public QAbstractTableModel
+class KDEVPLATFORMVCS_EXPORT VcsItemEventModel : public QStandardItemModel
 {
 Q_OBJECT
 public:
     VcsItemEventModel( QObject* parent );
     ~VcsItemEventModel();
-    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
+    
     void addItemEvents( const QList<KDevelop::VcsItemEvent>& );
     KDevelop::VcsItemEvent itemEventForIndex( const QModelIndex& ) const;
-    void clear();
-private:
-    class VcsItemEventModelPrivate* const d;
 };
 }
 

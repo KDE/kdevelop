@@ -276,7 +276,6 @@ kdev_logReceiver (void *baton,
             irev.setRevisionValue( QVariant( qlonglong( log_item->copyfrom_rev ) ),
                                    KDevelop::VcsRevision::GlobalNumber );
             iev.setRepositoryCopySourceRevision( irev );
-            iev.setRevision( vcsrev );
             switch( log_item->action )
             {
                 case 'A':
@@ -292,7 +291,7 @@ kdev_logReceiver (void *baton,
                     iev.setActions( KDevelop::VcsItemEvent::Replaced );
                     break;
             }
-            ev.setActions( ev.actions() | iev.actions() );
+            
             ev.items().append( iev );
         }
     }
