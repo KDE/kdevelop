@@ -22,17 +22,17 @@
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
 #include <interfaces/iproject.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/contextmenuextension.h>
-#include <KMenu>
-#include "vcschangesviewplugin.h"
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/contextmenuextension.h>
+#include <vcs/vcsstatusinfo.h>
+#include <vcs/models/projectchangesmodel.h>
 #include <project/projectmodel.h>
 #include <KIcon>
 #include <KActionCollection>
-#include <interfaces/idocumentcontroller.h>
-#include <vcs/vcsstatusinfo.h>
-#include <vcs/models/projectchangesmodel.h>
+#include <KMenu>
+#include "vcschangesviewplugin.h"
 
 using namespace KDevelop;
 
