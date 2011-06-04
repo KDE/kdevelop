@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2011 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,26 +18,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef WIDGETPLASMOID_H
-#define WIDGETPLASMOID_H
+#ifndef DASHBOARDDATAENGINE_H
+#define DASHBOARDDATAENGINE_H
 
-#include <plasma/applet.h>
+#include <plasma/dataengine.h>
 
 namespace KDevelop {
-    class IDashboardWidgetFactory;
-    class IProject;
+class IProject;
 }
 
-class WidgetPlasmoid : public Plasma::Applet
+class ProjectFiles : public QObject
 {
+    Q_OBJECT
     public:
-        WidgetPlasmoid(const KPluginInfo& info, KDevelop::IDashboardWidgetFactory* fact, QGraphicsItem* parent = 0, uint appletId = 0);
+        ProjectFiles(KDevelop::IProject* project, QObject* parent) : QObject(parent), m_project(project) {}
         
-        virtual void init();
-        KDevelop::IProject* project() const;
+    public slots:
+        QString fileContents(const QString& fileName);
         
     private:
-        KDevelop::IDashboardWidgetFactory* m_fact;
+        KDevelop::IProject* m_project;
 };
 
-#endif // WIDGETPLASMOID_H
+class DashboardDataEngine : public Plasma::DataEngine
+{
+    Q_OBJECT
+    public:
+        explicit DashboardDataEngine(QObject *parent = 0, KService::Ptr service = KService::Ptr());
+        
+        void addConnection(const QString& containmentId, KDevelop::IProject* project);
+        
+};
+
+#endif

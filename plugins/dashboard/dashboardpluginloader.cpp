@@ -20,11 +20,11 @@
 
 #include "dashboardpluginloader.h"
 #include <interfaces/icore.h>
-#include <interfaces/idashboardcontroller.h>
-#include <interfaces/idashboardfactory.h>
-#include "widgetplasmoid.h"
 #include <plasma/dataengine.h>
 #include <KServiceTypeTrader>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
+#include "dashboarddataengine.h"
 
 using namespace KDevelop;
 using namespace Plasma;
@@ -48,38 +48,11 @@ KPluginInfo queryPlugin(const QString &id )
 
 }
 
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardPlasmoidFactory* fact)
-{
-    return fact->plasmaApplet();
-}
-
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fact, uint appletId)
-{
-    return new WidgetPlasmoid(queryPlugin(fact->id()), fact, 0, appletId);
-}
-
-Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, uint appletId, const QVariantList& args)
-{
-    QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
-
-    foreach(IDashboardPlasmoidFactory* fact, facts) {
-        if(fact->id()==name)
-            return createApplet(fact);
-    }
-    
-    QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
-    foreach(IDashboardWidgetFactory* fact, factsW) {
-        if(fact->id()==name)
-            return createApplet(fact, appletId);
-    }
-    
-    return 0;
-}
-
 Plasma::DataEngine* DashboardPluginLoader::internalLoadDataEngine(const QString& name)
 {
-    if (name == "org.kdevelop.projects")
+    if (name == "org.kdevelop.projects") {
         return engine().data();
+    }
 
     return 0;
 }
@@ -100,12 +73,4 @@ KPluginInfo::List DashboardPluginLoader::dashboardElements() const
     return KPluginInfo::fromServices( serviceList );
 }
 
-////////////////
-DashboardDataEngine::DashboardDataEngine(QObject* parent, KService::Ptr service)
-    : DataEngine(parent, service)
-{}
 
-void DashboardDataEngine::addConnection(const QString& containmentId, const KUrl& projectFilePath)
-{
-    setData(containmentId, "projectFileUrl", QUrl(projectFilePath));
-}

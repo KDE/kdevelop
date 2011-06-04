@@ -48,8 +48,6 @@
 
 #include "projectmanagerview.h"
 #include "builditembuilderjob.h"
-#include <interfaces/idashboardcontroller.h>
-#include <interfaces/idashboardfactory.h>
 #include "projectdashboardwidget.h"
 
 using namespace KDevelop;
@@ -103,16 +101,6 @@ public:
     KAction* m_prune;
 };
 
-class ProjectDashboardItem : public IDashboardWidgetFactory
-{
-    public:
-        virtual QString id() const { return "org.kdevelop.project"; }
-        virtual QWidget* widget(IProject* project)
-        {
-            return new ProjectDashboardWidget(project);
-        }
-};
-
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
@@ -161,8 +149,6 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
              SLOT(updateFromBuildSetChange()));
     connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(modelReset()),
              SLOT(updateFromBuildSetChange()));
-    
-    ICore::self()->dashboardController()->addProjectDashboardItemFactory(new ProjectDashboardItem);
 }
 
 void ProjectManagerViewPlugin::updateFromBuildSetChange()

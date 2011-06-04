@@ -18,16 +18,19 @@
 */
 
 #include "dashboardcorona.h"
-#include <interfaces/iproject.h>
-#include "dashboardpluginloader.h"
 #include <QAction>
+#include <plasma/context.h>
+#include <interfaces/iproject.h>
+#include "dashboarddataengine.h"
+#include "dashboardpluginloader.h"
+#include <QFile>
+#include <QDir>
+#include <project/projectmodel.h>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)
 {
-    setObjectName(project->name());
-    
-    DashboardPluginLoader::self()->engine().data()->addConnection(objectName(), m_project->projectFileUrl());
+    DashboardPluginLoader::self()->engine().data()->addConnection(m_project->name(), m_project);
     
     setPreferredToolBoxPlugin(Plasma::Containment::CustomContainment, "org.kde.nettoolbox");
     
@@ -41,16 +44,25 @@ KDevelop::IProject* DashboardCorona::project() const
 void DashboardCorona::loadDefaultLayout()
 {
     Plasma::Containment* c=addContainment("newspaper");
+    c->context()->setCurrentActivity(m_project->name());
     
     c->init();
     
     KConfigGroup invalidConfig;
     c->setWallpaper("color");
-    c->updateConstraints(Plasma::StartupCompletedConstraint);
-    c->flushPendingConstraintsEvents();
+//     c->updateConstraints(Plasma::StartupCompletedConstraint);
+//     c->flushPendingConstraintsEvents();
     c->save(invalidConfig);
     
     emit containmentAdded(c);
     
-    c->addApplet("org.kdevelop.project");
+    if(m_project->projectFileUrl().isLocalFile()) {
+        QDir d(m_project->projectItem()->url().toLocalFile());
+        
+        if(d.exists("README"))
+            c->addApplet("plasma_kdev_projectfileelement", QVariantList() << "README");
+        if(d.exists("TODO"))
+            c->addApplet("plasma_kdev_projectfileelement", QVariantList() << "TODO");
+        
+    }
 }

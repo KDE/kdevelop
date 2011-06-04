@@ -1,7 +1,6 @@
 project(kdev-project-dashboard)
 
 set(kdevprojectdasboard_SRCS
-    widgetplasmoid.cpp
     appletselector.cpp
     dashboard.cpp
     dashboardcorona.cpp
@@ -9,6 +8,7 @@ set(kdevprojectdasboard_SRCS
     dashboardview.cpp
     dashboarddocument.cpp
     dashboardpluginloader.cpp
+    dashboarddataengine.cpp
     kdevprojectdashboard.cpp)
 
 kde4_add_ui_files(kdevprojectdasboard_SRCS appletselector.ui)

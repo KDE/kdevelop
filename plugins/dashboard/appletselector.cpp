@@ -21,8 +21,6 @@
 #include "ui_appletselector.h"
 #include <plasma/applet.h>
 #include <interfaces/icore.h>
-#include <interfaces/idashboardcontroller.h>
-#include <interfaces/idashboardfactory.h>
 #include <QStandardItemModel>
 
 using namespace KDevelop;

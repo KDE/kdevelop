@@ -103,8 +103,6 @@ install(FILES
     idocumentationproviderprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
-    idashboardcontroller.h
-    idashboardfactory.h
     ipartcontroller.h
     ilaunchmode.h
     iprojectprovider.h

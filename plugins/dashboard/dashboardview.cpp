@@ -23,6 +23,9 @@
 #include <plasma/corona.h>
 #include "dashboard.h"
 #include <interfaces/iproject.h>
+#include <QFile>
+#include <KIO/CopyJob>
+#include <KIO/NetAccess>
 
 using namespace Plasma;
 
@@ -32,7 +35,15 @@ DashboardView::DashboardView(KDevelop::IProject* project, Sublime::Document* doc
 
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
+    KUrl originalUrl=m_project->projectFileUrl().toLocalFile();
+    KUrl customUrl=originalUrl.upUrl();
+    customUrl.addPath(".kdev4/_custom.kdev4");
+    if(!QFile::exists(customUrl.toLocalFile())) {
+        KIO::CopyJob* job=KIO::copy(originalUrl, customUrl);
+        KIO::NetAccess::synchronousRun(job, 0);
+    }
+    
     DashboardCorona* corona=new DashboardCorona(m_project, this);
-    corona->initializeLayout(m_project->projectFileUrl().toLocalFile()); //TODO: decide what to do with remote files
+    corona->initializeLayout(customUrl.toLocalFile()); //TODO: decide what to do with remote files
     return new Dashboard(corona);
 }

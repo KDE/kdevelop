@@ -24,31 +24,16 @@
 #include <plasma/pluginloader.h>
 #include <plasma/dataengine.h>
 
+class DashboardDataEngine;
 namespace KDevelop
 {
     class IProject;
-
-    class IDashboardWidgetFactory;
-    class IDashboardPlasmoidFactory;
 }
-
-class DashboardDataEngine : public Plasma::DataEngine
-{
-    Q_OBJECT
-    public:
-        DashboardDataEngine(QObject* parent = 0, KService::Ptr service = KService::Ptr(0));
-        
-        void addConnection(const QString& containmentId, const KUrl& projectFilePath);
-};
 
 class DashboardPluginLoader : public Plasma::PluginLoader
 {
     public:
         DashboardPluginLoader();
-
-        Plasma::Applet* createApplet(KDevelop::IDashboardPlasmoidFactory* fact);
-        Plasma::Applet* createApplet(KDevelop::IDashboardWidgetFactory* fact, uint appletId);       
-        virtual Plasma::Applet* internalLoadApplet(const QString& name, uint appletId = 0, const QVariantList& args = QVariantList());
         
         virtual Plasma::DataEngine* internalLoadDataEngine(const QString& name);
         
