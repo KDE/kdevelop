@@ -225,8 +225,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
 
 VcsEventWidget::~VcsEventWidget()
 {
-    delete d->m_logModel;
-    delete d->m_detailModel;
     delete d->m_ui;
     delete d;
 }
