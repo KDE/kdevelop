@@ -44,11 +44,11 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
 
         void changes(KDevelop::IProject* project, const KUrl::List& urls, KDevelop::IBasicVersionControl::RecursionMode mode);
         
+    public slots:
+        void reloadAll();
         void reload(const QList<KDevelop::IProject*>& p);
         void reload(const QList<KUrl>& p);
-        void reloadAll();
         
-    public slots:
         void addProject(KDevelop::IProject* p);
         void removeProject(KDevelop::IProject* p);
         
