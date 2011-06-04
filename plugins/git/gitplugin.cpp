@@ -415,7 +415,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     *job << "git" << "log" << "--date=raw";
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
