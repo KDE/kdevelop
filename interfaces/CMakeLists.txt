@@ -112,6 +112,5 @@ install(FILES
 
 install(FILES
     kdevelopplugin.desktop
-    kdevdashboard.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR}
 )
