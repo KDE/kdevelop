@@ -2347,10 +2347,15 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST *&node)
       ast->ellipsis = session->token_stream->cursor();
       advance();
     }
-  else
+
+  parseTypeIdList(ast->type_ids);
+
+  if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
     {
-      parseTypeIdList(ast->type_ids);
+      ast->ellipsis = session->token_stream->cursor();
+      advance();
     }
+
 
   ADVANCE(')', ")");
 

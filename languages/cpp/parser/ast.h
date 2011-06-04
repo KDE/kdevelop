@@ -509,6 +509,8 @@ public:
 
   DECLARE_AST_NODE(ExceptionSpecification)
 
+  // when type_ids _and_ ellipsis is not null,
+  // the exception spec is variadic (pack expansion)
   uint ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
 };

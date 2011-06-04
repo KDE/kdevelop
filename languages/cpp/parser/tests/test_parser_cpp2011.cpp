@@ -91,7 +91,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dumper.dump(ast, lastSession->token_stream);
-  QEXPECT_FAIL("pack-expansion-throw", "not implemented", Abort);
   if (!control.problems().isEmpty()) {
     foreach(const KDevelop::ProblemPointer&p, control.problems()) {
       qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
