@@ -18,7 +18,6 @@
 
 #include "projectfileelement.h"
 
-#include <analitza/expression.h>
 #include <plasma/context.h>
 #include <plasma/datacontainer.h>
 #include <plasma/dataenginemanager.h>
