@@ -87,6 +87,11 @@ public:
     static VcsStatusInfo statusInfo(const QStandardItem *item) {
         return item->data(VcsStatusInfoRole).value<VcsStatusInfo>();
     }
+    
+    /**
+     * Returns item for particular url.
+     */
+    static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
 
 public slots:
     /**
@@ -103,11 +108,6 @@ protected:
      * @return changed row or -1 if row is deleted
      */
     int updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status);
-
-    /**
-     * Returns item for particular url.
-     */
-    static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
 
     /**
      * Returns list of currently checked statuses.

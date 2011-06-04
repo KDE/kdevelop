@@ -67,14 +67,14 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     if(selectionIdxs.isEmpty())
         return;
     
-//     foreach(const QModelIndex& idx, selectionIdxs) {
-//         if(idx.column()==0) {
-//             if(idx.parent().isValid())
-//                 urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
-//             else
-//                 projects += ICore::self()->projectController()->findProjectByName(idx.data().toString());
-//         }
-//     }
+    foreach(const QModelIndex& idx, selectionIdxs) {
+        if(idx.column()==0) {
+            if(idx.parent().isValid())
+                urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
+            else
+                projects += ICore::self()->projectController()->findProjectByName(idx.data().toString());
+        }
+    }
 
     QPointer<KMenu> menu = new KMenu;
     QAction* refreshAction = menu->addAction(KIcon("view-refresh"), i18n("Refresh"));    
@@ -137,10 +137,10 @@ void VcsChangesView::selectCurrentDocument()
     IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
     QStandardItem* item = 0;
     
-//     if(p) {
-//         ProjectChangesModel* pcmodel = static_cast<ProjectChangesModel*>(model());
-//         item = pcmodel->fileItemForUrl(pcmodel->projectItem(p), url);
-//     }
+    if(p) {
+        ProjectChangesModel* pcmodel = static_cast<ProjectChangesModel*>(model());
+        item = pcmodel->fileItemForUrl(pcmodel->projectItem(p), url);
+    }
     
     if(item) {
         expand(item->index().parent());
