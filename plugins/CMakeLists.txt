@@ -20,6 +20,7 @@ add_subdirectory(pastebin)
 add_subdirectory(dashboard)
 add_subdirectory(codeutils)
 macro_optional_add_subdirectory(git)
+add_subdirectory(vcschangesview)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
