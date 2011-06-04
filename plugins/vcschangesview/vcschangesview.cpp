@@ -39,6 +39,7 @@ using namespace KDevelop;
 VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent)
     : QTreeView(parent)
 {
+    setRootIsDecorated(false);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionMode(ContiguousSelection);
     setContextMenuPolicy(Qt::CustomContextMenu);

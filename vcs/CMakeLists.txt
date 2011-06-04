@@ -47,8 +47,6 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/ui/branchmanager.cpp
     dvcs/ui/revhistory/commitView.cpp
     dvcs/ui/revhistory/commitlogmodel.cpp
-    
-    ../tests/modeltest.cpp
 )
 
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
