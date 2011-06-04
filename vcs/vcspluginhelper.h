@@ -56,7 +56,6 @@ public Q_SLOTS:
     void history(const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ));
     void annotation();
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
-    void diffToHead();
     void diffToBase();
     void diffForRev();
     void update();

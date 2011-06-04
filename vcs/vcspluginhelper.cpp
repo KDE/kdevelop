@@ -90,7 +90,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * updateAction;
     KAction * historyAction;
     KAction * annotationAction;
-    KAction * diffToHeadAction;
     KAction * diffToBaseAction;
     KAction * revertAction;
     KAction * diffForRevAction;
@@ -99,8 +98,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        diffToHeadAction = new KAction(i18n("Compare to Head..."), parent);
-        diffToBaseAction = new KAction(i18n("Compare to Base..."), parent);
+        diffToBaseAction = new KAction(KIcon("vcs_diff"), i18n("Show Differences..."), parent);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
@@ -109,7 +107,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
         connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
-        connect(diffToHeadAction, SIGNAL(triggered()), parent, SLOT(diffToHead()));
         connect(diffToBaseAction, SIGNAL(triggered()), parent, SLOT(diffToBase()));
         connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
         connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
@@ -148,7 +145,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addSeparator();
         menu->addAction(historyAction);
         menu->addAction(annotationAction);
-        menu->addAction(diffToHeadAction);
         menu->addAction(diffToBaseAction);
         
         addAction->setEnabled(!allVersioned);
@@ -156,7 +152,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
         annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
-        diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
         
@@ -240,18 +235,6 @@ QMenu* VcsPluginHelper::commonActions()
 void VcsPluginHelper::revert()
 {
     EXECUTE_VCS_METHOD(revert);
-}
-
-void VcsPluginHelper::diffToHead()
-{
-    SINGLEURL_SETUP_VARS
-    ICore::self()->documentController()->saveAllDocuments();
-    KDevelop::VcsJob* job = iface->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
-
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
-    d->plugin->core()->runController()->registerJob(job);
 }
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
