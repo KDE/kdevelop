@@ -416,7 +416,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "log" << "--date=raw";
+    *job << "git" << "log" << "--date=raw" << "--numstat";
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
         *job << rev;
@@ -429,7 +429,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString());
+    *job << "git" << "log" << "--date=raw" << "--numstat" << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
     
@@ -850,6 +850,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     QList<QVariant> commits;
     static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
     static QRegExp infoRegex( "^(\\w+):(.*)" );
+    static QRegExp modificationsRegex("(\\d+)\\s+(\\d+)\\s+(.+)"); //18      2       shell/workingsets/workingsetwidget.cpp
 
     QString contents = job->output();
     QTextStream s(&contents);
@@ -857,8 +858,10 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     VcsEvent item;
     QString message;
     bool pushCommit = false;
+    
     while (!s.atEnd()) {
         QString line = s.readLine();
+        
         if (commitRegex.exactMatch(line)) {
             if (pushCommit) {
                 item.setMessage(message.trimmed());
@@ -877,6 +880,20 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             } else if (cap1 == "Date") {
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
+        } else if (modificationsRegex.exactMatch(line)) {
+            int additions = modificationsRegex.cap(1).toUInt();
+            int removals = modificationsRegex.cap(2).toUInt();
+            QString filename = modificationsRegex.cap(3);
+            
+            VcsItemEvent::Actions a;
+            if(additions>0 || removals>0)
+                a=VcsItemEvent::Modified;
+            
+            VcsItemEvent itemEvent;
+            itemEvent.setActions(a);
+            itemEvent.setRepositoryLocation(filename);
+            
+            item.addItem(itemEvent);
         } else if (line.startsWith("    ")) {
             message += line.remove(0, 4);
             message += '\n';
