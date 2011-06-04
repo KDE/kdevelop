@@ -419,13 +419,23 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint("foo::i");
-    b->setCondition("foo::i==2");
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 24);
 
     session->startProgram(&cfg);
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 24);
+
+    KDevelop::Breakpoint *b = breakpoints()->addWatchpoint("i");
+    b->setCondition("i==2");
+    QTest::qWait(100);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 23);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 24);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
