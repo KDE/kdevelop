@@ -72,7 +72,6 @@ public:
 
     void setRepositoryLocation( const QString& );
     void setRepositoryCopySourceLocation( const QString& );
-    void setRevision( const KDevelop::VcsRevision& );
     void setRepositoryCopySourceRevision( const KDevelop::VcsRevision& );
     void setActions( Actions );
 
@@ -100,15 +99,14 @@ public:
     QString author() const;
     QDateTime date() const;
     QString message() const;
-    VcsItemEvent::Actions actions() const;
     QList<VcsItemEvent> items() const;
 
     void setRevision( const VcsRevision& );
     void setAuthor( const QString& );
     void setDate( const QDateTime& );
     void setMessage(const QString& );
-    void setActions( VcsItemEvent::Actions );
     void setItems( const QList<VcsItemEvent>& );
+    void addItem(const VcsItemEvent& item);
     VcsEvent& operator=( const VcsEvent& rhs);
 private:
     class VcsEventPrivate* const d;
