@@ -33,6 +33,8 @@ class VcsChangesView : public QTreeView
     public:
         explicit VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* parent = 0);
         
+        virtual void setModel(QAbstractItemModel* model);
+        
     public slots:
         void popupContextMenu( const QPoint &pos );
         void selectCurrentDocument();

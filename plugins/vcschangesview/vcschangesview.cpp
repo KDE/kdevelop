@@ -147,5 +147,10 @@ void VcsChangesView::selectCurrentDocument()
         setCurrentIndex(item->index());
     } else
         collapseAll();
-        
+}
+
+void VcsChangesView::setModel(QAbstractItemModel* model)
+{
+    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expand(QModelIndex)));
+    QTreeView::setModel(model);
 }
