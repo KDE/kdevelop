@@ -31,7 +31,7 @@
 #include "dashboarddocument.h"
 
 K_PLUGIN_FACTORY(KDevProjectDashboardFactory, registerPlugin<KDevProjectDashboard>(); )
-K_EXPORT_PLUGIN(KDevProjectDashboardFactory(KAboutData("kdevprojectdashboard","projectdashboard", ki18n("Project Dashboard"),
+K_EXPORT_PLUGIN(KDevProjectDashboardFactory(KAboutData("kdevprojectdashboard","kdevprojectdashboard", ki18n("Project Dashboard"),
                                                        "0.1", ki18n("Project Dashboard to show project's features"), KAboutData::License_LGPL)))
 
 using namespace KDevelop;
