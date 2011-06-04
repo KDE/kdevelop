@@ -76,6 +76,7 @@ std::string*/
 #include <language/highlighting/colorcache.h>
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <shell/core.h>
+#include <ktexteditor/modificationinterface.h>
 
 using namespace KDevelop;
 
@@ -1456,6 +1457,9 @@ void PatchReviewPlugin::updateReview()
   }
   futureActiveDoc->textDocument()->setReadWrite(false);
   futureActiveDoc->setPrettyName(i18n("Overview"));
+  IDocument* doc=ICore::self()->documentController()->documentForUrl(m_patch->file());
+  KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+  modif->setModifiedOnDiskWarning(false);
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
@@ -1538,6 +1542,7 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(forceUpdate()));
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
