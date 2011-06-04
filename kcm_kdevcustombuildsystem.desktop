@@ -11,6 +11,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
 Name[bs]=Vlastiti sistem za gradnju
+Name[de]=Eigenes Build-System
 Name[el]=Προσαρμοσμένο σύστημα κατασκευής
 Name[en_GB]=Custom BuildSystem
 Name[es]=Sistema de construcción personalizado
@@ -27,6 +28,7 @@ Name[x-test]=xxCustom BuildSystemxx
 Name[zh_TW]=自訂編譯系統
 Comment=Configure Custom BuildSystem settings
 Comment[bs]=Konfiguriši postavke vlastitog sistem aza gradnju
+Comment[de]=Eigenes Build-System einrichten
 Comment[el]=Διαμόρφωση ρυθμίσεων προσαρμοσμένου συστήματος κατασκευής
 Comment[en_GB]=Configure Custom BuildSystem settings
 Comment[es]=Configurar las preferencias del sistema de construcción personalizado
