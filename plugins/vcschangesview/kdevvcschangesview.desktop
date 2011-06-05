@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Comment=This plugin provides integration between the projects and their VCS infrastructure
+Name=VCS Integration
+GenericName=VCS Integration
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevvcschangesviewplugin
+X-KDE-PluginInfo-Name=kdevvcschangesviewplugin
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Email=aleixpol@kde.org
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=12
+X-KDevelop-Category=Global
+X-KDevelop-Mode=NoGUI
+X-KDevelop-LoadMode=AlwaysOn

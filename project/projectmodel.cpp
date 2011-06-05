@@ -610,6 +610,11 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
     return false;
 }
 
+bool ProjectBaseItem::isProjectRoot() const
+{
+    return parent()==0;
+}
+
 ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, ProjectBaseItem *parent)
     : ProjectFolderItem( project, dir, parent )
 {

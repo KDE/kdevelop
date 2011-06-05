@@ -34,7 +34,7 @@ IPartController::IPartController( QWidget* toplevel )
 }
 
 
-KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName )
+KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName )
 {
     // parttype may be a interface type not derived from KParts/ReadOnlyPart
     const KService::List offers = KMimeTypeTrader::self()->query( mimetype,
@@ -62,7 +62,7 @@ KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, con
             ptr = offers.first();
         }
         KPluginLoader loader( QFile::encodeName( ptr->library() ) );
-        return static_cast<KParts::Factory*>( loader.factory() );
+        return loader.factory();
     }
                                                                                                   
     return 0;
@@ -86,10 +86,10 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
     KParts::Part* part = 0;
     for ( uint i = 0; i < length; ++i )
     {
-        KParts::Factory* editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
+        KPluginFactory* editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
         if ( editorFactory )
         {
-            part = editorFactory->createPart( 0, this, classNames[ i ] );
+            part = editorFactory->create<KParts::ReadOnlyPart>( 0, this );
             break;
         }
     }

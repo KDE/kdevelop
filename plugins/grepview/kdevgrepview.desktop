@@ -18,6 +18,7 @@ Comment[x-test]=xxAllows fast searching of multiple files using patterns or regu
 Comment[zh_TW]=允許使用樣式或正規表示式來快速搜尋與取代多個檔案。
 Name=Find/Replace In Files
 Name[ca]=Cerca i substitució en fitxers
+Name[ca@valencia]=Cerca i substitució en fitxers
 Name[da]=Find/erstat i filer
 Name[de]=In Dateien suchen/ersetzen
 Name[el]=Αναζήτηση/Αντικατάσταση σε αρχεία

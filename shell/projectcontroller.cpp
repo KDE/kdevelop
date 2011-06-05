@@ -75,6 +75,9 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QApplication>
+#include <vcs/models/projectchangesmodel.h>
+#include <vcs/widgets/vcsdiffpatchsources.h>
+#include <vcs/widgets/vcscommitdialog.h>
 
 namespace KDevelop
 {
@@ -100,6 +103,7 @@ public:
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
+    QPointer<ProjectChangesModel> m_changesModel;
 
     ProjectControllerPrivate( ProjectController* p )
         : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false), m_cleaningUp(false)
@@ -480,6 +484,11 @@ void ProjectController::setupActions()
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( KIcon("configure") );
     action->setEnabled( false );
+    
+    action = ac->addAction( "commit_current_project" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( commitCurrentProject() ) );
+    action->setText( i18n( "Commit Current Project..." ) );
+    action->setIcon( KIcon("svn-commit") );
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
@@ -957,6 +966,40 @@ ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
 ProjectBuildSetModel* ProjectController::buildSetModel()
 {
     return d->buildset;
+}
+
+ProjectChangesModel* ProjectController::changesModel()
+{
+    if(!d->m_changesModel)
+        d->m_changesModel=new ProjectChangesModel(this);
+    
+    return d->m_changesModel;
+}
+
+void ProjectController::commitCurrentProject()
+{
+    KUrl url=ICore::self()->documentController()->activeDocument()->url();
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    
+    if(project && project->versionControlPlugin()) {
+        KUrl baseUrl=project->projectItem()->url();
+        IPlugin* plugin = project->versionControlPlugin();
+        IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
+        
+        if(vcs) {
+            ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
+
+            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl), baseUrl, vcs);
+
+            bool ret = showVcsDiff(patchSource);
+
+            if(!ret) {
+                VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+                commitDialog->setCommitCandidates(patchSource->infos());
+                commitDialog->exec();
+            }
+        }
+    }
 }
 
 }

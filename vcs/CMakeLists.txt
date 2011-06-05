@@ -36,6 +36,7 @@ set(kdevplatformvcs_LIB_SRCS
     models/vcseventmodel.cpp
     models/vcsfilechangesmodel.cpp
     models/vcsitemeventmodel.cpp
+    models/projectchangesmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
     dvcs/ui/dvcsmainview.cpp
@@ -96,6 +97,7 @@ install(FILES
     models/vcseventmodel.h
     models/vcsfilechangesmodel.h
     models/vcsitemeventmodel.h
+    models/projectchangesmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
 )
 

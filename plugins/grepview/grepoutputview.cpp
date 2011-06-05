@@ -124,7 +124,11 @@ GrepOutputView::GrepOutputView(QWidget* parent)
 void GrepOutputView::replacementTextChanged(QString)
 {
     updateCheckable();
-    updateApplyState(model()->index(0, 0), model()->index(0, 0));
+
+    if (model()) {
+        // see https://bugs.kde.org/show_bug.cgi?id=274902 - renewModel can trigger a call here without an active model
+        updateApplyState(model()->index(0, 0), model()->index(0, 0));
+    }
 }
 
 GrepOutputView::~GrepOutputView()

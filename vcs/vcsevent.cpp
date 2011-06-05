@@ -32,7 +32,6 @@ class VcsItemEventPrivate
 public:
     QString location;
     QString sourceLocation;
-    VcsRevision revision;
     VcsRevision sourceRevision;
     VcsItemEvent::Actions actions;
 };
@@ -51,7 +50,6 @@ VcsItemEvent::VcsItemEvent(const VcsItemEvent& rhs )
     : d(new VcsItemEventPrivate)
 {
     d->actions = rhs.d->actions;
-    d->revision = rhs.d->revision;
     d->sourceRevision = rhs.d->sourceRevision;
     d->sourceLocation = rhs.d->sourceLocation;
     d->location = rhs.d->location;
@@ -72,11 +70,6 @@ VcsRevision VcsItemEvent::repositoryCopySourceRevision() const
     return d->sourceRevision;
 }
 
-VcsRevision VcsItemEvent::revision() const
-{
-    return d->revision;
-}
-
 VcsItemEvent::Actions VcsItemEvent::actions() const
 {
     return d->actions;
@@ -90,11 +83,6 @@ void VcsItemEvent::setRepositoryLocation( const QString& l )
 void VcsItemEvent::setRepositoryCopySourceLocation( const QString& l )
 {
     d->sourceLocation = l;
-}
-
-void VcsItemEvent::setRevision( const KDevelop::VcsRevision& rev )
-{
-    d->revision = rev;
 }
 
 void VcsItemEvent::setRepositoryCopySourceRevision( const KDevelop::VcsRevision& rev )
@@ -112,7 +100,6 @@ VcsItemEvent& VcsItemEvent::operator=( const VcsItemEvent& rhs)
     if(this == &rhs)
         return *this;
     d->actions = rhs.d->actions;
-    d->revision = rhs.d->revision;
     d->sourceRevision = rhs.d->sourceRevision;
     d->sourceLocation = rhs.d->sourceLocation;
     d->location = rhs.d->location;
@@ -126,7 +113,6 @@ public:
     QString author;
     QString message;
     QDateTime date;
-    VcsItemEvent::Actions actions;
     QList<VcsItemEvent> items;
 };
 
@@ -147,7 +133,6 @@ VcsEvent::VcsEvent( const VcsEvent& rhs )
     d->author = rhs.d->author;
     d->message = rhs.d->message;
     d->date = rhs.d->date;
-    d->actions = rhs.d->actions;
     d->items = rhs.d->items;
 }
 
@@ -169,11 +154,6 @@ QDateTime VcsEvent::date() const
 QString VcsEvent::message() const
 {
     return d->message;
-}
-
-VcsItemEvent::Actions VcsEvent::actions() const
-{
-    return d->actions;
 }
 
 QList<VcsItemEvent> VcsEvent::items() const
@@ -201,21 +181,20 @@ void VcsEvent::setMessage(const QString& m )
     d->message = m;
 }
 
-void VcsEvent::setActions( VcsItemEvent::Actions a )
-{
-    d->actions = a;
-}
-
 void VcsEvent::setItems( const QList<VcsItemEvent>& l )
 {
     d->items = l;
+}
+
+void VcsEvent::addItem(const VcsItemEvent& item)
+{
+    d->items.append(item);
 }
 
 VcsEvent& VcsEvent::operator=( const VcsEvent& rhs)
 {
     if(this == &rhs)
         return *this;
-    d->actions = rhs.d->actions;
     d->revision = rhs.d->revision;
     d->message = rhs.d->message;
     d->items = rhs.d->items;

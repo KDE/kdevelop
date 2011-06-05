@@ -100,7 +100,7 @@ public:
 
     /** @copydoc ICore::debugController() */
     virtual IDebugController* debugController();
-
+    
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
 

@@ -185,7 +185,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         debugController = new DebugController(m_core);
     }
-
+    
     kDebug() << "initializing ui controller";
     
     if( !session.isEmpty() && !SessionController::tryLockSession(session) && !(mode & Core::NoUi) )

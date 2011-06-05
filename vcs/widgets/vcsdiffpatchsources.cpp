@@ -26,15 +26,37 @@
 #include <kmessagebox.h>
 #include <interfaces/iruncontroller.h>
 #include "vcsjob.h"
+#include "vcsdiff.h"
 #include <interfaces/iplugincontroller.h>
 #include <KComboBox>
+#include <interfaces/isession.h>
+#include <interfaces/ibasicversioncontrol.h>
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs, QStringList oldMessages)
-    : VCSDiffPatchSource(updater), m_selectable(selectable), m_vcs(vcs)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& url, IBasicVersionControl* vcs)
+    : VCSDiffPatchSource(updater), m_vcs(vcs)
 {
     Q_ASSERT(m_vcs);
+    
+    QScopedPointer<VcsJob> statusJob(vcs->status(url));
+    QVariant varlist;
+
+    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
+    {
+        varlist = statusJob->fetchResults();
+
+        foreach( const QVariant &var, varlist.toList() )
+        {
+            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            
+            m_infos += info;
+            if(info.state()!=VcsStatusInfo::ItemUpToDate)
+                m_selectable[info.url()] = info.state();
+        }
+    }
+    else
+        kDebug() << "Couldn't get status for urls: " << url;
 
     m_commitMessageWidget = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget);
@@ -48,7 +70,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap
     m_oldMessages = new KComboBox;
     
     m_oldMessages->addItem(i18n("Old Messages"));
-    foreach(QString message, oldMessages)
+    foreach(QString message, oldMessages())
         m_oldMessages->addItem(message, message);
     m_oldMessages->setMaximumWidth(200);
     
@@ -58,6 +80,12 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap
     
     layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit);
+}
+
+QStringList VCSCommitDiffPatchSource::oldMessages() const
+{
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    return vcsGroup.readEntry("OldCommitMessages", QStringList());
 }
 
 void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
@@ -189,6 +217,9 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
     }
 
     emit reviewFinished(message, selection);
+    
+    VcsJob* job=m_vcs->commit(message, selection, KDevelop::IBasicVersionControl::NonRecursive);
+    ICore::self()->runController()->registerJob(job);
 
     deleteLater();
     

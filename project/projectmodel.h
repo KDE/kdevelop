@@ -186,7 +186,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          */
         virtual RenameStatus rename( const QString& newname );
         
-        /**
+        bool isProjectRoot() const;
+        
+         /**
          * Default flags: Qt::ItemIsEnabled | Qt::ItemIsSelectable
          * 
          * @returns the flags supported by the item

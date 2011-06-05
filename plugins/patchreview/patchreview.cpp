@@ -76,6 +76,7 @@ std::string*/
 #include <language/highlighting/colorcache.h>
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <shell/core.h>
+#include <ktexteditor/modificationinterface.h>
 
 using namespace KDevelop;
 
@@ -207,32 +208,20 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
     
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ipatch.data());
-    if(!lpatch) {
-      m_editPatch.tabWidget->hide();
-      m_editPatch.baseDir->hide();
-      m_editPatch.label->hide();
-      m_editPatch.depth->hide();
-      m_editPatch.depthLabel->hide();
-      m_editPatch.applied->hide();
+    m_editPatch.tabWidget->setVisible(lpatch);
+    m_editPatch.baseDir->setVisible(lpatch);
+    m_editPatch.label->setVisible(lpatch);
+    m_editPatch.depth->setVisible(lpatch);
+    m_editPatch.depthLabel->setVisible(lpatch);
+    m_editPatch.applied->setVisible(lpatch);
+    if(!lpatch)
       return;
-    }else{
-      m_editPatch.tabWidget->show();
-      m_editPatch.baseDir->show();
-      m_editPatch.label->show();
-      m_editPatch.depth->show();
-      m_editPatch.depthLabel->show();
-      m_editPatch.applied->show();
-    }
     
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
     m_editPatch.depth->setValue( lpatch->m_depth );
-    if (lpatch->isAlreadyApplied()) {
-      m_editPatch.applied->setCheckState(Qt::Checked);
-    } else {
-      m_editPatch.applied->setCheckState(Qt::Unchecked);
-    }
+    m_editPatch.applied->setCheckState(lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked);
 
     if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
@@ -1468,6 +1457,9 @@ void PatchReviewPlugin::updateReview()
   }
   futureActiveDoc->textDocument()->setReadWrite(false);
   futureActiveDoc->setPrettyName(i18n("Overview"));
+  IDocument* doc=ICore::self()->documentController()->documentForUrl(m_patch->file());
+  KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+  modif->setModifiedOnDiskWarning(false);
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
@@ -1550,6 +1542,7 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(forceUpdate()));
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );

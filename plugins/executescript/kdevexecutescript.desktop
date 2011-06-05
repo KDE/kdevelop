@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=This plugin allows running of scripts.
+Name=Execute Scripts
+GenericName=Script Execution Support
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevexecutescript
+X-KDevelop-Version=12
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevexecutescript
+X-KDE-PluginInfo-Author=Niko Sams
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Interfaces=org.kdevelop.IExecuteScriptPlugin
+X-KDevelop-Mode=NoGUI

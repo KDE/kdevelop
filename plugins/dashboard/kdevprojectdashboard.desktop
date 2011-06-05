@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Icon=dashboard-show
+Exec=blubb
+Comment=This plugin shows relevant information of some project when it's invoked
+Name=Project Dashboard
+GenericName=Project Dashboard
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevprojectdashboard
+X-KDE-PluginInfo-Name=kdevprojectdashboard
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Version=12
+X-KDevelop-Category=Core
+X-KDE-PluginInfo-Category=Core
+X-KDevelop-Mode=GUI
