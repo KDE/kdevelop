@@ -96,12 +96,11 @@ public:
   void addArgument(AbstractType::Ptr argument);
 
   /**
-   * Remove an argument type from the function.
+   * Remove the argument with number i from the function.
    *
-   * \param argument the argument type to remove
-   * \todo this function doesn't seem to be used, remove it?
+   * \param i index (starting from 0 with the first argument) to remove
    */
-  void removeArgument(AbstractType::Ptr argument);
+  void removeArgument(int i);
 
   virtual AbstractType* clone() const;
 
