@@ -30,13 +30,15 @@ class Declaration;
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 {
     public:
-        enum Flags { None=0, Read=1, Write=2 };
+        enum DataAccessFlag { None=0, Read=1, Write=2 };
+        Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
+        
         DataAccess(const CursorInRevision& cur, uint flags);
         
         bool isRead()  const { return m_flags&Read; }
         bool isWrite() const { return m_flags&Write; }
         
-        uint m_flags;
+        DataAccessFlags m_flags;
         KDevelop::CursorInRevision m_pos;
         //SimpleRange value() const; //nomes per write?
         
