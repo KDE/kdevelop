@@ -59,6 +59,9 @@ static int compareVersions(const QList<int>& v1, const QList<int>& v2)
     int dif=0;
     for(; it1!=itEnd1 && it2!=itEnd2 && !dif; ++it1, ++it2) { dif=*it1-*it2; }
     
+    if(dif==0 && it1!=itEnd1) ++dif;
+    if(dif==0 && it2!=itEnd2) --dif;
+    
     return dif;
 }
 
