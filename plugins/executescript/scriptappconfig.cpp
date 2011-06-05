@@ -215,21 +215,21 @@ KIcon ScriptAppConfigType::icon() const
     return KIcon("system-run");
 }
 
-bool ScriptAppConfigType::canLaunch(const KUrl& file) const
+bool ScriptAppConfigType::canLaunch(const KUrl& /*file*/) const
 {
     return false;
 }
 
-bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
+bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* /*item*/) const
 {
     return false;
 }
 
-void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
+void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup /*config*/, KDevelop::ProjectBaseItem* /*item*/) const
 {
 }
 
-void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList &args) const
+void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
 {
 }
 
