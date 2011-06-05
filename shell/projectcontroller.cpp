@@ -76,6 +76,8 @@ Boston, MA 02110-1301, USA.
 #include "session.h"
 #include <QApplication>
 #include <vcs/models/projectchangesmodel.h>
+#include <vcs/widgets/vcsdiffpatchsources.h>
+#include <vcs/widgets/vcscommitdialog.h>
 
 namespace KDevelop
 {
@@ -482,6 +484,11 @@ void ProjectController::setupActions()
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( KIcon("configure") );
     action->setEnabled( false );
+    
+    action = ac->addAction( "commit_current_project" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( commitCurrentProject() ) );
+    action->setText( i18n( "Commit Current Project..." ) );
+    action->setIcon( KIcon("svn-commit") );
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
@@ -967,6 +974,32 @@ ProjectChangesModel* ProjectController::changesModel()
         d->m_changesModel=new ProjectChangesModel(this);
     
     return d->m_changesModel;
+}
+
+void ProjectController::commitCurrentProject()
+{
+    KUrl url=ICore::self()->documentController()->activeDocument()->url();
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    
+    if(project && project->versionControlPlugin()) {
+        KUrl baseUrl=project->projectItem()->url();
+        IPlugin* plugin = project->versionControlPlugin();
+        IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
+        
+        if(vcs) {
+            ICore::self()->documentController()->saveAllDocuments();
+
+            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl), baseUrl, vcs);
+
+            bool ret = showVcsDiff(patchSource);
+
+            if(!ret) {
+                VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+                commitDialog->setCommitCandidates(patchSource->infos());
+                commitDialog->exec();
+            }
+        }
+    }
 }
 
 }

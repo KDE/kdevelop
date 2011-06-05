@@ -103,6 +103,7 @@ public Q_SLOTS:
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
     void openProjects(const KUrl::List& projects);
+    void commitCurrentProject();
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
