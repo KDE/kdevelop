@@ -66,11 +66,3 @@ QWeakPointer<DashboardDataEngine> DashboardPluginLoader::engine()
 
 DashboardPluginLoader* DashboardPluginLoader::self() { return s_loader; }
 
-KPluginInfo::List DashboardPluginLoader::dashboardElements() const
-{
-    KService::List serviceList = KServiceTypeTrader::self()->query( "KDevelop/Dashboard" );
-
-    return KPluginInfo::fromServices( serviceList );
-}
-
-

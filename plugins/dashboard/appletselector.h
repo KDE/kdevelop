@@ -30,7 +30,7 @@ class AppletSelector : public KDialog
 {
     Q_OBJECT
     public:
-        AppletSelector(const KPluginInfo::List& plugins, const QString& parentApp, const QStringList& whitelist, QWidget* parent);
+        AppletSelector(const QString& parentApp, const QStringList&, QWidget* parent);
         
     public slots:
         void selected(const QModelIndex& idx);

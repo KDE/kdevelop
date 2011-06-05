@@ -23,7 +23,7 @@
 #include <interfaces/icore.h>
 #include <QStandardItemModel>
 
-AppletSelector::AppletSelector(const KPluginInfo::List& plugins, const QString& parentApp, const QStringList& whitelist, QWidget* parent)
+AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWidget* parent)
     : KDialog(parent)
 {
     setButtons(Close);
@@ -37,13 +37,9 @@ AppletSelector::AppletSelector(const KPluginInfo::List& plugins, const QString& 
     setMainWidget(w);
     
     QStandardItemModel* model = new QStandardItemModel(this);
-    KPluginInfo::List list=Plasma::Applet::listAppletInfo();
-    list.append(plugins);
+    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString(), parentApp);
     
     foreach(const KPluginInfo& info, list) {
-        if(!whitelist.contains(info.pluginName()) && parentApp!=info.property("X-Plasma-ParentApp").toString())
-            continue;
-        
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setEditable(false);
         item->setToolTip(info.comment());
