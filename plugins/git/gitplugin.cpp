@@ -416,7 +416,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "log" << "--date=raw" << "--numstat";
+    *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/;
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
         *job << rev;
@@ -429,7 +429,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "log" << "--date=raw" << "--numstat" << toRevisionName(rev, QString());
+    *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/ << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
     
