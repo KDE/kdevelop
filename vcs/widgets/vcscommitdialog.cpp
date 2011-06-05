@@ -81,11 +81,10 @@ void VcsCommitDialog::setRecursive( bool recursive )
     d->ui.recursiveChk->setChecked( recursive );
 }
 
-void VcsCommitDialog::setCommitCandidates( const QVariant& statuses )
+void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses )
 {
-    foreach( const QVariant &var, statuses.toList() )
+    foreach( const VcsStatusInfo& info, statuses )
     {
-        VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
         d->m_model->updateState( info );
     }
 }

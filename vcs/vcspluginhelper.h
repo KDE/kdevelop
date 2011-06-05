@@ -59,10 +59,8 @@ public Q_SLOTS:
     void diffToBase();
     void diffForRev();
     void update();
-    void executeCommit(const QString& message, const QList<KUrl>& urls);
-    void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
-    void commitReviewCancelled(QString);
+    void commitReviewed(QString);
     
     void revertDone(KJob* job);
     void delayedModificationWarningOn();

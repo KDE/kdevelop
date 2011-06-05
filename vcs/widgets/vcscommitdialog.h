@@ -18,6 +18,8 @@
 
 namespace KDevelop
 {
+
+class VcsStatusInfo;
 class IPatchSource;
 
 class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public KDialog
@@ -27,7 +29,7 @@ public:
     VcsCommitDialog( IPatchSource *patchSource, QWidget *parent = 0 );
     virtual ~VcsCommitDialog();
     ///Sets the commit candidates
-    void setCommitCandidates( const QVariant& );
+    void setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses );
     void setRecursive( bool );
     bool recursive() const;
 

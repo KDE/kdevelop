@@ -433,56 +433,25 @@ void VcsPluginHelper::commit()
     ICore::self()->documentController()->saveAllDocuments();
 
     KUrl url = d->ctxUrls.first();
-    QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
-    QMap<KUrl, VcsStatusInfo::State> changes;
-    QVariant varlist;
-
-    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
-    {
-        varlist = statusJob->fetchResults();
-
-        foreach( const QVariant &var, varlist.toList() )
-        {
-            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
-            
-            if(info.state()!=VcsStatusInfo::ItemUpToDate)
-                changes[info.url()] = info.state();
-        }
-    }
-    else
-        kDebug() << "Couldn't get status for urls: " << url;
-    
     
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), changes, d->vcs, retrieveOldCommitMessages());
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), url, d->vcs);
     
     bool ret = showVcsDiff(patchSource);
 
     if(!ret) {
         VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
-        commitDialog->setCommitCandidates(varlist);
-        commitDialog->show();
+        commitDialog->setCommitCandidates(patchSource->infos());
+        commitDialog->exec();
+    } else {
+        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(commitReviewed(QString)));
+        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewed(QString)));
     }
-
-    connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
-    connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
 }
 
-void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
-{
-    VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
-    d->plugin->core()->runController()->registerJob(job);
-    addOldCommitMessage(message);
-}
-
-void VcsPluginHelper::commitReviewCancelled(QString message)
+void VcsPluginHelper::commitReviewed(QString message)
 {
     addOldCommitMessage(message);
-}
-
-void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
-{
-    dlg->deleteLater();
 }
 
 QStringList retrieveOldCommitMessages()
