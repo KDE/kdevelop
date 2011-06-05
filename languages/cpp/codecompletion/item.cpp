@@ -180,8 +180,18 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       }
       insertFunctionParenText(document, insertionPosition, m_declaration, jumpForbidden);
     }
+    
+    if (removeInSecondStep.get()) {
+      //if we would remove text after the inserted text, skip that if it is a property
+      //of the executed item and additionally insert a . or ->
+      Identifier id(document->text(removeInSecondStep->toRange()));
+      QString insertAccessor = keepRemainingWord(id);
+      if (!insertAccessor.isEmpty()) {
+        document->insertText(removeInSecondStep->toRange().start(), insertAccessor);
+        removeInSecondStep.release();
+      }
+    }
   }
-  
   
   if(removeInSecondStep.get())
   {
@@ -197,6 +207,51 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       document->removeText(removeRange);
     }
   }
+}
+
+QString NormalDeclarationCompletionItem::keepRemainingWord(Identifier id)
+{
+  TypePtr<StructureType> type;
+  QString insertAccessor;
+  if (m_declaration->type<StructureType>()) {
+    type = m_declaration->type<StructureType>();
+    insertAccessor = ".";
+  } else if (m_declaration->type<PointerType>()) {
+    type = StructureType::Ptr::dynamicCast(m_declaration->type<PointerType>()->baseType());
+    insertAccessor = "->";
+  }
+  if (!type && (m_declaration->type<ReferenceType>())) {
+    type = StructureType::Ptr::dynamicCast(m_declaration->type<ReferenceType>()->baseType());
+    insertAccessor = ".";
+  }
+  if (type) {
+    return keepRemainingWord(type, id, insertAccessor);
+  }
+  return QString();
+}
+
+QString NormalDeclarationCompletionItem::keepRemainingWord(const StructureType::Ptr &type, const Identifier &id, const QString &insertAccessor)
+{
+  QList<Declaration*> decls = m_declaration->context()->findDeclarations(type->qualifiedIdentifier());
+  if (decls.count()) {
+    Declaration* structDecl = decls.first();
+    if (structDecl->internalContext()->findDeclarations(id).count()) {
+      return insertAccessor;
+    }
+    if (structDecl->internalContext()->findDeclarations(Identifier( "operator->" )).count()) {
+      Declaration* smartPtrFn = structDecl->internalContext()->findDeclarations(Identifier( "operator->" )).first();
+      if (smartPtrFn->type<FunctionType>()) {
+        if (PointerType::Ptr::dynamicCast(smartPtrFn->type<FunctionType>()->returnType())) {
+          PointerType::Ptr ptrTyp = PointerType::Ptr::staticCast(smartPtrFn->type<FunctionType>()->returnType());
+          AbstractType::Ptr smartPointerType = ptrTyp->baseType();
+          if (StructureType::Ptr::dynamicCast(ptrTyp->baseType())) {
+            return keepRemainingWord(StructureType::Ptr::staticCast(ptrTyp->baseType()), id, "->");
+          }
+        }
+      }
+    }
+  }
+  return QString();
 }
 
 const bool indentByDepth = false;
