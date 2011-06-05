@@ -146,7 +146,7 @@ QVariant GrepOutputItem::data ( int role ) const {
         QString start = Qt::escape(text().left(m_change->m_range.start.column));
         QString repl  = "<b>" + Qt::escape(grepModel->replacementFor(m_change->m_oldText)) + "</b>";
         QString end   = Qt::escape(text().right(text().length() - m_change->m_range.end.column));
-        return QVariant((start + repl + end).trimmed());
+        return QVariant(QString(start + repl + end).trimmed());
     }
     else
     {

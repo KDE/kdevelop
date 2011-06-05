@@ -117,8 +117,8 @@ void ProjectLoadTest::addRemoveFiles()
     }
     QTest::qWait(500);
 
-    QCOMPARE(project->filesForUrl(p.first+"/blub"+QString::number(50)).count(), 1);
-    KDevelop::ProjectFileItem* file = project->filesForUrl(p.first+"/blub"+QString::number(50)).first();
+    QCOMPARE(project->filesForUrl(QString(p.first+"/blub"+QString::number(50))).count(), 1);
+    KDevelop::ProjectFileItem* file = project->filesForUrl(QString(p.first+"/blub"+QString::number(50))).first();
     project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
         QFile f2(p.first+"/blub"+QString::number(i));
