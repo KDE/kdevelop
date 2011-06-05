@@ -132,7 +132,6 @@
     <Separator/>
     <Action name="show_left_dock"/>
     <Action name="show_right_dock"/>
-    <Action name="show_top_dock"/>
     <Action name="show_bottom_dock"/>
     <Action name="hide_all_docks"/>
     <Separator/>
