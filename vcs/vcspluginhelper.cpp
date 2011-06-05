@@ -246,6 +246,7 @@ void VcsPluginHelper::revert()
         if(doc) {
             KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             modif->setModifiedOnDiskWarning(false);
+            doc->textDocument()->setModified(false);
         }
     }
     job->setProperty("urls", d->ctxUrls);
