@@ -52,7 +52,7 @@ void CodeAnalysisTest::testUseReadWrite()
   int i=0;
   foreach(const QVariant& f, modFlags) {
     qDebug() << "flags" << repo->modifications().at(i)->m_flags << f;
-    QCOMPARE(repo->modifications().at(i)->m_flags, f.toUInt());
+    QCOMPARE(repo->modifications().at(i)->m_flags, KDevelop::DataAccess::DataAccessFlags(f.toUInt()));
     
     i++;
   }
