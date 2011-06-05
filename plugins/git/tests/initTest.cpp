@@ -127,7 +127,7 @@ void GitInitTest::addFiles()
     VERIFYJOB(j);
 
     // /tmp/kdevGit_testdir/ and testfile
-    j = m_plugin->add(KUrl::List(gitTest_BaseDir + gitTest_FileName));
+    j = m_plugin->add(KUrl::List(QString(gitTest_BaseDir + gitTest_FileName)));
     VERIFYJOB(j);
 
     f.setFileName(gitSrcDir + gitTest_FileName3);
@@ -170,8 +170,8 @@ void GitInitTest::addFiles()
     f.close();
     
     KUrl::List multipleFiles;
-    multipleFiles << (gitTest_BaseDir + "file1");
-    multipleFiles << (gitTest_BaseDir + "file2");
+    multipleFiles << QString(gitTest_BaseDir + "file1");
+    multipleFiles << QString(gitTest_BaseDir + "file2");
     j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
 }

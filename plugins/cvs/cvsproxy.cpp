@@ -75,7 +75,7 @@ bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const KUrl::L
     foreach(const KUrl &url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
-        QString file = KUrl::relativeUrl(repository + QDir::separator(), url);
+        QString file = KUrl::relativeUrl(QString(repository + QDir::separator()), url);
 
         args << KShell::quoteArg( file );
     }
