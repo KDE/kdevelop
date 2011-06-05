@@ -52,6 +52,7 @@
 #include "../debugger/variable/variablewidget.h"
 #include "../debugger/framestack/framestackmodel.h"
 #include "../debugger/framestack/framestackwidget.h"
+#include <KXMLGUIFactory>
 
 
 namespace KDevelop {
@@ -101,10 +102,21 @@ private:
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
       m_breakpointModel(new BreakpointModel(this)),
-      m_variableCollection(new VariableCollection(this))
+      m_variableCollection(new VariableCollection(this)),
+      m_uiInitialized(false)
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
+}
+
+void DebugController::initialize()
+{
+}
+
+void DebugController::initializeUi()
+{
+    if (m_uiInitialized) return;
+    m_uiInitialized = true;
 
     if((Core::self()->setupFlags() & Core::NoUi)) return;
     setupActions();
@@ -134,11 +146,9 @@ DebugController::DebugController(QObject *parent)
             this,
             SLOT(partAdded(KParts::Part*)));
 
-}
-
-void DebugController::initialize()
-{
     stateChanged("ended");
+
+    ICore::self()->uiController()->activeMainWindow()->guiFactory()->addClient(this);
 }
 
 

@@ -44,6 +44,9 @@ public:
     IDebugController(QObject *parent = 0);
     virtual ~IDebugController();
 
+    /** Each plugin using the debugger actions needs to call this function to setup the gui */
+    virtual void initializeUi() = 0;
+
     virtual void addSession(IDebugSession* session) = 0;
     
     /** Return the current debug session. At present, only
