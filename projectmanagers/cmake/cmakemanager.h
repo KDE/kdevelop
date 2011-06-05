@@ -127,10 +127,11 @@ private slots:
     void deletedWatched(const QString& directory);
 
 private:
-    void reimport(KDevelop::ProjectFolderItem* fi);
+    void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
     bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
+    void cleanupToDelete(KDevelop::IProject* p);
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
@@ -151,6 +152,7 @@ private:
     KDevelop::ICodeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
+    QSet<QString> m_toDelete;
 };
 
 #endif

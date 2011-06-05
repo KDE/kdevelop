@@ -87,6 +87,8 @@
 #include <vcs/vcsjob.h>
 #include <project/interfaces/iprojectbuilder.h>
 
+Q_DECLARE_METATYPE(KDevelop::IProject*);
+
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
@@ -925,11 +927,11 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     return true;
 }
 
-void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
+void CMakeManager::reimport(CMakeFolderItem* fi)
 {
     Q_ASSERT(!isReloading(fi->project()));
     KJob *job=createImportJob(fi);
-    job->setProperty("projectitem", qVariantFromValue(fi));
+    job->setProperty("project", qVariantFromValue(fi->project()));
     
     QMutexLocker locker(&m_busyProjectsMutex);
     Q_ASSERT(!m_busyProjects.contains(fi->project()));
@@ -942,11 +944,13 @@ void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 
 void CMakeManager::reimportDone(KJob* job)
 {
-    QMutexLocker locker(&m_busyProjectsMutex);
-    ProjectFolderItem* it = job->property("projectitem").value<KDevelop::ProjectFolderItem*>();
+    IProject* p = job->property("project").value<KDevelop::IProject*>();
     
-    Q_ASSERT(m_busyProjects.contains(it->project()));
-    m_busyProjects.remove(it->project());
+    cleanupToDelete(p);
+    
+    QMutexLocker locker(&m_busyProjectsMutex);
+    Q_ASSERT(m_busyProjects.contains(p));
+    m_busyProjects.remove(p);
 }
 
 bool CMakeManager::isReloading(IProject* p)
@@ -959,27 +963,34 @@ bool CMakeManager::isReloading(IProject* p)
     return m_busyProjects.contains(p);
 }
 
+
+void CMakeManager::cleanupToDelete(IProject* p)
+{
+    Q_ASSERT(isReloading(p));
+    
+    for(QSet<QString>::iterator it=m_toDelete.begin(), itEnd=m_toDelete.end(); it!=itEnd; ) {
+        IndexedString url(*it);
+        if(p->fileSet().contains(url)) {
+            qDeleteAll(p->filesForUrl(url.toUrl()));
+            it=m_toDelete.erase(it);
+        } else 
+            ++it;
+    }
+}
+
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
-    IProject* p=0;
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     
-    QMutexLocker locker(&m_busyProjectsMutex);
-    if(m_busyProjects.isEmpty())
-        p=ICore::self()->projectController()->findProjectForUrl(dirurl);
-    else
-        QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
-    locker.unlock();
-    
-    if(p) {
-        Q_ASSERT(!isReloading(p));
+    if(p && !isReloading(p)) {
         dirurl.adjustPath(KUrl::AddTrailingSlash);
         if(p->folder()==dirurl) {
             ICore::self()->projectController()->closeProject(p);
         } else {
             KUrl url(path);
             
-            if(path.endsWith("/CMakeLists.txt")) {
+            if(url.fileName()=="CMakeLists.txt") {
                 QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
                 foreach(ProjectFolderItem* folder, folders) 
                     reload(folder);
@@ -989,13 +1000,15 @@ void CMakeManager::deletedWatched(const QString& path)
                 m_busyProjects += p;
                 locker.unlock();
                 
-                qDeleteAll(p->itemsForUrl(url));
+                m_toDelete += path;
+                cleanupToDelete(p);
                 
                 locker.relock();
                 m_busyProjects -= p;
             }
         }
-    }
+    } else if(p)
+        m_toDelete += path;
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
@@ -1066,6 +1079,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             locker.unlock();
             
             reloadFiles(folders.first());
+            cleanupToDelete(p);
             
             locker.relock();
             m_busyProjects -= p;
@@ -1101,6 +1115,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         QString current=it->text();
         KUrl fileurl = folderurl;
         fileurl.addPath(current);
+        m_toDelete.remove(fileurl.toLocalFile());
         
         if(!entries.contains(current))
             qDeleteAll(item->project()->itemsForUrl(fileurl));
