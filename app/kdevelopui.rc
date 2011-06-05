@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="131" name="kdevelop" >
+<kpartgui version="132" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -165,6 +165,8 @@
   <Action name="file_new" />
   <DefineGroup append="file_operations" name="file_operations"/>
   <DefineGroup append="edit_operations" name="edit_operations"/>
+  <Separator/>
+  <Action name="commit_current_project" />
 </ToolBar>
 
 <Menu name="rb_popup">
