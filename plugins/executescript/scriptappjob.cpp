@@ -40,6 +40,8 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 
+#include <executescriptoutputmodel.h>
+
 #include "iexecutescriptplugin.h"
 
 ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
@@ -108,7 +110,7 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
+    setModel( new KDevelop::ExecuteScriptOutputModel(), KDevelop::IOutputView::TakeOwnership );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
