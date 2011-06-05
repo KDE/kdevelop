@@ -987,7 +987,7 @@ void ProjectController::commitCurrentProject()
         IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
         
         if(vcs) {
-            ICore::self()->documentController()->saveAllDocuments();
+            ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
             VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl), baseUrl, vcs);
 
