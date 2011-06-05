@@ -132,7 +132,7 @@ void Dashboard::showConfigure()
         w = new QWidget(m_configDialog);
     }
 
-    m_configDialog->addPage(w, i18n("Background"), i18n("preferences-desktop-wallpaper"));
+    m_configDialog->addPage(w, i18n("Background"), "preferences-desktop-wallpaper");
     
     m_configDialog->show();
 }
