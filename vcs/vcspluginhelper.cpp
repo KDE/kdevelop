@@ -76,6 +76,8 @@
 #include <KCompositeJob>
 #include <QClipboard>
 #include <QApplication>
+#include <ktexteditor/modificationinterface.h>
+#include <QTimer>
 
 namespace KDevelop
 {
@@ -93,6 +95,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffToBaseAction;
     KAction * revertAction;
     KAction * diffForRevAction;
+    QPointer<QTimer> modificationTimer;
     
     void createActions(QObject * parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
@@ -234,8 +237,49 @@ QMenu* VcsPluginHelper::commonActions()
 
 void VcsPluginHelper::revert()
 {
-    EXECUTE_VCS_METHOD(revert);
+    VcsJob* job=d->vcs->revert(d->ctxUrls);
+    connect(job, SIGNAL(finished(KJob*)), SLOT(revertDone(KJob*)));
+    
+    foreach(const KUrl& url, d->ctxUrls) {
+        IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
+        
+        if(doc) {
+            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            modif->setModifiedOnDiskWarning(false);
+        }
+    }
+    job->setProperty("urls", d->ctxUrls);
+    
+    d->plugin->core()->runController()->registerJob(job);
 }
+
+void VcsPluginHelper::revertDone(KJob* job)
+{
+    d->modificationTimer = new QTimer;
+    d->modificationTimer->setInterval(100);
+    connect(d->modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
+    
+    d->modificationTimer->setProperty("urls", job->property("urls"));
+    d->modificationTimer->start();
+}
+
+void VcsPluginHelper::delayedModificationWarningOn()
+{
+    KUrl::List urls = d->modificationTimer->property("urls").value<KUrl::List>();
+    
+    foreach(const KUrl& url, urls) {
+        IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
+        doc->reload();
+        
+        if(doc) {
+            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            modif->setModifiedOnDiskWarning(true);
+        }
+    }
+    
+    d->modificationTimer->deleteLater();
+}
+
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {

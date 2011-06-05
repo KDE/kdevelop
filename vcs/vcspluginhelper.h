@@ -63,9 +63,10 @@ public Q_SLOTS:
     void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
     void commitReviewCancelled(QString);
+    
+    void revertDone(KJob* job);
+    void delayedModificationWarningOn();
 private:
-    KUrl urlForItem(KDevelop::ProjectBaseItem* item) const;
-
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;
 };
