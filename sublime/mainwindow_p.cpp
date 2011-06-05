@@ -72,12 +72,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
-    action = new KAction(i18n("Show Top Dock"), this);
-    action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_T);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
-    ac->addAction("show_top_dock", action);
-
     action = new KAction(i18n("Focus Editor"), this);
     action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
@@ -98,27 +92,52 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
 
-    action = new KAction(i18n("Remove view"), this);
-    connect(action, SIGNAL(triggered(bool)), SLOT(removeView()));
-    ac->addAction("remove_view", action);
-
-    action = new KAction(i18n("Anchor Current Dock"), this);
-    action->setCheckable(true);
-    action->setEnabled(false);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_A);
-    connect(action, SIGNAL(toggled(bool)), SLOT(anchorCurrentDock(bool)));
-    ac->addAction("anchor_current_dock", action);
-
-    action = new KAction(i18n("Maximize Current Dock"), this);
-    action->setCheckable(true);
-    action->setEnabled(false);
-    connect(action, SIGNAL(toggled(bool)), SLOT(maximizeCurrentDock(bool)));
-    ac->addAction("maximize_current_dock", action);
-
     action = new KActionMenu(i18n("Tool Views"), this);
     ac->addAction("docks_submenu", action);
 
+    idealController = new IdealController(m_mainWindow);
+
+    QToolBar *leftToolBar = new QToolBar(i18n("Left Button Bar"), m_mainWindow);
+    leftToolBar->setObjectName("left_button_bar");
+    leftToolBar->setMovable(false);
+    leftToolBar->setFloatable(false);
+    leftToolBar->addWidget(idealController->leftBarWidget);
+    idealController->leftBarWidget->show();
+    m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
+
+    QToolBar *rightToolBar = new QToolBar(i18n("Right Button Bar"), m_mainWindow);
+    rightToolBar->setObjectName("right_button_bar");
+    rightToolBar->setMovable(false);
+    rightToolBar->setFloatable(false);
+    rightToolBar->addWidget(idealController->rightBarWidget);
+    idealController->rightBarWidget->show();
+    m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
+
+    QToolBar *bottomToolBar = new QToolBar(i18n("Bottom Button Bar"), m_mainWindow);
+    bottomToolBar->setObjectName("bottom_button_bar");
+    bottomToolBar->setMovable(false);
+    bottomToolBar->setFloatable(false);
+    bottomToolBar->addWidget(idealController->bottomBarWidget);
+    idealController->bottomBarWidget->show();
+    m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
+
+    // adymo: intentionally do not add a toolbar for top buttonbar
+    // this doesn't work well with toolbars added via xmlgui
+
     recreateCentralWidget();
+
+    connect(idealController,
+            SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
+            this,
+            SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
+
+    connect(idealController,
+            SIGNAL(widgetResized(Qt::DockWidgetArea, int)),
+            this,
+            SLOT(widgetResized(Qt::DockWidgetArea, int)));
+
+   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)),
+            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)));
 }
 
 
@@ -129,57 +148,39 @@ MainWindowPrivate::~MainWindowPrivate()
 
 void MainWindowPrivate::showLeftDock(bool b)
 {
-    idealMainWidget->showLeftDock(b);
+    idealController->showLeftDock(b);
 }
 
 void MainWindowPrivate::showBottomDock(bool b)
 {
-    idealMainWidget->showBottomDock(b);
+    idealController->showBottomDock(b);
 }
 
 void MainWindowPrivate::showRightDock(bool b)
 {
-    idealMainWidget->showRightDock(b);
-}
-
-void MainWindowPrivate::showTopDock(bool b)
-{
-    idealMainWidget->showTopDock(b);
-}
-
-void MainWindowPrivate::anchorCurrentDock(bool b)
-{
-    idealMainWidget->anchorCurrentDock(b);
-}
-
-void MainWindowPrivate::maximizeCurrentDock(bool b)
-{
-    idealMainWidget->maximizeCurrentDock(b);
+    idealController->showRightDock(b);
 }
 
 void MainWindowPrivate::focusEditor()
 {
-    idealMainWidget->focusEditor();
+    if (View* view = m_mainWindow->activeView())
+        if (view->hasWidget())
+            view->widget()->setFocus(Qt::ShortcutFocusReason);
 }
 
 void MainWindowPrivate::toggleDocksShown()
 {
-    idealMainWidget->toggleDocksShown();
-}
-
-void MainWindowPrivate::removeView()
-{
-    idealMainWidget->removeView();
+    idealController->toggleDocksShown();
 }
 
 void MainWindowPrivate::selectNextDock()
 {
-    idealMainWidget->selectNextDock();
+    idealController->goPrevNextDock(IdealController::NextDock);
 }
 
 void MainWindowPrivate::selectPreviousDock()
 {
-    idealMainWidget->selectPreviousDock();
+    idealController->goPrevNextDock(IdealController::PrevDock);
 }
 
 Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view, Sublime::Position position)
@@ -187,7 +188,9 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
     if (!d->docks.contains(view))
     {
         d->docks << view;
-        d->idealMainWidget->addView(d->positionToDockArea(position), view);
+
+        //add view
+        d->idealController->addView(d->positionToDockArea(position), view);
     }
     return Area::ContinueWalker;
 }
@@ -252,9 +255,6 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             QWidget *widget = view->widget(container);
             if (widget && !container->hasWidget(widget))
             {
-                widget->installEventFilter(d);
-                foreach (QWidget* w, widget->findChildren<QWidget*>())
-                    w->installEventFilter(d);
                 container->addWidget(view, position);
                 d->viewContainers[view] = container;
                 d->widgetToView[widget] = view;
@@ -271,20 +271,19 @@ void MainWindowPrivate::reconstruct()
         m_leftTabbarCornerWidget->hide();
         m_leftTabbarCornerWidget->setParent(0);
     }
-    
+
+    idealController->setWidthForArea(Qt::LeftDockWidgetArea, area->thickness(Sublime::Left));
+    idealController->setWidthForArea(Qt::BottomDockWidgetArea, area->thickness(Sublime::Bottom));
+    idealController->setWidthForArea(Qt::RightDockWidgetArea, area->thickness(Sublime::Right));
+
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, area->rootIndex());
 
-    idealMainWidget->blockSignals(true);
-    IdealMainLayout *l = idealMainWidget->mainLayout();
-    l->setWidthForRole(IdealMainLayout::Left, area->thickness(Sublime::Left));
-    l->setWidthForRole(IdealMainLayout::Right, area->thickness(Sublime::Right));
-    l->setWidthForRole(IdealMainLayout::Bottom,
-                       area->thickness(Sublime::Bottom));
-    l->setWidthForRole(IdealMainLayout::Top, area->thickness(Sublime::Top));
+    m_mainWindow->blockSignals(true);
+
     kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
@@ -293,10 +292,10 @@ void MainWindowPrivate::reconstruct()
         {
             Sublime::Position pos = area->toolViewPosition(view);
             if (area->shownToolView(pos) == id)
-                idealMainWidget->raiseView(view);
+                idealController->raiseView(view);
         }
     }
-    idealMainWidget->blockSignals(false);
+    m_mainWindow->blockSignals(false);
     
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
 }
@@ -311,7 +310,7 @@ void MainWindowPrivate::clearArea()
     {
         // FIXME should we really delete here??
         bool nonDestructive = true;
-        idealMainWidget->removeView(view, nonDestructive);
+        idealController->removeView(view, nonDestructive);
 
         if (view->hasWidget())
             view->widget()->setParent(0);
@@ -337,28 +336,12 @@ void MainWindowPrivate::clearArea()
 
 void MainWindowPrivate::recreateCentralWidget()
 {
-    idealMainWidget = new IdealMainWidget(m_mainWindow, m_mainWindow->actionCollection());
-    m_mainWindow->setCentralWidget(idealMainWidget);
-
     centralWidget = new QWidget();
-    idealMainWidget->setCentralWidget(centralWidget);
+    m_mainWindow->setCentralWidget(centralWidget);
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget);
     layout->setMargin(0);
     centralWidget->setLayout(layout);
-
-    connect(idealMainWidget,
-            SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
-            this,
-            SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
-
-    connect(idealMainWidget->mainLayout(),
-            SIGNAL(widgetResized(IdealMainLayout::Role, int)),
-            this,
-            SLOT(widgetResized(IdealMainLayout::Role, int)));
-
-    connect(idealMainWidget, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)),
-            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)));
 }
 
 void MainWindowPrivate::
@@ -417,7 +400,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 {
-    idealMainWidget->raiseView(view);
+    idealController->raiseView(view);
 }
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
@@ -554,7 +537,7 @@ void MainWindowPrivate::aboutToRemoveToolView(Sublime::View *toolView, Sublime::
     if (!docks.contains(toolView))
         return;
 
-    idealMainWidget->removeView(toolView);
+    idealController->removeView(toolView);
     // TODO are Views unique?
     docks.removeAll(toolView);
 }
@@ -565,7 +548,7 @@ void MainWindowPrivate::toolViewMoved(
     if (!docks.contains(toolView))
         return;
 
-    idealMainWidget->moveView(toolView, positionToDockArea(position));
+    idealController->moveView(toolView, positionToDockArea(position));
 }
 
 Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
@@ -598,17 +581,9 @@ void MainWindowPrivate::activateFirstVisibleView()
         m_mainWindow->activateView(area->views().first());
 }
 
-bool MainWindowPrivate::eventFilter(QObject *, QEvent *event)
+void MainWindowPrivate::widgetResized(Qt::DockWidgetArea dockArea, int thickness)
 {
-    if (event->type() == QEvent::FocusIn)
-        idealMainWidget->centralWidgetFocused();
-
-    return false;
-}
-
-void MainWindowPrivate::widgetResized(IdealMainLayout::Role role, int thickness)
-{
-    area->setThickness(IdealMainLayout::positionForRole(role), thickness);
+    //TODO: adymo: remove all thickness business
 }
 
 void MainWindowPrivate::widgetCloseRequest(QWidget* widget)

@@ -30,7 +30,6 @@
 #include "sublimedefs.h"
 
 #include "mainwindow.h"
-#include "ideallayout.h"
 #include <qmenubar.h>
 #include <qstylepainter.h>
 #include <qstyleoption.h>
@@ -51,6 +50,7 @@ class Container;
 class Controller;
 class AreaIndex;
 class IdealMainWidget;
+class IdealController;
 
 class AreaTabButton : public QWidget {
     public:
@@ -177,7 +177,7 @@ public:
     QWidget *centralWidget;
     AreaTabWidget* areaSwitcher;
 
-    IdealMainWidget *idealMainWidget;
+    IdealController *idealController;
     int ignoreDockShown;
     bool autoAreaSettingsSave;                       
 
@@ -197,23 +197,16 @@ private slots:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
-    void widgetResized(IdealMainLayout::Role role, int thickness);
+    void widgetResized(Qt::DockWidgetArea dockArea, int thickness);
     void widgetCloseRequest(QWidget* widget);
 
     void showLeftDock(bool b);
     void showRightDock(bool b);
     void showBottomDock(bool b);
-    void showTopDock(bool b);
-    void anchorCurrentDock(bool b);
-    void maximizeCurrentDock(bool b);
     void focusEditor();
     void toggleDocksShown();
     void selectNextDock();
     void selectPreviousDock();
-    void removeView();
-
-protected:
-    virtual bool eventFilter(QObject *, QEvent *event);
 
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
