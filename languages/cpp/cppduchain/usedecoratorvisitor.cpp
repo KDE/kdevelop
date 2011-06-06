@@ -75,7 +75,7 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
     CursorInRevision cursor = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     
     //use rw computation
-    uint f = m_defaultFlags;
+    KDevelop::DataAccess::DataAccessFlags f = m_defaultFlags;
     if(type->whichType()==AbstractType::TypeReference && !(type.cast<ReferenceType>() && type.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier)) {
       f |= DataAccess::Write;
     }
@@ -211,7 +211,7 @@ void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
   m_callStack.push(args);
   m_argStack.push(0);
   
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   visit(node->expression);
   
   m_argStack.pop();
@@ -221,7 +221,7 @@ void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
 void UseDecoratorVisitor::visitMemInitializer(MemInitializerAST* node)
 {
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Write);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Write);
   
   static AbstractType::Ptr ntype(new DelayedType);
   m_callStack.push(QList< AbstractType::Ptr >() << ntype);
@@ -246,7 +246,7 @@ void UseDecoratorVisitor::visitMemInitializer(MemInitializerAST* node)
 void UseDecoratorVisitor::visitConditionalExpression(ConditionalExpressionAST* node)
 {
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   static AbstractType::Ptr ntype(new DelayedType);
   m_callStack.push(QList< AbstractType::Ptr >() << ntype);
@@ -286,7 +286,7 @@ void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 {
 //   qDebug() << "visit: PostfixExpression" << nodeToString(m_session, node);
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   static AbstractType::Ptr ntype(new DelayedType);
   
@@ -304,7 +304,7 @@ void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 {
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   
   if(optype)
@@ -318,7 +318,7 @@ void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 {
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   bool modif = optype ? optype->modifiers()&FunctionType::ConstModifier : m_session->token_stream->token(node->op).kind!=Token_arrow;
   
@@ -331,7 +331,7 @@ void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
 {
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  PushValue<uint> v(m_defaultFlags, DataAccess::Read);
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   visit(node->declarator);
   if(node->initializer) {
@@ -354,7 +354,7 @@ void UseDecoratorVisitor::visit##a(a##AST* node)\
 void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
   PushPositiveContext pushContext( m_currentContext, node->ducontext );\
-  PushValue<uint> v(m_defaultFlags, b);\
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, b);\
 /*   qDebug() << "visit: " #a << nodeToString(m_session, node);*/\
   static AbstractType::Ptr ntype(new DelayedType);\
   \
