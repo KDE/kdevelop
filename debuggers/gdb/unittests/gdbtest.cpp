@@ -774,7 +774,7 @@ void GdbTest::testStackSwitchThread()
     COMPARE_DATA(tIdx.child(0, 2), fileName+":39");
 
     tIdx = stackModel->index(1,0);
-    QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at pthread_cond_timedwait"));
+    QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at "));
     stackModel->setCurrentThread(2);
     QTest::qWait(200);
     int rows = stackModel->rowCount(tIdx);
