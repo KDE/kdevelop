@@ -580,7 +580,7 @@ void GdbTest::testShowStepInSource()
     TestDebugSession *session = new TestDebugSession;
 
     qRegisterMetaType<KUrl>("KUrl");
-    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl, int)));
+    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl, int, QString)));
 
     TestLaunchConfiguration cfg;
 
