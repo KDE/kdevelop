@@ -15,6 +15,9 @@ target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})
 add_executable(qmapstring qmapstring.cpp)
 target_link_libraries(qmapstring ${QT_QTCORE_LIBRARY})
 
+add_executable(qmapstringbool qmapstringbool.cpp)
+target_link_libraries(qmapstringbool ${QT_QTCORE_LIBRARY})
+
 add_executable(qdate qdate.cpp)
 target_link_libraries(qdate ${QT_QTCORE_LIBRARY})
 

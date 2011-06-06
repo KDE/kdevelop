@@ -228,7 +228,6 @@ class QMapPrinter:
             return self
 
         def payload (self):
-
             #we can't use QMapPayloadNode as it's inlined
             #as a workaround take the sum of sizeof(members)
             ret = self.ktype.sizeof
@@ -240,7 +239,12 @@ class QMapPrinter:
             #TODO: find a real solution for this problem
             ret += ret % gdb.lookup_type('void').pointer().sizeof
 
+            #for some reason booleans are different
+            if str(self.vtype) == 'bool':
+                ret += 2
+
             ret -= gdb.lookup_type('void').pointer().sizeof
+            
             return ret
 
         def concrete (self, data_node):
