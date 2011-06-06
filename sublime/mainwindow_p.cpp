@@ -101,6 +101,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     leftToolBar->setObjectName("left_button_bar");
     leftToolBar->setMovable(false);
     leftToolBar->setFloatable(false);
+    leftToolBar->layout()->setMargin(0);
     leftToolBar->addWidget(idealController->leftBarWidget);
     idealController->leftBarWidget->show();
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
@@ -109,6 +110,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     rightToolBar->setObjectName("right_button_bar");
     rightToolBar->setMovable(false);
     rightToolBar->setFloatable(false);
+    rightToolBar->layout()->setMargin(0);
     rightToolBar->addWidget(idealController->rightBarWidget);
     idealController->rightBarWidget->show();
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
@@ -117,6 +119,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     bottomToolBar->setObjectName("bottom_button_bar");
     bottomToolBar->setMovable(false);
     bottomToolBar->setFloatable(false);
+    bottomToolBar->layout()->setMargin(0);
     bottomToolBar->addWidget(idealController->bottomBarWidget);
     idealController->bottomBarWidget->show();
     m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
