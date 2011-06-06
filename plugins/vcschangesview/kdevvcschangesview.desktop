@@ -1,8 +1,17 @@
 [Desktop Entry]
 Type=Service
 Comment=This plugin provides integration between the projects and their VCS infrastructure
+Comment[es]=Este complemento proporciona integración entre los proyectos y su infraestructura VCS
+Comment[uk]=Цей додаток забезпечує інтеграцію між проектами та їхньою структурою системи керування версіями
+Comment[x-test]=xxThis plugin provides integration between the projects and their VCS infrastructurexx
 Name=VCS Integration
+Name[es]=Integración VCS
+Name[uk]=Інтеграція з системами керування версіями
+Name[x-test]=xxVCS Integrationxx
 GenericName=VCS Integration
+GenericName[es]=Integración VCS
+GenericName[uk]=Інтеграція з системами керування версіями
+GenericName[x-test]=xxVCS Integrationxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevvcschangesviewplugin
 X-KDE-PluginInfo-Name=kdevvcschangesviewplugin

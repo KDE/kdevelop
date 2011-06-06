@@ -2,8 +2,17 @@
 Type=Service
 Exec=blubb
 Name=Project Information
+Name[es]=Información del proyecto
+Name[uk]=Параметри проекту
+Name[x-test]=xxProject Informationxx
 GenericName=Project Information
+GenericName[es]=Información del proyecto
+GenericName[uk]=Параметри проекту
+GenericName[x-test]=xxProject Informationxx
 Comment=Shows information related to the project
+Comment[es]=Muestra información relacionada con el proyecto
+Comment[uk]=Показує дані щодо проекту
+Comment[x-test]=xxShows information related to the projectxx
 Icon=project-new
 ServiceTypes=KDevelop/Dashboard
 X-KDE-PluginInfo-Name=org.kdevelop.project

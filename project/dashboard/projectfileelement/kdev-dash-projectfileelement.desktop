@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=Project File Element
+Name[es]=Elemento del archivo del proyecto
+Name[uk]=Елемент файла проекту
+Name[x-test]=xxProject File Elementxx
 Icon=kdevelop
 Comment=Draws a project file into a Dashboard element
+Comment[es]=Muestra un archivo de proyecto en un elemento del tablero de mandos
+Comment[uk]=Показує файл проекту як елемент панелі приладів
+Comment[x-test]=xxDraws a project file into a Dashboard elementxx
 Type=Service
 ServiceTypes=Plasma/Applet
 X-KDE-Library=plasma_kdev_projectfileelement

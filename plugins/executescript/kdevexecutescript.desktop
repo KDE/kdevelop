@@ -2,8 +2,17 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows running of scripts.
+Comment[es]=Este complemento permite ejecutar scripts.
+Comment[uk]=За допомогою цього додатка можна запускати скрипти.
+Comment[x-test]=xxThis plugin allows running of scripts.xx
 Name=Execute Scripts
+Name[es]=Ejecutar scripts
+Name[uk]=Виконання скриптів
+Name[x-test]=xxExecute Scriptsxx
 GenericName=Script Execution Support
+GenericName[es]=Implementación de la ejecución de scripts
+GenericName[uk]=Підтримка виконання скриптів
+GenericName[x-test]=xxScript Execution Supportxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevexecutescript
 X-KDevelop-Version=12
