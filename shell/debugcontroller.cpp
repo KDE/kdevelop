@@ -146,9 +146,10 @@ void DebugController::initializeUi()
             this,
             SLOT(partAdded(KParts::Part*)));
 
-    stateChanged("ended");
 
     ICore::self()->uiController()->activeMainWindow()->guiFactory()->addClient(this);
+
+    stateChanged("ended");
 }
 
 
