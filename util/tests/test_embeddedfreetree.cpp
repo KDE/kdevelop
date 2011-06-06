@@ -28,6 +28,8 @@ unsigned int extractor_div_with = 0;
 #include <language/util/setrepository.h>
 #include <kdebug.h>
 #include <time.h>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
 
 struct TestItem {
     explicit TestItem(uint _value = 0) : value(_value), leftChild(-1), rightChild(-1) {
@@ -323,7 +325,11 @@ struct NothingDoVisitor {
 class TestEmbeddedFreeTree : public QObject {
   Q_OBJECT
   private slots:
-    
+    void initTestCase() {
+        KDevelop::AutoTestShell::init();
+        KDevelop::TestCore* core = new KDevelop::TestCore;
+        core->initialize(KDevelop::Core::NoUi, "test-embeddedfreetree");
+    }
     void randomizedTest() {
         TestSet set;
         srand(time(NULL));
