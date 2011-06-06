@@ -33,16 +33,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
         enum DataAccessFlag { None=0, Read=1, Write=2 };
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
         
-        DataAccess(const CursorInRevision& cur, uint flags);
+        DataAccess(const CursorInRevision& cur, DataAccessFlags flags);
         
         bool isRead()  const { return m_flags&Read; }
         bool isWrite() const { return m_flags&Write; }
         
+        Declaration* declarationForDataAccess() const;
+        KDevelop::CursorInRevision pos() const { return m_pos; }
+        DataAccessFlags flags() const { return m_flags; }
+    private:
         DataAccessFlags m_flags;
         KDevelop::CursorInRevision m_pos;
-        //SimpleRange value() const; //nomes per write?
-        
-        Declaration* declarationForDataAccess() const;
 };
 
 
@@ -51,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
     public:
         ~DataAccessRepository() { clear(); }
         //Again, cursor/range?
-        void addModification(const KDevelop::CursorInRevision& cursor, uint flags);
+        void addModification(const KDevelop::CursorInRevision& cursor, DataAccess::DataAccessFlags flags);
       
         void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
         QList<DataAccess*> modifications() const { return m_modifications; }

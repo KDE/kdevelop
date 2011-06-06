@@ -20,19 +20,19 @@
 
 namespace KDevelop {
 
-void DataAccessRepository::addModification(const KDevelop::CursorInRevision& cursor, uint flags)
+void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags)
 {
     m_modifications.append(new DataAccess(cursor, flags));
 }
 
-DataAccess::DataAccess(const KDevelop::CursorInRevision& cur, uint flags)
+DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags)
   : m_flags(flags), m_pos(cur)
 {}
 
 DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
 {
     foreach(DataAccess* a, m_modifications) {
-        if(a->m_pos==cursor)
+        if(a->pos()==cursor)
             return a;
     }
     return 0;
