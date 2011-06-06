@@ -731,8 +731,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         {
             QStringList files=t.files;
             QString outputName=t.name;
-            if(data.properties[TargetProperty].contains(t.name) && data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
-                outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
+            if(data.properties[TargetProperty].contains(t.name)) {
+                if(data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
+                    outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
+                else if(data.properties[TargetProperty][t.name].contains("FOLDER") &&
+                            data.properties[TargetProperty][t.name]["FOLDER"].first()=="CTestDashboardTargets")
+                    continue; //filter some annoying targets
+            }
             
             QString path;
             switch(t.type)
