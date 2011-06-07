@@ -27,14 +27,15 @@
 
 #include <QtCore/QObject>
 
-#include <vcs/interfaces/idistributedversioncontrol.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
 
 #include "dvcsevent.h"
 #include <vcs/vcsexport.h>
 #include <vcs/vcsstatusinfo.h>
+#include <vcs/interfaces/idistributedversioncontrol.h>
 #include <outputview/outputjob.h>
+#include <vcs/interfaces/ibranchingversioncontrol.h>
 
 class QMenu;
 class QString;
@@ -54,7 +55,7 @@ struct DistributedVersionControlPluginPrivate;
  * from real DVCS plugins like Git. It is based on KDevelop's CVS plugin (also looks like svn plugin is it's relative too).
  * @note Create only special items in contextMenuExtension, all standard menu items are created in vcscommon plugin!
  */
-class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
+class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl, public IBranchingVersionControl
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
@@ -83,22 +84,6 @@ public:
       */
     virtual void parseLogOutput(const DVcsJob * job,
                                 QList<DVcsEvent>& revisions) const = 0;
-
-
-
-    // In tree branch-management
-    virtual DVcsJob* switchBranch(const QString &repository, const QString &branch) = 0;
-
-    /** Branch. */
-    virtual DVcsJob* branch(const QString &repository, const QString &basebranch = QString(),
-                            const QString &branch = QString(), const QStringList &args = QStringList()) = 0;
-    //parsers for branch:
-    /** Returns current branch. */
-    virtual QString curBranch(const QString &repository) = 0;
-
-    /** Returns the list of branches. */
-    virtual QStringList branches(const QString &repository) = 0;
-    // End: In tree branch-management
     
     /** Returns the list of all commits (in all branches).
      * @see CommitView and CommitViewDelegate to see how this list is used.
@@ -119,6 +104,12 @@ public Q_SLOTS:
 
     // slots for menu
     void slotInit();
+    
+    ///synchronous currentBranch call
+    QString curBranch(const KUrl& repo);
+    
+    ///synchronous listBranches call
+    QStringList listBranches(const KUrl& repo);
 
 Q_SIGNALS:
     /**

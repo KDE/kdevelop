@@ -219,6 +219,26 @@ KDevelop::DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJo
     return j;
 }
 
+QString DistributedVersionControlPlugin::curBranch(const KUrl& repo)
+{
+    QString name;
+    QScopedPointer<VcsJob> job(currentBranch(repo));
+    if(job->exec() && job->status()==VcsJob::JobSucceeded) {
+        name = job->fetchResults().toString();
+    }
+    return name;
+}
+
+QStringList DistributedVersionControlPlugin::listBranches(const KUrl& repo)
+{
+    QStringList branchlist;
+    QScopedPointer<VcsJob> job(branches(repo));
+    if(job->exec() && job->status()==VcsJob::JobSucceeded) {
+        branchlist = job->fetchResults().toStringList();
+    }
+    return branchlist;
+}
+
 }
 
 //-----------------------------------------------------------------------------------

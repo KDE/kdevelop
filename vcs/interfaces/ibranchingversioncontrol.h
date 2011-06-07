@@ -22,31 +22,29 @@
 #ifndef IBRANCHINGVERSIONCONTROL_H
 #define IBRANCHINGVERSIONCONTROL_H
 
-
+class KUrl;
 class QString;
-class VcsMapping;
-class VcsRevision;
 
 namespace KDevelop
 {
+class VcsRevision;
+class VcsJob;
 
 class IBranchingVersionControl
 {
 public:
+    virtual ~IBranchingVersionControl() {}
+    
     /**
      * Creates a branch from the given mapping information
      *
-     * @param mapping List of source/destination pairs of repository paths
-     * specifying what should end up where. Some VCS's may not support
-     * destination paths and will ignore them. The source paths always specify
-     * what is to be branched.
+     * @param repository repository directory on which we're going to branch
      * @param rev What revision of the requested items should be branched.
      * @param branchName Short, descriptive name for the branch used for VCS's
      * that take branch names instead of destination paths, or store metadata
      * about the branch. Not all VCS's will use this parameter.
      */
-    virtual VcsJob* branch( const QString& commitMessage,
-                            const VcsMapping& mapping,
+    virtual VcsJob* branch( const KUrl& repository,
                             const VcsRevision& rev,
                             const QString& branchName ) = 0;
 
@@ -54,19 +52,54 @@ public:
     /**
      * Creates a new tag from the given mapping information
      *
-     * @param mapping List of source/destination pairs of repository paths
-     * specifying what should end up where. Some VCS's may not support
-     * destination paths and will ignore them. The source paths always specify
-     * what is to be tagged.
      * @param rev What revision of the requested items should be tagged.
      * @param tagName Short, descriptive name for the tag used for VCS's that
      * take tag names instead of destination paths, or store metadata about the
      * tag. Not all VCS's will use this parameter.
      */
-    virtual VcsJob* tag( const QString& commitMessage,
-                         const VcsMapping& mapping,
+    virtual VcsJob* tag( const KUrl& repository,
+                         const QString& commitMessage,
                          const VcsRevision& rev,
                          const QString& tagName ) = 0;
+                         
+   /**
+    * Switches to the desired branch inside the specified repository
+    *
+    * @param repository The repository path where the branch will be switched
+    * @param branchName The branch name that will be switched to inside the specified repostory
+    */
+   virtual VcsJob* switchBranch(const KUrl &repository, const QString &branchName) = 0;
+
+   /**
+    * Returns the branches inside the specified repository in a QStringList
+    *
+    * @param repository The repository path where the branches will be returned from
+    */
+   virtual VcsJob* branches(const KUrl &repository) = 0;
+
+   /**
+    * Returns the current branch name inside the specified repository
+    *
+    * @param repository The repository path where the current branch will be returned from
+    */
+   virtual VcsJob* currentBranch(const KUrl &repository) = 0;
+
+   /**
+    * Deletes the desired branch inside the specified repository
+    *
+    * @param repository The repository path where the current branch will be deleted from
+    * @param branchName The branch name that will be deleted inside the specified repository
+    */
+   virtual VcsJob* deleteBranch(const KUrl &repository, const QString &branchName) = 0;
+   
+   /**
+    * Deletes the desired branch inside the specified repository
+    *
+    * @param repository The repository path where the current branch will be deleted from
+    * @param oldBranchName The branch name that will be renamed
+    * @param newBranchName The new branch name
+    */
+   virtual VcsJob* renameBranch(const KUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
 
 };
 
