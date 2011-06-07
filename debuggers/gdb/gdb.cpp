@@ -44,7 +44,7 @@
 using namespace GDBDebugger;
 
 GDB::GDB(QObject* parent)
-: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0)
+: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false)
 {
 }
 
@@ -120,6 +120,9 @@ void GDB::execute(GDBCommand* command)
     QString commandText = currentCmd_->cmdToSend();
 
     kDebug(9012) << "SEND:" << commandText;
+    
+    isRunning_ = false;
+    receivedReply_ = false;
 
     process_->write(commandText.toLatin1(),
                     commandText.length());
@@ -184,7 +187,7 @@ void GDB::readyReadStandardError()
 
 void GDB::processLine(const QByteArray& line)
 {
-    kDebug(9012) << "GDB output: " << line << "\n";
+    kDebug(9012) << "GDB output: " << line;
     if(!currentCmd_)
     {
         kDebug(9012) << "No current command\n";
@@ -224,8 +227,7 @@ void GDB::processLine(const QByteArray& line)
    }
    else
    {
-       bool ready_for_next_command = false;
-
+       
        #ifndef DEBUG_NO_TRY
        try
        {
@@ -250,26 +252,19 @@ void GDB::processLine(const QByteArray& line)
                
                if (result.reason == "stopped")
                {
+                   //stopped is *not* a reply, wait for ^running or ^done (running before stopped, done after stopped)
+                   isRunning_ = false;
                    emit programStopped(result);
-                   ready_for_next_command = true;
                }
                else if (result.reason == "running")
                {
+                   receivedReply_ = true;
+                   isRunning_ = true;
                    emit programRunning();
                }
-
-               /* In theory, commands that run inferior and asynchronous,
-                  and we get back gdb prompt, and can send further
-                  commands. As of Dec 2007, this actually does not work,
-                  and fully async operation of GDB is only being designed.
-                  So, if we see "running", assume we can't yet send
-                  commands.  */
-
-               ready_for_next_command = (result.reason != "running");
-
-               if (currentCmd_ && currentCmd_->type() == GDBMI::TargetAttach && result.reason == "stopped") {
-                   //when attaching don't send next command when we get *stopped response, as ^done will follow
-                   ready_for_next_command = false;
+               else
+               {
+                   receivedReply_ = true;
                }
 
                if (result.reason == "done")
@@ -328,14 +323,12 @@ void GDB::processLine(const QByteArray& line)
                     "The MI response is: %2", e.what(),
                     QString::fromLatin1(line)),
                i18n("Internal debugger error"));
-
-           delete currentCmd_;
-           currentCmd_ = 0;
-           ready_for_next_command = true;
+            isRunning_ = false;
+            receivedReply_ = true;
        }
        #endif
 
-       if (ready_for_next_command)
+       if (receivedReply_ && !isRunning_)
        {
            delete currentCmd_;
            currentCmd_ = 0;
