@@ -260,7 +260,7 @@ void MainWindow::saveSettings()
     //debugToolBar visibility is stored separately to allow a area dependent default value
     foreach (KToolBar* toolbar, toolBars()) {
         if (toolbar->objectName() == "debugToolBar") {
-            cg.writeEntry("debugToolBarVisibility", toolbar->isVisible());
+            cg.writeEntry("debugToolBarVisibility", toolbar->isVisibleTo(this));
         }
     }
 
