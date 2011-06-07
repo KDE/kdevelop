@@ -443,18 +443,12 @@ QString AbstractNavigationContext::currentHtml() const {
 
 QString AbstractNavigationContext::fontSizePrefix(bool shorten) const
 {
-  if(shorten)
-    return "";
-  else
-    return "";
+  return QString();
 }
 
 QString AbstractNavigationContext::fontSizeSuffix(bool shorten) const
 {
-  if(shorten)
-    return "";
-  else
-    return "";
+  return QString();
 }
 
 const Colorizer AbstractNavigationContext::typeHighlight("006000");
