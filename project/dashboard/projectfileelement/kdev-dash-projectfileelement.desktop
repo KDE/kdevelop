@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Project File Element
+Name[el]=Αντικείμενο αρχείου του έργου
 Name[es]=Elemento del archivo del proyecto
+Name[pt]=Elemento de Ficheiro do Projecto
 Name[uk]=Елемент файла проекту
 Name[x-test]=xxProject File Elementxx
 Icon=kdevelop
 Comment=Draws a project file into a Dashboard element
+Comment[el]=Εμφανίζει ένα αρχείο έργου σε ένα αντικείμενο πίνακα ελέγχου
 Comment[es]=Muestra un archivo de proyecto en un elemento del tablero de mandos
+Comment[pt]=Desenha um ficheiro do projecto num elemento do Quadro
 Comment[uk]=Показує файл проекту як елемент панелі приладів
 Comment[x-test]=xxDraws a project file into a Dashboard elementxx
 Type=Service
