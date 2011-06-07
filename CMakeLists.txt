@@ -110,3 +110,5 @@ install( EXPORT KDevPlatformTargets
 
 # Put this last, so it can use _kdevplatform_CONFIG_DEST
 add_subdirectory(cmake)
+
+include(CTest)

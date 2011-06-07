@@ -239,10 +239,24 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 
 QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) const
 {
-    int row = currentIdx.row();
-    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
-    if(current_item->parent() != 0) //we do nothing if it's the root item
-    {
+    GrepOutputItem* current_item = 0;
+
+    if (!currentIdx.isValid()) {
+        // no item selected, search recursively for the last item in search results
+        QStandardItem *it = item(0,0);
+        while (it) {
+            QStandardItem *child = it->child( it->rowCount() - 1 );
+            if (!child) return it->index();
+            it = child;
+        }
+        return QModelIndex();
+    }
+    else
+        current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+
+    if (current_item->parent() != 0) {
+        int row = currentIdx.row();
+
         if(!current_item->isText()) // the item is a file
         {
             int item_row = current_item->row();
@@ -272,10 +286,24 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
 
 QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
 {
-    int row = currentIdx.row();
-    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
-    if(current_item->parent() != 0) //we do nothing if it's the root item
-    {
+    GrepOutputItem* current_item = 0;
+
+    if (!currentIdx.isValid()) {
+        QStandardItem *it = item(0,0);
+        if (!it) return QModelIndex();
+        current_item = dynamic_cast<GrepOutputItem*>(it);
+    }
+    else
+        current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+
+    if (current_item->parent() == 0) {
+        // root item with overview of search results
+        if (current_item->rowCount() > 0)
+            return nextItemIndex(current_item->child(0)->index());
+        else
+            return QModelIndex();
+    } else {
+        int row = currentIdx.row();
         if(!current_item->isText()) // the item is a file
         {
             int item_row = current_item->row();
