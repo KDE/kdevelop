@@ -22,6 +22,7 @@
 
 #include "ideal.h"
 
+#include <QApplication>
 #include <QMainWindow>
 #include <QStylePainter>
 #include <KIcon>
@@ -247,16 +248,25 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
-    if ( checked ) {
+    IdealController::RaiseMode mode = IdealController::HideOtherViews;
+    if (checked) {
+        if (QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)
+                || widgetAction->property("raise").toInt() == IdealController::GroupWithOtherViews) {
+            mode = IdealController::GroupWithOtherViews;
+            // need to reset the raise property so that subsequent
+            // showWidget()'s will not do grouping unless explicitly asked
+            widgetAction->setProperty("raise", IdealController::HideOtherViews);
+        }
+    }
+
+    if ( checked && mode == IdealController::HideOtherViews ) {
         // Make sure only one widget is visible at any time.
         // The alternative to use a QActionCollection and setting that to "exclusive"
         // has a big drawback: QActions in a collection that is exclusive cannot
         // be un-checked by the user, e.g. in the View -> Tool Views menu.
         foreach(QAction *otherAction, actions()) {
-            if ( otherAction != widgetAction && otherAction->isChecked() ) {
+            if ( otherAction != widgetAction && otherAction->isChecked() )
                 otherAction->setChecked(false);
-                break;
-            }
         }
     }
 
@@ -728,13 +738,14 @@ void IdealController::slotDockBarContextMenuRequested(QPoint position)
     emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
 }
 
-void IdealController::raiseView(View* view)
+void IdealController::raiseView(View* view, RaiseMode mode)
 {
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 
     QWidget *focusWidget = m_mainWindow->focusWidget();
 
+    action->setProperty("raise", mode);
     action->setChecked(true);
     // TODO: adymo: hack: focus needs to stay inside the previously
     // focused widget (setChecked will focus the toolview)

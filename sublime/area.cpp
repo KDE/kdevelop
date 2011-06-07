@@ -47,7 +47,7 @@ struct AreaPrivate {
         controller = p.controller;
         toolViewPositions.clear();
         desiredToolViews = p.desiredToolViews;
-        shownToolView = p.shownToolView;
+        shownToolViews = p.shownToolViews;
         workingSet = p.workingSet;
 
         title = p.title;
@@ -89,7 +89,7 @@ struct AreaPrivate {
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
     QMap<QString, Sublime::Position> desiredToolViews;
-    QMap<Sublime::Position, QString> shownToolView;
+    QMap<Sublime::Position, QStringList> shownToolViews;
     QMap<Sublime::Position, int> thickness;
     QString iconName;
     QString workingSet;
@@ -306,10 +306,10 @@ void Area::save(KConfigGroup& group) const
     }
     group.writeEntry("desired views", desired);
     kDebug() << "save " << this << "wrote" << group.readEntry("desired views", "");
-    group.writeEntry("view on left", shownToolView(Sublime::Left));
-    group.writeEntry("view on right", shownToolView(Sublime::Right));
-    group.writeEntry("view on top", shownToolView(Sublime::Top));
-    group.writeEntry("view on bottom", shownToolView(Sublime::Bottom));
+    group.writeEntry("view on left", shownToolViews(Sublime::Left));
+    group.writeEntry("view on right", shownToolViews(Sublime::Right));
+    group.writeEntry("view on top", shownToolViews(Sublime::Top));
+    group.writeEntry("view on bottom", shownToolViews(Sublime::Bottom));
     group.writeEntry("thickness left", thickness(Sublime::Left));
     group.writeEntry("thickness right", thickness(Sublime::Right));
     group.writeEntry("thickness bottom", thickness(Sublime::Bottom));
@@ -336,12 +336,12 @@ void Area::load(const KConfigGroup& group)
             d->desiredToolViews[id] = pos;
         }
     }
-    setShownToolView(Sublime::Left, group.readEntry("view on left", QString()));
-    setShownToolView(Sublime::Right, 
-                     group.readEntry("view on right", QString()));
-    setShownToolView(Sublime::Top, group.readEntry("view on top", QString()));
-    setShownToolView(Sublime::Bottom,
-                     group.readEntry("view on bottom", QString()));
+    setShownToolViews(Sublime::Left, group.readEntry("view on left", QStringList()));
+    setShownToolViews(Sublime::Right,
+                     group.readEntry("view on right", QStringList()));
+    setShownToolViews(Sublime::Top, group.readEntry("view on top", QStringList()));
+    setShownToolViews(Sublime::Bottom,
+                     group.readEntry("view on bottom", QStringList()));
     setThickness(Sublime::Left, group.readEntry("thickness left", -1));
     setThickness(Sublime::Right, group.readEntry("thickness right", -1));
     setThickness(Sublime::Bottom, group.readEntry("thickness bottom", -1));
@@ -355,14 +355,14 @@ bool Area::wantToolView(const QString& id)
     return (d->desiredToolViews.contains(id));
 }
 
-void Area::setShownToolView(Sublime::Position pos, const QString& id)
+void Area::setShownToolViews(Sublime::Position pos, const QStringList& ids)
 {
-    d->shownToolView[pos] = id;
+    d->shownToolViews[pos] = ids;
 }
 
-QString Area::shownToolView(Sublime::Position pos) const
+QStringList Area::shownToolViews(Sublime::Position pos) const
 {
-    return d->shownToolView[pos];
+    return d->shownToolViews[pos];
 }
 
 void Area::setDesiredToolViews(

@@ -313,15 +313,15 @@ void MainWindowPrivate::reconstruct()
 
     m_mainWindow->blockSignals(true);
 
-    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
+    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolViews(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
         QString id = view->document()->documentSpecifier();
         if (!id.isEmpty())
         {
             Sublime::Position pos = area->toolViewPosition(view);
-            if (area->shownToolView(pos) == id)
-                idealController->raiseView(view);
+            if (area->shownToolViews(pos).contains(id))
+                idealController->raiseView(view, IdealController::GroupWithOtherViews);
         }
     }
     m_mainWindow->blockSignals(false);
@@ -379,11 +379,25 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
     if (ignoreDockShown)
         return;
 
-    QString id;
-    if (shown)
-        id = view->document()->documentSpecifier();
-    kDebug() << "View " << view->document()->documentSpecifier() << " " << shown;
-    area->setShownToolView(pos, id);
+    struct ShownToolViewFinder {
+        ShownToolViewFinder() {}
+        Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
+        {
+            if (v->hasWidget() && v->widget()->isVisible())
+                views << v;
+            return Area::ContinueWalker;
+        }
+        QList<View *> views;
+    };
+
+    ShownToolViewFinder finder;
+    m_mainWindow->area()->walkToolViews(finder, pos);
+
+    QStringList ids;
+    foreach (View *v, finder.views) {
+        ids << v->document()->documentSpecifier();
+    }
+    area->setShownToolViews(pos, ids);
 }
 
 void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
