@@ -215,7 +215,11 @@ QString NormalDeclarationCompletionItem::keepRemainingWord(Identifier id)
   QString insertAccessor;
   if (m_declaration->type<StructureType>()) {
     type = m_declaration->type<StructureType>();
-    insertAccessor = ".";
+    if (m_declaration->internalContext() && m_declaration->internalContext()->type() == DUContext::Class) {
+      insertAccessor = "::";
+    } else {
+      insertAccessor = ".";
+    }
   } else if (m_declaration->type<PointerType>()) {
     type = StructureType::Ptr::dynamicCast(m_declaration->type<PointerType>()->baseType());
     insertAccessor = "->";

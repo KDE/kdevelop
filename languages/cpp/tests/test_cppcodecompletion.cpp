@@ -2958,6 +2958,12 @@ void TestCppCodeCompletion::testExecuteKeepWord_data()
 
   QTest::newRow("smartPtr") << "template<class T> struct SmartPointer { T* operator->() {return 0;}};\nstruct Foo { int bar() { return 0; } };\nSmartPointer<Foo> f;\nfbar();"
                             << "f->bar();";
+
+  QTest::newRow("enum") << "\nclass f { enum Foo { xy, xz }; };\n\nfFoo x;"
+                            << "f::Foo x;";
+
+  QTest::newRow("staticfunction") << "struct f { static void bar() {} };\n\n\nfbar();"
+                                  << "f::bar();";
 }
 
 void TestCppCodeCompletion::testExecuteKeepWord()
