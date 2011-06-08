@@ -510,6 +510,43 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseIte
     return success;
 }
 
+bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent)
+{
+    bool success = true;
+    foreach(ProjectBaseItem* item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
+
+        ProjectFolderItem* oldParent = getParentFolder(item);
+        d->stopWatcher(oldParent);
+        d->stopWatcher(newParent);
+
+        KUrl oldUrl = item->url();
+        KUrl newUrl = newParent->url();
+        newUrl.addPath(item->baseName());
+
+        success &= renameUrl(oldParent->project(), oldUrl, newUrl);
+        if ( success ) {
+            if (item->file()) {
+                emit fileRemoved(item->file());
+                ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );
+                emit fileAdded(created);
+            } else {
+                emit folderRemoved(item->folder());
+                ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
+                emit folderAdded(created);
+            }
+            oldParent->removeRow( item->row() );
+        }
+
+        d->continueWatcher(oldParent);
+        d->continueWatcher(newParent);
+        if ( !success )
+            break;
+    }
+    return success;
+}
+
 bool AbstractFileManagerPlugin::isValid( const KUrl& /*url*/, const bool /*isFolder*/,
                                          IProject* /*project*/ ) const
 {

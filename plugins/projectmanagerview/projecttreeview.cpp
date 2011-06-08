@@ -43,6 +43,9 @@
 #include <interfaces/context.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
+#include <interfaces/iselectioncontroller.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "projectmanagerviewplugin.h"
 #include <language/duchain/duchainlock.h>
@@ -64,8 +67,86 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
 
     setIndentation(10);
 
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setAutoScroll(true);
+    setAutoExpandDelay(300);
+
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+}
+
+QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
+{
+   QList<ProjectFileItem*> fileItems;
+    foreach(ProjectBaseItem* item, items)
+    {
+        if (ProjectFileItem *file = item->file())
+            fileItems.append(file);
+        else if (item->folder())
+            fileItems.append(fileItemsWithin(item->children()));
+    }
+    return fileItems;
+}
+
+QList<ProjectBaseItem*> topLevelItemsWithin(QList<ProjectBaseItem*> items)
+{
+    qSort(items.begin(), items.end(), ProjectBaseItem::urlLessThan);
+    KUrl lastFolder;
+    for (int i = items.size() - 1; i >= 0; --i)
+    {
+        if (lastFolder.isParentOf(items[i]->url()))
+            items.removeAt(i);
+        else if (items[i]->folder())
+            lastFolder = items[i]->url();
+    }
+    return items;
+}
+
+template<class T>
+void filterDroppedItems(QList<T*> &items, ProjectBaseItem* dest)
+{
+    for (int i = items.size() - 1; i >= 0; --i)
+    {
+        //No drag and drop from and to same location
+        if (items[i]->parent() == dest)
+            items.removeAt(i);
+        //No moving between projects (technically feasible if the projectmanager is the same though...)
+        else if (items[i]->project() != dest->project())
+            items.removeAt(i);
+    }
+}
+
+ProjectBaseItem* ProjectTreeView::itemAtPos(QPoint pos)
+{
+    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+    QModelIndex index = proxy->mapToSource(indexAt(pos));
+    return projectModel()->itemFromIndex(index);
+}
+
+void ProjectTreeView::dropEvent(QDropEvent* event)
+{
+    ProjectItemContext* selectionCtxt =
+            static_cast<ProjectItemContext*>(KDevelop::ICore::self()->selectionController()->currentSelection());
+    ProjectBaseItem* destItem = itemAtPos(event->pos());
+    if (destItem && (dropIndicatorPosition() == AboveItem || dropIndicatorPosition() == BelowItem))
+            destItem = destItem->parent();
+    if (selectionCtxt && destItem)
+    {
+        if (ProjectFolderItem *folder = destItem->folder())
+        {
+            QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
+            filterDroppedItems(usefulItems, destItem);
+            destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+        }
+        else if (destItem->target() && destItem->project()->buildSystemManager())
+        {
+            QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
+            filterDroppedItems(usefulItems, destItem);
+            destItem->project()->buildSystemManager()->addFilesToTarget(usefulItems, destItem->target());
+        }
+    }
+    event->accept();
 }
 
 ProjectTreeView::~ProjectTreeView()
