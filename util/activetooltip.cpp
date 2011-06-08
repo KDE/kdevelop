@@ -27,7 +27,6 @@
 #include <QMouseEvent>
 #include <limits>
 #include <kdebug.h>
-#include <QPointer>
 #include <qdesktopwidget.h>
 #include <qmenu.h>
 #include <qstylepainter.h>
@@ -42,7 +41,7 @@ public:
     uint previousDistance_;
     QRect rect_;
     QRegion rectExtensions_;
-    QList<QPointer<QObject> > friendWidgets_;
+    QList<QWeakPointer<QObject> > friendWidgets_;
     int mouseOut_;
 };
 
@@ -232,7 +231,7 @@ void ActiveToolTip::setBoundingGeometry(const QRect& geometry) {
 }
 
 namespace {
-    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
+    typedef QMultiMap<float, QPair<QWeakPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
     static ToolTipPriorityMap registeredToolTips;
     ActiveToolTipManager manager;
     
@@ -250,28 +249,28 @@ void ActiveToolTipManager::doVisibility() {
     QRect fullGeometry; //Geometry of all visible tooltips together
     
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
-        QPointer< ActiveToolTip > w = (*it).first;
+        QWeakPointer< ActiveToolTip > w = (*it).first;
         if(w) {
             if(exclusive) {
-                (w)->hide();
+                (w.data())->hide();
             }else{
-                QRect geom = (w)->geometry();
-                if((w)->geometry().top() < lastBottomPosition) {
+                QRect geom = (w.data())->geometry();
+                if((w.data())->geometry().top() < lastBottomPosition) {
                     geom.moveTop(lastBottomPosition);
                 }
                 if(lastLeftPosition != -1)
                     geom.moveLeft(lastLeftPosition);
                 
-                (w)->setGeometry(geom);
-//                 (w)->show();
+                (w.data())->setGeometry(geom);
+//                 (w.data())->show();
                     
-                lastBottomPosition = (w)->geometry().bottom();
-                lastLeftPosition = (w)->geometry().left();
+                lastBottomPosition = (w.data())->geometry().bottom();
+                lastLeftPosition = (w.data())->geometry().left();
                 
                 if(it == registeredToolTips.constBegin())
-                    fullGeometry = (w)->geometry();
+                    fullGeometry = (w.data())->geometry();
                 else
-                    fullGeometry = fullGeometry.united((w)->geometry());
+                    fullGeometry = fullGeometry.united((w.data())->geometry());
             }
             if(it.key() == 0) {
                 exclusive = true;
@@ -305,7 +304,7 @@ void ActiveToolTipManager::doVisibility() {
         if(!offset.isNull()) {
             for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
                 if((*it).first) {
-                    (*it).first->move((*it).first->pos() + offset);
+                    (*it).first.data()->move((*it).first.data()->pos() + offset);
                 }
         }
     }
@@ -315,15 +314,15 @@ void ActiveToolTipManager::doVisibility() {
         if(!(*it).first) {
             it = registeredToolTips.erase(it);
         }else{
-            (*it).first->setBoundingGeometry(fullGeometry);
+            (*it).first.data()->setBoundingGeometry(fullGeometry);
             ++it;
         }
     }
 
     //Final step: Show tooltips
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
-        if(it->first && masterWidget(it->first)->isActiveWindow())
-            (*it).first->show();
+        if(it->first.data() && masterWidget(it->first.data())->isActiveWindow())
+            (*it).first.data()->show();
         if(exclusive)
             break;
     }
@@ -332,13 +331,13 @@ void ActiveToolTipManager::doVisibility() {
 void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority, QString uniqueId) {
     
     if(!uniqueId.isEmpty()) {
-        for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
+        for(QMap< float, QPair< QWeakPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
             if((*it).second == uniqueId)
-                delete (*it).first;
+                delete (*it).first.data();
         }
     }
 
-    registeredToolTips.insert(priority, qMakePair(QPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
+    registeredToolTips.insert(priority, qMakePair(QWeakPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
 
     connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
     QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);
