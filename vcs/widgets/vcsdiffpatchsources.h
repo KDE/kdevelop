@@ -109,8 +109,8 @@ Q_SIGNALS:
     void reviewFinished(QString message, QList<KUrl> selection);
     void reviewCancelled(QString message);
 public:
-    QPointer<QWidget> m_commitMessageWidget;
-    QPointer<QTextEdit> m_commitMessageEdit;
+    QWeakPointer<QWidget> m_commitMessageWidget;
+    QWeakPointer<QTextEdit> m_commitMessageEdit;
     QList<KDevelop::VcsStatusInfo> m_infos;
     QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     KDevelop::IBasicVersionControl* m_vcs;
