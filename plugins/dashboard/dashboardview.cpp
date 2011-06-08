@@ -33,6 +33,11 @@ DashboardView::DashboardView(KDevelop::IProject* project, Sublime::Document* doc
     : View(doc, ws), m_project(project)
 {}
 
+DashboardView::~DashboardView()
+{
+    delete m_dashboard.data();
+}
+
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
     KUrl originalUrl=m_project->projectFileUrl().toLocalFile();
@@ -45,5 +50,6 @@ QWidget* DashboardView::createWidget(QWidget* parent)
     
     DashboardCorona* corona=new DashboardCorona(m_project, this);
     corona->initializeLayout(customUrl.toLocalFile()); //TODO: decide what to do with remote files
-    return new Dashboard(corona);
+    m_dashboard=QWeakPointer<Dashboard>(new Dashboard(corona));
+    return m_dashboard.data();
 }
