@@ -1159,9 +1159,11 @@ void PatchReviewPlugin::showPatch()
 
 void PatchReviewPlugin::forceUpdate()
 {
-  m_patch->update();
+  if(m_patch) {
+    m_patch->update();
   
-  notifyPatchChanged();
+    notifyPatchChanged();
+  }
 }
 
 void PatchReviewPlugin::updateKompareModel() {
