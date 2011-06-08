@@ -103,11 +103,4 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProj
     return true;
 }
 
-bool GenericProjectManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* newParent)
-{
-    Q_UNUSED(items);
-    Q_UNUSED(newParent);
-    return false;
-}
-
 #include "genericmanager.moc"
