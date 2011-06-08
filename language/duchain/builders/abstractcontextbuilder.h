@@ -578,9 +578,6 @@ protected:
     {
       if ( recompiling() )
       {
-
-        ///@todo We should also somehow make sure we don't get quadratic worst-case effort while updating.
-
         DUChainReadLocker readLock( DUChain::lock() );
         const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
@@ -604,16 +601,9 @@ protected:
             break;
           }
         }
-
-        if(ret) {
+        if(ret)
           nextContextIndex() = currentIndex; //If we had a match, jump forward to that position
-        } else if (nextContextIndex()) {
-            // the matching-API expects the contexts to be opened/closed in correct order
-            // if you hit this assert, make sure that the ranges of your contexts are correct
-            // if this is not done, any kind of havoc can happen, esp. declarations being deleted
-            // randomly due to the not-matched (and hence not-encountered) contexts get cleaned up
-            Q_ASSERT(range.start > childContexts.at(nextContextIndex() - 1)->range().start);
-        }
+          ///@todo We should also somehow make sure we don't get quadratic worst-case effort while updating.
       }
 
       if ( !ret )
