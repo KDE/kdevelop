@@ -978,7 +978,11 @@ ProjectChangesModel* ProjectController::changesModel()
 
 void ProjectController::commitCurrentProject()
 {
-    KUrl url=ICore::self()->documentController()->activeDocument()->url();
+    IDocument* doc=ICore::self()->documentController()->activeDocument();
+    if(!doc)
+        return;
+    
+    KUrl url=doc->url();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     
     if(project && project->versionControlPlugin()) {
