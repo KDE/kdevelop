@@ -19,6 +19,9 @@
 #include <cvsjob.h>
 #include <cvsproxy.h>
 
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
 #define CVSTEST_BASEDIR         "/tmp/kdevcvs_testdir/"
 #define CVS_REPO                CVSTEST_BASEDIR"repo/"
 #define CVS_IMPORT              CVSTEST_BASEDIR"import/"
@@ -27,6 +30,10 @@
 
 void CvsTest::initTestCase()
 {
+    KDevelop::AutoTestShell::init();
+    KDevelop::TestCore* core = new KDevelop::TestCore;
+    core->initialize(KDevelop::Core::NoUi, "test-cvs");
+
     m_proxy = new CvsProxy;
 
     // If the basedir for this cvs test exists from a 

@@ -39,6 +39,7 @@ if (CVS)
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
+        kdevplatformtests
 	)
 
 endif (CVS)

@@ -149,6 +149,8 @@ void SvnRecursiveAdd::test()
     validatingExecJob(vcs->add(KUrl(addUrl), IBasicVersionControl::Recursive));
     kDebug() << "Recursively reverting changes at " << addUrl;
     validatingExecJob(vcs->revert(KUrl(addUrl), IBasicVersionControl::Recursive));
+
+    core->cleanup();
 }
 
 QTEST_KDEMAIN(SvnRecursiveAdd, GUI)
