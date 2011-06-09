@@ -21,18 +21,22 @@
 #define DASHBOARDVIEW_H
 
 #include <sublime/view.h>
+#include <qsharedpointer.h>
 
+class Dashboard;
 namespace KDevelop { class IProject; }
 
 class DashboardView : public Sublime::View
 {
     public:
         DashboardView(KDevelop::IProject* project, Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip);
-            
+        virtual ~DashboardView();
+        
         virtual QWidget* createWidget(QWidget* parent);
         
     private:
         KDevelop::IProject* m_project;
+        QWeakPointer<Dashboard> m_dashboard;
 };
 
 #endif // DASHBOARDVIEW_H

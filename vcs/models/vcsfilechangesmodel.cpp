@@ -94,10 +94,8 @@ VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
 
 int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status)
 {
-    QStandardItem* it1=0;
+    QStandardItem* it1=fileItemForUrl(parent, status.url());
     QStandardItem* itStatus;
-
-    it1=fileItemForUrl(parent, status.url());
 
     if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
         if(it1)
@@ -180,5 +178,9 @@ QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
     return ret;
 }
 
+void VcsFileChangesModel::setIsCheckbable(bool checkable)
+{
+    d->allowSelection = checkable;
+}
 
 }

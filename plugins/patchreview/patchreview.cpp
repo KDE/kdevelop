@@ -91,7 +91,7 @@ Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 class PatchFilesModel : public VcsFileChangesModel
 {
 public:
-  PatchFilesModel(QObject *parent, bool allowSelection = false) : VcsFileChangesModel(parent, allowSelection) { };
+  PatchFilesModel(QObject *parent, bool allowSelection) : VcsFileChangesModel(parent, allowSelection) { };
   enum ItemRoles { HunksNumberRole = VcsStatusInfoRole+1 };
 
 public slots:
@@ -160,7 +160,6 @@ void PatchReviewToolView::updatePatchFromEdit() {
     lpatch->m_command = m_editPatch.command->text();
     lpatch->m_filename = m_editPatch.filename->url();
     lpatch->m_baseDir = m_editPatch.baseDir->url();
-    lpatch->m_depth = m_editPatch.depth->value();
     lpatch->setAlreadyApplied(m_editPatch.applied->checkState() == Qt::Checked);
 
     m_plugin->notifyPatchChanged();
@@ -193,16 +192,17 @@ void PatchReviewToolView::fillEditFromPatch() {
       finishText = ipatch->finishReviewCustomText();
     kDebug() << "finish-text: " << finishText;
     m_editPatch.finishReview->setText(finishText);
+    m_fileModel->setIsCheckbable(m_plugin->patch()->canSelectFiles());
     
     if(m_customWidget) {
       kDebug() << "removing custom widget";
       m_customWidget->hide();
-      m_editPatch.verticalLayout->removeWidget(m_customWidget);
+      m_editPatch.customWidgetsLayout->removeWidget(m_customWidget);
     }
 
     m_customWidget = ipatch->customWidget();
     if(m_customWidget) {
-      m_editPatch.verticalLayout->insertWidget(0, m_customWidget);
+      m_editPatch.customWidgetsLayout->insertWidget(0, m_customWidget);
       m_customWidget->show();
       kDebug() << "got custom widget";
     }
@@ -211,8 +211,6 @@ void PatchReviewToolView::fillEditFromPatch() {
     m_editPatch.tabWidget->setVisible(lpatch);
     m_editPatch.baseDir->setVisible(lpatch);
     m_editPatch.label->setVisible(lpatch);
-    m_editPatch.depth->setVisible(lpatch);
-    m_editPatch.depthLabel->setVisible(lpatch);
     m_editPatch.applied->setVisible(lpatch);
     if(!lpatch)
       return;
@@ -220,7 +218,6 @@ void PatchReviewToolView::fillEditFromPatch() {
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
-    m_editPatch.depth->setValue( lpatch->m_depth );
     m_editPatch.applied->setCheckState(lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked);
 
     if ( lpatch->m_command.isEmpty() )
@@ -234,14 +231,6 @@ void PatchReviewToolView::patchSelectionChanged(int selection)
     m_fileModel->removeRows(0, m_fileModel->rowCount());
     if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
       m_plugin->setPatch(m_plugin->knownPatches()[selection]);
-    }
-}
-
-void PatchReviewToolView::slotDepthChanged(int newDepth)
-{
-    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
-        lpatch->m_depth = newDepth;
-        m_plugin->notifyPatchChanged();
     }
 }
 
@@ -267,7 +256,7 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.setupUi( this );
 
-    m_fileModel = new PatchFilesModel(this, true);
+    m_fileModel = new PatchFilesModel(this, m_plugin->patch()->canSelectFiles());
     m_editPatch.filesList->setModel(m_fileModel);
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated(false);
@@ -302,10 +291,8 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
-    connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(slotDepthChanged(int)) );
     connect( m_editPatch.applied, SIGNAL(stateChanged(int)), SLOT(slotAppliedChanged(int)) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.baseDir, SIGNAL(textChanged(QString)), SLOT(updatePatchFromEdit()) );
 
     
     
@@ -496,7 +483,7 @@ KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
 
 void PatchReviewToolView::kompareModelChanged()
 {
-    m_fileModel->removeRows(0, m_fileModel->rowCount());
+    m_fileModel->clear();
 
     if (!m_plugin->modelList())
         return;
@@ -538,9 +525,9 @@ void PatchReviewToolView::kompareModelChanged()
 
 void PatchReviewToolView::documentActivated(IDocument* doc)
 {
-    QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     if ( !m_plugin->modelList() )
         return ;
+    
     QStandardItem *fileItem = m_fileModel->fileItemForUrl(doc->url());
     if (fileItem) {
         m_editPatch.filesList->setCurrentIndex(fileItem->index());
@@ -880,9 +867,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
     
     clear();
     
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-    
     KColorScheme scheme(QPalette::Active);
     
     QImage tintedInsertion = KIcon("insert-text").pixmap(16, 16).toImage();
@@ -1159,9 +1143,11 @@ void PatchReviewPlugin::showPatch()
 
 void PatchReviewPlugin::forceUpdate()
 {
-  m_patch->update();
+  if(m_patch) {
+    m_patch->update();
   
-  notifyPatchChanged();
+    notifyPatchChanged();
+  }
 }
 
 void PatchReviewPlugin::updateKompareModel() {
@@ -1341,7 +1327,11 @@ void PatchReviewPlugin::cancelReview()
 
     emit patchChanged();
     
-    delete m_patch;
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data())) {
+      delete m_patch;
+      // make sure "show" button still openes the file dialog to open a custom patch file
+      setPatch(new LocalPatchSource);
+    }
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
@@ -1476,9 +1466,8 @@ void PatchReviewPlugin::updateReview()
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
         ICore::self()->documentController()->openDocument(absoluteUrl);
-        if (documents.contains(absoluteUrl)) {
-          documents.remove(absoluteUrl);
-        }
+        documents.remove(absoluteUrl);
+        
         seekHunk(true, absoluteUrl); //Jump to the first changed position
       }else{
         // Maybe the file was deleted

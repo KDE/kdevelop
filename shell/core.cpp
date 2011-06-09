@@ -243,7 +243,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     runController->initialize();
     sourceFormatterController->initialize();
     selectionController->initialize();
-    documentationController->initialize();
+    if (documentationController) documentationController->initialize();
     debugController->initialize();
     
     return true;

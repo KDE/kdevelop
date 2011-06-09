@@ -50,7 +50,12 @@ Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
 Dashboard::~Dashboard()
 {
     m_selector->hide();
+    
     corona->saveLayout(QString());
+    foreach (Plasma::Containment *containment, corona->containments()) {
+        containment->config().deleteEntry("geometry");
+        containment->config().deleteEntry("zvalue");
+    }
 }
 
 void Dashboard::updateView()
@@ -62,8 +67,6 @@ void Dashboard::updateView()
         c->resize(size());
         
         ensureVisible(c);
-        
-        qDebug() << "pepepepepe" << c->boundingRect() << viewportTransform();
     }
 }
 
@@ -97,42 +100,26 @@ KConfigGroup configurationDialog(Plasma::Containment* containment, const QString
 void Dashboard::showConfigure()
 {
     if(!m_configDialog) {
-        KConfigSkeleton *nullManager = new KConfigSkeleton(0);
+        KConfigSkeleton *nullManager = new KConfigSkeleton(QString(), this);
         m_configDialog = new KConfigDialog(this, "", nullManager);
-        connect(m_configDialog, SIGNAL(destroyed(QObject*)), nullManager, SLOT(deleteLater()));
-    }
-//     
-//     QWidget* w=containment()->wallpaper()->createConfigurationInterface(m_configDialog);
-//  /////////////////
-    QWidget* w = 0;
-    Wallpaper* wallpaper = containment()->wallpaper();
+        
+        QWidget* w = 0;
+        Wallpaper* wallpaper = containment()->wallpaper();
 
-    if (!m_configDialog->layout()) {
-        new QVBoxLayout(m_configDialog);
-    }
+        if (wallpaper) {
+    //         wallpaper->setRenderingMode(wallpaperInfo.second);
+            KConfigGroup cfg = configurationDialog(containment(), wallpaper->name());
+    //         kDebug() << "making a" << wallpaperInfo.first << "in mode" << wallpaperInfo.second;
+    //         wallpaper->restore(cfg);
+            w = wallpaper->createConfigurationInterface(m_configDialog);
+        }
 
-    if (m_configDialog->layout()->count() > 0) {
-        delete dynamic_cast<QWidgetItem*>(m_configDialog->layout()->takeAt(0))->widget();
-    }
-/*
-    if (wallpaper && wallpaper->pluginName() != wallpaperInfo.first) {
-        delete wallpaper;
-        wallpaper = 0;
-    }*/
+        if (!w) {
+            w = new QWidget(m_configDialog);
+        }
 
-    if (wallpaper) {
-//         wallpaper->setRenderingMode(wallpaperInfo.second);
-        KConfigGroup cfg = configurationDialog(containment(), wallpaper->name());
-//         kDebug() << "making a" << wallpaperInfo.first << "in mode" << wallpaperInfo.second;
-//         wallpaper->restore(cfg);
-        w = wallpaper->createConfigurationInterface(m_configDialog);
+        m_configDialog->addPage(w, i18n("Background"), "preferences-desktop-wallpaper");
     }
-
-    if (!w) {
-        w = new QWidget(m_configDialog);
-    }
-
-    m_configDialog->addPage(w, i18n("Background"), "preferences-desktop-wallpaper");
     
     m_configDialog->show();
 }

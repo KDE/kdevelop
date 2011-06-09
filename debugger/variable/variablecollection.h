@@ -26,7 +26,6 @@
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMap>
-#include <QtCore/QPointer>
 
 #include <KDE/KTextEditor/Document>
 #include <KDE/KTextEditor/View>
@@ -219,7 +218,7 @@ private Q_SLOTS:
 
 private:
     VariablesRoot* universe_;
-    QPointer<VariableToolTip> activeTooltip_;
+    QWeakPointer<VariableToolTip> activeTooltip_;
     bool m_widgetVisible;
 };
 

@@ -59,10 +59,11 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
         kDebug() << "Couldn't get status for urls: " << url;
 
     m_commitMessageWidget = new QWidget;
-    QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget);
+    QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
 
     m_commitMessageEdit = new QTextEdit;
-    m_commitMessageEdit->setFont( KGlobalSettings::fixedFont() );
+    m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
+    m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
     
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
@@ -79,7 +80,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
     titleLayout->addWidget(m_oldMessages);
     
     layout->addLayout(titleLayout);
-    layout->addWidget(m_commitMessageEdit);
+    layout->addWidget(m_commitMessageEdit.data());
 }
 
 QStringList VCSCommitDiffPatchSource::oldMessages() const
@@ -93,7 +94,7 @@ void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
     if(m_oldMessages->currentIndex() != 0)
     {
         m_oldMessages->setCurrentIndex(0);
-        m_commitMessageEdit->setText(text);
+        m_commitMessageEdit.data()->setText(text);
     }
 }
 
@@ -162,7 +163,7 @@ void VCSDiffPatchSource::update() {
 }
 
 VCSCommitDiffPatchSource::~VCSCommitDiffPatchSource() {
-    delete m_commitMessageWidget;
+    delete m_commitMessageWidget.data();
 }
 
 bool VCSCommitDiffPatchSource::canSelectFiles() const {
@@ -174,7 +175,7 @@ QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSCommitDiffPatchSource::additional
 }
 
 QWidget* VCSCommitDiffPatchSource::customWidget() const {
-    return m_commitMessageWidget;
+    return m_commitMessageWidget.data();
 }
 
 QString VCSCommitDiffPatchSource::finishReviewCustomText() const {
@@ -190,7 +191,7 @@ void VCSCommitDiffPatchSource::cancelReview() {
     QString message;
 
     if (m_commitMessageEdit)
-        message = m_commitMessageEdit->toPlainText();
+        message = m_commitMessageEdit.data()->toPlainText();
 
     emit reviewCancelled(message);
     
@@ -202,7 +203,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
     QString message;
 
     if (m_commitMessageEdit)
-        message = m_commitMessageEdit->toPlainText();
+        message = m_commitMessageEdit.data()->toPlainText();
 
     kDebug() << "Finishing with selection" << selection;
     QString text = i18n("Files will be committed:\n");

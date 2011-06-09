@@ -47,9 +47,9 @@ class KDEVPLATFORMVCS_EXPORT VcsFileChangesModel : public QStandardItemModel
 public:
     /**
      * Constructor for class.
-     * @param allowSelection if true, model will show checkboxes on items.
+     * @param isCheckable if true, model will show checkboxes on items.
      */
-    VcsFileChangesModel(QObject *parent, bool allowSelection = false);
+    VcsFileChangesModel(QObject *parent, bool isCheckable = false);
     enum ItemRoles { VcsStatusInfoRole = Qt::UserRole+1 };
 
     /**
@@ -93,6 +93,7 @@ public:
      */
     static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
 
+    void setIsCheckbable(bool checkable);
 public slots:
     /**
      * Used to post update of status of some file. Any status except UpToDate
