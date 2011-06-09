@@ -17,12 +17,20 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#include "main.h"
+
 #include <shell/core.h>
 #include <shell/shellextension.h>
+
 #include <language/backgroundparser/parsejob.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+
 #include <interfaces/ilanguage.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <tests/autotestshell.h>
 
 #include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
@@ -32,12 +40,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
+#include <QtCore/QDirIterator>
+
 #include <stdio.h>
-#include <tests/autotestshell.h>
-#include <QDirIterator>
-#include <language/backgroundparser/backgroundparser.h>
-#include "main.h"
-#include <language/duchain/duchain.h>
 
 bool verbose=false, warnings=false;
 
@@ -82,7 +87,7 @@ void Manager::init()
     warnings=m_args->isSet("warnings");
 
     uint features = TopDUContext::VisibleDeclarationsAndContexts;
-    if(m_args->isSet("f"))
+    if(m_args->isSet("features"))
     {
         QString featuresStr = m_args->getOption("f");
         if(featuresStr == "visible-declarations")
@@ -156,7 +161,17 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     m_waiting.remove(url.toUrl());
     
     std::cout << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
-    
+    if (m_args->isSet("dump-errors") && topContext) {
+        DUChainReadLocker lock;
+        if (!topContext->problems().isEmpty()) {
+            std::cout << topContext->problems().size() << " problems encountered in " << topContext->url().c_str() << std::endl;
+            foreach(const ProblemPointer& p, topContext->problems()) {
+                std::cout << "  " << qPrintable(p->description()) << "\n    range: "
+                        << "[(" << p->finalLocation().start.line << ", " << p->finalLocation().start.column << "),"
+                        << " (" << p->finalLocation().end.line << ", " << p->finalLocation().end.column << ")]" << std::endl;
+            }
+        }
+    }
     if(m_waiting.isEmpty() && m_allFilesAdded)
     {
         std::cout << "ready" << std::endl;
@@ -212,6 +227,7 @@ int main(int argc, char** argv)
     options.add("r").add("force-update-recursive", ki18n("Enforce an update of the top-contexts corresponding to the given files and all included files"));
     options.add("t").add("threads <count>", ki18n("Number of threads to use"));
     options.add("f").add("features <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
+    options.add("d").add("dump-errors", ki18n("Print problems encountered during parsing"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
