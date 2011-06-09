@@ -66,6 +66,7 @@ private slots:
   void initTestCase();
   void testCommentClearing();
   void testExpressionBefore();
+  void testSpecialItems();
   void testOnlyShow();
   void testFriends();
   void testInvalidContexts();

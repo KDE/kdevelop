@@ -1804,6 +1804,8 @@ void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeIt
         }
       }
     }
+    else if (parent->accessType() == BinaryOpFunctionCallAccess)
+      items += specialItemsForArgumentType(parent->m_expressionResult.type.abstractType());
   }
 
   ///Eventually add a "this" item

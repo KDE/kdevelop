@@ -202,6 +202,28 @@ void TestCppCodeCompletion::testExpressionBefore()
   QCOMPARE(Cpp::expressionBefore(exp23, exp23.length()), 3);
 }
 
+void TestCppCodeCompletion::testSpecialItems()
+{
+  //Special items are (at this time) just all the enum members given duplicate values that qualify for "Best Match" status
+  //If reasonably possible, it would be nice to not duplicate while still having best matches
+  //See Also: context.cpp's CodeCompletionContext::specialItemsForArgumentType function
+  QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester test(top->childContexts()[ctxt], "c = ");
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test2(top->childContexts()[ctxt], "test(");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  release(top);
+}
+
 void TestCppCodeCompletion::testOnlyShow()
 {
   QByteArray method = "template<class T1> class T { }; namespace A { struct B {}; } struct C { }; int testMe() { }";
