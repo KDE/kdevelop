@@ -134,28 +134,20 @@ void TestCppCodeCompletion::testCommentClearing()
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester test(top->childContexts()[ctxt], "//* \n inst.");
-  qDebug() << test.names;
   QCOMPARE(test.names, QStringList() << "i");
   CompletionItemTester test2(top->childContexts()[ctxt], "// \n inst.");
-  qDebug() << test2.names;
   QCOMPARE(test2.names, QStringList() << "i");
   CompletionItemTester test3(top->childContexts()[ctxt], "/*//*/ inst.");
-  qDebug() << test3.names;
   QCOMPARE(test3.names, QStringList() << "i");
   CompletionItemTester test4(top->childContexts()[ctxt], " ///*//*/ \n inst.");
-  qDebug() << test4.names;
   QCOMPARE(test4.names, QStringList() << "i");
   CompletionItemTester test5(top->childContexts()[ctxt], "/*// inst.");
-  qDebug() << test5.names;
   QCOMPARE(test5.names, QStringList());
   CompletionItemTester test6(top->childContexts()[ctxt], "// inst.");
-  qDebug() << test6.names;
   QCOMPARE(test6.names, QStringList());
   CompletionItemTester test7(top->childContexts()[ctxt], "/*// \n/* // \n */ inst.");
-  qDebug() << test7.names;
   QCOMPARE(test7.names, QStringList() << "i");
   CompletionItemTester test8(top->childContexts()[ctxt], "// \n /*// \n/* // \n */ /*/*/ inst.");
-  qDebug() << test8.names;
   QCOMPARE(test8.names, QStringList() << "i");
   release(top);
 }
