@@ -1237,6 +1237,23 @@ void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+//Bug 274390
+void GdbTest::testCommandOrderFastStepping()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeqt"));
+
+    breakpoints()->addCodeBreakpoint("main");
+    QVERIFY(session->startProgram(&cfg));
+    for(int i=0; i<20; i++) {
+        session->stepInto();
+    }
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)

@@ -65,12 +65,16 @@
 #include <tests/testcore.h>
 
 #include <KTempDir>
+#include <KTextEditor/Editor>
+#include <KTextEditor/EditorChooser>
+#include <KTextEditor/View>
+#include <qtest_kde.h>
 
 using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_MAIN(TestCppCodeCompletion)
+QTEST_KDEMAIN(TestCppCodeCompletion, GUI)
 
 QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
 
@@ -2967,6 +2971,69 @@ void TestCppCodeCompletion::testFilterVoid()
 
   release(top);
 }
+
+void TestCppCodeCompletion::testExecuteKeepWord_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<QString>("expectedCode");
+
+  QTest::newRow("replaceWord") << "\nstruct Foo { };\nFoo f;\nfbar();"
+                               << "f();";
+
+  QTest::newRow("structfunction") << "\nstruct Foo { int bar() { return 0; } };\nFoo f;\nfbar();"
+                                  << "f.bar();";
+
+  QTest::newRow("pointer") << "\nstruct Foo { int bar() { return 0; } };\nFoo *f;\nfbar();"
+                           << "f->bar();";
+
+  QTest::newRow("reference") << "\nstruct Foo { int bar() { return 0; } };\nFoo &f;\nfbar();"
+                             << "f.bar();";
+
+  QTest::newRow("smartPtr") << "template<class T> struct SmartPointer { T* operator->() {return 0;}};\nstruct Foo { int bar() { return 0; } };\nSmartPointer<Foo> f;\nfbar();"
+                            << "f->bar();";
+
+  QTest::newRow("enum") << "\nclass f { enum Foo { xy, xz }; };\n\nfFoo x;"
+                            << "f::Foo x;";
+
+  QTest::newRow("staticfunction") << "struct f { static void bar() {} };\n\n\nfbar();"
+                                  << "f::bar();";
+}
+
+void TestCppCodeCompletion::testExecuteKeepWord()
+{
+  QFETCH(QString, code);
+  TopDUContext* top = parse(code.toAscii(), DumpAll);
+
+  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  QVERIFY(editor);
+
+  KTextEditor::Document* doc = editor->createDocument(this);
+  QVERIFY(doc);
+  doc->setText(code);
+
+  KTextEditor::View *v = doc->createView(0);
+  v->setCursorPosition(KTextEditor::Cursor(3, 1));
+
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  CompletionItemTester complCtx(top->childContexts().last(), "");
+  KSharedPtr<CompletionTreeItem> item;
+  for(int i=0; i<complCtx.items.length(); ++i) {
+    kDebug() << complCtx.itemData(i).toString();
+    if (complCtx.itemData(i).toString()=="f") {
+      item = complCtx.items.at(i);
+    }
+  }
+  QVERIFY(!item.isNull());
+  item->execute(doc, KTextEditor::Range(3, 0, 3, 4));
+
+  QFETCH(QString, expectedCode);
+  QCOMPARE(doc->line(3), expectedCode);
+
+  release(top);
+}
+
 
 //BEGIN: Helper
 

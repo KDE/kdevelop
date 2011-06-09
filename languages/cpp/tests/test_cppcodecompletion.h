@@ -138,6 +138,8 @@ private slots:
   void testParentConstructor();
   void testOverride_data();
   void testOverride();
+  void testExecuteKeepWord_data();
+  void testExecuteKeepWord();
 public:
   enum DumpArea {
     DumpNone = 0,

@@ -140,6 +140,9 @@ private:
     /** The unprocessed output from gdb. Output is
         processed as soon as we see newline. */
     QByteArray buffer_;
+    
+    bool receivedReply_;
+    bool isRunning_;
 };
 }
 
