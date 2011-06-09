@@ -91,7 +91,7 @@ Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 class PatchFilesModel : public VcsFileChangesModel
 {
 public:
-  PatchFilesModel(QObject *parent, bool allowSelection = false) : VcsFileChangesModel(parent, allowSelection) { };
+  PatchFilesModel(QObject *parent, bool allowSelection) : VcsFileChangesModel(parent, allowSelection) { };
   enum ItemRoles { HunksNumberRole = VcsStatusInfoRole+1 };
 
 public slots:
@@ -193,6 +193,7 @@ void PatchReviewToolView::fillEditFromPatch() {
       finishText = ipatch->finishReviewCustomText();
     kDebug() << "finish-text: " << finishText;
     m_editPatch.finishReview->setText(finishText);
+    m_fileModel->setIsCheckbable(m_plugin->patch()->canSelectFiles());
     
     if(m_customWidget) {
       kDebug() << "removing custom widget";
@@ -267,7 +268,7 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.setupUi( this );
 
-    m_fileModel = new PatchFilesModel(this, true);
+    m_fileModel = new PatchFilesModel(this, m_plugin->patch()->canSelectFiles());
     m_editPatch.filesList->setModel(m_fileModel);
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated(false);
@@ -496,7 +497,7 @@ KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
 
 void PatchReviewToolView::kompareModelChanged()
 {
-    m_fileModel->removeRows(0, m_fileModel->rowCount());
+    m_fileModel->clear();
 
     if (!m_plugin->modelList())
         return;
@@ -538,9 +539,9 @@ void PatchReviewToolView::kompareModelChanged()
 
 void PatchReviewToolView::documentActivated(IDocument* doc)
 {
-    QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     if ( !m_plugin->modelList() )
         return ;
+    
     QStandardItem *fileItem = m_fileModel->fileItemForUrl(doc->url());
     if (fileItem) {
         m_editPatch.filesList->setCurrentIndex(fileItem->index());
@@ -879,9 +880,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
       return;
     
     clear();
-    
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
     
     KColorScheme scheme(QPalette::Active);
     
@@ -1478,9 +1476,8 @@ void PatchReviewPlugin::updateReview()
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
         ICore::self()->documentController()->openDocument(absoluteUrl);
-        if (documents.contains(absoluteUrl)) {
-          documents.remove(absoluteUrl);
-        }
+        documents.remove(absoluteUrl);
+        
         seekHunk(true, absoluteUrl); //Jump to the first changed position
       }else{
         // Maybe the file was deleted
