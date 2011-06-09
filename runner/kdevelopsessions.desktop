@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=KDevelop Sessions
+Comment=Matches KDevelop Sessions
+Icon=kdevelop
+
+X-KDE-ServiceTypes=Plasma/Runner
+Type=Service
+TryExec=kdevelop
+X-KDE-Library=krunner_kdevelopsessions
+X-KDE-PluginInfo-Author=Sebastian Kügler
+X-KDE-PluginInfo-Email=sebas@kde.org
+X-KDE-PluginInfo-Name=kdevelopsessions
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
