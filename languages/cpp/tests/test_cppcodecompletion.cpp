@@ -263,6 +263,23 @@ void TestCppCodeCompletion::testOnlyShow()
   release(top);
 }
 
+void TestCppCodeCompletion::testFriends()
+{
+  QByteArray method = "class Friendly{};";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 0;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester test(top->childContexts()[ctxt], "friend ");
+  QVERIFY(test.completionContext->isValid());
+  QVERIFY(test.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester test2(top->childContexts()[ctxt], "friend class ");
+  QVERIFY(test2.completionContext->isValid());
+  QVERIFY(test2.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester test3(top->childContexts()[ctxt], "class ");
+  QVERIFY(!test3.completionContext->isValid());
+
+  release(top);
+}
 
 void TestCppCodeCompletion::testInvalidContexts()
 {

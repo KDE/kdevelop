@@ -209,7 +209,7 @@ namespace Cpp {
       void skipUnaryOperators(QString &str, int &pointerConversions) const;
 
       ///test if the context is valid for its accessType
-      bool testContextValidity() const;
+      bool testContextValidity(const QString &expressionPrefix, const QString &accessStr) const;
 
       ///Specialized processing for access types
       void processArrowMemberAccess();

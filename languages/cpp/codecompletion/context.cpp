@@ -99,9 +99,9 @@ const QSet<QString> BINARY_OPERATORS =
       BINARY_ARITHMETIC_OPERATORS + ARITHMETIC_COMPARISON_OPERATORS;
 //These will be skipped over to find parent contexts
 const QSet<QString> UNARY_OPERATORS = QString("++ -- ! ~ + - & *").split(' ').toSet();
-const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new").split(' ').toSet();
+const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new friend class").split(' ').toSet();
 //When these appear as access strings, only show types
-const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new").split(' ').toSet();
+const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new friend class").split(' ').toSet();
 //A parent context is created for these access strings
 //TODO: delete, case and possibly also xxx_cast< should open a parent context and get specialized handling
 const QSet<QString> PARENT_ACCESS_STRINGS = BINARY_OPERATORS + QString("< , ( : return").split(' ').toSet();
@@ -373,7 +373,7 @@ CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
   m_onlyShow = findOnlyShow( accessStr );
   m_expressionResult = evaluateExpression();
 
-  m_valid = testContextValidity();
+  m_valid = testContextValidity(expressionPrefix, accessStr);
   if (!m_valid)
     return;
 
@@ -502,7 +502,7 @@ void CodeCompletionContext::processArrowMemberAccess() {
   m_expressionResult.isInstance = true;
 }
 
-bool CodeCompletionContext::testContextValidity() const {
+bool CodeCompletionContext::testContextValidity(const QString &expressionPrefix, const QString &accessStr) const {
   if( !m_expression.isEmpty() && !m_expressionResult.isValid() ) {
     //StaticMemberChoose may be an access to a namespace, like "MyNamespace::".
     //"MyNamespace" cannot be evaluated, still we can give some completions
@@ -512,6 +512,10 @@ bool CodeCompletionContext::testContextValidity() const {
         m_accessType != StaticMemberChoose )
       return false;
   }
+  //Special case for "class" access str, which should only have completions when it is "friend class ..."
+  if (accessStr == "class" && !expressionPrefix.endsWith("friend"))
+    return false;
+
   switch ( m_accessType )
   {
     case NoMemberAccess:
