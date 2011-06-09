@@ -206,12 +206,12 @@ int main(int argc, char** argv)
     KCmdLineOptions options;
     options.add("+dir", ki18n("directory"));
     
-    options.add("warnings", ki18n("Show warnings"));
-    options.add("verbose", ki18n("Show warnings and debug output"));
-    options.add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));
-    options.add("force-update-recursive", ki18n("Enforce an update of the top-contexts corresponding to the given files and all included files"));
-    options.add("threads <count>", ki18n("Number of threads to use"));
-    options.add("f <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
+    options.add("w").add("warnings", ki18n("Show warnings"));
+    options.add("V").add("verbose", ki18n("Show warnings and debug output"));
+    options.add("u").add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));
+    options.add("r").add("force-update-recursive", ki18n("Enforce an update of the top-contexts corresponding to the given files and all included files"));
+    options.add("t").add("threads <count>", ki18n("Number of threads to use"));
+    options.add("f").add("features <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
