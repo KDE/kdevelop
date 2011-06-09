@@ -31,7 +31,7 @@ using KDevelop::ProjectBaseItem;
 using KDevelop::IndexedString;
 
 DummyProject::DummyProject( const QString& name, QObject* parent )
-    : KDevelop::IProject( parent ), m_name(name)
+    : KDevelop::IProject( parent ), m_name(name), m_projectItem(0)
 {
 }
 
