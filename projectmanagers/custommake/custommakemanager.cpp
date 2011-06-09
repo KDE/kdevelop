@@ -259,11 +259,18 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
     return KDevelop::renameUrl( oldFolder->project(), oldFolder->url(), newFolder );
 }
 
-bool CustomMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* newParent)
+bool CustomMakeManager::moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent)
 {
-    Q_UNUSED(items);
-    Q_UNUSED(newParent);
-    return false;
+    bool success = true;
+    foreach (KDevelop::ProjectBaseItem *item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
+
+        KUrl newUrl = newParent->url();
+        newUrl.addPath(item->baseName());
+        success &= KDevelop::renameUrl( item->project(), item->url(), newUrl );
+    }
+    return success;
 }
 
 /////////////////////////////////////////////////////////////////////////////

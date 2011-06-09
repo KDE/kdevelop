@@ -64,8 +64,11 @@ public:
 
 private slots:
   void initTestCase();
+  void testCommentClearing();
   void testExpressionBefore();
+  void testSpecialItems();
   void testOnlyShow();
+  void testFriends();
   void testInvalidContexts();
   void testMemberAccess();
   void testParentContexts();
@@ -137,6 +140,8 @@ private slots:
   void testParentConstructor();
   void testOverride_data();
   void testOverride();
+  void testExecuteKeepWord_data();
+  void testExecuteKeepWord();
 public:
   enum DumpArea {
     DumpNone = 0,

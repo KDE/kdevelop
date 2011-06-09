@@ -138,6 +138,8 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     m_config(KGlobal::config(), "GDB Debugger"), m_session(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
+    
+    core()->debugController()->initializeUi();
 
     setXMLFile("kdevgdbui.rc");
 

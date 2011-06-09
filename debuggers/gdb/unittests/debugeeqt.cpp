@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 Niko Sams <niko.sams@gmail.com>
+   Copyright 2011 Niko Sams <niko.sams@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,37 +15,15 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include <QDebug>
+#include <qt4/QtCore/QString>
+#include <qt4/QtCore/qpointer.h>
 
-#ifndef QTPRINTERSTEST_H
-#define QTPRINTERSTEST_H
-
-#include <QObject>
-
-namespace GDBDebugger
-{
-
-class QtPrintersTest : public QObject
-{
-    Q_OBJECT
-private Q_SLOTS:
-    void testQString();
-    void testQByteArray();
-    void testQListContainer_data();
-    void testQListContainer();
-    void testQMapInt();
-    void testQMapString();
-    void testQMapStringBool();
-    void testQDate();
-    void testQTime();
-    void testQDateTime();
-    void testQUrl();
-    void testQHashInt();
-    void testQHashString();
-    void testQSetInt();
-    void testQSetString();
-    void testQChar();
-};
-
+int main(int argc, char **argv) {
+    for(int i=0; i<10; ++i) {
+        QString x("foobar");
+        x += QString::number(i);
+        qDebug() << x;
+    }
+    return 0;
 }
-
-#endif

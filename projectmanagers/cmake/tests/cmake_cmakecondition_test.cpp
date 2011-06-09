@@ -105,6 +105,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "version_less" ) << QString("1.1 VERSION_LESS 1.3.1").split(" ") << true;
     QTest::newRow( "version_equal" ) << QString("1.3.1 VERSION_EQUAL 1.3.1").split(" ") << true;
     QTest::newRow( "version_greater" ) << QString("1.4 VERSION_GREATER 1.3.1").split(" ") << true;
+    QTest::newRow( "version_greater" ) << QString("4.6.80 VERSION_GREATER 4.6").split(" ") << true;
     QTest::newRow( "detect_number" ) << QString("BLEP2").split(" ") << true;
 
     //parentheses: 2.6.3

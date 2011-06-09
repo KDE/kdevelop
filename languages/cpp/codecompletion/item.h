@@ -96,6 +96,11 @@ private:
   
   void needCachedArgumentList() const;
   
+  QString keepRemainingWord(Identifier id);
+  QString keepRemainingWord(const StructureType::Ptr &type, const Identifier &id, const QString &insertAccessor);
+  
+
+  
   mutable DeclarationPointer m_cachedTypeStringDecl;
   mutable QString m_cachedTypeString;
   mutable uint m_cachedTypeStringLength;
