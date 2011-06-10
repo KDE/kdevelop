@@ -91,7 +91,6 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     QString postfix;
     if(mModel->itemFromIndex(index)->folder())
         postfix=sep;
-    qDebug() << "path from index:" << index << removeProjectBasePath( mModel->pathFromIndex(index), mBase );
     return KDevelop::joinWithEscaping(removeProjectBasePath( mModel->pathFromIndex(index), mBase ), sep, escape)+postfix;
 }
 
