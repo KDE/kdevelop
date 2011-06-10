@@ -60,7 +60,7 @@ QStringList gccSetupStandardIncludePaths()
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc <<"gcc" <<"-xc++" <<"-E" <<"-v" <<NULL_DEVICE;
+    proc <<"gcc" << "-std=c++0x" <<"-xc++" <<"-E" <<"-v" <<NULL_DEVICE;
 
     // We'll use the following constants to know what we're currently parsing.
     const short parsingInitial = 0;
@@ -119,7 +119,7 @@ QVector<rpp::pp_macro*> computeGccStandardMacros()
     // The output of the following gcc commands is several line in the format:
     // "#define MACRO [definition]", where definition may or may not be present.
     // Parsing each line sequentially, we can easily build the macro set.
-    proc <<"gcc" <<"-xc++" <<"-E" <<"-dM" <<NULL_DEVICE;
+    proc <<"gcc" << "-std=c++0x" <<"-xc++" <<"-E" <<"-dM" <<NULL_DEVICE;
 
     if (proc.execute(5000) == 0) {
         QString line;
