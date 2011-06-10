@@ -936,6 +936,7 @@ public:
   uint sizeof_token;
   TypeIdAST *type_id;
   ExpressionAST *expression;
+  bool isVariadic;
 };
 
 class StringLiteralAST : public AST

@@ -81,6 +81,7 @@ void TestParser::testVariadicTemplates_data()
   QTest::newRow("pack-expansion-initlist2") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { params... }; };\n";
   QTest::newRow("pack-expansion-initlist3") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { (params+10)... }; };\n";
   QTest::newRow("pack-expansion-throw") << "template<typename ... Arg> void A() throw(Arg...) {};\n";
+  QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
   ///TODO: capture-list?

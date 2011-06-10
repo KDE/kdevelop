@@ -4204,9 +4204,15 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
       {
         uint sizeof_token = session->token_stream->cursor();
         advance();
+        bool isVariadic = false;
+        if (session->token_stream->lookAhead() == Token_ellipsis) {
+          isVariadic = true;
+          advance();
+        }
 
         SizeofExpressionAST *ast = CreateNode<SizeofExpressionAST>(session->mempool);
         ast->sizeof_token = sizeof_token;
+        ast->isVariadic = isVariadic;
 
         uint index = session->token_stream->cursor();
         if (session->token_stream->lookAhead() == '(')
