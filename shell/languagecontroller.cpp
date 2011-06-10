@@ -215,14 +215,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     
     if(d->m_cleanedUp)
         return languages;
-
-    if (IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
-        // shortcut: when we have a document, always pick the mimetype from there
-        // also fixes issues when opening files without extension, as their
-        // mimetype would not found properly (see below)
-        return languagesForMimetype(doc->mimeType()->name());
-    }
-
+    
     const QString fileName = url.fileName();
 
     ///TODO: cache regexp or simple string pattern for endsWith matching
