@@ -309,15 +309,19 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with out own restructured UI configuration
-        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevelop/katepartui.rc");
-        const QString katePartUI = katePartUIs.last();
-        const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevelop/katepartui.rc");
-        if (!QFile::exists(katePartLocalUI)) {
-            // prevent warning:
-            // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
-            QFile::copy(katePartUI, katePartLocalUI);
+        ///FIXME: put katepartui replacement into kdevplatform
+        ///FIXME: look in share/$appname/, i.e. support Quanta, Gluon, ...
+        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevplatform/katepartui.rc");
+        if (!katePartUIs.isEmpty()) {
+            const QString katePartUI = katePartUIs.last();
+            const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevplatform/katepartui.rc");
+            if (!QFile::exists(katePartLocalUI)) {
+                // prevent warning:
+                // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
+                QFile::copy(katePartUI, katePartLocalUI);
+            }
+            view->replaceXMLFile(katePartUI, katePartLocalUI);
         }
-        view->replaceXMLFile(katePartUI, katePartLocalUI);
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
