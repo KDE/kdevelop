@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include <QDebug>
-#include <qt4/QtCore/QString>
-#include <qt4/QtCore/qpointer.h>
+#include <QtCore/QString>
+#include <QtCore/qpointer.h>
 
 int main(int argc, char **argv) {
     qDebug();
