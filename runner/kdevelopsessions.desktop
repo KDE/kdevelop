@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=KDevelop Sessions
+Name[pt]=Sessões do KDevelop
+Name[pt_BR]=Sessões do KDevelop
+Name[sv]=KDevelop-sessioner
+Name[uk]=Сеанси KDevelop
+Name[x-test]=xxKDevelop Sessionsxx
 Comment=Matches KDevelop Sessions
+Comment[pt]=Corresponde às Sessões do KDevelop
+Comment[pt_BR]=Corresponder às sessões do KDevelop
+Comment[sv]=Matchar KDevelop-sessioner
+Comment[uk]=Пошук відповідних сеансів KDevelop
+Comment[x-test]=xxMatches KDevelop Sessionsxx
 Icon=kdevelop
 
 X-KDE-ServiceTypes=Plasma/Runner
