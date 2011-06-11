@@ -72,6 +72,7 @@ private Q_SLOTS:
     void testSwitchFrameGdbConsole();
     void testInsertAndRemoveBreakpointWhileRunning();
     void testCommandOrderFastStepping();
+    void testPickupManuallyInsertedBreakpoint();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);

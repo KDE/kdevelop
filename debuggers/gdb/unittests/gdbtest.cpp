@@ -1254,6 +1254,26 @@ void GdbTest::testCommandOrderFastStepping()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testPickupManuallyInsertedBreakpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint("main");
+    QVERIFY(session->startProgram(&cfg));
+    session->addCommand(GDBMI::NonMI, "break debugee.cpp:32");
+    session->stepInto();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000); //wait for breakpoints update
+    QCOMPARE(breakpoints()->breakpoints().count(), 2);
+    QCOMPARE(breakpoints()->rowCount(), 2+1);
+    KDevelop::Breakpoint *b = breakpoints()->breakpoint(1);
+    QVERIFY(b);
+    QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
+    QCOMPARE(b->url().url(), QString("debugee.cpp"));
+}
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
