@@ -24,6 +24,8 @@
 #include <QtCore/QFlags>
 #include <KDE/KIcon>
 
+#include "outputviewexport.h"
+
 class QString;
 class QAbstractItemModel;
 class QModelIndex;
@@ -36,7 +38,7 @@ class QAction;
 namespace KDevelop
 {
 
-class IOutputView
+class KDEVPLATFORMOUTPUTVIEW_EXPORT IOutputView
 {
 public:
 
@@ -72,7 +74,7 @@ public:
         VcsView   = 8 /**< the standard outputview for VCS commands */
     };
 
-    virtual ~IOutputView() {}
+    virtual ~IOutputView();
 
     /**
      * fetch the identifier for one of the standard toolviews
