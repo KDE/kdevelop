@@ -1,11 +1,19 @@
 [Desktop Entry]
 Name=KDevelop Sessions
+Name[el]=Συνεδρίες KDevelop
+Name[es]=Sesiones de KDevelop
+Name[nb]=KDevelop-økter
+Name[nl]=KDevelop sessies
 Name[pt]=Sessões do KDevelop
 Name[pt_BR]=Sessões do KDevelop
 Name[sv]=KDevelop-sessioner
 Name[uk]=Сеанси KDevelop
 Name[x-test]=xxKDevelop Sessionsxx
 Comment=Matches KDevelop Sessions
+Comment[el]=Ταιριάζει με συνεδρίες KDevelop
+Comment[es]=Sesiones coincidentes de KDevelop
+Comment[nb]=Treffer KDevelop-økter
+Comment[nl]=Komt overeen met KDevelop sessies
 Comment[pt]=Corresponde às Sessões do KDevelop
 Comment[pt_BR]=Corresponder às sessões do KDevelop
 Comment[sv]=Matchar KDevelop-sessioner
