@@ -139,10 +139,6 @@ ClassNode::~ClassNode()
 
 void ClassNode::populateNode()
 {
-  // Add special folders
-  addNode(new BaseClassesFolderNode(m_model));
-  addNode(new DerivedClassesFolderNode(m_model));
-
   DUChainReadLocker readLock(DUChain::lock());
 
   if ( updateClassDeclarations() )
@@ -150,6 +146,9 @@ void ClassNode::populateNode()
     m_cachedUrl = getDeclaration()->url();
     ClassModelNodesController::self().registerForChanges(m_cachedUrl, this);
   }
+
+  // Add special folders
+  addBaseAndDerived();
 }
 
 template <> inline bool qMapLessThanKey(const IndexedIdentifier &key1, const IndexedIdentifier &key2)
@@ -218,6 +217,27 @@ bool ClassNode::updateClassDeclarations()
   }
 
   return hadChanges;
+}
+
+bool ClassNode::addBaseAndDerived()
+{
+  bool added = false;
+
+  BaseClassesFolderNode *baseClassesNode = new BaseClassesFolderNode( m_model );
+  addNode( baseClassesNode );
+  if ( !baseClassesNode->hasChildren() )
+    removeNode( baseClassesNode );
+  else
+    added = true;
+
+  DerivedClassesFolderNode *derivedClassesNode = new DerivedClassesFolderNode( m_model );
+  addNode( derivedClassesNode );
+  if ( !derivedClassesNode->hasChildren() )
+    removeNode( derivedClassesNode );
+  else
+    added = true;
+
+  return added;
 }
 
 void ClassNode::nodeCleared()
