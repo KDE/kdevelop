@@ -89,7 +89,7 @@ void Manager::init()
     uint features = TopDUContext::VisibleDeclarationsAndContexts;
     if(m_args->isSet("features"))
     {
-        QString featuresStr = m_args->getOption("f");
+        QString featuresStr = m_args->getOption("features");
         if(featuresStr == "visible-declarations")
         {
             features = TopDUContext::VisibleDeclarationsAndContexts;
