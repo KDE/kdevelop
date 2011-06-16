@@ -148,6 +148,7 @@ private slots:
     void createConfiguration();
     void addConfiguration(KDevelop::ILaunchConfiguration*);
     void selectionChanged(QItemSelection,QItemSelection);
+    void modelChanged(QModelIndex,QModelIndex);
     void pageChanged();
     void saveConfig();
     void updateNameLabel( LaunchConfiguration* l );
