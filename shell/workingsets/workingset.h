@@ -88,8 +88,8 @@ signals:
 private:
     void changed(Sublime::Area* area);
 
-    void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex, KConfigGroup &wsGroup, KConfigGroup &areaGroup);
-    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup wsGroup, KConfigGroup areaGroup);
+    void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex, KConfigGroup & group);
+    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group);
 
     WorkingSet(const WorkingSet& rhs);
 
