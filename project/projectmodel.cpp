@@ -313,6 +313,13 @@ void ProjectBaseItem::setText( const QString& text )
 
 ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newname)
 {
+    if (parent()) {
+        foreach(ProjectBaseItem* sibling, parent()->children()) {
+            if (sibling->text() == newname) {
+                return ExistingItemSameName;
+            }
+        }
+    }
     setText( newname );
     return RenameOk;
 }
@@ -519,7 +526,7 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, Proje
         : ProjectBaseItem( project, dir.fileName(), parent )
 {
     setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project->folder() != dir)
+    if (project && project->folder() != dir)
         setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( dir );
 }
@@ -579,7 +586,11 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
         //There exists a file with that name?
         if( !KIO::NetAccess::stat(dest, entry, 0) )
         {
-            if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
+            if( !project() || !project()->projectFileManager() )
+            {
+                return ProjectBaseItem::rename(newname);
+            }
+            else if( project()->projectFileManager()->renameFolder(this, dest) )
             {
                 return ProjectBaseItem::RenameOk;
             }
@@ -669,7 +680,11 @@ ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
         //There exists a file with that name?
         if( !KIO::NetAccess::stat(dest, entry, 0) )
         {
-            if( !project() || project()->projectFileManager()->renameFile(this, dest) )
+            if( !project() || !project()->projectFileManager() )
+            {
+                return ProjectBaseItem::rename(newname);
+            }
+            else if( project()->projectFileManager()->renameFile(this, dest) )
             {
                 return ProjectBaseItem::RenameOk;
             }

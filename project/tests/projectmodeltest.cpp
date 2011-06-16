@@ -369,25 +369,34 @@ void ProjectModelTest::testRename()
     QFETCH( QString, expectedItemText );
     QFETCH( int, expectedRenameCode );
 
+    DummyProject* proj = new DummyProject( "DummyProject", 0 );
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
+    proj->setProjectItem( rootItem );
+    model->appendRow( rootItem );
+
+    new ProjectFileItem(proj, KUrl("existing"), rootItem);
+
     ProjectBaseItem* item = 0;
     if( itemType == ProjectBaseItem::Target ) {
-        item = new ProjectTargetItem( 0, itemText );
+        item = new ProjectTargetItem( proj, itemText, rootItem );
     } else if( itemType == ProjectBaseItem::File ) {
-        item = new ProjectFileItem( 0, KUrl(itemText) );
+        item = new ProjectFileItem( proj, KUrl(itemText), rootItem );
     } else if( itemType == ProjectBaseItem::Folder ) {
-        item = new ProjectFolderItem( 0, KUrl(itemText) );
+        item = new ProjectFolderItem( proj, KUrl(itemText), rootItem );
     } else if( itemType == ProjectBaseItem::BuildFolder ) {
-        item = new ProjectBuildFolderItem( 0, KUrl(itemText) );
+        item = new ProjectBuildFolderItem( proj, KUrl(itemText), rootItem );
     }
     Q_ASSERT( item );
-    
-    model->appendRow( item );
+
+    QCOMPARE(item->model(), model);
     QSignalSpy s( model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)) );
     ProjectBaseItem::RenameStatus stat = item->rename( newName );
     QCOMPARE( (int)stat, expectedRenameCode );
     if( datachangesignal ) {
         QCOMPARE( s.count(), 1 );
         QCOMPARE( qvariant_cast<QModelIndex>( s.takeFirst().at(0) ), item->index() );
+    } else {
+        QCOMPARE( s.count(), 0 );
     }
     QCOMPARE( item->text(), expectedItemText );
 }
@@ -436,7 +445,7 @@ void ProjectModelTest::testRename_data()
     QTest::newRow("ExistingFileError")
     << (int)ProjectBaseItem::Folder
     << QString::fromLatin1("mynew")
-    << QString::fromLatin1("bin")
+    << QString::fromLatin1("existing")
     << false
     << QString::fromLatin1("mynew")
     << (int)ProjectBaseItem::ExistingItemSameName;

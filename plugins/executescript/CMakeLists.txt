@@ -35,5 +35,5 @@ install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-install(FILES iexecutescriptplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevexecutescript COMPONENT Devel)
+install(FILES iexecutescriptplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/executescript COMPONENT Devel)
 install(FILES kdevexecutescript.desktop DESTINATION ${SERVICES_INSTALL_DIR})

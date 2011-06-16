@@ -335,7 +335,6 @@ void LaunchConfigurationDialog::addConfiguration(ILaunchConfiguration* _launch)
     int row = model->findItemForProject(launch->project())->row;
     QModelIndex idx  = model->index(row, 0);
     
-    qDebug() << "pepepe" << idx.isValid() << launch->project()->name();
     model->addConfiguration(launch, idx);
     
     QModelIndex newindex = model->index( model->rowCount( idx ) - 1, 0, idx );
