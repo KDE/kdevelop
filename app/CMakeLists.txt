@@ -1,3 +1,5 @@
+add_subdirectory(runner)
+
 ########### next target ###############
 
 find_package(SharedMimeInfo REQUIRED)

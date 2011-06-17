@@ -49,7 +49,6 @@ add_subdirectory(app_templates)
 add_subdirectory(documentation)
 add_subdirectory(providers)
 add_subdirectory(utils)
-add_subdirectory(runner)
 #macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()
