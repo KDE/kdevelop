@@ -54,7 +54,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
      *                             should be acceded. Everything except letters, numbers, and the _ character
      *                             counts as word boundary.
      * */
-    virtual QVector<SimpleRange> grep(QString identifier, bool surroundedByBoundary = true) const = 0;
+    virtual QVector<SimpleRange> grep(const QString& identifier, bool surroundedByBoundary = true) const = 0;
     /**
       * Overwrites the text in the file with the new given one
       *
