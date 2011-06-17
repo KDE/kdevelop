@@ -23,6 +23,7 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -86,4 +87,38 @@ void TestDUChain::testRValueReference() {
   QCOMPARE(decls.at(0)->toString(), QString("class A"));
   QCOMPARE(decls.at(1)->toString(), QString("int&& intRef"));
   QCOMPARE(decls.at(2)->toString(), QString("A&& aRef"));
+}
+
+void TestDUChain::testDefaultDelete_data() {
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("isDefault");
+  QTest::addColumn<bool>("isDelete");
+
+  QTest::newRow("default") << "class A { A() = default; };\n" << true << false;
+  QTest::newRow("delete") << "class A { A() = delete; };\n" << false << true;
+}
+
+void TestDUChain::testDefaultDelete() {
+  QFETCH(QString, code);
+  QFETCH(bool, isDefault);
+  QFETCH(bool, isDelete);
+
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QVector< Declaration* > decs = top->childContexts().first()->localDeclarations();
+  QCOMPARE(decs.size(), 1);
+  ClassFunctionDeclaration* aCtor = dynamic_cast<ClassFunctionDeclaration*>(decs.first());
+  QVERIFY(aCtor);
+  QVERIFY(!aCtor->isAbstract());
+  QVERIFY(!aCtor->isDestructor());
+  QVERIFY(!aCtor->isFinal());
+  QVERIFY(!aCtor->isSignal());
+  QVERIFY(!aCtor->isSlot());
+  QCOMPARE(aCtor->isDefaulted(), isDefault);
+  QCOMPARE(aCtor->isDeleted(), isDelete);
+  //TODO: should delete also be definition?
+  QCOMPARE(aCtor->isDefinition(), isDefault);
 }
