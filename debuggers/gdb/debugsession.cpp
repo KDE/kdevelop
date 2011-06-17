@@ -1023,7 +1023,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         dir = QFileInfo(executable).absolutePath();
     }
     
-    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, dir));
+    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir)));
 
     // Set the run arguments
     if (!arguments.isEmpty())
@@ -1049,7 +1049,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle off"));
 
     if (config_configGdbScript_.isValid())
-        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_configGdbScript_.toLocalFile())));
 
 
     if (!config_runShellScript_.isEmpty()) {
@@ -1059,8 +1059,8 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
 
         QProcess *proc = new QProcess;
         QStringList arguments;
-        arguments << "-c" << config_runShellScript_.toLocalFile() +
-            ' ' + executable + QString::fromAscii( options );
+        arguments << "-c" << KShell::quoteArg(config_runShellScript_.toLocalFile()) +
+            ' ' + KShell::quoteArg(executable) + QString::fromAscii( options );
 
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
@@ -1074,14 +1074,14 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        kDebug(9012) << "Running gdb script " << config_runGdbScript_.toLocalFile();
-        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_runGdbScript_.toLocalFile()));
+        kDebug(9012) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
 
         // Note: script could contain "run" or "continue"
     }
     else
     {
-        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, executable, this, &DebugSession::handleFileExecAndSymbols, true));
+        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, true));
         raiseEvent(connected_to_program);
         queueCmd(new GDBCommand(GDBMI::ExecRun));
     }

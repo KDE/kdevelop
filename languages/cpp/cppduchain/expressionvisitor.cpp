@@ -1312,11 +1312,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = p.cast<AbstractType>();
     } else {
 
-    static IndexedString ref("&");
-    static IndexedString ptr("*");
+    static const IndexedString ref("&");
+    static const IndexedString rvalueRef("&&");
+    static const IndexedString ptr("*");
 
     IndexedString op = m_session->token_stream->token(node->op).symbol();
-
 
     if(op == ptr) {
 
@@ -1329,6 +1329,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       ReferenceType::Ptr p( new ReferenceType() );
       p->setBaseType( m_lastType );
       p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+      if (op == rvalueRef)
+        p->setIsRValue(true);
 
       m_lastType = p.cast<AbstractType>();
     }

@@ -195,6 +195,7 @@ private slots:
 
   //BEGIN C++2011
   void testRangeBasedFor();
+  void testRValueReference();
   //END C++2011
 
 private:

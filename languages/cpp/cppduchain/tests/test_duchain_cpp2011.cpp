@@ -67,3 +67,23 @@ void TestDUChain::testRangeBasedFor() {
   QCOMPARE(decls.at(0)->abstractType()->toString(), QString("int"));
   QVERIFY(decls.at(0)->uses().isEmpty());
 }
+
+void TestDUChain::testRValueReference() {
+  //                                         1         2         3
+  //                                123456789012345678901234567890
+  LockedTopDUContext top = parse(  "class A {};"
+                                 "\nint&& intRef;"
+                                 "\nA&& aRef;"
+                                 "\n", DumpAll
+                           );
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QVector< Declaration* > decls = top->localDeclarations();
+  QCOMPARE(decls.size(), 3);
+
+  QCOMPARE(decls.at(0)->toString(), QString("class A"));
+  QCOMPARE(decls.at(1)->toString(), QString("int&& intRef"));
+  QCOMPARE(decls.at(2)->toString(), QString("A&& aRef"));
+}

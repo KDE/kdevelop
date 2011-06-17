@@ -16,10 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 #include <QDebug>
-#include <qt4/QtCore/QString>
-#include <qt4/QtCore/qpointer.h>
+#include <QtCore/QString>
+#include <QtCore/qpointer.h>
 
 int main(int argc, char **argv) {
+    qDebug();
     for(int i=0; i<10; ++i) {
         QString x("foobar");
         x += QString::number(i);

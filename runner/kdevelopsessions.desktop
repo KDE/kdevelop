@@ -1,0 +1,37 @@
+[Desktop Entry]
+Name=KDevelop Sessions
+Name[el]=Συνεδρίες KDevelop
+Name[es]=Sesiones de KDevelop
+Name[nb]=KDevelop-økter
+Name[nds]=KDevelop-Törns
+Name[nl]=KDevelop sessies
+Name[pt]=Sessões do KDevelop
+Name[pt_BR]=Sessões do KDevelop
+Name[sv]=KDevelop-sessioner
+Name[uk]=Сеанси KDevelop
+Name[x-test]=xxKDevelop Sessionsxx
+Name[zh_TW]=KDevelop 工作階段
+Comment=Matches KDevelop Sessions
+Comment[el]=Ταιριάζει με συνεδρίες KDevelop
+Comment[es]=Sesiones coincidentes de KDevelop
+Comment[nb]=Treffer KDevelop-økter
+Comment[nds]=Kiekt na passen KDevelop-Törns
+Comment[nl]=Komt overeen met KDevelop sessies
+Comment[pt]=Corresponde às Sessões do KDevelop
+Comment[pt_BR]=Corresponder às sessões do KDevelop
+Comment[sv]=Matchar KDevelop-sessioner
+Comment[uk]=Пошук відповідних сеансів KDevelop
+Comment[x-test]=xxMatches KDevelop Sessionsxx
+Comment[zh_TW]=比對 KDevelop 工作階段
+Icon=kdevelop
+
+X-KDE-ServiceTypes=Plasma/Runner
+Type=Service
+TryExec=kdevelop
+X-KDE-Library=krunner_kdevelopsessions
+X-KDE-PluginInfo-Author=Sebastian Kügler
+X-KDE-PluginInfo-Email=sebas@kde.org
+X-KDE-PluginInfo-Name=kdevelopsessions
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
