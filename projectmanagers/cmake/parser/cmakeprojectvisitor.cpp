@@ -579,15 +579,6 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possibleModuleNames += possib;
     }
 
-    QString var="CMAKE_INSTALL_PREFIX";
-    QString instPath;
-    if(m_vars->contains(var))
-        instPath = m_vars->value(var).join(QString());
-    else if(m_cache->contains(var))
-        instPath = m_cache->value(var).value;
-
-    kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
-
     #if defined(Q_OS_WIN)
     const QStringList modulePath = QStringList() << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     #else
@@ -596,12 +587,17 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    foreach(const QString& post, postfix)
+    QStringList lookupPaths = m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+    
+    foreach(const QString& lookup, lookupPaths)
     {
-        configPath.prepend(instPath+"/share/"+name.toLower()+post);
-        configPath.prepend(instPath+"/lib/"+name.toLower()+post);
-        configPath.prepend(instPath+"/share/"+name+post);
-        configPath.prepend(instPath+"/lib/"+name+post);
+        foreach(const QString& post, postfix)
+        {
+            configPath.prepend(lookup+"/share/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/"+name+post);
+            configPath.prepend(lookup+"/lib/"+name+post);
+        }
     }
 
     QString varName=pack->name()+"_DIR";
