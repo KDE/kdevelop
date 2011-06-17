@@ -451,11 +451,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     QString rangeToReplaceText = document->text(rangeToReplace);
     QString replacementText = insertionText(document->url(), SimpleCursor(rangeToReplace.end()));
     //Don't replace anything before end of comment, open or closing bracket, or semicolon
-    int noReplace = rangeToReplaceText.lastIndexOf(QRegExp("[{}/;]"));
+    QRegExp replaceAfter = QRegExp("inline|[{}/;]");
+    int noReplace = replaceAfter.lastIndexIn(rangeToReplaceText) + replaceAfter.matchedLength() - 1;
     if (noReplace >= 0)
     {
       rangeToReplace = KTextEditor::Range(word.start().line(), noReplace + 1, word.end().line(), word.end().column());
-      replacementText = "\n" + replacementText;
+      replacementText.prepend(" ");
     }
     DocumentChangeSet changes;
     changes.addChange(DocumentChange(IndexedString(document->url()), rangeToReplace, document->text(rangeToReplace), replacementText));
