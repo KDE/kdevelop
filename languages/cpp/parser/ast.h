@@ -279,6 +279,7 @@ public:
   uint virt;
   uint access_specifier;
   NameAST *name;
+  bool isVariadic;
 };
 
 class BinaryExpressionAST : public ExpressionAST
@@ -445,6 +446,7 @@ public:
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
+  bool isVariadic;
 };
 
 class DeleteExpressionAST : public ExpressionAST
@@ -507,6 +509,8 @@ public:
 
   DECLARE_AST_NODE(ExceptionSpecification)
 
+  // when type_ids _and_ ellipsis is not null,
+  // the exception spec is variadic (pack expansion)
   uint ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
 };
@@ -541,6 +545,7 @@ public:
   DECLARE_AST_NODE(FunctionCall)
 
   ExpressionAST *arguments;
+  bool isVariadic;
 };
 
 class FunctionDefinitionAST : public DeclarationAST
@@ -637,12 +642,22 @@ public:
 
   DECLARE_AST_NODE(InitializerClause)
 
-  // either 'expression' or 'initializer_list' or neither are used.
+  // either 'expression' or 'initializer_list' or 'defaultDeleted' or neither are used.
   // neither are used when the clause represents the empty initializer "{}"
 
   // assignment expression
   ExpressionAST *expression;
+  // initializer list
   const ListNode<InitializerClauseAST*> *initializer_list;
+
+  // support for = default or = deleted functions
+  enum DefaultDeleted {
+    NotDefaultOrDeleted,
+    Default,
+    Deleted
+  };
+  DefaultDeleted defaultDeleted;
+  bool initializer_isVariadic;
 };
 
 class LabeledStatementAST : public StatementAST
@@ -685,6 +700,10 @@ public:
 
   NameAST *initializer_id;
   ExpressionAST *expression;
+  // : foo(args)...
+  bool initializerIsVariadic : 1;
+  // : foo(args...)
+  bool expressionIsVariadic : 1;;
 };
 
 class NameAST : public AST
@@ -917,6 +936,7 @@ public:
   uint sizeof_token;
   TypeIdAST *type_id;
   ExpressionAST *expression;
+  bool isVariadic;
 };
 
 class StringLiteralAST : public AST
@@ -956,6 +976,7 @@ public:
 
   TypeIdAST *type_id;
   ExpressionAST *expression;
+  bool isVariadic;
 };
 
 class TemplateDeclarationAST : public DeclarationAST
@@ -1060,6 +1081,7 @@ public:
   TypeIdAST *type_id;
   const ListNode<TemplateParameterAST*> *template_parameters;
   NameAST *template_name;
+  bool isVariadic;
 };
 
 class TypedefAST : public DeclarationAST

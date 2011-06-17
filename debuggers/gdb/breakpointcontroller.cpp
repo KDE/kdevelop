@@ -160,6 +160,15 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
         case IDebugSession::connected_to_program:
         {
             kDebug() << "connected to program";
+
+            //load breakpoints the user might have added through eg .gdbinit on startup
+            //*before* sending, so we avoid getting duplicates
+            debugSession()->addCommand(
+                new GDBCommand(GDBMI::BreakList,
+                            "",
+                            this,
+                            &BreakpointController::handleBreakpointListInitial));
+
             sendMaybeAll();
             break;
         }
@@ -170,6 +179,47 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
         default:
             break;
     }
+}
+
+void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord &r)
+{
+    m_dontSendChanges++;
+
+    const GDBMI::Value& blist = r["BreakpointTable"]["body"];
+
+    for(int i = 0, e = blist.size(); i != e; ++i)
+    {
+        KDevelop::Breakpoint *updateBreakpoint = 0;
+        const GDBMI::Value& mi_b = blist[i];
+        QString type = mi_b["type"].literal();
+        foreach(KDevelop::Breakpoint *b, breakpointModel()->breakpoints()) {
+            if ((type == "watchpoint" || type == "hw watchpoint") && b->kind() == KDevelop::Breakpoint::WriteBreakpoint) {
+                if (mi_b["original-location"].literal() == b->expression()) {
+                    updateBreakpoint = b;
+                }
+            } else if (type == "read watchpoint" && b->kind() == KDevelop::Breakpoint::ReadBreakpoint) {
+                if (mi_b["original-location"].literal() == b->expression()) {
+                    updateBreakpoint = b;
+                }
+            } else if (type == "acc watchpoint" && b->kind() == KDevelop::Breakpoint::AccessBreakpoint) {
+                if (mi_b["original-location"].literal() == b->expression()) {
+                    updateBreakpoint = b;
+                }
+            } else if (b->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                if (mi_b["original-location"].literal() == b->location()) {
+                    updateBreakpoint = b;
+                }
+            }
+            if (updateBreakpoint) break;
+        }
+        if (updateBreakpoint) {
+            update(updateBreakpoint, mi_b);
+        } else {
+            //ignore, we will load them in the first pause anyway
+        }
+    }
+
+    m_dontSendChanges--;
 }
 
 void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # copy of http://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python/libstdcxx/v6/printers.py
-# revision 155023 (2009-12-06)
-
+# revision 170958 (2011-03-14)
 # Pretty-printers for libstc++.
 
-# Copyright (C) 2008, 2009 Free Software Foundation, Inc.
+# Copyright (C) 2008, 2009, 2010, 2011 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +22,13 @@ import gdb
 import itertools
 import re
 
+# Try to use the new-style pretty-printing if available.
+_use_gdb_pp = True
+try:
+    import gdb.printing
+except ImportError:
+    _use_gdb_pp = False
+
 class StdPointerPrinter:
     "Print a smart pointer of some kind"
 
@@ -40,7 +46,7 @@ class StdPointerPrinter:
 class UniquePointerPrinter:
     "Print a unique_ptr"
 
-    def __init__ (self, val):
+    def __init__ (self, typename, val):
         self.val = val
 
     def to_string (self):
@@ -81,7 +87,7 @@ class StdListPrinter:
         elif self.typename == "std::__debug::list":
             nodetype = gdb.lookup_type('std::__norm::_List_node<%s>' % itype).pointer()
         else:
-            raise "Cannot cast list node for list printer."
+            raise ValueError, "Cannot cast list node for list printer."
         return self._iterator(nodetype, self.val['_M_impl']['_M_node'])
 
     def to_string(self):
@@ -105,7 +111,7 @@ class StdListIteratorPrinter:
         elif self.typename == "std::__norm::_List_iterator" or self.typename == "std::__norm::_List_const_iterator":
             nodetype = gdb.lookup_type('std::__norm::_List_node<%s>' % itype).pointer()
         else:
-            raise "Cannot cast list node for list iterator printer."
+            raise ValueError, "Cannot cast list node for list iterator printer."
         return self.val['_M_node'].cast(nodetype).dereference()['_M_data']
 
 class StdSlistPrinter:
@@ -129,7 +135,7 @@ class StdSlistPrinter:
             self.count = self.count + 1
             return ('[%d]' % count, elt['_M_data'])
 
-    def __init__(self, val):
+    def __init__(self, typename, val):
         self.val = val
 
     def children(self):
@@ -145,7 +151,7 @@ class StdSlistPrinter:
 class StdSlistIteratorPrinter:
     "Print __gnu_cxx::slist::iterator"
 
-    def __init__(self, val):
+    def __init__(self, typename, val):
         self.val = val
 
     def to_string(self):
@@ -157,37 +163,74 @@ class StdVectorPrinter:
     "Print a std::vector"
 
     class _iterator:
-        def __init__ (self, start, finish):
-            self.item = start
-            self.finish = finish
+        def __init__ (self, start, finish, bitvec):
+            self.bitvec = bitvec
+            if bitvec:
+                self.item   = start['_M_p']
+                self.so     = start['_M_offset']
+                self.finish = finish['_M_p']
+                self.fo     = finish['_M_offset']
+                itype = self.item.dereference().type
+                self.isize = 8 * itype.sizeof
+            else:
+                self.item = start
+                self.finish = finish
             self.count = 0
 
         def __iter__(self):
             return self
 
         def next(self):
-            if self.item == self.finish:
-                raise StopIteration
             count = self.count
             self.count = self.count + 1
-            elt = self.item.dereference()
-            self.item = self.item + 1
-            return ('[%d]' % count, elt)
+            if self.bitvec:
+                if self.item == self.finish and self.so >= self.fo:
+                    raise StopIteration
+                elt = self.item.dereference()
+                if elt & (1 << self.so):
+                    obit = 1
+                else:
+                    obit = 0
+                self.so = self.so + 1
+                if self.so >= self.isize:
+                    self.item = self.item + 1
+                    self.so = 0
+                return ('[%d]' % count, obit)
+            else:
+                if self.item == self.finish:
+                    raise StopIteration
+                elt = self.item.dereference()
+                self.item = self.item + 1
+                return ('[%d]' % count, elt)
 
     def __init__(self, typename, val):
         self.typename = typename
         self.val = val
+        self.is_bool = val.type.template_argument(0).code  == gdb.TYPE_CODE_BOOL
 
     def children(self):
         return self._iterator(self.val['_M_impl']['_M_start'],
-                              self.val['_M_impl']['_M_finish'])
+                              self.val['_M_impl']['_M_finish'],
+                              self.is_bool)
 
     def to_string(self):
         start = self.val['_M_impl']['_M_start']
         finish = self.val['_M_impl']['_M_finish']
         end = self.val['_M_impl']['_M_end_of_storage']
-        return ('%s of length %d, capacity %d'
-                % (self.typename, int (finish - start), int (end - start)))
+        if self.is_bool:
+            start = self.val['_M_impl']['_M_start']['_M_p']
+            so    = self.val['_M_impl']['_M_start']['_M_offset']
+            finish = self.val['_M_impl']['_M_finish']['_M_p']
+            fo     = self.val['_M_impl']['_M_finish']['_M_offset']
+            itype = start.dereference().type
+            bl = 8 * itype.sizeof
+            length   = (bl - so) + bl * ((finish - start) - 1) + fo
+            capacity = bl * (end - start)
+            return ('%s<bool> of length %d, capacity %d'
+                    % (self.typename, int (length), int (capacity)))
+        else:
+            return ('%s of length %d, capacity %d'
+                    % (self.typename, int (finish - start), int (end - start)))
 
     def display_hint(self):
         return 'array'
@@ -195,7 +238,7 @@ class StdVectorPrinter:
 class StdVectorIteratorPrinter:
     "Print std::vector::iterator"
 
-    def __init__(self, val):
+    def __init__(self, typename, val):
         self.val = val
 
     def to_string(self):
@@ -212,7 +255,7 @@ class StdTuplePrinter:
             # tuple.
             nodes = self.head.type.fields ()
             if len (nodes) != 1:
-                raise "Top of tuple tree does not consist of a single node."
+                raise ValueError, "Top of tuple tree does not consist of a single node."
 
             # Set the actual head to the first pair.
             self.head  = self.head.cast (nodes[0].type)
@@ -228,7 +271,7 @@ class StdTuplePrinter:
                 raise StopIteration
             # Check that this iteration has an expected structure.
             if len (nodes) != 2:
-                raise "Cannot parse more than 2 nodes in a tuple tree."
+                raise ValueError, "Cannot parse more than 2 nodes in a tuple tree."
 
             # - Left node is the next recursion parent.
             # - Right node is the actual class contained in the tuple.
@@ -318,7 +361,7 @@ class RbtreeIterator:
 class StdRbtreeIteratorPrinter:
     "Print std::map::iterator"
 
-    def __init__ (self, val):
+    def __init__ (self, typename, val):
         self.val = val
 
     def to_string (self):
@@ -330,7 +373,7 @@ class StdRbtreeIteratorPrinter:
 class StdDebugIteratorPrinter:
     "Print a debug enabled version of an iterator"
 
-    def __init__ (self, val):
+    def __init__ (self, typename, val):
         self.val = val
 
     # Just strip away the encapsulating __gnu_debug::_Safe_iterator
@@ -524,7 +567,7 @@ class StdDequePrinter:
 class StdDequeIteratorPrinter:
     "Print std::deque::iterator"
 
-    def __init__(self, val):
+    def __init__(self, typename, val):
         self.val = val
 
     def to_string(self):
@@ -533,18 +576,10 @@ class StdDequeIteratorPrinter:
 class StdStringPrinter:
     "Print a std::basic_string of some kind"
 
-    def __init__(self, encoding, val):
-        self.encoding = encoding
+    def __init__(self, typename, val):
         self.val = val
 
     def to_string(self):
-        # Look up the target encoding as late as possible.
-        encoding = self.encoding
-        if encoding == 0:
-            encoding = gdb.parameter('target-charset')
-        elif encoding == 1:
-            encoding = gdb.parameter('target-wide-charset')
-
         # Make sure &string works, too.
         type = self.val.type
         if type.code == gdb.TYPE_CODE_REF:
@@ -558,7 +593,9 @@ class StdStringPrinter:
         reptype = gdb.lookup_type (str (realtype) + '::_Rep').pointer ()
         header = ptr.cast(reptype) - 1
         len = header.dereference ()['_M_length']
-        return self.val['_M_dataplus']['_M_p'].string (encoding, length = len)
+        if hasattr(ptr, "lazy_string"):
+            return ptr.lazy_string (length = len)
+        return ptr.string (length = len)
 
     def display_hint (self):
         return 'string'
@@ -651,128 +688,189 @@ class Tr1UnorderedMapPrinter:
     def display_hint (self):
         return 'map'
 
+# A "regular expression" printer which conforms to the
+# "SubPrettyPrinter" protocol from gdb.printing.
+class RxPrinter(object):
+    def __init__(self, name, function):
+        super(RxPrinter, self).__init__()
+        self.name = name
+        self.function = function
+        self.enabled = True
+
+    def invoke(self, value):
+        if not self.enabled:
+            return None
+        return self.function(self.name, value)
+
+# A pretty-printer that conforms to the "PrettyPrinter" protocol from
+# gdb.printing.  It can also be used directly as an old-style printer.
+class Printer(object):
+    def __init__(self, name):
+        super(Printer, self).__init__()
+        self.name = name
+        self.subprinters = []
+        self.lookup = {}
+        self.enabled = True
+        self.compiled_rx = re.compile('^([a-zA-Z0-9_:]+)<.*>$')
+
+    def add(self, name, function):
+        # A small sanity check.
+        # FIXME
+        if not self.compiled_rx.match(name + '<>'):
+            raise ValueError, 'libstdc++ programming error: "%s" does not match' % name
+        printer = RxPrinter(name, function)
+        self.subprinters.append(printer)
+        self.lookup[name] = printer
+
+    @staticmethod
+    def get_basic_type(type):
+        # If it points to a reference, get the reference.
+        if type.code == gdb.TYPE_CODE_REF:
+            type = type.target ()
+
+        # Get the unqualified type, stripped of typedefs.
+        type = type.unqualified ().strip_typedefs ()
+
+        return type.tag
+
+    def __call__(self, val):
+        typename = self.get_basic_type(val.type)
+        if not typename:
+            return None
+
+        # All the types we match are template types, so we can use a
+        # dictionary.
+        match = self.compiled_rx.match(typename)
+        if not match:
+            return None
+
+        basename = match.group(1)
+        if basename in self.lookup:
+            return self.lookup[basename].invoke(val)
+
+        # Cannot find a pretty printer.  Return None.
+        return None
+
+libstdcxx_printer = None
+
 def register_libstdcxx_printers (obj):
     "Register libstdc++ pretty-printers with objfile Obj."
 
-    if obj == None:
-        obj = gdb
+    global _use_gdb_pp
+    global libstdcxx_printer
 
-    obj.pretty_printers.append (lookup_function)
-
-def lookup_function (val):
-    "Look-up and return a pretty-printer that can print val."
-
-    # Get the type.
-    type = val.type
-
-    # If it points to a reference, get the reference.
-    if type.code == gdb.TYPE_CODE_REF:
-        type = type.target ()
-
-    # Get the unqualified type, stripped of typedefs.
-    type = type.unqualified ().strip_typedefs ()
-
-    # Get the type name.
-    typename = type.tag
-    if typename == None:
-        return None
-
-    # Iterate over local dictionary of types to determine
-    # if a printer is registered for that type.  Return an
-    # instantiation of the printer if found.
-    for function in pretty_printers_dict:
-        if function.search (typename):
-            return pretty_printers_dict[function] (val)
-
-    # Cannot find a pretty printer.  Return None.
-    return None
+    if _use_gdb_pp:
+        gdb.printing.register_pretty_printer(obj, libstdcxx_printer)
+    else:
+        if obj is None:
+            obj = gdb
+        obj.pretty_printers.append(libstdcxx_printer)
 
 def build_libstdcxx_dictionary ():
+    global libstdcxx_printer
+
+    libstdcxx_printer = Printer("libstdc++-v6")
+
     # libstdc++ objects requiring pretty-printing.
     # In order from:
     # http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen/a01847.html
-    pretty_printers_dict[re.compile('^std::basic_string<char(,.*)?>$')] = lambda val: StdStringPrinter(0, val)
-    pretty_printers_dict[re.compile('^std::basic_string<wchar_t(,.*)?>$')] = lambda val: StdStringPrinter(1, val)
-    pretty_printers_dict[re.compile('^std::basic_string<char16_t(,.*)?>$')] = lambda val: StdStringPrinter('UTF-16', val)
-    pretty_printers_dict[re.compile('^std::basic_string<char32_t(,.*)?>$')] = lambda val: StdStringPrinter('UTF-32', val)
-    pretty_printers_dict[re.compile('^std::bitset<.*>$')] = lambda val: StdBitsetPrinter("std::bitset", val)
-    pretty_printers_dict[re.compile('^std::deque<.*>$')] = lambda val: StdDequePrinter("std::deque", val)
-    pretty_printers_dict[re.compile('^std::list<.*>$')] = lambda val: StdListPrinter("std::list", val)
-    pretty_printers_dict[re.compile('^std::map<.*>$')] = lambda val: StdMapPrinter("std::map", val)
-    pretty_printers_dict[re.compile('^std::multimap<.*>$')] = lambda val: StdMapPrinter("std::multimap", val)
-    pretty_printers_dict[re.compile('^std::multiset<.*>$')] = lambda val: StdSetPrinter("std::multiset", val)
-    pretty_printers_dict[re.compile('^std::priority_queue<.*>$')] = lambda val: StdStackOrQueuePrinter("std::priority_queue", val)
-    pretty_printers_dict[re.compile('^std::queue<.*>$')] = lambda val: StdStackOrQueuePrinter("std::queue", val)
-    pretty_printers_dict[re.compile('^std::tuple<.*>$')] = lambda val: StdTuplePrinter("std::tuple", val)
-    pretty_printers_dict[re.compile('^std::set<.*>$')] = lambda val: StdSetPrinter("std::set", val)
-    pretty_printers_dict[re.compile('^std::stack<.*>$')] = lambda val: StdStackOrQueuePrinter("std::stack", val)
-    pretty_printers_dict[re.compile('^std::unique_ptr<.*>$')] = UniquePointerPrinter
-    pretty_printers_dict[re.compile('^std::vector<.*>$')] = lambda val: StdVectorPrinter("std::vector", val)
+    libstdcxx_printer.add('std::basic_string', StdStringPrinter)
+    libstdcxx_printer.add('std::bitset', StdBitsetPrinter)
+    libstdcxx_printer.add('std::deque', StdDequePrinter)
+    libstdcxx_printer.add('std::list', StdListPrinter)
+    libstdcxx_printer.add('std::map', StdMapPrinter)
+    libstdcxx_printer.add('std::multimap', StdMapPrinter)
+    libstdcxx_printer.add('std::multiset', StdSetPrinter)
+    libstdcxx_printer.add('std::priority_queue', StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::queue', StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::tuple', StdTuplePrinter)
+    libstdcxx_printer.add('std::set', StdSetPrinter)
+    libstdcxx_printer.add('std::stack', StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::unique_ptr', UniquePointerPrinter)
+    libstdcxx_printer.add('std::vector', StdVectorPrinter)
     # vector<bool>
 
     # Printer registrations for classes compiled with -D_GLIBCXX_DEBUG.
-    pretty_printers_dict[re.compile('^std::__debug::bitset<.*>$')] = lambda val: StdBitsetPrinter("std::__debug::bitset", val)
-    pretty_printers_dict[re.compile('^std::__debug::deque<.*>$')] = lambda val: StdDequePrinter("std::__debug::deque", val)
-    pretty_printers_dict[re.compile('^std::__debug::list<.*>$')] = lambda val: StdListPrinter("std::__debug::list", val)
-    pretty_printers_dict[re.compile('^std::__debug::map<.*>$')] = lambda val: StdMapPrinter("std::__debug::map", val)
-    pretty_printers_dict[re.compile('^std::__debug::multimap<.*>$')] = lambda val: StdMapPrinter("std::__debug::multimap", val)
-    pretty_printers_dict[re.compile('^std::__debug::multiset<.*>$')] = lambda val: StdSetPrinter("std::__debug::multiset", val)
-    pretty_printers_dict[re.compile('^std::__debug::priority_queue<.*>$')] = lambda val: StdStackOrQueuePrinter("std::__debug::priority_queue", val)
-    pretty_printers_dict[re.compile('^std::__debug::queue<.*>$')] = lambda val: StdStackOrQueuePrinter("std::__debug::queue", val)
-    pretty_printers_dict[re.compile('^std::__debug::set<.*>$')] = lambda val: StdSetPrinter("std::__debug::set", val)
-    pretty_printers_dict[re.compile('^std::__debug::stack<.*>$')] = lambda val: StdStackOrQueuePrinter("std::__debug::stack", val)
-    pretty_printers_dict[re.compile('^std::__debug::unique_ptr<.*>$')] = UniquePointerPrinter
-    pretty_printers_dict[re.compile('^std::__debug::vector<.*>$')] = lambda val: StdVectorPrinter("std::__debug::vector", val)
+    libstdcxx_printer.add('std::__debug::bitset', StdBitsetPrinter)
+    libstdcxx_printer.add('std::__debug::deque', StdDequePrinter)
+    libstdcxx_printer.add('std::__debug::list', StdListPrinter)
+    libstdcxx_printer.add('std::__debug::map', StdMapPrinter)
+    libstdcxx_printer.add('std::__debug::multimap', StdMapPrinter)
+    libstdcxx_printer.add('std::__debug::multiset', StdSetPrinter)
+    libstdcxx_printer.add('std::__debug::priority_queue',
+                          StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::__debug::queue', StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::__debug::set', StdSetPrinter)
+    libstdcxx_printer.add('std::__debug::stack', StdStackOrQueuePrinter)
+    libstdcxx_printer.add('std::__debug::unique_ptr', UniquePointerPrinter)
+    libstdcxx_printer.add('std::__debug::vector', StdVectorPrinter)
 
     # These are the TR1 and C++0x printers.
     # For array - the default GDB pretty-printer seems reasonable.
-    pretty_printers_dict[re.compile('^std::shared_ptr<.*>$')] = lambda val: StdPointerPrinter ('std::shared_ptr', val)
-    pretty_printers_dict[re.compile('^std::weak_ptr<.*>$')] = lambda val: StdPointerPrinter ('std::weak_ptr', val)
-    pretty_printers_dict[re.compile('^std::unordered_map<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::unordered_map', val)
-    pretty_printers_dict[re.compile('^std::unordered_set<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::unordered_set', val)
-    pretty_printers_dict[re.compile('^std::unordered_multimap<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::unordered_multimap', val)
-    pretty_printers_dict[re.compile('^std::unordered_multiset<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::unordered_multiset', val)
+    libstdcxx_printer.add('std::shared_ptr', StdPointerPrinter)
+    libstdcxx_printer.add('std::weak_ptr', StdPointerPrinter)
+    libstdcxx_printer.add('std::unordered_map', Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::unordered_set', Tr1UnorderedSetPrinter)
+    libstdcxx_printer.add('std::unordered_multimap', Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::unordered_multiset', Tr1UnorderedSetPrinter)
 
-    pretty_printers_dict[re.compile('^std::tr1::shared_ptr<.*>$')] = lambda val: StdPointerPrinter ('std::tr1::shared_ptr', val)
-    pretty_printers_dict[re.compile('^std::tr1::weak_ptr<.*>$')] = lambda val: StdPointerPrinter ('std::tr1::weak_ptr', val)
-    pretty_printers_dict[re.compile('^std::tr1::unordered_map<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::tr1::unordered_map', val)
-    pretty_printers_dict[re.compile('^std::tr1::unordered_set<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::tr1::unordered_set', val)
-    pretty_printers_dict[re.compile('^std::tr1::unordered_multimap<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::tr1::unordered_multimap', val)
-    pretty_printers_dict[re.compile('^std::tr1::unordered_multiset<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::tr1::unordered_multiset', val)
+    libstdcxx_printer.add('std::tr1::shared_ptr', StdPointerPrinter)
+    libstdcxx_printer.add('std::tr1::weak_ptr', StdPointerPrinter)
+    libstdcxx_printer.add('std::tr1::unordered_map', Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::tr1::unordered_set', Tr1UnorderedSetPrinter)
+    libstdcxx_printer.add('std::tr1::unordered_multimap',
+                          Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::tr1::unordered_multiset',
+                          Tr1UnorderedSetPrinter)
 
     # These are the C++0x printer registrations for -D_GLIBCXX_DEBUG cases.
     # The tr1 namespace printers do not seem to have any debug
     # equivalents, so do no register them.
-    pretty_printers_dict[re.compile('^std::__debug::unordered_map<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::__debug::unordered_map', val)
-    pretty_printers_dict[re.compile('^std::__debug::unordered_set<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::__debug::unordered_set', val)
-    pretty_printers_dict[re.compile('^std::__debug::unordered_multimap<.*>$')] = lambda val: Tr1UnorderedMapPrinter ('std::__debug::unordered_multimap',  val)
-    pretty_printers_dict[re.compile('^std::__debug::unordered_multiset<.*>$')] = lambda val: Tr1UnorderedSetPrinter ('std::__debug:unordered_multiset', val)
+    libstdcxx_printer.add('std::__debug::unordered_map',
+                          Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::__debug::unordered_set',
+                          Tr1UnorderedSetPrinter)
+    libstdcxx_printer.add('std::__debug::unordered_multimap',
+                          Tr1UnorderedMapPrinter)
+    libstdcxx_printer.add('std::__debug::unordered_multiset',
+                          Tr1UnorderedSetPrinter)
 
 
     # Extensions.
-    pretty_printers_dict[re.compile('^__gnu_cxx::slist<.*>$')] = StdSlistPrinter
+    libstdcxx_printer.add('__gnu_cxx::slist', StdSlistPrinter)
 
     if True:
         # These shouldn't be necessary, if GDB "print *i" worked.
         # But it often doesn't, so here they are.
-        pretty_printers_dict[re.compile('^std::_List_iterator<.*>$')] = lambda val: StdListIteratorPrinter("std::_List_iterator",val)
-        pretty_printers_dict[re.compile('^std::_List_const_iterator<.*>$')] = lambda val: StdListIteratorPrinter("std::_List_const_iterator",val)
-        pretty_printers_dict[re.compile('^std::_Rb_tree_iterator<.*>$')] = lambda val: StdRbtreeIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^std::_Rb_tree_const_iterator<.*>$')] = lambda val: StdRbtreeIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^std::_Deque_iterator<.*>$')] = lambda val: StdDequeIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^std::_Deque_const_iterator<.*>$')] = lambda val: StdDequeIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^__gnu_cxx::__normal_iterator<.*>$')] = lambda val: StdVectorIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^__gnu_cxx::_Slist_iterator<.*>$')] = lambda val: StdSlistIteratorPrinter(val)
+        libstdcxx_printer.add('std::_List_iterator', StdListIteratorPrinter)
+        libstdcxx_printer.add('std::_List_const_iterator',
+                              StdListIteratorPrinter)
+        libstdcxx_printer.add('std::_Rb_tree_iterator',
+                              StdRbtreeIteratorPrinter)
+        libstdcxx_printer.add('std::_Rb_tree_const_iterator',
+                              StdRbtreeIteratorPrinter)
+        libstdcxx_printer.add('std::_Deque_iterator', StdDequeIteratorPrinter)
+        libstdcxx_printer.add('std::_Deque_const_iterator',
+                              StdDequeIteratorPrinter)
+        libstdcxx_printer.add('__gnu_cxx::__normal_iterator',
+                              StdVectorIteratorPrinter)
+        libstdcxx_printer.add('__gnu_cxx::_Slist_iterator',
+                              StdSlistIteratorPrinter)
 
-        # Debug (compiled with -D_GLIBCXX_DEBUG) printer registrations.
-        # The Rb_tree debug iterator when unwrapped from the encapsulating __gnu_debug::_Safe_iterator
-        # does not have the __norm namespace. Just use the existing printer registration for that.
-        pretty_printers_dict[re.compile('^__gnu_debug::_Safe_iterator<.*>$')] = lambda val: StdDebugIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^std::__norm::_List_iterator<.*>$')] = lambda val: StdListIteratorPrinter ("std::__norm::_List_iterator",val)
-        pretty_printers_dict[re.compile('^std::__norm::_List_const_iterator<.*>$')] = lambda val: StdListIteratorPrinter ("std::__norm::_List_const_iterator",val)
-        pretty_printers_dict[re.compile('^std::__norm::_Deque_const_iterator<.*>$')] = lambda val: StdDequeIteratorPrinter(val)
-        pretty_printers_dict[re.compile('^std::__norm::_Deque_iterator<.*>$')] = lambda val: StdDequeIteratorPrinter(val)
-
-pretty_printers_dict = {}
+        # Debug (compiled with -D_GLIBCXX_DEBUG) printer
+        # registrations.  The Rb_tree debug iterator when unwrapped
+        # from the encapsulating __gnu_debug::_Safe_iterator does not
+        # have the __norm namespace. Just use the existing printer
+        # registration for that.
+        libstdcxx_printer.add('__gnu_debug::_Safe_iterator',
+                              StdDebugIteratorPrinter)
+        libstdcxx_printer.add('std::__norm::_List_iterator',
+                              StdListIteratorPrinter)
+        libstdcxx_printer.add('std::__norm::_List_const_iterator',
+                              StdListIteratorPrinter)
+        libstdcxx_printer.add('std::__norm::_Deque_const_iterator',
+                              StdDequeIteratorPrinter)
+        libstdcxx_printer.add('std::__norm::_Deque_iterator',
+                              StdDequeIteratorPrinter)
 
 build_libstdcxx_dictionary ()

@@ -65,6 +65,7 @@ private:
 
     virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);
 
+    void handleBreakpointListInitial(const GDBMI::ResultRecord &r);
     void handleBreakpointList(const GDBMI::ResultRecord &r);
 
     void update(KDevelop::Breakpoint *b, const GDBMI::Value& v);

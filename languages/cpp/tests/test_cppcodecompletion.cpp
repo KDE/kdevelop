@@ -3041,6 +3041,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   KTextEditor::Document* doc = editor->createDocument(this);
   QVERIFY(doc);
   doc->setText(code);
+  doc->startEditing();
 
   KTextEditor::View *v = doc->createView(0);
   v->setCursorPosition(KTextEditor::Cursor(3, 1));
@@ -3062,7 +3063,12 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
 
+  doc->endEditing();
+
   release(top);
+
+  delete v;
+  delete doc;
 }
 
 

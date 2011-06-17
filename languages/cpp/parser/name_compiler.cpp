@@ -90,10 +90,14 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
       do
         {
           if(it->element && it->element->op) { ///@todo What about ptr-to-member?
-            static IndexedString ref('&');
-            if( session->token_stream->token(it->element->op).symbol() == ref) {
+            int kind = session->token_stream->kind(it->element->op);
+            if(kind == '&') {
               //We're handling a 'reference'
               id.setIsReference(true);
+            } else if(kind == Token_and) {
+              //We're handling an rvalue-reference
+              id.setIsReference(true);
+              id.setIsRValue(true);
             } else {
               //We're handling a real pointer
               id.setPointerDepth(id.pointerDepth()+1);
