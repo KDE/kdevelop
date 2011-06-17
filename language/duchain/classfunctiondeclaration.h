@@ -29,13 +29,16 @@
 namespace KDevelop
 {
 
+///FIXME: refactor and put signal/slot/default/delete into cpp specific API?
 enum ClassFunctionFlags
 {
   FunctionFlagNormal = 0,
   FunctionSignalFlag = 1 <<  1,
   FunctionSlotFlag = 1 << 2,
   AbstractFunctionFlag = 1 << 3,
-  FinalFunctionFlag = 1 << 4
+  FinalFunctionFlag = 1 << 4,
+  DefaultFunctionFlag = 1 << 5,
+  DeleteFunctionFlag = 1 << 6
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString)
@@ -89,6 +92,14 @@ public:
   ///Whether this function is final
   bool isFinal() const;
   void setIsFinal(bool);
+
+  ///Whether this function is deleted
+  bool isDeleted() const;
+  void setIsDeleted(bool);
+
+  ///Whether this function is defaulted
+  bool isDefaulted() const;
+  void setIsDefaulted(bool);
   
   virtual bool isConstructor() const;
   virtual bool isDestructor() const;
