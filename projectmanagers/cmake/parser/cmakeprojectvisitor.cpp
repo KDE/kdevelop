@@ -1497,8 +1497,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::Path:
-            val=fi.canonicalPath();
-            val=dir.relativeFilePath(val);
+            val=fi.path();
             break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
@@ -2272,7 +2271,7 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
 
 QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QString& expression, bool recursive, bool followSymlinks)
 {
-    kDebug(9042) << "Starting from (" << startPath << ", " << expression << ", " << followSymlinks << ")";
+    kDebug(9042) << "Starting from (" << startPath << ", " << expression << "," << recursive << ", " << followSymlinks << ")";
     QString expr = expression;
     int firstSlash = expr.indexOf('/');
     int slashShift = 0;
@@ -2347,7 +2346,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     }
     QStringList matches;
     QString path = startPath;
-    if (!path.isEmpty() && !path.endsWith('/'))
+    if (!path.endsWith('/'))
         path += '/';
     foreach(QString dirName, matchedDirs)
     {

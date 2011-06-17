@@ -370,7 +370,7 @@ void CMakeProjectVisitorTest::testRun_data()
     
     //This test should probably be linux-only
     results.clear();
-    results << StringPair("output", "/lib");
+    results << StringPair("output", "/usr/lib");
     QTest::newRow("get_filename_component") <<
                             "get_filename_component(output /usr/lib/libdl.so PATH)\n"
                             << cacheValues << results;
@@ -444,6 +444,7 @@ void CMakeProjectVisitorTest::testRun()
     foreach(const StringPair& v, cache)
         val[v.first]=v.second;
     
+    vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
     
     CMakeProjectVisitor v(file.fileName(), fakeContext);
