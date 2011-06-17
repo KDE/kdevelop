@@ -31,6 +31,7 @@
 #include <kurlcompletion.h>
 #include <kurlrequester.h>
 #include <kstandarddirs.h>
+#include <klineedit.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
