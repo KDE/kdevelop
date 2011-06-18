@@ -646,6 +646,8 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
 
   if( decl->isDefinition() )
     details << "definition";
+  if( decl->isExplicitlyDeleted() )
+    details << "deleted";
 
   if( memberDecl && memberDecl->isForwardDeclaration() )
     details << "forward";

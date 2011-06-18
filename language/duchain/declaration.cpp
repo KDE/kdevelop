@@ -53,7 +53,7 @@ REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
   : m_comment(0), m_isDefinition(false), m_inSymbolTable(false), m_isTypeAlias(false),
-    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false)
+    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false), m_isExplicitlyDeleted(false)
 {
   m_kind = Declaration::Instance;
 }
@@ -71,7 +71,8 @@ m_isTypeAlias(rhs.m_isTypeAlias),
 m_anonymousInContext(rhs.m_anonymousInContext),
 m_isFinal(rhs.m_isFinal),
 m_alwaysForceDirect(rhs.m_alwaysForceDirect),
-m_isAutoDeclaration(rhs.m_isAutoDeclaration)
+m_isAutoDeclaration(rhs.m_isAutoDeclaration),
+m_isExplicitlyDeleted(rhs.m_isExplicitlyDeleted)
 {
 }
 
@@ -597,6 +598,16 @@ bool Declaration::alwaysForceDirect() const
 void Declaration::setAlwaysForceDirect(bool direct)
 {
   d_func_dynamic()->m_alwaysForceDirect = direct;
+}
+
+bool Declaration::isExplicitlyDeleted() const
+{
+  return d_func()->m_isExplicitlyDeleted;
+}
+
+void Declaration::setExplicitlyDeleted(bool deleted)
+{
+  d_func_dynamic()->m_isExplicitlyDeleted = deleted;
 }
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
