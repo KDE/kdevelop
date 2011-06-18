@@ -134,6 +134,15 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      */
     virtual void problem( AST* node, const QString& str );
 
+    /**
+     * Called for important issues in code.
+     *
+     * @see reportRealProblems()
+     */
+    void realProblem( ProblemPointer problem );
+
+    DUContext* currentContext() const;
+
   private:
 
     TopDUContext* topContext() const;
