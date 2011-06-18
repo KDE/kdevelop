@@ -48,6 +48,9 @@ QString CodeRepresentation::rangeText(KTextEditor::Range range) const
 
 static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<SimpleRange>& ret, bool surroundedByBoundary)
 {
+    if (identifier.isEmpty())
+        return;
+
     int pos = 0;
     while(true)
     {
@@ -73,10 +76,15 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_url = IndexedString(m_document->url());
   }
   
-  virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+  virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
       QVector< SimpleRange > ret;
+
+      if (identifier.isEmpty())
+        return ret;
+
       for(int line = 0; line < m_document->lines(); ++line)
         grepLine(identifier, m_document->line(line), line, ret, surroundedByBoundary);
+
       return ret;
   }
   
@@ -153,10 +161,15 @@ class FileCodeRepresentation : public CodeRepresentation {
       return lineData.at(line);
     }
     
-    virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
         QVector< SimpleRange > ret;
+
+        if (identifier.isEmpty())
+            return ret;
+
         for(int line = 0; line < lineData.count(); ++line)
             grepLine(identifier, lineData.at(line), line, ret, surroundedByBoundary);
+
         return ret;
     }
     
@@ -249,10 +262,15 @@ class StringCodeRepresentation : public CodeRepresentation {
         return false;
     }
     
-    virtual QVector< SimpleRange > grep ( QString identifier, bool surroundedByBoundary ) const {
+    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
         QVector< SimpleRange > ret;
+
+        if (identifier.isEmpty())
+            return ret;
+
         for(int line = 0; line < data->lines().count(); ++line)
             grepLine(identifier, data->lines().at(line), line, ret, surroundedByBoundary);
+
         return ret;
     }
     
