@@ -129,23 +129,22 @@ public:
   void setFinal(bool final);
   
   /**
-   * Changes weather this declaration must be direct in all cases or not. Needed for some languages, i.e. Python.
+   * Changes whether this declaration must be direct in all cases or not. Needed for some languages, i.e. Python.
    * "false" is the default.
    * \param direct true to force direct, false otherwise.
    * */
   void setAlwaysForceDirect(bool direct);
-  /// Access weather this declaration must always be direct.
+  /// Access whether this declaration must always be direct.
   bool alwaysForceDirect() const;
   
   /**
-   * Changes weather this declaration is "implicitly created", i.e. not declared in the class context, but written somewhere else outside
+   * Changes whether this declaration is "implicitly created", i.e. not declared in the class context, but written somewhere else outside
    * \param _auto true for implicit, false for default behaviour
    * */
   void setAutoDeclaration(bool _auto);
-  /// Access weather this declaration is implicitly created or not.
+  /// Access whether this declaration is implicitly created or not.
   bool isAutoDeclaration() const;
   
-
   /**
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
    *
@@ -359,7 +358,7 @@ public:
   QMap<IndexedString, QList<RangeInRevision> > uses() const;
   
   /**
-   * Determines weather the declaration has any uses or not.
+   * Determines whether the declaration has any uses or not.
    * Cheaper than calling uses().
    * */
   bool hasUses() const;
