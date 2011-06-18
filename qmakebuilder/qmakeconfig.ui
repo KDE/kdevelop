@@ -56,7 +56,7 @@
       </size>
      </property>
      <property name="title">
-      <string>GroupBox</string>
+      <string>Build Settings</string>
      </property>
     </widget>
    </item>
