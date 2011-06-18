@@ -683,10 +683,6 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
         details << "conversion-function";
       if( classFunDecl->isAbstract() )
         details << "abstract";
-      if ( classFunDecl->isDefaulted() )
-        details << "default";
-      if ( classFunDecl->isDeleted() )
-        details << "delete";
     }
   }
   
