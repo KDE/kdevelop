@@ -138,7 +138,7 @@ public:
     /**Splits the view in this position by given @p orientation.
     Does nothing if the view is already splitted.*/
     void split(Qt::Orientation orientation);
-    /**Unsplits the index removing the given @p child and moving the contents
+    /**Unsplits the index removing the given @p childToRemove and moving the contents
     of another child to this index.*/
     void unsplit(AreaIndex *childToRemove);
 
