@@ -126,7 +126,7 @@ void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
     if(managedWidgetChangeState())
     {
         int ret = KMessageBox::questionYesNoCancel(this,
-                      i18n("Current changes will be lost. Would you want to save them ?"));
+                      i18n("Current changes will be lost. Would you want to save them?"));
         if(ret == KMessageBox::Yes)
         {
             save();
@@ -171,7 +171,7 @@ void QMakeBuilderPreferences::removeBuildConfig()
         {
             bool correct=KIO::NetAccess::del(KUrl(removed), this);
             if(!correct)
-                KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
+                KMessageBox::error(this, i18n("Could not remove: %1.", removed));
         }
     }
 }
