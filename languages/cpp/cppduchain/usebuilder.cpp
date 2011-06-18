@@ -129,20 +129,17 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
       RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
       m_builder->newUse(node, range, decl);
 
-      if (decl) {
-        ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(decl.data());
-        if (cFunc && cFunc->isDeleted()) {
-          KSharedPtr<KDevelop::Problem> problem(new Problem);
-          problem->setDescription(i18n("use of deleted function"));
+      if (decl && decl->isExplicitlyDeleted()) {
+        KSharedPtr<KDevelop::Problem> problem(new Problem);
+        problem->setDescription(i18n("use of deleted function"));
 
-          problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
+        problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
 
-          CppEditorIntegrator editor(session());
-          problem->setFinalLocation(DocumentRange(currentContext()->url(), editor.findRange(node).castToSimpleRange()));
+        CppEditorIntegrator editor(session());
+        problem->setFinalLocation(DocumentRange(currentContext()->url(), editor.findRange(node).castToSimpleRange()));
 
-          if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
-            realProblem(problem);
-        }
+        if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
+          realProblem(problem);
       }
     }
 

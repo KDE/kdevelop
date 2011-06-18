@@ -196,7 +196,6 @@ private slots:
   //BEGIN C++2011
   void testRangeBasedFor();
   void testRValueReference();
-  void testDefaultDelete_data();
   void testDefaultDelete();
   //END C++2011
 

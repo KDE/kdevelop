@@ -3565,7 +3565,6 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
       // no type specifier, maybe a constructor or a cast operator??
 
       rewind(index);
-
       InitDeclaratorAST *declarator = 0;
       if (parseInitDeclarator(declarator))
         {
@@ -3575,13 +3574,31 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
               {
                 advance();
 
-                SimpleDeclarationAST *ast
-                  = CreateNode<SimpleDeclarationAST>(session->mempool);
-                ast->init_declarators = snoc(ast->init_declarators,
-                                             declarator, session->mempool);
-                ast->function_specifiers = funSpec;
-                UPDATE_POS(ast, start, _M_last_valid_token+1);
-                node = ast;
+                if (declarator->initializer && declarator->initializer->initializer_clause
+                    && declarator->initializer->initializer_clause->defaultDeleted
+                            != InitializerClauseAST::NotDefaultOrDeleted)
+                  {
+                    // defaulted or deleted functions are definitions
+                    FunctionDefinitionAST *ast
+                      = CreateNode<FunctionDefinitionAST>(session->mempool);
+                    ast->storage_specifiers = storageSpec;
+                    ast->function_specifiers = funSpec;
+                    ast->init_declarator = declarator;
+
+                    UPDATE_POS(ast, start, _M_last_valid_token+1);
+                    node = ast;
+                  }
+                else
+                  {
+                    SimpleDeclarationAST *ast
+                      = CreateNode<SimpleDeclarationAST>(session->mempool);
+                    ast->init_declarators = snoc(ast->init_declarators,
+                                                declarator, session->mempool);
+                    ast->function_specifiers = funSpec;
+
+                    UPDATE_POS(ast, start, _M_last_valid_token+1);
+                    node = ast;
+                  }
               }
               return true;
 
@@ -3715,17 +3732,39 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
         case ';':
           {
             advance();
-            SimpleDeclarationAST *ast
-              = CreateNode<SimpleDeclarationAST>(session->mempool);
 
-            ast->storage_specifiers = storageSpec;
-            ast->function_specifiers = funSpec;
-            ast->type_specifier = spec;
-            ast->win_decl_specifiers = winDeclSpec;
-            ast->init_declarators = declarators;
+            if (decl && decl->initializer && decl->initializer->initializer_clause
+                && decl->initializer->initializer_clause->defaultDeleted
+                        != InitializerClauseAST::NotDefaultOrDeleted)
+              {
+                // defaulted or deleted functions are definitions
+                FunctionDefinitionAST *ast
+                  = CreateNode<FunctionDefinitionAST>(session->mempool);
 
-            UPDATE_POS(ast, start, _M_last_valid_token+1);
-            node = ast;
+                ast->win_decl_specifiers = winDeclSpec;
+                ast->storage_specifiers = storageSpec;
+                ast->function_specifiers = funSpec;
+                ast->type_specifier = spec;
+                ast->init_declarator = decl;
+
+                UPDATE_POS(ast, start, _M_last_valid_token+1);
+                node = ast;
+              }
+            else
+              {
+                SimpleDeclarationAST *ast
+                  = CreateNode<SimpleDeclarationAST>(session->mempool);
+
+                ast->storage_specifiers = storageSpec;
+                ast->function_specifiers = funSpec;
+                ast->type_specifier = spec;
+                ast->win_decl_specifiers = winDeclSpec;
+                ast->init_declarators = declarators;
+
+                UPDATE_POS(ast, start, _M_last_valid_token+1);
+                node = ast;
+              }
+
           }
           return true;
 

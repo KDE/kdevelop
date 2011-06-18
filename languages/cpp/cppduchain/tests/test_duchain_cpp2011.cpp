@@ -24,6 +24,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -89,35 +90,60 @@ void TestDUChain::testRValueReference() {
   QCOMPARE(decls.at(2)->toString(), QString("A&& aRef"));
 }
 
-void TestDUChain::testDefaultDelete_data() {
-  QTest::addColumn<QString>("code");
-  QTest::addColumn<bool>("isDefault");
-  QTest::addColumn<bool>("isDelete");
-
-  QTest::newRow("default") << "class A { A() = default; };\n" << true << false;
-  QTest::newRow("delete") << "class A { A() = delete; };\n" << false << true;
-}
-
 void TestDUChain::testDefaultDelete() {
-  QFETCH(QString, code);
-  QFETCH(bool, isDefault);
-  QFETCH(bool, isDelete);
-
-  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
+  LockedTopDUContext top = parse("class A {\n"
+                                 "  A() = default;\n"
+                                 "  A(const A&) = delete;\n"
+                                 "  virtual ~A();\n"
+                                 "};\n"
+                                 "A::~A() = default;\n"
+                                 "void foo(int) = delete;\n"
+                                 , DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QVector< Declaration* > decs = top->childContexts().first()->localDeclarations();
-  QCOMPARE(decs.size(), 1);
-  ClassFunctionDeclaration* aCtor = dynamic_cast<ClassFunctionDeclaration*>(decs.first());
+  DUContext* ACtx = top->childContexts().first();
+  const QVector< Declaration* > Adecs = ACtx->localDeclarations();
+  QCOMPARE(Adecs.size(), 3);
+
+  {
+  ClassFunctionDeclaration* aCtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(0));
   QVERIFY(aCtor);
   QVERIFY(!aCtor->isAbstract());
   QVERIFY(!aCtor->isDestructor());
-  QVERIFY(!aCtor->isFinal());
-  QVERIFY(!aCtor->isSignal());
-  QVERIFY(!aCtor->isSlot());
-  QCOMPARE(aCtor->isDefaulted(), isDefault);
-  QCOMPARE(aCtor->isDeleted(), isDelete);
+  QVERIFY(aCtor->isConstructor());
+  QCOMPARE(aCtor->isExplicitlyDeleted(), false);
   QCOMPARE(aCtor->isDefinition(), true);
+  }
+
+  {
+  ClassFunctionDeclaration* copyCtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(1));
+  QVERIFY(copyCtor);
+  QVERIFY(!copyCtor->isAbstract());
+  QVERIFY(!copyCtor->isDestructor());
+  QVERIFY(copyCtor->isConstructor());
+  QCOMPARE(copyCtor->isExplicitlyDeleted(), true);
+  QCOMPARE(copyCtor->isDefinition(), true);
+  }
+
+  {
+  ClassFunctionDeclaration* aDtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(2));
+  QVERIFY(aDtor);
+  QVERIFY(!aDtor->isAbstract());
+  QVERIFY(aDtor->isVirtual());
+  QVERIFY(aDtor->isDestructor());
+  QVERIFY(!aDtor->isConstructor());
+  QCOMPARE(aDtor->isDefinition(), false);
+  FunctionDefinition* definition = FunctionDefinition::definition(aDtor);
+  QVERIFY(definition);
+  QCOMPARE(definition->range().start.line, 5);
+  }
+
+  {
+  FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().last());
+  QVERIFY(fooDec);
+  QCOMPARE(fooDec->isExplicitlyDeleted(), true);
+  QCOMPARE(fooDec->isDefinition(), true);
+  }
 }

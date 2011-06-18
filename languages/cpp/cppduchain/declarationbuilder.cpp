@@ -365,12 +365,17 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     if(m_mapAst && !m_mappedNodes.empty())
       editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
 
+    if (m_initializerType == DeleteInitializer) {
+      DUChainWriteLocker lock(DUChain::lock());
+      decl->setExplicitlyDeleted(m_initializerType == DeleteInitializer);
+    }
+
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
         // don't overwrite isDefinition if that was already set (see openFunctionDeclaration)
-        decl->setDeclarationIsDefinition( decl->isDefinition() || (bool)m_functionDefinedStack.top() );
+        decl->setDeclarationIsDefinition( (bool)m_functionDefinedStack.top() );
     }
-    
+
     applyFunctionSpecifiers();
   } else {
     openDefinition(node->id, node, node->id == 0);
@@ -734,10 +739,6 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
     Q_ASSERT(fun);
     fun->setAccessPolicy(currentAccessPolicy());
     fun->setIsAbstract(m_initializerType == AbstractInitializer);
-    fun->setIsDefaulted(m_initializerType == DefaultInitializer);
-    fun->setIsDeleted(m_initializerType == DeleteInitializer);
-    // the spec says defaulted and deleted functions are also definitions
-    fun->setDeclarationIsDefinition(fun->isDefaulted() || fun->isDeleted());
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition
