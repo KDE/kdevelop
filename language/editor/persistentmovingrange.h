@@ -66,6 +66,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public KShared
     void setZDepth(float depth) const;
     
     /**
+     * Returns the text contained by the range. Currently only works when the range is open in the editor.
+     * */
+    QString text() const;
+    
+    /**
      * Change the highlighting attribute.
      * */
     void setAttribute(KTextEditor::Attribute::Ptr attribute);

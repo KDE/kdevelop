@@ -62,6 +62,16 @@ KDevelop::SimpleRange KDevelop::PersistentMovingRange::range() const
   return m_p->m_range;
 }
 
+QString KDevelop::PersistentMovingRange::text() const
+{
+  VERIFY_FOREGROUND_LOCKED;
+  
+  if(m_p->m_movingRange)
+    return m_p->m_movingRange->document()->text(m_p->m_movingRange->toRange());
+  
+  return QString();
+}
+
 bool KDevelop::PersistentMovingRange::valid() const
 {
   VERIFY_FOREGROUND_LOCKED;
