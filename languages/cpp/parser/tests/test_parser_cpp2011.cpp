@@ -49,15 +49,20 @@ void TestParser::testRValueReference()
   QVERIFY(ast->declarations);
 }
 
+void TestParser::testDefaultDeletedFunctions_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("member-default") << "class A { A() = default; };\n";
+  QTest::newRow("member-delete") << "class A { A() = delete; };\n";
+  QTest::newRow("member-default-outside") << "class A { A(); };\nA::A() = default;\n";
+  QTest::newRow("non-member-delete") << "void foo(int) = delete;\n";
+}
+
 void TestParser::testDefaultDeletedFunctions()
 {
-  QByteArray code("class A{\n"
-                  "  A() = default;\n"
-                  "  A(const A&) = delete;\n"
-                  "};\n"
-                  "bool operator==(const A&, const A&) = default;\n"
-                  "bool operator!=(const A&, const A&) = delete;\n");
-  TranslationUnitAST* ast = parse(code);
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
