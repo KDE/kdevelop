@@ -170,26 +170,6 @@ void ClassFunctionDeclaration::setIsSlot(bool isSlot) {
   d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(isSlot, FunctionSlotFlag, d_func()->m_functionFlags);
 }
 
-bool ClassFunctionDeclaration::isDeleted() const
-{
-  return d_func()->m_functionFlags & DeleteFunctionFlag;
-}
-
-void ClassFunctionDeclaration::setIsDeleted(bool isDeleted)
-{
-  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(isDeleted, DeleteFunctionFlag, d_func()->m_functionFlags);
-}
-
-bool ClassFunctionDeclaration::isDefaulted() const
-{
-  return d_func()->m_functionFlags & DefaultFunctionFlag;
-}
-
-void ClassFunctionDeclaration::setIsDefaulted(bool isDefaulted)
-{
-  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(isDefaulted, DefaultFunctionFlag, d_func()->m_functionFlags);
-}
-
 bool ClassFunctionDeclaration::isConversionFunction() const {
   return identifier() == conversionIdentifier();
 }
