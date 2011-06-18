@@ -119,6 +119,5 @@ void TestDUChain::testDefaultDelete() {
   QVERIFY(!aCtor->isSlot());
   QCOMPARE(aCtor->isDefaulted(), isDefault);
   QCOMPARE(aCtor->isDeleted(), isDelete);
-  //TODO: should delete also be definition?
-  QCOMPARE(aCtor->isDefinition(), isDefault);
+  QCOMPARE(aCtor->isDefinition(), true);
 }

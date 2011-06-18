@@ -735,9 +735,9 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
     fun->setAccessPolicy(currentAccessPolicy());
     fun->setIsAbstract(m_initializerType == AbstractInitializer);
     fun->setIsDefaulted(m_initializerType == DefaultInitializer);
-    // = default is also the definition
-    fun->setDeclarationIsDefinition(fun->isDefaulted());
     fun->setIsDeleted(m_initializerType == DeleteInitializer);
+    // the spec says defaulted and deleted functions are also definitions
+    fun->setDeclarationIsDefinition(fun->isDefaulted() || fun->isDeleted());
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition
