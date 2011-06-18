@@ -138,6 +138,9 @@ public:
     /**Splits the view in this position by given @p orientation.
     Does nothing if the view is already splitted.*/
     void split(Qt::Orientation orientation);
+    /**Unsplits the index removing the given @p child and moving the contents
+    of another child to this index.*/
+    void unsplit(AreaIndex *childToRemove);
 
     /**@return the stacked view in @p position,
     returns 0 for splitter's indices and when there's no view at the @p position.*/
@@ -164,9 +167,6 @@ private:
     void copyTo(AreaIndex *target);
     /**Copies the children indices from this index to @p target.*/
     void copyChildrenTo(AreaIndex *target);
-    /**Unsplits the index removing the given @p child and moving the contents
-    of another child to this index.*/
-    void unsplit(AreaIndex *childToRemove);
 
     struct AreaIndexPrivate * const d;
 
