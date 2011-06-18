@@ -217,25 +217,25 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     KAction* previousContext = actions.addAction("previous_context");
     previousContext->setText( i18n("&Previous Visited Context") );
     previousContext->setIcon( KIcon("go-previous-context" ) );
-    previousContext->setShortcut( KStandardShortcut::Back );
+    previousContext->setShortcut( Qt::META | Qt::Key_Left );
     QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SLOT(previousContextShortcut()));
 
     KAction* nextContext = actions.addAction("next_context");
     nextContext->setText( i18n("&Next Visited Context") );
     nextContext->setIcon( KIcon("go-next-context" ) );
-    nextContext->setShortcut( KStandardShortcut::Forward );
+    nextContext->setShortcut( Qt::META | Qt::Key_Right );
     QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SLOT(nextContextShortcut()));
 
     KAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
     previousUse->setIcon( KIcon("go-previous-use") );
-    previousUse->setShortcut( Qt::ALT | Qt::Key_Up );
+    previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
     QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
 
     KAction* nextUse = actions.addAction("next_use");
     nextUse->setText( i18n("&Next Use") );
     nextUse->setIcon( KIcon("go-next-use") );
-    nextUse->setShortcut( Qt::ALT | Qt::Key_Down );
+    nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 
     KAction* outline = actions.addAction("outline_line");
