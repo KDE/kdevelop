@@ -282,7 +282,7 @@ p, li { white-space: pre-wrap; }
       <string>Files filter.</string>
      </property>
      <property name="whatsThis">
-      <string>Enter the file name pattern of the files to search here. You may give several patterns separated by spaces.</string>
+      <string>Enter the file name pattern of the files to search here. You may give several patterns separated by commas or spaces.</string>
      </property>
      <property name="editable">
       <bool>true</bool>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
       <string>Files pattern to exclude</string>
      </property>
      <property name="whatsThis">
-      <string>Enter the file name pattern of the files to exclude from the search here. You may give several patterns separated by spaces.&lt;p&gt;Every pattern is internally surrounded by asterisks, so that each pattern can match parts of the file paths.&lt;/p&gt;</string>
+      <string>Enter the file name pattern of the files to exclude from the search here. You may give several patterns separated by commas or spaces.&lt;p&gt;Every pattern is internally surrounded by asterisks, so that each pattern can match parts of the file paths.&lt;/p&gt;</string>
      </property>
      <property name="editable">
       <bool>true</bool>
@@ -417,11 +417,6 @@ p, li { white-space: pre-wrap; }
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>

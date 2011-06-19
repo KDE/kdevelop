@@ -70,41 +70,30 @@ WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
     m_id =  rhs.m_id + "_copy_";
 }
 
-void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
+void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup setGroup, KConfigGroup areaGroup )
 {
     if (area->isSplitted()) {
-        group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
+        setGroup.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
         if (area->first()) {
-            KConfigGroup subgroup(&group, "0");
-            subgroup.deleteGroup();
-            saveFromArea(a, area->first(), subgroup);
+            saveFromArea(a, area->first(), KConfigGroup(&setGroup, "0"), KConfigGroup(&areaGroup, "0"));
         }
 
         if (area->second()) {
-            KConfigGroup subgroup(&group, "1");
-            subgroup.deleteGroup();
-            saveFromArea(a, area->second(), subgroup);
+            saveFromArea(a, area->second(), KConfigGroup(&setGroup, "1"), KConfigGroup(&areaGroup, "1"));
         }
     } else {
-        group.writeEntry("View Count", area->viewCount());
-
+        setGroup.writeEntry("View Count", area->viewCount());
+        areaGroup.writeEntry("View Count", area->viewCount());
         int index = 0;
         foreach (Sublime::View* view, area->views()) {
-            kDebug() << view->document()->title();
-            group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-            group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-
-            TextDocument *textDoc = qobject_cast<TextDocument*>(view->document());
-            if (textDoc && textDoc->textDocument()) {
-                QString encoding = textDoc->textDocument()->encoding();
-                if (!encoding.isEmpty())
-                    group.writeEntry(QString("View %1 Encoding").arg(index), encoding);
-            }
-            QString state = view->viewState();
-            if (!state.isEmpty())
-                group.writeEntry(QString("View %1 State").arg(index), state);
-
+            //The working set config gets an updated list of files
+            QString docSpec = view->document()->documentSpecifier();
+            setGroup.writeEntry(QString("View %1").arg(index), docSpec);
+            setGroup.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
+            //The area specific config stores the working set documents in order along with their state
+            areaGroup.writeEntry(QString("View %1").arg(index), docSpec);
+            areaGroup.writeEntry(QString("View %1 State").arg(index), view->viewState());
             ++index;
         }
     }
@@ -202,70 +191,58 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     }
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
+    KConfigGroup setGroup = setConfig.group(m_id);
+    KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
 
-    loadToArea(area, areaIndex, group);
+    loadToArea(area, areaIndex, setGroup, areaGroup);
 
     //activate view in the working set
-    if (!area->views().isEmpty()) {
-        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
-            if(window->area() == area) {
-                QString activeView = group.readEntry("Active View", QString());
-                kDebug() << activeView;
-                bool found = false;
-                foreach (Sublime::View *v, area->views()) {
-                    if (v->document()->documentSpecifier() == activeView) {
-                        window->activateView(v);
-                        found = true;
-                        break;
-                    }
-                }
-                break;
-            }
+    QString activeView = areaGroup.readEntry("Active View", QString());
+    foreach (Sublime::View *v, area->views()) {
+        if (v->document()->documentSpecifier() == activeView) {
+            area->setActiveView(v);
+            break;
         }
     }
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup)
 {
-    if (group.hasKey("Orientation")) {
-        QStringList subgroups = group.groupList();
+    if (setGroup.hasKey("Orientation")) {
+        QStringList subgroups = setGroup.groupList();
 
         if (subgroups.contains("0") && subgroups.contains("1")) {
 //             kDebug() << "has zero, split:" << split;
 
-            Qt::Orientation orientation = group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
+            Qt::Orientation orientation = setGroup.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
             if(!areaIndex->isSplitted()){
                 areaIndex->split(orientation);
             }else{
                 areaIndex->setOrientation(orientation);
             }
 
-            loadToArea(area, areaIndex->first(), KConfigGroup(&group, "0"));
+            loadToArea(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), KConfigGroup(&areaGroup, "0"));
 
-            loadToArea(area, areaIndex->second(), KConfigGroup(&group, "1"));
+            loadToArea(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), KConfigGroup(&areaGroup, "1"));
         }
     } else {
         while (areaIndex->isSplitted()) {
-            areaIndex = areaIndex->first();
-            Q_ASSERT(areaIndex);// Split area index did not contain a first child area index if this fails
-            kDebug() << "is already splitted, using first index" << areaIndex;
+            Q_ASSERT(areaIndex->first());
+            areaIndex->unsplit(areaIndex->second());
         }
 
-        int viewCount = group.readEntry("View Count", 0);
+        //Track all documents in this areaIndex by their documentSpecifier
+        QHash<QString, Sublime::View*> viewsBySpec;
+        foreach (Sublime::View* view, areaIndex->views()) {
+            viewsBySpec.insert(view->document()->documentSpecifier(), view);
+        }
+        //Load all documents from the workingset into this areaIndex
+        int viewCount = setGroup.readEntry("View Count", 0);
         for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
+            QString type = setGroup.readEntry(QString("View %1 Type").arg(i), "");
+            QString specifier = setGroup.readEntry(QString("View %1").arg(i), "");
 
-            bool viewExists = false;
-            foreach (Sublime::View* view, areaIndex->views()) {
-                if (view->document()->documentSpecifier() == specifier) {
-                    viewExists = true;
-                    break;
-                }
-            }
-
-            if (viewExists) {
+            if (viewsBySpec.contains(specifier)) {
                 kDebug() << "View already exists!";
                 continue;
             }
@@ -274,17 +251,31 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
-                kDebug() << document->title();
                 Sublime::View* view = document->createView();
-
-                QString state = group.readEntry(QString("View %1 State").arg(i), "");
-                if (!state.isEmpty())
-                    view->setState(state);
-
                 area->addView(view, areaIndex);
+                viewsBySpec.insert(specifier, view);
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }
+        }
+        //Now use the workingset's area config (if present) to reorder the documents and load their state
+        Sublime::View *lastView = 0;
+        viewCount = areaGroup.readEntry("View Count", 0);
+        for (int i = 0; i < viewCount; ++i)
+        {
+            QString specifier = areaGroup.readEntry(QString("View %1").arg(i));
+            if (!viewsBySpec.contains(specifier))
+                continue;
+            Sublime::View *view = viewsBySpec[specifier];
+
+            if (lastView)
+                area->addView(area->removeView(view), areaIndex, lastView);
+
+            QString state = areaGroup.readEntry(QString("View %1 State").arg(i));
+            if (state.length())
+                view->setState(state);
+
+            lastView = view;
         }
     }
 }
@@ -333,18 +324,26 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     bool wasPersistent = isPersistent();
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-    deleteGroupRecursive(group);
-    group.writeEntry("iconName", m_iconName);
-    if (area->activeView()) {
-        group.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
-    } else {
-        group.writeEntry("Active View", QString());
-    }
-    saveFromArea(area, areaIndex, group);
+
+    KConfigGroup setGroup = setConfig.group(m_id);
+    deleteGroupRecursive(setGroup);
+    setGroup.writeEntry("iconName", m_iconName);
+
+    KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
+    QString lastActiveView = areaGroup.readEntry("Active View", "");
+    deleteGroupRecursive(setGroup);
+    if (area->activeView() && area->activeView()->document())
+        areaGroup.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
+    else
+        areaGroup.writeEntry("Active View", lastActiveView);
+
+    saveFromArea(area, areaIndex, setGroup, areaGroup);
 
     if(isEmpty())
-        deleteGroupRecursive(group);
+    {
+        deleteGroupRecursive(setGroup);
+        deleteGroupRecursive(areaGroup);
+    }
 
     setPersistent(wasPersistent);
 

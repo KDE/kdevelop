@@ -48,7 +48,7 @@ namespace KDevelop {
      * */
     void removeUse(const DeclarationId& id, const IndexedTopDUContext& use);
     /**
-     * Checks weather the given DeclarationID is is used
+     * Checks whether the given DeclarationID is is used
      * */
     bool hasUses(const DeclarationId& id) const;
 
