@@ -270,9 +270,10 @@ void VcsPluginHelper::delayedModificationWarningOn()
     
     foreach(const KUrl& url, urls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
-        doc->reload();
         
         if(doc) {
+            doc->reload();
+            
             KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             modif->setModifiedOnDiskWarning(true);
         }
