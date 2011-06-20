@@ -445,6 +445,7 @@ bool Parser::skipUntilDeclaration()
         case Token_export:
         case Token_thread_local:
         case Token_static_assert:
+        case Token_constexpr:
 
         case Token_const:       // cv
         case Token_volatile:    // cv
@@ -511,6 +512,8 @@ bool Parser::skipUntilStatement()
         case Token_scope:
         case Token_template:
         case Token_using:
+        case Token_static_assert:
+        case Token_constexpr:
           return true;
 
         default:
@@ -1872,6 +1875,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
   return true;
 }
 
+///TODO: the spec has a decl-specifier, friend and constexpr e.g. are no storage class specifiers!
 bool Parser::parseStorageClassSpecifier(const ListNode<uint> *&node)
 {
   uint start = session->token_stream->cursor();
@@ -1880,7 +1884,8 @@ bool Parser::parseStorageClassSpecifier(const ListNode<uint> *&node)
   while (0 != (tk = session->token_stream->lookAhead())
          && (tk == Token_friend || tk == Token_auto
              || tk == Token_register || tk == Token_static
-             || tk == Token_extern || tk == Token_mutable || tk == Token_thread_local))
+             || tk == Token_extern || tk == Token_mutable || tk == Token_thread_local
+             || tk == Token_constexpr))
     {
       node = snoc(node, session->token_stream->cursor(), session->mempool);
       advance();

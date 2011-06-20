@@ -51,6 +51,7 @@ enum TOKEN_KIND
     Token_compl,
     Token_concat,
     Token_const,
+    Token_constexpr,
     Token_const_cast,
     Token_continue,
     Token_decr,

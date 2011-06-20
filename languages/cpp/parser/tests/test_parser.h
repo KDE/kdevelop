@@ -87,6 +87,8 @@ private slots:
   void testVariadicTemplates();
   void testStaticAssert_data();
   void testStaticAssert();
+  void testConstExpr_data();
+  void testConstExpr();
 
 private:
   Control control;

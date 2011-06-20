@@ -136,3 +136,29 @@ void TestParser::testStaticAssert()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testConstExpr_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("function") << "constexpr int square(int x) { return x * x; }";
+  QTest::newRow("member") << "class A { constexpr int foo() { return 1; } };";
+  QTest::newRow("ctor") << "class A { constexpr A(); };";
+  QTest::newRow("data") << "constexpr double a = 4.2 * square(2);";
+}
+
+void TestParser::testConstExpr()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}
