@@ -491,6 +491,8 @@ public:
   DECLARE_AST_NODE(EnumSpecifier)
 
   NameAST *name;
+  TypeSpecifierAST* type;
+  bool isClass;
   const ListNode<EnumeratorAST*> *enumerators;
 };
 

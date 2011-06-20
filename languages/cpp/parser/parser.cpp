@@ -1690,8 +1690,22 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
   CHECK(Token_enum);
 
+  bool isClass = session->token_stream->lookAhead()==Token_class || session->token_stream->lookAhead()==Token_struct;
+  if(isClass) {
+    advance();
+  }
+
   NameAST *name = 0;
   parseName(name);
+
+  TypeSpecifierAST *type = 0;
+  if(session->token_stream->lookAhead() == ':') {
+    advance();
+    if(!parseTypeSpecifier(type)) {
+      rewind(start);
+      return false;
+    }
+  }
 
   if (session->token_stream->lookAhead() != '{')
     {
@@ -1702,6 +1716,8 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
   EnumSpecifierAST *ast = CreateNode<EnumSpecifierAST>(session->mempool);
   ast->name = name;
+  ast->type = type;
+  ast->isClass = isClass;
 
   EnumeratorAST *enumerator = 0;
   if (parseEnumerator(enumerator))
