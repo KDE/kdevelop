@@ -211,6 +211,12 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
 QString NormalDeclarationCompletionItem::keepRemainingWord(Identifier id)
 {
+  DUChainReadLocker lock;
+
+  if (!m_declaration) {
+    return QString();
+  }
+
   TypePtr<StructureType> type;
   QString insertAccessor;
   if (m_declaration->type<StructureType>()) {
@@ -236,20 +242,24 @@ QString NormalDeclarationCompletionItem::keepRemainingWord(Identifier id)
 
 QString NormalDeclarationCompletionItem::keepRemainingWord(const StructureType::Ptr &type, const Identifier &id, const QString &insertAccessor)
 {
-  QList<Declaration*> decls = m_declaration->context()->findDeclarations(type->qualifiedIdentifier());
-  if (decls.count()) {
-    Declaration* structDecl = decls.first();
+  ENSURE_CHAIN_READ_LOCKED;
+  Q_ASSERT(m_declaration);
+
+  if (Declaration* structDecl = type->declaration(m_declaration->topContext())) {
+    if (!structDecl->internalContext()) {
+      return QString();
+    }
     if (structDecl->internalContext()->findDeclarations(id).count()) {
       return insertAccessor;
     }
-    if (structDecl->internalContext()->findDeclarations(Identifier( "operator->" )).count()) {
-      Declaration* smartPtrFn = structDecl->internalContext()->findDeclarations(Identifier( "operator->" )).first();
-      if (smartPtrFn->type<FunctionType>()) {
-        if (PointerType::Ptr::dynamicCast(smartPtrFn->type<FunctionType>()->returnType())) {
-          PointerType::Ptr ptrTyp = PointerType::Ptr::staticCast(smartPtrFn->type<FunctionType>()->returnType());
-          AbstractType::Ptr smartPointerType = ptrTyp->baseType();
-          if (StructureType::Ptr::dynamicCast(ptrTyp->baseType())) {
-            return keepRemainingWord(StructureType::Ptr::staticCast(ptrTyp->baseType()), id, "->");
+    // might be a smart pointer or similar, hence check retval of operator-> if available
+    const QList<Declaration*> opDecs = structDecl->internalContext()->findDeclarations(Identifier( "operator->" ));
+    if (!opDecs.isEmpty()) {
+      Declaration* smartPtrFn = opDecs.first();
+      if (FunctionType::Ptr funType = smartPtrFn->type<FunctionType>()) {
+        if (PointerType::Ptr ptrRetType = PointerType::Ptr::dynamicCast(funType->returnType())) {
+          if (StructureType::Ptr retStructType = StructureType::Ptr::dynamicCast(ptrRetType->baseType())) {
+            return keepRemainingWord(retStructType, id, "->");
           }
         }
       }
