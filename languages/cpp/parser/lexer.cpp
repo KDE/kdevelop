@@ -192,6 +192,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(sizeof);
   ADD_TOKEN(__qt_slots__);
   ADD_TOKEN(static);
+  ADD_TOKEN(static_assert);
   ADD_TOKEN(static_cast);
   ADD_TOKEN(struct);
   ADD_TOKEN(switch);

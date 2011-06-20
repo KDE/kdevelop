@@ -101,6 +101,7 @@ static char const * const _S_token_names[] = {
   "sizeof",
   "__qt_slots__",
   "static",
+  "static_assert",
   "static_cast",
   "string_literal",
   "struct",

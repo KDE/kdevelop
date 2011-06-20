@@ -107,6 +107,7 @@ enum TOKEN_KIND
     Token_sizeof,
     Token___qt_slots__,
     Token_static,
+    Token_static_assert,
     Token_static_cast,
     Token_string_literal,
     Token_struct,

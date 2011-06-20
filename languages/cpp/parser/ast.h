@@ -197,6 +197,7 @@ public:
       Kind_SignalSlotExpression,                // 77
       Kind_QPropertyDeclaration,                // 78
       Kind_ForRangeDeclaration,                 // 79
+      Kind_StaticAssert,                        // 80
       NODE_KIND_COUNT
     };
 
@@ -937,6 +938,16 @@ public:
   TypeIdAST *type_id;
   ExpressionAST *expression;
   bool isVariadic;
+};
+
+class StaticAssertAST : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(StaticAssert)
+
+  ExpressionAST *expression;
+  StringLiteralAST *string;
 };
 
 class StringLiteralAST : public AST

@@ -107,3 +107,32 @@ void TestParser::testVariadicTemplates()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testStaticAssert_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html
+  // section 2.3
+  QTest::newRow("namespace-scope") << "static_assert(sizeof(long) >= 8, \"bla\");\n";
+  QTest::newRow("class-scope") << "template <class A> class B {\n"
+                                  "  static_assert(std::is_pod<A>::value, \"bla\");\n"
+                                  "};\n";
+  QTest::newRow("block-scope") << "void foo() { static_assert(sizeof(long) >= 8, \"bla\"); }\n";
+}
+
+void TestParser::testStaticAssert()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}

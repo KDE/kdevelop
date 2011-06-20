@@ -494,3 +494,9 @@ void DefaultVisitor::visitQPropertyDeclaration(QPropertyDeclarationAST *node)
   if (node->scriptableMethod)
     visit(node->scriptableMethod);
 }
+
+void DefaultVisitor::visitStaticAssert(StaticAssertAST* node)
+{
+  visit(node->expression);
+  visit(node->string);
+}

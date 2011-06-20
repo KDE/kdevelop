@@ -168,6 +168,7 @@ public:
   bool parseMemInitializerList(const ListNode<MemInitializerAST*> *&node);
   bool parseMemberSpecification(DeclarationAST *&node);
   bool parseMultiplicativeExpression(ExpressionAST *&node);
+  bool parseStaticAssert(DeclarationAST *&node);
   
   enum ParseNameAcceptTemplate {
     DontAcceptTemplate = 0,

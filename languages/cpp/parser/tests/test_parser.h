@@ -85,6 +85,8 @@ private slots:
   void testDefaultDeletedFunctions();
   void testVariadicTemplates_data();
   void testVariadicTemplates();
+  void testStaticAssert_data();
+  void testStaticAssert();
 
 private:
   Control control;

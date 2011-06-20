@@ -444,6 +444,7 @@ bool Parser::skipUntilDeclaration()
         case Token_template:
         case Token_export:
         case Token_thread_local:
+        case Token_static_assert:
 
         case Token_const:       // cv
         case Token_volatile:    // cv
@@ -690,6 +691,9 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
     case Token_template:
     case Token_export:
       return parseTemplateDeclaration(node);
+
+    case Token_static_assert:
+      return parseStaticAssert(node);
 
     default:
       {
@@ -2217,6 +2221,10 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
     {
       return true;
     }
+  else if (parseStaticAssert(node))
+    {
+      return true;
+    }
 
   rewind(start);
 
@@ -3434,6 +3442,8 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
       return parseAsmDefinition(node);
     case Token_namespace:
       return parseNamespaceAliasDefinition(node);
+    case Token_static_assert:
+      return parseStaticAssert(node);
     }
 
   Comment mcomment = comment();
@@ -3479,6 +3489,38 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
 
   if(mcomment)
     addComment(ast, mcomment);
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseStaticAssert(DeclarationAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  CHECK(Token_static_assert);
+
+  ADVANCE('(', ")");
+
+  StaticAssertAST *ast
+    = CreateNode<StaticAssertAST>(session->mempool);
+
+  if (!parseConstantExpression(ast->expression))
+    {
+      reportError("Constant expression expected");
+    }
+
+  ADVANCE(',', ",");
+
+  if (!parseStringLiteral(ast->string))
+    {
+      reportError("String literal expected");
+    }
+
+  ADVANCE(')', ")");
+  ADVANCE(';', ";");
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
