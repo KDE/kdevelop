@@ -1301,6 +1301,33 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     QCOMPARE(b->url().url(), QString("debugee.cpp"));
 }
 
+void GdbTest::testRunGdbScript()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    QTemporaryFile runScript;
+    runScript.open();
+
+    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("break main\n");
+    runScript.write("run\n");
+    runScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 27);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
