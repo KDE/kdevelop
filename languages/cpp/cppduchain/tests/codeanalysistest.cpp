@@ -105,6 +105,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("constructor") << "class C { C(int,int&); };  void f(int a) { int b; C* c=new C(a,b); }"
                                   << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Write));
+  QTest::newRow("empty constructor") << "class C { C(); };  void f() { new C; }"
+                                  << QVariantList();
 }
 
 static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& visited)

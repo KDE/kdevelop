@@ -109,7 +109,7 @@ void UseDecoratorVisitor::visitFunctionCall(FunctionCallAST* node)
   IndexedString id = m_session->token_stream->token(node->start_token).symbol();
   
   FunctionType::Ptr type = m_session->typeFromCallAst(node);
-  qDebug() << "function call" << id.str() << (type ? type->toString() : "caca");
+  qDebug() << "function call" << id.str() << (type ? type->toString() : "<null>");
   
   if(type) {
     m_callStack.push(type->arguments());
@@ -130,7 +130,7 @@ void UseDecoratorVisitor::visitNewExpression(NewExpressionAST* node)
     IndexedString id = m_session->token_stream->token(node->start_token).symbol();
   
     FunctionType::Ptr type = m_session->typeFromCallAst(node);
-    qDebug() << "new constructor call" << id.str() << (type ? type->toString() : "caca");
+    qDebug() << "new constructor call" << id.str() << (type ? type->toString() : "<null>");
     QList<AbstractType::Ptr> args;
     if(type)
       args = type->arguments();
@@ -144,7 +144,7 @@ void UseDecoratorVisitor::visitNewExpression(NewExpressionAST* node)
     m_argStack.push(0);
     visit(node->expression);
     visit(node->type_id);
-    visit(node->new_initializer->expression);
+    visit(node->new_initializer);
 //     visit(node->new_type_id);
     m_argStack.pop();
     m_callStack.pop();
