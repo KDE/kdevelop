@@ -1437,8 +1437,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           chosenFunction = declarations.first();
       }
 
-      if(chosenFunction)
+      if(chosenFunction) {
         newUse( node , token, token+1, chosenFunction );
+        session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
+      }
     }
 
     m_lastType = lastType;

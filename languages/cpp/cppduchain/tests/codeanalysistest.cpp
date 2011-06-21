@@ -43,18 +43,22 @@ void CodeAnalysisTest::testUseReadWrite()
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
   
   DataAccessRepository* repo = &m_modifications;
+  
+//   foreach(DataAccess* f, repo->modifications()) {
+//     qDebug() << "lalala" << f->flags();
+//   }
   
   QCOMPARE(repo->modifications().count(), modFlags.size());
   
   int i=0;
   foreach(const QVariant& f, modFlags) {
-//     qDebug() << "flags" << repo->modifications().at(i)->m_flags << f;
+    qDebug() << "flags" << repo->modifications().at(i)->flags() << f;
     KDevelop::DataAccess::DataAccessFlags p(f.toUInt());
-    QVERIFY(repo->modifications().at(i)->isRead() == p&DataAccess::Read);
-    QVERIFY(repo->modifications().at(i)->isWrite() == p&DataAccess::Write);
+    QCOMPARE(repo->modifications().at(i)->flags()&DataAccess::Read, (p&DataAccess::Read));
+    QCOMPARE(repo->modifications().at(i)->flags()&DataAccess::Write, (p&DataAccess::Write));
     
     i++;
   }
@@ -87,18 +91,20 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("ternary-op") << "int i; bool f() { i ? i : i; }"
                                   << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read) << uint(DataAccess::Read));
-  QTest::newRow("initializer") << "struct C {int i,j; C() : i(0),j(i) {} };" //todo: the use on j(>i<) is repeated
+  QTest::newRow("initializer") << "struct C {int i,j; C() : i(0),j(i) {} };"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("new-delete") << "int *a,b; void f() { a = new int(b); delete a; }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read));
+  QTest::newRow("new-define") << "void f() { int b=2, *a = new int(b); }"
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Write));
   QTest::newRow("return") << "int a; int f() { return a; }"
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("init") << "int f() { int a=3; }"
                                   << (QVariantList() << uint(DataAccess::Write));
   QTest::newRow("switch") << "int f(int a) { switch(a) { case 3: break;} }"
                                   << (QVariantList() << uint(DataAccess::Read));
-  QTest::newRow("constructor") << "Class C { C(int,int&); };  void f(int a) { int b; C* c=new C(a,b); }"
-                                  << (QVariantList() << uint(DataAccess::Read));
+  QTest::newRow("constructor") << "class C { C(int,int&); };  void f(int a) { int b; C* c=new C(a,b); }"
+                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Write));
 }
 
 static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& visited)

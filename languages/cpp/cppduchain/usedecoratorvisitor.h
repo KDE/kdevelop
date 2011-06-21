@@ -58,7 +58,6 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     virtual void visitName(NameAST *) ;
     virtual void visitNewDeclarator(NewDeclaratorAST *) ;
     virtual void visitNewExpression(NewExpressionAST *) ;
-    virtual void visitNewInitializer(NewInitializerAST *) ;
     virtual void visitPostfixExpression(PostfixExpressionAST *) ;
     virtual void visitPrimaryExpression(PrimaryExpressionAST *) ;
     virtual void visitPtrOperator(PtrOperatorAST *) ;

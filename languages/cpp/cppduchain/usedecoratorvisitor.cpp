@@ -43,6 +43,21 @@ QString nodeToString(const ParseSession* s, AST* node)
   return ret;
 }
 
+AbstractType::Ptr constructReadOnlyType()
+{
+  static AbstractType::Ptr ntype(new DelayedType);
+  return ntype;
+}
+
+ReferenceType::Ptr constructReferenceType()
+{
+  static AbstractType::Ptr ntype(new DelayedType);
+  static ReferenceType::Ptr reftype(new ReferenceType);
+  reftype->setBaseType(ntype);
+  
+  return reftype;
+}
+
 #define LOCKDUCHAIN     DUChainWriteLocker lock(DUChain::lock())
 typedef PushPositiveValue<DUContext*> PushPositiveContext;
 
@@ -79,6 +94,7 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
     if(type->whichType()==AbstractType::TypeReference && !(type.cast<ReferenceType>() && type.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier)) {
       f |= DataAccess::Write;
     }
+//     qDebug() << "adding..." << f << nodeToString(m_session, node);
     m_mods->addModification(cursor, f);
   }
   
@@ -98,12 +114,40 @@ void UseDecoratorVisitor::visitFunctionCall(FunctionCallAST* node)
   if(type) {
     m_callStack.push(type->arguments());
     m_argStack.push(0);
-    visit(node->arguments);
+    DefaultVisitor::visitFunctionCall(node);
     m_argStack.pop();
     m_callStack.pop();
   } else {
     kDebug() << "couldn't find the type for " << nodeToString(m_session, node);
   }
+}
+
+
+void UseDecoratorVisitor::visitNewExpression(NewExpressionAST* node)
+{
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    IndexedString id = m_session->token_stream->token(node->start_token).symbol();
+  
+    FunctionType::Ptr type = m_session->typeFromCallAst(node);
+    qDebug() << "new constructor call" << id.str() << (type ? type->toString() : "caca");
+    QList<AbstractType::Ptr> args;
+    if(type)
+      args = type->arguments();
+    else {
+      kDebug() << "couldn't find the type for " << node << nodeToString(m_session, node);
+      
+      args.append(constructReadOnlyType());
+    }
+    
+    m_callStack.push(args);
+    m_argStack.push(0);
+    visit(node->expression);
+    visit(node->type_id);
+    visit(node->new_initializer->expression);
+//     visit(node->new_type_id);
+    m_argStack.pop();
+    m_callStack.pop();
 }
 
 void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
@@ -119,8 +163,6 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   Token optoken = m_session->token_stream->token(node->op);
   bool isFunctionArguments = optoken.kind==',';
-  
-  qDebug() << "lelele" << (optype ? optype->toString() : "<null>");
   
   QList< AbstractType::Ptr > args;
   m_defaultFlags = DataAccess::Read;
@@ -167,19 +209,11 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   }
 }
 
-AbstractType::Ptr constructReadOnlyType()
+void UseDecoratorVisitor::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
-  static AbstractType::Ptr ntype(new DelayedType);
-  return ntype;
-}
-
-ReferenceType::Ptr constructReferenceType()
-{
-  static AbstractType::Ptr ntype(new DelayedType);
-  static ReferenceType::Ptr reftype(new ReferenceType);
-  reftype->setBaseType(ntype);
-  
-  return reftype;
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+//     visit(node->expression);
+    visit(node->declaration);
 }
 
 void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
@@ -373,7 +407,6 @@ void UseDecoratorVisitor::visit##a(a##AST* node)\
 
 IMPL_DEFAULT_VISIT_WITH_FLAGS(Condition, DataAccess::Read)
 IMPL_DEFAULT_VISIT_WITH_FLAGS(DeleteExpression, DataAccess::Read)
-IMPL_DEFAULT_VISIT_WITH_FLAGS(NewInitializer, DataAccess::Read)
 IMPL_DEFAULT_VISIT_WITH_FLAGS(ReturnStatement, DataAccess::Read)
 
 IMPL_DEFAULT_VISIT(CastExpression)
@@ -382,11 +415,9 @@ IMPL_DEFAULT_VISIT(CppCastExpression)
 IMPL_DEFAULT_VISIT(DeclarationStatement)
 IMPL_DEFAULT_VISIT(Declarator)
 IMPL_DEFAULT_VISIT(ElaboratedTypeSpecifier)
-IMPL_DEFAULT_VISIT(ExpressionOrDeclarationStatement)
 IMPL_DEFAULT_VISIT(ExpressionStatement)
 IMPL_DEFAULT_VISIT(Name)
 IMPL_DEFAULT_VISIT(NewDeclarator)
-IMPL_DEFAULT_VISIT(NewExpression)
 IMPL_DEFAULT_VISIT(PrimaryExpression)
 IMPL_DEFAULT_VISIT(PtrOperator)
 IMPL_DEFAULT_VISIT(SimpleDeclaration)
