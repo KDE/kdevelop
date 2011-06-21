@@ -111,12 +111,16 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   //we have two use cases here: the , parameter where we only want to advance in case we're in a function call argument list
   //or it's an operator expression and we want to visit the two sides of the expression.
   
-//   qDebug() << "BinaryExpression" << m_session->token_stream->token(node->op).symbolString();
+  qDebug() << "BinaryExpression" << m_session->token_stream->token(node->op).symbolString()
+                << nodeToString(m_session, node)
+                << m_session->positionAt( m_session->token_stream->position(node->start_token) );
   
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   Token optoken = m_session->token_stream->token(node->op);
   bool isFunctionArguments = optoken.kind==',';
+  
+  qDebug() << "lelele" << (optype ? optype->toString() : "<null>");
   
   QList< AbstractType::Ptr > args;
   m_defaultFlags = DataAccess::Read;
@@ -150,7 +154,7 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   //argstack can be empty in cases like "int a,b,c;"
   if(!m_argStack.isEmpty() && (optype || isFunctionArguments)) {
     ++m_argStack.top();
-    qDebug() << "advancing parameter" << m_argStack.top();
+    qDebug() << "advancing parameter" << m_argStack.top() << "over" << m_callStack.top().size();
     Q_ASSERT(m_callStack.top().size()>m_argStack.top());
   }
   m_defaultFlags = DataAccess::Read;
