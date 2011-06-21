@@ -292,6 +292,8 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
 QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimetype)
 {
+    QMutexLocker lock(&d->dataMutex);
+
     QList<ILanguage*> languages;
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimetype);
     if (it != d->languageCache.constEnd()) {
@@ -319,6 +321,8 @@ QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimety
 
 QList<QString> LanguageController::mimetypesForLanguageName(const QString& languageName)
 {
+    QMutexLocker lock(&d->dataMutex);
+
     QList<QString> mimetypes;
     for (LanguageCache::ConstIterator iter = d->languageCache.constBegin(); iter != d->languageCache.constEnd(); ++iter) {
         foreach (ILanguage* language, iter.value()) {

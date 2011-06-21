@@ -28,6 +28,8 @@ unsigned int extractor_div_with = 0;
 #include <language/util/setrepository.h>
 #include <kdebug.h>
 #include <time.h>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
 
 struct TestItem {
     explicit TestItem(uint _value = 0) : value(_value), leftChild(-1), rightChild(-1) {
@@ -287,10 +289,6 @@ class TestSet {
     TestItemBasedSet set;
 };
 
-const int cycles = 100000;
-const int valueRange = 1000;
-const int removeProbability = 40; //Percent
-
 float toSeconds(clock_t time) {
     return ((float)time) / CLOCKS_PER_SEC;
 }
@@ -323,8 +321,16 @@ struct NothingDoVisitor {
 class TestEmbeddedFreeTree : public QObject {
   Q_OBJECT
   private slots:
-    
+    void initTestCase() {
+        KDevelop::AutoTestShell::init();
+        KDevelop::TestCore* core = new KDevelop::TestCore;
+        core->initialize(KDevelop::Core::NoUi, "test-embeddedfreetree");
+    }
     void randomizedTest() {
+        const int cycles = 10000;
+        const int valueRange = 1000;
+        const int removeProbability = 40; //Percent
+
         TestSet set;
         srand(time(NULL));
         for(int a = 0; a < cycles; ++a) {
@@ -424,7 +430,8 @@ class TestEmbeddedFreeTree : public QObject {
         
         typedef Utils::StorableSet<TestItem, TestItemConversion, StaticRepository> RepositorySet;
         
-        uint cycles = 10000;
+        const uint cycles = 3000;
+        const uint setSize = 1500;
         
         uint totalItems = 0, totalFilteredItems = 0;
         
@@ -443,7 +450,7 @@ class TestEmbeddedFreeTree : public QObject {
             
             //Build the sets
             extractor_div_with = (rand() % 10) + 1;
-            for(int a = 0; a < 15000; ++a) {
+            for(uint a = 0; a < setSize; ++a) {
                 uint value = rand() % 3000;
                 uint divValue = value/extractor_div_with;
                 if(!divValue)

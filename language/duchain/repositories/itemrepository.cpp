@@ -42,7 +42,7 @@ const int crashesBeforeCleanup = 2;
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 69;
+  return 71;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
@@ -298,8 +298,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
           QString input;
           while(true) {
             out << i18n("Clear cache: [Y/n] ") << flush;
-            in >> input;
-            input = input.trimmed();
+            input = in.readLine().trimmed();
             if (input.toLower() == "y" || input.isEmpty()) {
               userAnswer = KMessageBox::Yes;
               break;
@@ -310,8 +309,8 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
           }
         } else {
           userAnswer = KMessageBox::questionYesNo(0,
-            i18n("The crash may be caused by a corruption of cached data. Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
-            i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+            i18np("The Session crashed once.", "The Session crashed %1 times in a row.", count) + "\n\n" + i18n("The crash may be caused by a corruption of cached data.\n\nPress OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
+            i18n("Session crashed"),
             KStandardGuiItem::ok(),
             KStandardGuiItem::cancel());
         }

@@ -55,7 +55,8 @@ public:
 
     virtual ProjectFolderItem* addFolder( const KUrl& folder, ProjectFolderItem *parent );
     virtual ProjectFileItem* addFile( const KUrl& file, ProjectFolderItem *parent );
-    virtual bool removeFilesAndFolders( QList<ProjectBaseItem*> items);
+    virtual bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items );
+    virtual bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent);
     virtual bool renameFolder( ProjectFolderItem *folder, const KUrl& url );
     virtual bool renameFile( ProjectFileItem *file, const KUrl& url );
 

@@ -75,6 +75,7 @@ public:
 
     virtual ProjectBuildSetModel* buildSetModel();
     virtual ProjectModel* projectModel();
+    virtual ProjectChangesModel* changesModel();
     virtual QItemSelectionModel* projectSelectionModel();
     virtual IProject* findProjectByName( const QString& name );
     IProject* findProjectForUrl( const KUrl& ) const;
@@ -102,6 +103,7 @@ public Q_SLOTS:
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
     void openProjects(const KUrl::List& projects);
+    void commitCurrentProject();
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

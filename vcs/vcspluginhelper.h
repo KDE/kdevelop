@@ -15,6 +15,7 @@
 
 #include <kurl.h>
 #include <memory>
+#include "vcsrevision.h"
 
 class KJob;
 class QAction;
@@ -48,24 +49,22 @@ public:
     KUrl::List const & contextUrlList();
     QMenu* commonActions();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void commit();
     void add();
     void revert();
-    void history();
+    void history(const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ));
     void annotation();
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
-    void diffToHead();
     void diffToBase();
     void diffForRev();
     void update();
-    void executeCommit(const QString& message, const QList<KUrl>& urls);
-    void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
-    void commitReviewCancelled(QString);
+    void commitReviewed(QString);
+    
+    void revertDone(KJob* job);
+    void delayedModificationWarningOn();
 private:
-    KUrl urlForItem(KDevelop::ProjectBaseItem* item) const;
-
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;
 };

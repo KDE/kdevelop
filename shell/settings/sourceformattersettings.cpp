@@ -144,6 +144,10 @@ void SourceFormatterSettings::load()
         foreach( const QString& mime, info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList() )
         {
             KMimeType::Ptr mimePtr = KMimeType::mimeType(mime);
+            if (!mimePtr) {
+                kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << mime;
+                continue;
+            }
             QString languageName = formatter->formatter->highlightModeForMime(mimePtr);
             LanguageSettings& l = languages[languageName];
             l.mimetypes.append( mimePtr );

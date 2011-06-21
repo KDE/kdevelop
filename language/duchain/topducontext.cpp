@@ -124,13 +124,6 @@ TopDUContext* IndexedTopDUContext::data() const {
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
-class TopDUContext::CacheData {
-  public:
-    CacheData(TopDUContextPointer _context) : context(_context) {
-    }
-    TopDUContextPointer context;
-};
-
 template <class T>
 void removeFromVector(QVector<T>& vec, const T& t) {
   for(int a  =0; a < vec.size(); ++a) {
@@ -160,16 +153,6 @@ public:
         if(dynamic_cast<TopDUContext*>(import.context(0)))
           dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.insert(m_ctxt);
     }
-  }
-
-  mutable QHash<QThread*, TopDUContext::CacheData*> m_threadCaches;
-
-  TopDUContext::CacheData* currentCache() const {
-    QHash<QThread*, TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThread());
-    if(it != m_threadCaches.end())
-      return *it;
-    else
-      return 0;
   }
 
   ~TopDUContextLocalPrivate() {
@@ -865,7 +848,6 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
 
 struct TopDUContext::FindDeclarationsAcceptor {
   FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check, SearchFlags _flags) : top(_top), target(_target), check(_check) {
-    cache = _top->m_local->currentCache();
     flags = _flags;
   }
 
@@ -926,7 +908,6 @@ struct TopDUContext::FindDeclarationsAcceptor {
   }
 
   const TopDUContext* top;
-  CacheData* cache;
   DeclarationList& target;
   const DeclarationChecker& check;
   QFlags< KDevelop::DUContext::SearchFlag > flags;
@@ -1379,21 +1360,6 @@ QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, 
   if(declarationIndex == std::numeric_limits<int>::max())
     return ret;
   return allUses(context, declarationIndex, noEmptyRanges);
-}
-
-///@todo move this kind of caching into the symbol-table
-TopDUContext::Cache::Cache(TopDUContextPointer context) : d(new CacheData(context)) {
-  DUChainWriteLocker lock(DUChain::lock());
-  if(d->context)
-    d->context->m_local->m_threadCaches.insert(QThread::currentThread(), d);
-}
-
-TopDUContext::Cache::~Cache() {
-  DUChainWriteLocker lock(DUChain::lock());
-  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThread()] == d)
-    d->context->m_local->m_threadCaches.remove(QThread::currentThread());
-
-  delete d;
 }
 
 KSharedPtr<IAstContainer> TopDUContext::ast() const

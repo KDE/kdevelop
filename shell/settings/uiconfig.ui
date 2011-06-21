@@ -21,62 +21,20 @@
      </property>
      <layout class="QGridLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Top Left Owner</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Top Right Owner</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QComboBox" name="kcfg_TopLeftCornerOwner">
-        <item>
-         <property name="text">
-          <string>Left Dock</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Top Dock</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="kcfg_TopRightCornerOwner">
-        <item>
-         <property name="text">
-          <string>Right Dock</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Top Dock</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Bottom Left Owner</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="0" column="1">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Bottom Right Owner</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="1" column="0">
        <widget class="QComboBox" name="kcfg_BottomLeftCornerOwner">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -96,7 +54,7 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="1" column="1">
        <widget class="QComboBox" name="kcfg_BottomRightCornerOwner">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

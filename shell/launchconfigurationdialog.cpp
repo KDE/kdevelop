@@ -76,7 +76,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     connect( addConfig, SIGNAL(clicked()), this, SLOT(createConfiguration()));
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
-    
+    connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
     connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QModelIndex idx = model->indexForConfig( Core::self()->runControllerInternal()->defaultLaunch() );
     kDebug() << "selecting index:" << idx;
@@ -268,6 +268,15 @@ void LaunchConfigurationDialog::pageChanged()
     button( KDialog::Apply )->setEnabled( true );
 }
 
+void LaunchConfigurationDialog::modelChanged(QModelIndex topLeft, QModelIndex bottomRight)
+{
+    if (tree->selectionModel())
+    {
+        QModelIndex index = tree->selectionModel()->selectedRows().first();
+        if (index.row() >= topLeft.row() && index.row() <= bottomRight.row() && bottomRight.column() == 1)
+            selectionChanged(tree->selectionModel()->selection(), tree->selectionModel()->selection());
+    }
+}
 
 void LaunchConfigurationDialog::deleteConfiguration()
 {
@@ -326,7 +335,6 @@ void LaunchConfigurationDialog::addConfiguration(ILaunchConfiguration* _launch)
     int row = model->findItemForProject(launch->project())->row;
     QModelIndex idx  = model->index(row, 0);
     
-    qDebug() << "pepepe" << idx.isValid() << launch->project()->name();
     model->addConfiguration(launch, idx);
     
     QModelIndex newindex = model->index( model->rowCount( idx ) - 1, 0, idx );
@@ -605,7 +613,6 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
                 if( index.column() == 0 )
                 {
                     t->launch->setName( value.toString() );
-                    return true;
                 } else if( index.column() == 1 )
                 {
                     if (t->launch->type()->id() != value.toString()) {
@@ -618,8 +625,9 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
                         endRemoveRows();
                         addLaunchModeItemsForLaunchConfig( t );
                     }
-                    return true;
                 }
+                emit dataChanged(index, index);
+                return true;
             }
             LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( static_cast<TreeItem*>( index.internalPointer() ) );
             if( lmi )
@@ -628,6 +636,7 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
                 {
                     LaunchConfiguration* l = configForIndex( index );
                     l->setLauncherForMode( lmi->mode->id(), value.toString() );
+                    emit dataChanged(index, index);
                     return true;
                 }
             }

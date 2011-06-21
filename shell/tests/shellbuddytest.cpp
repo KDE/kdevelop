@@ -222,8 +222,8 @@ void ShellBuddyTest::testDisableBuddies()
     createFile(dirA, "a.cpp");
     createFile(dirA, "b.cpp");
 
-    m_documentController->openDocument(dirA.name() + "a.cpp");
-    m_documentController->openDocument(dirA.name() + "a.h");
+    m_documentController->openDocument(QString(dirA.name() + "a.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "a.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -236,7 +236,7 @@ void ShellBuddyTest::testDisableBuddies()
     //activate a.cpp => new doc should be opened right next to it
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(0));
 
-    m_documentController->openDocument(dirA.name() + "b.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "b.cpp"));
     verifyFilename(areaIndex->views().value(0), "a.cpp");
     verifyFilename(areaIndex->views().value(1), "b.cpp");
     verifyFilename(areaIndex->views().value(2), "a.h");
@@ -268,9 +268,9 @@ void ShellBuddyTest::testDisableOpenAfterCurrent()
     createFile(dirA, "foo.cpp");
     createFile(dirA, "x.cpp");
 
-    m_documentController->openDocument(dirA.name() + "foo.h");
-    m_documentController->openDocument(dirA.name() + "bar.cpp");
-    m_documentController->openDocument(dirA.name() + "foo.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "foo.h"));
+    m_documentController->openDocument(QString(dirA.name() + "bar.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.cpp"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -280,7 +280,7 @@ void ShellBuddyTest::testDisableOpenAfterCurrent()
     verifyFilename(areaIndex->views().value(2), "bar.cpp");
     verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "foo.cpp");
 
-    m_documentController->openDocument(dirA.name() + "x.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "x.cpp"));
     verifyFilename(areaIndex->views().value(0), "foo.h");
     verifyFilename(areaIndex->views().value(1), "foo.cpp");
     verifyFilename(areaIndex->views().value(2), "bar.cpp");
@@ -312,16 +312,16 @@ void ShellBuddyTest::testDisableAll()
     createFile(dirA, "bar.h");
     createFile(dirA, "bar.cpp");
 
-    m_documentController->openDocument(dirA.name() + "foo.cpp");
-    m_documentController->openDocument(dirA.name() + "bar.h");
-    m_documentController->openDocument(dirA.name() + "foo.h");
+    m_documentController->openDocument(QString(dirA.name() + "foo.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "bar.h"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.h"));
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
 
     //activate bar.h
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(1));
 
-    m_documentController->openDocument(dirA.name() + "bar.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "bar.cpp"));
 
     verifyFilename(areaIndex->views().value(0), "foo.cpp");
     verifyFilename(areaIndex->views().value(1), "bar.h");
@@ -353,9 +353,9 @@ void ShellBuddyTest::testMultipleFolders()
     KTempDir dirB;
     createFile(dirB, "a.h");  // different folder => not dirA/a.cpp's buddy!
 
-    m_documentController->openDocument(dirA.name() + "a.cpp");
-    m_documentController->openDocument(dirA.name() + "x.cpp");
-    m_documentController->openDocument(dirB.name() + "a.h");
+    m_documentController->openDocument(QString(dirA.name() + "a.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "x.cpp"));
+    m_documentController->openDocument(QString(dirB.name() + "a.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());

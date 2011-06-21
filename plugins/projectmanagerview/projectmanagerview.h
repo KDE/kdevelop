@@ -46,13 +46,14 @@ class ProjectManagerFilterAction : public KAction {
     Q_OBJECT
 
 public:
-    explicit ProjectManagerFilterAction( QObject* parent );
+    explicit ProjectManagerFilterAction( const QString &initialFilter, QObject* parent );
 
 signals:
     void filterChanged(const QString& filter);
 
 protected:
     virtual QWidget* createWidget( QWidget* parent );
+    QString m_intialFilter;
 };
 
 class ProjectManagerView: public QWidget
@@ -77,6 +78,7 @@ private:
     QStringList m_cachedFileList;
     ProjectProxyModel* m_modelFilter;
     ProjectManagerViewPlugin* m_plugin;
+    QString m_filterString;
 };
 
 #endif // KDEVPROJECTMANAGER_H

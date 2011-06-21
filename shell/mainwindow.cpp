@@ -302,7 +302,6 @@ void MainWindow::initialize()
     foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
         d->addPlugin(plugin);
     
-    guiFactory()->addClient(Core::self()->debugControllerInternal());
     guiFactory()->addClient(Core::self()->sessionController());
     guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
     // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't

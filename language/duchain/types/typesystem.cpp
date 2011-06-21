@@ -88,12 +88,12 @@ PointerTypeData::PointerTypeData( const PointerTypeData& rhs )
 {
 }
 
-ReferenceTypeData::ReferenceTypeData() : m_baseType(0)
+ReferenceTypeData::ReferenceTypeData() : m_baseType(0), m_isRValue( false )
 {
 }
 
 ReferenceTypeData::ReferenceTypeData( const ReferenceTypeData& rhs )
-  : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType )
+  : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType ), m_isRValue( rhs.m_isRValue )
 {
 }
 

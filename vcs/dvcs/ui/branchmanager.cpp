@@ -155,7 +155,7 @@ class BranchItem : public QStandardItem
                                                 i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
 
                 if (ret == KMessageBox::Yes ) {
-                    KDevelop::VcsJob *branchJob = bmodel->dvcsPlugin()->branch(bmodel->repository(), newBranch, text(), QStringList("-m"));
+                    KDevelop::VcsJob *branchJob = bmodel->dvcsPlugin()->renameBranch(bmodel->repository(), newBranch, text());
 
                     bool ret = branchJob->exec();
                     kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
@@ -168,10 +168,10 @@ class BranchItem : public QStandardItem
         }
 };
 
-BranchesListModel::BranchesListModel(DistributedVersionControlPlugin* dvcsplugin, const QString& repo, QObject* parent)
+BranchesListModel::BranchesListModel(DistributedVersionControlPlugin* dvcsplugin, const KUrl& repo, QObject* parent)
     : QStandardItemModel(parent), dvcsplugin(dvcsplugin), repo(repo)
 {
-    QStringList branches = dvcsplugin->branches(repo);
+    QStringList branches = dvcsplugin->listBranches(repo);
     QString curBranch = dvcsplugin->curBranch(repo);
 
     foreach(const QString& branch, branches)
@@ -181,7 +181,9 @@ BranchesListModel::BranchesListModel(DistributedVersionControlPlugin* dvcsplugin
 void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)
 {
     kDebug() << "Creating " << baseBranch << " based on " << newBranch;
-    KDevelop::VcsJob* branchJob = dvcsplugin->branch(repo, baseBranch, newBranch);
+    VcsRevision rev;
+    rev.setRevisionValue(baseBranch, KDevelop::VcsRevision::GlobalNumber);
+    KDevelop::VcsJob* branchJob = dvcsplugin->branch(repo, rev, newBranch);
 
     kDebug() << "Adding new branch";
     if (branchJob->exec())
@@ -190,7 +192,7 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
 
 void BranchesListModel::removeBranch(const QString& branch)
 {
-    KDevelop::VcsJob *branchJob = dvcsplugin->branch(repo, branch, QString(), QStringList("-D"));
+    KDevelop::VcsJob *branchJob = dvcsplugin->deleteBranch(KUrl(repo), branch);
     
     kDebug() << "Removing branch:" << branch;
     if (branchJob->exec()) {

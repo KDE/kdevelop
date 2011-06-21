@@ -93,13 +93,8 @@ bool PartController::isTextType( KMimeType::Ptr mimeType )
         isTextType = true;
     }
 
-    bool isKDEText = false;
-    QVariant v = mimeType->property( "X-KDE-text" );
-    if ( v.isValid() )
-        isKDEText = v.toBool();
-
     // is this regular text - open in editor
-    return ( isTextType || isKDEText
+    return ( isTextType
              || mimeType->is( "text/plain" )
              || mimeType->is( "text/html" )
              || mimeType->is( "application/x-zerosize" ) );
@@ -148,14 +143,14 @@ KParts::Part* PartController::createPart( const QString & mimeType,
         const QString & className,
         const QString & preferredName )
 {
-    KParts::Factory * editorFactory = findPartFactory(
+    KPluginFactory * editorFactory = findPartFactory(
                                           mimeType,
                                           partType,
                                           preferredName );
 
     if ( !className.isEmpty() && editorFactory )
     {
-        return editorFactory->createPart(
+        return editorFactory->create<KParts::Part>(
                    0,
                    this,
                    className.toLatin1() );

@@ -62,6 +62,7 @@ public:
     KUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
+    KDevelop::IBasicVersionControl* m_iface;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );
     void jobReceivedResults( KDevelop::VcsJob* job );
@@ -100,15 +101,15 @@ void VcsEventWidgetPrivate::currentRowChanged(const QModelIndex& start, const QM
 void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
 {
     KDevelop::VcsEvent ev = m_logModel->eventForIndex( index );
+    m_detailModel->removeRows(0, m_detailModel->rowCount()-1);
+    
     if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
     {
         m_ui->message->setPlainText( ev.message() );
-        m_detailModel->clear();
         m_detailModel->addItemEvents( ev.items() );
     }else
     {
         m_ui->message->clear();
-        m_detailModel->clear();
     }
 }
 
@@ -132,52 +133,36 @@ void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
 
 void VcsEventWidgetPrivate::diffToPrevious()
 {
-    KDevelop::IPlugin* plugin = m_job->vcsPlugin();
-    if( plugin )
-    {
-        KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
-        if( iface )
-        {
-            KDevelop::VcsEvent ev = m_logModel->eventForIndex( m_contextIndex );
-            KDevelop::VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
-            KDevelop::VcsJob* job = iface->diff( m_url, prev, ev.revision() );
+    KDevelop::VcsEvent ev = m_logModel->eventForIndex( m_contextIndex );
+    KDevelop::VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
+    KDevelop::VcsJob* job = m_iface->diff( m_url, prev, ev.revision() );
 
-            VcsDiffWidget* widget = new VcsDiffWidget( job );
-            widget->setRevisions( prev, ev.revision() );
-            KDialog* dlg = new KDialog( q );
-            
-            widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
-            
-            dlg->setCaption( i18n("Difference To Previous") );
-            dlg->setButtons( KDialog::Ok );
-            dlg->setMainWidget( widget );
-            dlg->show();
-        }
-    }
+    VcsDiffWidget* widget = new VcsDiffWidget( job );
+    widget->setRevisions( prev, ev.revision() );
+    KDialog* dlg = new KDialog( q );
+    
+    widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+    
+    dlg->setCaption( i18n("Difference To Previous") );
+    dlg->setButtons( KDialog::Ok );
+    dlg->setMainWidget( widget );
+    dlg->show();
 }
 
 void VcsEventWidgetPrivate::diffRevisions()
 {
-    KDevelop::IPlugin* plugin = m_job->vcsPlugin();
-    if( plugin )
-    {
-        KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
-        if( iface )
-        {
-            QModelIndexList l = m_ui->eventView->selectionModel()->selectedRows();
-            KDevelop::VcsEvent ev1 = m_logModel->eventForIndex( l.first() );
-            KDevelop::VcsEvent ev2 = m_logModel->eventForIndex( l.last() );
-            KDevelop::VcsJob* job = iface->diff( m_url, ev1.revision(), ev2.revision() );
+    QModelIndexList l = m_ui->eventView->selectionModel()->selectedRows();
+    KDevelop::VcsEvent ev1 = m_logModel->eventForIndex( l.first() );
+    KDevelop::VcsEvent ev2 = m_logModel->eventForIndex( l.last() );
+    KDevelop::VcsJob* job = m_iface->diff( m_url, ev1.revision(), ev2.revision() );
 
-            VcsDiffWidget* widget = new VcsDiffWidget( job );
-            widget->setRevisions( ev1.revision(), ev2.revision() );
-            KDialog* dlg = new KDialog( q );
-            dlg->setCaption( i18n("Difference between Revisions") );
-            dlg->setButtons( KDialog::Ok );
-            dlg->setMainWidget( widget );
-            dlg->show();
-        }
-    }
+    VcsDiffWidget* widget = new VcsDiffWidget( job );
+    widget->setRevisions( ev1.revision(), ev2.revision() );
+    KDialog* dlg = new KDialog( q );
+    dlg->setCaption( i18n("Difference between Revisions") );
+    dlg->setButtons( KDialog::Ok );
+    dlg->setMainWidget( widget );
+    dlg->show();
 }
 
 VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget *parent )
@@ -187,6 +172,9 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
     d->m_job = job;
     //Don't autodelete this job, its metadata will be used later on
     d->m_job->setAutoDelete( false );
+    
+    d->m_iface = job->vcsPlugin()->extension<KDevelop::IBasicVersionControl>();
+    Q_ASSERT(d->m_iface);
 
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
@@ -206,10 +194,9 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
     d->m_ui->itemEventView->setModel( d->m_detailModel );
     header = d->m_ui->itemEventView->horizontalHeader();
     header->setResizeMode( 0, QHeaderView::ResizeToContents );
-    header->setResizeMode( 1, QHeaderView::Stretch );
+    header->setResizeMode( 1, QHeaderView::ResizeToContents );
     header->setResizeMode( 2, QHeaderView::ResizeToContents );
     header->setResizeMode( 3, QHeaderView::Stretch );
-    header->setResizeMode( 4, QHeaderView::ResizeToContents );
 
     connect( d->m_ui->eventView, SIGNAL( clicked( const QModelIndex& ) ),
              this, SLOT( eventViewClicked( const QModelIndex& ) ) );
@@ -225,8 +212,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
 
 VcsEventWidget::~VcsEventWidget()
 {
-    delete d->m_logModel;
-    delete d->m_detailModel;
     delete d->m_ui;
     delete d;
 }

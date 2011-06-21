@@ -319,24 +319,6 @@ public:
   
   virtual CursorInRevision importPosition(const DUContext* target) const;
   
-  class CacheData;
-
-  /**The cache allows speeding up repeated searches. When you're planning to do many searches from within the same top-context,
-    *this should be done. Just create an item of type Cache, and give it the du-context. The duchain must not be locked when calling this.
-    *The cache will automatically be discarded on destruction of the item. It is thread-local, so you don't need to care about multi-threading.
-    *@warning The DUChain must not be locked when the constructor is called, and it must not be locked when the destructor is executed.
-    *@warning Only use this in phases when you're not changing the Data within this contexts, else the cache will become invalid and search will be fuzzy.
-    */
-  class KDEVPLATFORMLANGUAGE_EXPORT Cache {
-    public:
-    Cache(TopDUContextPointer context);
-    ~Cache();
-
-    private:
-    Q_DISABLE_COPY(Cache)
-    CacheData* d;
-  };
-  
   ///Returns the set of all recursively imported top-contexts. If import-caching is used, this returns the cached set.
   ///The list also contains this context itself. This set is used to determine declaration-visibility from within this top-context.
   const IndexedRecursiveImports& recursiveImportIndices() const;

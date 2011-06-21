@@ -51,6 +51,7 @@ class ISelectionController;
 class IDocumentationController;
 class IDebugController;
 class IPartController;
+class IDashboardController;
 
 /**
  * ICore is the container class for all the various objects in use by

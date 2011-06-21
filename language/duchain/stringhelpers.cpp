@@ -272,49 +272,40 @@ QString stripFinalWhitespace(QString str) {
 QString clearComments( QString str, QChar replacement ) {
 
   QString withoutStrings = clearStrings(str, '$');
-  
-  SafetyCounter s( 1000 );
-  int lastPos = 0;
-  int pos;
-  int len = str.length();
-  while( (pos = withoutStrings.indexOf( "/*", lastPos )) != -1 ) {
-    if( !s ) return str;
-    int i = withoutStrings.indexOf( "*/", pos );
-    int iNewline = withoutStrings.indexOf( '\n', pos );
-    
-    while(iNewline != -1 && iNewline < i && pos < len) {
-      //Preserve newlines
-      iNewline = withoutStrings.indexOf( '\n', pos );
-      fillString( str, pos, iNewline, replacement );
-      pos = iNewline+1;
+
+  int pos = -1, newlinePos = -1, endCommentPos = -1, nextPos = -1, dest = -1;
+  while ( (pos = str.indexOf('/', pos + 1)) != -1 )
+  {
+    newlinePos = withoutStrings.indexOf('\n', pos);
+
+    if (withoutStrings[pos + 1] == '/')
+    {
+      //C style comment
+      dest = newlinePos == -1 ? str.length() : newlinePos;
+      fillString(str, pos, dest, replacement);
+      pos = dest;
     }
-    if( i != -1 && i <= len - 2 ) {
-      fillString( str, pos, i+2, replacement );
-      lastPos = i+2;
-      if( lastPos == len ) break;
-    } else {
-      if ( i == -1 ) {
-        // unterminated comment, might happen during code completion
-        // see also: https://bugs.kde.org/show_bug.cgi?id=231351
-        fillString( str, pos, len, replacement );
+    else if (withoutStrings[pos + 1] == '*')
+    {
+      //CPP style comment
+      endCommentPos = withoutStrings.indexOf("*/", pos + 2);
+      if (endCommentPos != -1)
+        endCommentPos += 2;
+
+      dest = endCommentPos == -1 ? str.length() : endCommentPos;
+      while (pos < dest)
+      {
+        nextPos = (dest > newlinePos && newlinePos != -1) ? newlinePos : dest;
+        fillString(str, pos, nextPos, replacement);
+        pos = nextPos;
+        if (pos == newlinePos)
+        {
+          ++pos; //Keep newlines intact, skip them
+          newlinePos = withoutStrings.indexOf('\n', pos + 1);
+        }
       }
-      break;
     }
   }
-
-  lastPos = 0;
-  while( (pos = withoutStrings.indexOf( "//", lastPos )) != -1 ) {
-    if( !s ) return str;
-    int i = withoutStrings.indexOf( '\n', pos );
-    if( i != -1 && i <= len - 1 ) {
-      fillString( str, pos, i, replacement );
-      lastPos = i+1;
-    } else {
-      fillString( str, pos, len, replacement );
-      break;
-    }
-  }
-
   return str;
 }
 

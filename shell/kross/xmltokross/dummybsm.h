@@ -48,12 +48,13 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
         KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* ) { return 0; }
 
-        bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* ) { return false; }
+        bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectTargetItem* ) { return false; }
         bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-        bool removeFilesAndFolders(QList< KDevelop::ProjectBaseItem* > ) { return false; }
-        bool removeFilesFromTargets( QList<KDevelop::TargetFilePair> ) { return false; }
+        bool removeFilesAndFolders( const QList< KDevelop::ProjectBaseItem* >& ) { return false; }
+        bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& ) { return false; }
         bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
         bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
+        bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* >&, KDevelop::ProjectFolderItem* ) { return false; };
         QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const { return QHash<QString, QString>(); }
         Features features() const { return Targets | Files | Folders; }
         

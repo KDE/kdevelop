@@ -74,6 +74,9 @@ std::string*/
 #include <interfaces/ipatchexporter.h>
 #include "standardpatchexport.h"
 #include <language/highlighting/colorcache.h>
+#include <vcs/models/vcsfilechangesmodel.h>
+#include <shell/core.h>
+#include <ktexteditor/modificationinterface.h>
 
 using namespace KDevelop;
 
@@ -83,6 +86,43 @@ namespace {
 }
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
+
+
+class PatchFilesModel : public VcsFileChangesModel
+{
+public:
+  PatchFilesModel(QObject *parent, bool allowSelection) : VcsFileChangesModel(parent, allowSelection) { };
+  enum ItemRoles { HunksNumberRole = VcsStatusInfoRole+1 };
+
+public slots:
+  void updateState(const KDevelop::VcsStatusInfo &status, unsigned hunksNum) {
+      int row = VcsFileChangesModel::updateState(invisibleRootItem(), status);
+      if (row == -1)
+        return;
+
+      QStandardItem *item = invisibleRootItem()->child(row, 0);
+      setFileInfo(item, hunksNum);
+      item->setData(QVariant(hunksNum), HunksNumberRole);
+  }
+
+  void updateState(const KDevelop::VcsStatusInfo &status) {
+      int row = VcsFileChangesModel::updateState(invisibleRootItem(), status);
+      if (row == -1)
+        return;
+
+      QStandardItem *item = invisibleRootItem()->child(row, 0);
+      setFileInfo(invisibleRootItem()->child(row, 0), item->data(HunksNumberRole).toUInt());
+  }
+
+private:
+  void setFileInfo(QStandardItem *item, unsigned int hunksNum) {
+    QString newText = i18ncp("%1: number of changed hunks, %2: file name",
+                             "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum, item->text());
+    item->setText(newText);
+  }
+};
+
+
 
 PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) 
 : QWidget( parent ), m_reversed( false ), m_plugin( plugin ) 
@@ -120,7 +160,6 @@ void PatchReviewToolView::updatePatchFromEdit() {
     lpatch->m_command = m_editPatch.command->text();
     lpatch->m_filename = m_editPatch.filename->url();
     lpatch->m_baseDir = m_editPatch.baseDir->url();
-    lpatch->m_depth = m_editPatch.depth->value();
     lpatch->setAlreadyApplied(m_editPatch.applied->checkState() == Qt::Checked);
 
     m_plugin->notifyPatchChanged();
@@ -153,47 +192,33 @@ void PatchReviewToolView::fillEditFromPatch() {
       finishText = ipatch->finishReviewCustomText();
     kDebug() << "finish-text: " << finishText;
     m_editPatch.finishReview->setText(finishText);
+    m_fileModel->setIsCheckbable(m_plugin->patch()->canSelectFiles());
     
     if(m_customWidget) {
       kDebug() << "removing custom widget";
       m_customWidget->hide();
-      m_editPatch.verticalLayout->removeWidget(m_customWidget);
+      m_editPatch.customWidgetsLayout->removeWidget(m_customWidget);
     }
 
     m_customWidget = ipatch->customWidget();
     if(m_customWidget) {
-      m_editPatch.verticalLayout->insertWidget(0, m_customWidget);
+      m_editPatch.customWidgetsLayout->insertWidget(0, m_customWidget);
       m_customWidget->show();
       kDebug() << "got custom widget";
     }
     
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ipatch.data());
-    if(!lpatch) {
-      m_editPatch.tabWidget->hide();
-      m_editPatch.baseDir->hide();
-      m_editPatch.label->hide();
-      m_editPatch.depth->hide();
-      m_editPatch.depthLabel->hide();
-      m_editPatch.applied->hide();
+    m_editPatch.tabWidget->setVisible(lpatch);
+    m_editPatch.baseDir->setVisible(lpatch);
+    m_editPatch.label->setVisible(lpatch);
+    m_editPatch.applied->setVisible(lpatch);
+    if(!lpatch)
       return;
-    }else{
-      m_editPatch.tabWidget->show();
-      m_editPatch.baseDir->show();
-      m_editPatch.label->show();
-      m_editPatch.depth->show();
-      m_editPatch.depthLabel->show();
-      m_editPatch.applied->show();
-    }
     
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
-    m_editPatch.depth->setValue( lpatch->m_depth );
-    if (lpatch->isAlreadyApplied()) {
-      m_editPatch.applied->setCheckState(Qt::Checked);
-    } else {
-      m_editPatch.applied->setCheckState(Qt::Unchecked);
-    }
+    m_editPatch.applied->setCheckState(lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked);
 
     if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
@@ -203,17 +228,9 @@ void PatchReviewToolView::fillEditFromPatch() {
 
 void PatchReviewToolView::patchSelectionChanged(int selection)
 {
-  m_editPatch.filesList->clear();
+    m_fileModel->removeRows(0, m_fileModel->rowCount());
     if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
       m_plugin->setPatch(m_plugin->knownPatches()[selection]);
-    }
-}
-
-void PatchReviewToolView::slotDepthChanged(int newDepth)
-{
-    if (LocalPatchSource* lpatch = GetLocalPatchSource()) {
-        lpatch->m_depth = newDepth;
-        m_plugin->notifyPatchChanged();
     }
 }
 
@@ -239,6 +256,8 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.setupUi( this );
 
+    m_fileModel = new PatchFilesModel(this, m_plugin->patch()->canSelectFiles());
+    m_editPatch.filesList->setModel(m_fileModel);
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated(false);
     
@@ -272,10 +291,8 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
-    connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(slotDepthChanged(int)) );
     connect( m_editPatch.applied, SIGNAL(stateChanged(int)), SLOT(slotAppliedChanged(int)) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.baseDir, SIGNAL(textChanged(QString)), SLOT(updatePatchFromEdit()) );
 
     
     
@@ -295,10 +312,6 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(forceUpdate()) );
 
     connect( m_editPatch.showButton, SIGNAL(clicked(bool)), m_plugin, SLOT(showPatch()) );
-    
-    bool blocked = blockSignals( true );
-
-    blockSignals( blocked );
 }
 
 void PatchReviewToolView::nextHunk() {
@@ -443,58 +456,19 @@ void PatchReviewPlugin::highlightPatch() {
 
 void PatchReviewToolView::finishReview()
 {
-    QList<KUrl> selectedUrls;
-    for(int a = 0; a< m_editPatch.filesList->topLevelItemCount(); ++a) {
-      QTreeWidgetItem* item = m_editPatch.filesList->topLevelItem(a);
-      if(item && item->checkState(0) == Qt::Checked) {
-        QVariant v = item->data(0, Qt::UserRole);
-        
-        if( v.canConvert<KUrl>() ) {
-          selectedUrls << v.value<KUrl>();
-        }else if ( v.canConvert<const Diff2::DiffModel*>() ) {
-          const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
-
-          KUrl file = m_plugin->urlForFileModel( model );
-
-          selectedUrls << file;
-        }
-      }
-    }
+    QList<KUrl> selectedUrls = m_fileModel->checkedUrls();
     kDebug() << "finishing review with" << selectedUrls;
     m_plugin->finishReview(selectedUrls);
 }
 
 void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
-    try {
-        if ( !m_plugin->modelList() )
-            throw "no model";
-        
-        QVariant v = i.data( Qt::UserRole );
-        
-        if( v.canConvert<KUrl>() ) {
-          KUrl u = v.value<KUrl>();
-          ICore::self()->documentController()->openDocument( u, KTextEditor::Cursor() );
-          return;
-        }
-        
-        if ( !v.canConvert<const Diff2::DiffModel*>() )
-            throw "cannot convert";
-        const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
-        if ( !model )
-            throw "bad model-value";
+    KUrl file = m_fileModel->statusInfo( i ).url();
 
-        KUrl file = m_plugin->urlForFileModel( model );
+    kDebug() << "opening" << file.toLocalFile();
 
-        kDebug() << "opening" << file.toLocalFile();
+    ICore::self()->documentController()->openDocument( file, KTextEditor::Cursor() );
 
-        ICore::self()->documentController()->openDocument( file, KTextEditor::Cursor() );
-
-        m_plugin->seekHunk( true, file );
-    } catch ( const QString & str ) {
-        kDebug() << "fileDoubleClicked():" << str;
-    } catch ( const char * str ) {
-        kDebug() << "fileDoubleClicked():" << str;
-    }
+    m_plugin->seekHunk( true, file );
 }
 
 KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
@@ -507,60 +481,15 @@ KUrl PatchReviewPlugin::urlForFileModel(const Diff2::DiffModel* model)
   return file;
 }
 
-static QString stateToString(KDevelop::VcsStatusInfo::State state)
-{
-    switch(state)
-    {
-      case KDevelop::VcsStatusInfo::ItemAdded:
-          return i18nc("VCS file status", "Added");
-      case KDevelop::VcsStatusInfo::ItemDeleted:
-          return i18nc("VCS file status", "Deleted");
-      case KDevelop::VcsStatusInfo::ItemHasConflicts:
-          return i18nc("VCS file status", "Has Conflicts");
-      case KDevelop::VcsStatusInfo::ItemModified:
-          return i18nc("VCS file status", "Modified");
-      case KDevelop::VcsStatusInfo::ItemUpToDate:
-          return i18nc("VCS file status", "Up To Date");
-      case KDevelop::VcsStatusInfo::ItemUnknown:
-      case KDevelop::VcsStatusInfo::ItemUserState:
-          return i18nc("VCS file status", "Unknown");
-    }
-    return i18nc("Unknown VCS file status, probably a backend error", "?");
-}
-
-static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
-{
-    switch(state)
-    {
-      case KDevelop::VcsStatusInfo::ItemAdded:
-          return KIcon("vcs-added");
-      case KDevelop::VcsStatusInfo::ItemDeleted:
-          return KIcon("vcs-removed");
-      case KDevelop::VcsStatusInfo::ItemHasConflicts:
-          return KIcon("vcs-conflicting");
-      case KDevelop::VcsStatusInfo::ItemModified:
-          return KIcon("vcs-locally-modified");
-      case KDevelop::VcsStatusInfo::ItemUpToDate:
-          return KIcon("vcs-normal");
-      case KDevelop::VcsStatusInfo::ItemUnknown:
-      case KDevelop::VcsStatusInfo::ItemUserState:
-          return KIcon("unknown");
-    }
-    return KIcon("dialog-error");
-}
-
 void PatchReviewToolView::kompareModelChanged()
 {
-    m_editPatch.filesList->clear();
-    m_editPatch.filesList->setColumnCount(1);
+    m_fileModel->clear();
 
     if (!m_plugin->modelList())
         return;
 
     QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
 
-    QSet<KUrl> haveUrls;
-    
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if( models )
     {
@@ -572,113 +501,39 @@ void PatchReviewToolView::kompareModelChanged()
               cnt = diffs->count();
 
           KUrl file = m_plugin->urlForFileModel(*it);
-          haveUrls.insert(file);
-
           if(!QFileInfo(file.toLocalFile()).isReadable())
             continue;
-            
-          QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
-          
-          m_editPatch.filesList->insertTopLevelItem(0, item);
 
-          const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
+          VcsStatusInfo status;
+          status.setUrl(file);
+          status.setState(VcsStatusInfo::ItemModified);
 
-          QString text;
-          QIcon icon;
-          if(additionalUrls.contains(file)) {
-              text = i18ncp("%1: number of changed hunks, %2: file name, %3: vcs file state",
-                "%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
-              icon = stateToIcon(additionalUrls[file]);
-          } else {
-              text = i18ncp("%1: number of changed hunks, %2: file name",
-                "%2 (1 hunk)", "%2 (%1 hunks)", cnt, filenameArgument);
-          }
-
-          item->setData( 0, Qt::DisplayRole, text );
-          item->setIcon( 0, icon );
-          item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
-          item->setCheckState( 0, Qt::Checked );
+          m_fileModel->updateState(status, cnt);
       }
     }
-    
-    // Maps the _really_ useful items (with VCS state) to index 0,
-    // the items that have at least a project found to 1,
-    // and the probably really useless items without project found to 2.
-    // The project-manager filters useless stuff like backups out so they get index 2.
-    QMap<int, QList< QPair<KUrl, KDevelop::VcsStatusInfo::State> > > newItems;
-    
-    for(QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
-    {
-      KUrl url = it.key();
-      
-      if(!haveUrls.contains(url))
-      {
-        haveUrls.insert(url);
-        
-        if(*it != KDevelop::VcsStatusInfo::ItemUnknown)
-        {
-          newItems[0] << qMakePair(url, *it);
-        }else{
-          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)))
-          {
-            newItems[1] << qMakePair(url, *it);
-          }else{
-            newItems[2] << qMakePair(url, *it);
-          }
-        }
-      }
-    }
-    
-    for(int a = 0; a < 3; ++a)
-    {
-      for(QList< QPair< KUrl, KDevelop::VcsStatusInfo::State > >::iterator itemIt = newItems[a].begin(); itemIt != newItems[a].end(); ++itemIt)
-      {
-        KUrl url = itemIt->first;
-        KDevelop::VcsStatusInfo::State state = itemIt->second;
-        
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
-        
-        QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-        text += " (" + stateToString(state) + ")";
-        
-        item->setData( 0, Qt::DisplayRole, text );
-        QVariant v;
-        v.setValue<KUrl>( url );
-        item->setData( 0, Qt::UserRole, v );
-        item->setIcon( 0, stateToIcon(state) );
-        item->setCheckState( 0, Qt::Unchecked );
 
-        if(a == 0)
-          item->setCheckState( 0, Qt::Checked );
-        
-        m_editPatch.filesList->addTopLevelItem(item);
-      }
+    for(QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++) {
+        VcsStatusInfo status;
+        status.setUrl(it.key());
+        status.setState(it.value());
+        m_fileModel->updateState(status);
     }
+
+    m_editPatch.filesList->resizeColumnToContents(0);
 }
 
 
 void PatchReviewToolView::documentActivated(IDocument* doc)
 {
-    QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     if ( !m_plugin->modelList() )
         return ;
-    for(int a = 0; a < m_editPatch.filesList->topLevelItemCount(); ++a) {
-      
-        QTreeWidgetItem* item = m_editPatch.filesList->topLevelItem(a);
-      
-        QVariant v = item->data( 0, Qt::UserRole );
-        if ( v.canConvert<const Diff2::DiffModel*>() ) {
-            const Diff2::DiffModel * model = v.value<const Diff2::DiffModel*>();
-
-            KUrl file = m_plugin->urlForFileModel(model);
-
-            if(file == doc->url()) {
-              m_editPatch.filesList->setCurrentItem(item);
-              return;
-            }
-        }
+    
+    QStandardItem *fileItem = m_fileModel->fileItemForUrl(doc->url());
+    if (fileItem) {
+        m_editPatch.filesList->setCurrentIndex(fileItem->index());
+    } else {
+        m_editPatch.filesList->setCurrentIndex(QModelIndex());
     }
-    m_editPatch.filesList->setCurrentIndex(QModelIndex());
 }
 
 void PatchHighlighter::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* )
@@ -1012,9 +867,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
     
     clear();
     
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-    
     KColorScheme scheme(QPalette::Active);
     
     QImage tintedInsertion = KIcon("insert-text").pixmap(16, 16).toImage();
@@ -1291,9 +1143,11 @@ void PatchReviewPlugin::showPatch()
 
 void PatchReviewPlugin::forceUpdate()
 {
-  m_patch->update();
+  if(m_patch) {
+    m_patch->update();
   
-  notifyPatchChanged();
+    notifyPatchChanged();
+  }
 }
 
 void PatchReviewPlugin::updateKompareModel() {
@@ -1319,7 +1173,6 @@ void PatchReviewPlugin::updateKompareModel() {
               patchDoc->reload();
         }
 
-        qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination=m_patch->file().toLocalFile();
@@ -1474,7 +1327,11 @@ void PatchReviewPlugin::cancelReview()
 
     emit patchChanged();
     
-    delete m_patch;
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data())) {
+      delete m_patch;
+      // make sure "show" button still openes the file dialog to open a custom patch file
+      setPatch(new LocalPatchSource);
+    }
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
@@ -1590,6 +1447,9 @@ void PatchReviewPlugin::updateReview()
   }
   futureActiveDoc->textDocument()->setReadWrite(false);
   futureActiveDoc->setPrettyName(i18n("Overview"));
+  IDocument* doc=ICore::self()->documentController()->documentForUrl(m_patch->file());
+  KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+  modif->setModifiedOnDiskWarning(false);
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
@@ -1606,9 +1466,8 @@ void PatchReviewPlugin::updateReview()
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
         ICore::self()->documentController()->openDocument(absoluteUrl);
-        if (documents.contains(absoluteUrl)) {
-          documents.remove(absoluteUrl);
-        }
+        documents.remove(absoluteUrl);
+        
         seekHunk(true, absoluteUrl); //Jump to the first changed position
       }else{
         // Maybe the file was deleted
@@ -1665,12 +1524,14 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
   m_patch(0), m_factory(new PatchReviewToolViewFactory(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
-  
+    qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
+
     core()->uiController()->addToolView(i18n("Patch Review"), m_factory);
     setXMLFile("kdevpatchreview.rc");
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(forceUpdate()));
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );

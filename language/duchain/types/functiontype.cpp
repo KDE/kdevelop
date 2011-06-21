@@ -87,20 +87,9 @@ void FunctionType::addArgument(AbstractType::Ptr argument)
   d_func_dynamic()->m_argumentsList().append(argument->indexed());
 }
 
-void FunctionType::removeArgument(AbstractType::Ptr argument)
+void FunctionType::removeArgument(int i)
 {
-  TYPE_D_DYNAMIC(FunctionType);
-
-  IndexedType i = argument->indexed();
-  uint shift = 0;
-  for(unsigned int a = 0; a < d->m_argumentsSize(); ++a) {
-    if(d->m_arguments()[a] == i) {
-      ++shift;
-    }else if(shift) {
-      d->m_argumentsList()[a-shift] = d->m_argumentsList()[a];
-    }
-  }
-  d->m_argumentsList().resize(d->m_argumentsSize()-shift);
+  d_func_dynamic()->m_argumentsList().remove(i);
 }
 
 void FunctionType::setReturnType(AbstractType::Ptr returnType)

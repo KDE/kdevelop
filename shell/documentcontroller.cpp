@@ -54,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include "savedialog.h"
 #include <kmessagebox.h>
 #include <KIO/Job>
+#include "workingsetcontroller.h"
 
 #include <config-kdevplatform.h>
 
@@ -350,7 +351,7 @@ struct DocumentControllerPrivate {
             Sublime::View *partView = 0;
             foreach (Sublime::View *view, sdoc->views())
             {
-                if (area->views().contains(view) && (activationParams.testFlag(DocumentController::DoNotForceCurrentView) || area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView())))
+                if (area->views().contains(view) && area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView()))
                 {
                     partView = view;
                     break;
@@ -402,13 +403,9 @@ struct DocumentControllerPrivate {
                             Sublime::AreaIndex* activeViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
 
                             // try to find existing View of buddy document:
-                            //   * only in the same AreaIndex if flag DoNotForceCurrentView is not set,
-                            //   * in all AreaIndices of the current Area, if flag is set (TODO: test this case)
                             foreach (Sublime::View *view, sublimeDocBuddy->views())
                             {
-                                if (area->views().contains(view) &&
-                                    (activationParams.testFlag(DocumentController::DoNotForceCurrentView) ||
-                                     area->indexOf(view) == activeViewIndex))
+                                if (area->views().contains(view))
                                 {
                                     buddyView = view;
                                     break;
@@ -930,6 +927,26 @@ IDocument* DocumentController::activeDocument() const
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
+}
+
+QString DocumentController::activeDocumentPath() const
+{
+    IDocument* doc = activeDocument();
+    if(!doc)
+        return QString();
+    return doc->url().pathOrUrl();
+}
+
+QStringList DocumentController::activeDocumentPaths() const
+{
+    UiController *uiController = Core::self()->uiControllerInternal();
+    if( !uiController->activeSublimeWindow() ) return QStringList();
+    
+    QSet<QString> documents;
+    foreach(Sublime::View* view, uiController->activeSublimeWindow()->area()->views())
+        documents.insert(KUrl(view->document()->documentSpecifier()).pathOrUrl());
+    
+    return documents.toList();
 }
 
 void DocumentController::registerDocumentForMimetype( const QString& mimetype,

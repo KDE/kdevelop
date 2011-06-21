@@ -316,10 +316,7 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n( "Split Vertical" ) );
     action->setWhatsThis( i18n( "<b>Split Vertical</b><p>Splits the current view vertically.</p>" ) );
 
-    action = new KToggleFullScreenAction(m_mainWindow, this);
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_F11 );
-    actionCollection()->addAction( "fullscreen", action );
-    connect(action, SIGNAL(triggered(bool)), SLOT(toggleFullScreen(bool)));
+    action = KStandardAction::fullScreen( this, SLOT(toggleFullScreen(bool)), m_mainWindow, actionCollection() );
 
     action = actionCollection()->addAction( "file_new" );
     action->setIcon(KIcon("document-new"));

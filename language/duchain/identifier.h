@@ -327,6 +327,9 @@ public:
   bool isReference() const;
   void setIsReference(bool);
 
+  bool isRValue() const;
+  void setIsRValue(bool);
+
   bool isConstant() const;
   void setIsConstant(bool);
   
@@ -356,10 +359,13 @@ public:
   bool operator!=(const IndexedTypeIdentifier& rhs) const;
   private:
     IndexedQualifiedIdentifier m_identifier;
+    // The overall number of bits shared by these bit-fields should not exceed 32,
+    // so that we don't waste space. IndexedTypeIdentifer should be as compact as possible.
     bool m_isConstant : 1;
     bool m_isReference : 1;
+    bool m_isRValue : 1;
     uint m_pointerDepth : 5;
-    uint m_pointerConstMask : 25;
+    uint m_pointerConstMask : 24;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);

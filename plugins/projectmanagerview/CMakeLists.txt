@@ -9,6 +9,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projecttreeview.cpp
     projectbuildsetwidget.cpp
     builditembuilderjob.cpp
+    projectdashboardwidget.cpp
 )
 
 kde4_add_ui_files( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
@@ -22,6 +23,7 @@ install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
+install( FILES kdevdashboardproject.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevprojectmanagerview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevprojectmanagerview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevprojectmanagerview )
 

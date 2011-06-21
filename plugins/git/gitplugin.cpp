@@ -415,8 +415,8 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this);
-    *job << "git" << "log" << "--date=raw";
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/;
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
         *job << rev;
@@ -429,7 +429,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString());
+    *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/ << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
     
@@ -506,33 +506,6 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
     job->setResults(results);
 }
 
-DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
-{
-    QDir d(repository);
-    
-    if(hasModifications(d) && KMessageBox::questionYesNo(0, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
-        QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
-        stash->exec();
-    }
-    
-    DVcsJob* job = new DVcsJob(d, this);
-    *job << "git" << "checkout" << branch;
-    return job;
-}
-
-DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch, const QString &branch,
-                             const QStringList &args)
-{
-    DVcsJob* job = new DVcsJob(QDir(repository), this, KDevelop::OutputJob::Silent);
-    *job << "git" << "branch" << args;
-    
-    *job << "--";
-    if (!branch.isEmpty())
-        *job << branch;
-    if (!basebranch.isEmpty())
-        *job << basebranch;
-    return job;
-}
 
 DVcsJob* GitPlugin::lsFiles(const QDir &repository, const QStringList &args,
                             OutputJob::OutputJobVerbosity verbosity)
@@ -549,48 +522,93 @@ DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, Ou
     return job;
 }
 
-QString GitPlugin::curBranch(const QString &repository)
+VcsJob* GitPlugin::tag(const KUrl& repository, const QString& commitMessage, const VcsRevision& rev, const QString& tagName)
 {
-    kDebug() << "Getting branch list";
-    
-    QScopedPointer<DVcsJob> job(new DVcsJob(QDir(repository), this, OutputJob::Silent));
-    *job << "git" << "symbolic-ref" << "HEAD";
-    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
-        QString out = job->output().trimmed();
-        
-        kDebug() << "Getting branch list" << out.right(out.size()-11);
-        return out.right(out.size()-11);
-    }
-    return QString();
+    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "tag" << "-m" << commitMessage << tagName;
+    if(rev.revisionValue().isValid())
+        *job << rev.revisionValue().toString();
+    return job;
 }
 
-QStringList GitPlugin::branches(const QString &repository)
+VcsJob* GitPlugin::switchBranch(const KUrl &repository, const QString &branch)
 {
-    QStringList branchListDirty;
-    QScopedPointer<DVcsJob> job(branch(repository));
-    kDebug() << "Getting branch list";
+    QDir d=urlDir(repository);
     
-    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
-        branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
-    else
-        return QStringList();
+    if(hasModifications(d) && KMessageBox::questionYesNo(0, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
+        QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
+        stash->exec();
+    }
+    
+    DVcsJob* job = new DVcsJob(d, this);
+    *job << "git" << "checkout" << branch;
+    return job;
+}
+
+VcsJob* GitPlugin::branch(const KUrl& repository, const KDevelop::VcsRevision& rev, const QString& branchName)
+{
+    Q_ASSERT(!branchName.isEmpty());
+    
+    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "branch" << "--" << branchName;
+    
+    if(!rev.prettyValue().isEmpty())
+        *job << rev.revisionValue().toString();
+    return job;
+}
+
+VcsJob* GitPlugin::deleteBranch(const KUrl& repository, const QString& branchName)
+{
+    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    *job << "git" << "branch" << "-D" << branchName;
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    return job;
+}
+
+VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranchName, const QString& newBranchName)
+{
+    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    *job << "git" << "branch" << "-m" << newBranchName << oldBranchName;
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    return job;
+}
+
+VcsJob* GitPlugin::currentBranch(const KUrl& repository)
+{
+    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    *job << "git" << "symbolic-ref" << "HEAD";
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    return job;
+}
+
+void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
+{
+    QString out = job->output().trimmed();
+    job->setResults(out.right(out.size()-11));
+}
+
+VcsJob* GitPlugin::branches(const KUrl &repository)
+{
+    DVcsJob* job=new DVcsJob(urlDir(repository));
+    *job << "git" << "branch" << "-a";
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitBranchOutput(KDevelop::DVcsJob*)));
+    return job;
+}
+
+void GitPlugin::parseGitBranchOutput(DVcsJob* job)
+{
+    QStringList branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
 
     QStringList branchList;
     foreach(QString branch, branchListDirty)
     {
-        if (branch.contains('*'))
-        {
-            branch = branch.prepend('\n').section("\n*", 1);
-        }
-        else
-        {
-            branch = branch.prepend('\n').section('\n', 1);
-        }
+        if (branch.startsWith('*'))
+            branch = branch.right(branch.size()-2);
         
-        branch = branch.trimmed();
-        branchList<<branch;
+        branchList<<branch.trimmed();
     }
-    return branchList;
+    
+    job->setResults(branchList);
 }
 
 /* Few words about how this hardcore works:
@@ -779,7 +797,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 
 void GitPlugin::initBranchHash(const QString &repo)
 {
-    QStringList branches = GitPlugin::branches(repo);
+    QStringList branches = listBranches(KUrl(repo));
     kDebug() << "BRANCHES: " << branches;
     //Now root branch is the current branch. In future it should be the longest branch
     //other commitLists are got with git-rev-lits branch ^br1 ^ br2
@@ -850,6 +868,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     QList<QVariant> commits;
     static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
     static QRegExp infoRegex( "^(\\w+):(.*)" );
+    static QRegExp modificationsRegex("(\\d+)\\s+(\\d+)\\s+(.+)"); //18      2       shell/workingsets/workingsetwidget.cpp
 
     QString contents = job->output();
     QTextStream s(&contents);
@@ -857,8 +876,10 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     VcsEvent item;
     QString message;
     bool pushCommit = false;
+    
     while (!s.atEnd()) {
         QString line = s.readLine();
+        
         if (commitRegex.exactMatch(line)) {
             if (pushCommit) {
                 item.setMessage(message.trimmed());
@@ -877,6 +898,20 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             } else if (cap1 == "Date") {
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
+        } else if (modificationsRegex.exactMatch(line)) {
+            int additions = modificationsRegex.cap(1).toUInt();
+            int removals = modificationsRegex.cap(2).toUInt();
+            QString filename = modificationsRegex.cap(3);
+            
+            VcsItemEvent::Actions a;
+            if(additions>0 || removals>0)
+                a=VcsItemEvent::Modified;
+            
+            VcsItemEvent itemEvent;
+            itemEvent.setActions(a);
+            itemEvent.setRepositoryLocation(filename);
+            
+            item.addItem(itemEvent);
         } else if (line.startsWith("    ")) {
             message += line.remove(0, 4);
             message += '\n';

@@ -185,7 +185,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         debugController = new DebugController(m_core);
     }
-
+    
     kDebug() << "initializing ui controller";
     
     if( !session.isEmpty() && !SessionController::tryLockSession(session) && !(mode & Core::NoUi) )
@@ -243,7 +243,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     runController->initialize();
     sourceFormatterController->initialize();
     selectionController->initialize();
-    documentationController->initialize();
+    if (documentationController) documentationController->initialize();
     debugController->initialize();
     
     return true;

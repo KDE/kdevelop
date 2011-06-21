@@ -35,6 +35,7 @@ namespace KDevelop
 {
 class IProject;
 class ProjectModel;
+class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
@@ -69,8 +70,11 @@ class ProjectTreeView: public QTreeView
 
     protected:
         virtual void keyPressEvent(QKeyEvent *event);
+        virtual void dropEvent(QDropEvent* event);
 
     private:
+        KDevelop::ProjectBaseItem* itemAtPos(QPoint pos);
+
         KDevelop::IProject* m_ctxProject;
         QPointer<KDevelop::NavigationToolTip> m_tooltip;
         QPersistentModelIndex m_idx;

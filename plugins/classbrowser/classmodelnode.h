@@ -232,6 +232,10 @@ private:
   /// @note DU CHAIN MUST BE LOCKED FOR READ
   /// @return true if something was updated.
   bool updateClassDeclarations();
+
+  /// Add "Base classes" and "Derived classes" folders, if needed
+  /// @return true if one of the folders was added.
+  bool addBaseAndDerived();
 };
 
 //////////////////////////////////////////////////////////////////////////////

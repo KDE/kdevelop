@@ -101,7 +101,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     const char* errfileName = 0;
     apr_file_t* errfile = 0;
 
-    QByteArray ba = (KStandardDirs::locateLocal("tmp","")+"kdevelop_svn_diff" ).toUtf8();
+    QByteArray ba = QString(KStandardDirs::locateLocal("tmp","")+"kdevelop_svn_diff" ).toUtf8();
     
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
@@ -276,7 +276,6 @@ kdev_logReceiver (void *baton,
             irev.setRevisionValue( QVariant( qlonglong( log_item->copyfrom_rev ) ),
                                    KDevelop::VcsRevision::GlobalNumber );
             iev.setRepositoryCopySourceRevision( irev );
-            iev.setRevision( vcsrev );
             switch( log_item->action )
             {
                 case 'A':
@@ -292,7 +291,7 @@ kdev_logReceiver (void *baton,
                     iev.setActions( KDevelop::VcsItemEvent::Replaced );
                     break;
             }
-            ev.setActions( ev.actions() | iev.actions() );
+            
             ev.items().append( iev );
         }
     }

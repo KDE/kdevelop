@@ -2,6 +2,7 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
 set( outputviewinterfaces_LIB_SRCS
     outputmodel.cpp
+    ioutputview.cpp
     ioutputviewmodel.cpp
     outputjob.cpp
 )

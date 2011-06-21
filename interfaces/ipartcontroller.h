@@ -23,6 +23,8 @@
 
 #include "interfacesexport.h"
 
+class KPluginFactory;
+
 namespace KParts
 {
 class Factory;
@@ -42,7 +44,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IPartController : public KParts::PartManager
     Q_OBJECT
 public:
     IPartController( QWidget* parent );
-    static KParts::Factory* findPartFactory( const QString& mimetype,
+    static KPluginFactory* findPartFactory( const QString& mimetype,
                                              const QString& parttype,
                                              const QString& preferredName = QString() );
     KParts::Part* createPart( const QString& mimetype, const QString& prefName = QString() );

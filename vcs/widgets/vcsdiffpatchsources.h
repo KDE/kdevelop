@@ -27,14 +27,16 @@
 #include <qtextstream.h>
 #include <qtextedit.h>
 #include <kdebug.h>
-#include <interfaces/ibasicversioncontrol.h>
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
-#include "vcsdiff.h"
+
+#include "../vcsexport.h"
 
 class KComboBox;
 namespace KDevelop {
 class VcsCommitDialog;
+class IBasicVersionControl;
+class VcsDiff;
 }
 
 class QWidget;
@@ -45,7 +47,7 @@ public:
     virtual KDevelop::VcsDiff update() const = 0;
 };
 
-class VCSStandardDiffUpdater : public VCSDiffUpdater {
+class KDEVPLATFORMVCS_EXPORT VCSStandardDiffUpdater : public VCSDiffUpdater {
 public:
     VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, KUrl url);
     virtual ~VCSStandardDiffUpdater();
@@ -56,7 +58,7 @@ private:
 };
 
 
-class VCSDiffPatchSource : public KDevelop::IPatchSource {
+class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource {
     public:
     /// The ownership of the updater is taken
     VCSDiffPatchSource(VCSDiffUpdater* updater);
@@ -80,13 +82,14 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
     void updateFromDiff(KDevelop::VcsDiff diff);
 };
 
-class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
+class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     Q_OBJECT
     public:
     /// The ownership of the updater is taken
-    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, QMap<KUrl, KDevelop::VcsStatusInfo::State> selectable, KDevelop::IBasicVersionControl* vcs, QStringList oldMessages);
-    
+    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& base, KDevelop::IBasicVersionControl* vcs);
     ~VCSCommitDiffPatchSource() ;
+    
+    QStringList oldMessages() const;
     
     virtual bool canSelectFiles() const ;
     
@@ -101,12 +104,14 @@ class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     virtual void cancelReview();
     
     virtual bool finishReview(QList< KUrl > selection) ;
+    QList<KDevelop::VcsStatusInfo> infos() const { return m_infos; }
 Q_SIGNALS:
     void reviewFinished(QString message, QList<KUrl> selection);
     void reviewCancelled(QString message);
 public:
-    QPointer<QWidget> m_commitMessageWidget;
-    QPointer<QTextEdit> m_commitMessageEdit;
+    QWeakPointer<QWidget> m_commitMessageWidget;
+    QWeakPointer<QTextEdit> m_commitMessageEdit;
+    QList<KDevelop::VcsStatusInfo> m_infos;
     QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
@@ -116,6 +121,6 @@ public slots:
 
 ///Sends the diff to the patch-review plugin.
 ///Returns whether the diff was shown successfully.
-bool showVcsDiff(KDevelop::IPatchSource* vcsDiff);
+bool KDEVPLATFORMVCS_EXPORT showVcsDiff(KDevelop::IPatchSource* vcsDiff);
 
 #endif // VCSDIFFPATCHSOURCES_H

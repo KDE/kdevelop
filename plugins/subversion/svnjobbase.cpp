@@ -127,6 +127,19 @@ void SvnJobBase::internalJobStarted( ThreadWeaver::Job* job )
 
 void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
 {
+    if ( m_status == VcsJob::JobFailed ) {
+        // see: https://bugs.kde.org/show_bug.cgi?id=273759
+        // this gets also called when the internal job failed
+        // then the emit result in internalJobFailed might trigger
+        // a nested event loop (i.e. error dialog)
+        // during that the internalJobDone gets called and triggers
+        // deleteLater and eventually deletes this job
+        // => havoc
+        // 
+        // catching this state here works but I don't like it personally...
+        return;
+    }
+
     if( internalJob() == job )
     {
         outputMessage(i18n("Completed"));

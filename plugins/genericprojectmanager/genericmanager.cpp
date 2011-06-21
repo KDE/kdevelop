@@ -102,4 +102,5 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProj
 
     return true;
 }
+
 #include "genericmanager.moc"

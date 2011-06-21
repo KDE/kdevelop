@@ -1,6 +1,7 @@
 /*
   Copyright 2007 Roberto Raggi <roberto@kdevelop.org>
   Copyright 2007 Hamish Rodda <rodda@kde.org>
+  Copyright 2011 Alexander Dymo <adymo@kdevelop.org>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -39,6 +40,7 @@
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
+#include "ideallayout.h"
 #include <QVBoxLayout>
 #include <QLabel>
 
@@ -148,9 +150,11 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
     }
 }
 
-IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWidget *parent)
+IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
+        IdealController *controller, Sublime::MainWindow *parent)
     : QWidget(parent)
     , _area(area)
+    , _controller(controller)
     , _corner(0)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -192,13 +196,13 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     dock->setView(view);
     dock->setDockWidgetArea(_area);
 
-    connect(dock, SIGNAL(anchor(bool)), SLOT(anchor(bool)));
-    connect(dock, SIGNAL(maximize(bool)), SLOT(maximize(bool)));
-
     _widgets[action] = dock;
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
     addAction(action);
+    // adymo: layout doesn't notice the addition of actions for some reason,
+    // enforce the invalidation
+    layout()->invalidate();
 
     return action;
 }
@@ -235,34 +239,30 @@ void IdealButtonBarWidget::showWidget(bool checked)
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
-    IdealDockWidget *widget = _widgets.value(action);
+    showWidget(action, checked);
+}
+
+void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
+{
+    IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
-    
+
     if ( checked ) {
         // Make sure only one widget is visible at any time.
         // The alternative to use a QActionCollection and setting that to "exclusive"
         // has a big drawback: QActions in a collection that is exclusive cannot
         // be un-checked by the user, e.g. in the View -> Tool Views menu.
         foreach(QAction *otherAction, actions()) {
-            if ( otherAction != action && otherAction->isChecked() ) {
+            if ( otherAction != widgetAction && otherAction->isChecked() ) {
                 otherAction->setChecked(false);
                 break;
             }
         }
     }
 
-    parentWidget()->showDockWidget(widget, checked);
+    _controller->showDockWidget(widget, checked);
 }
 
-void IdealButtonBarWidget::anchor(bool anchor)
-{
-    parentWidget()->anchorDockWidget(anchor, this);
-}
-
-void IdealButtonBarWidget::maximize(bool maximized)
-{
-    parentWidget()->maximizeDockWidget(maximized, this);
-}
 
 void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 {
@@ -327,54 +327,48 @@ void IdealButtonBarWidget::actionToggled(bool state)
 {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
+    toggleAction(action, state);
+}
 
+void IdealButtonBarWidget::toggleAction(QAction* action, bool state)
+{
     IdealToolButton* button = _buttons.value(action);
     Q_ASSERT(button);
 
     bool blocked = button->blockSignals(true);
     button->setChecked(state);
     button->blockSignals(blocked);
+
+    if (state)
+        _controller->lastDockWidget[_area] = widgetForAction(action);
 }
 
-IdealDockWidget::IdealDockWidget(IdealMainWidget *parent)
+
+IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindow *parent)
     : QDockWidget(parent),
       m_area(0),
       m_view(0),
       m_docking_area(Qt::NoDockWidgetArea),
-      m_maximized(false),
-      m_mainWidget(parent)
+      m_controller(controller),
+      m_mainWindow(parent)
 {
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(contextMenuRequested(QPoint)));
 
-    QAbstractButton *floatButton =
-    qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_floatbutton"));
-
     QAbstractButton *closeButton =
     qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_closebutton"));
 
-    if (floatButton && closeButton) {
-    disconnect(floatButton, SIGNAL(clicked()), 0, 0);
+    if (closeButton) {
     disconnect(closeButton, SIGNAL(clicked()), 0, 0);
 
-    m_anchor = floatButton;
-    m_anchor->setCheckable(true);
-    m_anchor->setToolTip(i18n("Lock the tool"));
-    m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
-                    "will be automatically hidden when you click outside it. "
-                    "A locked tool will remain visible until you explicitly "
-                    "hide it, or switch to a different tool.</p>"));
-    connect(m_anchor, SIGNAL(toggled(bool)), SIGNAL(anchor(bool)));
-
-    m_close = closeButton;
-    m_close->setToolTip(i18n("Remove the tool"));
-    m_close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
-                   "You can add the tool again by using the "
-                   "<tt>View->Add Tool View</tt> command.</p>"));
-    connect(m_close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
+    connect(closeButton, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     }
+
+    setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
+    // do not allow to move docks to the top dock area (no buttonbar there in our current UI)
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 }
 
 IdealDockWidget::~IdealDockWidget()
@@ -398,54 +392,6 @@ Qt::DockWidgetArea IdealDockWidget::dockWidgetArea() const
 
 void IdealDockWidget::setDockWidgetArea(Qt::DockWidgetArea dockingArea)
 { m_docking_area = dockingArea; }
-
-void IdealDockWidget::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    event->accept();
-    setMaximized(!isMaximized());
-    slotMaximize(isMaximized());
-}
-
-bool IdealDockWidget::isMaximized() const
-{ return m_maximized; }
-
-void IdealDockWidget::setMaximized(bool maximized)
-{ m_maximized = maximized; }
-
-bool IdealDockWidget::event(QEvent *e)
-{ return QWidget::event(e); }
-
-bool IdealDockWidget::isAnchored() const
-{ return m_anchor->isChecked(); }
-
-void IdealDockWidget::setAnchored(bool anchored, bool emitSignals)
-{
-    bool blocked = false;
-
-    if (!emitSignals)
-        blocked = m_anchor->blockSignals(true);
-
-    m_anchor->setChecked(anchored);
-
-    if (!emitSignals)
-        m_anchor->blockSignals(blocked);
-}
-
-void IdealDockWidget::slotMaximize(bool maximized)
-{
-#if 0 // ### fixme
-    QStyle::StandardPixmap pix;
-
-    if (maximized)
-        pix = QStyle::SP_TitleBarNormalButton;
-    else
-        pix = QStyle::SP_TitleBarMaxButton;
-
-    m_maximize->setIcon(style()->standardPixmap(pix));
-#endif
-
-    emit maximize(maximized);
-}
 
 void IdealDockWidget::slotRemove()
 {
@@ -482,6 +428,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QAction* actions[] = {left, bottom, right, top};
     for (int i = 0; i < 4; ++i)
     {
+        // do not show "move to top" toolview position
+        // we never show the top buttonbar and we shouldn't allow docks to go there
+        if (top == actions[i])
+            continue;
         positionMenu->addAction(actions[i]);
         actions[i]->setCheckable(true);
     }
@@ -501,12 +451,6 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
     QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove Toolview"));
-    QAction* toggleAnchored;
-    if ( isAnchored() ) {
-        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock Toolview"));
-    } else {
-        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock Toolview"));
-    }
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 
@@ -515,22 +459,19 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         if ( triggered == remove ) {
             slotRemove();
             return;
-        } else if ( triggered == toggleAnchored ) {
-            setAnchored(!isAnchored(), true);
-            return;
         } else if ( triggered == setShortcut ) {
             KDialog *dialog = new KDialog(this);
             dialog->setCaption(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             dialog->setButtons( KDialog::Ok | KDialog::Cancel );
             KShortcutWidget *w = new KShortcutWidget(dialog);
             KShortcut shortcut;
-            shortcut.setPrimary(m_mainWidget->actionForView(m_view)->shortcuts().value(0));
-            shortcut.setAlternate(m_mainWidget->actionForView(m_view)->shortcuts().value(1));
+            shortcut.setPrimary(m_controller->actionForView(m_view)->shortcuts().value(0));
+            shortcut.setAlternate(m_controller->actionForView(m_view)->shortcuts().value(1));
             w->setShortcut(shortcut);
             dialog->setMainWidget(w);
 
             if (dialog->exec() == QDialog::Accepted) {
-                m_mainWidget->actionForView(m_view)->setShortcuts(w->shortcut().toList());
+                m_controller->actionForView(m_view)->setShortcuts(w->shortcut().toList());
 
                 //save shortcut config
                 KConfigGroup config = KGlobal::config()->group("UI");
@@ -566,57 +507,60 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     }
 }
 
-IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
-    : QWidget(parent)
-    , m_centralWidgetFocusing(false), m_switchingDocksShown(false)
+
+MainWindow* IdealButtonBarWidget::parentWidget() const
 {
-    Q_UNUSED(ac);
-    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this);
-    leftBarWidget->hide();
+    return static_cast<Sublime::MainWindow*>(QWidget::parentWidget());
+}
+
+IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
+{ return _widgets.value(action); }
+
+
+
+// IdealController
+
+IdealController::IdealController(Sublime::MainWindow* mainWindow):
+    QObject(mainWindow), m_mainWindow(mainWindow)
+{
+    leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, m_mainWindow);
     connect(leftBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
-    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this);
-    rightBarWidget->hide();
+    rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, m_mainWindow);
     connect(rightBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
-    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this);
+    bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, m_mainWindow);
     bottomStatusBarLocation = bottomBarWidget->corner();
     connect(bottomBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
-    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this);
-    topBarWidget->hide();
+    topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, m_mainWindow);
     connect(topBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
-    m_mainLayout = new IdealMainLayout(this);
-    m_mainLayout->addButtonBar(leftBarWidget, IdealMainLayout::Left);
-    m_mainLayout->addButtonBar(rightBarWidget, IdealMainLayout::Right);
-    m_mainLayout->addButtonBar(topBarWidget, IdealMainLayout::Top);
-    m_mainLayout->addButtonBar(bottomBarWidget, IdealMainLayout::Bottom);
+    m_docks = qobject_cast<KActionMenu*>(mainWindow->action("docks_submenu"));
 
-    setLayout(m_mainLayout);
+    m_showLeftDock = qobject_cast<KAction*>(m_mainWindow->action("show_left_dock"));
+    m_showRightDock = qobject_cast<KAction*>(m_mainWindow->action("show_right_dock"));
+    m_showBottomDock = qobject_cast<KAction*>(m_mainWindow->action("show_bottom_dock"));
+    m_showTopDock = qobject_cast<KAction*>(m_mainWindow->action("show_top_dock"));
 
-    connect(parent, SIGNAL(settingsLoaded()), m_mainLayout, SLOT(loadSettings()));
+    connect(m_mainWindow, SIGNAL(settingsLoaded()), this, SLOT(loadSettings()));
 
-    Q_ASSERT(parent->action("docks_submenu"));
-    Q_ASSERT(qobject_cast<KActionMenu*>(parent->action("docks_submenu")));
-
-    m_showLeftDock = qobject_cast<KAction*>(parent->action("show_left_dock"));
-    m_showRightDock = qobject_cast<KAction*>(parent->action("show_right_dock"));
-    m_showBottomDock = qobject_cast<KAction*>(parent->action("show_bottom_dock"));
-    m_showTopDock = qobject_cast<KAction*>(parent->action("show_top_dock"));
-
-    m_anchorCurrentDock = qobject_cast<KAction*>(parent->action("anchor_current_dock"));
-    m_maximizeCurrentDock = qobject_cast<KAction*>(parent->action("maximize_current_dock"));
-    m_docks = qobject_cast<KActionMenu*>(parent->action("docks_submenu"));
 }
 
-void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
+void IdealController::addView(Qt::DockWidgetArea area, View* view)
 {
-    IdealDockWidget *dock = new IdealDockWidget(this);
+    IdealDockWidget *dock = new IdealDockWidget(this, m_mainWindow);
+    // dock object name is used to store toolview settings
+    QString dockObjectName = view->document()->title();
+    // support different configuration for same docks opened in different areas
+    if (m_mainWindow->area())
+        dockObjectName += "_" + m_mainWindow->area()->objectName();
+
+    dock->setObjectName(dockObjectName);
 
     KAcceleratorManager::setNoAccel(dock);
     QWidget *w = view->widget(dock);
@@ -634,7 +578,7 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     } else {
       QMainWindow *toolView = new QMainWindow();
       KToolBar *toolBar = new KToolBar(toolView);
-      int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
+      int iconSize = m_mainWindow->style()->pixelMetric(QStyle::PM_SmallIconSize);
       toolBar->setIconSize(QSize(iconSize, iconSize));
       toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
       toolBar->setWindowTitle(i18n("%1 Tool Bar", w->windowTitle()));
@@ -652,7 +596,7 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
     dock->setWindowIcon(view->widget()->windowIcon());
     dock->setFocusProxy(dock->widget());
 
-    if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
+    if (IdealButtonBarWidget* bar = barForDockArea(area)) {
         KAction* action = bar->addWidget(
             view->document()->title(), dock,
             static_cast<MainWindow*>(parent())->area(), view);
@@ -670,110 +614,211 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
         bar->show();
     }
 
+    connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
+
     dock->hide();
 
     docks[dock] = area;
 }
 
-KAction * Sublime::IdealMainWidget::actionForRole(IdealMainLayout::Role role) const
+void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 {
-    switch (role) {
-        case IdealMainLayout::Left:
+    IdealDockWidget *dock = qobject_cast<IdealDockWidget*>(sender());
+    View *view = dock->view();
+    QAction* action = m_view_to_action.value(view);
+
+    if (dock->dockWidgetArea() == area) {
+        // this event can happen even when dock changes its location within the same area
+        // usecases:
+        // 1) user drags to the same area
+        // 2) user rearranges toolviews inside the same area
+        // 3) state restoration shows the dock widget
+
+        // in 3rd case we need to show dock if we don't want it to be shown
+        // TODO: adymo: invent a better solution for the restoration problem
+        if (!action->isChecked() && dock->isVisible()) {
+            dock->hide();
+        }
+
+        return; 
+    }
+
+    if (IdealButtonBarWidget* bar = barForDockArea(docks.value(dock)))
+        bar->removeAction(action);
+
+    if (IdealButtonBarWidget* bar = barForDockArea(area)) {
+        KAction* action = bar->addWidget(
+            view->document()->title(), dock,
+            static_cast<MainWindow*>(parent())->area(), view);
+        m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
+
+        // at this point the dockwidget is visible (user dragged it)
+        // properly set up UI state
+        action->blockSignals(true);
+
+        // set checked state for the menu action
+        action->setChecked(true);
+        // check the buttonbar button
+        bar->toggleAction(action, true);
+        // hide all other docks
+        // TODO: adymo: will redo this once we allow to show several docks at the same time
+        foreach(QAction *otherAction, bar->actions()) {
+            if ( otherAction != action && otherAction->isChecked() ) {
+                otherAction->setChecked(false);
+                break;
+            }
+        }
+
+        action->blockSignals(false);
+
+        // the dock should now be the "last" opened in a new area, not in the old area
+        for (QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> >::iterator it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {
+            if (it.value() == dock)
+                lastDockWidget[it.key()] = 0;
+        }
+        lastDockWidget[area] = dock;
+
+        // after drag, the toolview loses focus, so focus it again
+        dock->setFocus(Qt::ShortcutFocusReason);
+
+        //restore toolview shortcut config
+        KConfigGroup config = KGlobal::config()->group("UI");
+        QStringList shortcuts = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
+        KShortcut shortcut;
+        shortcut.setPrimary(shortcuts.value(0));
+        shortcut.setAlternate(shortcuts.value(1));
+        action->setShortcut(shortcut);
+
+        m_docks->addAction(action);
+    }
+
+    if (area == Qt::BottomDockWidgetArea || area == Qt::TopDockWidgetArea)
+        dock->setFeatures( QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | IdealDockWidget::DockWidgetVerticalTitleBar );
+    else
+        dock->setFeatures( QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable );
+
+    docks[dock] = area;
+
+}
+
+IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) const
+{
+    switch (area) {
+        case Qt::LeftDockWidgetArea:
+            return leftBarWidget;
+
+        case Qt::TopDockWidgetArea:
+            return topBarWidget;
+
+        case Qt::RightDockWidgetArea:
+            return rightBarWidget;
+
+        case Qt::BottomDockWidgetArea:
+            return bottomBarWidget;
+
         default:
-            return m_showLeftDock;
-        case IdealMainLayout::Right:
-            return m_showRightDock;
-        case IdealMainLayout::Top:
-            return m_showTopDock;
-        case IdealMainLayout::Bottom:
-            return m_showBottomDock;
+            Q_ASSERT(false);
+            return 0;
     }
 }
 
-void IdealMainWidget::centralWidgetFocused()
+void IdealController::slotDockBarContextMenuRequested(QPoint position)
 {
-    m_centralWidgetFocusing = true;
+    IdealButtonBarWidget* bar = qobject_cast<IdealButtonBarWidget*>(sender());
+    Q_ASSERT(bar);
 
-    for (IdealMainLayout::Role role = IdealMainLayout::Left; role <= IdealMainLayout::Top; role = static_cast<IdealMainLayout::Role>(role + 1))
-        if (!m_mainLayout->isAreaAnchored(role))
-            actionForRole(role)->setChecked(false);
-
-    m_centralWidgetFocusing = false;
+    emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
 }
 
-// helper for toggleDocksShown
-bool IdealMainWidget::allDocksHidden()
-{
-    foreach(QAction* shown, m_view_to_action) {
-        if (shown->isChecked()) return false;
-    }
-    return true;
-}
-
-// helper for toggleDocksShown
-bool IdealMainWidget::someDockMaximized()
-{
-    QMapIterator<IdealDockWidget*, Qt::DockWidgetArea> it(docks);
-    while(it.hasNext()) {
-        it.next();
-        if (it.key() && it.key()->isMaximized()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// helper for toggleDocksShown
-void IdealMainWidget::restorePreviouslyShownDocks()
-{
-    foreach(View* v, m_previouslyShownDocks) {
-        if (v && m_view_to_action.contains(v)) {
-            m_view_to_action[v]->setChecked(true);
-        }
-    }
-}
-
-// helper for toggleDocksShown
-void IdealMainWidget::hideAllShownDocks()
-{
-    m_previouslyShownDocks.clear();
-    QMapIterator<View*, QAction*> it(m_view_to_action);
-    while(it.hasNext()) {
-        it.next();
-        if (it.value() && it.value()->isChecked()) {
-            m_previouslyShownDocks << it.key();
-            it.value()->setChecked(false);
-        }
-    }
-    centralWidgetFocused();
-}
-
-void IdealMainWidget::toggleDocksShown()
-{
-    if (m_switchingDocksShown || someDockMaximized()) {
-        return;
-    }
-    m_switchingDocksShown = true;
-    if (allDocksHidden()) {
-        restorePreviouslyShownDocks();
-    } else {
-        hideAllShownDocks();
-    }
-    m_switchingDocksShown = false;
-}
-
-void IdealMainWidget::raiseView(View * view)
+void IdealController::raiseView(View* view)
 {
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 
+    QWidget *focusWidget = m_mainWindow->focusWidget();
+
     action->setChecked(true);
+    // TODO: adymo: hack: focus needs to stay inside the previously
+    // focused widget (setChecked will focus the toolview)
+    if (focusWidget)
+        focusWidget->setFocus(Qt::ShortcutFocusReason);
 }
 
-void IdealMainWidget::removeView(View* view, bool nondestructive)
+QList< IdealDockWidget* > IdealController::allDockWidgets()
+{
+    return docks.keys();
+}
+
+void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
+{
+    Q_ASSERT(docks.contains(dock));
+
+    Qt::DockWidgetArea area = docks.value(dock);
+
+    if (show) {
+        m_mainWindow->addDockWidget(area, dock);
+        dock->show();
+    } else {
+        m_mainWindow->removeDockWidget(dock);
+    }
+
+    setShowDockStatus(area, show);
+    emit dockShown(dock->view(), Sublime::dockAreaToPosition(area), show);
+
+    if (!show)
+        // Put the focus back on the editor if a dock was hidden
+        focusEditor();
+    else {
+        // focus the dock
+        dock->setFocus(Qt::ShortcutFocusReason);
+    }
+}
+
+void IdealController::focusEditor()
+{
+    if (View* view = m_mainWindow->activeView())
+        if (view->hasWidget())
+            view->widget()->setFocus(Qt::ShortcutFocusReason);
+}
+
+QWidget* IdealController::statusBarLocation() const
+{
+    return bottomStatusBarLocation;
+}
+
+QAction* IdealController::actionForView(View* view) const
+{
+    return m_view_to_action.value(view);
+}
+
+void IdealController::setShowDockStatus(Qt::DockWidgetArea area, bool checked)
+{
+    KAction* action = actionForArea(area);
+    if (action->isChecked() != checked) {
+        bool blocked = action->blockSignals(true);
+        action->setChecked(checked);
+        action->blockSignals(blocked);
+    }
+}
+
+KAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
+{
+    switch (area) {
+        case Qt::LeftDockWidgetArea:
+        default:
+            return m_showLeftDock;
+        case Qt::RightDockWidgetArea:
+            return m_showRightDock;
+        case Qt::TopDockWidgetArea:
+            return m_showTopDock;
+        case Qt::BottomDockWidgetArea:
+            return m_showBottomDock;
+    }
+}
+
+void IdealController::removeView(View* view, bool nondestructive)
 {
     Q_ASSERT(m_view_to_action.contains(view));
-    m_previouslyShownDocks.removeOne(view);
     QAction* action = m_view_to_action.value(view);
 
     QWidget *viewParent = view->widget()->parentWidget();
@@ -791,7 +836,7 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
        method asserts immediately.  */
     action->setChecked(false);
 
-    if (IdealButtonBarWidget* bar = barForRole(roleForArea(docks.value(dock))))
+    if (IdealButtonBarWidget* bar = barForDockArea(docks.value(dock)))
         bar->removeAction(action);
 
     m_view_to_action.remove(view);
@@ -803,372 +848,103 @@ void IdealMainWidget::removeView(View* view, bool nondestructive)
     delete dock;
 }
 
-void IdealMainWidget::moveView(View *view, Qt::DockWidgetArea area)
+void IdealController::moveView(View *view, Qt::DockWidgetArea area)
 {
     removeView(view);
     addView(area, view);
 }
 
-void IdealMainWidget::setCentralWidget(QWidget * widget)
+void IdealController::showBottomDock(bool show)
 {
-    m_mainLayout->addWidget(widget, IdealMainLayout::Central);
+    showDock(Qt::BottomDockWidgetArea, show);
 }
 
-void IdealMainWidget::anchorCurrentDock(bool anchor)
+void IdealController::showLeftDock(bool show)
 {
-    if (IdealDockWidget* dw = m_mainLayout->lastDockWidget()) {
-        if (!dw->isVisible())
-            return setAnchorActionStatus(dw->isAnchored());
-
-        dw->setAnchored(anchor, true);
-    }
+    showDock(Qt::LeftDockWidgetArea, show);
 }
 
-void IdealMainWidget::maximizeCurrentDock(bool maximized)
+void IdealController::showRightDock(bool show)
 {
-    if (IdealDockWidget* dw = m_mainLayout->lastDockWidget()) {
-        if (!dw->isVisible())
-            return setMaximizeActionStatus(false);
-
-        dw->setMaximized(maximized);
-    }
+    showDock(Qt::RightDockWidgetArea, show);
 }
 
-void IdealMainWidget::anchorDockWidget(bool checked, IdealButtonBarWidget * bar)
+void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 {
-    m_mainLayout->anchorWidget(checked, roleForBar(bar));
-}
+    IdealButtonBarWidget *bar = barForDockArea(area);
+    if (!bar) return;
+    IdealDockWidget *lastDock = lastDockWidget[area];
 
-void IdealMainWidget::maximizeDockWidget(bool checked, IdealButtonBarWidget * bar)
-{
-    IdealDockWidget* widget = 0;
-    if (checked) {
-        IdealMainLayout::Role role = roleForBar(bar);
-        widget = mainLayout()->lastDockWidget(role);
-    }
-
-    m_mainLayout->maximizeWidget(widget);
-
-    setMaximizeActionStatus(widget);
-}
-
-void IdealMainWidget::anchorDockWidget(IdealDockWidget * dock, bool anchor)
-{
-    Q_ASSERT(docks.contains(dock));
-
-    m_mainLayout->anchorWidget(anchor, roleForArea(docks.value(dock)));
-}
-
-void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
-{
-    Q_ASSERT(docks.contains(dock));
-
-    IdealMainLayout::Role role = roleForArea(docks.value(dock));
-
-    dock->setAnchored(m_mainLayout->isAreaAnchored(role), false);
-
-    if (show) {
-        m_mainLayout->addWidget(dock, role);
-
-        bool isMaximized = dock->isMaximized();
-        if (isMaximized)
-            m_mainLayout->maximizeWidget(dock);
-
-    } else {
-        m_mainLayout->removeWidget(dock, role);
-
-        setMaximizeActionStatus(false);
-    }
-
-    m_maximizeCurrentDock->setEnabled(show);
-    m_anchorCurrentDock->setEnabled(show);
-
-    setShowDockStatus(role, show);
-    Sublime::Position pos;
-    if (role == IdealMainLayout::Left)
-        pos = Sublime::Left;
-    else if (role == IdealMainLayout::Right)
-        pos = Sublime::Right;
-    else if (role == IdealMainLayout::Top)
-        pos = Sublime::Top;
-    else if (role == IdealMainLayout::Bottom)
-        pos = Sublime::Bottom;
-    else
-    {
-        Q_ASSERT (0 && "unexpect position");
+    if (lastDock && lastDock->isVisible() && !lastDock->hasFocus()) {
+        lastDock->setFocus(Qt::ShortcutFocusReason);
+        // re-sync action state given we may have asked for the dock to be hidden
+        KAction* action = actionForArea(area);
+        if (!action->isChecked()) {
+            action->blockSignals(true);
+            action->setChecked(true);
+            action->blockSignals(false);
+        }
         return;
     }
-    emit dockShown(dock->view(), pos, show);
 
-    // Put the focus back on the editor if a dock was hidden
-    if (!show)
-        focusEditor();
-}
-
-void IdealMainWidget::slotDockBarContextMenuRequested(const QPoint& position)
-{
-    IdealButtonBarWidget* bar = qobject_cast<IdealButtonBarWidget*>(sender());
-    Q_ASSERT(bar);
-
-    emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
-}
-
-IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)
-    : QWidget(parent)
-    , m_orientation(orientation)
-    , m_hover(false)
-    , m_pressed(false)
-    , m_resizeRole(resizeRole)
-{
-    setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
-    setMouseTracking(true);
-}
-
-void IdealSplitterHandle::paintEvent(QPaintEvent *)
-{
-    QStylePainter painter(this);
-    QStyleOption options;
-    options.initFrom(this);
-
-    if (m_orientation == Qt::Vertical)
-    options.state |= QStyle::State_Horizontal;
-
-    options.state |= QStyle::State_Enabled;
-    if (m_hover)
-        options.state |= QStyle::State_MouseOver;
-    if (m_pressed)
-        options.state |= QStyle::State_Sunken;
-
-    painter.drawControl(QStyle::CE_Splitter, options);
-}
-
-void IdealSplitterHandle::mouseMoveEvent(QMouseEvent * event)
-{
-    if (!(event->buttons() & Qt::LeftButton))
-        return;
-
-    int thickness = convert(parentWidget()->mapFromGlobal(event->globalPos())) - m_dragStart;
-
-    switch (m_resizeRole) {
-        case IdealMainLayout::Right:
-            thickness = parentWidget()->size().width() - thickness;
-            break;
-        case IdealMainLayout::Bottom:
-            thickness = parentWidget()->size().height() - thickness;
-            break;
-        default:
-            break;
-    }
-
-    emit resize(thickness, m_resizeRole);
-}
-
-void IdealSplitterHandle::mousePressEvent(QMouseEvent * event)
-{
-    if (event->button() == Qt::LeftButton) {
-        m_dragStart = convert(event->pos());
-        m_pressed = true;
-        update();
-    }
-}
-
-void IdealSplitterHandle::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton) {
-        m_pressed = false;
-        update();
-    }
-}
-
-void IdealSplitterHandle::enterEvent(QEvent* /*event*/)
-{
-    m_hover = true;
-    update();
-}
-
-void IdealSplitterHandle::leaveEvent(QEvent* /*event*/)
-{
-    m_hover = false;
-    update();
-}
-
-IdealMainWidget * IdealButtonBarWidget::parentWidget() const
-{
-    return static_cast<IdealMainWidget *>(QWidget::parentWidget());
-}
-
-IdealMainLayout * IdealMainWidget::mainLayout() const
-{
-    return m_mainLayout;
-}
-
-void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
-{
-    // If the dock is shown but not focused, first focus it, a second press of the shortcut will hide it
-    if (!m_centralWidgetFocusing) {
-        if (IdealDockWidget* widget = mainLayout()->lastDockWidget(role)) {
-            if (widget->isVisible() && !widget->hasFocus()) {
-                widget->setFocus(Qt::ShortcutFocusReason);
-
-                // re-sync action state given we may have asked for the dock to be hidden
-                KAction* action = actionForRole(role);
-                if (!action->isChecked()) {
-                    action->blockSignals(true);
-                    action->setChecked(true);
-                    action->blockSignals(false);
-                }
-                return;
-            }
-        }
-    }
-
-    if (show) {
-        if (IdealDockWidget* widget = m_mainLayout->lastDockWidget(role)) {
-            if (QAction *action = m_dockwidget_to_action.value(widget))
-                action->setChecked(show);
-
-            widget->setFocus(Qt::ShortcutFocusReason);
-        }
-
-        if (barForRole(role)->actions().count())
-            barForRole(role)->actions().first()->setChecked(show);
-
-    } else {
-        foreach (QAction* action, barForRole(role)->actions())
+    if (!show) {
+        // close all toolviews
+        foreach (QAction *action, bar->actions()) {
             if (action->isChecked())
                 action->setChecked(false);
 
-        // Focus editor
-        focusEditor();
+            focusEditor();
+        }
+    } else {
+        // open the last opened toolview (or the first one) and focus it
+        if (lastDock) {
+            if (QAction *action = m_dockwidget_to_action.value(lastDock))
+                action->setChecked(show);
+
+            lastDock->setFocus(Qt::ShortcutFocusReason);
+            return;
+        }
+
+        if (barForDockArea(area)->actions().count())
+            barForDockArea(area)->actions().first()->setChecked(show);
     }
 }
 
-void IdealMainWidget::showLeftDock(bool show)
+// returns currently focused dock widget (if any)
+IdealDockWidget* IdealController::currentDockWidget()
 {
-    showDock(IdealMainLayout::Left, show);
-}
+    QWidget *w = m_mainWindow->focusWidget();
+    while (true) {
+        if (!w) break;
+        IdealDockWidget *dockCandidate = qobject_cast<IdealDockWidget*>(w);
+        if (dockCandidate)
+            return dockCandidate;
 
-void IdealMainWidget::showBottomDock(bool show)
-{
-    showDock(IdealMainLayout::Bottom, show);
-}
-
-void IdealMainWidget::showTopDock(bool show)
-{
-    showDock(IdealMainLayout::Top, show);
-}
-
-void IdealMainWidget::showRightDock(bool show)
-{
-    showDock(IdealMainLayout::Right, show);
-}
-
-QWidget * IdealMainWidget::firstWidget(IdealMainLayout::Role role) const
-{
-    if (IdealButtonBarWidget* button = barForRole(role))
-        if (!button->actions().isEmpty())
-            return button->widgetForAction(button->actions().first());
-
+        w = w->parentWidget();
+    }
     return 0;
 }
 
-IdealButtonBarWidget* IdealMainWidget::barForRole(IdealMainLayout::Role role) const
+void IdealController::goPrevNextDock(IdealController::Direction direction)
 {
-    switch (role) {
-        case IdealMainLayout::Left:
-            return leftBarWidget;
-
-        case IdealMainLayout::Top:
-            return topBarWidget;
-
-        case IdealMainLayout::Right:
-            return rightBarWidget;
-
-        case IdealMainLayout::Bottom:
-            return bottomBarWidget;
-
-        default:
-            Q_ASSERT(false);
-            return 0;
-    }
-}
-
-IdealMainLayout::Role IdealMainWidget::roleForBar(IdealButtonBarWidget* bar) const
-{
-    if (bar == leftBarWidget)
-        return IdealMainLayout::Left;
-    else if (bar == topBarWidget)
-        return IdealMainLayout::Top;
-    else if (bar == rightBarWidget)
-        return IdealMainLayout::Right;
-    else if (bar == bottomBarWidget)
-        return IdealMainLayout::Bottom;
-
-    Q_ASSERT(false);
-    return IdealMainLayout::Left;
-}
-
-
-QAction * IdealMainWidget::actionForView(View * view) const
-{
-    return m_view_to_action.value(view);
-}
-
-void IdealMainWidget::setAnchorActionStatus(bool checked)
-{
-    bool blocked = m_anchorCurrentDock->blockSignals(true);
-    m_anchorCurrentDock->setChecked(checked);
-    m_anchorCurrentDock->blockSignals(blocked);
-}
-
-void IdealMainWidget::setMaximizeActionStatus(bool checked)
-{
-    bool blocked = m_maximizeCurrentDock->blockSignals(true);
-    m_maximizeCurrentDock->setChecked(checked);
-    m_maximizeCurrentDock->blockSignals(blocked);
-}
-
-IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
-{ return _widgets.value(action); }
-
-void IdealMainWidget::selectNextDock()
-{
-    IdealDockWidget* dock = mainLayout()->lastDockWidget();
-    IdealMainLayout::Role role = mainLayout()->lastDockWidgetRole();
-
-    IdealButtonBarWidget* bar = barForRole(role);
-
-    int index = bar->actions().indexOf(m_dockwidget_to_action.value(dock));
-
-    if (index == -1 || index == bar->actions().count() - 1)
-        index = 0;
-    else
-        ++index;
-
-    if (index < bar->actions().count()) {
-        QAction* action = bar->actions().at(index);
-        action->setChecked(true);
-    }
-}
-
-void IdealMainWidget::selectPreviousDock()
-{
-    IdealDockWidget* dock = mainLayout()->lastDockWidget();
-    IdealMainLayout::Role role = mainLayout()->lastDockWidgetRole();
-
-    IdealButtonBarWidget* bar = barForRole(role);
-
-    if ( bar->actions().isEmpty() ) {
-        // happens when all docks in a bar get removed
+    IdealDockWidget *currentDock = currentDockWidget();
+    if (!currentDock)
         return;
+    IdealButtonBarWidget *bar = barForDockArea(currentDock->dockWidgetArea());
+
+    int index = bar->actions().indexOf(m_dockwidget_to_action.value(currentDock));
+
+    if (direction == NextDock) {
+        if (index < 1)
+            index = bar->actions().count() - 1;
+        else
+            --index;
+    } else {
+        if (index == -1 || index == bar->actions().count() - 1)
+            index = 0;
+        else
+            ++index;
     }
-
-    int index = bar->actions().indexOf(m_dockwidget_to_action.value(dock));
-
-    if (index < 1)
-        index = bar->actions().count() - 1;
-    else
-        --index;
 
     if (index < bar->actions().count()) {
         QAction* action = bar->actions().at(index);
@@ -1176,32 +952,66 @@ void IdealMainWidget::selectPreviousDock()
     }
 }
 
-void IdealMainWidget::removeView()
+void IdealController::toggleDocksShown()
 {
-    MainWindow *main = dynamic_cast<MainWindow*>(parent());
-    main->area()->removeToolView(main->activeToolView());
+    QList<QAction*> allActions;
+    allActions += leftBarWidget->actions();
+    allActions += bottomBarWidget->actions();
+    allActions += rightBarWidget->actions();
+
+    bool show = true;
+    foreach (QAction *action, allActions) {
+        if (action->isChecked()) {
+            show = false;
+            break;
+        }
+    }
+
+    toggleDocksShown(leftBarWidget, show);
+    toggleDocksShown(bottomBarWidget, show);
+    toggleDocksShown(rightBarWidget, show);
 }
 
-void Sublime::IdealMainWidget::setShowDockStatus(IdealMainLayout::Role role, bool checked)
+void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
 {
-    KAction* action = actionForRole(role);
-    if (action->isChecked() != checked) {
-        bool blocked = action->blockSignals(true);
-        action->setChecked(checked);
-        action->blockSignals(blocked);
+    if (!show) {
+        foreach (QAction *action, bar->actions()) {
+            if (action->isChecked())
+                action->setChecked(false);
+        }
+        focusEditor();
+    } else {
+        IdealDockWidget *lastDock = lastDockWidget[bar->area()];
+        if (lastDock)
+            m_dockwidget_to_action[lastDock]->setChecked(true);
     }
 }
 
-void Sublime::IdealMainWidget::focusEditor()
+void IdealController::loadSettings()
 {
-    if (View* view = static_cast<MainWindow*>(parent())->activeView())
-        if (view->hasWidget())
-            view->widget()->setFocus(Qt::ShortcutFocusReason);
+    KConfigGroup cg(KGlobal::config(), "UiSettings");
+
+    int bottomOwnsBottomLeft = cg.readEntry("BottomLeftCornerOwner", 0);
+    if (bottomOwnsBottomLeft)
+        m_mainWindow->setCorner(Qt::BottomLeftCorner, Qt::BottomDockWidgetArea);
+    else
+        m_mainWindow->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+
+    int bottomOwnsBottomRight = cg.readEntry("BottomRightCornerOwner", 0);
+    if (bottomOwnsBottomRight)
+        m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
+    else
+        m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
 
-QWidget *IdealMainWidget::statusBarLocation() const
+void IdealController::setWidthForArea(Qt::DockWidgetArea area, int width)
 {
-    return bottomStatusBarLocation;
+    m_widthsForAreas[area] = width;
+}
+
+void IdealController::emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness)
+{
+    emit widgetResized(dockArea, thickness);
 }
 
 #include "ideal.moc"

@@ -38,6 +38,8 @@
 #include <QStandardItemModel>
 #include <KAction>
 #include <interfaces/isession.h>
+#include <QDBusConnection>
+#include <KProcess>
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -74,6 +76,8 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   Q_ASSERT( !m_self );
   m_self = this;
 
+  QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ExternalScriptPlugin", this, QDBusConnection::ExportScriptableSlots );
+  
   setXMLFile( "kdevexternalscript.rc" );
 
   //BEGIN load config
@@ -159,6 +163,43 @@ void ExternalScriptPlugin::execute( ExternalScriptItem* item ) const
   ExternalScriptJob* job = new ExternalScriptJob( item, const_cast<ExternalScriptPlugin*>(this) );
 
   KDevelop::ICore::self()->runController()->registerJob( job );
+}
+
+bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const
+{
+  // We extend ExternalScriptJob so that it deletes the temporarily created item on destruction
+  class ExternalScriptJobOwningItem : public ExternalScriptJob {
+  public:
+    ExternalScriptJobOwningItem( ExternalScriptItem* item, QObject* parent ) : ExternalScriptJob(item, parent), m_item(item) {
+    }
+    ~ExternalScriptJobOwningItem() {
+      delete m_item;
+    }
+  private:
+    ExternalScriptItem* m_item;
+  };
+  ExternalScriptItem* item = new ExternalScriptItem;
+  item->setCommand(command);
+  item->setWorkingDirectory(workingDirectory);
+  item->setPerformParameterReplacement(false);
+  kDebug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
+  ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, const_cast<ExternalScriptPlugin*>(this) );
+  // When a command is executed, for example through the terminal, we don't want the command output to be risen
+  job->setVerbosity(KDevelop::OutputJob::Silent);
+  
+  KDevelop::ICore::self()->runController()->registerJob( job );
+  return true;
+}
+
+QString ExternalScriptPlugin::executeCommandSync ( QString command, QString workingDirectory ) const
+{
+  kDebug() << "executing command " << command << " in working-dir " << workingDirectory;
+  KProcess process;
+  process.setWorkingDirectory( workingDirectory );
+  process.setShellCommand( command );
+  process.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+  process.execute();
+  return QString::fromLocal8Bit(process.readAll());
 }
 
 void ExternalScriptPlugin::executeScriptFromActionData() const

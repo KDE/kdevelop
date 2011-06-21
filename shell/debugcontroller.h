@@ -50,6 +50,8 @@ public:
     void initialize();
     void cleanup();
 
+    virtual void initializeUi();
+
     virtual void addSession(IDebugSession* session);
     virtual IDebugSession* currentSession();
 
@@ -103,6 +105,8 @@ private:
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;    
+    
+    bool m_uiInitialized;
 };
 
 }

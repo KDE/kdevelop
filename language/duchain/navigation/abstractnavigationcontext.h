@@ -40,7 +40,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
   enum FormattingFlag {
     Nothing = 0x0,
     Bold = 0x1,
-    Italic = 0x2
+    Italic = 0x2,
+    Fixed = 0x4
   };
   Q_DECLARE_FLAGS(Formatting, FormattingFlag)
   Colorizer(const QString& color, Formatting formatting = Nothing)
@@ -50,12 +51,16 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 
   QString operator()(const QString& str) const
   {
-    QString ret = "<font color=\"#" + m_color + "\">" + str + "</font>";
+    QString face="color: #"+m_color+"; ";
+    if( m_formatting & Fixed )
+      face += "font-family: monospace; ";
     if( m_formatting & Bold )
-      ret = "<b>"+ret+"</b>";
-
+      face += "font-weight: bold; ";
     if( m_formatting & Italic )
-      ret = "<i>"+ret+"</i>";
+      face += "text-decoration: italic; ";
+    
+    QString ret = "<span style='"+face+"'>" + str + "</span>";
+
     return ret;
   }
 

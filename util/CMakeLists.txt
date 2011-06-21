@@ -21,7 +21,9 @@ set (kdevplatformutil_LIB_UI
     runoptions.ui
 )
 
-add_subdirectory(dbus_socket_transformer)
+if(NOT WIN32)
+    add_subdirectory(dbus_socket_transformer)
+endif(NOT WIN32)
 
 add_subdirectory(duchainify)
 
@@ -40,7 +42,7 @@ target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ )
+install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
 ########### install files ###############
 

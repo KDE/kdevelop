@@ -1,6 +1,6 @@
-
 /***************************************************************************
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -70,9 +70,14 @@
 #include <qlabel.h>
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
+#include "widgets/flexibleaction.h"
 #include <interfaces/isession.h>
 #include "vcsevent.h"
 #include <KCompositeJob>
+#include <QClipboard>
+#include <QApplication>
+#include <ktexteditor/modificationinterface.h>
+#include <QTimer>
 
 namespace KDevelop
 {
@@ -87,17 +92,16 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * updateAction;
     KAction * historyAction;
     KAction * annotationAction;
-    KAction * diffToHeadAction;
     KAction * diffToBaseAction;
     KAction * revertAction;
     KAction * diffForRevAction;
+    QPointer<QTimer> modificationTimer;
     
     void createActions(QObject * parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        diffToHeadAction = new KAction(i18n("Compare to Head..."), parent);
-        diffToBaseAction = new KAction(i18n("Compare to Base..."), parent);
+        diffToBaseAction = new KAction(KIcon("vcs_diff"), i18n("Show Differences..."), parent);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
@@ -106,7 +110,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
         connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
-        connect(diffToHeadAction, SIGNAL(triggered()), parent, SLOT(diffToHead()));
         connect(diffToBaseAction, SIGNAL(triggered()), parent, SLOT(diffToBase()));
         connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
         connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
@@ -145,7 +148,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addSeparator();
         menu->addAction(historyAction);
         menu->addAction(annotationAction);
-        menu->addAction(diffToHeadAction);
         menu->addAction(diffToBaseAction);
         
         addAction->setEnabled(!allVersioned);
@@ -153,7 +155,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
         annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
-        diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
         
@@ -236,20 +237,51 @@ QMenu* VcsPluginHelper::commonActions()
 
 void VcsPluginHelper::revert()
 {
-    EXECUTE_VCS_METHOD(revert);
-}
-
-void VcsPluginHelper::diffToHead()
-{
-    SINGLEURL_SETUP_VARS
-    ICore::self()->documentController()->saveAllDocuments();
-    KDevelop::VcsJob* job = iface->diff(url,
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
-
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
+    VcsJob* job=d->vcs->revert(d->ctxUrls);
+    connect(job, SIGNAL(finished(KJob*)), SLOT(revertDone(KJob*)));
+    
+    foreach(const KUrl& url, d->ctxUrls) {
+        IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
+        
+        if(doc) {
+            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            modif->setModifiedOnDiskWarning(false);
+            doc->textDocument()->setModified(false);
+        }
+    }
+    job->setProperty("urls", d->ctxUrls);
+    
     d->plugin->core()->runController()->registerJob(job);
 }
+
+void VcsPluginHelper::revertDone(KJob* job)
+{
+    d->modificationTimer = new QTimer;
+    d->modificationTimer->setInterval(100);
+    connect(d->modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
+    
+    d->modificationTimer->setProperty("urls", job->property("urls"));
+    d->modificationTimer->start();
+}
+
+void VcsPluginHelper::delayedModificationWarningOn()
+{
+    KUrl::List urls = d->modificationTimer->property("urls").value<KUrl::List>();
+    
+    foreach(const KUrl& url, urls) {
+        IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
+        
+        if(doc) {
+            doc->reload();
+            
+            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            modif->setModifiedOnDiskWarning(true);
+        }
+    }
+    
+    d->modificationTimer->deleteLater();
+}
+
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
@@ -296,15 +328,11 @@ void VcsPluginHelper::diffForRev()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-void VcsPluginHelper::history()
+void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob *job = iface->log(url);
-    if( !job ) 
-    {
-        kWarning() << "Couldn't create log job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
-        return;
-    }
+    KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
+    
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
@@ -350,6 +378,30 @@ void VcsPluginHelper::annotation()
     }
 }
 
+class CopyFunction : public AbstractFunction
+{
+    public:
+        CopyFunction(const QString& tocopy)
+            : m_tocopy(tocopy) {}
+        
+        void operator()() { QApplication::clipboard()->setText(m_tocopy); }
+    private:
+        QString m_tocopy;
+};
+
+class HistoryFunction : public AbstractFunction
+{
+    public:
+        HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
+            : m_helper(helper), m_rev(rev) {}
+            
+            void operator()() { m_helper->history(m_rev); }
+        
+    private:
+        VcsPluginHelper* m_helper;
+        VcsRevision m_rev;
+};
+
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
     KTextEditor::AnnotationInterface* annotateiface =
@@ -360,7 +412,10 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
     VcsRevision rev = model->revisionForLine(line);
     d->diffForRevAction->setData(QVariant::fromValue(rev));
+    menu->addSeparator();
     menu->addAction(d->diffForRevAction);
+    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision history..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()
@@ -379,56 +434,25 @@ void VcsPluginHelper::commit()
     ICore::self()->documentController()->saveAllDocuments();
 
     KUrl url = d->ctxUrls.first();
-    QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
-    QMap<KUrl, VcsStatusInfo::State> changes;
-    QVariant varlist;
-
-    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
-    {
-        varlist = statusJob->fetchResults();
-
-        foreach( const QVariant &var, varlist.toList() )
-        {
-            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
-            
-            if(info.state()!=VcsStatusInfo::ItemUpToDate)
-                changes[info.url()] = info.state();
-        }
-    }
-    else
-        kDebug() << "Couldn't get status for urls: " << url;
-    
     
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), changes, d->vcs, retrieveOldCommitMessages());
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), url, d->vcs);
     
     bool ret = showVcsDiff(patchSource);
 
     if(!ret) {
         VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
-        commitDialog->setCommitCandidates(varlist);
-        commitDialog->show();
+        commitDialog->setCommitCandidates(patchSource->infos());
+        commitDialog->exec();
+    } else {
+        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(commitReviewed(QString)));
+        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewed(QString)));
     }
-
-    connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
-    connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
 }
 
-void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
-{
-    VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
-    d->plugin->core()->runController()->registerJob(job);
-    addOldCommitMessage(message);
-}
-
-void VcsPluginHelper::commitReviewCancelled(QString message)
+void VcsPluginHelper::commitReviewed(QString message)
 {
     addOldCommitMessage(message);
-}
-
-void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
-{
-    dlg->deleteLater();
 }
 
 QStringList retrieveOldCommitMessages()

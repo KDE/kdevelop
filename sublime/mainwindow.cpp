@@ -48,6 +48,9 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     loadGeometry(KGlobal::config()->group("Main Window"));
     d->areaSwitcher = new AreaTabWidget(menuBar());
     menuBar()->setCornerWidget(d->areaSwitcher, Qt::TopRightCorner);
+
+    // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
+    setDockOptions(QMainWindow::AnimatedDocks);
 }
 
 QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
@@ -146,10 +149,13 @@ void MainWindow::setArea(Area *area)
     initializeStatusBar();
     emit areaChanged(area);
     d->ignoreDockShown = false;
-    
-    loadSettings();
 
     setUpdatesEnabled(wasEnabled);
+
+    // delay loading settings: we need to finish with area activation
+    // and only then load mainwindow/dockwidget settings
+    // this way dock sizes get properly restored
+    QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
 
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
@@ -254,7 +260,7 @@ void MainWindow::saveSettings()
     //debugToolBar visibility is stored separately to allow a area dependent default value
     foreach (KToolBar* toolbar, toolBars()) {
         if (toolbar->objectName() == "debugToolBar") {
-            cg.writeEntry("debugToolBarVisibility", toolbar->isVisible());
+            cg.writeEntry("debugToolBarVisibility", toolbar->isVisibleTo(this));
         }
     }
 
@@ -263,7 +269,9 @@ void MainWindow::saveSettings()
 
 void MainWindow::loadSettings()
 {
-    kDebug() << "loading settings for " << (area() ? area()->objectName() : "");
+    setUpdatesEnabled(false);
+
+    kDebug(9504) << "loading settings for " << (area() ? area()->objectName() : "");
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();
@@ -344,6 +352,8 @@ void MainWindow::loadSettings()
 
     cg.sync();
 
+    setUpdatesEnabled(true);
+
     emit settingsLoaded();
 }
 
@@ -399,7 +409,7 @@ void MainWindow::enableAreaSettingsSave()
 
 QWidget *MainWindow::statusBarLocation()
 {
-    return d->idealMainWidget->statusBarLocation();
+    return d->idealController->statusBarLocation();
 }
 
 void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)

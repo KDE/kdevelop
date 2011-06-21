@@ -42,7 +42,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
 
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 if(CMAKE_COMPILER_IS_GNUCXX)
   # TODO: Remove when LTS for g++ < 4.3 has ended.
   #       See also: languages/cpp/parser/parser.h
@@ -110,3 +110,5 @@ install( EXPORT KDevPlatformTargets
 
 # Put this last, so it can use _kdevplatform_CONFIG_DEST
 add_subdirectory(cmake)
+
+include(CTest)

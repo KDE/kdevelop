@@ -52,6 +52,7 @@
 #include "../debugger/variable/variablewidget.h"
 #include "../debugger/framestack/framestackmodel.h"
 #include "../debugger/framestack/framestackwidget.h"
+#include <KXMLGUIFactory>
 
 
 namespace KDevelop {
@@ -101,10 +102,21 @@ private:
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
       m_breakpointModel(new BreakpointModel(this)),
-      m_variableCollection(new VariableCollection(this))
+      m_variableCollection(new VariableCollection(this)),
+      m_uiInitialized(false)
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
+}
+
+void DebugController::initialize()
+{
+}
+
+void DebugController::initializeUi()
+{
+    if (m_uiInitialized) return;
+    m_uiInitialized = true;
 
     if((Core::self()->setupFlags() & Core::NoUi)) return;
     setupActions();
@@ -134,10 +146,9 @@ DebugController::DebugController(QObject *parent)
             this,
             SLOT(partAdded(KParts::Part*)));
 
-}
 
-void DebugController::initialize()
-{
+    ICore::self()->uiController()->activeMainWindow()->guiFactory()->addClient(this);
+
     stateChanged("ended");
 }
 
@@ -236,7 +247,7 @@ void DebugController::setupActions()
     m_stepOverInstruction = action = new KAction(KIcon("debug-step-instruction"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction.</p>"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepIntoInstruction()));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOverInstruction()));
     ac->addAction("debug_stepoverinst", action);
 
 
@@ -254,7 +265,7 @@ void DebugController::setupActions()
     m_stepIntoInstruction = action = new KAction(KIcon("debug-step-into-instruction"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction.</p>"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOverInstruction()));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepIntoInstruction()));
     ac->addAction("debug_stepintoinst", action);
 
     m_stepOut = action = new KAction(KIcon("debug-step-out"), i18n("Step O&ut"), this);

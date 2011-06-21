@@ -65,20 +65,20 @@ class BranchesListModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
-        BranchesListModel(KDevelop::DistributedVersionControlPlugin* dvcsplugin, const QString& repo, QObject* parent = 0);
+        BranchesListModel(KDevelop::DistributedVersionControlPlugin* dvcsplugin, const KUrl& repo, QObject* parent = 0);
         
         void createBranch(const QString& baseBranch, const QString& newBranch);
         void removeBranch(const QString& branch);
         
         KDevelop::DistributedVersionControlPlugin* dvcsPlugin() const { return dvcsplugin; }
-        QString repository() const { return repo; }
+        KUrl repository() const { return repo; }
         
     public slots:
         void resetCurrent();
         
     private:
         KDevelop::DistributedVersionControlPlugin* dvcsplugin;
-        QString repo;
+        KUrl repo;
 };
 
 

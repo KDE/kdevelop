@@ -75,6 +75,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///This makes sense when the model takes some time but not too much time, to make the UI less flickering and
     ///annoying.
     ///The default is false
+    ///@todo Remove this option, make it true by default, and make sure in CodeCompletionWorker that the whole thing cannot break
     void setForceWaitForModel(bool wait);
     
     bool forceWaitForModel();

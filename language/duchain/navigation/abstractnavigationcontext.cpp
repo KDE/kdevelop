@@ -443,18 +443,12 @@ QString AbstractNavigationContext::currentHtml() const {
 
 QString AbstractNavigationContext::fontSizePrefix(bool shorten) const
 {
-  if(shorten)
-    return "";
-  else
-    return "";
+  return QString();
 }
 
 QString AbstractNavigationContext::fontSizeSuffix(bool shorten) const
 {
-  if(shorten)
-    return "";
-  else
-    return "";
+  return QString();
 }
 
 const Colorizer AbstractNavigationContext::typeHighlight("006000");
@@ -464,7 +458,7 @@ const Colorizer AbstractNavigationContext::codeHighlight("005000");
 const Colorizer AbstractNavigationContext::propertyHighlight("009900");
 const Colorizer AbstractNavigationContext::navigationHighlight("000099");
 const Colorizer AbstractNavigationContext::importantHighlight("000000", Colorizer::Bold | Colorizer::Italic);
-const Colorizer AbstractNavigationContext::commentHighlight("000000", Colorizer::Italic);
+const Colorizer AbstractNavigationContext::commentHighlight("000000", Colorizer::Fixed);
 const Colorizer AbstractNavigationContext::nameHighlight("000000", Colorizer::Bold);
 
 }

@@ -94,6 +94,9 @@ public:
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);
+    /**Loads size/toolbar/menu/statusbar settings to the global configuration file.
+    Reimplement in subclasses to load more and don't forget to call inherited method.*/
+    virtual void loadSettings();
 
 Q_SIGNALS:
     /**Emitted before the area is cleared from this mainwindow.*/
@@ -129,9 +132,6 @@ public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
     Reimplement in subclasses to save more and don't forget to call inherited method.*/
     virtual void saveSettings();
-    /**Loads size/toolbar/menu/statusbar settings to the global configuration file.
-    Reimplement in subclasses to load more and don't forget to call inherited method.*/
-    virtual void loadSettings();
 
     /**Reimplemented to save settings.*/
     virtual bool queryClose();
