@@ -43,7 +43,7 @@ void CodeAnalysisTest::testUseReadWrite()
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
   
   DataAccessRepository* repo = &m_modifications;
   
@@ -96,6 +96,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
   QTest::newRow("init") << "int f() { int a=3; }"
                                   << (QVariantList() << uint(DataAccess::Write));
   QTest::newRow("switch") << "int f(int a) { switch(a) { case 3: break;} }"
+                                  << (QVariantList() << uint(DataAccess::Read));
+  QTest::newRow("constructor") << "Class C { C(int,int&); };  void f(int a) { int b; C* c=new C(a,b); }"
                                   << (QVariantList() << uint(DataAccess::Read));
 }
 
