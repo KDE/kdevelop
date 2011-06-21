@@ -1305,7 +1305,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
 {
   int tk = session->token_stream->lookAhead();
 
-  if (tk != '&' && tk != '*'
+  if (tk != '&' && tk != '*' && tk != Token_and
       && tk != Token_scope && tk != Token_identifier)
     {
       return false;
@@ -1318,6 +1318,7 @@ bool Parser::parsePtrOperator(PtrOperatorAST *&node)
     {
     case '&':
     case '*':
+    case Token_and:
       ast->op = session->token_stream->cursor();
       advance();
       break;
@@ -1368,9 +1369,16 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
     }
   }
 
+  bool isVariadic = false;
+  if (session->token_stream->lookAhead() == Token_ellipsis) {
+    isVariadic = true;
+    advance();
+  }
+
   TemplateArgumentAST *ast = CreateNode<TemplateArgumentAST>(session->mempool);
   ast->type_id = typeId;
   ast->expression = expr;
+  ast->isVariadic = isVariadic;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -1406,7 +1414,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
   return true;
 }
 
-bool Parser::parseDeclarator(DeclaratorAST *&node)
+bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
 {
   uint start = session->token_stream->cursor();
 
@@ -1433,21 +1441,26 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
     }
   else
     {
-      if (session->token_stream->lookAhead() == ':')
+      // bitfield can be unnamed
+      if (!allowBitfield || session->token_stream->lookAhead() != ':')
         {
-          // unnamed bitfield
-        }
-      else if (parseName(declId, AcceptTemplate))
-        {
-          ast->id = declId;
-        }
-      else
-        {
-          rewind(start);
-          return false;
+          if (session->token_stream->lookAhead() == Token_ellipsis)
+            {
+              advance();
+              ast->isVariadic = true;
+            }
+          if (parseName(declId, AcceptTemplate))
+            {
+              ast->id = declId;
+            }
+          else
+            {
+              rewind(start);
+              return false;
+            }
         }
 
-      if (session->token_stream->lookAhead() == ':')
+      if (allowBitfield && session->token_stream->lookAhead() == ':')
         {
           advance();
 
@@ -1774,6 +1787,12 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
       {
         advance(); // skip class
 
+        if(session->token_stream->lookAhead() == Token_ellipsis)
+          {
+            advance();
+            ast->isVariadic = true;
+          }
+
         // parse optional name
         if(parseName(ast->name, AcceptTemplate))
           {
@@ -1807,6 +1826,8 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
           return false;
 
         ADVANCE('>', ">");
+
+        // TODO: can a template-template parameter be variadic?
 
         // TODO add to AST
         if (session->token_stream->lookAhead() == Token_class)
@@ -2326,10 +2347,15 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST *&node)
       ast->ellipsis = session->token_stream->cursor();
       advance();
     }
-  else
+
+  parseTypeIdList(ast->type_ids);
+
+  if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
     {
-      parseTypeIdList(ast->type_ids);
+      ast->ellipsis = session->token_stream->cursor();
+      advance();
     }
+
 
   ADVANCE(')', ")");
 
@@ -2501,11 +2527,26 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
   ADVANCE('(', "(");
   ExpressionAST *expr = 0;
   parseCommaExpression(expr);
+  bool expressionIsVariadic = false;
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      expressionIsVariadic = true;
+    }
   ADVANCE(')', ")");
+
+  bool initializerIsVariadic = false;
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      initializerIsVariadic = true;
+    }
 
   MemInitializerAST *ast = CreateNode<MemInitializerAST>(session->mempool);
   ast->initializer_id = initId;
   ast->expression = expr;
+  ast->initializerIsVariadic = initializerIsVariadic;
+  ast->expressionIsVariadic = expressionIsVariadic;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -2577,6 +2618,12 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
   if (!parseName(ast->name, AcceptTemplate))
     reportError(("Class name expected"));
 
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      ast->isVariadic = true;
+    }
+
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -2616,7 +2663,8 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 
   InitializerClauseAST *ast = 0;
 
-  if (session->token_stream->lookAhead() == '{')
+  const int token = session->token_stream->lookAhead();
+  if (token == '{')
     {
       advance();
       const ListNode<InitializerClauseAST*> *initializer_list = 0;
@@ -2625,10 +2673,24 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
         {
             return false;
         }
+      bool isVariadic = false;
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          advance();
+          isVariadic = true;
+        }
       ADVANCE('}',"}");
 
       ast = CreateNode<InitializerClauseAST>(session->mempool);
       ast->initializer_list = initializer_list;
+      ast->initializer_isVariadic = isVariadic;
+    }
+  else if (token == Token_delete || token == Token_default)
+    {
+      advance();
+
+      ast = CreateNode<InitializerClauseAST>(session->mempool);
+      ast->defaultDeleted = token == Token_delete ? InitializerClauseAST::Deleted : InitializerClauseAST::Default;
     }
   else
     {
@@ -3075,16 +3137,21 @@ bool Parser::parseForStatement(StatementAST *&node)
   ADVANCE(Token_for, "for");
   ADVANCE('(', "(");
 
+  ForRangeDeclarationAst *rangeDecl = 0;
   StatementAST *init = 0;
-  if (!parseForInitStatement(init))
-    {
-      reportError(("'for' initialization expected"));
-      return false;
-    }
-
   ConditionAST *cond = 0;
-  parseCondition(cond);
-  ADVANCE(';', ";");
+
+  if (!parseRangeBasedFor(rangeDecl))
+    {
+      if (!parseForInitStatement(init))
+        {
+          reportError(("'for' initialization expected"));
+          return false;
+        }
+
+      parseCondition(cond);
+      ADVANCE(';', ";");
+    }
 
   ExpressionAST *expr = 0;
   parseCommaExpression(expr);
@@ -3096,9 +3163,68 @@ bool Parser::parseForStatement(StatementAST *&node)
 
   ForStatementAST *ast = CreateNode<ForStatementAST>(session->mempool);
   ast->init_statement = init;
+  ast->range_declaration = rangeDecl;
   ast->condition = cond;
   ast->expression = expr;
   ast->statement = body;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseRangeBasedFor(ForRangeDeclarationAst *&node)
+{
+  Comment mcomment = comment();
+  clearComment();
+
+  uint start = session->token_stream->cursor();
+
+  const ListNode<uint> *cv = 0;
+  parseCvQualify(cv);
+
+  const ListNode<uint> *storageSpec = 0;
+  parseStorageClassSpecifier(storageSpec);
+
+  parseCvQualify(cv);
+
+  TypeSpecifierAST *spec = 0;
+  // auto support: right now it is part of the storage spec, put it back
+  if (storageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
+    rewind(storageSpec->toBack()->element);
+  }
+
+  if (!parseTypeSpecifier(spec))
+    {
+      rewind(start);
+      return false;
+    }
+
+  parseCvQualify(cv);
+  spec->cv = cv;
+
+  DeclaratorAST *declarator = 0;
+  if (!parseDeclarator(declarator, false /* no bitfield allowed */))
+    {
+      rewind(start);
+      return false;
+    }
+
+  if (session->token_stream->lookAhead() != ':')
+    {
+      rewind(start);
+      return false;
+    }
+  advance();
+
+  ForRangeDeclarationAst *ast = CreateNode<ForRangeDeclarationAst>(session->mempool);
+  ast->type_specifier = spec;
+  ast->storage_specifiers = storageSpec;
+  ast->declarator = declarator;
+
+  if(mcomment)
+    addComment(ast, mcomment);
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -3821,10 +3947,18 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         advance();
         ExpressionAST *expr = 0;
         parseExpression(expr);
+        ///TODO: is this the right place? can't find anything in the last public spec file...
+        bool isVariadic = false;
+        if (session->token_stream->lookAhead() == Token_ellipsis)
+          {
+            advance();
+            isVariadic = true;
+          }
         CHECK(')');
 
         FunctionCallAST *ast = CreateNode<FunctionCallAST>(session->mempool);
         ast->arguments = expr;
+        ast->isVariadic = isVariadic;
 
         UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
@@ -4070,9 +4204,15 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
       {
         uint sizeof_token = session->token_stream->cursor();
         advance();
+        bool isVariadic = false;
+        if (session->token_stream->lookAhead() == Token_ellipsis) {
+          isVariadic = true;
+          advance();
+        }
 
         SizeofExpressionAST *ast = CreateNode<SizeofExpressionAST>(session->mempool);
         ast->sizeof_token = sizeof_token;
+        ast->isVariadic = isVariadic;
 
         uint index = session->token_stream->cursor();
         if (session->token_stream->lookAhead() == '(')

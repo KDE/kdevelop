@@ -579,15 +579,6 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possibleModuleNames += possib;
     }
 
-    QString var="CMAKE_INSTALL_PREFIX";
-    QString instPath;
-    if(m_vars->contains(var))
-        instPath = m_vars->value(var).join(QString());
-    else if(m_cache->contains(var))
-        instPath = m_cache->value(var).value;
-
-    kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
-
     #if defined(Q_OS_WIN)
     const QStringList modulePath = QStringList() << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     #else
@@ -596,12 +587,17 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    foreach(const QString& post, postfix)
+    QStringList lookupPaths = m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+    
+    foreach(const QString& lookup, lookupPaths)
     {
-        configPath.prepend(instPath+"/share/"+name.toLower()+post);
-        configPath.prepend(instPath+"/lib/"+name.toLower()+post);
-        configPath.prepend(instPath+"/share/"+name+post);
-        configPath.prepend(instPath+"/lib/"+name+post);
+        foreach(const QString& post, postfix)
+        {
+            configPath.prepend(lookup+"/share/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/"+name+post);
+            configPath.prepend(lookup+"/lib/"+name+post);
+        }
     }
 
     QString varName=pack->name()+"_DIR";
@@ -1400,11 +1396,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             QFile f(filename.toLocalFile());
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
                 return 1;
-            QString output;
-            while (!f.atEnd()) {
-                QByteArray line = f.readLine();
-                output += line;
-            }
+            QString output=f.readAll();
             m_vars->insert(file->variable(), QStringList(output));
             kDebug(9042) << "FileAst: read ";
         }
@@ -1417,29 +1409,12 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 if (expr.isEmpty())
                     continue;
                 QString pathPrefix;
-                if (QDir::isRelativePath(expr))
+                if (QDir::isRelativePath(expr) && pathPrefix.isEmpty())
                     pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-                // pathPrefix must start from '/' if not empty when calling traverseRecursiveGlob()
-                if (expr[0] == '/')
-                {
-                    //moving slash to pathPrefix (it should be empty before)
-                    expr = expr.mid(1);
-                    pathPrefix += '/';
-                }
-                else
-                {
-                    if (!pathPrefix.isEmpty())
-                        pathPrefix += '/';
-                }
-                if (file->type() == FileAst::Glob)
-                {
-                    matches.append(traverseGlob(pathPrefix, expr));
-                }
-                else
-                {
-                    matches.append(traverseGlob(pathPrefix, expr, true, file->isFollowingSymlinks()));
-                }
+                
+                matches.append(traverseGlob(pathPrefix, expr, file->type() == FileAst::GlobRecurse, file->isFollowingSymlinks()));
             }
+            
             if (!file->path().isEmpty())
             {
                 // RELATIVE was specified, so we need to make all paths relative to file->path()
@@ -1451,15 +1426,11 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 }
             }
             m_vars->insert(file->variable(), matches);
-            QString kind = file->type() == FileAst::Glob ? "file glob" : "file glob_recurse";
-            QString followSymlinksMsg;
-            QString relativeMsg;
-            if (file->type() == FileAst::GlobRecurse && file->isFollowingSymlinks())
-                followSymlinksMsg = " FOLLOW_SYMLINKS: true";
-            if (!file->path().isEmpty())
-                relativeMsg = " RELATIVE " + file->path();
-            kDebug(9042) << kind << relativeMsg << followSymlinksMsg << " " << file->globbingExpressions()
-                << ": " << matches;
+            
+            kDebug(9042) << "glob. recurse:" << (file->type() == FileAst::GlobRecurse)
+                         << "RELATIVE: " << file->path()
+                         << "FOLLOW_SYMLINKS: " << file->isFollowingSymlinks()
+                         << ", " << file->globbingExpressions() << ": " << matches;
         }
             break;
         case FileAst::Remove:
@@ -1519,14 +1490,14 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
 
-    QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    QDir dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
     QFileInfo fi(dir, filecomp->fileName());
 
     QString val;
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::Path:
-            val=fi.canonicalPath();
+            val=fi.path();
             break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
@@ -1538,7 +1509,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             val=fi.suffix();
             break;
         case GetFilenameComponentAst::NameWe:
-            val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
+            val=fi.baseName();
             break;
         case GetFilenameComponentAst::Program:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
@@ -1660,68 +1631,42 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     return 1;
 }
 
+int toForeachEnd(const ForeachAst* fea)
+{
+    int lines=fea->line()+1, depth=1;
+    CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
+    CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
+    for(; depth>0 && it!=itEnd; ++it, lines++)
+    {
+        if(it->name=="foreach")
+        {
+            depth++;
+        }
+        else if(it->name=="endforeach")
+        {
+            depth--;
+        }
+    }
+    return lines-1;
+}
+
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
 {
-    kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->range();
-    int end = 1;
-    if(fea->range())
-    {
-        if (fea->ranges().start < fea->ranges().stop)
-        {
+    kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->type();
+    int end = -1;
+    switch(fea->type()) {
+        case ForeachAst::Range:
             for( int i = fea->ranges().start; i < fea->ranges().stop && !m_hitBreak; i += fea->ranges().step )
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->take(fea->loopVar());
+                m_vars->remove(fea->loopVar());
+                if(m_hitBreak)
+                    break;
             }
-        }
-        else
-        {
-            // loop never runs, skip over to matching endforeach
-
-            // FIXME this code is duplicated from the non-range case.
-            // It should be probably factored into a separate helper function.
-
-            int lines=fea->line()+1, depth=1;
-            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
-            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
-            for(; depth>0 && it!=itEnd; ++it, lines++)
-            {
-                if(it->name=="foreach")
-                {
-                    depth++;
-                }
-                else if(it->name=="endforeach")
-                {
-                    depth--;
-                }
-            }
-            end=lines-1;
-        }
-    }
-    else
-    {
-        //Looping in a list of values
-        QStringList args=fea->arguments();
-        if(args.count()==1 && args.first().isEmpty()) { //if the args are empty
-            int lines=fea->line()+1, depth=1;
-            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
-            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
-            for(; depth>0 && it!=itEnd; ++it, lines++)
-            {
-                if(it->name=="foreach")
-                {
-                    depth++;
-                }
-                else if(it->name=="endforeach")
-                {
-                    depth--;
-                }
-            }
-            end=lines-1;
-        }
-        else
-        {
+        break;
+        case ForeachAst::InItems: {
+            QStringList args=fea->arguments();
             foreach(const QString& s, args)
             {
                 m_vars->insert(fea->loopVar(), QStringList(s));
@@ -1730,8 +1675,26 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 if(m_hitBreak)
                     break;
             }
-        }
+        } break;
+        case ForeachAst::InLists: {
+            QStringList args=fea->arguments();
+            foreach(const QString& curr, args) {
+                QStringList list = m_vars->value(curr);
+                foreach(const QString& s, list)
+                {
+                    m_vars->insert(fea->loopVar(), QStringList(s));
+                    kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
+                    end=walk(fea->content(), fea->line()+1);
+                    if(m_hitBreak)
+                        break;
+                }
+            }
+        }   break;
     }
+    
+    if(end<0)
+        end = toForeachEnd(fea);
+    
     m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
     return end-fea->line()+1;
@@ -2306,10 +2269,9 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     return ret;
 }
 
-QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath,
-    const QString& expression, bool recursive, bool followSymlinks)
+QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QString& expression, bool recursive, bool followSymlinks)
 {
-    kDebug(9042) << "Starting from (" << startPath << ", " << expression << ", " << followSymlinks << ")";
+    kDebug(9042) << "Starting from (" << startPath << ", " << expression << "," << recursive << ", " << followSymlinks << ")";
     QString expr = expression;
     int firstSlash = expr.indexOf('/');
     int slashShift = 0;
@@ -2384,7 +2346,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath,
     }
     QStringList matches;
     QString path = startPath;
-    if (!path.isEmpty() && !path.endsWith('/'))
+    if (!path.endsWith('/'))
         path += '/';
     foreach(QString dirName, matchedDirs)
     {

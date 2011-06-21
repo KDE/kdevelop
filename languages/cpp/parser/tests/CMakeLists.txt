@@ -5,7 +5,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/testconfig.h.cmake ${CMAKE_CURRENT_BI
 
 ########### next target ###############
 
-set(parsertest_SRCS test_parser.cpp)
+set(parsertest_SRCS test_parser.cpp test_parser_cpp2011.cpp)
 
 
 kde4_add_unit_test(parsertest ${parsertest_SRCS})

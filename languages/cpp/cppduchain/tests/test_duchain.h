@@ -192,6 +192,13 @@ private slots:
 
   void testCommentAfterFunctionCall();
   void testPointerToMember();
+  void testNestedNamespace();
+
+  //BEGIN C++2011
+  void testRangeBasedFor();
+  void testRValueReference();
+  //END C++2011
+
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 

@@ -819,6 +819,8 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   // Not setting the member var because it gets nuked in visitSimpleDeclaration
   AST* first = node->init_statement;
   if (!first)
+    first = node->range_declaration;
+  if (!first)
     first = node->condition;
   if (!first)
     first = node->expression;
@@ -829,12 +831,15 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   if (!second)
     second = node->condition;
   if (!second)
+    second = node->range_declaration;
+  if (!second)
     second = node->init_statement;
 
   DUContext* secondParentContext = openContext(first, second, DUContext::Other);
 
   visit(node->init_statement);
   visit(node->condition);
+  visit(node->range_declaration);
   visit(node->expression);
 
   closeContext();

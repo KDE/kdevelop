@@ -87,6 +87,8 @@
 #include <vcs/vcsjob.h>
 #include <project/interfaces/iprojectbuilder.h>
 
+Q_DECLARE_METATYPE(KDevelop::IProject*);
+
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
@@ -95,6 +97,8 @@ K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", k
 Q_DECLARE_METATYPE ( KDevelop::ProjectFolderItem* )
 
 namespace {
+
+const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 QString fetchBuildDir(KDevelop::IProject* project)
 {
@@ -139,6 +143,239 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         newList.append(KUrl(s));
     }
     return newList;
+}
+
+bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
+{
+    bool ret=false;
+    QString txt=doc->text(r.castToSimpleRange().textRange());
+    QRegExp match("\\s+(./)*"+name);
+    if(!add && match.indexIn(txt) > -1)
+    {
+        txt.replace(match, replace.isEmpty() ? replace : ' '+replace);
+        doc->replaceText(r.castToSimpleRange().textRange(), txt);
+        ret=true;
+    }
+    else
+    {
+        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+        KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(lists);
+        QList<Declaration*> decls;
+        for(int i=0; i<topctx->usesCount(); i++)
+        {
+            Use u = topctx->uses()[i];
+
+            if(!r.contains(u.m_range))
+                continue; //We just want the uses in the range, not the whole file
+
+                Declaration* d=u.usedDeclaration(topctx);
+
+            if(d && d->context()->topContext()->url().toUrl()==lists)
+                decls += d;
+        }
+
+        if(add && decls.isEmpty())
+        {
+            doc->insertText(r.castToSimpleRange().textRange().start(), ' '+name);
+            ret=true;
+        }
+        else foreach(Declaration* d, decls)
+        {
+            r.start=d->range().end;
+
+            for(int lineNum = r.start.line; lineNum <= r.end.line; lineNum++)
+            {
+                int endParenIndex = doc->line(lineNum).indexOf(')');
+                if(endParenIndex >= 0) {
+                    r.end = CursorInRevision(lineNum, endParenIndex);
+                    break;
+                }
+            }
+
+            if(!r.isEmpty())
+            {
+                ret = ret || followUses(doc, r, name, lists, add, replace);
+            }
+        }
+    }
+    return ret;
+}
+
+QString dotlessRelativeUrl(KUrl baseUrl, KUrl url)
+{
+    QString dotlessRelative = KUrl::relativeUrl(baseUrl, url);
+    if (dotlessRelative.startsWith("./"))
+        dotlessRelative.remove(0, 2);
+    return dotlessRelative;
+}
+
+QString relativeToLists(QString listsPath, KUrl url)
+{
+    KUrl listsFolder = KUrl(KUrl(listsPath).directory(KUrl::AppendTrailingSlash));
+    QString relative = dotlessRelativeUrl(listsFolder, url);
+    return relative;
+}
+
+KUrl afterMoveUrl(KUrl origUrl, KUrl movedOrigUrl, KUrl movedNewUrl)
+{
+    QString difference = dotlessRelativeUrl(movedOrigUrl, origUrl);
+    KUrl newUrl(movedNewUrl);
+    newUrl.addPath(difference);
+    return newUrl;
+}
+
+QString itemListspath(const ProjectBaseItem* item)
+{
+    const DescriptorAttatched *desc = 0;
+    if (item->parent()->target())
+        desc = dynamic_cast<const DescriptorAttatched*>(item->parent());
+    else if (item->type() == ProjectBaseItem::BuildFolder)
+        desc = dynamic_cast<const DescriptorAttatched*>(item);
+
+    if (!desc)
+        return QString();
+    return desc->descriptor().filePath;
+}
+
+bool itemAffected(const ProjectBaseItem *item, const KUrl &changeUrl)
+{
+    QString listsPath = itemListspath(item);
+    if (listsPath.isEmpty())
+        return false;
+
+    KUrl listsFolder(KUrl(listsPath).directory(KUrl::AppendTrailingSlash));
+    //Who thought it was a good idea to have KUrl::isParentOf return true if the urls are equal?
+    return listsFolder.QUrl::isParentOf(changeUrl);
+}
+
+QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj, const KUrl &url, KUrl rootUrl = KUrl())
+{
+    if (rootUrl.isEmpty())
+        rootUrl = url;
+
+    QList<ProjectBaseItem*> dirtyItems;
+
+    QList<ProjectBaseItem*> sameUrlItems = proj->itemsForUrl(url);
+    foreach(ProjectBaseItem *sameUrlItem, sameUrlItems)
+    {
+        if (itemAffected(sameUrlItem, rootUrl))
+            dirtyItems.append(sameUrlItem);
+
+        foreach(ProjectBaseItem* childItem, sameUrlItem->children())
+            dirtyItems.append(cmakeListedItemsAffectedByUrlChange(childItem->project(), childItem->url(), rootUrl));
+    }
+    return dirtyItems;
+}
+
+QList<ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<ProjectBaseItem*> &items)
+{
+    QList<ProjectBaseItem*> dirtyItems;
+    foreach(ProjectBaseItem *item, items)
+        dirtyItems.append(cmakeListedItemsAffectedByUrlChange(item->project(), item->url()));
+    return dirtyItems;
+}
+
+bool changesWidgetRenameFolder(const CMakeFolderItem *folder, const KUrl &newUrl, ApplyChangesWidget *widget)
+{
+    QString lists = folder->descriptor().filePath;
+    widget->addDocuments(IndexedString(lists));
+    QString relative(relativeToLists(lists, newUrl));
+    KTextEditor::Range range = folder->descriptor().argRange().castToSimpleRange().textRange();
+    return widget->document()->replaceText(range, relative);
+}
+
+bool changesWidgetRemoveCMakeFolder(const CMakeFolderItem *folder, ApplyChangesWidget *widget)
+{
+    widget->addDocuments(IndexedString(folder->descriptor().filePath));
+    KTextEditor::Range range = folder->descriptor().range().castToSimpleRange().textRange();
+    return widget->document()->removeText(range);
+}
+
+bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFolder, ApplyChangesWidget *widget)
+{
+    QString lists(toFolder->url().path(KUrl::AddTrailingSlash).append("CMakeLists.txt"));
+    QString relative(relativeToLists(lists, folderUrl));
+    if (relative.endsWith('/'))
+        relative.chop(1);
+    QString insert = QString("add_subdirectory(%1)").arg(relative);
+    widget->addDocuments(IndexedString(lists));
+    return widget->document()->insertLine(widget->document()->lines(), insert);
+}
+
+bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl, ApplyChangesWidget *widget)
+{
+    const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(file->parent());
+    RangeInRevision targetRange = desc->descriptor().argRange();
+    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    QString listsPath = desc->descriptor().filePath;
+    QString newRelative = relativeToLists(listsPath, newUrl);
+    QString oldRelative = relativeToLists(listsPath, file->url());
+    widget->addDocuments(IndexedString(listsPath));
+    return followUses(widget->document(), targetRange, oldRelative, listsPath, false, newRelative);
+}
+
+bool changesWidgetAddFileToTarget(const ProjectFileItem *item, const ProjectTargetItem *target, ApplyChangesWidget *widget)
+{
+    const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(target);
+    RangeInRevision targetRange = desc->descriptor().range();
+    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    QString lists = desc->descriptor().filePath;
+    QString relative = relativeToLists(lists, item->url());
+    widget->addDocuments(IndexedString(lists));
+    return followUses(widget->document(), targetRange, relative, lists, true, QString());
+}
+
+bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChangesWidget *widget)
+{
+    const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(item->parent());
+    RangeInRevision targetRange = desc->descriptor().range();
+    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    QString lists = desc->descriptor().filePath;
+    QString relative = relativeToLists(lists, item->url());
+    widget->addDocuments(IndexedString(lists));
+    return followUses(widget->document(), targetRange, relative, lists, false, QString());
+}
+
+bool changesWidgetRemoveItems(const QList<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
+{
+    foreach(ProjectBaseItem *item, items)
+    {
+        CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item);
+        if (folder && !changesWidgetRemoveCMakeFolder(folder, widget))
+            return false;
+        else if (item->parent()->target() && !changesWidgetRemoveFileFromTarget(item, widget))
+            return false;
+    }
+    return true;
+}
+
+bool changesWidgetRemoveFilesFromTargets(const QList<ProjectFileItem*> &files, ApplyChangesWidget *widget)
+{
+    foreach(ProjectBaseItem *file, files)
+    {
+        Q_ASSERT(file->parent()->target());
+        if (!changesWidgetRemoveFileFromTarget(file, widget))
+            return false;
+    }
+    return true;
+}
+
+bool changesWidgetAddFilesToTarget(const QList<ProjectFileItem*> &files, const ProjectTargetItem* target, ApplyChangesWidget *widget)
+{
+    foreach(ProjectFileItem *file, files)
+    {
+        if (!changesWidgetAddFileToTarget(file, target, widget))
+            return false;
+    }
+    return true;
+}
+
+CMakeFolderItem* nearestCMakeFolder(ProjectBaseItem* item)
+{
+    while(!dynamic_cast<CMakeFolderItem*>(item))
+        item = item->parent();
+
+    return dynamic_cast<CMakeFolderItem*>(item);
 }
 
 }
@@ -494,8 +731,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         {
             QStringList files=t.files;
             QString outputName=t.name;
-            if(data.properties[TargetProperty].contains(t.name) && data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
-                outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
+            if(data.properties[TargetProperty].contains(t.name)) {
+                if(data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
+                    outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
+                else if(data.properties[TargetProperty][t.name].contains("FOLDER") &&
+                            data.properties[TargetProperty][t.name]["FOLDER"].first()=="CTestDashboardTargets")
+                    continue; //filter some annoying targets
+            }
             
             QString path;
             switch(t.type)
@@ -690,13 +932,15 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     return true;
 }
 
-void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
+void CMakeManager::reimport(CMakeFolderItem* fi)
 {
+    Q_ASSERT(!isReloading(fi->project()));
     KJob *job=createImportJob(fi);
-    job->setProperty("projectitem", qVariantFromValue(fi));
+    job->setProperty("project", qVariantFromValue(fi->project()));
     
     QMutexLocker locker(&m_busyProjectsMutex);
-    m_busyProjects += fi;
+    Q_ASSERT(!m_busyProjects.contains(fi->project()));
+    m_busyProjects += fi->project();
     locker.unlock();
     
     connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
@@ -705,11 +949,13 @@ void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 
 void CMakeManager::reimportDone(KJob* job)
 {
-    QMutexLocker locker(&m_busyProjectsMutex);
-    ProjectFolderItem* it = job->property("projectitem").value<KDevelop::ProjectFolderItem*>();
+    IProject* p = job->property("project").value<KDevelop::IProject*>();
     
-    Q_ASSERT(m_busyProjects.contains(it));
-    m_busyProjects.remove(it);
+    cleanupToDelete(p);
+    
+    QMutexLocker locker(&m_busyProjectsMutex);
+    Q_ASSERT(m_busyProjects.contains(p));
+    m_busyProjects.remove(p);
 }
 
 bool CMakeManager::isReloading(IProject* p)
@@ -718,50 +964,56 @@ bool CMakeManager::isReloading(IProject* p)
         return true;
     
     QMutexLocker locker(&m_busyProjectsMutex);
-    foreach(KDevelop::ProjectFolderItem* it, m_busyProjects) {
-        if(it->project()==p)
-            return true;
+    
+    return m_busyProjects.contains(p);
+}
+
+
+void CMakeManager::cleanupToDelete(IProject* p)
+{
+    Q_ASSERT(isReloading(p));
+    
+    for(QSet<QString>::iterator it=m_toDelete.begin(), itEnd=m_toDelete.end(); it!=itEnd; ) {
+        IndexedString url(*it);
+        if(p->fileSet().contains(url)) {
+            qDeleteAll(p->filesForUrl(url.toUrl()));
+            it=m_toDelete.erase(it);
+        } else 
+            ++it;
     }
-    return false;
 }
 
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
-    IProject* p=0;
-    if(m_busyProjects.isEmpty())
-        p=ICore::self()->projectController()->findProjectForUrl(dirurl);
-    else
-        QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     
-    if(p) {
-        if(!isReloading(p)) {
-            dirurl.adjustPath(KUrl::AddTrailingSlash);
-            if(p->folder()==dirurl) {
-                ICore::self()->projectController()->closeProject(p);
-            } else {
-                KUrl url(path);
-                
-                if(path.endsWith("/CMakeLists.txt")) {
-                    QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
-                    foreach(ProjectFolderItem* folder, folders) 
-                        reload(folder);
-                    
-                } else {
-                    QMutexLocker locker(&m_busyProjectsMutex);
-                    m_busyProjects += p->projectItem();
-                    locker.unlock();
-                    
-                    qDeleteAll(p->itemsForUrl(url));
-                    
-                    locker.relock();
-                    m_busyProjects -= p->projectItem();
-                }
-            }
+    if(p && !isReloading(p)) {
+        dirurl.adjustPath(KUrl::AddTrailingSlash);
+        if(p->folder()==dirurl) {
+            ICore::self()->projectController()->closeProject(p);
         } else {
-            QMetaObject::invokeMethod(this, "deletedWatched", Qt::QueuedConnection, Q_ARG(QString, path));
+            KUrl url(path);
+            
+            if(url.fileName()=="CMakeLists.txt") {
+                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
+                foreach(ProjectFolderItem* folder, folders) 
+                    reload(folder);
+                
+            } else {
+                QMutexLocker locker(&m_busyProjectsMutex);
+                m_busyProjects += p;
+                locker.unlock();
+                
+                m_toDelete += path;
+                cleanupToDelete(p);
+                
+                locker.relock();
+                m_busyProjects -= p;
+            }
         }
-    }
+    } else if(p)
+        m_toDelete += path;
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
@@ -828,13 +1080,14 @@ void CMakeManager::dirtyFile(const QString & dirty)
         
         if(!folders.isEmpty()) {
             QMutexLocker locker(&m_busyProjectsMutex);
-            m_busyProjects += folders.first();
+            m_busyProjects += p;
             locker.unlock();
             
             reloadFiles(folders.first());
+            cleanupToDelete(p);
             
             locker.relock();
-            m_busyProjects.remove(folders.first());
+            m_busyProjects -= p;
             locker.unlock();
         }
     }
@@ -867,18 +1120,12 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         QString current=it->text();
         KUrl fileurl = folderurl;
         fileurl.addPath(current);
+        m_toDelete.remove(fileurl.toLocalFile());
         
         if(!entries.contains(current))
-        {
             qDeleteAll(item->project()->itemsForUrl(fileurl));
-        }
-        else {
-            if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash)) {
-                it->setUrl(fileurl);
-            }
-            // reduce amount of checks done when looking for new items
-            entries.remove(current);
-        }
+        else if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash))
+            it->setUrl(fileurl);
     }
     
     //We look for new elements
@@ -887,9 +1134,8 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         KUrl fileurl = folderurl;
         fileurl.addPath( entry );
 
-        // existing entries should have been removed above already
-        // disabled for performance reasons
-//         Q_ASSERT( !item->hasFileOrFolder( entry ) );
+        if(item->hasFileOrFolder( entry ))
+            continue;
 
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
@@ -1023,203 +1269,76 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
     return ret;
 }
 
-KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
+bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* toFolder)
 {
-    bool created = KDevelop::createFolder(folder);
-    if(!created || !dynamic_cast<CMakeFolderItem*>(parent)) {
-        return 0;
-    }
-    
-    KUrl lists=parent->url();
-    lists.addPath("CMakeLists.txt");
-    
-    QString relative=KUrl::relativeUrl(parent->url(), folder);
-
-    kDebug() << "Adding folder " << parent->url() << " to " << folder << " as " << relative;
-    Q_ASSERT(!relative.contains("/"));
-
-    ApplyChangesWidget e;
-    e.setCaption(relative);
-    e.setInformation(i18n("Create a folder called '%1'.", relative));
-    e.addDocuments(IndexedString(lists));
-
-    e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
-
-    if(e.exec())
-    {
-        bool saved=e.applyAllChanges();
-        if(saved) { //If saved we create the folder then the CMakeLists.txt file
-            KUrl newCMakeLists(folder);
-            newCMakeLists.addPath("CMakeLists.txt");
-
-            QFile f(newCMakeLists.toLocalFile());
-            f.open(QIODevice::WriteOnly | QIODevice::Text);
-            QTextStream out(&f);
-            out << "\n";
-        } else
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not save the change."));
-    }
-    return 0;
-}
-
-bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
-{
-    bool ret=false;
-    QString txt=doc->text(r.castToSimpleRange().textRange());
-    if(!add && txt.contains(name))
-    {
-        txt.replace(name, replace);
-        doc->replaceText(r.castToSimpleRange().textRange(), txt);
-        ret=true;
-    }
-    else
-    {
-        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(lists);
-        QList<Declaration*> decls;
-        for(int i=0; i<topctx->usesCount(); i++)
-        {
-            Use u = topctx->uses()[i];
-
-            if(!r.contains(u.m_range))
-                continue; //We just want the uses in the range, not the whole file
-
-            Declaration* d=u.usedDeclaration(topctx);
-
-            if(d && d->context()->topContext()->url().toUrl()==lists)
-                decls += d;
-        }
-
-        if(add && decls.isEmpty())
-        {
-            doc->insertText(r.castToSimpleRange().textRange().start(), name);
-            ret=true;
-        }
-        else foreach(Declaration* d, decls)
-        {
-            r.start=d->range().end;
-
-            for(int lineNum = r.start.line; lineNum <= r.end.line; lineNum++)
-            {
-                int endParenIndex = doc->line(lineNum).indexOf(')');
-                if(endParenIndex >= 0) {
-                    r.end = CursorInRevision(lineNum, endParenIndex);
-                    break;
-                }
-            }
-
-            if(!r.isEmpty())
-            {
-                ret = ret || followUses(doc, r, name, lists, add, replace);
-            }
-        }
-    }
-    return ret;
-}
-
-QList<TargetFilePair> CMakeManager::getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const
-{
-    QList<TargetFilePair> targetFiles;
-    foreach (ProjectBaseItem* item, items)
-    {
-        if (ProjectFileItem* file = item->file())
-        {
-            //FIXME: ProjectFileItems should have a list of the targets they belong to
-            QList<ProjectFileItem*> allItemsForUrl = file->project()->filesForUrl(file->url());
-            foreach(ProjectFileItem* item, allItemsForUrl)
-            {
-                if (ProjectTargetItem* target = item->parent()->target())
-                    targetFiles << TargetFilePair(target, item);
-            }
-        }
-        else if (ProjectFolderItem* folder = item->folder())
-            targetFiles += getTargetFilesWithin(folder->children());
-    }
-    return targetFiles;
-}
-
-QList<CMakeFolderItem*> CMakeManager::getCMakeFoldersWithin(const QList<KDevelop::ProjectBaseItem*> &items) const
-{
-    QList<CMakeFolderItem*> cmakeFolders;
-    foreach (ProjectBaseItem* item, items)
-    {
-        switch (item->type())
-        {
-        case KDevelop::ProjectBaseItem::BuildFolder:
-            cmakeFolders << static_cast<CMakeFolderItem*>(item);
-            //let it drop
-        case KDevelop::ProjectBaseItem::Folder:
-            getCMakeFoldersWithin(item->children());
-            break;
-        }
-    }
-    return cmakeFolders;
-}
-
-bool CMakeManager::changesWidgetAddCMakeFolderRemovals(const QList<CMakeFolderItem*> &folders, ApplyChangesWidget* changesWidget)
-{
-    foreach(CMakeFolderItem* folder, folders)
-    {
-        KUrl lists = folder->url().upUrl();
-        lists.addPath("CMakeLists.txt");
-
-        changesWidget->addDocuments(IndexedString(lists));
-        KTextEditor::Range range = folder->descriptor().range().castToSimpleRange().textRange();
-        if (!changesWidget->document()->removeText(range))
-            return false;
-    }
-    return true;
-}
-
-bool CMakeManager::changesWidgetAddTargetFileRemovals(const QList<TargetFilePair> &targetFiles, ApplyChangesWidget* changesWidget)
-{
-    foreach (TargetFilePair targetFile, targetFiles)
-    {
-        Q_ASSERT(targetFile.second->parent() == targetFile.first);
-
-        CMakeFolderItem* folder = static_cast<CMakeFolderItem*>(targetFile.first->parent());
-
-        DescriptorAttatched* desc = dynamic_cast<DescriptorAttatched*>(targetFile.first);
-        RangeInRevision range = desc->descriptor().range();
-        range.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
-
-        KUrl lists = folder->url();
-        lists.addPath("CMakeLists.txt");
-
-        changesWidget->addDocuments(IndexedString(lists));
-
-        //FIXME: Not sure if this "find" extraction will cover all use cases
-        QString find = KUrl::relativeUrl(folder->url(), targetFile.second->url());
-        if (!followUses(changesWidget->document(), range, ' '+find, lists, false, QString()))
-            return false;
-    }
-    return true;
-}
-
-bool CMakeManager::removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items)
-{
-    //First do CMakeLists changes
     ApplyChangesWidget changesWidget;
-    changesWidget.setCaption(i18n("CMakeLists Changes"));
-    changesWidget.setInformation(i18n("Remove files and folders from CMakeLists as follows:"));
+    changesWidget.setCaption(DIALOG_CAPTION);
+    changesWidget.setInformation(i18n("Move files and folders within CMakeLists as follows:"));
 
     bool cmakeSuccessful = true;
-    cmakeSuccessful &= changesWidgetAddTargetFileRemovals(getTargetFilesWithin(items), &changesWidget);
-    cmakeSuccessful &= changesWidgetAddCMakeFolderRemovals(getCMakeFoldersWithin(items), &changesWidget);
+    CMakeFolderItem *nearestCMakeFolderItem = nearestCMakeFolder(toFolder);
+    foreach(ProjectBaseItem *movedItem, items)
+    {
+        QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(movedItem->project(), movedItem->url());
+        KUrl movedItemNewUrl = toFolder->url();
+        movedItemNewUrl.addPath(movedItem->baseName());
+        if (movedItem->folder())
+            movedItemNewUrl.adjustPath(KUrl::AddTrailingSlash);
+        foreach(ProjectBaseItem* dirtyItem, dirtyItems)
+        {
+            KUrl dirtyItemNewUrl = afterMoveUrl(dirtyItem->url(), movedItem->url(), movedItemNewUrl);
+            if (CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(dirtyItem))
+            {
+                cmakeSuccessful &= changesWidgetRemoveCMakeFolder(folder, &changesWidget);
+                cmakeSuccessful &= changesWidgetAddFolder(dirtyItemNewUrl, nearestCMakeFolderItem, &changesWidget);
+            }
+            else if (dirtyItem->parent()->target())
+            {
+                cmakeSuccessful &= changesWidgetMoveTargetFile(dirtyItem, dirtyItemNewUrl, &changesWidget);
+            }
+        }
+    }
 
-    if (changesWidget.hasDocuments())
+    if (changesWidget.hasDocuments() && cmakeSuccessful)
         cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
 
     if (!cmakeSuccessful)
     {
         if (KMessageBox::questionYesNo( QApplication::activeWindow(),
-                                        i18n("Changes to CMakeLists failed, abort file deletion?"),
-                                        i18n("Error"))
-            == KMessageBox::Yes)
-        {
+                                        i18n("Changes to CMakeLists failed, abort move?"),
+                                        DIALOG_CAPTION ) == KMessageBox::Yes)
             return false;
-        }
+    }
+
+    foreach(ProjectBaseItem *movedItem, items)
+    {
+        KUrl movedItemNewUrl = toFolder->url();
+        movedItemNewUrl.addPath(movedItem->baseName());
+        if (!KDevelop::renameUrl(movedItem->project(), movedItem->url(), movedItemNewUrl))
+            return false;
+    }
+
+    return true;
+}
+
+bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
+{
+    //First do CMakeLists changes
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(DIALOG_CAPTION);
+    changesWidget.setInformation(i18n("Remove files and folders from CMakeLists as follows:"));
+
+    bool cmakeSuccessful = changesWidgetRemoveItems(cmakeListedItemsAffectedByItemsChanged(items), &changesWidget);
+
+    if (changesWidget.hasDocuments() && cmakeSuccessful)
+        cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
+
+    if (!cmakeSuccessful)
+    {
+        if (KMessageBox::questionYesNo( QApplication::activeWindow(),
+                                        i18n("Changes to CMakeLists failed, abort deletion?"),
+                                        DIALOG_CAPTION ) == KMessageBox::Yes)
+            return false;
     }
 
     //Then delete the files/folders
@@ -1228,78 +1347,145 @@ bool CMakeManager::removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> item
         Q_ASSERT(item->folder() || item->file());
         Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
-        if (!KDevelop::removeUrl(item->project(), item->url(), false))
+        if (!KDevelop::removeUrl(item->project(), item->url(), (bool)item->folder()))
             return false;
     }
 
     return true;
 }
 
-bool CMakeManager::removeFilesFromTargets( QList<TargetFilePair> targetFiles)
+bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
 {
     ApplyChangesWidget changesWidget;
-    changesWidget.setCaption(i18n("CMakeLists Changes"));
+    changesWidget.setCaption(DIALOG_CAPTION);
     changesWidget.setInformation(i18n("Modify project targets as follows:"));
 
-    if (targetFiles.size() &&
-        changesWidgetAddTargetFileRemovals(targetFiles, &changesWidget) &&
+    if (files.size() &&
+        changesWidgetRemoveFilesFromTargets(files, &changesWidget) &&
         changesWidget.exec() &&
         changesWidget.applyAllChanges()) {
         return true;
     }
-
     return false;
+}
+
+ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem* parent)
+{
+    CMakeFolderItem *cmakeParent = nearestCMakeFolder(parent);
+    if(!cmakeParent)
+        return 0;
+
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(DIALOG_CAPTION);
+    changesWidget.setInformation(i18n("Create folder '%1':",
+                                      folder.fileName(KUrl::IgnoreTrailingSlash)));
+
+    changesWidgetAddFolder(folder, cmakeParent, &changesWidget);
+
+    if(changesWidget.exec() && changesWidget.applyAllChanges())
+    {
+        if(KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
+            KUrl newCMakeLists(folder);
+            newCMakeLists.addPath("CMakeLists.txt");
+            
+            QFile f(newCMakeLists.toLocalFile());
+            f.open(QIODevice::WriteOnly | QIODevice::Text);
+            QTextStream out(&f);
+            out << "\n";
+        } else
+            KMessageBox::error(0, i18n("Could not save the change."),
+                                  DIALOG_CAPTION);
+    }
+
+    return 0;
 }
 
 //This is being called from ::parse() so we shouldn't make it block the ui
 KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
 {
     KDevelop::ProjectFileItem* created = 0;
-    if ( KDevelop::createFile(url) ) {
+    if ( KDevelop::createFile(url) )
         created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
-    }
     return created;
 }
 
-bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, ProjectTargetItem* target)
 {
-    Q_ASSERT(!it->url().isEmpty());
-    
-    QSet<QString> headerExt=QSet<QString>() << ".h" << ".hpp" << ".hxx";
-    foreach(const QString& ext, headerExt)
+    QSet<QString> headerExt = QSet<QString>() << ".h" << ".hpp" << ".hxx";
+    QList< ProjectFileItem* > files = _files;
+    for (int i = files.count() - 1; i >= 0; --i)
     {
-        if(it->url().fileName().toLower().endsWith(ext))
+        QString fileName = files[i]->fileName();
+        QString fileExt = fileName.mid(fileName.lastIndexOf('.'));
+        QList< ProjectBaseItem* > sameUrlItems = files[i]->project()->itemsForUrl(files[i]->url());
+        foreach(ProjectBaseItem* item, sameUrlItems)
+        {
+            if (item->parent() == target)
+            {
+                files.removeAt(i);
+                break;
+            }
+        }
+        if (headerExt.contains(fileExt))
+            files.removeAt(i);
+    }
+
+    if(!files.length())
+        return true;
+
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(DIALOG_CAPTION);
+    changesWidget.setInformation(i18n("Modify target '%2' as follows:", target->baseName()));
+
+    bool success = changesWidgetAddFilesToTarget(files, target, &changesWidget) &&
+                   changesWidget.exec() &&
+                   changesWidget.applyAllChanges();
+
+    if(!success)
+        KMessageBox::error(0, i18n("CMakeLists changes failed."), DIALOG_CAPTION);
+
+    return success;
+}
+
+bool renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
+{
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(DIALOG_CAPTION);
+    changesWidget.setInformation(i18n("Rename '%1' to '%2':", item->text(),
+                                      newUrl.fileName(KUrl::IgnoreTrailingSlash)));
+    
+    bool cmakeSuccessful = true;
+    if (item->file())
+    {
+        QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(item->project(), item->url());
+        foreach(ProjectBaseItem* targetFile, targetFiles)
+            cmakeSuccessful &= changesWidgetMoveTargetFile(targetFile, newUrl, &changesWidget);
+    }
+    else if (CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item))
+        cmakeSuccessful &= changesWidgetRenameFolder(folder, newUrl, &changesWidget);
+    
+    if (changesWidget.hasDocuments() && cmakeSuccessful)
+        cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
+    
+    if (!cmakeSuccessful)
+    {
+        if (KMessageBox::questionYesNo( QApplication::activeWindow(),
+                                        i18n("Changes to CMakeLists failed, abort rename?"),
+                                        DIALOG_CAPTION ) == KMessageBox::Yes)
             return false;
     }
-    
-    if(it->parent()==target)
-        return true; //It already is in the target
 
-    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
+    return KDevelop::renameUrl(item->project(), item->url(), newUrl);
+}
 
-    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-    RangeInRevision r=desc->descriptor().range();
-    r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
+bool CMakeManager::renameFile(ProjectFileItem *item, const KUrl &newUrl)
+{
+    return renameFileOrFolder(item, newUrl);
+}
 
-    KUrl lists=folder->url();
-    lists.addPath("CMakeLists.txt");
-
-    ApplyChangesWidget e;
-    e.setCaption(it->fileName());
-    e.setInformation(i18n("Add a file called '%1' to target '%2'.", it->fileName(), target->text()));
-    e.addDocuments(IndexedString(lists));
-
-    QString filename=KUrl::relativeUrl(folder->url(), it->url());
-    if(filename.startsWith("./"))
-        filename=filename.right(filename.size()-2);
-    bool ret=followUses(e.document(), r, ' '+filename, lists, true, QString());
-
-    if(ret && e.exec())
-        ret=e.applyAllChanges();
-    if(!ret)
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Cannot save the change."));
-    return ret;
+bool CMakeManager::renameFolder(ProjectFolderItem* item, const KUrl &newUrl)
+{
+    return renameFileOrFolder(item, newUrl);
 }
 
 QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
@@ -1364,95 +1550,6 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
         ret.first=e.value;
         ret.second=e.doc;
     }
-    return ret;
-}
-
-
-bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
-{
-    KUrl fileUrl = it->url();
-    IProject *project = it->project();
-    QList<ProjectFileItem*> files=it->project()->filesForUrl(fileUrl);
-    
-    QList<ProjectTargetItem*> targets;
-    
-    //We loop through all the files with the same url
-    foreach(ProjectFileItem* file, files)
-    {
-        ProjectTargetItem* t=static_cast<ProjectBaseItem*>(file->parent())->target();
-        if(t)
-            targets+=t;
-    }
-        
-    if(targets.isEmpty())
-    {
-        return KDevelop::renameUrl(project, fileUrl, newUrl);
-    }
-    
-    ApplyChangesWidget e;
-    e.setCaption(it->text());
-    e.setInformation(i18n("Remove a file called '%1'.", it->text()));
-    
-    bool ret=false;
-    foreach(ProjectTargetItem* target, targets)
-    {
-        CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
-
-        DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-        RangeInRevision r=desc->descriptor().range();
-        r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
-
-        KUrl lists=folder->url();
-        lists.addPath("CMakeLists.txt");
-        e.addDocuments(IndexedString(lists));
-        
-        QString newName=KUrl::relativeUrl(fileUrl.upUrl(), newUrl);
-        if(newName.startsWith("./"))
-            newName.remove(0,2);
-        bool hasChanges = followUses(e.document(), r, ' '+it->text(), lists, false, ' '+newName);
-        ret = ret || hasChanges;
-    }
-
-    ret &= e.exec()==KDialog::Accepted;
-    if(ret)
-    {
-        ret=e.applyAllChanges();
-        ret = ret && KDevelop::renameUrl(project, fileUrl, newUrl);
-    }
-
-    return ret;
-}
-
-bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
-{
-    if(_it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
-    {
-        return KDevelop::renameUrl(_it->project(), _it->url(), newUrl);
-    }
-    
-    CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
-    KUrl lists=it->formerParent()->url();
-    lists.addPath("CMakeLists.txt");
-    QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
-    if(newName.startsWith("./"))
-        newName.remove(0,2);
-    
-    KUrl url = it->url();
-    IProject* project = it->project();
-
-    ApplyChangesWidget e;
-    e.setCaption(it->text());
-    e.setInformation(i18n("Rename a folder called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists));
-
-    KTextEditor::Range r=it->descriptor().argRange().castToSimpleRange().textRange();
-    kDebug(9042) << "For " << lists << " rename " << r;
-    
-    bool ret = e.document()->replaceText(r, newName);
-    
-    ret &= e.exec() == QDialog::Accepted;
-    ret &= KDevelop::renameUrl(project, url, newUrl);
-    ret &= e.applyAllChanges();
     return ret;
 }
 

@@ -432,32 +432,39 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
     if(!delay) {
       
       ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
-      
+
+      // see section 3.4.1-7 in the cpp spec on unqualified name lookup
+      // and https://bugs.kde.org/show_bug.cgi?id=273658 for a bug report
+      AbstractType::Ptr type;
+      int matchQuality = 0; // we just pick the size of the qualified identifier as match quality
+      bool wasInstance = false;
       foreach( Declaration* decl, dec ) {
         AbstractType::Ptr unAliased = TypeUtils::unAliasedType(decl->abstractType());
         if( needClass && !unAliased.cast<CppClassType>() )
           continue;
 
-        if (decl->abstractType() ) {
-          if(decl->kind() == KDevelop::Declaration::Instance)
-            m_lastTypeWasInstance = true;
+        if(unAliased.cast<DelayedType>())
+          continue;
 
+        if (decl->abstractType()) {
           //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
 
-          AbstractType::Ptr type = decl->abstractType();
-          
-          if(unAliased.cast<DelayedType>()) {
-            continue;
+          const int quality = decl->qualifiedIdentifier().count();
+          if (matchQuality < quality) {
+            // better quality, prefer over old match
+            type = decl->abstractType();
+            matchQuality = quality;
+            wasInstance = decl->kind() == KDevelop::Declaration::Instance;
           }
-
-          openedType = true;
-
-          if(type)
-            applyModifiers(type, modifiers);
-
-          openType(type);
-          break;
         }
+      }
+
+      if (type) {
+        m_lastTypeWasInstance = wasInstance;
+        applyModifiers(type, modifiers);
+        openType(type);
+
+        openedType = true;
       }
     }
 
@@ -569,12 +576,15 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
   
   bool typeOpened = false;
   if (node->op) {
-    QString op = editor()->tokenToString(node->op);
+    const QString op = editor()->tokenToString(node->op);
     if (!op.isEmpty()) {
       if (op[0] == '&') {
         ReferenceType::Ptr pointer(new ReferenceType());
         pointer->setModifiers(parseConstVolatile(editor()->parseSession(), node->cv));
         pointer->setBaseType(lastType());
+        if (op.size() == 2 && op[1] == '&')
+          pointer->setIsRValue(true);
+
         openType(pointer);
         typeOpened = true;
 

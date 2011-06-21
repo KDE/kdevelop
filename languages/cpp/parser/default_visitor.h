@@ -52,6 +52,7 @@ protected:
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *);
   virtual void visitExpressionStatement(ExpressionStatementAST *);
   virtual void visitForStatement(ForStatementAST *);
+  virtual void visitForRangeDeclaration(ForRangeDeclarationAst* );
   virtual void visitFunctionCall(FunctionCallAST *);
   virtual void visitFunctionDefinition(FunctionDefinitionAST *);
   virtual void visitIfStatement(IfStatementAST *);

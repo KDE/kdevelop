@@ -34,6 +34,7 @@ private Q_SLOTS:
     void testQListContainer();
     void testQMapInt();
     void testQMapString();
+    void testQMapStringBool();
     void testQDate();
     void testQTime();
     void testQDateTime();

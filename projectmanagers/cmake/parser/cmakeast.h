@@ -347,11 +347,12 @@ CMAKE_END_AST_CLASS( FltkWrapUiAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ForeachAst )
+    enum ForeachType { Range, InItems, InLists };
     struct rangeValues { int start, stop, step; };
 CMAKE_ADD_AST_MEMBER( QString, loopVar )
 CMAKE_ADD_AST_MEMBER( rangeValues, ranges )
 CMAKE_ADD_AST_MEMBER( QStringList, arguments )
-CMAKE_ADD_AST_MEMBER( bool, range )
+CMAKE_ADD_AST_MEMBER( ForeachType, type )
 CMAKE_END_AST_CLASS( ForeachAst )
 
 

@@ -1590,7 +1590,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_loopVar=func.arguments.first().value;
     if(func.arguments[1].value=="RANGE") {
         bool correctStart = true, correctStop = true, correctRange = true;
-        m_range=true;
+        m_type=Range;
         if(func.arguments.count()<3)
             return false;
         m_ranges.step = 1;
@@ -1607,8 +1607,20 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_ranges.step = func.arguments[4].value.toInt(&correctRange);
         if(!correctStart || !correctStop || !correctRange)
             return false;
+    } else if(func.arguments[1].value=="IN") {
+        if(func.arguments[2].value=="LISTS") {
+            m_type = InLists;
+        } else if(func.arguments[2].value=="ITEMS") {
+            m_type = InItems;
+        } else
+            return false;
+        
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+4, itEnd=func.arguments.constEnd();
+        for(; it!=itEnd; ++it) {
+            m_arguments += it->value;
+        }
     } else {
-        m_range=false;
+        m_type=InItems;
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
         for(; it!=itEnd; ++it)
         {
@@ -3710,6 +3722,8 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(propName=="VARIABLE") t=VariableProperty;
     else
         return false;
+    m_type=t;
+    
     ++it;
     if(it->value!="PROPERTY") {
         m_typeName=it->value;

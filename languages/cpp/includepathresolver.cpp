@@ -75,8 +75,8 @@ namespace {
 
    ///After how many seconds should we retry?
    static const int CACHE_FAIL_FOR_SECONDS = 200;
-   
-   static const int processTimeoutSeconds = 40000;
+
+   static const int processTimeoutSeconds = 30;
 
 }
 

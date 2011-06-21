@@ -5,3 +5,7 @@ add_executable(debugeerecursion debugeerecursion.cpp)
 
 add_executable(debugeethreads debugeethreads.cpp)
 target_link_libraries(debugeethreads ${QT_QTCORE_LIBRARY})
+
+add_executable(debugeeqt debugeeqt.cpp)
+target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
+

@@ -65,12 +65,16 @@
 #include <tests/testcore.h>
 
 #include <KTempDir>
+#include <KTextEditor/Editor>
+#include <KTextEditor/EditorChooser>
+#include <KTextEditor/View>
+#include <qtest_kde.h>
 
 using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_MAIN(TestCppCodeCompletion)
+QTEST_KDEMAIN(TestCppCodeCompletion, GUI)
 
 QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
 
@@ -123,6 +127,31 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testCommentClearing()
+{
+  QByteArray method = "struct a { int i; }; int foo() { a inst; }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester test(top->childContexts()[ctxt], "//* \n inst.");
+  QCOMPARE(test.names, QStringList() << "i");
+  CompletionItemTester test2(top->childContexts()[ctxt], "// \n inst.");
+  QCOMPARE(test2.names, QStringList() << "i");
+  CompletionItemTester test3(top->childContexts()[ctxt], "/*//*/ inst.");
+  QCOMPARE(test3.names, QStringList() << "i");
+  CompletionItemTester test4(top->childContexts()[ctxt], " ///*//*/ \n inst.");
+  QCOMPARE(test4.names, QStringList() << "i");
+  CompletionItemTester test5(top->childContexts()[ctxt], "/*// inst.");
+  QCOMPARE(test5.names, QStringList());
+  CompletionItemTester test6(top->childContexts()[ctxt], "// inst.");
+  QCOMPARE(test6.names, QStringList());
+  CompletionItemTester test7(top->childContexts()[ctxt], "/*// \n/* // \n */ inst.");
+  QCOMPARE(test7.names, QStringList() << "i");
+  CompletionItemTester test8(top->childContexts()[ctxt], "// \n /*// \n/* // \n */ /*/*/ inst.");
+  QCOMPARE(test8.names, QStringList() << "i");
+  release(top);
+}
+
 void TestCppCodeCompletion::testExpressionBefore()
 {
   QString exp1 = "int x";
@@ -171,6 +200,28 @@ void TestCppCodeCompletion::testExpressionBefore()
   QCOMPARE(Cpp::expressionBefore(exp22, exp22.length()), 0);
   QString exp23 = "   ";
   QCOMPARE(Cpp::expressionBefore(exp23, exp23.length()), 3);
+}
+
+void TestCppCodeCompletion::testSpecialItems()
+{
+  //Special items are (at this time) just all the enum members given duplicate values that qualify for "Best Match" status
+  //If reasonably possible, it would be nice to not duplicate while still having best matches
+  //See Also: context.cpp's CodeCompletionContext::specialItemsForArgumentType function
+  QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester test(top->childContexts()[ctxt], "c = ");
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test2(top->childContexts()[ctxt], "test(");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  release(top);
 }
 
 void TestCppCodeCompletion::testOnlyShow()
@@ -234,6 +285,23 @@ void TestCppCodeCompletion::testOnlyShow()
   release(top);
 }
 
+void TestCppCodeCompletion::testFriends()
+{
+  QByteArray method = "class Friendly{};";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 0;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester test(top->childContexts()[ctxt], "friend ");
+  QVERIFY(test.completionContext->isValid());
+  QVERIFY(test.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester test2(top->childContexts()[ctxt], "friend class ");
+  QVERIFY(test2.completionContext->isValid());
+  QVERIFY(test2.completionContext->onlyShow() == Cpp::CodeCompletionContext::ShowTypes);
+  CompletionItemTester test3(top->childContexts()[ctxt], "class ");
+  QVERIFY(!test3.completionContext->isValid());
+
+  release(top);
+}
 
 void TestCppCodeCompletion::testInvalidContexts()
 {
@@ -2934,6 +3002,75 @@ void TestCppCodeCompletion::testFilterVoid()
 
   release(top);
 }
+
+void TestCppCodeCompletion::testExecuteKeepWord_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<QString>("expectedCode");
+
+  QTest::newRow("replaceWord") << "\nstruct Foo { };\nFoo f;\nfbar();"
+                               << "f();";
+
+  QTest::newRow("structfunction") << "\nstruct Foo { int bar() { return 0; } };\nFoo f;\nfbar();"
+                                  << "f.bar();";
+
+  QTest::newRow("pointer") << "\nstruct Foo { int bar() { return 0; } };\nFoo *f;\nfbar();"
+                           << "f->bar();";
+
+  QTest::newRow("reference") << "\nstruct Foo { int bar() { return 0; } };\nFoo &f;\nfbar();"
+                             << "f.bar();";
+
+  QTest::newRow("smartPtr") << "template<class T> struct SmartPointer { T* operator->() {return 0;}};\nstruct Foo { int bar() { return 0; } };\nSmartPointer<Foo> f;\nfbar();"
+                            << "f->bar();";
+
+  QTest::newRow("enum") << "\nclass f { enum Foo { xy, xz }; };\n\nfFoo x;"
+                            << "f::Foo x;";
+
+  QTest::newRow("staticfunction") << "struct f { static void bar() {} };\n\n\nfbar();"
+                                  << "f::bar();";
+}
+
+void TestCppCodeCompletion::testExecuteKeepWord()
+{
+  QFETCH(QString, code);
+  TopDUContext* top = parse(code.toAscii(), DumpAll);
+
+  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  QVERIFY(editor);
+
+  KTextEditor::Document* doc = editor->createDocument(this);
+  QVERIFY(doc);
+  doc->setText(code);
+  doc->startEditing();
+
+  KTextEditor::View *v = doc->createView(0);
+  v->setCursorPosition(KTextEditor::Cursor(3, 1));
+
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  CompletionItemTester complCtx(top->childContexts().last(), "");
+  KSharedPtr<CompletionTreeItem> item;
+  for(int i=0; i<complCtx.items.length(); ++i) {
+    kDebug() << complCtx.itemData(i).toString();
+    if (complCtx.itemData(i).toString()=="f") {
+      item = complCtx.items.at(i);
+    }
+  }
+  QVERIFY(!item.isNull());
+  item->execute(doc, KTextEditor::Range(3, 0, 3, 4));
+
+  QFETCH(QString, expectedCode);
+  QCOMPARE(doc->line(3), expectedCode);
+
+  doc->endEditing();
+
+  release(top);
+
+  delete v;
+  delete doc;
+}
+
 
 //BEGIN: Helper
 

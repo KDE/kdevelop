@@ -86,8 +86,6 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     }
   }
   
-  //We will have some caching in TopDUContext until this objects lifetime is over
-  TopDUContext::Cache cache(topContext);
   Cpp::TypeConversionCacheEnabler enableConversionCache;
 
   KDevelop::CodeCompletionWorker::computeCompletions(context, position, followingText, contextRange, contextText);

@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <string>
 
 AStyleStringIterator::AStyleStringIterator(const QString &text)
-  : ASSourceIterator(), m_content(text)
+  : ASSourceIterator(), m_content(text), m_peekStart(-1)
 {
   m_is = new QTextStream(&m_content, QIODevice::ReadOnly);
 }
@@ -49,7 +49,9 @@ string AStyleStringIterator::nextLine(bool emptyLineWasDeleted)
 
 string AStyleStringIterator::peekNextLine()
 {
-    m_peekStart = m_is->pos();
+    if (m_peekStart == -1) {
+        m_peekStart = m_is->pos();
+    }
     return m_is->readLine().toUtf8().data();
 }
 

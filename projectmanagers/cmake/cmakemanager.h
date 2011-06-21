@@ -88,14 +88,15 @@ public:
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
     virtual KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
-    virtual bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
+    virtual bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target);
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-    virtual bool removeFilesFromTargets( QList<KDevelop::TargetFilePair> );
-    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items);
+    virtual bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*> &files );
+    virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
 
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
+    virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
@@ -126,10 +127,11 @@ private slots:
     void deletedWatched(const QString& directory);
 
 private:
-    void reimport(KDevelop::ProjectFolderItem* fi);
+    void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
     bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
+    void cleanupToDelete(KDevelop::IProject* p);
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
@@ -141,20 +143,16 @@ private:
     static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
     void reloadFiles(KDevelop::ProjectFolderItem* item);
 
-    bool changesWidgetAddTargetFileRemovals(const QList<KDevelop::TargetFilePair> &targetFiles, KDevelop::ApplyChangesWidget* changesWidget);
-    bool changesWidgetAddCMakeFolderRemovals(const QList<CMakeFolderItem*> &folders, KDevelop::ApplyChangesWidget* changesWidget);
-    QList<CMakeFolderItem*> getCMakeFoldersWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
-    QList<KDevelop::TargetFilePair> getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
-
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
-    QSet<KDevelop::ProjectFolderItem*> m_busyProjects;
+    QSet<KDevelop::IProject*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
+    QSet<QString> m_toDelete;
 };
 
 #endif

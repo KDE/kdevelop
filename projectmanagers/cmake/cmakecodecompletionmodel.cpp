@@ -230,7 +230,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                     DelayedType::Ptr delay = t.cast<DelayedType>();
                     args.append(delay->identifier().toString());
                 }
-                return '('+args.join(", ")+')';
+                return QString('('+args.join(", ")+')');
             }
         }
         

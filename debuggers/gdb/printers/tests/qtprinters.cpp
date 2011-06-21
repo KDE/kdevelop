@@ -246,6 +246,21 @@ void QtPrintersTest::testQMapString()
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
+void QtPrintersTest::testQMapStringBool()
+{
+    GdbProcess gdb("qmapstringbool");
+    gdb.execute("break qmapstringbool.cpp:8");
+    gdb.execute("run");
+    QByteArray out = gdb.execute("print m");
+    QVERIFY(out.contains("QMap<QString, bool>"));
+    QVERIFY(out.contains("[\"10\"] = true"));
+    QVERIFY(out.contains("[\"20\"] = false"));
+    gdb.execute("next");
+    out = gdb.execute("print m");
+    QVERIFY(out.contains("[\"30\"] = true"));
+}
+
+
 void QtPrintersTest::testQDate()
 {
     GdbProcess gdb("qdate");
