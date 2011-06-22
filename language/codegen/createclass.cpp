@@ -307,10 +307,12 @@ void ClassGenerator::fetchSuperClasses(DeclarationPointer derivedClass)
     d->inheritedClasses.append(derivedClass);
 
     DUContext* context = derivedClass->internalContext();
-    foreach (const DUContext::Import& import, context->importedParentContexts())
-        if (DUContext * parentContext = import.context(context->topContext()))
-            if (parentContext->type() == DUContext::Class)
-                fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+    if (context) {
+        foreach (const DUContext::Import& import, context->importedParentContexts())
+            if (DUContext * parentContext = import.context(context->topContext()))
+                if (parentContext->type() == DUContext::Class)
+                    fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+    }
 }
 
 class ClassIdentifierPagePrivate
