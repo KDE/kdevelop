@@ -99,6 +99,7 @@ class TranslationUnitAST;
 class TryBlockStatementAST;
 class CatchStatementAST;
 class TypeIdAST;
+class TypeIDOperatorAST;
 class TypeIdentificationAST;
 class TypeParameterAST;
 class TypeSpecifierAST;
@@ -197,6 +198,7 @@ public:
       Kind_SignalSlotExpression,                // 77
       Kind_QPropertyDeclaration,                // 78
       Kind_ForRangeDeclaration,                 // 79
+      Kind_TypeIDOperator,                      // 80
       NODE_KIND_COUNT
     };
 
@@ -1056,6 +1058,16 @@ public:
 
   TypeSpecifierAST *type_specifier;
   DeclaratorAST *declarator;
+};
+
+/// typeid(...)
+class TypeIDOperatorAST : public PostfixExpressionAST
+{
+public:
+
+  DECLARE_AST_NODE(TypeIDOperator)
+
+  TypeIdAST* typeId;
 };
 
 ///"typename"

@@ -109,6 +109,11 @@ void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* exp)
     newUse(node->name);*/
 }
 
+void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
+{
+  visitExpression(node);
+}
+
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {

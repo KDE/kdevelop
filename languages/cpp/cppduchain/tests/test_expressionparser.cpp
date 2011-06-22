@@ -1107,6 +1107,45 @@ void TestExpressionParser::testTemplateFunctions() {
   }
 }
 
+void TestExpressionParser::testTypeID()
+{
+  QByteArray method("namespace std { struct type_info{ const char* name(); }; }\nvoid f() {float f;}");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().size(), 3);
+  DUContextPointer fBody(top->childContexts().last());
+
+  Declaration* tiDec = top->findDeclarations(QualifiedIdentifier("::std::type_info")).first();
+
+  Cpp::ExpressionParser parser(false, true);
+
+  Cpp::ExpressionEvaluationResult result;
+
+  result = parser.evaluateExpression("typeid(int)", fBody);
+  QVERIFY(result.isValid());
+  QVERIFY(result.type.type<StructureType>());
+  QVERIFY(result.type.abstractType()->equals(tiDec->abstractType().constData()));
+
+  result = parser.evaluateExpression("typeid(5)", fBody);
+  QVERIFY(result.isValid());
+  QVERIFY(result.type.type<StructureType>());
+  QVERIFY(result.type.abstractType()->equals(tiDec->abstractType().constData()));
+
+  result = parser.evaluateExpression("typeid(f)", fBody);
+  QVERIFY(result.isValid());
+  QVERIFY(result.type.type<StructureType>());
+  QVERIFY(result.type.abstractType()->equals(tiDec->abstractType().constData()));
+
+  result = parser.evaluateExpression("typeid(f).name()", fBody);
+  QVERIFY(result.isValid());
+  QVERIFY(result.type.type<PointerType>());
+  QVERIFY(result.type.type<PointerType>()->baseType().cast<IntegralType>());
+  QCOMPARE(result.type.type<PointerType>()->baseType().cast<IntegralType>()->dataType(), (uint)IntegralType::TypeChar);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
