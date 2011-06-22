@@ -105,12 +105,15 @@ char const * const names[] = {
   "Kind_Comment",
   "Kind_JumpStatement",
   "Kind_SignalSlotExpression",
-  "Kind_QProperty"
+  "Kind_QProperty",
+  "ForRangeDeclaration",
+  "StaticAssert"
 };
 
 DumpTree::DumpTree()
   : m_tokenStream(0), indent(0)
 {
+  Q_ASSERT(sizeof(names) / sizeof(char const * const) == AST::NODE_KIND_COUNT);
 }
 
 void DumpTree::dump( AST * node, class TokenStream * tokenStream )
