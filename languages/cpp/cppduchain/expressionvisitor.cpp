@@ -1291,6 +1291,38 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     visitSubExpressions( node, node->sub_expressions );
   }
+
+  void ExpressionVisitor::visitTypeIDOperator(TypeIDOperatorAST* node) {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    clearLast();
+    // report uses
+    visit( node->expression );
+    visit( node->typeId );
+    clearLast();
+
+    m_lastInstance = Instance(true);
+
+    {
+      DUChainReadLocker lock;
+      foreach(Declaration* dec, m_currentContext->findDeclarations(QualifiedIdentifier("::std::type_info"))) {
+        if (dec->abstractType().cast<StructureType>()) {
+          m_lastType = dec->abstractType();
+          break;
+        }
+      }
+      if (!m_lastType) {
+        problem(node, "Could not find std::type_info, must #include <typeinfo> before using typeid");
+        return;
+      }
+    }
+
+    if( m_lastType )
+      expressionType( node, m_lastType, m_lastInstance );
+
+    visitSubExpressions( node, node->sub_expressions );
+  }
+
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );

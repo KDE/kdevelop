@@ -39,6 +39,7 @@ TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* vi
     : m_session(session), m_visitor(visitor), m_context(context), m_localContext(localVisibilityContext),
       m_source(source), m_flags(KDevelop::DUContext::NoSearchFlags), m_debug(debug)
 {
+  Q_ASSERT(m_context);
   m_position = m_context->range().end;
   m_stopSearch = false;
 }

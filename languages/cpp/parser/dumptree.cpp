@@ -105,7 +105,8 @@ char const * const names[] = {
   "Kind_Comment",
   "Kind_JumpStatement",
   "Kind_SignalSlotExpression",
-  "Kind_QProperty"
+  "Kind_QProperty",
+  "TypeIDOperator"
 };
 
 DumpTree::DumpTree()

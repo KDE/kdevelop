@@ -330,6 +330,7 @@ private:
   virtual void visitTypeId(TypeIdAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
+  virtual void visitTypeIDOperator(TypeIDOperatorAST *);
   
   void putStringType();
   AbstractType::Ptr qObjectPtrType() const;

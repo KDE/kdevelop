@@ -4081,10 +4081,21 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
         CHECK('(');
         TypeIdAST *typeId = 0;
-        parseTypeId(typeId);
+        ExpressionAST *expression = 0;
+        // either typeid or expression expected
+        parseTypeId(typeId) || parseExpression(expression);
         CHECK(')');
 
-        TypeIdentificationAST *ast = CreateNode<TypeIdentificationAST>(session->mempool);
+        TypeIDOperatorAST *ast = CreateNode<TypeIDOperatorAST>(session->mempool);
+        ast->expression = expression;
+        ast->typeId = typeId;
+
+        ExpressionAST *e = 0;
+        while (parsePostfixExpressionInternal(e))
+          {
+            ast->sub_expressions = snoc(ast->sub_expressions, e, session->mempool);
+          }
+
         UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
       }

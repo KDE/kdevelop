@@ -791,6 +791,26 @@ void TestParser::testOperators()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testTypeID_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::newRow("typeid-type") << "typeid(int);";
+  QTest::newRow("typeid-value") << "typeid(5);";
+  QTest::newRow("typeid-var") << "float f; typeid(f);";
+  QTest::newRow("type_info-name") << "typeid(1).name();";
+  QTest::newRow("type_info-name-stream") << "cout << typeid(1).name() << endl;";
+  QTest::newRow("type_info-op") << "bool b = typeid(1) == typeid(int);";
+}
+
+void TestParser::testTypeID()
+{
+  QFETCH(QString, code);
+  code = "int main() { " + code + " }\n";
+  TranslationUnitAST* ast = parse(code.toLocal8Bit());
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems
