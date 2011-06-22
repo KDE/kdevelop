@@ -777,12 +777,33 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
   return ret;
 }
 
+bool hasDeclarationUse(DUContext* context, int declIdx)
+{
+  bool ret=false;
+  int usescount=context->usesCount();
+  const Use* uses=context->uses();
+  
+  for(int i=0; !ret && i<usescount; ++i) {
+    ret = uses[i].m_declarationIndex==declIdx;
+  }
+  
+  foreach(DUContext* child, context->childContexts()) {
+    ret = ret || hasDeclarationUse(child, declIdx);
+    if(ret)
+      break;
+  }
+  
+  return ret;
+}
+
 bool Declaration::hasUses() const
 {
   ENSURE_CAN_READ
-  bool hasUsesInOtherConexts = DUChain::uses()->hasUses(id());
-  bool hasLocalUses = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false) == std::numeric_limits<int>::max() ? false : true;
-  return hasUsesInOtherConexts || hasLocalUses;
+  int idx = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false);
+  bool ret = idx != std::numeric_limits<int>::max() && (idx>=0 || hasDeclarationUse(topContext(), idx)); //hasLocalUses
+  ret =  ret || DUChain::uses()->hasUses(id()); //hasUsesInOtherContexts 
+  
+  return ret;
 }
 
 QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const
