@@ -831,8 +831,14 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  Declaration * declaration = openDefinition(node->name, node, node->name == 0);
-  
+  Declaration * declaration = 0;
+  if (!node->isOpaque) {
+    declaration = openDefinition(node->name, node, node->name == 0);
+  } else {
+    // opaque-enum-declaration
+    declaration = openForwardDeclaration(node->name, node);
+  }
+
   ///Create mappings iff the AST feature is specified
   if(m_mapAst)
     editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));

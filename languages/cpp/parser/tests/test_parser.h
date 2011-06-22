@@ -89,6 +89,8 @@ private slots:
   void testStaticAssert();
   void testConstExpr_data();
   void testConstExpr();
+  void testEnumClass_data();
+  void testEnumClass();
 
 private:
   Control control;

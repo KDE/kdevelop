@@ -25,6 +25,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/forwarddeclaration.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -145,5 +146,45 @@ void TestDUChain::testDefaultDelete() {
   QVERIFY(fooDec);
   QCOMPARE(fooDec->isExplicitlyDeleted(), true);
   QCOMPARE(fooDec->isDefinition(), true);
+  }
+}
+
+void TestDUChain::testEnum2011_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("scoped");
+  QTest::addColumn<bool>("opaque");
+
+  QTest::newRow("enum") << "enum Foo {A, B};" << false << false;
+  QTest::newRow("enum-empty") << "enum Foo {};" << false << false;
+  QTest::newRow("enum-class") << "enum class Foo {A, B};" << true << false;
+  QTest::newRow("enum-struct") << "enum struct Foo {A, B};" << true << false;
+  QTest::newRow("enum-typespec") << "enum Foo : int {A, B};" << false << false;
+  QTest::newRow("enum-opaque") << "enum Foo;" << false << true;
+  QTest::newRow("enum-opaque-class") << "enum class Foo;" << true << true;
+  QTest::newRow("enum-opaque-class-typespec") << "enum class Foo : char;" << true << true;
+  QTest::newRow("enum-opaque-typespec") << "enum Foo : unsigned int;" << false << true;
+}
+
+void TestDUChain::testEnum2011()
+{
+  QFETCH(QString, code);
+  QFETCH(bool, scoped);
+  QFETCH(bool, opaque);
+
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().size(), 1);
+  Declaration* dec = top->localDeclarations().first();
+  QCOMPARE(dec->identifier().toString(), QString("Foo"));
+
+  if (opaque) {
+    QVERIFY(dec->isForwardDeclaration());
+  } else {
+    QVERIFY(!dec->isForwardDeclaration());
+    QCOMPARE(dec->internalContext()->localScopeIdentifier().isEmpty(), !scoped);
   }
 }

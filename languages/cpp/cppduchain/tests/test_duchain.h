@@ -197,6 +197,8 @@ private slots:
   void testRangeBasedFor();
   void testRValueReference();
   void testDefaultDelete();
+  void testEnum2011_data();
+  void testEnum2011();
   //END C++2011
 
 private:

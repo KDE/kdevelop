@@ -492,8 +492,9 @@ public:
 
   NameAST *name;
   TypeSpecifierAST* type;
-  bool isClass;
   const ListNode<EnumeratorAST*> *enumerators;
+  bool isClass : 1;
+  bool isOpaque : 1;
 };
 
 class EnumeratorAST : public AST, public  CommentAST

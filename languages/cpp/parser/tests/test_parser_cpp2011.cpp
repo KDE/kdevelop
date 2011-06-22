@@ -162,3 +162,33 @@ void TestParser::testConstExpr()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testEnumClass_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("enum") << "enum Foo {A, B};";
+  QTest::newRow("enum-class") << "enum class Foo {A, B};";
+  QTest::newRow("enum-struct") << "enum struct Foo {A, B};";
+  QTest::newRow("enum-typespec") << "enum Foo : int {A, B};";
+  QTest::newRow("enum-opaque") << "enum Foo;";
+  QTest::newRow("enum-opaque-class") << "enum class Foo;";
+  QTest::newRow("enum-opaque-class-typespec") << "enum class Foo : char;";
+  QTest::newRow("enum-opaque-typespec") << "enum Foo : unsigned int;";
+}
+
+void TestParser::testEnumClass()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}

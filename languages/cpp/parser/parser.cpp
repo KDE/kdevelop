@@ -1707,41 +1707,44 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
     }
   }
 
-  if (session->token_stream->lookAhead() != '{')
-    {
-      rewind(start);
-      return false;
-    }
-  advance();
-
   EnumSpecifierAST *ast = CreateNode<EnumSpecifierAST>(session->mempool);
   ast->name = name;
   ast->type = type;
   ast->isClass = isClass;
 
-  EnumeratorAST *enumerator = 0;
-  if (parseEnumerator(enumerator))
+  if (session->token_stream->lookAhead() == '{')
     {
+      advance();
 
-      ast->enumerators = snoc(ast->enumerators, enumerator, session->mempool);
+      ast->isOpaque = false;
 
-      while (session->token_stream->lookAhead() == ',')
+      EnumeratorAST *enumerator = 0;
+      if (parseEnumerator(enumerator))
         {
-          advance();
-
-          if (!parseEnumerator(enumerator))
-            {
-              //reportError(("Enumerator expected"));
-              break;
-            }
 
           ast->enumerators = snoc(ast->enumerators, enumerator, session->mempool);
+
+          while (session->token_stream->lookAhead() == ',')
+            {
+              advance();
+
+              if (!parseEnumerator(enumerator))
+                {
+                  break;
+                }
+
+              ast->enumerators = snoc(ast->enumerators, enumerator, session->mempool);
+            }
         }
+
+      clearComment();
+
+      ADVANCE_NR('}', "}");
     }
-
-  clearComment();
-
-  ADVANCE_NR('}', "}");
+  else
+    {
+      ast->isOpaque = true;
+    }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
