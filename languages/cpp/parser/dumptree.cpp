@@ -125,23 +125,26 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream )
 
 void DumpTree::visit(AST *node)
 {
+  if (!node) {
+    return;
+  }
+
   QString nodeText;
-  if( m_tokenStream && node ) {
+  if( m_tokenStream ) {
     for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
       nodeText += tok.symbolString() + ' ';
     }
   }
-  if (node)
-    kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-             <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
+
+  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+               <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
 
-  if (node)
-    kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
+  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )
