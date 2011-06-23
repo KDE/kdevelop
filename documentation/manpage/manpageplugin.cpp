@@ -73,7 +73,7 @@ ManPagePlugin::~ManPagePlugin()
 
 QString ManPagePlugin::name() const
 {
-    return QString("Man Page");
+    return QString(i18n("Man Page"));
 }
 
 QIcon ManPagePlugin::icon() const
