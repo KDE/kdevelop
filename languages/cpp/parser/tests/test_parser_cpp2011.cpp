@@ -192,3 +192,36 @@ void TestParser::testEnumClass()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testRightAngleBrackets_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("isValid");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html
+  // or spec 14.2/3
+  QTest::newRow("invalid-1") << "X< 1>2 > x1;" << false; // Syntax error.
+  QTest::newRow("valid-1") << "X<(1>2)> x2;" << true; // Okay
+  QTest::newRow("valid-2") << "Y<X<1>> x3;" << true; // Okay, same as "Y<X<1> > x3;".
+  QTest::newRow("invalid-2") << "Y<X<6>>1>> x4;" << false;  // Syntax error. Instead, write "Y<X<(6>>1)>> x4;".";
+  QTest::newRow("valid-3") << "Y<X<(6>>1)>> x5;" << true;  // Okay
+}
+
+void TestParser::testRightAngleBrackets()
+{
+  QFETCH(QString, code);
+  QFETCH(bool, isValid);
+
+  code.prepend("template<int i> class X {};\n"
+               "template<class T> class Y{};\n");
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+
+  QCOMPARE(control.problems().isEmpty(), isValid);
+}
+

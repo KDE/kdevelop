@@ -91,6 +91,8 @@ private slots:
   void testConstExpr();
   void testEnumClass_data();
   void testEnumClass();
+  void testRightAngleBrackets_data();
+  void testRightAngleBrackets();
 
 private:
   Control control;

@@ -129,7 +129,8 @@ QHash<int, QString> initOperatorNames() {
   ret['>'] = ">";
   ret[','] = ",";
   ret[Token_assign] = "+=";
-  ret[Token_shift] = "<<"; ///@todo Parser does not differentiate between << and >>
+  ret[Token_leftshift] = "<<";
+  ret[Token_rightshift] = "<<";
   ret[Token_eq] = "==";
   ret[Token_not_eq] = "!=";
   ret[Token_leq] = "<=";

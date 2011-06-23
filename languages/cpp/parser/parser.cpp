@@ -1159,7 +1159,8 @@ bool Parser::parseOperator(OperatorAST *&node)
     case '>':
     case ',':
     case Token_assign:
-    case Token_shift:
+    case Token_leftshift:
+    case Token_rightshift:
     case Token_eq:
     case Token_not:
     case Token_not_eq:
@@ -1362,12 +1363,14 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
   ExpressionAST *expr = 0;
 
   if (!parseTypeId(typeId) ||
-       (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
+       (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
+         && session->token_stream->lookAhead() != Token_rightshift ))
   {
     rewind(start);
 
     if (!parsePrimaryExpression(expr) ||
-         (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
+         (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
+         && session->token_stream->lookAhead() != Token_rightshift ))
     {
       rewind(start);
       
@@ -1834,7 +1837,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
                   }
               }
             else if (session->token_stream->lookAhead() != ','
-                     && session->token_stream->lookAhead() != '>')
+                     && session->token_stream->lookAhead() != '>') ///TODO: right-shift also OK? see spec 14.2/3
               {
                 rewind(start);
                 return false;
@@ -2825,6 +2828,11 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
 
           if (session->token_stream->lookAhead() == '>')
             {
+              advance();
+            }
+          else if (session->token_stream->lookAhead() == Token_rightshift)
+            {
+              session->token_stream->splitRightShift(session->token_stream->cursor());
               advance();
             }
           else
@@ -4633,7 +4641,7 @@ bool Parser::parseShiftExpression(ExpressionAST *&node)
   if (!parseAdditiveExpression(node))
     return false;
 
-  while (session->token_stream->lookAhead() == Token_shift)
+  while (session->token_stream->lookAhead() == Token_rightshift || session->token_stream->lookAhead() == Token_leftshift)
     {
       uint op = session->token_stream->cursor();
       advance();

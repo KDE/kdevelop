@@ -29,6 +29,34 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
+void TokenStream::splitRightShift(uint index)
+{
+  Q_ASSERT(kind(index) == Token_rightshift);
+
+  // resize if required, as we will insert another token
+  if (lastToken == token_count) {
+    resize(token_count * 2);
+  }
+
+  // move tokens by one to make room for new token
+  for(uint i = token_count - 1; i > index; --i) {
+    tokens[i] = tokens[i - 1];
+  }
+
+  // change kind of current token and adapt size
+  Token &current_token = tokens[index];
+  Q_ASSERT(current_token.size == 2);
+  current_token.size = 1;
+  current_token.kind = '>';
+
+  // copy to next token (i.e. the new one) and adapt position
+  Token &next_token = tokens[index+1];
+  next_token = current_token;
+  next_token.position += 1;
+
+  ++lastToken;
+}
+
 /**
  * Returns the character BEHIND the found comment
  * */
@@ -296,6 +324,8 @@ void Lexer::tokenize(ParseSession* _session)
   (*session->token_stream)[index].position = cursor.offsetIn(session->contents());
   (*session->token_stream)[index].size = 0;
   (*session->token_stream)[index].kind = Token_EOF;
+
+  session->token_stream->setLastToken(index);
 }
 
 void Lexer::initialize_scan_table()
@@ -808,7 +838,7 @@ void Lexer::scan_less()
 	}
       else
 	{
-	  (*session->token_stream)[index++].kind = Token_shift;
+	  (*session->token_stream)[index++].kind = Token_leftshift;
 	}
     }
   else
@@ -861,7 +891,7 @@ void Lexer::scan_greater()
 	}
       else
 	{
-	  (*session->token_stream)[index++].kind = Token_shift;
+	  (*session->token_stream)[index++].kind = Token_rightshift;
 	}
     }
   else

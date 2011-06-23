@@ -110,9 +110,11 @@ struct ConstantBinaryExpressionEvaluator {
       case '|':
         endValue = left->ConstantIntegralType::value<Type>() | right->ConstantIntegralType::value<Type>();
       break;
-      case Token_shift:
-        ///@todo shift-direction?
+      case Token_leftshift:
         endValue = left->ConstantIntegralType::value<Type>() << right->ConstantIntegralType::value<Type>();
+      break;
+      case Token_rightshift:
+        endValue = left->ConstantIntegralType::value<Type>() >> right->ConstantIntegralType::value<Type>();
       break;
       case Token_and:
         endValue = left->ConstantIntegralType::value<Type>() && right->ConstantIntegralType::value<Type>();
@@ -165,7 +167,7 @@ AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType:
   ConstantIntegralType* rightConstantIntegral = dynamic_cast<ConstantIntegralType*>(right.unsafeData());
 
   if(leftIntegral && rightIntegral) {
-    if(tokenKind == '+' || tokenKind == '-' || tokenKind == '*' || tokenKind == '/' || tokenKind == '%' || tokenKind == '^' || tokenKind == '&' || tokenKind == '|' || tokenKind == '~' || tokenKind == Token_shift) {
+    if(tokenKind == '+' || tokenKind == '-' || tokenKind == '*' || tokenKind == '/' || tokenKind == '%' || tokenKind == '^' || tokenKind == '&' || tokenKind == '|' || tokenKind == '~' || tokenKind == Token_leftshift || tokenKind == Token_rightshift) {
       if(moreExpressiveThan(leftIntegral, rightIntegral))
         ret = left;
       else
