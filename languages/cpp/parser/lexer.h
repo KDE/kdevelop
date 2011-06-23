@@ -57,13 +57,6 @@ public:
   QByteArray symbolByteArray() const;
 
   uint symbolLength() const;
-  
-  ///@todo adymo: find out what @p right_brace is
-  union
-  {
-    //const NameSymbol *symbol;
-    uint right_brace;
-  } extra;
 };
 
 /**Stream of tokens found by lexer.
@@ -129,17 +122,6 @@ public:
   /**@return the position of the current token in the c++ source buffer.*/
   inline uint position(uint i) const
   { return tokens[i].position; }
-
-  /**@return the name symbol of the current token.*/
-  //inline const NameSymbol *symbol(uint i) const
-  //{ return tokens[i].extra.symbol; }
-
-  /**@return the position of the matching right brace in the
-  c++ source buffer.
-  @todo this doesn't seem to work as the lexer does not provide this
-  information at the moment.*/
-  inline uint matchingBrace(uint i) const
-  { return tokens[i].extra.right_brace; }
 
   /**@return the token at position @p index.*/
   inline Token &operator[](int index)

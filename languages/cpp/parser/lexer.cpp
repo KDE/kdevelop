@@ -393,9 +393,6 @@ void Lexer::scan_char_constant()
       ++cursor;
     }
 
-  //(*session->token_stream)[index].extra.symbol =
-    //control->findOrInsertName((const char*) begin, cursor - begin);
-
   (*session->token_stream)[index++].kind = Token_char_literal;
 }
 
@@ -430,9 +427,6 @@ void Lexer::scan_string_constant()
     {
       ++cursor;
     }
-
-  //(*session->token_stream)[index].extra.symbol =
-    //control->findOrInsertName((const char*) begin, cursor - begin);
 
   (*session->token_stream)[index++].kind = Token_string_literal;
 }
@@ -526,9 +520,6 @@ void Lexer::scan_int_constant()
 
   while (cursor < endCursor &&  (isalnum(*cursor) || *cursor == '.'))
     ++cursor;
-
-  //(*session->token_stream)[index].extra.symbol =
-    //control->findOrInsertName((const char*) begin, cursor - begin);
 
   (*session->token_stream)[index++].kind = Token_number_literal;
 }
