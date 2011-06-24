@@ -46,6 +46,8 @@ enum TOKEN_KIND
     Token_catch,
     Token_char,
     Token_char_literal,
+    Token_char16_t,
+    Token_char32_t,
     Token_class,
     Token_comment,
     Token_compl,

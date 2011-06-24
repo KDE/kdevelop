@@ -402,7 +402,12 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
     if( integral ) {
 
       ///Integral promotions, iso c++ 4.5
-      if( integerConversionRank(integral) < unsignedIntConversionRank && integral->dataType() != IntegralType::TypeBoolean && integral->dataType() != IntegralType::TypeWchar_t && integral->dataType() != IntegralType::TypeVoid ) {
+      if( integerConversionRank(integral) < unsignedIntConversionRank
+          && integral->dataType() != IntegralType::TypeBoolean
+          && integral->dataType() != TypeUtils::TypeChar16
+          && integral->dataType() != TypeUtils::TypeChar32
+          && integral->dataType() != IntegralType::TypeWchar_t
+          && integral->dataType() != IntegralType::TypeVoid ) {
         ///iso c++ 4.5.1
         ///@todo re-create a mini repository for fast lookup of such integral types, so we don't have to do allocations here
         AbstractType::Ptr newFrom( new IntegralType(IntegralType::TypeInt) );

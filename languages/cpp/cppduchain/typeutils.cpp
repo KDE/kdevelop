@@ -95,8 +95,9 @@ using namespace KDevelop;
      * Ranks:
      * 1 - bool
      * 2 - 1 byte, char
+     * 2 - 2 byte, char16
      * 3 - 2 byte,  short int, wchar_t, unsigned short int
-     * 4 - 4 byte,  int, unsigned int
+     * 4 - 4 byte,  int, unsigned int, char32_t
      * 5 - 4 byte,  long int
      * 6 - 4 byte, long long int
      **/
@@ -105,11 +106,14 @@ using namespace KDevelop;
         return 1;
       break;
       case IntegralType::TypeChar:
+      case TypeUtils::TypeChar16:
         return 2;
       break;
       case IntegralType::TypeWchar_t:
         return 3;
       break;
+      case TypeUtils::TypeChar32:
+        return 4;
       case IntegralType::TypeInt:
         if( type->modifiers() & AbstractType::ShortModifier )
           return 3;

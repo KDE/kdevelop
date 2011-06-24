@@ -1995,6 +1995,8 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   if(!restrictedItems || m_onlyShow == ShowTypes) {
     ADD_TOKEN(bool);
     ADD_TOKEN(char);
+    ADD_TOKEN(char16_t);
+    ADD_TOKEN(char32_t);
     ADD_TOKEN(const);
     ADD_TOKEN(double);
     ADD_TOKEN(enum);

@@ -187,6 +187,12 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           case Token_char:
             type = IntegralType::TypeChar;
             break;
+          case Token_char16_t:
+            type = TypeUtils::TypeChar16;
+            break;
+          case Token_char32_t:
+            type = TypeUtils::TypeChar32;
+            break;
           case Token_wchar_t:
             type = IntegralType::TypeWchar_t;
             break;

@@ -225,3 +225,33 @@ void TestParser::testRightAngleBrackets()
   QCOMPARE(control.problems().isEmpty(), isValid);
 }
 
+void TestParser::testCharacterTypes_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2249.html
+  QTest::newRow("char") << "char c = 'a';";
+  QTest::newRow("wchar_t") << "wchar_t c = L'a';";
+  QTest::newRow("char16_t") << "char16_t c = u'a';";
+  QTest::newRow("char32_t") << "char32_t c = U'a';";
+
+  QTest::newRow("char-str") << "const char* c = \"a\";";
+  QTest::newRow("wchar_t-str") << "const wchar_t* c = L\"a\";";
+  QTest::newRow("char16_t-str") << "const char16_t* c = u\"a\";";
+  QTest::newRow("char32_t-str") << "const char32_t* c = U\"a\";";
+}
+
+void TestParser::testCharacterTypes()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+
+  QVERIFY(control.problems().isEmpty());
+}

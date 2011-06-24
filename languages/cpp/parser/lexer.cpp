@@ -173,6 +173,8 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(case);
   ADD_TOKEN(catch);
   ADD_TOKEN(char);
+  ADD_TOKEN(char16_t);
+  ADD_TOKEN(char32_t);
   ADD_TOKEN(class);
   ADD_TOKEN(compl);
   ADD_TOKEN(const);
@@ -345,6 +347,8 @@ void Lexer::initialize_scan_table()
     }
 
   s_scan_table[int('L')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('u')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('U')] = &Lexer::scan_identifier_or_literal;
   s_scan_table[int('\n')] = &Lexer::scan_newline;
   s_scan_table[int('#')] = &Lexer::scan_preprocessor;
 
