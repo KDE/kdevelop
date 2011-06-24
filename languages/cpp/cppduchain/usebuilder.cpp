@@ -30,6 +30,8 @@
 #include "expressionvisitor.h"
 #include <parsesession.h>
 
+#include <KLocalizedString>
+
 using namespace KDevelop;
 
 UseBuilder::UseBuilder (ParseSession* session)
@@ -131,6 +133,19 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
                                   const KDevelop::DeclarationPointer& decl ) {
       RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
       m_builder->newUse(node, range, decl);
+
+      if (decl && decl->isExplicitlyDeleted()) {
+        KSharedPtr<KDevelop::Problem> problem(new Problem);
+        problem->setDescription(i18n("use of deleted function"));
+
+        problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
+
+        CppEditorIntegrator editor(session());
+        problem->setFinalLocation(DocumentRange(currentContext()->url(), editor.findRange(node).castToSimpleRange()));
+
+        if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
+          realProblem(problem);
+      }
     }
 
     virtual void problem(AST* node, const QString& str) {

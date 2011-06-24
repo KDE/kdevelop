@@ -164,8 +164,18 @@ private:
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<uint> m_functionDefinedStack;
 
-  bool m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
-  
+  bool m_changeWasSignificant, m_ignoreDeclarators;
+
+  enum InitializerType {
+    NoInitializer,
+    AbstractInitializer,
+    DefaultInitializer,
+    DeleteInitializer,
+    OtherInitializer
+  };
+  InitializerType m_initializerType;
+  InitializerType initializerType(InitializerAST* node) const;
+
   //Ast Mapping members
   QStack<AST *> m_mappedNodes;
 

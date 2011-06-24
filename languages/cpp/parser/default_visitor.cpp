@@ -501,3 +501,9 @@ void DefaultVisitor::visitTypeIDOperator(TypeIDOperatorAST* node)
   visit(node->expression);
   visitNodes(this, node->sub_expressions);
 }
+
+void DefaultVisitor::visitStaticAssert(StaticAssertAST* node)
+{
+  visit(node->expression);
+  visit(node->string);
+}

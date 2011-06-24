@@ -129,7 +129,8 @@ QHash<int, QString> initOperatorNames() {
   ret['>'] = ">";
   ret[','] = ",";
   ret[Token_assign] = "+=";
-  ret[Token_shift] = "<<"; ///@todo Parser does not differentiate between << and >>
+  ret[Token_leftshift] = "<<";
+  ret[Token_rightshift] = "<<";
   ret[Token_eq] = "==";
   ret[Token_not_eq] = "!=";
   ret[Token_leq] = "<=";
@@ -246,6 +247,12 @@ void ExpressionVisitor::reportRealProblems(bool report) {
   m_reportRealProblems = report;
 }
 
+void ExpressionVisitor::realProblem( ProblemPointer problem ) {
+  if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
+    m_problems << problem;
+  }
+}
+
 QList< KSharedPtr< KDevelop::Problem > > ExpressionVisitor::realProblems() const {
   return m_problems;
 }
@@ -267,6 +274,11 @@ AbstractType::Ptr ExpressionVisitor::lastType() {
 
 ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
   return m_lastInstance;
+}
+
+DUContext* ExpressionVisitor::currentContext() const
+{
+  return m_currentContext;
 }
 
 /** Find the member in the declaration's du-chain. **/

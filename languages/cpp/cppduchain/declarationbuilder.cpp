@@ -82,8 +82,27 @@ bool DeclarationBuilder::changeWasSignificant() const
   return m_changeWasSignificant;
 }
 
+DeclarationBuilder::InitializerType DeclarationBuilder::initializerType(InitializerAST* node) const
+{
+  if (!node) {
+    return NoInitializer;
+  }
+  if (node->initializer_clause) {
+    if (node->initializer_clause->defaultDeleted == InitializerClauseAST::Default) {
+      return DefaultInitializer;
+    } else if (node->initializer_clause->defaultDeleted == InitializerClauseAST::Deleted) {
+      return DeleteInitializer;
+    } else if (node->initializer_clause->expression) {
+      ///FIXME: actually compare expression to 0? right now we would accept something like
+      /// virtual void foo() = 42;
+      return AbstractInitializer;
+    }
+  }
+  return OtherInitializer;
+}
+
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_initializerType(NoInitializer), m_collectQtFunctionSignature(false)
 {
 }
 
@@ -183,7 +202,7 @@ struct ClearDUContextVisitor : public DefaultVisitor {
 
 void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
-  PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
+  PushValue<InitializerType> setHasInitialize(m_initializerType, initializerType(node->initializer));
 
   if(currentContext()->type() == DUContext::Other) {
     //Cannot declare a a function within a code-context
@@ -346,11 +365,17 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     if(m_mapAst && !m_mappedNodes.empty())
       editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
 
+    if (m_initializerType == DeleteInitializer) {
+      DUChainWriteLocker lock(DUChain::lock());
+      decl->setExplicitlyDeleted(m_initializerType == DeleteInitializer);
+    }
+
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
+        // don't overwrite isDefinition if that was already set (see openFunctionDeclaration)
         decl->setDeclarationIsDefinition( (bool)m_functionDefinedStack.top() );
     }
-    
+
     applyFunctionSpecifiers();
   } else {
     openDefinition(node->id, node, node->id == 0);
@@ -697,25 +722,24 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
    }
 
   if(currentContext()->type() == DUContext::Class) {
+    DUChainWriteLocker lock;
+    ClassFunctionDeclaration* fun = 0;
     if(!m_collectQtFunctionSignature) {
-      ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
-      DUChainWriteLocker lock(DUChain::lock());
-      fun->setAccessPolicy(currentAccessPolicy());
-      fun->setIsAbstract(m_declarationHasInitializer);
-      return fun;
+      fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
     }else{
-      QtFunctionDeclaration* fun = openDeclaration<QtFunctionDeclaration>(name, rangeNode, localId);
-      DUChainWriteLocker lock(DUChain::lock());
-      fun->setAccessPolicy(currentAccessPolicy());
-      fun->setIsAbstract(m_declarationHasInitializer);
-      fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
-      fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
+      QtFunctionDeclaration* qtFun = openDeclaration<QtFunctionDeclaration>(name, rangeNode, localId);
+      fun = qtFun;
+      qtFun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
+      qtFun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
       QByteArray temp(QMetaObject::normalizedSignature("(" + m_qtFunctionSignature + ")"));
       IndexedString signature(temp.mid(1, temp.length()-2));
 //       kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
-      fun->setNormalizedSignature(signature);
-      return fun;
+      qtFun->setNormalizedSignature(signature);
     }
+    Q_ASSERT(fun);
+    fun->setAccessPolicy(currentAccessPolicy());
+    fun->setIsAbstract(m_initializerType == AbstractInitializer);
+    return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition
      FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
@@ -807,8 +831,14 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  Declaration * declaration = openDefinition(node->name, node, node->name == 0);
-  
+  Declaration * declaration = 0;
+  if (!node->isOpaque) {
+    declaration = openDefinition(node->name, node, node->name == 0);
+  } else {
+    // opaque-enum-declaration
+    declaration = openForwardDeclaration(node->name, node);
+  }
+
   ///Create mappings iff the AST feature is specified
   if(m_mapAst)
     editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
