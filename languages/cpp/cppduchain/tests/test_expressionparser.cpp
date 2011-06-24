@@ -1146,6 +1146,54 @@ void TestExpressionParser::testTypeID()
   QCOMPARE(result.type.type<PointerType>()->baseType().cast<IntegralType>()->dataType(), (uint)IntegralType::TypeChar);
 }
 
+void TestExpressionParser::testCharacterTypes_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("isString");
+  QTest::addColumn<uint>("type");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2249.html
+  QTest::newRow("char") << "'a'" << false << (uint) IntegralType::TypeChar;
+  QTest::newRow("wchar_t") << "L'a'" << false << (uint) IntegralType::TypeWchar_t;
+  QTest::newRow("char16_t") << "u'a'" << false << (uint) TypeUtils::TypeChar16;
+  QTest::newRow("char32_t") << "U'a';" << false << (uint) TypeUtils::TypeChar32;
+
+  QTest::newRow("char-str") << "\"a\";" << true << (uint) IntegralType::TypeChar;
+  QTest::newRow("wchar_t-str") << "L\"a\";" << true << (uint) IntegralType::TypeWchar_t;
+  QTest::newRow("char16_t-str") << "u\"a\";" << true << (uint) TypeUtils::TypeChar16;
+  QTest::newRow("char32_t-str") << "U\"a\";" << true << (uint) TypeUtils::TypeChar32;
+}
+
+void TestExpressionParser::testCharacterTypes()
+{
+  QFETCH(QString, code);
+  QFETCH(bool, isString);
+  QFETCH(uint, type);
+
+  DUContext* top = parse("", DumpNone);
+
+  DUChainWriteLocker lock;
+  Cpp::ExpressionParser parser(false, true);
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression(code.toUtf8(), DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+
+  IntegralType::Ptr integralType;
+
+  if (isString) {
+    QVERIFY(result.type.type<PointerType>());
+    integralType = result.type.type<PointerType>()->baseType().cast<IntegralType>();
+  } else {
+    integralType = result.type.type<IntegralType>();
+  }
+
+  QVERIFY(integralType);
+  QEXPECT_FAIL("wchar_t-str", "not yet supported, see ExpressionVisitor::visitStringLiteral", Abort);
+  QEXPECT_FAIL("char16_t-str", "not yet supported, see ExpressionVisitor::visitStringLiteral", Abort);
+  QEXPECT_FAIL("char32_t-str", "not yet supported, see ExpressionVisitor::visitStringLiteral", Abort);
+  QCOMPARE(integralType->dataType(), type);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
