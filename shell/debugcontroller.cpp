@@ -155,7 +155,7 @@ void DebugController::initializeUi()
 
 void DebugController::cleanup()
 {
-    if (m_currentSession) m_currentSession->stopDebugger();
+    if (m_currentSession) m_currentSession.data()->stopDebugger();
 }
 
 DebugController::~DebugController()
@@ -185,7 +185,7 @@ void DebugController::partAdded(KParts::Part* part)
 
 IDebugSession* DebugController::currentSession()
 {
-    return m_currentSession;
+    return m_currentSession.data();
 }
 
 void DebugController::setupActions()
@@ -296,7 +296,7 @@ void DebugController::addSession(IDebugSession* session)
 
     //TODO support multiple sessions
     if (m_currentSession) {
-        m_currentSession->stopDebugger();
+        m_currentSession.data()->stopDebugger();
     }
     m_currentSession = session;
         
@@ -368,14 +368,14 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 {
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
     IDebugSession* session = static_cast<IDebugSession*>(sender());
-    kDebug() << session << state << "current" << m_currentSession;
-    if (session == m_currentSession) {
+    kDebug() << session << state << "current" << m_currentSession.data();
+    if (session == m_currentSession.data()) {
         updateDebuggerState(state, session);
     }
 
     if (state == IDebugSession::EndedState) {
-        if (session == m_currentSession) {
-            m_currentSession = 0;
+        if (session == m_currentSession.data()) {
+            m_currentSession.clear();
             emit currentSessionChanged(0);
             Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
             if (mainWindow && mainWindow->area()->objectName() != "code") {
@@ -439,7 +439,7 @@ ContextMenuExtension DebugController::contextMenuExtension( Context* context )
     if (!econtext)
         return menuExt;
 
-    if (m_currentSession && m_currentSession->isRunning()) {
+    if (m_currentSession && m_currentSession.data()->isRunning()) {
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_runToCursor);
     }
 
@@ -452,61 +452,61 @@ ContextMenuExtension DebugController::contextMenuExtension( Context* context )
 #if 0
 void DebugController::restartDebugger() {
     if (m_currentSession) {
-        m_currentSession->restartDebugger();
+        m_currentSession.data()->restartDebugger();
     }
 }
 #endif
 
 void DebugController::stopDebugger() {
     if (m_currentSession) {
-        m_currentSession->stopDebugger();
+        m_currentSession.data()->stopDebugger();
     }
 }
 void DebugController::interruptDebugger() {
     if (m_currentSession) {
-        m_currentSession->interruptDebugger();
+        m_currentSession.data()->interruptDebugger();
     }
 }
 
 void DebugController::run() {
     if (m_currentSession) {
-        m_currentSession->run();
+        m_currentSession.data()->run();
     }
 }
 
 void DebugController::runToCursor() {
     if (m_currentSession) {
-        m_currentSession->runToCursor();
+        m_currentSession.data()->runToCursor();
     }
 }
 void DebugController::jumpToCursor() {
     if (m_currentSession) {
-        m_currentSession->jumpToCursor();
+        m_currentSession.data()->jumpToCursor();
     }
 }
 void DebugController::stepOver() {
     if (m_currentSession) {
-        m_currentSession->stepOver();
+        m_currentSession.data()->stepOver();
     }
 }
 void DebugController::stepIntoInstruction() {
     if (m_currentSession) {
-        m_currentSession->stepIntoInstruction();
+        m_currentSession.data()->stepIntoInstruction();
     }
 }
 void DebugController::stepInto() {
     if (m_currentSession) {
-        m_currentSession->stepInto();
+        m_currentSession.data()->stepInto();
     }
 }
 void DebugController::stepOverInstruction() {
     if (m_currentSession) {
-        m_currentSession->stepOverInstruction();
+        m_currentSession.data()->stepOverInstruction();
     }
 }
 void DebugController::stepOut() {
     if (m_currentSession) {
-        m_currentSession->stepOut();
+        m_currentSession.data()->stepOut();
     }
 }
 

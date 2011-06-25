@@ -672,9 +672,9 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         action->blockSignals(false);
 
         // the dock should now be the "last" opened in a new area, not in the old area
-        for (QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> >::iterator it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {
-            if (it.value() == dock)
-                lastDockWidget[it.key()] = 0;
+        for (QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> >::iterator it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {
+            if (it.value().data() == dock)
+                lastDockWidget[it.key()].clear();
         }
         lastDockWidget[area] = dock;
 
@@ -873,7 +873,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 {
     IdealButtonBarWidget *bar = barForDockArea(area);
     if (!bar) return;
-    IdealDockWidget *lastDock = lastDockWidget[area];
+    IdealDockWidget *lastDock = lastDockWidget[area].data();
 
     if (lastDock && lastDock->isVisible() && !lastDock->hasFocus()) {
         lastDock->setFocus(Qt::ShortcutFocusReason);
@@ -981,7 +981,7 @@ void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
         }
         focusEditor();
     } else {
-        IdealDockWidget *lastDock = lastDockWidget[bar->area()];
+        IdealDockWidget *lastDock = lastDockWidget[bar->area()].data();
         if (lastDock)
             m_dockwidget_to_action[lastDock]->setChecked(true);
     }

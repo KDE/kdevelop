@@ -23,7 +23,6 @@
 #ifndef SUBLIME_IDEAL_H
 #define SUBLIME_IDEAL_H
 
-#include <QtCore/QPointer>
 #include <QtGui/QAction>
 #include <QtGui/QActionEvent>
 #include <QtGui/QToolButton>
@@ -183,7 +182,7 @@ public:
     QWidget *bottomStatusBarLocation;
 
     IdealDockWidget* currentDockWidget();
-    QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
+    QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> > lastDockWidget;
 
     void emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness);
 

@@ -25,7 +25,7 @@
 #define KDEV_DEBUGCONTROLLER_H
 
 #include <QtCore/QVariantList>
-#include <QtCore/QPointer>
+#include <QWeakPointer>
 #include <KDE/KXMLGUIClient>
 #include <KDE/KTextEditor/MarkInterface>
 
@@ -102,7 +102,7 @@ private:
     KAction* m_stepOut;
     KAction* m_toggleBreakpoint;
 
-    QPointer<IDebugSession> m_currentSession;
+    QWeakPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;    
     

@@ -23,7 +23,6 @@
 #define SUBLIME_IDEALLAYOUT_H
 
 #include <QtGui/QLayout>
-#include <QtCore/QPointer>
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
