@@ -111,11 +111,11 @@ KTextEditor::Editor* PartController::editorPart() const
 
         if (!editorFactory) {
             KMessageBox::error(qApp->activeWindow(),
-                               i18n("Could not find KTextEditor::Factory, check your installation.\n"
-                                    "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ),
+                               i18n("Could not find KTextEditor::Factory, check your installation:\n"
+                                    "Make sure that Kate is installed, KDEDIRS is set properly and that you ran kbuildsycoca4." ),
                                i18n("System Configuration Error"));
             qApp->quit();
-	    exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
             return 0;
         }
 
