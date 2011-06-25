@@ -35,7 +35,7 @@
 
 using namespace KDevelop;
 
-static QPointer<IndentPlugin> indentPluginSingleton;
+static QWeakPointer<IndentPlugin> indentPluginSingleton;
 
 K_PLUGIN_FACTORY(IndentFactory, registerPlugin<IndentPlugin>();)
 K_EXPORT_PLUGIN(IndentFactory(KAboutData("kdevindent","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
@@ -310,7 +310,7 @@ int IndentPlugin::indentationLength()
 
 void IndentPreferences::updateTimeout()
 {
-    QString formatted = indentPluginSingleton->formatSourceWithStyle ( m_style, indentPluginSingleton->previewText ( KMimeType::Ptr() ), KMimeType::Ptr() );
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }
 
