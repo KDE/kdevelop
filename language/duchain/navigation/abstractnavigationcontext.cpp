@@ -451,6 +451,20 @@ QString AbstractNavigationContext::fontSizeSuffix(bool shorten) const
   return QString();
 }
 
+QString Colorizer::operator() ( const QString& str ) const
+{
+  QString ret = "<font color=\"#" + m_color + "\">" + str + "</font>";
+
+  if( m_formatting & Fixed )
+    ret = "<tt>"+ret+"</tt>";
+  if ( m_formatting & Bold )
+    ret = "<b>"+ret+"</b>";
+  if ( m_formatting & Italic )
+    ret = "<i>"+ret+"</i>";
+
+  return ret;
+}
+
 const Colorizer AbstractNavigationContext::typeHighlight("006000");
 const Colorizer AbstractNavigationContext::errorHighlight("990000");
 const Colorizer AbstractNavigationContext::labelHighlight("000000");
@@ -458,7 +472,7 @@ const Colorizer AbstractNavigationContext::codeHighlight("005000");
 const Colorizer AbstractNavigationContext::propertyHighlight("009900");
 const Colorizer AbstractNavigationContext::navigationHighlight("000099");
 const Colorizer AbstractNavigationContext::importantHighlight("000000", Colorizer::Bold | Colorizer::Italic);
-const Colorizer AbstractNavigationContext::commentHighlight("000000", Colorizer::Fixed);
+const Colorizer AbstractNavigationContext::commentHighlight("303030");
 const Colorizer AbstractNavigationContext::nameHighlight("000000", Colorizer::Bold);
 
 }
