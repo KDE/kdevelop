@@ -61,6 +61,8 @@ public:
     TypeWchar_t,
     TypeString,
     TypeMixed,
+    TypeChar16_t,
+    TypeChar32_t,
     TypeLanguageSpecific = 200
   };
 
@@ -87,6 +89,10 @@ public:
    */
   void setDataType(uint dataType);
 
+  /**
+   * TODO: think of a way to make @c toString work properly for custom data types
+   *       right now you need to create a custom type and overload it...
+   */
   virtual QString toString() const;
 
   virtual uint hash() const;
