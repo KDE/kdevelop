@@ -1155,13 +1155,13 @@ void TestExpressionParser::testCharacterTypes_data()
   // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2249.html
   QTest::newRow("char") << "'a'" << false << (uint) IntegralType::TypeChar;
   QTest::newRow("wchar_t") << "L'a'" << false << (uint) IntegralType::TypeWchar_t;
-  QTest::newRow("char16_t") << "u'a'" << false << (uint) TypeUtils::TypeChar16;
-  QTest::newRow("char32_t") << "U'a';" << false << (uint) TypeUtils::TypeChar32;
+  QTest::newRow("char16_t") << "u'a'" << false << (uint) IntegralType::TypeChar16_t;
+  QTest::newRow("char32_t") << "U'a';" << false << (uint) IntegralType::TypeChar32_t;
 
   QTest::newRow("char-str") << "\"a\";" << true << (uint) IntegralType::TypeChar;
   QTest::newRow("wchar_t-str") << "L\"a\";" << true << (uint) IntegralType::TypeWchar_t;
-  QTest::newRow("char16_t-str") << "u\"a\";" << true << (uint) TypeUtils::TypeChar16;
-  QTest::newRow("char32_t-str") << "U\"a\";" << true << (uint) TypeUtils::TypeChar32;
+  QTest::newRow("char16_t-str") << "u\"a\";" << true << (uint) IntegralType::TypeChar16_t;
+  QTest::newRow("char32_t-str") << "U\"a\";" << true << (uint) IntegralType::TypeChar32_t;
 }
 
 void TestExpressionParser::testCharacterTypes()

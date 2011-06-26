@@ -673,10 +673,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           charType->setDataType(IntegralType::TypeWchar_t);
           symbol.right(symbol.size() - 1);
         } else if (symbol.startsWith('u')) {
-          charType->setDataType(TypeUtils::TypeChar16);
+          charType->setDataType(IntegralType::TypeChar16_t);
           symbol.right(symbol.size() - 1);
         } else if (symbol.startsWith('U')) {
-          charType->setDataType(TypeUtils::TypeChar32);
+          charType->setDataType(IntegralType::TypeChar32_t);
           symbol.right(symbol.size() - 1);
         }
         if (symbol.size() == 4) {

@@ -106,13 +106,13 @@ using namespace KDevelop;
         return 1;
       break;
       case IntegralType::TypeChar:
-      case TypeUtils::TypeChar16:
+      case IntegralType::TypeChar16_t:
         return 2;
       break;
       case IntegralType::TypeWchar_t:
         return 3;
       break;
-      case TypeUtils::TypeChar32:
+      case IntegralType::TypeChar32_t:
         return 4;
       case IntegralType::TypeInt:
         if( type->modifiers() & AbstractType::ShortModifier )

@@ -404,8 +404,8 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       ///Integral promotions, iso c++ 4.5
       if( integerConversionRank(integral) < unsignedIntConversionRank
           && integral->dataType() != IntegralType::TypeBoolean
-          && integral->dataType() != TypeUtils::TypeChar16
-          && integral->dataType() != TypeUtils::TypeChar32
+          && integral->dataType() != IntegralType::TypeChar16_t
+          && integral->dataType() != IntegralType::TypeChar32_t
           && integral->dataType() != IntegralType::TypeWchar_t
           && integral->dataType() != IntegralType::TypeVoid ) {
         ///iso c++ 4.5.1

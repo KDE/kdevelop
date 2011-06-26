@@ -35,11 +35,6 @@ namespace KDevelop {
 namespace TypeUtils {
   using namespace KDevelop;
 
-  enum CustomIntegralTypes {
-    TypeChar16 = IntegralType::TypeLanguageSpecific,
-    TypeChar32,
-  };
-
   /**
    * Returns the dereferenced and un-aliased type(example: ReferenceType(Typedef(PointerType(int))) -> PointerType(int))
    *
