@@ -117,8 +117,10 @@ public:
     }
     
 public Q_SLOTS:
-    // Returns the pretty name of the currently active session
+    // Returns the pretty name of the currently active session (used in the shell integration)
     virtual Q_SCRIPTABLE QString sessionName();
+    // Returns the directory associated to the active session (used in the shell integration)
+    virtual Q_SCRIPTABLE QString sessionDir();
 
 Q_SIGNALS:
     void sessionLoaded( ISession* );
