@@ -96,12 +96,7 @@ void TestParser::testVariadicTemplates()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -125,12 +120,7 @@ void TestParser::testStaticAssert()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -151,12 +141,7 @@ void TestParser::testConstExpr()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -181,12 +166,7 @@ void TestParser::testEnumClass()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -215,12 +195,7 @@ void TestParser::testRightAngleBrackets()
   code.prepend("template<int i> class X {};\n"
                "template<class T> class Y{};\n");
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
 
   QCOMPARE(control.problems().isEmpty(), isValid);
 }
@@ -247,12 +222,7 @@ void TestParser::testCharacterTypes()
   QFETCH(QString, code);
 
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
 
   QVERIFY(control.problems().isEmpty());
 }

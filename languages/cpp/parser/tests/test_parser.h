@@ -99,6 +99,12 @@ private slots:
   void testCharacterTypes_data();
   void testCharacterTypes();
 
+protected:
+  /**
+   * dump @p node and print problems of @c control
+   */
+  void dump(AST* node);
+
 private:
   Control control;
   DumpTree dumper;
