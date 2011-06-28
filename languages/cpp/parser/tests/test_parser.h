@@ -98,6 +98,8 @@ private slots:
   void testRightAngleBrackets();
   void testCharacterTypes_data();
   void testCharacterTypes();
+  void testRawStrings_data();
+  void testRawStrings();
 
 protected:
   /**

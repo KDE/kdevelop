@@ -226,3 +226,33 @@ void TestParser::testCharacterTypes()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testRawStrings_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm
+  QTest::newRow("char") << "const char* s = R\"(a)\";";
+  QTest::newRow("wchar_t") << "const wchar_t* s = LR\"(a)\";";
+  QTest::newRow("char16_t") << "const char16_t* s = uR\"(a)\";";
+  QTest::newRow("char32_t") << "const char32_t* s = UR\"(a)\";";
+  QTest::newRow("utf8") << "const char* s = u8R\"(a)\";";
+
+  QTest::newRow("empty") << "const char* s = R\"()\";";
+  QTest::newRow("delim1") << "const char* s = R\"g(a)g\";";
+  QTest::newRow("delim2") << "const char* s = R\"g()\")g\";";
+  QTest::newRow("delim3") << "const char* s = R\"*d~()\")*d~\";";
+  QTest::newRow("delim4") << "const char* s = R\"*d~()*d~))*d~\";";
+  QTest::newRow("escape") << "const char* s = R\"(\\n\\t)\";";
+  QTest::newRow("newline") << "const char* s = R\"(\n\t\n)\";";
+}
+
+void TestParser::testRawStrings()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}

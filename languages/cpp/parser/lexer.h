@@ -191,6 +191,8 @@ private:
   void scan_int_constant();
   void scan_char_constant();
   void scan_string_constant();
+  void scan_raw_string_constant();
+  void scan_raw_string_or_identifier();
   void scan_invalid_input();
   void scan_preprocessor();
 
@@ -291,7 +293,10 @@ private:
       ret.current += offset;
       return ret;
     }
-    
+
+    // useful for debugging
+    QString toString() const;
+
     uint* current;
   };
   
