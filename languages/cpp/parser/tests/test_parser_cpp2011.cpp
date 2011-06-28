@@ -239,6 +239,7 @@ void TestParser::testCharacterTypes_data()
   QTest::newRow("wchar_t-str") << "const wchar_t* c = L\"a\";";
   QTest::newRow("char16_t-str") << "const char16_t* c = u\"a\";";
   QTest::newRow("char32_t-str") << "const char32_t* c = U\"a\";";
+  QTest::newRow("utf8-str") << "const char* c = u8\"a\";";
 }
 
 void TestParser::testCharacterTypes()

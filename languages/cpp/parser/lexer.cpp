@@ -302,8 +302,15 @@ void Lexer::tokenize(ParseSession* _session)
     if(cursor.isChar()) {
       (this->*s_scan_table[((uchar)*cursor)])();
     }else{
-      //The cursor represents an identifier
-      scan_identifier_or_keyword();
+      //check for utf8 strings
+      static const uint u8Index = KDevelop::IndexedString("u8").index();
+      if (*cursor.current == u8Index && *(cursor+1) == '"') {
+        ++cursor;
+        scan_string_constant();
+      } else {
+        //The cursor represents an identifier
+        scan_identifier_or_keyword();
+      }
     }
     
     if(!m_leaveSize)
