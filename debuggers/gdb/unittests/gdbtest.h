@@ -75,6 +75,8 @@ private Q_SLOTS:
     void testPickupManuallyInsertedBreakpoint();
     void testPickupManuallyInsertedBreakpointOnlyOnce();
     void testRunGdbScript();
+    void testRemoteDebug();
+    void testRemoteDebugInsertBreakpoint();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);

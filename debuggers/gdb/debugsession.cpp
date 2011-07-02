@@ -1062,6 +1062,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         arguments << "-c" << KShell::quoteArg(config_runShellScript_.toLocalFile()) +
             ' ' + KShell::quoteArg(executable) + QString::fromAscii( options );
 
+        kDebug() << "starting sh" << arguments;
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
     }
@@ -1078,6 +1079,8 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
 
         // Note: script could contain "run" or "continue"
+
+        raiseEvent(connected_to_program);
     }
     else
     {
