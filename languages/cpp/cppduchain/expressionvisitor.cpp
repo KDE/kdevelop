@@ -130,7 +130,7 @@ QHash<int, QString> initOperatorNames() {
   ret[','] = ",";
   ret[Token_assign] = "+=";
   ret[Token_leftshift] = "<<";
-  ret[Token_rightshift] = "<<";
+  ret[Token_rightshift] = ">>";
   ret[Token_eq] = "==";
   ret[Token_not_eq] = "!=";
   ret[Token_leq] = "<=";
