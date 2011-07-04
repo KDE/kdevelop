@@ -37,8 +37,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
 {
 public:
   typedef TypePtr<PointerType> Ptr;
-  typedef AbstractType BaseType;
-  
+
   /// Default constructor
   PointerType ();
   /// Copy constructor. \param rhs type to copy
