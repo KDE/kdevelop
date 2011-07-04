@@ -84,6 +84,14 @@ QString ConstantIntegralType::toString() const
     case TypeWchar_t:
       ret += QString("%1").arg((wchar_t)d_func()->m_value);
       break;
+    case TypeChar16_t:
+      ///TODO: cast to char16_t once we can depend on c++0x
+      ret += QString("%1").arg((char)d_func()->m_value);
+      break;
+    case TypeChar32_t:
+      ///TODO: cast to char32_t once we can depend on c++0x
+      ret += QString("%1").arg((char)d_func()->m_value);
+      break;
     case TypeBoolean:
       ret += d_func()->m_value ? "true" : "false";
       break;

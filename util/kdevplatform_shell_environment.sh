@@ -24,6 +24,10 @@ if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
 fi
 
+if ! [ "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
+    export KDEV_SHELL_ENVIRONMENT_ID="default"
+fi
+
 if ! [ "$KDEV_DBUS_ID" ]; then
     echo "The required environment variable KDEV_DBUS_ID is not set. This variable defines the dbus id of the application instance instance which is supposed to be attached."
     exit 5
@@ -61,6 +65,19 @@ function getSessionName {
     echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
 }
 
+function getSessionDir {
+    echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionDir)"
+}
+
+function getCurrentShellEnvPath {
+    local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
+    if [ "$1" ]; then
+        ENV_ID=$1
+    fi
+    
+    echo "$(getSessionDir)/${ENV_ID}.sh"
+}
+
 function help! {
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
@@ -77,6 +94,7 @@ function help! {
     echo ""
     echo "help!                                  - Show help."
     echo "help! remote                           - Show help about remote shell-integration through ssh."
+    echo "help! env                              - Show help about the environment."
     echo ""
     echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
     fi
@@ -93,6 +111,14 @@ function help! {
     echo "copytohost! [client path] [host path]  - Copy a file/directory through the fish protocol from the client machine th the host machine."
     echo "copytoclient! [host path] [client path]- Copy a file/directory through the fish protocol from the host machine to the client machine."
     fi
+    
+    if [ "$1" == "env" ]; then
+      echo "env!                                 - List all available shell environment-ids for this session."
+      echo "updateenv! [id]                      - Set the shell environmnet-id for this session to the given id, or update the current one."
+      echo "showenv! [id]                        - Show the current shell environment or the one with the optionally given id."
+      echo "editenv! [id]                        - Edit the current shell environment or the one with the optionally given id."
+    fi
+    
     echo ""
 }
 
@@ -146,6 +172,14 @@ function ctc! {
     copytoclient! $@
 }
 
+function ue! {
+    updateenv! $@
+}
+
+function ee! {
+    editenv! $@
+}
+
 # Internals:
 
 # Opens a document in internally in the application
@@ -188,7 +222,7 @@ function getActiveDocument {
     qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath
 }
 
-function getActiveDocuments {
+function getOpenDocuments {
     qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
 }
 
@@ -557,6 +591,7 @@ function ssh! {
            FORWARD_DBUS_FROM_PORT=$DBUS_FORWARDING_TCP_TARGET_PORT \
            APPLICATION_HOST=$APPLICATION_HOST \
            KDEV_WORKING_DIR=$KDEV_WORKING_DIR \
+           KDEV_SHELL_ENVIRONMENT_ID=$KDEV_SHELL_ENVIRONMENT_ID \
            DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) \
            $(getSSHForwardOptionsFromCommand "$@") \
               bash --init-file \
@@ -580,11 +615,62 @@ function ssw! {
     ssh! $@
 }
 
+function env! {
+    FILES="$(executeInAppSync "ls $(getSessionDir)/*.sh" "")"
+    for FILE in $FILES; do
+        FILE=$(basename $FILE)
+        ID=${FILE%.sh} # This ugly construct strips away the .sh suffix
+        if [ "$ID" == "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
+            echo "$ID   [current]"
+        else
+            echo "$ID"
+        fi
+    done
+}
+
+function editenv! {
+    local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
+    if [ "$1" ]; then
+        ENV_ID=$1
+    fi
+    # If the environment-file doesn't exist yet, create it
+    executeInAppSync "if ! [ -e $(getCurrentShellEnvPath $ENV_ID) ]; then touch $(getCurrentShellEnvPath $ENV_ID); fi" ""
+    # Open it
+    openDocument "$(getCurrentShellEnvPath $ENV_ID)"
+}
+
+function updateenv! {
+    if [ "$1" ]; then
+        KDEV_SHELL_ENVIRONMENT_ID=$1
+    fi
+        
+    # Execute the contents of the shell-environment
+    local TEMP=$(mktemp)
+    RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
+    echo "$RESULT" > $TEMP
+    source $TEMP
+    rm $TEMP
+}
+
+function showenv! {
+    local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
+    if [ "$1" ]; then
+        ENV_ID=$1
+    fi
+
+    echo "Environment $ENV_ID:"
+
+    # Execute the contents of the shell-environment
+    echo $(executeInAppSync "cat \"$(getCurrentShellEnvPath $ENV_ID)\"" "")
+}
+
 if [ "$FORWARD_DBUS_FROM_PORT" ]; then
     # Start the target-side dbus forwarding, transforming from the ssh pipe to the abstract unix domain socket
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}${DBUS_SOCKET_SUFFIX}
     keepForwardingDBusFromTCPSocket
 fi
+
+updateenv!
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 

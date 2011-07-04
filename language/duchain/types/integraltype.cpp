@@ -86,6 +86,12 @@ QString IntegralType::toString() const
     case TypeChar:
       name = "char";
       break;
+    case TypeChar16_t:
+      name = "char16_t";
+      break;
+    case TypeChar32_t:
+      name = "char32_t";
+      break;
     case TypeWchar_t:
       name = "wchar_t";
       break;

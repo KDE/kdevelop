@@ -218,7 +218,7 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
-    QPointer<QWidget> m_leftTabbarCornerWidget;
+    QWeakPointer<QWidget> m_leftTabbarCornerWidget;
 };
 
 }

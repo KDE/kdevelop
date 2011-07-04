@@ -146,7 +146,8 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
 MainWindowPrivate::~MainWindowPrivate()
 {
-    delete m_leftTabbarCornerWidget;
+    delete m_leftTabbarCornerWidget.data();
+    m_leftTabbarCornerWidget.clear();
 }
 
 void MainWindowPrivate::showLeftDock(bool b)
@@ -271,8 +272,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 void MainWindowPrivate::reconstruct()
 {
     if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget.data()->hide();
+        m_leftTabbarCornerWidget.data()->setParent(0);
     }
 
     idealController->setWidthForArea(Qt::LeftDockWidgetArea, area->thickness(Sublime::Left));
@@ -300,13 +301,13 @@ void MainWindowPrivate::reconstruct()
     }
     m_mainWindow->blockSignals(false);
     
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
 void MainWindowPrivate::clearArea()
 {
     if(m_leftTabbarCornerWidget)
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget.data()->setParent(0);
     
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
@@ -334,7 +335,7 @@ void MainWindowPrivate::clearArea()
     area = 0;
     viewContainers.clear();
     
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
 void MainWindowPrivate::recreateCentralWidget()
@@ -372,8 +373,8 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
     if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget->hide();
-        m_leftTabbarCornerWidget->setParent(0);
+        m_leftTabbarCornerWidget.data()->hide();
+        m_leftTabbarCornerWidget.data()->setParent(0);
     }
     
     ViewCreator viewCreator(this);
@@ -394,7 +395,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
     
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
     
     // A formerly empty working-set may become non-empty, and a relayout of the area-selector may be required
     if(m_mainWindow->area()->views().size() == 1)
@@ -443,8 +444,8 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     else
     {
         if(m_leftTabbarCornerWidget) {
-            m_leftTabbarCornerWidget->hide();
-            m_leftTabbarCornerWidget->setParent(0);
+            m_leftTabbarCornerWidget.data()->hide();
+            m_leftTabbarCornerWidget.data()->setParent(0);
         }
         
         // We've about to remove the last view of this container.  It will
@@ -517,13 +518,13 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             //activate the current view there
             if (containerToActivate) {
                 m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));
-                setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+                setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
                 return;
             }
         }
     }
 
-    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
     if ( wasActive ) {
         m_mainWindow->setActiveView(0L);
     }
@@ -764,8 +765,10 @@ AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget*
 
 void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 {
-    if(widget != m_leftTabbarCornerWidget)
-        delete m_leftTabbarCornerWidget;
+    if(widget != m_leftTabbarCornerWidget.data()) {
+        delete m_leftTabbarCornerWidget.data();
+        m_leftTabbarCornerWidget.clear();
+    }
     m_leftTabbarCornerWidget = widget;
     
     if(!widget || !area || viewContainers.isEmpty())

@@ -21,7 +21,6 @@
 #include "core_p.h"
 
 #include <QtGui/QApplication>
-#include <QtCore/QPointer>
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
@@ -119,11 +118,11 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     if( !partController && !(mode & Core::NoUi))
     {
-        partController = new PartController(m_core, uiController->defaultMainWindow());
+        partController = new PartController(m_core, uiController.data()->defaultMainWindow());
 
         {
             // check features of kate and report to user if it does not fit
-            KTextEditor::Document* doc = partController->createTextPart();
+            KTextEditor::Document* doc = partController.data()->createTextPart();
 
             if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
                 KMessageBox::error(QApplication::activeWindow(),
@@ -196,9 +195,9 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
             return false;
     }
     
-    sessionController->initialize( session );
+    sessionController.data()->initialize( session );
 
-    if(!sessionController->lockSession())
+    if(!sessionController.data()->lockSession())
     {
         QString errmsg = i18n("Failed to lock the session %1, probably it is already active in another running instance", session );
         if( mode & Core::NoUi ) {
@@ -214,10 +213,10 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     // the controller construct
     DUChain::initialize();
 
-    if(!(mode & Core::NoUi)) uiController->initialize();
-    languageController->initialize();
-    projectController->initialize();
-    documentController->initialize();
+    if(!(mode & Core::NoUi)) uiController.data()->initialize();
+    languageController.data()->initialize();
+    projectController.data()->initialize();
+    documentController.data()->initialize();
 
     /* This is somewhat messy.  We want to load the areas before
         loading the plugins, so that when each plugin is loaded we
@@ -229,40 +228,56 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         those tool views when loading an area.  */
 
     kDebug() << "loading session plugins";
-    pluginController->initialize();
+    pluginController.data()->initialize();
 
     if(!(mode & Core::NoUi))
     {
-        workingSetController->initialize();
+        workingSetController.data()->initialize();
         /* Need to do this after everything else is loaded.  It's too
             hard to restore position of views, and toolbars, and whatever
             that are not created yet.  */
-        uiController->loadAllAreas(KGlobal::config());
-        uiController->defaultMainWindow()->show();
+        uiController.data()->loadAllAreas(KGlobal::config());
+        uiController.data()->defaultMainWindow()->show();
     }
-    runController->initialize();
-    sourceFormatterController->initialize();
-    selectionController->initialize();
-    if (documentationController) documentationController->initialize();
-    debugController->initialize();
+    runController.data()->initialize();
+    sourceFormatterController.data()->initialize();
+    selectionController.data()->initialize();
+    if (documentationController) {
+        documentationController.data()->initialize();
+    }
+    debugController.data()->initialize();
     
     return true;
 }
 CorePrivate::~CorePrivate()
 {
-    delete selectionController;
-    delete projectController;
-    delete languageController;
-    delete pluginController;
-    delete uiController;
-    delete partController;
-    delete documentController;
-    delete runController;
-    delete sessionController;
-    delete sourceFormatterController;
-    delete documentationController;
-    delete debugController;
-    delete workingSetController;
+    delete selectionController.data();
+    delete projectController.data();
+    delete languageController.data();
+    delete pluginController.data();
+    delete uiController.data();
+    delete partController.data();
+    delete documentController.data();
+    delete runController.data();
+    delete sessionController.data();
+    delete sourceFormatterController.data();
+    delete documentationController.data();
+    delete debugController.data();
+    delete workingSetController.data();
+
+    selectionController.clear();
+    projectController.clear();
+    languageController.clear();
+    pluginController.clear();
+    uiController.clear();
+    partController.clear();
+    documentController.clear();
+    runController.clear();
+    sessionController.clear();
+    sourceFormatterController.clear();
+    documentationController.clear();
+    debugController.clear();
+    workingSetController.clear();
 }
 
 
@@ -321,26 +336,26 @@ void Core::cleanup()
     d->m_shuttingDown = true;
     
     if (!d->m_cleanedUp) {
-        d->debugController->cleanup();
-        d->selectionController->cleanup();
+        d->debugController.data()->cleanup();
+        d->selectionController.data()->cleanup();
         // Save the layout of the ui here, so run it first
-        d->uiController->cleanup();
+        d->uiController.data()->cleanup();
 
         if (d->workingSetController)
-            d->workingSetController->cleanup();
+            d->workingSetController.data()->cleanup();
 
-        /* Must be called before projectController->cleanup(). */
+        /* Must be called before projectController.data()->cleanup(). */
         // Closes all documents (discards, as already saved if the user wished earlier)
-        d->documentController->cleanup();
-        d->runController->cleanup();
+        d->documentController.data()->cleanup();
+        d->runController.data()->cleanup();
 
-        d->projectController->cleanup();
-        d->sourceFormatterController->cleanup();
-        d->pluginController->cleanup();
-        d->sessionController->cleanup();
+        d->projectController.data()->cleanup();
+        d->sourceFormatterController.data()->cleanup();
+        d->pluginController.data()->cleanup();
+        d->sessionController.data()->cleanup();
         
         //Disable the functionality of the language controller
-        d->languageController->cleanup();
+        d->languageController.data()->cleanup();
     }
 
     d->m_cleanedUp = true;
@@ -353,7 +368,7 @@ KComponentData Core::componentData() const
 
 IUiController *Core::uiController()
 {
-    return d->uiController;
+    return d->uiController.data();
 }
 
 ISession* Core::activeSession()
@@ -363,118 +378,118 @@ ISession* Core::activeSession()
 
 SessionController *Core::sessionController()
 {
-    return d->sessionController;
+    return d->sessionController.data();
 }
 
 UiController *Core::uiControllerInternal()
 {
-    return d->uiController;
+    return d->uiController.data();
 }
 
 IPluginController *Core::pluginController()
 {
-    return d->pluginController;
+    return d->pluginController.data();
 }
 
 PluginController *Core::pluginControllerInternal()
 {
-    return d->pluginController;
+    return d->pluginController.data();
 }
 
 IProjectController *Core::projectController()
 {
-    return d->projectController;
+    return d->projectController.data();
 }
 
 ProjectController *Core::projectControllerInternal()
 {
-    return d->projectController;
+    return d->projectController.data();
 }
 
 IPartController *Core::partController()
 {
-    return d->partController;
+    return d->partController.data();
 }
 
 PartController *Core::partControllerInternal()
 {
-    return d->partController;
+    return d->partController.data();
 }
 
 ILanguageController *Core::languageController()
 {
-    return d->languageController;
+    return d->languageController.data();
 }
 
 LanguageController *Core::languageControllerInternal()
 {
-    return d->languageController;
+    return d->languageController.data();
 }
 
 IDocumentController *Core::documentController()
 {
-    return d->documentController;
+    return d->documentController.data();
 }
 
 DocumentController *Core::documentControllerInternal()
 {
-    return d->documentController;
+    return d->documentController.data();
 }
 
 IRunController *Core::runController()
 {
-    return d->runController;
+    return d->runController.data();
 }
 
 RunController *Core::runControllerInternal()
 {
-    return d->runController;
+    return d->runController.data();
 }
 
 ISourceFormatterController* Core::sourceFormatterController()
 {
-    return d->sourceFormatterController;
+    return d->sourceFormatterController.data();
 }
 
 SourceFormatterController* Core::sourceFormatterControllerInternal()
 {
-    return d->sourceFormatterController;
+    return d->sourceFormatterController.data();
 }
 
 
 ProgressManager *Core::progressController()
 {
-    return d->progressController;
+    return d->progressController.data();
 }
 
 ISelectionController* Core::selectionController()
 {
-    return d->selectionController;
+    return d->selectionController.data();
 }
 
 IDocumentationController* Core::documentationController()
 {
-    return d->documentationController;
+    return d->documentationController.data();
 }
 
 DocumentationController* Core::documentationControllerInternal()
 {
-    return d->documentationController;
+    return d->documentationController.data();
 }
 
 IDebugController* Core::debugController()
 {
-    return d->debugController;
+    return d->debugController.data();
 }
 
 DebugController* Core::debugControllerInternal()
 {
-    return d->debugController;
+    return d->debugController.data();
 }
 
 WorkingSetController* Core::workingSetControllerInternal()
 {
-    return d->workingSetController;
+    return d->workingSetController.data();
 }
 
 QString Core::version()

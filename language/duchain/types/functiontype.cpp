@@ -82,9 +82,12 @@ FunctionType::~FunctionType()
 }
 
 
-void FunctionType::addArgument(AbstractType::Ptr argument)
+void FunctionType::addArgument(AbstractType::Ptr argument, int index)
 {
-  d_func_dynamic()->m_argumentsList().append(argument->indexed());
+  if ( index == -1 )
+    d_func_dynamic()->m_argumentsList().append(argument->indexed());
+  else
+    d_func_dynamic()->m_argumentsList().insert(index, argument->indexed());
 }
 
 void FunctionType::removeArgument(int i)
