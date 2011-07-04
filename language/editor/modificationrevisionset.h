@@ -1,4 +1,6 @@
 /*
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -23,6 +25,11 @@
 
 namespace KDevelop {
 
+/**
+ * This class represents a set of modification-revisions assigned to file-names.
+ * It is safe to store this class in the disk-mapped internal duchain data structures.
+* */
+  
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
 {
   public:
