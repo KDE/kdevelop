@@ -24,8 +24,7 @@
 #include "modeltest.h"
 
 #include <QtGui/QtGui>
-
-Q_DECLARE_METATYPE(QModelIndex)
+#include <project/tests/projectmodeltest.h>
 
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.

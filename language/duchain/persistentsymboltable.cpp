@@ -347,7 +347,7 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
   }
 }
 
-struct Visitor {
+struct AnalisysVisitor {
   bool operator() (const PersistentSymbolTableItem* item) {
     QualifiedIdentifier id(item->id.identifier());
     if(identifiers.contains(id)) {
@@ -383,7 +383,7 @@ void PersistentSymbolTable::selfAnalysis() {
   {
     QMutexLocker lock(d->m_declarations.mutex());
     
-    Visitor v;
+    AnalisysVisitor v;
     kDebug() << d->m_declarations.statistics();
     d->m_declarations.visitAllItems(v);
     kDebug() << "visited" << v.identifiers.size() << "identifiers";

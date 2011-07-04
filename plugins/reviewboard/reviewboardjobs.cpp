@@ -34,9 +34,7 @@ using namespace ReviewBoard;
 
 
 
-namespace
-{
-QByteArray urlToData(const KUrl& url)
+QByteArray ReviewBoard::urlToData(const KUrl& url)
 {
     QByteArray ret;
     if (url.isLocalFile()) {
@@ -54,6 +52,8 @@ QByteArray urlToData(const KUrl& url)
     }
     return ret;
 }
+namespace
+{
 static const QByteArray m_boundary = "----------" + KRandom::randomString( 42 + 13 ).toLatin1();
 
 QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)

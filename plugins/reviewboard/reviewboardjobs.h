@@ -96,6 +96,8 @@ namespace ReviewBoard
         private:
             HttpPostCall* m_req;
     };
+    
+    QByteArray urlToData(const KUrl&);
 }
 
 #endif

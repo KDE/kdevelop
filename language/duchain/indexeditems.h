@@ -277,5 +277,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
 };
 
 }
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
 
 #endif // INDEXEDITEMS_H
