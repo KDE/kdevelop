@@ -717,7 +717,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       DUContext* classContext = functionDeclaration->context();
 
       //Take the type from the classContext
-      if( classContext && classContext->type() == DUContext::Class && classContext->owner() && classContext->owner() )
+      if( classContext && classContext->type() == DUContext::Class && classContext->owner() )
         thisType = classContext->owner()->abstractType();
 
       if( !thisType ) {
@@ -736,8 +736,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         m_lastType = thisPointer.cast<AbstractType>();
         m_lastInstance = Instance(true);
       }else{
-        if( context->owner() && context->owner() && context->owner()->abstractType() )
-          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(m_currentContext->owner()->abstractType()->toString()));
+        if( context->owner() && context->owner()->abstractType() )
+          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(context->owner()->abstractType()->toString()));
         else
           problem(node, "\"this\" used in non-function context with invalid type");
       }
