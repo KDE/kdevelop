@@ -64,7 +64,7 @@
 #include <interfaces/iuicontroller.h>
 #include <cpppreprocessenvironment.h>
 #include <language/checks/dataaccessrepository.h>
-#include <language/checks/flowgraph.h>
+#include <language/checks/controlflowgraph.h>
 #include <controlflowgraphbuilder.h>
 #include <usedecoratorvisitor.h>
 
