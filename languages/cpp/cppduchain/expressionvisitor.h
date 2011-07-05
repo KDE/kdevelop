@@ -134,6 +134,15 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      */
     virtual void problem( AST* node, const QString& str );
 
+    /**
+     * Called for important issues in code.
+     *
+     * @see reportRealProblems()
+     */
+    void realProblem( ProblemPointer problem );
+
+    DUContext* currentContext() const;
+
   private:
 
     TopDUContext* topContext() const;
@@ -332,6 +341,7 @@ private:
   virtual void visitTypeId(TypeIdAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
+  virtual void visitTypeIDOperator(TypeIDOperatorAST *);
   
   void putStringType();
   AbstractType::Ptr qObjectPtrType() const;

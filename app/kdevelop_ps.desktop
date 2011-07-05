@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=kdevelop --ps
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+X-DocPath=kdevelop/index.html
+Terminal=false
+Name=KDevelop 4 (Pick Session)
+GenericName=Integrated Development Environment (Pick Session to start with)
+Categories=Qt;KDE;Development;IDE;

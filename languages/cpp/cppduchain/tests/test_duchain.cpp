@@ -6042,17 +6042,22 @@ void TestDUChain::testPointerToMember()
 
 }
 
-QVector<const Use*> usesForContext(DUContext* c)
+void TestDUChain::testDeclarationHasUses()
 {
-  QVector<const Use*> ret;
-  for(int i=0; i<c->usesCount(); i++) {
-    ret += &c->uses()[i];
-  }
-  
-  foreach(DUContext* cc, c->childContexts()) {
-    ret += usesForContext(cc);
-  }
-  return ret;
+  QByteArray method(
+    "int a,b,c,d;\n"
+    "void f() {"
+    "  if(a) {"
+    "    b++;"
+    "  }"
+    "}"
+  );
+  LockedTopDUContext top = parse(method, DumpAll);
+
+  QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("a")).first()->hasUses(), true);
+  QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("b")).first()->hasUses(), true);
+  QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("c")).first()->hasUses(), false);
+  QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("d")).first()->hasUses(), false);
 }
 
 #include "test_duchain.moc"

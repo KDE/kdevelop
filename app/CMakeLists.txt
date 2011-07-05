@@ -38,6 +38,7 @@ endif (Q_WS_MAC)
 ########### install files ###############
 
 install( PROGRAMS kdevelop.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 install( FILES kdeveloprc DESTINATION ${CONFIG_INSTALL_DIR} )
 install( FILES kdevelopui.rc katepartui.rc kdevelop.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
 install( FILES kdevelop.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )

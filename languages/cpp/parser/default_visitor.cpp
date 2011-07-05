@@ -494,3 +494,16 @@ void DefaultVisitor::visitQPropertyDeclaration(QPropertyDeclarationAST *node)
   if (node->scriptableMethod)
     visit(node->scriptableMethod);
 }
+
+void DefaultVisitor::visitTypeIDOperator(TypeIDOperatorAST* node)
+{
+  visit(node->typeId);
+  visit(node->expression);
+  visitNodes(this, node->sub_expressions);
+}
+
+void DefaultVisitor::visitStaticAssert(StaticAssertAST* node)
+{
+  visit(node->expression);
+  visit(node->string);
+}

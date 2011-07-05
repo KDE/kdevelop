@@ -57,13 +57,6 @@ public:
   QByteArray symbolByteArray() const;
 
   uint symbolLength() const;
-  
-  ///@todo adymo: find out what @p right_brace is
-  union
-  {
-    //const NameSymbol *symbol;
-    uint right_brace;
-  } extra;
 };
 
 /**Stream of tokens found by lexer.
@@ -72,7 +65,12 @@ All tokens are destructed when this stream is deleted.
 
 The stream has a "cursor" which is simply an integer which defines
 the offset (index) of the token currently "observed" from the beginning of
-the stream.*/
+the stream.
+
+TODO: reuse some pool / container class for the token array
+NOTE: token_count is actually the *size* of the token pool
+      the last actually used token is lastToken
+*/
 class TokenStream
 {
 private:
@@ -84,7 +82,8 @@ public:
   inline TokenStream(uint size = 1024)
      : tokens(0),
        index(0),
-       token_count(0)
+       token_count(0),
+       lastToken(0)
   {
     resize(size);
   }
@@ -130,17 +129,6 @@ public:
   inline uint position(uint i) const
   { return tokens[i].position; }
 
-  /**@return the name symbol of the current token.*/
-  //inline const NameSymbol *symbol(uint i) const
-  //{ return tokens[i].extra.symbol; }
-
-  /**@return the position of the matching right brace in the
-  c++ source buffer.
-  @todo this doesn't seem to work as the lexer does not provide this
-  information at the moment.*/
-  inline uint matchingBrace(uint i) const
-  { return tokens[i].extra.right_brace; }
-
   /**@return the token at position @p index.*/
   inline Token &operator[](int index)
   { Q_ASSERT(index >= 0 && index < (int)token_count); return tokens[index]; }
@@ -149,10 +137,26 @@ public:
   inline const Token &token(int index) const
   { return tokens[index]; }
 
+  /**
+   * Set and remember the last token index.
+   * Anything after this index is not defined.
+   */
+  inline void setLastToken(uint index)
+  { lastToken = index; }
+
+  /**
+   * Split the right shift token at @p index into two distinct right angle brackets.
+   * 
+   * Required to support 14.2/3 of the spec, see also:
+   * http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html
+   */
+  void splitRightShift(uint index);
+
 private:
   Token *tokens;
   uint index;
   uint token_count;
+  uint lastToken;
 
 private:
   friend class Lexer;

@@ -109,6 +109,8 @@ protected:
   virtual void visitWinDeclSpec(WinDeclSpecAST *) {}
   virtual void visitSignalSlotExpression(SignalSlotExpressionAST *) {}
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *) {}
+  virtual void visitTypeIDOperator(TypeIDOperatorAST *) {}
+  virtual void visitStaticAssert(StaticAssertAST *) {}
 
 private:
   typedef void (Visitor::*visitor_fun_ptr)(AST *);

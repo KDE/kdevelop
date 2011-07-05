@@ -23,6 +23,9 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
+#include <language/duchain/forwarddeclaration.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -86,4 +89,102 @@ void TestDUChain::testRValueReference() {
   QCOMPARE(decls.at(0)->toString(), QString("class A"));
   QCOMPARE(decls.at(1)->toString(), QString("int&& intRef"));
   QCOMPARE(decls.at(2)->toString(), QString("A&& aRef"));
+}
+
+void TestDUChain::testDefaultDelete() {
+  LockedTopDUContext top = parse("class A {\n"
+                                 "  A() = default;\n"
+                                 "  A(const A&) = delete;\n"
+                                 "  virtual ~A();\n"
+                                 "};\n"
+                                 "A::~A() = default;\n"
+                                 "void foo(int) = delete;\n"
+                                 , DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  DUContext* ACtx = top->childContexts().first();
+  const QVector< Declaration* > Adecs = ACtx->localDeclarations();
+  QCOMPARE(Adecs.size(), 3);
+
+  {
+  ClassFunctionDeclaration* aCtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(0));
+  QVERIFY(aCtor);
+  QVERIFY(!aCtor->isAbstract());
+  QVERIFY(!aCtor->isDestructor());
+  QVERIFY(aCtor->isConstructor());
+  QCOMPARE(aCtor->isExplicitlyDeleted(), false);
+  QCOMPARE(aCtor->isDefinition(), true);
+  }
+
+  {
+  ClassFunctionDeclaration* copyCtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(1));
+  QVERIFY(copyCtor);
+  QVERIFY(!copyCtor->isAbstract());
+  QVERIFY(!copyCtor->isDestructor());
+  QVERIFY(copyCtor->isConstructor());
+  QCOMPARE(copyCtor->isExplicitlyDeleted(), true);
+  QCOMPARE(copyCtor->isDefinition(), true);
+  }
+
+  {
+  ClassFunctionDeclaration* aDtor = dynamic_cast<ClassFunctionDeclaration*>(Adecs.at(2));
+  QVERIFY(aDtor);
+  QVERIFY(!aDtor->isAbstract());
+  QVERIFY(aDtor->isVirtual());
+  QVERIFY(aDtor->isDestructor());
+  QVERIFY(!aDtor->isConstructor());
+  QCOMPARE(aDtor->isDefinition(), false);
+  FunctionDefinition* definition = FunctionDefinition::definition(aDtor);
+  QVERIFY(definition);
+  QCOMPARE(definition->range().start.line, 5);
+  }
+
+  {
+  FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().last());
+  QVERIFY(fooDec);
+  QCOMPARE(fooDec->isExplicitlyDeleted(), true);
+  QCOMPARE(fooDec->isDefinition(), true);
+  }
+}
+
+void TestDUChain::testEnum2011_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("scoped");
+  QTest::addColumn<bool>("opaque");
+
+  QTest::newRow("enum") << "enum Foo {A, B};" << false << false;
+  QTest::newRow("enum-empty") << "enum Foo {};" << false << false;
+  QTest::newRow("enum-class") << "enum class Foo {A, B};" << true << false;
+  QTest::newRow("enum-struct") << "enum struct Foo {A, B};" << true << false;
+  QTest::newRow("enum-typespec") << "enum Foo : int {A, B};" << false << false;
+  QTest::newRow("enum-opaque") << "enum Foo;" << false << true;
+  QTest::newRow("enum-opaque-class") << "enum class Foo;" << true << true;
+  QTest::newRow("enum-opaque-class-typespec") << "enum class Foo : char;" << true << true;
+  QTest::newRow("enum-opaque-typespec") << "enum Foo : unsigned int;" << false << true;
+}
+
+void TestDUChain::testEnum2011()
+{
+  QFETCH(QString, code);
+  QFETCH(bool, scoped);
+  QFETCH(bool, opaque);
+
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().size(), 1);
+  Declaration* dec = top->localDeclarations().first();
+  QCOMPARE(dec->identifier().toString(), QString("Foo"));
+
+  if (opaque) {
+    QVERIFY(dec->isForwardDeclaration());
+  } else {
+    QVERIFY(!dec->isForwardDeclaration());
+    QCOMPARE(dec->internalContext()->localScopeIdentifier().isEmpty(), !scoped);
+  }
 }

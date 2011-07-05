@@ -129,7 +129,8 @@ QHash<int, QString> initOperatorNames() {
   ret['>'] = ">";
   ret[','] = ",";
   ret[Token_assign] = "+=";
-  ret[Token_shift] = "<<"; ///@todo Parser does not differentiate between << and >>
+  ret[Token_leftshift] = "<<";
+  ret[Token_rightshift] = ">>";
   ret[Token_eq] = "==";
   ret[Token_not_eq] = "!=";
   ret[Token_leq] = "<=";
@@ -246,6 +247,12 @@ void ExpressionVisitor::reportRealProblems(bool report) {
   m_reportRealProblems = report;
 }
 
+void ExpressionVisitor::realProblem( ProblemPointer problem ) {
+  if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
+    m_problems << problem;
+  }
+}
+
 QList< KSharedPtr< KDevelop::Problem > > ExpressionVisitor::realProblems() const {
   return m_problems;
 }
@@ -267,6 +274,11 @@ AbstractType::Ptr ExpressionVisitor::lastType() {
 
 ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
   return m_lastInstance;
+}
+
+DUContext* ExpressionVisitor::currentContext() const
+{
+  return m_currentContext;
 }
 
 /** Find the member in the declaration's du-chain. **/
@@ -706,7 +718,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       DUContext* classContext = functionDeclaration->context();
 
       //Take the type from the classContext
-      if( classContext && classContext->type() == DUContext::Class && classContext->owner() && classContext->owner() )
+      if( classContext && classContext->type() == DUContext::Class && classContext->owner() )
         thisType = classContext->owner()->abstractType();
 
       if( !thisType ) {
@@ -726,8 +738,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         m_lastInstance = Instance(true);
         session()->mapCallAstToType(node, cppFunction);
       }else{
-        if( context->owner() && context->owner() && context->owner()->abstractType() )
-          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(m_currentContext->owner()->abstractType()->toString()));
+        if( context->owner() && context->owner()->abstractType() )
+          problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(context->owner()->abstractType()->toString()));
         else
           problem(node, "\"this\" used in non-function context with invalid type");
       }
@@ -1294,6 +1306,38 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     visitSubExpressions( node, node->sub_expressions );
   }
+
+  void ExpressionVisitor::visitTypeIDOperator(TypeIDOperatorAST* node) {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    clearLast();
+    // report uses
+    visit( node->expression );
+    visit( node->typeId );
+    clearLast();
+
+    m_lastInstance = Instance(true);
+
+    {
+      DUChainReadLocker lock;
+      foreach(Declaration* dec, m_currentContext->findDeclarations(QualifiedIdentifier("::std::type_info"))) {
+        if (dec->abstractType().cast<StructureType>()) {
+          m_lastType = dec->abstractType();
+          break;
+        }
+      }
+      if (!m_lastType) {
+        problem(node, "Could not find std::type_info, must #include <typeinfo> before using typeid");
+        return;
+      }
+    }
+
+    if( m_lastType )
+      expressionType( node, m_lastType, m_lastInstance );
+
+    visitSubExpressions( node, node->sub_expressions );
+  }
+
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitPtrOperator(PtrOperatorAST* node) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );

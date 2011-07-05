@@ -1301,6 +1301,113 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     QCOMPARE(b->url().url(), QString("debugee.cpp"));
 }
 
+void GdbTest::testRunGdbScript()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    QTemporaryFile runScript;
+    runScript.open();
+
+    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("break main\n");
+    runScript.write("run\n");
+    runScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 27);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testRemoteDebug()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
+    shellScript.open();
+    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.close();
+    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
+    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
+
+    QTemporaryFile runScript(QDir::currentPath()+"/runscript");
+    runScript.open();
+    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("target remote localhost:2345\n");
+    runScript.write("break debugee.cpp:30\n");
+    runScript.write("continue\n");
+    runScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 29);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    QFile::remove(shellScript.fileName()+"-copy");
+}
+
+void GdbTest::testRemoteDebugInsertBreakpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
+
+    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
+    shellScript.open();
+    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.close();
+    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
+    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
+
+    QTemporaryFile runScript(QDir::currentPath()+"/runscript");
+    runScript.open();
+    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("target remote localhost:2345\n");
+    runScript.write("break debugee.cpp:30\n");
+    runScript.write("continue\n");
+    runScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 29);
+
+    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 35);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    QFile::remove(shellScript.fileName()+"-copy");
+}
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)

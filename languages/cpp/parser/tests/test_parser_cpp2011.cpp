@@ -49,15 +49,20 @@ void TestParser::testRValueReference()
   QVERIFY(ast->declarations);
 }
 
+void TestParser::testDefaultDeletedFunctions_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("member-default") << "class A { A() = default; };\n";
+  QTest::newRow("member-delete") << "class A { A() = delete; };\n";
+  QTest::newRow("member-default-outside") << "class A { A(); };\nA::A() = default;\n";
+  QTest::newRow("non-member-delete") << "void foo(int) = delete;\n";
+}
+
 void TestParser::testDefaultDeletedFunctions()
 {
-  QByteArray code("class A{\n"
-                  "  A() = default;\n"
-                  "  A(const A&) = delete;\n"
-                  "};\n"
-                  "bool operator==(const A&, const A&) = default;\n"
-                  "bool operator!=(const A&, const A&) = delete;\n");
-  TranslationUnitAST* ast = parse(code);
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -102,3 +107,121 @@ void TestParser::testVariadicTemplates()
   QVERIFY(ast);
   QVERIFY(ast->declarations);
 }
+
+void TestParser::testStaticAssert_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html
+  // section 2.3
+  QTest::newRow("namespace-scope") << "static_assert(sizeof(long) >= 8, \"bla\");\n";
+  QTest::newRow("class-scope") << "template <class A> class B {\n"
+                                  "  static_assert(std::is_pod<A>::value, \"bla\");\n"
+                                  "};\n";
+  QTest::newRow("block-scope") << "void foo() { static_assert(sizeof(long) >= 8, \"bla\"); }\n";
+}
+
+void TestParser::testStaticAssert()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}
+
+void TestParser::testConstExpr_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("function") << "constexpr int square(int x) { return x * x; }";
+  QTest::newRow("member") << "class A { constexpr int foo() { return 1; } };";
+  QTest::newRow("ctor") << "class A { constexpr A(); };";
+  QTest::newRow("data") << "constexpr double a = 4.2 * square(2);";
+}
+
+void TestParser::testConstExpr()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}
+
+void TestParser::testEnumClass_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("enum") << "enum Foo {A, B};";
+  QTest::newRow("enum-class") << "enum class Foo {A, B};";
+  QTest::newRow("enum-struct") << "enum struct Foo {A, B};";
+  QTest::newRow("enum-typespec") << "enum Foo : int {A, B};";
+  QTest::newRow("enum-opaque") << "enum Foo;";
+  QTest::newRow("enum-opaque-class") << "enum class Foo;";
+  QTest::newRow("enum-opaque-class-typespec") << "enum class Foo : char;";
+  QTest::newRow("enum-opaque-typespec") << "enum Foo : unsigned int;";
+}
+
+void TestParser::testEnumClass()
+{
+  QFETCH(QString, code);
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast);
+  QVERIFY(ast->declarations);
+}
+
+void TestParser::testRightAngleBrackets_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<bool>("isValid");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1757.html
+  // or spec 14.2/3
+  QTest::newRow("invalid-1") << "X< 1>2 > x1;" << false; // Syntax error.
+  QTest::newRow("valid-1") << "X<(1>2)> x2;" << true; // Okay
+  QTest::newRow("valid-2") << "Y<X<1>> x3;" << true; // Okay, same as "Y<X<1> > x3;".
+  QTest::newRow("invalid-2") << "Y<X<6>>1>> x4;" << false;  // Syntax error. Instead, write "Y<X<(6>>1)>> x4;".";
+  QTest::newRow("valid-3") << "Y<X<(6>>1)>> x5;" << true;  // Okay
+}
+
+void TestParser::testRightAngleBrackets()
+{
+  QFETCH(QString, code);
+  QFETCH(bool, isValid);
+
+  code.prepend("template<int i> class X {};\n"
+               "template<class T> class Y{};\n");
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dumper.dump(ast, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+
+  QCOMPARE(control.problems().isEmpty(), isValid);
+}
+

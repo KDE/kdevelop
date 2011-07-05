@@ -479,8 +479,9 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   if(m_onlyComputeSimplified)
     return;
   
-  //The created context must be unnamed, so the enumerators can be found globally with the correct scope
-  openContext(node, DUContext::Enum, 0 );
+  //The created context must be unnamed if not an "enum class", so the enumerators can be found globally with the correct scope.
+  //In case of an "enum class" this enum creates its own context.
+  openContext(node, DUContext::Enum, node->isClass ? node->name : 0 );
 
   {
     DUChainWriteLocker lock(DUChain::lock());

@@ -99,6 +99,7 @@ class TranslationUnitAST;
 class TryBlockStatementAST;
 class CatchStatementAST;
 class TypeIdAST;
+class TypeIDOperatorAST;
 class TypeIdentificationAST;
 class TypeParameterAST;
 class TypeSpecifierAST;
@@ -197,6 +198,8 @@ public:
       Kind_SignalSlotExpression,                // 77
       Kind_QPropertyDeclaration,                // 78
       Kind_ForRangeDeclaration,                 // 79
+      Kind_TypeIDOperator,                      // 80
+      Kind_StaticAssert,                        // 81
       NODE_KIND_COUNT
     };
 
@@ -490,7 +493,10 @@ public:
   DECLARE_AST_NODE(EnumSpecifier)
 
   NameAST *name;
+  TypeSpecifierAST* type;
   const ListNode<EnumeratorAST*> *enumerators;
+  bool isClass : 1;
+  bool isOpaque : 1;
 };
 
 class EnumeratorAST : public AST, public  CommentAST
@@ -939,6 +945,16 @@ public:
   bool isVariadic;
 };
 
+class StaticAssertAST : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(StaticAssert)
+
+  ExpressionAST *expression;
+  StringLiteralAST *string;
+};
+
 class StringLiteralAST : public AST
 {
 public:
@@ -1056,6 +1072,16 @@ public:
 
   TypeSpecifierAST *type_specifier;
   DeclaratorAST *declarator;
+};
+
+/// typeid(...)
+class TypeIDOperatorAST : public PostfixExpressionAST
+{
+public:
+
+  DECLARE_AST_NODE(TypeIDOperator)
+
+  TypeIdAST* typeId;
 };
 
 ///"typename"

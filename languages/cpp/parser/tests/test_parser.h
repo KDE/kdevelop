@@ -78,12 +78,24 @@ private slots:
   void testOperators_data();
   void testOperators();
 
+  void testTypeID_data();
+  void testTypeID();
+
   //BEGIN C++2011 support
   void testRangeBasedFor();
   void testRValueReference();
+  void testDefaultDeletedFunctions_data();
   void testDefaultDeletedFunctions();
   void testVariadicTemplates_data();
   void testVariadicTemplates();
+  void testStaticAssert_data();
+  void testStaticAssert();
+  void testConstExpr_data();
+  void testConstExpr();
+  void testEnumClass_data();
+  void testEnumClass();
+  void testRightAngleBrackets_data();
+  void testRightAngleBrackets();
 
 private:
   Control control;

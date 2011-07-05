@@ -85,6 +85,8 @@ protected:
   virtual void visitClassSpecifier(ClassSpecifierAST* node);
   virtual void visitUsingDirective(UsingDirectiveAST* node);
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node);
+  virtual void visitTypeIDOperator(TypeIDOperatorAST* node);
+
 private:
   void buildUsesForName(NameAST* name);
 
