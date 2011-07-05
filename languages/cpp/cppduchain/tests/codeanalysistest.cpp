@@ -19,8 +19,8 @@
 #include "codeanalysistest.h"
 #include <QTest>
 #include <language/duchain/duchain.h>
-#include <language/checks/flowgraph.h>
-#include <language/checks/flownode.h>
+#include <language/checks/controlflowgraph.h>
+#include <language/checks/controlflownode.h>
 
 QTEST_MAIN(CodeAnalysisTest)
 
@@ -114,10 +114,10 @@ static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& 
   if(!visited.contains(node)) {
     visited.insert(node);
     
-    if(node->m_next)
-      walkNodesRecursively(node->m_next, visited);
-    if(node->m_alternative)
-      walkNodesRecursively(node->m_alternative, visited);
+    if(node->next())
+      walkNodesRecursively(node->next(), visited);
+    if(node->alternative())
+      walkNodesRecursively(node->alternative(), visited);
   }
 }
 
@@ -171,19 +171,19 @@ private:
       QString name = initialIt.value();
       if(isfirst)
         *m_dev << '\t' << name << " [shape=doubleoctagon]\n\n";
-      if(!node->m_next && !node->m_alternative)
+      if(!node->next() && !node->alternative())
         *m_dev << '\t' << name << " [color=red]\n\n";
       
-      if(exportNode(node->m_next))        *m_dev << '\t' << name << " -> " << m_names.value(node->m_next) << " [color=blue];\n";
-      if(exportNode(node->m_alternative)) *m_dev << '\t' << name << " -> " << m_names.value(node->m_alternative) << " [color=red];\n";
+      if(exportNode(node->next()))        *m_dev << '\t' << name << " -> " << m_names.value(node->next()) << " [color=blue];\n";
+      if(exportNode(node->alternative())) *m_dev << '\t' << name << " -> " << m_names.value(node->alternative()) << " [color=red];\n";
       
       return true;
     }
     
     QString nodesName(const ControlFlowNode* node) const
     {
-      RangeInRevision range = node->m_nodeRange;
-      if(!node->m_next && !node->m_alternative)
+      RangeInRevision range = node->nodeRange();
+      if(!node->next() && !node->alternative())
         return "Exit";
       else if(range.isEmpty()) {
         static int uniqueId=0;
