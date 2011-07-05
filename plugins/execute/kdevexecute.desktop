@@ -8,7 +8,6 @@ Comment[ca]=Aquest connector permet executar programes sense «instrumentor», �
 Comment[ca@valencia]=Este connector permet executar programes sense «instrumentor», és a dir, nativament per l'amfitrió actual.
 Comment[da]=Dette plugin tillader kørsel af programmer uden instrumentor dvs. nativt på det nuværende system.
 Comment[de]=Dieses Modul erlaubt das Ausführen von Programmen im Kontext des Betriebssystems.
-Comment[el]=Αυτό το πρόσθετο επιτρέπει την εκτέλεση προγραμμάτων χωρίς οργανωτή, πχ. εγγενώς από τον τρέχων υπολογιστή.
 Comment[en_GB]=This plugin allows running of programs with no instrumentor, ie. natively by the current host.
 Comment[es]=Este complemento permite ejecutar programas sin instrumentor (es decir, de forma nativa por la máquina actual).
 Comment[et]=See plugin võimaldab panna programme aktiivses masinas tööle ilma instrumentaatorita, s.t loomulikult.
