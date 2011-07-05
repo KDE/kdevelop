@@ -35,6 +35,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
     void setStartCursor(const CursorInRevision& cursor) {m_nodeRange.start = cursor; }
     void setEndCursor(const CursorInRevision& cursor) {m_nodeRange.end = cursor; }
     
+    void setNext(ControlFlowNode* next) { m_next=next; }
+    void setAlternative(ControlFlowNode* alt) { m_alternative=alt; }
+    
+    ControlFlowNode* next() const { return m_next; }
+    ControlFlowNode* alternative() const { return m_alternative; }
+    KDevelop::RangeInRevision nodeRange() const { return m_nodeRange; }
+    KDevelop::RangeInRevision conditionRange() const { return m_conditionRange; }
+    
+private:
     KDevelop::RangeInRevision m_nodeRange;
     KDevelop::RangeInRevision m_conditionRange;
     
