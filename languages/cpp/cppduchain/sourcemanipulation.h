@@ -71,6 +71,8 @@ public:
       int line;
       QString prefix;
     };
+
+    static QString makeSignatureString(QList<SignatureItem> arg_signature, DUContext* context);
     
     ///Returns the exact position where the item should be inserted so it is in the given line.
     ///The inserted item has to start with a newline, and does not need to end with a newline.
