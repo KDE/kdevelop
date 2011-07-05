@@ -685,6 +685,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
       return parseLinkageSpecification(node);
 
     case Token_namespace:
+    case Token_inline:
       return parseNamespace(node);
 
     case Token_using:
@@ -848,6 +849,13 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 {
   uint start = session->token_stream->cursor();
 
+  bool inlined = false;
+  if (session->token_stream->lookAhead() == Token_inline)
+    {
+      inlined = true;
+      advance();
+    }
+
   CHECK(Token_namespace);
 
   uint namespace_name = 0;
@@ -891,6 +899,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 
   NamespaceAST *ast = CreateNode<NamespaceAST>(session->mempool);
   ast->namespace_name = namespace_name;
+  ast->inlined = inlined;
   parseLinkageBody(ast->linkage_body);
 
   UPDATE_POS(ast, start, ast->linkage_body->end_token);

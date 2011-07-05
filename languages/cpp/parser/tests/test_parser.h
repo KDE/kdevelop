@@ -102,6 +102,7 @@ private slots:
   void testRawStrings();
   void testNullPtr_data();
   void testNullPtr();
+  void testInlineNamespace();
 
 protected:
   /**

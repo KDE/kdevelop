@@ -281,3 +281,13 @@ void TestParser::testNullPtr()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testInlineNamespace()
+{
+  const QString code = "inline namespace foo {/*...*/}";
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
