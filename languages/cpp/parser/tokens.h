@@ -90,6 +90,7 @@ enum TOKEN_KIND
     Token_new,
     Token_not,
     Token_not_eq,
+    Token_nullptr,
     Token_number_literal,
     Token_operator,
     Token_or,

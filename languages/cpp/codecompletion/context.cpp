@@ -2055,6 +2055,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
     ADD_TOKEN(new);
     ADD_TOKEN(not);
     ADD_TOKEN(not_eq);
+    ADD_TOKEN(nullptr);
     ADD_TOKEN(or);
     ADD_TOKEN(or_eq);
     ADD_TOKEN(reinterpret_cast);

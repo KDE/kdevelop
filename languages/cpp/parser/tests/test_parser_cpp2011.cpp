@@ -256,3 +256,28 @@ void TestParser::testRawStrings()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testNullPtr_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2431.pdf
+  QTest::newRow("assign") << "char* ch = nullptr;";
+  QTest::newRow("compare") << "if(ch == nullptr);";
+  QTest::newRow("ternary") << "char* ch3 = true ? nullptr : nullptr;";
+  QTest::newRow("sizeof") << "sizeof(nullptr);";
+  QTest::newRow("typeid") << "typeid(nullptr);";
+  QTest::newRow("throw") << "throw nullptr;";
+}
+
+void TestParser::testNullPtr()
+{
+  QFETCH(QString, code);
+
+  code = "void foo() {\n" + code + "\n}\n";
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}

@@ -100,6 +100,8 @@ private slots:
   void testCharacterTypes();
   void testRawStrings_data();
   void testRawStrings();
+  void testNullPtr_data();
+  void testNullPtr();
 
 protected:
   /**

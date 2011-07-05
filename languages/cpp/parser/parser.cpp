@@ -3984,6 +3984,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
     case Token_true:
     case Token_false:
     case Token_this:
+    case Token_nullptr:
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();
