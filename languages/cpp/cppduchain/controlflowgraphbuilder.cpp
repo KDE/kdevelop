@@ -26,7 +26,7 @@
 #include <language/duchain/topducontext.h>
 
 using namespace KDevelop;
-QString nodeToString(ParseSession* s, AST* node);
+QString nodeToString(const ParseSession* s, AST* node);
 
 ControlFlowGraphBuilder::ControlFlowGraphBuilder(const KDevelop::ReferencedTopDUContext& top, const ParseSession* session, ControlFlowGraph* graph)
   : m_session(session)
@@ -71,6 +71,9 @@ ControlFlowNode* ControlFlowGraphBuilder::createCompoundStatement(AST* node, Con
 
 void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
+  if(!node->function_body->ducontext) //means its ducontext hasn't been built, we probably don't need the flow diagram
+    return;
+  
   PushValue<ControlFlowNode*> currentNode(m_currentNode);
   m_returnNode = new ControlFlowNode;
   
