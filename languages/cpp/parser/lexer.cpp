@@ -323,7 +323,6 @@ void Lexer::tokenize(ParseSession* _session)
         if (*(cursor+1) == '"') {
           ++cursor;
           scan_string_constant();
-          break;
         } else {
           scan_identifier_or_keyword();
         }
