@@ -138,10 +138,12 @@ public:
     static bool hasStaticMinimumFeatures();
     
     ///Returns a structure containing data modification inside the parsed file.
-    virtual QSharedPointer<KDevelop::DataAccessRepository> dataAccessInformation() = 0;
+    /// It's up to the caller to remove the returned instance
+    virtual KDevelop::DataAccessRepository* dataAccessInformation() = 0;
     
     ///Returns a control flow graph for the code in the parsed file.
-    virtual QSharedPointer<KDevelop::ControlFlowGraph> controlFlowGraph() = 0;
+    /// It's up to the caller to remove the returned instance
+    virtual KDevelop::ControlFlowGraph* controlFlowGraph() = 0;
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
