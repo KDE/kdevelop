@@ -423,6 +423,7 @@ bool Parser::skipUntilDeclaration()
         case '~':
         case Token_scope:
         case Token_identifier:
+        case Token_inline:
         case Token_operator:
         case Token_char:
         case Token_char16_t:
