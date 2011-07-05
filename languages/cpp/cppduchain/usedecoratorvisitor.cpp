@@ -74,17 +74,15 @@ void UseDecoratorVisitor::run(AST* node)
 
 void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   //Type exctraction
   AbstractType::Ptr type;
   if(!m_callStack.isEmpty())
     type = m_callStack.top().at(m_argStack.top());
  
-  DUContext* ctx = m_currentContext;
   IndexedString id = m_session->token_stream->token(node->id).symbol();
 //   qDebug() << "found name" << id.str() << (type ? type->toString() : "no type") << ctx;
   
-  if(type && ctx) {
+  if(type) {
     LOCKDUCHAIN;
     //Use extraction
     CursorInRevision cursor = m_session->positionAt( m_session->token_stream->position(node->start_token) );
@@ -105,11 +103,9 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
 
 void UseDecoratorVisitor::visitFunctionCall(FunctionCallAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
-  IndexedString id = m_session->token_stream->token(node->start_token).symbol();
   
   FunctionType::Ptr type = m_session->typeFromCallAst(node);
-  qDebug() << "function call" << id.str() << (type ? type->toString() : "<null>");
+  qDebug() << "function call" << (type ? type->toString() : "<null>") << nodeToString(m_session, node);
   
   if(type) {
     m_callStack.push(type->arguments());
@@ -125,8 +121,6 @@ void UseDecoratorVisitor::visitFunctionCall(FunctionCallAST* node)
 
 void UseDecoratorVisitor::visitNewExpression(NewExpressionAST* node)
 {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );
-
     IndexedString id = m_session->token_stream->token(node->start_token).symbol();
   
     FunctionType::Ptr type = m_session->typeFromCallAst(node);
@@ -159,7 +153,6 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
                 << nodeToString(m_session, node)
                 << m_session->positionAt( m_session->token_stream->position(node->start_token) );
   
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   Token optoken = m_session->token_stream->token(node->op);
   bool isFunctionArguments = optoken.kind==',';
@@ -211,14 +204,12 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
 
 void UseDecoratorVisitor::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );
 //     visit(node->expression);
     visit(node->declaration);
 }
 
 void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   Token optoken = m_session->token_stream->token(node->op);
   
@@ -258,7 +249,6 @@ void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
 
 void UseDecoratorVisitor::visitMemInitializer(MemInitializerAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Write);
   
   static AbstractType::Ptr ntype(new DelayedType);
@@ -283,7 +273,6 @@ void UseDecoratorVisitor::visitMemInitializer(MemInitializerAST* node)
 
 void UseDecoratorVisitor::visitConditionalExpression(ConditionalExpressionAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   static AbstractType::Ptr ntype(new DelayedType);
@@ -323,7 +312,6 @@ void visitNodesBackwards(Visitor *v, const ListNode<_Tp> *nodes)
 void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 {
 //   qDebug() << "visit: PostfixExpression" << nodeToString(m_session, node);
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   static AbstractType::Ptr ntype(new DelayedType);
@@ -341,7 +329,6 @@ void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 
 void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   
@@ -355,7 +342,6 @@ void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 
 void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   bool modif = optype ? optype->modifiers()&FunctionType::ConstModifier : m_session->token_stream->token(node->op).kind!=Token_arrow;
@@ -368,7 +354,6 @@ void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 
 void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
 {
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   visit(node->declarator);
@@ -383,7 +368,6 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
 #define IMPL_DEFAULT_VISIT(a) \
 void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );\
 /*qDebug() << "visit: " #a << nodeToString(m_session, node);*/\
     DefaultVisitor::visit##a (node);\
 }
@@ -391,7 +375,6 @@ void UseDecoratorVisitor::visit##a(a##AST* node)\
 # define IMPL_DEFAULT_VISIT_WITH_FLAGS(a, b) \
 void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
-  PushPositiveContext pushContext( m_currentContext, node->ducontext );\
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, b);\
 /*   qDebug() << "visit: " #a << nodeToString(m_session, node);*/\
   static AbstractType::Ptr ntype(new DelayedType);\
