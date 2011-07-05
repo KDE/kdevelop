@@ -182,8 +182,8 @@ public:
     
     KDevelop::ModificationRevisionSet includePathDependencies() const ;
     
-    virtual QSharedPointer< ControlFlowGraph > controlFlowGraph();
-    virtual QSharedPointer< DataAccessRepository > dataAccessInformation();
+    virtual ControlFlowGraph* controlFlowGraph();
+    virtual DataAccessRepository* dataAccessInformation();
 private:
   
     KDevelop::TopDUContext::Features standardMinimumFeatures() const;

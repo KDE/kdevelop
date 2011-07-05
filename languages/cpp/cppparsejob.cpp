@@ -976,18 +976,18 @@ TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
     return (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::Recursive);
 }
 
-QSharedPointer<ControlFlowGraph> CPPParseJob::controlFlowGraph()
+ControlFlowGraph* CPPParseJob::controlFlowGraph()
 {
-  QSharedPointer<ControlFlowGraph> ret(new ControlFlowGraph);
-  ControlFlowGraphBuilder flowvisitor(duChain(), m_session.data(), ret.data());
+  ControlFlowGraph* ret = new ControlFlowGraph;
+  ControlFlowGraphBuilder flowvisitor(duChain(), m_session.data(), ret);
   flowvisitor.run(m_session->topAstNode());
   return ret;
 }
 
-QSharedPointer<DataAccessRepository> CPPParseJob::dataAccessInformation()
+DataAccessRepository* CPPParseJob::dataAccessInformation()
 {
-  QSharedPointer<DataAccessRepository> ret(new DataAccessRepository);
-  UseDecoratorVisitor visit(m_session.data(), ret.data());
+  DataAccessRepository* ret = new DataAccessRepository;
+  UseDecoratorVisitor visit(m_session.data(), ret);
   visit.run(m_session->topAstNode());
   return ret;
 }
