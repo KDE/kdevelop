@@ -23,10 +23,8 @@
 
 namespace KDevelop
 {
-
 class Declaration;
 
-//DataAccess
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 {
     public:

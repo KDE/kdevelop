@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "flowgraph.h"
-#include "flownode.h"
+#include "controlflowgraph.h"
+#include "controlflownode.h"
 
 using namespace KDevelop;
 

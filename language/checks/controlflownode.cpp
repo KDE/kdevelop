@@ -16,31 +16,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FLOWNODE_H
-#define FLOWNODE_H
-#include <language/editor/rangeinrevision.h>
-#include <language/languageexport.h>
+#include "controlflownode.h"
 
-namespace KDevelop
+using namespace KDevelop;
+
+ControlFlowNode::ControlFlowNode()
+  : m_next(0), m_alternative(0)
+{}
+
+ControlFlowNode::Type ControlFlowNode::type() const
 {
-
-class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
-{
-  public:
-    enum Type { Conditional, Sequential, Exit };
-    ControlFlowNode();
-    
-    Type type() const;
-    
-    void setStartCursor(const CursorInRevision& cursor) {m_nodeRange.start = cursor; }
-    void setEndCursor(const CursorInRevision& cursor) {m_nodeRange.end = cursor; }
-    
-    KDevelop::RangeInRevision m_nodeRange;
-    KDevelop::RangeInRevision m_conditionRange;
-    
-    ControlFlowNode* m_next;
-    ControlFlowNode* m_alternative;
-};
-
+  Q_ASSERT(!m_alternative || m_next); //If we have alternative, we have next.
+  
+  if(m_next && m_alternative) return Conditional;
+  else if(m_next) return Sequential;
+  else return Exit;
 }
-#endif // FLUXNODE_H
