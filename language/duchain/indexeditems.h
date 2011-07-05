@@ -16,6 +16,7 @@
 
 #include <sys/types.h>
 #include "../languageexport.h"
+#include <QMetaType>
 
 namespace KDevelop {
 

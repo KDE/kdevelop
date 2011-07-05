@@ -20,6 +20,7 @@
 #include <QtCore/QMetaType>
 #include "../languageexport.h"
 #include <language/duchain/referencecounting.h>
+#include <QMetaType>
 
 class QDataStream;
 class KUrl;
