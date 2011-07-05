@@ -119,8 +119,7 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/codehighlighting.cpp
 
     checks/dataaccessrepository.cpp
-    checks/flowgraph.cpp
-    checks/flownode.cpp
+    checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -330,8 +329,8 @@ install(FILES
 
 install(FILES
     checks/dataaccessrepository.h
-    checks/flowgraph.h
-    checks/flownode.h
+    checks/controlflowgraph.h
+    checks/controlflownode.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/checks COMPONENT Devel
 )
 
