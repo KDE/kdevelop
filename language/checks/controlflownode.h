@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+    Copyright 2010-2011 Aleix Pol Gonzalez <aleixpol@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,20 +27,41 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
 {
   public:
-    enum Type { Conditional, Sequential, Exit };
+    /** Defines the type of the node in terms of what's on the next and alternative method */
+    enum Type {
+        Conditional, /**< It's a conditional node. alternative and next are available, also conditionRange returns a valid range. */
+        Sequential,  /**< It's a node where we just have a next node, we always know where it's going to go as a next step. */
+        Exit         /**< It's the end node, it will either return to the caller or finish execution depending on the context. */
+    };
+    
+    /** Constructs an empty node with no next or alternative nodes */
     ControlFlowNode();
     
+    /** @returns the node type by checking the node's next and alternative value */
     Type type() const;
     
+    /** Sets where is this range going to start to @p cursor*/
     void setStartCursor(const CursorInRevision& cursor) {m_nodeRange.start = cursor; }
+    
+    /** Sets where is this range going to end to @p cursor*/
     void setEndCursor(const CursorInRevision& cursor) {m_nodeRange.end = cursor; }
     
+    /** Sets @p next to be the node that will be executed after this one */
     void setNext(ControlFlowNode* next) { m_next=next; }
+    
+    /** Sets @p alt to be the alternative to next. Converts this node into a conditional node */
     void setAlternative(ControlFlowNode* alt) { m_alternative=alt; }
     
+    /** @returns the node to be executed next */
     ControlFlowNode* next() const { return m_next; }
+    
+    /** @returns the node to be executed next alternatively */
     ControlFlowNode* alternative() const { return m_alternative; }
+    
+    /** @returns the node range as in what range area does the node affect. */
     KDevelop::RangeInRevision nodeRange() const { return m_nodeRange; }
+    
+    /** @returns the node range as in what range does its condition affect. */
     KDevelop::RangeInRevision conditionRange() const { return m_conditionRange; }
     
 private:
