@@ -146,6 +146,15 @@ public:
   bool isAutoDeclaration() const;
   
   /**
+   * Changes whether this declaration is "explicitly deleted", i.e. not implicitly declared or accessible.
+   *
+   * \param deleted true for deleted, false for default behaviour
+   * */
+  void setExplicitlyDeleted(bool deleted);
+  /// Access whether this declaration is implicitly created or not.
+  bool isExplicitlyDeleted() const;
+  
+  /**
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)

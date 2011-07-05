@@ -331,7 +331,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                             int newIndentationLength = 0;
 
                             for(int a = 0; a < newLines[line].size(); ++a)
-                                if(change.m_newText[a].isSpace())
+                                if(newLines[line][a].isSpace())
                                     newIndentationLength = a;
                                 else
                                     break;

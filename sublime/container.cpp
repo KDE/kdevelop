@@ -40,7 +40,6 @@
 
 #include "view.h"
 #include "document.h"
-#include <qpointer.h>
 #include <QEvent>
 #include <QKeyEvent>
 #include "urldocument.h"
@@ -90,7 +89,7 @@ struct ContainerPrivate {
     KSqueezedTextLabel *fileNameCorner;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
-    QPointer<QWidget> leftCornerWidget;
+    QWeakPointer<QWidget> leftCornerWidget;
 };
 
 class UnderlinedLabel: public KSqueezedTextLabel {
@@ -197,11 +196,12 @@ Container::Container(QWidget *parent)
 
 void Container::setLeftCornerWidget(QWidget* widget)
 {
-    if(d->leftCornerWidget == widget) {
+    if(d->leftCornerWidget.data() == widget) {
         if(d->leftCornerWidget)
-            d->leftCornerWidget->setParent(0);
+            d->leftCornerWidget.data()->setParent(0);
     }else{
-        delete d->leftCornerWidget;
+        delete d->leftCornerWidget.data();
+        d->leftCornerWidget.clear();
     }
     d->leftCornerWidget = widget;
     if(!widget)

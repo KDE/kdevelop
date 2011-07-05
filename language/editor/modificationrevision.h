@@ -39,6 +39,9 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
  * All member-functions except the IndexedString constructor directly act on the two members, without additional logic.
  *
  * Does not need a d-pointer, is only a container-class.
+ * 
+ * It is safe to store this class in the disk-mapped internal duchain data structures.
+ * 
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {

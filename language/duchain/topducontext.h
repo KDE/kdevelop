@@ -25,6 +25,7 @@
 #include "ducontext.h"
 #include <language/util/setrepository.h>
 #include "indexeditems.h"
+#include <QMetaType>
 
 template< class T >
 class KSharedPtr;
@@ -406,6 +407,7 @@ inline uint qHash(const IndexedTopDUContext& ctx) {
 }
 
 }
+Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 
 #endif // TOPDUCONTEXT_H
 

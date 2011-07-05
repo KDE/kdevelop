@@ -17,8 +17,10 @@
 //krazy:excludeall=dpointer,inline
 
 #include <QtCore/QString>
+#include <QtCore/QMetaType>
 #include "../languageexport.h"
 #include <language/duchain/referencecounting.h>
+#include <QMetaType>
 
 class QDataStream;
 class KUrl;
@@ -158,5 +160,6 @@ inline uint qHash( const KDevelop::IndexedString& str ) {
   return str.index();
 }
 }
+Q_DECLARE_METATYPE(KDevelop::IndexedString);
 
 #endif

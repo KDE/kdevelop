@@ -92,8 +92,9 @@ public:
    * Add an argument to the function, specifying what type it takes.
    *
    * \param argument the argument's type
+   * \param index where to insert the argument; the default "-1" will insert it at the end of the list
    */
-  void addArgument(AbstractType::Ptr argument);
+  void addArgument(AbstractType::Ptr argument, int index = -1);
 
   /**
    * Remove the argument with number i from the function.

@@ -53,7 +53,7 @@ REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
   : m_comment(0), m_isDefinition(false), m_inSymbolTable(false), m_isTypeAlias(false),
-    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false)
+    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false), m_isExplicitlyDeleted(false)
 {
   m_kind = Declaration::Instance;
 }
@@ -71,7 +71,8 @@ m_isTypeAlias(rhs.m_isTypeAlias),
 m_anonymousInContext(rhs.m_anonymousInContext),
 m_isFinal(rhs.m_isFinal),
 m_alwaysForceDirect(rhs.m_alwaysForceDirect),
-m_isAutoDeclaration(rhs.m_isAutoDeclaration)
+m_isAutoDeclaration(rhs.m_isAutoDeclaration),
+m_isExplicitlyDeleted(rhs.m_isExplicitlyDeleted)
 {
 }
 
@@ -599,6 +600,16 @@ void Declaration::setAlwaysForceDirect(bool direct)
   d_func_dynamic()->m_alwaysForceDirect = direct;
 }
 
+bool Declaration::isExplicitlyDeleted() const
+{
+  return d_func()->m_isExplicitlyDeleted;
+}
+
+void Declaration::setExplicitlyDeleted(bool deleted)
+{
+  d_func_dynamic()->m_isExplicitlyDeleted = deleted;
+}
+
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
 bool Declaration::isTypeAlias() const {
   DUCHAIN_D(Declaration);
@@ -777,12 +788,33 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
   return ret;
 }
 
+bool hasDeclarationUse(DUContext* context, int declIdx)
+{
+  bool ret=false;
+  int usescount=context->usesCount();
+  const Use* uses=context->uses();
+  
+  for(int i=0; !ret && i<usescount; ++i) {
+    ret = uses[i].m_declarationIndex==declIdx;
+  }
+  
+  foreach(DUContext* child, context->childContexts()) {
+    ret = ret || hasDeclarationUse(child, declIdx);
+    if(ret)
+      break;
+  }
+  
+  return ret;
+}
+
 bool Declaration::hasUses() const
 {
   ENSURE_CAN_READ
-  bool hasUsesInOtherConexts = DUChain::uses()->hasUses(id());
-  bool hasLocalUses = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false) == std::numeric_limits<int>::max() ? false : true;
-  return hasUsesInOtherConexts || hasLocalUses;
+  int idx = topContext()->indexForUsedDeclaration(const_cast<Declaration*>(this), false);
+  bool ret = idx != std::numeric_limits<int>::max() && (idx>=0 || hasDeclarationUse(topContext(), idx)); //hasLocalUses
+  ret =  ret || DUChain::uses()->hasUses(id()); //hasUsesInOtherContexts 
+  
+  return ret;
 }
 
 QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const

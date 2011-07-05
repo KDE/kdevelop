@@ -28,7 +28,6 @@
 #include "document.h"
 #include "areaindex.h"
 #include "controller.h"
-#include <qpointer.h>
 
 namespace Sublime {
 
@@ -94,7 +93,7 @@ struct AreaPrivate {
     QMap<Sublime::Position, int> thickness;
     QString iconName;
     QString workingSet;
-    QPointer<View> activeView;
+    QWeakPointer<View> activeView;
 };
 
 
@@ -153,7 +152,7 @@ Area::~Area()
 
 View* Area::activeView()
 {
-    return d->activeView;
+    return d->activeView.data();
 }
 
 void Area::setActiveView(View* view)
@@ -426,7 +425,7 @@ bool Area::closeView(View* view)
     if(alreadyClosingViews.contains(view))
         return false; // The view is already being closed, so ignore the closeView request
 
-    QPointer<Document> doc = view->document();
+    QWeakPointer<Document> doc = view->document();
 
     
     if(doc)
@@ -434,7 +433,7 @@ bool Area::closeView(View* view)
         int otherViewsInCurrentWorkingSet = 0;
         int viewsInOtherWorkingSet = 0;
 
-        foreach(View* otherView, doc->views())
+        foreach(View* otherView, doc.data()->views())
         {
             Area* area = controller()->areaForView(otherView);
             if(area == this && otherView != view)
@@ -452,8 +451,8 @@ bool Area::closeView(View* view)
             // So, record the views, and make sure that the working-set controller
             // doesn't try to delete the view twice while synchronizing the areas.
             
-            alreadyClosingViews = doc->views().toSet();
-            bool ret = doc->closeDocument();
+            alreadyClosingViews = doc.data()->views().toSet();
+            bool ret = doc.data()->closeDocument();
             alreadyClosingViews.clear();
             return ret;
         }

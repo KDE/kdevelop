@@ -115,7 +115,8 @@ ProjectBuildSetWidget::~ProjectBuildSetWidget()
     delete m_ui;
 }
 
-static void appendActions(QMenu& menu, const QList<QAction*>& actions)
+//TODO test whether this could be replaced by projecttreeview.cpp::popupContextMenu_appendActions
+void showContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
 {
     menu.addSeparator();
     foreach( QAction* act, actions )
@@ -170,14 +171,14 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
             runActions += ext.actions(KDevelop::ContextMenuExtension::RunGroup);
         }
 
-        appendActions(m, buildActions);
-        appendActions(m, runActions);
-        appendActions(m, fileActions);
+        showContextMenu_appendActions(m, buildActions);
+        showContextMenu_appendActions(m, runActions);
+        showContextMenu_appendActions(m, fileActions);
 
-        appendActions(m, vcsActions);
-        appendActions(m, extActions);
+        showContextMenu_appendActions(m, vcsActions);
+        showContextMenu_appendActions(m, extActions);
 
-        appendActions(m, projectActions);
+        showContextMenu_appendActions(m, projectActions);
     }
     
     m.exec( m_ui->itemView->viewport()->mapToGlobal( p ) );

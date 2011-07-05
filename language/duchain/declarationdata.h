@@ -61,6 +61,7 @@ public:
   bool m_isFinal       : 1;
   bool m_alwaysForceDirect : 1;
   bool m_isAutoDeclaration : 1;
+  bool m_isExplicitlyDeleted : 1;
 };
 }
 

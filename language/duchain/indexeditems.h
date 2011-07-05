@@ -16,6 +16,7 @@
 
 #include <sys/types.h>
 #include "../languageexport.h"
+#include <QMetaType>
 
 namespace KDevelop {
 
@@ -277,5 +278,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
 };
 
 }
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
 
 #endif // INDEXEDITEMS_H

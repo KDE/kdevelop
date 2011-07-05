@@ -229,8 +229,8 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
         emit activateUrl( item->file()->url() );
     }
 }
-
-void appendActions(QMenu& menu, const QList<QAction*>& actions)
+//TODO test whether this could be replaced by projectbuildsetwidget.cpp::showContextMenu_appendActions
+void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
 {
     menu.addActions(actions);
     menu.addSeparator();
@@ -281,11 +281,11 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         runActions += ext.actions(ContextMenuExtension::RunGroup);
     }
 
-    appendActions(menu, buildActions);
-    appendActions(menu, runActions );
-    appendActions(menu, fileActions);
-    appendActions(menu, vcsActions);
-    appendActions(menu, extActions);
+    popupContextMenu_appendActions(menu, buildActions);
+    popupContextMenu_appendActions(menu, runActions );
+    popupContextMenu_appendActions(menu, fileActions);
+    popupContextMenu_appendActions(menu, vcsActions);
+    popupContextMenu_appendActions(menu, extActions);
 
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
@@ -293,7 +293,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
         projectActions << projectConfig;
     }
-    appendActions(menu, projectActions);
+    popupContextMenu_appendActions(menu, projectActions);
     
     if(!itemlist.isEmpty())
         KDevelop::populateParentItemsMenu(itemlist.front(), &menu);

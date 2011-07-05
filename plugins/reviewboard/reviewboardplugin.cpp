@@ -54,25 +54,6 @@ ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
 ReviewBoardPlugin::~ReviewBoardPlugin()
 {}
 
-QByteArray urlToData(const KUrl& url)
-{
-    QByteArray ret;
-    if(url.isLocalFile()) {
-        QFile f(url.toLocalFile());
-        Q_ASSERT(f.exists());
-        bool corr=f.open(QFile::ReadOnly | QFile::Text);
-        Q_ASSERT(corr);
-        
-        ret = f.readAll();
-        
-    } else {
-#if defined(__GNUC__)
-#warning TODO: add downloading the data
-#endif
-    }
-    return ret;
-}
-
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
     ReviewPatchDialog d;

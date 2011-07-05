@@ -9,6 +9,8 @@
  ***************************************************************************/
 
 // some utility functions used at various places
+#ifndef GREPUTIL_H
+#define GREPUTIL_H
 
 #include <QStringList>
 #include <QString>
@@ -20,3 +22,5 @@ QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false );
 
 /// Replaces each occurence of "%s" in pattern by searchString (and "%%" by "%")
 QString substitudePattern(const QString& pattern, const QString& searchString);
+
+#endif

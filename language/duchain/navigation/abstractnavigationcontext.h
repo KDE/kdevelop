@@ -49,20 +49,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
   {
   }
 
-  QString operator()(const QString& str) const
-  {
-    QString face="color: #"+m_color+"; ";
-    if( m_formatting & Fixed )
-      face += "font-family: monospace; ";
-    if( m_formatting & Bold )
-      face += "font-weight: bold; ";
-    if( m_formatting & Italic )
-      face += "text-decoration: italic; ";
-    
-    QString ret = "<span style='"+face+"'>" + str + "</span>";
-
-    return ret;
-  }
+  QString operator()(const QString& str) const;
 
   QString m_color;
   Formatting m_formatting;

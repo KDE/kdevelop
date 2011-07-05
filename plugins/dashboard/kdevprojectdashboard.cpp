@@ -52,7 +52,7 @@ KDevProjectDashboard::KDevProjectDashboard( QObject* parent, const QVariantList&
     ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop", new ProjectDashboardFactory);
 }
 
-KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(Context* context)
+KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(KDevelop::Context* context)
 {
     m_selectedProjects.clear();
     if( context->type() != KDevelop::Context::ProjectItemContext )

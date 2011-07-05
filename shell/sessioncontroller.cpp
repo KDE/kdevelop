@@ -829,6 +829,11 @@ QString SessionController::sessionDirectory()
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
+QString SessionController::sessionDir()
+{
+    return sessionDirectory() + "/" + activeSession()->id().toString();
+}
+
 SessionController::LockSessionState SessionController::tryLockSession(QString id)
 {
     LockSessionState ret;

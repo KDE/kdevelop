@@ -63,8 +63,6 @@ public:
 ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate )
 {
-    setCapabilities(Killable);
-    
     d->m_importer = importer;
     d->m_folder = folder;
     d->m_project = folder->project();

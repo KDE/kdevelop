@@ -55,10 +55,6 @@
 
 using namespace KTextEditor;
 
-Q_DECLARE_METATYPE(KDevelop::IndexedString)
-Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
-Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
-
 static QMutex minimumFeaturesMutex;
 static QHash<KDevelop::IndexedString, QList<KDevelop::TopDUContext::Features> > staticMinimumFeatures;
 

@@ -64,10 +64,6 @@
 #include "referencecounting.h"
 #include "importers.h"
 
-Q_DECLARE_METATYPE(KDevelop::IndexedString)
-Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
-Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
-
 namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.
 //During "soft" cleanup, the consistency is not guaranteed. The repository is
