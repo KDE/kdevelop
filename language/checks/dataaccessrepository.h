@@ -25,35 +25,64 @@ namespace KDevelop
 {
 class Declaration;
 
+/**
+ * @brief Represents a data access in some code
+ * 
+ * This class provides the position of a data access in the code
+ * and tells us whether it's writing or reading the data.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 {
     public:
-        enum DataAccessFlag { None=0, Read=1, Write=2 };
+        /** Defines the flags that will tell what this data access is about */
+        enum DataAccessFlag { None=0,
+            Read=1, /**< This data access reads data */
+            Write=2 /**< This data access writes data */
+        };
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
         
+        /** Constructs a DataAccess instance with its @p cur position and
+         * its @p flags DataAccessFlags that will tell us how is it modifying the data
+         */
         DataAccess(const CursorInRevision& cur, DataAccessFlags flags);
         
+        /** Checks the flags and returns if it's reading the data */
         bool isRead()  const { return m_flags&Read; }
+        
+        /** Checks the flags and returns if it's writing the data */
         bool isWrite() const { return m_flags&Write; }
         
-        Declaration* declarationForDataAccess() const;
+        /** @returns the cursor */
         KDevelop::CursorInRevision pos() const { return m_pos; }
+        
+        /** @returns the flags that specify how is this access interacting with the data */
         DataAccessFlags flags() const { return m_flags; }
+        
     private:
         DataAccessFlags m_flags;
         KDevelop::CursorInRevision m_pos;
 };
 
-
+/**
+ * @brief Stores all the data accesses in a file
+ * 
+ * Provides the data accesses in a file and provides different ways to accessing them
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 {
     public:
         ~DataAccessRepository() { clear(); }
-        //Again, cursor/range?
+        
+        /** Constructs a DataAccess instance and adds it to the repository */
         void addModification(const KDevelop::CursorInRevision& cursor, DataAccess::DataAccessFlags flags);
       
+        /** Clears the whole structure as if it was never used before */
         void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
+        
+        /** @returns all the data access stored in this repository */
         QList<DataAccess*> modifications() const { return m_modifications; }
+        
+        /** @returns the access located at the position specified by @p cursor */
         DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
     private:
         QList<DataAccess*> m_modifications;

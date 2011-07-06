@@ -38,11 +38,5 @@ DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
     return 0;
 }
 
-Declaration* DataAccess::declarationForDataAccess() const
-{
-    Q_ASSERT(false && "TODO!!!!");
-    return 0;
-}
-
 }
 
