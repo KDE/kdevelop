@@ -19,11 +19,12 @@
 #include "controlflowgraphbuilder.h"
 #include <language/checks/controlflownode.h>
 #include <language/checks/controlflowgraph.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchainlock.h>
 #include <parsesession.h>
 #include <lexer.h>
 #include <tokens.h>
 #include <util/pushvalue.h>
-#include <language/duchain/topducontext.h>
 
 using namespace KDevelop;
 QString nodeToString(const ParseSession* s, AST* node);
@@ -77,7 +78,13 @@ void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* nod
   PushValue<ControlFlowNode*> currentNode(m_currentNode);
   m_returnNode = new ControlFlowNode;
   
-  m_graph->addEntry(node->function_body->ducontext, createCompoundStatement(node->function_body, m_returnNode));
+  Declaration* d;
+  {
+    KDevelop::DUChainReadLocker lock;
+    d=node->function_body->ducontext->owner();
+  }
+  
+  m_graph->addEntry(d, createCompoundStatement(node->function_body, m_returnNode));
 }
 
 void ControlFlowGraphBuilder::visitEnumerator(EnumeratorAST* node)
