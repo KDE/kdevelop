@@ -103,6 +103,8 @@ private slots:
   void testNullPtr_data();
   void testNullPtr();
   void testInlineNamespace();
+  void testDecltype_data();
+  void testDecltype();
 
 protected:
   /**

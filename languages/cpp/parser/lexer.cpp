@@ -186,6 +186,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(constexpr);
   ADD_TOKEN(const_cast);
   ADD_TOKEN(continue);
+  ADD_TOKEN(decltype);
   ADD_TOKEN(default);
   ADD_TOKEN(delete);
   ADD_TOKEN(do);

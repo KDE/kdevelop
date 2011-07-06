@@ -57,6 +57,7 @@ enum TOKEN_KIND
     Token_const_cast,
     Token_continue,
     Token_decr,
+    Token_decltype,
     Token_default,
     Token_delete,
     Token_do,

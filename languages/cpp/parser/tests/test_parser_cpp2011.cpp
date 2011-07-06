@@ -291,3 +291,30 @@ void TestParser::testInlineNamespace()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testDecltype_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2343.pdf
+  // simple type specifier
+  QTest::newRow("idexpr-noparen") << "int i; decltype(i) j;";
+  QTest::newRow("idexpr-paren") << "int i; decltype((i)) j;";
+  QTest::newRow("classmember-noparen") << "struct A {int i;}; A a; decltype(a.i) j;";
+  QTest::newRow("classmember2-noparen") << "struct A {int i;}; A* a; decltype(a->i) j;";
+  QTest::newRow("classmember-paren") << "struct A {int i;}; A a; decltype((a.i)) j;";
+  QTest::newRow("classmember2-paren") << "struct A {int i;}; A* a; decltype((a->i)) j;";
+  QTest::newRow("functioncall") << "int foo() {} decltype(foo()) i;";
+  QTest::newRow("expr") << "decltype(1+2) i;";
+  QTest::newRow("idexpr-ref") << "int i; decltype(i)& i;";
+}
+
+void TestParser::testDecltype()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}

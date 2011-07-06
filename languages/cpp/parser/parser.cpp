@@ -1302,6 +1302,16 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
           parseUnaryExpression(ast->expression);
         }
     }
+  else if (session->token_stream->lookAhead() == Token_decltype)
+    {
+      ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
+      ///TODO: differentiate between typeof and decltype
+      ast->type_of = session->token_stream->cursor();
+      advance();
+      ADVANCE('(', "(");
+      parseExpression(ast->expression);
+      ADVANCE(')', ")");
+    }
   else if (onlyIntegral)
     {
       rewind(start);
