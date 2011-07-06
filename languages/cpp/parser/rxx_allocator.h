@@ -23,8 +23,6 @@
 #include <cstdlib>
 #include <string.h>
 #include <memory>
-#include <KDebug>
-#include <QMutex>
 
 /**The allocator which uses fixed size blocks for allocation of its elements.
 Block size is currently 64k, allocated space is not reclaimed,
@@ -34,13 +32,6 @@ memory in the block then a new block is allocated.
 The allocator supports standard c++ library interface but does not
 make use of allocation hints.
 */
-
-/*
-if you want to check rxx_allocator isn't keeping too much memory for itself,
-define this.
-*/
-//#define DEBUG_CHAIN_LENGTH
-
 template <class _Tp> class rxx_allocator {
 public:
   typedef _Tp value_type;
@@ -52,24 +43,8 @@ public:
   typedef std::ptrdiff_t difference_type;
 
   static const size_type max_block_count = size_type(-1);
-  static const size_type _S_block_size = 1 << 15; // 32K
-  static const size_type _S_null_size  = 1<<10; // 1K
+  static const size_type _S_block_size = 1 << 16; // 64K
 
-
-  struct block{
-    block *next;
-    char data[_S_block_size-sizeof(block*)];
-  };
-
-  static block* allocated_blocks;
-  static QMutex chain_lock;
-
-#ifdef DEBUG_CHAIN_LENGTH
-  static size_type length(block*b){
-  	if(!b) return 0;
-  	return 1+length(b->next);
-  }
-#endif
   rxx_allocator() {
     init();
   }
@@ -79,15 +54,10 @@ public:
   }
 
   ~rxx_allocator() {
-    if(_M_current_block){
-      chain_lock.lock();
-      _M_current_block->next=allocated_blocks;
-      allocated_blocks=_M_first_block;
-#ifdef DEBUG_CHAIN_LENGTH
-      Q_ASSERT(length(allocated_blocks)*_S_block_size<(1<<25)) //32M
-#endif
-      chain_lock.unlock();
-    }
+    for (size_type index = 0; index < _M_block_index + 1; ++index)
+      delete[] _M_storage[index];
+
+    ::free(_M_storage);
   }
 
   pointer address(reference __val) { return &__val; }
@@ -101,42 +71,22 @@ public:
     const size_type bytes = __n * sizeof(_Tp);
 
     if (_M_current_block == 0
-        || (sizeof(_M_current_block->data)) < ( _M_current_index + bytes))
+	|| _S_block_size < _M_current_index + bytes)
       {
-        block *new_block=0;
-        if(chain_lock.tryLock()){
-          if(allocated_blocks){
-            new_block=allocated_blocks;
-            allocated_blocks=allocated_blocks->next;
-          }
-          chain_lock.unlock();
-        }
-        
-        if(!new_block){
-          new_block = new block;
-        }
+	++_M_block_index;
 
-        ::memset(new_block->data, 0, _S_null_size - sizeof(block*) );
-        if(_M_first_block){
-          _M_current_block->next=new_block;
-        } else {
-          _M_first_block = new_block;
-        }
+	_M_storage = reinterpret_cast<char**>
+	  (::realloc(_M_storage, sizeof(char*) * (1 + _M_block_index)));
 
-        _M_current_block=new_block;
-        _M_current_index = 0;
-        _M_nulled_index=_S_null_size;
+	_M_current_block = _M_storage[_M_block_index] = reinterpret_cast<char*>
+	  (new char[_S_block_size]);
+
+	::memset(_M_current_block, 0, _S_block_size);
+	_M_current_index = 0;
       }
 
-    if( ( _M_nulled_index - sizeof(block*) ) < (_M_current_index + bytes) ){
-      ::memset( (char*)_M_current_block + _M_nulled_index, 0, _S_null_size);
-      _M_nulled_index+=_S_null_size;
-      Q_ASSERT(_M_nulled_index <= _S_block_size );
-    }
-
-
     pointer p = reinterpret_cast<pointer>
-      (_M_current_block->data + _M_current_index);
+      (_M_current_block + _M_current_index);
 
     _M_current_index += bytes;
 
@@ -159,23 +109,20 @@ private:
 
   void init()
   {
+    _M_block_index = max_block_count;
     _M_current_index = 0;
+    _M_storage = 0;
     _M_current_block = 0;
-    _M_first_block = 0;
   }
 
   template <class _Tp1> rxx_allocator(const rxx_allocator<_Tp1> &__o) {}
 
 private:
+  size_type _M_block_index;
   size_type _M_current_index;
-  size_type _M_nulled_index;
-  block *_M_current_block;
-  block *_M_first_block;
+  char *_M_current_block;
+  char **_M_storage;
 };
-template<class T>
-typename rxx_allocator<T>::block *rxx_allocator<T>::allocated_blocks = 0;
-
-template<class T> QMutex rxx_allocator<T>::chain_lock;
 
 #endif // RXX_ALLOCATOR_H
 
