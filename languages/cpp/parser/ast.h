@@ -731,6 +731,7 @@ public:
 
   uint namespace_name;
   LinkageBodyAST *linkage_body;
+  bool inlined : 1;
 };
 
 class NamespaceAliasDefinitionAST : public DeclarationAST

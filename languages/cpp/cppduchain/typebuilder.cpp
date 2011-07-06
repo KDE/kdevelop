@@ -291,6 +291,12 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         case Token_char:
           type = IntegralType::TypeChar;
           break;
+        case Token_char16_t:
+          type = IntegralType::TypeChar16_t;
+          break;
+        case Token_char32_t:
+          type = IntegralType::TypeChar32_t;
+          break;
         case Token_wchar_t:
           type = IntegralType::TypeWchar_t;
           break;

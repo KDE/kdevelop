@@ -96,6 +96,19 @@ private slots:
   void testEnumClass();
   void testRightAngleBrackets_data();
   void testRightAngleBrackets();
+  void testCharacterTypes_data();
+  void testCharacterTypes();
+  void testRawStrings_data();
+  void testRawStrings();
+  void testNullPtr_data();
+  void testNullPtr();
+  void testInlineNamespace();
+
+protected:
+  /**
+   * dump @p node and print problems of @c control
+   */
+  void dump(AST* node);
 
 private:
   Control control;

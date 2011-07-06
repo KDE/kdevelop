@@ -423,8 +423,11 @@ bool Parser::skipUntilDeclaration()
         case '~':
         case Token_scope:
         case Token_identifier:
+        case Token_inline:
         case Token_operator:
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -494,6 +497,8 @@ bool Parser::skipUntilStatement()
         case Token_catch:
         case Token_throw:
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -680,6 +685,7 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
       return parseLinkageSpecification(node);
 
     case Token_namespace:
+    case Token_inline:
       return parseNamespace(node);
 
     case Token_using:
@@ -843,6 +849,13 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 {
   uint start = session->token_stream->cursor();
 
+  bool inlined = false;
+  if (session->token_stream->lookAhead() == Token_inline)
+    {
+      inlined = true;
+      advance();
+    }
+
   CHECK(Token_namespace);
 
   uint namespace_name = 0;
@@ -886,6 +899,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 
   NamespaceAST *ast = CreateNode<NamespaceAST>(session->mempool);
   ast->namespace_name = namespace_name;
+  ast->inlined = inlined;
   parseLinkageBody(ast->linkage_body);
 
   UPDATE_POS(ast, start, ast->linkage_body->end_token);
@@ -1234,6 +1248,8 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
       switch(session->token_stream->lookAhead())
         {
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -3978,6 +3994,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
     case Token_true:
     case Token_false:
     case Token_this:
+    case Token_nullptr:
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();

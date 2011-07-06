@@ -96,12 +96,7 @@ void TestParser::testVariadicTemplates()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -125,12 +120,7 @@ void TestParser::testStaticAssert()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -151,12 +141,7 @@ void TestParser::testConstExpr()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -181,12 +166,7 @@ void TestParser::testEnumClass()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -215,13 +195,99 @@ void TestParser::testRightAngleBrackets()
   code.prepend("template<int i> class X {};\n"
                "template<class T> class Y{};\n");
   TranslationUnitAST* ast = parse(code.toUtf8());
-  dumper.dump(ast, lastSession->token_stream);
-  if (!control.problems().isEmpty()) {
-    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
-    }
-  }
+  dump(ast);
 
   QCOMPARE(control.problems().isEmpty(), isValid);
 }
 
+void TestParser::testCharacterTypes_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2249.html
+  QTest::newRow("char") << "char c = 'a';";
+  QTest::newRow("wchar_t") << "wchar_t c = L'a';";
+  QTest::newRow("char16_t") << "char16_t c = u'a';";
+  QTest::newRow("char32_t") << "char32_t c = U'a';";
+
+  QTest::newRow("char-str") << "const char* c = \"a\";";
+  QTest::newRow("wchar_t-str") << "const wchar_t* c = L\"a\";";
+  QTest::newRow("char16_t-str") << "const char16_t* c = u\"a\";";
+  QTest::newRow("char32_t-str") << "const char32_t* c = U\"a\";";
+  QTest::newRow("utf8-str") << "const char* c = u8\"a\";";
+}
+
+void TestParser::testCharacterTypes()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testRawStrings_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2442.htm
+  QTest::newRow("char") << "const char* s = R\"(a)\";";
+  QTest::newRow("wchar_t") << "const wchar_t* s = LR\"(a)\";";
+  QTest::newRow("char16_t") << "const char16_t* s = uR\"(a)\";";
+  QTest::newRow("char32_t") << "const char32_t* s = UR\"(a)\";";
+  QTest::newRow("utf8") << "const char* s = u8R\"(a)\";";
+
+  QTest::newRow("empty") << "const char* s = R\"()\";";
+  QTest::newRow("delim1") << "const char* s = R\"g(a)g\";";
+  QTest::newRow("delim2") << "const char* s = R\"g()\")g\";";
+  QTest::newRow("delim3") << "const char* s = R\"*d~()\")*d~\";";
+  QTest::newRow("delim4") << "const char* s = R\"*d~()*d~))*d~\";";
+  QTest::newRow("escape") << "const char* s = R\"(\\n\\t)\";";
+  QTest::newRow("newline") << "const char* s = R\"(\n\t\n)\";";
+}
+
+void TestParser::testRawStrings()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testNullPtr_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // see also: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2431.pdf
+  QTest::newRow("assign") << "char* ch = nullptr;";
+  QTest::newRow("compare") << "if(ch == nullptr);";
+  QTest::newRow("ternary") << "char* ch3 = true ? nullptr : nullptr;";
+  QTest::newRow("sizeof") << "sizeof(nullptr);";
+  QTest::newRow("typeid") << "typeid(nullptr);";
+  QTest::newRow("throw") << "throw nullptr;";
+}
+
+void TestParser::testNullPtr()
+{
+  QFETCH(QString, code);
+
+  code = "void foo() {\n" + code + "\n}\n";
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testInlineNamespace()
+{
+  const QString code = "inline namespace foo {/*...*/}";
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}

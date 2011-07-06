@@ -72,6 +72,9 @@ private slots:
   void testDynamicArray();
   void testTypeID();
 
+  void testCharacterTypes_data();
+  void testCharacterTypes();
+
 public:
   enum DumpArea {
     DumpNone = 0,

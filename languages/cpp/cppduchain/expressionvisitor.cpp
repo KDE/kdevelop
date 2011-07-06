@@ -664,20 +664,34 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if(token.kind == Token_char_literal) {
       // char literal e.g. 'x'
       LOCKDUCHAIN;
-      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeChar));
-      m_lastInstance = Instance( true );
+      ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
       if ( token.size == 3 ) {
-        static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>( token.symbolByteArray().at(1) );
-      } else if (token.size == 4) {
-        if (token.symbolByteArray() == "'\\t'") {
-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\t');
-        } else if (token.symbolByteArray() == "'\\n'") {
-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\n');
-        } else if (token.symbolByteArray() == "'\\r'") {
-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\r');
+        charType->setValue<char>( token.symbolByteArray().at(1) );
+      } else {
+        QByteArray symbol = token.symbolByteArray();
+        if (symbol.startsWith('L')) {
+          charType->setDataType(IntegralType::TypeWchar_t);
+          symbol.right(symbol.size() - 1);
+        } else if (symbol.startsWith('u')) {
+          charType->setDataType(IntegralType::TypeChar16_t);
+          symbol.right(symbol.size() - 1);
+        } else if (symbol.startsWith('U')) {
+          charType->setDataType(IntegralType::TypeChar32_t);
+          symbol.right(symbol.size() - 1);
+        }
+        if (symbol.size() == 4) {
+          if (symbol == "'\\t'") {
+            charType->setValue<char>('\t');
+          } else if (symbol == "'\\n'") {
+            charType->setValue<char>('\n');
+          } else if (symbol == "'\\r'") {
+            charType->setValue<char>('\r');
+          }
         }
       }
 
+      m_lastType = AbstractType::Ptr(charType);
+      m_lastInstance = Instance( true );
     } else if(token.symbol() == True || token.symbol() == False) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
@@ -2242,6 +2256,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
+    ///TODO: proper support for wchar_t, char16_t and char32_t strings
     putStringType();
   }
 

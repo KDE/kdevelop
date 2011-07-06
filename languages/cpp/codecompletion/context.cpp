@@ -2027,6 +2027,8 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   if(!restrictedItems || m_onlyShow == ShowTypes) {
     ADD_TOKEN(bool);
     ADD_TOKEN(char);
+    ADD_TOKEN(char16_t);
+    ADD_TOKEN(char32_t);
     ADD_TOKEN(const);
     ADD_TOKEN(double);
     ADD_TOKEN(enum);
@@ -2085,6 +2087,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
     ADD_TOKEN(new);
     ADD_TOKEN(not);
     ADD_TOKEN(not_eq);
+    ADD_TOKEN(nullptr);
     ADD_TOKEN(or);
     ADD_TOKEN(or_eq);
     ADD_TOKEN(reinterpret_cast);

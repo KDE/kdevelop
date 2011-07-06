@@ -57,6 +57,11 @@ void TokenStream::splitRightShift(uint index)
   ++lastToken;
 }
 
+QString Lexer::SpecialCursor::toString() const
+{
+  return KDevelop::IndexedString::fromIndex(*current).str();
+}
+
 /**
  * Returns the character BEHIND the found comment
  * */
@@ -173,6 +178,8 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(case);
   ADD_TOKEN(catch);
   ADD_TOKEN(char);
+  ADD_TOKEN(char16_t);
+  ADD_TOKEN(char32_t);
   ADD_TOKEN(class);
   ADD_TOKEN(compl);
   ADD_TOKEN(const);
@@ -206,6 +213,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(new);
   ADD_TOKEN(not);
   ADD_TOKEN(not_eq);
+  ADD_TOKEN(nullptr);
   ADD_TOKEN(operator);
   ADD_TOKEN(or);
   ADD_TOKEN(or_eq);
@@ -300,8 +308,33 @@ void Lexer::tokenize(ParseSession* _session)
     if(cursor.isChar()) {
       (this->*s_scan_table[((uchar)*cursor)])();
     }else{
-      //The cursor represents an identifier
-      scan_identifier_or_keyword();
+      //check for utf8 strings
+      static const uint u8Index = KDevelop::IndexedString("u8").index();
+      //check for raw strings
+      static const uint u8RIndex = KDevelop::IndexedString("u8R").index();
+      static const uint uRIndex = KDevelop::IndexedString("uR").index();
+      static const uint URIndex = KDevelop::IndexedString("UR").index();
+      static const uint LRIndex = KDevelop::IndexedString("LR").index();
+
+      if (*cursor.current == u8Index) {
+        // check for utf8 string
+        // not calling scan_identifier_or_literal as u8
+        // is only supported for strings, not characters
+        if (*(cursor+1) == '"') {
+          ++cursor;
+          scan_string_constant();
+        } else {
+          scan_identifier_or_keyword();
+        }
+      } else if (*cursor.current == u8RIndex || *cursor.current == uRIndex
+                  || *cursor.current == URIndex || *cursor.current == LRIndex)
+      {
+        // probably raw string
+        scan_raw_string_or_identifier();
+      } else {
+          //The cursor represents an identifier
+          scan_identifier_or_keyword();
+      }
     }
     
     if(!m_leaveSize)
@@ -345,6 +378,9 @@ void Lexer::initialize_scan_table()
     }
 
   s_scan_table[int('L')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('u')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('U')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('R')] = &Lexer::scan_raw_string_or_identifier;
   s_scan_table[int('\n')] = &Lexer::scan_newline;
   s_scan_table[int('#')] = &Lexer::scan_preprocessor;
 
@@ -463,6 +499,66 @@ void Lexer::scan_string_constant()
   (*session->token_stream)[index++].kind = Token_string_literal;
 }
 
+void Lexer::scan_raw_string_constant()
+{
+  Q_ASSERT(*cursor == '"');
+  ++cursor;
+
+  (*session->token_stream)[index++].kind = Token_string_literal;
+
+  // find delimiter
+  KDevVarLengthArray<uint, 16> delim;
+  // NOTE: actually the spec says the delim should not be longer
+  //       than 16 *chars* but due to string concatenation
+  //       we don't really care about that and only look for
+  //       max. 16 - chars or strings - until we find a proper '(' char
+  int length = 0;
+  while (cursor < endCursor && *cursor && *cursor != '(' && length < 16)
+    {
+      delim.append(*cursor.current);
+      ++cursor;
+      ++length;
+    }
+
+  if (*cursor != '(')
+    {
+      KDevelop::ProblemPointer p = createProblem();
+      p->setDescription("expected R\"delim(");
+      control->reportProblem(p);
+      return;
+    }
+  ++cursor;
+
+  // parse raw string
+  bool delimFound = false;
+  while (cursor < endCursor && *cursor)
+    {
+      if (*cursor == ')') {
+        ++cursor;
+        // check for end delimiter
+        int i = 0;
+        while(i < delim.size() && cursor < endCursor && *cursor && *cursor.current == delim[i]) {
+          ++cursor;
+          ++i;
+        }
+        if (i == delim.size() && cursor < endCursor && *cursor == '"') {
+          ++cursor;
+          delimFound = true;
+          break;
+        }
+      } else {
+        ++cursor;
+      }
+    }
+
+  if (!delimFound)
+    {
+      KDevelop::ProblemPointer p = createProblem();
+      p->setDescription("expected )delim\"");
+      control->reportProblem(p);
+    }
+}
+
 void Lexer::scan_newline()
 {
   ++cursor;
@@ -497,6 +593,19 @@ void Lexer::scan_identifier_or_literal()
     default:
       scan_identifier_or_keyword();
       break;
+    }
+}
+
+void Lexer::scan_raw_string_or_identifier()
+{
+  if (*(cursor+1) == '"')
+    {
+      ++cursor;
+      scan_raw_string_constant();
+    }
+  else
+    {
+      scan_identifier_or_keyword();
     }
 }
 

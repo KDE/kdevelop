@@ -25,6 +25,7 @@
 #include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
+struct C;
 namespace KDevelop {
   class DUContext;
   class Declaration;
@@ -33,6 +34,7 @@ namespace KDevelop {
 
 namespace TypeUtils {
   using namespace KDevelop;
+
   /**
    * Returns the dereferenced and un-aliased type(example: ReferenceType(Typedef(PointerType(int))) -> PointerType(int))
    *

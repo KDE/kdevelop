@@ -820,6 +820,16 @@ TranslationUnitAST* TestParser::parse(const QByteArray& unit)
   return  parser.parse(lastSession);
 }
 
+void TestParser::dump(AST* node)
+{
+  dumper.dump(node, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
+}
+
 struct HasKindVisitor : protected DefaultVisitor
 {
 
