@@ -25,14 +25,15 @@
 
 [:
 
-#include <QtCore/QString>
-
 namespace QMake
 {
     class Lexer;
 }
 
 :]
+
+%parser_declaration_header "QtCore/QString"
+
 
 ------------------------------------------------------------
 -- Parser class members
