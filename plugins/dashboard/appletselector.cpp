@@ -38,7 +38,7 @@ AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWi
     setMainWidget(w);
     
     QStandardItemModel* model = new QStandardItemModel(this);
-    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString()/*, parentApp*/);
+    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString(), parentApp);
     
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
