@@ -33,11 +33,12 @@ AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWi
     m_ui->setupUi(w);
     
     m_ui->plugins->header()->setSortIndicator(0, Qt::AscendingOrder);
+    m_ui->addButton->setIcon(KIcon("list-add"));
     
     setMainWidget(w);
     
     QStandardItemModel* model = new QStandardItemModel(this);
-    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString(), parentApp);
+    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString()/*, parentApp*/);
     
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
@@ -50,10 +51,27 @@ AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWi
     
     m_ui->plugins->setModel(model);
     
+    connect(m_ui->plugins, SIGNAL(activated(QModelIndex)), SLOT(canAdd()));
     connect(m_ui->plugins, SIGNAL(doubleClicked(QModelIndex)), SLOT(selected(QModelIndex)));
+    connect(m_ui->addButton, SIGNAL(clicked(bool)), SLOT(addClicked()));
+}
+
+AppletSelector::~AppletSelector()
+{
+    delete m_ui;
 }
 
 void AppletSelector::selected(const QModelIndex& idx)
 {
     emit addApplet(idx.data(Qt::UserRole+1).toString());
+}
+
+void AppletSelector::addClicked()
+{
+    selected(m_ui->plugins->selectionModel()->currentIndex());
+}
+
+void AppletSelector::canAdd()
+{
+    m_ui->addButton->setEnabled(true);
 }

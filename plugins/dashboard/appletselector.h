@@ -31,9 +31,12 @@ class AppletSelector : public KDialog
     Q_OBJECT
     public:
         AppletSelector(const QString& parentApp, const QStringList&, QWidget* parent);
+        virtual ~AppletSelector();
         
     public slots:
         void selected(const QModelIndex& idx);
+        void addClicked();
+        void canAdd();
         
     signals:
         void addApplet(const QString& name);
