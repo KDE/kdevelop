@@ -190,6 +190,7 @@ protected:
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
   virtual void visitForStatement(ForStatementAST*);
   virtual void visitIfStatement(IfStatementAST*);
+  virtual void visitSwitchStatement(SwitchStatementAST*);
   virtual void visitDoStatement(DoStatementAST*);
   virtual void visitTryBlockStatement(TryBlockStatementAST*);
   virtual void visitCatchStatement(CatchStatementAST*);

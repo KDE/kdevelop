@@ -1003,6 +1003,24 @@ void ContextBuilder::visitIfStatement(IfStatementAST* node)
   }
 }
 
+void ContextBuilder::visitSwitchStatement(SwitchStatementAST* node)
+{
+  DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
+
+  visit(node->condition);
+
+  closeContext();
+
+  if (node->statement) {
+    const bool contextNeeded = createContextIfNeeded(node->statement, secondParentContext);
+
+    visit(node->statement);
+
+    if (contextNeeded)
+      closeContext();
+  }
+}
+
 void ContextBuilder::visitDoStatement(DoStatementAST *node)
 {
   if(!node->statement) {

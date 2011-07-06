@@ -72,6 +72,7 @@ private slots:
   void testInvalidContexts();
   void testMemberAccess();
   void testParentContexts();
+  void testCaseContext();
   void testUnaryOperators();
   void testBinaryOperators();
   void testDeclarationIsInitialization();
