@@ -23,7 +23,12 @@
 
 namespace KDevelop
 {
+/** @brief Class that represents a node in the control flow graph
 
+    This class will provide us the information to know how to navigate in a ControlFlowGraph.
+    It has two methods (next and alternative) that will tell us what are the next nodes and 
+    nodeRange and conditionRange that will tell us the code ranges that this nodes is located at.
+*/
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
 {
   public:

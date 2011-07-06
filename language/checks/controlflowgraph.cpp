@@ -24,7 +24,7 @@ using namespace KDevelop;
 struct ControlFlowGraph::Private
 {
     QList<ControlFlowNode*> m_nodes;
-    QMap<KDevelop::DUContext*, ControlFlowNode*> m_funcNodes;
+    QMap<KDevelop::Declaration*, ControlFlowNode*> m_funcNodes;
     QVector<ControlFlowNode*> m_deadNodes;
 };
 
@@ -43,10 +43,10 @@ void ControlFlowGraph::addEntry(ControlFlowNode* n)
     d->m_nodes += n;
 }
 
-void ControlFlowGraph::addEntry(KDevelop::DUContext* ctx, ControlFlowNode* n)
+void ControlFlowGraph::addEntry(Declaration* decl, ControlFlowNode* n)
 {
-  Q_ASSERT(ctx);
-  d->m_funcNodes.insert(ctx, n);
+  Q_ASSERT(d);
+  d->m_funcNodes.insert(decl, n);
 }
 
 void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
@@ -61,8 +61,8 @@ void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted
   
   deleted += node;
   
-  clearNodeRecursively(node->m_next, deleted);
-  clearNodeRecursively(node->m_alternative, deleted);
+  clearNodeRecursively(node->next(), deleted);
+  clearNodeRecursively(node->alternative(), deleted);
   
   delete node;
 }
@@ -94,12 +94,12 @@ QVector< ControlFlowNode* > ControlFlowGraph::deadNodes() const
     return d->m_deadNodes;
 }
 
-QList<DUContext*> ControlFlowGraph::contexts() const
+QList<Declaration*> ControlFlowGraph::declarations() const
 {
     return d->m_funcNodes.keys();
 }
 
-ControlFlowNode* ControlFlowGraph::nodePerContext(DUContext* ctx)
+ControlFlowNode* ControlFlowGraph::nodePerDeclaration(Declaration* decl)
 {
-    return d->m_funcNodes[ctx];
+    return d->m_funcNodes[decl];
 }

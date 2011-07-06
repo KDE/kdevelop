@@ -26,24 +26,46 @@
 namespace KDevelop {
 
 class Declaration;
-class DUContext;
 class ControlFlowNode;
+
+/**
+ * @brief The ControlFlowGraph describes the way a code interacts with the current state of a system
+ * 
+ * This class will store the information regarding how is the code flow going to change depending
+ * on what current state we have in our system. It will tell us what different code paths we have
+ * available by listing them in different ways and it will let us know what those paths depend on
+ * so that we can analyze it.
+ */
 
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
 {
   public:
+    /** Creates an empty graph. */
     ControlFlowGraph();
     ~ControlFlowGraph();
     
+    /** Adds an entry @p n to the graph */
     void addEntry(KDevelop::ControlFlowNode* n);
-    void addEntry(KDevelop::DUContext* ctx, KDevelop::ControlFlowNode* n);
+    
+    /** Adds an entry @p n to the graph given @p decl declaration */
+    void addEntry(KDevelop::Declaration* d, KDevelop::ControlFlowNode* n);
+    
+    /** Adds a node that does belong to the graph but that can't be accessed by any means. */
     void addDeadNode(ControlFlowNode* n);
+    
+    /** Clears the current graph as if it was just constructed */
     void clear();
     
-    QList<KDevelop::DUContext*> contexts() const;
-    ControlFlowNode* nodePerContext(DUContext* ctx);
+    /** @returns all declarations that have a node attached to */
+    QList<KDevelop::Declaration*> declarations() const;
     
+    /** @returns  the node attached to the declaration @p d*/
+    ControlFlowNode* nodePerDeclaration(KDevelop::Declaration* d);
+    
+    /** @returns all root nodes in the graph */
     QList<ControlFlowNode*> graphNodes() const;
+    
+    /** @returns all dead nodes in the graph */
     QVector<ControlFlowNode*> deadNodes() const;
   private:
     ControlFlowGraph(const ControlFlowGraph&);
