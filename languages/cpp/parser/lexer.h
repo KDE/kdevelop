@@ -71,29 +71,23 @@ TODO: reuse some pool / container class for the token array
 NOTE: token_count is actually the *size* of the token pool
       the last actually used token is lastToken
 */
-class TokenStream
+class TokenStream : public QVector<Token>
 {
 private:
   TokenStream(const TokenStream &);
   void operator = (const TokenStream &);
 
 public:
-  /**Creates a token stream with the default size of 1024 tokens.*/
+  /**Creates a token stream with the default reserved size of 1024 tokens.*/
   inline TokenStream(uint size = 1024)
-     : tokens(0),
-       index(0),
-       token_count(0),
-       lastToken(0)
+    : index(0)
   {
-    resize(size);
+    reserve(size);
   }
 
-  inline ~TokenStream()
-  { ::free(tokens); }
-
-  /**@return the size of the token stream.*/
-  inline uint size() const
-  { return token_count; }
+  /**@return the token at position @p index.*/
+  inline const Token &token(int index) const
+  { return at(index); }
 
   /**@return the "cursor" - the offset (index) of the token
   currently "observed" from the beginning of the stream.*/
@@ -104,14 +98,6 @@ public:
   inline void rewind(int i)
   { index = i; }
 
-  /**Resizes the token stream.*/
-  void resize(uint size)
-  {
-    Q_ASSERT(size > 0);
-    tokens = (Token*) ::realloc(tokens, sizeof(Token) * size);
-    token_count = size;
-  }
-
   /**Updates the cursor position to point to the next token and returns
   the cursor.*/
   inline uint nextToken()
@@ -119,30 +105,15 @@ public:
 
   /**@return the kind of the next (LA) token in the stream.*/
   inline int lookAhead(uint i = 0) const
-  { return tokens[index + i].kind; }
+  { return at(index + i).kind; }
 
   /**@return the kind of the current token in the stream.*/
   inline int kind(uint i) const
-  { return tokens[i].kind; }
+  { return at(i).kind; }
 
   /**@return the position of the current token in the c++ source buffer.*/
   inline uint position(uint i) const
-  { return tokens[i].position; }
-
-  /**@return the token at position @p index.*/
-  inline Token &operator[](int index)
-  { Q_ASSERT(index >= 0 && index < (int)token_count); return tokens[index]; }
-
-  /**@return the token at position @p index.*/
-  inline const Token &token(int index) const
-  { return tokens[index]; }
-
-  /**
-   * Set and remember the last token index.
-   * Anything after this index is not defined.
-   */
-  inline void setLastToken(uint index)
-  { lastToken = index; }
+  { return at(i).position; }
 
   /**
    * Split the right shift token at @p index into two distinct right angle brackets.
@@ -153,13 +124,7 @@ public:
   void splitRightShift(uint index);
 
 private:
-  Token *tokens;
   uint index;
-  uint token_count;
-  uint lastToken;
-
-private:
-  friend class Lexer;
 };
 
 /**C++ Lexer.*/
