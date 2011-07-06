@@ -110,6 +110,7 @@ public:
         return Base::data()[Base::size()-1];
     }
 
+    ///Removes last item from the array but does not return it, use @c back() if required.
     inline void pop_back() {
         Q_ASSERT(Base::size() > 0);
         Base::resize(Base::size()-1);
