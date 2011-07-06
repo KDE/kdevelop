@@ -107,7 +107,7 @@ QString zeroIndentation(QString str, int fromLine = 0) {
 
   return ret.join("\n");
 }
-namespace KDevelop{
+
 KDevelop::DocumentChangeSet& KDevelop::SourceCodeInsertion::changes() {
   return m_changeSet;
 }
@@ -242,10 +242,9 @@ QString KDevelop::SourceCodeInsertion::applyIndentation(QString decl) const {
   return ret.join("\n");;
 }
 
-QString SourceCodeInsertion::makeSignatureString(QList<SignatureItem> arg_signature, DUContext* context) {
+QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature, DUContext* context) {
   QString ret;
-  for(unsigned i=0;i<=arg_signature.size();i++){
-    const SourceCodeInsertion::SignatureItem& item=arg_signature.at(i);
+  foreach(const SourceCodeInsertion::SignatureItem& item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
     AbstractType::Ptr type = TypeUtils::removeConstants(item.type, context->topContext());
@@ -274,7 +273,6 @@ SimpleRange SourceCodeInsertion::insertionRange(int line)
     }
     return range;
   }
-  return SimpleRange(line, 0, line, 0);
 }
 
 bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, bool isConstant, QString body) {
@@ -329,7 +327,7 @@ SimpleCursor SourceCodeInsertion::end() const
   
 }
 
-KDevelop::SourceCodeInsertion::InsertionPoint KDevelop::SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
+SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
   Q_UNUSED(policy);
   InsertionPoint ret;
   ret.line = end().line;
@@ -375,7 +373,7 @@ KDevelop::SourceCodeInsertion::InsertionPoint KDevelop::SourceCodeInsertion::fin
     
   return ret;
 }
-}
+
 bool Cpp::SourceCodeInsertion::insertSlot(QString name, QString normalizedSignature) {
     if(!m_context || !m_codeRepresentation)
       return false;
