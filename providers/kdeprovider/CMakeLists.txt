@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(kdevkdeprovider_PART_SRCS kdeprojectsmodel.cpp
+set(kdevkdeprovider_PART_SRCS
     kdeproviderwidget.cpp
     kdeproviderplugin.cpp
     kdeprojectsmodel.cpp

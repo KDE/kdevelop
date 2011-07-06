@@ -244,15 +244,15 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(decl->url().toUrl());
       if(doc && doc->textDocument()) {
         QString body = doc->textDocument()->text(decl->internalContext()->rangeInCurrentRevision().textRange());
-        SourceCodeInsertion ins(targetTopContext);
+        KDevelop::SourceCodeInsertion ins(targetTopContext);
         QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
 
         ins.setSubScope(namespaceIdentifier);
         
-        QList<SourceCodeInsertion::SignatureItem> signature;
+        QList<KDevelop::SourceCodeInsertion::SignatureItem> signature;
         
         foreach(Declaration* argument,  funDecl->internalFunctionContext()->localDeclarations()) {
-          SourceCodeInsertion::SignatureItem item;
+          KDevelop::SourceCodeInsertion::SignatureItem item;
           item.name = argument->identifier().toString();
           item.type = argument->abstractType();
           signature.append(item);
