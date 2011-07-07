@@ -29,7 +29,7 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     m_ui=new Ui::ReviewPatch;
     QWidget* w= new QWidget(this);
     m_ui->setupUi(w);
-    m_ui->repositories()->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_ui->repositories->setInsertPolicy(QComboBox::InsertAlphabetically);
     setMainWidget(w);
     
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
