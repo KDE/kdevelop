@@ -60,7 +60,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
     QList<KDevelop::Declaration*> declarations() const;
     
     /** @returns  the node attached to the declaration @p d*/
-    ControlFlowNode* nodePerDeclaration(KDevelop::Declaration* d);
+    ControlFlowNode* nodePerDeclaration(KDevelop::Declaration* d) const;
     
     /** @returns all root nodes in the graph */
     QList<ControlFlowNode*> graphNodes() const;

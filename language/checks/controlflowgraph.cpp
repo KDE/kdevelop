@@ -99,7 +99,7 @@ QList<Declaration*> ControlFlowGraph::declarations() const
     return d->m_funcNodes.keys();
 }
 
-ControlFlowNode* ControlFlowGraph::nodePerDeclaration(Declaration* decl)
+ControlFlowNode* ControlFlowGraph::nodePerDeclaration(Declaration* decl) const
 {
-    return d->m_funcNodes[decl];
+    return d->m_funcNodes.value(decl);
 }
