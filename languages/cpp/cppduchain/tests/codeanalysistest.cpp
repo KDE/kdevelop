@@ -21,6 +21,7 @@
 #include <language/duchain/duchain.h>
 #include <language/checks/controlflowgraph.h>
 #include <language/checks/controlflownode.h>
+#include <language/duchain/declaration.h>
 
 QTEST_MAIN(CodeAnalysisTest)
 
@@ -127,14 +128,20 @@ class ControlFlowToDot
     ControlFlowToDot(QTextStream* dev, const QByteArray& sources) : m_dev(dev), m_sources(sources)
     {}
     
-    bool exportGraph(const QByteArray& name, const ControlFlowGraph* graph)
+    static QString escapeQuotes(const QString& _s) { QString s(_s); s.replace('\"', "\\\""); return s;}
+    
+    bool exportGraph(const QByteArray&, const ControlFlowGraph* graph)
     {
       bool r = true;
       int i=0;
       *m_dev << "digraph G {\n";
+      *m_dev << "  label = \""+escapeQuotes(m_sources)+"\";\n";
       QList<ControlFlowNode*> n=graph->graphNodes();
       for(QList<ControlFlowNode*>::const_iterator it=n.constBegin(), itEnd=n.constEnd(); it!=itEnd; ++it, ++i) {
         *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
+        Declaration* d=declarationForNode(graph, *it);
+        if(d)
+          *m_dev << "\tlabel=\""+d->toString()+"\"\n";
         r &= exportNode(*it);
         *m_dev << "  }\n";
       }
@@ -152,6 +159,14 @@ class ControlFlowToDot
       *m_dev << "}\n";
       
       return r;
+    }
+    
+    Declaration* declarationForNode(const ControlFlowGraph* graph, const ControlFlowNode* node) const {
+      foreach(Declaration* d, graph->declarations()) {
+        if(graph->nodePerDeclaration(d))
+          return d;
+      }
+      return 0;
     }
     
 private:
@@ -190,7 +205,14 @@ private:
         return QString("dummy_%1").arg(uniqueId++);
       } else {
         int a=cursorToPos(range.start), b=cursorToPos(range.end);
-        return "\""+m_sources.mid(a, b-a)+"\"";
+        QString ret=m_sources.mid(a, b-a);
+        if(node->type()==ControlFlowNode::Conditional) {
+          RangeInRevision crange = node->conditionRange();
+          int ca=cursorToPos(crange.start), cb=cursorToPos(crange.end);
+          ret += " - condtion: "+m_sources.mid(ca, cb-ca);
+        }
+        
+        return "\""+ret+"\"";
       }
     }
     
