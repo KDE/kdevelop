@@ -18,11 +18,14 @@
 
 #ifndef MODIFICATIONSREPOSITORY_H
 #define MODIFICATIONSREPOSITORY_H
+
 #include <language/languageexport.h>
 #include <language/editor/cursorinrevision.h>
 
 namespace KDevelop
 {
+
+class RangeInRevision;
 class Declaration;
 
 /**
@@ -84,6 +87,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
         
         /** @returns the access located at the position specified by @p cursor */
         DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
+        
+        /** @returns all the data accesses inside the @p range range */
+        QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
     private:
         QList<DataAccess*> m_modifications;
 };

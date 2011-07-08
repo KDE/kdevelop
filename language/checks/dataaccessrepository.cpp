@@ -17,6 +17,7 @@
 */
 
 #include "dataaccessrepository.h"
+#include <editor/rangeinrevision.h>
 
 namespace KDevelop {
 
@@ -36,6 +37,17 @@ DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
             return a;
     }
     return 0;
+}
+
+QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& range) const
+{
+    QList<DataAccess*> ret;
+    foreach(DataAccess* a, m_modifications) {
+        if(range.contains(a->pos()))
+            ret+=a;
+    }
+    
+    return ret;
 }
 
 }
