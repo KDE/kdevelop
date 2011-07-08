@@ -106,6 +106,7 @@ void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
   
   ControlFlowNode* nextNode = new ControlFlowNode;
   
+  previous->setConditionRange(RangeInRevision(cursorForToken(node->condition->start_token), cursorForToken(node->condition->end_token)));
   previous->setNext(createCompoundStatement(node->statement, nextNode));
   previous->setAlternative(node->else_statement ? createCompoundStatement(node->else_statement, nextNode) : nextNode);
   
@@ -127,6 +128,7 @@ void ControlFlowGraphBuilder::visitWhileStatement(WhileStatementAST* node)
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, conditionNode);
   
   previous->setNext(conditionNode);
+  conditionNode->setConditionRange(RangeInRevision(cursorForToken(node->condition->start_token), cursorForToken(node->condition->end_token)));
   conditionNode->setNext(bodyNode);
   conditionNode->setAlternative(nextNode);
   
@@ -150,6 +152,7 @@ void ControlFlowGraphBuilder::visitForStatement(ForStatementAST* node)
   
   conditionNode->setNext(bodyNode);
   conditionNode->setAlternative(nextNode);
+  conditionNode->setConditionRange(RangeInRevision(cursorForToken(node->condition->start_token), cursorForToken(node->condition->end_token)));
   
   previous->setNext(conditionNode);
   nextNode->setStartCursor(cursorForToken(node->end_token));
@@ -168,6 +171,7 @@ void ControlFlowGraphBuilder::visitConditionalExpression(ConditionalExpressionAS
   
   previous->setNext(trueNode);
   previous->setAlternative(elseNode);
+  previous->setConditionRange(RangeInRevision(cursorForToken(node->condition->start_token), cursorForToken(node->condition->end_token)));
   
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
@@ -187,6 +191,7 @@ void ControlFlowGraphBuilder::visitDoStatement(DoStatementAST* node)
   
   previous->setNext(bodyNode);
   condNode->setAlternative(bodyNode);
+  condNode->setConditionRange(RangeInRevision(cursorForToken(node->expression->start_token), cursorForToken(node->expression->end_token)));
   
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
@@ -248,6 +253,7 @@ void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
   visit(node->statement);
   switchNode->setNext(m_defaultNode);
   switchNode->setAlternative(m_caseNodes.isEmpty() ? 0 : m_caseNodes.first().first);
+  switchNode->setConditionRange(RangeInRevision(cursorForToken(node->condition->start_token), cursorForToken(node->condition->end_token)));
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
