@@ -811,6 +811,15 @@ void TestParser::testTypeID()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testRegister()
+{
+  // see also: http://bugsfiles.kde.org/attachment.cgi?id=61647
+  QString code = "void foo() { register int i; int register j; }\n";
+  TranslationUnitAST* ast = parse(code.toLocal8Bit());
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems

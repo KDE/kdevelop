@@ -3478,6 +3478,8 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
   return false;
 }
 
+///TODO: decl-specifier-seq is currently not used at all,
+///      can lead to problems for certain orders of specifiers
 bool Parser::parseBlockDeclaration(DeclarationAST *&node)
 {
   switch(session->token_stream->lookAhead())
@@ -3517,6 +3519,9 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
       rewind(start);
       return false;
     }
+
+  if (!storageSpec) // see also https://bugs.kde.org/show_bug.cgi?id=253827
+    parseStorageClassSpecifier(storageSpec);
 
   parseCvQualify(cv);
   spec->cv = cv;

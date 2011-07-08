@@ -81,6 +81,8 @@ private slots:
   void testTypeID_data();
   void testTypeID();
 
+  void testRegister();
+
   //BEGIN C++2011 support
   void testRangeBasedFor();
   void testRValueReference();
