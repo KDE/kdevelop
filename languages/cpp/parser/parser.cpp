@@ -1774,9 +1774,14 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
       ADVANCE_NR('}', "}");
     }
-  else
+  else if (session->token_stream->lookAhead() == ';')
     {
       ast->isOpaque = true;
+    }
+  else
+    {
+      rewind(start);
+      return false;
     }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);

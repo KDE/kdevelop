@@ -828,7 +828,6 @@ void TestParser::inlineTemplate()
   QVERIFY(control.problems().isEmpty());
 }
 
-
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems

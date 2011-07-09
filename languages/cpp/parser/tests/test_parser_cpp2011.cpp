@@ -160,6 +160,10 @@ void TestParser::testEnumClass_data()
   QTest::newRow("enum-opaque-class") << "enum class Foo;";
   QTest::newRow("enum-opaque-class-typespec") << "enum class Foo : char;";
   QTest::newRow("enum-opaque-typespec") << "enum Foo : unsigned int;";
+
+  // elaborate type specifier (was broken initially by the support for the above)
+  QTest::newRow("elaborate-var") << "enum X{}; enum X myVar;\n";
+  QTest::newRow("elaborate-return") << "enum X{}; enum X foo(); enum X foo() {}\n";
 }
 
 void TestParser::testEnumClass()
