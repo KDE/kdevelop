@@ -33,28 +33,17 @@ void TokenStream::splitRightShift(uint index)
 {
   Q_ASSERT(kind(index) == Token_rightshift);
 
-  // resize if required, as we will insert another token
-  if (lastToken == token_count) {
-    resize(token_count * 2);
-  }
-
-  // move tokens by one to make room for new token
-  for(uint i = token_count - 1; i > index; --i) {
-    tokens[i] = tokens[i - 1];
-  }
-
   // change kind of current token and adapt size
-  Token &current_token = tokens[index];
+  Token &current_token = (*this)[index];
   Q_ASSERT(current_token.size == 2);
   current_token.size = 1;
   current_token.kind = '>';
 
   // copy to next token (i.e. the new one) and adapt position
-  Token &next_token = tokens[index+1];
-  next_token = current_token;
+  Token next_token = current_token;
   next_token.position += 1;
 
-  ++lastToken;
+  insert(index+1, next_token);
 }
 
 QString Lexer::SpecialCursor::toString() const
@@ -275,6 +264,8 @@ Lexer::Lexer(Control *c)
 void Lexer::tokenize(ParseSession* _session)
 {
   session = _session;
+  TokenStream* stream = session->token_stream;
+  Q_ASSERT(stream->isEmpty());
 
   if (!s_initialized)
     initialize_scan_table();
@@ -282,13 +273,16 @@ void Lexer::tokenize(ParseSession* _session)
   m_canMergeComment = false;
   m_firstInLine = true;
   m_leaveSize = false;
-  
-  session->token_stream->resize(1024);
-  (*session->token_stream)[0].kind = Token_EOF;
-  (*session->token_stream)[0].session = session;
-  (*session->token_stream)[0].position = 0;
-  (*session->token_stream)[0].size = 0;
+
+  {
+  Token eof;
+  eof.kind = Token_EOF;
+  eof.session = session;
+  eof.position = 0;
+  eof.size = 0;
+  stream->append(eof);
   index = 1;
+  }
 
   cursor.current = session->contents();
   endCursor = session->contents() + session->contentsVector().size();
@@ -296,16 +290,19 @@ void Lexer::tokenize(ParseSession* _session)
     --endCursor;
 
   while (cursor < endCursor) {
-    size_t previousIndex = index;
-    
-    if (index == session->token_stream->size())
-      session->token_stream->resize(session->token_stream->size() * 2);
+    Q_ASSERT(stream->size() == index);
 
-    Token *current_token = &(*session->token_stream)[index];
-    current_token->session = session;
-    current_token->position = cursor.offsetIn( session->contents() );
-    current_token->size = 0;
-    
+    size_t previousIndex = index;
+
+    {
+    Token token;
+    token.session = session;
+    token.position = cursor.offsetIn( session->contents() );
+    token.size = 0;
+    stream->append(token);
+    }
+    Token* current_token = &(session->token_stream->last());
+
     if(cursor.isChar()) {
       (this->*s_scan_table[((uchar)*cursor)])();
     }else{
@@ -337,7 +334,8 @@ void Lexer::tokenize(ParseSession* _session)
           scan_identifier_or_keyword();
       }
     }
-    
+
+
     if(!m_leaveSize)
       current_token->size = cursor.offsetIn( session->contents() ) - current_token->position;
     
@@ -349,17 +347,18 @@ void Lexer::tokenize(ParseSession* _session)
     
     if(previousIndex != index)
       m_firstInLine = false;
-    
+    else // skipped index, remove last appended token again
+      stream->pop_back();
   }
 
-    if (index == session->token_stream->size())
-      session->token_stream->resize(session->token_stream->size() * 2);
-  (*session->token_stream)[index].session = session;
-  (*session->token_stream)[index].position = cursor.offsetIn(session->contents());
-  (*session->token_stream)[index].size = 0;
-  (*session->token_stream)[index].kind = Token_EOF;
-
-  session->token_stream->setLastToken(index);
+  {
+  Token eof;
+  eof.kind = Token_EOF;
+  eof.session = session;
+  eof.position = cursor.offsetIn( session->contents() );
+  eof.size = 0;
+  stream->append(eof);
+  }
 }
 
 void Lexer::initialize_scan_table()
