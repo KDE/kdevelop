@@ -928,10 +928,12 @@ public:
   DECLARE_AST_NODE(SimpleTypeSpecifier)
 
   const ListNode<uint> *integrals;
-  uint type_of;
   TypeIdAST *type_id;
-  ExpressionAST *expression;
   NameAST *name;
+  // expression for typeof or decltype
+  ExpressionAST *expression;
+  bool isTypeof : 1;
+  bool isDecltype : 1;
 };
 
 class SizeofExpressionAST : public ExpressionAST

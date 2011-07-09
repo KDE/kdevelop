@@ -39,6 +39,8 @@
 #include "debugbuilders.h"
 #include <language/duchain/types/typealiastype.h>
 #include <util/pushvalue.h>
+#include "typeutils.h"
+#include <functional>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -263,6 +265,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
     closeType();
 }
 
+///TODO: share code with TypeASTVisitor
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if(m_onlyComputeSimplified) {
@@ -273,11 +276,36 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   m_lastTypeWasInstance = false;
   m_lastTypeWasAuto = false;
 
-  if (node->type_of && node->expression) {
+  if ((node->isTypeof || node->isDecltype) && node->expression) {
     node->expression->ducontext = currentContext();
     ExpressionParser parser;
     ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
-    openType(result.type.abstractType());
+    AbstractType::Ptr type = result.type.abstractType();
+    /// const& for decltype in additional parens - but only if it's not already const&
+    /// see spec 7.1.6/4
+    if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression
+        && (type && (!TypeUtils::isConstant(type) || !TypeUtils::isReferenceType(type))) )
+    {
+      ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
+      int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
+      bool isInParen = stringFromContents(editor()->parseSession()->contentsVector(), startPosition, 1) == "(";
+      if (isInParen) {
+        // type might already be a ref type
+        ReferenceType::Ptr refType = type.cast<ReferenceType>();
+        if (!refType) {
+          refType = ReferenceType::Ptr(new ReferenceType);
+          refType->setBaseType(type);
+        }
+        AbstractType::Ptr base = refType->baseType();
+        if (!(base->modifiers() & AbstractType::ConstModifier)) {
+          base->setModifiers(base->modifiers() | AbstractType::ConstModifier);
+          refType->setBaseType(base);
+        }
+        type = refType.cast<AbstractType>();
+      }
+    }
+
+    openType(type);
     openedType = true;
   } else if (node->integrals) {
     uint type = IntegralType::TypeNone;

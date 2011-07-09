@@ -1284,7 +1284,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
   else if (session->token_stream->lookAhead() == Token___typeof)
     {
       ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
-      ast->type_of = session->token_stream->cursor();
+      ast->isTypeof = true;
       advance();
 
       if (session->token_stream->lookAhead() == '(')
@@ -1309,8 +1309,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
   else if (session->token_stream->lookAhead() == Token_decltype)
     {
       ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
-      ///TODO: differentiate between typeof and decltype
-      ast->type_of = session->token_stream->cursor();
+      ast->isDecltype = true;
       advance();
       ADVANCE('(', "(");
       parseExpression(ast->expression);

@@ -201,6 +201,7 @@ private slots:
   void testDefaultDelete();
   void testEnum2011_data();
   void testEnum2011();
+  void testDecltype();
   //END C++2011
 
 private:

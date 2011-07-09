@@ -26,6 +26,9 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/integraltype.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -187,4 +190,86 @@ void TestDUChain::testEnum2011()
     QVERIFY(!dec->isForwardDeclaration());
     QCOMPARE(dec->internalContext()->localScopeIdentifier().isEmpty(), !scoped);
   }
+}
+
+void TestDUChain::testDecltype()
+{
+  // see also: spec 7.1.6/4
+  QByteArray code = "const int&& foo();\n"
+                    "int i;\n"
+                    "struct A { double x; };\n"
+                    "const A* a = new A();\n"
+                    // start decltype examples
+                    "decltype(foo()) x1 = i;\n"
+                    "decltype(i) x2;\n"
+                    "decltype(a->x) x3;\n"
+                    "decltype((a->x)) x4;\n"
+                    // other examples
+                    "const int& j = i;\n"
+                    "decltype((j)) x5;\n"
+                    "int& j2 = i;\n"
+                    "decltype((j2)) x6;\n"
+                    ;
+
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+
+  // x1
+  QCOMPARE(top->localDeclarations().size(), 12);
+  FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
+  QVERIFY(fooDec);
+  QVERIFY(fooDec->type<FunctionType>());
+  QCOMPARE(fooDec->type<FunctionType>()->returnType()->toString(), QString("const int&&"));
+  Declaration* x1Dec = top->localDeclarations().at(4);
+  QVERIFY(x1Dec->abstractType()->equals(fooDec->type<FunctionType>()->returnType().constData()));
+
+  // x2
+  Declaration* iDec = top->localDeclarations().at(1);
+  Declaration* x2Dec = top->localDeclarations().at(5);
+  QVERIFY(x2Dec->abstractType()->equals(iDec->abstractType().constData()));
+
+  // x3
+  Declaration* ADec = top->localDeclarations().at(2);
+  QVERIFY(ADec->internalContext());
+  QCOMPARE(ADec->internalContext()->localDeclarations().size(), 1);
+  Declaration* AxDec = ADec->internalContext()->localDeclarations().first();
+  Declaration* x3Dec = top->localDeclarations().at(6);
+  QVERIFY(x3Dec->abstractType()->equals(AxDec->abstractType().constData()));
+
+  // x4
+  // const& due to additional parens
+  Declaration* x4Dec = top->localDeclarations().at(7);
+  QVERIFY(!x4Dec->abstractType()->equals(AxDec->abstractType().constData()));
+  QVERIFY(!(x4Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeDouble);
+
+  // x5
+  // already const&, make sure it's not doubled due to additional parens
+  Declaration* jDec = top->localDeclarations().at(8);
+  Declaration* x5Dec = top->localDeclarations().at(9);
+  QVERIFY(x5Dec->abstractType()->equals(jDec->abstractType().constData()));
+  QVERIFY(!(x5Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x5Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeInt);
+
+  // x6
+  // already &, make sure it's not doubled due to additional parens, but must be const
+  Declaration* j2Dec = top->localDeclarations().at(10);
+  Declaration* x6Dec = top->localDeclarations().at(11);
+  // jDec has the type that we want
+  QVERIFY(x6Dec->abstractType()->equals(jDec->abstractType().constData()));
+  QVERIFY(!(x6Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x6Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(x6Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(x6Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x6Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeInt);
 }
