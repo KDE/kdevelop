@@ -820,6 +820,15 @@ void TestParser::testRegister()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::inlineTemplate()
+{
+  QByteArray code = "template <typename T> inline void a() {}\n";
+  TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems

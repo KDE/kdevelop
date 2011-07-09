@@ -82,6 +82,7 @@ private slots:
   void testTypeID();
 
   void testRegister();
+  void inlineTemplate();
 
   //BEGIN C++2011 support
   void testRangeBasedFor();

@@ -685,7 +685,6 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
       return parseLinkageSpecification(node);
 
     case Token_namespace:
-    case Token_inline:
       return parseNamespace(node);
 
     case Token_using:
@@ -704,6 +703,11 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
     case Token_static_assert:
       return parseStaticAssert(node);
 
+    case Token_inline:
+      if (session->token_stream->lookAhead(+1) == Token_namespace) {
+        return parseNamespace(node);
+      }
+      // else fallthrough
     default:
       {
         const ListNode<uint> *cv = 0;
