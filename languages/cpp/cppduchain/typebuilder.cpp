@@ -284,7 +284,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     /// const& for decltype in additional parens - but only if it's not already const&
     /// see spec 7.1.6/4
     if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression
-        && (type && (!TypeUtils::isConstant(type) || !TypeUtils::isReferenceType(type))) )
+        && (type && !TypeUtils::isReferenceType(type)))
     {
       ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
       int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
@@ -297,10 +297,6 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           refType->setBaseType(type);
         }
         AbstractType::Ptr base = refType->baseType();
-        if (!(base->modifiers() & AbstractType::ConstModifier)) {
-          base->setModifiers(base->modifiers() | AbstractType::ConstModifier);
-          refType->setBaseType(base);
-        }
         type = refType.cast<AbstractType>();
       }
     }
