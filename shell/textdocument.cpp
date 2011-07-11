@@ -308,13 +308,12 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
-        //katepart with out own restructured UI configuration
-        ///FIXME: put katepartui replacement into kdevplatform
-        ///FIXME: look in share/$appname/, i.e. support Quanta, Gluon, ...
-        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevplatform/katepartui.rc");
+        //katepart with our own restructured UI configuration
+        const QString uiFile = KGlobal::mainComponent().componentName() + "/katepartui.rc";
+        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", uiFile);
         if (!katePartUIs.isEmpty()) {
             const QString katePartUI = katePartUIs.last();
-            const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevplatform/katepartui.rc");
+            const QString katePartLocalUI = KStandardDirs::locateLocal("data", uiFile);
             if (!QFile::exists(katePartLocalUI)) {
                 // prevent warning:
                 // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
