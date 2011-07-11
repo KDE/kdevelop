@@ -265,6 +265,7 @@ void TestDUChain::testDecltype()
   // already &, make sure it's not doubled due to additional parens, but must not be const
   Declaration* j2Dec = top->localDeclarations().at(10);
   Declaration* x6Dec = top->localDeclarations().at(11);
+  QVERIFY(x6Dec->abstractType()->equals(j2Dec->abstractType().constData()));
   QVERIFY(!(x6Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
   QVERIFY(x6Dec->abstractType().cast<ReferenceType>());
   QVERIFY(!(x6Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier));
