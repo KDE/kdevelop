@@ -108,6 +108,7 @@ void DefaultVisitor::visitDeclarator(DeclaratorAST *node)
   visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
+  visit(node->trailing_return_type);
 }
 
 void DefaultVisitor::visitDeleteExpression(DeleteExpressionAST *node)

@@ -29,6 +29,8 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/arraytype.h>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -278,4 +280,67 @@ void TestDUChain::testDecltype()
   Declaration* x7Dec = top->localDeclarations().at(11);
   // x6 has the type that we want
   QVERIFY(x7Dec->abstractType()->equals(x6Dec->abstractType().constData()));
+}
+
+void TestDUChain::testTrailingReturnType()
+{
+  {
+    QByteArray code = "auto foo() -> int;\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    Declaration* dec = top->localDeclarations().first();
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    QVERIFY(funcType->returnType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
+
+  {
+    QByteArray code = "class A { int x; }; auto foo(A* arg) -> decltype(arg->x);\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 2);
+    Declaration* dec = top->localDeclarations().at(1);
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    qDebug() << funcType->returnType()->toString();
+    QVERIFY(funcType->returnType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
+
+  {
+    // example from the spec, 8.0/5
+    QByteArray code = "auto f() -> int(*)[4];\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    Declaration* dec = top->localDeclarations().first();
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    qDebug() << funcType->returnType()->toString();
+    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Abort);
+    QVERIFY(funcType->returnType().cast<PointerType>());
+    QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>());
+    QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->dimension(), 4);
+    QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>()->dataType(),
+             (uint) IntegralType::TypeInt);
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
 }

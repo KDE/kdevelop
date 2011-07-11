@@ -654,6 +654,15 @@ FunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
   return functionType;
 }
 
+void TypeBuilder::visitTrailingReturnType(TrailingReturnTypeAST* node)
+{
+  DefaultVisitor::visitTrailingReturnType(node);
+
+  FunctionType::Ptr funcType = currentType<FunctionType>();
+  if (lastType() && funcType)
+    funcType->setReturnType(lastType());
+}
+
 void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {
   // Custom code - create array types
   if (node->array_dimensions) {

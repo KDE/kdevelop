@@ -68,6 +68,7 @@ protected:
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
   virtual void createTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForInitializer(InitializerAST *node);
+  virtual void visitTrailingReturnType(TrailingReturnTypeAST *node);
 
   /// Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.

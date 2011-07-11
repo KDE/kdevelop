@@ -930,6 +930,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
+  visit(node->trailing_return_type);
   //END Finished with default visitor
 
   if(m_currentInitializer)
