@@ -346,6 +346,5 @@ void TestParser::testAlternativeFunctionSyntax()
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
 
-  QEXPECT_FAIL("attribute", "we need to introduce abstract-declarator and related to properly parse this", Continue);
   QVERIFY(control.problems().isEmpty());
 }

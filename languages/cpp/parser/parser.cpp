@@ -1590,11 +1590,10 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
               }
           }
 
+        // trailing return type support
         if (session->token_stream->lookAhead() == Token_arrow)
           {
-            advance();
-            ///TODO: introduce parseTrailingReturnType
-            parseTypeSpecifier(ast->trailing_return_type);
+            parseTrailingReturnType(ast->trailing_return_type);
           }
       }
 
@@ -5210,6 +5209,30 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
   ast->throw_token = pos;
 
   parseAssignmentExpression(ast->expression);
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseTrailingReturnType(TrailingReturnTypeAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  CHECK(Token_arrow);
+
+  TrailingReturnTypeAST *ast = CreateNode<TrailingReturnTypeAST>(session->mempool);
+
+  // trailing-type-specifier-seq
+  TypeSpecifierAST* type = 0;
+  while (parseTypeSpecifier(type))
+    {
+      ast->type_specifier = snoc(ast->type_specifier, type, session->mempool);
+    }
+
+  // abstract-declarator_opt
+  parseAbstractDeclarator(ast->abstractDeclarator);
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;

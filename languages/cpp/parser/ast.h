@@ -95,6 +95,7 @@ class TemplateArgumentAST;
 class TemplateDeclarationAST;
 class TemplateParameterAST;
 class ThrowExpressionAST;
+class TrailingReturnTypeAST;
 class TranslationUnitAST;
 class TryBlockStatementAST;
 class CatchStatementAST;
@@ -200,6 +201,7 @@ public:
       Kind_ForRangeDeclaration,                 // 79
       Kind_TypeIDOperator,                      // 80
       Kind_StaticAssert,                        // 81
+      Kind_TrailingReturnType,                  // 82
       NODE_KIND_COUNT
     };
 
@@ -449,8 +451,7 @@ public:
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
-  ///TODO: follow spec and introduce TrailingReturnTypeAST and other stuff?
-  TypeSpecifierAST* trailing_return_type;
+  TrailingReturnTypeAST* trailing_return_type;
   bool isVariadic;
 };
 
@@ -1029,6 +1030,17 @@ public:
 
   uint throw_token;
   ExpressionAST *expression;
+};
+
+class TrailingReturnTypeAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(TrailingReturnType)
+
+  const ListNode<TypeSpecifierAST*> *type_specifier;
+  // TODO: attribute-specifier-seq
+  DeclaratorAST* abstractDeclarator;
 };
 
 class TranslationUnitAST : public AST, public CommentAST

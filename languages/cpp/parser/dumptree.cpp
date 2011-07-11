@@ -108,7 +108,8 @@ char const * const names[] = {
   "Kind_QProperty",
   "ForRangeDeclaration",
   "TypeIDOperator",
-  "StaticAssert"
+  "StaticAssert",
+  "TrailingReturnType"
 };
 
 DumpTree::DumpTree()

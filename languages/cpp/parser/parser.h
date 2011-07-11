@@ -169,6 +169,7 @@ public:
   bool parseMemberSpecification(DeclarationAST *&node);
   bool parseMultiplicativeExpression(ExpressionAST *&node);
   bool parseStaticAssert(DeclarationAST *&node);
+  bool parseTrailingReturnType(TrailingReturnTypeAST *&node);
   
   enum ParseNameAcceptTemplate {
     DontAcceptTemplate = 0,

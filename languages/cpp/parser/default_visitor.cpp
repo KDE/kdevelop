@@ -507,3 +507,10 @@ void DefaultVisitor::visitStaticAssert(StaticAssertAST* node)
   visit(node->expression);
   visit(node->string);
 }
+
+void DefaultVisitor::visitTrailingReturnType(TrailingReturnTypeAST* node)
+{
+  visitNodes(this, node->type_specifier);
+  visit(node->abstractDeclarator);
+}
+
