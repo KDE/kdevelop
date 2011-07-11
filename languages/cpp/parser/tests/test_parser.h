@@ -108,6 +108,8 @@ private slots:
   void testInlineNamespace();
   void testDecltype_data();
   void testDecltype();
+  void testAlternativeFunctionSyntax_data();
+  void testAlternativeFunctionSyntax();
 
 protected:
   /**

@@ -1589,6 +1589,13 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
                 advance();
               }
           }
+
+        if (session->token_stream->lookAhead() == Token_arrow)
+          {
+            advance();
+            ///TODO: introduce parseTrailingReturnType
+            parseTypeSpecifier(ast->trailing_return_type);
+          }
       }
 
     if (skipParen)

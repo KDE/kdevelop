@@ -322,3 +322,30 @@ void TestParser::testDecltype()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testAlternativeFunctionSyntax_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // example from http://en.wikipedia.org/wiki/C%2B%2B0x#Alternative_function_syntax
+  QTest::newRow("decltype") << "template<typename Lhs, typename Rhs>\n"
+                               "auto adding_func(const Lhs& lhs, const Rhs &rhs) -> decltype(lhs+rhs)\n"
+                               "{ return lhs + rhs; }\n";
+
+  // example from the spec 8.0/5
+  QTest::newRow("attribute") << "auto f()->int(*)[4];\n";
+
+  // simple case
+  QTest::newRow("simple") << "auto f() -> int { return 1; }\n";
+}
+
+void TestParser::testAlternativeFunctionSyntax()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QEXPECT_FAIL("attribute", "we need to introduce abstract-declarator and related to properly parse this", Continue);
+  QVERIFY(control.problems().isEmpty());
+}

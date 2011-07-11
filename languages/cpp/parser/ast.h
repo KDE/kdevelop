@@ -449,6 +449,8 @@ public:
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
+  ///TODO: follow spec and introduce TrailingReturnTypeAST and other stuff?
+  TypeSpecifierAST* trailing_return_type;
   bool isVariadic;
 };
 
