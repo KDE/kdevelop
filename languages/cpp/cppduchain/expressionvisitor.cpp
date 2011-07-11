@@ -213,7 +213,20 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_hadMemberAccess(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0), m_reportRealProblems(false) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source,
+                                     bool strict, bool propagateConstness)
+: m_strict(strict)
+, m_memberAccess(false)
+, m_skipLastNamePart(false)
+, m_hadMemberAccess(false)
+, m_source(source)
+, m_ignore_uses(0)
+, m_session(session)
+, m_currentContext(0)
+, m_topContext(0)
+, m_reportRealProblems(false)
+, m_propagateConstness(propagateConstness)
+{
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -347,7 +360,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
  *
  **/
   void ExpressionVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
-{
+  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     if( !m_lastInstance || !m_lastType ) {
@@ -407,9 +420,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       break;
     }
 
-  m_memberAccess = true;
-  visitName(node->name);
-  m_memberAccess = false;
+    m_memberAccess = true;
+    visitName(node->name);
+    m_memberAccess = false;
   }
 
 
@@ -475,9 +488,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
 
+    bool isConst = false;
+
     if( m_memberAccess ) {
       LOCKDUCHAIN;
-      bool isConst = false;
 
       m_lastType = realType(m_lastType, topContext());
 
@@ -562,6 +576,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
         m_lastType = m_lastDeclarations.first()->abstractType();
+        if (m_propagateConstness && isConst && m_lastType && !isConstant(m_lastType)) {
+          m_lastType->setModifiers(m_lastType->modifiers() | AbstractType::ConstModifier);
+        }
         //kDebug(9007) << "found declaration: " << m_lastDeclarations.first()->toString();
 
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.

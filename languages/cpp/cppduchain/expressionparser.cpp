@@ -39,7 +39,11 @@
 namespace Cpp {
 using namespace KDevelop;
 
-ExpressionParser::ExpressionParser( bool strict, bool debug ) : m_strict(strict), m_debug(debug) {
+ExpressionParser::ExpressionParser( bool strict, bool debug, bool propagateConstness )
+: m_strict(strict)
+, m_debug(debug)
+, m_propagateConstness(propagateConstness)
+{
 }
 
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::TopDUContext* source, bool forceExpression ) {
@@ -106,7 +110,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   }
   
   ExpressionEvaluationResult ret;
-  ExpressionVisitor v(session, source, m_strict);
+  ExpressionVisitor v(session, source, m_strict, m_propagateConstness);
   v.parse( ast );
 
   DUChainReadLocker lock(DUChain::lock());

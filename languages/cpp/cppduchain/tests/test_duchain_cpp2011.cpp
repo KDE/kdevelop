@@ -244,7 +244,6 @@ void TestDUChain::testDecltype()
   QVERIFY(!x4Dec->abstractType()->equals(AxDec->abstractType().constData()));
   QVERIFY(!(x4Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
   QVERIFY(x4Dec->abstractType().cast<ReferenceType>());
-  QEXPECT_FAIL("", "const is not properly propagated", Continue);
   QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
   QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
   QCOMPARE(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),

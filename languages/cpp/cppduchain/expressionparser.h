@@ -46,11 +46,15 @@ class ExpressionEvaluationResult;
 class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
   public:
      /**
-     * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
-     * @param debug Enables additional output
+     * @param strict When this is false, the expression-visitor tries to recover from problems.
+     *               For example when it cannot find a matching function, it returns the first of the candidates.
+     * @param debug  Enables additional output
+     * @param propagateConstness When this is set to true, the expression visitor will propagate the constness
+     *                           in member accesses. Required for decltype support, i.e.:
+     *                           'const A* a; decltype((a->x)) b;', here b should be const
      * */
 
-    explicit ExpressionParser( bool strict = false, bool debug = false );
+    explicit ExpressionParser( bool strict = false, bool debug = false, bool propagateConstness = false );
     /**
      * Evaluates the type of an expression given as a string within a given context.
      * The expression can either be a simple type-id, or a valid C++ expression.
@@ -96,6 +100,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
   private:
     bool m_strict;
     bool m_debug;
+    bool m_propagateConstness;
 };
 
 }

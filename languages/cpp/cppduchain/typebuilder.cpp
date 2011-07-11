@@ -277,28 +277,25 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   m_lastTypeWasAuto = false;
 
   if ((node->isTypeof || node->isDecltype) && node->expression) {
-    node->expression->ducontext = currentContext();
-    ExpressionParser parser;
-    ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
-    AbstractType::Ptr type = result.type.abstractType();
-    /// const& for decltype in additional parens - but only if it's not already const&
-    /// see spec 7.1.6/4
-    if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression
-        && (type && !TypeUtils::isReferenceType(type)))
-    {
+    bool isDecltypeInParen = false;
+    if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
       ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
       int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
-      bool isInParen = stringFromContents(editor()->parseSession()->contentsVector(), startPosition, 1) == "(";
-      if (isInParen) {
-        // type might already be a ref type
-        ReferenceType::Ptr refType = type.cast<ReferenceType>();
-        if (!refType) {
-          refType = ReferenceType::Ptr(new ReferenceType);
-          refType->setBaseType(type);
-        }
-        AbstractType::Ptr base = refType->baseType();
-        type = refType.cast<AbstractType>();
-      }
+      isDecltypeInParen = stringFromContents(editor()->parseSession()->contentsVector(), startPosition, 1) == "(";
+    }
+
+    node->expression->ducontext = currentContext();
+    ExpressionParser parser(false, false, isDecltypeInParen);
+    ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
+    AbstractType::Ptr type = result.type.abstractType();
+    // make reference for decltype in additional parens - but only if it's not already a reference
+    // see spec 7.1.6/4
+    if (isDecltypeInParen && type && !TypeUtils::isReferenceType(type))
+    {
+      // type might already be a ref type
+      ReferenceType::Ptr refType = ReferenceType::Ptr(new ReferenceType);
+      refType->setBaseType(type);
+      type = refType.cast<AbstractType>();
     }
 
     openType(type);
