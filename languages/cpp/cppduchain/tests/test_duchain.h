@@ -203,6 +203,7 @@ private slots:
   void testEnum2011();
   void testDecltype();
   void testTrailingReturnType();
+  void testConstexpr();
   //END C++2011
 
 private:

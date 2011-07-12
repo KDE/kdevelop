@@ -56,6 +56,23 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
     return QString::fromUtf8( stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition) );
 }
 
+bool isConstexpr(ParseSession* session, const ListNode<uint> *storageSpec)
+{
+  if (storageSpec) {
+    const ListNode<uint> *it = storageSpec->toFront();
+    const ListNode<uint> *end = it;
+    do {
+      int kind = session->token_stream->kind(it->element);
+      if (kind == Token_constexpr)
+        return true;
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  return false;
+}
+
 TypeBuilder::TypeBuilder(ParseSession* session)
   : ContextBuilder(session), m_inTypedef(false), m_lastTypeWasInstance(false), m_lastTypeWasAuto(false)
 {
@@ -578,6 +595,10 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   visit(node->type_specifier);
 
   AbstractType::Ptr baseType = lastType();
+
+  if (baseType && isConstexpr(editor()->parseSession(), node->storage_specifiers)) {
+    baseType->setModifiers(baseType->modifiers() | AbstractType::ConstModifier);
+  }
 
   if (node->init_declarators) {
     const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;

@@ -32,6 +32,8 @@
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
 
+#include "typeutils.h"
+
 using namespace KDevelop;
 using namespace Cpp;
 
@@ -343,4 +345,34 @@ void TestDUChain::testTrailingReturnType()
              (uint) IntegralType::TypeInt);
     QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
   }
+}
+
+void TestDUChain::testConstexpr()
+{
+  const QByteArray code = "constexpr int square(int x) { return x * x; }\n"
+                          "constexpr double a = 4.2 * square(2);\n"
+                          "class A {\n"
+                          "  constexpr A();\n"
+                          "  constexpr int foo() { return 1; }\n"
+                          "};\n";
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+
+  QCOMPARE(top->localDeclarations().size(), 3);
+  // square
+  QEXPECT_FAIL("", "constexpr functions are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(top->localDeclarations().at(0)->abstractType()));
+  // double a
+  QVERIFY(TypeUtils::isConstant(top->localDeclarations().at(1)->abstractType()));
+  // class A
+  QVERIFY(top->localDeclarations().at(2)->internalContext());
+  DUContext* aCtx = top->localDeclarations().at(2)->internalContext();
+  QCOMPARE(aCtx->localDeclarations().size(), 2);
+  // A::A
+  QEXPECT_FAIL("", "constexpr constructors are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(0)->abstractType()));
+  // A::foo
+  QEXPECT_FAIL("", "constexpr member functions are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(1)->abstractType()));
 }

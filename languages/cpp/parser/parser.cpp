@@ -3561,6 +3561,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   advance();
 
   SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
+  ast->storage_specifiers = storageSpec;
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
 
