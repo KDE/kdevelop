@@ -65,6 +65,9 @@ class InitDeclaratorAST;
 class InitializerAST;
 class InitializerClauseAST;
 class LabeledStatementAST;
+class LambdaExpressionAST;
+class LambdaCaptureAST;
+class LambdaDeclaratorAST;
 class LinkageBodyAST;
 class LinkageSpecificationAST;
 class MemInitializerAST;
@@ -202,6 +205,9 @@ public:
       Kind_TypeIDOperator,                      // 80
       Kind_StaticAssert,                        // 81
       Kind_TrailingReturnType,                  // 82
+      Kind_LambdaExpression,                    // 83
+      Kind_LambdaCapture,                       // 84
+      Kind_LambdaDeclarator,                    // 85
       NODE_KIND_COUNT
     };
 
@@ -681,6 +687,57 @@ public:
   StatementAST* statement;
 };
 
+/*
+ * lambda-expression from the spec
+ *
+ * for optimization purposes we also include
+ * lambda-introducer, lambda-capture, capture-default
+ * and capture-list in here
+ */
+class LambdaExpressionAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaExpression)
+
+  // '&' or '=' or neither
+  uint default_capture;
+  const ListNode<LambdaCaptureAST*> *capture_list;
+
+  LambdaDeclaratorAST *declarator;
+  StatementAST *compound;
+};
+
+/*
+ * in the spec this is called just 'capture'.
+ * We wrapped lambda-capture in LambdaExpressionAST
+ */
+class LambdaCaptureAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaCapture)
+
+  uint identifier;
+
+  bool isThis : 1;
+  bool isRef : 1;
+  bool isVariadic : 1;
+};
+
+class LambdaDeclaratorAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaDeclarator)
+
+  ParameterDeclarationClauseAST *parameter_declaration_clause;
+  ///TODO: attribute-specifier
+  bool isMutable : 1;
+  ExceptionSpecificationAST *exception_spec;
+  TrailingReturnTypeAST *trailing_return_type;
+};
+
 class LinkageBodyAST : public AST
 {
 public:
@@ -866,6 +923,7 @@ public:
   StatementAST *expression_statement;
   ExpressionAST *sub_expression;
   NameAST *name;
+  LambdaExpressionAST *lambda;
 };
 
 class PtrOperatorAST : public AST

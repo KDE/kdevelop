@@ -321,6 +321,7 @@ void DefaultVisitor::visitPrimaryExpression(PrimaryExpressionAST *node)
   visit(node->expression_statement);
   visit(node->sub_expression);
   visit(node->name);
+  visit(node->lambda);
 }
 
 void DefaultVisitor::visitPtrOperator(PtrOperatorAST *node)
@@ -515,3 +516,21 @@ void DefaultVisitor::visitTrailingReturnType(TrailingReturnTypeAST* node)
   visit(node->abstractDeclarator);
 }
 
+void DefaultVisitor::visitLambdaExpression(LambdaExpressionAST* node)
+{
+  visitNodes(this, node->capture_list);
+  visit(node->declarator);
+  visit(node->compound);
+}
+
+void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* node)
+{
+  // nothing to do
+}
+
+void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)
+{
+  visit(node->parameter_declaration_clause);
+  visit(node->exception_spec);
+  visit(node->trailing_return_type);
+}

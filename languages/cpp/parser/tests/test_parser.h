@@ -110,6 +110,8 @@ private slots:
   void testDecltype();
   void testAlternativeFunctionSyntax_data();
   void testAlternativeFunctionSyntax();
+  void testLambda_data();
+  void testLambda();
 
 protected:
   /**

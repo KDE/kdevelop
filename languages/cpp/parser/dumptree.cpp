@@ -109,7 +109,10 @@ char const * const names[] = {
   "ForRangeDeclaration",
   "TypeIDOperator",
   "StaticAssert",
-  "TrailingReturnType"
+  "TrailingReturnType",
+  "LambdaExpression",
+  "LambdaCapture",
+  "LambdaDeclarator"
 };
 
 DumpTree::DumpTree()

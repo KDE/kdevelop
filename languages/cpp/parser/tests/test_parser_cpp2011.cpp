@@ -348,3 +348,33 @@ void TestParser::testAlternativeFunctionSyntax()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testLambda_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("minimal") << "auto f = [] {};";
+  QTest::newRow("capture-default-=") << "auto f = [=] {};";
+  QTest::newRow("capture-default-&") << "auto f = [&] {};";
+  QTest::newRow("capture-this") << "auto f = [this] {};";
+  QTest::newRow("capture-id") << "auto f = [a] {};";
+  QTest::newRow("capture-id-ref") << "auto f = [&a] {};";
+  QTest::newRow("capture-id-variadic") << "auto f = [a...] {};";
+  QTest::newRow("capture-list1") << "auto f = [=, &a, b, this] {};";
+  QTest::newRow("capture-list2") << "auto f = [&, &a, b, this] {};";
+  QTest::newRow("params-empty") << "auto f = [] () {};";
+  QTest::newRow("params") << "auto f = [] (int a, const A& b) {};";
+  QTest::newRow("return") << "auto f = [] () -> int {};";
+  QTest::newRow("return-decltype") << "auto f = [=] (const A &a) -> decltype(a.foo()) { return a.foo(); };";
+  QTest::newRow("throw") << "auto f = [] () throw(std::exception) {};";
+}
+
+void TestParser::testLambda()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}

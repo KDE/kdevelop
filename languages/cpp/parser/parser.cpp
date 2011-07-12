@@ -4055,10 +4055,21 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
 
     default:
       NameAST *name = 0;
-      if (!parseName(name, EventuallyAcceptTemplate))
-        return false;
-      ast = CreateNode<PrimaryExpressionAST>(session->mempool);
-      ast->name = name;
+      LambdaExpressionAST *lambda = 0;
+      if (parseName(name, EventuallyAcceptTemplate))
+        {
+          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+          ast->name = name;
+        }
+      else if(parseLambdaExpression(lambda))
+        {
+          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+          ast->lambda = lambda;
+        }
+      else
+        {
+          return false;
+        }
 
       break;
     }
@@ -5238,6 +5249,133 @@ bool Parser::parseTrailingReturnType(TrailingReturnTypeAST*& node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
+  return true;
+}
+
+bool Parser::parseLambdaExpression(LambdaExpressionAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  // parse lambda-capture
+  CHECK('[');
+  uint defaultCapture = 0;
+  const ListNode<LambdaCaptureAST*>* captures = 0;
+  // capture-default
+  if ( (session->token_stream->lookAhead() == '&'
+        || session->token_stream->lookAhead() == '=')
+      && (session->token_stream->lookAhead(+1) == ']'
+        || session->token_stream->lookAhead(+1) == ','))
+    {
+      defaultCapture = session->token_stream->lookAhead();
+      advance();
+      if (session->token_stream->lookAhead() == ',')
+        advance();
+    }
+  // capture-list
+  while(session->token_stream->lookAhead() && session->token_stream->lookAhead() != ']')
+    {
+      LambdaCaptureAST* capture = 0;
+      if (!parseLambdaCapture(capture)) {
+        break;
+      }
+      captures = snoc(captures, capture, session->mempool);
+      if (session->token_stream->lookAhead() == ',')
+        advance();
+      else
+        break;
+    }
+  CHECK(']');
+
+  LambdaDeclaratorAST* declarator = 0;
+  // optional
+  parseLambdaDeclarator(declarator);
+
+  StatementAST* compound;
+  if (!parseCompoundStatement(compound))
+    {
+      reportError("Compound statement expected");
+      rewind(start);
+      return false;
+    }
+
+  LambdaExpressionAST* ast = CreateNode<LambdaExpressionAST>(session->mempool);
+  ast->capture_list = captures;
+  ast->compound = compound;
+  ast->declarator = declarator;
+  ast->default_capture = defaultCapture;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
+bool Parser::parseLambdaCapture(LambdaCaptureAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  LambdaCaptureAST* ast = CreateNode<LambdaCaptureAST>(session->mempool);
+
+  if (session->token_stream->lookAhead() == Token_this)
+    {
+      advance();
+      ast->isThis = true;
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
+      node = ast;
+      return true;
+    }
+
+  if (session->token_stream->lookAhead() == '&')
+    {
+      ast->isRef = true;
+      advance();
+    }
+
+  ADVANCE(Token_identifier, "identifier");
+  ast->identifier = session->token_stream->cursor();
+
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      ast->isVariadic = true;
+    }
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
+bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  CHECK('(');
+  ParameterDeclarationClauseAST* params = 0;
+  parseParameterDeclarationClause(params);
+  CHECK(')');
+
+  ///TODO: attribute-specifier
+
+  bool isMutable = false;
+  if (session->token_stream->lookAhead() == Token_mutable)
+    {
+      isMutable = true;
+      advance();
+    }
+
+  ExceptionSpecificationAST* exception_spec = 0;
+  parseExceptionSpecification(exception_spec);
+
+  TrailingReturnTypeAST* trailing_return_type = 0;
+  parseTrailingReturnType(trailing_return_type);
+
+  LambdaDeclaratorAST* ast = CreateNode<LambdaDeclaratorAST>(session->mempool);
+  ast->parameter_declaration_clause = params;
+  ast->isMutable = isMutable;
+  ast->exception_spec = exception_spec;
+  ast->trailing_return_type = trailing_return_type;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
   return true;
 }
 

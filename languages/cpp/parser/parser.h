@@ -226,6 +226,9 @@ public:
   bool parseUsingDirective(DeclarationAST *&node);
   bool parseWhileStatement(StatementAST *&node);
   bool parseWinDeclSpec(WinDeclSpecAST *&node);
+  bool parseLambdaExpression(LambdaExpressionAST *&node);
+  bool parseLambdaCapture(LambdaCaptureAST *&node);
+  bool parseLambdaDeclarator(LambdaDeclaratorAST *&node);
 
   bool skipUntil(int token);
   bool skipUntilDeclaration();
