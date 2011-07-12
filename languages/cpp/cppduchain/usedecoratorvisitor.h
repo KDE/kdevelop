@@ -40,40 +40,27 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     virtual void visitFunctionCall(FunctionCallAST* node);
     virtual void visitBinaryExpression(BinaryExpressionAST* node);
     
-    virtual void visitCastExpression(CastExpressionAST *) ;
+//     virtual void visitCastExpression(CastExpressionAST *) ;
     virtual void visitClassMemberAccess(ClassMemberAccessAST *) ;
-    virtual void visitCompoundStatement(CompoundStatementAST *) ;
     virtual void visitCondition(ConditionAST *) ;
     virtual void visitConditionalExpression(ConditionalExpressionAST *) ;
-    virtual void visitCppCastExpression(CppCastExpressionAST *) ;
-    virtual void visitDeclarationStatement(DeclarationStatementAST *) ;
-    virtual void visitDeclarator(DeclaratorAST *) ;
+//     virtual void visitCppCastExpression(CppCastExpressionAST *) ;
     virtual void visitDeleteExpression(DeleteExpressionAST *) ;
-    virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *) ;
     virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
-    virtual void visitExpressionStatement(ExpressionStatementAST *) ;
     virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
     virtual void visitInitDeclarator(InitDeclaratorAST *) ;
     virtual void visitMemInitializer(MemInitializerAST *) ;
-    virtual void visitName(NameAST *) ;
-    virtual void visitNewDeclarator(NewDeclaratorAST *) ;
     virtual void visitNewExpression(NewExpressionAST *) ;
     virtual void visitPostfixExpression(PostfixExpressionAST *) ;
-    virtual void visitPrimaryExpression(PrimaryExpressionAST *) ;
-    virtual void visitPtrOperator(PtrOperatorAST *) ;
     virtual void visitReturnStatement(ReturnStatementAST* ) ;
-    virtual void visitSimpleDeclaration(SimpleDeclarationAST *) ;
-    virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *) ;
-    virtual void visitSizeofExpression(SizeofExpressionAST *) ;
-    virtual void visitStringLiteral(StringLiteralAST *) ;
-    virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
-    virtual void visitThrowExpression(ThrowExpressionAST *) ;
-    virtual void visitTranslationUnit(TranslationUnitAST *) ;
-    virtual void visitTypeId(TypeIdAST *) ;
+//     virtual void visitSimpleDeclaration(SimpleDeclarationAST *) ;
+//     virtual void visitThrowExpression(ThrowExpressionAST *) ;
     virtual void visitUnaryExpression(UnaryExpressionAST *) ;
-    virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
     
   private:
+    KDevelop::CursorInRevision cursorForToken(uint token);
+    KDevelop::RangeInRevision rangeForNode(AST* ast);
+    
     const ParseSession* m_session;
     QStack< QList<KDevelop::AbstractType::Ptr> > m_callStack;
     QStack<int> m_argStack;
