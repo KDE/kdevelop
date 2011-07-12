@@ -68,19 +68,20 @@ void AreaOperationTest::init()
     //view object names are in form AreaNumber.DocumentNumber.ViewNumber
     //"tool" prefix is there for tooldocument views
     m_area1 = new Area(m_controller, "Area 1");
-    View *view = doc1->createView();
-    view->setObjectName("view1.1.1");
-    m_area1->addView(view);
-    view = doc2->createView();
-    view->setObjectName("view1.2.1");
-    m_area1->addView(view);
-    view = doc2->createView();
-    view->setObjectName("view1.2.2");
-    m_area1->addView(view);
-    view = doc3->createView();
-    view->setObjectName("view1.3.1");
-    m_area1->addView(view);
-    view = tool1->createView();
+    m_pView111 = doc1->createView();
+    m_pView111->setObjectName("view1.1.1");
+    m_area1->addView(m_pView111);
+    m_pView121 = doc2->createView();
+    m_pView121->setObjectName("view1.2.1");
+    m_area1->addView(m_pView121);
+    m_pView122 = doc2->createView();
+    m_pView122->setObjectName("view1.2.2");
+    m_area1->addView(m_pView122);
+    m_pView131 = doc3->createView();
+    m_pView131->setObjectName("view1.3.1");
+    m_area1->addView(m_pView131);
+
+    View *view = tool1->createView();
     view->setObjectName("toolview1.1.1");
     m_area1->addToolView(view, Sublime::Left);
     view = tool2->createView();
@@ -555,6 +556,122 @@ void AreaOperationTest::testAddingViewAfter()
     }
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void AreaOperationTest::splitViewActiveTabsTest()
+{
+    MainWindow mw(m_controller);
+    m_controller->showArea(m_area1, &mw);
+    checkArea1(&mw);
+
+    // at first show of the area, the active view should be m_pView111
+    QCOMPARE(mw.activeView(), m_pView111);
+
+    // Try to get to the the main container :
+    // get the central widget
+    QWidget *pCentral = mw.centralWidget();
+    QVERIFY(pCentral);
+    QVERIFY(pCentral->inherits("QWidget"));
+
+    // get its first splitter
+    QWidget *pSplitter = pCentral->findChild<QSplitter*>();
+    QVERIFY(pSplitter);
+    QVERIFY(pSplitter->inherits("QSplitter"));
+
+    // finally, get the splitter's container
+    Container *pContainer = pSplitter->findChild<Sublime::Container*>();
+    QVERIFY(pContainer);
+
+    // verify that the current active widget in the container is the one in activeview (m_pView111)
+    QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
+
+    // activate the second tab of the area (view212)
+    mw.activateView(m_pView121);
+
+    // verify that the active view was correctly updated to m_pView121
+    QCOMPARE(mw.activeView(), m_pView121);
+
+    // check if the container's current widget was updated to the active view's
+    QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
+
+    // now, create a splitted view of the active view (m_pView121)
+    Sublime::View *pNewView = mw.activeView()->document()->createView();
+    pNewView->setObjectName("splitOf" + mw.activeView()->objectName());
+    m_area1->addView(pNewView, mw.activeView(), Qt::Vertical);
+
+    // verify that creating a new view did not break the central widget
+    QCOMPARE(pCentral, mw.centralWidget());
+
+    // verify that creating a new view did not break the main splitter
+    QCOMPARE(pSplitter, pCentral->findChild<QSplitter*>());
+
+    // creating a new view created two new children splitters, get them
+    QVERIFY(pSplitter->findChildren<QSplitter*>().size() == 2);
+    QWidget *pFirstSplitter = pSplitter->findChildren<QSplitter*>().at(0);
+    QVERIFY(pFirstSplitter);
+    QWidget *pSecondSplitter = pSplitter->findChildren<QSplitter*>().at(1);
+    QVERIFY(pSecondSplitter);
+
+    // for each splitter, get the corresponding container
+    Container *pFirstContainer = pFirstSplitter->findChild<Sublime::Container*>();
+    QVERIFY(pFirstContainer);
+    Container *pSecondContainer = pSecondSplitter->findChild<Sublime::Container*>();
+    QVERIFY(pSecondContainer);
+
+    // the active view should have remained view121
+    QCOMPARE(mw.activeView(), m_pView121);
+
+    // pFirstContainer should contain the newView's widget
+    QVERIFY(pFirstContainer->hasWidget(pNewView->widget()));
+
+    // the new view's widget should be the current widget of the new container
+    QCOMPARE(pFirstContainer->currentWidget(), pNewView->widget());
+
+    // pSecondContainer should contain all the old views widgets
+    QVERIFY(pSecondContainer->hasWidget(m_pView111->widget()));
+    QVERIFY(pSecondContainer->hasWidget(m_pView121->widget()));
+    QVERIFY(pSecondContainer->hasWidget(m_pView122->widget()));
+    QVERIFY(pSecondContainer->hasWidget(m_pView131->widget()));
+
+    // the active widget should be the current widget of the second container
+    QCOMPARE(pSecondContainer->currentWidget(), mw.activeView()->widget());
+
+    ////////////////////////////////////////////////////////////////////////////
+    // now, activate the new view and check if all went well
+    mw.activateView(pNewView);
+
+    // active view should now be newView
+    QCOMPARE(mw.activeView(), pNewView);
+
+    // the active widget should be the current widget of the new container
+    QCOMPARE(pFirstContainer->currentWidget(), mw.activeView()->widget());
+
+    // the current widget of the old container should have remained view121's
+    QCOMPARE(pSecondContainer->currentWidget(), m_pView121->widget());
+
+    ////////////////////////////////////////////////////////////////////////////
+    // now delete newView and check area state
+    delete m_area1->removeView(pNewView);
+
+    // verify that deleting the view did not broke the central widget
+    QCOMPARE(pCentral, mw.centralWidget());
+
+    // removing the view should have destroyed the sub splitters and containers,
+    // so get the main one and verify that deleting the view did not break it
+    QCOMPARE(pSplitter, pCentral->findChild<QSplitter*>());
+
+    // get the new container inside the main splitter
+    pContainer = pSplitter->findChild<Sublime::Container*>();
+    QVERIFY(pContainer);
+
+    // active view should now be back to m_pView121 again
+    QCOMPARE(mw.activeView(), m_pView121);
+
+    // check also the container current widget
+    QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
+}
+
 void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     const QString &printedAreas, int containerCount, int splitterCount, QString location)
 {

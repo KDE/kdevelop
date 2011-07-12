@@ -271,11 +271,16 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
-            if (widget && !container->hasWidget(widget))
+            if (widget)
             {
-                container->addWidget(view, position);
-                d->viewContainers[view] = container;
-                d->widgetToView[widget] = view;
+                if(!container->hasWidget(widget))
+                {
+                    container->addWidget(view, position);
+                    d->viewContainers[view] = container;
+                    d->widgetToView[widget] = view;
+                }
+                if(d->activeView == view)
+                    container->setCurrentWidget(widget);
             }
             position++;
         }
