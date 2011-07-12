@@ -27,8 +27,9 @@
 const int SPACING_FROM_PARENT_BOTTOM = 5;
 
 void AssistantPopup::updateActions() {
-    QPalette palette = QApplication::palette();
+    QPalette palette = this->palette();
     palette.setBrush(QPalette::Background, palette.toolTipBase());
+    palette.setBrush(QPalette::WindowText, palette.toolTipText());
     setPalette(palette);
     m_assistantActions = m_assistant->actions();
     bool haveTitle = false;

@@ -27,6 +27,8 @@
 #include <QSize>
 #include <QMenu>
 #include <QStylePainter>
+#include <qtextobject.h>
+#include <QAbstractTextDocumentLayout>
 
 using namespace KDevelop;
 
@@ -87,7 +89,10 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
         QPixmap richTextPixmap(richTextLabel.size().width(), richTextLabel.size().height());
         richTextPixmap.fill(Qt::transparent);
         QPainter richTextPainter(&richTextPixmap);
-        richTextLabel.drawContents(&richTextPainter, richTextPixmap.rect());
+        QAbstractTextDocumentLayout::PaintContext ctx;
+        ctx.palette.setBrush(QPalette::Text, palette().windowText());
+        ctx.clip=richTextPixmap.rect();
+        richTextLabel.documentLayout()->draw(&richTextPainter, ctx);
  
         if (!icon().isNull())
             point = QPoint(buttonRect.x() + buttonRect.width() / 2 + iconSize().width() / 2 + 2, buttonRect.y() + buttonRect.height() / 2);
@@ -99,7 +104,7 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
         QStyleOptionButton opt = getStyleOption();
         p.drawControl(QStyle::CE_PushButtonBevel, opt);
         p.drawPrimitive(QStyle::PE_FrameFocusRect, opt);
-        p.drawPixmap(buttonRect.left(), buttonRect.top(), richTextPixmap.width(), richTextPixmap.height(),richTextPixmap);
+        p.drawPixmap(buttonRect.topLeft(), richTextPixmap);
     } else
         QToolButton::paintEvent(event);
 }
