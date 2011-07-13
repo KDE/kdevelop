@@ -321,7 +321,6 @@ void DefaultVisitor::visitPrimaryExpression(PrimaryExpressionAST *node)
   visit(node->expression_statement);
   visit(node->sub_expression);
   visit(node->name);
-  visit(node->lambda);
 }
 
 void DefaultVisitor::visitPtrOperator(PtrOperatorAST *node)

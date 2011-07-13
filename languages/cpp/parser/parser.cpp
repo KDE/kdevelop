@@ -4010,13 +4010,15 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  PrimaryExpressionAST *ast = 0;
-
   switch(session->token_stream->lookAhead())
     {
     case Token_string_literal:
+      {
+      PrimaryExpressionAST *ast = 0;
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       parseStringLiteral(ast->literal);
+      node = ast;
+      }
       break;
 
     case Token_number_literal:
@@ -4025,12 +4027,18 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
     case Token_false:
     case Token_this:
     case Token_nullptr:
+      {
+      PrimaryExpressionAST *ast = 0;
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();
+      node = ast;
+      }
       break;
 
     case '(':
+      {
+      PrimaryExpressionAST *ast = 0;
       advance();
 
       if (session->token_stream->lookAhead() == '{')
@@ -4051,22 +4059,20 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
         }
 
       CHECK(')');
+      node = ast;
+      }
       break;
 
     default:
       NameAST *name = 0;
-      LambdaExpressionAST *lambda = 0;
       if (parseName(name, EventuallyAcceptTemplate))
         {
+          PrimaryExpressionAST *ast = 0;
           ast = CreateNode<PrimaryExpressionAST>(session->mempool);
           ast->name = name;
+          node = ast;
         }
-      else if(parseLambdaExpression(lambda))
-        {
-          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
-          ast->lambda = lambda;
-        }
-      else
+      else if(!parseLambdaExpression(node))
         {
           return false;
         }
@@ -4074,8 +4080,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       break;
     }
 
-  UPDATE_POS(ast, start, _M_last_valid_token+1);
-  node = ast;
+  UPDATE_POS(node, start, _M_last_valid_token+1);
 
   return true;
 }
@@ -5252,7 +5257,7 @@ bool Parser::parseTrailingReturnType(TrailingReturnTypeAST*& node)
   return true;
 }
 
-bool Parser::parseLambdaExpression(LambdaExpressionAST*& node)
+bool Parser::parseLambdaExpression(ExpressionAST*& node)
 {
   uint start = session->token_stream->cursor();
 

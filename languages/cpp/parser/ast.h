@@ -694,7 +694,7 @@ public:
  * lambda-introducer, lambda-capture, capture-default
  * and capture-list in here
  */
-class LambdaExpressionAST : public AST
+class LambdaExpressionAST : public ExpressionAST
 {
 public:
 
@@ -923,7 +923,6 @@ public:
   StatementAST *expression_statement;
   ExpressionAST *sub_expression;
   NameAST *name;
-  LambdaExpressionAST *lambda;
 };
 
 class PtrOperatorAST : public AST
