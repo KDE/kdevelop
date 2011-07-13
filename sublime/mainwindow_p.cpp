@@ -439,12 +439,13 @@ void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    if (!m_indexSplitters.contains(index))
+    if (!m_indexSplitters[index])
         return;
 
     QSplitter *splitter = m_indexSplitters[index];
     kDebug() << "index " << index << " root " << area->rootIndex();
     kDebug() << "splitter " << splitter << " container " << splitter->widget(0);
+    kDebug() << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
     if (!container) {
@@ -516,27 +517,30 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
-            parentSplitter->setUpdatesEnabled(false);
-            //save sizes and orientation of the sibling splitter
-            parentSplitter->setOrientation(siblingSplitter->orientation());
-            QList<int> sizes = siblingSplitter->sizes();
-
-            /* Parent has two children -- 'index' that we've deleted and
-               'sibling'.  We move all children of 'sibling' into parent,
-               and delete 'sibling'.  sibling either contains a single
-               Container instance, or a bunch of further QSplitters.  */
-            while (siblingSplitter->count() > 0)
+            if(siblingSplitter)
             {
-                //reparent contents into parent splitter
-                QWidget *siblingWidget = siblingSplitter->widget(0);
-                siblingWidget->setParent(parentSplitter);
-                parentSplitter->addWidget(siblingWidget);
+                parentSplitter->setUpdatesEnabled(false);
+                //save sizes and orientation of the sibling splitter
+                parentSplitter->setOrientation(siblingSplitter->orientation());
+                QList<int> sizes = siblingSplitter->sizes();
+
+                /* Parent has two children -- 'index' that we've deleted and
+                'sibling'.  We move all children of 'sibling' into parent,
+                and delete 'sibling'.  sibling either contains a single
+                Container instance, or a bunch of further QSplitters.  */
+                while (siblingSplitter->count() > 0)
+                {
+                    //reparent contents into parent splitter
+                    QWidget *siblingWidget = siblingSplitter->widget(0);
+                    siblingWidget->setParent(parentSplitter);
+                    parentSplitter->addWidget(siblingWidget);
+                }
+
+                m_indexSplitters.remove(sibling);
+                delete siblingSplitter;
+                parentSplitter->setSizes(sizes);
             }
 
-            m_indexSplitters.remove(sibling);
-            delete siblingSplitter;
-
-            parentSplitter->setSizes(sizes);
             parentSplitter->setUpdatesEnabled(true);
 
             kDebug() << "after deleation " << parent << " has "
