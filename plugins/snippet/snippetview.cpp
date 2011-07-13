@@ -66,11 +66,9 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
 
-#ifdef SNIPPETS_ENABLE_GHNS_UPLOAD
     m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
     connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
     addAction(m_putNewStuffAction);
-#endif
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -111,9 +109,7 @@ void SnippetView::validateActions()
     m_addRepoAction->setEnabled(true);
     m_editRepoAction->setEnabled(selectedRepo);
     m_removeRepoAction->setEnabled(selectedRepo);
-#ifdef SNIPPETS_ENABLE_GHNS_UPLOAD
     m_putNewStuffAction->setEnabled(selectedRepo);
-#endif
 
     m_addSnippetAction->setEnabled(selectedRepo || selectedSnippet);
     m_editSnippetAction->setEnabled(selectedSnippet);
@@ -169,9 +165,7 @@ void SnippetView::contextMenu (const QPoint& pos)
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
-#ifdef SNIPPETS_ENABLE_GHNS_UPLOAD
         menu.addAction(m_putNewStuffAction);
-#endif
         menu.addSeparator();
 
         menu.addAction(m_addSnippetAction);
