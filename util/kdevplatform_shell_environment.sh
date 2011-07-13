@@ -316,9 +316,13 @@ function sync! {
 # Take a path, and returns "yes" if the equal file is available on the host and the client
 # The check is performed by comparing inode-numbers
 function isEqualFileOnHostAndClient {
+    function trimWhiteSpace() {
+        echo $1
+    }
+
     FILE=$1
-    INODE_HOST=$(ls -i $FILE | cut -d' ' -f1)
-    INODE_CLIENT=$(executeInAppSync "ls -i $FILE | cut -d' ' -f1" "$(dirname $FILE)")
+    INODE_HOST=$(trimWhiteSpace $(ls --color=never -i $FILE | cut -d' ' -f1))
+    INODE_CLIENT=$(trimWhiteSpace $(executeInAppSync "ls --color=never -i $FILE | cut -d' ' -f1" "$(dirname $FILE)"))
     if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
         echo "yes"
     else
