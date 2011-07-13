@@ -168,48 +168,49 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   bool isFunctionArguments = optoken.kind==',';
   
   QList< AbstractType::Ptr > args;
-  m_defaultFlags = DataAccess::Read;
-  if(optype) {
-    args = optype->arguments();
-    if(args.size()==1) { //if there's just the last argument, create a delayed type of the first with the proper flags
-      AbstractType::Ptr ntype(new DelayedType);
-      ntype->setModifiers(optype->modifiers());
-      args.prepend(ntype);
-    }
-  } else if(!isFunctionArguments) {
-    AbstractType::Ptr ntype(constructReadOnlyType());
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
+  if(!optype && optoken.kind=='=' && node->left_expression->kind==AST::Kind_PrimaryExpression) {
+    PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(node->left_expression);
+//     qDebug() << "lalala" << node->left_expression->kind << nodeToString(m_session, primary) << nodeToString(m_session, primary->name);
+    m_mods->addModification(cursorForToken(primary->name->start_token), DataAccess::Write, rangeForNode(node->right_expression));
     
-    if(optoken.kind=='=') {
-      qDebug() << "flflflfl" << nodeToString(m_session, node->left_expression);
-      ReferenceType::Ptr reftype(constructReferenceType());
+    visit(node->right_expression);
+  } else {
+    if(optype) {
+      args = optype->arguments();
+      if(args.size()==1) { //if there's just the last argument, create a delayed type of the first with the proper flags
+        AbstractType::Ptr ntype(new DelayedType);
+        ntype->setModifiers(optype->modifiers());
+        args.prepend(ntype);
+      }
+    } else if(!isFunctionArguments) {
+      AbstractType::Ptr ntype(constructReadOnlyType());
       
-      args += reftype.cast<AbstractType>();
-      m_defaultFlags = 0;
-    } else
       args += ntype;
-    args += ntype;
-  }
+      args += ntype;
+    }
+    
+    if(!args.isEmpty()) {
+      m_callStack.push(args);
+      m_argStack.push(0);
+    }
+    
+    visit(node->left_expression);
   
-  if(!args.isEmpty()) {
-    m_callStack.push(args);
-    m_argStack.push(0);
-  }
-  
-  visit(node->left_expression);
-  
-  //argstack can be empty in cases like "int a,b,c;"
-  if(!m_argStack.isEmpty() && (optype || isFunctionArguments)) {
-    ++m_argStack.top();
-    qDebug() << "advancing parameter" << m_argStack.top() << "over" << m_callStack.top().size();
-    Q_ASSERT(m_callStack.top().size()>m_argStack.top());
-  }
-  m_defaultFlags = DataAccess::Read;
-  
-  visit(node->right_expression);
-  
-  if(!args.isEmpty()) {
-    m_argStack.pop();
-    m_callStack.pop();
+    //argstack can be empty in cases like "int a,b,c;"
+    if(!m_argStack.isEmpty() && (optype || isFunctionArguments)) {
+      ++m_argStack.top();
+  //     qDebug() << "advancing parameter" << m_argStack.top() << "over" << m_callStack.top().size();
+      Q_ASSERT(m_callStack.top().size()>m_argStack.top());
+    }
+    m_defaultFlags = DataAccess::Read;
+    
+    visit(node->right_expression);
+    
+    if(!args.isEmpty()) {
+      m_argStack.pop();
+      m_callStack.pop();
+    }
   }
 }
 
