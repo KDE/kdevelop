@@ -107,8 +107,9 @@ public:
 
     /** Removes all views from this area and deletes them.
       * If an open document has changes, and it is the last view of that document,
-      * the user may push 'Cancel', and the view will stay active. */
-    void clearViews();
+      * the user may push 'Cancel', and the view will stay active.
+      * @param silent If this is true, the user is never asked for feedback. */
+    void clearViews(bool silent = false);
 
     /**
      * Returns the view that was last stored through setActiveView(view), or zero
@@ -125,8 +126,10 @@ public:
       * Closes the document if it is the last view.
       * Does allow breaking the closing process.
       * If it is the last view of the document that has changes, and the user pushed 'Cancel',
-      * false will be returned, and the view will not be closed. */
-    bool closeView(View* view);
+      * false will be returned, and the view will not be closed. 
+      * @param silent If this is false, the user will be asked for feedback. Otherwise he won't.
+      */
+    bool closeView(View* view, bool silent = false);
     
     /**@return the index of view or 0 if it can not be found.*/
     AreaIndex *indexOf(View *view);

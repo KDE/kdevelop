@@ -69,7 +69,7 @@ public:
     virtual void setTextSelection(const KTextEditor::Range &range);
 
     //Overridden from Sublime::Document
-    virtual bool closeDocument();
+    virtual bool closeDocument(bool silent);
 protected:
     /** Gives us access to the KParts */
     QMap<QWidget*, KParts::Part*> partForView() const;

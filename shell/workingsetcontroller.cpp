@@ -307,7 +307,7 @@ void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString&
         WorkingSet* newSet = getWorkingSet(to);
         newSet->loadToArea(area, area->rootIndex(), !from.isEmpty());
     } else {
-        area->clearViews();
+        area->clearViews(true);
     }
 
     emit workingSetSwitched();

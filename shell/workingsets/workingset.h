@@ -63,6 +63,7 @@ public:
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex);
 
     ///Loads this working-set directly from the configuration file, and stores it in the given area
+    ///Does not ask the user, this should be done beforehand.
     ///@param clear If this is true, the area will be cleared before
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear = true);
 

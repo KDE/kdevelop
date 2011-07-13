@@ -43,7 +43,7 @@ public:
     void setWorkingSet(WorkingSet* set);
 
 public slots:
-    void closeSet();
+    void closeSet(bool ask = false);
     void loadSet();
     void duplicateSet();
     void mergeSet();

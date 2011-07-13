@@ -128,7 +128,7 @@ QIcon Document::statusIcon() const
     return d->statusIcon;
 }
 
-bool Document::closeDocument()
+bool Document::closeDocument(bool silent)
 {
     foreach (Sublime::Area *area, controller()->allAreas())
     {

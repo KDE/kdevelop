@@ -182,12 +182,11 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
     if(clear) {
         kDebug() << "clearing area with working-set" << area->workingSet();
-        QSet< QString > files = fileList().toSet();
-        foreach(Sublime::View* view, area->views()) {
-            Sublime::UrlDocument* doc = dynamic_cast<Sublime::UrlDocument*>(view->document());
-            if(!doc || !files.contains(doc->documentSpecifier()))
-                area->closeView(view);
-        }
+        // We have to close all views, else we may get serious UI
+        // consistency problems when the documents intersect.
+        // Clear the views silently, because the user should be batch-asked
+        // before changing working sets.
+        area->clearViews(true);
     }
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");

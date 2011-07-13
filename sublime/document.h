@@ -77,8 +77,10 @@ public:
       *The default implementation will close all views and then deletes the document itself.
       *Override this if you want to confirm closing with the user.
       *
+      * @param silent If this is true, the user must not be asked.
+      * 
       * Returns whether closing was successful (The user did not push 'Cancel') */
-    virtual bool closeDocument();
+    virtual bool closeDocument(bool silent = false);
 
     void setStatusIcon(QIcon icon);
     
