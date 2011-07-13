@@ -579,11 +579,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possibleModuleNames += possib;
     }
 
-    #if defined(Q_OS_WIN)
-    const QStringList modulePath = QStringList() << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
-    #else
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
-    #endif
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
