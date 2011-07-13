@@ -331,7 +331,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 
     KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
     QString lastActiveView = areaGroup.readEntry("Active View", "");
-    deleteGroupRecursive(setGroup);
+    deleteGroupRecursive(areaGroup);
     if (area->activeView() && area->activeView()->document())
         areaGroup.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
     else
