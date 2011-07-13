@@ -1531,7 +1531,7 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(forceUpdate()));
+    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(documentSaved(KDevelop::IDocument*)));
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
@@ -1543,6 +1543,15 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 void PatchReviewPlugin::documentClosed(IDocument* doc)
 {
     removeHighlighting(doc->url());
+}
+
+void PatchReviewPlugin::documentSaved(IDocument* doc)
+{
+    // Only update if the url is not the patch-file, because our call to
+    // the reload() KTextEditor function also causes this signal,
+    // which would lead to an endless update loop.
+    if(m_patch && doc->url() != m_patch->file())
+      forceUpdate();
 }
 
 void PatchReviewPlugin::textDocumentCreated(IDocument* doc)

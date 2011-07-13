@@ -206,6 +206,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument*);
+    void documentSaved(KDevelop::IDocument*);
     void exporterSelected(QAction* action);
     
 private:
