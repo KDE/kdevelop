@@ -136,12 +136,17 @@ public:
     @p newView will be in the <b>second</b> child index.*/
     void split(View *newView, Qt::Orientation orientation);
     /**Splits the view in this position by given @p orientation.
-    Does nothing if the view is already splitted.*/
-    void split(Qt::Orientation orientation);
+     * @p moveViewsToSecondChild Normally, the existing views in this index are moved to the first sub-index.
+     *                           If this is true, the views are moved to the _second_ sub-index instead.
+     * Does nothing if the view is already splitted.*/
+    void split(Qt::Orientation orientation, bool moveViewsToSecondChild = false);
     /**Unsplits the index removing the given @p childToRemove and moving the contents
     of another child to this index.*/
     void unsplit(AreaIndex *childToRemove);
 
+    /** Returns a text-representation of the architecture of this area index and sub-indices. */
+    QString print() const;
+    
     /**@return the stacked view in @p position,
     returns 0 for splitter's indices and when there's no view at the @p position.*/
     View *viewAt(int position) const;
@@ -164,7 +169,7 @@ private:
     void setParent(AreaIndex *parent);
 
     /**Copies the data from this index to @p target.*/
-    void copyTo(AreaIndex *target);
+    void moveViewsTo(AreaIndex *target);
     /**Copies the children indices from this index to @p target.*/
     void copyChildrenTo(AreaIndex *target);
 

@@ -142,6 +142,8 @@ public Q_SLOTS:
 
     // DBUS-compatible versions of openDocument
     virtual Q_SCRIPTABLE bool openDocumentSimple( QString url );
+    // Opens a list of documents, with optional split-view separators, like: "file1 / [ file2 - fil3 ]" (see kdevplatform_shell_environment.sh)
+    virtual Q_SCRIPTABLE bool openDocumentsSimple( QStringList urls );
     virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
     
     // Returns the currently active document
@@ -154,6 +156,7 @@ private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
 
 private:
+    bool openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView );
     QList<IDocument*> documentsInWindow(MainWindow* mw) const;
     QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw, bool currentAreaOnly = false) const;
     QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;

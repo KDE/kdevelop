@@ -201,7 +201,6 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug() << "reconstructing views for area index" << index;
     QSplitter *splitter = d->m_indexSplitters.value(index);
     if (!splitter)
     {
@@ -222,10 +221,13 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                 operator()(index->parent());
             }
             QSplitter *parent = d->m_indexSplitters.value(index->parent());
-            kDebug() << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
-            parent->addWidget(splitter);
+            
+            if(index == index->parent()->first())
+                parent->insertWidget(0, splitter);
+            else
+                parent->addWidget(splitter);
         }
         Q_ASSERT(splitter);
     }
@@ -236,6 +238,18 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     else
     {
         Container *container = 0;
+        
+        if(splitter->count())
+        {
+            // After unsplitting, we might have to remove an old QSplitter here
+            QWidget* widget = splitter->widget(0);
+            if(qobject_cast<QSplitter*>(widget))
+            {
+                widget->setParent(0);
+                delete widget;
+            }
+        }
+        
         if (!splitter->widget(0))
         {
             //we need to create view container
@@ -376,22 +390,38 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         m_leftTabbarCornerWidget.data()->hide();
         m_leftTabbarCornerWidget.data()->setParent(0);
     }
-    
-    ViewCreator viewCreator(this);
-    QSplitter *splitter = m_indexSplitters[index];
-    if (index->isSplitted() && (splitter->count() == 1) &&
-            qobject_cast<Sublime::Container*>(splitter->widget(0)))
+
     {
-        Container *container = qobject_cast<Sublime::Container*>(splitter->widget(0));
-        //we need to remove extra container before reconstruction
-        //first reparent widgets in container so that they are not deleted
-        while (container->count())
+         // Remove container objects in the hierarchy from the parents,
+         // because they are not needed anymore, and might lead to broken splitter hierarchy and crashes.
+        for(Sublime::AreaIndex* current = index; current; current = current->parent())
         {
-            container->widget(0)->setParent(0);
+        QSplitter *splitter = m_indexSplitters[current];
+        if (current->isSplitted() && splitter)
+        {
+            // Also update the orientation
+            splitter->setOrientation(current->orientation());
+            
+            for(int w = 0; w < splitter->count(); ++w)
+            {
+                Container *container = qobject_cast<Sublime::Container*>(splitter->widget(w));
+                //we need to remove extra container before reconstruction
+                //first reparent widgets in container so that they are not deleted
+                if(container)
+                {
+                    while (container->count())
+                    {
+                        container->widget(0)->setParent(0);
+                    }
+                    //and then delete the container
+                    delete container;
+                }
+            }
         }
-        //and then delete the container
-        delete container;
+        }
     }
+
+    ViewCreator viewCreator(this);
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
     

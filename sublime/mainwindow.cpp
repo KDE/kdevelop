@@ -118,6 +118,11 @@ MainWindow::~MainWindow()
     delete d;
 }
 
+void MainWindow::reconstructViews()
+{
+    d->reconstruct();
+}
+
 void MainWindow::setArea(Area *area)
 {
     if (d->area)

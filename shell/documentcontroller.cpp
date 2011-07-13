@@ -1002,6 +1002,157 @@ KTextEditor::Document* DocumentController::globalTextEditorInstance()
     return d->globalTextEditorInstance;
 }
 
+bool DocumentController::openDocumentsSimple( QStringList urls )
+{
+    Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
+    Sublime::AreaIndex* areaIndex = area->rootIndex();
+
+    if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
+        areaIndex = area->indexOf(activeView);
+
+    kDebug() << "opening " << urls << " to area " << area << " index " << areaIndex << " with children " << areaIndex->first() << " " << areaIndex->second();
+    
+    bool isFirstView = false;
+    
+    bool ret = openDocumentsWithSplitSeparators( areaIndex, urls, isFirstView );
+    
+    kDebug() << "area arch. after opening: " << areaIndex->print();
+    
+    // Required because sublime sometimes doesn't update correctly when the area-index contents has been changed
+    // (especially when views have been moved to other indices, through unsplit, split, etc.)
+    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews();
+    
+    return ret;
+}
+
+bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView )
+{
+    kDebug() << "opening " << urlsWithSeparators << " index " << index << " with children " << index->first() << " " << index->second() << " view-count " << index->viewCount();
+    if(urlsWithSeparators.isEmpty())
+        return true;
+    
+    Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
+    
+    QList<int> topLevelSeparators; // Indices of the top-level separators (with groups skipped)
+    QStringList separators = QStringList() << "/" << "-";
+    QList<QStringList> groups;
+    
+    bool ret = true;
+    
+    {
+        int parenDepth = 0;
+        int groupStart = 0;
+        for(int pos = 0; pos < urlsWithSeparators.size(); ++pos)
+        {
+            QString item = urlsWithSeparators[pos];
+            if(separators.contains(item))
+            {
+                if(parenDepth == 0)
+                    topLevelSeparators << pos;
+            }else if(item == "[")
+            {
+                if(parenDepth == 0)
+                    groupStart = pos+1;
+                ++parenDepth;
+            }
+            else if(item == "]")
+            {
+                if(parenDepth > 0)
+                {
+                    --parenDepth;
+                    
+                    if(parenDepth == 0)
+                        groups << urlsWithSeparators.mid(groupStart, pos-groupStart);
+                }
+                else{
+                    kDebug() << "syntax error in " << urlsWithSeparators << ": parens do not match";
+                    ret = false;
+                }
+            }else if(parenDepth == 0)
+            {
+                groups << (QStringList() << item);
+            }
+        }
+    }
+    
+    if(topLevelSeparators.isEmpty())
+    {
+        if(urlsWithSeparators.size() > 1)
+        {
+            foreach(QStringList group, groups)
+                ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
+        }else{
+            while(index->isSplitted())
+                index = index->first();
+            // Simply open the document into the area index
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
+                        KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+            Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
+            if (sublimeDoc) {
+                Sublime::View* view = sublimeDoc->createView();
+                area->addView(view, index);
+                if(isFirstView)
+                {
+                    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->activateView(view);
+                    isFirstView = false;
+                }
+            }else{
+                ret = false;
+            }
+        }
+        return ret;
+    }
+    
+    // Pick a separator in the middle
+    
+    int pickSeparator = topLevelSeparators[topLevelSeparators.size()/2];
+    
+    bool activeViewToSecondChild = false;
+    if(pickSeparator == urlsWithSeparators.size()-1)
+    {
+        // There is no right child group, so the right side should be filled with the currently active views
+        activeViewToSecondChild = true;
+    }else{
+        QStringList separatorsAndParens = separators;
+        separatorsAndParens << "[" << "]";
+        // Check if the second child-set contains an unterminated separator, which means that the active views should end up there
+        for(int pos = pickSeparator+1; pos < urlsWithSeparators.size(); ++pos)
+            if( separators.contains(urlsWithSeparators[pos]) && (pos == urlsWithSeparators.size()-1 ||
+                separatorsAndParens.contains(urlsWithSeparators[pos-1]) ||
+                separatorsAndParens.contains(urlsWithSeparators[pos-1])) )
+                    activeViewToSecondChild = true;
+    }
+    
+    Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == "/" ? Qt::Horizontal : Qt::Vertical;
+    
+    if(!index->isSplitted())
+    {
+        kDebug() << "splitting " << index << "orientation" << orientation << "to second" << activeViewToSecondChild;
+        index->split(orientation, activeViewToSecondChild);
+    }else{
+        index->setOrientation(orientation);
+        kDebug() << "WARNING: Area is already splitted (shouldn't be)" << urlsWithSeparators;
+    }
+    
+    openDocumentsWithSplitSeparators( index->first(), urlsWithSeparators.mid(0, pickSeparator) , isFirstView );
+    if(pickSeparator != urlsWithSeparators.size() - 1)
+        openDocumentsWithSplitSeparators( index->second(), urlsWithSeparators.mid(pickSeparator+1, urlsWithSeparators.size() - (pickSeparator+1) ), isFirstView );
+    
+    // Clean up the child-indices, because document-loading may fail
+    
+    if(!index->first()->viewCount())
+    {
+        kDebug() << "unsplitting first";
+        index->unsplit(index->first());
+    }
+    else if(!index->second()->viewCount())
+    {
+        kDebug() << "unsplitting second";
+        index->unsplit(index->second());
+    }
+
+    return ret;
+}
 
 }
 

@@ -118,7 +118,7 @@ void AreaIndex::remove(View *view)
         d->parent->unsplit(this);
 }
 
-void Sublime::AreaIndex::split(Qt::Orientation orientation)
+void Sublime::AreaIndex::split(Qt::Orientation orientation, bool moveViewsToSecond)
 {
     //we can not split areas that have already been splitted
     if (d->isSplitted())
@@ -128,8 +128,10 @@ void Sublime::AreaIndex::split(Qt::Orientation orientation)
     d->second = new AreaIndex(this);
     d->orientation = orientation;
 
-    //assign current views to the first part of splitter
-    copyTo(d->first);
+    if(moveViewsToSecond)
+        moveViewsTo(d->second);
+    else
+        moveViewsTo(d->first);
 }
 
 void AreaIndex::split(View *newView, Qt::Orientation orientation)
@@ -146,7 +148,7 @@ void AreaIndex::unsplit(AreaIndex *childToRemove)
         return;
 
     AreaIndex *other = d->first == childToRemove ? d->second : d->first;
-    other->copyTo(this);
+    other->moveViewsTo(this);
     d->orientation = other->orientation();
     d->first = 0;
     d->second = 0;
@@ -169,7 +171,7 @@ void AreaIndex::copyChildrenTo(AreaIndex *target)
     d->second = 0;
 }
 
-void AreaIndex::copyTo(AreaIndex *target)
+void AreaIndex::moveViewsTo(AreaIndex *target)
 {
     target->d->views = d->views;
     d->views.clear();
@@ -235,6 +237,16 @@ void Sublime::AreaIndex::setOrientation(Qt::Orientation orientation) const
 RootAreaIndex::RootAreaIndex()
     :AreaIndex(), d(0)
 {
+}
+
+QString AreaIndex::print() const
+{
+    if(isSplitted())
+        return " ( " + first()->print() + (orientation() == Qt::Horizontal ? " / " : " - ") + second()->print() + " ) ";
+    QStringList ret;
+    foreach(Sublime::View* view, views())
+        ret << view->document()->title();
+    return ret.join(" ");
 }
 
 }
