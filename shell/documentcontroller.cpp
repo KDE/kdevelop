@@ -861,9 +861,9 @@ QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList
     return ret;
 }
 
-bool DocumentController::saveAllDocumentsForWindow(KDevelop::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
+bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
 {
-    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw, currentAreaOnly);
+    QList<IDocument*> checkSave = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw), currentAreaOnly);
 
     return saveSomeDocuments(checkSave, mode);
 }

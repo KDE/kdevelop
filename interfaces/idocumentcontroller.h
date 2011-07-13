@@ -92,6 +92,7 @@ public:
 
     Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
     Q_SCRIPTABLE virtual bool saveSomeDocuments(const QList<IDocument*>& list, KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
+    Q_SCRIPTABLE virtual bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) = 0;
 
     /// Opens a text document containing the @p data text.
     Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;

@@ -1335,9 +1335,8 @@ void PatchReviewPlugin::cancelReview()
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
-      setUniqueWorkingSet(); // Make the working-set unique, so that we don't affect other areas
-      w->area()->clearViews();
-      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+      if(setUniqueEmptyWorkingSet())
+        ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
   }
 }
@@ -1360,8 +1359,8 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
-      w->area()->clearViews();
-      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+      if(setUniqueEmptyWorkingSet())
+        ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
   }
 }
@@ -1379,7 +1378,7 @@ void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique()
   if (w->area()->objectName() != "review")
     ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
 
-  setUniqueWorkingSet();
+  setUniqueEmptyWorkingSet();
 }
 
 bool PatchReviewPlugin::isWorkingSetUnique() const
@@ -1391,15 +1390,23 @@ bool PatchReviewPlugin::isWorkingSetUnique() const
   return true;
 }
 
-void PatchReviewPlugin::setUniqueWorkingSet()
+bool PatchReviewPlugin::setUniqueEmptyWorkingSet()
 {
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  
+  if(!ICore::self()->documentController()->saveAllDocumentsForWindow(ICore::self()->uiController()->activeMainWindow(), KDevelop::IDocument::Default, true))
+    return false;
   
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
   while(!isWorkingSetUnique())
     w->area()->setWorkingSet(QString("review_%1").arg(rand() % 10000));
+  
+  // We've asked the user, so just clear silently
+  w->area()->clearViews(true);
+  
+  return true;
 }
 
 void PatchReviewPlugin::updateReview()

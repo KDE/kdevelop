@@ -87,7 +87,7 @@ public:
     /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
     /// Returns false if the user cancels the save dialog.
     virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode);
-    bool saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false);
+    bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false);
 
     void notifyDocumentClosed(IDocument* doc);
 
