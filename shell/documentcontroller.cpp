@@ -1012,7 +1012,7 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
 
     kDebug() << "opening " << urls << " to area " << area << " index " << areaIndex << " with children " << areaIndex->first() << " " << areaIndex->second();
     
-    bool isFirstView = false;
+    bool isFirstView = true;
     
     bool ret = openDocumentsWithSplitSeparators( areaIndex, urls, isFirstView );
     
@@ -1140,12 +1140,12 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     
     // Clean up the child-indices, because document-loading may fail
     
-    if(!index->first()->viewCount())
+    if(!index->first()->viewCount() && !index->first()->isSplitted())
     {
         kDebug() << "unsplitting first";
         index->unsplit(index->first());
     }
-    else if(!index->second()->viewCount())
+    else if(!index->second()->viewCount() && !index->second()->isSplitted())
     {
         kDebug() << "unsplitting second";
         index->unsplit(index->second());
