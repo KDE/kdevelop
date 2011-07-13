@@ -130,7 +130,6 @@ void KDevKonsoleView::setDirectory( const KUrl &url )
 
 bool KDevKonsoleView::eventFilter( QObject* obj, QEvent *e )
 {
-    kDebug();
     switch( e->type() ) {
         case QEvent::ShortcutOverride: {
             QKeyEvent *k = static_cast<QKeyEvent *>(e);
