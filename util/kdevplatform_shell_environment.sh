@@ -359,7 +359,11 @@ function open! {
     FILES=$@
     NEWFILES=""
     for RELATIVE_FILE in $FILES; do
-        FILE=$(mapFileToClient $RELATIVE_FILE)
+        if [ "$RELATIVE_FILE" == "/" ]; then
+            FILE=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+        fi
         NEWFILES="$NEWFILES $FILE"
     done
 
