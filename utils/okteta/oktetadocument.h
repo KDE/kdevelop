@@ -68,7 +68,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     virtual void setTextSelection( const KTextEditor::Range& range );
 
   public: // Sublime::Document API
-    virtual bool closeDocument();
+    virtual bool closeDocument(bool silent);
 
   public:
     OktetaPlugin* plugin() const;
