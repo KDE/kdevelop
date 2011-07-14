@@ -283,6 +283,12 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     return Area::ContinueWalker;
 }
 
+void MainWindowPrivate::reconstructViews()
+{
+    ViewCreator viewCreator(this);
+    area->walkViews(viewCreator, area->rootIndex());
+}
+
 void MainWindowPrivate::reconstruct()
 {
     if(m_leftTabbarCornerWidget) {
@@ -297,8 +303,7 @@ void MainWindowPrivate::reconstruct()
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
-    ViewCreator viewCreator(this);
-    area->walkViews(viewCreator, area->rootIndex());
+    reconstructViews();
 
     m_mainWindow->blockSignals(true);
 

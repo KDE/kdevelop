@@ -120,7 +120,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::reconstructViews()
 {
-    d->reconstruct();
+    d->reconstructViews();
 }
 
 void MainWindow::setArea(Area *area)

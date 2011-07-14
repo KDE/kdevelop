@@ -160,6 +160,8 @@ public:
 
     /**Reconstructs the mainwindow according to the current area.*/
     void reconstruct();
+    /**Reconstructs the views according to the current area index.*/
+    void reconstructViews();    
     /**Clears the area leaving mainwindow empty.*/
     void clearArea();
 
