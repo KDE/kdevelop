@@ -23,7 +23,7 @@
 #include <interfaces/icore.h>
 #include <QStandardItemModel>
 
-AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWidget* parent)
+AppletSelector::AppletSelector(const QString& parentApp, const QStringList& whitelist, QWidget* parent)
     : KDialog(parent)
 {
     setButtons(Close);
@@ -38,16 +38,9 @@ AppletSelector::AppletSelector(const QString& parentApp, const QStringList&, QWi
     setMainWidget(w);
     
     QStandardItemModel* model = new QStandardItemModel(this);
-    KPluginInfo::List list=Plasma::Applet::listAppletInfo(QString(), parentApp);
     
-    foreach(const KPluginInfo& info, list) {
-        QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
-        item->setEditable(false);
-        item->setToolTip(info.comment());
-        item->setData(info.pluginName(), Qt::UserRole+1);
-        
-        model->appendRow(item);
-    }
+    addPlugins(model, Plasma::Applet::listAppletInfo(QString(), parentApp));
+    addPlugins(model, filterByName(whitelist, Plasma::Applet::listAppletInfo()));
     
     m_ui->plugins->setModel(model);
     
@@ -60,6 +53,29 @@ AppletSelector::~AppletSelector()
 {
     delete m_ui;
 }
+
+void AppletSelector::addPlugins(QStandardItemModel* model, const KPluginInfo::List& list)
+{
+    foreach(const KPluginInfo& info, list) {
+        QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
+        item->setEditable(false);
+        item->setToolTip(info.comment());
+        item->setData(info.pluginName(), Qt::UserRole+1);
+        
+        model->appendRow(item);
+    }
+}
+
+KPluginInfo::List AppletSelector::filterByName(const QStringList& whitelist, const KPluginInfo::List& listAppletInfo)
+{
+    KPluginInfo::List ret;
+    foreach(const KPluginInfo& plugin, listAppletInfo) {
+        if(whitelist.contains(plugin.pluginName()))
+            ret += plugin;
+    }
+    return ret;
+}
+
 
 void AppletSelector::selected(const QModelIndex& idx)
 {

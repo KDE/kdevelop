@@ -23,6 +23,7 @@
 #include <KDE/KDialog>
 #include <KPluginInfo>
 
+class QStandardItemModel;
 class QModelIndex;
 namespace Ui { class AppletSelector; }
 
@@ -30,7 +31,7 @@ class AppletSelector : public KDialog
 {
     Q_OBJECT
     public:
-        AppletSelector(const QString& parentApp, const QStringList&, QWidget* parent);
+        AppletSelector(const QString& parentApp, const QStringList& whitelist, QWidget* parent);
         virtual ~AppletSelector();
         
     public slots:
@@ -42,6 +43,8 @@ class AppletSelector : public KDialog
         void addApplet(const QString& name);
         
     private:
+        void addPlugins(QStandardItemModel* model, const KPluginInfo::List& list);
+        KPluginInfo::List filterByName(const QStringList& whitelist, const KPluginInfo::List& listAppletInfo);
         Ui::AppletSelector* m_ui;
 };
 
