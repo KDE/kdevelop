@@ -365,6 +365,8 @@ void Lexer::tokenize(ParseSession* _session)
   eof.size = 0;
   stream->append(eof);
   }
+
+  stream->squeeze();
 }
 
 void Lexer::initialize_scan_table()
