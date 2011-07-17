@@ -126,10 +126,16 @@ KDevelop::IndexedString Token::symbol() const {
 }
 
 QByteArray Token::symbolByteArray() const {
+  if (size == 0) // esp. for EOF
+    return QByteArray();
+
   return stringFromContents(session->contentsVector(), position, size);
 }
 
 QString Token::symbolString() const {
+  if (size == 0) // esp. for EOF
+    return QString();
+
   return QString::fromUtf8(stringFromContents(session->contentsVector(), position, size));
 }
 
