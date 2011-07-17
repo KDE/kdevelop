@@ -116,14 +116,15 @@ char const * const names[] = {
 };
 
 DumpTree::DumpTree()
-  : m_tokenStream(0), indent(0)
+  : m_tokenStream(0), indent(0), m_forceOutput(false)
 {
   Q_ASSERT(sizeof(names) / sizeof(char const * const) == AST::NODE_KIND_COUNT);
 }
 
-void DumpTree::dump( AST * node, class TokenStream * tokenStream )
+void DumpTree::dump( AST * node, class TokenStream * tokenStream, bool forceOutput )
 {
   m_tokenStream = tokenStream;
+  m_forceOutput = forceOutput;
   visit(node);
   m_tokenStream = 0;
 }
@@ -142,14 +143,16 @@ void DumpTree::visit(AST *node)
     }
   }
 
-  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+  QDebug debug = m_forceOutput ? qDebug() : kDebugStream(QtDebugMsg, 9007);
+
+  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
                <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
 
-  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
+  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )

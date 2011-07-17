@@ -92,3 +92,7 @@ target_link_libraries(cppcodegentest
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )
 
+kde4_add_executable( cpp-parser cpp-parser.cpp )
+target_link_libraries(cpp-parser
+${QT_QTCORE_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+kdev4cppparser kdev4cppduchain kdev4cpprpp)
