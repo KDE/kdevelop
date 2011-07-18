@@ -50,6 +50,7 @@ public:
     void initialize();
     void cleanup();
 
+    /// Must be called by debugger plugin that needs debugger actions and toolviews.
     virtual void initializeUi();
 
     virtual void addSession(IDebugSession* session);
