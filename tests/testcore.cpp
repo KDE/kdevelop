@@ -29,8 +29,9 @@
 #include <interfaces/isession.h>
 #include "../shell/core_p.h"
 
-#include <KGlobal>
 #include <QCoreApplication>
+
+#include <KParts/MainWindow>
 
 namespace KDevelop
 {
@@ -50,6 +51,12 @@ void TestCore::initialize( Core::Setup mode, const QString& session )
     TestCore* core = dynamic_cast<TestCore*>(Core::m_self);
     Q_ASSERT(core);
     core->initializeNonStatic(mode, session);
+
+    if (mode == Default) {
+        // we don't want the window to be visible, hide it
+        // the unit tests should work anyways
+        core->uiController()->activeMainWindow()->hide();
+    }
 }
 
 void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)

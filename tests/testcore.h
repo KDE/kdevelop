@@ -39,7 +39,8 @@ class UiController;
  *
  * This is an ICore implementation which should be used inside unit tests.
  * By default a temporary session named after currently running application
- * will be instantiated.
+ * will be instantiated. Furthermore the mainwindow - if created - will be
+ * hidden as no user interaction should take place in a unit test.
  *
  * The simplest code which should suffice for most use cases is:
  *
@@ -76,7 +77,9 @@ public:
      * Initialize the test core with the given setup @p mode.
      * Optionally launch with a user given session.
      *
-     * @p mode Use Core::NoUi when your unit test does not require any UI
+     * @p mode Use @c Core::NoUi when your unit test does not require any UI
+     *         NOTE: Even in @c Default mode the mainwindow will be hidden,
+     *               as unit tests should not depend on user interaction.
      * @p session By default a temporary session will be created called "test-%appname".
      *            If @p session is not empty, a non-temporary session with the given name
      *            will be opened.
