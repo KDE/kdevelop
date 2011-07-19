@@ -144,6 +144,9 @@ void pp_macro::computeHash() const {
     FOREACH_FUNCTION(const IndexedString& definitionComponent, definition)
       m_valueHash = definitionComponent.hash() + 17 * m_valueHash;
 
+    ///FIXME: a is also declared in FOREACH_FUNCTION macro, and that local
+    ///       var will be used in the loop context
+    ///       what was intended here?
     int a = 1;
     FOREACH_FUNCTION(const IndexedString& formal, formals) {
         a *= 19;
