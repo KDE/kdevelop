@@ -400,8 +400,6 @@ struct DocumentControllerPrivate {
                         Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
 
                         if(sublimeDocBuddy) {
-                            Sublime::AreaIndex* activeViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
-
                             // try to find existing View of buddy document:
                             foreach (Sublime::View *view, sublimeDocBuddy->views())
                             {

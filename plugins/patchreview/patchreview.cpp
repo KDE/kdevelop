@@ -618,7 +618,7 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* 
 
     for(int b = 0; b < markers.size(); ++b) {
       QString spanText = Qt::escape(string.mid(currentPos, markers[b]->offset() - currentPos));
-      if(markers[b]->type() == Diff2::Marker::End && (currentPos != 0 || markers[b]->offset() != string.size()))
+      if(markers[b]->type() == Diff2::Marker::End && (currentPos != 0 || markers[b]->offset() != static_cast<uint>(string.size())))
       {
         if(a == highlightMark.first && b == highlightMark.second)
           html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
@@ -1056,7 +1056,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Dif
       for(int b = 0; b < markers.size(); ++b) { 
         if(markers[b]->type() == Diff2::Marker::End)
         {
-          if(currentPos != 0 || markers[b]->offset() != string.size())
+          if(currentPos != 0 || markers[b]->offset() != static_cast<uint>(string.size()))
           {
             KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()) ) );
             m_ranges << r2;

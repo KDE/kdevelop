@@ -279,7 +279,7 @@ public:
         foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
-                bool loaded = loadSessionExternally( s );
+                loadSessionExternally( s );
                 break;
             }
         }

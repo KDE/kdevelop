@@ -441,12 +441,12 @@ QString AbstractNavigationContext::currentHtml() const {
   return m_currentText;
 }
 
-QString AbstractNavigationContext::fontSizePrefix(bool shorten) const
+QString AbstractNavigationContext::fontSizePrefix(bool /*shorten*/) const
 {
   return QString();
 }
 
-QString AbstractNavigationContext::fontSizeSuffix(bool shorten) const
+QString AbstractNavigationContext::fontSizeSuffix(bool /*shorten*/) const
 {
   return QString();
 }

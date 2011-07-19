@@ -199,8 +199,6 @@ QMenu* GrepDialog::createSyncButtonMenu()
 {
     QMenu* ret = new QMenu;
 
-    QAction* action = 0;
-    
     QSet<KUrl> hadUrls;
     
     IDocument *doc = m_plugin->core()->documentController()->activeDocument();

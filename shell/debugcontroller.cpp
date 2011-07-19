@@ -101,9 +101,15 @@ private:
 
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
+      m_continueDebugger(0), m_stopDebugger(0),
+      m_interruptDebugger(0), m_runToCursor(0),
+      m_jumpToCursor(0), m_stepOver(0),
+      m_stepIntoInstruction(0), m_stepInto(0),
+      m_stepOverInstruction(0), m_stepOut(0),
+      m_toggleBreakpoint(0),
       m_breakpointModel(new BreakpointModel(this)),
       m_variableCollection(new VariableCollection(this)),
-      m_uiInitialized(false), m_runToCursor(0), m_toggleBreakpoint(0)
+      m_uiInitialized(false)
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
