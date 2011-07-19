@@ -57,7 +57,6 @@ private slots:
     void cleanupTestCase();
 
 private:
-    KDevelop::TestCore* m_testCore;
     GitPlugin* m_plugin;
     void removeTempDirs();
 };

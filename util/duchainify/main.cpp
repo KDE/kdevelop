@@ -31,6 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
@@ -235,7 +236,7 @@ int main(int argc, char** argv)
     KApplication app(false);
 
     AutoTestShell::init();
-    Core::initialize(0, KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
     Manager manager(args);
 
     QTimer::singleShot(0, &manager, SLOT(init()));

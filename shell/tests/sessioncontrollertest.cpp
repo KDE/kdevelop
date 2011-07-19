@@ -21,6 +21,7 @@
 
 #include <qtest_kde.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -34,19 +35,19 @@
 
 Q_DECLARE_METATYPE( KDevelop::ISession* )
 
-using KDevelop::SessionController;
-using KDevelop::ISession;
-using KDevelop::AutoTestShell;
-using KDevelop::Session;
-using KDevelop::Core;
+using namespace KDevelop;
 
 using QTest::kWaitForSignal;
 
 //////////////////// Helper Functions ////////////////////////////////////////
 
-void verifySessionDir( Session* s, bool exists = true )
+QString sessionDir( ISession* s )
 {
-    QString sessiondir = SessionController::sessionDirectory() + "/" + s->id().toString();
+    return SessionController::sessionDirectory() + "/" + s->id().toString();
+}
+
+void verifySessionDir( const QString& sessiondir, const QString& name, bool exists )
+{
     if( exists ) 
     {
         kDebug() << "checking existing session" << sessiondir;
@@ -54,11 +55,16 @@ void verifySessionDir( Session* s, bool exists = true )
         QVERIFY( QFileInfo( sessiondir ).isDir() );
         QVERIFY( QFileInfo( sessiondir+"/sessionrc" ).exists() );
         KSharedConfig::Ptr cfg = KSharedConfig::openConfig( sessiondir+"/sessionrc" );
-        QCOMPARE( s->name(), cfg->group("").readEntry( Session::cfgSessionNameEntry, "" ) );
+        QCOMPARE( name, cfg->group("").readEntry( Session::cfgSessionNameEntry, "" ) );
     } else {
         kDebug() << "checking not-existing dir: " << sessiondir;
         QVERIFY( !QFileInfo( sessiondir ).exists() );
     }
+}
+
+void verifySessionDir( ISession* s, bool exists = true )
+{
+    verifySessionDir(sessionDir(s), s->name(), exists);
 }
 
 ////////////////////// Fixture ///////////////////////////////////////////////
@@ -66,7 +72,7 @@ void verifySessionDir( Session* s, bool exists = true )
 void SessionControllerTest::initTestCase()
 {
     AutoTestShell::init();
-    Core::initialize( 0, KDevelop::Core::NoUi );
+    TestCore::initialize(Core::NoUi);
     m_core = Core::self();
     qRegisterMetaType<KDevelop::ISession*>();
 }
@@ -202,6 +208,21 @@ void SessionControllerTest::readFromConfig()
     grp.writeEntry( "TestEntry", "Test1" );
     KConfigGroup grp2( s->config(), "TestGroup" );
     QCOMPARE(grp.readEntry( "TestEntry", "" ), QString( "Test1" ) );
+}
+
+void SessionControllerTest::temporary()
+{
+    ISession* s = Core::self()->activeSession();
+    s->setTemporary(true);
+    const QString oldName = s->name();
+    const QString dir = sessionDir(s);
+
+    verifySessionDir(s, true);
+    Core::self()->sessionController()->cleanup();
+    verifySessionDir(dir, oldName, false);
+    Core::self()->sessionController()->initialize(oldName);
+    QCOMPARE(Core::self()->activeSession()->name(), oldName);
+    // dir / UID can be different, hence don't verifySessionDir
 }
 
 QTEST_KDEMAIN( SessionControllerTest, GUI)

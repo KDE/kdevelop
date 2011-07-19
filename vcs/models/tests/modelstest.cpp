@@ -32,7 +32,7 @@ using namespace KDevelop;
 void ModelsTest::testInit()
 {
     AutoTestShell::init();
-    Core::initialize();
+    TestCore::initialize();
 }
 
 

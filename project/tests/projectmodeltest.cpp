@@ -88,8 +88,7 @@ private:
 void ProjectModelTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
-    KDevelop::TestCore* core = new KDevelop::TestCore();
-    core->initialize(KDevelop::Core::NoUi);
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );

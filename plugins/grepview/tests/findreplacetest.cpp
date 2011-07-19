@@ -27,16 +27,7 @@
 void FindReplaceTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
-    m_testCore = new KDevelop::TestCore();
-    m_testCore->initialize(KDevelop::Core::NoUi);
-    //m_plugin = new GrepViewPlugin(m_testCore);
-}
-
-void FindReplaceTest::cleanupTestCase()
-{
-    //delete m_plugin;
-    m_testCore->cleanup();
-    delete m_testCore;
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 }
 
 void FindReplaceTest::testFind_data()

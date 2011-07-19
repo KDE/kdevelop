@@ -109,6 +109,12 @@ void fillWorkingDirectory(QString const & dirname)
     verifiedWrite(file1, keywordText);
 }
 
+void SvnRecursiveAdd::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore::initialize();
+}
+
 void SvnRecursiveAdd::test()
 {
     KTempDir reposDir;
@@ -116,9 +122,6 @@ void SvnRecursiveAdd::test()
     cmd.setWorkingDirectory(reposDir.name());
     cmd << "svnadmin" << "create" << reposDir.name();
     QCOMPARE(cmd.execute(10000), 0);
-    AutoTestShell::init();
-    std::auto_ptr<TestCore> core(new TestCore());
-    core->initialize(Core::Default);
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     IBasicVersionControl* vcs = NULL;
     foreach(IPlugin* p,  plugins) {
@@ -149,8 +152,6 @@ void SvnRecursiveAdd::test()
     validatingExecJob(vcs->add(KUrl(addUrl), IBasicVersionControl::Recursive));
     kDebug() << "Recursively reverting changes at " << addUrl;
     validatingExecJob(vcs->revert(KUrl(addUrl), IBasicVersionControl::Recursive));
-
-    core->cleanup();
 }
 
 QTEST_KDEMAIN(SvnRecursiveAdd, GUI)

@@ -33,17 +33,18 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
 
-void ShellDocumentOperationTest::init()
+using namespace KDevelop;
+
+void ShellDocumentOperationTest::initTestCase()
 {
     AutoTestShell::init();
-    KDevelop::Core::initialize();
-}
-
-void ShellDocumentOperationTest::cleanup()
-{
+    TestCore::initialize();
 }
 
 void ShellDocumentOperationTest::testOpenDocumentFromText()

@@ -20,7 +20,6 @@
 #define SHELLBUDDYTEST_H
 
 #include <QObject>
-#include <tests/autotestshell.h>
 #include <KTempDir>
 #include <sublime/view.h>
 #include "../documentcontroller.h"
@@ -31,8 +30,7 @@ using namespace KDevelop;
 class ShellBuddyTest: public QObject {
     Q_OBJECT
 private slots:
-    void init();
-    void cleanup();
+    void initTestCase();
 
     void testDeclarationDefinitionOrder();
     void testMultiDotFilenames();

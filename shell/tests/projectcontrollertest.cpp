@@ -27,6 +27,7 @@
 
 #include <qtest_kde.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include "../core.h"
 #include "../projectcontroller.h"
@@ -35,18 +36,7 @@
 #include "../../project/interfaces/iprojectfilemanager.h"
 #include "../project/projectmodel.h"
 
-using KDevelop::ProjectController;
-using KDevelop::IProjectDialogProvider;
-using KDevelop::IProject;
-using KDevelop::Project;
-using KDevelop::Core;
-using KDevelop::IPlugin;
-using KDevelop::IProjectFileManager;
-
-using KDevelop::ProjectModel;
-using KDevelop::ProjectBaseItem;
-using KDevelop::ProjectFileItem;
-using KDevelop::ProjectFolderItem;
+using namespace KDevelop;
 
 using QTest::kWaitForSignal;
 
@@ -149,7 +139,7 @@ K_EXPORT_PLUGIN(FakeFileManager())
 void ProjectControllerTest::initTestCase()
 {
     AutoTestShell::init();
-    Core::initialize();
+    TestCore::initialize();
     qRegisterMetaType<KDevelop::IProject*>();
     m_core = Core::self();
     m_scratchDir = QDir(QDir::tempPath());

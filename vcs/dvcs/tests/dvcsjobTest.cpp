@@ -33,8 +33,7 @@ using namespace KDevelop;
 void DVcsJobTest::initTestCase()
 {
     AutoTestShell::init();
-    TestCore* testCore = new KDevelop::TestCore();
-    testCore->initialize(KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
 }
 
 void DVcsJobTest::testJob()

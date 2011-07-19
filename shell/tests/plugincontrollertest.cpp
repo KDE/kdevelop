@@ -31,13 +31,12 @@
 #include <kdebug.h>
 
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include "../core.h"
 #include "../plugincontroller.h"
 
-using KDevelop::Core;
-using KDevelop::PluginController;
-using KDevelop::IPlugin;
+using namespace KDevelop;
 
 using QTest::kWaitForSignal;
 
@@ -68,7 +67,7 @@ void PluginControllerTest::initTestCase()
     p.execute();
 
     AutoTestShell::init();
-    Core::initialize( Core::NoUi );
+    TestCore::initialize( Core::NoUi );
     m_core = Core::self();
     m_pluginCtrl = m_core->pluginControllerInternal();
 }

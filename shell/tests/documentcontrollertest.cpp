@@ -32,20 +32,22 @@
 #include <ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <languagecontroller.h>
+#include <documentcontroller.h>
+#include <tests/testcore.h>
 
 using namespace KDevelop;
 
 void DocumentControllerTest::initTestCase()
 {
-
+    AutoTestShell::init();
+    TestCore::initialize();
+    Core::self()->languageController()->backgroundParser()->disableProcessing();
+    m_subject = Core::self()->documentController();
 }
 
 void DocumentControllerTest::init()
 {
-    AutoTestShell::init();
-    Core::initialize();
-    Core::self()->languageController()->backgroundParser()->disableProcessing();
-    m_subject = Core::self()->documentController();
+    Core::self()->documentControllerInternal()->initialize();
 
     // create temp files
     m_file1.setPrefix(m_tempDir.name());
@@ -69,7 +71,7 @@ void DocumentControllerTest::cleanup()
         document->close(IDocument::Discard);
     }
 
-    Core::self()->cleanup();
+    Core::self()->documentControllerInternal()->cleanup();
 }
 
 void DocumentControllerTest::cleanupTestCase()

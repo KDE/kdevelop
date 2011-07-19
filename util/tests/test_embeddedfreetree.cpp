@@ -323,8 +323,7 @@ class TestEmbeddedFreeTree : public QObject {
   private slots:
     void initTestCase() {
         KDevelop::AutoTestShell::init();
-        KDevelop::TestCore* core = new KDevelop::TestCore;
-        core->initialize(KDevelop::Core::NoUi, "test-embeddedfreetree");
+        KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
     }
     void randomizedTest() {
         const int cycles = 10000;

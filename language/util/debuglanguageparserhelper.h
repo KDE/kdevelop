@@ -32,6 +32,7 @@
 #include <tests/autotestshell.h>
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
+#include <tests/testcore.h>
 
 namespace KDevelopUtils {
 
@@ -182,7 +183,7 @@ int initAndRunParser(const KAboutData& aboutData, int argc, char* argv[])
     bool printTokens = args->isSet("print-tokens");
 
     KDevelop::AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     KDevelop::DUChain::self()->disablePersistentStorage();
     KDevelop::CodeRepresentation::setDiskChangesForbidden(true);

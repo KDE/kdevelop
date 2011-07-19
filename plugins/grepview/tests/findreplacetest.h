@@ -42,7 +42,6 @@ public:
     typedef QList<File> FileList;
     
 private:
-    KDevelop::TestCore* m_testCore;
     GrepViewPlugin* m_plugin;
     
 private slots:
@@ -53,8 +52,6 @@ private slots:
     
     void testReplace();
     void testReplace_data();
-    
-    void cleanupTestCase();
 };
 
 Q_DECLARE_METATYPE(FindReplaceTest::MatchList)

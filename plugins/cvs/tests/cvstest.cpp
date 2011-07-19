@@ -31,8 +31,7 @@
 void CvsTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
-    KDevelop::TestCore* core = new KDevelop::TestCore;
-    core->initialize(KDevelop::Core::NoUi, "test-cvs");
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     m_proxy = new CvsProxy;
 

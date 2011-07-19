@@ -32,15 +32,12 @@ class ProjectLoadTest : public QObject
 Q_OBJECT
   void self();
 private slots:
+  void initTestCase();
   void init();
-  void cleanup();
 
   void addRemoveFiles();
   void addLotsOfFiles();
   void addMultipleJobs();
-
-private:
-  KDevelop::TestCore* m_core;
 };
 
 #endif
