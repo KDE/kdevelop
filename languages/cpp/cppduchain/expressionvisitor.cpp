@@ -56,7 +56,7 @@
 // uncomment to get debugging info on ADL - very expensive on parsing
 //#define DEBUG_ADL
 
-const uint maxExpressionVisitorProblems = 400;
+const int maxExpressionVisitorProblems = 400;
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -278,6 +278,9 @@ void ExpressionVisitor::problem( AST* node, const QString& str ) {
   Cpp::DumpChain d;
 
   d.dump(node, m_session);
+#else
+  Q_UNUSED(node);
+  Q_UNUSED(str);
 #endif
 }
 
@@ -2139,7 +2142,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             ///Allow incomplete matching between the specified signature and the real signature, as Qt allows it.
             ///@todo: For signals, we should only allow it when at least as many arguments are specified as in the slot declaration.
             ///@todo: For slots, we should only allow it if the parameter has a default argument.
-            uint functionSigLength = qtFunction->normalizedSignature().length();
+            int functionSigLength = qtFunction->normalizedSignature().length();
             const char* functionSig = qtFunction->normalizedSignature().c_str();
 
             if(functionSigLength >= sig.length() &&

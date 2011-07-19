@@ -296,7 +296,7 @@ void Lexer::tokenize(ParseSession* _session)
     --endCursor;
 
   while (cursor < endCursor) {
-    Q_ASSERT(stream->size() == index);
+    Q_ASSERT(static_cast<uint>(stream->size()) == index);
 
     size_t previousIndex = index;
 

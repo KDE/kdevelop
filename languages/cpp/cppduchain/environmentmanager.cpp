@@ -179,7 +179,7 @@ QString print(const Cpp::ReferenceCountedMacroSet& set) {
 EnvironmentManager* EnvironmentManager::m_self = 0;
 
 EnvironmentManager::EnvironmentManager()
-  : m_simplifiedMatching(false), m_matchingLevel(Full),
+  : m_matchingLevel(Full), m_simplifiedMatching(false),
     m_macroDataRepository("macro repository"), m_stringSetRepository("string sets"), m_macroSetRepository()
 {
 }

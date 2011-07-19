@@ -822,7 +822,7 @@ uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticComp
   return ret;
 }
 
-void MoreArgumentHintsCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+void MoreArgumentHintsCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& /*word*/)
 {
   currentMaxArgumentHints = m_oldNumber + maxArgumentHintsExtensionSteps;
   

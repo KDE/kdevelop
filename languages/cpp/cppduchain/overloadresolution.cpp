@@ -64,7 +64,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
 
       if ( functionDeclaration /*&& functionDeclaration->isConstructor()*/ ) //Test not needed, because name == classname
       {
-        if ( function->indexedArgumentsSize() >= params.parameters.size() )
+        if ( function->indexedArgumentsSize() >= static_cast<uint>(params.parameters.size()) )
         {
           if ( !implicit || !functionDeclaration->isExplicit() )
             goodDeclarations << *it;
@@ -306,7 +306,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
   }
 
   const IndexedType* arguments( functionType->indexedArguments() );
-  if ( params.parameters.count() > functionType->indexedArgumentsSize() )
+  if ( static_cast<uint>(params.parameters.count()) > functionType->indexedArgumentsSize() )
     return declaration;
 
   //templateContext contains the template-parameters that we need to find instantiations for
@@ -639,7 +639,7 @@ uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, cons
     if ( argumentTemplateDeclarationContext )
     {
       int matchLength = argumentTemplateDeclarationContext->localDeclarations().count();
-      if ( parameterType.templateIdentifiersCount() < matchLength )
+      if ( parameterType.templateIdentifiersCount() < static_cast<uint>(matchLength) )
         matchLength = parameterType.templateIdentifiersCount();
 
       for ( int a = 0; a < matchLength; ++a )

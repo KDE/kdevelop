@@ -94,8 +94,9 @@ void getFirstLast(AST** first, AST** last, const ListNode<_Tp> *nodes)
 }
 
 ContextBuilder::ContextBuilder (ParseSession* session)
-: m_nameCompiler(session)
-  , m_inFunctionDefinition(false)
+:   m_inFunctionDefinition(false)
+  , m_editor(session)
+  , m_nameCompiler(session)
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
@@ -103,7 +104,6 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
-  , m_editor(session)
 {
 }
 
