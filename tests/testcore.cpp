@@ -26,7 +26,11 @@
 #include <shell/plugincontroller.h>
 #include <shell/partcontroller.h>
 #include <shell/projectcontroller.h>
+#include <interfaces/isession.h>
 #include "../shell/core_p.h"
+
+#include <KGlobal>
+#include <QCoreApplication>
 
 namespace KDevelop
 {
@@ -34,12 +38,34 @@ namespace KDevelop
 TestCore::TestCore()
  : Core( new CorePrivate(this) )
 {
-    KDevelop::Core::m_self = this;
+    Core::m_self = this;
 }
 
 void TestCore::initialize( Core::Setup mode, const QString& session )
 {
+    if (!Core::m_self) {
+        new TestCore;
+    }
+
+    TestCore* core = dynamic_cast<TestCore*>(Core::m_self);
+    Q_ASSERT(core);
+    core->initializeNonStatic(mode, session);
+}
+
+void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
+{
+    QString session = _session;
+    if (_session.isEmpty()) {
+        // use a distinct session name for unit test sessions
+        // they are temporary (see below) but still - we want to make sure
+        session = "test-" + qAppName();
+    }
+
     d->initialize( mode, session );
+
+    if (_session.isEmpty()) {
+        activeSession()->setTemporary(true);
+    }
 }
 
 void TestCore::setSessionController( SessionController* ctrl )
