@@ -27,6 +27,8 @@
 #include <KConfigGroup>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <interfaces/iplugincontroller.h>
+#include <tests/testcore.h>
+#include <shell/sessioncontroller.h>
 
 QTEST_KDEMAIN(CMakeManagerTest, GUI )
 
@@ -41,7 +43,8 @@ using namespace KDevelop;
 CMakeManagerTest::CMakeManagerTest(QObject* parent): QObject(parent)
 {
     AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::Default);
+    TestCore* core = new TestCore;
+    core->initialize(KDevelop::Core::Default, "cmakemanagertest");
 }
 
 CMakeManagerTest::~CMakeManagerTest()
@@ -52,10 +55,11 @@ void CMakeManagerTest::testWithBuildDirProject()
     // Import project
     QList< ProjectFolderItem* > items;
     
-    KUrl url(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/with_build_dir.kdev4");
+    KUrl url(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/with_build_dir.kdev4").canonicalFilePath());
     ICore::self()->projectController()->openProject(url);
     
-    KUrl expected_source_Dir(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/");
+    KUrl expected_source_Dir(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir").canonicalFilePath());
+    expected_source_Dir.adjustPath(KUrl::AddTrailingSlash);
     WAIT_FOR_OPEN_SIGNAL;
     
     IProject* project = ICore::self()->projectController()->findProjectByName("with_build_dir");
