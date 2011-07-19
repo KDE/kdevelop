@@ -139,7 +139,7 @@ bool MIParser::parseResultRecord(Record *&record)
     else if (c == '*')
         res->subkind = ResultRecord::ExecNotification;
     else if (c == '+')
-        res->subkind == ResultRecord::StatusNotification;
+        res->subkind = ResultRecord::StatusNotification;
     else {
         Q_ASSERT(c == '=');
         res->subkind = ResultRecord::GeneralNotification;        
