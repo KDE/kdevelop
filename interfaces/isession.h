@@ -56,6 +56,14 @@ public:
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
     virtual QUuid id() const = 0;
+
+    /**
+     * Mark session as temporary. It will then be deleted on close.
+     *
+     * This is mainly useful for unit tests etc.
+     */
+    virtual void setTemporary(bool temp) = 0;
+    virtual bool isTemporary() const = 0;
 };
 
 }

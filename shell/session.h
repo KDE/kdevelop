@@ -51,6 +51,10 @@ public:
     virtual QString name() const;
     void setName( const QString& );
     QUuid id() const;
+
+    virtual void setTemporary(bool temp);
+    virtual bool isTemporary() const;
+
 Q_SIGNALS:
     void nameChanged( const QString& newname, const QString& oldname );
 private:

@@ -47,6 +47,8 @@ public:
     QUuid id;
     KSharedConfig::Ptr config;
     QString sessionDirectory;
+    bool isTemporary;
+
     KUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
@@ -70,6 +72,7 @@ public:
             QDir( SessionController::sessionDirectory() ).mkdir( id.toString() );
         }
         config = KSharedConfig::openConfig( sessionDirectory+"/sessionrc" );
+        isTemporary = false;
     }
 };
 
@@ -169,6 +172,16 @@ void Session::setName( const QString& newname )
     d->config->group("").writeEntry( cfgSessionNameEntry, newname );
     d->config->sync();
     emit nameChanged( newname, oldname );
+}
+
+void Session::setTemporary(bool temp)
+{
+    d->isTemporary = temp;
+}
+
+bool Session::isTemporary() const
+{
+    return d->isTemporary;
 }
 
 }
