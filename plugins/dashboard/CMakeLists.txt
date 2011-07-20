@@ -1,4 +1,5 @@
 project(kdev-project-dashboard)
+add_subdirectory(plasmoids)
 
 set(kdevprojectdasboard_SRCS
     appletselector.cpp

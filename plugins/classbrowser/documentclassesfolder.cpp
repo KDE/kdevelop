@@ -360,7 +360,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
         const IndexedDeclaration* declarations;
         DUChainReadLocker lock;
         PersistentSymbolTable::self().declarations(item.id, count, declarations);
-        for ( int i = 0; i < count; ++i )
+        for ( uint i = 0; i < count; ++i )
         {
           if (declarations[i].indexedTopContext().url() == a_file)
           {

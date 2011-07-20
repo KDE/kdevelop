@@ -29,12 +29,16 @@
 
 using namespace KDevelop;
 
-void ModelsTest::testInit()
+void ModelsTest::initTestCase()
 {
     AutoTestShell::init();
-    Core::initialize();
+    TestCore::initialize();
 }
 
+void ModelsTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
 
 void ModelsTest::testVcsFileChangesModel()
 {

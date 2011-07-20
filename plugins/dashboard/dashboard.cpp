@@ -31,7 +31,7 @@ using namespace Plasma;
 Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
     : View(corona->containments().first(), parent), corona(corona), m_selector(0)
 {
-    m_selector=new AppletSelector("KDevelop", QStringList(), this);
+    m_selector=new AppletSelector("KDevelop", QStringList("webbrowser"), this);
     connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
     
     setFocusPolicy(Qt::NoFocus);

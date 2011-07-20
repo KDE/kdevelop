@@ -206,6 +206,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument*);
+    void documentSaved(KDevelop::IDocument*);
     void exporterSelected(QAction* action);
     
 private:
@@ -216,7 +217,8 @@ private:
     // Returns whether the current working set is active only in this area
     bool isWorkingSetUnique() const;
     // Makes sure that this working set is active only in this area, and that its name starts with "review".
-    void setUniqueWorkingSet();
+    // Returns false on failure (if the user disagreed).
+    bool setUniqueEmptyWorkingSet();
   
     QList<KDevelop::IPatchSource::Ptr> m_knownPatches;
 

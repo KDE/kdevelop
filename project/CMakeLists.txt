@@ -1,5 +1,3 @@
-add_subdirectory(dashboard)
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9503 )
 set(kdevplatformproject_LIB_SRCS
     projectutils.cpp

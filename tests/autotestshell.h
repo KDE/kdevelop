@@ -30,12 +30,12 @@
    You can initialize it in initTestCase() to get a minimal shell to run
    your autotests.
 
-   Example of a minimal KDevPlatform app:
+   Example of a minimal KDevPlatform unit test:
 
    void Mytest::initTestCase()
    {
        AutoTestShell::init();
-       KDevelop::Core::initialize();
+       TestCore::initialize();
    }
 
  */

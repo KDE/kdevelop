@@ -618,7 +618,7 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* 
 
     for(int b = 0; b < markers.size(); ++b) {
       QString spanText = Qt::escape(string.mid(currentPos, markers[b]->offset() - currentPos));
-      if(markers[b]->type() == Diff2::Marker::End && (currentPos != 0 || markers[b]->offset() != string.size()))
+      if(markers[b]->type() == Diff2::Marker::End && (currentPos != 0 || markers[b]->offset() != static_cast<uint>(string.size())))
       {
         if(a == highlightMark.first && b == highlightMark.second)
           html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
@@ -1056,7 +1056,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Dif
       for(int b = 0; b < markers.size(); ++b) { 
         if(markers[b]->type() == Diff2::Marker::End)
         {
-          if(currentPos != 0 || markers[b]->offset() != string.size())
+          if(currentPos != 0 || markers[b]->offset() != static_cast<uint>(string.size()))
           {
             KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()) ) );
             m_ranges << r2;
@@ -1335,9 +1335,8 @@ void PatchReviewPlugin::cancelReview()
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
-      setUniqueWorkingSet(); // Make the working-set unique, so that we don't affect other areas
-      w->area()->clearViews();
-      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+      if(setUniqueEmptyWorkingSet())
+        ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
   }
 }
@@ -1360,8 +1359,8 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     if(w->area()->objectName() == "review") {
-      w->area()->clearViews();
-      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+      if(setUniqueEmptyWorkingSet())
+        ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
   }
 }
@@ -1379,7 +1378,7 @@ void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique()
   if (w->area()->objectName() != "review")
     ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
 
-  setUniqueWorkingSet();
+  setUniqueEmptyWorkingSet();
 }
 
 bool PatchReviewPlugin::isWorkingSetUnique() const
@@ -1391,15 +1390,23 @@ bool PatchReviewPlugin::isWorkingSetUnique() const
   return true;
 }
 
-void PatchReviewPlugin::setUniqueWorkingSet()
+bool PatchReviewPlugin::setUniqueEmptyWorkingSet()
 {
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  
+  if(!ICore::self()->documentController()->saveAllDocumentsForWindow(ICore::self()->uiController()->activeMainWindow(), KDevelop::IDocument::Default, true))
+    return false;
   
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
   while(!isWorkingSetUnique())
     w->area()->setWorkingSet(QString("review_%1").arg(rand() % 10000));
+  
+  // We've asked the user, so just clear silently
+  w->area()->clearViews(true);
+  
+  return true;
 }
 
 void PatchReviewPlugin::updateReview()
@@ -1531,7 +1538,7 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(forceUpdate()));
+    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), this, SLOT(documentSaved(KDevelop::IDocument*)));
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
@@ -1543,6 +1550,15 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 void PatchReviewPlugin::documentClosed(IDocument* doc)
 {
     removeHighlighting(doc->url());
+}
+
+void PatchReviewPlugin::documentSaved(IDocument* doc)
+{
+    // Only update if the url is not the patch-file, because our call to
+    // the reload() KTextEditor function also causes this signal,
+    // which would lead to an endless update loop.
+    if(m_patch && doc->url() != m_patch->file())
+      forceUpdate();
 }
 
 void PatchReviewPlugin::textDocumentCreated(IDocument* doc)

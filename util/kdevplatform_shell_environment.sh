@@ -85,7 +85,7 @@ function help! {
     echo "Standard commands:"
     echo "raise!                                 - Raise the window."
     echo "sync!                                  - Synchronize the working directory with the currently open document."
-    echo "open!   [file] ...                     - Open the file(s) within the attached application."
+    echo "open!   [file] ...                     - Open the file(s) within the attached application. See \"help! open\""
     echo "eopen!  [file] ...                     - Open the file(s) within an external application using kde-open."
     echo "create!  [file] [[text]]               - Create and open a new file."
     echo "search!   [pattern] [[locations]] ...  - Search for the given pattern here or at the optionally given location(s)."
@@ -97,6 +97,23 @@ function help! {
     echo "help! env                              - Show help about the environment."
     echo ""
     echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
+    fi
+
+    if [ "$1" == "open" ]; then
+    echo "Extended opening:"
+    echo "The open! command can also be used to open files in specific tool-view configurations, by adding split-separators:"
+    echo "- Files around the / separator will be arranged horizontally by split-view."
+    echo "- Files around the - separator will be arranged vertically by split-view."
+    echo "- Parens [ ... ] can be used to disambiguate the hierarchy (there must be spaces between filename and paren)."
+    echo "- If a file is missing around a separator, the currently active view is inserted into the position."
+    echo ""
+    echo "Examples:"
+    echo "open! file1 / file2                 - The active view is split horizontally."
+         "                                      file1 is opened in the left view, and file2 in the right view."
+    echo "open! file1 / [ file2 - file3 ]     - The active view is split horizontally, and the right split-view is split vertically."
+         "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
+    echo "open! / file1                       - The active view is split horizontally."
+         "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
     fi
     
     if [ "$1" == "remote" ]; then
@@ -185,6 +202,14 @@ function ee! {
 # Opens a document in internally in the application
 function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
+    if ! [ "$RESULT" == "true" ]; then
+        echo "Failed to open $1"
+    fi
+}
+
+# Opens a document in internally in the application
+function openDocuments {
+    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $1 ")")
     if ! [ "$RESULT" == "true" ]; then
         echo "Failed to open $1"
     fi
@@ -291,9 +316,13 @@ function sync! {
 # Take a path, and returns "yes" if the equal file is available on the host and the client
 # The check is performed by comparing inode-numbers
 function isEqualFileOnHostAndClient {
+    function trimWhiteSpace() {
+        echo $1
+    }
+
     FILE=$1
-    INODE_HOST=$(ls -i $FILE | cut -d' ' -f1)
-    INODE_CLIENT=$(executeInAppSync "ls -i $FILE | cut -d' ' -f1" "$(dirname $FILE)")
+    INODE_HOST=$(trimWhiteSpace $(ls --color=never -i $FILE | cut -d' ' -f1))
+    INODE_CLIENT=$(trimWhiteSpace $(executeInAppSync "ls --color=never -i $FILE | cut -d' ' -f1" "$(dirname $FILE)"))
     if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
         echo "yes"
     else
@@ -328,11 +357,17 @@ function mapFileToClient {
 
 function open! {
     FILES=$@
+    NEWFILES=""
     for RELATIVE_FILE in $FILES; do
-        # TODO: Support ':linenumber' at the end of the file
-        FILE=$(mapFileToClient $RELATIVE_FILE)
-        openDocument "$FILE"
+        if [ "$RELATIVE_FILE" == "/" ]; then
+            FILE=$RELATIVE_FILE
+        else
+            FILE=$(mapFileToClient $RELATIVE_FILE)
+        fi
+        NEWFILES="$NEWFILES $FILE"
     done
+
+    openDocuments "$NEWFILES"
 }
 
 function eopen! {

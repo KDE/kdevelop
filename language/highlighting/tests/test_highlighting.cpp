@@ -36,11 +36,15 @@ using namespace KDevelop;
 void TestHighlighting::initTestCase()
 {
     AutoTestShell::init();
-    TestCore* core = new TestCore();
-    core->initialize(Core::NoUi);
+    TestCore::initialize(Core::NoUi);
 
     DUChain::self()->disablePersistentStorage();
     CodeRepresentation::setDiskChangesForbidden(true);
+}
+
+void TestHighlighting::cleanupTestCase()
+{
+    TestCore::shutdown();
 }
 
 void TestHighlighting::testInitialization()

@@ -28,7 +28,9 @@ class ModelsTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void testInit();
+    void initTestCase();
+    void cleanupTestCase();
+
     void testVcsFileChangesModel();
 };
 

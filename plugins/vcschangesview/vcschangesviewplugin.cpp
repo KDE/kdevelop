@@ -94,7 +94,7 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     connect(reloadaction, SIGNAL(triggered(bool)), m_model, SLOT(reloadAll()));
 }
 
-void VcsProjectIntegrationPlugin::activated(const QModelIndex& idx)
+void VcsProjectIntegrationPlugin::activated(const QModelIndex& /*idx*/)
 {
 
 }

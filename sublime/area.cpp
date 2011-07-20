@@ -418,7 +418,7 @@ void Area::setWorkingSet(QString name)
     }
 }
 
-bool Area::closeView(View* view)
+bool Area::closeView(View* view, bool silent)
 {
     static QSet<View*> alreadyClosingViews;
     
@@ -444,15 +444,8 @@ bool Area::closeView(View* view)
 
         if(otherViewsInCurrentWorkingSet == 0 && viewsInOtherWorkingSet == 0)
         {
-            // only one view in one working-set remaining
-            // let the user decide whether he wants to close the document or not
-            
-            // Eventually, the document will automatically delete all of its views.
-            // So, record the views, and make sure that the working-set controller
-            // doesn't try to delete the view twice while synchronizing the areas.
-            
             alreadyClosingViews = doc.data()->views().toSet();
-            bool ret = doc.data()->closeDocument();
+            bool ret = doc.data()->closeDocument(silent);
             alreadyClosingViews.clear();
             return ret;
         }
@@ -471,10 +464,10 @@ bool Area::closeView(View* view)
     return true;
 }
 
-void Area::clearViews()
+void Area::clearViews(bool silent)
 {
     foreach(Sublime::View* view, views())
-        closeView(view);
+        closeView(view, silent);
 }
 
 }

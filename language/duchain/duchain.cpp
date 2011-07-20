@@ -1521,6 +1521,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
             allImportsLoaded = false;
 
         if(allImportsLoaded) {
+          l.unlock();
           lock.unlock();
           foreach( KDevelop::ILanguage* language, languages)
             if(language->languageSupport() && language->languageSupport()->codeHighlighting())

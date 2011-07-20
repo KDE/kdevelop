@@ -20,15 +20,12 @@
 #define SHELLDOCUMENTOPERATIONTEST_H
 
 #include <QObject>
-#include <tests/autotestshell.h>
-
-using namespace KDevelop;
 
 class ShellDocumentOperationTest: public QObject {
     Q_OBJECT
 private slots:
-    void init();
-    void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
 
     void testOpenDocumentFromText();
     void testClosing();

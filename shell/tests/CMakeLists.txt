@@ -20,11 +20,11 @@ target_link_libraries( shell-documentcontrollertest ${QT_QTTEST_LIBRARY} ${KDEVP
 
 set( shellbuddytest_SRCS shellbuddytest.cpp )
 kde4_add_unit_test(shell-buddytest ${shellbuddytest_SRCS})
-target_link_libraries(shell-buddytest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+target_link_libraries(shell-buddytest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 set( shelldocumentoperationtest_SRCS shelldocumentoperationtest.cpp )
 kde4_add_unit_test(shell-documentoperationtest ${shelldocumentoperationtest_SRCS})
-target_link_libraries(shell-documentoperationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+target_link_libraries(shell-documentoperationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 ## This test needs fixing:
 # creating a factory is not enough to inject a new project plugin, we also need a KPluginInfo
@@ -34,7 +34,7 @@ set( projectcontrollertest_SRCS projectcontrollertest.cpp )
 
 set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 kde4_add_unit_test(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})
-target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 # Disabled for now, until I find a way of loading plugins from builddir/sourcedir
 #set( plugincontrollertest_SRCS plugincontrollertest.cpp )

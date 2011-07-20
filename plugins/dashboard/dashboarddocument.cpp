@@ -30,11 +30,11 @@ DashboardDocument::DashboardDocument(KDevelop::IProject* project)
     , m_project(project)
 {}
 
-void DashboardDocument::activate(Sublime::View* activeView, KParts::MainWindow* mainWindow)
+void DashboardDocument::activate(Sublime::View* /*activeView*/, KParts::MainWindow* /*mainWindow*/)
 {}
 
-void DashboardDocument::setTextSelection(const KTextEditor::Range& range) {}
-void DashboardDocument::setCursorPosition(const KTextEditor::Cursor& cursor) {}
+void DashboardDocument::setTextSelection(const KTextEditor::Range& /*range*/) {}
+void DashboardDocument::setCursorPosition(const KTextEditor::Cursor& /*cursor*/) {}
 
 KTextEditor::Cursor DashboardDocument::cursorPosition() const
 {
@@ -51,7 +51,7 @@ bool DashboardDocument::isActive() const
     return true;
 }
 
-bool DashboardDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
+bool DashboardDocument::close(KDevelop::IDocument::DocumentSaveMode /*mode*/)
 {
     return true;
 }
@@ -59,7 +59,7 @@ bool DashboardDocument::close(KDevelop::IDocument::DocumentSaveMode mode)
 void DashboardDocument::reload()
 {}
 
-bool DashboardDocument::save(KDevelop::IDocument::DocumentSaveMode mode)
+bool DashboardDocument::save(KDevelop::IDocument::DocumentSaveMode /*mode*/)
 {
     return true;
 }
@@ -69,7 +69,7 @@ KTextEditor::Document* DashboardDocument::textDocument() const
     return 0;
 }
 
-KParts::Part* DashboardDocument::partForView(QWidget* view) const
+KParts::Part* DashboardDocument::partForView(QWidget* /*view*/) const
 {
     return 0;
 }

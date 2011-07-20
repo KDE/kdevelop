@@ -24,11 +24,15 @@
 #include <QFile>
 #include <QFormLayout>
 #include <KConfigDialog>
+#include <QGraphicsLinearLayout>
+#include <KTextBrowser>
+#include <QScrollBar>
+#include <plasma/containment.h>
 
 using namespace Plasma;
 
 ProjectFileItem::ProjectFileItem(QObject *parent, const QVariantList &args)
-	: Applet(parent, args), m_args(args)
+	: Applet(parent, args), m_args(args), m_output(0)
 {
 	setAspectRatioMode(IgnoreAspectRatio);
 }
@@ -41,11 +45,13 @@ void ProjectFileItem::init()
         config().writeEntry("relativePath", m_args.first());
     
     QGraphicsLinearLayout* m_layout = new QGraphicsLinearLayout(Qt::Vertical);
-    m_output = new Plasma::Label(this);
+    m_output = new Plasma::TextBrowser(this);
+    m_output->nativeWidget()->setLineWrapMode(QTextEdit::NoWrap);
+    m_output->setFont(QFont("monospace"));
     m_layout->addItem(m_output);
     
     setLayout(m_layout);
-    setPreferredSize(300,300);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     
     reloadData();
 }
@@ -64,6 +70,19 @@ void ProjectFileItem::reloadData()
     if(f.open(QFile::ReadOnly)) {
         m_output->setText(f.readAll());
     }
+    
+    setObjectName(i18n("Project File: %1", config().readEntry("relativePath")));
+}
+
+QSizeF ProjectFileItem::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
+{
+    QSizeF ret=Plasma::Applet::sizeHint(which, constraint);
+//     QSizeF ret(500, 300);
+//     if(m_output) {
+//         ret.expandedTo(QSizeF(m_output->nativeWidget()->horizontalScrollBar()->maximum(),
+//                           m_output->nativeWidget()->verticalScrollBar()->maximum()));
+//     }
+    return ret;
 }
 
 void ProjectFileItem::createConfigurationInterface(KConfigDialog* parent)

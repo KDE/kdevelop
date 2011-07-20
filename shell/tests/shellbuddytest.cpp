@@ -33,24 +33,27 @@
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
 
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
 #include <iostream>
 
-void ShellBuddyTest::init()
+void ShellBuddyTest::initTestCase()
 {
     AutoTestShell::init();
-    KDevelop::Core::initialize();
+    TestCore::initialize();
     m_documentController = Core::self()->documentController();
     m_uiController = Core::self()->uiControllerInternal();
 }
 
-void ShellBuddyTest::cleanup()
+void ShellBuddyTest::cleanupTestCase()
 {
+    TestCore::shutdown();
 }
-
 
 void ShellBuddyTest::verifyFilename(Sublime::View *view, const QString& endOfFilename)
 {

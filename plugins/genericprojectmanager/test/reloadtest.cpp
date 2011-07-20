@@ -32,6 +32,8 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <language/duchain/indexedstring.h>
 #include <project/projectmodel.h>
+#include <interfaces/iuicontroller.h>
+#include <KParts/MainWindow>
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
@@ -45,25 +47,25 @@ void exec(const QString &cmd)
     Q_ASSERT(proc.exitStatus() == 0);
 }
 
+void ProjectLoadTest::initTestCase()
+{
+    KDevelop::AutoTestShell::init();
+    KDevelop::TestCore::initialize();
+}
+
+void ProjectLoadTest::cleanupTestCase()
+{
+    KDevelop::TestCore::shutdown();
+}
+
 void ProjectLoadTest::init()
 {
     exec("bash -c \"rm -r testproject*\"");
 
-    KDevelop::AutoTestShell::init();
-    m_core = new KDevelop::TestCore();
-    m_core->initialize( KDevelop::Core::Default );
-
-    QTest::qWait(500); //wait for previously loaded projects
     foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
         KDevelop::ICore::self()->projectController()->closeProject(p);
     }
     Q_ASSERT(KDevelop::ICore::self()->projectController()->projects().isEmpty());
-}
-
-void ProjectLoadTest::cleanup()
-{
-    m_core->cleanup();
-    delete m_core;
 }
 
 QPair<QString, KUrl> makeProject()

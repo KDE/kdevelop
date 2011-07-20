@@ -30,6 +30,7 @@ class TestHighlighting : public QObject
 
 private slots:
     void initTestCase();
+    void cleanupTestCase();
 
     // for valgrind
     void testInitialization();

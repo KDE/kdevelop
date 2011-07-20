@@ -81,6 +81,12 @@ public:
       *The contents is reconstructed, even if the area equals the currently set area. */
     void setArea(Area *area);
     
+    /**
+     * Reconstruct the view structure. This is required after significant untracked changes to the
+     * area-index structure.
+     * */
+    void reconstructViews();
+    
     /**Returns the view that is closest to the given global position, or zero.
       * */
     View* viewForPosition(QPoint globalPos) const;

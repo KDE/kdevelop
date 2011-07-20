@@ -20,11 +20,8 @@
 #ifndef KALGEBRAPLASMA_HEADER
 #define KALGEBRAPLASMA_HEADER
 
-#include <Plasma/PopupApplet>
-#include <Plasma/Label>
-#include <Plasma/LineEdit>
-#include <KLineEdit>
-#include <QGraphicsLinearLayout>
+#include <Plasma/Applet>
+#include <Plasma/TextBrowser>
 #include <ui_config.h>
 
 class QSizeF;
@@ -40,10 +37,10 @@ class ProjectFileItem : public Plasma::Applet
         void init();
        
         virtual void createConfigurationInterface(KConfigDialog* parent);
-        
+        virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const;
     private:
         void reloadData();
-        Plasma::Label *m_output;
+        Plasma::TextBrowser *m_output;
         QVariantList m_args;
         Ui::Config m_ui;
         

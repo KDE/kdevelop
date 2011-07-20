@@ -201,7 +201,6 @@ Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view
 
 Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 {
-    kDebug() << "reconstructing views for area index" << index;
     QSplitter *splitter = d->m_indexSplitters.value(index);
     if (!splitter)
     {
@@ -222,10 +221,13 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                 operator()(index->parent());
             }
             QSplitter *parent = d->m_indexSplitters.value(index->parent());
-            kDebug() << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
-            parent->addWidget(splitter);
+            
+            if(index == index->parent()->first())
+                parent->insertWidget(0, splitter);
+            else
+                parent->addWidget(splitter);
         }
         Q_ASSERT(splitter);
     }
@@ -236,6 +238,18 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     else
     {
         Container *container = 0;
+        
+        if(splitter->count())
+        {
+            // After unsplitting, we might have to remove an old QSplitter here
+            QWidget* widget = splitter->widget(0);
+            if(qobject_cast<QSplitter*>(widget))
+            {
+                widget->setParent(0);
+                delete widget;
+            }
+        }
+        
         if (!splitter->widget(0))
         {
             //we need to create view container
@@ -269,6 +283,12 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     return Area::ContinueWalker;
 }
 
+void MainWindowPrivate::reconstructViews()
+{
+    ViewCreator viewCreator(this);
+    area->walkViews(viewCreator, area->rootIndex());
+}
+
 void MainWindowPrivate::reconstruct()
 {
     if(m_leftTabbarCornerWidget) {
@@ -283,8 +303,7 @@ void MainWindowPrivate::reconstruct()
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
-    ViewCreator viewCreator(this);
-    area->walkViews(viewCreator, area->rootIndex());
+    reconstructViews();
 
     m_mainWindow->blockSignals(true);
 
@@ -376,22 +395,38 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         m_leftTabbarCornerWidget.data()->hide();
         m_leftTabbarCornerWidget.data()->setParent(0);
     }
-    
-    ViewCreator viewCreator(this);
-    QSplitter *splitter = m_indexSplitters[index];
-    if (index->isSplitted() && (splitter->count() == 1) &&
-            qobject_cast<Sublime::Container*>(splitter->widget(0)))
+
     {
-        Container *container = qobject_cast<Sublime::Container*>(splitter->widget(0));
-        //we need to remove extra container before reconstruction
-        //first reparent widgets in container so that they are not deleted
-        while (container->count())
+         // Remove container objects in the hierarchy from the parents,
+         // because they are not needed anymore, and might lead to broken splitter hierarchy and crashes.
+        for(Sublime::AreaIndex* current = index; current; current = current->parent())
         {
-            container->widget(0)->setParent(0);
+        QSplitter *splitter = m_indexSplitters[current];
+        if (current->isSplitted() && splitter)
+        {
+            // Also update the orientation
+            splitter->setOrientation(current->orientation());
+            
+            for(int w = 0; w < splitter->count(); ++w)
+            {
+                Container *container = qobject_cast<Sublime::Container*>(splitter->widget(w));
+                //we need to remove extra container before reconstruction
+                //first reparent widgets in container so that they are not deleted
+                if(container)
+                {
+                    while (container->count())
+                    {
+                        container->widget(0)->setParent(0);
+                    }
+                    //and then delete the container
+                    delete container;
+                }
+            }
         }
-        //and then delete the container
-        delete container;
+        }
     }
+
+    ViewCreator viewCreator(this);
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
     
@@ -409,12 +444,13 @@ void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    if (!m_indexSplitters.contains(index))
+    if (!m_indexSplitters[index])
         return;
 
     QSplitter *splitter = m_indexSplitters[index];
     kDebug() << "index " << index << " root " << area->rootIndex();
     kDebug() << "splitter " << splitter << " container " << splitter->widget(0);
+    kDebug() << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
     if (!container) {
@@ -486,27 +522,30 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             AreaIndex *sibling = parent->first() == index ? parent->second() : parent->first();
             QSplitter *siblingSplitter = m_indexSplitters[sibling];
 
-            parentSplitter->setUpdatesEnabled(false);
-            //save sizes and orientation of the sibling splitter
-            parentSplitter->setOrientation(siblingSplitter->orientation());
-            QList<int> sizes = siblingSplitter->sizes();
-
-            /* Parent has two children -- 'index' that we've deleted and
-               'sibling'.  We move all children of 'sibling' into parent,
-               and delete 'sibling'.  sibling either contains a single
-               Container instance, or a bunch of further QSplitters.  */
-            while (siblingSplitter->count() > 0)
+            if(siblingSplitter)
             {
-                //reparent contents into parent splitter
-                QWidget *siblingWidget = siblingSplitter->widget(0);
-                siblingWidget->setParent(parentSplitter);
-                parentSplitter->addWidget(siblingWidget);
+                parentSplitter->setUpdatesEnabled(false);
+                //save sizes and orientation of the sibling splitter
+                parentSplitter->setOrientation(siblingSplitter->orientation());
+                QList<int> sizes = siblingSplitter->sizes();
+
+                /* Parent has two children -- 'index' that we've deleted and
+                'sibling'.  We move all children of 'sibling' into parent,
+                and delete 'sibling'.  sibling either contains a single
+                Container instance, or a bunch of further QSplitters.  */
+                while (siblingSplitter->count() > 0)
+                {
+                    //reparent contents into parent splitter
+                    QWidget *siblingWidget = siblingSplitter->widget(0);
+                    siblingWidget->setParent(parentSplitter);
+                    parentSplitter->addWidget(siblingWidget);
+                }
+
+                m_indexSplitters.remove(sibling);
+                delete siblingSplitter;
+                parentSplitter->setSizes(sizes);
             }
 
-            m_indexSplitters.remove(sibling);
-            delete siblingSplitter;
-
-            parentSplitter->setSizes(sizes);
             parentSplitter->setUpdatesEnabled(true);
 
             kDebug() << "after deleation " << parent << " has "

@@ -57,7 +57,7 @@ void StandardOutputViewTest::initTestCase()
     m_testCore = new KDevelop::TestCore();
     m_testCore->initialize(KDevelop::Core::Default);
 
-    m_controller = dynamic_cast<KDevelop::UiController*>(m_testCore->uiController());
+    m_controller = m_testCore->uiControllerInternal();
 
     QTest::qWait(500); // makes sure that everything is loaded (don't know if it's required)
 

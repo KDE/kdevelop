@@ -318,11 +318,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                     
                     if(oldLines.size() == newLines.size())
                     {
-                        for(uint line = 0; line < newLines.size(); ++line)
+                        for(int line = 0; line < newLines.size(); ++line)
                         {
                             // Keep the previous indentation
                             QString oldIndentation;
-                            for(uint a = 0; a < oldLines[line].size(); ++a)
+                            for(int a = 0; a < oldLines[line].size(); ++a)
                                 if(oldLines[line][a].isSpace())
                                     oldIndentation.append(oldLines[line][a]);
                                 else

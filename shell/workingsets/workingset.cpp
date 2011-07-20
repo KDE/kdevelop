@@ -179,15 +179,19 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     DisableMainWindowUpdatesFromArea updatesDisabler(area);
 
     kDebug() << "loading working-set" << m_id << "into area" << area;
-
     if(clear) {
         kDebug() << "clearing area with working-set" << area->workingSet();
+        
+        // We have to close all views, else we may get serious UI
+        // consistency problems when the documents intersect.
+        // Clear the views silently, because the user should be batch-asked
+        // before changing working sets.
         QSet< QString > files = fileList().toSet();
         foreach(Sublime::View* view, area->views()) {
             Sublime::UrlDocument* doc = dynamic_cast<Sublime::UrlDocument*>(view->document());
             if(!doc || !files.contains(doc->documentSpecifier()))
                 area->closeView(view);
-        }
+        }   
     }
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
@@ -331,7 +335,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 
     KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
     QString lastActiveView = areaGroup.readEntry("Active View", "");
-    deleteGroupRecursive(setGroup);
+    deleteGroupRecursive(areaGroup);
     if (area->activeView() && area->activeView()->document())
         areaGroup.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
     else

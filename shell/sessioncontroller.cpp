@@ -160,7 +160,11 @@ public:
     }
 
     ~SessionControllerPrivate() {
-        clearRecoveryDirectory();
+        if (activeSession) {
+            // when session was active, we deleted the folder already
+            // in that case activeSession = 0
+            clearRecoveryDirectory();
+        }
     }
 
     Session* findSessionForName( const QString& name ) const
@@ -279,7 +283,7 @@ public:
         foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
-                bool loaded = loadSessionExternally( s );
+                loadSessionExternally( s );
                 break;
             }
         }
@@ -641,7 +645,13 @@ void SessionController::startNewSession()
 
 void SessionController::cleanup()
 {
+    ISession* active = d->activeSession;
+    d->activeSession = 0;
+    if (active->isTemporary()) {
+        deleteSession(active->name());
+    }
     qDeleteAll(d->sessionActions);
+    d->sessionActions.clear();
 }
 
 void SessionController::initialize( const QString& session )

@@ -48,7 +48,6 @@
 
 #include "projectmanagerview.h"
 #include "builditembuilderjob.h"
-#include "projectdashboardwidget.h"
 
 using namespace KDevelop;
 

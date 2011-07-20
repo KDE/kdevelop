@@ -73,8 +73,8 @@ void setupSampleProject( const QString& name, const QString& content )
 void SvnImport::initTestCase()
 {
     AutoTestShell::init();
-    core = new TestCore();
-    core->initialize(Core::Default);
+    TestCore::initialize();
+
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     foreach(IPlugin* p,  plugins) {
         qDebug() << "checking plugin" << p;
@@ -90,11 +90,9 @@ void SvnImport::initTestCase()
     QVERIFY(vcs);
 }
 
-
 void SvnImport::cleanupTestCase()
 {
-    core->cleanup();
-    core->deleteLater();
+    TestCore::shutdown();
 }
 
 void SvnImport::testBasic()

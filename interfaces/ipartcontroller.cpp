@@ -78,11 +78,6 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
         /*"KParts/ReadWritePart",*/ "KParts/ReadOnlyPart"
     };
 
-    static const char* const classNames[length] =
-    {
-        /*"KParts::ReadWritePart",*/ "KParts::ReadOnlyPart"
-    };
-
     KParts::Part* part = 0;
     for ( uint i = 0; i < length; ++i )
     {

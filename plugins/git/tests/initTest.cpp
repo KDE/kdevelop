@@ -53,9 +53,8 @@ using namespace KDevelop;
 void GitInitTest::initTestCase()
 {
     AutoTestShell::init();
-    m_testCore = new KDevelop::TestCore();
-    m_testCore->initialize(KDevelop::Core::NoUi);
-    m_plugin = new GitPlugin(m_testCore);
+    TestCore::initialize(Core::NoUi);
+    m_plugin = new GitPlugin(TestCore::self());
     removeTempDirs();
 
     // Now create the basic directory structure
@@ -68,8 +67,7 @@ void GitInitTest::initTestCase()
 void GitInitTest::cleanupTestCase()
 {
     delete m_plugin;
-    m_testCore->cleanup();
-    delete m_testCore;
+    TestCore::shutdown();
     if (QFileInfo(gitTest_BaseDir).exists())
         KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0);
 
