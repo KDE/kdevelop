@@ -25,6 +25,7 @@
 #include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
+struct C;
 namespace KDevelop {
   class DUContext;
   class Declaration;
@@ -33,6 +34,7 @@ namespace KDevelop {
 
 namespace TypeUtils {
   using namespace KDevelop;
+
   /**
    * Returns the dereferenced and un-aliased type(example: ReferenceType(Typedef(PointerType(int))) -> PointerType(int))
    *
@@ -135,6 +137,7 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr increasePointerDepth(KDevelop::AbstractType::Ptr type);
   
   KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedType removeConstModifier(const KDevelop::IndexedType& type);
+  KDEVCPPDUCHAIN_EXPORT void removeConstModifier(KDevelop::AbstractType::Ptr& type);
   
   ///Transforms from constants like '5' to their underlying types like 'int' (Or from enumerators to their enumeration-types)
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr removeConstants(KDevelop::AbstractType::Ptr type, const KDevelop::TopDUContext* source);

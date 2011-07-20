@@ -697,9 +697,10 @@ void TestParser::testCommentAfterFunctionCall() {
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   FunctionDefinitionAST* funcAst = static_cast<FunctionDefinitionAST*>(getAST(ast, AST::Kind_FunctionDefinition));
   QVERIFY(hasKind(funcAst, AST::Kind_ExpressionOrDeclarationStatement));
-  ExpressionOrDeclarationStatementAST* ambAst = static_cast<ExpressionOrDeclarationStatementAST*>(getAST(funcAst, AST::Kind_ExpressionOrDeclarationStatement));
   QVERIFY(hasKind(funcAst, AST::Kind_FunctionCall));
   QVERIFY(hasKind(funcAst, AST::Kind_InitDeclarator));
+  ExpressionOrDeclarationStatementAST* ambAst = static_cast<ExpressionOrDeclarationStatementAST*>(getAST(funcAst, AST::Kind_ExpressionOrDeclarationStatement));
+  QVERIFY(ambAst);
 }
 
 void TestParser::testPtrToMemberAst() {
@@ -811,6 +812,23 @@ void TestParser::testTypeID()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testRegister()
+{
+  // see also: http://bugsfiles.kde.org/attachment.cgi?id=61647
+  QString code = "void foo() { register int i; int register j; }\n";
+  TranslationUnitAST* ast = parse(code.toLocal8Bit());
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::inlineTemplate()
+{
+  QByteArray code = "template <typename T> inline void a() {}\n";
+  TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems
@@ -818,6 +836,16 @@ TranslationUnitAST* TestParser::parse(const QByteArray& unit)
   lastSession = new ParseSession();
   lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
   return  parser.parse(lastSession);
+}
+
+void TestParser::dump(AST* node)
+{
+  dumper.dump(node, lastSession->token_stream);
+  if (!control.problems().isEmpty()) {
+    foreach(const KDevelop::ProblemPointer&p, control.problems()) {
+      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+    }
+  }
 }
 
 struct HasKindVisitor : protected DefaultVisitor

@@ -26,6 +26,13 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/arraytype.h>
+
+#include "typeutils.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -187,4 +194,185 @@ void TestDUChain::testEnum2011()
     QVERIFY(!dec->isForwardDeclaration());
     QCOMPARE(dec->internalContext()->localScopeIdentifier().isEmpty(), !scoped);
   }
+}
+
+void TestDUChain::testDecltype()
+{
+  // see also: spec 7.1.6/4
+  QByteArray code = "const int&& foo();\n"
+                    "int i;\n"
+                    "struct A { double x; };\n"
+                    "const A* a = new A();\n"
+                    // start decltype examples
+                    "decltype(foo()) x1 = i;\n"
+                    "decltype(i) x2;\n"
+                    "decltype(a->x) x3;\n"
+                    "decltype((a->x)) x4;\n"
+                    // other examples
+                    "const int& j = i;\n"
+                    "decltype((j)) x5;\n"
+                    "int& j2 = i;\n"
+                    "decltype((j2)) x6;\n"
+                    "decltype((i)) x7;\n"
+                    ;
+
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+
+  // x1
+  QCOMPARE(top->localDeclarations().size(), 13);
+  FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
+  QVERIFY(fooDec);
+  QVERIFY(fooDec->type<FunctionType>());
+  QCOMPARE(fooDec->type<FunctionType>()->returnType()->toString(), QString("const int&&"));
+  Declaration* x1Dec = top->localDeclarations().at(4);
+  QVERIFY(x1Dec->abstractType()->equals(fooDec->type<FunctionType>()->returnType().constData()));
+
+  // x2
+  Declaration* iDec = top->localDeclarations().at(1);
+  Declaration* x2Dec = top->localDeclarations().at(5);
+  QVERIFY(x2Dec->abstractType()->equals(iDec->abstractType().constData()));
+
+  // x3
+  Declaration* ADec = top->localDeclarations().at(2);
+  QVERIFY(ADec->internalContext());
+  QCOMPARE(ADec->internalContext()->localDeclarations().size(), 1);
+  Declaration* AxDec = ADec->internalContext()->localDeclarations().first();
+  Declaration* x3Dec = top->localDeclarations().at(6);
+  QVERIFY(x3Dec->abstractType()->equals(AxDec->abstractType().constData()));
+
+  // x4
+  // & due to additional parens, const because of const A*
+  Declaration* x4Dec = top->localDeclarations().at(7);
+  QVERIFY(!x4Dec->abstractType()->equals(AxDec->abstractType().constData()));
+  QVERIFY(!(x4Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x4Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeDouble);
+
+  // x5
+  // already const&, make sure it's not doubled due to additional parens
+  Declaration* jDec = top->localDeclarations().at(8);
+  Declaration* x5Dec = top->localDeclarations().at(9);
+  QVERIFY(x5Dec->abstractType()->equals(jDec->abstractType().constData()));
+  QVERIFY(!(x5Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(x5Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x5Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeInt);
+
+  // x6
+  // already &, make sure it's not doubled due to additional parens, but must not be const
+  Declaration* j2Dec = top->localDeclarations().at(10);
+  Declaration* x6Dec = top->localDeclarations().at(11);
+  QVERIFY(x6Dec->abstractType()->equals(j2Dec->abstractType().constData()));
+  QVERIFY(!(x6Dec->abstractType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x6Dec->abstractType().cast<ReferenceType>());
+  QVERIFY(!(x6Dec->abstractType().cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier));
+  QVERIFY(x6Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(x6Dec->abstractType().cast<ReferenceType>()->baseType().cast<IntegralType>()->dataType(),
+           (uint) IntegralType::TypeInt);
+
+  // x7
+  // make sure it's & due to additional parens, but must not be const
+  Declaration* x7Dec = top->localDeclarations().at(11);
+  // x6 has the type that we want
+  QVERIFY(x7Dec->abstractType()->equals(x6Dec->abstractType().constData()));
+}
+
+void TestDUChain::testTrailingReturnType()
+{
+  {
+    QByteArray code = "auto foo() -> int;\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    Declaration* dec = top->localDeclarations().first();
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    QVERIFY(funcType->returnType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
+
+  {
+    QByteArray code = "class A { int x; }; auto foo(A* arg) -> decltype(arg->x);\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 2);
+    Declaration* dec = top->localDeclarations().at(1);
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    qDebug() << funcType->returnType()->toString();
+    QVERIFY(funcType->returnType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
+
+  {
+    // example from the spec, 8.0/5
+    QByteArray code = "auto f() -> int(*)[4];\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    Declaration* dec = top->localDeclarations().first();
+    QVERIFY(dynamic_cast<FunctionDeclaration*>(dec));
+    QVERIFY(dec->abstractType());
+    FunctionType::Ptr funcType = dec->abstractType().cast<FunctionType>();
+    QVERIFY(funcType);
+    QVERIFY(funcType->returnType());
+    qDebug() << funcType->returnType()->toString();
+    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Abort);
+    QVERIFY(funcType->returnType().cast<PointerType>());
+    QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>());
+    QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->dimension(), 4);
+    QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>());
+    QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>()->dataType(),
+             (uint) IntegralType::TypeInt);
+    QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+  }
+}
+
+void TestDUChain::testConstexpr()
+{
+  const QByteArray code = "constexpr int square(int x) { return x * x; }\n"
+                          "constexpr double a = 4.2 * square(2);\n"
+                          "class A {\n"
+                          "  constexpr A();\n"
+                          "  constexpr int foo() { return 1; }\n"
+                          "};\n";
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+
+  QCOMPARE(top->localDeclarations().size(), 3);
+  // square
+  QEXPECT_FAIL("", "constexpr functions are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(top->localDeclarations().at(0)->abstractType()));
+  // double a
+  QVERIFY(TypeUtils::isConstant(top->localDeclarations().at(1)->abstractType()));
+  // class A
+  QVERIFY(top->localDeclarations().at(2)->internalContext());
+  DUContext* aCtx = top->localDeclarations().at(2)->internalContext();
+  QCOMPARE(aCtx->localDeclarations().size(), 2);
+  // A::A
+  QEXPECT_FAIL("", "constexpr constructors are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(0)->abstractType()));
+  // A::foo
+  QEXPECT_FAIL("", "constexpr member functions are not handled yet", Continue);
+  QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(1)->abstractType()));
 }

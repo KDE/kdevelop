@@ -85,10 +85,15 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         }
       while (it != end);
     }
-  else if (node->type_of)
+  else if (node->isTypeof)
     {
       // ### implement me
       _M_type.push(Identifier("typeof<...>"));
+    }
+  else if (node->isDecltype)
+    {
+      // ### implement me
+      _M_type.push(Identifier("decltype<...>"));
     }
 
   visit(node->name);

@@ -28,7 +28,7 @@ public:
 };
 
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char **/*argv*/) {
     TestThread t1;
     TestThread t2;
     TestThread t3;

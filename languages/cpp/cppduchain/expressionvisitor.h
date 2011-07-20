@@ -51,9 +51,14 @@ using namespace KDevelop;
 class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
   public:
     /**
-     * @param strict When this is false, the expression-visitor tries to recover from problems. For example when it cannot find a matching function, it returns the first of the candidates.
+     * @param strict When this is false, the expression-visitor tries to recover from problems.
+     *               For example when it cannot find a matching function, it returns the first of the candidates.
+     * @param propagateConstness When this is set to true, the expression visitor will propagate the constness
+     *                           in member accesses. Required for decltype support, i.e.:
+     *                           'const A* a; decltype((a->x)) b;', here b should be const
      * */
-    explicit ExpressionVisitor( ParseSession* session, const KDevelop::TopDUContext* source = 0, bool strict = false );
+    explicit ExpressionVisitor( ParseSession* session, const KDevelop::TopDUContext* source = 0,
+                                bool strict = false, bool propagateConstness = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -217,7 +222,11 @@ private:
     bool m_reportRealProblems;
 
     QList<KSharedPtr<KDevelop::Problem> > m_problems;
-    
+
+    /// set to true when member access on a const object should result in a const type
+    /// i.e.: 'const A* a; decltype((a->x)) b;', here b should be const
+    bool m_propagateConstness;
+
   inline void clearLast() {
     m_lastInstance = Instance();
     m_lastType = 0;

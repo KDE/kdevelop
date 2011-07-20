@@ -68,7 +68,7 @@ template <class _Tp>
 inline _Tp *CreateNode(pool *memory_pool)
 {
   _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
-  node->kind = _Tp::__node_kind;
+  node->kind = static_cast<AST::NODE_KIND>(_Tp::__node_kind);
   return node;
 }
 
@@ -423,8 +423,11 @@ bool Parser::skipUntilDeclaration()
         case '~':
         case Token_scope:
         case Token_identifier:
+        case Token_inline:
         case Token_operator:
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -494,6 +497,8 @@ bool Parser::skipUntilStatement()
         case Token_catch:
         case Token_throw:
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -698,6 +703,11 @@ bool Parser::parseDeclaration(DeclarationAST *&node)
     case Token_static_assert:
       return parseStaticAssert(node);
 
+    case Token_inline:
+      if (session->token_stream->lookAhead(+1) == Token_namespace) {
+        return parseNamespace(node);
+      }
+      // else fallthrough
     default:
       {
         const ListNode<uint> *cv = 0;
@@ -843,6 +853,13 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 {
   uint start = session->token_stream->cursor();
 
+  bool inlined = false;
+  if (session->token_stream->lookAhead() == Token_inline)
+    {
+      inlined = true;
+      advance();
+    }
+
   CHECK(Token_namespace);
 
   uint namespace_name = 0;
@@ -886,6 +903,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
 
   NamespaceAST *ast = CreateNode<NamespaceAST>(session->mempool);
   ast->namespace_name = namespace_name;
+  ast->inlined = inlined;
   parseLinkageBody(ast->linkage_body);
 
   UPDATE_POS(ast, start, ast->linkage_body->end_token);
@@ -1234,6 +1252,8 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
       switch(session->token_stream->lookAhead())
         {
         case Token_char:
+        case Token_char16_t:
+        case Token_char32_t:
         case Token_wchar_t:
         case Token_bool:
         case Token_short:
@@ -1264,7 +1284,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
   else if (session->token_stream->lookAhead() == Token___typeof)
     {
       ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
-      ast->type_of = session->token_stream->cursor();
+      ast->isTypeof = true;
       advance();
 
       if (session->token_stream->lookAhead() == '(')
@@ -1285,6 +1305,15 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
         {
           parseUnaryExpression(ast->expression);
         }
+    }
+  else if (session->token_stream->lookAhead() == Token_decltype)
+    {
+      ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
+      ast->isDecltype = true;
+      advance();
+      ADVANCE('(', "(");
+      parseExpression(ast->expression);
+      ADVANCE(')', ")");
     }
   else if (onlyIntegral)
     {
@@ -1560,6 +1589,12 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
                 advance();
               }
           }
+
+        // trailing return type support
+        if (session->token_stream->lookAhead() == Token_arrow)
+          {
+            parseTrailingReturnType(ast->trailing_return_type);
+          }
       }
 
     if (skipParen)
@@ -1744,9 +1779,14 @@ bool Parser::parseEnumSpecifier(TypeSpecifierAST *&node)
 
       ADVANCE_NR('}', "}");
     }
-  else
+  else if (session->token_stream->lookAhead() == ';')
     {
       ast->isOpaque = true;
+    }
+  else
+    {
+      rewind(start);
+      return false;
     }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -3462,6 +3502,8 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
   return false;
 }
 
+///TODO: decl-specifier-seq is currently not used at all,
+///      can lead to problems for certain orders of specifiers
 bool Parser::parseBlockDeclaration(DeclarationAST *&node)
 {
   switch(session->token_stream->lookAhead())
@@ -3502,6 +3544,9 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
       return false;
     }
 
+  if (!storageSpec) // see also https://bugs.kde.org/show_bug.cgi?id=253827
+    parseStorageClassSpecifier(storageSpec);
+
   parseCvQualify(cv);
   spec->cv = cv;
 
@@ -3516,6 +3561,7 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   advance();
 
   SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
+  ast->storage_specifiers = storageSpec;
   ast->type_specifier = spec;
   ast->init_declarators = declarators;
 
@@ -3964,13 +4010,15 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  PrimaryExpressionAST *ast = 0;
-
   switch(session->token_stream->lookAhead())
     {
     case Token_string_literal:
+      {
+      PrimaryExpressionAST *ast = 0;
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       parseStringLiteral(ast->literal);
+      node = ast;
+      }
       break;
 
     case Token_number_literal:
@@ -3978,12 +4026,19 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
     case Token_true:
     case Token_false:
     case Token_this:
+    case Token_nullptr:
+      {
+      PrimaryExpressionAST *ast = 0;
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();
+      node = ast;
+      }
       break;
 
     case '(':
+      {
+      PrimaryExpressionAST *ast = 0;
       advance();
 
       if (session->token_stream->lookAhead() == '{')
@@ -4004,20 +4059,28 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
         }
 
       CHECK(')');
+      node = ast;
+      }
       break;
 
     default:
       NameAST *name = 0;
-      if (!parseName(name, EventuallyAcceptTemplate))
-        return false;
-      ast = CreateNode<PrimaryExpressionAST>(session->mempool);
-      ast->name = name;
+      if (parseName(name, EventuallyAcceptTemplate))
+        {
+          PrimaryExpressionAST *ast = 0;
+          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+          ast->name = name;
+          node = ast;
+        }
+      else if(!parseLambdaExpression(node))
+        {
+          return false;
+        }
 
       break;
     }
 
-  UPDATE_POS(ast, start, _M_last_valid_token+1);
-  node = ast;
+  UPDATE_POS(node, start, _M_last_valid_token+1);
 
   return true;
 }
@@ -5167,6 +5230,157 @@ bool Parser::parseThrowExpression(ExpressionAST *&node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
+  return true;
+}
+
+bool Parser::parseTrailingReturnType(TrailingReturnTypeAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  CHECK(Token_arrow);
+
+  TrailingReturnTypeAST *ast = CreateNode<TrailingReturnTypeAST>(session->mempool);
+
+  // trailing-type-specifier-seq
+  TypeSpecifierAST* type = 0;
+  while (parseTypeSpecifier(type))
+    {
+      ast->type_specifier = snoc(ast->type_specifier, type, session->mempool);
+    }
+
+  // abstract-declarator_opt
+  parseAbstractDeclarator(ast->abstractDeclarator);
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseLambdaExpression(ExpressionAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  // parse lambda-capture
+  CHECK('[');
+  uint defaultCapture = 0;
+  const ListNode<LambdaCaptureAST*>* captures = 0;
+  // capture-default
+  if ( (session->token_stream->lookAhead() == '&'
+        || session->token_stream->lookAhead() == '=')
+      && (session->token_stream->lookAhead(+1) == ']'
+        || session->token_stream->lookAhead(+1) == ','))
+    {
+      defaultCapture = session->token_stream->lookAhead();
+      advance();
+      if (session->token_stream->lookAhead() == ',')
+        advance();
+    }
+  // capture-list
+  while(session->token_stream->lookAhead() && session->token_stream->lookAhead() != ']')
+    {
+      LambdaCaptureAST* capture = 0;
+      if (!parseLambdaCapture(capture)) {
+        break;
+      }
+      captures = snoc(captures, capture, session->mempool);
+      if (session->token_stream->lookAhead() == ',')
+        advance();
+      else
+        break;
+    }
+  CHECK(']');
+
+  LambdaDeclaratorAST* declarator = 0;
+  // optional
+  parseLambdaDeclarator(declarator);
+
+  StatementAST* compound;
+  if (!parseCompoundStatement(compound))
+    {
+      reportError("Compound statement expected");
+      rewind(start);
+      return false;
+    }
+
+  LambdaExpressionAST* ast = CreateNode<LambdaExpressionAST>(session->mempool);
+  ast->capture_list = captures;
+  ast->compound = compound;
+  ast->declarator = declarator;
+  ast->default_capture = defaultCapture;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
+bool Parser::parseLambdaCapture(LambdaCaptureAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  LambdaCaptureAST* ast = CreateNode<LambdaCaptureAST>(session->mempool);
+
+  if (session->token_stream->lookAhead() == Token_this)
+    {
+      advance();
+      ast->isThis = true;
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
+      node = ast;
+      return true;
+    }
+
+  if (session->token_stream->lookAhead() == '&')
+    {
+      ast->isRef = true;
+      advance();
+    }
+
+  ADVANCE(Token_identifier, "identifier");
+  ast->identifier = session->token_stream->cursor();
+
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      ast->isVariadic = true;
+    }
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
+bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  CHECK('(');
+  ParameterDeclarationClauseAST* params = 0;
+  parseParameterDeclarationClause(params);
+  CHECK(')');
+
+  ///TODO: attribute-specifier
+
+  bool isMutable = false;
+  if (session->token_stream->lookAhead() == Token_mutable)
+    {
+      isMutable = true;
+      advance();
+    }
+
+  ExceptionSpecificationAST* exception_spec = 0;
+  parseExceptionSpecification(exception_spec);
+
+  TrailingReturnTypeAST* trailing_return_type = 0;
+  parseTrailingReturnType(trailing_return_type);
+
+  LambdaDeclaratorAST* ast = CreateNode<LambdaDeclaratorAST>(session->mempool);
+  ast->parameter_declaration_clause = params;
+  ast->isMutable = isMutable;
+  ast->exception_spec = exception_spec;
+  ast->trailing_return_type = trailing_return_type;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
   return true;
 }
 

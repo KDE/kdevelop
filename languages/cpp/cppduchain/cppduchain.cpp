@@ -43,7 +43,7 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-const int maxParentDepth = 20;
+const uint maxParentDepth = 20;
 
 namespace Cpp {
 
@@ -94,7 +94,7 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
     uint maxPointerLevel = buildIdentifierForType(pointerType->baseType(), id, pointerLevel, top);
     if(type->modifiers() & AbstractType::ConstModifier)
       id.setIsConstPointer(maxPointerLevel - pointerLevel, true);
-    if(id.pointerDepth() < pointerLevel)
+    if(static_cast<uint>(id.pointerDepth()) < pointerLevel)
       id.setPointerDepth(pointerLevel);
     
     return maxPointerLevel;
@@ -615,11 +615,10 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           currentId.clearTemplateIdentifiers();
           
           KDevelop::InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
-          int neededParameters = 0;
           KDevelop::InstantiationInformation newInformation(instantiationInfo);
           newInformation.templateParametersList().clear();
           
-          for(neededParameters = 0; neededParameters < instantiationInfo.templateParametersSize(); ++neededParameters) {
+          for(uint neededParameters = 0; neededParameters < instantiationInfo.templateParametersSize(); ++neededParameters) {
             newInformation.templateParametersList().append(instantiationInfo.templateParameters()[neededParameters]);
             AbstractType::Ptr niceParam = stripType(instantiationInfo.templateParameters()[neededParameters].abstractType(), ctx);
             if(niceParam) {

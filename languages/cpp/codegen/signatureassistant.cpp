@@ -48,8 +48,8 @@ bool AdaptDefinitionSignatureAssistant::isUseful() {
 }
 
 AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted)
-: m_view(view)
-, m_editingDefinition(false)
+: m_editingDefinition(false)
+, m_view(view)
 {
   connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
   m_document = KDevelop::IndexedString(view->document()->url());

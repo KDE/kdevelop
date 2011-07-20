@@ -217,9 +217,9 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
     return new OktetaView( this );
 }
 
-bool OktetaDocument::closeDocument()
+bool OktetaDocument::closeDocument(bool silent)
 {
-    return close();
+    return close(silent ? Silent : Default);
 }
 
 void OktetaDocument::onByteArrayDocumentLoaded( Kasten::AbstractDocument* document )

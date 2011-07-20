@@ -39,6 +39,8 @@
 #include "debugbuilders.h"
 #include <language/duchain/types/typealiastype.h>
 #include <util/pushvalue.h>
+#include "typeutils.h"
+#include <functional>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -52,6 +54,23 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
     int startPosition = session->token_stream->position(start_token);
     int endPosition = session->token_stream->position(end_token);
     return QString::fromUtf8( stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition) );
+}
+
+bool isConstexpr(ParseSession* session, const ListNode<uint> *storageSpec)
+{
+  if (storageSpec) {
+    const ListNode<uint> *it = storageSpec->toFront();
+    const ListNode<uint> *end = it;
+    do {
+      int kind = session->token_stream->kind(it->element);
+      if (kind == Token_constexpr)
+        return true;
+
+      it = it->next;
+    } while (it != end);
+  }
+
+  return false;
 }
 
 TypeBuilder::TypeBuilder(ParseSession* session)
@@ -263,6 +282,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
     closeType();
 }
 
+///TODO: share code with TypeASTVisitor
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if(m_onlyComputeSimplified) {
@@ -273,11 +293,29 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   m_lastTypeWasInstance = false;
   m_lastTypeWasAuto = false;
 
-  if (node->type_of && node->expression) {
+  if ((node->isTypeof || node->isDecltype) && node->expression) {
+    bool isDecltypeInParen = false;
+    if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
+      ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
+      int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
+      isDecltypeInParen = stringFromContents(editor()->parseSession()->contentsVector(), startPosition, 1) == "(";
+    }
+
     node->expression->ducontext = currentContext();
-    ExpressionParser parser;
+    ExpressionParser parser(false, false, isDecltypeInParen);
     ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
-    openType(result.type.abstractType());
+    AbstractType::Ptr type = result.type.abstractType();
+    // make reference for decltype in additional parens - but only if it's not already a reference
+    // see spec 7.1.6/4
+    if (isDecltypeInParen && type && !TypeUtils::isReferenceType(type))
+    {
+      // type might already be a ref type
+      ReferenceType::Ptr refType = ReferenceType::Ptr(new ReferenceType);
+      refType->setBaseType(type);
+      type = refType.cast<AbstractType>();
+    }
+
+    openType(type);
     openedType = true;
   } else if (node->integrals) {
     uint type = IntegralType::TypeNone;
@@ -290,6 +328,12 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       switch (kind) {
         case Token_char:
           type = IntegralType::TypeChar;
+          break;
+        case Token_char16_t:
+          type = IntegralType::TypeChar16_t;
+          break;
+        case Token_char32_t:
+          type = IntegralType::TypeChar32_t;
           break;
         case Token_wchar_t:
           type = IntegralType::TypeWchar_t;
@@ -552,6 +596,10 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
   AbstractType::Ptr baseType = lastType();
 
+  if (baseType && isConstexpr(editor()->parseSession(), node->storage_specifiers)) {
+    baseType->setModifiers(baseType->modifiers() | AbstractType::ConstModifier);
+  }
+
   if (node->init_declarators) {
     const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;
     do {
@@ -625,6 +673,15 @@ FunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
     functionType->setReturnType(lastType());
 
   return functionType;
+}
+
+void TypeBuilder::visitTrailingReturnType(TrailingReturnTypeAST* node)
+{
+  DefaultVisitor::visitTrailingReturnType(node);
+
+  FunctionType::Ptr funcType = currentType<FunctionType>();
+  if (lastType() && funcType)
+    funcType->setReturnType(lastType());
 }
 
 void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {

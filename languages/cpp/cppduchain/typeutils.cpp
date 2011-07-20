@@ -95,8 +95,9 @@ using namespace KDevelop;
      * Ranks:
      * 1 - bool
      * 2 - 1 byte, char
+     * 2 - 2 byte, char16
      * 3 - 2 byte,  short int, wchar_t, unsigned short int
-     * 4 - 4 byte,  int, unsigned int
+     * 4 - 4 byte,  int, unsigned int, char32_t
      * 5 - 4 byte,  long int
      * 6 - 4 byte, long long int
      **/
@@ -105,11 +106,14 @@ using namespace KDevelop;
         return 1;
       break;
       case IntegralType::TypeChar:
+      case IntegralType::TypeChar16_t:
         return 2;
       break;
       case IntegralType::TypeWchar_t:
         return 3;
       break;
+      case IntegralType::TypeChar32_t:
+        return 4;
       case IntegralType::TypeInt:
         if( type->modifiers() & AbstractType::ShortModifier )
           return 3;
@@ -279,12 +283,16 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
 IndexedType removeConstModifier(const IndexedType& indexedType)
 {
     AbstractType::Ptr type = indexedType.abstractType();
-    if(type && type->modifiers() & AbstractType::ConstModifier)
-    {
-      type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
-      return type->indexed();
-    }
-    return indexedType;
+    removeConstModifier(type);
+    return type->indexed();
+}
+
+void removeConstModifier(AbstractType::Ptr& type)
+{
+  if(type && type->modifiers() & AbstractType::ConstModifier)
+  {
+    type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
+  }
 }
 
 AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* source) {

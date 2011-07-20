@@ -108,18 +108,23 @@ char const * const names[] = {
   "Kind_QProperty",
   "ForRangeDeclaration",
   "TypeIDOperator",
-  "StaticAssert"
+  "StaticAssert",
+  "TrailingReturnType",
+  "LambdaExpression",
+  "LambdaCapture",
+  "LambdaDeclarator"
 };
 
 DumpTree::DumpTree()
-  : m_tokenStream(0), indent(0)
+  : m_tokenStream(0), indent(0), m_forceOutput(false)
 {
   Q_ASSERT(sizeof(names) / sizeof(char const * const) == AST::NODE_KIND_COUNT);
 }
 
-void DumpTree::dump( AST * node, class TokenStream * tokenStream )
+void DumpTree::dump( AST * node, class TokenStream * tokenStream, bool forceOutput )
 {
   m_tokenStream = tokenStream;
+  m_forceOutput = forceOutput;
   visit(node);
   m_tokenStream = 0;
 }
@@ -132,20 +137,22 @@ void DumpTree::visit(AST *node)
 
   QString nodeText;
   if( m_tokenStream ) {
-    for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
+    for( std::size_t a = node->start_token; a < node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
       nodeText += tok.symbolString() + ' ';
     }
   }
 
-  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+  QDebug debug = m_forceOutput ? qDebug() : kDebugStream(QtDebugMsg, 9007);
+
+  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
                <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
 
-  kDebug(9007) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
+  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )

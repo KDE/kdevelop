@@ -429,6 +429,20 @@ void TestCppCodeCompletion::testParentContexts()
   CompletionItemTester returnContext(top->childContexts()[ctxt], "return ");
   QCOMPARE(returnContext.names, QStringList() << "X" << "a" << "b" << "Templ" << "this");
   QCOMPARE(returnContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::ReturnAccess);
+  //See also testCaseContext
+  release(top);
+}
+
+void TestCppCodeCompletion::testCaseContext()
+{
+  QByteArray method = "enum testEnum { foo, bar }; void test() { switch( testEnum ) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
+  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "test" << "foo" << "bar");
+  QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
   release(top);
 }
 

@@ -81,6 +81,9 @@ private slots:
   void testTypeID_data();
   void testTypeID();
 
+  void testRegister();
+  void inlineTemplate();
+
   //BEGIN C++2011 support
   void testRangeBasedFor();
   void testRValueReference();
@@ -96,6 +99,26 @@ private slots:
   void testEnumClass();
   void testRightAngleBrackets_data();
   void testRightAngleBrackets();
+  void testCharacterTypes_data();
+  void testCharacterTypes();
+  void testRawStrings_data();
+  void testRawStrings();
+  void testNullPtr_data();
+  void testNullPtr();
+  void testInlineNamespace();
+  void testDecltype_data();
+  void testDecltype();
+  void testAlternativeFunctionSyntax_data();
+  void testAlternativeFunctionSyntax();
+  void testLambda_data();
+  void testLambda();
+  //END C++2011 Support
+
+protected:
+  /**
+   * dump @p node and print problems of @c control
+   */
+  void dump(AST* node);
 
 private:
   Control control;

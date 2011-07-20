@@ -71,6 +71,10 @@ private slots:
   void testArray();
   void testDynamicArray();
   void testTypeID();
+  void testConstness();
+
+  void testCharacterTypes_data();
+  void testCharacterTypes();
 
 public:
   enum DumpArea {

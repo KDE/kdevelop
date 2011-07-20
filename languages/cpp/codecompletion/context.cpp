@@ -65,6 +65,7 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
+#include <interfaces/foregroundlock.h>
 
 ///Created statically as this object must be a child of the main thread
 CppUtils::ReplaceCurrentAccess accessReplacer;
@@ -104,7 +105,7 @@ const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< d
 const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new friend class").split(' ').toSet();
 //A parent context is created for these access strings
 //TODO: delete, case and possibly also xxx_cast< should open a parent context and get specialized handling
-const QSet<QString> PARENT_ACCESS_STRINGS = BINARY_OPERATORS + QString("< , ( : return").split(' ').toSet();
+const QSet<QString> PARENT_ACCESS_STRINGS = BINARY_OPERATORS + QString("< , ( : return case").split(' ').toSet();
 //TODO: support ".*" and "->*" as MEMBER_ACCESS_STRINGS
 const QSet<QString> MEMBER_ACCESS_STRINGS = QString(". -> ::").split(' ').toSet();
 const QSet<QString> ACCESS_STRINGS = KEYWORD_ACCESS_STRINGS + PARENT_ACCESS_STRINGS + MEMBER_ACCESS_STRINGS;
@@ -122,6 +123,22 @@ const bool excludeReservedIdentifiers = true;
 using namespace KDevelop;
 
 namespace Cpp {
+
+IndexedType switchExpressionType(DUContextPointer caseContext)
+{
+  ForegroundLock foregroundLock;
+  LOCKDUCHAIN;
+  if (!caseContext)
+    return IndexedType();
+  DUContext* switchContext = 0;
+  if (caseContext->importedParentContexts().size() == 1)
+    switchContext = caseContext->importedParentContexts().first().context(caseContext->topContext());
+  if (!switchContext)
+    return IndexedType();
+  QString switchExpression = switchContext->createRangeMoving()->text();
+  ExpressionParser expressionParser;
+  return expressionParser.evaluateType(switchExpression.toUtf8(), DUContextPointer(switchContext)).type;
+}
 
 ///@todo move these together with those from expressionvisitor into an own file, or make them unnecessary
 QList<Declaration*> declIdsToDeclPtrs( const QList<DeclarationId>& decls, uint count, TopDUContext* top ) {
@@ -834,6 +851,9 @@ CodeCompletionContext::AccessType CodeCompletionContext::findAccessType( const Q
     if ( accessStr == "return" )
       return ReturnAccess;
 
+    if ( accessStr == "case" )
+      return CaseAccess;
+
     if( BINARY_OPERATORS.contains( accessStr ) )
       return BinaryOpFunctionCallAccess;
   }
@@ -1355,6 +1375,18 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                 }
               }
             }
+          }
+        break;
+        case CaseAccess:
+          {
+            lock.unlock(); //TODO: reorganize such that this unlock-relock uglyness isn't needed
+            IndexedType switchExprType = switchExpressionType(m_duContext);
+            lock.lock();
+            if (!m_duContext)
+              return items;
+
+            if (switchExprType.abstractType())
+              items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
           }
         break;
         case TemplateAccess:
@@ -1995,6 +2027,8 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   if(!restrictedItems || m_onlyShow == ShowTypes) {
     ADD_TOKEN(bool);
     ADD_TOKEN(char);
+    ADD_TOKEN(char16_t);
+    ADD_TOKEN(char32_t);
     ADD_TOKEN(const);
     ADD_TOKEN(double);
     ADD_TOKEN(enum);
@@ -2053,6 +2087,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
     ADD_TOKEN(new);
     ADD_TOKEN(not);
     ADD_TOKEN(not_eq);
+    ADD_TOKEN(nullptr);
     ADD_TOKEN(or);
     ADD_TOKEN(or_eq);
     ADD_TOKEN(reinterpret_cast);

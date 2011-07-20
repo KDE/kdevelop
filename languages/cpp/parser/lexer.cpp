@@ -33,28 +33,22 @@ void TokenStream::splitRightShift(uint index)
 {
   Q_ASSERT(kind(index) == Token_rightshift);
 
-  // resize if required, as we will insert another token
-  if (lastToken == token_count) {
-    resize(token_count * 2);
-  }
-
-  // move tokens by one to make room for new token
-  for(uint i = token_count - 1; i > index; --i) {
-    tokens[i] = tokens[i - 1];
-  }
-
   // change kind of current token and adapt size
-  Token &current_token = tokens[index];
+  Token &current_token = (*this)[index];
   Q_ASSERT(current_token.size == 2);
   current_token.size = 1;
   current_token.kind = '>';
 
   // copy to next token (i.e. the new one) and adapt position
-  Token &next_token = tokens[index+1];
-  next_token = current_token;
+  Token next_token = current_token;
   next_token.position += 1;
 
-  ++lastToken;
+  insert(index+1, next_token);
+}
+
+QString Lexer::SpecialCursor::toString() const
+{
+  return KDevelop::IndexedString::fromIndex(*current).str();
 }
 
 /**
@@ -132,10 +126,16 @@ KDevelop::IndexedString Token::symbol() const {
 }
 
 QByteArray Token::symbolByteArray() const {
+  if (size == 0) // esp. for EOF
+    return QByteArray();
+
   return stringFromContents(session->contentsVector(), position, size);
 }
 
 QString Token::symbolString() const {
+  if (size == 0) // esp. for EOF
+    return QString();
+
   return QString::fromUtf8(stringFromContents(session->contentsVector(), position, size));
 }
 
@@ -173,12 +173,15 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(case);
   ADD_TOKEN(catch);
   ADD_TOKEN(char);
+  ADD_TOKEN(char16_t);
+  ADD_TOKEN(char32_t);
   ADD_TOKEN(class);
   ADD_TOKEN(compl);
   ADD_TOKEN(const);
   ADD_TOKEN(constexpr);
   ADD_TOKEN(const_cast);
   ADD_TOKEN(continue);
+  ADD_TOKEN(decltype);
   ADD_TOKEN(default);
   ADD_TOKEN(delete);
   ADD_TOKEN(do);
@@ -206,6 +209,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(new);
   ADD_TOKEN(not);
   ADD_TOKEN(not_eq);
+  ADD_TOKEN(nullptr);
   ADD_TOKEN(operator);
   ADD_TOKEN(or);
   ADD_TOKEN(or_eq);
@@ -266,6 +270,8 @@ Lexer::Lexer(Control *c)
 void Lexer::tokenize(ParseSession* _session)
 {
   session = _session;
+  TokenStream* stream = session->token_stream;
+  Q_ASSERT(stream->isEmpty());
 
   if (!s_initialized)
     initialize_scan_table();
@@ -273,13 +279,16 @@ void Lexer::tokenize(ParseSession* _session)
   m_canMergeComment = false;
   m_firstInLine = true;
   m_leaveSize = false;
-  
-  session->token_stream->resize(1024);
-  (*session->token_stream)[0].kind = Token_EOF;
-  (*session->token_stream)[0].session = session;
-  (*session->token_stream)[0].position = 0;
-  (*session->token_stream)[0].size = 0;
+
+  {
+  Token eof;
+  eof.kind = Token_EOF;
+  eof.session = session;
+  eof.position = 0;
+  eof.size = 0;
+  stream->append(eof);
   index = 1;
+  }
 
   cursor.current = session->contents();
   endCursor = session->contents() + session->contentsVector().size();
@@ -287,23 +296,52 @@ void Lexer::tokenize(ParseSession* _session)
     --endCursor;
 
   while (cursor < endCursor) {
-    size_t previousIndex = index;
-    
-    if (index == session->token_stream->size())
-      session->token_stream->resize(session->token_stream->size() * 2);
+    Q_ASSERT(static_cast<uint>(stream->size()) == index);
 
-    Token *current_token = &(*session->token_stream)[index];
-    current_token->session = session;
-    current_token->position = cursor.offsetIn( session->contents() );
-    current_token->size = 0;
-    
+    size_t previousIndex = index;
+
+    {
+    Token token;
+    token.session = session;
+    token.position = cursor.offsetIn( session->contents() );
+    token.size = 0;
+    stream->append(token);
+    }
+    Token* current_token = &(session->token_stream->last());
+
     if(cursor.isChar()) {
       (this->*s_scan_table[((uchar)*cursor)])();
     }else{
-      //The cursor represents an identifier
-      scan_identifier_or_keyword();
+      //check for utf8 strings
+      static const uint u8Index = KDevelop::IndexedString("u8").index();
+      //check for raw strings
+      static const uint u8RIndex = KDevelop::IndexedString("u8R").index();
+      static const uint uRIndex = KDevelop::IndexedString("uR").index();
+      static const uint URIndex = KDevelop::IndexedString("UR").index();
+      static const uint LRIndex = KDevelop::IndexedString("LR").index();
+
+      if (*cursor.current == u8Index) {
+        // check for utf8 string
+        // not calling scan_identifier_or_literal as u8
+        // is only supported for strings, not characters
+        if (*(cursor+1) == '"') {
+          ++cursor;
+          scan_string_constant();
+        } else {
+          scan_identifier_or_keyword();
+        }
+      } else if (*cursor.current == u8RIndex || *cursor.current == uRIndex
+                  || *cursor.current == URIndex || *cursor.current == LRIndex)
+      {
+        // probably raw string
+        scan_raw_string_or_identifier();
+      } else {
+          //The cursor represents an identifier
+          scan_identifier_or_keyword();
+      }
     }
-    
+
+
     if(!m_leaveSize)
       current_token->size = cursor.offsetIn( session->contents() ) - current_token->position;
     
@@ -315,17 +353,20 @@ void Lexer::tokenize(ParseSession* _session)
     
     if(previousIndex != index)
       m_firstInLine = false;
-    
+    else // skipped index, remove last appended token again
+      stream->pop_back();
   }
 
-    if (index == session->token_stream->size())
-      session->token_stream->resize(session->token_stream->size() * 2);
-  (*session->token_stream)[index].session = session;
-  (*session->token_stream)[index].position = cursor.offsetIn(session->contents());
-  (*session->token_stream)[index].size = 0;
-  (*session->token_stream)[index].kind = Token_EOF;
+  {
+  Token eof;
+  eof.kind = Token_EOF;
+  eof.session = session;
+  eof.position = cursor.offsetIn( session->contents() );
+  eof.size = 0;
+  stream->append(eof);
+  }
 
-  session->token_stream->setLastToken(index);
+  stream->squeeze();
 }
 
 void Lexer::initialize_scan_table()
@@ -345,6 +386,9 @@ void Lexer::initialize_scan_table()
     }
 
   s_scan_table[int('L')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('u')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('U')] = &Lexer::scan_identifier_or_literal;
+  s_scan_table[int('R')] = &Lexer::scan_raw_string_or_identifier;
   s_scan_table[int('\n')] = &Lexer::scan_newline;
   s_scan_table[int('#')] = &Lexer::scan_preprocessor;
 
@@ -463,6 +507,66 @@ void Lexer::scan_string_constant()
   (*session->token_stream)[index++].kind = Token_string_literal;
 }
 
+void Lexer::scan_raw_string_constant()
+{
+  Q_ASSERT(*cursor == '"');
+  ++cursor;
+
+  (*session->token_stream)[index++].kind = Token_string_literal;
+
+  // find delimiter
+  KDevVarLengthArray<uint, 16> delim;
+  // NOTE: actually the spec says the delim should not be longer
+  //       than 16 *chars* but due to string concatenation
+  //       we don't really care about that and only look for
+  //       max. 16 - chars or strings - until we find a proper '(' char
+  int length = 0;
+  while (cursor < endCursor && *cursor && *cursor != '(' && length < 16)
+    {
+      delim.append(*cursor.current);
+      ++cursor;
+      ++length;
+    }
+
+  if (*cursor != '(')
+    {
+      KDevelop::ProblemPointer p = createProblem();
+      p->setDescription("expected R\"delim(");
+      control->reportProblem(p);
+      return;
+    }
+  ++cursor;
+
+  // parse raw string
+  bool delimFound = false;
+  while (cursor < endCursor && *cursor)
+    {
+      if (*cursor == ')') {
+        ++cursor;
+        // check for end delimiter
+        int i = 0;
+        while(i < delim.size() && cursor < endCursor && *cursor && *cursor.current == delim[i]) {
+          ++cursor;
+          ++i;
+        }
+        if (i == delim.size() && cursor < endCursor && *cursor == '"') {
+          ++cursor;
+          delimFound = true;
+          break;
+        }
+      } else {
+        ++cursor;
+      }
+    }
+
+  if (!delimFound)
+    {
+      KDevelop::ProblemPointer p = createProblem();
+      p->setDescription("expected )delim\"");
+      control->reportProblem(p);
+    }
+}
+
 void Lexer::scan_newline()
 {
   ++cursor;
@@ -497,6 +601,19 @@ void Lexer::scan_identifier_or_literal()
     default:
       scan_identifier_or_keyword();
       break;
+    }
+}
+
+void Lexer::scan_raw_string_or_identifier()
+{
+  if (*(cursor+1) == '"')
+    {
+      ++cursor;
+      scan_raw_string_constant();
+    }
+  else
+    {
+      scan_identifier_or_keyword();
     }
 }
 

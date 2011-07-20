@@ -87,6 +87,7 @@ namespace Cpp {
         BinaryOpFunctionCallAccess, /// "var1 {somebinaryoperator} "
         TemplateAccess,       /// "bla<."
         ReturnAccess,         /// "return " -- Takes into account return type
+        CaseAccess,           /// "case " -- Takes into account switch expression type
       };
 
       /**
