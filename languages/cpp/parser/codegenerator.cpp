@@ -649,20 +649,25 @@ void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 
   print(node->integrals, true);
 
-  print(node->type_of);
-
   if (node->name) {
     visit(node->name);
     m_output << " ";
   }
 
-  if (node->type_id) {
-    m_output << "(";
-    visit(node->type_id);
+  if (node->isTypeof) {
+    m_output << "typeof";
+    ///TODO: expression in parens?
+    if (node->type_id) {
+      m_output << "(";
+      visit(node->type_id);
+      m_output << ")";
+    }
+    visit(node->expression);
+  } else if (node->isDecltype) {
+    m_output << "decltype(";
+    visit(node->expression);
     m_output << ")";
   }
-
-  visit(node->expression);
 }
 
 void CodeGenerator::visitSizeofExpression(SizeofExpressionAST* node)

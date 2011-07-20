@@ -108,6 +108,11 @@ private slots:
   void testInlineNamespace();
   void testDecltype_data();
   void testDecltype();
+  void testAlternativeFunctionSyntax_data();
+  void testAlternativeFunctionSyntax();
+  void testLambda_data();
+  void testLambda();
+  //END C++2011 Support
 
 protected:
   /**

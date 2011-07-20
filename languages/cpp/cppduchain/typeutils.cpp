@@ -283,12 +283,16 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
 IndexedType removeConstModifier(const IndexedType& indexedType)
 {
     AbstractType::Ptr type = indexedType.abstractType();
-    if(type && type->modifiers() & AbstractType::ConstModifier)
-    {
-      type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
-      return type->indexed();
-    }
-    return indexedType;
+    removeConstModifier(type);
+    return type->indexed();
+}
+
+void removeConstModifier(AbstractType::Ptr& type)
+{
+  if(type && type->modifiers() & AbstractType::ConstModifier)
+  {
+    type->setModifiers(type->modifiers() & (~AbstractType::ConstModifier));
+  }
 }
 
 AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* source) {

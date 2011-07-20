@@ -100,7 +100,11 @@ Visitor::visitor_fun_ptr Visitor::_S_table[AST::NODE_KIND_COUNT] = {
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitQPropertyDeclaration),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitForRangeDeclaration),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTypeIDOperator),
-  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitStaticAssert)
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitStaticAssert),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitTrailingReturnType),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaExpression),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaCapture),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaDeclarator),
 };
 
 Visitor::Visitor()

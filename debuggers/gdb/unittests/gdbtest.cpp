@@ -51,12 +51,25 @@ using KDevelop::AutoTestShell;
 
 namespace GDBDebugger {
 
+KUrl findExecutable(const QString& name)
+{
+    QFileInfo info(qApp->applicationDirPath()  + "/unittests/" + name);
+    Q_ASSERT(info.exists());
+    Q_ASSERT(info.isExecutable());
+    return info.canonicalFilePath();
+}
+
+QString findSourceFile(const QString& name)
+{
+    QFileInfo info(QFileInfo(__FILE__).dir().path() + '/' + name);
+    Q_ASSERT(info.exists());
+    return info.canonicalFilePath();
+}
 
 void GdbTest::init()
 {
     AutoTestShell::init();
-    m_core = new KDevelop::TestCore();
-    m_core->initialize(KDevelop::Core::NoUi);
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     //remove all breakpoints - so we can set our own in the test
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
@@ -73,16 +86,10 @@ void GdbTest::init()
     vc->watches()->clear();
 }
 
-void GdbTest::cleanup()
-{
-    m_core->cleanup();
-    delete m_core;
-}
-
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(KUrl executable = KUrl(QDir::currentPath()+"/unittests/debugee") ) {
+    TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
         c = new KConfig();
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
@@ -160,11 +167,11 @@ void compareData(QModelIndex index, QString expected, const char *file, int line
 {
     QString s = index.model()->data(index, Qt::DisplayRole).toString();
     if (s != expected) {
-        kFatal() << QString("'%0' didn't match expected '%1' in %2:%3").arg(s).arg(expected).arg(file).arg(line);
+        QFAIL(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3").arg(s).arg(expected).arg(file).arg(line)));
     }
 }
 
-static const QString debugeeFileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+static const QString debugeeFileName = findSourceFile("debugee.cpp");
 
 KDevelop::BreakpointModel* breakpoints()
 {
@@ -304,7 +311,7 @@ void GdbTest::testPendingBreakpoint()
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QFileInfo(__FILE__).dir().path()+"/gdbtest.cpp", 10);
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(findSourceFile("/gdbtest.cpp"), 10);
     QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
 
     session->startProgram(&cfg);
@@ -519,8 +526,8 @@ void GdbTest::testBreakOnAccessBreakpoint()
 void GdbTest::testInsertBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
+    QString fileName = findSourceFile("debugeeslow.cpp");
 
     session->startProgram(&cfg);
 
@@ -539,8 +546,8 @@ void GdbTest::testInsertBreakpointWhileRunning()
 void GdbTest::testInsertBreakpointWhileRunningMultiple()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
+    QString fileName = findSourceFile("debugeeslow.cpp");
 
     session->startProgram(&cfg);
 
@@ -654,8 +661,8 @@ void GdbTest::testStack()
 void GdbTest::testStackFetchMore()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeerecursion"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeerecursion.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeerecursion"));
+    QString fileName = findSourceFile("debugeerecursion.cpp");
     
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -754,8 +761,8 @@ void GdbTest::testStackDeactivateAndActive()
 void GdbTest::testStackSwitchThread()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeethreads"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeethreads.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
+    QString fileName = findSourceFile("debugeethreads.cpp");
     
     TestFrameStackModel *stackModel = session->frameStackModel();
 
@@ -786,10 +793,10 @@ void GdbTest::testStackSwitchThread()
 
 void GdbTest::testAttach()
 {
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+    QString fileName = findSourceFile("debugeeslow.cpp");
 
     KProcess debugeeProcess;
-    debugeeProcess << "nice" << QDir::currentPath()+"/unittests/debugeeslow";
+    debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
     debugeeProcess.start();
     Q_ASSERT(debugeeProcess.waitForStarted());
     QTest::qWait(100);
@@ -816,7 +823,7 @@ void GdbTest::testCoreFile()
 
     KProcess debugeeProcess;
     debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
-    debugeeProcess << "bash" << "-c" << "ulimit -c unlimited; ./unittests/debugeecrash";
+    debugeeProcess << "bash" << "-c" << "ulimit -c unlimited; " + findExecutable("debugeecrash").toLocalFile();
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
     kDebug() << debugeeProcess.readAll();
@@ -826,7 +833,7 @@ void GdbTest::testCoreFile()
     }
 
     TestDebugSession *session = new TestDebugSession;
-    session->examineCoreFile(KUrl(QDir::currentPath()+"/unittests/debugeecrash"), KUrl(QDir::currentPath()+"/core"));
+    session->examineCoreFile(findExecutable("debugeecrash"), KUrl(QDir::currentPath()+"/core"));
     
     TestFrameStackModel *stackModel = session->frameStackModel();
     
@@ -1178,8 +1185,8 @@ void GdbTest::testSegfaultDebugee()
 {
     TestDebugSession *session = new TestDebugSession;
     session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeecrash"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeecrash.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeecrash"));
+    QString fileName = findSourceFile("debugeecrash.cpp");
 
     breakpoints()->addCodeBreakpoint(fileName, 23);
 
@@ -1224,8 +1231,8 @@ void GdbTest::testSwitchFrameGdbConsole()
 void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
 {
     TestDebugSession *session = new TestDebugSession;
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+    TestLaunchConfiguration cfg(findExecutable("debugeeslow"));
+    QString fileName = findSourceFile("debugeeslow.cpp");
 
     session->startProgram(&cfg);
 
@@ -1242,7 +1249,7 @@ void GdbTest::testCommandOrderFastStepping()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeqt"));
+    TestLaunchConfiguration cfg(findExecutable("debugeeqt"));
 
     breakpoints()->addCodeBreakpoint("main");
     QVERIFY(session->startProgram(&cfg));
@@ -1308,7 +1315,7 @@ void GdbTest::testRunGdbScript()
     QTemporaryFile runScript;
     runScript.open();
 
-    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
     runScript.write("break main\n");
     runScript.write("run\n");
     runScript.close();
@@ -1333,14 +1340,14 @@ void GdbTest::testRemoteDebug()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.write("gdbserver localhost:2345 " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1371,14 +1378,14 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.write("gdbserver localhost:2345 " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1419,12 +1426,12 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     while (s.data()->state() != state) {
         if (stopWatch.elapsed() > 5000) {
             kWarning() << "current state" << s.data()->state() << "waiting for" << state;
-            kFatal() << QString("Didn't reach state in %0:%1").arg(file).arg(line);
+            QFAIL(qPrintable(QString("Didn't reach state in %0:%1").arg(file).arg(line)));
         }
         QTest::qWait(20);
         if (!s) {
             if (state == DebugSession::EndedState) break;
-            kFatal() << QString("Didn't reach state; session ended in %0:%1").arg(file).arg(line);
+            QFAIL(qPrintable(QString("Didn't reach state; session ended in %0:%1").arg(file).arg(line)));
         }
     }
     QTest::qWait(100);

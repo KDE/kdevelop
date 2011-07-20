@@ -62,7 +62,7 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   
   if( params.parameters.size() + m_funDecl->defaultParametersSize() < functionArgumentCount && !partial )
     return; //Not enough parameters + default-parameters
-  if( params.parameters.size() > functionArgumentCount )
+  if( static_cast<uint>(params.parameters.size()) > functionArgumentCount )
     return; //Too many parameters
 
   m_parameterCountMismatch = false;
@@ -100,7 +100,7 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
 
   //Is one of our conversions worse than one of the other function's?
 
-  uint minParams = m_parameterConversions.size();
+  int minParams = m_parameterConversions.size();
   if(other.m_parameterConversions.size() < minParams)
     minParams = other.m_parameterConversions.size();
 

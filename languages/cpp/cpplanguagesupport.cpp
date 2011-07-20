@@ -208,7 +208,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     }
 }
 
-void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* window, QString& _xmlFile, KActionCollection& actions)
+void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)
 {
     _xmlFile = xmlFile();
 

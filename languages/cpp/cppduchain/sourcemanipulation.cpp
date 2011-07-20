@@ -167,9 +167,8 @@ QString KDevelop::SourceCodeInsertion::applySubScope(QString decl) const {
   
   ret += decl;
 
-  foreach(const QString& scope, m_scope.toStringList())
-    ret += "}" + scopeClose + "\n";
-  
+  ret += QString("}" + scopeClose + "\n").repeated(m_scope.count());
+
   return ret;
 }
 

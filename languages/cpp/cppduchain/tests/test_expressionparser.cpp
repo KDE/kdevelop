@@ -1146,6 +1146,30 @@ void TestExpressionParser::testTypeID()
   QCOMPARE(result.type.type<PointerType>()->baseType().cast<IntegralType>()->dataType(), (uint)IntegralType::TypeChar);
 }
 
+void TestExpressionParser::testConstness()
+{
+  QByteArray method("struct A { int x; }; const A* a = new A;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  // "a" is a pointer type, which itself is not const, but it points to const data
+  Declaration* a = top->localDeclarations().last();
+  QVERIFY(!TypeUtils::isConstant(a->abstractType()));
+  QVERIFY(a->abstractType().cast<PointerType>());
+  QVERIFY(TypeUtils::isConstant(a->abstractType().cast<PointerType>()->baseType()));
+
+  Cpp::ExpressionParser parser(false, true, true);
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("a->x", DUContextPointer(top));
+
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  QVERIFY(TypeUtils::isConstant(result.type.abstractType()));
+}
+
 void TestExpressionParser::testCharacterTypes_data()
 {
   QTest::addColumn<QString>("code");

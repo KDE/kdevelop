@@ -65,6 +65,9 @@ class InitDeclaratorAST;
 class InitializerAST;
 class InitializerClauseAST;
 class LabeledStatementAST;
+class LambdaExpressionAST;
+class LambdaCaptureAST;
+class LambdaDeclaratorAST;
 class LinkageBodyAST;
 class LinkageSpecificationAST;
 class MemInitializerAST;
@@ -95,6 +98,7 @@ class TemplateArgumentAST;
 class TemplateDeclarationAST;
 class TemplateParameterAST;
 class ThrowExpressionAST;
+class TrailingReturnTypeAST;
 class TranslationUnitAST;
 class TryBlockStatementAST;
 class CatchStatementAST;
@@ -200,10 +204,14 @@ public:
       Kind_ForRangeDeclaration,                 // 79
       Kind_TypeIDOperator,                      // 80
       Kind_StaticAssert,                        // 81
+      Kind_TrailingReturnType,                  // 82
+      Kind_LambdaExpression,                    // 83
+      Kind_LambdaCapture,                       // 84
+      Kind_LambdaDeclarator,                    // 85
       NODE_KIND_COUNT
     };
 
-  int kind;
+  NODE_KIND kind;
 
   uint start_token;
   uint end_token;
@@ -449,6 +457,7 @@ public:
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
+  TrailingReturnTypeAST* trailing_return_type;
   bool isVariadic;
 };
 
@@ -676,6 +685,57 @@ public:
   //The constant label expression
   ExpressionAST *expression;
   StatementAST* statement;
+};
+
+/*
+ * lambda-expression from the spec
+ *
+ * for optimization purposes we also include
+ * lambda-introducer, lambda-capture, capture-default
+ * and capture-list in here
+ */
+class LambdaExpressionAST : public ExpressionAST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaExpression)
+
+  // '&' or '=' or neither
+  uint default_capture;
+  const ListNode<LambdaCaptureAST*> *capture_list;
+
+  LambdaDeclaratorAST *declarator;
+  StatementAST *compound;
+};
+
+/*
+ * in the spec this is called just 'capture'.
+ * We wrapped lambda-capture in LambdaExpressionAST
+ */
+class LambdaCaptureAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaCapture)
+
+  uint identifier;
+
+  bool isThis : 1;
+  bool isRef : 1;
+  bool isVariadic : 1;
+};
+
+class LambdaDeclaratorAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(LambdaDeclarator)
+
+  ParameterDeclarationClauseAST *parameter_declaration_clause;
+  ///TODO: attribute-specifier
+  bool isMutable : 1;
+  ExceptionSpecificationAST *exception_spec;
+  TrailingReturnTypeAST *trailing_return_type;
 };
 
 class LinkageBodyAST : public AST
@@ -928,10 +988,12 @@ public:
   DECLARE_AST_NODE(SimpleTypeSpecifier)
 
   const ListNode<uint> *integrals;
-  uint type_of;
   TypeIdAST *type_id;
-  ExpressionAST *expression;
   NameAST *name;
+  // expression for typeof or decltype
+  ExpressionAST *expression;
+  bool isTypeof : 1;
+  bool isDecltype : 1;
 };
 
 class SizeofExpressionAST : public ExpressionAST
@@ -1025,6 +1087,17 @@ public:
 
   uint throw_token;
   ExpressionAST *expression;
+};
+
+class TrailingReturnTypeAST : public AST
+{
+public:
+
+  DECLARE_AST_NODE(TrailingReturnType)
+
+  const ListNode<TypeSpecifierAST*> *type_specifier;
+  // TODO: attribute-specifier-seq
+  DeclaratorAST* abstractDeclarator;
 };
 
 class TranslationUnitAST : public AST, public CommentAST

@@ -108,6 +108,7 @@ void DefaultVisitor::visitDeclarator(DeclaratorAST *node)
   visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
+  visit(node->trailing_return_type);
 }
 
 void DefaultVisitor::visitDeleteExpression(DeleteExpressionAST *node)
@@ -506,4 +507,29 @@ void DefaultVisitor::visitStaticAssert(StaticAssertAST* node)
 {
   visit(node->expression);
   visit(node->string);
+}
+
+void DefaultVisitor::visitTrailingReturnType(TrailingReturnTypeAST* node)
+{
+  visitNodes(this, node->type_specifier);
+  visit(node->abstractDeclarator);
+}
+
+void DefaultVisitor::visitLambdaExpression(LambdaExpressionAST* node)
+{
+  visitNodes(this, node->capture_list);
+  visit(node->declarator);
+  visit(node->compound);
+}
+
+void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* /*node*/)
+{
+  // nothing to do
+}
+
+void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)
+{
+  visit(node->parameter_declaration_clause);
+  visit(node->exception_spec);
+  visit(node->trailing_return_type);
 }

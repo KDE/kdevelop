@@ -34,7 +34,7 @@ public:
   DumpTree();
   virtual ~DumpTree();
 
-  void dump(AST *node, TokenStream* tokenStream = 0);
+  void dump(AST *node, TokenStream* tokenStream = 0, bool forceOutput = false);
 
 protected:
   virtual void visit(AST *node);
@@ -42,6 +42,7 @@ protected:
 private:
   TokenStream* m_tokenStream;
   int indent;
+  bool m_forceOutput;
 };
 
 #endif // DUMPTREE_H

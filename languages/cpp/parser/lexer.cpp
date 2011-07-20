@@ -126,10 +126,16 @@ KDevelop::IndexedString Token::symbol() const {
 }
 
 QByteArray Token::symbolByteArray() const {
+  if (size == 0) // esp. for EOF
+    return QByteArray();
+
   return stringFromContents(session->contentsVector(), position, size);
 }
 
 QString Token::symbolString() const {
+  if (size == 0) // esp. for EOF
+    return QString();
+
   return QString::fromUtf8(stringFromContents(session->contentsVector(), position, size));
 }
 
@@ -290,7 +296,7 @@ void Lexer::tokenize(ParseSession* _session)
     --endCursor;
 
   while (cursor < endCursor) {
-    Q_ASSERT(stream->size() == index);
+    Q_ASSERT(static_cast<uint>(stream->size()) == index);
 
     size_t previousIndex = index;
 
@@ -359,6 +365,8 @@ void Lexer::tokenize(ParseSession* _session)
   eof.size = 0;
   stream->append(eof);
   }
+
+  stream->squeeze();
 }
 
 void Lexer::initialize_scan_table()

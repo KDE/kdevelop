@@ -94,8 +94,9 @@ void getFirstLast(AST** first, AST** last, const ListNode<_Tp> *nodes)
 }
 
 ContextBuilder::ContextBuilder (ParseSession* session)
-: m_nameCompiler(session)
-  , m_inFunctionDefinition(false)
+:   m_inFunctionDefinition(false)
+  , m_editor(session)
+  , m_nameCompiler(session)
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
@@ -103,7 +104,6 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
-  , m_editor(session)
 {
 }
 
@@ -930,6 +930,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
+  visit(node->trailing_return_type);
   //END Finished with default visitor
 
   if(m_currentInitializer)

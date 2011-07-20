@@ -26,6 +26,8 @@
 #include "cppduchain.h"
 #include "expressionvisitor.h"
 #include "typebuilder.h"
+#include "parser/rpp/chartools.h"
+
 #include <language/duchain/duchainlock.h>
 
 using namespace Cpp;
@@ -145,6 +147,7 @@ QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
   return m_declarations;
 }
 
+///TODO: share code with TypeBuilder
 void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if(m_stopSearch)
@@ -241,15 +244,33 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       
       m_typeId = QualifiedIdentifier(integral->toString());
     }
-  else if (node->type_of)
+  else if (node->isTypeof || node->isDecltype)
     {
       if (node->expression)
       {
-        ExpressionParser parser;
+         bool isDecltypeInParen = false;
+        if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
+          ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
+          int startPosition = m_session->token_stream->position(node->expression->start_token);
+          isDecltypeInParen = stringFromContents(m_session->contentsVector(), startPosition, 1) == "(";
+        }
+
+        ExpressionParser parser(false, false, isDecltypeInParen);
         node->expression->ducontext = const_cast<DUContext*>(m_context);
         ExpressionEvaluationResult result = parser.evaluateType(node->expression, m_session);
         m_type = result.type.abstractType();
         m_typeId = QualifiedIdentifier(result.toString());
+        // make reference for decltype in additional parens - but only if it's not already a reference
+        // see spec 7.1.6/4
+        if (isDecltypeInParen && m_type && !TypeUtils::isReferenceType(m_type))
+        {
+          // type might already be a ref type
+          ReferenceType::Ptr refType = ReferenceType::Ptr(new ReferenceType);
+          refType->setBaseType(m_type);
+          m_type = refType.cast<AbstractType>();
+          ///TODO: anything todo with m_typeId ?
+        }
+
       }
     }
 

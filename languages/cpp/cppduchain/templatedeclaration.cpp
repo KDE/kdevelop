@@ -869,7 +869,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 
   if(!forceLocal) {
     ///Apply default-parameters
-    if(templateContext && (templateContext->localDeclarations().count() > templateArguments.templateParametersSize() || (templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1))) {
+    if(templateContext && (static_cast<uint>(templateContext->localDeclarations().count()) > templateArguments.templateParametersSize() || (templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1))) {
       //Do a little fake instantiation so all the default-parameters are correctly applied right here. Then, they can be used
       //during specialization-matching.
       DUContext* newTemplateContext = instantiateDeclarationAndContext( surroundingContext, source, templateContext, templateArguments, 0, 0, true );

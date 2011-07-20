@@ -243,7 +243,7 @@ private:
 
   void compareTokenStreams()
   {
-    std::size_t cursor = 1;
+    int cursor = 1;
     forever {
       QVERIFY(cursor < lastSession->token_stream->size());
       QVERIFY(cursor < lastGeneratedSession->token_stream->size());

@@ -322,3 +322,59 @@ void TestParser::testDecltype()
 
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testAlternativeFunctionSyntax_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // example from http://en.wikipedia.org/wiki/C%2B%2B0x#Alternative_function_syntax
+  QTest::newRow("decltype") << "template<typename Lhs, typename Rhs>\n"
+                               "auto adding_func(const Lhs& lhs, const Rhs &rhs) -> decltype(lhs+rhs)\n"
+                               "{ return lhs + rhs; }\n";
+
+  // example from the spec 8.0/5
+  QTest::newRow("attribute") << "auto f()->int(*)[4];\n";
+
+  // simple case
+  QTest::newRow("simple") << "auto f() -> int { return 1; }\n";
+}
+
+void TestParser::testAlternativeFunctionSyntax()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testLambda_data()
+{
+  QTest::addColumn<QString>("code");
+
+  QTest::newRow("minimal") << "auto f = [] {};";
+  QTest::newRow("capture-default-=") << "auto f = [=] {};";
+  QTest::newRow("capture-default-&") << "auto f = [&] {};";
+  QTest::newRow("capture-this") << "auto f = [this] {};";
+  QTest::newRow("capture-id") << "auto f = [a] {};";
+  QTest::newRow("capture-id-ref") << "auto f = [&a] {};";
+  QTest::newRow("capture-id-variadic") << "auto f = [a...] {};";
+  QTest::newRow("capture-list1") << "auto f = [=, &a, b, this] {};";
+  QTest::newRow("capture-list2") << "auto f = [&, &a, b, this] {};";
+  QTest::newRow("params-empty") << "auto f = [] () {};";
+  QTest::newRow("params") << "auto f = [] (int a, const A& b) {};";
+  QTest::newRow("return") << "auto f = [] () -> int {};";
+  QTest::newRow("return-decltype") << "auto f = [=] (const A &a) -> decltype(a.foo()) { return a.foo(); };";
+  QTest::newRow("throw") << "auto f = [] () throw(std::exception) {};";
+}
+
+void TestParser::testLambda()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QVERIFY(control.problems().isEmpty());
+}
