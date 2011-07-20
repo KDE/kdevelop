@@ -89,6 +89,7 @@ void DocumentControllerTest::testSetEncoding()
 
 void DocumentControllerTest::testOpeningNewDocumentFromText()
 {
+    qRegisterMetaType<KDevelop::IDocument*>("KDevelop::IDocument*");
     QSignalSpy createdSpy(m_subject, SIGNAL(textDocumentCreated(KDevelop::IDocument*)));
     QVERIFY(createdSpy.isValid());
     QSignalSpy openedSpy(m_subject, SIGNAL(documentOpened(KDevelop::IDocument*)));
