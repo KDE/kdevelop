@@ -33,6 +33,7 @@ Q_OBJECT
   void self();
 private slots:
   void initTestCase();
+  void cleanupTestCase();
   void init();
 
   void addRemoveFiles();

@@ -50,6 +50,11 @@ void ShellBuddyTest::initTestCase()
     m_uiController = Core::self()->uiControllerInternal();
 }
 
+void ShellBuddyTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void ShellBuddyTest::verifyFilename(Sublime::View *view, const QString& endOfFilename)
 {
     QVERIFY(view);

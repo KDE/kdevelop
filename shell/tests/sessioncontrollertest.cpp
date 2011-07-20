@@ -89,12 +89,8 @@ void SessionControllerTest::cleanupTestCase()
         if (m_sessionCtrl->activeSession()->name() != name)
             m_sessionCtrl->deleteSession( name );
     }
-    // Need to cleanup this directory manually, because SessionController (rightfully) doesn't
-    // allow to delete the active session
-    Session* s = static_cast<Session*>( Core::self()->activeSession() );
-    KIO::NetAccess::del( QString(SessionController::sessionDirectory() + "/" + s->id().toString()), 0 );
-    KGlobal::config()->group( SessionController::cfgSessionGroup() ).deleteEntry( SessionController::cfgActiveSessionEntry() );
-    KGlobal::config()->group( SessionController::cfgSessionGroup() ).sync();
+
+    TestCore::shutdown();
 }
 
 void SessionControllerTest::createSession_data()

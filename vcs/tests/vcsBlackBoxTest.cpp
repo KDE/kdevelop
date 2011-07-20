@@ -382,6 +382,7 @@ void VcsBlackBoxTest::initTestCase()
 
 void VcsBlackBoxTest::cleanupTestCase()
 {
+    TestCore::shutdown();
 }
 
 void VcsBlackBoxTest::repoInit(DRepo& r, DRepo& s)

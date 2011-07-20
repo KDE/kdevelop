@@ -34,6 +34,7 @@ class SvnImport
     Q_OBJECT
 private slots:
     void initTestCase();
+    void cleanupTestCase();
     void testBasic();
     void testImportIntoDir();
     void testImportWithMissingDirs();

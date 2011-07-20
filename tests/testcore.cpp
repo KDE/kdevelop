@@ -75,6 +75,14 @@ void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
     }
 }
 
+void TestCore::shutdown()
+{
+    if (Core::m_self) {
+        self()->cleanup();
+        Core::m_self->deleteLater();
+    }
+}
+
 void TestCore::setSessionController( SessionController* ctrl )
 {
     d->sessionController = ctrl;

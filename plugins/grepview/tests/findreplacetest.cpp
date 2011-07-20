@@ -30,6 +30,11 @@ void FindReplaceTest::initTestCase()
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 }
 
+void FindReplaceTest::cleanupTestCase()
+{
+    KDevelop::TestCore::shutdown();
+}
+
 void FindReplaceTest::testFind_data()
 {
     QTest::addColumn<QString>("subject");

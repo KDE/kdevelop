@@ -45,7 +45,13 @@ class UiController;
  * The simplest code which should suffice for most use cases is:
  *
  * \code
- * TestCore::initialize();
+ * MyUnitTest::initTestCase() {
+ *   AutoTestShell::init()
+ *   TestCore::initialize();
+ * }
+ * MyUnitTest::cleanupTestCase() {
+ *   TestCore::shutdown();
+ * }
  * \endcode
  *
  * This class also allows to replace certain or all parts of the
@@ -85,6 +91,16 @@ public:
      *            will be opened.
      */
     static void initialize( Core::Setup mode = Core::Default, const QString& session = "" );
+
+    /**
+     * Calls @c cleanup() on the current TestCore instance,
+     * then deletes the core.
+     *
+     * @NOTE: It is important to call this in e.g. @code cleanupTestSuite @endcode
+     *        otherwise the core will be leaked, no proper cleanup will take place
+     *        and e.g. temporary sessions not properly deleted.
+     */
+    static void shutdown();
 
     void setSessionController( SessionController* );
     void setPluginController( PluginController* );

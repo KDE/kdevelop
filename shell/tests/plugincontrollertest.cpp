@@ -72,6 +72,11 @@ void PluginControllerTest::initTestCase()
     m_pluginCtrl = m_core->pluginControllerInternal();
 }
 
+void PluginControllerTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void PluginControllerTest::init()
 {
 }

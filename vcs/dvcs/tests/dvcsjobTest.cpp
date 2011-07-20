@@ -36,6 +36,11 @@ void DVcsJobTest::initTestCase()
     TestCore::initialize(Core::NoUi);
 }
 
+void DVcsJobTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void DVcsJobTest::testJob()
 {
     KDevelop::DVcsJob* job = new KDevelop::DVcsJob(QDir::temp());

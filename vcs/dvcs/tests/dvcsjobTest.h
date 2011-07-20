@@ -29,6 +29,7 @@ class DVcsJobTest: public QObject
 
     private slots:
         void initTestCase();
+        void cleanupTestCase();
         void testJob();
 };
 

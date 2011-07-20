@@ -325,6 +325,9 @@ class TestEmbeddedFreeTree : public QObject {
         KDevelop::AutoTestShell::init();
         KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
     }
+    void cleanupTestCase() {
+        KDevelop::TestCore::shutdown();
+    }
     void randomizedTest() {
         const int cycles = 10000;
         const int valueRange = 1000;

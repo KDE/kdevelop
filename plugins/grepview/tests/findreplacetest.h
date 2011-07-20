@@ -46,6 +46,7 @@ private:
     
 private slots:
     void initTestCase();
+    void cleanupTestCase();
     
     void testFind();
     void testFind_data();

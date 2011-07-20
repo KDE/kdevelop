@@ -90,6 +90,11 @@ void SvnImport::initTestCase()
     QVERIFY(vcs);
 }
 
+void SvnImport::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void SvnImport::testBasic()
 {
     KTempDir reposDir;

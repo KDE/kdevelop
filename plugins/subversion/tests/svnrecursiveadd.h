@@ -27,6 +27,7 @@ class SvnRecursiveAdd
     Q_OBJECT
 private slots:
     void initTestCase();
+    void cleanupTestCase();
 
     void test();
 };

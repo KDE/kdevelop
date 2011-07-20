@@ -42,6 +42,11 @@ void TestHighlighting::initTestCase()
     CodeRepresentation::setDiskChangesForbidden(true);
 }
 
+void TestHighlighting::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void TestHighlighting::testInitialization()
 {
     CodeHighlighting highlighting(this);

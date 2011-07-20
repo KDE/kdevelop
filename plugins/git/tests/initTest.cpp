@@ -67,6 +67,7 @@ void GitInitTest::initTestCase()
 void GitInitTest::cleanupTestCase()
 {
     delete m_plugin;
+    TestCore::shutdown();
     if (QFileInfo(gitTest_BaseDir).exists())
         KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0);
 

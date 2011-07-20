@@ -49,6 +49,8 @@ void CvsTest::initTestCase()
 
 void CvsTest::cleanupTestCase()
 {
+    KDevelop::TestCore::shutdown();
+
     delete m_proxy;
 
     if ( QFileInfo(CVSTEST_BASEDIR).exists() )

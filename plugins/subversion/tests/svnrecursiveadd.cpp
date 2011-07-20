@@ -115,6 +115,11 @@ void SvnRecursiveAdd::initTestCase()
     TestCore::initialize();
 }
 
+void SvnRecursiveAdd::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void SvnRecursiveAdd::test()
 {
     KTempDir reposDir;

@@ -47,6 +47,11 @@ void ShellDocumentOperationTest::initTestCase()
     TestCore::initialize();
 }
 
+void ShellDocumentOperationTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void ShellDocumentOperationTest::testOpenDocumentFromText()
 {
     //open some docs

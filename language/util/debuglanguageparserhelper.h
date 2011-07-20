@@ -209,6 +209,8 @@ int initAndRunParser(const KAboutData& aboutData, int argc, char* argv[])
 
     }
 
+    KDevelop::TestCore::shutdown();
+
     return 0;
 }
 }

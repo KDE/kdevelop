@@ -76,6 +76,7 @@ void DocumentControllerTest::cleanup()
 
 void DocumentControllerTest::cleanupTestCase()
 {
+    TestCore::shutdown();
     m_tempDir.unlink();
 }
 

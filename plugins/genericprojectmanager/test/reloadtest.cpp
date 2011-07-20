@@ -53,6 +53,11 @@ void ProjectLoadTest::initTestCase()
     KDevelop::TestCore::initialize();
 }
 
+void ProjectLoadTest::cleanupTestCase()
+{
+    KDevelop::TestCore::shutdown();
+}
+
 void ProjectLoadTest::init()
 {
     exec("bash -c \"rm -r testproject*\"");
