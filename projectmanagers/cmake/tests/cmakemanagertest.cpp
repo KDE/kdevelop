@@ -28,6 +28,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 #include <tests/autotestshell.h>
 #include <tests/testproject.h>
 #include <tests/testcore.h>
@@ -48,23 +49,49 @@ static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
 
+struct TestProjectPaths {
+    // foo/
+    KUrl sourceDir;
+    // foo/foo.kdev4
+    KUrl projectFile;
+    // foo/.kdev4/foo.kdev4
+    KUrl configFile;
+};
+
+TestProjectPaths projectPaths(const QString& project)
+{
+    TestProjectPaths paths;
+    QFileInfo info(CMAKE_TESTS_PROJECTS_DIR "/" + project);
+    Q_ASSERT(info.exists());
+
+    paths.sourceDir = info.canonicalFilePath();
+    paths.sourceDir.adjustPath(KUrl::AddTrailingSlash);
+
+    paths.projectFile = paths.sourceDir;
+    paths.projectFile.addPath(project + ".kdev4");
+    Q_ASSERT(QFile::exists(paths.projectFile.toLocalFile()));
+
+    paths.configFile = paths.sourceDir;
+    paths.configFile.addPath(".kdev4/" + project + ".kdev4");
+
+    return paths;
+}
+
 /**
  * apply default configuration to project in @p sourceDir called @p projectName
  * 
  * this prevents the dialog to popup asking for user interaction
  * which should never happen in an automated unit test
  */
-void defaultConfigure(const KUrl& sourceDir, const QString& projectName)
+void defaultConfigure(const TestProjectPaths& paths)
 {
-    QVERIFY(QDir(sourceDir.toLocalFile()).exists());
-
-    KConfig config(sourceDir.toLocalFile(KUrl::AddTrailingSlash) + ".kdev4/" + projectName + ".kdev4");
+    KConfig config(paths.configFile.toLocalFile());
     // clear config
     config.deleteGroup("CMake");
 
     // apply default configuration
     CMakeBuildDirChooser bd;
-    bd.setSourceFolder(sourceDir);
+    bd.setSourceFolder(paths.sourceDir);
     // we don't want to execute, just pick the defaults from the dialog
 
     KConfigGroup cmakeGrp = config.group("CMake");
@@ -89,34 +116,81 @@ void defaultConfigure(const KUrl& sourceDir, const QString& projectName)
 
 using namespace KDevelop;
 
-CMakeManagerTest::CMakeManagerTest(QObject* parent): QObject(parent)
+void CMakeManagerTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
+
+    cleanup();
 }
 
-CMakeManagerTest::~CMakeManagerTest()
+void CMakeManagerTest::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void CMakeManagerTest::testWithBuildDirProject()
+void CMakeManagerTest::cleanup()
 {
-    KUrl url(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/with_build_dir.kdev4").canonicalFilePath());
-    KUrl expected_source_Dir(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir").canonicalFilePath());
-    expected_source_Dir.adjustPath(KUrl::AddTrailingSlash);
-
-    defaultConfigure(expected_source_Dir, "with_build_dir");
-
-    // Import project
-    QList< ProjectFolderItem* > items;
-    
-    ICore::self()->projectController()->openProject(url);
-    
-    WAIT_FOR_OPEN_SIGNAL;
-    
-    IProject* project = ICore::self()->projectController()->findProjectByName("with_build_dir");
-    QCOMPARE(url, project->projectFileUrl());
-    QCOMPARE(expected_source_Dir, project->folder());
+    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
+    }
+    QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 }
 
+void CMakeManagerTest::testWithBuildDirProject()
+{
+    const TestProjectPaths paths = projectPaths("with_build_dir");
+
+    defaultConfigure(paths);
+
+    // Import project
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("with_build_dir");
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+}
+
+void CMakeManagerTest::testIncludePaths()
+{
+    const TestProjectPaths paths = projectPaths("single_subdirectory");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("single_subdirectory");
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl fooCpp(paths.sourceDir, "subdir/foo.cpp");
+    QVERIFY(QFile::exists(fooCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl(fooCpp);
+    QCOMPARE(items.size(), 2); // once the target, once the plain file
+    ProjectBaseItem* fooCppItem = items.first();
+
+    KUrl::List _includeDirs = project->buildSystemManager()->includeDirectories(fooCppItem);
+    QSet<KUrl> includeDirs;
+    foreach(KUrl url, _includeDirs) {
+        url.cleanPath(KUrl::SimplifyDirSeparators);
+        url.adjustPath(KUrl::RemoveTrailingSlash);
+        includeDirs << url;
+    }
+
+    QEXPECT_FAIL("", "urls are not properly cleaned nor unified", Continue);
+    QCOMPARE(includeDirs.size(), _includeDirs.size());
+
+    KUrl buildDir(paths.sourceDir, "build");
+    QVERIFY(includeDirs.contains(buildDir));
+
+    KUrl subBuildDir(paths.sourceDir, "build/subdir");
+    QVERIFY(includeDirs.contains(subBuildDir));
+
+    KUrl subDir(paths.sourceDir, "subdir");
+    QVERIFY(includeDirs.contains(subDir));
+}
