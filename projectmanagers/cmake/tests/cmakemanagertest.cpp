@@ -18,17 +18,19 @@
 */
 
 #include "cmakemanagertest.h"
-#include <tests/testproject.h>
+
 #include <icmakemanager.h>
+#include <cmakebuilddirchooser.h>
+
 #include <qtest.h>
 #include <qtest_kde.h>
-#include <shell/core.h>
-#include <tests/autotestshell.h>
-#include <KConfigGroup>
-#include <project/interfaces/iprojectfilemanager.h>
+
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/icore.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <tests/autotestshell.h>
+#include <tests/testproject.h>
 #include <tests/testcore.h>
-#include <shell/sessioncontroller.h>
 
 QTEST_KDEMAIN(CMakeManagerTest, GUI )
 
@@ -38,28 +40,79 @@ QTEST_KDEMAIN(CMakeManagerTest, GUI )
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
 } void(0)
 
+static QString currentBuildDirKey = "CurrentBuildDir";
+static QString currentCMakeBinaryKey = "Current CMake Binary";
+static QString currentBuildTypeKey = "CurrentBuildType";
+static QString currentInstallDirKey = "CurrentInstallDir";
+static QString currentExtraArgumentsKey = "Extra Arguments";
+static QString projectRootRelativeKey = "ProjectRootRelative";
+static QString projectBuildDirs = "BuildDirs";
+
+/**
+ * apply default configuration to project in @p sourceDir called @p projectName
+ * 
+ * this prevents the dialog to popup asking for user interaction
+ * which should never happen in an automated unit test
+ */
+void defaultConfigure(const KUrl& sourceDir, const QString& projectName)
+{
+    QVERIFY(QDir(sourceDir.toLocalFile()).exists());
+
+    KConfig config(sourceDir.toLocalFile(KUrl::AddTrailingSlash) + ".kdev4/" + projectName + ".kdev4");
+    // clear config
+    config.deleteGroup("CMake");
+
+    // apply default configuration
+    CMakeBuildDirChooser bd;
+    bd.setSourceFolder(sourceDir);
+    // we don't want to execute, just pick the defaults from the dialog
+
+    KConfigGroup cmakeGrp = config.group("CMake");
+    {
+        QDir buildFolder( bd.buildFolder().toLocalFile() );
+        if ( !buildFolder.exists() ) {
+            if ( !buildFolder.mkpath( buildFolder.absolutePath() ) ) {
+                QFAIL("The build directory did not exist and could not be created.");
+            }
+        }
+    }
+
+    cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
+    cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
+    cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
+    cmakeGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
+    cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
+    cmakeGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
+
+    config.sync();
+}
+
 using namespace KDevelop;
 
 CMakeManagerTest::CMakeManagerTest(QObject* parent): QObject(parent)
 {
     AutoTestShell::init();
-    TestCore* core = new TestCore;
-    core->initialize(KDevelop::Core::Default, "cmakemanagertest");
+    TestCore::initialize();
 }
 
 CMakeManagerTest::~CMakeManagerTest()
-{}
+{
+    TestCore::shutdown();
+}
 
 void CMakeManagerTest::testWithBuildDirProject()
 {
+    KUrl url(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/with_build_dir.kdev4").canonicalFilePath());
+    KUrl expected_source_Dir(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir").canonicalFilePath());
+    expected_source_Dir.adjustPath(KUrl::AddTrailingSlash);
+
+    defaultConfigure(expected_source_Dir, "with_build_dir");
+
     // Import project
     QList< ProjectFolderItem* > items;
     
-    KUrl url(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir/with_build_dir.kdev4").canonicalFilePath());
     ICore::self()->projectController()->openProject(url);
     
-    KUrl expected_source_Dir(QFileInfo(CMAKE_TESTS_PROJECTS_DIR "/with_build_dir").canonicalFilePath());
-    expected_source_Dir.adjustPath(KUrl::AddTrailingSlash);
     WAIT_FOR_OPEN_SIGNAL;
     
     IProject* project = ICore::self()->projectController()->findProjectByName("with_build_dir");
