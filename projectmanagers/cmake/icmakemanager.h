@@ -19,11 +19,19 @@
 #ifndef ICMAKEMANAGER_H
 #define ICMAKEMANAGER_H
 
+#include <QtCore/QObject>
+#include <QtCore/QPair>
+
+namespace KDevelop
+{
+class IProject;
+}
+
 class ICMakeManager
 {
 public:
     virtual ~ICMakeManager() {}
-    
+
     virtual QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const=0;
 
 };
