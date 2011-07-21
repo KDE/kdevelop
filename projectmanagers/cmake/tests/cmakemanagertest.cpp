@@ -178,11 +178,10 @@ void CMakeManagerTest::testIncludePaths()
     QSet<KUrl> includeDirs;
     foreach(KUrl url, _includeDirs) {
         url.cleanPath(KUrl::SimplifyDirSeparators);
-        url.adjustPath(KUrl::RemoveTrailingSlash);
+        url.adjustPath(KUrl::AddTrailingSlash);
         includeDirs << url;
     }
 
-    QEXPECT_FAIL("", "urls are not properly cleaned nor unified", Continue);
     QCOMPARE(includeDirs.size(), _includeDirs.size());
 
     KUrl buildDir(paths.sourceDir, "build");
