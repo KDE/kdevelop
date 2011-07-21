@@ -659,6 +659,7 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 IDocument* DocumentController::openDocumentFromText( const QString& data )
 {
     IDocument* d = openDocument(nextEmptyDocumentUrl());
+    Q_ASSERT(d->textDocument());
     d->textDocument()->setText( data );
     return d;
 }

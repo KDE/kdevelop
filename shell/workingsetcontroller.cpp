@@ -46,7 +46,7 @@ const int toolTipTimeout = 2000;
 QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
 WorkingSetController::WorkingSetController(Core* core)
-    : m_emptyWorkingSet(0), m_core(core)
+    : m_emptyWorkingSet(0), m_core(core), m_changingWorkingSet(false)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);
@@ -300,7 +300,7 @@ void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString
 void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
 {
     kDebug() << "changed working-set from" << from << "to" << to << "area" << area;
-    if (from == to)
+    if (from == to || m_changingWorkingSet)
         return;
 
     // We have to always clear the target area first, because else we cannot perform the switch safely
@@ -323,10 +323,12 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
 
     if (area->workingSet().isEmpty()) {
         //Spawn a new working-set
+        m_changingWorkingSet = true;
         WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
         set->connectArea(area);
         set->saveFromArea(area, area->rootIndex());
         area->setWorkingSet(set->id());
+        m_changingWorkingSet = false;
     }
 }
 
