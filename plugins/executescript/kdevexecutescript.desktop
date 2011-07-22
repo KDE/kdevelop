@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin allows running of scripts.
 Comment[bg]=Тази приставка позволява изпълнение на скриптове.
+Comment[de]=Dieses Modul ermöglicht das Ausführen von Skripten.
 Comment[el]=Το πρόσθετο αυτό επιτρέπει την εκτέλεση σεναρίων.
 Comment[es]=Este complemento permite ejecutar scripts.
 Comment[et]=See plugin võimaldab käivitada skripte.
