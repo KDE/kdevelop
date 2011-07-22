@@ -359,7 +359,7 @@ void VariablesRoot::resetChanged()
 }
 
 VariableCollection::VariableCollection(IDebugController* controller)
-: TreeModel(QVector<QString>() << "Name" << "Value", controller), m_widgetVisible(false)
+: TreeModel(QVector<QString>() << i18n( "Name" ) << i18n( "Value" ), controller), m_widgetVisible(false)
 {
     universe_ = new VariablesRoot(this);
     setRootItem(universe_);
