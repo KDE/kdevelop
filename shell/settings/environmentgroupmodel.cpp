@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QModelIndex>
 
 #include <kdebug.h>
+#include <KLocalizedString>
 
 namespace KDevelop
 {
@@ -86,10 +87,10 @@ QVariant EnvironmentGroupModel::headerData( int section, Qt::Orientation orienta
     }
     if( section == 0 )
     {
-        return "Variable";
+        return i18n( "Variable" );
     } else
     {
-        return "Value";
+        return i18n( "Value" );
     }
 }
 
