@@ -20,12 +20,10 @@
 #define MODIFICATIONSREPOSITORY_H
 
 #include <language/languageexport.h>
-#include <language/editor/cursorinrevision.h>
+#include <language/editor/rangeinrevision.h>
 
 namespace KDevelop
 {
-
-class RangeInRevision;
 class Declaration;
 
 /**
@@ -45,9 +43,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
         
         /** Constructs a DataAccess instance with its @p cur position and
-         * its @p flags DataAccessFlags that will tell us how is it modifying the data
+         * its @p flags DataAccessFlags that will tell us how is it modifying the data.
+         * In case it's a Write, a @p range can be provided
          */
-        DataAccess(const CursorInRevision& cur, DataAccessFlags flags);
+        DataAccess(const CursorInRevision& cur, DataAccessFlags flags, const KDevelop::RangeInRevision& range);
         
         /** Checks the flags and returns if it's reading the data */
         bool isRead()  const { return m_flags&Read; }
@@ -61,9 +60,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
         /** @returns the flags that specify how is this access interacting with the data */
         DataAccessFlags flags() const { return m_flags; }
         
+        /** @returns the range that contains the written value in case it's a Write access */
+        KDevelop::RangeInRevision value() const { return m_value; }
+        
     private:
         DataAccessFlags m_flags;
         KDevelop::CursorInRevision m_pos;
+        KDevelop::RangeInRevision m_value;
 };
 
 /**
@@ -77,7 +80,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
         ~DataAccessRepository() { clear(); }
         
         /** Constructs a DataAccess instance and adds it to the repository */
-        void addModification(const KDevelop::CursorInRevision& cursor, DataAccess::DataAccessFlags flags);
+        void addModification(const KDevelop::CursorInRevision& cursor, KDevelop::DataAccess::DataAccessFlags flags,
+                             const KDevelop::RangeInRevision& range=RangeInRevision::invalid());
       
         /** Clears the whole structure as if it was never used before */
         void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }

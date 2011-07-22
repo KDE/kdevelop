@@ -21,13 +21,14 @@
 
 namespace KDevelop {
 
-void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags)
+void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
 {
-    m_modifications.append(new DataAccess(cursor, flags));
+    Q_ASSERT(!range.isValid() || flags==DataAccess::Write);
+    m_modifications.append(new DataAccess(cursor, flags, range));
 }
 
-DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags)
-  : m_flags(flags), m_pos(cur)
+DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
+  : m_flags(flags), m_pos(cur), m_value(range)
 {}
 
 DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
