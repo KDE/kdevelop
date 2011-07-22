@@ -6042,6 +6042,17 @@ void TestDUChain::testPointerToMember()
 
 }
 
+void TestDUChain::testMemberPtrCrash()
+{
+  QByteArray code(
+  "template<typename T>\n"
+  "class A{};\n"
+  "class B{};\n"
+  "class C{};\n"
+  "A<B C::*> x;\n");
+  LockedTopDUContext top = parse(code, DumpNone);
+}
+
 void TestDUChain::testDeclarationHasUses()
 {
   QByteArray method(

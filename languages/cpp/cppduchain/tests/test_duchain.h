@@ -191,6 +191,7 @@ private slots:
 
   void testCommentAfterFunctionCall();
   void testPointerToMember();
+  void testMemberPtrCrash();
   void testNestedNamespace();
   
   void testDeclarationHasUses();

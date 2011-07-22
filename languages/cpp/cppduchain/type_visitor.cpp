@@ -84,7 +84,9 @@ void TypeASTVisitor::run(TypeIdAST *node)
                 pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
                 pointer->setBaseType(m_type);
                 PtrToMemberAST * ast=ptrOp->mem_ptr;
+                lock.unlock(); //visit() may lock DUChain
                 visit(ast);
+                lock.lock();
                 pointer->setClassType(m_type);
                 m_type=pointer.cast<AbstractType>();
               }
