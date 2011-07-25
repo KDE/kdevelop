@@ -11,7 +11,7 @@ set(kdevplatformtests_LIB_SRCS
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
 target_link_libraries(kdevplatformtests 
-        ${QT_QTCORE_LIBRARY} kdevplatformshell kdevplatformlanguage)
+        ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} kdevplatformshell kdevplatformlanguage)
 target_link_libraries(kdevplatformtests LINK_INTERFACE_LIBRARIES 
         kdevplatformshell
         kdevplatformlanguage)
