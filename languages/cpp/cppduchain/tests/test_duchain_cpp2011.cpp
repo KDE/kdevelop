@@ -336,14 +336,27 @@ void TestDUChain::testTrailingReturnType()
     QVERIFY(funcType);
     QVERIFY(funcType->returnType());
     qDebug() << funcType->returnType()->toString();
-    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Abort);
+    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Continue);
     QVERIFY(funcType->returnType().cast<PointerType>());
+    /* TODO: uncomment once the above has been fixed
     QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>());
     QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->dimension(), 4);
     QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>());
     QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>()->dataType(),
              (uint) IntegralType::TypeInt);
     QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+    */
+  }
+
+  {
+    // make sure we don't crash due to assertion on m_context in TypeASTVisitor ctor
+    QByteArray code = "void func() { auto f = []() { return 1; }; }\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    QByteArray code2 = "void func() { auto f = []() -> int { return 1; }; }\n";
+    TopDUContext* top2 = parse(code2, DumpAll, top);
+    QVERIFY(top2);
+    QCOMPARE(top2, top.m_top);
   }
 }
 

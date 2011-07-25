@@ -2439,3 +2439,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   }
 }
 
+void Cpp::ExpressionVisitor::visitLambdaExpression(LambdaExpressionAST* node)
+{
+  PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+  DefaultVisitor::visitLambdaExpression(node);
+}
