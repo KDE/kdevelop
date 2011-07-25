@@ -645,6 +645,8 @@ void SessionController::startNewSession()
 
 void SessionController::cleanup()
 {
+    d->recoveryTimer.stop();
+
     ISession* active = d->activeSession;
     d->activeSession = 0;
     if (active->isTemporary()) {
