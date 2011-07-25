@@ -1393,13 +1393,13 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
 
   if (!parseTypeId(typeId) ||
        (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
-         && session->token_stream->lookAhead() != Token_rightshift ))
+         && session->token_stream->lookAhead() != Token_rightshift && session->token_stream->lookAhead() != Token_ellipsis ))
   {
     rewind(start);
 
     if (!parsePrimaryExpression(expr) ||
          (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
-         && session->token_stream->lookAhead() != Token_rightshift ))
+         && session->token_stream->lookAhead() != Token_rightshift && session->token_stream->lookAhead() != Token_ellipsis ))
     {
       rewind(start);
       
