@@ -24,6 +24,7 @@
 #include "externalscriptview.h"
 #include "externalscriptitem.h"
 #include "externalscriptjob.h"
+#include "externalscriptdebug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -182,7 +183,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setCommand(command);
   item->setWorkingDirectory(workingDirectory);
   item->setPerformParameterReplacement(false);
-  kDebug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
+  debug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
   ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, const_cast<ExternalScriptPlugin*>(this) );
   // When a command is executed, for example through the terminal, we don't want the command output to be risen
   job->setVerbosity(KDevelop::OutputJob::Silent);
@@ -193,7 +194,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
 
 QString ExternalScriptPlugin::executeCommandSync ( QString command, QString workingDirectory ) const
 {
-  kDebug() << "executing command " << command << " in working-dir " << workingDirectory;
+  debug() << "executing command " << command << " in working-dir " << workingDirectory;
   KProcess process;
   process.setWorkingDirectory( workingDirectory );
   process.setShellCommand( command );
@@ -225,7 +226,7 @@ void ExternalScriptPlugin::rowsRemoved( const QModelIndex& /*parent*/, int start
   KConfigGroup config = getConfig();
   for ( int i = start; i <= end; ++i ) {
     KConfigGroup child = config.group( QString("script %1").arg(i) );
-    qDebug() << "removing config group:" << child.name();
+    debug() << "removing config group:" << child.name();
     child.deleteGroup();
   }
   config.sync();
@@ -246,7 +247,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
   Q_ASSERT( item );
 
-  qDebug() << "save extern script:" << item << idx;
+  debug() << "save extern script:" << item << idx;
   KConfigGroup config = getConfig().group( QString("script %1").arg( row ) );
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );

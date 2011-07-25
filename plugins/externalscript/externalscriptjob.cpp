@@ -22,12 +22,12 @@
 
 #include "externalscriptitem.h"
 #include "externalscriptoutputmodel.h"
+#include "externalscriptdebug.h"
 
 #include <QFileInfo>
 #include <QApplication>
 
 #include <KProcess>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KShell>
@@ -53,7 +53,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
-  kDebug() << "creating external script job";
+  debug() << "creating external script job";
 
   setCapabilities( Killable );
   setStandardToolView( KDevelop::IOutputView::RunView );
@@ -162,7 +162,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
            SLOT( processFinished( int, QProcess::ExitStatus ) ) );
 
   // Now setup the process parameters
-  kDebug() << "setting command:" << command;
+  debug() << "setting command:" << command;
 
   if ( m_errorMode == ExternalScriptItem::ErrorMergeOutput ) {
     m_proc->setOutputChannelMode( KProcess::MergedChannels );
@@ -176,7 +176,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
 void ExternalScriptJob::start()
 {
-  kDebug() << "launching?" << m_proc;
+  debug() << "launching?" << m_proc;
 
   if ( m_proc ) {
     if ( m_showOutput ) {
@@ -324,7 +324,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
         appendLine( i18n( "*** Crashed with return code: %1 ***", QString::number( exitCode ) ) );
   }
 
-  kDebug() << "Process done";
+  debug() << "Process done";
 
   emitResult();
 }
@@ -340,7 +340,7 @@ void ExternalScriptJob::processError( QProcess::ProcessError error )
     emitResult();
   }
 
-  kDebug() << "Process error";
+  debug() << "Process error";
 }
 
 void ExternalScriptJob::appendLine( const QString& l )

@@ -7,6 +7,7 @@ set(kdevexternalscript_PART_SRCS
     externalscriptjob.cpp
     externalscriptoutputmodel.cpp
     editexternalscript.cpp
+    externalscriptdebug.cpp
 )
 
 set(kdevexternalscript_PART_UI
