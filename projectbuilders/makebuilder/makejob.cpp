@@ -82,10 +82,16 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     kDebug(9037) << "Building with make" << m_command << m_overrideTarget;
+    if (!m_item)
+    {
+        setError(ItemNoLongerValidError);
+        setErrorText(i18n("Build item no longer available"));
+        return emitResult();
+    }
 
     if( m_item->type() == KDevelop::ProjectBaseItem::File ) {
         setError(IncorrectItemError);
-        setErrorText("Internal error: cannot build a file item");
+        setErrorText(i18n("Internal error: cannot build a file item"));
         return emitResult();
     }
 
