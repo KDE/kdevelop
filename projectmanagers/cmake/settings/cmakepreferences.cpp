@@ -293,6 +293,8 @@ void CMakePreferences::removeBuildDir()
 
 void CMakePreferences::configure()
 {
+    //TODO: Why doesn't this use the project() member of the kcmodule? That should give the
+    // project for which the dialog was opened.
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(m_subprojFolder);
     KDevelop::ProjectFolderItem* it=p->projectItem();
     KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
