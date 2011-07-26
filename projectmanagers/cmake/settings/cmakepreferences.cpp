@@ -47,6 +47,15 @@
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
+//TODO: Instead of 'current binary', 'current extra args' etc. this config module should store such things per
+// configured builddir since otherwise switching between builddirs with different options is impossible.
+
+static const QString currentBuildDirItemName = "currentBuildDir";
+static const QString currentInstallDirItemName = "currentInstallDir";
+static const QString currentBuildTypeItemName = "currentBuildType";
+static const QString cmakeBinItemName = "cmakeBin";
+static const QString currentExtraArgsItemName = "currentExtraArguments";
+
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
 {
@@ -129,11 +138,13 @@ void CMakePreferences::save()
     
     item = CMakeSettings::self()->findItem("currentBuildDir");
     item->setProperty( qVariantFromValue<KUrl>( KUrl( m_prefsUi->buildDirs->currentText() ) ) );
-    
-    KUrl cmakeCmd;
-    KUrl installPrefix;
-    QString buildType;
-    
+
+    // Initialize the values here so in case there's no model yet we don't write empty stuff to the
+    // config. The model may be empty if a new builddir entry has been created and none existed before.
+    KUrl cmakeCmd = qVariantValue<KUrl>(CMakeSettings::self()->findItem(cmakeBinItemName)->property());
+    KUrl installPrefix = qVariantValue<KUrl>(CMakeSettings::self()->findItem(currentInstallDirItemName)->property());
+    QString buildType = CMakeSettings::self()->findItem(currentBuildTypeItemName)->property().toString();
+
     bool needReconfiguring = true;
     if(m_currentModel)
     {
@@ -145,14 +156,14 @@ void CMakePreferences::save()
             needReconfiguring = false;
         }
     }
-    
-    item = CMakeSettings::self()->findItem("cmakeBin");
+
+    item = CMakeSettings::self()->findItem(cmakeBinItemName);
     item->setProperty(qVariantFromValue<KUrl>(cmakeCmd));
     
-    item = CMakeSettings::self()->findItem("currentInstallDir");
+    item = CMakeSettings::self()->findItem(currentInstallDirItemName);
     item->setProperty( qVariantFromValue<KUrl>(installPrefix));
     
-    item = CMakeSettings::self()->findItem("currentBuildType");
+    item = CMakeSettings::self()->findItem(currentBuildTypeItemName);
     item->setProperty( qVariantFromValue<QString>(buildType));
     
     kDebug(9042) << "doing real save from ProjectKCModule";
@@ -257,8 +268,24 @@ void CMakePreferences::createBuildDir()
     
     if(bdCreator.exec())
     {
-        m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::RemoveTrailingSlash));
+        QString newbuilddir = bdCreator.buildFolder().toLocalFile(KUrl::RemoveTrailingSlash);
+        m_prefsUi->buildDirs->addItem(newbuilddir);
+        m_prefsUi->buildDirs->setCurrentItem(newbuilddir);
         m_prefsUi->removeBuildDir->setEnabled(true);
+        
+        // Initialize the kconfig items with the values from the dialog, this ensures the settings
+        // end up in the config file once the changes are saved
+        CMakeSettings::self()->findItem(cmakeBinItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.cmakeBinary()));
+        CMakeSettings::self()->findItem(currentInstallDirItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.installPrefix()));
+        CMakeSettings::self()->findItem(currentBuildTypeItemName)->setProperty(QVariant(bdCreator.buildType()));
+        CMakeSettings::self()->findItem(currentBuildDirItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.buildFolder()));
+        CMakeSettings::self()->findItem(currentExtraArgsItemName)->setProperty(QVariant(bdCreator.extraArguments()));
+        
+        // Save explicitly here to store to file and then run configure which configures the builddir with the arguments
+        // set in the dialog. This is necessary since a consecutive creation of another builddir would override these
+        // arguments. See the TODO at the beginning of the file
+        save();
+        
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
     }
