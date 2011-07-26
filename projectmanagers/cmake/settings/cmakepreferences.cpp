@@ -198,8 +198,10 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        delete m_currentModel;
+        disconnect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, 0);
+        m_currentModel->deleteLater();
         m_currentModel=0;
+        m_prefsUi->cacheList->setModel(0);
         m_prefsUi->cacheList->setEnabled(false);
         emit changed(true);
     }
