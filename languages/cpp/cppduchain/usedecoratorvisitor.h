@@ -56,6 +56,7 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
 //     virtual void visitSimpleDeclaration(SimpleDeclarationAST *) ;
 //     virtual void visitThrowExpression(ThrowExpressionAST *) ;
     virtual void visitUnaryExpression(UnaryExpressionAST *) ;
+    virtual void visitCppCastExpression(CppCastExpressionAST* );
     
   private:
     KDevelop::CursorInRevision cursorForToken(uint token);

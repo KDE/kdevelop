@@ -334,6 +334,21 @@ void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
   m_callStack.pop();
 }
 
+void UseDecoratorVisitor::visitCppCastExpression(CppCastExpressionAST* node)
+{
+  PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
+  
+  m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+  m_argStack.push(0);
+  
+  visit(node->type_id); //visit specifiers
+  visitNodesBackwards(this, node->sub_expressions); //visit subexpressions, like ++ in (e++) and .b in (e.b)
+  visit(node->expression);
+  
+  m_argStack.pop();
+  m_callStack.pop();
+}
+
 void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 {
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);

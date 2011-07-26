@@ -114,6 +114,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("method call, different parameter count") << "class C { void f(int,int&); };  void f(int x) { C c; c.f(1,x); }"
                                   << (QVariantList() << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Read|DataAccess::Write));
+  QTest::newRow("casts") << "class C { C m(); }; class D : public C {}; void f(D* a) { static_cast<C*>(a)->m(); }"
+                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read));
 }
 
 static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& visited)
