@@ -168,8 +168,8 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   
   QList< AbstractType::Ptr > args;
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
-  if(!optype && optoken.kind=='=' && node->left_expression->kind==AST::Kind_PrimaryExpression) {
-    PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(node->left_expression);
+  PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(node->left_expression);
+  if(!optype && optoken.kind=='=' && node->left_expression->kind==AST::Kind_PrimaryExpression && primary->name) {
 //     qDebug() << "lalala" << node->left_expression->kind << nodeToString(m_session, primary) << nodeToString(m_session, primary->name);
     m_mods->addModification(cursorForToken(primary->name->start_token), DataAccess::Write, rangeForNode(node->right_expression));
     
