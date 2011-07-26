@@ -29,6 +29,7 @@
 
 #include <KDE/KColorScheme>
 #include <KDE/KDebug>
+#include <KSqueezedTextLabel>
 
 #include <interfaces/istatus.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -113,13 +114,14 @@ void StatusBar::registerStatus(QObject* status)
 
 QWidget* errorMessage(QWidget* parent, const QString& text)
 {
-    QLabel* label = new QLabel(parent);
+    KSqueezedTextLabel* label = new KSqueezedTextLabel(parent);
     KStatefulBrush red(KColorScheme::Window, KColorScheme::NegativeText);
     QPalette pal = label->palette();
     pal.setBrush(QPalette::WindowText, red.brush(label));
     label->setPalette(pal);
     label->setAlignment(Qt::AlignRight);
     label->setText(text);
+    label->setToolTip(text);
     return label;
 }
 

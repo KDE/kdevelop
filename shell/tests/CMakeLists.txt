@@ -18,6 +18,10 @@ set(documentcontrollertest_SRCS documentcontrollertest.cpp)
 kde4_add_unit_test(shell-documentcontrollertest ${documentcontrollertest_SRCS})
 target_link_libraries( shell-documentcontrollertest ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
+set(uicontrollertest_SRCS uicontrollertest.cpp)
+kde4_add_unit_test(shell-uicontrollertest ${uicontrollertest_SRCS})
+target_link_libraries( shell-uicontrollertest ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
 set( shellbuddytest_SRCS shellbuddytest.cpp )
 kde4_add_unit_test(shell-buddytest ${shellbuddytest_SRCS})
 target_link_libraries(shell-buddytest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
