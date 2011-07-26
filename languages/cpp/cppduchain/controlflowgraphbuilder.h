@@ -56,6 +56,7 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     
   private:
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);
+    void createCompoundStatementFrom(KDevelop::ControlFlowNode* curr, AST* node, KDevelop::ControlFlowNode* next);
     KDevelop::CursorInRevision cursorForToken(uint token);
     KDevelop::RangeInRevision nodeRange(AST* node);
     

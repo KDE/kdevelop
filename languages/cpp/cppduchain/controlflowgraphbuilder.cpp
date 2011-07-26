@@ -55,15 +55,29 @@ CursorInRevision ControlFlowGraphBuilder::cursorForToken(uint token)
 
 RangeInRevision ControlFlowGraphBuilder::nodeRange(AST* node)
 {
-  return RangeInRevision(cursorForToken(node->start_token), cursorForToken(node->end_token));
+  if(node)
+    return RangeInRevision(cursorForToken(node->start_token), cursorForToken(node->end_token));
+  else
+    return RangeInRevision::invalid();
 }
 
 // RangeInRevision rangeBetween(uint start_token, uint end_token);
 
 ControlFlowNode* ControlFlowGraphBuilder::createCompoundStatement(AST* node, ControlFlowNode* next)
 {
-  Q_ASSERT(node);
   ControlFlowNode* startNode = new ControlFlowNode;
+  if(node)
+    createCompoundStatementFrom(startNode, node, next);
+  else {
+    startNode->setNext(next);
+    m_currentNode = startNode;
+  }
+  return startNode;
+}
+
+void ControlFlowGraphBuilder::createCompoundStatementFrom(ControlFlowNode* startNode, AST* node, ControlFlowNode* next)
+{
+  Q_ASSERT(node && startNode);
   CursorInRevision startcursor = cursorForToken(node->start_token);
   startNode->setStartCursor(startcursor);
   m_currentNode = startNode;
@@ -73,7 +87,6 @@ ControlFlowNode* ControlFlowGraphBuilder::createCompoundStatement(AST* node, Con
     m_currentNode->setNext(next);
     m_currentNode->setEndCursor(cursorForToken(node->end_token));
   }
-  return startNode;
 }
 
 void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
@@ -150,16 +163,16 @@ void ControlFlowGraphBuilder::visitForStatement(ForStatementAST* node)
   ControlFlowNode* previous = m_currentNode;
   
   ControlFlowNode* nextNode = new ControlFlowNode;
-  ControlFlowNode* conditionNode = createCompoundStatement(flownode, 0);
+  ControlFlowNode* conditionNode = createCompoundStatement(flownode, nextNode);
+  ControlFlowNode* endCondition = m_currentNode;
   ControlFlowNode* incNode = createCompoundStatement(node->expression, conditionNode);
   
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
   PushValue<ControlFlowNode*> pushContinue(m_continueNode, incNode);
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, incNode);
   
-  conditionNode->setNext(bodyNode);
-  conditionNode->setAlternative(nextNode);
-  conditionNode->setConditionRange(nodeRange(flownode));
+  endCondition->setAlternative(bodyNode);
+  endCondition->setConditionRange(nodeRange(flownode));
   
   previous->setNext(conditionNode);
   nextNode->setStartCursor(cursorForToken(node->end_token));
