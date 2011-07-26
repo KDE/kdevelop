@@ -90,24 +90,30 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("if-unary") << "int i; bool f() { if(!i) {} }"
                                   << (QVariantList() << uint(DataAccess::Read));
-  QTest::newRow("ternary-op") << "int i; bool f() { i ? i : i; }"
+  QTest::newRow("ternary-op") << "int i; bool f() { return i ? i : i; }" //TODO: do the same when ref parameter
                                   << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read) << uint(DataAccess::Read));
   QTest::newRow("initializer") << "struct C {int i,j; C() : i(0),j(i) {} };"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("new-delete") << "int *a,b; void f() { a = new int(b); delete a; }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read));
   QTest::newRow("new-define") << "void f() { int b=2, *a = new int(b); }"
-                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Write));
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("return") << "int a; int f() { return a; }"
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("init") << "int f() { int a=3; }"
                                   << (QVariantList() << uint(DataAccess::Write));
+  QTest::newRow("init2") << "int f() { int a=3; int b=a; }"
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("switch") << "int f(int a) { switch(a) { case 3: break;} }"
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("constructor") << "class C { C(int,int&); };  void f(int a) { int b; C* c=new C(a,b); }"
-                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Write));
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read|DataAccess::Write));
   QTest::newRow("empty constructor") << "class C { C(); };  void f() { new C; }"
                                   << QVariantList();
+  QTest::newRow("function call, different parameter count") << "void f(int) { f(3,4); }"
+                                  << (QVariantList() << uint(DataAccess::Read));
+  QTest::newRow("method call, different parameter count") << "class C { void f(int,int&); };  void f(int x) { C c; c.f(1,x); }"
+                                  << (QVariantList() << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Read|DataAccess::Write));
 }
 
 static void walkNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& visited)
@@ -209,7 +215,7 @@ private:
         if(node->type()==ControlFlowNode::Conditional) {
           RangeInRevision crange = node->conditionRange();
           int ca=cursorToPos(crange.start), cb=cursorToPos(crange.end);
-          ret += " - condtion: "+m_sources.mid(ca, cb-ca);
+          ret += " - condition: "+m_sources.mid(ca, cb-ca);
         }
         
         return "\""+ret+"\"";
@@ -239,7 +245,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   QFETCH(QString, code);
   QFETCH(int, nodeCount);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpAST);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   
@@ -274,6 +280,7 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::newRow("conditional_inlined") << "int f(int a) { a=a?a+1 : a-1; return a+3; }" << 5;
   QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 5;
   QTest::newRow("for") << "int f(int a) { for(int i=0; i<a; i++) {i+=54;} return 0; }" << 6;
+  QTest::newRow("forinf") << "void f() { for(;;) {} }" << 6;
   QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: f(1); break; case 2: f(2); return; default: f(3); break; } f(4); }" << 9;
   QTest::newRow("switch2") << "void f(int a) { switch(a) { case 1: f(-1); case 2: f(1); break; case 3: f(2); break; } f(666); }" << 9;
   QTest::newRow("switch0") << "void f(int a) { switch(a) {} f(666); }" << 3;
