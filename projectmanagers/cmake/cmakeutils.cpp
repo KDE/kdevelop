@@ -215,5 +215,12 @@ QStringList allBuildDirs(KDevelop::IProject* project)
     return cmakeGrp.readEntry( projectBuildDirs, QStringList() );
 }
 
+void setAllBuildDirs(KDevelop::IProject* project, const QStringList& buildDirs)
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( projectBuildDirs, buildDirs );
+    cmakeGrp.sync();
+}
+
 }
 
