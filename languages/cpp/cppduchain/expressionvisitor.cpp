@@ -1244,8 +1244,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           chosenFunction = declarations.first();
       }
 
-      if(chosenFunction)
+      if(chosenFunction) {
         newUse( node , token, token+1, chosenFunction );
+        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
+      }
     }else{
       DefaultVisitor::visitInitDeclarator(node);
     }
@@ -1519,7 +1521,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       if(chosenFunction) {
         newUse( node , token, token+1, chosenFunction );
-        session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
+        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }
 
@@ -2066,7 +2068,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
     
     if(chosenFunction)
-      session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
+      session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
 
     static IndexedString functionCallOperatorIdentifier("operator()");
 
