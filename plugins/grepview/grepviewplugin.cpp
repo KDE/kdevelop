@@ -16,6 +16,7 @@
 #include "grepoutputmodel.h"
 #include "grepoutputdelegate.h"
 #include "grepjob.h"
+#include "grepoutputview.h"
 
 #include <QWhatsThis>
 
@@ -69,12 +70,23 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     // instantiate delegate, it's supposed to be deleted via QObject inheritance
     new GrepOutputDelegate(this);
+    m_factory = new GrepOutputViewFactory();
+    core()->uiController()->addToolView(i18n("Find/Replace in Files"), m_factory);
+}
+
+GrepOutputViewFactory* GrepViewPlugin::toolViewFactory() const
+{
+    return m_factory;
 }
 
 GrepViewPlugin::~GrepViewPlugin()
 {
 }
 
+void GrepViewPlugin::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
+}
 void GrepViewPlugin::startSearch(QString pattern, QString directory, bool showOptions)
 {
     m_directory = directory;
