@@ -101,7 +101,9 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
     
     //use rw computation
     KDevelop::DataAccess::DataAccessFlags f = m_defaultFlags;
-    if(type->whichType()==AbstractType::TypeReference && !(type.cast<ReferenceType>() && type.cast<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier)) {
+    
+    TypePtr< ReferenceType > reftype=type.cast<ReferenceType>();
+    if(reftype && reftype->baseType() && !reftype->baseType()->modifiers() & AbstractType::ConstModifier) {
       f |= DataAccess::Write;
     }
 //     qDebug() << "adding..." << f << nodeToString(m_session, node);
