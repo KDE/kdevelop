@@ -36,7 +36,7 @@
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
 #include "cmakebuilddirchooser.h"
-#include "cmakeutils.h"
+#include "cmakeconfig.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -48,7 +48,7 @@ K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
-    : KCModule(CMakePreferencesFactory::componentData(), parent, args) , m_currentModel(0)
+    : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -65,6 +65,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     m_prefsUi->cacheList->verticalHeader()->hide();
+    addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
             this, SLOT(buildDirChanged( const QString & )));
@@ -76,7 +77,12 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     
     showInternal(m_prefsUi->showInternal->checkState());
     m_subprojFolder=KUrl(args[1].toString()).upUrl();
-    m_project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_subprojFolder);
+    
+    kDebug(9042) << "Source folder: " << m_srcFolder << args[1].toString();
+//     foreach(const QVariant &v, args)
+//     {
+//         kDebug(9042) << "arg: " << v.toString();
+//     }
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
@@ -88,38 +94,47 @@ CMakePreferences::~CMakePreferences()
 
 void CMakePreferences::load()
 {
+    ProjectKCModule<CMakeSettings>::load();
+    CMakeSettings::self()->readConfig();
+
+    kDebug(9042) << "********loading";
     m_prefsUi->buildDirs->clear();
-    m_prefsUi->buildDirs->addItems(CMake::allBuildDirs(m_project));
-    m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMake::currentBuildDir(m_project).toLocalFile() ) );
+    m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
+    m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
     
     m_srcFolder=m_subprojFolder;
-    m_srcFolder.cd(CMake::projectRootRelative(m_project));
+    m_srcFolder.cd(CMakeSettings::projectRootRelative());
 
     if(m_prefsUi->buildDirs->count()==0)
     {
         m_prefsUi->removeBuildDir->setEnabled(false);
     }
+//     QString cmDir=group.readEntry("CMakeDirectory");
+//     m_prefsUi->kcfg_cmakeDir->setUrl(KUrl(cmDir));
+//     kDebug(9032) << "cmakedir" << cmDir;
 }
 
 void CMakePreferences::save()
 {
+    kDebug(9042) << "*******saving";
     QStringList bDirs;
     int count=m_prefsUi->buildDirs->model()->rowCount();
     for(int i=0; i<count; i++)
     {
         bDirs += m_prefsUi->buildDirs->itemText(i);
     }
-    CMake::setAllBuildDirs(m_project, bDirs);
 
-    KUrl currentBuildDir( m_prefsUi->buildDirs->currentText() );
-    CMake::setCurrentBuildDir(m_project, currentBuildDir);
-
+    KConfigSkeletonItem* item = CMakeSettings::self()->findItem("buildDirs");
+    item->setProperty( QVariant( bDirs ) );
+    
+    item = CMakeSettings::self()->findItem("currentBuildDir");
+    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_prefsUi->buildDirs->currentText() ) ) );
+    
     KUrl cmakeCmd;
     KUrl installPrefix;
     QString buildType;
-    QString extraConfigArgs;
+    
     bool needReconfiguring = true;
-
     if(m_currentModel)
     {
         cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
@@ -130,24 +145,30 @@ void CMakePreferences::save()
             needReconfiguring = false;
         }
     }
-    else if (m_newBuildFolderSettings.contains(currentBuildDir))
-    {
-        BuildFolderSettings settings = m_newBuildFolderSettings[currentBuildDir];
-        cmakeCmd = settings.cmakeBinary;
-        installPrefix = settings.installDir;
-        buildType = settings.buildType;
-        extraConfigArgs = settings.extraArguments;
-    }
-
-    CMake::setCurrentCMakeBinary(m_project, cmakeCmd);
-    CMake::setCurrentInstallDir(m_project, installPrefix);
-    CMake::setCurrentBuildType(m_project, buildType);
-    CMake::setCurrentExtraArguments(m_project, extraConfigArgs);
-
+    
+    item = CMakeSettings::self()->findItem("cmakeBin");
+    item->setProperty(qVariantFromValue<KUrl>(cmakeCmd));
+    
+    item = CMakeSettings::self()->findItem("currentInstallDir");
+    item->setProperty( qVariantFromValue<KUrl>(installPrefix));
+    
+    item = CMakeSettings::self()->findItem("currentBuildType");
+    item->setProperty( qVariantFromValue<QString>(buildType));
+    
+    kDebug(9042) << "doing real save from ProjectKCModule";
+    ProjectKCModule<CMakeSettings>::save();
+    CMakeSettings::self()->writeConfig();
+    
     //We run cmake on the builddir to generate it 
     if (needReconfiguring) {
         configure();
     }
+}
+
+void CMakePreferences::defaults()
+{
+    ProjectKCModule<CMakeSettings>::defaults();
+//     kDebug(9032) << "*********defaults!";
 }
 
 void CMakePreferences::updateCache(const KUrl& newBuildDir)
@@ -175,17 +196,18 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         
         showInternal(m_prefsUi->showInternal->checkState());
     }
-    else if (m_currentModel)
+    else
     {
-        m_currentModel->clear();
         delete m_currentModel;
         m_currentModel=0;
         m_prefsUi->cacheList->setEnabled(false);
+        emit changed(true);
     }
 }
 
 void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QModelIndex& )
 {
+    kDebug(9042) << "item " << index << " selected";
     QModelIndex idx = index.sibling(index.row(), 3);
     QModelIndex idxType = index.sibling(index.row(), 1);
     QString comment=QString("%1. %2")
@@ -210,6 +232,7 @@ void CMakePreferences::showInternal(int state)
 void CMakePreferences::buildDirChanged(const QString &str)
 {
     updateCache(str);
+    kDebug(9042) << "builddir Changed" << str;
     emit changed(true);
 }
 
@@ -234,13 +257,10 @@ void CMakePreferences::createBuildDir()
     {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::RemoveTrailingSlash));
         m_prefsUi->removeBuildDir->setEnabled(true);
-        KUrl buildFolder = bdCreator.buildFolder();
-        m_newBuildFolderSettings[buildFolder].buildType = bdCreator.buildType();
-        m_newBuildFolderSettings[buildFolder].cmakeBinary = bdCreator.cmakeBinary();
-        m_newBuildFolderSettings[buildFolder].extraArguments = bdCreator.extraArguments();
-        m_newBuildFolderSettings[buildFolder].installDir = bdCreator.installPrefix();
+        kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
     }
+    //TODO: Save it for next runs
 }
 
 void CMakePreferences::removeBuildDir()
@@ -271,22 +291,17 @@ void CMakePreferences::removeBuildDir()
 
 void CMakePreferences::configure()
 {
-    KDevelop::ProjectFolderItem* it = m_project->projectItem();
-    KDevelop::IProjectBuilder *b = m_project->buildSystemManager()->builder(it);
-    KJob* job=b->configure(m_project);
-    m_configureJobFolder = CMake::currentBuildDir(m_project);
+    KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(m_subprojFolder);
+    KDevelop::ProjectFolderItem* it=p->projectItem();
+    KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
+    KJob* job=b->configure(p);
+    
     KDevelop::ICore::self()->runController()->registerJob(job);
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(configureFinished(KJob*)));
-}
-
-void CMakePreferences::configureFinished(KJob*)
-{
-    if (KUrl(m_prefsUi->buildDirs->currentText()) == m_configureJobFolder)
-        updateCache(m_configureJobFolder);
 }
 
 void CMakePreferences::showAdvanced(bool v)
 {
+    kDebug(9042) << "toggle pressed: " << v;
     m_prefsUi->advancedBox->setHidden(!v);
 }
 

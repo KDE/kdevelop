@@ -110,12 +110,7 @@ namespace CMake
      * Sets the current extra arguments for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentExtraArguments( KDevelop::IProject* project, const QString& args );
-
-    /**
-     * Sets the current extra arguments for the given project.
-     */
-    KDEVCMAKECOMMON_EXPORT void setAllBuildDirs( KDevelop::IProject* project, const QStringList& buildDirs );
-
+    
     /**
      * Obtains a cmake documentation instance if it exists
      */

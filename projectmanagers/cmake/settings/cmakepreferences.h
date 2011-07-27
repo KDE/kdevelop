@@ -22,19 +22,21 @@
 #ifndef CMAKEPREFERENCES_H
 #define CMAKEPREFERENCES_H
 
+#include <project/projectkcmodule.h>
 #include "cmakecachemodel.h"
-#include <KSharedConfig>
-#include <KCModule>
 
-namespace KDevelop { class IProject; }
+#include <KSharedConfig>
+
+class QItemSelection;
+class CMakeSettings;
+
 namespace Ui { class CMakeBuildSettings; }
-class KJob;
 
 /**
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class CMakePreferences : public KCModule
+class CMakePreferences : public ProjectKCModule<CMakeSettings>
 {
     Q_OBJECT
     public:
@@ -42,8 +44,9 @@ class CMakePreferences : public KCModule
         ~CMakePreferences();
 
     private slots:
-        void load();
-        void save();
+        virtual void load();
+        virtual void save();
+        virtual void defaults();
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(true); }
@@ -51,23 +54,11 @@ class CMakePreferences : public KCModule
         void createBuildDir();
         void removeBuildDir();
         void showAdvanced(bool v);
-        void configureFinished(KJob*);
     private:
         void configure();
-
-        struct BuildFolderSettings
-        {
-            KUrl installDir;
-            QString buildType;
-            KUrl cmakeBinary;
-            QString extraArguments;
-        };
-
-        QHash<KUrl, BuildFolderSettings> m_newBuildFolderSettings;
+        
         KUrl m_srcFolder;
         KUrl m_subprojFolder;
-        KUrl m_configureJobFolder;
-        KDevelop::IProject *m_project;
         void updateCache( const KUrl & );
         Ui::CMakeBuildSettings* m_prefsUi;
         CMakeCacheModel* m_currentModel;
