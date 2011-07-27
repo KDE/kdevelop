@@ -156,7 +156,7 @@ void CMakeCompliance::testCMakeTests_data()
     KStandardDirs::findAllExe(cmakes, "cmake");
     foreach(const QString& exe, cmakes) {
         foreach(const QString& file, files)
-            QTest::newRow( qPrintable(exe+file) ) << exe << CMAKE_TESTS_PROJECTS_DIR + file;
+            QTest::newRow( qPrintable(QString(exe+file)) ) << exe << QString(CMAKE_TESTS_PROJECTS_DIR + file);
     }
 }
 
