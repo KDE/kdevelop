@@ -129,7 +129,7 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
                       item.name = baseName;
                       break;
                     }
-                    QString name = (baseName + "%1").arg(a);
+                    QString name = QString(baseName + "%1").arg(a);
                     if(!hadNames.contains(name))
                     {
                       item.name = name;

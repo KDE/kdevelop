@@ -267,7 +267,7 @@ void GdbTest::testChangeLocationBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 28);
     QTest::qWait(500);
-    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), debugeeFileName+":30");
+    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), QString(debugeeFileName+":30"));
     QCOMPARE(b->line(), 29);
     QTest::qWait(100);
     QCOMPARE(b->line(), 29);
