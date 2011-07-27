@@ -19,7 +19,6 @@ set(kdevplatformproject_LIB_SRCS
 
 kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
 target_link_libraries(kdevplatformproject
-        ${QT_QTDESIGNER_LIBRARY}
         kdevplatforminterfaces
         kdevplatformutil
         kdevplatformlanguage

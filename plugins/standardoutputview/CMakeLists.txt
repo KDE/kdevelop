@@ -13,7 +13,7 @@ set(standardoutputview_LIB_SRCS
 
 kde4_add_plugin(kdevstandardoutputview ${standardoutputview_LIB_SRCS})
 target_link_libraries(kdevstandardoutputview ${KDE4_KDEUI_LIBS}
-    ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces sublime kdevplatformutil kdevplatformoutputview)
+    kdevplatforminterfaces sublime kdevplatformutil kdevplatformoutputview)
 
 install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
