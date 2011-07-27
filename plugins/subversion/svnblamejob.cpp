@@ -164,8 +164,8 @@ void SvnBlameJob::start()
         setErrorText( i18n( "Not enough information to blame location" ) );
     }else
     {
-        connect( m_job, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ),
-                 this, SLOT( blameLineReceived( const KDevelop::VcsAnnotationLine& ) ) );
+        connect( m_job, SIGNAL(blameLine(KDevelop::VcsAnnotationLine)),
+                 this, SLOT(blameLineReceived(KDevelop::VcsAnnotationLine)) );
         kDebug(9510) << "blameging url:" << m_job->location();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }

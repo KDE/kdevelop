@@ -37,14 +37,14 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 
     ui->locationValidLabel->setText(QString(" "));
     
-    connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(const QString&)),
-             this, SLOT(urlEdited() ));
-    connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
-             this, SLOT(urlEdited() ));
-    connect( ui->templateView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( itemChanged( const QModelIndex&, const QModelIndex& ) ) );
-    connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
-             this, SLOT( nameChanged() ) );
+    connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(QString)),
+             this, SLOT(urlEdited()));
+    connect( ui->locationUrl, SIGNAL(urlSelected(KUrl)),
+             this, SLOT(urlEdited()));
+    connect( ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(itemChanged(QModelIndex,QModelIndex)) );
+    connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
+             this, SLOT(nameChanged()) );
 }
 
 

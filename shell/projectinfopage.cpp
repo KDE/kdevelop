@@ -25,10 +25,10 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
 {
     page_ui = new Ui::ProjectInfoPage;
     page_ui->setupUi( this );
-    connect( page_ui->nameEdit, SIGNAL( textEdited( const QString& ) ), 
-             this, SIGNAL( projectNameChanged( const QString& ) ) );
-    connect( page_ui->managerCombo, SIGNAL( activated( int ) ),
-             this, SLOT( changeProjectManager( int ) ) );
+    connect( page_ui->nameEdit, SIGNAL(textEdited(QString)), 
+             this, SIGNAL(projectNameChanged(QString)) );
+    connect( page_ui->managerCombo, SIGNAL(activated(int)),
+             this, SLOT(changeProjectManager(int)) );
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         page_ui->managerCombo->addItem( KIcon(info.icon()), info.name(), info.pluginName() );

@@ -142,9 +142,9 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     core()->uiController()->addToolView( i18n("Projects"), d->factory );
     connect( core()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionState(KDevelop::Context*)));
-    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
              SLOT(updateFromBuildSetChange()));
-    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
              SLOT(updateFromBuildSetChange()));
     connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(modelReset()),
              SLOT(updateFromBuildSetChange()));
@@ -240,18 +240,18 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     if ( needsBuildItems ) {
         KAction* action = new KAction( i18n( "Build" ), this );
         action->setIcon(KIcon("run-build"));
-        connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
+        connect( action, SIGNAL(triggered()), this, SLOT(buildItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new KAction( i18n( "Install" ), this );
         action->setIcon(KIcon("run-install"));
-        connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
+        connect( action, SIGNAL(triggered()), this, SLOT(installItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new KAction( i18n( "Clean" ), this );
         action->setIcon(KIcon("run-clean"));
-        connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
+        connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new KAction( i18n( "Add to Buildset" ), this );
-        connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
+        connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
     if ( needsCloseProjects ) {

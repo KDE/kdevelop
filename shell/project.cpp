@@ -515,7 +515,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
+    connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)) );
     Core::self()->runController()->registerJob( importJob );
     return true;
 }

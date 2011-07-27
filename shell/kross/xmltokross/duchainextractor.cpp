@@ -66,8 +66,8 @@ class KrossInterfaceCreator : public DUChainReader
 
 DUChainExtractor::DUChainExtractor(QObject* parent) : QObject(parent), m_done(false)
 {
-    connect(Core::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob* )),
-            this, SLOT(parsingFinished(KDevelop::ParseJob* )));
+    connect(Core::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
+            this, SLOT(parsingFinished(KDevelop::ParseJob*)));
 }
 
 void DUChainExtractor::start(const KUrl& _input, const KUrl& builddir,

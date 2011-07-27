@@ -153,7 +153,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(hintSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
     connect(severityMapper, SIGNAL(mapped(int)), model(), SLOT(setSeverity(int)));
 
-    connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
+    connect(this, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)));
 }
 
 ProblemWidget::~ProblemWidget()

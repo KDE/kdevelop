@@ -156,8 +156,8 @@ void SvnStatusJob::start()
     }else
     {
         kDebug(9510) << "Starting status job";
-        connect( m_job, SIGNAL( gotNewStatus( const KDevelop::VcsStatusInfo& ) ),
-            this, SLOT( addToStats( const KDevelop::VcsStatusInfo& ) ),
+        connect( m_job, SIGNAL(gotNewStatus(KDevelop::VcsStatusInfo)),
+            this, SLOT(addToStats(KDevelop::VcsStatusInfo)),
                         Qt::QueuedConnection );
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }

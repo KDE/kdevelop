@@ -46,9 +46,9 @@ BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_dontUpdateMarks(false)
 {
-    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), SLOT(save()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), SLOT(save()));
-    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), SLOT(save()));
+    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(save()));
+    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(save()));
+    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(save()));
     connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateMarks()));
 
     if (KDevelop::ICore::self()->partController()) { //TODO remove if

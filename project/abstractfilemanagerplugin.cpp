@@ -125,8 +125,8 @@ KJob* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderIte
     q->connect( listJob, SIGNAL(finished(KJob*)),
                 q, SLOT(jobFinished(KJob*)) );
 
-    q->connect( listJob, SIGNAL(entries(FileManagerListJob*, ProjectFolderItem*, KIO::UDSEntryList, bool)),
-                q, SLOT(addJobItems(FileManagerListJob*, ProjectFolderItem*, KIO::UDSEntryList, bool)) );
+    q->connect( listJob, SIGNAL(entries(FileManagerListJob*,ProjectFolderItem*,KIO::UDSEntryList,bool)),
+                q, SLOT(addJobItems(FileManagerListJob*,ProjectFolderItem*,KIO::UDSEntryList,bool)) );
 
     return listJob;
 }

@@ -59,8 +59,8 @@ void EditStyleDialog::init()
 		QVBoxLayout *layout = new QVBoxLayout(m_ui.settingsWidgetParent);
 		layout->addWidget(m_settingsWidget);
 		m_ui.settingsWidgetParent->setLayout(layout);
-		connect(m_settingsWidget, SIGNAL(previewTextChanged(const QString&)),
-			this, SLOT(updatePreviewText(const QString&)));
+		connect(m_settingsWidget, SIGNAL(previewTextChanged(QString)),
+			this, SLOT(updatePreviewText(QString)));
 	}
 
 	// add texteditor preview

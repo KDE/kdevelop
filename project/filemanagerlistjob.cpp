@@ -65,8 +65,8 @@ void FileManagerListJob::startNextJob()
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->url(), KIO::HideProgressInfo );
     job->setParentJob( this );
-    connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
-             this, SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)) );
+    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
+             this, SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)) );
     connect( job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)) );
 }
 

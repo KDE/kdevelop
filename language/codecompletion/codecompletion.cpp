@@ -100,7 +100,7 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
     if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
       cc->unregisterCompletionModel(m_model);
     
-  disconnect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+  disconnect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
 }
 
 void CodeCompletion::checkDocument(Document* textDocument)
@@ -122,7 +122,7 @@ void CodeCompletion::checkDocument(Document* textDocument)
   foreach (KTextEditor::View* view, textDocument->views())
     viewCreated(textDocument, view);
 
-  connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+  connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
 }
 
 

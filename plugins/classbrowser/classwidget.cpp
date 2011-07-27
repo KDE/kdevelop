@@ -58,10 +58,10 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   m_tree->header()->setStretchLastSection(false);
 
   // We need notification in the model for the collapse/expansion of nodes.
-  connect(m_tree, SIGNAL(collapsed(const QModelIndex&)),
-          m_model, SLOT(collapsed(const QModelIndex&)));
-  connect(m_tree, SIGNAL(expanded(const QModelIndex&)),
-          m_model, SLOT(expanded(const QModelIndex&)));
+  connect(m_tree, SIGNAL(collapsed(QModelIndex)),
+          m_model, SLOT(collapsed(QModelIndex)));
+  connect(m_tree, SIGNAL(expanded(QModelIndex)),
+          m_model, SLOT(expanded(QModelIndex)));
 
   // Init search box
   m_searchLine->setClearButtonShown( true );

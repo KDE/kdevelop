@@ -57,7 +57,7 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
 
     QWidget* mainWidget = new QWidget(this);
     setMainWidget( mainWidget );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(save()) );
 
     QVBoxLayout* layout = new QVBoxLayout(mainWidget);
     mainWidget->setLayout(layout);

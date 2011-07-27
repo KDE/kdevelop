@@ -299,7 +299,7 @@ QVariant SvnDiffJob::fetchResults()
 void SvnDiffJob::start()
 {
 
-    disconnect( m_job, SIGNAL( done( ThreadWeaver::Job* ) ), this, SLOT( internalJobDone( ThreadWeaver::Job* ) ) );
+    disconnect( m_job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(internalJobDone(ThreadWeaver::Job*)) );
     if( !m_job->source().isValid()
          || ( !m_job->destination().isValid() &&
                 ( m_job->srcRevision().revisionType() == KDevelop::VcsRevision::Invalid
@@ -310,8 +310,8 @@ void SvnDiffJob::start()
         setErrorText( i18n( "Not enough information given to execute diff" ) );
     }else
     {
-        connect( m_job, SIGNAL( gotDiff( const QString& ) ),
-                 this, SLOT( setDiff( const QString& ) ),
+        connect( m_job, SIGNAL(gotDiff(QString)),
+                 this, SLOT(setDiff(QString)),
                  Qt::QueuedConnection );
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
@@ -423,8 +423,8 @@ void SvnDiffJob::setDiff( const QString& diff )
 
             m_catJobMap[job] = l;
 
-            connect( job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ), this, SLOT( addLeftText( KDevelop::VcsJob* ) ) );
-            connect( job, SIGNAL( result( KJob* ) ), this, SLOT( removeJob( KJob* ) ) );
+            connect( job, SIGNAL(resultsReady(KDevelop::VcsJob*)), this, SLOT(addLeftText(KDevelop::VcsJob*)) );
+            connect( job, SIGNAL(result(KJob*)), this, SLOT(removeJob(KJob*)) );
 
             KDevelop::ICore::self()->runController()->registerJob(job);
         }

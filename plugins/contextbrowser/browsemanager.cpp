@@ -58,7 +58,7 @@ EditorViewWatcher::EditorViewWatcher(QObject* parent)
 void EditorViewWatcher::documentCreated( KDevelop::IDocument* document ) {
     KTextEditor::Document* textDocument = document->textDocument();
     if(textDocument) {
-        connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+        connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
         foreach(KTextEditor::View* view, textDocument->views()) {
             Q_ASSERT(view->parentWidget());
             addViewInternal(view);

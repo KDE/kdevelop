@@ -130,17 +130,17 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     recreateCentralWidget();
 
     connect(idealController,
-            SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
+            SIGNAL(dockShown(Sublime::View*,Sublime::Position,bool)),
             this,
-            SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
+            SLOT(slotDockShown(Sublime::View*,Sublime::Position,bool)));
 
     connect(idealController,
-            SIGNAL(widgetResized(Qt::DockWidgetArea, int)),
+            SIGNAL(widgetResized(Qt::DockWidgetArea,int)),
             this,
-            SLOT(widgetResized(Qt::DockWidgetArea, int)));
+            SLOT(widgetResized(Qt::DockWidgetArea,int)));
 
-   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)),
-            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)));
+   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)),
+            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)));
 }
 
 
@@ -257,8 +257,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
             connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,KMenu*)),
                     d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,KMenu*)));
-            connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*, int)),
-                    d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*, int)));
+            connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)),
+                    d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)));
             connect(container, SIGNAL(closeRequest(QWidget*)),
                     d, SLOT(widgetCloseRequest(QWidget*)), Qt::QueuedConnection);
             splitter->addWidget(container);

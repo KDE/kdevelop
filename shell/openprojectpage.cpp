@@ -73,14 +73,14 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );
     // Emitted for changes in the places view, the url navigator and when using the back/forward/up buttons
-    connect( ops, SIGNAL(urlEntered(const KUrl&)), SLOT(opsEntered(const KUrl&)));
+    connect( ops, SIGNAL(urlEntered(KUrl)), SLOT(opsEntered(KUrl)));
 
     // Emitted when selecting an entry from the "Name" box or editing in there
-    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(const QString&)), 
-             SLOT(comboTextChanged(const QString&)));
+    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(QString)), 
+             SLOT(comboTextChanged(QString)));
 
     // Emitted when clicking on a file in the fileview area
-    connect( fileWidget, SIGNAL(fileHighlighted(const QString&)), SLOT(highlightFile(const QString&)) );
+    connect( fileWidget, SIGNAL(fileHighlighted(QString)), SLOT(highlightFile(QString)) );
     
     connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(KUrl)), SLOT(dirChanged(KUrl)));
 }

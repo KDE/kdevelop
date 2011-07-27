@@ -427,12 +427,12 @@ ProjectController::ProjectController( Core* core )
     d->m_core = core;
     d->model = new ProjectModel();
     d->buildset = new ProjectBuildSetModel( this );
-    connect( this, SIGNAL( projectOpened( KDevelop::IProject* ) ),
-             d->buildset, SLOT( loadFromProject( KDevelop::IProject* ) ) );
-    connect( this, SIGNAL( projectClosing( KDevelop::IProject* ) ),
-             d->buildset, SLOT( saveToProject( KDevelop::IProject* ) ) );
-    connect( this, SIGNAL( projectClosed( KDevelop::IProject* ) ),
-             d->buildset, SLOT( projectClosed( KDevelop::IProject* ) ) );
+    connect( this, SIGNAL(projectOpened(KDevelop::IProject*)),
+             d->buildset, SLOT(loadFromProject(KDevelop::IProject*)) );
+    connect( this, SIGNAL(projectClosing(KDevelop::IProject*)),
+             d->buildset, SLOT(saveToProject(KDevelop::IProject*)) );
+    connect( this, SIGNAL(projectClosed(KDevelop::IProject*)),
+             d->buildset, SLOT(projectClosed(KDevelop::IProject*)) );
 
     d->selectionModel = new QItemSelectionModel(d->model);
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
@@ -456,37 +456,37 @@ void ProjectController::setupActions()
     action->setToolTip( i18n( "Open / Import Project" ) );
     action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
     action->setIcon(KIcon("project-open"));
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18n( "Fetch Project..." ) );
     action->setToolTip( i18n( "Fetch Project" ) );
     action->setWhatsThis( i18n( "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
 //     action->setIcon(KIcon("project-open"));
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( fetchProject() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
 //    action = ac->addAction( "project_close" );
 //    action->setText( i18n( "C&lose Project" ) );
-//    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeProject() ) );
+//    connect( action, SIGNAL(triggered(bool)), SLOT(closeProject()) );
 //    action->setToolTip( i18n( "Close project" ) );
 //    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
 //    action->setEnabled( false );
 
     d->m_closeProject = action = ac->addAction( "project_close" );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeSelectedProjects() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(closeSelectedProjects()) );
     action->setText( i18n( "Close Project(s)" ) );
     action->setIcon( KIcon( "project-development-close" ) );
     action->setToolTip( i18n( "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( "project_open_config" );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProjectConfig() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(openProjectConfig()) );
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( KIcon("configure") );
     action->setEnabled( false );
     
     action = ac->addAction( "commit_current_project" );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( commitCurrentProject() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIcon( KIcon("svn-commit") );
 
@@ -494,7 +494,7 @@ void ProjectController::setupActions()
 //     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction = new KRecentFilesAction( this );
-    connect( d->m_recentAction, SIGNAL(urlSelected(const KUrl&)), SLOT(
+    connect( d->m_recentAction, SIGNAL(urlSelected(KUrl)), SLOT(
                             openProject( const KUrl& ) ));
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent" ) );

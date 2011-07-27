@@ -45,16 +45,16 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start.adjustPath(KUrl::AddTrailingSlash);
     sourcePageWidget = new ProjectSourcePage( start, this );
-    connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
+    connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
     sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
     
     openPageWidget = new OpenProjectPage( start, this );
-    connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
+    connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
     openPage = addPage( openPageWidget, i18n("Select the project") );
     
     QWidget* page = new ProjectInfoPage( this );
-    connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
-    connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
+    connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
+    connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
     projectInfoPage = addPage( page, i18n("Project information") );
     
     setValid( sourcePage, true );
@@ -168,8 +168,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
                 if( isDir ) {
                     // If a dir was selected fetch all files in it
                     KIO::ListJob* job = KIO::listDir( m_url );
-                    connect( job, SIGNAL(entries(KIO::Job*, const KIO::UDSEntryList&)), 
-                                  SLOT(storeFileList(KIO::Job*, const KIO::UDSEntryList&)));
+                    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), 
+                                  SLOT(storeFileList(KIO::Job*,KIO::UDSEntryList)));
                     KIO::NetAccess::synchronousRun( job, Core::self()->uiController()->activeMainWindow() );
                 } else {
                     // Else we'lll just take the given file

@@ -95,8 +95,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
     m_document = active->textDocument();
 
-    connect( m_document, SIGNAL( aboutToClose( KTextEditor::Document* ) ),
-             this, SLOT( kill() ) );
+    connect( m_document, SIGNAL(aboutToClose(KTextEditor::Document*)),
+             this, SLOT(kill()) );
 
     m_selectionRange = m_document->activeView()->selectionRange();
     m_cursorPosition = m_document->activeView()->cursorPosition();
@@ -152,14 +152,14 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     m_proc->setWorkingDirectory( workingDir );
   }
   m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
-  connect( m_lineMaker, SIGNAL( receivedStdoutLines( QStringList ) ),
-           model, SLOT( appendStdoutLines( QStringList ) ) );
-  connect( m_lineMaker, SIGNAL( receivedStderrLines( QStringList ) ),
-           model, SLOT( appendStderrLines( QStringList ) ) );
-  connect( m_proc, SIGNAL( error( QProcess::ProcessError ) ),
-           SLOT( processError( QProcess::ProcessError ) ) );
-  connect( m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-           SLOT( processFinished( int, QProcess::ExitStatus ) ) );
+  connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+           model, SLOT(appendStdoutLines(QStringList)) );
+  connect( m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
+           model, SLOT(appendStderrLines(QStringList)) );
+  connect( m_proc, SIGNAL(error(QProcess::ProcessError)),
+           SLOT(processError(QProcess::ProcessError)) );
+  connect( m_proc, SIGNAL(finished(int,QProcess::ExitStatus)),
+           SLOT(processFinished(int,QProcess::ExitStatus)) );
 
   // Now setup the process parameters
   debug() << "setting command:" << command;

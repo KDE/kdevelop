@@ -187,12 +187,12 @@ SessionDialog::SessionDialog( QWidget* parent )
     connect( m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteSession()) );
     connect( m_ui->activateButton, SIGNAL(clicked()), this, SLOT(activateSession()) );
     connect( m_ui->cloneButton, SIGNAL(clicked()), this, SLOT(cloneSession()) );
-    connect( m_ui->sessionList->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), 
-             this, SLOT( enableButtons( const QItemSelection&, const QItemSelection& ) ) );
-    connect( m_ui->sessionList->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( enableButtons( const QModelIndex&, const QModelIndex& ) ) );
-    connect( m_model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-             this, SLOT( enableButtons() ) );
+    connect( m_ui->sessionList->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), 
+             this, SLOT(enableButtons(QItemSelection,QItemSelection)) );
+    connect( m_ui->sessionList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(enableButtons(QModelIndex,QModelIndex)) );
+    connect( m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+             this, SLOT(enableButtons()) );
     enableButtons( m_ui->sessionList->selectionModel()->selection(), QItemSelection() );
     enableButtons();
 }

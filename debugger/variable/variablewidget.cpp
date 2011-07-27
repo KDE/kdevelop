@@ -96,8 +96,8 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     topLayout->addWidget(watchVarEditor_);
     topLayout->setMargin(0);
 
-    connect(watchVarEditor_, SIGNAL(returnPressed(const QString &)),
-            this, SLOT(slotAddWatch(const QString&)));
+    connect(watchVarEditor_, SIGNAL(returnPressed(QString)),
+            this, SLOT(slotAddWatch(QString)));
 
     //TODO
     //connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));

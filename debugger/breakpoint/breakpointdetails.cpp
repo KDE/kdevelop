@@ -62,8 +62,8 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     layout->setContentsMargins(11, 0, 0, 11);
 
     status_ = new QLabel(this);
-    connect(status_, SIGNAL(linkActivated(const QString&)),
-            this, SLOT(showExplanation(const QString&)));
+    connect(status_, SIGNAL(linkActivated(QString)),
+            this, SLOT(showExplanation(QString)));
     layout->addWidget(status_);
 
     QGridLayout* hitsLayout = new QGridLayout();

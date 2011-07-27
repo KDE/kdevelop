@@ -252,7 +252,7 @@ void WorkingSetController::previousDocument()
 
 void WorkingSetController::initializeController( UiController* controller )
 {
-  connect( controller, SIGNAL( areaCreated( Sublime::Area* ) ), this, SLOT( areaCreated( Sublime::Area* ) ) );
+  connect( controller, SIGNAL(areaCreated(Sublime::Area*)), this, SLOT(areaCreated(Sublime::Area*)) );
 }
 
 QList< WorkingSet* > WorkingSetController::allWorkingSets() const

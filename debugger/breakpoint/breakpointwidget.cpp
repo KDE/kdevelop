@@ -76,11 +76,11 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     table_->setModel(m_debugController->breakpointModel());
 
     connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotRowClicked(QModelIndex)));
-    connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
+    connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(modelReset()), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(dataChanged(QModelIndex, QModelIndex)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateBreakpointDetail()));
 
 
     connect(m_debugController->breakpointModel(),
@@ -88,8 +88,8 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
             SLOT(breakpointHit(KDevelop::Breakpoint*)));
 
     connect(m_debugController->breakpointModel(),
-            SIGNAL(error(KDevelop::Breakpoint *, const QString&, int)),
-            SLOT(breakpointError(KDevelop::Breakpoint *, const QString&, int)));
+            SIGNAL(error(KDevelop::Breakpoint*,QString,int)),
+            SLOT(breakpointError(KDevelop::Breakpoint*,QString,int)));
 
     setupPopupMenu();
 }

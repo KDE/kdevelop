@@ -29,8 +29,8 @@ LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, KDevelop::DV
     Ui::LogViewBase::setupUi(this);
 
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( slotJobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotJobFinished(KJob*)));
     }
 }
 

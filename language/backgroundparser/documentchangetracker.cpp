@@ -72,8 +72,8 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     Q_ASSERT(document->url().isValid());
     Q_ASSERT(document);
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)));
-    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)));
+    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
+    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)));
     connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
     connect(document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)), SLOT(documentSavedOrUploaded(KTextEditor::Document*,bool)));
     
@@ -81,7 +81,7 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     Q_ASSERT(m_moving);
     m_changedRange = m_moving->newMovingRange(KTextEditor::Range(), KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
     
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)));
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
     
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
     

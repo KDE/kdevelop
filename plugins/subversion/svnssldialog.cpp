@@ -31,8 +31,8 @@ SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
     setDefaultButton( KDialog::User2 );
     setButtonText( KDialog::User2, i18n("Trust Temporarily") );
     setButtonText( KDialog::User1, i18n("Trust Permanently") );
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT( permanentlyClicked() ) );
-    connect( this, SIGNAL( user2Clicked() ), this, SLOT( temporarilyClicked() ) );
+    connect( this, SIGNAL(user1Clicked()), this, SLOT(permanentlyClicked()) );
+    connect( this, SIGNAL(user2Clicked()), this, SLOT(temporarilyClicked()) );
 }
 SvnSSLTrustDialog::~SvnSSLTrustDialog()
 {

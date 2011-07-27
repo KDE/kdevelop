@@ -132,8 +132,8 @@ void SvnCatJob::start()
         setErrorText( i18n( "Not enough information to execute cat" ) );
     }else
     {
-        connect( m_job, SIGNAL( gotContent( const QString& ) ),
-                 this, SLOT( setContent( const QString& ) ),
+        connect( m_job, SIGNAL(gotContent(QString)),
+                 this, SLOT(setContent(QString)),
                  Qt::QueuedConnection );
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }

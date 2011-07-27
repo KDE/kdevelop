@@ -44,15 +44,15 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   m_model->setSourceModel( m_plugin->model() );
   m_model->setDynamicSortFilter( true );
   m_model->sort( 0 );
-  connect( filterText, SIGNAL( userTextChanged( QString ) ),
-           m_model, SLOT( setFilterWildcard( QString ) ) );
+  connect( filterText, SIGNAL(userTextChanged(QString)),
+           m_model, SLOT(setFilterWildcard(QString)) );
 
   scriptTree->setModel( m_model );
   scriptTree->setContextMenuPolicy( Qt::CustomContextMenu );
   scriptTree->viewport()->installEventFilter( this );
   scriptTree->header()->hide();
-  connect(scriptTree, SIGNAL(customContextMenuRequested(const QPoint&)),
-          this, SLOT(contextMenu(const QPoint&)));
+  connect(scriptTree, SIGNAL(customContextMenuRequested(QPoint)),
+          this, SLOT(contextMenu(QPoint)));
 
   m_addScriptAction = new KAction(KIcon("document-new"), i18n("Add External Script"), this);
   connect(m_addScriptAction, SIGNAL(triggered()), this, SLOT(addScript()));
@@ -64,7 +64,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   connect(m_removeScriptAction, SIGNAL(triggered()), this, SLOT(removeScript()));
   addAction(m_removeScriptAction);
 
-  connect(scriptTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+  connect(scriptTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(validateActions()));
 
   validateActions();

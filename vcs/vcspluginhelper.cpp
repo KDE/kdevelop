@@ -366,8 +366,8 @@ void VcsPluginHelper::annotation()
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
             connect(doc->textDocument()->activeView(),
-                    SIGNAL(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )),
-                    this, SLOT(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )));
+                    SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
+                    this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;

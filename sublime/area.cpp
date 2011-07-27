@@ -128,15 +128,15 @@ Area::Area(const Area &area)
 
 void Area::initialize()
 {
-    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
-    connect(this, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-            d->controller, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
-    connect(this, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
+            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*,Sublime::View*)));
+    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
+            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
+    connect(this, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
+            d->controller, SLOT(notifyToolViewAdded(Sublime::View*,Sublime::Position)));
+    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
+            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*,Sublime::Position)));
+    connect(this, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
             d->controller, SIGNAL(toolViewMoved(Sublime::View*)));
 
     /* In theory, ownership is passed to us, so should not bother detecting
@@ -167,7 +167,7 @@ void Area::addView(View *view, AreaIndex *index, View *after)
         after = activeView();
     }
     index->add(view, after);
-    connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
+    connect(view, SIGNAL(positionChanged(Sublime::View*,int)), this, SLOT(positionChanged(Sublime::View*,int)));
     kDebug() << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
     emit viewAdded(index, view);

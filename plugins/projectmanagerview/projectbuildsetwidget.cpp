@@ -56,34 +56,34 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     m_ui->setupUi( this );
     
     m_ui->addItemButton->setIcon( KIcon( "list-add" ) );
-    connect( m_ui->addItemButton, SIGNAL( clicked() ),
-             this, SLOT( addItems() ) );
+    connect( m_ui->addItemButton, SIGNAL(clicked()),
+             this, SLOT(addItems()) );
 
     m_ui->removeItemButton->setIcon( KIcon( "list-remove" ) );
-    connect( m_ui->removeItemButton, SIGNAL( clicked() ),
-             this, SLOT( removeItems() ) );
+    connect( m_ui->removeItemButton, SIGNAL(clicked()),
+             this, SLOT(removeItems()) );
 
     m_ui->upButton->setIcon( KIcon( "go-up" ) );
-    connect( m_ui->upButton, SIGNAL( clicked() ),
-             SLOT( moveUp() ) );
+    connect( m_ui->upButton, SIGNAL(clicked()),
+             SLOT(moveUp()) );
     
     m_ui->downButton->setIcon( KIcon( "go-down" ) );
-    connect( m_ui->downButton, SIGNAL( clicked() ),
-             SLOT( moveDown() ) );
+    connect( m_ui->downButton, SIGNAL(clicked()),
+             SLOT(moveDown()) );
     
     m_ui->topButton->setIcon( KIcon( "go-top" ) );
-    connect( m_ui->topButton, SIGNAL( clicked() ),
-             SLOT( moveToTop() ) );
+    connect( m_ui->topButton, SIGNAL(clicked()),
+             SLOT(moveToTop()) );
     
     m_ui->bottomButton->setIcon( KIcon( "go-bottom" ) );
-    connect( m_ui->bottomButton, SIGNAL( clicked() ),
-             SLOT( moveToBottom() ) );
+    connect( m_ui->bottomButton, SIGNAL(clicked()),
+             SLOT(moveToBottom()) );
     
     m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
     m_ui->itemView->verticalHeader()->setVisible(false);
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
-             SLOT(showContextMenu(const QPoint&) ) );
+    connect( m_ui->itemView, SIGNAL(customContextMenuRequested(QPoint)),
+             SLOT(showContextMenu(QPoint)) );
     layout()->setMargin(0);
 }
 
@@ -91,7 +91,7 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
 {
     m_view = view;
     m_ui->itemView->setModel( KDevelop::ICore::self()->projectController()->buildSetModel() );
-    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
+    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(selectionChanged()) );
 }
 
@@ -148,7 +148,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 
     KMenu m;
     m.setTitle( i18n("Buildset") );
-    m.addAction( i18n( "Remove from buildset" ), this, SLOT( removeItems() ) );
+    m.addAction( i18n( "Remove from buildset" ), this, SLOT(removeItems()) );
     
     if( !itemlist.isEmpty() )
     {

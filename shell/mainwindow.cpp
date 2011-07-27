@@ -316,7 +316,7 @@ void MainWindow::initialize()
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateCaption()));
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateCaption()));
 
-    connect(Core::self()->sessionController()->activeSession(), SIGNAL(nameChanged(QString , QString)), SLOT(updateCaption()));
+    connect(Core::self()->sessionController()->activeSession(), SIGNAL(nameChanged(QString,QString)), SLOT(updateCaption()));
     
     // Remove Handbook entry
     actionCollection()->action( "help_contents" )->setVisible( false );

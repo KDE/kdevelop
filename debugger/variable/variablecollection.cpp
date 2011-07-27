@@ -368,9 +368,9 @@ VariableCollection::VariableCollection(IDebugController* controller)
     //new ModelTest(this);
 
     connect (ICore::self()->documentController(),
-         SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ),
+         SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
          this,
-         SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
+         SLOT(textDocumentCreated(KDevelop::IDocument*)) );
 
     connect(controller, SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
              SLOT(updateAutoUpdate(KDevelop::IDebugSession*)));
@@ -416,8 +416,8 @@ VariableCollection::~ VariableCollection()
 void VariableCollection::textDocumentCreated(IDocument* doc)
 {
   connect( doc->textDocument(),
-       SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ),
-       this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
+       SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)),
+       this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)) );
 
   foreach( KTextEditor::View* view, doc->textDocument()->views() )
     viewCreated( doc->textDocument(), view );
@@ -435,9 +435,9 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     iface->enableTextHints(500);
 
     connect(view,
-            SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)),
+            SIGNAL(needTextHint(KTextEditor::Cursor,QString&)),
             this,
-            SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));
+            SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
 }
 
 void VariableCollection::

@@ -54,26 +54,26 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.newButton->setIcon(KIcon("list-add"));
     ui.deleteButton->setIcon(KIcon("list-remove"));
 
-    connect( ui.newButton, SIGNAL( clicked() ),
-             SLOT( newButtonClicked() ) );
-    connect( ui.deleteButton, SIGNAL( clicked() ),
-             SLOT( deleteButtonClicked() ) );
+    connect( ui.newButton, SIGNAL(clicked()),
+             SLOT(newButtonClicked()) );
+    connect( ui.deleteButton, SIGNAL(clicked()),
+             SLOT(deleteButtonClicked()) );
 
-    connect( ui.addgrpBtn, SIGNAL( clicked() ), SLOT( addGroupClicked() ) );
-    connect( ui.addgrpBtn, SIGNAL( clicked() ), SIGNAL(changed() ) );
-    connect( ui.removegrpBtn, SIGNAL( clicked() ), SLOT( removeGroupClicked() ) );
-    connect( ui.removegrpBtn, SIGNAL( clicked() ), SIGNAL(changed() ) );
-    connect( ui.setAsDefaultBtn, SIGNAL( clicked() ), SLOT( setAsDefault() ) );
-    connect( ui.setAsDefaultBtn, SIGNAL( clicked() ), SIGNAL( changed() ) );
+    connect( ui.addgrpBtn, SIGNAL(clicked()), SLOT(addGroupClicked()) );
+    connect( ui.addgrpBtn, SIGNAL(clicked()), SIGNAL(changed()) );
+    connect( ui.removegrpBtn, SIGNAL(clicked()), SLOT(removeGroupClicked()) );
+    connect( ui.removegrpBtn, SIGNAL(clicked()), SIGNAL(changed()) );
+    connect( ui.setAsDefaultBtn, SIGNAL(clicked()), SLOT(setAsDefault()) );
+    connect( ui.setAsDefaultBtn, SIGNAL(clicked()), SIGNAL(changed()) );
     connect( ui.activeCombo, SIGNAL(currentIndexChanged(int)),
-             SLOT( activeGroupChanged(int)) );
+             SLOT(activeGroupChanged(int)) );
     connect( ui.activeCombo, SIGNAL(editTextChanged(QString)), SLOT(enableButtons(QString)));
-    connect( groupModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
-    connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
-    connect( groupModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
-    connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
-    connect( groupModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
-    connect( groupModel, SIGNAL( modelReset() ), SLOT( enableDeleteButton() ) );
+    connect( groupModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
+    connect( groupModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( groupModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( groupModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(enableDeleteButton()) );
+    connect( groupModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(enableDeleteButton()) );
+    connect( groupModel, SIGNAL(modelReset()), SLOT(enableDeleteButton()) );
 }
 
 void EnvironmentWidget::setActiveGroup( const QString& group )

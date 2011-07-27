@@ -339,9 +339,9 @@ void RunController::initialize()
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
     }
-    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
+    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
             this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
+    connect(Core::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
             this, SLOT(slotProjectClosing(KDevelop::IProject*)));
     connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
              this, SLOT(slotRefreshProject(KDevelop::IProject*)));
@@ -833,7 +833,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
 {
     delete d->launchAsMapper;
     d->launchAsMapper = new QSignalMapper( this );
-    connect( d->launchAsMapper, SIGNAL( mapped( int ) ), SLOT( launchAs( int ) ) );
+    connect( d->launchAsMapper, SIGNAL(mapped(int)), SLOT(launchAs(int)) );
     d->launchAsInfo.clear();
     d->contextItem = 0;
     ContextMenuExtension ext;
@@ -863,7 +863,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                         act->setText( type->name() );
                         kDebug() << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
                         d->launchAsMapper->setMapping( act, i );
-                        connect( act, SIGNAL( triggered() ), d->launchAsMapper, SLOT( map() ) );
+                        connect( act, SIGNAL(triggered()), d->launchAsMapper, SLOT(map()) );
                         menu->addAction(act);
                         i++;
                     }

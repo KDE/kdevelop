@@ -110,8 +110,8 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     // but by default the konsole shouldn't
     // automatically switch directories on you.
 
-//     connect( KDevelop::Core::documentController(), SIGNAL( documentActivated( KDevDocument* ) ),
-//              this, SLOT( documentActivated( KDevDocument* ) ) );
+//     connect( KDevelop::Core::documentController(), SIGNAL(documentActivated(KDevDocument*)),
+//              this, SLOT(documentActivated(KDevDocument*)) );
 }
 
 KDevKonsoleView::~KDevKonsoleView()

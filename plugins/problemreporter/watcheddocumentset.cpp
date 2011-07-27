@@ -133,7 +133,7 @@ void ProjectSet::trackProjectFiles(const IProject* project)
         if (fileManager) {
             connect(fileManager, SIGNAL(fileAdded(ProjectFileItem*)), this, SLOT(fileAdded(ProjectFileItem*)));
             connect(fileManager, SIGNAL(fileRemoved(ProjectFileItem*)), this, SLOT(fileRemoved(ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRenamed(const KUrl&, ProjectFileItem*)), this, SLOT(fileRenamed(const KUrl&, ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRenamed(KUrl,ProjectFileItem*)), this, SLOT(fileRenamed(KUrl,ProjectFileItem*)));
         }
     }
 }

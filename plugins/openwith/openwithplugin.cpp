@@ -88,7 +88,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
     if( !m_urls.isEmpty() )
     {
         m_actionMap = new QSignalMapper( this );
-        connect( m_actionMap, SIGNAL(mapped(const QString&)), SLOT(open(const QString&)) );
+        connect( m_actionMap, SIGNAL(mapped(QString)), SLOT(open(QString)) );
 
         // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
         // TODO: Think about possible alternatives to using the mimetype of the first url.
@@ -110,7 +110,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
 
             KAction* openAction = new KAction( i18n( "Open" ), this );
             openAction->setIcon( SmallIcon( "document-open" ) );
-            connect( openAction, SIGNAL( triggered() ), SLOT( openDefault() ) );
+            connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
 
             KDevelop::ContextMenuExtension ext;
             ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );

@@ -74,7 +74,7 @@ void ProblemHighlighter::viewCreated(Document* , View* view)
     if( !iface )
         return;
 
-    connect(view, SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)), this, SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));
+    connect(view, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
 }
 
 void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QString& )

@@ -95,15 +95,15 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
 
 
     //connect signals to changed signal
-    connect( interpreter, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
-    connect( projectTarget, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
+    connect( interpreter, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( projectTarget, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( executablePath->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
-    connect( arguments, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
-    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
+    connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( executablePath, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }

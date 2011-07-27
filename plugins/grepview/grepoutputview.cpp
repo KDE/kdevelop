@@ -93,8 +93,8 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     
     modelSelector->setEditable(false);
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(modelSelector, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(modelSelectorContextMenu(const QPoint&)));
+    connect(modelSelector, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(modelSelectorContextMenu(QPoint)));
     connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
     
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
@@ -158,7 +158,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
-    connect(newModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+    connect(newModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(rowsRemoved()));
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));

@@ -47,8 +47,8 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
     
     connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
                                                 SLOT(documentSaved(KDevelop::IDocument*)));
-    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                                                SLOT(itemsAdded(QModelIndex, int, int)));
+    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+                                                SLOT(itemsAdded(QModelIndex,int,int)));
 }
 
 ProjectChangesModel::~ProjectChangesModel()
@@ -194,3 +194,4 @@ void ProjectChangesModel::reloadAll()
     QList< IProject* > projects = ICore::self()->projectController()->projects();
     reload(projects);
 }
+

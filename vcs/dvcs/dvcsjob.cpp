@@ -70,9 +70,9 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->model = new OutputModel;
     setModel(d->model, IOutputView::TakeOwnership);
     
-    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(slotProcessExited(int, QProcess::ExitStatus)));
-    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
+    connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
+            SLOT(slotProcessExited(int,QProcess::ExitStatus)));
+    connect(d->childproc, SIGNAL(error(QProcess::ProcessError)),
             SLOT(slotProcessError(QProcess::ProcessError)));
 
     connect(d->childproc, SIGNAL(readyReadStandardOutput()),

@@ -143,7 +143,7 @@ void SnippetPlugin::documentLoaded( KParts::Part* part )
         foreach( KTextEditor::View* view, textDocument->views() )
           viewCreated( textDocument, view );
 
-        connect( textDocument, SIGNAL( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ), SLOT( viewCreated(KTextEditor::Document*, KTextEditor::View* ) ) );
+        connect( textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)) );
 
     }
 }

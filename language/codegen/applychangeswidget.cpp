@@ -247,12 +247,12 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     v->addWidget(changesView);
     v->setSizes(QList<int>() << 400 << 100);
     
-    QObject::connect(m_editParts[m_index], SIGNAL(textChanged(KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range)),
-            parent, SLOT(change (KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range)));
-    QObject::connect(m_editParts[m_index], SIGNAL(textInserted(KTextEditor::Document*, KTextEditor::Range)),
-            parent, SLOT(insertion (KTextEditor::Document*, KTextEditor::Range)));
-    QObject::connect(m_editParts[m_index], SIGNAL(textRemoved(KTextEditor::Document*, KTextEditor::Range, const QString&)),
-            parent, SLOT(removal (KTextEditor::Document*, KTextEditor::Range, const QString&)));
+    QObject::connect(m_editParts[m_index], SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)),
+            parent, SLOT(change(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)));
+    QObject::connect(m_editParts[m_index], SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)),
+            parent, SLOT(insertion(KTextEditor::Document*,KTextEditor::Range)));
+    QObject::connect(m_editParts[m_index], SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)),
+            parent, SLOT(removal(KTextEditor::Document*,KTextEditor::Range,QString)));
     QObject::connect(changesView, SIGNAL(activated(QModelIndex)),
             parent, SLOT(jump(QModelIndex)));
 }

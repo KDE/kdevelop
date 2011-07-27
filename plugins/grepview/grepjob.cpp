@@ -91,7 +91,7 @@ GrepJob::GrepJob( QObject* parent )
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     
-    connect(this, SIGNAL(result(KJob *)), this, SLOT(testFinishState(KJob *)));
+    connect(this, SIGNAL(result(KJob*)), this, SLOT(testFinishState(KJob*)));
 }
 
 QString GrepJob::statusName() const
@@ -228,8 +228,8 @@ void GrepJob::start()
     m_outputModel->clear();
 
     qRegisterMetaType<GrepOutputItem::List>();
-    connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
-            m_outputModel, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
+    connect(this, SIGNAL(foundMatches(QString,GrepOutputItem::List)),
+            m_outputModel, SLOT(appendOutputs(QString,GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }

@@ -334,7 +334,7 @@ void ProjectModelTest::testItemSanity()
     // Check that model is properly emitting data-changes
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
-    QSignalSpy s( model, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )) );
+    QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
     parent->setUrl( KUrl("file:///newtest") );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
@@ -389,7 +389,7 @@ void ProjectModelTest::testRename()
     Q_ASSERT( item );
 
     QCOMPARE(item->model(), model);
-    QSignalSpy s( model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)) );
+    QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
     ProjectBaseItem::RenameStatus stat = item->rename( newName );
     QCOMPARE( (int)stat, expectedRenameCode );
     if( datachangesignal ) {
@@ -477,8 +477,8 @@ void ProjectModelTest::testAddItemInThread()
     model->appendRow( root );
     AddItemThread t( root );
     SignalReceiver check( model );
-    connect( model, SIGNAL(rowsInserted( const QModelIndex&, int, int )), &check, SLOT(rowsInserted(const QModelIndex&, int, int)), Qt::DirectConnection );
-    KDevelop::KDevSignalSpy spy( &t, SIGNAL( addedItems() ), Qt::QueuedConnection );
+    connect( model, SIGNAL(rowsInserted(QModelIndex,int,int)), &check, SLOT(rowsInserted(QModelIndex,int,int)), Qt::DirectConnection );
+    KDevelop::KDevSignalSpy spy( &t, SIGNAL(addedItems()), Qt::QueuedConnection );
     t.start();
     QVERIFY(spy.wait( 10000 ));
     QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );

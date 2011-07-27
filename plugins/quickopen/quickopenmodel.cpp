@@ -70,7 +70,7 @@ void QuickOpenModel::registerProvider( const QStringList& scopes, const QStringL
 
   m_providers << e; //.insert( types, e );
 
-  connect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
+  connect( provider, SIGNAL(destroyed(QObject*)), this, SLOT(destroyed(QObject*)) );
 
   restart(true);
 }
@@ -81,7 +81,7 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( (*it).provider == provider ) {
       m_providers.erase( it );
-      disconnect( provider, SIGNAL( destroyed(QObject*) ), this, SLOT( destroyed( QObject* ) ) );
+      disconnect( provider, SIGNAL(destroyed(QObject*)), this, SLOT(destroyed(QObject*)) );
       ret = true;
       break;
     }

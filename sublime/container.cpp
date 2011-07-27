@@ -182,7 +182,7 @@ Container::Container(QWidget *parent)
 
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
     connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeRequest(int)));
-    connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
+    connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
     connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(closeRequest(int)));

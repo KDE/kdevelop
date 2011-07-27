@@ -200,8 +200,8 @@ bool KompareModelList::compare(Kompare::Mode mode)
 	m_diffProcess = new KompareProcess( m_diffSettings, Kompare::Custom, m_info->localSource, m_info->localDestination, QString(), mode );
 	m_diffProcess->setEncoding( m_encoding );
 
-	connect( m_diffProcess, SIGNAL(diffHasFinished( bool )),
-	         this, SLOT(slotDiffProcessFinished( bool )) );
+	connect( m_diffProcess, SIGNAL(diffHasFinished(bool)),
+	         this, SLOT(slotDiffProcessFinished(bool)) );
 
 	emit status( Kompare::RunningDiff );
 	m_diffProcess->start();
@@ -641,8 +641,8 @@ bool KompareModelList::saveDiff( const QString& url, QString directory, DiffSett
 	m_diffProcess = new KompareProcess( diffSettings, Kompare::Custom, m_info->localSource, m_info->localDestination, directory );
 	m_diffProcess->setEncoding( m_encoding );
 
-	connect( m_diffProcess, SIGNAL(diffHasFinished( bool )),
-	         this, SLOT(slotWriteDiffOutput( bool )) );
+	connect( m_diffProcess, SIGNAL(diffHasFinished(bool)),
+	         this, SLOT(slotWriteDiffOutput(bool)) );
 
 	emit status( Kompare::RunningDiff );
 	m_diffProcess->start();

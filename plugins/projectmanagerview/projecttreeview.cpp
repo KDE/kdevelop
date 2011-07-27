@@ -72,8 +72,8 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setAutoScroll(true);
     setAutoExpandDelay(300);
 
-    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
+    connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
 }
 
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
@@ -290,7 +290,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
         KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
-        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
+        connect( projectConfig, SIGNAL(triggered()), this, SLOT(openProjectConfig()) );
         projectActions << projectConfig;
     }
     popupContextMenu_appendActions(menu, projectActions);

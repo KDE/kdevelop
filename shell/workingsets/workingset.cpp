@@ -470,8 +470,8 @@ void WorkingSet::connectArea( Sublime::Area* area )
 //         Q_ASSERT(area->workingSet() == m_id);
 
   m_areas.push_back( area );
-  connect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
-  connect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
+  connect( area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)) );
+  connect( area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)) );
 }
 
 void WorkingSet::disconnectArea( Sublime::Area* area )
@@ -485,8 +485,8 @@ void WorkingSet::disconnectArea( Sublime::Area* area )
 
 //         Q_ASSERT(area->workingSet() == m_id);
 
-  disconnect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
-  disconnect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
+  disconnect( area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)) );
+  disconnect( area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)) );
   m_areas.removeAll( area );
 }
 

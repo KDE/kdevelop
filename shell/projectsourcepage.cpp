@@ -143,7 +143,7 @@ void ProjectSourcePage::getVcsProject()
     
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
-    connect(job, SIGNAL(percent(KJob*, unsigned long)), SLOT(progressChanged(KJob*, unsigned long)));
+    connect(job, SIGNAL(percent(KJob*,ulong)), SLOT(progressChanged(KJob*,ulong)));
     connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(infoMessage(KJob*,QString,QString)));
     ICore::self()->runController()->registerJob(job);
 }

@@ -63,28 +63,28 @@ QWidget* createNavPart(QWidget* parent, KParts::Part* part)
     KParts::Part* navPart=factory->createPart(parent, parent,"KompareNavTreePart",
                                               QStringList("KParts::ReadOnlyPart" ));
     
-    QObject::connect(part, SIGNAL( modelsChanged(const Diff2::DiffModelList*) ),
-                navPart, SLOT( slotModelsChanged( const Diff2::DiffModelList*) ) );
+    QObject::connect(part, SIGNAL(modelsChanged(const Diff2::DiffModelList*)),
+                navPart, SLOT(slotModelsChanged(const Diff2::DiffModelList*)) );
 
-    QObject::connect(part, SIGNAL( kompareInfo(Kompare::Info*) ),
-                navPart, SLOT( slotKompareInfo(Kompare::Info*) ) );
+    QObject::connect(part, SIGNAL(kompareInfo(Kompare::Info*)),
+                navPart, SLOT(slotKompareInfo(Kompare::Info*)) );
 
-    QObject::connect(navPart, SIGNAL(selectionChanged(const Diff2::DiffModel*, const Diff2::Difference*) ),
-                part, SIGNAL( selectionChanged(const Diff2::DiffModel*, const Diff2::Difference*) ) );
-    QObject::connect(part, SIGNAL( setSelection(const Diff2::DiffModel*, const Diff2::Difference*) ),
-                navPart, SLOT( slotSetSelection(const Diff2::DiffModel*, const Diff2::Difference*) ) );
+    QObject::connect(navPart, SIGNAL(selectionChanged(const Diff2::DiffModel*,const Diff2::Difference*)),
+                part, SIGNAL(selectionChanged(const Diff2::DiffModel*,const Diff2::Difference*)) );
+    QObject::connect(part, SIGNAL(setSelection(const Diff2::DiffModel*,const Diff2::Difference*)),
+                navPart, SLOT(slotSetSelection(const Diff2::DiffModel*,const Diff2::Difference*)) );
 
-    QObject::connect(navPart, SIGNAL( selectionChanged(const Diff2::Difference*) ),
-                part, SIGNAL( selectionChanged(const Diff2::Difference*) ) );
-    QObject::connect(part, SIGNAL( setSelection(const Diff2::Difference*) ),
-                navPart, SLOT( slotSetSelection(const Diff2::Difference*) ) );
+    QObject::connect(navPart, SIGNAL(selectionChanged(const Diff2::Difference*)),
+                part, SIGNAL(selectionChanged(const Diff2::Difference*)) );
+    QObject::connect(part, SIGNAL(setSelection(const Diff2::Difference*)),
+                navPart, SLOT(slotSetSelection(const Diff2::Difference*)) );
                 
     QObject::connect( part, SIGNAL(applyDifference(bool)),
         navPart, SLOT(slotApplyDifference(bool)) );
     QObject::connect( part, SIGNAL(applyAllDifferences(bool)),
         navPart, SLOT(slotApplyAllDifferences(bool)) );
-    QObject::connect( part, SIGNAL(applyDifference(const Diff2::Difference*, bool)),
-        navPart, SLOT(slotApplyDifference(const Diff2::Difference*, bool)) );
+    QObject::connect( part, SIGNAL(applyDifference(const Diff2::Difference*,bool)),
+        navPart, SLOT(slotApplyDifference(const Diff2::Difference*,bool)) );
     
     return navPart->widget();
 }

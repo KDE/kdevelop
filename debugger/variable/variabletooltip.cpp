@@ -119,9 +119,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
     itemHeight_ = view_->indexRowSizeHint(model_->indexForItem(var_, 0));
     connect(view_->verticalScrollBar(),
-            SIGNAL(rangeChanged(int, int)),
+            SIGNAL(rangeChanged(int,int)),
             this,
-            SLOT(slotRangeChanged(int, int)));
+            SLOT(slotRangeChanged(int,int)));
 
     selection_ = view_->selectionModel();
     selection_->select(model_->indexForItem(var_, 0), 
@@ -135,10 +135,10 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     QLabel* label2 = new QLabel(i18n("<a href=\"watchpoint\">Stop on change</a>"), 
                                 this);
     labelL->addWidget(label2);
-    connect(label, SIGNAL(linkActivated(const QString&)),
-            this, SLOT(slotLinkActivated(const QString&)));
-    connect(label2, SIGNAL(linkActivated(const QString&)),
-            this, SLOT(slotLinkActivated(const QString&)));    
+    connect(label, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotLinkActivated(QString)));
+    connect(label2, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotLinkActivated(QString)));    
 
     QHBoxLayout* inner = new QHBoxLayout();
     l->addLayout(inner);

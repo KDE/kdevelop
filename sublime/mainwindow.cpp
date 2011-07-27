@@ -162,20 +162,20 @@ void MainWindow::setArea(Area *area)
     // this way dock sizes get properly restored
     QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
 
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
+        this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
     connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)),
-        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*, Sublime::View*)));
+        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*,Sublime::View*)));
     connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
         this, SLOT(raiseToolView(Sublime::View*)));
-    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-        this, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-        this, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
-        this, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
+        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)));
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
+        this, SLOT(toolViewAdded(Sublime::View*,Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
+        this, SLOT(aboutToRemoveToolView(Sublime::View*,Sublime::Position)));
+    connect(area, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
+        this, SLOT(toolViewMoved(Sublime::View*,Sublime::Position)));
      connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
         this, SLOT(setupAreaSelector()));
 }

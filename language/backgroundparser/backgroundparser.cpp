@@ -205,8 +205,8 @@ public:
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
             QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
-                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
+            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*,float,QString)),
+                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*,float,QString)), Qt::QueuedConnection);
 
             m_parseJobs.insert(url, job);
 

@@ -78,7 +78,7 @@ void OutputJob::startOutput()
             view->setDelegate(m_outputId, m_outputDelegate, m_delegateOwnership);
 
             if (m_killJobOnOutputClose)
-                connect(i, SIGNAL(outputRemoved(int, int)), this, SLOT(outputViewRemoved(int, int)));
+                connect(i, SIGNAL(outputRemoved(int,int)), this, SLOT(outputViewRemoved(int,int)));
 
             if (m_verbosity == OutputJob::Verbose)
                 view->raiseOutput(m_outputId);

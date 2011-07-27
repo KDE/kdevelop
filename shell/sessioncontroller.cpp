@@ -304,7 +304,7 @@ public:
         q->actionCollection()->addAction( "session_"+s->id().toString(), a );
         q->unplugActionList( "available_sessions" );
         q->plugActionList( "available_sessions", grp->actions() );
-        connect(s, SIGNAL(nameChanged(QString, QString)), SLOT(nameChanged()));
+        connect(s, SIGNAL(nameChanged(QString,QString)), SLOT(nameChanged()));
     }
 
     SessionController* q;
@@ -604,26 +604,26 @@ SessionController::SessionController( QObject *parent )
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
+    KAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
     action->setText( i18n("Start New Session") );
     action->setToolTip( i18n("Start a new KDevelop instance with an empty session") );
     action->setIcon(KIcon("window-new"));
 
-    action = actionCollection()->addAction( "rename_session", this, SLOT( renameSession() ) );
+    action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
     action->setText( i18n("Rename Session...") );
     action->setIcon(KIcon("edit-rename"));
 
-    action = actionCollection()->addAction( "delete_session", this, SLOT( deleteSession() ) );
+    action = actionCollection()->addAction( "delete_session", this, SLOT(deleteSession()) );
     action->setText( i18n("Delete Session...") );
     action->setIcon(KIcon("edit-delete"));
 
-    action = actionCollection()->addAction( "quit", this, SIGNAL( quitSession() ) );
+    action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
     action->setShortcut(Qt::CTRL | Qt::Key_Q);
     action->setIcon(KIcon("application-exit"));
 
     #if 0
-    action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
+    action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
     action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );

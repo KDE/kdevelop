@@ -182,8 +182,8 @@ UiController::UiController(Core *core)
         return;
 
     connect( QApplication::instance(),
-             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
-            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
+             SIGNAL(focusChanged(QWidget*,QWidget*)),
+            this, SLOT(widgetChanged(QWidget*,QWidget*)) );
 }
 
 UiController::~UiController()
