@@ -16,7 +16,6 @@ kde4_add_plugin(kdevmakebuilder ${kdevmakebuilder_LIB_SRCS})
 target_link_libraries(kdevmakebuilder
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
-        ${QT_QTDESIGNER_LIBRARY}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}

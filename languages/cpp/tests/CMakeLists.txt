@@ -70,7 +70,6 @@ target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
     kdev4cppduchain
     kdev4cpprpp
     kdev4cppparser
-    ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDE4_THREADWEAVER_LIBRARIES}
