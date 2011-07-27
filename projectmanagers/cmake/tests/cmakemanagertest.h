@@ -29,13 +29,14 @@
  **/
 class CMakeManagerTest : public QObject {
     Q_OBJECT
-public:
-    CMakeManagerTest(QObject* parent = 0);
-    virtual ~CMakeManagerTest();
 
 private slots:
-    void testWithBuildDirProject();
+    void initTestCase();
+    void cleanupTestCase();
+    void cleanup();
 
+    void testWithBuildDirProject();
+    void testIncludePaths();
 };
 
 #endif // CMAKEMANAGERTEST_H

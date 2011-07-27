@@ -86,6 +86,11 @@ void TestParser::testVariadicTemplates_data()
   QTest::newRow("pack-expansion-initlist2") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { params... }; }\n";
   QTest::newRow("pack-expansion-initlist3") << "template<typename ... Arg> void A(Arg ... params) { int a[] = { (params+10)... }; }\n";
   QTest::newRow("pack-expansion-throw") << "template<typename ... Arg> void A() throw(Arg...) {};\n";
+  QTest::newRow("pack-expansion-typename") << "template<typename T> struct A { T type; };\n"
+                                              "template<typename... Args> void foo(Args... args) { foo<typename A<Args>::type...>(args...); };\n";
+  QTest::newRow("pack-expansion-is_function") << "template<typename> struct is_function { };\n"
+                                                 "template<typename _Res, typename... _ArgTypes> struct is_function<_Res(_ArgTypes...) const> { };\n";
+  QTest::newRow("pack-expansion-funcptr") << "template<typename ... Args> void foo(Args... args) { typedef int (*t5)(Args...); }\n";
   QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
@@ -97,6 +102,8 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
+  QEXPECT_FAIL("pack-expansion-funcptr", "function pointer is improperly parsed", Abort);
+  QEXPECT_FAIL("pack-expansion-is_function", "function pointer is improperly parsed", Abort);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);

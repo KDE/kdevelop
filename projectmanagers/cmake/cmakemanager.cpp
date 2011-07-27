@@ -139,8 +139,15 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         {
             s= replaceInstallDir(s, installDir);
         }
-//         kDebug(9042) << "resolving" << _s << "to" << s;
-        newList.append(KUrl(s));
+        KUrl d(s);
+        d.cleanPath();
+        d.adjustPath(KUrl::AddTrailingSlash);
+//         kDebug(9042) << "resolved" << _s << "to" << d;
+
+        if (!newList.contains(d))
+        {
+            newList.append(d);
+        }
     }
     return newList;
 }

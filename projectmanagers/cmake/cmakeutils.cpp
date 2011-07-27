@@ -55,6 +55,7 @@ static QString projectBuildDirs = "BuildDirs";
 namespace CMake
 {
 
+///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
 bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
 {
     KConfigGroup cmakeGrp = item->project()->projectConfiguration()->group("CMake");

@@ -151,10 +151,18 @@ namespace CMakeParserUtils
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-        
-        data->vm.insert("CMAKE_CURRENT_BINARY_DIR", data->vm.value("CMAKE_BINARY_DIR"));
         data->vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
         data->vm.insert("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
+
+        const QString projectSourceDir = data->vm.value("CMAKE_SOURCE_DIR").first();
+        const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").first();
+        QString binDir = projectBinDir;
+        // CURRENT_BINARY_DIR must point to the subfolder if any"
+        if (sourcedir.startsWith(projectSourceDir)) {
+            Q_ASSERT(sourcedir.at(projectSourceDir.size()) == '/');
+            binDir += sourcedir.mid(projectSourceDir.size());
+        }
+        data->vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
         data->vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         
         CMakeProjectVisitor v(file, parent);
