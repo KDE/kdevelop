@@ -88,7 +88,6 @@ target_link_libraries(kdevcpplanguagesupport
     kdev4cpprpp
     kdev4cppduchain
     kdev4cppparser
-    ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDE4_THREADWEAVER_LIBRARIES}

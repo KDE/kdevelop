@@ -20,7 +20,6 @@ target_link_libraries(
     kdev4cmakecommon
         ${KDE4_KIO_LIBS}
         ${KDE4_KDEUI_LIBS}
-        ${QT_QTDESIGNER_LIBRARY}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
