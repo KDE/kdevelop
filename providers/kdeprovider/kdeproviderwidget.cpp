@@ -60,7 +60,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     Ui::KDEConfig().setupUi(page);
     
     m_dialog->addPage(page, i18n("General") );
-    connect(m_dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
+    connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
 }
 
 VcsLocation extractLocation(const QVariantMap& urls)

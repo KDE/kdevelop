@@ -40,8 +40,8 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
-    connect( m_prefsUi->makeBinary, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( m_prefsUi->makeBinary, SIGNAL( urlSelected( const KUrl& ) ), SLOT( changed() ) );
+    connect( m_prefsUi->makeBinary, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( m_prefsUi->makeBinary, SIGNAL(urlSelected(KUrl)), SLOT(changed()) );
     l->addWidget( w );
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );

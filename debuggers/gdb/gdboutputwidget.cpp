@@ -129,18 +129,18 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
-     connect( this,       SIGNAL(userGDBCmd(const QString &)),
-             session, SLOT(slotUserGDBCmd(const QString&)));
+     connect( this,       SIGNAL(userGDBCmd(QString)),
+             session, SLOT(slotUserGDBCmd(QString)));
      connect( this,       SIGNAL(breakInto()),
              session, SLOT(interruptDebugger()));
 
-     connect( session, SIGNAL(gdbInternalCommandStdout(const QString&)),
-             this,       SLOT(slotInternalCommandStdout(const QString&)) );
-     connect( session, SIGNAL(gdbUserCommandStdout(const QString&)),
-             this,       SLOT(slotUserCommandStdout(const QString&)) );
+     connect( session, SIGNAL(gdbInternalCommandStdout(QString)),
+             this,       SLOT(slotInternalCommandStdout(QString)) );
+     connect( session, SIGNAL(gdbUserCommandStdout(QString)),
+             this,       SLOT(slotUserCommandStdout(QString)) );
 
-     connect( session, SIGNAL(gdbStateChanged(DBGStateFlags, DBGStateFlags)),
-             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+     connect( session, SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)),
+             this,       SLOT(slotStateChanged(DBGStateFlags,DBGStateFlags)));
 
      slotStateChanged(s_none, session->debuggerState());
 }

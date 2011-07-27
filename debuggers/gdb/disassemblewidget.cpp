@@ -59,7 +59,7 @@ SelectAddrDialog::SelectAddrDialog(QWidget* parent)
     setMainWidget(widget);
     setCaption(i18n("Address Selector"));
     
-    connect(m_ui.comboBox, SIGNAL(editTextChanged(const QString&)), 
+    connect(m_ui.comboBox, SIGNAL(editTextChanged(QString)), 
             this, SLOT(validateInput()) );
     connect(m_ui.comboBox, SIGNAL(returnPressed()),
             this, SLOT(itemSelected()) );
@@ -133,9 +133,9 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
         topLayout->addLayout(controlsLayout);
 
-        connect(m_startAddress, SIGNAL(editTextChanged(const QString&)), 
+        connect(m_startAddress, SIGNAL(editTextChanged(QString)), 
                 this, SLOT(slotValidateEdits()) );
-        connect(m_endAddress, SIGNAL(editTextChanged(const QString&)), 
+        connect(m_endAddress, SIGNAL(editTextChanged(QString)), 
                 this, SLOT(slotValidateEdits()) );
 
         connect(m_evalButton, SIGNAL(clicked(bool)),

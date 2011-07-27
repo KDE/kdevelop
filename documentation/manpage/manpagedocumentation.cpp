@@ -52,8 +52,8 @@ void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray 
 QString ManPageDocumentation::getManPageContent()
 {
     KIO::TransferJob  * transferJob = KIO::get(m_url, KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
-             this, SLOT( readDataFromManPage( KIO::Job *, const QByteArray & ) ) );
+    connect( transferJob, SIGNAL(data(KIO::Job*,QByteArray)),
+             this, SLOT(readDataFromManPage(KIO::Job*,QByteArray)) );
     if (transferJob->exec()){
         return m_manPageBuffer;
     } else {

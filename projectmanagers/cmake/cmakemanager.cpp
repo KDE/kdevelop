@@ -950,7 +950,7 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
     m_busyProjects += fi->project();
     locker.unlock();
     
-    connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
+    connect( job, SIGNAL(result(KJob*)), this, SLOT(reimportDone(KJob*)) );
     ICore::self()->runController()->registerJob( job );
 }
 
@@ -1217,7 +1217,7 @@ ContextMenuExtension CMakeManager::contextMenuExtension( KDevelop::Context* cont
     if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
     {
         KAction* action = new KAction( i18n( "Jump to target definition" ), this );
-        connect( action, SIGNAL( triggered() ), this, SLOT( jumpToDeclaration() ) );
+        connect( action, SIGNAL(triggered()), this, SLOT(jumpToDeclaration()) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
 

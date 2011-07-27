@@ -76,10 +76,10 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->verticalHeader()->hide();
     addConfig( CMakeSettings::self(), w );
 
-    connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
-            this, SLOT(buildDirChanged( const QString & )));
-    connect(m_prefsUi->showInternal, SIGNAL( stateChanged ( int ) ),
-            this, SLOT(showInternal ( int )));
+    connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(buildDirChanged(QString)));
+    connect(m_prefsUi->showInternal, SIGNAL(stateChanged(int)),
+            this, SLOT(showInternal(int)));
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
     connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
@@ -195,10 +195,10 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         m_prefsUi->cacheList->hideColumn(4);
         m_prefsUi->cacheList->resizeColumnToContents(0);
         m_prefsUi->cacheList->setEnabled(true);
-        connect(m_currentModel, SIGNAL( itemChanged ( QStandardItem * ) ),
-                this, SLOT( cacheEdited( QStandardItem * ) ));
+        connect(m_currentModel, SIGNAL(itemChanged(QStandardItem*)),
+                this, SLOT(cacheEdited(QStandardItem*)));
         connect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(listSelectionChanged (QModelIndex,QModelIndex)));
+                this, SLOT(listSelectionChanged(QModelIndex,QModelIndex)));
         
         foreach(const QModelIndex &idx, m_currentModel->persistentIndices())
         {

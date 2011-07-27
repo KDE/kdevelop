@@ -180,8 +180,8 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     // is undesirable. Besides, this makes tracepoint look even more similar
     // to printf debugging.
 // PORTING TODO broken - need intermediate signal?
-//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
-//              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(QByteArray)),
+//              procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
 }
 
 void CppDebuggerPlugin::unload()

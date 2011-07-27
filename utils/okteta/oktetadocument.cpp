@@ -207,8 +207,8 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         Kasten::AbstractModelSynchronizer* synchronizer = synchronizerFactory->createSynchronizer();
 
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
-        connect( loadJob, SIGNAL(documentLoaded( Kasten::AbstractDocument* )),
-                 SLOT(onByteArrayDocumentLoaded( Kasten::AbstractDocument* )) );
+        connect( loadJob, SIGNAL(documentLoaded(Kasten::AbstractDocument*)),
+                 SLOT(onByteArrayDocumentLoaded(Kasten::AbstractDocument*)) );
         Kasten::JobManager::executeJob( loadJob, qApp->activeWindow() );
 
         delete synchronizerFactory;
@@ -227,7 +227,7 @@ void OktetaDocument::onByteArrayDocumentLoaded( Kasten::AbstractDocument* docume
     if( document )
     {
         mByteArrayDocument = static_cast<Kasten::ByteArrayDocument*>( document );
-        connect( mByteArrayDocument, SIGNAL(localSyncStateChanged( Kasten::LocalSyncState )),
+        connect( mByteArrayDocument, SIGNAL(localSyncStateChanged(Kasten::LocalSyncState)),
                  SLOT(onByteArrayDocumentChanged()) );
     }
 }

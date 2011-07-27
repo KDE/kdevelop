@@ -651,9 +651,9 @@ bool CodeCompletionContext::doSignalSlotCompletion() {
         QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
 
         int skipSignal = 0;
-        if( connectedSignal.startsWith( "SIGNAL(" ) )
+        if( connectedSignal.startsWith( "SIGNAL(") )
           skipSignal = 7;
-        if( connectedSignal.startsWith( "Q_SIGNAL(" ) )
+        if( connectedSignal.startsWith( "Q_SIGNAL(") )
           skipSignal = 9;
 
         if( skipSignal && connectedSignal.endsWith( ")" ) &&

@@ -130,7 +130,7 @@ public:
     TestDebugSession() : DebugSession(), m_line(0)
     {
         qRegisterMetaType<KUrl>("KUrl");
-        Q_ASSERT(connect(this, SIGNAL(showStepInSource(KUrl, int, QString)), SLOT(slotShowStepInSource(KUrl, int))));
+        Q_ASSERT(connect(this, SIGNAL(showStepInSource(KUrl,int,QString)), SLOT(slotShowStepInSource(KUrl,int))));
         
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
@@ -587,7 +587,7 @@ void GdbTest::testShowStepInSource()
     TestDebugSession *session = new TestDebugSession;
 
     qRegisterMetaType<KUrl>("KUrl");
-    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl, int, QString)));
+    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl,int,QString)));
 
     TestLaunchConfiguration cfg;
 

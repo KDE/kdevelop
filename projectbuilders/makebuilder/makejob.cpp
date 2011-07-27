@@ -129,12 +129,12 @@ void MakeJob::start()
     m_process = new KProcess(this);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     m_lineMaker = new ProcessLineMaker( m_process );
-    connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             this, SLOT( addStandardOutput( const QStringList& ) ) );
-    connect( m_process, SIGNAL( error( QProcess::ProcessError ) ),
-             this, SLOT( procError( QProcess::ProcessError ) ) );
-    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
+    connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+             this, SLOT(addStandardOutput(QStringList)) );
+    connect( m_process, SIGNAL(error(QProcess::ProcessError)),
+             this, SLOT(procError(QProcess::ProcessError)) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(procFinished(int,QProcess::ExitStatus)) );
 
     m_process->setEnvironment( environmentVars() );
     m_process->setWorkingDirectory( buildDir.toLocalFile() );

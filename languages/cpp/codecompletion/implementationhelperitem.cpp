@@ -443,7 +443,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
 
-    QString localText = "SLOT(" + name + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
+    QString localText = "SLOT("+name+"("+QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature)+")));";
     document->replaceText(word, localText);
   }else{
     //this code assumes (safely for now) that the "word" range is on one line

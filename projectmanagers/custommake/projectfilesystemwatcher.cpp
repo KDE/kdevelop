@@ -33,10 +33,10 @@ ProjectFileSystemWatcher::ProjectFileSystemWatcher( QObject* parent  )
     , d( new ProjectFileSystemWatcherPrivate )
 {
     d->m_watch = new QFileSystemWatcher(this);
-    connect( d->m_watch, SIGNAL(directoryChanged ( const QString &)),
-             this, SLOT(slotDirChanged(const QString&)) );
-    connect( d->m_watch, SIGNAL(fileChanged ( const QString &)),
-             this, SLOT(slotFileChanged(const QString&)) );
+    connect( d->m_watch, SIGNAL(directoryChanged(QString)),
+             this, SLOT(slotDirChanged(QString)) );
+    connect( d->m_watch, SIGNAL(fileChanged(QString)),
+             this, SLOT(slotFileChanged(QString)) );
 }
 
 ProjectFileSystemWatcher::~ProjectFileSystemWatcher()

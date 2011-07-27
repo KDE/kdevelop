@@ -318,7 +318,7 @@ IndentPreferences::IndentPreferences()
 {
     m_updateTimer = new QTimer ( this );
     m_updateTimer->setSingleShot ( true );
-    connect ( m_updateTimer, SIGNAL ( timeout() ), SLOT ( updateTimeout() ) );
+    connect ( m_updateTimer, SIGNAL (timeout()), SLOT (updateTimeout()) );
     m_vLayout = new QVBoxLayout ( this );
     m_captionLabel = new QLabel;
     m_vLayout->addWidget ( m_captionLabel );
@@ -343,7 +343,7 @@ IndentPreferences::IndentPreferences()
                "the code will be written into a temporary file, the temporary "
                "file will be substituted into that position, and the result "
                "will be read out of that file instead." ) );
-    connect ( m_commandEdit, SIGNAL ( textEdited ( QString ) ), SLOT ( textEdited ( QString ) ) );
+    connect ( m_commandEdit, SIGNAL (textEdited(QString)), SLOT (textEdited(QString)) );
 }
 
 void IndentPreferences::load ( const KDevelop::SourceFormatterStyle& style )

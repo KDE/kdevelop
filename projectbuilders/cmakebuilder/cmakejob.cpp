@@ -86,10 +86,10 @@ void CMakeJob::start()
 
     QString cmd = cmakeBinary( m_project );
     m_executor = new KDevelop::CommandExecutor(cmd, this);
-    connect(m_executor, SIGNAL(receivedStandardError(const QStringList&)),
-            model(), SLOT(appendLines(const QStringList&) ) );
-    connect(m_executor, SIGNAL(receivedStandardOutput(const QStringList&)),
-            model(), SLOT(appendLines(const QStringList&) ) );
+    connect(m_executor, SIGNAL(receivedStandardError(QStringList)),
+            model(), SLOT(appendLines(QStringList)) );
+    connect(m_executor, SIGNAL(receivedStandardOutput(QStringList)),
+            model(), SLOT(appendLines(QStringList)) );
     KUrl buildDirUrl = KUrl(QFileInfo(buildDir( m_project ).toLocalFile()).absoluteFilePath());
     if( !QFileInfo(buildDirUrl.toLocalFile()).exists() )
     {
@@ -99,8 +99,8 @@ void CMakeJob::start()
     }
     m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
-    connect( m_executor, SIGNAL( failed(QProcess::ProcessError)), this, SLOT( slotFailed( QProcess::ProcessError ) ) );
-    connect( m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
+    connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
+    connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
     m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
     m_executor->start();

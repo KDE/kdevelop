@@ -79,9 +79,9 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       functionSignature += '(' + classFun->normalizedSignature().str() + ')';
       if(addSignalSlot) {
         if(classFun->isSignal())
-          functionSignature = "SIGNAL(" + functionSignature + ')';
+          functionSignature = "SIGNAL("+functionSignature+')';
         else
-          functionSignature = "SLOT(" + functionSignature + ')';
+          functionSignature = "SLOT("+functionSignature+')';
       }else{
         //Only add a closing )
         functionSignature += ')';

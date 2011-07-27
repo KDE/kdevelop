@@ -65,8 +65,8 @@ void GDB::start(KConfigGroup& config)
     connect(process_, SIGNAL(readyReadStandardError()),
             SLOT(readyReadStandardError()));
     connect(process_,
-            SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(processFinished(int, QProcess::ExitStatus)));
+            SIGNAL(finished(int,QProcess::ExitStatus)),
+            SLOT(processFinished(int,QProcess::ExitStatus)));
     connect(process_, SIGNAL(error(QProcess::ProcessError)),
             SLOT(processErrored(QProcess::ProcessError)));
 

@@ -1022,7 +1022,7 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
   
     addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
     
-    QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT( d, void slot3(TE*) )  };");
+    QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT(d,void slot3(TE*))  };");
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
