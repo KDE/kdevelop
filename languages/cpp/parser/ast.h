@@ -211,7 +211,7 @@ public:
       NODE_KIND_COUNT
     };
 
-  NODE_KIND kind;
+  int kind;
 
   uint start_token;
   uint end_token;

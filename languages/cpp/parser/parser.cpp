@@ -68,7 +68,7 @@ template <class _Tp>
 inline _Tp *CreateNode(pool *memory_pool)
 {
   _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
-  node->kind = static_cast<AST::NODE_KIND>(_Tp::__node_kind);
+  node->kind = _Tp::__node_kind;
   return node;
 }
 
