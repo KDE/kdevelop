@@ -42,6 +42,7 @@ Boston, MA 02110-1301, USA.
 #include "sessiondialog.h"
 #include "shellextension.h"
 #include <interfaces/iprojectcontroller.h>
+#include <util/fileutils.h>
 #include <qapplication.h>
 #include <kprocess.h>
 #include <sublime/mainwindow.h>
@@ -73,36 +74,6 @@ const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
 namespace KDevelop
 {
-
-///Recursive deletion of a directory, should go into some utility file
-static bool removeDirectory(const QDir &aDir)
-{
-  bool has_err = false;
-  if (aDir.exists())//QDir::NoDotAndDotDot
-  {
-    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot | 
-    QDir::Dirs | QDir::Files);
-    int count = entries.size();
-    for (int idx = 0; ((idx < count) && !has_err); idx++)
-    {
-      QFileInfo entryInfo = entries[idx];
-      QString path = entryInfo.absoluteFilePath();
-      if (entryInfo.isDir())
-      {
-        has_err = !removeDirectory(QDir(path));
-      }
-      else
-      {
-        QFile file(path);
-        if (!file.remove())
-        has_err = true;
-      }
-    }
-    if (!aDir.rmdir(aDir.absolutePath()))
-      has_err = true;
-  }
-  return !has_err;
-}
 
 namespace {
     int argc = 0;
@@ -330,10 +301,7 @@ public:
     
     void clearRecoveryDirectory()
     {
-        QDir recoveryDir(ownSessionDirectory() + "/recovery");
-        
-        if(recoveryDir.exists())
-            removeDirectory(recoveryDir);
+        removeDirectory(ownSessionDirectory() + "/recovery");
     }
     
 public slots:
@@ -492,20 +460,11 @@ private slots:
                 return;
         }
 
-        {
+        if (recoveryDir.exists("backup")) {
             // Clear the old backup recovery directory, as we will create a new one
-            QDir recoveryBackupDir(recoveryDir.path() + "/backup");
-            if(recoveryBackupDir.exists())
-            {
-                //Clear the backup dir
-                foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
-                    QFile::remove(file.absoluteFilePath());
-                
-                if(!recoveryDir.rmdir("backup"))
-                {
-                    kWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
-                    return;
-                }
+            if (!removeDirectory(recoveryDir.absoluteFilePath("backup"))) {
+                kWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
+                return;
             }
         }
         
