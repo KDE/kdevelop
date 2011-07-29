@@ -280,6 +280,10 @@ void GrepOutputView::expandElements(const QModelIndex&)
 
 void GrepOutputView::selectPreviousItem()
 {
+    if (!model()) {
+        return;
+    }
+
     QModelIndex prev_idx = model()->previousItemIndex(resultsTreeView->currentIndex());
     if (prev_idx.isValid()) {
         resultsTreeView->setCurrentIndex(prev_idx);
@@ -289,6 +293,10 @@ void GrepOutputView::selectPreviousItem()
 
 void GrepOutputView::selectNextItem()
 {
+    if (!model()) {
+        return;
+    }
+
     QModelIndex next_idx = model()->nextItemIndex(resultsTreeView->currentIndex());
     if (next_idx.isValid()) {
         resultsTreeView->setCurrentIndex(next_idx);
