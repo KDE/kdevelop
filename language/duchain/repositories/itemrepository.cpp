@@ -20,20 +20,19 @@
 
 #include <QDataStream>
 #include <QUuid>
-
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
-#include <klockfile.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-
-#include <interfaces/icore.h>
-
-#include "../duchain.h"
-#include <interfaces/isession.h>
-
 #include <QApplication>
 #include <QTextStream>
+
+#include <KStandardDirs>
+#include <KComponentData>
+#include <KLockFile>
+#include <KMessageBox>
+#include <KLocale>
+
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
+
+#include "../duchain.h"
 
 namespace KDevelop {
 
