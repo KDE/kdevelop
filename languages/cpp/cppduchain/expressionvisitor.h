@@ -148,9 +148,9 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
     DUContext* currentContext() const;
 
-  private:
-
     TopDUContext* topContext() const;
+
+  private:
 
     bool m_strict, m_memberAccess, m_skipLastNamePart;
     AbstractType::Ptr m_lastType;

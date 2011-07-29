@@ -156,6 +156,16 @@ void TestDUChain::testDefaultDelete() {
   }
 }
 
+void TestDUChain::testDelete_Bug278781()
+{
+  // don't crash, see also: https://bugs.kde.org/show_bug.cgi?id=278781
+  LockedTopDUContext top = parse("NonCopyable(const NonCopyable&) = delete;\n"
+                                 , DumpNone);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+}
+
 void TestDUChain::testEnum2011_data()
 {
   QTest::addColumn<QString>("code");

@@ -247,8 +247,8 @@ void ExpressionVisitor::parse( AST* ast ) {
   Q_ASSERT(ast->ducontext);
   m_topContext = ast->ducontext->topContext();
   visit(ast);
-  m_topContext = 0;
   flushUse();
+  m_topContext = 0;
 }
 
 void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {

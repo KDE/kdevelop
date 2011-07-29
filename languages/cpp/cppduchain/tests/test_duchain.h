@@ -200,6 +200,7 @@ private slots:
   void testRangeBasedFor();
   void testRValueReference();
   void testDefaultDelete();
+  void testDelete_Bug278781();
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
