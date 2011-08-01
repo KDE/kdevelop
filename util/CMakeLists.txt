@@ -15,6 +15,7 @@ set(kdevplatformutil_LIB_SRCS
     environmentgrouplist.cpp
     activetooltip.cpp
     executecompositejob.cpp
+    fileutils.cpp
 )
 
 set (kdevplatformutil_LIB_UI
