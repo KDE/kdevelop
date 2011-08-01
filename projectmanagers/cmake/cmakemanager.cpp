@@ -152,15 +152,43 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
     return newList;
 }
 
+KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::Range& r, const QString& name)
+{
+    QString txt=doc->text(r);
+    QRegExp match("\\s*(./)?"+name);
+    int namepos=match.indexIn(txt);
+    
+    if(namepos<0)
+        return KTextEditor::Range::invalid();
+    
+    KTextEditor::Cursor c(r.start());
+    int l=c.line(), p, nextp;
+    for(p=0; p<namepos; l++, p=nextp) {
+        nextp=txt.indexOf('\n', p);
+        if(nextp<0)
+            break;
+    }
+    Q_ASSERT(l>=0 && p>=0);
+    c.setLine(l);
+    c.setColumn((l==0 ? r.start().column() : 0) + (namepos-p));
+    
+    return KTextEditor::Range(c, KTextEditor::Cursor(l, c.column()+match.matchedLength()));
+}
+
 bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
 {
     bool ret=false;
-    QString txt=doc->text(r.castToSimpleRange().textRange());
-    QRegExp match("\\s+(./)*"+name);
-    if(!add && match.indexIn(txt) > -1)
+    KTextEditor::Range rx;
+    if(!add)
+        rx=rangeForText(doc, r.castToSimpleRange().textRange(), name);
+    
+    if(!add && rx.isValid())
     {
-        txt.replace(match, replace.isEmpty() ? replace : ' '+replace);
-        doc->replaceText(r.castToSimpleRange().textRange(), txt);
+        if(replace.isEmpty())
+            doc->removeText(rx);
+        else
+            doc->replaceText(rx, ' '+replace);
+        
         ret=true;
     }
     else
