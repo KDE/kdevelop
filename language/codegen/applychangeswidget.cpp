@@ -270,7 +270,7 @@ void ApplyChangesWidget::insertion(KTextEditor::Document *document, const KTextE
 
 void ApplyChangesWidget::removal(KTextEditor::Document *document, const KTextEditor::Range &range, const QString &oldText)
 {
-    d->addItem(d->m_changes[d->m_index], document, range, i18n("Remove"), oldText);
+    d->addItem(d->m_changes[d->m_index], document, KTextEditor::Range(range.start(), range.start()), i18n("Remove"), oldText);
 }
 
 void ApplyChangesWidget::switchEditView()
