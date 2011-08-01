@@ -1467,7 +1467,7 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
 
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
-    changesWidget.setInformation(i18n("Modify target '%2' as follows:", target->baseName()));
+    changesWidget.setInformation(i18n("Modify target '%1' as follows:", target->baseName()));
 
     bool success = changesWidgetAddFilesToTarget(files, target, &changesWidget) &&
                    changesWidget.exec() &&
