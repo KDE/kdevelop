@@ -203,9 +203,9 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
             if(!r.contains(u.m_range))
                 continue; //We just want the uses in the range, not the whole file
 
-                Declaration* d=u.usedDeclaration(topctx);
+            Declaration* d=u.usedDeclaration(topctx);
 
-            if(d && d->context()->topContext()->url().toUrl()==lists)
+            if(d && d->topContext()->url().toUrl()==lists)
                 decls += d;
         }
 
