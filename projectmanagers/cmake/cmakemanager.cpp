@@ -236,7 +236,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     return ret;
 }
 
-QString dotlessRelativeUrl(KUrl baseUrl, KUrl url)
+QString dotlessRelativeUrl(const KUrl& baseUrl, const KUrl& url)
 {
     QString dotlessRelative = KUrl::relativeUrl(baseUrl, url);
     if (dotlessRelative.startsWith("./"))
@@ -244,14 +244,14 @@ QString dotlessRelativeUrl(KUrl baseUrl, KUrl url)
     return dotlessRelative;
 }
 
-QString relativeToLists(QString listsPath, KUrl url)
+QString relativeToLists(const QString& listsPath, const KUrl& url)
 {
     KUrl listsFolder = KUrl(KUrl(listsPath).directory(KUrl::AppendTrailingSlash));
     QString relative = dotlessRelativeUrl(listsFolder, url);
     return relative;
 }
 
-KUrl afterMoveUrl(KUrl origUrl, KUrl movedOrigUrl, KUrl movedNewUrl)
+KUrl afterMoveUrl(const KUrl& origUrl, const KUrl& movedOrigUrl, const KUrl& movedNewUrl)
 {
     QString difference = dotlessRelativeUrl(movedOrigUrl, origUrl);
     KUrl newUrl(movedNewUrl);
