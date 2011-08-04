@@ -148,41 +148,35 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
     QStringList args;
     KUrl cmakecache = buildDir( project );
     cmakecache.addPath("CMakeCache.txt");
-    if( !QFileInfo( cmakecache.toLocalFile() ).exists() )
+    if( !CMake::currentInstallDir(project).toLocalFile().isEmpty() ) 
     {
-        if( !CMake::currentInstallDir(project).toLocalFile().isEmpty() ) 
-        {
-            args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
-        }
-        if( !CMake::currentBuildType(project).isEmpty() )
-        {
-            args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
-        }
+        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
+    }
+    if( !CMake::currentBuildType(project).isEmpty() )
+    {
+        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
+    }
 #ifdef Q_OS_WIN
-        // Visual Studio solution is the standard generator under windows, but we dont want to use
-        // the VS IDE, so we need nmake makefiles
-        args << QString("-G") << QString("NMake Makefiles");
+    // Visual Studio solution is the standard generator under windows, but we dont want to use
+    // the VS IDE, so we need nmake makefiles
+    args << QString("-G") << QString("NMake Makefiles");
 #endif
-        if( !CMake::currentExtraArguments(project).isEmpty() ) {
-            KShell::Errors err;
-            QString cmakeargs = CMake::currentExtraArguments(project);
-            QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
-            if( err == KShell::NoError ) {
-                args += tmp;
+    if( !CMake::currentExtraArguments(project).isEmpty() ) {
+        KShell::Errors err;
+        QString cmakeargs = CMake::currentExtraArguments(project);
+        QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
+        if( err == KShell::NoError ) {
+            args += tmp;
+        } else {
+            kWarning() << "Ignoring cmake Extra arguments";
+            if( err == KShell::BadQuoting ) {
+                kWarning() << "CMake arguments badly quoted:" << cmakeargs;
             } else {
-                kWarning() << "Ignoring cmake Extra arguments";
-                if( err == KShell::BadQuoting ) {
-                    kWarning() << "CMake arguments badly quoted:" << cmakeargs;
-                } else {
-                    kWarning() << "CMake arguments had meta character:" << cmakeargs;
-                }
+                kWarning() << "CMake arguments had meta character:" << cmakeargs;
             }
         }
-        args << CMake::projectRoot(project).toLocalFile();
-    } else 
-    {
-        args << ".";
     }
+    args << CMake::projectRoot(project).toLocalFile();
 
     return args;
 }
