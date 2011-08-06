@@ -684,7 +684,7 @@ CursorInRevision position;
    * @param decl A member-declaration of this context the navigation-widget should be created for. Zero to create a widget for this context.
    * @param topContext Top-context from where the navigation-widget is triggered. In C++, this is needed to resolve forward-declarations.
    * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
-   * @param htmlSuffux Html-formatted text that should be appended to any information shown by this widget
+   * @param htmlSuffix Html-formatted text that should be appended to any information shown by this widget
    *
    * Can return zero, which the default-implementation currently always does.
    * */
