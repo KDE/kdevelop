@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Icon=svn_merge
+Icon=subversion
 Exec=blubb
 Comment=This plugin integrates subversion to KDevelop.
 Comment[bg]=Тази приставка вгражда subversion в KDevelop.

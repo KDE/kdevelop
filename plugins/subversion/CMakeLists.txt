@@ -2,6 +2,7 @@
 project(KDevSubversionPlugin)
 
 add_subdirectory(tests)
+add_subdirectory(icons)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
 
