@@ -40,7 +40,8 @@ namespace Sublime {
 }
 
 namespace KDevelop {
-
+class ProjectFileItem;
+class IProject;
 class MainWindow;
 
 /**
@@ -154,6 +155,8 @@ public Q_SLOTS:
     
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
+    void slotProjectOpened(KDevelop::IProject* p);
+    void slotFileRenamed(const KUrl& oldname, KDevelop::ProjectFileItem* newitem);
 
 private:
     bool openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView );

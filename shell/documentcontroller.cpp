@@ -45,6 +45,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -559,6 +561,7 @@ DocumentController::DocumentController( QObject *parent )
 
 void KDevelop::DocumentController::initialize()
 {
+    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(slotProjectOpened(KDevelop::IProject*)));
 }
 
 void DocumentController::cleanup()
@@ -1152,6 +1155,26 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     }
 
     return ret;
+}
+
+void DocumentController::slotProjectOpened(IProject* p)
+{
+    connect(p->managerPlugin(), SIGNAL(fileRenamed(KUrl,KDevelop::ProjectFileItem*)), SLOT(slotFileRenamed(KUrl,KDevelop::ProjectFileItem*)));
+}
+
+void DocumentController::slotFileRenamed(const KUrl& oldname, ProjectFileItem* newitem)
+{
+    IDocument* doc=documentForUrl(oldname);
+    if(!doc)
+        return;
+    
+    KTextEditor::Cursor c;
+    KTextEditor::Document* textdoc=doc->textDocument();
+    if(textdoc && textdoc->activeView())
+        c = textdoc->activeView()->cursorPosition();
+    
+    doc->close(IDocument::Discard);
+    ICore::self()->documentController()->openDocument(newitem->url(), c);
 }
 
 }
