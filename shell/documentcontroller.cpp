@@ -604,6 +604,7 @@ void DocumentController::setupActions()
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
     action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setShortcut( QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
