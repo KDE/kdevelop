@@ -1309,9 +1309,13 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
 
     bool cmakeSuccessful = true;
     CMakeFolderItem *nearestCMakeFolderItem = nearestCMakeFolder(toFolder);
+    IProject* project=toFolder->project();
+    
+    KUrl::List movedUrls;
+    KUrl::List oldUrls;
     foreach(ProjectBaseItem *movedItem, items)
     {
-        QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(movedItem->project(), movedItem->url());
+        QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(project, movedItem->url());
         KUrl movedItemNewUrl = toFolder->url();
         movedItemNewUrl.addPath(movedItem->baseName());
         if (movedItem->folder())
@@ -1329,6 +1333,9 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
                 cmakeSuccessful &= changesWidgetMoveTargetFile(dirtyItem, dirtyItemNewUrl, &changesWidget);
             }
         }
+        
+        oldUrls += movedItem->url();
+        movedUrls += movedItemNewUrl;
     }
 
     if (changesWidget.hasDocuments() && cmakeSuccessful)
@@ -1342,11 +1349,12 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
             return false;
     }
 
-    foreach(ProjectBaseItem *movedItem, items)
+    KUrl::List::const_iterator it1=oldUrls.constBegin(), it1End=oldUrls.constEnd();
+    KUrl::List::const_iterator it2=movedUrls.constBegin();
+    Q_ASSERT(oldUrls.size()==movedUrls.size());
+    for(; it1!=it1End; ++it1, ++it2)
     {
-        KUrl movedItemNewUrl = toFolder->url();
-        movedItemNewUrl.addPath(movedItem->baseName());
-        if (!KDevelop::renameUrl(movedItem->project(), movedItem->url(), movedItemNewUrl))
+        if (!KDevelop::renameUrl(project, *it1, *it2))
             return false;
     }
 
@@ -1487,9 +1495,11 @@ bool renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
                                       newUrl.fileName(KUrl::IgnoreTrailingSlash)));
     
     bool cmakeSuccessful = true;
+    IProject* project=item->project();
+    KUrl oldUrl=item->url();
     if (item->file())
     {
-        QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(item->project(), item->url());
+        QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(project, oldUrl);
         foreach(ProjectBaseItem* targetFile, targetFiles)
             cmakeSuccessful &= changesWidgetMoveTargetFile(targetFile, newUrl, &changesWidget);
     }
@@ -1507,7 +1517,7 @@ bool renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
             return false;
     }
 
-    return KDevelop::renameUrl(item->project(), item->url(), newUrl);
+    return KDevelop::renameUrl(project, oldUrl, newUrl);
 }
 
 bool CMakeManager::renameFile(ProjectFileItem *item, const KUrl &newUrl)
