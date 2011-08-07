@@ -1013,6 +1013,17 @@ void CMakeManager::cleanupToDelete(IProject* p)
         } else 
             ++it;
     }
+    
+    QHash<KUrl, KUrl>::const_iterator it=m_renamed.constBegin(), itEnd=m_renamed.constEnd();
+    for(; it!=itEnd; ++it) {
+        QList<ProjectBaseItem*> items=p->itemsForUrl(it.key());
+        foreach(ProjectBaseItem* item, items) {
+            if(item->file())
+                emit fileRenamed(it.value(), item->file());
+            else
+                emit folderRenamed(it.value(), item->folder());
+        }
+    }
 }
 
 void CMakeManager::deletedWatched(const QString& path)
@@ -1046,17 +1057,6 @@ void CMakeManager::deletedWatched(const QString& path)
         }
     } else if(p)
         m_toDelete += path;
-    
-    QHash<KUrl, KUrl>::const_iterator it=m_renamed.constBegin(), itEnd=m_renamed.constEnd();
-    for(; it!=itEnd; ++it) {
-        QList<ProjectBaseItem*> items=p->itemsForUrl(it.key());
-        foreach(ProjectBaseItem* item, items) {
-            if(item->file())
-                emit fileRenamed(it.value(), item->file());
-            else
-                emit folderRenamed(it.value(), item->folder());
-        }
-    }
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
@@ -1507,7 +1507,7 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
     changesWidget.setInformation(i18n("Rename '%1' to '%2':", item->text(),
                                       newUrl.fileName(KUrl::IgnoreTrailingSlash)));
     
-    bool cmakeSuccessful = true;
+    bool cmakeSuccessful = true, changedCMakeLists=false;
     IProject* project=item->project();
     KUrl oldUrl=item->url();
     if (item->file())
@@ -1519,8 +1519,11 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
     else if (CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item))
         cmakeSuccessful &= changesWidgetRenameFolder(folder, newUrl, &changesWidget);
     
-    if (changesWidget.hasDocuments() && cmakeSuccessful)
-        cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
+    item->setUrl(newUrl);
+    if (changesWidget.hasDocuments() && cmakeSuccessful) {
+        changedCMakeLists = changesWidget.exec() && changesWidget.applyAllChanges();
+        cmakeSuccessful &= changedCMakeLists;
+    }
     
     if (!cmakeSuccessful)
     {
@@ -1531,8 +1534,16 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
     }
 
     bool ret = KDevelop::renameUrl(project, oldUrl, newUrl);
-    if(ret)
-        m_renamed[newUrl] = oldUrl;
+    if(ret) {
+        if(changedCMakeLists)
+            m_renamed[newUrl] = oldUrl;
+        else if(ProjectFolderItem* folder=item->folder()) {
+            emit folderRenamed(oldUrl, folder);
+        } else if(KDevelop::ProjectFileItem *file = item->file()) {
+            emit fileRenamed(oldUrl, file);
+        }
+    } else
+        item->setUrl(oldUrl);
     
     return ret;
 }
