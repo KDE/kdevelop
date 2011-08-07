@@ -117,6 +117,10 @@ public:
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
+signals:
+    void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
+    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
+    
 private slots:
     void dirtyFile(const QString& file);
 
@@ -132,6 +136,7 @@ private:
     bool isReloading(KDevelop::IProject* p);
     bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
     void cleanupToDelete(KDevelop::IProject* p);
+    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
@@ -153,6 +158,7 @@ private:
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
     QSet<QString> m_toDelete;
+    QHash<KUrl, KUrl> m_renamed;
 };
 
 #endif
