@@ -645,17 +645,17 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
   }
 
   if( decl->isDefinition() )
-    details << "definition";
+    details << i18nc("tells if a declaration is defining the variable's value", "definition");
   if( decl->isExplicitlyDeleted() )
     details << "deleted";
 
   if( memberDecl && memberDecl->isForwardDeclaration() )
-    details << "forward";
+    details << i18nc("as in c++ forward declaration", "forward");
 
   AbstractType::Ptr t(decl->abstractType());
   if( t ) {
     if( t->modifiers() & AbstractType::ConstModifier )
-      details << "constant";
+      details << i18nc("a variable that won't change, const", "constant");
     if( t->modifiers() & AbstractType::VolatileModifier )
       details << "volatile";
   }
