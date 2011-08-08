@@ -1173,7 +1173,7 @@ void DocumentController::slotFileRenamed(const KUrl& oldname, ProjectFileItem* n
     if(textdoc && textdoc->activeView())
         c = textdoc->activeView()->cursorPosition();
     
-    doc->close(IDocument::Discard);
+    doc->close(IDocument::Default);
     ICore::self()->documentController()->openDocument(newitem->url(), c);
 }
 
