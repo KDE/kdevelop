@@ -159,7 +159,7 @@ namespace CMakeParserUtils
         QString binDir = projectBinDir;
         // CURRENT_BINARY_DIR must point to the subfolder if any"
         if (sourcedir.startsWith(projectSourceDir)) {
-            Q_ASSERT(sourcedir.at(projectSourceDir.size()) == '/');
+            Q_ASSERT(projectSourceDir.size()==sourcedir.size() || sourcedir.at(projectSourceDir.size()) == '/');
             binDir += sourcedir.mid(projectSourceDir.size());
         }
         data->vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
