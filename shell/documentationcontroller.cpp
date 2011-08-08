@@ -48,17 +48,26 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 {
     public:
         DocumentationViewFactory()
+            : mProvidersModel(0)
         {}
         
         virtual QWidget* create( QWidget *parent = 0 )
         {
-            return new DocumentationView( parent );
+            return new DocumentationView( parent, providers() );
         }
         
         virtual Qt::DockWidgetArea defaultPosition() { return Qt::RightDockWidgetArea; }
         virtual QString id() const { return "org.kdevelop.DocumentationView"; }
         
     private:
+        ProvidersModel* providers() {
+            if(!mProvidersModel)
+                mProvidersModel = new ProvidersModel;
+            
+            return mProvidersModel;
+        }
+        
+        ProvidersModel* mProvidersModel;
 };
 
 DocumentationController::DocumentationController(Core* core)
