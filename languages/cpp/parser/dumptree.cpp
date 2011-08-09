@@ -129,6 +129,11 @@ void DumpTree::dump( AST * node, class TokenStream * tokenStream, bool forceOutp
   m_tokenStream = 0;
 }
 
+inline QDebug debug(bool forceOutput)
+{
+  return forceOutput ? qDebug() : kDebugStream(QtDebugMsg, 9007);
+}
+
 void DumpTree::visit(AST *node)
 {
   if (!node) {
@@ -143,16 +148,14 @@ void DumpTree::visit(AST *node)
     }
   }
 
-  QDebug debug = m_forceOutput ? qDebug() : kDebugStream(QtDebugMsg, 9007);
-
-  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
-               <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText << endl;
+  debug(m_forceOutput) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind]
+               <<  "[" << node->start_token << "," << node->end_token << "]" << nodeText;
 
   ++indent;
   DefaultVisitor::visit(node);
   --indent;
 
-  debug << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
+  debug(m_forceOutput) << QString(indent * 2, ' ').toLatin1().constData() << names[node->kind];
 }
 
 DumpTree::~ DumpTree( )
