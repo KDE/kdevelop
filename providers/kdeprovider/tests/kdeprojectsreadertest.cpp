@@ -58,6 +58,6 @@ void KDEProjectsReaderTest::testsProperParse()
             QVERIFY(!it.value().toString().isEmpty());
         }
         
-        QVERIFY(item->data(KDEProjectsModel::PluginRole).isValid());
+        QVERIFY(!item->data(KDEProjectsModel::VcsLocationRole).toMap().isEmpty());
     }
 }

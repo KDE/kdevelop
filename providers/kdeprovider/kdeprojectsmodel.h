@@ -52,7 +52,7 @@ class KDEProjectsModel : public QStandardItemModel
     Q_OBJECT
     public:
         
-        enum Role { VcsLocationRole = Qt::UserRole+1, PluginRole };
+        enum Role { VcsLocationRole = Qt::UserRole+1 };
         
         explicit KDEProjectsModel(QObject* parent = 0);
 };
