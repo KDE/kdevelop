@@ -509,6 +509,7 @@ void CMakeProjectVisitorTest::testFinder()
     
     CMakeProjectData data;
     data.vm=initialVariables;
+    data.vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
     data.vm.insert("CMAKE_MODULE_PATH", modulePath);
     
