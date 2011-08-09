@@ -22,7 +22,6 @@
 #include <QNetworkReply>
 #include <QStack>
 
-class KDEProjectsModel;
 class KDEProjectsReader : public QObject
 {
     Q_OBJECT

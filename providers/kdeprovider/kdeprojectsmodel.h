@@ -27,18 +27,14 @@ namespace KDevelop {
 
 struct Source
 {
-    enum VcsType { Git, SVN };
-    Source(Source::VcsType aType=Git) : type(aType) {}
-    Source(const QString& anIcon, const QString& aName, Source::VcsType aType, const QPair< QString, QString >& aUrl);
+    Source() {}
+    Source(const QString& anIcon, const QString& aName, const QPair< QString, QString >& aUrl);
     
     QString name;
     QString icon;
-    VcsType type;
     
     /** urls for protocol */
     QVariantMap m_urls;
-    
-    QString plugin() const { return type==SVN ? "kdevsubversion" : "kdevgit"; }
 };
 
 class SourceItem : public QStandardItem
