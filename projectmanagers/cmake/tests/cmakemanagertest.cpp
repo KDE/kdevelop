@@ -184,12 +184,12 @@ void CMakeManagerTest::testIncludePaths()
 
     QCOMPARE(includeDirs.size(), _includeDirs.size());
 
-    KUrl buildDir(paths.sourceDir, "build");
+    KUrl buildDir(paths.sourceDir, "build/");
     QVERIFY(includeDirs.contains(buildDir));
 
-    KUrl subBuildDir(paths.sourceDir, "build/subdir");
+    KUrl subBuildDir(paths.sourceDir, "build/subdir/");
     QVERIFY(includeDirs.contains(subBuildDir));
 
-    KUrl subDir(paths.sourceDir, "subdir");
+    KUrl subDir(paths.sourceDir, "subdir/");
     QVERIFY(includeDirs.contains(subDir));
 }
