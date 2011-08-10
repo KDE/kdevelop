@@ -27,7 +27,7 @@
 
 namespace KDevelop {
 
-DECLARE_LIST_MEMBER_HASH(UnsureTypeData, m_types, IndexedType)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(UnsureTypeData, m_types, IndexedType)
 
 struct KDEVPLATFORMLANGUAGE_EXPORT UnsureTypeData : public AbstractTypeData {
   UnsureTypeData() {
