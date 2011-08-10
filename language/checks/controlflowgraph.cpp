@@ -46,6 +46,7 @@ void ControlFlowGraph::addEntry(ControlFlowNode* n)
 void ControlFlowGraph::addEntry(Declaration* decl, ControlFlowNode* n)
 {
   Q_ASSERT(d);
+  Q_ASSERT(decl);
   d->m_funcNodes.insert(decl, n);
 }
 
