@@ -101,9 +101,13 @@ void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* nod
   {
     KDevelop::DUChainReadLocker lock;
     d=node->function_body->ducontext->owner();
+//     qDebug() << "lalala" << nodeToString(m_session, node) << node->function_body->ducontext->owner() << node->function_body;
   }
   
-  m_graph->addEntry(d, createCompoundStatement(node->function_body, m_returnNode));
+  if(d)
+    m_graph->addEntry(d, createCompoundStatement(node->function_body, m_returnNode));
+  else
+    m_graph->addEntry(createCompoundStatement(node->function_body, m_returnNode));
 }
 
 void ControlFlowGraphBuilder::visitEnumerator(EnumeratorAST* node)
