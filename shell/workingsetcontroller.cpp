@@ -288,13 +288,6 @@ void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString
             oldSet->saveFromArea(area, area->rootIndex());
         }
     }
-
-    if (!to.isEmpty()) {
-        WorkingSet* newSet = getWorkingSet(to);
-        newSet->connectArea(area);
-    }
-
-    kDebug() << "update ready";
 }
 
 void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
@@ -309,11 +302,11 @@ void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString&
     
     if (!to.isEmpty()) {
         WorkingSet* newSet = getWorkingSet(to);
+        newSet->connectArea(area);
         newSet->loadToArea(area, area->rootIndex(), !from.isEmpty());
     }
 
     emit workingSetSwitched();
-    kDebug() << "update ready";
 }
 
 void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
@@ -325,6 +318,7 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
         //Spawn a new working-set
         m_changingWorkingSet = true;
         WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
+        kDebug() << "Spawned new working-set" << set->id() << "because a view was added";
         set->connectArea(area);
         set->saveFromArea(area, area->rootIndex());
         area->setWorkingSet(set->id());
