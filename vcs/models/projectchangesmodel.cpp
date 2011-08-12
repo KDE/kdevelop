@@ -67,6 +67,7 @@ void ProjectChangesModel::addProject(IProject* p)
         
         itStatus->setIcon(KIcon(info.icon()));
         itStatus->setText(vcs->name());
+        reload(QList<IProject*>() << p);
     } else {
         it->setEnabled(false);
         itStatus->setEnabled(false);
