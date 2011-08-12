@@ -124,7 +124,7 @@ struct DisableMainWindowUpdatesFromArea
     ~DisableMainWindowUpdatesFromArea() {
         if(m_area) {
             foreach(Sublime::MainWindow* window, wasUpdatesEnabled) {
-                window->setUpdatesEnabled(true);
+                window->setUpdatesEnabled(wasUpdatesEnabled.contains(window));
             }
         }
     }

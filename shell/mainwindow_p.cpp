@@ -69,6 +69,7 @@ Boston, MA 02110-1301, USA.
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
 #include <sublime/container.h>
+#include <sublime/holdupdates.h>
 
 namespace KDevelop {
 
@@ -149,9 +150,8 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
     //disable updates on a window to avoid toolbar flickering on xmlgui client change
-    m_mainWindow->setUpdatesEnabled( false );
+    Sublime::HoldUpdates s(m_mainWindow);
     mergeView(view);
-    m_mainWindow->setUpdatesEnabled( true );
 
     if(!view)
         return;
