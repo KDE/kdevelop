@@ -122,7 +122,6 @@ public:
      */
     virtual KDevelop::IPlugin* vcsPlugin() const = 0;
 
-protected:
     /**
      * This can be used to set the type of the vcs job in subclasses.
      */

@@ -200,7 +200,16 @@ void ProjectChangesModel::reloadAll()
 
 void ProjectChangesModel::jobUnregistered(KJob* job)
 {
-    static QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>() << KDevelop::VcsJob::Status << KDevelop::VcsJob::Annotate << KDevelop::VcsJob::Cat;
+    static QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>()
+		<< KDevelop::VcsJob::Add
+		<< KDevelop::VcsJob::Remove
+		<< KDevelop::VcsJob::Push
+		<< KDevelop::VcsJob::Pull
+		<< KDevelop::VcsJob::Commit
+		<< KDevelop::VcsJob::Move
+		<< KDevelop::VcsJob::Copy
+		<< KDevelop::VcsJob::Import
+		;
     
     VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
     if(vcsjob) {
