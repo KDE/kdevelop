@@ -25,4 +25,6 @@
 
 GitJob::GitJob(const QDir& workingDir, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : DVcsJob(workingDir, parent, verbosity)
-{}
+{
+    setType(VcsJob::UserType);
+}

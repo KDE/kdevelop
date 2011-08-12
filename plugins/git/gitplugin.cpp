@@ -282,6 +282,7 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
 VcsJob* GitPlugin::init(const KUrl &directory)
 {
     DVcsJob* job = new DVcsJob(urlDir(directory), this);
+    job->setType(VcsJob::Import);
     *job << "git" << "init";
     return job;
 }
@@ -289,6 +290,7 @@ VcsJob* GitPlugin::init(const KUrl &directory)
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
     DVcsJob* job = new GitCloneJob(urlDir(dest), this);
+    job->setType(VcsJob::Import);
     *job << "git" << "clone" << "--progress" << "--" << source.localUrl().url() << dest;
     return job;
 }
@@ -309,6 +311,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
+    job->setType(VcsJob::Status);
     
     if(m_oldVersion) {
         *job << "git" << "ls-files" << "-t" << "-m" << "-c" << "-o" << "-d" << "-k" << "--directory";
@@ -328,6 +331,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     //TODO: control different types
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
     QString revstr = revisionInterval(srcRevision, dstRevision);
     if(!revstr.isEmpty())
@@ -345,6 +349,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
         return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
     
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
+    job->setType(VcsJob::Revert);
     *job << "git" << "checkout" << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     
@@ -363,6 +368,7 @@ VcsJob* GitPlugin::commit(const QString& message,
 
     QDir dir = dotGitDirectory(localLocations.front());
     DVcsJob* job = new DVcsJob(dir, this);
+    job->setType(VcsJob::Commit);
     KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     addNotVersionedFiles(dir, files);
     
@@ -404,6 +410,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << files.front().toLocalFile(), KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
         DVcsJob* job = new GitJob(dir, this);
+        job->setType(VcsJob::Remove);
         *job << "git" << "rm" << "-r";
         *job << "--" << files;
         return job;
@@ -416,6 +423,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Log);
     *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/;
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
@@ -429,6 +437,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Log);
     *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/ << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
@@ -441,6 +450,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& r
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Annotate);
     *job << "git" << "blame" << "--porcelain";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
