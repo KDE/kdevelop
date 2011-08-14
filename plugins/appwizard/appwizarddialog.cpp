@@ -95,11 +95,7 @@ void AppWizardDialog::pageInValid( QWidget* w )
 void AppWizardDialog::next()
 {
     AppWizardPageWidget* w = qobject_cast<AppWizardPageWidget*>(currentPage()->widget());
-    if (w) {
-        if (w->shouldContinue()) {
-            KAssistantDialog::next();
-        }
-    } else {
+    if (!w || w->shouldContinue()) {
         KAssistantDialog::next();
     }
 }
