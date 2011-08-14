@@ -612,7 +612,7 @@ void DocumentController::setupActions()
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
     action->setIcon(KIcon("document-revert"));
-    action->setText(i18n( "Rever&t All" ) );
+    action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
     action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
