@@ -396,12 +396,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     IndexedString doc;
     {
-      QList<DUContext*> containers = completionContext()->memberAccessContainers();
+      QSet<DUContext*> containers = completionContext()->memberAccessContainers();
 
       if(containers.isEmpty())
         return;
       else
-        doc = containers[0]->url();
+        doc = (*containers.begin())->url();
     }
 
     lock.unlock();
@@ -414,12 +414,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     }
     lock.lock();
 
-    QList<DUContext*> containers = completionContext()->memberAccessContainers();
+    QSet<DUContext*> containers = completionContext()->memberAccessContainers();
 
     if(containers.isEmpty())
       return;
 
-    DUContext* classContext = containers.first();
+    DUContext* classContext = *containers.begin();
 
     Cpp::SourceCodeInsertion insertion(updated.data());
     insertion.setContext(classContext);
