@@ -431,8 +431,8 @@ bool Area::closeView(View* view, bool silent)
     if(doc)
     {
         kDebug() << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
-        int viewsInCurrentArea = 0; // Number of views for the same document in the current working-set
-        int viewsInOtherAreas = 0; // Number of views for the same document in other working-sets
+        int viewsInCurrentArea = 0; // Number of views for the same document in the current area
+        int viewsInOtherAreas = 0; // Number of views for the same document in other areas
 
         foreach(View* otherView, doc.data()->views())
         {

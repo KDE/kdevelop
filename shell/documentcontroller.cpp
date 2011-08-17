@@ -341,7 +341,8 @@ struct DocumentControllerPrivate {
             return false;
         }
         //react on document deletion - we need to cleanup controller structures
-        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
+        
+        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(notifyDocumentClosed(Sublime::Document*)));
         //We check if it was already opened before
         bool emitOpened = !documents.contains(url);
         if(emitOpened)
@@ -724,10 +725,13 @@ void DocumentController::closeDocument( const KUrl &url )
     d->documents[url]->close();
 }
 
-void DocumentController::notifyDocumentClosed(IDocument* doc)
+void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
-    d->documents.remove(doc->url());
-
+    IDocument* doc = dynamic_cast<IDocument*>(doc_);
+    Q_ASSERT(doc);
+    
+    d->removeDocument(doc_);
+    
     if (d->documents.isEmpty()) {
         if (d->saveAll)
             d->saveAll->setEnabled(false);
