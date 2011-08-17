@@ -389,6 +389,9 @@ CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
 #endif
   if ( doIncludeCompletion() )
     return;
+  //We'll have to get a few expressionResults and do other DUChain processing during construction
+  //so lock the DUChain here
+  LOCKDUCHAIN;
 
   if( !m_duContext || depth > MAX_DEPTH || !isValidPosition() ) {
     m_valid = false;
@@ -470,10 +473,6 @@ void CodeCompletionContext::processAllMemberAccesses() {
     replaceCurrentAccess( ".", "->" );
 
 #ifndef TEST_COMPLETION // hmzzz ?? :) ///FIXME: manually test for these cases and get rid of comment to the left
-  LOCKDUCHAIN;
-  if( !m_duContext )
-    return;
-
   DelayedType::Ptr delayed = type.cast<DelayedType>();
   if( delayed && delayed->kind() == DelayedType::Unresolved ) {
     eventuallyAddGroup(
@@ -486,10 +485,6 @@ void CodeCompletionContext::processAllMemberAccesses() {
 }
 
 void CodeCompletionContext::processArrowMemberAccess() {
-  LOCKDUCHAIN;
-  if( !m_duContext )
-    return;
-
   //Dereference a pointer
   AbstractType::Ptr containerType = m_expressionResult.type.abstractType();
   PointerType::Ptr pnt = TypeUtils::realType( containerType, m_duContext->topContext() ).cast<PointerType>();
@@ -584,10 +579,6 @@ bool CodeCompletionContext::testContextValidity(const QString &expressionPrefix,
 }
 
 DUContextPointer CodeCompletionContext::findLocalClass() const {
-  LOCKDUCHAIN;
-  if (!m_duContext)
-    return DUContextPointer();
-
   Declaration* classDecl = Cpp::localClassFromCodeContext( m_duContext.data() );
   return classDecl ? DUContextPointer( classDecl->internalContext() ) : DUContextPointer();
 }
@@ -650,10 +641,6 @@ bool CodeCompletionContext::doSignalSlotCompletion() {
 
   if( !parentContext() || !m_expression.isEmpty() ||
       parentContext()->accessType() != FunctionCallAccess )
-    return false;
-
-  LOCKDUCHAIN;
-  if (!m_duContext)
     return false;
 
   //Check if we're in a connect/disconnect function, and at what param
@@ -740,10 +727,6 @@ ExpressionEvaluationResult CodeCompletionContext::evaluateExpression() const {
 
 bool CodeCompletionContext::doConstructorCompletion() {
   QString text = m_text.trimmed();
-  LOCKDUCHAIN;
-
-  if(!m_duContext)
-    return false;
 
   QStringList hadItems;
 
@@ -977,9 +960,6 @@ CodeCompletionContext::OnlyShow CodeCompletionContext::findOnlyShow(const QStrin
   if ( parentContext() && parentContext()->accessType() == TemplateAccess )
     return ShowTypes;
 
-  LOCKDUCHAIN;
-  if (!m_duContext)
-    return ShowAll;
   //Only ShowTypes in these DUContexts unless initializing a declaration
   //ie, m_expressionIsTypePrefix == true
   if (m_duContext->type() == DUContext::Class ||
@@ -1007,12 +987,7 @@ bool CodeCompletionContext::isConstructorInitialization() {
 
 void CodeCompletionContext::processFunctionCallAccess() {
   ///Generate a list of all found functions/operators, together with each a list of optional prefixed parameters
-
   ///All the variable argument-count management in the following code is done to treat global operator-functions equivalently to local ones. Those take an additional first argument.
-
-  LOCKDUCHAIN;
-  if(!m_duContext)
-    return;
 
   OverloadResolutionHelper helper( m_duContext, TopDUContextPointer(m_duContext->topContext()) );
 
@@ -1093,14 +1068,8 @@ bool CodeCompletionContext::doIncludeCompletion()
   kDebug(9007) << "extracted prefix " << prefixPath;
 
 #ifndef TEST_COMPLETION
-  {
-    bool local = line.startsWith('"');
-
-    LOCKDUCHAIN;
-    if (!m_duContext)
-      return true;
-    m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
-  }
+  bool local = line.startsWith('"');
+  m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
 #endif
 
   m_accessType = IncludeListAccess;
@@ -1265,10 +1234,6 @@ void CodeCompletionContext::preprocessText( int line ) {
   disableMacros.insert(IndexedString("Q_EMIT"));
   disableMacros.insert(IndexedString("Q_SIGNAL"));
   disableMacros.insert(IndexedString("Q_SLOT"));
-
-  LOCKDUCHAIN;
-  if (!m_duContext)
-    return;
 
   // Use the proxy-context if possible, because that one contains most of the macros if existent
   TopDUContext* useTopContext = proxyContextForUrl(m_duContext->url().toUrl());
@@ -1736,7 +1701,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
 
 void CodeCompletionContext::addOverridableItems()
 {
-  LOCKDUCHAIN; if (!m_duContext) return;
   if(m_duContext->type() != DUContext::Class)
     return;
 
@@ -1763,8 +1727,6 @@ void CodeCompletionContext::addImplementationHelpers()
 
 void CodeCompletionContext::addCPPBuiltin()
 {
-  LOCKDUCHAIN; if (!m_duContext) return;
-
   ///Eventually add a "this" item
   DUContext* functionContext = m_duContext.data();
   if(m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes) {
@@ -1848,6 +1810,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes))
         {
           items += standardAccessCompletionItems();
+          LOCKDUCHAIN; if (!m_duContext) return items;
 #ifndef TEST_COMPLETION
           MissingIncludeCompletionModel::self().startWithExpression(m_duContext, QString(), m_followingText);
 #endif
@@ -1859,7 +1822,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
     if(shouldAddParentItems(fullCompletion))
       items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
-    if(depth() == 0) {
+    if(depth() == 0)
+    {
+      LOCKDUCHAIN; if (!m_duContext) return items;
       //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
       if(m_accessType == StaticMemberChoose) {
 #ifndef TEST_COMPLETION
