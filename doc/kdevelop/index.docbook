@@ -115,10 +115,8 @@ double bar ()
 </sect2>
 </sect1>
 <sect1 id="setting-up-an-application-as-a-second-project"><title>Setting up an application as a second project</title>
-<para>The next thing you want to do is set up other projects in the</para>
-<para>same session. In the example above, you would want to add the device driver as the second project, which you can do using exactly the same steps.</para>
-<para>If you have multiple applications or libraries, simply repeat the steps to add</para>
-<para>more and more projects to your session.</para>
+<para>The next thing you want to do is set up other projects in the same session. In the example above, you would want to add the device driver as the second project, which you can do using exactly the same steps.</para>
+<para>If you have multiple applications or libraries, simply repeat the steps to add more and more projects to your session.</para>
 </sect1>
 <sect1 id="creating-projects-from-scratch"><title>Creating projects from scratch</title>
 <para>There is of course also the possibility that you want to start a new project from scratch. This can be done using the <menuchoice><guimenu>Projects</guimenu><guimenuitem>New from template</guimenuitem></menuchoice> menu item. The details of what options this offers to you are described elsewhere in this manual.</para>
@@ -349,9 +347,6 @@ double bar ()
     <textobject>
       <phrase></phrase>
     </textobject>
-    <caption>
-      <para></para>
-    </caption>
   </mediaobject>
 </screenshot> Clicking on the links for the declaration of a symbol or expanding the list of uses allows you to jump to these locations, if necessary opening the respective file and placing the cursor at the corresponding location. A similar effect can be achieved by using the <guilabel>Code Browser</guilabel> tool view also discussed previously.
 </para></listitem>
@@ -1057,12 +1052,10 @@ for (typename Triangulation::active_cell_iterator
 <para>To build any of the targets listed there, click on it with the right mouse button and select <guilabel>Build</guilabel>. For example, doing this with the <quote>clean</quote> target will simply execute <quote>make clean</quote>. You can see this happening in the subwindow titled <guilabel>Build</guilabel> that opens up, showing the command and the output. (This window corresponds to the <guilabel>Build</guilabel> tool, so you can close and later re-open the window using the <guilabel>Build</guilabel> tool button on the perimeter of the main window. It is shown at the bottom right of the picture.)</para>
 </sect1>
 <sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"><title>Selecting a collection of Makefile targets for repeated building</title>
-<para>Right-clicking on individual Makefile targets every time you want to build something will quickly get old. Rather, we'd like to have individual targets for one or more of the projects in the session that we can repeatedly build without much mouse work. This is where the concept of <quote>Build target selections</quote> comes in: it is a collection of Makefile targets that are built one-after-the-other whenever you hit the <guilabel>Build selection</guilabel> button in the button list at the top, select the <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> menu item, or</para>
-<para>hit the <keycap>F8</keycap> function key.</para>
+<para>Right-clicking on individual Makefile targets every time you want to build something will quickly get old. Rather, we'd like to have individual targets for one or more of the projects in the session that we can repeatedly build without much mouse work. This is where the concept of <quote>Build target selections</quote> comes in: it is a collection of Makefile targets that are built one-after-the-other whenever you hit the <guilabel>Build selection</guilabel> button in the button list at the top, select the <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> menu item, or hit the <keycap>F8</keycap> function key.</para>
 <para>The list of selected Makefile targets is shown in the bottom half of the <guilabel>Projects</guilabel> tool view.</para>
 <para>By default, the selection contains all projects, but you can change that. For example, if your list of projects contains three projects (a base library L and two applications A and B), but you're currently only working on project A, then you may want to remove project B from the selection by highlighting it in the selection and hitting the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject> </inlinemediaobject> button. Furthermore, you probably want to make sure that the library L is built before  project A by moving entries in the selection up and down using the buttons to the right of the list. You can also get a particular Makefile target into the selection by right-clicking onto it and selecting <guilabel>Add to buildset</guilabel>, or just highlighting it and hitting the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject> </inlinemediaobject> button just above the list of selected targets.</para>
-<para>&kdevelop; allows you to configure what to do whenever you build the selection. To this end, use the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Open configuration</guimenuitem></menuchoice>. There, you can for example select the number of simultaneous</para>
-<para>jobs <quote>make</quote> should execute &mdash; if your computer has, say, 8 processor cores, then entering 8 in this field would be a useful choice. In this dialog, the <guilabel>Default make target</guilabel> is a Makefile target used for <emphasis>all</emphasis> targets in the selection.</para>
+<para>&kdevelop; allows you to configure what to do whenever you build the selection. To this end, use the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Open configuration</guimenuitem></menuchoice>. There, you can for example select the number of simultaneous jobs <quote>make</quote> should execute &mdash; if your computer has, say, 8 processor cores, then entering 8 in this field would be a useful choice. In this dialog, the <guilabel>Default make target</guilabel> is a Makefile target used for <emphasis>all</emphasis> targets in the selection.</para>
 </sect1>
 <sect1 id="what-to-do-with-error-messages"><title>What to do with error messages</title>
 <para>If the compiler encounters an error message, simply click on the line with the error message and the editor will jump to the line (and if available column) where the error was reported. Depending on the error message, &kdevelop; may also offer you several possible actions to fix the error, for example by declaring a previously undeclared variable if an unknown symbol was found.</para>
@@ -1319,22 +1312,11 @@ for (typename Triangulation::active_cell_iterator
     </caption>
   </mediaobject>
 </screenshot></para>
-<para>This context information comes from various language support plugins, which</para>
-<para>can be used after a given file has been saved (so it can check the</para>
-<para>filetype and use the correct language support).</para>
-<para>&kdevelop;'s completion is set to appear as you type, right away, pretty</para>
-<para>much everywhere that it could possibly complete something. This is</para>
-<para>configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default),</para>
-<para>make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
+<para>This context information comes from various language support plugins, which can be used after a given file has been saved (so it can check the filetype and use the correct language support).</para>
+<para>&kdevelop;'s completion is set to appear as you type, right away, pretty much everywhere that it could possibly complete something. This is configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default), make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
 <para>&kdevelop; has two ways to show a completion: <guilabel>Minimal Automatic Completion</guilabel> shows just the basic information in completion tooltips (&ie; the namespace, class, function, or variable name). This will look similar to <guilabel>Kate</guilabel> completion (except for the icons).</para>
-<para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry,</para>
-<para>and in the case of functions, also the arguments they take. Also,</para>
-<para>if you are curently filling in the arguments to a function, full</para>
-<para>completion will have an additional info-box above the cursor that will</para>
-<para>show you the current argument you are working on.</para>
-<para>&kdevelop;'s code completion should also bring-to-top and highlight in</para>
-<para>green any completion items that match the currently expected type in</para>
-<para>both minimal and full completion, known as <quote>best-matches</quote>.</para>
+<para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry, and in the case of functions, also the arguments they take. Also, if you are curently filling in the arguments to a function, full completion will have an additional info-box above the cursor that will show you the current argument you are working on.</para>
+<para>&kdevelop;'s code completion should also bring-to-top and highlight in green any completion items that match the currently expected type in both minimal and full completion, known as <quote>best-matches</quote>.</para>
 <para>The three possible choices for the completion level in the configuration dialog are:</para>
 <itemizedlist>
 <listitem><para><guilabel>Always minimal completion</guilabel>: Never show <quote>Full Completion</quote>
