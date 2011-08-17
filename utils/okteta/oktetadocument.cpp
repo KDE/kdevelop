@@ -171,10 +171,7 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
         }
     }
 
-    ICore::self()->documentController()->notifyDocumentClosed( this );
-
-    // Here we go...
-    deleteLater();
+    // The document is deleted automatically when there are no views left
 
     return true;
 }
