@@ -427,7 +427,7 @@ bool Area::closeView(View* view, bool silent)
 
     QWeakPointer<Document> doc = view->document();
 
-    
+    // We don't just delete the view, because if silent is false, we might need to ask the user.
     if(doc)
     {
         kDebug() << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
