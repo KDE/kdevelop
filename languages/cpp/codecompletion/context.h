@@ -132,7 +132,7 @@ namespace Cpp {
        * When memberAccessOperation is StaticMemberChoose, this returns all
        * fitting namespace-contexts.
        * */
-      QList<DUContext*> memberAccessContainers() const;
+      QSet<DUContext*> memberAccessContainers() const;
 
       /**
        * When memberAccessOperation is FunctionCallAccess,
@@ -217,16 +217,30 @@ namespace Cpp {
       void processFunctionCallAccess();
       void processAllMemberAccesses();
 
+      ///Whether or not this context should add parent items
+      bool shouldAddParentItems(bool fullCompletion);
+
+      ///Item creation functions for various completion types
       QList<CompletionTreeItemPointer> keywordCompletionItems();
+      QList<CompletionTreeItemPointer> memberAccessCompletionItems(const bool& shouldAbort);
+      QList<CompletionTreeItemPointer> returnAccessCompletionItems();
+      QList<CompletionTreeItemPointer> caseAccessCompletionItems();
+      QList<CompletionTreeItemPointer> templateAccessCompletionItems();
+      QList<CompletionTreeItemPointer> functionAccessCompletionItems(bool fullCompletion);
+      QList<CompletionTreeItemPointer> binaryFunctionAccessCompletionItems(bool fullCompletion);
+      //DUChain presumed locked
+      QList<CompletionTreeItemPointer> commonFunctionAccessCompletionItems(bool fullCompletion);
+      QList<CompletionTreeItemPointer> includeListAccessCompletionItems(const bool& shouldAbort);
+      QList<CompletionTreeItemPointer> signalSlotAccessCompletionItems();
+      ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
+      QList<CompletionTreeItemPointer> standardAccessCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
+
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true, bool typeIsConst = false);
       bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0, bool typeIsConst = false);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
-
-      ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
-      void standardAccessCompletionItems(QList<CompletionTreeItemPointer>& items);
 
       ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
       void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
@@ -245,6 +259,11 @@ namespace Cpp {
       bool isValidPosition();
       ///Returns whether this is a valid context for implementation helpers
       bool isImplementationHelperValid() const;
+
+      ///Add groups
+      void addOverridableItems();
+      void addImplementationHelpers();
+      void addCPPBuiltin();
 
       /**
        * Specialized completion functions, if these completion types are
@@ -284,11 +303,8 @@ namespace Cpp {
       int m_pointerConversionsBeforeMatching; 
 
       QList<KDevelop::CompletionTreeElementPointer> m_storedUngroupedItems;
-      //Used to store pre-computed local completion-items.
-      QList<CompletionTreeItemPointer> m_storedItems;
-      //If this is true, m_storedItems will be used instead of computing items, no matter whether it is empty or not.
-      bool m_useStoredItems;
-       //A specific completion item type to show, or ShowAll, see enum OnlyShow
+
+      //A specific completion item type to show, or ShowAll, see enum OnlyShow
       OnlyShow m_onlyShow;
       //Expression is set to the type part in something like: {type}{varname}{initialization}
       bool m_expressionIsTypePrefix;
