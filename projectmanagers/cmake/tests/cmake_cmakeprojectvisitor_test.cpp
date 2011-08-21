@@ -291,6 +291,15 @@ void CMakeProjectVisitorTest::testRun_data()
                              << cacheValues << results;
                              
     results.clear();
+    QTest::newRow("nested_problem_string") <<
+                            "if (NOT A)\n"
+                            "foreach (moc_file ${B} ${C})\n"
+                            "\"\n"
+                            "endforeach ()\n"
+                            "endif ()\n"
+                            << cacheValues << results;
+
+    results.clear();
     QTest::newRow("no_endwhile") <<
                             "set(VAR TRUE)\n"
                             "while(VAR)\n"

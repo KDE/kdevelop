@@ -1183,15 +1183,12 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     }
 
     int inside=0;
-//     kDebug(9042) << "if() was false, looking for an else/elseif @" << lines;
-    CMakeFileContent::const_iterator it=ifast->content().constBegin()+lines;
-    CMakeFileContent::const_iterator itEnd=ifast->content().constEnd();
-
     bool visited=false;
     QList<int> ini;
-    for(; it!=itEnd; ++it, lines++)
+    for(; lines < ifast->content().size(); ++lines)
     {
-        QString funcName=it->name;
+        const CMakeFunctionDesc funcDesc = ifast->content().at(lines);
+        QString funcName=funcDesc.name;
 //         kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
         if(funcName=="if")
         {
@@ -1202,8 +1199,8 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             inside--; 
             if(inside<=0) {
 //                 Q_ASSERT(!ini.isEmpty());
-                if(!it->arguments.isEmpty())
-                    usesForArguments(ifast->condition(), ini, m_topctx, *it);
+                if(!funcDesc.arguments.isEmpty())
+                    usesForArguments(ifast->condition(), ini, m_topctx, funcDesc);
                 break;
             }
 //                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
@@ -1225,40 +1222,35 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 }
                 else
                 {
-                    if(!myIf.parseFunctionInfo(resolveVariables(*it)))
-                        kDebug(9042) << "uncorrect condition correct" << it->writeBack();
+                    if(!myIf.parseFunctionInfo(resolveVariables(funcDesc)))
+                        kDebug(9042) << "uncorrect condition correct" << funcDesc.writeBack();
                     condition=myIf.condition();
                 }
                 result=cond.condition(condition);
                 if(funcName=="if")
                     ini=cond.variableArguments();
 
-                usesForArguments(condition, cond.variableArguments(), m_topctx, *it);
+                usesForArguments(condition, cond.variableArguments(), m_topctx, funcDesc);
                 kDebug(9042) << ">> " << funcName << condition << result;
             }
             else if(funcName=="else")
             {
                 kDebug(9042) << ">> else";
                 result=true;
-                usesForArguments(ifast->condition(), ini, m_topctx, *it);
+                usesForArguments(ifast->condition(), ini, m_topctx, funcDesc);
             }
 
             if(!visited && result)
             {
                 kDebug(9042) << "About to visit " << funcName << "?" << result;
-
-                int oldpos=lines;
                 lines = walk(ifast->content(), lines+1)-1;
-
-                it+=lines-oldpos;
-
                 visited=true;
 //                 kDebug(9042) << "Visited. now in" << it->name;
             }
         }
     }
 
-    if(it==itEnd)
+    if(lines >= ifast->content().size())
     {
         kDebug() << "error. found an unfinished endif";
         return ifast->content().size()-ifast->line();
