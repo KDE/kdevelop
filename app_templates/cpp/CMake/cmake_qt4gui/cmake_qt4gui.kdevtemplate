@@ -1,6 +1,6 @@
 # KDE Config File
 [General]
-Name=Qt4 CMake Gui application
+Name=CMake Qt-C++
 Name[ca]=Aplicació IGU Qt4 CMake
 Name[ca@valencia]=Aplicació IGU Qt4 CMake
 Name[cs]=Aplikace Qt4 CMake Gui
@@ -30,8 +30,7 @@ Name[uk]=Програма-оболонка Qt4 CMake
 Name[x-test]=xxQt4 CMake Gui applicationxx
 Name[zh_CN]=Qt4 CMake 图形用户界面应用程序
 Name[zh_TW]=Qt4 CMake 使用者介面應用程式
-Category=C++/Qt (cmake)
-Comment=Generate a CMake/Qt4 based GUI application (crossplatform compatible)
+Comment=Qt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en CMake/Qt4 (multi plataforma)
 Comment[ca@valencia]=Genera una aplicació basada en CMake/Qt4 (multi plataforma)
 Comment[da]=Genererer et CMake-/Qt4-baseret gui-applikation (krydsplatform kompatibelt)
@@ -59,3 +58,4 @@ Comment[x-test]=xxGenerate a CMake/Qt4 based GUI application (crossplatform comp
 Comment[zh_CN]=生成基于 CMake/Qt4 的图形用户界面应用程序(跨平台兼容)
 Comment[zh_TW]=產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
+Category=KDE/Graphical
