@@ -344,11 +344,12 @@ function mapFileToClient {
             # If we are forwarding, map it to the client somehow.
             if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
                     # We can eventually map the file using the fish protocol
-                    if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
-                        # We can only map through fish if the forward-chains contains no comma, which means that
-                        # we forward only once.
-                        FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+                    if [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
+                        echo "ssh chain is too long: $KDEV_SSH_FORWARD_CHAIN, mapping anyway" 1>&2
                     fi
+                    # Theoretically, we can only map through fish if the forward-chains contains no comma, which means that
+                    # we forward only once. Try anyway, there might be the same filesystem on the whole forward-chain.
+                    FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
             fi
         fi
     fi
