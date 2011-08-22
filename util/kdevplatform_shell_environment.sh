@@ -640,8 +640,14 @@ function ssh! {
                    -i"
 
 
-    
-    kill %1 # Stop the dbus forwarding subprocess
+
+    if [ "$FORWARD_DBUS_FROM_PORT" ]; then
+        # We created the 2nd subprocess
+        kill %2 # Stop the dbus forwarding subprocess
+    else
+        # We created the 1st subprocess
+        kill %1 # Stop the dbus forwarding subprocess
+    fi
 }
 
 # A version of ssh! that preserves the current working directory
