@@ -212,10 +212,7 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
 		;
     
     VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
-    if(vcsjob) {
-        bool change = readOnly.contains(vcsjob->type());
-        if(change) {
-            reloadAll();
-        }
+    if(vcsjob && readOnly.contains(vcsjob->type())) {
+        reloadAll();
     }
 }
