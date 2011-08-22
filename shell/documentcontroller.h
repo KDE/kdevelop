@@ -90,8 +90,6 @@ public:
     virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode);
     bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false);
 
-    void notifyDocumentClosed(IDocument* doc);
-
     void initialize();
 
     void cleanup();
@@ -157,6 +155,7 @@ private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
     void slotProjectOpened(KDevelop::IProject* p);
     void slotFileRenamed(const KUrl& oldname, KDevelop::ProjectFileItem* newitem);
+    void notifyDocumentClosed(Sublime::Document* doc);
 
 private:
     bool openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView );

@@ -55,6 +55,7 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         void statusReady(KJob* job);
         void documentSaved(KDevelop::IDocument*);
         void itemsAdded(const QModelIndex& idx, int start, int end);
+        void jobUnregistered(KJob*);
         
 };
 

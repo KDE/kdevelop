@@ -42,6 +42,7 @@
 #include "controller.h"
 #include "mainwindow.h"
 #include "ideal.h"
+#include "holdupdates.h"
 #include <KToolBar>
 #include <KSelectAction>
 #include <ktoggleaction.h>
@@ -529,7 +530,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
             if(siblingSplitter)
             {
-                parentSplitter->setUpdatesEnabled(false);
+                HoldUpdates du(parentSplitter);
                 //save sizes and orientation of the sibling splitter
                 parentSplitter->setOrientation(siblingSplitter->orientation());
                 QList<int> sizes = siblingSplitter->sizes();
@@ -550,8 +551,6 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                 delete siblingSplitter;
                 parentSplitter->setSizes(sizes);
             }
-
-            parentSplitter->setUpdatesEnabled(true);
 
             kDebug() << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";

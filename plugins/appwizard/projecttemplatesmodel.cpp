@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 
 #include "appwizardplugin.h"
-#include "projecttemplateitem.h"
+#include <KIcon>
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
     :QStandardItemModel(parent), m_plugin(parent)
@@ -61,10 +61,12 @@ void ProjectTemplatesModel::refresh()
             QString name = general.readEntry("Name");
             QString category = general.readEntry("Category");
             QString icon = general.readEntry("Icon");
+            QString comment = general.readEntry("Comment");
     
-            ProjectTemplateItem *templateItem = createItem(name, category);
+            QStandardItem *templateItem = createItem(name, category);
             templateItem->setData(templateDescription);
             templateItem->setData(icon, Qt::UserRole+2);
+            templateItem->setData(comment, Qt::UserRole+3);
         } else {
             // Template file doesn't exist anymore, so remove the description
             // saves us the extra lookups for templateExists on the next run
@@ -74,7 +76,7 @@ void ProjectTemplatesModel::refresh()
     setHorizontalHeaderLabels(QStringList() << i18n("Project Templates"));
 }
 
-ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, const QString &category)
+QStandardItem *ProjectTemplatesModel::createItem(const QString& name, const QString& category)
 {
     QStringList path = category.split('/');
 
@@ -85,7 +87,8 @@ ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, cons
         currentPath << entry;
         if (!m_templateItems.contains(currentPath.join("/")))
         {
-            ProjectTemplateItem *item = new ProjectTemplateItem(entry);
+            QStandardItem *item = new QStandardItem(entry);
+            item->setEditable(false);
             parent->appendRow(item);
             m_templateItems[currentPath.join("/")] = item;
             parent = item;
@@ -94,7 +97,8 @@ ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, cons
             parent = m_templateItems[currentPath.join("/")];
     }
 
-    ProjectTemplateItem *templateItem = new ProjectTemplateItem(name);
+    QStandardItem *templateItem = new QStandardItem(name);
+    templateItem->setEditable(false);
     parent->appendRow(templateItem);
     return templateItem;
 }

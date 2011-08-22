@@ -154,12 +154,14 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 
   if( completionContext && completionContext->isValid() ) {
-    DUChainReadLocker lock(DUChain::lock());
+    {
+      DUChainReadLocker lock(DUChain::lock());
 
-    if (!context) {
-      failed();
-      kDebug() << "Completion context disappeared before completions could be calculated";
-      return;
+      if (!context) {
+        failed();
+        kDebug() << "Completion context disappeared before completions could be calculated";
+        return;
+      }
     }
     QList<CompletionTreeItemPointer> items = completionContext->completionItems(aborting(), fullCompletion());
 

@@ -141,10 +141,7 @@ bool PartDocument::close(DocumentSaveMode mode)
     foreach (KParts::Part* part, d->partForView)
         part->deleteLater();
 
-    Core::self()->documentControllerInternal()->notifyDocumentClosed(this);
-
-    // Here we go...
-    deleteLater();
+    // The document will be deleted automatically if there are no views left
 
     return true;
 }

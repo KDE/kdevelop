@@ -391,6 +391,7 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
         bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
                         dlg.projectName(),
                         dlg.projectManager() );
+        tmp.close();
         if (!ok)
             return KUrl();
 

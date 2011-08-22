@@ -341,7 +341,8 @@ struct DocumentControllerPrivate {
             return false;
         }
         //react on document deletion - we need to cleanup controller structures
-        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
+        
+        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(notifyDocumentClosed(Sublime::Document*)));
         //We check if it was already opened before
         bool emitOpened = !documents.contains(url);
         if(emitOpened)
@@ -612,7 +613,7 @@ void DocumentController::setupActions()
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
     action->setIcon(KIcon("document-revert"));
-    action->setText(i18n( "Rever&t All" ) );
+    action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
     action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
@@ -724,10 +725,13 @@ void DocumentController::closeDocument( const KUrl &url )
     d->documents[url]->close();
 }
 
-void DocumentController::notifyDocumentClosed(IDocument* doc)
+void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
-    d->documents.remove(doc->url());
-
+    IDocument* doc = dynamic_cast<IDocument*>(doc_);
+    Q_ASSERT(doc);
+    
+    d->removeDocument(doc_);
+    
     if (d->documents.isEmpty()) {
         if (d->saveAll)
             d->saveAll->setEnabled(false);

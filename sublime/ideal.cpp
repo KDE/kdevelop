@@ -584,9 +584,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       toolBar->setWindowTitle(i18n("%1 Tool Bar", w->windowTitle()));
       toolBar->setFloatable(false);
       toolBar->setMovable(false);
-      foreach (QAction *action, toolBarActions) {
-        toolBar->addAction(action);
-      }
+      toolBar->addActions(toolBarActions);
       toolView->setCentralWidget(w);
       toolView->addToolBar(toolBar);
       dock->setWidget(toolView);
