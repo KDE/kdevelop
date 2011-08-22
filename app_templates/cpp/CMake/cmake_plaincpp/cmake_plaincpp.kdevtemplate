@@ -1,34 +1,6 @@
 # KDE Config File
 [General]
 Name=CMake C++
-Name[ca]=Senzilla aplicació C++ basada en CMake
-Name[ca@valencia]=Senzilla aplicació C++ basada en CMake
-Name[cs]=Jednoduchá aplikace C++ založená na CMake
-Name[da]=Simpel CMake-baseret C++-applikation
-Name[de]=Einfache auf CMake basierende C++-Anwendung
-Name[el]=Απλή εφαρμογή C++ με βάση το CMake
-Name[en_GB]=Simple CMake-based C++ application
-Name[es]=Aplicación C++ sencilla basada en CMake
-Name[et]=Lihtne CMake'i põhine C++ rakendus
-Name[fi]=Yksinkertainen CMake-perustainen C++-sovellus
-Name[fr]=Application C++ simple utilisant CMake
-Name[ga]=Feidhmchlár simplí C++ bunaithe ar CMake
-Name[gl]=Programa básico en C++ baseado en CMake
-Name[it]=Semplice applicazione in C++ basata su CMake
-Name[nb]=Enkelt C++-program basert på CMake
-Name[nds]=Eenfach op CMake-baseert "C++"-Programm
-Name[nl]=Eenvoudige op CMake gebaseerd C++ programma
-Name[pl]=Prosty program w C++ używający CMake
-Name[pt]=Aplicação simples em C++, baseada no CMake
-Name[pt_BR]=Simples Aplicativo C++ baseado no CMake
-Name[ru]=Простое приложение на С++ с CMake
-Name[sl]=Preprost program v C++, temelječ na CMake
-Name[sv]=Enkelt CMake-baserat C++ program
-Name[tr]=Basit CMake temelli C++ uygulaması
-Name[uk]=Проста заснована на CMake програма C++
-Name[x-test]=xxSimple CMake-based C++ applicationxx
-Name[zh_CN]=基于 CMake 的简单 C++ 应用程序
-Name[zh_TW]=簡單的使用 CMake 的 C++ 應用程式
 Comment=Simple CMake-based C++ application
 Category=Standard/Terminal
 Icon=default-kdevelop
