@@ -36,10 +36,14 @@ signals:
     void valid();
     void invalid();
 private slots:
-    void itemChanged( const QModelIndex&, const QModelIndex& );
+    void itemChanged( const QModelIndex& current );
+    void templateFamilyChanged(const QModelIndex&, const QModelIndex&);
     void urlEdited();
     void validateData();
     void nameChanged();
+    void typeChanged(const QModelIndex& idx);
+    void templateChanged(int);
+    
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);
