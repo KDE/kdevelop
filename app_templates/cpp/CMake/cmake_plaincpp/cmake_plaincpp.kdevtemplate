@@ -1,7 +1,17 @@
 # KDE Config File
 [General]
 Name=CMake C++
+Name[nl]=CMake C++
+Name[pt]=C++ com CMake
+Name[pt_BR]=CMake C++
+Name[uk]=CMake C++
+Name[x-test]=xxCMake C++xx
 Comment=Simple CMake-based C++ application
+Comment[nl]=Eenvoudig op CMake gebaseerd C++ programma
+Comment[pt]=Aplicação simples em C++, baseada no CMake
+Comment[pt_BR]=Simples Aplicativo C++ baseado no CMake
+Comment[uk]=Проста заснована на CMake програма C++
+Comment[x-test]=xxSimple CMake-based C++ applicationxx
 Category=Standard/Terminal
 Icon=default-kdevelop
 ShowFilesAfterGeneration=%{PROJECTDIR}/main.cpp

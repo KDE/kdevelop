@@ -1,6 +1,16 @@
 # KDE Config File
 [General]
 Name=CMake Qt-C++
+Name[nl]=CMake Qt-C++
+Name[pt]=Qt-C++ com QMake
+Name[pt_BR]=CMake Qt-C++
+Name[uk]=CMake Qt-C++
+Name[x-test]=xxCMake Qt-C++xx
 Comment=Qt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)
+Comment[nl]=Gui-toepassing van Qt4 CMake. Genereert een ope CMake/Qt4 gebaseerd GUI-programma (crossplatform compatibel)
+Comment[pt]=Aplicação gráfica do Qt4 com CMake. Gera uma aplicação gráfica baseada no CMake/Qt4 (compatível com várias plataformas)
+Comment[pt_BR]=Aplicativo gráfico com CMake para Qt4. Gera um aplicativo de interface em CMake/Qt4 (compatível com várias plataformas)
+Comment[uk]=Програма Qt4 з графічним інтерфейсом і системою збирання CMake. Створити графічну програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
+Comment[x-test]=xxQt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)xx
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
 Category=KDE/Graphical
