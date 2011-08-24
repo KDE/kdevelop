@@ -318,8 +318,6 @@ void MainWindow::initialize()
 
     connect(Core::self()->sessionController()->activeSession(), SIGNAL(nameChanged(QString,QString)), SLOT(updateCaption()));
     
-    // Remove Handbook entry
-    actionCollection()->action( "help_contents" )->setVisible( false );
     updateCaption();
 }
 
