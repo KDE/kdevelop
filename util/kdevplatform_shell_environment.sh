@@ -109,11 +109,11 @@ function help! {
     echo ""
     echo "Examples:"
     echo "open! file1 / file2                 - The active view is split horizontally."
-         "                                      file1 is opened in the left view, and file2 in the right view."
+    echo "                                      file1 is opened in the left view, and file2 in the right view."
     echo "open! file1 / [ file2 - file3 ]     - The active view is split horizontally, and the right split-view is split vertically."
-         "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
+    echo "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
     echo "open! / file1                       - The active view is split horizontally."
-         "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
+    echo "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
     fi
     
     if [ "$1" == "remote" ]; then
