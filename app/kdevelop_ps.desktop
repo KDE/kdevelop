@@ -3,7 +3,6 @@ Type=Application
 Exec=kdevelop --ps
 MimeType=application/x-kdevelop;
 Icon=kdevelop
-X-DocPath=kdevelop/index.html
 Terminal=false
 Name=KDevelop 4 (Pick Session)
 Name[de]=KDevelop 4 (Sitzung auswählen)
