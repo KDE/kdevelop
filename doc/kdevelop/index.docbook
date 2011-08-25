@@ -168,8 +168,7 @@ double bar ()
 </para></listitem>
 </itemizedlist>
 <para>A complete list of tools and views is given <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list">here</ulink>.</para>
-<para>For many programmers, vertical screen space is the most important. To this end, you can arrange your</para>
-<para>tool views at the left and right margin of the window: to move a tool, click on its symbol with the right mouse button and select a new position for it.</para>
+<para>For many programmers, vertical screen space is the most important. To this end, you can arrange your tool views at the left and right margin of the window: to move a tool, click on its symbol with the right mouse button and select a new position for it.</para>
 </sect1>
 <sect1 id="exploring-source-code"><title>Exploring source code</title>
 <sect2 id="local-information"><title>Local information</title>
@@ -1030,8 +1029,7 @@ for (typename Triangulation::active_cell_iterator
 <chapter id="building-compiling-projects-with-custom-makefiles"><title>Building (compiling) projects with custom Makefiles</title>
 <para>Many projects describe how source files have to be compiled (and which files have to be recompiled once a source or header file changes) using Makefiles that are interpreted by the <guilabel>make</guilabel> program (see, for example, <ulink url="http://www.gnu.org/software/make/">GNU make</ulink>). For simple projects, it is often very easy to set up such a file by hand. Larger projects often integrate their Makefiles with the <guilabel>GNU autotools</guilabel> (autoconf, autoheader, automake). In this section, let us simply assume that you have a Makefile for your project and you want to teach &kdevelop; how to interact with it.</para>
 <para><note><para>&kdevelop; 4.x doesn't know about the <guilabel>GNU autotools</guilabel> at the time this section is written. If your project uses them, you will have to run <varname>./configure</varname> or any of the other related commands by hand on a command line. If you want to do this within &kdevelop;, open the <guilabel>Konsole</guilabel> tool (if necessary add it to the perimeter of the main window using the menu <menuchoice><guimenu>Windows</guimenu><guimenuitem>Add tool view</guimenuitem></menuchoice>) that gives you a shell window view and run <varname>./configure</varname> from the command line in this view.</para></note></para>
-<para>The first step is to teach &kdevelop; about targets in your Makefiles. There are two ways to do that: selecting individual Makefile targets, and choosing a set of targets you may want to build frequently. For both approaches, open</para>
-<para>the <guilabel>Projects</guilabel> tool by clicking on the <guilabel>Projects</guilabel> button on the perimeter of &kdevelop;'s main window (if you don't have this button see above how to add a tool's button there). The <guilabel>Projects</guilabel> tool window has two parts: the top half &mdash; titled <guilabel>Projects</guilabel> &mdash; lists all of your projects and let's you expand the underlying directory trees. The bottom half &mdash; titled <guilabel>Project Selection</guilabel> &mdash; lists a subset of those projects that will be built if you choose the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> or hit <keycap>F8</keycap>; we'll come back to this part below.</para>
+<para>The first step is to teach &kdevelop; about targets in your Makefiles. There are two ways to do that: selecting individual Makefile targets, and choosing a set of targets you may want to build frequently. For both approaches, open the <guilabel>Projects</guilabel> tool by clicking on the <guilabel>Projects</guilabel> button on the perimeter of &kdevelop;'s main window (if you don't have this button see above how to add a tool's button there). The <guilabel>Projects</guilabel> tool window has two parts: the top half &mdash; titled <guilabel>Projects</guilabel> &mdash; lists all of your projects and let's you expand the underlying directory trees. The bottom half &mdash; titled <guilabel>Project Selection</guilabel> &mdash; lists a subset of those projects that will be built if you choose the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> or hit <keycap>F8</keycap>; we'll come back to this part below.</para>
 <sect1 id="building-individual-makefile-targets"><title>Building individual Makefile targets</title>
 <para>In the top part of the project view, expand the sub-tree for one project, let's say the one for which you want to run a particular Makefile target. This will give you icons for (i) directories under this project, (ii) files in the top-level directory for this project, (iii) Makefile targets &kdevelop; can identify. These categories are shown in the picture at right. Note that &kdevelop; <emphasis>understands</emphasis> Makefile syntax to a certain degree and therefore can offer you targets defined in this Makefile (though this understanding has its limits if targets are composed or implicit).</para>
 <para>
@@ -1279,7 +1277,7 @@ for (typename Triangulation::active_cell_iterator
 <para>Two that have been found to be very useful to change are to set <guilabel>Align</guilabel> to the &Tab; key (many people don't usually enter tabs by hand and rather prefer if the editor chooses the layout of code; with the changed shortcut, hitting &Tab; makes &kdevelop; indent/outdent/align the code). The second one is putting <guilabel>Toggle Breakpoint</guilabel> on <keycombo>&Ctrl;<keycap>B</keycap></keycombo> since this is quite a frequent operation.</para>
 </sect1>
 <sect1 id="customizing-code-auto-completion"><title>Customizing code auto-completion</title>
-<para>Code completion is discussed in <link linkend="auto-completion">this manual's section on writing source code</link>. In &kdevelop;, it comes from two sources: the editor, and the parse engine. The editor (<guilabel>Kate</guilabel>) is a component of the larger KDE environment and offers auto-completion based on words it has already seen in other parts of the same document. Such auto-completions can be identified in the tooltip by the icon that precedes it:</para>
+<para>Code completion is discussed in <link linkend="auto-completion">this manual's section on writing source code</link>. In &kdevelop;, it comes from two sources: the editor, and the parse engine. The editor (&kate;) is a component of the larger KDE environment and offers auto-completion based on words it has already seen in other parts of the same document. Such auto-completions can be identified in the tooltip by the icon that precedes it:</para>
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1314,8 +1312,8 @@ for (typename Triangulation::active_cell_iterator
 </screenshot></para>
 <para>This context information comes from various language support plugins, which can be used after a given file has been saved (so it can check the filetype and use the correct language support).</para>
 <para>&kdevelop;'s completion is set to appear as you type, right away, pretty much everywhere that it could possibly complete something. This is configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default), make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
-<para>&kdevelop; has two ways to show a completion: <guilabel>Minimal Automatic Completion</guilabel> shows just the basic information in completion tooltips (&ie; the namespace, class, function, or variable name). This will look similar to <guilabel>Kate</guilabel> completion (except for the icons).</para>
-<para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry, and in the case of functions, also the arguments they take. Also, if you are curently filling in the arguments to a function, full completion will have an additional info-box above the cursor that will show you the current argument you are working on.</para>
+<para>&kdevelop; has two ways to show a completion: <guilabel>Minimal Automatic Completion</guilabel> shows just the basic information in completion tooltips (&ie; the namespace, class, function, or variable name). This will look similar to &kate; completion (except for the icons).</para>
+<para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry, and in the case of functions, also the arguments they take. Also, if you are currently filling in the arguments to a function, full completion will have an additional info-box above the cursor that will show you the current argument you are working on.</para>
 <para>&kdevelop;'s code completion should also bring-to-top and highlight in green any completion items that match the currently expected type in both minimal and full completion, known as <quote>best-matches</quote>.</para>
 <para>The three possible choices for the completion level in the configuration dialog are:</para>
 <itemizedlist>
@@ -1383,7 +1381,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/kdevelop4 .
 make &amp;&amp; make install
 </programlisting>
 </para>
-<para>the following line is needed so that kbuildsycoca4 finds all .desktop files
+<para>the following line is needed so that <application>kbuildsycoca4</application> finds all .desktop files
 </para>
 <para><programlisting>
 export KDEDIRS=$HOME/kdevelop4:/usr
@@ -1397,7 +1395,7 @@ make &amp;&amp; make install
 kbuildsycoca4
 </programlisting>
 </para>
-<para>Please note: Whenever you do some package or distribution update that calls <guilabel>kbuildsycoca4</guilabel>, you need to execute the following lines after the update:</para>
+<para>Please note: Whenever you do some package or distribution update that calls <application>kbuildsycoca4</application>, you need to execute the following lines after the update:</para>
 <para><programlisting>
 export KDEDIRS=$HOME/kdevelop4:/usr
 kbuildsycoca4
