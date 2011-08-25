@@ -6,7 +6,7 @@
 ]>
 <book lang="&language;">
 <bookinfo>
-<title>KDevelop Handbook</title>
+<title>&kdevelop; Handbook</title>
 <authorgroup>
 <author>
 <personname>
@@ -18,7 +18,7 @@
     </authorgroup>
 <legalnotice>&FDLNotice;</legalnotice>
 <date>2011-06-03</date>
-    <releaseinfo>KDevelop 4.2 (&kde; 4.7)</releaseinfo>
+    <releaseinfo>&kdevelop; 4.2 (&kde; 4.7)</releaseinfo>
 <abstract>
 <para>&kdevelop; is an Integrated Development Environment to be used for a wide variety of programming tasks.</para>
     </abstract>
@@ -33,8 +33,8 @@
 <!--userbase <timestamp>2011-06-27T12:36:08Z</timestamp>-->
 
 <!--userbase-content-->
-<chapter id="what-is-kdevelop"><title>What is KDevelop?</title>
-<para><ulink url="http://www.KDevelop.org">KDevelop</ulink> is a modern integrated development environment (IDE) for C++ (and other languages) that is one of many <ulink url="http://www.kde.org/applications/">KDE applications</ulink>. As such it runs on &Linux; (even if you run one of the other desktops, such as GNOME) but it is also available for most other variants of &UNIX; and for Windows as well.</para>
+<chapter id="what-is-kdevelop"><title>What is &kdevelop;?</title>
+<para><ulink url="http://www.KDevelop.org">&kdevelop;</ulink> is a modern integrated development environment (IDE) for C++ (and other languages) that is one of many <ulink url="http://www.kde.org/applications/">KDE applications</ulink>. As such it runs on &Linux; (even if you run one of the other desktops, such as GNOME) but it is also available for most other variants of &UNIX; and for Windows as well.</para>
 <para>&kdevelop; offers all amenities of modern IDEs. For large projects and applications, the most important feature is that &kdevelop; <emphasis>understands C++</emphasis>: it parses the entire source base and remembers which classes have which member functions, where variables are defined, what their types are, and many other things about your code. For example, let's say one of your project's header files declares a class</para>
 <para><programlisting>
 class Car {
@@ -67,7 +67,7 @@ double bar ()
 <para>If you hover the mouse over the symbol <varname>var</varname> in function <varname>bar</varname> you get the option to see all uses of this symbol. Clicking on it will only show you the uses of this variable in function <varname>bar</varname> because &kdevelop; understands that the variable <varname>var</varname> in function <varname>foo</varname> has nothing to do with it. Similarly, right clicking on the variable name allows you to rename the variable; doing so will only touch the variable in <varname>bar</varname> but not the one with the same name in <varname>foo</varname>.</para>
 <para>But &kdevelop; is not just an intelligent code editor; there are other things &kdevelop; does well. Obviously, it highlights the source code in different colors; it has a customizable indenter; it has an integrated interface to the GNU debugger <application>gdb</application>; it can show you the documentation for a function if you hover the mouse over a use of this function; it can deal with different kinds of build environments and compilers (&eg; with <guilabel>make</guilabel> and <guilabel>cmake</guilabel>-based project), and many other neat things that are discussed in this manual.</para>
 </chapter>
-<chapter id="sessions-and-projects--the-basics-of-kdevelop"><title>Sessions and projects: The basics of KDevelop</title>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"><title>Sessions and projects: The basics of &kdevelop;</title>
 <para>In this section, we will go over some of the terminology of how &kdevelop; sees the world and how it structures work. In particular, we introduce the concept of <emphasis>sessions</emphasis> and <emphasis>projects</emphasis> and explain how you can set up the projects you want to work on in &kdevelop;.</para>
 <sect1 id="terminology"><title>Terminology</title>
 <para>&kdevelop; has the concept of <emphasis>sessions</emphasis> and <emphasis>projects</emphasis>. A session contains all projects that have something to do with each other. For the examples that follow, assume you are the developer of both a library and an application that uses it. You can think of the core KDE libraries as the former and &kdevelop; as the latter. Another example: Let's say you are a &Linux; kernel hacker but you are also working on a device driver for &Linux; that hasn't been merged into the kernel tree yet.</para>
@@ -93,11 +93,11 @@ double bar ()
 </para></listitem>
 <listitem><para>Choose an URL for the location of the repository where the source files can be obtained
 </para></listitem>
-<listitem><para>Hit <guilabel>Get</guilabel>. This can take quite a long while; depending on the speed of your connection and the size of the project. Unfortunately, in &kdevelop; 4.2.x the progress bar does not actually show anything, but you can track progress by periodically looking at the output of the command line command <screen>du -sk <replaceable>/path/to/KDevelop/project</replaceable></screen> to see how much data has already been downloaded.
+<listitem><para>Hit <guilabel>Get</guilabel>. This can take quite a long while; depending on the speed of your connection and the size of the project. Unfortunately, in &kdevelop; 4.2.x the progress bar does not actually show anything, but you can track progress by periodically looking at the output of the command line command <screen>du -sk <replaceable>/path/to/&kdevelop;/project</replaceable></screen> to see how much data has already been downloaded.
 </para></listitem>
 </itemizedlist>
 </para></listitem>
-</itemizedlist><para><note><para>The problem with the progress bar has been reported as <ulink url="http://bugs.kde.org/show_bug.cgi?id=256832">KDevelop bug 256832</ulink>.</para></note></para>
+</itemizedlist><para><note><para>The problem with the progress bar has been reported as <ulink url="http://bugs.kde.org/show_bug.cgi?id=256832">&kdevelop; bug 256832</ulink>.</para></note></para>
 <para><note><para>In this process, I also get the error message <emphasis>You need to specify a valid location for the project</emphasis> which can be safely ignored.</para></note></para>
 <itemizedlist>
 <listitem><para>It asks you to select a &kdevelop; project file in this directory. Since you probably don't have one yet, simply hit <guilabel>Next</guilabel>
@@ -106,7 +106,7 @@ double bar ()
 </para></listitem>
 <listitem><para>&kdevelop; will then ask you to choose a project manager. If this project uses standard &UNIX; make files, choose the custom makefile project manager
 </para></listitem>
-<listitem><para>&kdevelop; will then start to parse the entire project. Again, it will take quite a while to go through all files and index classes &etc; At the bottom right of the main window, there is a progress bar that shows how long this process has come along. (If you have several processor cores, you can accelerate this process by going to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop</guimenuitem></menuchoice> menu item, then selecting <guilabel>Background parser</guilabel> on the left, and increasing the number of threads for background parsing on the right.)
+<listitem><para>&kdevelop; will then start to parse the entire project. Again, it will take quite a while to go through all files and index classes &etc; At the bottom right of the main window, there is a progress bar that shows how long this process has come along. (If you have several processor cores, you can accelerate this process by going to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kdevelop;</guimenuitem></menuchoice> menu item, then selecting <guilabel>Background parser</guilabel> on the left, and increasing the number of threads for background parsing on the right.)
 </para></listitem>
 </itemizedlist>
 </sect2>
@@ -645,7 +645,7 @@ void foo()
   </mediaobject>
 </screenshot></para>
 <para><note><para>The fact that the tooltip shows the same function twice is fixed in &kdevelop; 4.2.2 and later.</para></note></para>
-<para><note><para>In the example, accepting one of the choices the auto-completion tool offers yields the correct signature but unfortunately deletes the <varname>inline</varname> marker already written. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274244">KDevelop Bug 274245</ulink>.</para></note></para>
+<para><note><para>In the example, accepting one of the choices the auto-completion tool offers yields the correct signature but unfortunately deletes the <varname>inline</varname> marker already written. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274244">&kdevelop; Bug 274245</ulink>.</para></note></para>
 </sect2>
 <sect2 id="documenting-declarations"><title>Documenting declarations</title>
 <para>Good code is well documented, both at the level of the implementation of algorithms within in functions as well as at the level of the interface &mdash; &ie;, classes, (member and global) functions, and (member or global) variables need to be documented to explain their intent, possible values of arguments, pre- and postconditions, &etc; As far as documenting the interface is concerned, <ulink url="http://www.doxygen.org">doxygen</ulink> has become the de facto standard for formatting comments that can then be extracted and displayed on searchable webpages.</para>
@@ -790,7 +790,7 @@ for (typename Triangulation::active_cell_iterator
     </caption>
   </mediaobject>
 </screenshot></para>
-<para><note><para>The name of a snippet may not have spaces or other special characters because it must look like a normal function or variable name (for reasons that will become clear in the next paragraph). If the name of the snippet does contain spaces, the <guilabel>OK</guilabel> button will become inactive without any further explanation. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274299">KDevelop bug 274299</ulink>.</para></note></para>
+<para><note><para>The name of a snippet may not have spaces or other special characters because it must look like a normal function or variable name (for reasons that will become clear in the next paragraph). If the name of the snippet does contain spaces, the <guilabel>OK</guilabel> button will become inactive without any further explanation. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274299">&kdevelop; bug 274299</ulink>.</para></note></para>
 <para>To use a snippet so defined, when you are editing code, you can just type the name of the snippet like you would any other function or variable name. This name will become available for auto-completion &mdash; which means that there is no harm in using a long and descriptive name for a snippet such as the one above &mdash; and when you accept the suggestion of the auto-completion tooltip (for example by just hitting &Enter;), the already entered part of the snippets' name will be replaced by the full expansion of the snippet and will be properly indented:</para>
 <para>
 <screenshot>
@@ -1061,9 +1061,9 @@ for (typename Triangulation::active_cell_iterator
 <para>If the compiler encounters an error message, simply click on the line with the error message and the editor will jump to the line (and if available column) where the error was reported. Depending on the error message, &kdevelop; may also offer you several possible actions to fix the error, for example by declaring a previously undeclared variable if an unknown symbol was found.</para>
 </sect1>
 </chapter>
-<chapter id="running-programs-in-kdevelop"><title>Running programs in KDevelop</title>
+<chapter id="running-programs-in-kdevelop"><title>Running programs in &kdevelop;</title>
 <para>Once you have built a program, you will want to run it. To do this, need to configure <emphasis>Launches</emphasis> for your projects. A <emphasis>Launch</emphasis> consists of the name of an executable, a set of command line parameters, and an execution environment (such as <quote>run this program in a shell</quote>, or <quote>run this program in the debugger</quote>).</para>
-<sect1 id="setting-up-launches-in-kdevelop"><title>Setting up launches in KDevelop</title>
+<sect1 id="setting-up-launches-in-kdevelop"><title>Setting up launches in &kdevelop;</title>
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1096,7 +1096,7 @@ for (typename Triangulation::active_cell_iterator
   </mediaobject>
 </screenshot></para>
 <para>You can now try to run the program: Select <menuchoice><guimenu>Run</guimenu><guimenuitem>Execute Launch</guimenuitem></menuchoice> from &kdevelop;'s main window menu (or hit <keycombo>&Shift;<keycap>F9</keycap></keycombo>) and your program should run in a separate subwindow of &kdevelop;. The picture above shows the result: The new <guilabel>Run</guilabel> tool subwindow at the bottom shows the output of the program that is being run, in this case of the <replaceable>step-32</replaceable> program.</para>
-<para><note><para> If you have configured multiple launches, you can choose which one should run when you hit <keycombo>&Shift;<keycap>F9</keycap></keycombo> by going to <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>. Unfortunately, by default, all launches are named <emphasis>New Native Application</emphasis> without an <emphasis>obvious</emphasis> possibility of renaming them, making it difficult to distinguish them when selecting the current launch configuration (see <ulink url="https://bugs.kde.org/show_bug.cgi?id=272300">KDevelop bug 272300</ulink>). There is a non-obvious way to edit the name of a configuration, however: in the dialog box you get when you select <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>, double-click on the name of the configuration in the tree view on the left, which will allow you to edit the configuration's name.</para></note></para>
+<para><note><para> If you have configured multiple launches, you can choose which one should run when you hit <keycombo>&Shift;<keycap>F9</keycap></keycombo> by going to <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>. Unfortunately, by default, all launches are named <emphasis>New Native Application</emphasis> without an <emphasis>obvious</emphasis> possibility of renaming them, making it difficult to distinguish them when selecting the current launch configuration (see <ulink url="https://bugs.kde.org/show_bug.cgi?id=272300">&kdevelop; bug 272300</ulink>). There is a non-obvious way to edit the name of a configuration, however: in the dialog box you get when you select <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>, double-click on the name of the configuration in the tree view on the left, which will allow you to edit the configuration's name.</para></note></para>
 </sect1>
 <sect1 id="some-useful-keyboard-shortcuts0"><title>Some useful keyboard shortcuts</title>
 <para>
@@ -1128,7 +1128,7 @@ for (typename Triangulation::active_cell_iterator
 </para>
 </sect1>
 </chapter>
-<chapter id="debugging-programs-in-kdevelop"><title>Debugging programs in KDevelop</title>
+<chapter id="debugging-programs-in-kdevelop"><title>Debugging programs in &kdevelop;</title>
 <sect1 id="running-a-program-in-the-debugger"><title>Running a program in the debugger</title>
 <para>Once you have a launch configured (see <link linkend="running-programs-in-kdevelop">Running programs</link>), you can also run it in a debugger: Select the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Debug Launch</guimenuitem></menuchoice>, or hit <keycap>F9</keycap>. If you are familiar with <application>gdb</application>, the effect is the same as starting <application>gdb</application> with the executable specified in the launch configuration and then saying <varname>Run</varname>. This means that if the program calls <varname>abort()</varname> somewhere (&eg; when you run onto a failing assertion) or if there is a segmentation fault, then the debugger will stop. On the other hand, if the program runs to the end (with or without doing the right thing) then the debugger will not stop by itself before the program is finished. In the latter case, you will want to set a breakpoint on all those lines of your code base where you want the debugger to stop before you run the debug launch. You can do that by moving the cursor on such a line and selecting the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Toggle breakpoint</guimenuitem></menuchoice>, or right-clicking on a line and selecting <guilabel>Toggle Breakpoint</guilabel> from the context menu.</para>
 <para>
@@ -1241,7 +1241,7 @@ for (typename Triangulation::active_cell_iterator
 <para>There are a number of useful things one can configure in and around &kdevelop;'s built-in editor. Of more universal use is to switch on line numbering using the menu entry <menuchoice><guimenu>Editor</guimenu><guisubmenu>View</guisubmenu><guimenuitem>Show line numbers</guimenuitem></menuchoice>, making it easier to match compiler error messages or debug messages with locations in the code. In the same submenu you may also want to switch on the <emphasis>Icon border</emphasis> - a column to the left of your code in which &kdevelop; will show icons such as whether there is a breakpoint on the current line.</para>
 </sect1>
 <sect1 id="customizing-code-indentation"><title>Customizing code indentation</title>
-<para>Many of us like code formatted in a particular way. Many projects also enforce a particular indentation style. Neither may match &kdevelop;'s default indentation style. However, this can be customized: Go to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Customize KDevelop</guimenuitem></menuchoice> menu item, then click on <guilabel>Source Formatter</guilabel> on the left. You can choose one of the predefined indentation styles that are widely in use, or define your own one by adding a new style and then editing it. There may not be a way to exactly re-create the style in which your project's sources have been indented in the past, but you can come close by using the settings for a new style; an example is shown in the two pictures below.</para>
+<para>Many of us like code formatted in a particular way. Many projects also enforce a particular indentation style. Neither may match &kdevelop;'s default indentation style. However, this can be customized: Go to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Customize &kdevelop;</guimenuitem></menuchoice> menu item, then click on <guilabel>Source Formatter</guilabel> on the left. You can choose one of the predefined indentation styles that are widely in use, or define your own one by adding a new style and then editing it. There may not be a way to exactly re-create the style in which your project's sources have been indented in the past, but you can come close by using the settings for a new style; an example is shown in the two pictures below.</para>
 <para>
 <screenshot>
 <screeninfo></screeninfo>
@@ -1272,7 +1272,7 @@ for (typename Triangulation::active_cell_iterator
     </caption>
   </mediaobject>
 </screenshot></para>
-<para><note><para> With <guilabel>KDevelop 4.2.2</guilabel>, you can create a new style for a particular mimetype (&eg; for C++ header files) but this style does not show up among the list of possible styles for other mimetypes (&eg; for C++ source files) although it would of course be useful to use the same style for both kinds of files. You will therefore have to define the style twice, once for header and once for source files. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335">KDevelop bug 272335</ulink>.</para></note></para>
+<para><note><para> With <guilabel>&kdevelop; 4.2.2</guilabel>, you can create a new style for a particular mimetype (&eg; for C++ header files) but this style does not show up among the list of possible styles for other mimetypes (&eg; for C++ source files) although it would of course be useful to use the same style for both kinds of files. You will therefore have to define the style twice, once for header and once for source files. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335">&kdevelop; bug 272335</ulink>.</para></note></para>
 </sect1>
 <sect1 id="customizing-keyboard-shortcuts"><title>Customizing keyboard shortcuts</title>
 <para>&kdevelop; has an almost boundless list of keyboard shortcuts (some of them are listed in the <quote>Useful keyboard shortcuts sections</quote> of several chapters in this manual) that can be changed to your taste through the menu <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts</guimenuitem></menuchoice>. At the top of the dialog you can enter a searchword and it only shows those commands that match; you can then edit which key combination is bound to this command.</para>
@@ -1313,7 +1313,7 @@ for (typename Triangulation::active_cell_iterator
   </mediaobject>
 </screenshot></para>
 <para>This context information comes from various language support plugins, which can be used after a given file has been saved (so it can check the filetype and use the correct language support).</para>
-<para>&kdevelop;'s completion is set to appear as you type, right away, pretty much everywhere that it could possibly complete something. This is configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default), make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
+<para>&kdevelop;'s completion is set to appear as you type, right away, pretty much everywhere that it could possibly complete something. This is configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default), make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
 <para>&kdevelop; has two ways to show a completion: <guilabel>Minimal Automatic Completion</guilabel> shows just the basic information in completion tooltips (&ie; the namespace, class, function, or variable name). This will look similar to <guilabel>Kate</guilabel> completion (except for the icons).</para>
 <para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry, and in the case of functions, also the arguments they take. Also, if you are curently filling in the arguments to a function, full completion will have an additional info-box above the cursor that will show you the current argument you are working on.</para>
 <para>&kdevelop;'s code completion should also bring-to-top and highlight in green any completion items that match the currently expected type in both minimal and full completion, known as <quote>best-matches</quote>.</para>
@@ -1328,7 +1328,7 @@ for (typename Triangulation::active_cell_iterator
 </itemizedlist>
 </sect1>
 </chapter>
-<chapter id="building-kdevelop-from-sources"><title>Building KDevelop from Sources</title>
+<chapter id="building-kdevelop-from-sources"><title>Building &kdevelop; from Sources</title>
 <para>If you want to have the latest features and bugfixes, you can build &kdevelop; yourself from the sources.</para>
 <para>There exists a more in-detail article <ulink url="http://techbase.kde.org/KDevelop4/HowToCompile">here</ulink>.</para>
 <para>Be aware that you <emphasis>could</emphasis> build an unstable version. To help the developers fix bugs, please keep the <varname>RelWithDebInfo</varname> and report bugs to http://bugs.kde.org, either per hand or using Dr. Konqi.</para>
