@@ -152,27 +152,50 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
     return newList;
 }
 
+void eatLeadingWhitespace(KTextEditor::Document* doc, KTextEditor::Range& eater, const KTextEditor::Range& bounds)
+{
+    QString text = doc->text(KTextEditor::Range(bounds.start(), eater.start()));
+    int newStartLine = eater.start().line(), pos = text.length() - 2; //pos = index before eater.start
+    while (pos > 0)
+    {
+        if (text[pos] == '\n')
+            --newStartLine;
+        else if (!text[pos].isSpace())
+        {
+            ++pos;
+            break;
+        }
+        --pos;
+    }
+    int lastNewLinePos = text.lastIndexOf('\n', pos - 1);
+    int newStartCol = lastNewLinePos == -1 ? eater.start().column() + pos :
+                                             pos - lastNewLinePos - 1;
+    eater.start().setLine(newStartLine);
+    eater.start().setColumn(newStartCol);
+}
+
 KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::Range& r, const QString& name)
 {
     QString txt=doc->text(r);
-    QRegExp match("\\s*(./)?"+name);
-    int namepos=match.indexIn(txt);
+    QRegExp match("([\\s]|^)(\\./)?"+QRegExp::escape(name));
+    int namepos = match.indexIn(txt);
     
-    if(namepos<0)
+    if(namepos == -1)
         return KTextEditor::Range::invalid();
+    //QRegExp doesn't support lookbehind asserts, and \b isn't good enough
+    //so either match "^" or match "\s" and then +1 here
+    if (txt[namepos].isSpace())
+        ++namepos;
     
     KTextEditor::Cursor c(r.start());
-    int l=c.line(), p, nextp;
-    for(p=0; p<namepos; l++, p=nextp) {
-        nextp=txt.indexOf('\n', p);
-        if(nextp<0)
-            break;
-    }
-    Q_ASSERT(l>=0 && p>=0);
-    c.setLine(l);
-    c.setColumn((l==0 ? r.start().column() : 0) + (namepos-p));
+    c.setLine(c.line() + txt.left(namepos).count('\n'));
+    int lastNewLinePos = txt.lastIndexOf('\n', namepos);
+    if (lastNewLinePos < 0)
+        c.setColumn(r.start().column() + namepos);
+    else
+        c.setColumn(namepos - lastNewLinePos - 1);
     
-    return KTextEditor::Range(c, KTextEditor::Cursor(l, c.column()+match.matchedLength()));
+    return KTextEditor::Range(c, KTextEditor::Cursor(c.line(), c.column()+match.matchedLength()));
 }
 
 bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
@@ -185,9 +208,12 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     if(!add && rx.isValid())
     {
         if(replace.isEmpty())
+        {
+            eatLeadingWhitespace(doc, rx, r.castToSimpleRange().textRange());
             doc->removeText(rx);
+        }
         else
-            doc->replaceText(rx, ' '+replace);
+            doc->replaceText(rx, replace);
         
         ret=true;
     }
