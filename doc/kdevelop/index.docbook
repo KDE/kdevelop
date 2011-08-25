@@ -1242,7 +1242,7 @@ for (typename Triangulation::active_cell_iterator
 </sect1>
 <sect1 id="customizing-code-indentation"><title>Customizing code indentation</title>
 <para>Many of us like code formatted in a particular way. Many projects also enforce a particular indentation style. Neither may match &kdevelop;'s default indentation style. However, this can be customized: Go to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Customize KDevelop</guimenuitem></menuchoice> menu item, then click on <guilabel>Source Formatter</guilabel> on the left. You can choose one of the predefined indentation styles that are widely in use, or define your own one by adding a new style and then editing it. There may not be a way to exactly re-create the style in which your project's sources have been indented in the past, but you can come close by using the settings for a new style; an example is shown in the two pictures below.</para>
-<para>|
+<para>
 <screenshot>
 <screeninfo></screeninfo>
   <mediaobject>
@@ -1257,7 +1257,7 @@ for (typename Triangulation::active_cell_iterator
     </caption>
   </mediaobject>
 </screenshot></para>
-<para>|
+<para>
 <screenshot>
 <screeninfo></screeninfo>
   <mediaobject>
