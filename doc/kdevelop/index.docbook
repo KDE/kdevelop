@@ -206,7 +206,7 @@ double bar ()
     </caption>
   </mediaobject>
 </screenshot></para>
-<para>Here, &kdevelop; has cross-referenced the declaration from an entirely different file (<varname>utilities.h</varname>, which in fact even resides in a different project of the same session) together with the doxygen-style comment that accompanies the declaration there.</para>
+<para>Here, &kdevelop; has cross-referenced the declaration from an entirely different file (<filename>utilities.h</filename>, which in fact even resides in a different project of the same session) together with the doxygen-style comment that accompanies the declaration there.</para>
 <para>What makes these tooltips even more useful is that they are dynamic: I can click on the container to get information about the context in which the variable is declared (&ie; about the namespace <varname>System</varname>, such as where it is declared, defined, used, or what its documentation is) and I can click on the blue links that will reset the cursor position to the location of the declaration of the Symbol (&eg; in <varname>utilities.h</varname>, line 289) or give me a list of places where this symbol is used in the current file or throughout all the projects of the current session. The latter is often useful if you want to explore how, for example, a particular function is used in a large code basis.</para>
 <note><para>The information in a tooltip is fleeting &mdash; it depends on you holding the &Alt; key down or hovering your mouse. If you want a more permanent place for it, open the <guilabel>Code Browser</guilabel> tool view in one of the sub-windows. For example, here the cursor is on the same function as in the example above, and the tool view on the left presents the same kind of information as in the tooltip before:</para>
 <para>
@@ -998,7 +998,7 @@ for (typename Triangulation::active_cell_iterator
     <entry>Collapse one level: remove this block from view, for example if you want to focus on the bigger picture within a function</entry>
   </row>
   <row>
-    <entry><keycombo>&Ctrl;<keycap></keycap><keycap></keycap></keycombo></entry>
+    <entry><keycombo>&Ctrl;<keycap>+</keycap></keycombo></entry>
     <entry>Expand one level: undo the collapsing</entry>
   </row>
   <row>
@@ -1235,7 +1235,7 @@ for (typename Triangulation::active_cell_iterator
 </para></listitem>
 </itemizedlist>
 </chapter>
-<chapter id="customizing-kdevelop"><title>Customizing KDevelop</title>
+<chapter id="customizing-kdevelop"><title>Customizing &kdevelop;</title>
 <para>There are times when you want to change the default appearance or behavior of &kdevelop;, for example because you are used to different keyboard shortcuts or because your project requires a different indenting style for source code. In the following sections, we briefly discuss the various ways how &kdevelop; can be customized for these needs.</para>
 <sect1 id="customizing-the-editor"><title>Customizing the editor</title>
 <para>There are a number of useful things one can configure in and around &kdevelop;'s built-in editor. Of more universal use is to switch on line numbering using the menu entry <menuchoice><guimenu>Editor</guimenu><guisubmenu>View</guisubmenu><guimenuitem>Show line numbers</guimenuitem></menuchoice>, making it easier to match compiler error messages or debug messages with locations in the code. In the same submenu you may also want to switch on the <emphasis>Icon border</emphasis> - a column to the left of your code in which &kdevelop; will show icons such as whether there is a breakpoint on the current line.</para>
