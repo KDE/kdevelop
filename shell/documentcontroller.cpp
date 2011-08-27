@@ -154,6 +154,12 @@ struct DocumentControllerPrivate {
                 }
 
                 documents.insert(document->url(), document);
+
+                if (!controller->isEmptyDocumentUrl(document->url()))
+                {
+                    fileOpenRecent->addUrl(document->url());
+                }
+
                 break;
             }
         }
