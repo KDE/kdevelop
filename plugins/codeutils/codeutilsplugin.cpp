@@ -146,6 +146,8 @@ void CodeUtilsPlugin::documentDeclaration()
     stream << indentation << " **/\n" << flush;
 
     lock.unlock();
+    // clear selection to prevent removal of text
+    view->removeSelection();
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 
