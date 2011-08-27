@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake QtCore C++
+Name[es]=CMake QtCore C++
 Name[nl]=CMake QtCore C++
 Name[pt]=QtCore em C++ com CMake
 Name[pt_BR]=CMake QtCore C++

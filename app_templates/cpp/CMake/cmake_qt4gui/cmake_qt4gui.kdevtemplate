@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake Qt-C++
+Name[es]=CMake Qt-C++
 Name[nl]=CMake Qt-C++
 Name[pt]=Qt-C++ com QMake
 Name[pt_BR]=CMake Qt-C++
