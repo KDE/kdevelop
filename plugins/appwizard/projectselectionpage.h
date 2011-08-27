@@ -18,6 +18,7 @@ class ProjectSelectionPage;
 
 class ProjectTemplatesModel;
 class QModelIndex;
+class QStandardItem;
 class KUrl;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
@@ -47,6 +48,7 @@ private slots:
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);
+    inline QStandardItem* getCurrentItem() const;
 
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

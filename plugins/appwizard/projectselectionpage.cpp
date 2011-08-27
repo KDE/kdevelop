@@ -118,7 +118,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 
 QString ProjectSelectionPage::selectedTemplate()
 {
-    QStandardItem *item = m_templatesModel->itemFromIndex(ui->templateView->currentIndex());
+    QStandardItem *item = getCurrentItem();
     if (item)
         return item->data().toString();
     else
@@ -194,7 +194,7 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    QStandardItem* item = getCurrentItem();
     if( item && !item->hasChildren() )
     {
         ui->locationValidLabel->setText( QString(" ") );
@@ -245,6 +245,21 @@ QString ProjectSelectionPage::pathUp(const QString& aPath)
     tPath = tPath.remove(tIndex, tPath.length() - tIndex);
     return tPath;
 }
+
+QStandardItem* ProjectSelectionPage::getCurrentItem() const
+{
+    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    if ( item && item->hasChildren() )
+        item = m_templatesModel->itemFromIndex( ui->templatesIconView->currentIndex() );
+    if ( item && item->hasChildren() )
+    {
+        const int currect = ui->templateType->currentIndex();
+        const QModelIndex idx = m_templatesModel->index( currect, 0, ui->templateType->rootModelIndex() );
+        item = m_templatesModel->itemFromIndex(idx);
+    }
+    return item;
+}
+
 
 bool ProjectSelectionPage::shouldContinue()
 {
