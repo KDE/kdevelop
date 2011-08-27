@@ -368,7 +368,10 @@ struct DocumentControllerPrivate {
             {
                 uiController->activeSublimeWindow()->activateView(partView);
             }
-            fileOpenRecent->addUrl( url );
+            if (!controller->isEmptyDocumentUrl(url))
+            {
+                fileOpenRecent->addUrl( url );
+            }
 
             if( applyRange && range.isValid() )
             {
