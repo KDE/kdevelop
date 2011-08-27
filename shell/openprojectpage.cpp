@@ -83,6 +83,8 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
     connect( fileWidget, SIGNAL(fileHighlighted(QString)), SLOT(highlightFile(QString)) );
     
     connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(KUrl)), SLOT(dirChanged(KUrl)));
+
+    connect( fileWidget, SIGNAL(accepted()), SIGNAL(accepted()));
 }
 
 KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const

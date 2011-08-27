@@ -50,6 +50,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
+    connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
     openPage = addPage( openPageWidget, i18n("Select the project") );
     
     QWidget* page = new ProjectInfoPage( this );
@@ -203,6 +204,22 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     }
     validateProjectInfo();
     setValid( openPage, true );
+}
+
+void OpenProjectDialog::openPageAccepted()
+{
+    if ( isValid( openPage ) )
+    {
+        ///TODO: cleanup to just call next() once we depend on kde 4.7.3 or higher
+        ///      requires bugfix in kdelibs, workaround for now
+        if ( isAppropriate( projectInfoPage ) )
+        {
+            next();
+        } else
+        {
+            accept();
+        }
+    }
 }
 
 void OpenProjectDialog::validateProjectName( const QString& name )
