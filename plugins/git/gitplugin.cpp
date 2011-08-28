@@ -997,10 +997,14 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     QStringList versionString = job->output().trimmed().split(' ').last().split('.');
-    static QList<int> minimumVersion = QList<int>() << 1 << 7;
-    
+    static const QList<int> minimumVersion = QList<int>() << 1 << 7;
     kDebug() << "checking git version" << versionString << "against" << minimumVersion;
     m_oldVersion = false;
+    if (versionString.size() < minimumVersion.size()) {
+        m_oldVersion = true;
+        kWarning() << "invalid git version string:" << job->output().trimmed();
+        return;
+    }
     foreach(int num, minimumVersion) {
         QString curr = versionString.takeFirst();
         int valcurr = curr.toInt();
