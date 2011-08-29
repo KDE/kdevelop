@@ -27,18 +27,22 @@ class OpenProjectPage;
 
 class OpenProjectDialog : public KAssistantDialog
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent = 0 );
     KUrl projectFileUrl();
     QString projectName();
     QString projectManager();
+
 private slots:
     void validateSourcePage( bool );
     void validateOpenUrl( const KUrl& );
     void validateProjectName( const QString& );
     void validateProjectManager( const QString& );
     void storeFileList(KIO::Job*, const KIO::UDSEntryList&);
+    void openPageAccepted();
+
 private:
     void validateProjectInfo();
     KUrl m_url;
