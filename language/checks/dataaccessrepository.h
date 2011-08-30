@@ -38,7 +38,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
         /** Defines the flags that will tell what this data access is about */
         enum DataAccessFlag { None=0,
             Read=1, /**< This data access reads data */
-            Write=2 /**< This data access writes data */
+            Write=2,/**< This data access writes data */
+            Call=4  /**< This call is modifying some outsider data*/
         };
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
         
@@ -53,6 +54,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
         
         /** Checks the flags and returns if it's writing the data */
         bool isWrite() const { return m_flags&Write; }
+        
+        /** Checks the flags and returns if it's just some call */
+        bool isCall() const { return m_flags&Call; }
         
         /** @returns the cursor */
         KDevelop::CursorInRevision pos() const { return m_pos; }
