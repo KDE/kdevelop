@@ -370,6 +370,8 @@ void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   bool modif = optype ? optype->modifiers()&FunctionType::ConstModifier : m_session->token_stream->token(node->op).kind!=Token_arrow;
   
+  DataAccess::DataAccessFlags flags(DataAccess::Call | DataAccess::Read | (modif ? DataAccess::Write : DataAccess::None));
+  m_mods->addModification(cursorForToken(node->name->start_token), flags);
 //   qDebug() << "class member access" << nodeToString(m_session, node->name) << modif << (optype ? optype->toString() : "null") << (node->kind);
   m_callStack.top()=(QList< AbstractType::Ptr >() << (modif ? constructReferenceType().cast<AbstractType>() : constructReadOnlyType()));
 }

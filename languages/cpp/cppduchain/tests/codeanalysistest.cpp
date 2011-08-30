@@ -81,9 +81,9 @@ void CodeAnalysisTest::testUseReadWrite_data()
   QTest::newRow("oper++") << "struct C { bool operator++(int); }; C e; bool f() { e++; }"
                                   << (QVariantList() << uint(DataAccess::Write|DataAccess::Read));
   QTest::newRow("member-dot") << "struct C { C boh(); }; C e; bool f() { e.boh().boh().boh(); }"
-                                  << (QVariantList() << uint(DataAccess::Write|DataAccess::Read));
+                                  << (QVariantList() << uint(DataAccess::Write|DataAccess::Read) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write));
   QTest::newRow("member-arrow") << "struct C { C boh(); }; C* e; bool f() { e->boh(); }"
-                                  << (QVariantList() << uint(DataAccess::Read));
+                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Call|DataAccess::Read));
   QTest::newRow("forloop") << "int i; bool f() { for(i=0; i<33; ++i) {} }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read|DataAccess::Write));
   QTest::newRow("if-nocond") << "int i; bool f() { if(i) {} }"
@@ -113,9 +113,9 @@ void CodeAnalysisTest::testUseReadWrite_data()
   QTest::newRow("function call, different parameter count") << "void f(int) { f(3,4); }"
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("method call, different parameter count") << "class C { void f(int,int&); };  void f(int x) { C c; c.f(1,x); }"
-                                  << (QVariantList() << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Read|DataAccess::Write));
+                                  << (QVariantList() << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Read|DataAccess::Write) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write));
   QTest::newRow("casts") << "class C { C m(); }; class D : public C {}; void f(D* a) { static_cast<C*>(a)->m(); }"
-                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read));
+                                  << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read) << uint(DataAccess::Call|DataAccess::Read));
   QTest::newRow("ptr") << "void f() { int* a=new int; (*a)=3; }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read));
 }
