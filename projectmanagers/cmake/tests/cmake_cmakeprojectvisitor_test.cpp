@@ -410,11 +410,21 @@ void CMakeProjectVisitorTest::testRun_data()
     cacheValues << StringPair("VAR", "OFF");
     results.clear();
     results << StringPair("val", "TRUE");
-    QTest::newRow("break1") <<
+    QTest::newRow("option") <<
                             "option(VAR \"something\" ON)\n"
                             "if(NOT VAR)\n"
                                 "set(val TRUE)\n"
                             "endif(NOT VAR)\n"
+                            << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    QTest::newRow("unfinished while") <<
+                            "while(1)\n"
+                            << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    QTest::newRow("unfinished foreach") <<
+                            "foreach(VAR 1)\n"
                             << cacheValues << results;
 }
 
