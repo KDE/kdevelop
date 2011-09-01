@@ -1992,16 +1992,6 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
 
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
     int end=whileast->line()+1;
-    if(result)
-    {
-        walk(whileast->content(), whileast->line()+1);
-        
-        if(m_hitBreak) {
-            kDebug() << "break found. leaving loop";
-            m_hitBreak=false;
-        } else
-            walk(whileast->content(), whileast->line());
-    }
     CMakeFileContent::const_iterator it=whileast->content().constBegin()+end;
     CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
     int lines=0, inside=1;
@@ -2016,6 +2006,18 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
 
     if(it!=itEnd) {
         usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
+    } else
+        lines++;
+    
+    if(result && inside==0)
+    {
+        walk(whileast->content(), whileast->line()+1);
+        
+        if(m_hitBreak) {
+            kDebug() << "break found. leaving loop";
+            m_hitBreak=false;
+        } else
+            walk(whileast->content(), whileast->line());
     }
     return lines;
 }
@@ -2133,7 +2135,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         m_backtrace.top().context = m_topctx;
         delete element;
         
-        if(line>fc.count()) {
+        if(line>=fc.count()) {
             DUChainWriteLocker lock(DUChain::lock());
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
