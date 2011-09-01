@@ -9,6 +9,7 @@ Name[sv]=CMake C++
 Name[uk]=CMake C++
 Name[x-test]=xxCMake C++xx
 Comment=Simple CMake-based C++ application
+Comment[es]=Aplicación C++ sencilla basada en CMake
 Comment[nl]=Eenvoudig op CMake gebaseerd C++ programma
 Comment[pt]=Aplicação simples em C++, baseada no CMake
 Comment[pt_BR]=Simples Aplicativo C++ baseado no CMake

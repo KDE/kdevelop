@@ -9,6 +9,7 @@ Name[sv]=CMake Qt-C++
 Name[uk]=CMake Qt-C++
 Name[x-test]=xxCMake Qt-C++xx
 Comment=Qt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)
+Comment[es]=Aplicación con interfaz gráfica Qt4 CMake. Genera una aplicación con interfaz gráfica basada en CMake/Qt4 (compatible multiplataforma)
 Comment[nl]=Gui-toepassing van Qt4 CMake. Genereert een ope CMake/Qt4 gebaseerd GUI-programma (crossplatform compatibel)
 Comment[pt]=Aplicação gráfica do Qt4 com CMake. Gera uma aplicação gráfica baseada no CMake/Qt4 (compatível com várias plataformas)
 Comment[pt_BR]=Aplicativo gráfico com CMake para Qt4. Gera um aplicativo de interface em CMake/Qt4 (compatível com várias plataformas)

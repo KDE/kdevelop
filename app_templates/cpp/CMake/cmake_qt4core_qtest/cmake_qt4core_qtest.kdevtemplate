@@ -9,6 +9,7 @@ Name[sv]=CMake QtTest
 Name[uk]=CMake QtTest
 Name[x-test]=xxCMake QtTestxx
 Comment=Qt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)
+Comment[es]=Aplicación Qt4 CMake QTest Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
 Comment[nl]=Kerntoepassing van Qt4 CMake QTest. Genereert een op CMake/Qt4-gebaseerd programma (crossplatform compatibel)
 Comment[pt]=Gera uma aplicação baseada no CMake/Qt4 Core com QTest (compatível com várias plataformas)
 Comment[pt_BR]=Aplicativo principal QTest com CMake para Qt4. Gera um aplicativo em CMake/Qt4 (compatível com várias plataformas)
