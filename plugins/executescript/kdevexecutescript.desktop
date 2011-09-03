@@ -20,6 +20,7 @@ Comment[x-test]=xxThis plugin allows running of scripts.xx
 Comment[zh_TW]=此外掛程式允許執行文稿。
 Name=Execute Scripts
 Name[bg]=Изпълнение на скриптове
+Name[cs]=Spustit skripty
 Name[de]=Skripte ausführen
 Name[el]=Εκτέλεση σεναρίων
 Name[es]=Ejecutar scripts
