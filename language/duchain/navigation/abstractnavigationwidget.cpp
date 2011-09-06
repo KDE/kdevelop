@@ -218,10 +218,6 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
     setContext( nextContext );
 }
 
-void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
-  QWidget::keyPressEvent(event);
-}
-
 void AbstractNavigationWidget::executeContextAction(QString action) {
   DUChainReadLocker lock( DUChain::lock() );
   //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
