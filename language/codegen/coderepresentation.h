@@ -45,7 +45,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
     virtual QString line(int line) const = 0;
     virtual int lines() const = 0;
     virtual QString text() const = 0;
-    virtual QString rangeText(KTextEditor::Range range) const;
+    virtual QString rangeText(const KTextEditor::Range& range) const;
     /**
      * Search for the given identifier in the document, and returns all ranges
      * where it was found.
@@ -60,7 +60,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
       *
       * @return true on success
       */
-    virtual bool setText(QString) = 0;
+    virtual bool setText(const QString&) = 0;
     /** @return true if this representation represents an actual file on disk */
     virtual bool fileExists() = 0;
     
@@ -83,7 +83,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
   public:
       /** Used to group edit-history together. Call this before a bunch of replace(), and endEdit in the end. */
       virtual void startEdit() = 0;
-      virtual bool replace(const KTextEditor::Range& range, QString oldText, QString newText, bool ignoreOldText = false) = 0;
+      virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
+                           const QString& newText, bool ignoreOldText = false) = 0;
       /** Must be called exactly once per startEdit() */
       virtual void endEdit() = 0;
     
@@ -93,12 +94,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
 /**
   * Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
   */
-KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation::Ptr createCodeRepresentation(IndexedString url);
+KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& url);
 
 /**
   * @return true if an artificial code representation already exists for the specified URL
   */
-KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(IndexedString url);
+KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(const IndexedString& url);
 
 /**
  *   Allows inserting artificial source-code into the code-representation and parsing framework.
@@ -113,10 +114,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QS
          * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl()
          * function, while ensuring that the name is unique.
          */
-        InsertArtificialCodeRepresentation(IndexedString file, QString text);
+        InsertArtificialCodeRepresentation(const IndexedString& file, const QString& text);
         ~InsertArtificialCodeRepresentation();
         
-        void setText(QString text);
+        void setText(const QString& text);
         QString text();
         /**
           * Returns the file-name for this code-representation.
