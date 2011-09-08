@@ -211,11 +211,9 @@ KDevelop::ProblemPointer ParseJob::readContents()
     QFileInfo fileInfo( localFile );
 
     QDateTime lastModified = fileInfo.lastModified();
-    
-    ForegroundLock lock;
 
     d->tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document());
-    
+
     //Try using an artificial code-representation, which overrides everything else
     if(artificialCodeRepresentationExists(document())) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(document());
@@ -223,24 +221,29 @@ KDevelop::ProblemPointer ParseJob::readContents()
         kDebug() << "took contents for " << document().str() << " from artificial code-representation";
         return KDevelop::ProblemPointer();
     }
-    
-    if(DocumentChangeTracker* t = d->tracker.data())
-    {
-        // The file is open in an editor
-        d->previousRevision = t->revisionAtLastReset();
 
-        t->reset(); // Reset the tracker to the current revision
-        Q_ASSERT(t->revisionAtLastReset());
-        
-        d->contents.contents = t->textAtLastReset().toUtf8();
-        d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
-        
-        d->revision = t->acquireRevision(d->contents.modification.revision);
-    }else{
+    bool hadTracker = false;
+    if(d->tracker)
+    {
+        ForegroundLock lock;
+        if(DocumentChangeTracker* t = d->tracker.data())
+        {
+            // The file is open in an editor
+            d->previousRevision = t->revisionAtLastReset();
+
+            t->reset(); // Reset the tracker to the current revision
+            Q_ASSERT(t->revisionAtLastReset());
+            
+            d->contents.contents = t->textAtLastReset().toUtf8();
+            d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
+            
+            d->revision = t->acquireRevision(d->contents.modification.revision);
+            hadTracker = true;
+        }
+    }
+    if (!hadTracker) {
         // We have to load the file from disk
-        
-        lock.unlock(); // Unlock the foreground lock before reading from disk, so the UI won't block due to I/O
-        
+
         QFile file( localFile );
         
         if ( !file.open( QIODevice::ReadOnly ) )
