@@ -592,7 +592,7 @@ void CPPInternalParseJob::run()
 
       bool isStandardContext = false;
       {
-        DUChainWriteLocker l(DUChain::lock());
+        DUChainReadLocker l(DUChain::lock());
         TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
         isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
