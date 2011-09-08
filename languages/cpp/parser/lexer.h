@@ -51,7 +51,10 @@ public:
   //Symbol associated to the token. This only works if this is a simple symbol
   //only consisting of one identifier(not comments), does not work for operators like "->" or numbers like "50"
   KDevelop::IndexedString symbol() const;
-  
+  //The index of the symbol associated to the token.
+  //The notes from @c symbol() apply as well.
+  uint symbolIndex() const;
+
   //This always works, but is expensive
   QString symbolString() const;
   QByteArray symbolByteArray() const;

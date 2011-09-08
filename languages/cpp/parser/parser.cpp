@@ -280,10 +280,11 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   uint start = session->token_stream->cursor();
 
-  KDevelop::IndexedString name = session->token_stream->token(session->token_stream->cursor()).symbol();
+  const uint tokenIndex = session->token_stream->token(session->token_stream->cursor()).symbolIndex();
   static const KDevelop::IndexedString declSpecString("__declspec");
-  if (name != declSpecString)
+  if (declSpecString.index() != tokenIndex)
     return false;
+
   uint specifier = session->token_stream->cursor();
 
   advance();
