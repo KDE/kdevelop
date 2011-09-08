@@ -102,7 +102,7 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
         identifier.append(*data);
       }else{
         //End of token
-        to.append( KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash).index() );
+        to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
         //kDebug() << "word" << "\"" + KDevelop::IndexedString(to.back()).str() + "\"";
         hash.clear();
         identifier.clear();
@@ -116,7 +116,7 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
   }
   
   if(tokenizing)
-    to.append( KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash).index() );
+    to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
   
   
 /*  kDebug() << QString::fromUtf8(stringFromContents(to));
