@@ -626,6 +626,11 @@ void BackgroundParser::setThreadCount(int threadCount)
     }
 }
 
+int BackgroundParser::threadCount() const
+{
+    return d->m_threads;
+}
+
 void BackgroundParser::setDelay(int miliseconds)
 {
     if (d->m_delay != miliseconds) {

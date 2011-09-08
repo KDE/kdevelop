@@ -145,6 +145,8 @@ void Manager::init()
 
     if ( m_total ) {
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
+        const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
+        std::cout << "parsing with " << threads << " threads" << std::endl;
         if (m_waiting.isEmpty()) {
             std::cout << "ready" << std::endl;
             QApplication::quit();
