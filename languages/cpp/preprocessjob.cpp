@@ -158,8 +158,7 @@ void PreprocessJob::run()
       if(Cpp::EnvironmentManager::self()->isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
         m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
-        IndexedString u = parentJob()->document();
-        m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
+        m_secondEnvironmentFile = new Cpp::EnvironmentFile( parentJob()->document(), 0 );
       }
     }
 

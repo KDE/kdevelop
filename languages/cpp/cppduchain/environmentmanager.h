@@ -212,7 +212,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
   public:
     ///@todo Respect changing include-paths: Check if the included files are still the same(maybe new files are found that were not found before)
-    EnvironmentFile( KDevelop::IndexedString url, KDevelop::TopDUContext* topContext );
+    EnvironmentFile( const KDevelop::IndexedString& url, KDevelop::TopDUContext* topContext );
 
     EnvironmentFile( EnvironmentFileData& data );
     
