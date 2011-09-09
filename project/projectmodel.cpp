@@ -708,6 +708,9 @@ QString ProjectFileItem::fileName() const
     return baseName();
 }
 
+///NOTE: this is kind of slow due to KMimeType::findByUrl
+///      maybe we should also introduce an extension-cache
+///      similar to what the language controller is doing
 void ProjectFileItem::setUrl( const KUrl& url )
 {
     if( project() ) {
