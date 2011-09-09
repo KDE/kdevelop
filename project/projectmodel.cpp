@@ -122,6 +122,7 @@ public:
     Qt::ItemFlags flags;
     ProjectModel* model;
     KUrl m_url;
+    QString iconName;
 };
 
 
@@ -667,7 +668,7 @@ ProjectFileItem::~ProjectFileItem()
 
 QString ProjectFileItem::iconName() const
 {
-    return KMimeType::findByUrl(url(), 0, false, true)->iconName(url());
+    return d_ptr->iconName;
 }
 
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
@@ -716,6 +717,8 @@ void ProjectFileItem::setUrl( const KUrl& url )
     }
 
     ProjectBaseItem::setUrl( url );
+
+    d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName(url);
 }
 
 int ProjectFileItem::type() const
