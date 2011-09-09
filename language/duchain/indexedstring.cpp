@@ -323,4 +323,9 @@ uint IndexedString::indexForString( const char* str, short unsigned length, uint
   }
 }
 
+uint IndexedString::indexForString(const QString& str, uint hash) {
+  const QByteArray array(str.toUtf8());
+  return indexForString(array.constBegin(), array.size(), hash);
+}
+
 }

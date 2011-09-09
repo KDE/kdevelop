@@ -89,6 +89,11 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
+inline uint indexForUrl(const KUrl& url)
+{
+    return IndexedString::indexForString(url.pathOrUrl(KUrl::RemoveTrailingSlash));
+}
+
 class ProjectModelPrivate
 {
 public:
@@ -107,6 +112,8 @@ public:
         return model->itemFromIndex( idx );
     }
 
+    // a hash of IndexedString::indexForString(url) <-> ProjectBaseItem for fast lookup
+    QMultiHash<uint, ProjectBaseItem*> urlLookupTable;
 };
 
 class ProjectBaseItemPrivate
@@ -141,7 +148,11 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
-    
+
+    if (model()) {
+        model()->d->urlLookupTable.remove(indexForUrl(d->m_url), this);
+    }
+
     if( parent() ) {
         parent()->takeRow( d->row );
     } else if( model() ) {
@@ -291,7 +302,20 @@ QString ProjectBaseItem::text() const
 void ProjectBaseItem::setModel( ProjectModel* model )
 {
     Q_D(ProjectBaseItem);
+
+    const uint urlIndex = indexForUrl(d->m_url);
+
+    if (model == d->model) {
+        return;
+    } else if (d->model) {
+        d->model->d->urlLookupTable.remove(urlIndex, this);
+    }
+
     d->model = model;
+    if (model) {
+        model->d->urlLookupTable.insert(urlIndex, this);
+    }
+
     foreach( ProjectBaseItem* item, d->children ) {
         item->setModel( model );
     }
@@ -410,9 +434,15 @@ QString ProjectBaseItem::baseName() const
 void ProjectBaseItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectBaseItem);
+    const KUrl oldUrl = d->m_url;
     d->m_url = url;
     const QString baseName = url.fileName();
     setText( baseName );
+
+    if (model()) {
+        model()->d->urlLookupTable.remove(indexForUrl(oldUrl), this);
+        model()->d->urlLookupTable.insert(indexForUrl(d->m_url), this);
+    }
 }
 
 Qt::ItemFlags ProjectBaseItem::flags()
@@ -961,6 +991,15 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
 {
     // Not supported
     return false;
+}
+
+QList< ProjectBaseItem* > ProjectModel::itemsForUrl ( const KUrl& url )
+{
+    if (!url.isValid()) {
+        return QList<ProjectBaseItem*>();
+    }
+
+    return d->urlLookupTable.values(indexForUrl(url));
 }
 
 void ProjectVisitor::visit ( IProject* prj )
