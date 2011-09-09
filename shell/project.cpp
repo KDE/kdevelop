@@ -454,7 +454,6 @@ QString Project::projectTempFile() const
 
 KSharedConfig::Ptr Project::projectConfiguration() const
 {
-    d->m_cfg->reparseConfiguration();
     return d->m_cfg;
 }
 
