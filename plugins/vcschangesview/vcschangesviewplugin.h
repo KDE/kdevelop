@@ -42,7 +42,7 @@ class VcsProjectIntegrationPlugin : public KDevelop::IPlugin
     Q_OBJECT
     public:
         VcsProjectIntegrationPlugin(QObject *parent, const QVariantList & args);
-        KDevelop::ProjectChangesModel* model() const;
+        KDevelop::ProjectChangesModel* model();
         
     private slots:
         void activated(const QModelIndex& idx);
