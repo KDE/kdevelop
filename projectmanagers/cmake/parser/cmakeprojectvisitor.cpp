@@ -2135,14 +2135,14 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         m_backtrace.top().context = m_topctx;
         delete element;
         
-        if(line>=fc.count()) {
-            DUChainWriteLocker lock(DUChain::lock());
+        if(line>fc.count()) {
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
             p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
-            m_topctx->addProblem(p);
             
+            DUChainWriteLocker lock(DUChain::lock());
+            m_topctx->addProblem(p);
             break;
         }
         
