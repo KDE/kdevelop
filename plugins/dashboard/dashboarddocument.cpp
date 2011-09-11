@@ -43,7 +43,7 @@ KTextEditor::Cursor DashboardDocument::cursorPosition() const
 
 IDocument::DocumentState DashboardDocument::state() const
 {
-    return IDocument::DocumentState::Clean;
+    return IDocument::Clean;
 }
 
 bool DashboardDocument::isActive() const

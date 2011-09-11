@@ -82,7 +82,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
   m_browser = new KTextBrowser;
   
   // since we can embed arbitrary HTML we have to make sure it stays readable by forcing a black-white palette
-  m_browser->viewport()->setPalette( QPalette( Qt::black, Qt::white ) );
+  m_browser->setPalette( QPalette( Qt::black, Qt::white ) );
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
@@ -216,10 +216,6 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
   
   if(thisPtr)
     setContext( nextContext );
-}
-
-void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
-  QWidget::keyPressEvent(event);
 }
 
 void AbstractNavigationWidget::executeContextAction(QString action) {

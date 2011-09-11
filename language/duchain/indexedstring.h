@@ -150,6 +150,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
 
   static unsigned int hashString(const char* str, unsigned short length);
 
+  ///Optimized function that only computes the index of a string
+  ///removes the overhead of the IndexedString ref counting
+  static uint indexForString(const char* str, unsigned short length, uint hash = 0);
+  static uint indexForString(const QString& str, uint hash = 0);
+
  private:
    explicit IndexedString(bool);
    uint m_index;

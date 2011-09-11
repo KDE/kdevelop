@@ -29,7 +29,7 @@ namespace KDevelop {
     
 static bool onDiskChangesForbidden = false;
 
-QString CodeRepresentation::rangeText(KTextEditor::Range range) const
+QString CodeRepresentation::rangeText(const KTextEditor::Range& range) const
 {
     Q_ASSERT(range.end().line() < lines());
     
@@ -102,7 +102,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     return m_document->text();
   }
   
-  bool setText(QString text) {
+  bool setText(const QString& text) {
     bool ret = m_document->setText(text);
     ModificationRevision::clearModificationCache(m_url);
     return ret;
@@ -120,7 +120,8 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_document->endEditing();
   }
   
-  bool replace(const KTextEditor::Range& range, QString oldText, QString newText, bool ignoreOldText) {
+  bool replace(const KTextEditor::Range& range, const QString& oldText,
+               const QString& newText, bool ignoreOldText) {
       QString old = m_document->text(range);
       if(oldText != old && !ignoreOldText) {
           return false;
@@ -132,7 +133,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return ret;
   }
   
-  virtual QString rangeText(KTextEditor::Range range) const {
+  virtual QString rangeText(const KTextEditor::Range& range) const {
       return m_document->text(range);
   }
   
@@ -143,7 +144,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
 
 class FileCodeRepresentation : public CodeRepresentation {
   public:
-    FileCodeRepresentation(IndexedString document) : m_document(document) {
+    FileCodeRepresentation(const IndexedString& document) : m_document(document) {
         QString localFile(document.toUrl().toLocalFile());
   
         QFile file( localFile );
@@ -181,7 +182,7 @@ class FileCodeRepresentation : public CodeRepresentation {
       return data;
     }
     
-    bool setText(QString text) {
+    bool setText(const QString& text) {
       Q_ASSERT(!onDiskChangesForbidden);
       QString localFile(m_document.toUrl().toLocalFile());
 
@@ -213,10 +214,10 @@ class FileCodeRepresentation : public CodeRepresentation {
 
 class ArtificialStringData : public QSharedData {
     public:
-    ArtificialStringData(QString data) {
+    ArtificialStringData(const QString& data) {
         setData(data);
     }
-    void setData(QString data) {
+    void setData(const QString& data) {
         m_data = data;
         m_lineData = m_data.split('\n');
     }
@@ -253,7 +254,7 @@ class StringCodeRepresentation : public CodeRepresentation {
         return data->data();
     }
     
-    bool setText(QString text) {
+    bool setText(const QString& text) {
         data->setData(text);
         return true;
     }
@@ -281,7 +282,7 @@ class StringCodeRepresentation : public CodeRepresentation {
 static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
 
 //Return the representation for the given URL if it exists, or an empty pointer otherwise
-KSharedPtr<ArtificialStringData> representationForUrl(IndexedString url)
+KSharedPtr<ArtificialStringData> representationForUrl(const IndexedString& url)
 {
     if(artificialStrings.contains(url))
         return artificialStrings[url];
@@ -295,12 +296,12 @@ KSharedPtr<ArtificialStringData> representationForUrl(IndexedString url)
     }
 }
 
-bool artificialCodeRepresentationExists(IndexedString url)
+bool artificialCodeRepresentationExists(const IndexedString& url)
 {
     return !representationForUrl(url).isNull();
 }
 
-CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
+CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& url) {
     if(artificialCodeRepresentationExists(url))
         return CodeRepresentation::Ptr(new StringCodeRepresentation(representationForUrl(url)));
 
@@ -316,7 +317,7 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
     onDiskChangesForbidden = changesForbidden;
 }
 
-KUrl CodeRepresentation::artificialUrl(const QString & name)
+KUrl CodeRepresentation::artificialUrl(const QString& name)
 {
     KUrl url(name);
     url.setScheme("artificial");
@@ -325,7 +326,10 @@ KUrl CodeRepresentation::artificialUrl(const QString & name)
     return url;
 }
 
-InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(IndexedString file, QString text) : m_file(file) {
+InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const IndexedString& file,
+                                                                       const QString& text)
+: m_file(file)
+{
     if(m_file.toUrl().isRelative())
     {
         m_file = IndexedString(CodeRepresentation::artificialUrl(file.str()));
@@ -353,7 +357,7 @@ InsertArtificialCodeRepresentation::~InsertArtificialCodeRepresentation() {
     artificialStrings.remove(m_file);
 }
 
-void InsertArtificialCodeRepresentation::setText(QString text) {
+void InsertArtificialCodeRepresentation::setText(const QString& text) {
     Q_ASSERT(artificialStrings.contains(m_file));
     artificialStrings[m_file]->setData(text);
 }
