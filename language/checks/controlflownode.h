@@ -52,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
     void setEndCursor(const CursorInRevision& cursor) {m_nodeRange.end = cursor; }
     
     /** Sets the condition range to @p range */
-    void setConditionRange(const KDevelop::RangeInRevision& range) { m_conditionRange=range; }
+    void setConditionRange(const KDevelop::RangeInRevision& range);
     
     /** Sets @p next to be the node that will be executed after this one */
     void setNext(ControlFlowNode* next) { m_next=next; }

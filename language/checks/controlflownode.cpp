@@ -21,7 +21,7 @@
 using namespace KDevelop;
 
 ControlFlowNode::ControlFlowNode()
-  : m_next(0), m_alternative(0)
+  : m_conditionRange(RangeInRevision::invalid()), m_next(0), m_alternative(0)
 {}
 
 ControlFlowNode::Type ControlFlowNode::type() const
@@ -32,3 +32,10 @@ ControlFlowNode::Type ControlFlowNode::type() const
   else if(m_next) return Sequential;
   else return Exit;
 }
+
+void ControlFlowNode::setConditionRange(const RangeInRevision& range)
+{
+    Q_ASSERT(!range.isValid() || range.end>=range.start);
+    m_conditionRange=range;
+}
+
