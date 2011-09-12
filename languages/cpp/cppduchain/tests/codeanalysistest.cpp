@@ -173,7 +173,7 @@ class ControlFlowToDot
     
     Declaration* declarationForNode(const ControlFlowGraph* graph, const ControlFlowNode* node) const {
       foreach(Declaration* d, graph->declarations()) {
-        if(graph->nodePerDeclaration(d))
+        if(graph->nodePerDeclaration(d)==node)
           return d;
       }
       return 0;
@@ -269,6 +269,11 @@ void CodeAnalysisTest::testControlFlowCreation()
   }
   
   QCOMPARE(visited.size(), nodeCount);
+  
+  foreach(ControlFlowNode* n, visited) {
+    RangeInRevision crange=n->conditionRange();
+    QVERIFY(!crange.isValid() || crange.end>=crange.start);
+  }
 }
 
 void CodeAnalysisTest::testControlFlowCreation_data()
