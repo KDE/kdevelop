@@ -55,10 +55,13 @@ CursorInRevision ControlFlowGraphBuilder::cursorForToken(uint token)
 
 RangeInRevision ControlFlowGraphBuilder::nodeRange(AST* node)
 {
-  if(node)
-    return RangeInRevision(cursorForToken(node->start_token), cursorForToken(node->end_token));
-  else
-    return RangeInRevision::invalid();
+  RangeInRevision ret = node ? RangeInRevision(cursorForToken(node->start_token), cursorForToken(node->end_token)) : RangeInRevision::invalid();
+  if(ret.start>=ret.end) { //I don't understand why I need this
+    CursorInRevision start=ret.end;
+    ret.start=ret.end;
+    ret.end=start;
+  }
+  return ret;
 }
 
 // RangeInRevision rangeBetween(uint start_token, uint end_token);
@@ -122,7 +125,6 @@ void ControlFlowGraphBuilder::visitEnumerator(EnumeratorAST* node)
 
 void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
 {
-//TODO:   m_currentNode->m_conditionRange = rangeBetween(node->condition->start_token, node->condition->end_token);
   ControlFlowNode* previous = m_currentNode;
   m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
   visit(node->condition);
