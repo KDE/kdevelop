@@ -381,6 +381,9 @@ CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath)
               }
             }
           }else{
+            // Turn relative paths into absolute paths from the storage path
+            if (!textLine.startsWith("/"))
+              textLine = sourceDir.absoluteFilePath(textLine);
             ret.paths << textLine;
           }
         }
