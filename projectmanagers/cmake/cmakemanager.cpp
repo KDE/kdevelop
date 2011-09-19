@@ -1228,9 +1228,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
 
 bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const
 {
-    KUrl cache=url, missing=url;
-    cache.addPath("CMakeCache.txt");
-    missing.addPath(".kdev_ignore");
+    KUrl cache(url,"CMakeCache.txt"), missing(url, ".kdev_ignore");
     
     bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
     ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
