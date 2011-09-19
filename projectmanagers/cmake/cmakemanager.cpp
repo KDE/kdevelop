@@ -668,7 +668,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
     m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
     
-    KUrl cmakeListsPath(folder->url());
+    KUrl cmakeListsPath(item->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     
     if(folder && QFile::exists(cmakeListsPath.toLocalFile()))
