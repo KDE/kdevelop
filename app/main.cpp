@@ -76,7 +76,7 @@ public:
 
     void saveState( QSessionManager& sm ) {
         if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController())
-            sm.setRestartCommand(QStringList() << "kdevelop" << "-s" << KDevelop::Core::self()->sessionController()->activeSession()->id().toString());
+            sm.setRestartCommand(QStringList() << QCoreApplication::applicationFilePath() << "-s" << KDevelop::Core::self()->sessionController()->activeSession()->id().toString());
         KApplication::saveState(sm);
     }
 };
