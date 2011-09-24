@@ -84,6 +84,7 @@ void GdbTest::init()
         delete vc->watches()->child(i);
     }
     vc->watches()->clear();
+
 }
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
@@ -91,6 +92,7 @@ class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 public:
     TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
         c = new KConfig();
+        c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", executable);
@@ -1413,6 +1415,24 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
     QFile::remove(shellScript.fileName()+"-copy");
+}
+
+void GdbTest::testBreakpointWithSpaceInPath()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg(findExecutable("debugeespace"));
+    KConfigGroup grp = cfg.config();
+    QString fileName = findSourceFile("debugee space.cpp");
+
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(fileName, 20);
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 20);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 

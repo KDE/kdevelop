@@ -24,6 +24,7 @@
 #include "breakpointcontroller.h"
 
 #include <KDebug>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
@@ -32,11 +33,26 @@
 
 #include "gdbcommand.h"
 #include "debugsession.h"
-#include <KLocalizedString>
 
 using namespace GDBMI;
 
 namespace GDBDebugger {
+
+
+QString quoteExpression(QString expr)
+{
+    expr.replace('"', "\\\"");
+    expr = expr.prepend('"').append('"');
+    return expr;
+}
+QString unquoteExpression(QString expr)
+{
+    if (expr.left(1) == QString('"') && expr.right(1) == QString('"')) {
+        expr = expr.mid(1, expr.length()-2);
+        expr.replace("\\\"", "\"");
+    }
+    return expr;
+}
 
 struct Handler : public GDBCommandHandler
 {
@@ -194,24 +210,29 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
         QString type = mi_b["type"].literal();
         foreach(KDevelop::Breakpoint *b, breakpointModel()->breakpoints()) {
             if ((type == "watchpoint" || type == "hw watchpoint") && b->kind() == KDevelop::Breakpoint::WriteBreakpoint) {
-                if (mi_b["original-location"].literal() == b->expression()) {
+                if (unquoteExpression(mi_b["original-location"].literal()) == b->expression()) {
                     updateBreakpoint = b;
                 }
             } else if (type == "read watchpoint" && b->kind() == KDevelop::Breakpoint::ReadBreakpoint) {
-                if (mi_b["original-location"].literal() == b->expression()) {
+                if (unquoteExpression(mi_b["original-location"].literal()) == b->expression()) {
                     updateBreakpoint = b;
                 }
             } else if (type == "acc watchpoint" && b->kind() == KDevelop::Breakpoint::AccessBreakpoint) {
-                if (mi_b["original-location"].literal() == b->expression()) {
+                if (unquoteExpression(mi_b["original-location"].literal()) == b->expression()) {
                     updateBreakpoint = b;
                 }
             } else if (b->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-                if (mi_b["original-location"].literal() == b->location()) {
-                    updateBreakpoint = b;
+                QString location = mi_b["original-location"].literal();
+                QRegExp rx("^(.+):(\\d+)$");
+                if (rx.indexIn(location) != -1) {
+                    if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt()-1 == b->line()) {
+                        updateBreakpoint = b;
+                    }
                 }
             }
             if (updateBreakpoint) break;
         }
+        
         if (updateBreakpoint) {
             update(updateBreakpoint, mi_b);
         } else {
@@ -269,9 +290,15 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             } else {
                 m_ids[breakpoint] = 0; //add to m_ids so we don't delete it while insert command is still pending
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                    QString location;
+                    if (breakpoint->line() != -1) {
+                        location = quoteExpression(breakpoint->url().pathOrUrl(KUrl::RemoveTrailingSlash)) + ':' + QString::number(breakpoint->line()+1);
+                    } else {
+                        location = breakpoint->location();
+                    }
                     debugSession()->addCommand(
                         new GDBCommand(BreakInsert,
-                                    breakpoint->location(),
+                                    quoteExpression(location),
                                     new InsertedHandler(this, breakpoint)));
                     addedCommand = true;
                 } else {
@@ -284,7 +311,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                     debugSession()->addCommand(
                         new GDBCommand(
                             BreakWatch,
-                            opt + breakpoint->location(),
+                            opt + quoteExpression(breakpoint->location()),
                             new InsertedHandler(this, breakpoint)));
                     addedCommand = true;
                 }
@@ -388,7 +415,18 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                just fine, but after KDevelop restart, we'll try to add the
                breakpoint using basically "watch *&(foo)".  I'm not sure if
                that's a problem or not.  */
-            breakpoint->setData(KDevelop::Breakpoint::LocationColumn, b["original-location"].literal());
+            QString location = b["original-location"].literal();
+            kDebug() << "location" << location;
+            if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                QRegExp rx("^(.+):(\\d+)$");
+                if (rx.indexIn(location) != -1) {
+                    breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
+                } else {
+                    kWarning() << "can't parse location" << location;
+                }
+            } else {
+                breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
+            }
         }
     } else {
         breakpoint->setData(KDevelop::Breakpoint::LocationColumn, "Your GDB is too old");
