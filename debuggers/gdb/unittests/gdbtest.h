@@ -76,6 +76,7 @@ private Q_SLOTS:
     void testRunGdbScript();
     void testRemoteDebug();
     void testRemoteDebugInsertBreakpoint();
+    void testRemoteDebugInsertBreakpointPickupOnlyOnce();
     void testBreakpointWithSpaceInPath();
 
 private:

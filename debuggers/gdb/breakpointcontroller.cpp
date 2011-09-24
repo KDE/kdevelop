@@ -131,6 +131,7 @@ struct DeletedHandler : public Handler
         Q_UNUSED(r);
         controller->m_ids.remove(breakpoint);
         if (!breakpoint->deleted()) {
+            kDebug() << "delete finished, but was not really deleted (it was just modified)";
             controller->sendMaybe(breakpoint);
         } else {
             delete breakpoint;
@@ -185,7 +186,6 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
                             this,
                             &BreakpointController::handleBreakpointListInitial));
 
-            sendMaybeAll();
             break;
         }
         case IDebugSession::debugger_exited:
@@ -223,10 +223,13 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                 }
             } else if (b->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                 QString location = mi_b["original-location"].literal();
+                kDebug() << "location" << location;
                 QRegExp rx("^(.+):(\\d+)$");
                 if (rx.indexIn(location) != -1) {
                     if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt()-1 == b->line()) {
                         updateBreakpoint = b;
+                    } else {
+                        kDebug() << "!=" << b->location();
                     }
                 }
             }
@@ -241,6 +244,8 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
     }
 
     m_dontSendChanges--;
+
+    sendMaybeAll();
 }
 
 void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
@@ -265,7 +270,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         if (m_ids.contains(breakpoint)) { //if id is 0 breakpoint insertion is still pending, InsertedHandler will call sendMaybe again and delete it
             kDebug() << "breakpoint id" << m_ids[breakpoint];
             if (m_ids[breakpoint]) {
-                debugSession()->addCommand(
+                debugSession()->addCommandToFront(
                     new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                 new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
@@ -276,6 +281,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         }
     }
     else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
+        kDebug() << "location changed";
         if (!breakpoint->enabled()) {
             m_dirty[breakpoint].clear();
             breakpointStateChanged(breakpoint);
@@ -283,7 +289,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
                 /* We already have GDB breakpoint for this, so we need to remove
                 this one.  */
-                debugSession()->addCommand(
+                kDebug() << "We already have GDB breakpoint for this, so we need to remove this one";
+                debugSession()->addCommandToFront(
                     new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                 new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
@@ -296,7 +303,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                     } else {
                         location = breakpoint->location();
                     }
-                    debugSession()->addCommand(
+                    debugSession()->addCommandToFront(
                         new GDBCommand(BreakInsert,
                                     quoteExpression(location),
                                     new InsertedHandler(this, breakpoint)));
@@ -308,7 +315,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                     else if (breakpoint->kind() == KDevelop::Breakpoint::AccessBreakpoint)
                         opt = "-a ";
 
-                    debugSession()->addCommand(
+                    debugSession()->addCommandToFront(
                         new GDBCommand(
                             BreakWatch,
                             opt + quoteExpression(breakpoint->location()),
