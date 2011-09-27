@@ -274,7 +274,7 @@ template <typename T> T* BuildASTVisitor::stackPop()
 
 QString BuildASTVisitor::getTokenString(qint64 idx)
 {
-    QMake::Parser::Token token = m_parser->tokenStream->token(idx);
+    QMake::Parser::Token token = m_parser->tokenStream->at(idx);
     return m_parser->tokenText(token.begin,token.end).replace('\n',"\\n");
 }
 
@@ -284,19 +284,19 @@ void BuildASTVisitor::setPositionForAst( AstNode* node, AST* ast )
     m_parser->tokenStream->startPosition( node->startToken, &line, &col );
     ast->startLine = line;
     ast->startColumn = col;
-    QMake::Parser::Token tok = m_parser->tokenStream->token( node->startToken );
+    QMake::Parser::Token tok = m_parser->tokenStream->at( node->startToken );
     ast->start = tok.begin;
     m_parser->tokenStream->endPosition( node->endToken, &line, &col );
     ast->endLine = line;
     ast->endColumn = col;
-    tok = m_parser->tokenStream->token( node->endToken );
+    tok = m_parser->tokenStream->at( node->endToken );
     ast->end = tok.end;
 }
 
 void BuildASTVisitor::setPositionForToken( qint64 idx, ValueAST* ast )
 {
     qint64 line,col;
-    QMake::Parser::Token token = m_parser->tokenStream->token(idx);
+    QMake::Parser::Token token = m_parser->tokenStream->at(idx);
     m_parser->tokenStream->startPosition(idx,&line,&col);
     ast->startLine = line;
     ast->startColumn = col;

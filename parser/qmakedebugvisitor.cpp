@@ -37,7 +37,7 @@ DebugVisitor::DebugVisitor(QMake::Parser* parser)
 QString DebugVisitor::getTokenInfo(qint64 idx)
 {
     qint64 line,col;
-    QMake::Parser::Token token = m_parser->tokenStream->token(idx);
+    QMake::Parser::Token token = m_parser->tokenStream->at(idx);
     m_parser->tokenStream->startPosition(idx,&line,&col);
     return QString("%1,%2,%3")
             .arg(line)

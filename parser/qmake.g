@@ -30,6 +30,8 @@ namespace QMake
     class Lexer;
 }
 
+#include <QtCore/QString>
+
 :]
 
 %parser_declaration_header "QtCore/QString"
@@ -164,7 +166,7 @@ void Parser::tokenize( const QString& contents )
         if ( !kind ) // when the lexer returns 0, the end of file is reached
             kind = Parser::Token_EOF;
 
-        Parser::Token &t = this->tokenStream->next();
+        Parser::Token &t = this->tokenStream->push();
         t.kind = kind;
         if( t.kind == Parser::Token_EOF )
         {
@@ -216,7 +218,7 @@ void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
     qint64 line;
     qint64 col;
     size_t index = tokenStream->index()-1;
-    Token &token = tokenStream->token(index);
+    Token &token = tokenStream->at(index);
     kDebug(9024) << "token starts at:" << token.begin;
     kDebug(9024) << "index is:" << index;
     tokenStream->startPosition(index, &line, &col);
