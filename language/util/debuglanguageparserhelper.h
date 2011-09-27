@@ -100,7 +100,7 @@ private:
             LexerT lexer(&tokenStream, m_session.contents());
             int token;
             while ((token = lexer.nextTokenKind())) {
-                TokenT &t = tokenStream.next();
+                TokenT &t = tokenStream.push();
                 t.begin = lexer.tokenBegin();
                 t.end = lexer.tokenEnd();
                 t.kind = token;
