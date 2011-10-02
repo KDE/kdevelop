@@ -254,9 +254,18 @@ void ContextBrowserView::navigationContextChanged(bool wasInitial, bool isInitia
 
 void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force) {
     m_lastUsedTopContext = IndexedTopDUContext(topContext);
+
+    if(isLocked() && (!m_navigationWidget.data() || !isVisible()))
+    {
+        // Automatically remove the locked state if the view is not visible or the widget was deleted,
+        // because the locked state has side-effects on other navigation functionality.
+        m_autoLocked = false;
+        m_lockButton->setChecked(false);
+    }
     
     if(m_navigationWidgetDeclaration == decl->id() && !force)
         return;
+    
     m_navigationWidgetDeclaration = decl->id();
     
     if (!isLocked() && (isVisible() || force)) {  // NO-OP if toolview is hidden, for performance reasons
