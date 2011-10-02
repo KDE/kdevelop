@@ -101,8 +101,6 @@ void ProjectSelectionPage::templateChanged(int current)
 
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
-    qDebug() << "--------" << current << current.data() << current.data( Qt::UserRole+2 );
-    
     KStandardDirs* dirs = m_templatesModel->plugin()->componentData().dirs();
     QString picPath = dirs->findResource("apptemplate_previews", current.data( Qt::UserRole+2 ).toString() );
     if( picPath.isEmpty() ) 

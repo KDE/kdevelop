@@ -344,8 +344,8 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   
   updateProviders();
-
-  m_model->restart();
+// no need to call this, it's done by updateProviders already
+//   m_model->restart();
 }
 
 

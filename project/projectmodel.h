@@ -278,6 +278,7 @@ public:
 
     virtual ProjectTargetItem *target() const;
     virtual QString iconName() const;
+    virtual void setUrl(const KUrl& );
 };
 
 /**

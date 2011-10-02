@@ -30,6 +30,10 @@
 #include <assert.h>
 #include <sstream>
 
+#ifndef HAVE_MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
+#endif
+
 /**
  * The goal of this utility is transforming the abstract unix-socket which is used by dbus
  * into a TCP socket which can be forwarded to a target machine by ssh tunneling, and then on

@@ -80,7 +80,7 @@ private:
 
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(VcsProjectIntegrationFactory::componentData(), parent)
-    , m_model(ICore::self()->projectController()->changesModel())
+    , m_model(0)
 {
     ICore::self()->uiController()->addToolView(i18n("VCS Changes"), new VCSProjectToolViewFactory(this));
     
@@ -93,7 +93,6 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     reloadaction->setText(i18n("Reload View"));
     reloadaction->setIcon(KIcon("view-refresh"));
     reloadaction->setToolTip(i18n("Refreshes the view for all projects, in case anything changed."));
-    connect(reloadaction, SIGNAL(triggered(bool)), m_model, SLOT(reloadAll()));
 }
 
 void VcsProjectIntegrationPlugin::activated(const QModelIndex& /*idx*/)
@@ -101,7 +100,12 @@ void VcsProjectIntegrationPlugin::activated(const QModelIndex& /*idx*/)
 
 }
 
-ProjectChangesModel* VcsProjectIntegrationPlugin::model() const
+ProjectChangesModel* VcsProjectIntegrationPlugin::model()
 {
+    if(!m_model) {
+        m_model = ICore::self()->projectController()->changesModel();
+        connect(actionCollection()->action("reload_view"), SIGNAL(triggered(bool)), m_model, SLOT(reloadAll()));
+    }
+    
     return m_model;
 }

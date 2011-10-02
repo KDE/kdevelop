@@ -775,6 +775,11 @@ QString ProjectTargetItem::iconName() const
     return "system-run";
 }
 
+void ProjectTargetItem::setUrl(const KUrl& url)
+{
+    d_ptr->m_url=url;
+}
+
 int ProjectTargetItem::type() const
 {
     return ProjectBaseItem::Target;
