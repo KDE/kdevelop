@@ -75,8 +75,13 @@ public:
     explicit KDevelopApplication(bool GUIenabled = true): KApplication(GUIenabled) {}
 
     void saveState( QSessionManager& sm ) {
-        if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController())
-            sm.setRestartCommand(QStringList() << QCoreApplication::applicationFilePath() << "-s" << KDevelop::Core::self()->sessionController()->activeSession()->id().toString());
+        if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController()) {
+            QString x11SessionId = QString("%1_%2").arg(sm.sessionId()).arg(sm.sessionKey());
+            QString kdevelopSessionId = KDevelop::Core::self()->sessionController()->activeSession()->id().toString();
+
+            sm.setRestartCommand(QStringList() << QCoreApplication::applicationFilePath() << "-session" << x11SessionId << "-s" << kdevelopSessionId);
+        }
+
         KApplication::saveState(sm);
     }
 };
