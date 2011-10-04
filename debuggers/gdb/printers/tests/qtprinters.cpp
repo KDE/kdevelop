@@ -21,6 +21,7 @@
 #include <QTest>
 #include <QProcess>
 #include <QDebug>
+#include <QFileInfo>
 #include <QDir>
 
 const QString BINARY_PATH(PRINTER_BIN_DIR);
@@ -41,9 +42,11 @@ public:
         execute("set confirm off");
         execute("set print pretty on");
         QList<QByteArray> p;
+        QDir printersDir = QFileInfo(__FILE__).dir();
+        printersDir.cdUp(); // go up to get to the main printers directory
         p << "python"
           << "import sys"
-          << "sys.path.insert(0, '"+QDir(__FILE__).dirName().toAscii()+"')"
+          << "sys.path.insert(0, '"+printersDir.path().toAscii()+"')"
           << "from qt4 import register_qt4_printers"
           << "register_qt4_printers (None)"
           << "end";
