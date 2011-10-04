@@ -43,6 +43,11 @@ QMakeFileVisitor::~QMakeFileVisitor()
 
 }
 
+void QMakeFileVisitor::setVariables(const VariableMap& vars)
+{
+    m_variableValues = vars;
+}
+
 QMakeVariableResolver::VariableMap QMakeFileVisitor::visitFile(QMake::ProjectAST* node)
 {
     visitProject(node);

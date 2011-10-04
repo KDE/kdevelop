@@ -61,6 +61,10 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 bool QMakeProjectFile::read()
 {
+    // default values
+    m_variableValues["QT"] = QStringList() << "core" << "gui";
+    m_variableValues["CONFIG"] = QStringList() << "qt";
+
     Q_ASSERT(m_mkspecs);
     foreach( const QString& var, m_mkspecs->variables() )
     {

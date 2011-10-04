@@ -121,6 +121,8 @@ bool QMakeFile::read()
     {
         ifDebug(kDebug(9024) << "found ast:" << m_ast->statements.count() ;)
         QMakeFileVisitor visitor(this, this);
+        ///TODO: cleanup, re-use m_variableValues directly in the visitor
+        visitor.setVariables(m_variableValues);
         m_variableValues = visitor.visitFile(m_ast);
         ifDebug(kDebug(9024) << "Variables found:" << m_variableValues ;)
     }

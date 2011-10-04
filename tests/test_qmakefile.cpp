@@ -330,5 +330,106 @@ void TestQMakeFile::replaceFunctions()
     }
 }
 
+void TestQMakeFile::qtIncludeDirs_data()
+{
+    QTest::addColumn<QString>("fileContents");
+    QTest::addColumn<QStringList>("modules");
+    QTest::addColumn<QStringList>("missingModules");
+
+    {
+    QStringList list;
+    list << "core" << "gui";
+    QTest::newRow("defaults") << "" << list;
+    }
+    {
+    QStringList list;
+    list << "core";
+    QTest::newRow("minimal") << "QT -= gui" << list;
+    }
+    {
+    QStringList modules;
+    modules << "core" << "gui" << "network" << "opengl" << "phonon" << "script" << "scripttools"
+            << "sql" << "svg" << "webkit" << "xml" << "xmlpatterns" << "qt3support" << "designer"
+            << "uitools" << "help" << "assistant" << "qtestlib" << "testlib" << "qaxcontainer"
+            << "qaxserver" << "dbus" << "declarative";
+    foreach(const QString& module, modules) {
+        QTest::newRow(qPrintable(module)) << ("QT = " + module) << (QStringList() << module);
+    }
+    }
+}
+
+void TestQMakeFile::qtIncludeDirs()
+{
+    QFETCH(QString, fileContents);
+    QFETCH(QStringList, modules);
+
+    QMap<QString, QString> moduleMap;
+    moduleMap["core"] = "QtCore";
+    moduleMap["gui"] = "QtGui";
+    moduleMap["network"] = "QtNetwork";
+    moduleMap["opengl"] = "QtOpenGL";
+    moduleMap["phonon"] = "Phonon";
+    moduleMap["script"] = "QtScript";
+    moduleMap["scripttools"] = "QtScriptTools";
+    moduleMap["sql"] = "QtSql";
+    moduleMap["svg"] = "QtSvg";
+    moduleMap["webkit"] = "QtWebKit";
+    moduleMap["xml"] = "QtXml";
+    moduleMap["xmlpatterns"] = "QtXmlPatterns";
+    moduleMap["qt3support"] = "Qt3Support";
+    moduleMap["designer"] = "QtDesigner";
+    moduleMap["uitools"] = "QtUiTools";
+    moduleMap["help"] = "QtHelp";
+    moduleMap["assistant"] = "QtAssistant";
+    moduleMap["qtestlib"] = "QtTest";
+    moduleMap["testlib"] = "QtTest";
+    moduleMap["qaxcontainer"] = "ActiveQt";
+    moduleMap["qaxserver"] = "ActiveQt";
+    moduleMap["dbus"] = "QtDBus";
+    moduleMap["declarative"] = "QtDeclarative";
+
+    KTemporaryFile tmpFile;
+    tmpFile.open();
+    tmpFile.write(fileContents.toUtf8());
+    tmpFile.close();
+
+    QMakeProjectFile file(tmpFile.fileName());
+
+    QHash<QString,QString> qmvars = queryQMake( tmpFile.fileName() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    QVERIFY(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+    QVERIFY(file.read());
+
+    const KUrl::List includes = file.includeDirectories();
+    qDebug() << includes;
+
+    // should always be there
+    QVERIFY(includes.contains(qmvars["QT_INSTALL_HEADERS"]));
+
+    for(QMap< QString, QString >::const_iterator it = moduleMap.constBegin();
+        it != moduleMap.constEnd(); ++it)
+    {
+        QFileInfo include(qmvars["QT_INSTALL_HEADERS"] + "/" + it.value());
+//         NOTE: disabled since not all modules are always present.
+//         TODO: think about this some more
+//         QVERIFY(include.exists() && include.isDir());
+
+        bool shouldBeIncluded = modules.contains(it.key());
+        if (!shouldBeIncluded) {
+            foreach(const QString& module, modules) {
+                if (module != it.key() && moduleMap.value(module) == it.value()) {
+                    shouldBeIncluded = true;
+                    break;
+                }
+            }
+        }
+        QCOMPARE((bool) includes.contains(include.filePath()),
+                 shouldBeIncluded);
+    }
+}
+
 
 #include "test_qmakefile.moc"

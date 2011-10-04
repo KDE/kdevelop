@@ -41,6 +41,9 @@ private slots:
 
     void replaceFunctions_data();
     void replaceFunctions();
+
+    void qtIncludeDirs_data();
+    void qtIncludeDirs();
 };
 
 #endif // TEST_QMAKEFILE_H

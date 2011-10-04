@@ -39,6 +39,8 @@ public:
 
     virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const;
 
+    // use this before visiting a file to set the default variables
+    void setVariables(const VariableMap& vars);
     // visit whole file and return map of defined variables
     VariableMap visitFile(QMake::ProjectAST* node);
     // visit macro with given arguments and forward its returnvalue
