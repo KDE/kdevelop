@@ -2,6 +2,7 @@
 Type=Service
 Name=Custom BuildSystem
 Name[bs]=Vlastiti sistem za gradnju
+Name[cs]=Vlastní systém pro sestavení
 Name[de]=Eigenes Build-System
 Name[el]=Προσαρμοσμένο σύστημα κατασκευής
 Name[en_GB]=Custom BuildSystem
@@ -21,6 +22,7 @@ Name[zh_CN]=自定义构建系统
 Name[zh_TW]=自訂編譯系統
 Comment=KDevelop Custom BuildSystem Support
 Comment[bs]=Podrška za KDevelop vlastiti sistem za gradnju
+Comment[cs]=Podpora pro vlastní systém sestavení KDevelop
 Comment[de]=Unterstüzung von eigenen Build-Systemen in KDevelop
 Comment[el]=Υποστήριξη προσαρμοσμένου συστήματος κατασκευής KDevelop
 Comment[en_GB]=KDevelop Custom BuildSystem Support
