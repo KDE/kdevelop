@@ -465,7 +465,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
 
   if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !proxyContext)
   {
-    top = contentContextFromProxyContext(top);
+    top = DUChainUtils::contentContextFromProxyContext(top);
     if(!top)
     {
       kDebug(9007) << "WARNING: Proxy-context had invalid content-context";

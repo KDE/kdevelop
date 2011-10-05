@@ -809,7 +809,7 @@ void CPPInternalParseJob::run()
           Q_ASSERT(0); //Failure
         }
 
-        Q_ASSERT(contentContextFromProxyContext(proxyContext) == contentContext.data());
+        Q_ASSERT(DUChainUtils::contentContextFromProxyContext(proxyContext) == contentContext.data());
 
         //Make sure the imported contextsa re added
         foreach ( const LineContextPair &context, parentJob()->includedFiles() )
