@@ -41,6 +41,7 @@
 #include "specializationstore.h"
 #include "persistentsymboltable.h"
 #include "classdeclaration.h"
+#include "parsingenvironment.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -233,6 +234,32 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
 QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)
 {
   return iconForProperties(completionProperties(dec));
+}
+
+TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
+{
+  if(!top)
+    return 0;
+  if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
+    if(!top->importedParentContexts().isEmpty())
+    {
+      DUContext* ctx = top->importedParentContexts()[0].context(0);
+      if(!ctx)
+        return 0;
+      TopDUContext* ret = ctx->topContext();
+      if(!ret)
+        return 0;
+      if(ret->url() != top->url())
+        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
+      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
+        return ret;
+    }
+    else {
+      kDebug() << "Proxy-context imports no content-context";
+    }
+  } else
+    return top;
+  return 0;
 }
 
 TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url, bool preferProxyContext) {

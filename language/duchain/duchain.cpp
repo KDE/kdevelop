@@ -1389,7 +1389,10 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
 
   QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
   while(it != list.constEnd()) {
-    if(*it && ((*it)->isProxyContext() == proxyContext) && (*it)->matchEnvironment(environment)) {
+    if(*it && ((*it)->isProxyContext() == proxyContext) && (*it)->matchEnvironment(environment) &&
+      // Verify that the environment-file and its top-context are "good": The top-context must exist,
+      // and there must be a content-context associated to the proxy-context.
+      (*it)->topContext() && (!proxyContext || DUChainUtils::contentContextFromProxyContext((*it)->topContext())) ) {
       return *it;
     }
     ++it;
@@ -1642,26 +1645,6 @@ void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
   emit declarationSelected(decl);
 }
 
-TopDUContext* contentContextFromProxyContext(TopDUContext* top)
-{
-  if(!top)
-    return 0;
-  if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
-    if(!top->importedParentContexts().isEmpty())
-    {
-      TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
-      if(ret->url() != top->url())
-        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
-      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
-        return ret;
-    }
-    else {
-      kDebug() << "Proxy-context imports no content-context";
-    }
-  } else
-    return top;
-  return 0;
-}
 KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext) {
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
@@ -1684,7 +1667,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 
   if(!proxyContext) {
     DUChainReadLocker readLock(DUChain::lock());
-    return contentContextFromProxyContext(waiter.m_topContext);
+    return DUChainUtils::contentContextFromProxyContext(waiter.m_topContext);
   }
 
   return waiter.m_topContext;

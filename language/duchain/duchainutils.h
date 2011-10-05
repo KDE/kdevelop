@@ -55,6 +55,12 @@ namespace DUChainUtils {
     * @param proxyContext Whether the returned context should be a proxy context. When no proxy-context is found, a normal context is returned.
     */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url, bool preferProxyContext = false);
+  /**
+   * Returns the content-context associated to the given proxy-contex.
+   * Returns the same context if it is not a proxy-context.
+   * Returns zero if no content-context could be acquired.
+   * */
+  KDEVPLATFORMLANGUAGE_EXPORT TopDUContext* contentContextFromProxyContext(TopDUContext* top);
   /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
    * Must only be called from the foreground or with the foreground lock held.
    * If the item under the cursor is a use, the declaration is returned. */
