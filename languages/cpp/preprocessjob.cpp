@@ -80,6 +80,8 @@ TopDUContext* contentContextFromProxyContext(TopDUContext* top)
     if(!top->importedParentContexts().isEmpty())
     {
       TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
+      if( !ret )
+        return 0;
       if(ret->url() != top->url())
         kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
       if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
