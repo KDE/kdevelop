@@ -108,6 +108,8 @@ public:
      */
     RevisionType revisionType() const;
 
+    RevisionSpecialType specialType() const;
+
     /**
      * Return the value of this revision.
      * The actual content depends on the type of this revision, the possible
