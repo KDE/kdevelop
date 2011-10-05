@@ -162,6 +162,7 @@ private slots:
     void parseGitStatusOutput_old(KDevelop::DVcsJob* job);
     void parseGitVersionOutput(KDevelop::DVcsJob* job);
     void parseGitBranchOutput(KDevelop::DVcsJob* job);
+    void parseGitCurrentBranch(KDevelop::DVcsJob* job);
     
     void ctxPushStash();
     void ctxPopStash();
@@ -187,8 +188,6 @@ private:
 
     bool m_hasError;
     QString m_errorDescription;
-    public slots:
-        void parseGitCurrentBranch(KDevelop::DVcsJob*);
 };
 
 #endif

@@ -334,10 +334,19 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
-    QString revstr = revisionInterval(srcRevision, dstRevision);
-    if(!revstr.isEmpty())
-        *job << revstr;
+    if(srcRevision.revisionType()==VcsRevision::Special
+        && dstRevision.revisionType()==VcsRevision::Special
+        && srcRevision.specialType()==VcsRevision::Base
+        && dstRevision.specialType()==VcsRevision::Working)
+        *job << "HEAD";
+    else {
+        QString revstr = revisionInterval(srcRevision, dstRevision);
+        if(!revstr.isEmpty())
+            *job << revstr;
+    }
     
+    qDebug() << "fuuu" << (srcRevision==VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base)) << (dstRevision==VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)) << job->dvcsCommand();
+    qDebug() << "faaa" << srcRevision.prettyValue() << dstRevision.prettyValue();
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
