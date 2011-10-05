@@ -345,8 +345,6 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
             *job << revstr;
     }
     
-    qDebug() << "fuuu" << (srcRevision==VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base)) << (dstRevision==VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)) << job->dvcsCommand();
-    qDebug() << "faaa" << srcRevision.prettyValue() << dstRevision.prettyValue();
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
