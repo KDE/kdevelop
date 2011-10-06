@@ -16,6 +16,7 @@ Comment=Simple CMake-based C++ application
 Comment[cs]=Jednoduchá aplikace C++ založená na CMake
 Comment[es]=Aplicación C++ sencilla basada en CMake
 Comment[fr]=Application C++ simple utilisant CMake
+Comment[lt]=Paprasta CMake-paremta C++ programa
 Comment[nb]=Enkelt C++-program basert på CMake
 Comment[nl]=Eenvoudig op CMake gebaseerd C++ programma
 Comment[pt]=Aplicação simples em C++, baseada no CMake
