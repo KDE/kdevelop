@@ -3,7 +3,7 @@ project(gdb)
 macro_optional_find_package( KDE4Workspace 4.2.0 )
 
 macro_log_feature( KDE4WORKSPACE_FOUND
-"KDE 4 Worksapce" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
+"KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
 "" "Required for building the process selection dialog for attaching GDB to a running process."
 )
 
