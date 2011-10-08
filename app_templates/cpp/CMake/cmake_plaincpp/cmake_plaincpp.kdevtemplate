@@ -2,6 +2,7 @@
 [General]
 Name=CMake C++
 Name[cs]=CMake C++
+Name[de]=CMake C++
 Name[es]=CMake C++
 Name[fr]=CMake C++
 Name[nb]=CMake C++
@@ -14,6 +15,7 @@ Name[x-test]=xxCMake C++xx
 Name[zh_TW]=CMake C++
 Comment=Simple CMake-based C++ application
 Comment[cs]=Jednoduchá aplikace C++ založená na CMake
+Comment[de]=Einfache auf CMake basierende C++-Anwendung
 Comment[es]=Aplicación C++ sencilla basada en CMake
 Comment[fr]=Application C++ simple utilisant CMake
 Comment[lt]=Paprasta CMake-paremta C++ programa

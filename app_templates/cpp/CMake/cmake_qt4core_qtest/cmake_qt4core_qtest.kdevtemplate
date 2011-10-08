@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake QtTest
+Name[de]=CMake QtTest
 Name[es]=CMake QtTest
 Name[fr]=CMake QtTest
 Name[nb]=CMake QtTest

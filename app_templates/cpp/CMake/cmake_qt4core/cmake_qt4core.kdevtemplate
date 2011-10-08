@@ -2,6 +2,7 @@
 [General]
 Name=CMake QtCore C++
 Name[cs]=CMake QtCore C++
+Name[de]=CMake QtCore C++
 Name[es]=CMake QtCore C++
 Name[fr]=CMake QtCore C++
 Name[nb]=CMake QtCore C++
