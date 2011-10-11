@@ -43,28 +43,37 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     resize(QSize(700, 500));
     
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    KPageWidgetItem* currentPage;
     start.adjustPath(KUrl::AddTrailingSlash);
-    sourcePageWidget = new ProjectSourcePage( start, this );
-    connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
-    sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+
+    if( fetch ) {
+        sourcePageWidget = new ProjectSourcePage( start, this );
+        connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
+        sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+        currentPage = sourcePage;
+    }
     
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
     connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
     openPage = addPage( openPageWidget, i18n("Select the project") );
     
+    if( !fetch ) {
+        currentPage = openPage;
+    }
+
     QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
     connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
     projectInfoPage = addPage( page, i18n("Project information") );
     
-    setValid( sourcePage, true );
+    setValid( sourcePage, false );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
     
-    setCurrentPage( fetch ? sourcePage : openPage );
+    setCurrentPage( currentPage );
 }
 
 void OpenProjectDialog::validateSourcePage(bool valid)
