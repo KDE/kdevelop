@@ -433,7 +433,6 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
     GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
-    toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString,int)),
             toolView, SLOT(showErrorMessage(QString)));

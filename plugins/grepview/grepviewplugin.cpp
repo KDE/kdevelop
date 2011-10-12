@@ -70,7 +70,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     // instantiate delegate, it's supposed to be deleted via QObject inheritance
     new GrepOutputDelegate(this);
-    m_factory = new GrepOutputViewFactory();
+    m_factory = new GrepOutputViewFactory(this);
     core()->uiController()->addToolView(i18n("Find/Replace in Files"), m_factory);
 }
 

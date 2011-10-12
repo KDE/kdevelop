@@ -32,12 +32,13 @@
 
 using namespace KDevelop;
 
-GrepOutputViewFactory::GrepOutputViewFactory()
+GrepOutputViewFactory::GrepOutputViewFactory(GrepViewPlugin* plugin)
+: m_plugin(plugin)
 {}
 
 QWidget* GrepOutputViewFactory::create(QWidget* parent)
 {
-    return new GrepOutputView(parent);
+    return new GrepOutputView(parent, m_plugin);
 }
 
 Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
@@ -53,8 +54,15 @@ QString GrepOutputViewFactory::id() const
 
 const int GrepOutputView::HISTORY_SIZE = 5;
 
-GrepOutputView::GrepOutputView(QWidget* parent)
+GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
   : QWidget(parent)
+  , m_next(0)
+  , m_prev(0)
+  , m_collapseAll(0)
+  , m_expandAll(0)
+  , m_clearSearchHistory(0)
+  , m_statusLabel(0)
+  , m_plugin(plugin)
 {
     Ui::GrepOutputView::setupUi(this);
 
@@ -220,11 +228,6 @@ void GrepOutputView::changeModel(int index)
     
     updateCheckable();
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
-}
-
-void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
-{
-    m_plugin = plugin;
 }
 
 void GrepOutputView::setMessage(const QString& msg)
