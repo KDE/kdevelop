@@ -1,23 +1,23 @@
 #include "%{APPNAME}Test.h"
 #include <QtTest/QTest>
 
-void %{APPNAME}Test::initTestCase()
+void %{APPNAMEID}Test::initTestCase()
 {}
 
-void %{APPNAME}Test::init()
+void %{APPNAMEID}Test::init()
 {}
 
-void %{APPNAME}Test::cleanup()
+void %{APPNAMEID}Test::cleanup()
 {}
 
-void %{APPNAME}Test::cleanupTestCase()
+void %{APPNAMEID}Test::cleanupTestCase()
 {}
 
-void %{APPNAME}Test::someTest()
+void %{APPNAMEID}Test::someTest()
 {
     QCOMPARE(1,2);
 }
 
 
-QTEST_MAIN(%{APPNAME}Test)
+QTEST_MAIN(%{APPNAMEID}Test)
 #include "%{APPNAME}Test.moc"

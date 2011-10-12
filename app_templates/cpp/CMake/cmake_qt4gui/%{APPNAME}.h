@@ -1,14 +1,14 @@
-#ifndef %{APPNAME}_H
-#define %{APPNAME}_H
+#ifndef %{APPNAMEID}_H
+#define %{APPNAMEID}_H
 
 #include <QtGui/QMainWindow>
 
-class %{APPNAME} : public QMainWindow
+class %{APPNAMEID} : public QMainWindow
 {
 Q_OBJECT
 public:
-    %{APPNAME}();
-    virtual ~%{APPNAME}();
+    %{APPNAMEID}();
+    virtual ~%{APPNAMEID}();
 };
 
-#endif // %{APPNAME}_H
+#endif // %{APPNAMEID}_H

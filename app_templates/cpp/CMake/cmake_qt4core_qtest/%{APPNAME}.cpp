@@ -1,9 +1,9 @@
 #include "%{APPNAME}.h"
 
-%{APPNAME}::%{APPNAME}()
+%{APPNAMEID}::%{APPNAMEID}()
 {}
 
-%{APPNAME}::~%{APPNAME}()
+%{APPNAMEID}::~%{APPNAMEID}()
 {}
 
 #include "%{APPNAME}.moc"

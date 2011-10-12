@@ -3,17 +3,17 @@
 #include <QTimer>
 #include <iostream>
 
-%{APPNAME}::%{APPNAME}()
+%{APPNAMEID}::%{APPNAMEID}()
 {
     QTimer* timer = new QTimer(this);
     connect( timer, SIGNAL(timeout()), SLOT(output()) );
     timer->start( 1000 );
 }
 
-%{APPNAME}::~%{APPNAME}()
+%{APPNAMEID}::~%{APPNAMEID}()
 {}
 
-void %{APPNAME}::output()
+void %{APPNAMEID}::output()
 {
     std::cout << "Hello World!" << std::endl;
 }
