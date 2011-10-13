@@ -73,11 +73,11 @@ void ProjectSelectionPage::templateFamilyChanged(const QModelIndex& current, con
 {
     ui->templatesIconView->setModel(m_templatesModel);
     ui->templatesIconView->setRootIndex(current);
-    
-    ui->templatesIconView->setCurrentIndex(m_templatesModel->index(0,0, current));
-    
+
     connect( ui->templatesIconView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(typeChanged(QModelIndex)) );
+
+    ui->templatesIconView->setCurrentIndex(m_templatesModel->index(0,0, current));
 }
 
 void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
