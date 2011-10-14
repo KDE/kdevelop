@@ -105,6 +105,8 @@ Visitor::visitor_fun_ptr Visitor::_S_table[AST::NODE_KIND_COUNT] = {
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaExpression),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaCapture),
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitLambdaDeclarator),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitInitializerList),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitBracedInitList),
 };
 
 Visitor::Visitor()

@@ -579,7 +579,7 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   clearLastType();
 
-  if(!node->init_declarator && node->type_specifier)
+  if(!node->declarator && node->type_specifier)
     m_typeSpecifierWithoutInitDeclarators = node->type_specifier->start_token;
 
   ContextBuilder::visitFunctionDeclaration(node);

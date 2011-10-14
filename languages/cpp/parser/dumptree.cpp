@@ -112,7 +112,9 @@ char const * const names[] = {
   "TrailingReturnType",
   "LambdaExpression",
   "LambdaCapture",
-  "LambdaDeclarator"
+  "LambdaDeclarator",
+  "InitializerList",
+  "BracedInitList"
 };
 
 DumpTree::DumpTree()

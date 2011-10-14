@@ -166,15 +166,13 @@ private:
 
   bool m_changeWasSignificant, m_ignoreDeclarators;
 
-  enum InitializerType {
-    NoInitializer,
-    AbstractInitializer,
-    DefaultInitializer,
-    DeleteInitializer,
-    OtherInitializer
+  enum FunctionFlag {
+    NoFunctionFlag,
+    AbstractFunction,
+    DefaultFunction,
+    DeleteFunction
   };
-  InitializerType m_initializerType;
-  InitializerType initializerType(InitializerAST* node) const;
+  FunctionFlag m_functionFlag;
 
   //Ast Mapping members
   QStack<AST *> m_mappedNodes;

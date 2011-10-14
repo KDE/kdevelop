@@ -33,6 +33,7 @@ protected:
   virtual void visitBaseClause(BaseClauseAST *);
   virtual void visitBaseSpecifier(BaseSpecifierAST *);
   virtual void visitBinaryExpression(BinaryExpressionAST *);
+  virtual void visitBracedInitList(BracedInitListAST *);
   virtual void visitCastExpression(CastExpressionAST *);
   virtual void visitClassMemberAccess(ClassMemberAccessAST *);
   virtual void visitClassSpecifier(ClassSpecifierAST *);
@@ -60,6 +61,7 @@ protected:
   virtual void visitInitDeclarator(InitDeclaratorAST *);
   virtual void visitInitializer(InitializerAST *);
   virtual void visitInitializerClause(InitializerClauseAST *);
+  virtual void visitInitializerList(InitializerListAST *);
   virtual void visitJumpStatement(JumpStatementAST *);
   virtual void visitLabeledStatement(LabeledStatementAST *);
   virtual void visitLinkageBody(LinkageBodyAST *);

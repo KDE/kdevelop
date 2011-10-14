@@ -82,27 +82,8 @@ bool DeclarationBuilder::changeWasSignificant() const
   return m_changeWasSignificant;
 }
 
-DeclarationBuilder::InitializerType DeclarationBuilder::initializerType(InitializerAST* node) const
-{
-  if (!node) {
-    return NoInitializer;
-  }
-  if (node->initializer_clause) {
-    if (node->initializer_clause->defaultDeleted == InitializerClauseAST::Default) {
-      return DefaultInitializer;
-    } else if (node->initializer_clause->defaultDeleted == InitializerClauseAST::Deleted) {
-      return DeleteInitializer;
-    } else if (node->initializer_clause->expression) {
-      ///FIXME: actually compare expression to 0? right now we would accept something like
-      /// virtual void foo() = 42;
-      return AbstractInitializer;
-    }
-  }
-  return OtherInitializer;
-}
-
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_initializerType(NoInitializer), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_functionFlag(NoFunctionFlag), m_collectQtFunctionSignature(false)
 {
 }
 
@@ -169,6 +150,19 @@ void DeclarationBuilder::parseComments(const ListNode<uint> *comments)
 
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
+  FunctionFlag flag = NoFunctionFlag;
+  switch(node->defaultDeleted) {
+    case FunctionDefinitionAST::NotDefaultOrDeleted:
+      flag = NoFunctionFlag;
+      break;
+    case FunctionDefinitionAST::Default:
+      flag = DefaultFunction;
+      break;
+    case FunctionDefinitionAST::Deleted:
+      flag = DeleteFunction;
+      break;
+  }
+  PushValue<FunctionFlag> setDefaultDeleted(m_functionFlag, flag);
 
   parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
@@ -202,7 +196,10 @@ struct ClearDUContextVisitor : public DefaultVisitor {
 
 void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
-  PushValue<InitializerType> setHasInitialize(m_initializerType, initializerType(node->initializer));
+  ///FIXME: properly add support for member-declaration/member-declarator
+  PushValue<FunctionFlag> setHasInitialize(m_functionFlag,
+    (node->initializer && node->initializer->initializer_clause && node->initializer->initializer_clause->expression)
+      ? AbstractFunction : NoFunctionFlag);
 
   if(currentContext()->type() == DUContext::Other) {
     //Cannot declare a a function within a code-context
@@ -365,9 +362,9 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     if(m_mapAst && !m_mappedNodes.empty())
       editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
 
-    if (m_initializerType == DeleteInitializer) {
+    if (m_functionFlag == DeleteFunction) {
       DUChainWriteLocker lock(DUChain::lock());
-      decl->setExplicitlyDeleted(m_initializerType == DeleteInitializer);
+      decl->setExplicitlyDeleted(true);
     }
 
     if( !m_functionDefinedStack.isEmpty() ) {
@@ -738,7 +735,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
     }
     Q_ASSERT(fun);
     fun->setAccessPolicy(currentAccessPolicy());
-    fun->setIsAbstract(m_initializerType == AbstractInitializer);
+    fun->setIsAbstract(m_functionFlag == AbstractFunction);
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition
@@ -1551,7 +1548,6 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   if(m_mapAst)
     m_mappedNodes.pop();
 }
-
 
 void DeclarationBuilder::popSpecifiers()
 {

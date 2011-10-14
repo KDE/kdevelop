@@ -112,6 +112,9 @@ private slots:
   void testAlternativeFunctionSyntax();
   void testLambda_data();
   void testLambda();
+  void testInitList_data();
+  void testInitList();
+  void testInitListFalsePositives();
   //END C++2011 Support
 
 protected:
@@ -119,6 +122,13 @@ protected:
    * dump @p node and print problems of @c control
    */
   void dump(AST* node);
+  /**
+   * Retrieve string representation of @p node.
+   */
+  QString stringForNode(AST* node) const;
+
+  bool hasKind(AST*, AST::NODE_KIND);
+  AST* getAST(AST*, AST::NODE_KIND, int num = 0);
 
 private:
   Control control;

@@ -22,6 +22,7 @@
 #include <QTest>
 
 #include "parsesession.h"
+#include "lexer.h"
 
 void TestParser::testRangeBasedFor()
 {
@@ -63,6 +64,7 @@ void TestParser::testDefaultDeletedFunctions()
 {
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -384,4 +386,95 @@ void TestParser::testLambda()
   dump(ast);
 
   QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testInitList_data()
+{
+  QTest::addColumn<QString>("code");
+
+  // exmaples taken from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm
+  QTest::newRow("assign") << "int a = {1};";
+  QTest::newRow("ctor") << "std::complex<double> z{1,2};";
+  QTest::newRow("new") << "auto i = new std::vector<std::string>{\"once\", \"upon\", \"a\", \"time\"};"; // 4 string elements
+  QTest::newRow("func-arg") << "f( {\"Nicholas\",\"Annemarie\"} );"; // pass list of two elements
+  QTest::newRow("return") << "std::vector<std::string> f() { return { \"Norah\" }; }"; // return list of one element
+  QTest::newRow("init-zero") << "int* e {};"; // initialization to zero / null pointer
+  QTest::newRow("ctor-explicit") << "double x = double{1};"; // explicitly construct a double
+  QTest::newRow("map") << "std::map<std::string,int> anim = { {\"bear\",4}, {\"cassowary\",2}, {\"tiger\",7} };";
+}
+
+void TestParser::testInitList()
+{
+  QFETCH(QString, code);
+
+  TranslationUnitAST* ast = parse(code.toUtf8());
+  dump(ast);
+
+  QEXPECT_FAIL("new", "not implemented yet", Abort);
+  QEXPECT_FAIL("func-arg", "not implemented yet", Abort);
+  QEXPECT_FAIL("return", "not implemented yet", Abort);
+  QEXPECT_FAIL("ctor-explicit", "not implemented yet", Abort);
+  QVERIFY(control.problems().isEmpty());
+  QVERIFY(hasKind(ast, AST::Kind_BracedInitList));
+}
+
+void TestParser::testInitListFalsePositives()
+{
+  {
+  TranslationUnitAST* ast = parse(
+    "void foo() {};"
+  );
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast && ast->declarations);
+  QCOMPARE(ast->declarations->count(), 2);
+
+  // void foo() {}
+  QCOMPARE(ast->declarations->at(0)->element->kind, (int) AST::Kind_FunctionDefinition);
+  FunctionDefinitionAST* funcDef = static_cast<FunctionDefinitionAST*>(ast->declarations->at(0)->element);
+  QVERIFY(!funcDef->constructor_initializers);
+  QVERIFY(funcDef->type_specifier);
+  QCOMPARE(stringForNode(funcDef->type_specifier).trimmed(), QString("void"));
+  QVERIFY(funcDef->function_body);
+  QCOMPARE(stringForNode(funcDef->function_body).trimmed(), QString("{}"));
+  // ;
+  QVERIFY(!ast->declarations->at(1)->element);
+  }
+  {
+  TranslationUnitAST* ast = parse(
+    "class c{void foo() {};};"
+  );
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast && ast->declarations);
+  QCOMPARE(ast->declarations->count(), 1);
+
+  // class c{};
+  QCOMPARE(ast->declarations->at(0)->element->kind, (int) AST::Kind_SimpleDeclaration);
+  SimpleDeclarationAST* cDec = static_cast<SimpleDeclarationAST*>(ast->declarations->at(0)->element);
+  QVERIFY(cDec->type_specifier);
+  QCOMPARE(cDec->type_specifier->kind, (int) AST::Kind_ClassSpecifier);
+  ClassSpecifierAST* cSpec = static_cast<ClassSpecifierAST*>(cDec->type_specifier);
+  QCOMPARE(cSpec->member_specs->count(), 2);
+  }
+  {
+  TranslationUnitAST* ast = parse(
+    "class c{c();};"
+  );
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+
+  QVERIFY(ast && ast->declarations);
+  QCOMPARE(ast->declarations->count(), 1);
+
+  // class c{};
+  QCOMPARE(ast->declarations->at(0)->element->kind, (int) AST::Kind_SimpleDeclaration);
+  SimpleDeclarationAST* cDec = static_cast<SimpleDeclarationAST*>(ast->declarations->at(0)->element);
+  QVERIFY(cDec->type_specifier);
+  QCOMPARE(cDec->type_specifier->kind, (int) AST::Kind_ClassSpecifier);
+  ClassSpecifierAST* cSpec = static_cast<ClassSpecifierAST*>(cDec->type_specifier);
+  QCOMPARE(cSpec->member_specs->count(), 1);
+  }
 }

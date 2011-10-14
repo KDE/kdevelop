@@ -35,6 +35,7 @@ class AsmDefinitionAST;
 class BaseClauseAST;
 class BaseSpecifierAST;
 class BinaryExpressionAST;
+class BracedInitListAST;
 class CastExpressionAST;
 class ClassMemberAccessAST;
 class ClassSpecifierAST;
@@ -63,6 +64,7 @@ class IfStatementAST;
 class IncrDecrExpressionAST;
 class InitDeclaratorAST;
 class InitializerAST;
+class InitializerListAST;
 class InitializerClauseAST;
 class LabeledStatementAST;
 class LambdaExpressionAST;
@@ -116,9 +118,14 @@ class WhileStatementAST;
 class WinDeclSpecAST;
 
 class AST
-{///@warning When adding new nodes here, also modify the names[] array in dumptree.cpp
+{
 public:
-
+  /**
+   * @WARNING: When adding new nodes here, you also need to modify the following places:
+   * - names[] array in dumptree.cpp
+   * - add visitXYZ to visitor.h and visitor.cpp, esp. also to the Visitor::_S_table
+   * - overload visitXYZ impl to default_visitor.cpp
+   */
   enum NODE_KIND
     {
       Kind_UNKNOWN = 0,
@@ -208,6 +215,8 @@ public:
       Kind_LambdaExpression,                    // 83
       Kind_LambdaCapture,                       // 84
       Kind_LambdaDeclarator,                    // 85
+      Kind_InitializerList,                     // 86
+      Kind_BracedInitList,                      // 87
       NODE_KIND_COUNT
     };
 
@@ -572,10 +581,18 @@ public:
   const ListNode<uint> *storage_specifiers;
   const ListNode<uint> *function_specifiers;
   TypeSpecifierAST *type_specifier;
-  InitDeclaratorAST *init_declarator;
+  DeclaratorAST *declarator;
   StatementAST *function_body;
   WinDeclSpecAST *win_decl_specifiers;
   CtorInitializerAST *constructor_initializers;
+
+  // support for = default or = deleted functions
+  enum DefaultDeleted {
+    NotDefaultOrDeleted,
+    Default,
+    Deleted
+  };
+  DefaultDeleted defaultDeleted;
 };
 
 class ForStatementAST : public StatementAST
@@ -648,8 +665,27 @@ public:
   DECLARE_AST_NODE(Initializer)
 
   InitializerClauseAST *initializer_clause;
+  // expression list or braced init list
   ExpressionAST *expression;
 };
+
+class InitializerListAST : public ExpressionAST
+{
+public:
+  DECLARE_AST_NODE(InitializerList)
+
+  const ListNode<InitializerClauseAST*> *clauses;
+  bool isVariadic : 1;
+};
+
+class BracedInitListAST : public ExpressionAST
+{
+public:
+  DECLARE_AST_NODE(BracedInitList)
+
+  InitializerListAST *list;
+};
+
 
 class InitializerClauseAST : public AST
 {
@@ -657,22 +693,8 @@ public:
 
   DECLARE_AST_NODE(InitializerClause)
 
-  // either 'expression' or 'initializer_list' or 'defaultDeleted' or neither are used.
-  // neither are used when the clause represents the empty initializer "{}"
-
-  // assignment expression
+  // assignment expression or braced-init-list
   ExpressionAST *expression;
-  // initializer list
-  const ListNode<InitializerClauseAST*> *initializer_list;
-
-  // support for = default or = deleted functions
-  enum DefaultDeleted {
-    NotDefaultOrDeleted,
-    Default,
-    Deleted
-  };
-  DefaultDeleted defaultDeleted;
-  bool initializer_isVariadic;
 };
 
 class LabeledStatementAST : public StatementAST

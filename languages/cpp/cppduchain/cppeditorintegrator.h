@@ -140,7 +140,7 @@ public:
    * Retrieve the string represented by a range of tokens in utf8.
    */
   QByteArray tokensToByteArray(std::size_t start, std::size_t end) const;
-  
+
 private:
   ParseSession* m_session;
 };
