@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
+#include <QtGui/QTextEdit>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -1224,9 +1225,19 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl&, QTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
+    QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
+    // Some limit on the file size should be set since whole content is going to be read into
+    // the memory. 1Mb seems to be good value since it's rather strange to have so huge commit
+    // message.
+    static const qint64 maxMergeMsgFileSize = 1024*1024;
+    if (!mergeMsgFile.exists() || mergeMsgFile.size() > maxMergeMsgFileSize)
+        return;
+    mergeMsgFile.open(QIODevice::ReadOnly);
+    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.readAll());
+    editor->setPlainText(mergeMsg);
 }
 
 class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
