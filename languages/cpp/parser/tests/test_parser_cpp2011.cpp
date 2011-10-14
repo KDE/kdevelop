@@ -411,7 +411,6 @@ void TestParser::testInitList()
   dump(ast);
 
   QEXPECT_FAIL("func-arg", "not implemented yet", Abort);
-  QEXPECT_FAIL("return", "not implemented yet", Abort);
   QEXPECT_FAIL("ctor-explicit", "not implemented yet", Abort);
   QVERIFY(control.problems().isEmpty());
   QVERIFY(hasKind(ast, AST::Kind_BracedInitList));

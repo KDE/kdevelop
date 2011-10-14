@@ -2995,9 +2995,10 @@ bool Parser::parseStatement(StatementAST *&node)
 
     case Token_return:
       {
+        ///TODO: cleanup and put this into parseJumpStatement to follow the spec
         advance();
         ExpressionAST *expr = 0;
-        parseCommaExpression(expr);
+        parseCommaExpression(expr) || parseBracedInitList(expr);
 
         ADVANCE(';', ";");
 
