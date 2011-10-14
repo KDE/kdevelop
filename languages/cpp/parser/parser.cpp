@@ -4325,18 +4325,28 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
   rewind(saved_pos);
 
  L_no_rewind:
-  if (!expr && parseSimpleTypeSpecifier(typeSpec,true)
-      && session->token_stream->lookAhead() == '(')
+  bool expectPrimary = true;
+  if (!expr && parseSimpleTypeSpecifier(typeSpec,true))
     {
-      advance(); // skip '('
-      parseCommaExpression(expr);
-      CHECK(')');
+      if (session->token_stream->lookAhead() == '(')
+        {
+          advance(); // skip '('
+          parseCommaExpression(expr);
+          CHECK(')');
+          expectPrimary = false;
+        }
+      else if (parseBracedInitList(expr))
+        {
+          expectPrimary = false;
+        }
     }
   else if (expr)
     {
       typeSpec = 0;
+      expectPrimary = false;
     }
-  else
+
+  if (expectPrimary)
     {
       typeSpec = 0;
       rewind(start);

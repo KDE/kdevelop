@@ -400,6 +400,7 @@ void TestParser::testInitList_data()
   QTest::newRow("return") << "std::vector<std::string> f() { return { \"Norah\" }; }"; // return list of one element
   QTest::newRow("init-zero") << "int* e {};"; // initialization to zero / null pointer
   QTest::newRow("ctor-explicit") << "double x = double{1};"; // explicitly construct a double
+  QTest::newRow("ctor-explicit2") << "void foo() { double{1}; };"; // explicitly construct a double
   QTest::newRow("map") << "std::map<std::string,int> anim = { {\"bear\",4}, {\"cassowary\",2}, {\"tiger\",7} };";
   QTest::newRow("operator[]") << "void foo() { x[{1,2,3}] = 7; }"; // 5.2.1
 }
@@ -412,7 +413,6 @@ void TestParser::testInitList()
   dump(ast);
 
   QEXPECT_FAIL("func-arg", "not implemented yet", Abort);
-  QEXPECT_FAIL("ctor-explicit", "not implemented yet", Abort);
   QVERIFY(control.problems().isEmpty());
   QVERIFY(hasKind(ast, AST::Kind_BracedInitList));
 }
