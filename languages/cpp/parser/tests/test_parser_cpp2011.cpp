@@ -401,6 +401,7 @@ void TestParser::testInitList_data()
   QTest::newRow("init-zero") << "int* e {};"; // initialization to zero / null pointer
   QTest::newRow("ctor-explicit") << "double x = double{1};"; // explicitly construct a double
   QTest::newRow("map") << "std::map<std::string,int> anim = { {\"bear\",4}, {\"cassowary\",2}, {\"tiger\",7} };";
+  QTest::newRow("operator[]") << "void foo() { x[{1,2,3}] = 7; }"; // 5.2.1
 }
 
 void TestParser::testInitList()

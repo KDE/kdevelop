@@ -4119,7 +4119,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
       {
         advance();
         ExpressionAST *expr = 0;
-        parseExpression(expr);
+        parseExpression(expr) || parseBracedInitList(expr);
         CHECK(']');
 
         SubscriptExpressionAST *ast
