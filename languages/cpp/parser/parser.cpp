@@ -4549,14 +4549,22 @@ bool Parser::parseNewInitializer(NewInitializerAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  CHECK('(');
+  ExpressionAST *expr = 0;
+  if (session->token_stream->lookAhead() == '(')
+    {
+      advance();
+
+      parseCommaExpression(expr);
+      CHECK(')');
+    }
+  else if (!parseBracedInitList(expr))
+    {
+      rewind(start);
+      return false;
+    }
 
   NewInitializerAST *ast = CreateNode<NewInitializerAST>(session->mempool);
-
-  parseCommaExpression(ast->expression);
-
-  CHECK(')');
-
+  ast->expression = expr;
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 

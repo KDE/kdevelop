@@ -410,7 +410,6 @@ void TestParser::testInitList()
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
 
-  QEXPECT_FAIL("new", "not implemented yet", Abort);
   QEXPECT_FAIL("func-arg", "not implemented yet", Abort);
   QEXPECT_FAIL("return", "not implemented yet", Abort);
   QEXPECT_FAIL("ctor-explicit", "not implemented yet", Abort);
@@ -476,5 +475,12 @@ void TestParser::testInitListFalsePositives()
   QCOMPARE(cDec->type_specifier->kind, (int) AST::Kind_ClassSpecifier);
   ClassSpecifierAST* cSpec = static_cast<ClassSpecifierAST*>(cDec->type_specifier);
   QCOMPARE(cSpec->member_specs->count(), 1);
+  }
+  {
+  TranslationUnitAST* ast = parse(
+    "class C {}; C* c = new C();"
+  );
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
   }
 }
