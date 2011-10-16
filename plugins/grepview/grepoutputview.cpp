@@ -310,12 +310,11 @@ void GrepOutputView::selectNextItem()
 
 void GrepOutputView::collapseAllItems()
 {
-    // Collapse the first children, which correspond to the files.
-    QModelIndex base = resultsTreeView->model()->index(0, 0);
-    
-    int rows = resultsTreeView->model()->rowCount(base);
-    for(int row = 0; row < rows; ++row)
-        resultsTreeView->collapse(base.child(row, 0));
+    // Collapse everything
+    resultsTreeView->collapseAll();
+
+    // Now reopen the first children, which correspond to the files.
+    resultsTreeView->expand(resultsTreeView->model()->index(0, 0));
 }
 
 void GrepOutputView::expandAllItems()
