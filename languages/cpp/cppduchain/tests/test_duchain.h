@@ -206,6 +206,7 @@ private slots:
   void testDecltype();
   void testTrailingReturnType();
   void testConstexpr();
+  void testInitListRegressions();
   //END C++2011
 
 private:

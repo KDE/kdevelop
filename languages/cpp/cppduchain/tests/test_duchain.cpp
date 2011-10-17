@@ -6071,4 +6071,20 @@ void TestDUChain::testDeclarationHasUses()
   QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("d")).first()->hasUses(), false);
 }
 
+void TestDUChain::testInitListRegressions()
+{
+  {
+  // as see in /usr/include/c++/4.6.1/bits/stl_bvector.h
+    QByteArray code(
+      "#define __CHAR_BIT__ 8\n"
+      "typedef unsigned long _Bit_type;\n"
+      "enum { _S_word_bit = int(__CHAR_BIT__ * sizeof(_Bit_type)) };\n"
+    );
+
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
+  }
+}
+
 #include "test_duchain.moc"

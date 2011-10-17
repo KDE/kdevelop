@@ -331,6 +331,7 @@ private:
   virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
   virtual void visitInitDeclarator(InitDeclaratorAST *) ;
   virtual void visitInitializerClause(InitializerClauseAST *);
+  virtual void visitInitializerList(InitializerListAST *);
   virtual void visitMemInitializer(MemInitializerAST *) ;
   virtual void visitName(NameAST *) ;
   virtual void visitNewDeclarator(NewDeclaratorAST *) ;
@@ -351,7 +352,7 @@ private:
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   virtual void visitTypeIDOperator(TypeIDOperatorAST *);
   virtual void visitLambdaExpression(LambdaExpressionAST* );
-  
+
   void putStringType();
   AbstractType::Ptr qObjectPtrType() const;
   

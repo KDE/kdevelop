@@ -1250,11 +1250,18 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
   void ExpressionVisitor::visitInitializerClause(InitializerClauseAST* node)
   {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
     DefaultVisitor::visitInitializerClause(node);
     if( m_lastType ) {
       m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() );
       m_parameterNodes.append(node);
     }
+  }
+
+  void ExpressionVisitor::visitInitializerList(InitializerListAST* node)
+  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    DefaultVisitor::visitInitializerList( node );
   }
 
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
