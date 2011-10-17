@@ -137,18 +137,14 @@ private slots:
   void testTemplateRecursiveInstantiation();
   void testTemplateInternalSearch();
   void testTemplateImplicitInstantiations();
-  void testStringSets();
   void testAssignedContexts();
   void testTryCatch();
-  void testIndexedStrings();
   void testEnum();
   void testCaseUse();
   void testConstructorOperatorUses();
   void testSizeofUse();
   void testDefinitionUse();
   void testOperatorUses();
-  void testImportStructure();
-  void testImportCache();
   void testDeclareSubClass();
   void testDeclarationId();
   void testConst();
@@ -159,8 +155,6 @@ private slots:
   void testConstructorUses();
   void testExternalMemberDeclaration();
 
-  void testSymbolTableValid();
-  
   void testSeparateVariableDefinition();
   
   void testBaseUses();
