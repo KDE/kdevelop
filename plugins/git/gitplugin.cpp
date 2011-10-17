@@ -50,6 +50,7 @@
 #include <KMessageBox>
 #include <KStandardDirs>
 #include "gitjob.h"
+#include "gitmessagehighlighter.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -1221,6 +1222,11 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
             return job;
         }
     }
+}
+
+void GitPlugin::setupCommitMessageEditor(const KUrl&, QTextEdit* editor) const
+{
+    new GitMessageHighlighter(editor);
 }
 
 class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget

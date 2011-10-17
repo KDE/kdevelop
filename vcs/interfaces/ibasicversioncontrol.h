@@ -27,6 +27,7 @@
 #include "../vcsdiff.h"
 
 class QString;
+class QTextEdit;
 
 namespace KDevelop
 {
@@ -46,7 +47,7 @@ class VcsLocationWidget;
  *
  */
 
-class IBasicVersionControl
+class KDEVPLATFORMVCS_EXPORT IBasicVersionControl
 {
 public:
 
@@ -249,6 +250,12 @@ public:
     
     virtual VcsLocationWidget* vcsLocation(QWidget* parent) const=0;
 
+    /**
+     * Optionally apply VCS specific settings to the commit message editor.
+     * Overwrite this to set e.g. a default commit message or to setup highlighting or validation.
+     * The default implementation does nothing.
+     */
+    virtual void setupCommitMessageEditor(const KUrl& localLocation, QTextEdit *editor) const;
 };
 
 }

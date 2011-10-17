@@ -64,6 +64,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
     m_commitMessageEdit = new QTextEdit;
     m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
+    m_vcs->setupCommitMessageEditor(url, m_commitMessageEdit.data());
     
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));

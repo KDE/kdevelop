@@ -88,6 +88,7 @@ public:
     virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations, RecursionMode recursion);
     virtual KDevelop::VcsJob* update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion);
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
+    virtual void setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const;
     //End of
 
     KDevelop::VcsJob* add(const KUrl::List& localLocations,
