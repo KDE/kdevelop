@@ -330,6 +330,7 @@ private:
   virtual void visitFunctionCall(FunctionCallAST *) ;
   virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
   virtual void visitInitDeclarator(InitDeclaratorAST *) ;
+  virtual void visitInitializerClause(InitializerClauseAST *);
   virtual void visitMemInitializer(MemInitializerAST *) ;
   virtual void visitName(NameAST *) ;
   virtual void visitNewDeclarator(NewDeclaratorAST *) ;

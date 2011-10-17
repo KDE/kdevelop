@@ -145,6 +145,7 @@ public:
   bool parseExclusiveOrExpression(ExpressionAST *&node,
 				  bool templArgs = false);
   bool parseExpression(ExpressionAST *&node);
+  bool parseExpressionList(ExpressionAST *&node);
   bool parseExpressionOrDeclarationStatement(StatementAST *&node);
   bool parseExpressionStatement(StatementAST *&node);
   bool parseForInitStatement(StatementAST *&node);

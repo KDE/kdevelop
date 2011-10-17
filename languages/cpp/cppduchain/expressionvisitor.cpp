@@ -1204,7 +1204,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         } else if(!node->initializer->expression && node->initializer->initializer_clause && constructedType)
         { // report operator= use in i.e.: foo = bar;
           token = node->initializer->start_token;
-          fail = !buildParametersFromExpression(node->initializer->initializer_clause->expression);
+          fail = !buildParametersFromExpression(node->initializer->initializer_clause);
           LOCKDUCHAIN;
           declarations.clear();
           if ( ClassDeclaration* cdec = dynamic_cast<ClassDeclaration*>(constructedType->declaration(m_source)) ) {
@@ -1245,6 +1245,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         newUse( node , token, token+1, chosenFunction );
     }else{
       DefaultVisitor::visitInitDeclarator(node);
+    }
+  }
+
+  void ExpressionVisitor::visitInitializerClause(InitializerClauseAST* node)
+  {
+    DefaultVisitor::visitInitializerClause(node);
+    if( m_lastType ) {
+      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() );
+      m_parameterNodes.append(node);
     }
   }
 
@@ -1879,12 +1888,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return true;
 
     visit(expression);
-
-    //binary expressions don't yield m_lastType, so when m_lastType is set we probably only have one single parameter
-    if( m_lastType ) {
-      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() );
-      m_parameterNodes.append(expression);
-    }
 
     //Check if all parameters could be evaluated
     int paramNum = 1;

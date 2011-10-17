@@ -104,7 +104,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
-  QEXPECT_FAIL("pack-expansion-funcptr", "function pointer is improperly parsed", Abort);
   QEXPECT_FAIL("pack-expansion-is_function", "function pointer is improperly parsed", Abort);
   QVERIFY(control.problems().isEmpty());
 
@@ -396,7 +395,7 @@ void TestParser::testInitList_data()
   QTest::newRow("assign") << "int a = {1};";
   QTest::newRow("ctor") << "std::complex<double> z{1,2};";
   QTest::newRow("new") << "auto i = new std::vector<std::string>{\"once\", \"upon\", \"a\", \"time\"};"; // 4 string elements
-  QTest::newRow("func-arg") << "f( {\"Nicholas\",\"Annemarie\"} );"; // pass list of two elements
+  QTest::newRow("func-arg") << "void foo() { f( {\"Nicholas\",\"Annemarie\"} ); }"; // pass list of two elements
   QTest::newRow("return") << "std::vector<std::string> f() { return { \"Norah\" }; }"; // return list of one element
   QTest::newRow("init-zero") << "int* e {};"; // initialization to zero / null pointer
   QTest::newRow("ctor-explicit") << "double x = double{1};"; // explicitly construct a double
@@ -412,7 +411,6 @@ void TestParser::testInitList()
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
 
-  QEXPECT_FAIL("func-arg", "not implemented yet", Abort);
   QVERIFY(control.problems().isEmpty());
   QVERIFY(hasKind(ast, AST::Kind_BracedInitList));
 }

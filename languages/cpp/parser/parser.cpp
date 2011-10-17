@@ -2555,8 +2555,7 @@ bool Parser::parseInitializer(InitializerAST *&node)
   else if (tk == '(')
     {
       advance();
-      ///TODO: expressionList
-      parseCommaExpression(ast->expression);
+      parseExpressionList(ast->expression);
       CHECK(')');
     }
   else if (!parseBracedInitList(ast->expression))
@@ -2606,7 +2605,7 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
 
   ADVANCE('(', "(");
   ExpressionAST *expr = 0;
-  parseCommaExpression(expr);
+  parseExpressionList(expr);
   bool expressionIsVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {
@@ -4136,7 +4135,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
       {
         advance();
         ExpressionAST *expr = 0;
-        parseExpression(expr);
+        parseExpressionList(expr);
         ///TODO: is this the right place? can't find anything in the last public spec file...
         bool isVariadic = false;
         if (session->token_stream->lookAhead() == Token_ellipsis)
@@ -4252,7 +4251,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
         CHECK('(');
         ExpressionAST *expr = 0;
-        parseCommaExpression(expr);
+        parseExpressionList(expr);
         CHECK(')');
 
         TypeIdentificationAST *ast = CreateNode<TypeIdentificationAST>(session->mempool);
@@ -4331,7 +4330,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
       if (session->token_stream->lookAhead() == '(')
         {
           advance(); // skip '('
-          parseCommaExpression(expr);
+          parseExpressionList(expr);
           CHECK(')');
           expectPrimary = false;
         }
@@ -4486,8 +4485,9 @@ bool Parser::parseNewExpression(ExpressionAST *&node)
 
   if (session->token_stream->lookAhead() == '(')
     {
+      // new-placement
       advance();
-      parseCommaExpression(ast->expression);
+      parseExpressionList(ast->expression);
       CHECK(')');
     }
 
@@ -4565,7 +4565,7 @@ bool Parser::parseNewInitializer(NewInitializerAST *&node)
     {
       advance();
 
-      parseCommaExpression(expr);
+      parseExpressionList(expr);
       CHECK(')');
     }
   else if (!parseBracedInitList(expr))
@@ -5050,6 +5050,14 @@ bool Parser::parseConstantExpression(ExpressionAST *&node)
 bool Parser::parseExpression(ExpressionAST *&node)
 {
   return parseCommaExpression(node);
+}
+
+bool Parser::parseExpressionList(ExpressionAST*& node)
+{
+  InitializerListAST* listNode = 0;
+  const bool success = parseInitializerList(listNode);
+  node = listNode;
+  return success;
 }
 
 bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
