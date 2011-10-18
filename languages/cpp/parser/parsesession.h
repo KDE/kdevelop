@@ -128,6 +128,9 @@ public:
 
   CommentFormatter m_commentFormatter;
 
+  /// useful for debugging, can be called from GDB
+  void dumpNode(AST* node) const;
+
 private:
   PreprocessedContents m_contents;
   rpp::LocationTable* m_locationTable;

@@ -189,3 +189,12 @@ const KDevelop::IndexedString& ParseSession::url() const
 {
   return m_url;
 }
+
+void ParseSession::dumpNode(AST* node) const
+{
+  QString ret;
+  for(int i = node->start_token; i < node->end_token; ++i) {
+    ret += token_stream->token(i).symbolString();
+  }
+  std::cout << qPrintable(ret) << std::endl;
+}
