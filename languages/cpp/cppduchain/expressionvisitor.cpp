@@ -482,6 +482,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   void ExpressionVisitor::visitName(NameAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    Q_ASSERT(m_currentContext); // required later on
 
     DUContext* searchInContext = m_currentContext;
 
