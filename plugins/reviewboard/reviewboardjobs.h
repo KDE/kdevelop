@@ -41,7 +41,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString>>& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
+            HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
             
             virtual void start();
             

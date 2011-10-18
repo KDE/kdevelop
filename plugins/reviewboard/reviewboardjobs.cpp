@@ -100,13 +100,13 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 
 }
 
-HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString>>& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
+HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
         : KJob(parent), m_post(post), m_multipart(multipart)
 {
     m_requrl=s;
     m_requrl.addPath(apiPath);
 
-    for(QList<QPair<QString,QString>>::const_iterator i = queryParameters.begin(); i < queryParameters.end(); i++) {
+    for(QList<QPair<QString,QString> >::const_iterator i = queryParameters.begin(); i < queryParameters.end(); i++) {
         m_requrl.addQueryItem(i->first, i->second);
     }
 }
@@ -166,7 +166,7 @@ void HttpPostCall::finished()
 NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& projectPath, const QString& basedir, QObject* parent)
         : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir), m_project(projectPath)
 {
-    m_newreq = new HttpPostCall(m_server, "/api/review-requests/", QList<QPair<QString,QString>>(), "repository="+projectPath.toLatin1(), false, this);
+    m_newreq = new HttpPostCall(m_server, "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
     connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
 }
 
@@ -193,7 +193,7 @@ void NewRequest::submitPatch()
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
-    m_uploadpatch = new HttpPostCall(m_server, "/api/review-requests/"+m_id+"/diffs/", QList<QPair<QString,QString>>(), multipartFormData(vals), true, this);
+    m_uploadpatch = new HttpPostCall(m_server, "/api/review-requests/"+m_id+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
     connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
     m_uploadpatch->start();
 }
@@ -217,7 +217,7 @@ void NewRequest::done()
 ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
     : m_server(server), KJob(parent)
 {
-    QList<QPair<QString,QString>> countParameters;
+    QList<QPair<QString,QString> > countParameters;
 
     countParameters << qMakePair<QString,QString>("counts-only", "1");
 
@@ -238,7 +238,7 @@ QVariantList ProjectsListRequest::repositories() const
 void ProjectsListRequest::gotRepositoryCount(KJob* )
 {
     int numberOfRepositories = m_countRequest->result().toMap()["count"].toInt();
-    QList<QPair<QString,QString>> repositoriesParameteres;
+    QList<QPair<QString,QString> > repositoriesParameteres;
 
     repositoriesParameteres << qMakePair<QString,QString>("max-results", QString("%1").arg(numberOfRepositories));
 
