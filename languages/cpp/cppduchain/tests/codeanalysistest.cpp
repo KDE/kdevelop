@@ -74,6 +74,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
   
   QTest::newRow("callr") << "int f(int e, int a) { f(a,e); }" << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read) << uint(DataAccess::Read));
   QTest::newRow("callrw") << "int p,w; int f(int&, int) { f(p,w); }" << (QVariantList() << uint(DataAccess::Write|DataAccess::Read) << uint(DataAccess::Read) << uint(DataAccess::Read));
+  QTest::newRow("initandcopy") << "void f() { int a=1, b; a=b; }"
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("oper==") << "class C { bool operator==(const C&) const; }; bool f(const C& e) { return e==e; }"
                                   << (QVariantList() << uint(DataAccess::Read) << uint(DataAccess::Read));
   QTest::newRow("++oper") << "struct C { bool operator++(); }; C e; bool f() { ++e; }"

@@ -174,7 +174,11 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
 //     qDebug() << "lalala" << node->left_expression->kind << nodeToString(primary) << nodeToString(primary->name) << nodeToString(node->right_expression);
     m_mods->addModification(cursorForToken(primary->name->start_token), DataAccess::Write, rangeForNode(node->right_expression));
     
+    m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+    m_argStack.push(0);
     visit(node->right_expression);
+    m_argStack.pop();
+    m_callStack.pop();
   } else {
     if(optype) {
       args = optype->arguments();
