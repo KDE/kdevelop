@@ -61,6 +61,7 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
   private:
     KDevelop::CursorInRevision cursorForToken(uint token);
     KDevelop::RangeInRevision rangeForNode(AST* ast);
+    QString nodeToString(AST* node);
     
     const ParseSession* m_session;
     QStack< QList<KDevelop::AbstractType::Ptr> > m_callStack;
