@@ -75,7 +75,7 @@ void GitMessageHighlighter::highlightBlock(const QString& text)
                     applyErrorFormat(
                         &format,
                         lineLength <= summaryHardLimit,
-                        i18n("Try to keep summary length bellow %1 characters.").arg(summarySoftLimit)
+                        i18n("Try to keep summary length below %1 characters.").arg(summarySoftLimit)
                     );
                 }
                 break;
@@ -95,7 +95,7 @@ void GitMessageHighlighter::highlightBlock(const QString& text)
                     applyErrorFormat(
                         &format,
                         false,
-                        i18n("Try to keep line length bellow %1 characters.").arg(lineLenLimit)
+                        i18n("Try to keep line length below %1 characters.").arg(lineLenLimit)
                     );
                 }
                 break;
