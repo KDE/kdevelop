@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+    <file>main.qml</file>
+    <file>Starting.qml</file>
+    <file>UseKDevelop.qml</file>
+ </qresource>
+</RCC>

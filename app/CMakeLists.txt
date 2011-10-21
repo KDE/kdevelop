@@ -4,8 +4,10 @@ add_subdirectory(plasma)
 
 find_package(SharedMimeInfo REQUIRED)
 
-set(kdevelop_SRCS main.cpp kdevideextension.cpp)
+set(kdevelop_SRCS main.cpp kdevideextension.cpp welcomepage/welcomepageview.cpp)
 kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+
+qt4_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
 
 kde4_add_executable(kdevelop ${kdevelop_SRCS} )
 
@@ -18,7 +20,10 @@ target_link_libraries(kdevelop
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES})
+    ${KDE4_THREADWEAVER_LIBRARIES}
+
+    ${QT_QTDECLARATIVE_LIBRARIES}
+)
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES kdevelop_attach DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)

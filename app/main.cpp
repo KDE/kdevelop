@@ -67,6 +67,12 @@
 
 #include <iostream>
 #include <QtCore/QTextStream>
+#include <interfaces/iuicontroller.h>
+#include <QLabel>
+#include <sublime/area.h>
+#include "welcomepage/welcomepageview.h"
+#include <sublime/document.h>
+#include <shell/uicontroller.h>
 
 using KDevelop::Core;
 
@@ -475,6 +481,10 @@ int main( int argc, char *argv[] )
         }
         args->clear();
     }
+    
+    WelcomePageView* v=new WelcomePageView("lalalal", core->uiControllerInternal()->controller());
+    if(args->count()==0)
+        core->uiController()->activeArea()->addView(v->createView());
 
     return app.exec();
 }
