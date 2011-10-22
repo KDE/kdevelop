@@ -245,7 +245,7 @@ void GDB::processLine(const QByteArray& line)
                
                if (result.subkind == GDBMI::ResultRecord::GeneralNotification)
                {
-                   kDebug() << "General notification";
+                   kDebug(9012) << "General notification";
                    emit notification(result);
                    return;
                }
