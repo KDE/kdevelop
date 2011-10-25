@@ -46,12 +46,12 @@ ExpressionParser::ExpressionParser( bool strict, bool debug, bool propagateConst
 {
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const KDevelop::TopDUContext* source, bool forceExpression ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
 
-  ParseSession* session = new ParseSession();
+  ParseSession session;
 
   Control control;
   DumpChain dumper;
@@ -68,19 +68,18 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     type = context->type();
   }
 
-  session->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+  session.setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
 
-  ast = parser.parseTypeOrExpression(session, forceExpression);
+  ast = parser.parseTypeOrExpression(&session, forceExpression);
 
   if(!ast) {
     kDebug(9007) << "Failed to parse \"" << unit << "\"";
-    delete session;
     return ExpressionEvaluationResult();
   }
-  
+
   if (m_debug) {
     kDebug(9007) << "===== AST:";
-    dumper.dump(ast, session);
+    dumper.dump(ast, &session);
   }
 
   ast->ducontext = context.data();
@@ -90,40 +89,42 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     return ExpressionEvaluationResult();
   }
   
-  ExpressionEvaluationResult ret = evaluateType( ast, session, source );
+  ExpressionEvaluationResult ret = evaluateType( ast, &session, source );
 
-  delete session;
 
   return ret;
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source ) {
+ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context, const TopDUContext* source )
+{
   return evaluateType( expression, context, source, true );
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session, const KDevelop::TopDUContext* source ) {
-  
+ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSession* session, const TopDUContext* source )
+{
   if (m_debug) {
     DumpChain dumper;
     kDebug(9007) << "===== AST:";
     dumper.dump(ast, session);
   }
-  
+
   ExpressionEvaluationResult ret;
   ExpressionVisitor v(session, source, m_strict, m_propagateConstness);
   v.parse( ast );
 
   DUChainReadLocker lock(DUChain::lock());
-  
+
   ret.type = v.lastType()->indexed();
   ret.isInstance = v.lastInstance().isInstance;
-  
+
   if(v.lastInstance().declaration)
-    ret.instanceDeclaration = KDevelop::DeclarationId(KDevelop::IndexedDeclaration(v.lastInstance().declaration.data()));
-  
-  foreach(const DeclarationPointer &decl, v.lastDeclarations())
+    ret.instanceDeclaration = DeclarationId(IndexedDeclaration(v.lastInstance().declaration.data()));
+
+  foreach(const DeclarationPointer &decl, v.lastDeclarations()) {
     if(decl)
       ret.allDeclarations.append(decl->id());
+  }
+
   return ret;
 }
 
