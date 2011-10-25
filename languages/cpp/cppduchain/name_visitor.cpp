@@ -179,10 +179,11 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
     if(!m_visitor) {
       m_visitor = new ExpressionVisitor(m_session, m_source);
       ownVisitor = true;
+    }
+    if (!node->expression->ducontext) {
       node->expression->ducontext = const_cast<DUContext*>(m_localContext);
     }
-    
-    m_visitor->visit( node->expression );
+    m_visitor->parse( node->expression );
 
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;

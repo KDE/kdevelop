@@ -323,7 +323,6 @@ private:
   virtual void visitCppCastExpression(CppCastExpressionAST *) ;
   virtual void visitDeclarationStatement(DeclarationStatementAST *) ;
   virtual void visitDeclarator(DeclaratorAST *) ;
-  virtual void visitDeleteExpression(DeleteExpressionAST *) ;
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *) ;
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
   virtual void visitExpressionStatement(ExpressionStatementAST *) ;
@@ -331,12 +330,10 @@ private:
   virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
   virtual void visitInitDeclarator(InitDeclaratorAST *) ;
   virtual void visitInitializerClause(InitializerClauseAST *);
-  virtual void visitInitializerList(InitializerListAST *);
   virtual void visitMemInitializer(MemInitializerAST *) ;
   virtual void visitName(NameAST *) ;
   virtual void visitNewDeclarator(NewDeclaratorAST *) ;
   virtual void visitNewExpression(NewExpressionAST *) ;
-  virtual void visitNewInitializer(NewInitializerAST *) ;
   virtual void visitPostfixExpression(PostfixExpressionAST *) ;
   virtual void visitPrimaryExpression(PrimaryExpressionAST *) ;
   virtual void visitPtrOperator(PtrOperatorAST *) ;
@@ -345,13 +342,12 @@ private:
   virtual void visitSizeofExpression(SizeofExpressionAST *) ;
   virtual void visitStringLiteral(StringLiteralAST *) ;
   virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
-  virtual void visitThrowExpression(ThrowExpressionAST *) ;
   virtual void visitTranslationUnit(TranslationUnitAST *) ;
   virtual void visitTypeId(TypeIdAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   virtual void visitTypeIDOperator(TypeIDOperatorAST *);
-  virtual void visitLambdaExpression(LambdaExpressionAST* );
+  virtual void visit(AST* node);
 
   void putStringType();
   AbstractType::Ptr qObjectPtrType() const;

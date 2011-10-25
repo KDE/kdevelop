@@ -399,3 +399,16 @@ void TestDUChain::testConstexpr()
   QEXPECT_FAIL("", "constexpr member functions are not handled yet", Continue);
   QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(1)->abstractType()));
 }
+
+void TestDUChain::testBug284536()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=284536
+  const QByteArray code = "template<typename T> struct A { typedef T type; };\n"
+                          "template<typename T, typename... Args>\n"
+                          "A<typename T<_Functor>::type(Args...)> func() {}\n";
+  // baby don't crash me, oh no
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QCOMPARE(top->localDeclarations().size(), 2);
+}
