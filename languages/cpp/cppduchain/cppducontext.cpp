@@ -64,7 +64,7 @@ QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopD
 }
 
 
-bool isTemplateDependent(DUContext* context)
+bool isTemplateDependent(const DUContext* context)
 {
   while(context && !context->owner())
     context = context->parentContext();
@@ -75,17 +75,17 @@ bool isTemplateDependent(DUContext* context)
 }
 
 ///@todo Make this faster
-bool isTemplateDependent(Declaration* decl)
+bool isTemplateDependent(const Declaration* decl)
 {
   if( !decl )
     return false;
-  TemplateDeclaration* templDecl = dynamic_cast<TemplateDeclaration*>(decl);
+  const TemplateDeclaration* templDecl = dynamic_cast<const TemplateDeclaration*>(decl);
   if( !templDecl )
     return false;
   if( decl->abstractType().cast<CppTemplateParameterType>() )
     return true;
 
-  DUContext* ctx = decl->context();
+  const DUContext* ctx = decl->context();
 
   while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
     //Check if there is an imported template-context, which has an unresolved template-parameter

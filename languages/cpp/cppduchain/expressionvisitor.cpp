@@ -190,8 +190,6 @@ void ExpressionVisitor::visitIndependentNodes(const ListNode<_Tp> *nodes)
   while (it != end);
 }
 
-typedef PushPositiveValue<DUContext*> PushPositiveContext;
-
 const Token& ExpressionVisitor::tokenFromIndex( int index ) {
   return m_session->token_stream->token(index);
 }
@@ -199,9 +197,9 @@ const Token& ExpressionVisitor::tokenFromIndex( int index ) {
 
 typedef PushValue<AbstractType::Ptr> PushAbstractType;
 
-TopDUContext* ExpressionVisitor::topContext() const {
+const TopDUContext* ExpressionVisitor::topContext() const {
   if( m_source ) {
-    return const_cast<TopDUContext*>(m_source); ///@todo remove const_cast
+    return m_source;
   }else{
     return m_topContext;
   }
@@ -290,7 +288,7 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
   return m_lastInstance;
 }
 
-DUContext* ExpressionVisitor::currentContext() const
+const DUContext* ExpressionVisitor::currentContext() const
 {
   return m_currentContext;
 }
@@ -476,7 +474,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   {
     Q_ASSERT(m_currentContext); // required later on
 
-    DUContext* searchInContext = m_currentContext;
+    const DUContext* searchInContext = m_currentContext;
 
     m_hadMemberAccess = m_memberAccess;
     
@@ -554,9 +552,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         missing->setIdentifier(IndexedTypeIdentifier(nameV.identifier()));
         if(m_memberAccess)
-          missing->containerContext = searchInContext;
+          missing->containerContext = const_cast<DUContext*>(searchInContext);
 
-        missing->searchStartContext = m_currentContext;
+        missing->searchStartContext = const_cast<DUContext*>(m_currentContext);
 
         if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
           KSharedPtr<KDevelop::Problem> problem(new Cpp::MissingDeclarationProblem(missing));
@@ -717,7 +715,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       AbstractType::Ptr thisType;
 
-      DUContext* context = m_currentContext; //Here we find the context of the function-declaration/definition we're currently in
+      const DUContext* context = m_currentContext; //Here we find the context of the function-declaration/definition we're currently in
       while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
       { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
         context = context->parentContext();
@@ -1059,8 +1057,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( !op.isEmpty() )
       {
         LOCKDUCHAIN;
-        KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolutionHelper helper(ptr, TopDUContextPointer(topContext()) );
+        OverloadResolutionHelper helper(
+          DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+          TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
+        );
         helper.setFunctionNameForADL(QualifiedIdentifier("operator" + op));
         helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() ) );
         helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) ) );
@@ -1211,8 +1211,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       {
         LOCKDUCHAIN;
 
-        KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
+        OverloadResolver resolver(
+          DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+          TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          oldInstance
+        );
 
         if( !fail )
           chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
@@ -1479,8 +1482,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       {
         LOCKDUCHAIN;
 
-        KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
+        OverloadResolver resolver(
+          DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+          TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          oldInstance
+        );
 
         if( !fail )
           chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
@@ -1681,8 +1687,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         if( !op.isEmpty() )
         {
           LOCKDUCHAIN;
-          KDevelop::DUContextPointer ptr(m_currentContext);
-          OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
+          OverloadResolutionHelper helper(
+            DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+            TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
+          );
           helper.setFunctionNameForADL( QualifiedIdentifier("operator" + op) );
           helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
 
@@ -1903,8 +1911,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     LOCKDUCHAIN;
 
     DeclarationPointer chosenFunction;
-    KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolutionHelper helper( ptr, KDevelop::TopDUContextPointer(topContext()) );
+    OverloadResolutionHelper helper(
+      DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+      TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
+    );
 
     MissingDeclarationType::Ptr missing;
     
@@ -2155,8 +2165,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     LOCKDUCHAIN;
 
-    KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
+    OverloadResolutionHelper helper(
+      DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+      TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
+    );
     helper.setFunctionNameForADL( QualifiedIdentifier("operator[]") );
     helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ) );
 
@@ -2244,8 +2256,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( !op.isEmpty() )
       {
         LOCKDUCHAIN;
-        KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
+        OverloadResolutionHelper helper(
+          DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+          TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
+        );
         helper.setFunctionNameForADL( QualifiedIdentifier("operator" + op) );
         helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
 
@@ -2347,8 +2361,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       {
         LOCKDUCHAIN;
 
-        KDevelop::DUContextPointer ptr(m_currentContext);
-        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldLastInstance );
+        OverloadResolver resolver(
+          DUContextPointer(const_cast<DUContext*>(m_currentContext)),
+          TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          oldLastInstance
+        );
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
       }
 
@@ -2374,7 +2391,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if (!node) {
       return;
     }
-    PushPositiveContext pushContext(m_currentContext, node->ducontext);
+    PushPositiveValue<const DUContext*> pushContext(m_currentContext, node->ducontext);
     Visitor::visit(node);
   }
 }

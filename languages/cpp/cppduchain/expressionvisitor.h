@@ -146,9 +146,9 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      */
     void realProblem( ProblemPointer problem );
 
-    DUContext* currentContext() const;
+    const DUContext* currentContext() const;
 
-    TopDUContext* topContext() const;
+    const TopDUContext* topContext() const;
 
   private:
 
@@ -215,8 +215,8 @@ private:
     } m_currentUse; //This is used to temporarily delay the calling of usingDeclaration.
 
     ParseSession* m_session;
-    KDevelop::DUContext* m_currentContext;
-    KDevelop::TopDUContext* m_topContext;
+    const KDevelop::DUContext* m_currentContext;
+    const KDevelop::TopDUContext* m_topContext;
     bool m_reportRealProblems;
 
     QList<KSharedPtr<KDevelop::Problem> > m_problems;
