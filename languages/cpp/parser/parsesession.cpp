@@ -192,9 +192,6 @@ const KDevelop::IndexedString& ParseSession::url() const
 
 void ParseSession::dumpNode(AST* node) const
 {
-  QString ret;
-  for(int i = node->start_token; i < node->end_token; ++i) {
-    ret += token_stream->token(i).symbolString();
-  }
-  std::cout << qPrintable(ret) << std::endl;
+  DumpTree dumper;
+  dumper.dump(node, token_stream, true);
 }
