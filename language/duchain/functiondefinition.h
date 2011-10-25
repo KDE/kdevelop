@@ -44,7 +44,7 @@ namespace KDevelop {
     * @param topContext the top-context from which to search
     * \returns the declaration matching this definition, otherwise null if no matching declaration has been found.
     * */
-    Declaration* declaration(TopDUContext* topContext = 0) const;
+    Declaration* declaration(const TopDUContext* topContext = 0) const;
 
     ///Returns true if a Declaration has been assigned to this Definition
     bool hasDeclaration() const;

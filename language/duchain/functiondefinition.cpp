@@ -43,7 +43,7 @@ FunctionDefinition::~FunctionDefinition() {
     DUChain::definitions()->removeDefinition(d_func()->m_declaration, this);
 }
 
-Declaration* FunctionDefinition::declaration(TopDUContext* topContext) const
+Declaration* FunctionDefinition::declaration(const TopDUContext* topContext) const
 {
   ENSURE_CAN_READ
   
