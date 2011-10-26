@@ -202,6 +202,7 @@ private slots:
   void testConstexpr();
   void testInitListRegressions();
   void testBug284536();
+  void testBug285004();
   //END C++2011
 
 private:

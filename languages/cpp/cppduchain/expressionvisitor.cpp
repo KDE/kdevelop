@@ -241,10 +241,11 @@ void ExpressionVisitor::parse( AST* ast ) {
   m_lastType = 0;
   m_lastInstance = Instance();
   Q_ASSERT(ast->ducontext);
-  m_topContext = ast->ducontext->topContext();
+  ///WARNING: ::parse can be called recursivly by e.g. the name or type visitor!
+  PushValue<const TopDUContext*> pushTopContext(m_topContext, ast->ducontext->topContext());
   visit(ast);
+  Q_ASSERT(m_topContext);
   flushUse();
-  m_topContext = 0;
 }
 
 void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {

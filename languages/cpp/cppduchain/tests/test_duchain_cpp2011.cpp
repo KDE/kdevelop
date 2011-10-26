@@ -412,3 +412,21 @@ void TestDUChain::testBug284536()
   DUChainReadLocker lock;
   QCOMPARE(top->localDeclarations().size(), 2);
 }
+
+void TestDUChain::testBug285004()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=285004
+  // NOTE: I couldn't come up with something shorter - what a strange bug -.-'
+  // source is gcc 4.5's tr1_impl/type_traits
+  const QByteArray code = "namespace std {\n"
+                          "  template<typename T> struct is_f;\n"
+                          "  template<typename _Res, typename... Args> struct is_f<_Res(Args...)> { };\n"
+                          "  template<typename _Res, typename... Args> struct is_f<_Res(Args......)> { };\n"
+                          "  template<typename T> struct is_a : public i_c<(is_i<T>::value || is_i<T>::value)> { };\n"
+                          "  template<typename T> struct is_f : public i_c<(is_a<T>::value)> { };\n"
+                          "}\n";
+  // baby don't crash me, oh no
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+}
