@@ -19,6 +19,7 @@
 
 #include "formattinghelpers.h"
 #include <QString>
+#include <vector>
 #include <kdebug.h>
 
 namespace KDevelop
@@ -56,19 +57,27 @@ static QString reverse( const QString& str ) {
   return ret;
 }
 
-// Returns the new text position, with all whitespace that is redundant in the given context skipped
-int skipRedundantWhiteSpace( QString context, QString text, int textPosition, int textEnd )
+// Returns the text start position with all whitespace that is redundant in the given context skipped
+int skipRedundantWhiteSpace( QString context, QString text )
 {
-    if( context.isEmpty() || !context[context.size()-1].isSpace() )
-        return textPosition;
+    if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
+        return 0;
+    
+    int textPosition = 0;
     
     // Extract trailing whitespace in the context
     int contextPosition = context.size()-1;
     while( contextPosition > 0 && context[contextPosition-1].isSpace() )
         --contextPosition;
     
+    
+    int textWhitespaceEnd = 0;
+    while(textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
+        ++textWhitespaceEnd;
+    
     QString contextWhiteSpace = context.mid(contextPosition);
-    QString textWhiteSpace = text.mid(textPosition, textEnd-textPosition);
+    contextPosition = 0;
+    QString textWhiteSpace = text.left(textWhitespaceEnd);
     
     // Step 1: Remove redundant newlines
     while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
@@ -83,30 +92,75 @@ int skipRedundantWhiteSpace( QString context, QString text, int textPosition, in
         textWhiteSpace.remove(0, textOffset);
     }
     
-    if(textWhiteSpace.contains('\n'))
+    int contextOffset = 0;
+    int textOffset = 0;
+    // Skip redundant ordinary whitespace
+    while( contextOffset < contextWhiteSpace.size() && textOffset < textWhiteSpace.size() && contextWhiteSpace[contextOffset].isSpace() && contextWhiteSpace[contextOffset] != '\n' && textWhiteSpace[textOffset].isSpace() && textWhiteSpace[textOffset] != '\n' )
     {
-        // There are remaining newlines which are not redundant, no more matching required.
-        return textPosition;
+        ++contextOffset;
+        ++textOffset;
+    }
+
+    return textPosition+textOffset;
+}
+
+std::pair<int, int> skipRedundantWhiteSpaceB( QString context, QString text )
+{
+    if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
+        return std::make_pair(0, 0);
+    
+    int textPosition = 0;
+    
+    // Extract trailing whitespace in the context
+    int contextPosition = context.size()-1;
+    while( contextPosition > 0 && context[contextPosition-1].isSpace() )
+        --contextPosition;
+    
+    
+    int textWhitespaceEnd = 0;
+    while(textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
+        ++textWhitespaceEnd;
+    
+    QString contextWhiteSpace = context.mid(contextPosition);
+    contextPosition = 0;
+    QString textWhiteSpace = text.left(textWhitespaceEnd);
+    
+    // Step 1: Remove redundant newlines
+    while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
+    {
+        int contextOffset = contextWhiteSpace.indexOf('\n')+1;
+        int textOffset = textWhiteSpace.indexOf('\n')+1;
+
+        contextPosition += contextOffset;
+        contextWhiteSpace.remove(0, contextOffset);
+
+        textPosition += textOffset;
+        textWhiteSpace.remove(0, textOffset);
     }
     
-    if(contextWhiteSpace.contains('\n'))
+    while(textWhiteSpace.contains('\n'))
+    {
+        // There are remaining newlines which are not redundant, no more matching required.
+        return std::make_pair(textPosition, contextPosition);
+    }
+    
+    while(contextWhiteSpace.contains('\n'))
     {
         // There are too many newlines in the context. To make everything correct, we would have
         // to remove those newlines, however we're not editing that area, thus there is nothing we can do.
-        return textPosition;
+        return std::make_pair(textPosition, contextPosition);
     }
     
     // Step 2: Remove redundant whitespace
     
     if( textWhiteSpace.size() > contextWhiteSpace.size() )
-        return textPosition + contextWhiteSpace.size(); // Skip the context white space
+        return std::make_pair(textPosition + contextWhiteSpace.size(), contextPosition + contextWhiteSpace.size()); // Skip the context white space
     else
-        return textEnd;
+        return std::make_pair(textPosition + textWhiteSpace.size(), contextPosition + textWhiteSpace.size());
 }
 
 QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& /*originalMergedText*/, const QString& text, const QString& leftContext, const QString& rightContext)
 {
-    ///@todo Create unit-tests for this
     QString formattedMergedText = _formattedMergedText;
     //Now remove "leftContext" and "rightContext" from the sides
     if(!leftContext.isEmpty()) {
@@ -121,9 +175,11 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
         while(startOfWhiteSpace > 0 && formattedMergedText[startOfWhiteSpace-1].isSpace())
             --startOfWhiteSpace;
         
-        endOfLeftContext = skipRedundantWhiteSpace( leftContext, formattedMergedText, startOfWhiteSpace, endOfLeftContext );
+        formattedMergedText = formattedMergedText.mid(startOfWhiteSpace);
         
-        formattedMergedText = formattedMergedText.mid(endOfLeftContext);
+        int skip = skipRedundantWhiteSpace( leftContext, formattedMergedText );
+        
+        formattedMergedText = formattedMergedText.mid(skip);
     }
 
     {
@@ -136,18 +192,9 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
 
         formattedMergedText = formattedMergedText.left(endOfText);
 
-        // Simply reverse the string, and perform the same matching logic as above to remove redundant training newlines and/or whitespace
-        QString rev = reverse(formattedMergedText);
+        int skip = skipRedundantWhiteSpace( reverse(rightContext), reverse(formattedMergedText) );
 
-        int endOfRightContext = 0;
-        while(endOfRightContext < rev.size() && rev[endOfRightContext].isSpace())
-            ++endOfRightContext;
-        
-        endOfRightContext = skipRedundantWhiteSpace( reverse(rightContext), rev, 0, endOfRightContext );
-        
-        rev = rev.mid( endOfRightContext );
-        
-        formattedMergedText = reverse(rev);
+        formattedMergedText = formattedMergedText.left(formattedMergedText.size() - skip);
     }
 
     return formattedMergedText;
