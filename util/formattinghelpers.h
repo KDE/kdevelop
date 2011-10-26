@@ -28,7 +28,7 @@ namespace KDevelop {
 /**
  * Helps extracting a re-formatted version of a text fragment, within a specific left and right context.
  * The re-formatting must be an operation which only changes whitespace, and keeps whitespace boundaries
- * between identifiers intact.
+ * between identifiers intact. If this is not the case, the original text is returned.
  * 
  * @param formattedMergedText The re-formatted merged text: format(leftContext + text + rightContext)
  * @param originalMergedText The original merged text: (leftContext + text + rightContext)
