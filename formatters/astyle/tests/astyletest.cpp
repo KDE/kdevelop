@@ -114,4 +114,105 @@ void AstyleTest::testMacroFormatting()
     QCOMPARE(formatted, QString("#define asdf\\\n  foobar\n"));
 }
 
+void AstyleTest::testContext()
+{
+    AStyleFormatter* formatter = new AStyleFormatter;
+    formatter->setBracketFormatMode(astyle::LINUX_MODE);
+    formatter->setParensInsidePaddingMode(true);
+    formatter->setBlockIndent(true);
+    // We enable break-blocks mode, so that we can test the newline matching
+    formatter->setBreakBlocksMode(true);
+    formatter->setBreakClosingHeaderBlocksMode(true);
+    formatter->setParensUnPaddingMode(true);
+    
+    QString leftContext = "int main() {\n";
+    QString rightContext = ";\n}\n";
+    
+    /// Newline tests
+    
+    QString formattedSource = formatter->formatSource(
+        " int a;\n", leftContext, "int b;" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // Adjust indentation
+    QCOMPARE(formattedSource, QString("    int a;\n    "));
+    
+    formattedSource = formatter->formatSource(
+        " int a;\n", leftContext + " ", "   int b;" + rightContext );
+    
+//     qDebug() << formattedSource;
+    QCOMPARE(formattedSource, QString("   int a;\n "));
+    
+    /// "if(a);" is interpreted as own block, so due to the "break blocks" option,
+    /// astyle breaks these blocks with a newline in between.
+    formattedSource = formatter->formatSource(
+        "  if(a); ", leftContext + " if(a); ", " if(a);" + rightContext );
+    
+//     qDebug() << formattedSource;
+    QCOMPARE(formattedSource, QString("\n\n    if( a );\n\n   "));
+
+    formattedSource = formatter->formatSource(
+        "  if(a); ", leftContext + " if(a);\n", " \n if(a);" + rightContext );
+    
+//     qDebug() << formattedSource;
+    QCOMPARE(formattedSource, QString("\n    if( a );\n"));
+
+    formattedSource = formatter->formatSource(
+        "  if(a)\na; ", leftContext + " if(a);\n", " \n\n if(a);" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // Adjust indentation, successor already partially indentend
+    QCOMPARE(formattedSource, QString("\n    if( a )\n        a;"));
+    
+    /// Whitespace tests
+    
+    formattedSource = formatter->formatSource(
+        "int ", leftContext + "  ", rightContext );
+    
+    // 2 whitespaces are already in the context, so add only 2
+//     qDebug() << "formatted source:" << formattedSource;
+    QCOMPARE(formattedSource, QString("  int "));
+
+    formattedSource = formatter->formatSource(
+        "q", leftContext + "  if(", ")" + rightContext );
+    
+    // Padding was added around both parens
+    QCOMPARE(formattedSource, QString(" q "));
+
+    formattedSource = formatter->formatSource(
+        "q", leftContext + "  if( ", " )" + rightContext );
+    
+    // Padding already existed around both parens
+    QCOMPARE(formattedSource, QString("q"));
+
+    formattedSource = formatter->formatSource(
+        " q ", leftContext + "  if(", "   )" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // No padding on left, too much padding on right
+    QCOMPARE(formattedSource, QString(" q"));
+
+    formattedSource = formatter->formatSource(
+        "   ", leftContext + "  if(q", ")" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // Normalize padding: from 3 to 1
+    QCOMPARE(formattedSource, QString(" "));
+    
+    formattedSource = formatter->formatSource(
+        "", leftContext + "  if(", "q )" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // Normalize padding: from 0 to 1
+    QCOMPARE(formattedSource, QString(" "));
+    
+    formattedSource = formatter->formatSource(
+        " ", leftContext + "  if(   ", "q )" + rightContext );
+    
+//     qDebug() << formattedSource;
+    // Reduce padding as much as possible
+    QCOMPARE(formattedSource, QString(""));
+    
+}
+
 #include "astyletest.moc"

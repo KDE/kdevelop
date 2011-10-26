@@ -33,6 +33,7 @@ private slots:
     void varTypeAssistant();
     void testMultipleFormatters();
     void testMacroFormatting();
+    void testContext();
 
 private:
     AStyleFormatter* m_formatter;
