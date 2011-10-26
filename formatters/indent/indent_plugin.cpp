@@ -98,13 +98,7 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	}
 	
 	QString useText = text;
-	//We can only respect the context if it is in a separate line
-	///@todo Simplify the context, to make the formatting more efficient (remove complete functions etc.)
-	if(leftContext.endsWith("\n"))
-		useText = leftContext + useText;
-	
-	if(rightContext.startsWith("\n"))
-		useText = useText + rightContext;
+	useText = leftContext + useText + rightContext;
 	
 	QString command = style.content();
 	if(command.contains("$TMPFILE"))
@@ -163,7 +157,6 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	}else{
 		output = ios.readAll();
 	}
-kDebug() << "output: " << output;
 	if (output.isEmpty())
 	{
 		kWarning() << "indent returned empty text for style" << style.name() << style.content();
