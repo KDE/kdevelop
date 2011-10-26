@@ -373,22 +373,22 @@ void MainWindowPrivate::recreateCentralWidget()
     centralWidget->setLayout(layout);
 }
 
+struct ShownToolViewFinder {
+    ShownToolViewFinder() {}
+    Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
+    {
+        if (v->hasWidget() && v->widget()->isVisible())
+            views << v;
+        return Area::ContinueWalker;
+    }
+    QList<View *> views;
+};
+
 void MainWindowPrivate::
 slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 {
     if (ignoreDockShown)
         return;
-
-    struct ShownToolViewFinder {
-        ShownToolViewFinder() {}
-        Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
-        {
-            if (v->hasWidget() && v->widget()->isVisible())
-                views << v;
-            return Area::ContinueWalker;
-        }
-        QList<View *> views;
-    };
 
     ShownToolViewFinder finder;
     m_mainWindow->area()->walkToolViews(finder, pos);
