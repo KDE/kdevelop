@@ -24,16 +24,17 @@
 namespace KDevelop
 {
 
-///Matches the given prefix to the given text, ignoring all whitespace, but not ignoring newlines
+///Matches the given prefix to the given text, ignoring all whitespace
 ///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
 int matchPrefixIgnoringWhitespace(QString text, QString prefix)
 {
     int prefixPos = 0;
     int textPos = 0;
+    
     while (prefixPos < prefix.length() && textPos < text.length()) {
-        while (prefixPos < prefix.length() && prefix[prefixPos].isSpace() && prefix[prefixPos] != '\n')
+        while (prefixPos < prefix.length() && prefix[prefixPos].isSpace())
             ++prefixPos;
-        while (textPos < text.length() && text[textPos].isSpace() && prefix[prefixPos] != '\n')
+        while (textPos < text.length() && text[textPos].isSpace())
             ++textPos;
 
         if(prefixPos == prefix.length() || textPos == text.length())
@@ -47,25 +48,6 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix)
     return textPos;
 }
 
-//Returns the closest newline position before the actual text, or -1
-int leadingNewLine(QString str) {
-    int ret = -1;
-    for(int a = 0; a < str.length(); ++a) {
-        if(!str[a].isSpace())
-            return ret;
-        if(str[a] == '\n')
-            ret = a;
-    }
-    return ret;
-}
-
-int firstNonWhiteSpace(QString str) {
-    for(int a = 0; a < str.length(); ++a)
-        if(!str[a].isSpace())
-            return a;
-    return -1;
-}
-
 static QString reverse( const QString& str ) {
   QString ret;
   for(int a = str.length()-1; a >= 0; --a)
@@ -74,51 +56,98 @@ static QString reverse( const QString& str ) {
   return ret;
 }
 
-///Removes parts of the white-space at the start that are in @p output but not in @p text
-QString equalizeWhiteSpaceAtStart(QString original, QString output, bool removeIndent = false) {
-    int outputNewline = leadingNewLine(output);
-    if(outputNewline != -1) {
-        if(leadingNewLine(original) != -1)
-            return output.mid(outputNewline); //Exactly include the leading newline as in the original text
-        else
-            output = output.mid(outputNewline+1); //Skip the leading newline, the orginal had none as well
-    }
+// Returns the new text position, with all whitespace that is redundant in the given context skipped
+int skipRedundantWhiteSpace( QString context, QString text, int textPosition, int textEnd )
+{
+    if( context.isEmpty() || !context[context.size()-1].isSpace() )
+        return textPosition;
+    
+    // Extract trailing whitespace in the context
+    int contextPosition = context.size()-1;
+    while( contextPosition > 0 && context[contextPosition-1].isSpace() )
+        --contextPosition;
+    
+    QString contextWhiteSpace = context.mid(contextPosition);
+    QString textWhiteSpace = text.mid(textPosition, textEnd-textPosition);
+    
+    // Step 1: Remove redundant newlines
+    while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
+    {
+        int contextOffset = contextWhiteSpace.indexOf('\n')+1;
+        int textOffset = textWhiteSpace.indexOf('\n')+1;
 
-    if(removeIndent && output[0].isSpace() && !original[0].isSpace()) {
-        //The original text has no leading white space, remove all leading white space
-        int nonWhite = firstNonWhiteSpace(output);
-        if(nonWhite != -1)
-            output = output.mid(nonWhite);
-        else
-            output.clear();
+        contextPosition += contextOffset;
+        contextWhiteSpace.remove(0, contextOffset);
+
+        textPosition += textOffset;
+        textWhiteSpace.remove(0, textOffset);
     }
-    return output;
+    
+    if(textWhiteSpace.contains('\n'))
+    {
+        // There are remaining newlines which are not redundant, no more matching required.
+        return textPosition;
+    }
+    
+    if(contextWhiteSpace.contains('\n'))
+    {
+        // There are too many newlines in the context. To make everything correct, we would have
+        // to remove those newlines, however we're not editing that area, thus there is nothing we can do.
+        return textPosition;
+    }
+    
+    // Step 2: Remove redundant whitespace
+    
+    if( textWhiteSpace.size() > contextWhiteSpace.size() )
+        return textPosition + contextWhiteSpace.size(); // Skip the context white space
+    else
+        return textEnd;
 }
 
 QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& /*originalMergedText*/, const QString& text, const QString& leftContext, const QString& rightContext)
 {
+    ///@todo Create unit-tests for this
     QString formattedMergedText = _formattedMergedText;
     //Now remove "leftContext" and "rightContext" from the sides
-
     if(!leftContext.isEmpty()) {
         int endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext);
         if(endOfLeftContext == -1) {
             kWarning() << "problem matching the left context";
             return text;
         }
+        
+        int startOfWhiteSpace = endOfLeftContext;
+        // Include all leading whitespace
+        while(startOfWhiteSpace > 0 && formattedMergedText[startOfWhiteSpace-1].isSpace())
+            --startOfWhiteSpace;
+        
+        endOfLeftContext = skipRedundantWhiteSpace( leftContext, formattedMergedText, startOfWhiteSpace, endOfLeftContext );
+        
         formattedMergedText = formattedMergedText.mid(endOfLeftContext);
-        formattedMergedText = equalizeWhiteSpaceAtStart(text, formattedMergedText);
     }
 
-    if(!rightContext.isEmpty()) {
+    {
         //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
         int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ");
         if(endOfText == -1) {
             kWarning() << "problem matching the text while formatting";
             return text;
         }
+
         formattedMergedText = formattedMergedText.left(endOfText);
-        formattedMergedText = reverse(equalizeWhiteSpaceAtStart(reverse(text), reverse( formattedMergedText), true));
+
+        // Simply reverse the string, and perform the same matching logic as above to remove redundant training newlines and/or whitespace
+        QString rev = reverse(formattedMergedText);
+
+        int endOfRightContext = 0;
+        while(endOfRightContext < rev.size() && rev[endOfRightContext].isSpace())
+            ++endOfRightContext;
+        
+        endOfRightContext = skipRedundantWhiteSpace( reverse(rightContext), rev, 0, endOfRightContext );
+        
+        rev = rev.mid( endOfRightContext );
+        
+        formattedMergedText = reverse(rev);
     }
 
     return formattedMergedText;
