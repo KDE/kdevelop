@@ -911,7 +911,10 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << (folder ? folder->url() : KUrl()) << item;
     }
-    Q_ASSERT(folder);
+    if( !folder ) {
+        // Not a CMake folder, so no include-directories to be returned;
+        return KUrl::List();
+    }
 
 //     kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
     KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
@@ -929,7 +932,10 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
-    Q_ASSERT(folder);
+    if( !folder ) {
+        // Not a CMake folder, so no defines to be returned;
+        return QHash<QString,QString>();
+    }
 
     return folder->definitions();
 }
