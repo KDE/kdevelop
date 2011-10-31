@@ -852,11 +852,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
-    } else {
+    } else if( folder ) {
+        // Only do cmake-stuff if its a cmake folder
         folder->cleanupBuildFolders(QList<Subdirectory>());
         folder->cleanupTargets(QList<CMakeTarget>());
+    } else {
+        // Log non-cmake folders for debugging purposes
+        kDebug(9042) << "Folder Item which is not a CMake folder parsed:" << item->url() << item->type();
     }
-    reloadFiles(folder);
+    // Use item here since folder may be 0.
+    reloadFiles(item);
 
     return folderList;
 }
