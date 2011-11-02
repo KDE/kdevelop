@@ -4,7 +4,10 @@ Rectangle {
     id: rectangle1
     width: 360
     height: 360
-    color: 'green'
+    gradient: Gradient {
+         GradientStop { position: 0.0; color: "#61B056" }
+         GradientStop { position: 1.0; color: "#A3D69B" }
+    }
 
     Column {
         id: tabs
@@ -14,32 +17,18 @@ Rectangle {
         anchors.margins: 30
         spacing: 30
 
-        Text {
+        Link {
             width: parent.width
 
             text: "Starting"
-            horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 20
-
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: { usePage.visible=false; startingPage.visible=true; }
-            }
+            onClicked: { usePage.visible=false; startingPage.visible=true; }
         }
 
-        Text {
+        Link {
             width: parent.width
 
             text: "Learn KDevelop!"
-            horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 20
-
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: { usePage.visible=true; startingPage.visible=false; }
-            }
+            onClicked: { usePage.visible=true; startingPage.visible=false; }
         }
     }
 
@@ -48,7 +37,6 @@ Rectangle {
         x: tabs.width+tabs.x
         height: parent.height
         width: parent.width-x
-        anchors.margins: 50
 
         Starting {
             id: startingPage

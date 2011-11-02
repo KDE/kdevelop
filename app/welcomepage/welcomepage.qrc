@@ -3,5 +3,7 @@
     <file>main.qml</file>
     <file>Starting.qml</file>
     <file>UseKDevelop.qml</file>
+    <file>Link.qml</file>
+    <file>StandardPage.qml</file>
  </qresource>
 </RCC>
