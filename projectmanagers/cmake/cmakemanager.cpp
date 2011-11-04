@@ -430,7 +430,7 @@ bool changesWidgetAddFilesToTarget(const QList<ProjectFileItem*> &files, const P
 
 CMakeFolderItem* nearestCMakeFolder(ProjectBaseItem* item)
 {
-    while(!dynamic_cast<CMakeFolderItem*>(item))
+    while(!dynamic_cast<CMakeFolderItem*>(item) && item)
         item = item->parent();
 
     return dynamic_cast<CMakeFolderItem*>(item);
@@ -926,7 +926,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 {
     CMakeFolderItem* folder=0;
     kDebug(9042) << "Querying defines dirs for " << item;
-    while(!folder)
+    while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
         item = item->parent();
