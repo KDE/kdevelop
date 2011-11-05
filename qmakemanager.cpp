@@ -133,6 +133,8 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
                           || name.startsWith(".swp.")))
     {
         return false;
+    } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+        return false;
     } else {
         return true;
     }
