@@ -32,6 +32,7 @@
 #include <KTemporaryFile>
 #include <KProcess>
 #include <QFileInfo>
+#include <KTempDir>
 
 QTEST_MAIN(TestQMakeFile);
 
@@ -433,11 +434,15 @@ void TestQMakeFile::qtIncludeDirs()
 
 void TestQMakeFile::testInclude()
 {
+    KTempDir tempDir;
+    QVERIFY(tempDir.exists());
     KTemporaryFile includeFile;
-    includeFile.open();
+    includeFile.setPrefix(tempDir.name() + "qmake-include");
+    QVERIFY(includeFile.open());
     includeFile.write(
         "DEFINES += SOME_INCLUDE_DEF\n"
         "SOURCES += includedFile.cpp\n"
+        "INCLUDEPATH += $$PWD\n"
         "QT += webkit\n"
     );
     includeFile.close();
@@ -509,8 +514,11 @@ void TestQMakeFile::testInclude()
 
     QCOMPARE(file.variableValues("DEFINES"), QStringList() << "SOME_DEF" << "SOME_INCLUDE_DEF");
     QCOMPARE(file.variableValues("SOURCES"), QStringList() << "file.cpp" << "includedFile.cpp");
-    qDebug() << file.variableValues("QT");
     QCOMPARE(file.variableValues("QT"), QStringList() << "core" << "gui" << "network" << "webkit");
+    // verify that include path was properly propagated (but does not contain trailing slash)
+    KUrl includePath = KUrl::fromPath(tempDir.name());
+    includePath.adjustPath(KUrl::RemoveTrailingSlash);
+    QVERIFY(file.includeDirectories().contains(includePath));
 }
 
 
