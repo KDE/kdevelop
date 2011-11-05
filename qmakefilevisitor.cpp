@@ -103,7 +103,7 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
             return;
         }
         ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
-        QMakeIncludeFile includefile( argument, m_baseFile );
+        QMakeIncludeFile includefile( argument, m_baseFile, m_variableValues );
         bool read = includefile.read();
         ifDebug(kDebug(9024) << "successfully read:" << read;)
         if( read )

@@ -44,6 +44,8 @@ private slots:
 
     void qtIncludeDirs_data();
     void qtIncludeDirs();
+
+    void testInclude();
 };
 
 #endif // TEST_QMAKEFILE_H

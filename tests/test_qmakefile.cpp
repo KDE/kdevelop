@@ -431,5 +431,87 @@ void TestQMakeFile::qtIncludeDirs()
     }
 }
 
+void TestQMakeFile::testInclude()
+{
+    KTemporaryFile includeFile;
+    includeFile.open();
+    includeFile.write(
+        "DEFINES += SOME_INCLUDE_DEF\n"
+        "SOURCES += includedFile.cpp\n"
+        "QT += webkit\n"
+    );
+    includeFile.close();
+
+    KTemporaryFile baseFile;
+    baseFile.open();
+    baseFile.write(
+        "TEMPLATE = app\n"
+        "TARGET = includeTest\n"
+        "QT += network\n"
+        "DEFINES += SOME_DEF\n"
+        "SOURCES += file.cpp\n"
+        /*
+        "CONFIG += console"
+        "# Comment to enable Debug Messages"
+        "DEFINES += QT_NO_DEBUG_OUTPUT"
+        "DESTDIR = ../bin"
+        "RESOURCES = phantomjs.qrc"
+        "HEADERS += csconverter.h \\"
+        "    phantom.h \\"
+        "    webpage.h \\"
+        "    consts.h \\"
+        "    utils.h \\"
+        "    networkaccessmanager.h \\"
+        "    cookiejar.h \\"
+        "    filesystem.h \\"
+        "    terminal.h \\"
+        "    encoding.h \\"
+        "    config.h \\"
+        "    mimesniffer.cpp \\"
+        "    third_party/mongoose/mongoose.h \\"
+        "    webserver.h"
+        "SOURCES += phantom.cpp \\"
+        "    webpage.cpp \\"
+        "    main.cpp \\"
+        "    csconverter.cpp \\"
+        "    utils.cpp \\"
+        "    networkaccessmanager.cpp \\"
+        "    cookiejar.cpp \\"
+        "    filesystem.cpp \\"
+        "    terminal.cpp \\"
+        "    encoding.cpp \\"
+        "    config.cpp \\"
+        "    mimesniffer.cpp \\"
+        "    third_party/mongoose/mongoose.c \\"
+        "    webserver.cpp"
+        ""
+        "OTHER_FILES += usage.txt \\"
+        "    bootstrap.js \\"
+        "    configurator.js \\"
+        "    modules/fs.js \\"
+        "    modules/webpage.js \\"
+        "    modules/webserver.js"
+        ""
+        */
+        "include(" + includeFile.fileName().toLocal8Bit() + ")\n"
+    );
+    baseFile.close();
+
+    QMakeProjectFile file(baseFile.fileName());
+
+    QHash<QString,QString> qmvars = queryQMake( baseFile.fileName() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    QVERIFY(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+    QVERIFY(file.read());
+
+    QCOMPARE(file.variableValues("DEFINES"), QStringList() << "SOME_DEF" << "SOME_INCLUDE_DEF");
+    QCOMPARE(file.variableValues("SOURCES"), QStringList() << "file.cpp" << "includedFile.cpp");
+    qDebug() << file.variableValues("QT");
+    QCOMPARE(file.variableValues("QT"), QStringList() << "core" << "gui" << "network" << "webkit");
+}
+
 
 #include "test_qmakefile.moc"

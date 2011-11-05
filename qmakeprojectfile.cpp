@@ -62,19 +62,29 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 bool QMakeProjectFile::read()
 {
     // default values
-    m_variableValues["QT"] = QStringList() << "core" << "gui";
-    m_variableValues["CONFIG"] = QStringList() << "qt";
+    // NOTE: if we already have such a var, e.g. in an include file,
+    //       we must not overwrite it here!
+    if (!m_variableValues.contains("QT")) {
+        m_variableValues["QT"] = QStringList() << "core" << "gui";
+    }
+    if (!m_variableValues.contains("CONFIG")) {
+        m_variableValues["CONFIG"] = QStringList() << "qt";
+    }
 
     Q_ASSERT(m_mkspecs);
     foreach( const QString& var, m_mkspecs->variables() )
     {
-        m_variableValues[var] = m_mkspecs->variableValues( var );
+        if (!m_variableValues.contains(var)) {
+            m_variableValues[var] = m_mkspecs->variableValues( var );
+        }
     }
     if( m_cache )
     {
         foreach( const QString& var, m_cache->variables() )
         {
-            m_variableValues[var] = m_cache->variableValues( var );
+            if (!m_variableValues.contains(var)) {
+                m_variableValues[var] = m_cache->variableValues( var );
+            }
         }
     }
 

@@ -24,10 +24,12 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent )
-    : QMakeProjectFile( incfile ), m_parent(parent)
+QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent,
+                                    const VariableMap& variables )
+    : QMakeProjectFile( incfile )
+    , m_parent(parent)
 {
-    m_variableValues = parent->variableMap();
+    m_variableValues = variables;
 
     QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(parent);
     if( pro ) {
