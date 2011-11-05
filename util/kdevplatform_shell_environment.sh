@@ -131,7 +131,7 @@ function help! {
     
     if [ "$1" == "env" ]; then
       echo "env!                                 - List all available shell environment-ids for this session."
-      echo "updateenv! [id]                      - Set the shell environmnet-id for this session to the given id, or update the current one."
+      echo "setenv! [id]                         - Set the shell environmnet-id for this session to the given id, or update the current one."
       echo "showenv! [id]                        - Show the current shell environment or the one with the optionally given id."
       echo "editenv! [id]                        - Edit the current shell environment or the one with the optionally given id."
     fi
@@ -189,8 +189,8 @@ function ctc! {
     copytoclient! $@
 }
 
-function ue! {
-    updateenv! $@
+function sev! {
+    setenv! $@
 }
 
 function ee! {
@@ -684,7 +684,7 @@ function editenv! {
     openDocument "$(getCurrentShellEnvPath $ENV_ID)"
 }
 
-function updateenv! {
+function setenv! {
     if [ "$1" ]; then
         KDEV_SHELL_ENVIRONMENT_ID=$1
     fi
@@ -693,6 +693,10 @@ function updateenv! {
     local TEMP=$(mktemp)
     RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
     echo "$RESULT" > $TEMP
+    if ! [ "$RESULT" ]; then
+        # If the environment shell file doesn't exist, create it
+        executeInAppSync "if ! [ -e $(getCurrentShellEnvPath) ]; then touch $(getCurrentShellEnvPath); fi" ""
+    fi
     source $TEMP
     rm $TEMP
 }
@@ -715,7 +719,7 @@ if [ "$FORWARD_DBUS_FROM_PORT" ]; then
     keepForwardingDBusFromTCPSocket
 fi
 
-updateenv!
+setenv!
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 
