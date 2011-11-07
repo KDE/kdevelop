@@ -488,9 +488,11 @@ void CMakeProjectVisitorTest::testRun()
 void CMakeProjectVisitorTest::testFinder_data()
 {
     QTest::addColumn<QString>("module");
+    QTest::addColumn<QString>("args");
     
-    QTest::newRow("Qt4") << "Qt4";
-    QTest::newRow("KDE4") << "KDE4";
+    QTest::newRow("Qt4") << "Qt4" << QString();
+    QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
+    QTest::newRow("KDE4") << "KDE4" << QString();
 //     QTest::newRow("Eigen2") << "Eigen2";
 //     QTest::newRow("Exiv2") << "Exiv2";
 //     QTest::newRow("QtGStreamer") << "QtGStreamer"; //commented because it might not be installed, but works
@@ -511,6 +513,7 @@ void CMakeProjectVisitorTest::testFinder_init()
 void CMakeProjectVisitorTest::testFinder()
 {
     QFETCH(QString, module);
+    QFETCH(QString, args);
     testFinder_init();
     
     KDevelop::ReferencedTopDUContext fakeContext=
@@ -521,7 +524,7 @@ void CMakeProjectVisitorTest::testFinder()
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     
     QTextStream out(&file);
-    out << QString("find_package(%1 REQUIRED)\n").arg(module);
+    out << QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args);
     file.close();
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
     file.remove();

@@ -643,6 +643,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
             m_vars->insert(pack->name()+"_FIND_QUIET", QStringList("TRUE"));
+        m_vars->insert(pack->name()+"_FIND_COMPONENTS", pack->components());
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
