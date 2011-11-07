@@ -507,7 +507,8 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         KUrl afile(mpath);
         afile.addPath(file);
         kDebug(9042) << "Trying:" << mpath << '.' << file;
-        if(QFile::exists(afile.toLocalFile()))
+        QFileInfo f(afile.toLocalFile());
+        if(f.exists() && f.isFile())
         {
             if(location)
                 path=mpath;
