@@ -583,7 +583,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    QStringList lookupPaths = m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+    QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
     
     foreach(const QString& lookup, lookupPaths)
     {
@@ -605,18 +605,19 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     possibleConfigNames+=QString("%1-config.cmake").arg(pack->name().toLower());
 
     QString path;
-    foreach(const QString& possib, possibleModuleNames)
-    {
-        path=findFile(possib, modulePath);
-        if(!path.isEmpty()) {
+    foreach(const QString& possib, possibleConfigNames) {
+        path = findFile(possib, configPath);
+        if (!path.isEmpty()) {
+            m_vars->insert(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
             break;
         }
     }
+    
     if (path.isEmpty()) {
-        foreach(const QString& possib, possibleConfigNames) {
-            path = findFile(possib, configPath);
-            if (!path.isEmpty()) {
-                m_vars->insert(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
+        foreach(const QString& possib, possibleModuleNames)
+        {
+            path=findFile(possib, modulePath);
+            if(!path.isEmpty()) {
                 break;
             }
         }

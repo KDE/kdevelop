@@ -33,7 +33,7 @@ struct Macro
 
 struct CacheEntry
 {
-    CacheEntry(const QString& v=QString(), const QString &d=QString()) : value(v), doc(d) {}
+    CacheEntry(const QString& value=QString(), const QString &doc=QString()) : value(value), doc(doc) {}
     QString value;
     QString doc;
 };

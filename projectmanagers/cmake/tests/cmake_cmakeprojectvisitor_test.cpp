@@ -493,12 +493,13 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::newRow("KDE4") << "KDE4";
 //     QTest::newRow("Eigen2") << "Eigen2";
 //     QTest::newRow("Exiv2") << "Exiv2";
-//     QTest::newRow("QtGstreamer") << "QtGstreamer"; //commented because it might not be installed, but works
+//     QTest::newRow("QtGStreamer") << "QtGStreamer"; //commented because it might not be installed, but works
 }
 
 void CMakeProjectVisitorTest::testFinder_init()
 {
     QPair<VariableMap, QStringList> initials=CMakeParserUtils::initialVariables();
+    modulePath.clear();
     modulePath += initials.first.value("CMAKE_MODULE_PATH");
     modulePath += CMAKE_INSTALLED_MODULES;
 //     modulePath += QStringList(CMAKE_TESTS_PROJECTS_DIR "/modules"); //Not used yet
@@ -531,6 +532,7 @@ void CMakeProjectVisitorTest::testFinder()
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
     data.vm.insert("CMAKE_MODULE_PATH", modulePath);
+    data.cache.insert("CMAKE_PREFIX_PATH", CacheEntry(TEST_PREFIX_PATH));
     
     foreach(const QString& script, buildstrap)
     {
