@@ -98,6 +98,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("new-delete") << "int *a,b; void f() { a = new int(b); delete a; }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read));
+  QTest::newRow("local new-delete") << "int b; void f() { int *a = new int(b); delete a; }"
+                                  << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Read) << uint(DataAccess::Read));
   QTest::newRow("new-define") << "void f() { int b=2, *a = new int(b); }"
                                   << (QVariantList() << uint(DataAccess::Write) << uint(DataAccess::Write) << uint(DataAccess::Read));
   QTest::newRow("return") << "int a; int f() { return a; }"
@@ -305,5 +307,6 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   
   QTest::newRow("outside") << "enum {Result = 2 ? 1 : 3 };" << 4;
   QTest::newRow("class") << "struct Peu { public: Peu() { int x = 3?4:2; } int thing(int x) { return x ? x+1 : x-1; } };" << 10;
+  QTest::newRow("lecture") << "int f(int x) { int i; if(x==0) i=3; else i=4; return i; }" << 5;
 }
 
