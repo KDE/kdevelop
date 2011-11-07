@@ -156,6 +156,16 @@ void TestDUChain::testDefaultDelete() {
   }
 }
 
+void TestDUChain::testDelete_Bug278781()
+{
+  // don't crash, see also: https://bugs.kde.org/show_bug.cgi?id=278781
+  LockedTopDUContext top = parse("NonCopyable(const NonCopyable&) = delete;\n"
+                                 , DumpNone);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+}
+
 void TestDUChain::testEnum2011_data()
 {
   QTest::addColumn<QString>("code");
@@ -336,14 +346,27 @@ void TestDUChain::testTrailingReturnType()
     QVERIFY(funcType);
     QVERIFY(funcType->returnType());
     qDebug() << funcType->returnType()->toString();
-    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Abort);
+    QEXPECT_FAIL("", "type is parsed as 'array[4] of pointer to int, which is wrong.", Continue);
     QVERIFY(funcType->returnType().cast<PointerType>());
+    /* TODO: uncomment once the above has been fixed
     QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>());
     QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->dimension(), 4);
     QVERIFY(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>());
     QCOMPARE(funcType->returnType().cast<PointerType>()->baseType().cast<ArrayType>()->elementType().cast<IntegralType>()->dataType(),
              (uint) IntegralType::TypeInt);
     QCOMPARE(funcType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+    */
+  }
+
+  {
+    // make sure we don't crash due to assertion on m_context in TypeASTVisitor ctor
+    QByteArray code = "void func() { auto f = []() { return 1; }; }\n";
+    LockedTopDUContext top = parse(code, DumpAll);
+    QVERIFY(top);
+    QByteArray code2 = "void func() { auto f = []() -> int { return 1; }; }\n";
+    TopDUContext* top2 = parse(code2, DumpAll, top);
+    QVERIFY(top2);
+    QCOMPARE(top2, top.m_top);
   }
 }
 
@@ -375,4 +398,35 @@ void TestDUChain::testConstexpr()
   // A::foo
   QEXPECT_FAIL("", "constexpr member functions are not handled yet", Continue);
   QVERIFY(TypeUtils::isConstant(aCtx->localDeclarations().at(1)->abstractType()));
+}
+
+void TestDUChain::testBug284536()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=284536
+  const QByteArray code = "template<typename T> struct A { typedef T type; };\n"
+                          "template<typename T, typename... Args>\n"
+                          "A<typename T<_Functor>::type(Args...)> func() {}\n";
+  // baby don't crash me, oh no
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QCOMPARE(top->localDeclarations().size(), 2);
+}
+
+void TestDUChain::testBug285004()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=285004
+  // NOTE: I couldn't come up with something shorter - what a strange bug -.-'
+  // source is gcc 4.5's tr1_impl/type_traits
+  const QByteArray code = "namespace std {\n"
+                          "  template<typename T> struct is_f;\n"
+                          "  template<typename _Res, typename... Args> struct is_f<_Res(Args...)> { };\n"
+                          "  template<typename _Res, typename... Args> struct is_f<_Res(Args......)> { };\n"
+                          "  template<typename T> struct is_a : public i_c<(is_i<T>::value || is_i<T>::value)> { };\n"
+                          "  template<typename T> struct is_f : public i_c<(is_a<T>::value)> { };\n"
+                          "}\n";
+  // baby don't crash me, oh no
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
 }

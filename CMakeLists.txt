@@ -30,6 +30,7 @@ find_package(KDevPlatform 1.2.60 REQUIRED)
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} )
 
@@ -49,6 +50,7 @@ add_subdirectory(app_templates)
 add_subdirectory(documentation)
 add_subdirectory(providers)
 add_subdirectory(utils)
+add_subdirectory(doc)
 #macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()

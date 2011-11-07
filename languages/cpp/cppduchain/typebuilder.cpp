@@ -45,11 +45,6 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-///@todo Make this unneeded in this place
-namespace Cpp {
-bool isTemplateDependent(Declaration* decl);
-}
-
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
     int endPosition = session->token_stream->position(end_token);
@@ -579,7 +574,7 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   clearLastType();
 
-  if(!node->init_declarator && node->type_specifier)
+  if(!node->declarator && node->type_specifier)
     m_typeSpecifierWithoutInitDeclarators = node->type_specifier->start_token;
 
   ContextBuilder::visitFunctionDeclaration(node);

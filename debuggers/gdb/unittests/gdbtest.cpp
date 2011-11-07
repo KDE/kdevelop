@@ -84,6 +84,7 @@ void GdbTest::init()
         delete vc->watches()->child(i);
     }
     vc->watches()->clear();
+
 }
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
@@ -91,6 +92,7 @@ class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 public:
     TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
         c = new KConfig();
+        c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", executable);
@@ -130,7 +132,7 @@ public:
     TestDebugSession() : DebugSession(), m_line(0)
     {
         qRegisterMetaType<KUrl>("KUrl");
-        Q_ASSERT(connect(this, SIGNAL(showStepInSource(KUrl, int, QString)), SLOT(slotShowStepInSource(KUrl, int))));
+        Q_ASSERT(connect(this, SIGNAL(showStepInSource(KUrl,int,QString)), SLOT(slotShowStepInSource(KUrl,int))));
         
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
@@ -267,7 +269,7 @@ void GdbTest::testChangeLocationBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 28);
     QTest::qWait(500);
-    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), debugeeFileName+":30");
+    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), QString(debugeeFileName+":30"));
     QCOMPARE(b->line(), 29);
     QTest::qWait(100);
     QCOMPARE(b->line(), 29);
@@ -587,7 +589,7 @@ void GdbTest::testShowStepInSource()
     TestDebugSession *session = new TestDebugSession;
 
     qRegisterMetaType<KUrl>("KUrl");
-    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl, int, QString)));
+    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl,int,QString)));
 
     TestLaunchConfiguration cfg;
 
@@ -1413,6 +1415,88 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
     QFile::remove(shellScript.fileName()+"-copy");
+}
+
+
+void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
+
+    QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
+    shellScript.open();
+    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.close();
+    shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
+    QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
+
+    QTemporaryFile runScript(QDir::currentPath()+"/runscript");
+    runScript.open();
+    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("target remote localhost:2345\n");
+    runScript.write("break debugee.cpp:30\n");
+    runScript.write("continue\n");
+    runScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 29);
+
+    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 35);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    //************************** second session
+    session = new TestDebugSession;
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 29);
+
+    QCOMPARE(breakpoints()->breakpoints().count(), 2); //one from kdevelop, one from runScript
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(session->line(), 35);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    QFile::remove(shellScript.fileName()+"-copy");
+}
+
+void GdbTest::testBreakpointWithSpaceInPath()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg(findExecutable("debugeespace"));
+    KConfigGroup grp = cfg.config();
+    QString fileName = findSourceFile("debugee space.cpp");
+
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(fileName, 20);
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 20);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 

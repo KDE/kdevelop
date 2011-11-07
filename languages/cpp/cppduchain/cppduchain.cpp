@@ -219,7 +219,7 @@ KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdenti
   return prefix;
 }
 
-Declaration* localClassFromCodeContext(DUContext* context)
+Declaration* localClassFromCodeContext(const DUContext* context)
 {
   if(!context)
     return 0;
@@ -263,7 +263,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   return 0;
 }
 
-Declaration* localFunctionFromCodeContext(DUContext* context)
+Declaration* localFunctionFromCodeContext(const DUContext* context)
 {
   while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.

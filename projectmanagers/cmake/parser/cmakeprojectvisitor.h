@@ -177,7 +177,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 
         QStringList traverseGlob(const QString& startPath, const QString& expression,
             bool recursive = false, bool followSymlinks = false);
-
+        QStringList variableValue(const QString& var) const;
+        
         CMakeProperties m_props;
         QStringList m_modulePath;
         QString m_projectName;

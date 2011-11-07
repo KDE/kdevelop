@@ -5,9 +5,6 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile name="kdeproviderpluginconfig" />
   <group name="KDE">
-    <entry name="svnPrefix" type="String">
-        <default>svn://anonsvn.kde.org/home/kde</default>
-    </entry>
     <entry name="gitProtocol" type="String">
         <default>git</default>
     </entry>

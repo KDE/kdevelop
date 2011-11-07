@@ -45,9 +45,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-bool hasKind(AST*, AST::NODE_KIND);
-AST* getAST(AST*, AST::NODE_KIND, int num = 0);
-
 QString preprocess(const QString& contents) {
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
@@ -125,8 +122,10 @@ void TestParser::testTokenTable()
 
 void TestParser::testParser()
 {
-  QByteArray clazz("struct A { int i; A() : i(5) { } virtual void TestParser::test() = 0; };");
+  QByteArray clazz("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
   TranslationUnitAST* ast = parse(clazz);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
 }
@@ -135,6 +134,7 @@ void TestParser::testTemplateArguments()
 {
   QByteArray templatetest("template <int N, int M> struct SeriesAdder{ enum { value = N + SeriesAdder< 0 >::value }; };");
   TranslationUnitAST* ast = parse(templatetest);
+    QVERIFY(control.problems().isEmpty());
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
   QVERIFY(control.problems().isEmpty());
@@ -146,13 +146,16 @@ void TestParser::testManyComparisons()
   {
     QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 ){ } }");
     TranslationUnitAST* ast = parse(clazz);
+    dump(ast);
+    QVERIFY(control.problems().isEmpty());
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
-    dumper.dump(ast, lastSession->token_stream);
   }
   {
     QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 && val < val4 && val < val5 && val < val6 && val < val7 && val < val8 && val < val9 && val < val10 && val < val11 && val < val12 && val < val13 && val < val14 && val < val15 && val < val16 && val < val17 && val < val18 && val < val19 && val < val20 && val < val21 && val < val22 && val < val23 && val < val24 && val < val25 && val < val26){ } }");
     TranslationUnitAST* ast = parse(clazz);
+    dump(ast);
+    QVERIFY(control.problems().isEmpty());
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
   }
@@ -199,6 +202,8 @@ void TestParser::testParseMethod()
 {
   QByteArray method("void TestParser::A::test() {  }");
   TranslationUnitAST* ast = parse(method);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
 }
@@ -279,8 +284,17 @@ void TestParser::testIfStatements()
 
 void TestParser::testComments()
 {
-  QByteArray method("//TranslationUnitComment\n//Hello\nint A; //behind\n /*between*/\n /*Hello2*/\n class B{}; //behind\n//Hello3\n //beforeTest\nvoid TestParser::test(); //testBehind");
+  QByteArray method("//TranslationUnitComment\n"
+                    "//Hello\n"
+                    "int A; //behind\n"
+                    " /*between*/\n"
+                    " /*Hello2*/\n"
+                    " class B{}; //behind\n"
+                    "//Hello3\n"
+                    " //beforeTest\n"
+                    "void TestParser::test(); //testBehind");
   TranslationUnitAST* ast = parse(method);
+  QVERIFY(control.problems().isEmpty());
 
   CommentFormatter formatter;
   
@@ -288,16 +302,20 @@ void TestParser::testComments()
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
+  QCOMPARE(it->count(), 3);
   it = it->next;
   QVERIFY(it);
+  QVERIFY(it->element);
   QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello\n(behind)"));
 
   it = it->next;
   QVERIFY(it);
+  QVERIFY(it->element);
   QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("between\nHello2\n(behind)"));
 
   it = it->next;
   QVERIFY(it);
+  QVERIFY(it->element);
   QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello3\nbeforeTest\n(testBehind)"));
 }
 
@@ -306,6 +324,7 @@ void TestParser::testComments2()
   CommentFormatter formatter;
   QByteArray method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
   TranslationUnitAST* ast = parse(method);
+  QVERIFY(control.problems().isEmpty());
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -335,6 +354,7 @@ void TestParser::testComments3()
   CommentFormatter formatter;
   QByteArray method("class Class{\n//Comment\n int val;};");
   TranslationUnitAST* ast = parse(method);
+  QVERIFY(control.problems().isEmpty());
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -540,7 +560,8 @@ void TestParser::testInitListTrailingComma()
 
   QByteArray code("const int foo [] = {1,};");
   TranslationUnitAST* ast = parse(code);
-  dumper.dump(ast, lastSession->token_stream);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
 
   QCOMPARE(ast->declarations->count(), 1);
   SimpleDeclarationAST* simpleDecl = reinterpret_cast<SimpleDeclarationAST*>(ast->declarations->at(0)->element);
@@ -878,20 +899,28 @@ struct HasKindVisitor : protected DefaultVisitor
   }
 };
 
-bool hasKind(AST* ast, AST::NODE_KIND kind)
+bool TestParser::hasKind(AST* ast, AST::NODE_KIND kind)
 {
   HasKindVisitor visitor(kind);
   visitor.visit(ast);
   return visitor.hasKind();
 }
 
-AST* getAST(AST* ast, AST::NODE_KIND kind, int num)
+AST* TestParser::getAST(AST* ast, AST::NODE_KIND kind, int num)
 {
   HasKindVisitor visitor(kind, num);
   visitor.visit(ast);
   return visitor.ast;
 }
 
+QString TestParser::stringForNode(AST* node) const
+{
+  QString ret;
+  for(int i = node->start_token; i < node->end_token; ++i) {
+    ret += lastSession->token_stream->token(i).symbolString();
+  }
+  return ret;
+}
 
 #include "test_parser.moc"
 

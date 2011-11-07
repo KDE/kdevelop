@@ -115,6 +115,7 @@ public:
   bool parseBaseClause(BaseClauseAST *&node);
   bool parseBaseSpecifier(BaseSpecifierAST *&node);
   bool parseBlockDeclaration(DeclarationAST *&node);
+  bool parseBracedInitList(ExpressionAST *&node);
   bool parseCastExpression(ExpressionAST *&node);
   bool parseClassSpecifier(TypeSpecifierAST *&node);
   bool parseSignalSlotExpression(ExpressionAST *&node);
@@ -128,6 +129,9 @@ public:
   bool parseCvQualify(const ListNode<uint> *&node);
   bool parseDeclaration(DeclarationAST *&node);
   bool parseDeclarationInternal(DeclarationAST *&node);
+  bool parseFunctionDefinitionInternal(DeclarationAST *&node, uint start, WinDeclSpecAST* winDeclSpec,
+                                       const ListNode<uint>* storageSpec, const ListNode<uint>* funSpec,
+                                       TypeSpecifierAST* spec);
   bool parseDeclarationStatement(StatementAST *&node);
   bool parseDeclarator(DeclaratorAST *&node, bool allowBitfield = true);
   bool parseDeleteExpression(ExpressionAST *&node);
@@ -141,6 +145,7 @@ public:
   bool parseExclusiveOrExpression(ExpressionAST *&node,
 				  bool templArgs = false);
   bool parseExpression(ExpressionAST *&node);
+  bool parseExpressionList(ExpressionAST *&node);
   bool parseExpressionOrDeclarationStatement(StatementAST *&node);
   bool parseExpressionStatement(StatementAST *&node);
   bool parseForInitStatement(StatementAST *&node);
@@ -155,7 +160,7 @@ public:
   bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node);
   bool parseInitializer(InitializerAST *&node);
   bool parseInitializerClause(InitializerClauseAST *&node);
-  bool parseInitializerList(const ListNode<InitializerClauseAST*> *&node);
+  bool parseInitializerList(InitializerListAST *&node);
   bool parseJumpStatement(StatementAST *&node);
   bool parseLabeledStatement(StatementAST *&node);
   bool parseLinkageBody(LinkageBodyAST *&node);
@@ -301,9 +306,13 @@ private:
   };
   QQueue<PendingError> m_pendingErrors;
 
+  ///return string representation of @p node for debugging
+  QString stringForNode(AST* node) const;
+
 private:
   Parser(const Parser& source);
   void operator = (const Parser& source);
+
 };
 
 #endif

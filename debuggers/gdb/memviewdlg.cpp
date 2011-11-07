@@ -164,7 +164,7 @@ namespace GDBDebugger
         if (!session) return;
         connect( session, 
                  SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)),
-                 SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+                 SLOT(slotStateChanged(DBGStateFlags,DBGStateFlags)));
     }
 
     void MemoryView::initWidget()
@@ -183,8 +183,8 @@ namespace GDBDebugger
             {
                 ok_ = true;
 
-                connect(real_widget, SIGNAL(bufferChanged(int, int)),
-                        this, SLOT(memoryEdited(int, int)));
+                connect(real_widget, SIGNAL(bufferChanged(int,int)),
+                        this, SLOT(memoryEdited(int,int)));
 
                 khexedit2_real_widget = real_widget;
 
@@ -226,12 +226,12 @@ namespace GDBDebugger
                     this,                         SLOT(slotHideRangeDialog()));
 
             connect(rangeSelector_->startAddressLineEdit,
-                    SIGNAL(textChanged(const QString&)),
+                    SIGNAL(textChanged(QString)),
                     this,
                     SLOT(slotEnableOrDisable()));
 
             connect(rangeSelector_->amountLineEdit,
-                    SIGNAL(textChanged(const QString&)),
+                    SIGNAL(textChanged(QString)),
                     this,
                     SLOT(slotEnableOrDisable()));
 
@@ -470,8 +470,8 @@ namespace GDBDebugger
         toolBox_->setCurrentIndex(toolBox_->indexOf(widget));
         memoryViews_.push_back(widget);
 
-        connect(widget, SIGNAL(captionChanged(const QString&)),
-                this, SLOT(slotChildCaptionChanged(const QString&)));
+        connect(widget, SIGNAL(captionChanged(QString)),
+                this, SLOT(slotChildCaptionChanged(QString)));
 
         connect(widget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(slotChildDestroyed(QObject*)));

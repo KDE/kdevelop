@@ -291,6 +291,15 @@ void CMakeProjectVisitorTest::testRun_data()
                              << cacheValues << results;
                              
     results.clear();
+    QTest::newRow("nested_problem_string") <<
+                            "if (NOT A)\n"
+                            "foreach (moc_file ${B} ${C})\n"
+                            "\"\n"
+                            "endforeach ()\n"
+                            "endif ()\n"
+                            << cacheValues << results;
+
+    results.clear();
     QTest::newRow("no_endwhile") <<
                             "set(VAR TRUE)\n"
                             "while(VAR)\n"
@@ -410,11 +419,21 @@ void CMakeProjectVisitorTest::testRun_data()
     cacheValues << StringPair("VAR", "OFF");
     results.clear();
     results << StringPair("val", "TRUE");
-    QTest::newRow("break1") <<
+    QTest::newRow("option") <<
                             "option(VAR \"something\" ON)\n"
                             "if(NOT VAR)\n"
                                 "set(val TRUE)\n"
                             "endif(NOT VAR)\n"
+                            << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    QTest::newRow("unfinished while") <<
+                            "while(1)\n"
+                            << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    QTest::newRow("unfinished foreach") <<
+                            "foreach(VAR 1)\n"
                             << cacheValues << results;
 }
 
@@ -469,17 +488,22 @@ void CMakeProjectVisitorTest::testRun()
 void CMakeProjectVisitorTest::testFinder_data()
 {
     QTest::addColumn<QString>("module");
+    QTest::addColumn<QString>("args");
     
-    QTest::newRow("Qt4") << "Qt4";
-    QTest::newRow("KDE4") << "KDE4";
+    QTest::newRow("Qt4") << "Qt4" << QString();
+    QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
+    QTest::newRow("KDE4") << "KDE4" << QString();
+    QTest::newRow("Automoc4") << "Automoc4" << QString();
+//     QTest::newRow("Boost") << "Boost" << QString("1.39");
 //     QTest::newRow("Eigen2") << "Eigen2";
 //     QTest::newRow("Exiv2") << "Exiv2";
-//     QTest::newRow("QtGstreamer") << "QtGstreamer"; //commented because it might not be installed, but works
+//     QTest::newRow("QtGStreamer") << "QtGStreamer"; //commented because it might not be installed, but works
 }
 
 void CMakeProjectVisitorTest::testFinder_init()
 {
     QPair<VariableMap, QStringList> initials=CMakeParserUtils::initialVariables();
+    modulePath.clear();
     modulePath += initials.first.value("CMAKE_MODULE_PATH");
     modulePath += CMAKE_INSTALLED_MODULES;
 //     modulePath += QStringList(CMAKE_TESTS_PROJECTS_DIR "/modules"); //Not used yet
@@ -491,6 +515,7 @@ void CMakeProjectVisitorTest::testFinder_init()
 void CMakeProjectVisitorTest::testFinder()
 {
     QFETCH(QString, module);
+    QFETCH(QString, args);
     testFinder_init();
     
     KDevelop::ReferencedTopDUContext fakeContext=
@@ -501,7 +526,7 @@ void CMakeProjectVisitorTest::testFinder()
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     
     QTextStream out(&file);
-    out << QString("find_package(%1 REQUIRED)\n").arg(module);
+    out << QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args);
     file.close();
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
     file.remove();
@@ -509,8 +534,10 @@ void CMakeProjectVisitorTest::testFinder()
     
     CMakeProjectData data;
     data.vm=initialVariables;
+    data.vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
     data.vm.insert("CMAKE_MODULE_PATH", modulePath);
+    data.cache.insert("CMAKE_PREFIX_PATH", CacheEntry(TEST_PREFIX_PATH));
     
     foreach(const QString& script, buildstrap)
     {
@@ -525,7 +552,7 @@ void CMakeProjectVisitorTest::testFinder()
     v.setCacheValues( &data.cache );
     v.walk(code, 0);
     
-    QString foundvar=QString("%1_FOUND").arg(module.toUpper());
+    QString foundvar=QString("%1_FOUND").arg(module);
     bool found=CMakeCondition(&v).condition(QStringList(foundvar));
     if(!found)
         qDebug() << "result: " << data.vm.value(foundvar);

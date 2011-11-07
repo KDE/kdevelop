@@ -1399,22 +1399,24 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1;
     QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.constEnd();
 
+    bool ret=true;
+    enum State { None, Components };
+    State s=None;
     for(; it!=itEnd; ++it)
     {
         if(it->value.isEmpty())
         {}
-        else if(it->value[0].isNumber())
-        {
-            m_version=it->value;
-        }
+        else if(it->value[0].isNumber()) m_version=it->value;
+        else if(it->value=="QUIET") m_isQuiet=true;
+        else if(it->value=="NO_MODULE") m_noModule=true;
+        else if(it->value=="REQUIRED") { m_isRequired=true; s=Components; }
+        else if(it->value=="COMPONENTS") s=Components;
+        else if(s==Components)
+            m_components.append(it->value);
         else
-        {
-            m_isQuiet |= it->value=="QUIET";
-            m_noModule |= it->value=="NO_MODULE";
-            m_isRequired |= it->value=="REQUIRED";
-        }
+            ret=false;
     }
-    return true;
+    return ret;
 }
 
 FindPathAst::FindPathAst()

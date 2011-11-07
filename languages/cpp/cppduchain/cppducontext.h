@@ -751,8 +751,8 @@ class CppDUContext : public BaseContext {
 };
 
 ///Returns whether the given declaration depends on a missing template-parameter
-bool isTemplateDependent(Declaration* decl);
-bool isTemplateDependent(DUContext* context);
+bool isTemplateDependent(const Declaration* decl);
+bool isTemplateDependent(const DUContext* context);
 
 }
 

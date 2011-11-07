@@ -194,8 +194,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     if( quickOpen )
         quickOpen->registerProvider( IncludeFileDataProvider::scopes(), QStringList(i18n("Files")), m_quickOpenDataProvider );
-    else
-        kWarning() << "Quickopen not found";
+    // else we are in NoUi mode (duchainify, unit tests, ...) and hence cannot find the Quickopen plugin
 
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
@@ -466,7 +465,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
 
   if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !proxyContext)
   {
-    top = contentContextFromProxyContext(top);
+    top = DUChainUtils::contentContextFromProxyContext(top);
     if(!top)
     {
       kDebug(9007) << "WARNING: Proxy-context had invalid content-context";

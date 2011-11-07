@@ -25,11 +25,10 @@
 #include <QHash>
 
 #include <project/projectmodel.h>
-#include "cmakelistsparser.h"
-#include "cmaketypes.h"
-#include "cmakeast.h"
 #include <interfaces/iproject.h>
 #include <language/duchain/topducontext.h>
+#include <parser/cmakelistsparser.h>
+#include <parser/cmaketypes.h>
 
 namespace KDevelop {
     class IProject;
@@ -62,7 +61,7 @@ class DUChainAttatched
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
 {
     public:
         CMakeFolderItem( KDevelop::IProject* project, const KUrl& folder, const QString& build, CMakeFolderItem* item);
@@ -98,18 +97,13 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         QString m_buildDir;
 };
 
-class CMakeExecutableTargetItem 
+class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem 
     : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched, public DescriptorAttatched
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
                                   CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
-                                  const QString& _outputName, const KUrl& basepath)
-            : KDevelop::ProjectExecutableTargetItem( project, name, parent)
-            , DUChainAttatched(c)
-            , outputName(_outputName)
-            , path(basepath)
-        {}
+                                  const QString& _outputName, const KUrl& basepath);
         
         virtual KUrl builtUrl() const;
         virtual KUrl installedUrl() const { return KUrl(); }
@@ -119,20 +113,19 @@ class CMakeExecutableTargetItem
         KUrl path;
 };
 
-class CMakeLibraryTargetItem
+class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
     : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched, public DescriptorAttatched
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
                                CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
-                               const QString& _outputName, const KUrl& /*basepath*/)
-            : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+                               const QString& _outputName, const KUrl& /*basepath*/);
             
     private:
         QString outputName;
 };
 
-class CMakeCustomTargetItem
+class KDEVCMAKECOMMON_EXPORT CMakeCustomTargetItem
     : public KDevelop::ProjectTargetItem, public DUChainAttatched, public DescriptorAttatched
 {
     public:

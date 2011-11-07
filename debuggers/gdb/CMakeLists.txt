@@ -1,6 +1,20 @@
 project(gdb)
 
-find_package(KDE4Workspace 4.2.0 REQUIRED)
+macro_optional_find_package( KDE4Workspace 4.2.0 )
+
+macro_log_feature( KDE4WORKSPACE_FOUND
+"KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
+"" "Required for building the process selection dialog for attaching GDB to a running process."
+)
+
+if(KDE4WORKSPACE_FOUND)
+    include_directories(
+        ${KDE4WORKSPACE_INCLUDE_DIR}
+    )
+    add_definitions(
+        -DKDEV_ENABLE_GDB_ATTACH_DIALOG
+    )
+endif(KDE4WORKSPACE_FOUND)
 
 add_subdirectory(unittests)
 add_subdirectory(printers)
@@ -9,8 +23,8 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${KDE4WORKSPACE_INCLUDE_DIR}
     )
+
 #add_subdirectory(tests)
 
 ########### next target ###############
@@ -26,7 +40,6 @@ set(kdevgdb_PART_SRCS
     stty.cpp
     disassemblewidget.cpp
 #    memviewdlg.cpp
-    processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
@@ -42,6 +55,13 @@ set(kdevgdb_PART_SRCS
     gdbframestackmodel.cpp
     gdbvariable.cpp
 )
+
+if(KDE4WORKSPACE_FOUND)
+    set(kdevgdb_PART_SRCS
+        ${kdevgdb_PART_SRCS}
+        processselection.cpp
+    )
+endif(KDE4WORKSPACE_FOUND)
 
 set(kdevgdb_PART_UI
     debuggertracingdialog.ui
@@ -78,7 +98,6 @@ set(gdbtest_PART_SRCS
     stty.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
-    processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
@@ -91,6 +110,13 @@ set(gdbtest_PART_SRCS
     gdbframestackmodel.cpp
     gdbvariable.cpp
 )
+
+if(KDE4WORKSPACE_FOUND)
+    set(gdbtest_PART_SRCS
+        ${gdbtest_PART_SRCS}
+        processselection.cpp
+    )
+endif(KDE4WORKSPACE_FOUND)
 
 kde4_add_ui_files(gdbtest_PART_SRCS
     debuggertracingdialog.ui

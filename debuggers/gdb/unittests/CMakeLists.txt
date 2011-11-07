@@ -9,3 +9,4 @@ target_link_libraries(debugeethreads ${QT_QTCORE_LIBRARY})
 add_executable(debugeeqt debugeeqt.cpp)
 target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
 
+add_executable("debugeespace" "debugee space.cpp")

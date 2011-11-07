@@ -378,11 +378,11 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
         case KTextEditor::CodeCompletionModel::Name: {
           QString suffix = ", #include " + m_addedInclude;
           if(!m_decl.data())
-            return m_displayTextPrefix + suffix;
+            return QString(m_displayTextPrefix + suffix);
           else if(m_decl.data()->kind() == Declaration::Namespace)
-            return m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString()  + suffix;
+            return QString(m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString()  + suffix);
           else
-            return m_displayTextPrefix + m_decl.data()->toString() + suffix;
+            return QString(m_displayTextPrefix + m_decl.data()->toString() + suffix);
         }
       }
       break;
@@ -450,7 +450,7 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
     //Add some text behind the item, so we get some more info in minimal completion mode
     DUChainReadLocker lock(DUChain::lock());
     if(m_declaration)
-      return m_declaration->qualifiedIdentifier().toString() + ": " + i18n("forward-declare");
+      return QString(m_declaration->qualifiedIdentifier().toString() + ": " + i18n("forward-declare"));
     return ret;
 //     return m_displayTextPrefix + ": " + i18n("Add Forward-Declaration");
   }

@@ -44,6 +44,11 @@ void DefaultVisitor::visitBinaryExpression(BinaryExpressionAST *node)
   visit(node->right_expression);
 }
 
+void DefaultVisitor::visitBracedInitList(BracedInitListAST *node)
+{
+  visit(node->list);
+}
+
 void DefaultVisitor::visitCastExpression(CastExpressionAST *node)
 {
   visit(node->type_id);
@@ -177,7 +182,7 @@ void DefaultVisitor::visitFunctionCall(FunctionCallAST *node)
 void DefaultVisitor::visitFunctionDefinition(FunctionDefinitionAST *node)
 {
   visit(node->type_specifier);
-  visit(node->init_declarator);
+  visit(node->declarator);
   visit(node->constructor_initializers);
   visit(node->function_body);
   visit(node->win_decl_specifiers);
@@ -210,7 +215,11 @@ void DefaultVisitor::visitInitializer(InitializerAST *node)
 void DefaultVisitor::visitInitializerClause(InitializerClauseAST *node)
 {
   visit(node->expression);
-  visitNodes(this, node->initializer_list);
+}
+
+void DefaultVisitor::visitInitializerList(InitializerListAST *node)
+{
+  visitNodes(this, node->clauses);
 }
 
 void DefaultVisitor::visitJumpStatement(JumpStatementAST *)

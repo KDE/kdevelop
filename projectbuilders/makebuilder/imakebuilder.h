@@ -23,8 +23,6 @@
 
 #include <project/interfaces/iprojectbuilder.h>
 
-class IProject;
-class ProjectItem;
 class KJob;
 
 /**

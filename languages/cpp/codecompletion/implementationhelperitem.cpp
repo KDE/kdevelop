@@ -88,7 +88,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
       if(m_type == CreateSignalSlot)
         return i18nc("@action C++ code completion", "Create Slot");
 
-      ret = prefix + " " + ret.toString();
+      ret = QString(prefix + " " + ret.toString());
     }
 
     if(index.column() == KTextEditor::CodeCompletionModel::Name) {
@@ -108,14 +108,14 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
         QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
         parentScope = Cpp::stripPrefixes(m_completionContext->duContext(), parentScope);
         if(!parentScope.isEmpty())
-          ret = parentScope.toString() + "::" + ret.toString();
+          ret = QString(parentScope.toString() + "::" + ret.toString());
       }
     }
     if(index.column() == KTextEditor::CodeCompletionModel::Arguments) {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
       KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
       if(classFunction && classFunction->isAbstract())
-        ret = ret.toString() + " = 0";
+        ret = QString(ret.toString() + " = 0");
     }
   }
 
@@ -396,12 +396,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     IndexedString doc;
     {
-      QList<DUContext*> containers = completionContext()->memberAccessContainers();
+      QSet<DUContext*> containers = completionContext()->memberAccessContainers();
 
       if(containers.isEmpty())
         return;
       else
-        doc = containers[0]->url();
+        doc = (*containers.begin())->url();
     }
 
     lock.unlock();
@@ -414,12 +414,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     }
     lock.lock();
 
-    QList<DUContext*> containers = completionContext()->memberAccessContainers();
+    QSet<DUContext*> containers = completionContext()->memberAccessContainers();
 
     if(containers.isEmpty())
       return;
 
-    DUContext* classContext = containers.first();
+    DUContext* classContext = *containers.begin();
 
     Cpp::SourceCodeInsertion insertion(updated.data());
     insertion.setContext(classContext);
@@ -443,7 +443,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
 
-    QString localText = "SLOT(" + name + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
+    QString localText = "SLOT("+name+"("+QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature)+")));";
     document->replaceText(word, localText);
   }else{
     //this code assumes (safely for now) that the "word" range is on one line

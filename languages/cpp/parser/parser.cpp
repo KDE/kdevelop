@@ -68,7 +68,7 @@ template <class _Tp>
 inline _Tp *CreateNode(pool *memory_pool)
 {
   _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
-  node->kind = static_cast<AST::NODE_KIND>(_Tp::__node_kind);
+  node->kind = _Tp::__node_kind;
   return node;
 }
 
@@ -280,10 +280,11 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   uint start = session->token_stream->cursor();
 
-  KDevelop::IndexedString name = session->token_stream->token(session->token_stream->cursor()).symbol();
+  const uint tokenIndex = session->token_stream->token(session->token_stream->cursor()).symbolIndex();
   static const KDevelop::IndexedString declSpecString("__declspec");
-  if (name != declSpecString)
+  if (declSpecString.index() != tokenIndex)
     return false;
+
   uint specifier = session->token_stream->cursor();
 
   advance();
@@ -1032,7 +1033,6 @@ bool Parser::parseTemplateArgumentList(const ListNode<TemplateArgumentAST*> *&no
 bool Parser::parseTypedef(DeclarationAST *&node)
 {
   uint start = session->token_stream->cursor();
-
   Comment mcomment = comment();
 
   CHECK(Token_typedef);
@@ -1393,13 +1393,13 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
 
   if (!parseTypeId(typeId) ||
        (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
-         && session->token_stream->lookAhead() != Token_rightshift ))
+         && session->token_stream->lookAhead() != Token_rightshift && session->token_stream->lookAhead() != Token_ellipsis ))
   {
     rewind(start);
 
     if (!parsePrimaryExpression(expr) ||
          (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'
-         && session->token_stream->lookAhead() != Token_rightshift ))
+         && session->token_stream->lookAhead() != Token_rightshift && session->token_stream->lookAhead() != Token_ellipsis ))
     {
       rewind(start);
       
@@ -2539,8 +2539,6 @@ bool Parser::parseInitializer(InitializerAST *&node)
   uint start = session->token_stream->cursor();
 
   int tk = session->token_stream->lookAhead();
-  if (tk != '=' && tk != '(')
-    return false;
 
   InitializerAST *ast = CreateNode<InitializerAST>(session->mempool);
 
@@ -2550,14 +2548,20 @@ bool Parser::parseInitializer(InitializerAST *&node)
 
       if (!parseInitializerClause(ast->initializer_clause))
         {
-          reportError(("Initializer clause expected"));
+          rewind(start);
+          return false;
         }
     }
   else if (tk == '(')
     {
       advance();
-      parseCommaExpression(ast->expression);
+      parseExpressionList(ast->expression);
       CHECK(')');
+    }
+  else if (!parseBracedInitList(ast->expression))
+    {
+      rewind(start);
+      return false;
     }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -2601,7 +2605,7 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
 
   ADVANCE('(', "(");
   ExpressionAST *expr = 0;
-  parseCommaExpression(expr);
+  parseExpressionList(expr);
   bool expressionIsVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {
@@ -2705,28 +2709,60 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
   return true;
 }
 
-bool Parser::parseInitializerList(const ListNode<InitializerClauseAST*> *&node)
+bool Parser::parseBracedInitList(ExpressionAST*& node)
 {
-  const ListNode<InitializerClauseAST*> *list = 0;
+  uint start = session->token_stream->cursor();
+
+  CHECK('{');
+  InitializerListAST *list = 0;
+  parseInitializerList(list);
+
+  if (list && session->token_stream->lookAhead() == ',') {
+    // see https://bugs.kde.org/show_bug.cgi?id=233328
+    // and grammar spec on braced-init-list
+    // init lists may have a trailing comma
+    advance();
+  }
+
+  CHECK('}');
+
+  BracedInitListAST *ast = CreateNode<BracedInitListAST>(session->mempool);
+  ast->list = list;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+
+  return true;
+}
+
+bool Parser::parseInitializerList(InitializerListAST *&node)
+{
+  uint start = session->token_stream->cursor();
+
+  const ListNode<InitializerClauseAST*> *clauses = 0;
   do
     {
-      if (list)
+      if (clauses)
         advance(); // skip ',' separator between clauses
-
-      if (session->token_stream->lookAhead() == '}') {
-        // see https://bugs.kde.org/show_bug.cgi?id=233328
-        // init lists may have a trailing comma
-        break;
-      }
 
       InitializerClauseAST *init_clause = 0;
       if (!parseInitializerClause(init_clause))
         {
           return false;
         }
-      list = snoc(list,init_clause,session->mempool);
+      clauses = snoc(clauses,init_clause,session->mempool);
     } while (session->token_stream->lookAhead() == ',');
 
+  InitializerListAST *list = CreateNode<InitializerListAST>(session->mempool);
+  list->clauses = clauses;
+
+  if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      list->isVariadic = true;
+    }
+
+  UPDATE_POS(list, start, _M_last_valid_token+1);
   node = list;
 
   return true;
@@ -2736,48 +2772,17 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  InitializerClauseAST *ast = 0;
+  ExpressionAST *expr = 0;
+  // assignment or braced-init-list
+  parseAssignmentExpression(expr) || parseBracedInitList(expr);
 
-  const int token = session->token_stream->lookAhead();
-  if (token == '{')
-    {
-      advance();
-      const ListNode<InitializerClauseAST*> *initializer_list = 0;
-      if (session->token_stream->lookAhead() != '}' &&
-              !parseInitializerList(initializer_list))
-        {
-            return false;
-        }
-      bool isVariadic = false;
-      if (session->token_stream->lookAhead() == Token_ellipsis)
-        {
-          advance();
-          isVariadic = true;
-        }
-      ADVANCE('}',"}");
+  if (!expr) {
+    rewind(start);
+    return false;
+  }
 
-      ast = CreateNode<InitializerClauseAST>(session->mempool);
-      ast->initializer_list = initializer_list;
-      ast->initializer_isVariadic = isVariadic;
-    }
-  else if (token == Token_delete || token == Token_default)
-    {
-      advance();
-
-      ast = CreateNode<InitializerClauseAST>(session->mempool);
-      ast->defaultDeleted = token == Token_delete ? InitializerClauseAST::Deleted : InitializerClauseAST::Default;
-    }
-  else
-    {
-      ExpressionAST *expression = 0;
-      if (!parseAssignmentExpression(expression))
-        {
-          reportError("Expression expected");
-          return false;
-        }
-      ast = CreateNode<InitializerClauseAST>(session->mempool);
-      ast->expression = expression;
-    }
+  InitializerClauseAST *ast = CreateNode<InitializerClauseAST>(session->mempool);
+  ast->expression = expr;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -2989,9 +2994,10 @@ bool Parser::parseStatement(StatementAST *&node)
 
     case Token_return:
       {
+        ///TODO: cleanup and put this into parseJumpStatement to follow the spec
         advance();
         ExpressionAST *expr = 0;
-        parseCommaExpression(expr);
+        parseCommaExpression(expr) || parseBracedInitList(expr);
 
         ADVANCE(';', ";");
 
@@ -3679,48 +3685,44 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
     parseCvQualify(cv);
 
   int index = session->token_stream->cursor();
+
   NameAST *name = 0;
   if (parseName(name, AcceptTemplate) && session->token_stream->lookAhead() == '(')
     {
       // no type specifier, maybe a constructor or a cast operator??
 
       rewind(index);
-      InitDeclaratorAST *declarator = 0;
-      if (parseInitDeclarator(declarator))
+
+      int startDeclarator = session->token_stream->cursor();
+      DeclaratorAST *declarator = 0;
+      if (parseDeclarator(declarator) && declarator->parameter_declaration_clause)
         {
           switch(session->token_stream->lookAhead())
             {
-            case ';':
+            case '=':
               {
                 advance();
-
-                if (declarator->initializer && declarator->initializer->initializer_clause
-                    && declarator->initializer->initializer_clause->defaultDeleted
-                            != InitializerClauseAST::NotDefaultOrDeleted)
+                if (session->token_stream->lookAhead() == Token_delete ||
+                    session->token_stream->lookAhead() == Token_default)
                   {
+                    FunctionDefinitionAST::DefaultDeleted defaultDeleted = (session->token_stream->lookAhead() == Token_delete)
+                        ? FunctionDefinitionAST::Deleted : FunctionDefinitionAST::Default;
+                    advance();
+                    CHECK(';');
                     // defaulted or deleted functions are definitions
                     FunctionDefinitionAST *ast
                       = CreateNode<FunctionDefinitionAST>(session->mempool);
                     ast->storage_specifiers = storageSpec;
                     ast->function_specifiers = funSpec;
-                    ast->init_declarator = declarator;
+                    ast->declarator = declarator;
+                    ast->defaultDeleted = defaultDeleted;
 
                     UPDATE_POS(ast, start, _M_last_valid_token+1);
                     node = ast;
-                  }
-                else
-                  {
-                    SimpleDeclarationAST *ast
-                      = CreateNode<SimpleDeclarationAST>(session->mempool);
-                    ast->init_declarators = snoc(ast->init_declarators,
-                                                declarator, session->mempool);
-                    ast->function_specifiers = funSpec;
 
-                    UPDATE_POS(ast, start, _M_last_valid_token+1);
-                    node = ast;
+                    return true;
                   }
               }
-              return true;
 
             case ':':
               {
@@ -3735,7 +3737,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
                     ast->storage_specifiers = storageSpec;
                     ast->function_specifiers = funSpec;
-                    ast->init_declarator = declarator;
+                    ast->declarator = declarator;
                     ast->function_body = funBody;
                     ast->constructor_initializers = ctorInit;
 
@@ -3758,7 +3760,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
                     ast->storage_specifiers = storageSpec;
                     ast->function_specifiers = funSpec;
-                    ast->init_declarator = declarator;
+                    ast->declarator = declarator;
                     ast->function_body = funBody;
 
                     UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -3777,6 +3779,30 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
             }
 
         }
+
+        // else expect something else
+        rewind(startDeclarator);
+
+        // check for simple-declaration
+        const ListNode<InitDeclaratorAST*> *declarators = 0;
+        parseInitDeclaratorList(declarators);
+
+        if (session->token_stream->lookAhead() == ';')
+          {
+            advance();
+            // simple-declaration
+            SimpleDeclarationAST *ast
+              = CreateNode<SimpleDeclarationAST>(session->mempool);
+
+            ast->storage_specifiers = storageSpec;
+            ast->function_specifiers = funSpec;
+            ast->win_decl_specifiers = winDeclSpec;
+            ast->init_declarators = declarators;
+
+            UPDATE_POS(ast, start, _M_last_valid_token+1);
+            node = ast;
+            return true;
+          }
     }
 
  start_decl:
@@ -3824,105 +3850,92 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
       spec->cv = cv;
 
-      const ListNode<InitDeclaratorAST*> *declarators = 0;
-      InitDeclaratorAST *decl = 0;
       int startDeclarator = session->token_stream->cursor();
-      bool maybeFunctionDefinition = false;
-
-      if (session->token_stream->lookAhead() != ';')
+      if (parseFunctionDefinitionInternal(node, start, winDeclSpec, storageSpec, funSpec, spec))
         {
-          if (parseInitDeclarator(decl) && (session->token_stream->lookAhead() == '{' || session->token_stream->lookAhead() == Token_try))
-            {
-              // function definition
-              maybeFunctionDefinition = true;
-            }
-          else
-            {
-              rewind(startDeclarator);
-              if (!parseInitDeclaratorList(declarators))
-                {
-                  syntaxError();
-                  return false;
-                }
-            }
-        }
-
-      switch(session->token_stream->lookAhead())
-        {
-        case ';':
-          {
-            advance();
-
-            if (decl && decl->initializer && decl->initializer->initializer_clause
-                && decl->initializer->initializer_clause->defaultDeleted
-                        != InitializerClauseAST::NotDefaultOrDeleted)
-              {
-                // defaulted or deleted functions are definitions
-                FunctionDefinitionAST *ast
-                  = CreateNode<FunctionDefinitionAST>(session->mempool);
-
-                ast->win_decl_specifiers = winDeclSpec;
-                ast->storage_specifiers = storageSpec;
-                ast->function_specifiers = funSpec;
-                ast->type_specifier = spec;
-                ast->init_declarator = decl;
-
-                UPDATE_POS(ast, start, _M_last_valid_token+1);
-                node = ast;
-              }
-            else
-              {
-                SimpleDeclarationAST *ast
-                  = CreateNode<SimpleDeclarationAST>(session->mempool);
-
-                ast->storage_specifiers = storageSpec;
-                ast->function_specifiers = funSpec;
-                ast->type_specifier = spec;
-                ast->win_decl_specifiers = winDeclSpec;
-                ast->init_declarators = declarators;
-
-                UPDATE_POS(ast, start, _M_last_valid_token+1);
-                node = ast;
-              }
-
-          }
           return true;
+        }
+      // else simple-declaration
+      rewind(startDeclarator);
+      const ListNode<InitDeclaratorAST*> *declarators = 0;
+      parseInitDeclaratorList(declarators);
 
-        case Token_try:
-        case '{':
-          {
-            if (!maybeFunctionDefinition)
-              {
-                syntaxError();
-                return false;
-              }
+      if (session->token_stream->lookAhead() == ';')
+        {
+          advance();
+          // simple-declaration
+          SimpleDeclarationAST *ast
+            = CreateNode<SimpleDeclarationAST>(session->mempool);
 
-            StatementAST *funBody = 0;
-            if (parseFunctionBody(funBody))
-              {
-                FunctionDefinitionAST *ast
-                  = CreateNode<FunctionDefinitionAST>(session->mempool);
+          ast->storage_specifiers = storageSpec;
+          ast->function_specifiers = funSpec;
+          ast->type_specifier = spec;
+          ast->win_decl_specifiers = winDeclSpec;
+          ast->init_declarators = declarators;
 
-                ast->win_decl_specifiers = winDeclSpec;
-                ast->storage_specifiers = storageSpec;
-                ast->function_specifiers = funSpec;
-                ast->type_specifier = spec;
-                ast->init_declarator = decl;
-                ast->function_body = funBody;
-
-                UPDATE_POS(ast, start, _M_last_valid_token+1);
-                node = ast;
-
-                return true;
-              }
-          }
-          break;
-        } // end switch
+          UPDATE_POS(ast, start, _M_last_valid_token+1);
+          node = ast;
+          return true;
+        }
     }
 
   syntaxError();
   return false;
 }
+
+bool Parser::parseFunctionDefinitionInternal(DeclarationAST*& node, uint start,
+                                              WinDeclSpecAST* winDeclSpec, const ListNode<uint>* storageSpec,
+                                              const ListNode<uint>* funSpec, TypeSpecifierAST* spec)
+{
+  DeclaratorAST* declarator = 0;
+  StatementAST *funBody = 0;
+  FunctionDefinitionAST::DefaultDeleted defaultDeleted = FunctionDefinitionAST::NotDefaultOrDeleted;
+  if (!parseDeclarator(declarator))
+    {
+      return false;
+    }
+
+  if (!declarator->parameter_declaration_clause)
+    {
+      // cannot be a function definition without a param decl clause
+      rewind(start);
+      return false;
+    }
+
+  if (session->token_stream->lookAhead() == '=' &&
+        (session->token_stream->lookAhead(1) == Token_delete
+        || session->token_stream->lookAhead(1) == Token_default) &&
+      session->token_stream->lookAhead(2) == ';')
+    {
+      advance();
+      if (session->token_stream->lookAhead() == Token_delete) {
+        defaultDeleted = FunctionDefinitionAST::Deleted;
+      } else {
+        defaultDeleted = FunctionDefinitionAST::Default;
+      }
+      advance();
+      advance();
+    }
+  else if (!parseFunctionBody(funBody))
+    {
+      return false;
+    }
+
+  FunctionDefinitionAST *ast = CreateNode<FunctionDefinitionAST>(session->mempool);
+
+  ast->win_decl_specifiers = winDeclSpec;
+  ast->storage_specifiers = storageSpec;
+  ast->function_specifiers = funSpec;
+  ast->type_specifier = spec;
+  ast->declarator = declarator;
+  ast->function_body = funBody;
+  ast->defaultDeleted = defaultDeleted;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  node = ast;
+  return true;
+}
+
 
 bool Parser::parseFunctionBody(StatementAST *&node)
 {
@@ -4105,7 +4118,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
       {
         advance();
         ExpressionAST *expr = 0;
-        parseExpression(expr);
+        parseExpression(expr) || parseBracedInitList(expr);
         CHECK(']');
 
         SubscriptExpressionAST *ast
@@ -4122,7 +4135,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
       {
         advance();
         ExpressionAST *expr = 0;
-        parseExpression(expr);
+        parseExpressionList(expr);
         ///TODO: is this the right place? can't find anything in the last public spec file...
         bool isVariadic = false;
         if (session->token_stream->lookAhead() == Token_ellipsis)
@@ -4238,7 +4251,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
         CHECK('(');
         ExpressionAST *expr = 0;
-        parseCommaExpression(expr);
+        parseExpressionList(expr);
         CHECK(')');
 
         TypeIdentificationAST *ast = CreateNode<TypeIdentificationAST>(session->mempool);
@@ -4311,18 +4324,28 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
   rewind(saved_pos);
 
  L_no_rewind:
-  if (!expr && parseSimpleTypeSpecifier(typeSpec,true)
-      && session->token_stream->lookAhead() == '(')
+  bool expectPrimary = true;
+  if (!expr && parseSimpleTypeSpecifier(typeSpec,true))
     {
-      advance(); // skip '('
-      parseCommaExpression(expr);
-      CHECK(')');
+      if (session->token_stream->lookAhead() == '(')
+        {
+          advance(); // skip '('
+          parseExpressionList(expr);
+          CHECK(')');
+          expectPrimary = false;
+        }
+      else if (parseBracedInitList(expr))
+        {
+          expectPrimary = false;
+        }
     }
   else if (expr)
     {
       typeSpec = 0;
+      expectPrimary = false;
     }
-  else
+
+  if (expectPrimary)
     {
       typeSpec = 0;
       rewind(start);
@@ -4462,8 +4485,9 @@ bool Parser::parseNewExpression(ExpressionAST *&node)
 
   if (session->token_stream->lookAhead() == '(')
     {
+      // new-placement
       advance();
-      parseCommaExpression(ast->expression);
+      parseExpressionList(ast->expression);
       CHECK(')');
     }
 
@@ -4536,14 +4560,22 @@ bool Parser::parseNewInitializer(NewInitializerAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  CHECK('(');
+  ExpressionAST *expr = 0;
+  if (session->token_stream->lookAhead() == '(')
+    {
+      advance();
+
+      parseExpressionList(expr);
+      CHECK(')');
+    }
+  else if (!parseBracedInitList(expr))
+    {
+      rewind(start);
+      return false;
+    }
 
   NewInitializerAST *ast = CreateNode<NewInitializerAST>(session->mempool);
-
-  parseCommaExpression(ast->expression);
-
-  CHECK(')');
-
+  ast->expression = expr;
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
@@ -5020,6 +5052,14 @@ bool Parser::parseExpression(ExpressionAST *&node)
   return parseCommaExpression(node);
 }
 
+bool Parser::parseExpressionList(ExpressionAST*& node)
+{
+  InitializerListAST* listNode = 0;
+  const bool success = parseInitializerList(listNode);
+  node = listNode;
+  return success;
+}
+
 bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
   if(session->token_stream->lookAhead() == Token___qt_signal__ ||
      session->token_stream->lookAhead() == Token___qt_slot__) {
@@ -5391,4 +5431,15 @@ bool Parser::holdErrors(bool hold)
   return current;
 }
 
+QString Parser::stringForNode(AST* node) const
+{
+  if (!node) {
+    return "<invalid node>";
+  }
 
+  QString str;
+  for(int i = node->start_token; i < node->end_token; ++i) {
+    str += session->token_stream->token(i).symbolString();
+  }
+  return str;
+}

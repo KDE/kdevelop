@@ -199,3 +199,9 @@ const KDevelop::IndexedString& ParseSession::url() const
 {
   return m_url;
 }
+
+void ParseSession::dumpNode(AST* node) const
+{
+  DumpTree dumper;
+  dumper.dump(node, token_stream, true);
+}

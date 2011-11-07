@@ -38,14 +38,6 @@ kde4_add_unit_test(sourcemanipulationtest ${sourcemanipulationtest_SRCS})
 target_link_libraries(sourcemanipulationtest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
     kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
-########### next target ###############
-
-set(itemrepositorytest_SRCS test_itemrepository.cpp)
-
-
-kde4_add_unit_test(itemrepositorytest ${itemrepositorytest_SRCS})
-target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
 ########## next target ################
 
 kde4_add_unit_test(codeanalysistest codeanalysistest.cpp testhelper.cpp)

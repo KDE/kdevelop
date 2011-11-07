@@ -79,9 +79,9 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       functionSignature += '(' + classFun->normalizedSignature().str() + ')';
       if(addSignalSlot) {
         if(classFun->isSignal())
-          functionSignature = "SIGNAL(" + functionSignature + ')';
+          functionSignature = "SIGNAL("+functionSignature+')';
         else
-          functionSignature = "SLOT(" + functionSignature + ')';
+          functionSignature = "SLOT("+functionSignature+')';
       }else{
         //Only add a closing )
         functionSignature += ')';
@@ -497,13 +497,13 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             indentation = QString(depth, ' ');
 
           if(m_declaration->kind() == Declaration::Namespace)
-            return indentation + "namespace";
+            return QString(indentation + "namespace");
           
           if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
             if( alias->identifier().isEmpty() ) {
-              return indentation + "using namespace";/* " + alias->importIdentifier().toString();*/
+              return QString(indentation + "using namespace");/* " + alias->importIdentifier().toString();*/
             } else {
-              return indentation + "namespace";/* " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();*/
+              return QString(indentation + "namespace");/* " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();*/
             }
           }
 
@@ -516,19 +516,19 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                 if(classDecl) {
                   switch (classDecl->classType()) {
                     case ClassDeclarationData::Class:
-                      return indentation + "class";
+                      return QString(indentation + "class");
                       break;
                     case ClassDeclarationData::Struct:
-                      return indentation + "struct";
+                      return QString(indentation + "struct");
                       break;
                     case ClassDeclarationData::Union:
-                      return indentation + "union";
+                      return QString(indentation + "union");
                       break;
                     default:
                       ;
                   }
                 }else if(dec->isForwardDeclaration()) {
-                  return indentation + "class"; ///@todo Would be useful to have the class/struct/union info also for forward-declarations
+                  return QString(indentation + "class"); ///@todo Would be useful to have the class/struct/union info also for forward-declarations
                 }
               }
               if(dec->type<EnumerationType>()) {

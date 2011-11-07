@@ -54,6 +54,7 @@ public:
     enum ErrorTypes
     {
         IncorrectItemError = UserDefinedError,
+        ItemNoLongerValidError,
         InvalidBuildDirectoryError,
         BuildCommandError,
         FailedError = FailedShownError

@@ -106,7 +106,9 @@ private Q_SLOTS:
     void contextWatch();
 
     void slotExamineCore();
+    #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
     void slotAttachProcess();
+    #endif
 
     void slotDBusServiceRegistered(const QString& service);
     void slotDBusServiceUnregistered(const QString& service);

@@ -24,7 +24,7 @@
 
 QTEST_MAIN( KDEProjectsReaderTest )
 
-#define WAIT_FOR_SIGNAL(a, b) \
+#define WAIT_FOR_SIGNAL(a,b) \
 {\
     bool gotSignal = QTest::kWaitForSignal((a), SIGNAL(b), 30000);\
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
@@ -40,7 +40,7 @@ void KDEProjectsReaderTest::testsProperParse()
     
     QVERIFY(!reader.hasErrors());
     
-    WAIT_FOR_SIGNAL(&reader, downloadDone());
+    WAIT_FOR_SIGNAL(&reader,downloadDone());
     
     for(int i=0; i<m.rowCount(); i++) {
         QStandardItem* item = m.item(i,0);
@@ -58,6 +58,6 @@ void KDEProjectsReaderTest::testsProperParse()
             QVERIFY(!it.value().toString().isEmpty());
         }
         
-        QVERIFY(item->data(KDEProjectsModel::PluginRole).isValid());
+        QVERIFY(!item->data(KDEProjectsModel::VcsLocationRole).toMap().isEmpty());
     }
 }

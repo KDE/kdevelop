@@ -139,21 +139,82 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         {
             s= replaceInstallDir(s, installDir);
         }
-//         kDebug(9042) << "resolving" << _s << "to" << s;
-        newList.append(KUrl(s));
+        KUrl d(s);
+        d.cleanPath();
+        d.adjustPath(KUrl::AddTrailingSlash);
+//         kDebug(9042) << "resolved" << _s << "to" << d;
+
+        if (!newList.contains(d))
+        {
+            newList.append(d);
+        }
     }
     return newList;
+}
+
+void eatLeadingWhitespace(KTextEditor::Document* doc, KTextEditor::Range& eater, const KTextEditor::Range& bounds)
+{
+    QString text = doc->text(KTextEditor::Range(bounds.start(), eater.start()));
+    int newStartLine = eater.start().line(), pos = text.length() - 2; //pos = index before eater.start
+    while (pos > 0)
+    {
+        if (text[pos] == '\n')
+            --newStartLine;
+        else if (!text[pos].isSpace())
+        {
+            ++pos;
+            break;
+        }
+        --pos;
+    }
+    int lastNewLinePos = text.lastIndexOf('\n', pos - 1);
+    int newStartCol = lastNewLinePos == -1 ? eater.start().column() + pos :
+                                             pos - lastNewLinePos - 1;
+    eater.start().setLine(newStartLine);
+    eater.start().setColumn(newStartCol);
+}
+
+KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::Range& r, const QString& name)
+{
+    QString txt=doc->text(r);
+    QRegExp match("([\\s]|^)(\\./)?"+QRegExp::escape(name));
+    int namepos = match.indexIn(txt);
+    
+    if(namepos == -1)
+        return KTextEditor::Range::invalid();
+    //QRegExp doesn't support lookbehind asserts, and \b isn't good enough
+    //so either match "^" or match "\s" and then +1 here
+    if (txt[namepos].isSpace())
+        ++namepos;
+    
+    KTextEditor::Cursor c(r.start());
+    c.setLine(c.line() + txt.left(namepos).count('\n'));
+    int lastNewLinePos = txt.lastIndexOf('\n', namepos);
+    if (lastNewLinePos < 0)
+        c.setColumn(r.start().column() + namepos);
+    else
+        c.setColumn(namepos - lastNewLinePos - 1);
+    
+    return KTextEditor::Range(c, KTextEditor::Cursor(c.line(), c.column()+match.matchedLength()));
 }
 
 bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
 {
     bool ret=false;
-    QString txt=doc->text(r.castToSimpleRange().textRange());
-    QRegExp match("\\s+(./)*"+name);
-    if(!add && match.indexIn(txt) > -1)
+    KTextEditor::Range rx;
+    if(!add)
+        rx=rangeForText(doc, r.castToSimpleRange().textRange(), name);
+    
+    if(!add && rx.isValid())
     {
-        txt.replace(match, replace.isEmpty() ? replace : ' '+replace);
-        doc->replaceText(r.castToSimpleRange().textRange(), txt);
+        if(replace.isEmpty())
+        {
+            eatLeadingWhitespace(doc, rx, r.castToSimpleRange().textRange());
+            doc->removeText(rx);
+        }
+        else
+            doc->replaceText(rx, replace);
+        
         ret=true;
     }
     else
@@ -168,9 +229,9 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
             if(!r.contains(u.m_range))
                 continue; //We just want the uses in the range, not the whole file
 
-                Declaration* d=u.usedDeclaration(topctx);
+            Declaration* d=u.usedDeclaration(topctx);
 
-            if(d && d->context()->topContext()->url().toUrl()==lists)
+            if(d && d->topContext()->url().toUrl()==lists)
                 decls += d;
         }
 
@@ -201,7 +262,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     return ret;
 }
 
-QString dotlessRelativeUrl(KUrl baseUrl, KUrl url)
+QString dotlessRelativeUrl(const KUrl& baseUrl, const KUrl& url)
 {
     QString dotlessRelative = KUrl::relativeUrl(baseUrl, url);
     if (dotlessRelative.startsWith("./"))
@@ -209,14 +270,14 @@ QString dotlessRelativeUrl(KUrl baseUrl, KUrl url)
     return dotlessRelative;
 }
 
-QString relativeToLists(QString listsPath, KUrl url)
+QString relativeToLists(const QString& listsPath, const KUrl& url)
 {
     KUrl listsFolder = KUrl(KUrl(listsPath).directory(KUrl::AppendTrailingSlash));
     QString relative = dotlessRelativeUrl(listsFolder, url);
     return relative;
 }
 
-KUrl afterMoveUrl(KUrl origUrl, KUrl movedOrigUrl, KUrl movedNewUrl)
+KUrl afterMoveUrl(const KUrl& origUrl, const KUrl& movedOrigUrl, const KUrl& movedNewUrl)
 {
     QString difference = dotlessRelativeUrl(movedOrigUrl, origUrl);
     KUrl newUrl(movedNewUrl);
@@ -305,8 +366,7 @@ bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFold
 bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(file->parent());
-    RangeInRevision targetRange = desc->descriptor().argRange();
-    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().argRange().end);
     QString listsPath = desc->descriptor().filePath;
     QString newRelative = relativeToLists(listsPath, newUrl);
     QString oldRelative = relativeToLists(listsPath, file->url());
@@ -317,8 +377,7 @@ bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl
 bool changesWidgetAddFileToTarget(const ProjectFileItem *item, const ProjectTargetItem *target, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(target);
-    RangeInRevision targetRange = desc->descriptor().range();
-    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().range().end);
     QString lists = desc->descriptor().filePath;
     QString relative = relativeToLists(lists, item->url());
     widget->addDocuments(IndexedString(lists));
@@ -328,8 +387,7 @@ bool changesWidgetAddFileToTarget(const ProjectFileItem *item, const ProjectTarg
 bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(item->parent());
-    RangeInRevision targetRange = desc->descriptor().range();
-    targetRange.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+    RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().range().end);
     QString lists = desc->descriptor().filePath;
     QString relative = relativeToLists(lists, item->url());
     widget->addDocuments(IndexedString(lists));
@@ -372,7 +430,7 @@ bool changesWidgetAddFilesToTarget(const QList<ProjectFileItem*> &files, const P
 
 CMakeFolderItem* nearestCMakeFolder(ProjectBaseItem* item)
 {
-    while(!dynamic_cast<CMakeFolderItem*>(item))
+    while(!dynamic_cast<CMakeFolderItem*>(item) && item)
         item = item->parent();
 
     return dynamic_cast<CMakeFolderItem*>(item);
@@ -610,7 +668,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
     m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
     
-    KUrl cmakeListsPath(folder->url());
+    KUrl cmakeListsPath(item->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     
     if(folder && QFile::exists(cmakeListsPath.toLocalFile()))
@@ -794,11 +852,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
-    } else {
+    } else if( folder ) {
+        // Only do cmake-stuff if its a cmake folder
         folder->cleanupBuildFolders(QList<Subdirectory>());
         folder->cleanupTargets(QList<CMakeTarget>());
+    } else {
+        // Log non-cmake folders for debugging purposes
+        kDebug(9042) << "Folder Item which is not a CMake folder parsed:" << item->url() << item->type();
     }
-    reloadFiles(folder);
+    // Use item here since folder may be 0.
+    reloadFiles(item);
 
     return folderList;
 }
@@ -848,7 +911,10 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << (folder ? folder->url() : KUrl()) << item;
     }
-    Q_ASSERT(folder);
+    if( !folder ) {
+        // Not a CMake folder, so no include-directories to be returned;
+        return KUrl::List();
+    }
 
 //     kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
     KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
@@ -860,13 +926,16 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 {
     CMakeFolderItem* folder=0;
     kDebug(9042) << "Querying defines dirs for " << item;
-    while(!folder)
+    while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
-    Q_ASSERT(folder);
+    if( !folder ) {
+        // Not a CMake folder, so no defines to be returned;
+        return QHash<QString,QString>();
+    }
 
     return folder->definitions();
 }
@@ -943,7 +1012,7 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
     m_busyProjects += fi->project();
     locker.unlock();
     
-    connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
+    connect( job, SIGNAL(result(KJob*)), this, SLOT(reimportDone(KJob*)) );
     ICore::self()->runController()->registerJob( job );
 }
 
@@ -980,6 +1049,17 @@ void CMakeManager::cleanupToDelete(IProject* p)
             it=m_toDelete.erase(it);
         } else 
             ++it;
+    }
+    
+    QHash<KUrl, KUrl>::const_iterator it=m_renamed.constBegin(), itEnd=m_renamed.constEnd();
+    for(; it!=itEnd; ++it) {
+        QList<ProjectBaseItem*> items=p->itemsForUrl(it.key());
+        foreach(ProjectBaseItem* item, items) {
+            if(item->file())
+                emit fileRenamed(it.value(), item->file());
+            else
+                emit folderRenamed(it.value(), item->folder());
+        }
     }
 }
 
@@ -1103,7 +1183,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         return;
     }
     
-    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot);
     QSet<QString> entries = filterFiles(entriesL);
     
     KUrl folderurl = item->url();
@@ -1159,9 +1239,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
 
 bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const
 {
-    KUrl cache=url, missing=url;
-    cache.addPath("CMakeCache.txt");
-    missing.addPath(".kdev_ignore");
+    KUrl cache(url,"CMakeCache.txt"), missing(url, ".kdev_ignore");
     
     bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
     ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
@@ -1210,7 +1288,7 @@ ContextMenuExtension CMakeManager::contextMenuExtension( KDevelop::Context* cont
     if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
     {
         KAction* action = new KAction( i18n( "Jump to target definition" ), this );
-        connect( action, SIGNAL( triggered() ), this, SLOT( jumpToDeclaration() ) );
+        connect( action, SIGNAL(triggered()), this, SLOT(jumpToDeclaration()) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
 
@@ -1277,9 +1355,13 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
 
     bool cmakeSuccessful = true;
     CMakeFolderItem *nearestCMakeFolderItem = nearestCMakeFolder(toFolder);
+    IProject* project=toFolder->project();
+    
+    KUrl::List movedUrls;
+    KUrl::List oldUrls;
     foreach(ProjectBaseItem *movedItem, items)
     {
-        QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(movedItem->project(), movedItem->url());
+        QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(project, movedItem->url());
         KUrl movedItemNewUrl = toFolder->url();
         movedItemNewUrl.addPath(movedItem->baseName());
         if (movedItem->folder())
@@ -1297,6 +1379,9 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
                 cmakeSuccessful &= changesWidgetMoveTargetFile(dirtyItem, dirtyItemNewUrl, &changesWidget);
             }
         }
+        
+        oldUrls += movedItem->url();
+        movedUrls += movedItemNewUrl;
     }
 
     if (changesWidget.hasDocuments() && cmakeSuccessful)
@@ -1310,12 +1395,15 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
             return false;
     }
 
-    foreach(ProjectBaseItem *movedItem, items)
+    KUrl::List::const_iterator it1=oldUrls.constBegin(), it1End=oldUrls.constEnd();
+    KUrl::List::const_iterator it2=movedUrls.constBegin();
+    Q_ASSERT(oldUrls.size()==movedUrls.size());
+    for(; it1!=it1End; ++it1, ++it2)
     {
-        KUrl movedItemNewUrl = toFolder->url();
-        movedItemNewUrl.addPath(movedItem->baseName());
-        if (!KDevelop::renameUrl(movedItem->project(), movedItem->url(), movedItemNewUrl))
+        if (!KDevelop::renameUrl(project, *it1, *it2))
             return false;
+        
+        m_renamed[*it2] = *it1;
     }
 
     return true;
@@ -1435,7 +1523,7 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
 
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
-    changesWidget.setInformation(i18n("Modify target '%2' as follows:", target->baseName()));
+    changesWidget.setInformation(i18n("Modify target '%1' as follows:", target->baseName()));
 
     bool success = changesWidgetAddFilesToTarget(files, target, &changesWidget) &&
                    changesWidget.exec() &&
@@ -1447,25 +1535,30 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
     return success;
 }
 
-bool renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
+bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
 {
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
     changesWidget.setInformation(i18n("Rename '%1' to '%2':", item->text(),
                                       newUrl.fileName(KUrl::IgnoreTrailingSlash)));
     
-    bool cmakeSuccessful = true;
+    bool cmakeSuccessful = true, changedCMakeLists=false;
+    IProject* project=item->project();
+    KUrl oldUrl=item->url();
     if (item->file())
     {
-        QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(item->project(), item->url());
+        QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(project, oldUrl);
         foreach(ProjectBaseItem* targetFile, targetFiles)
             cmakeSuccessful &= changesWidgetMoveTargetFile(targetFile, newUrl, &changesWidget);
     }
     else if (CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item))
         cmakeSuccessful &= changesWidgetRenameFolder(folder, newUrl, &changesWidget);
     
-    if (changesWidget.hasDocuments() && cmakeSuccessful)
-        cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
+    item->setUrl(newUrl);
+    if (changesWidget.hasDocuments() && cmakeSuccessful) {
+        changedCMakeLists = changesWidget.exec() && changesWidget.applyAllChanges();
+        cmakeSuccessful &= changedCMakeLists;
+    }
     
     if (!cmakeSuccessful)
     {
@@ -1475,7 +1568,19 @@ bool renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
             return false;
     }
 
-    return KDevelop::renameUrl(item->project(), item->url(), newUrl);
+    bool ret = KDevelop::renameUrl(project, oldUrl, newUrl);
+    if(ret) {
+        if(changedCMakeLists)
+            m_renamed[newUrl] = oldUrl;
+        else if(ProjectFolderItem* folder=item->folder()) {
+            emit folderRenamed(oldUrl, folder);
+        } else if(KDevelop::ProjectFileItem *file = item->file()) {
+            emit fileRenamed(oldUrl, file);
+        }
+    } else
+        item->setUrl(oldUrl);
+    
+    return ret;
 }
 
 bool CMakeManager::renameFile(ProjectFileItem *item, const KUrl &newUrl)

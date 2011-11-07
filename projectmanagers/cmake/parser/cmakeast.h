@@ -304,6 +304,7 @@ CMAKE_END_AST_CLASS( FindLibraryAst )
 CMAKE_BEGIN_AST_CLASS( FindPackageAst ) //FIXME: there are things that I don't understand
 CMAKE_ADD_AST_MEMBER( QString, name )
 CMAKE_ADD_AST_MEMBER( QString, version )
+CMAKE_ADD_AST_MEMBER( QStringList, components )
 CMAKE_ADD_AST_MEMBER( bool, isQuiet )
 CMAKE_ADD_AST_MEMBER( bool, noModule )
 CMAKE_ADD_AST_MEMBER( bool, isRequired )

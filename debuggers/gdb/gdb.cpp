@@ -65,8 +65,8 @@ void GDB::start(KConfigGroup& config)
     connect(process_, SIGNAL(readyReadStandardError()),
             SLOT(readyReadStandardError()));
     connect(process_,
-            SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(processFinished(int, QProcess::ExitStatus)));
+            SIGNAL(finished(int,QProcess::ExitStatus)),
+            SLOT(processFinished(int,QProcess::ExitStatus)));
     connect(process_, SIGNAL(error(QProcess::ProcessError)),
             SLOT(processErrored(QProcess::ProcessError)));
 
@@ -245,7 +245,7 @@ void GDB::processLine(const QByteArray& line)
                
                if (result.subkind == GDBMI::ResultRecord::GeneralNotification)
                {
-                   kDebug() << "General notification";
+                   kDebug(9012) << "General notification";
                    emit notification(result);
                    return;
                }

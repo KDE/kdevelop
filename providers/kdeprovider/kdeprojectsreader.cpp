@@ -59,6 +59,7 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
 {
     if(reply->error()!=QNetworkReply::NoError) {
         m_errors += reply->errorString();
+        emit downloadDone();
         return;
     }
     
@@ -72,7 +73,7 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
             QStringRef name = xml.name();
             
             if(name == "project")
-                m_current.push(Source(Source::Git));
+                m_current.push(Source());
             else if(!m_current.isEmpty())
             {
                 if(name == "name")

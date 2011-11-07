@@ -126,9 +126,9 @@ void ManPageModel::initModel(){
     KIO::TransferJob  * transferJob = 0;
 
     transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
-             this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
-    connect(transferJob, SIGNAL(result(KJob *)), this, SLOT(indexDataReceived(KJob *)));
+    connect( transferJob, SIGNAL(data(KIO::Job*,QByteArray)),
+             this, SLOT(readDataFromMainIndex(KIO::Job*,QByteArray)) );
+    connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(indexDataReceived(KJob*)));
 }
 
 void ManPageModel::indexDataReceived(KJob *job){
@@ -144,7 +144,7 @@ void ManPageModel::indexDataReceived(KJob *job){
 
 void ManPageModel::initSection(){
     KIO::StoredTransferJob  * transferJob = KIO::storedGet(KUrl("man:(" + iterator->peekNext().first + ")"), KIO::NoReload, KIO::HideProgressInfo);
-    connect(transferJob, SIGNAL(result(KJob *)), this, SLOT(sectionDataReceived(KJob *)));
+    connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(sectionDataReceived(KJob*)));
 }
 
 void ManPageModel::sectionDataReceived(KJob *job){

@@ -1,0 +1,1416 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kdevelop "<application>KDevelop</application>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+<book lang="&language;">
+<bookinfo>
+<title>&kdevelop; Handbook</title>
+<authorgroup>
+<author>
+<personname>
+    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/KDevelop4/Manual">KDevelop4/Manual</ulink> page.</firstname>
+<surname></surname>
+</personname>
+    </author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+    </authorgroup>
+<legalnotice>&FDLNotice;</legalnotice>
+<date>2011-06-03</date>
+    <releaseinfo>&kdevelop; 4.2 (&kde; 4.7)</releaseinfo>
+<abstract>
+<para>&kdevelop; is an Integrated Development Environment to be used for a wide variety of programming tasks.</para>
+    </abstract>
+  <keywordset>
+    <keyword>KDE</keyword>
+    <keyword>KDevelop</keyword>
+    <keyword>IDE</keyword>
+    <keyword>development</keyword>
+    <keyword>programming</keyword>
+  </keywordset>
+</bookinfo>
+<!--userbase <timestamp>2011-06-27T12:36:08Z</timestamp>-->
+
+<!--userbase-content-->
+<chapter id="what-is-kdevelop"><title>What is &kdevelop;?</title>
+<para><ulink url="http://www.KDevelop.org">&kdevelop;</ulink> is a modern integrated development environment (IDE) for C++ (and other languages) that is one of many <ulink url="http://www.kde.org/applications/">KDE applications</ulink>. As such it runs on &Linux; (even if you run one of the other desktops, such as GNOME) but it is also available for most other variants of &UNIX; and for Windows as well.</para>
+<para>&kdevelop; offers all amenities of modern IDEs. For large projects and applications, the most important feature is that &kdevelop; <emphasis>understands C++</emphasis>: it parses the entire source base and remembers which classes have which member functions, where variables are defined, what their types are, and many other things about your code. For example, let's say one of your project's header files declares a class</para>
+<para><programlisting>
+class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para>and later on in your program you have</para>
+<para><programlisting>
+Car my_ride;
+// ...do something with this variable...
+std::string color = my_ride.ge
+</programlisting>
+</para>
+<para>it will have remembered that <varname>my_ride</varname> in the last line is a variable of type <varname>Car</varname> and offer you to complete <varname>ge</varname> as <varname>get_color()</varname> since this is the only member function of the <varname>Car</varname> class that starts like this. Instead of continuing to type you just hit &Enter; to get the full word; this saves typing, avoids typos, and doesn't require you to remember the exact names of the hundreds or thousands of functions and classes that make up large projects.</para>
+<para>As a second example, assume you have code like this:</para>
+<para><programlisting>double foo ()
+{
+  double var = my_func();
+ return var * var;
+}
+double bar ()
+{
+  double var = my_func();
+  return var * var * var;
+}
+</programlisting></para>
+<para>If you hover the mouse over the symbol <varname>var</varname> in function <varname>bar</varname> you get the option to see all uses of this symbol. Clicking on it will only show you the uses of this variable in function <varname>bar</varname> because &kdevelop; understands that the variable <varname>var</varname> in function <varname>foo</varname> has nothing to do with it. Similarly, right clicking on the variable name allows you to rename the variable; doing so will only touch the variable in <varname>bar</varname> but not the one with the same name in <varname>foo</varname>.</para>
+<para>But &kdevelop; is not just an intelligent code editor; there are other things &kdevelop; does well. Obviously, it highlights the source code in different colors; it has a customizable indenter; it has an integrated interface to the GNU debugger <application>gdb</application>; it can show you the documentation for a function if you hover the mouse over a use of this function; it can deal with different kinds of build environments and compilers (&eg; with <guilabel>make</guilabel> and <guilabel>cmake</guilabel>-based project), and many other neat things that are discussed in this manual.</para>
+</chapter>
+<chapter id="sessions-and-projects--the-basics-of-kdevelop"><title>Sessions and projects: The basics of &kdevelop;</title>
+<para>In this section, we will go over some of the terminology of how &kdevelop; sees the world and how it structures work. In particular, we introduce the concept of <emphasis>sessions</emphasis> and <emphasis>projects</emphasis> and explain how you can set up the projects you want to work on in &kdevelop;.</para>
+<sect1 id="terminology"><title>Terminology</title>
+<para>&kdevelop; has the concept of <emphasis>sessions</emphasis> and <emphasis>projects</emphasis>. A session contains all projects that have something to do with each other. For the examples that follow, assume you are the developer of both a library and an application that uses it. You can think of the core KDE libraries as the former and &kdevelop; as the latter. Another example: Let's say you are a &Linux; kernel hacker but you are also working on a device driver for &Linux; that hasn't been merged into the kernel tree yet.</para>
+<para>So taking the latter as an example, you would have a session in &kdevelop; that has two projects: the &Linux; kernel and the device driver. You will want to group them into a single session (rather than having two sessions with a single project each) because it will be useful to be able to see the kernel functions and data structures in &kdevelop; whenever you write source code for the driver &mdash; for example so that you can get kernel function and variable names auto-expanded, or so that you can see kernel function documentation while hacking on the device driver.</para>
+<para>Now imagine you also happen to be a KDE developer. Then you would have a second session that contains KDE as a project. You could in principle have just one session for all of this, but there is no real reason for this: in your KDE work, you don't need to access kernel or device driver functions; and you don't want KDE class names autoexpanded while working working on the &Linux; kernel. Finally, building some of the KDE libraries is independent of re-compiling the &Linux; kernel (whereas whenever you compile the device driver it would also be good to re-compile the &Linux; kernel if some of the kernel header files have changed).</para>
+<para>Finally, another use for sessions is if you work both on the current development version of a project, as well as on a branch: in that case, you don't want &kdevelop; to confuse classes that belong to mainline and the branch, so you'd have two sessions, with the same set of projects but from different directories (corresponding to different development branches).</para>
+</sect1>
+<sect1 id="setting-up-a-session-and-importing-an-existing-project"><title>Setting up a session and importing an existing project</title>
+<para>Let's stick with the &Linux; kernel and device driver example &mdash; you may want to substitute your own set of libraries or projects for these two examples. To create a new session that contains these two projects go to the <menuchoice><guimenu>Session</guimenu><guimenuitem>Start new session</guimenuitem></menuchoice> menu at the top left (or, if this is the first time you use &kdevelop;: simply use the default session you get on first use, which is empty).</para>
+<para>We next want to populate this session with projects that for the moment we assume already exist somewhere (the case of starting projects from scratch is discussed elsewhere in this manual). For this, there are essentially two methods, depending on whether the project already is somewhere on your hard drive or whether it needs to be downloaded from a server.</para>
+<sect2 id="option-1--importing-a-project-from-a-version-control-system-server"><title>Option 1: Importing a project from a version control system server</title>
+<para>Let's first assume that the project we want to set up &mdash; the &Linux; kernel &mdash; resides in some version control system on a server, but that you haven't checked it out to your local hard drive yet. In this case, go to the <guilabel>Project</guilabel> menu to create the &Linux; kernel as a project inside the current session and then follow these steps:</para>
+<itemizedlist>
+<listitem><para>Go to <menuchoice><guimenu>Projects</guimenu><guimenuitem>Fetch project</guimenuitem></menuchoice> to import a project
+</para></listitem>
+<listitem><para>You then have multiple options to start a new project in the current session, depending on where the source files should come from: You can just point &kdevelop; at an existing directory (see option 2 below), or you can ask &kdevelop; to get the sources from a repository.
+</para></listitem>
+<listitem><para>Assuming you don't already have a version checked out:
+<itemizedlist>
+<listitem><para>In the dialog box, under <guilabel>Select the source</guilabel>, choose to use <guilabel>Subversion</guilabel>, <guilabel>Git</guilabel>, or one of the other choices
+</para></listitem>
+<listitem><para>Choose a working directory as destination into which the sources should be checked out
+</para></listitem>
+<listitem><para>Choose an URL for the location of the repository where the source files can be obtained
+</para></listitem>
+<listitem><para>Hit <guilabel>Get</guilabel>. This can take quite a long while; depending on the speed of your connection and the size of the project. Unfortunately, in &kdevelop; 4.2.x the progress bar does not actually show anything, but you can track progress by periodically looking at the output of the command line command <screen>du -sk <replaceable>/path/to/&kdevelop;/project</replaceable></screen> to see how much data has already been downloaded.
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+</itemizedlist><para><note><para>The problem with the progress bar has been reported as <ulink url="http://bugs.kde.org/show_bug.cgi?id=256832">&kdevelop; bug 256832</ulink>.</para></note></para>
+<para><note><para>In this process, I also get the error message <emphasis>You need to specify a valid location for the project</emphasis> which can be safely ignored.</para></note></para>
+<itemizedlist>
+<listitem><para>It asks you to select a &kdevelop; project file in this directory. Since you probably don't have one yet, simply hit <guilabel>Next</guilabel>
+</para></listitem>
+<listitem><para>Hit <guilabel>Next</guilabel> again
+</para></listitem>
+<listitem><para>&kdevelop; will then ask you to choose a project manager. If this project uses standard &UNIX; make files, choose the custom makefile project manager
+</para></listitem>
+<listitem><para>&kdevelop; will then start to parse the entire project. Again, it will take quite a while to go through all files and index classes &etc; At the bottom right of the main window, there is a progress bar that shows how long this process has come along. (If you have several processor cores, you can accelerate this process by going to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kdevelop;</guimenuitem></menuchoice> menu item, then selecting <guilabel>Background parser</guilabel> on the left, and increasing the number of threads for background parsing on the right.)
+</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="option-2--importing-a-project-that-is-already-on-your-hard-drive"><title>Option 2: Importing a project that is already on your hard drive</title>
+<para>Alternatively, if the project you want to work with already exists on your hard drive (for example, because you have downloaded it as a tar file from an FTP server, because you already checked out a version of the project from a version control system, or because it is your own project that exists <emphasis>only</emphasis> on your own hard drive), then  use <menuchoice><guimenu>Projects</guimenu><guimenuitem>Open/Import project</guimenuitem></menuchoice> and in the dialog box choose the directory in which your project resides.</para>
+</sect2>
+</sect1>
+<sect1 id="setting-up-an-application-as-a-second-project"><title>Setting up an application as a second project</title>
+<para>The next thing you want to do is set up other projects in the same session. In the example above, you would want to add the device driver as the second project, which you can do using exactly the same steps.</para>
+<para>If you have multiple applications or libraries, simply repeat the steps to add more and more projects to your session.</para>
+</sect1>
+<sect1 id="creating-projects-from-scratch"><title>Creating projects from scratch</title>
+<para>There is of course also the possibility that you want to start a new project from scratch. This can be done using the <menuchoice><guimenu>Projects</guimenu><guimenuitem>New from template</guimenuitem></menuchoice> menu item. The details of what options this offers to you are described elsewhere in this manual.</para>
+</sect1>
+</chapter>
+<chapter id="working-with-source-code"><title>Working with source code</title>
+<para>Besides debugging, reading through and writing source code is what you will spend the most time with when developing software. To this end, &kdevelop; offers you many many different ways to explore source codes and to make writing it more productive. As discussed in more detail in the following sections, &kdevelop; is not just a source editor &mdash; rather, it is a source management system that gives you different views of extracted information on the files that collectively make up your session's source code.</para>
+<sect1 id="tools-and-views"><title>Tools and views</title>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-7.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>In order to work with projects, &kdevelop; has the concept of <emphasis>tools</emphasis>. A tool provides a particular view of the source, or an action that can be taken with it. Tools are represented by buttons around the perimeter of your window (in vertical text along the left and right margins, or horizontally along the bottom margin). If you click on them, they expand to a subwindow &mdash; a <emphasis>view</emphasis> &mdash; within the main window; if you click on the tool button again, the subwindow disappears again.</para>
+<para><note><para>To make a subwindow disappear, you can also click at the <guilabel>x</guilabel> at the top right of the subwindow; however, at least with &kdevelop; 4.2.x, this also removes the button representing the tool from the perimeter, which was your way of getting the subwindow back. See below for how to get the button back onto the perimeter in the same way as getting any tool's button there. This behavior has been reported as <ulink url="http://bugs.kde.org/show_bug.cgi?id=270018">bug 270018</ulink></para></note></para>
+<para>The picture above shows a particular selection of tools, aligned on the left and right margins; in the picture, the <guilabel>Classes</guilabel> tool is open on the left and the <guilabel>Snippets</guilabel> tool on the right, along with an editor for a source file in the middle. In practice, most of the time you will probably only have the editor and maybe the <guilabel>Classes</guilabel> or <guilabel>Code Browser</guilabel> tool open at the left. Other tool view will likely only be open temporarily as you use the tool, leaving more space for the editor most of the time.</para>
+<para>When you run &kdevelop; the first time, you should already have the <guilabel>Projects</guilabel> tool button. Click on it: it will open a subwindow that shows the projects you have added to the session at the bottom, and a file system view of the directories of your projects at the top.</para>
+<para>There are many other tools you can use with &kdevelop;, not all of which are initially present as buttons on the perimeter. To add some, go to the <menuchoice><guimenu>Windows</guimenu><guimenuitem>Add tool view</guimenuitem></menuchoice> menu entry. Here are some that you will likely find useful:</para>
+<itemizedlist>
+<listitem><para><guilabel>Classes</guilabel>: A complete list of all classes that are defined in one of the projects or your session with all of their member functions and variables. Clicking on any of the members opens a source editor window at the location of the item you clicked on.
+</para></listitem>
+<listitem><para><guilabel>Documents</guilabel>: Lists some of the more recently visited files, by kind (&eg; source files, patch files, plain text documents).
+</para></listitem>
+<listitem><para><guilabel>Code Browser</guilabel>: Depending on your cursor position in a file, this tool shows things that are related. For example, if you are on an <varname>#include</varname> line, it shows information about the file you are including such as what classes are declared in that file; if you are on an empty line at file scope, it shows the classes and functions declared and defined in the current file (all as links: clicking on them brings you to the point in the file where the declaration or definition actually is); if you are in a function definition, it shows where the declaration is and offers a list of places where the function is used.
+</para></listitem>
+<listitem><para><guilabel>File system</guilabel>: Shows you a tree view of the file system.
+</para></listitem>
+<listitem><para><guilabel>Documentation</guilabel>: Allows you to search for man pages and other help documents.
+</para></listitem>
+<listitem><para><guilabel>Snippets</guilabel>: This provides sequences of text that one uses over an over and doesn't want to write every time. For example, in the project from which the picture above was created, there is a frequent need to write code like
+</para></listitem>
+</itemizedlist>
+<para><programlisting>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
+      = triangulation.begin_active();
+   cell != triangulation.end();
+   ++cell)</programlisting> This is an awkward expression but it will look almost exactly like this everytime you need such a loop &mdash; which would make it a good candidate for a snippet.</para>
+<itemizedlist>
+<listitem><para><guilabel>Konsole</guilabel>: Opens a command line window inside &kdevelop;'s main window, for the occasional command you may want to enter (&eg; to run <varname>./configure</varname>).
+</para></listitem>
+</itemizedlist>
+<para>A complete list of tools and views is given <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list">here</ulink>.</para>
+<para>For many programmers, vertical screen space is the most important. To this end, you can arrange your tool views at the left and right margin of the window: to move a tool, click on its symbol with the right mouse button and select a new position for it.</para>
+</sect1>
+<sect1 id="exploring-source-code"><title>Exploring source code</title>
+<sect2 id="local-information"><title>Local information</title>
+<para>&kdevelop; <emphasis>understands</emphasis> source code, and as a consequence it is really good at providing you information about variables or functions that may appear in your program. For example, here is a snapshot of working with a piece of code and hovering the mouse over the symbol <varname>cell</varname> in line 1316 (if you are working keyboard oriented, you can achieve the same effect by holding down the &Alt; key for a while):</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>&kdevelop; shows me a tooltip that includes the type of the variable (here: <varname>DoFHandler&lt;dim&gt;active_cell_iterator</varname>), where this variable is declared (the <emphasis>container</emphasis>, which here is the surrounding function <varname>get_maximal_velocity</varname> since it is a local variable), what it is (a variable, not a function, class or namespace) and where it is declared (in line 1314, just a few lines up in the code).</para>
+<para>In the current context, the symbol over which the mouse was hovering has no associated documentation. In this example, had the mouse hovered over the symbol <varname>get_this_mpi_process</varname> in line 1318, the outcome would have been this:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Here, &kdevelop; has cross-referenced the declaration from an entirely different file (<filename>utilities.h</filename>, which in fact even resides in a different project of the same session) together with the doxygen-style comment that accompanies the declaration there.</para>
+<para>What makes these tooltips even more useful is that they are dynamic: I can click on the container to get information about the context in which the variable is declared (&ie; about the namespace <varname>System</varname>, such as where it is declared, defined, used, or what its documentation is) and I can click on the blue links that will reset the cursor position to the location of the declaration of the Symbol (&eg; in <varname>utilities.h</varname>, line 289) or give me a list of places where this symbol is used in the current file or throughout all the projects of the current session. The latter is often useful if you want to explore how, for example, a particular function is used in a large code basis.</para>
+<note><para>The information in a tooltip is fleeting &mdash; it depends on you holding the &Alt; key down or hovering your mouse. If you want a more permanent place for it, open the <guilabel>Code Browser</guilabel> tool view in one of the sub-windows. For example, here the cursor is on the same function as in the example above, and the tool view on the left presents the same kind of information as in the tooltip before:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-15.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Moving the cursor around on the right changes the information presented on the left. What's more, clicking on the <guilabel>Lock current view</guilabel> button at the top right allows you to lock this information, making it independent of the cursor movement while you explore the information presented there.</para></note>
+<para><note><para>This sort of context information is available in many other places in &kdevelop;, not just in the source editor. For example, holding down the &Alt; key in a completion list (&eg; when doing a quick-open) also yields context information about the current symbol.</para></note></para>
+</sect2>
+<sect2 id="file-scope-information"><title>File scope information</title>
+<para>The next level up is to obtain information about the entire source file you are currently working on. To this end, position the cursor at file scope in the current file and look at the what the <guilabel>Code Browser</guilabel> tool view shows:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Here, it shows a list of namespaces, classes and functions declared or defined in the current file, giving you an overview of what's happening in this file and a means to jump directly to any of these declarations or definitions without scrolling up and down in the file or searching for a particular symbol.</para>
+<para><note><para>The information shown for file scope is the same as presented in the <quote>Outline</quote> mode discussed below for navigating source code; the difference is that outline mode is only a temporary tooltip.</para></note></para>
+</sect2>
+<sect2 id="project-and-session-scope-information"><title>Project and session scope information</title>
+<para>There are many ways to obtain information about an entire project (or, in fact, about all projects in a session). This sort of information is typically provided through various tool views. For example, the <guilabel>Classes</guilabel> tool view provides a tree structure of all classes and surrounding namespaces for all projects in a session, together with the member functions and variables of each of these classes:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Hovering over an entry provides again information about the symbol, its location of declaration and definition, and its uses. Double-clicking on an entry in this tree view opens an editor window at the location where the symbol is declared or defined.</para>
+<para>But there are other ways of looking at global information. For example, the <guilabel>Documents</guilabel> tool provides a view of a project in terms of the kinds of files or other documents this project is comprised of:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-18.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+</sect2>
+</sect1>
+<sect1 id="navigating-in-source-code"><title>Navigating in source code</title>
+<para>In the previous section, we have discussed exploring source code, &ie; getting information about symbols, files and projects. The next step is then to jump around your source base, &ie; to navigate in it. There are again various levels at which this is possible: local, within a file, and within a project.</para>
+<para><note><para>Many of the ways to navigate through code are accessible from the <guilabel>Navigate</guilabel> menu in the &kdevelop; main window.</para></note></para>
+<sect2 id="local-navigation"><title>Local navigation</title>
+<para>&kdevelop; is much more than an editor, but it is <emphasis>also</emphasis> a source editor. As such, you can of course move the cursor up, down, left or right in a source file. You can also use the <keycap>PageUp</keycap> and <keycap>PageDown</keycap> keys, and all the other commands you are used from any useful editor.</para>
+</sect2>
+<sect2 id="file-scope-navigation-and-outline-mode"><title>File scope navigation and outline mode</title>
+<para>At the file scope, &kdevelop; offers many possible ways to navigate through source code. For example:</para>
+<itemizedlist>
+<listitem><para><guilabel>Outline</guilabel>: You can get an outline of what's in the current file in at least three different ways:
+<itemizedlist>
+<listitem><para>Clicking into the <guilabel>Outline</guilabel> textbox at the top right of the main window, or hitting <keycombo>&Alt;&Ctrl;<keycap>N</keycap></keycombo> opens a drop-down menu that lists all function and class declarations:
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-19.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot> You can then just select which one to jump to, or &mdash; if there are a lot &mdash; start typing any text that may appear in the names shown; in that case, as you keep typing, the list becomes smaller and smaller as names are removed that don't match the text already typed until you are ready to select one of the choices.
+</para></listitem>
+<listitem><para>Positioning the cursor at file scope (&ie; outside any function or class declarations or definitions) and having the <guilabel>Code Browser</guilabel> tool open:
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-16.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot> This also provides you an outline of what is happening in the current file, and allows you to select where you want to jump to.
+</para></listitem>
+<listitem><para>Hovering the mouse over the tab for one of the open files also yields an outline of the file in that tab.
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para>Source files are organized as a list of function declarations or definitions. Hitting <keycombo>&Alt;&Ctrl;<keycap>PgUp</keycap></keycombo> and <keycombo>&Alt;&Ctrl;<keycap>PgDown</keycap></keycombo> jumps to the previous or next function definition in this file.
+</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="project-and-session-scope-navigation--semantic-navigation"><title>Project and session scope navigation: Semantic navigation</title>
+<para>As mentioned in other places, &kdevelop; does not usually consider individual source files but rather looks at projects as a whole (or, rather, at all projects that are part of the current session). As a consequence, it offers many possibilities for navigating through entire projects. Some of these are derived from what we have already discussed in the section on <link linkend="exploring-source-code">Exploring source code</link> while others are genuinely different. The common theme is that these navigation features are based on a <emphasis>semantic understanding</emphasis> of the code, &ie; they offer you something that requires parsing entire projects and connecting data. The following list shows some ways how to navigate through source code that is scattered throughout a potentially very large number of files:</para>
+<itemizedlist>
+<listitem><para>As seen in the section on <link linkend="exploring-source-code">Exploring source code</link>, you can get a tooltip explaining individual namespace, class, function or variable names by hovering your mouse over it or keeping the &Alt; key pressed for a while. Here is an example:
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-14.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot> Clicking on the links for the declaration of a symbol or expanding the list of uses allows you to jump to these locations, if necessary opening the respective file and placing the cursor at the corresponding location. A similar effect can be achieved by using the <guilabel>Code Browser</guilabel> tool view also discussed previously.
+</para></listitem>
+<listitem><para><guilabel>Quick open</guilabel>: A very powerful way of jumping to other files or locations is to use the various <emphasis>quick open</emphasis> methods in &kdevelop;. There are four versions of these:
+<itemizedlist>
+<listitem><para><guilabel>Quick open class</guilabel> (<menuchoice><guimenu>Navigate</guimenu><guimenuitem>Quick open class</guimenuitem></menuchoice> or <keycombo>&Alt;&Ctrl;<keycap>C</keycap></keycombo>): You will get a list of all classes in this session. Start typing (a part of) the name of a class and the list will continue to whittle down to only those that actually match what you've typed so far. If the list is short enough, select an element using the up and down keys and &kdevelop; will get you to the place where the class is declared.
+</para></listitem>
+<listitem><para><guilabel>Quick open function</guilabel> (<menuchoice><guimenu>Navigate</guimenu><guimenuitem>Quick open function</guimenuitem></menuchoice> or <keycombo>&Alt;&Ctrl;<keycap>M</keycap></keycombo>): You will get a list of all (member) functions that are part of the projects in the current session, and you can select from it in the same way as above. Note that this list may include both function declarations and definitions.
+</para></listitem>
+<listitem><para><guilabel>Quick open file</guilabel> (<menuchoice><guimenu>Navigate</guimenu><guimenuitem>Quick open file</guimenuitem></menuchoice> or <keycombo>&Alt;&Ctrl;<keycap>O</keycap></keycombo>): You will get a list of all files that are part of the projects in the current session, and you can select from it in the same way as above.
+</para></listitem>
+<listitem><para><guilabel>Universal quick open</guilabel> (<menuchoice><guimenu>Navigate</guimenu><guimenuitem>Quick open</guimenuitem></menuchoice> or <keycombo>&Alt;&Ctrl;<keycap>Q</keycap></keycombo>): If you forget which key combination is bound to which of the above commands, this is the universal swiss army knife &mdash; it simply presents you with a combined list of all files, functions, classes, and other things from which you can select.
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+<listitem><para><guilabel>Jump to declaration/definition</guilabel>:  When implementing a (member) function, one often needs to switch back to the point where a function is declared, for example to keep the list of function arguments synchronised between declaration and definition, or to update the documentation. To do so, place the cursor onto the function name and select <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Jump to declaration</guimenuitem></menuchoice> (or hit <keycombo>&Ctrl;<keycap>.</keycap></keycombo>) to get to the place where the function is declared. There are multiple ways to get back to the original place:
+<itemizedlist>
+<listitem><para>Selecting <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Jump to definition</guimenuitem></menuchoice> (or hitting <keycombo>&Ctrl;<keycap>,</keycap></keycombo>).
+</para></listitem>
+<listitem><para>Selecting <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Previous visited context</guimenuitem></menuchoice> (or hit <keycombo><keycap>Meta</keycap><keycap>Left</keycap></keycombo>), as described below.
+</para></listitem>
+</itemizedlist>
+</para></listitem>
+</itemizedlist><para><note><para>Jumping to the declaration of a symbol is something that does not only work when placing the cursor on the name of the function you are currently implementing. Rather, it also works for other symbols: Putting the cursor on a (local, global, or member) variable and jumping to its declaration also transports you to its location of declaration. Similarly, you can place the cursor on the name of a class, for example in a variable of function declaration, and jump to the location of its declaration.</para></note></para>
+<itemizedlist>
+<listitem><para><guilabel>Switch between declaration/definition</guilabel>: In the example above, to jump to the site of the declaration of the current function, you need to first place the cursor on the function name. To avoid this step, you can select <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Switch definition/declaration</guimenuitem></menuchoice> (or hit <keycombo>&Shift;&Ctrl;<keycap>C</keycap></keycombo>) to jump to the declaration of the function within which the cursor currently is. Selecting the same menu entry a second time transports you back to the place where the function is defined.
+</para></listitem>
+<listitem><para><guilabel>Previous/Next use</guilabel>: Placing the cursor on the name of a local variable and selecting <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Next use</guimenuitem></menuchoice> (or hitting <keycombo><keycap>Meta</keycap>&Shift;<keycap>Right</keycap></keycombo>) transports you to the next use of this variable in the code. (Note that this doesn't just search for the next occurrence of the variable name but in fact takes into account that variables with the same name but in different scopes are different.) The same works for the use of function names. Selecting <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Previous use</guimenuitem></menuchoice> (or hitting <keycombo><keycap>Meta</keycap>&Shift;<keycap>Left</keycap></keycombo>) transports you to the previous use of a symbol.
+</para></listitem>
+</itemizedlist>
+<para><note><para>To see the list of all uses of a name through which these commands cycle, place the cursor onto it and open the <guilabel>Code Browser</guilabel> tool view or press and hold the &Alt; button. This is explained in more detail in the section on <link linkend="file-scope-information">Exploring code</link>.</para></note></para>
+<itemizedlist>
+<listitem><para>The <guilabel>context list</guilabel>: Web browsers have this feature where you can go backward and forward in the list of most recently visited web pages. &kdevelop; has the same kind of features, except that instead of web pages you visit <emphasis>contexts</emphasis>. A context is the current location of the cursor, and you change it by navigating away from it using anything but cursor commands &mdash; for example, by clicking on a location provided by a tooltip, in the <guilabel>Code Browser</guilabel> tool view, one of the options given in the <guilabel>Navigation</guilabel> menu, or any other navigation command. Using the <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Previous Visited Context</guimenuitem></menuchoice> (<keycombo><keycap>Meta</keycap><keycap>Left</keycap></keycombo>) and <menuchoice><guimenu>Navigation</guimenu><guimenuitem>Next Visited Context</guimenuitem></menuchoice> (<keycombo><keycap>Meta</keycap><keycap>Right</keycap></keycombo>) transports you along this list of visited contexts just like the <guilabel>back</guilabel> and <guilabel>forward</guilabel> buttons of a browser transports you to the previous or next webpage in the list of visited pages.
+</para></listitem>
+<listitem><para>Finally, there are tool views that allow you to navigate to different places in your code base. For example, the <guilabel>Classes</guilabel> tool provides you with a list of all namespaces and classes in all projects of the current session, and allows you to expand it to see member functions and variables of each of these classes:
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-17.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot> Double-clicking on an item (or going through the context menu using the right mouse button) allows you to jump to the location of the declaration of the item. Other tools allow similar things; for example, the <guilabel>Projects</guilabel> tool view provides a list of files that are part of a session:
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-13.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot> Again, double-clicking on a file opens it.
+</para></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<sect1 id="writing-source-code"><title>Writing source code</title>
+<para>Because &kdevelop; understands your projects' source code, it can assist in writing more code. The following outlines some of the ways in which it does that.</para>
+<sect2 id="auto-completion"><title>Auto-completion</title>
+<para>Probably the most useful of all features in writing new code is auto-completion. Consider, for example, the following piece of code:</para>
+<para><programlisting>class Car {
+  // ...
+  public:
+    std::string get_color () const;
+};
+void foo()
+{
+  Car my_ride;
+  // ...do something with this variable...
+  std::string color = my_ride.ge
+</programlisting></para>
+<para>In the last line, &kdevelop; will remember that the variable <varname>my_ride</varname> is of type <varname>Car</varname>, and will automatically offer to complete the name of the member function <varname>ge</varname> as <varname>get_color</varname>. In fact, all you have to do is to keep typing until the auto-completion feature has reduced the number of matches to one, and then hit the &Enter; key:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Note that you can click on the tool-tip to get more information about the function apart from its return type and whether it is public:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-43.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Auto-completion can save you a lot of typing if your project uses long variable and function names; furthermore, it avoids mis-spelling names (and the resulting compiler errors) and it makes it much simpler to remember the exact names of functions; for example, if all of your getters start with <varname>get_</varname>, then the auto-completion feature will be able to only present you a list of possible getters when you have typed the first four letters, likely reminding you in the process which of the functions is the correct one. Note that for auto-completion to work, neither the declaration of the <varname>Car</varname> class nor of the <varname>my_ride</varname> variable need to be in the same file as where you are currently writing code. &kdevelop; simply has to know that these classes and variables are connected, &ie; the files in which these connections are made need to be part of the project you are currently working on.</para>
+<para><note><para>&kdevelop; doesn't always know when to assist you in completing code. If the auto-completion tooltip doesn't automatically open, hit <keycombo>&Ctrl;<keycap>Space</keycap></keycombo> to open a list of completions manually. In general, in order for auto-completion to work, &kdevelop; needs to parse your source files. This happens in the background for all files that are part of the projects of the current session after you start &kdevelop;, as well as while after you stop typing for a fraction of a second (the delay can be configured).</para></note></para>
+<para><note><para>&kdevelop; only parses files that it considers source code, as determined by the MIME-type of the file. This type isn't set before the first time a file is saved; consequently, creating a new file and starting to write code in it will not trigger parsing for auto-completion until after it is saved for the first time.</para></note></para>
+<para><note><para>As in the previous note, for auto-completion to work, &kdevelop; must be able to find declarations in header files. For this, it searches in a number of default paths. If it doesn't automatically find a header file, it will underline the name of a header file in red; in that case, right click on it to tell &kdevelop; explicitly where to find these files and the information they provide.</para></note></para>
+<para><note><para>Configuring auto-completion is discussed in <link linkend="customizing-code-auto-completion">this section of this manual</link>.</para></note></para>
+</sect2>
+<sect2 id="adding-new-classes-and-implementing-member-functions"><title>Adding new classes and implementing member functions</title>
+<para>&kdevelop; has a wizard for adding new classes. To add a new class, select <menuchoice><guimenu>Code</guimenu><guimenuitem>Create New Class</guimenuitem></menuchoice> to get the following dialog box:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-27.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Here, we have entered the new class's name <varname>Bus</varname> (you can also enter here which other classes this class should be derived from). The next page of the dialog allows us to select the standard member functions we will need:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-28.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Here, we want a default constructor, a copy constructor, and a destructor. After the following pages of the dialog that allow you to select a license header and the location for the new files, &kdevelop; will generate two new tabs with the header and source files:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-29.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>The header file already has include guards and the new class has all the member functions we selected. The next two steps would be to document the class and its member functions and to implement them. We will discuss aids for documenting classes and functions below. To implement the special functions already added, simply go to the <guilabel>bus.cpp</guilabel> tab where the skeleton of functions are already provided:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-30.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>To add new member functions, go back to the <guilabel>bus.h</guilabel> tab and add the name of a function. For example, let us add this:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-31.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Note how I have already started with the implementation. However, in many coding styles, the function shouldn't be implemented in the header file but rather in the corresponding .cpp file. To this end, locate the cursor on the name of the function and select <menuchoice><guimenu>Code</guimenu><guimenuitem>Move to source</guimenuitem></menuchoice> or hit <keycombo>&Ctrl;&Alt;<keycap>S</keycap></keycombo>. This remove the code between curly braces from the header file (and replaces it by a semicolon as necessary to terminate the function declaration) and moves it into the source file:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-32.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Note how I have just started typing and that I meant to imply that the <varname>students</varname> variable should probably be a member variable of class <varname>Bus</varname> but that I haven't yet added it. Note also how &kdevelop; underlines it to make clear that it doesn't know anything about the variable. But this problem can be solved: Clicking on the variable name yields the following tooltip:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-33.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>(The same can be achieved by right clicking on it and selecting <guilabel>Solve: Declare As</guilabel>.) Let me select <quote>3 - private unsigned int</quote> (either by mouse, or by hitting <keycombo>&Alt;<keycap>3</keycap></keycombo>) and then see how it comes out in the header file:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-34.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>It is worth noting that &kdevelop; extracts the type of the variable to be declared from the expression used to initialize it. For example, if we had written the addition in the following rather dubious way, it would had suggested to declare the variable as type <varname>double</varname>:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-35.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>As a final point: The method using <menuchoice><guimenu>Code</guimenu><guimenuitem>Move to source</guimenuitem></menuchoice>  does not always insert the new member function where you may want it. For example, you may want it to be marked as <varname>inline</varname> and place it at the bottom of the header file. In a case like this, write the declaration and the start writing the definition of the function like this:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-36.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>&kdevelop; automatically offers all possible completions of what might come here. Selecting one of the two <varname>add_students</varname> entries yields the following code that already fills in the complete argument list:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-37.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para><note><para>The fact that the tooltip shows the same function twice is fixed in &kdevelop; 4.2.2 and later.</para></note></para>
+<para><note><para>In the example, accepting one of the choices the auto-completion tool offers yields the correct signature but unfortunately deletes the <varname>inline</varname> marker already written. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274244">&kdevelop; Bug 274245</ulink>.</para></note></para>
+</sect2>
+<sect2 id="documenting-declarations"><title>Documenting declarations</title>
+<para>Good code is well documented, both at the level of the implementation of algorithms within in functions as well as at the level of the interface &mdash; &ie;, classes, (member and global) functions, and (member or global) variables need to be documented to explain their intent, possible values of arguments, pre- and postconditions, &etc; As far as documenting the interface is concerned, <ulink url="http://www.doxygen.org">doxygen</ulink> has become the de facto standard for formatting comments that can then be extracted and displayed on searchable webpages.</para>
+<para>&kdevelop; supports this style of comments by providing a short cut to generate the framework of comments that document a class or member function. For example, assume you have already written this code:</para>
+<para><programlisting>
+class Car {
+  public:
+    std::string get_color () const;
+};
+</programlisting>
+</para>
+<para>You now want to add documentation to both the class and the member function. To this end, move the cursor onto the first line and select <menuchoice><guimenu>Code</guimenu><guimenuitem>Document Declaration</guimenuitem></menuchoice> or hit <keycombo>&Alt;&Shift;<keycap>D</keycap></keycombo>. &kdevelop; will respond with the following:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-23.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>The cursor is already in the grayed out area for you to fill in the short description (after the doxygen keyword <varname>@brief</varname>) of this class. You can then continue to add documentation to this comment that gives a more detailed overview of what the class does:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-24.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>While the editor is inside the comment, the comment text is highlighted in green (the highlighting disappears once you move the cursor out of the comment). When you get to the end of a line, hit &Enter; and &kdevelop; will automatically start a new line that starts with an asterisk and place the cursor one character indented.</para>
+<para>Now let's document the member function, again by putting the cursor on the line of the declaration and selecting <menuchoice><guimenu>Code</guimenu><guimenuitem>Document Declaration</guimenuitem></menuchoice> or hitting <keycombo>&Alt;&Shift;<keycap>D</keycap></keycombo>:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-25.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Again, &kdevelop; automatically generates the skeleton of a comment, including documentation for the function itself, as well as its return type. In the current case, the name of the function is pretty much self-explanatory, but oftentimes function arguments may not be and should be documented individually. To illustrate this, let's consider a slightly more interesting function and the comment &kdevelop; automatically generates:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-26.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Here, the suggested comment already contains all the Doxygen fields for the individual parameters, for example.</para>
+</sect2>
+<sect2 id="renaming-variables-functions-and-classes"><title>Renaming variables, functions and classes</title>
+<para>Sometimes, one wants to rename a function, class or variable. For example, let's say we already have this:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-38.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>We then realize that we're unhappy with the name <varname>remove_students</varname> and would have rather called it, say, <varname>throw_out_students</varname>. We could do a search-replace for the name, but this has two drawbacks:</para>
+<itemizedlist>
+<listitem><para>The function may be used in more than one file.
+</para></listitem>
+<listitem><para>We really only want to rename this function and not touch functions that may have the same name but are declared in other classes or namespaces.
+</para></listitem>
+</itemizedlist>
+<para>Both these problems can be solved by moving the cursor on any of the occurrences of the name of the function and selecting <menuchoice><guimenu>Code</guimenu><guimenuitem>Rename declaration</guimenuitem></menuchoice> (or right clicking on the name and selecting <guilabel>Rename Bus::remove_students</guilabel>). This brings up a dialog box where you can enter the new name of the function and where you can also see all the places where the function is actually used:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-39.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+</sect2>
+<sect2 id="code-snippets"><title>Code snippets</title>
+<para>Most projects have pieces of code that one frequently has to write in source code. Examples are: for compiler writers, a loop over all instructions; for user interface writers, checks that user input is valid and if not to open an error box; in the project of the author of these lines, it would be code of the kind</para>
+<para><programlisting>
+for (typename Triangulation::active_cell_iterator
+       cell = triangulation.begin_active();
+     cell != triangulation.end(); ++cell)
+  ... do something with the cell ...
+</programlisting>
+</para>
+<para>Rather than typing this kind of text over and over again (with all the concomitant typos one introduces), the <guilabel>Snippets</guilabel> tool of &kdevelop; can help here. To this end, open the tool view (see <link linkend="tools-and-views">Tools and views</link> if the corresponding button isn't already on the perimeter of your window). Then click on the <quote>Add repository</quote> button (a slight misnomer &mdash; it allows you to create a named collection of snippets for source codes of a particular kind, &eg; C++ sources) and create an empty repository. Then click <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject> </inlinemediaobject> to add a snippet, to get a dialog like the following:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-40.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para><note><para>The name of a snippet may not have spaces or other special characters because it must look like a normal function or variable name (for reasons that will become clear in the next paragraph). If the name of the snippet does contain spaces, the <guilabel>OK</guilabel> button will become inactive without any further explanation. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=274299">&kdevelop; bug 274299</ulink>.</para></note></para>
+<para>To use a snippet so defined, when you are editing code, you can just type the name of the snippet like you would any other function or variable name. This name will become available for auto-completion &mdash; which means that there is no harm in using a long and descriptive name for a snippet such as the one above &mdash; and when you accept the suggestion of the auto-completion tooltip (for example by just hitting &Enter;), the already entered part of the snippets' name will be replaced by the full expansion of the snippet and will be properly indented:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-41.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Note that for this to work, the <guilabel>Snippets</guilabel> tool view need not be open or visible: you only ever need the tool view to define new snippets. An alternative, if less convenient, way to expand a snippet is to simply click on it in the respective tool view.</para>
+<para><note><para>Snippets are much more powerful than just explained. For a full description of what you can do with them, see the <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets">detailed documentation of the Snippets tool</ulink>.</para></note></para>
+</sect2>
+</sect1>
+<sect1 id="modes-and-working-sets"><title>Modes and working sets</title>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_noworkingset.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>If you've gotten this far, take a look at the upper right of the &kdevelop; main window: As shown in the picture, you will see that there are three <guilabel>modes</guilabel> &kdevelop; can be in: <guilabel>Code</guilabel> (the mode we discuss in the current chapter on working with source code), <guilabel>Debug</guilabel> (see <link linkend="debugging-programs-in-kdevelop">Debugging programs</link>) and <guilabel>Review</guilabel> (see <link linkend="working-with-version-control-systems">Working with version control systems</link>).</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop4_sessionsprojectsworkingsets.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Each mode has its own set of tools that are stacked around the perimeter, and each mode also has a <emphasis>working set</emphasis> of currently open files and documents. Furthermore, each such working set is associated with a current session, &ie; we have the relationship shown above. Note that the files in the working set come from the same session, but they may come from different projects that are part of the same session.</para>
+<para>If you open &kdevelop; the first time, the working set is empty &mdash; there are no open files. But as you open files for editing (or debugging, or reviewing in the other modes) your working set grows. The fact that your working set is non-empty is indicated by a symbol in the tab, as shown below. You will notice that whenever you close &kdevelop; and later start it again, the working set is saved and restored, &ie; you get the same set of open files.</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-10.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>If you hover your mouse over the symbol for the working set, you get a tooltip that shows you which files are currently open in this working set (here: the <varname>step-32.cc</varname> and <varname>step-1.cc</varname> files). Clicking on the red minus sign closes the tab for the corresponding file. Maybe more importantly, clicking on the correspondingly named button allows you to <guilabel>close</guilabel> the entire working set at once (&ie; to close all currently open files). The point about closing a working set, however, is that it doesn't just close all files, it actually saves the working set and opens a new, still empty one. You can see this here:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-11.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Note the two symbols to the left of the three mode tabs (the heart and the unidentifiable symbol to its left). Each of these two symbols represents a saved working set, in addition to the currently open working set. If you hover your mouse over the heart symbol, you'll get something like this:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-12.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>It shows you that the corresponding working set contains two files and their corresponding project names: <varname>Makefile</varname> and <varname>changes.h</varname>. Clicking <guilabel>Load</guilabel> will close and save the current working set (which as shown here has the files <varname>tria.h</varname> and <varname>tria.cc</varname> open) and instead open the selected working set. You can also permanently delete a working set, which removes it from the set of saved working sets.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts"><title>Some useful keyboard shortcuts</title>
+<para>&kdevelop;'s editor follows the standard keyboard shortcuts for all usual editing operations. However, it also supports a number of more advanced operations when editing source code, some of which are bound to particular key combinations. The following are frequently particularly helpful:</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2">Jumping around in code</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>O</keycap></keycombo></entry>
+    <entry>Quick open file: enter part of a filename and select among all the files in the current session's projects' directory trees that match the string; the file will then be opened</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>C</keycap></keycombo></entry>
+    <entry>Quick open class: enter part of a class name and select among all class names that match; the cursor will then jump to the class declaration</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>M</keycap></keycombo></entry>
+    <entry>Quick open function: enter part of a (member) function name and select among all names that match; note that the list shows both declarations and definitions and the cursor will then jump to the selected item</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>Q</keycap></keycombo></entry>
+    <entry>Universal quick open: type anything (file name, class name, function name) and get a list of anything that matches to select from</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>N</keycap></keycombo></entry>
+    <entry>Outline: Provide a list of all things that are happening in this file, &eg; class declarations and function definitions</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>,</keycap></keycombo></entry>
+    <entry>Jump to definition of a function if the cursor is currently on a function declaration</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>.</keycap></keycombo></entry>
+    <entry>Jump to declaration of a function or variable if the cursor is currently in a function definition</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>PageDown</keycap></keycombo></entry>
+    <entry>Jump to next function</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>PageUp</keycap></keycombo></entry>
+    <entry>Jump to previous function</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>G</keycap></keycombo></entry>
+    <entry>Goto line</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2">Searching and replacing</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>F</keycap></keycombo></entry>
+    <entry>Find</entry>
+  </row>
+  <row>
+    <entry><keycap>F3</keycap></entry>
+    <entry>Find next</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>R</keycap></keycombo></entry>
+    <entry>Replace</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Alt;<keycap>F</keycap></keycombo></entry>
+    <entry>Find-Replace in multiple files</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2">Other things</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>_</keycap></keycombo></entry>
+    <entry>Collapse one level: remove this block from view, for example if you want to focus on the bigger picture within a function</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>+</keycap></keycombo></entry>
+    <entry>Expand one level: undo the collapsing</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>D</keycap></keycombo></entry>
+    <entry>Comment out selected text or current line</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;&Shift;<keycap>D</keycap></keycombo></entry>
+    <entry>Comment in selected text or current line</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Alt;&Shift;<keycap>D</keycap></keycombo></entry>
+    <entry>Document the current function. If the cursor is on a function or class declaration then hitting this key will create a doxygen-style comment pre-populated with a listing of all parameters, return values, &etc;</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>T</keycap></keycombo></entry>
+    <entry>Transpose the current and the previous character</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Ctrl;<keycap>K</keycap></keycombo></entry>
+    <entry>Delete the current line (note: this is not just emacs' <quote>delete from here to the end of the line</quote>)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="building-compiling-projects-with-custom-makefiles"><title>Building (compiling) projects with custom Makefiles</title>
+<para>Many projects describe how source files have to be compiled (and which files have to be recompiled once a source or header file changes) using Makefiles that are interpreted by the <guilabel>make</guilabel> program (see, for example, <ulink url="http://www.gnu.org/software/make/">GNU make</ulink>). For simple projects, it is often very easy to set up such a file by hand. Larger projects often integrate their Makefiles with the <guilabel>GNU autotools</guilabel> (autoconf, autoheader, automake). In this section, let us simply assume that you have a Makefile for your project and you want to teach &kdevelop; how to interact with it.</para>
+<para><note><para>&kdevelop; 4.x doesn't know about the <guilabel>GNU autotools</guilabel> at the time this section is written. If your project uses them, you will have to run <varname>./configure</varname> or any of the other related commands by hand on a command line. If you want to do this within &kdevelop;, open the <guilabel>Konsole</guilabel> tool (if necessary add it to the perimeter of the main window using the menu <menuchoice><guimenu>Windows</guimenu><guimenuitem>Add tool view</guimenuitem></menuchoice>) that gives you a shell window view and run <varname>./configure</varname> from the command line in this view.</para></note></para>
+<para>The first step is to teach &kdevelop; about targets in your Makefiles. There are two ways to do that: selecting individual Makefile targets, and choosing a set of targets you may want to build frequently. For both approaches, open the <guilabel>Projects</guilabel> tool by clicking on the <guilabel>Projects</guilabel> button on the perimeter of &kdevelop;'s main window (if you don't have this button see above how to add a tool's button there). The <guilabel>Projects</guilabel> tool window has two parts: the top half &mdash; titled <guilabel>Projects</guilabel> &mdash; lists all of your projects and let's you expand the underlying directory trees. The bottom half &mdash; titled <guilabel>Project Selection</guilabel> &mdash; lists a subset of those projects that will be built if you choose the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> or hit <keycap>F8</keycap>; we'll come back to this part below.</para>
+<sect1 id="building-individual-makefile-targets"><title>Building individual Makefile targets</title>
+<para>In the top part of the project view, expand the sub-tree for one project, let's say the one for which you want to run a particular Makefile target. This will give you icons for (i) directories under this project, (ii) files in the top-level directory for this project, (iii) Makefile targets &kdevelop; can identify. These categories are shown in the picture at right. Note that &kdevelop; <emphasis>understands</emphasis> Makefile syntax to a certain degree and therefore can offer you targets defined in this Makefile (though this understanding has its limits if targets are composed or implicit).</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-1a.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>To build any of the targets listed there, click on it with the right mouse button and select <guilabel>Build</guilabel>. For example, doing this with the <quote>clean</quote> target will simply execute <quote>make clean</quote>. You can see this happening in the subwindow titled <guilabel>Build</guilabel> that opens up, showing the command and the output. (This window corresponds to the <guilabel>Build</guilabel> tool, so you can close and later re-open the window using the <guilabel>Build</guilabel> tool button on the perimeter of the main window. It is shown at the bottom right of the picture.)</para>
+</sect1>
+<sect1 id="selecting-a-collection-of-makefile-targets-for-repeated-building"><title>Selecting a collection of Makefile targets for repeated building</title>
+<para>Right-clicking on individual Makefile targets every time you want to build something will quickly get old. Rather, we'd like to have individual targets for one or more of the projects in the session that we can repeatedly build without much mouse work. This is where the concept of <quote>Build target selections</quote> comes in: it is a collection of Makefile targets that are built one-after-the-other whenever you hit the <guilabel>Build selection</guilabel> button in the button list at the top, select the <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> menu item, or hit the <keycap>F8</keycap> function key.</para>
+<para>The list of selected Makefile targets is shown in the bottom half of the <guilabel>Projects</guilabel> tool view.</para>
+<para>By default, the selection contains all projects, but you can change that. For example, if your list of projects contains three projects (a base library L and two applications A and B), but you're currently only working on project A, then you may want to remove project B from the selection by highlighting it in the selection and hitting the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-remove.png" format="PNG"/> </imageobject> </inlinemediaobject> button. Furthermore, you probably want to make sure that the library L is built before  project A by moving entries in the selection up and down using the buttons to the right of the list. You can also get a particular Makefile target into the selection by right-clicking onto it and selecting <guilabel>Add to buildset</guilabel>, or just highlighting it and hitting the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject> </inlinemediaobject> button just above the list of selected targets.</para>
+<para>&kdevelop; allows you to configure what to do whenever you build the selection. To this end, use the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Open configuration</guimenuitem></menuchoice>. There, you can for example select the number of simultaneous jobs <quote>make</quote> should execute &mdash; if your computer has, say, 8 processor cores, then entering 8 in this field would be a useful choice. In this dialog, the <guilabel>Default make target</guilabel> is a Makefile target used for <emphasis>all</emphasis> targets in the selection.</para>
+</sect1>
+<sect1 id="what-to-do-with-error-messages"><title>What to do with error messages</title>
+<para>If the compiler encounters an error message, simply click on the line with the error message and the editor will jump to the line (and if available column) where the error was reported. Depending on the error message, &kdevelop; may also offer you several possible actions to fix the error, for example by declaring a previously undeclared variable if an unknown symbol was found.</para>
+</sect1>
+</chapter>
+<chapter id="running-programs-in-kdevelop"><title>Running programs in &kdevelop;</title>
+<para>Once you have built a program, you will want to run it. To do this, need to configure <emphasis>Launches</emphasis> for your projects. A <emphasis>Launch</emphasis> consists of the name of an executable, a set of command line parameters, and an execution environment (such as <quote>run this program in a shell</quote>, or <quote>run this program in the debugger</quote>).</para>
+<sect1 id="setting-up-launches-in-kdevelop"><title>Setting up launches in &kdevelop;</title>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-2.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>To set this up go to menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Configure launches</guimenuitem></menuchoice>, highlight the project you want to add a launch for, and click on the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-list-add.png" format="PNG"/> </imageobject> </inlinemediaobject> button. Then enter the name of the executable, and the path where you want to run the program. If running the executable depends on building the executable and/or other libraries first, then you may want to add them to the list at the bottom: select <guilabel>Build</guilabel> from the dropdown menu, then hit the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-folder.png" format="PNG"/> </imageobject> </inlinemediaobject> symbol to the right of the textbox and select whatever target you want to have built. In the example above, I have selected the target <guilabel>all</guilabel> from project <replaceable>1.deal.II</replaceable> and <replaceable>step-32</replaceable> from project <replaceable>1.step-32</replaceable> to make sure both the base library and the application program have been compiled and are up to date before the program is actually executed. While you're there, you may as well also configure a debug launch by clicking on the <guilabel>Debug</guilabel> symbol and adding the name of the debugger program; if this is the system's default debugger (&eg; <application>gdb</application> on &Linux;), then you don't need to do this step.</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-3.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>You can now try to run the program: Select <menuchoice><guimenu>Run</guimenu><guimenuitem>Execute Launch</guimenuitem></menuchoice> from &kdevelop;'s main window menu (or hit <keycombo>&Shift;<keycap>F9</keycap></keycombo>) and your program should run in a separate subwindow of &kdevelop;. The picture above shows the result: The new <guilabel>Run</guilabel> tool subwindow at the bottom shows the output of the program that is being run, in this case of the <replaceable>step-32</replaceable> program.</para>
+<para><note><para> If you have configured multiple launches, you can choose which one should run when you hit <keycombo>&Shift;<keycap>F9</keycap></keycombo> by going to <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>. Unfortunately, by default, all launches are named <emphasis>New Native Application</emphasis> without an <emphasis>obvious</emphasis> possibility of renaming them, making it difficult to distinguish them when selecting the current launch configuration (see <ulink url="https://bugs.kde.org/show_bug.cgi?id=272300">&kdevelop; bug 272300</ulink>). There is a non-obvious way to edit the name of a configuration, however: in the dialog box you get when you select <menuchoice><guimenu>Run</guimenu><guimenuitem>Current Launch Configuration</guimenuitem></menuchoice>, double-click on the name of the configuration in the tree view on the left, which will allow you to edit the configuration's name.</para></note></para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts0"><title>Some useful keyboard shortcuts</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2">Running a program</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry><keycap>F8</keycap></entry>
+    <entry>Build (call make)</entry>
+  </row>
+  <row>
+    <entry><keycombo>&Shift;<keycap>F9</keycap></keycombo></entry>
+    <entry>Run</entry>
+  </row>
+  <row>
+    <entry><keycap>F9</keycap></entry>
+    <entry>Run program in the debugger; you may want to set breakpoints beforehand, for example by right-clicking with the mouse on a particular line in the source code</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="debugging-programs-in-kdevelop"><title>Debugging programs in &kdevelop;</title>
+<sect1 id="running-a-program-in-the-debugger"><title>Running a program in the debugger</title>
+<para>Once you have a launch configured (see <link linkend="running-programs-in-kdevelop">Running programs</link>), you can also run it in a debugger: Select the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Debug Launch</guimenuitem></menuchoice>, or hit <keycap>F9</keycap>. If you are familiar with <application>gdb</application>, the effect is the same as starting <application>gdb</application> with the executable specified in the launch configuration and then saying <varname>Run</varname>. This means that if the program calls <varname>abort()</varname> somewhere (&eg; when you run onto a failing assertion) or if there is a segmentation fault, then the debugger will stop. On the other hand, if the program runs to the end (with or without doing the right thing) then the debugger will not stop by itself before the program is finished. In the latter case, you will want to set a breakpoint on all those lines of your code base where you want the debugger to stop before you run the debug launch. You can do that by moving the cursor on such a line and selecting the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Toggle breakpoint</guimenuitem></menuchoice>, or right-clicking on a line and selecting <guilabel>Toggle Breakpoint</guilabel> from the context menu.</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-4.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Running a program in the debugger will put &kdevelop; in a different mode: it will replace all the <quote>Tool</quote> buttons on the perimeter of the main window by ones that are appropriate for debugging, rather than for editing. You can see which of the mode you are in by looking at the top right of the window: there are tabs named <guilabel>Review</guilabel>, <guilabel>Debug</guilabel>, and <guilabel>Code</guilabel>; clicking on them allows you to switch back and forth between the three modes; each mode has a set of tool views of its own, which you can configure in the same way as we configured the <guilabel>Code</guilabel> tools in the section <link linkend="tools-and-views">Tools and views</link>.</para>
+<para>Once the debugger stops (at a breakpoint, or a point where <varname>abort()</varname> is called) you can inspect a variety of information about your program. For example, in the image above, we have selected the <guilabel>Frame Stack</guilabel> tool at the bottom (roughly equivalent to <application>gdb</application>'s <quote>backtrace</quote> and <quote>info threads</quote> commands) that shows the various threads that are currently running in your program at the left (here a total of 8) and how execution got to the current stopping point at the right (here: <varname>main()</varname> called <varname>run()</varname>; the list would be longer had we stopped in a function called by <varname>run()</varname> itself). On the left, we can inspect local variables including the current object (the object pointed to by the <varname>this</varname> variable).</para>
+<para>From here, there are various possibilities you can do: You can execute the current line (<keycap>F10</keycap>, <application>gdb</application>'s <quote>next</quote> command), step into the functions (<keycap>F11</keycap>, <application>gdb</application>'s <quote>step</quote> command), or run to the end of the function (<keycap>F12</keycap>, <application>gdb</application>'s <quote>finish</quote> command). At every stage, &kdevelop; updates the variables shown at the left to their current values. You can also hover the mouse over a symbol in your code, &eg; a variable; &kdevelop; will then show the current value of that symbol and offer to stop the program during execution the next time this variable's value changes. If you know <application>gdb</application>, you can also click on the <guilabel>GDB</guilabel> tool button at the bottom and have the possibility to enter <application>gdb</application> commands, for example in order to change the value of a variable (for which there doesn't currently seem to be another way).</para>
+</sect1>
+<sect1 id="attaching-the-debugger-to-a-running-process"><title>Attaching the debugger to a running process</title>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-9.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>Sometimes, one wants to debug a program that's already running. One scenario for this is debugging parallel programs using <ulink url="https://computing.llnl.gov/tutorials/mpi/">MPI</ulink>, or for debugging a long running background process. To do this, go to the menu entry <menuchoice><guimenu>Run</guimenu><guimenuitem>Attach to Process</guimenuitem></menuchoice>, which will open a window like the one above. You will want to select the program that matches your currently open project in &kdevelop; - in my case that would be the step-32 program.</para>
+<para>This list of programs can be confusing because it is often long as in the case shown here. You can make your life a bit easier by going to the dropdown box at the top right of the window. The default value is <guilabel>User processes</guilabel>, &ie; all programs that are run by any of the users currently logged into this machine (if this is your desktop or laptop, you're probably the only such user, apart from root and various service accounts); the list doesn't include processes run by the root user, however. You can limit the list by either choosing <guilabel>Own processes</guilabel>, removing all the programs run by other users. Or better still: Select <guilabel>Programs only</guilabel>, which removes a lot of processes that are formally running under your name but that you don't usually interact with, such as the window manager, background tasks and so on that are unlikely candidates for debugging.</para>
+<para>Once you have selected a process, attaching to it will get you into &kdevelop;'s debug mode, open all the usual debugger tool views and stop the program at the position where it happened to be when you attached to it. You may then want to set breakpoints, viewpoints, or whatever else is necessary and continue program execution by going to the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Continue</guimenuitem></menuchoice>.</para>
+</sect1>
+<sect1 id="some-useful-keyboard-shortcuts1"><title>Some useful keyboard shortcuts</title>
+<para>
+<informaltable>
+  <tgroup cols="2">
+    <colspec colname="c1"/>
+    <colspec colname="c2"/>
+  <thead>
+  <row>
+    <entry namest="c1" nameend="c2">Debugging</entry>
+  </row>
+  </thead>
+  <tbody>
+  <row>
+    <entry><keycap>F10</keycap></entry>
+    <entry>Step over (gdb's <quote>next</quote>)</entry>
+  </row>
+  <row>
+    <entry><keycap>F11</keycap></entry>
+    <entry>Step into (gdb's <quote>step</quote>)</entry>
+  </row>
+  <row>
+    <entry><keycap>F12</keycap></entry>
+    <entry>Step out of (gdb's <quote>finish</quote>)</entry>
+  </row>
+  </tbody>
+  </tgroup>
+</informaltable>
+</para>
+</sect1>
+</chapter>
+<chapter id="working-with-version-control-systems"><title>Working with version control systems</title>
+<para>If you are working with larger projects, chances are that the source code is managed by a version control system such as <ulink url="http://subversion.apache.org">subversion</ulink> or <ulink url="http://git-scm.com/">git</ulink>. The following description is written with <guilabel>subversion</guilabel> in view but will be equally true if you use <guilabel>git</guilabel> or any other supported version control system.</para>
+<para>First not that if the directory in which a project is located is under version control, &kdevelop; will automatically notice. In other words: It is not necessary that you tell &kdevelop; to check out a copy itself when setting up your project; it is ok to point &kdevelop; at a directory into which you have previously checked out a copy from the repository. If you have such a directory under version control, open the <guilabel>Projects</guilabel> tool view. There are then a number of things you can do:</para>
+<itemizedlist>
+<listitem><para>If your directory has become outdated, you can update it from the repository: Click on the project name with the right mouse button, go to the menu <guilabel>Subversion</guilabel> and select <guilabel>Update</guilabel>. This will bring all files that belong to this project up to date with respect to the repository.
+</para></listitem>
+<listitem><para>If you want to restrict this action to individual subdirectories or files, then expand the tree view of this project to the level you want and right click on a subdirectory or file name, then do the same as above.
+</para></listitem>
+</itemizedlist>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-8.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<itemizedlist>
+<listitem><para>If you've edited one or more files, expand the view of this project to the directory in which these files are located and right click on the directory. This gives you a menu item <guilabel>Subversion</guilabel> that offers you different choices. Choose <guilabel>Compare to base</guilabel> to see the differences between the version you have edited and the version in the repository you had previously checked out (the revision <quote>base</quote>). The resulting view will show the <quote>diffs</quote> for all files in this directory.
+</para></listitem>
+<listitem><para>If you only edited a single file, you can also get the <guilabel>Subversion</guilabel> menu for this file by simply right clicking on the corresponding file name in the project view. Even simpler, just right clicking into the <guilabel>Editor</guilabel> view in which you have opened this file will also give you this menu option.
+</para></listitem>
+<listitem><para>If you want to check in one or more edited files, right click either on an individual file, subdirectory, or whole project and select <menuchoice><guimenu>Subversion</guimenu><guimenuitem>Commit</guimenuitem></menuchoice>. This will get you into <guilabel>Review</guilabel> mode, the third mode besides <guilabel>Code</guilabel> and <guilabel>Debug</guilabel> as you can see in the top right corner of the &kdevelop; main window. The picture on the right shows you how this looks. In <guilabel>Review</guilabel> mode, the top part shows you diffs for the entire subdirectory/project and each individual changed file with changes highlighted (see the various tabs on this part of the window). By default, all changed files are in the changeset you are about to commit, but you can unselect some of the files if their modifications are unrelated to what you want to commit. For example, in the example on the right I have unselected <varname>step-32.cc</varname> and <varname>step-32.prm</varname> because the changes in these files have nothing to do with the other ones I made to this project and I don't yet want to check them in yet (I may later want to do so in a separate commit). After reviewing the changes you can enter a commit message into the text box and hit <guilabel>Commit</guilabel> on the right to send things off.
+</para></listitem>
+<listitem><para>As with seeing differences, if you want to check in a single file you can also just right click into the editor window to get the <menuchoice><guimenu>Subversion</guimenu><guimenuitem>Commit</guimenuitem></menuchoice> menu item.
+</para></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="customizing-kdevelop"><title>Customizing &kdevelop;</title>
+<para>There are times when you want to change the default appearance or behavior of &kdevelop;, for example because you are used to different keyboard shortcuts or because your project requires a different indenting style for source code. In the following sections, we briefly discuss the various ways how &kdevelop; can be customized for these needs.</para>
+<sect1 id="customizing-the-editor"><title>Customizing the editor</title>
+<para>There are a number of useful things one can configure in and around &kdevelop;'s built-in editor. Of more universal use is to switch on line numbering using the menu entry <menuchoice><guimenu>Editor</guimenu><guisubmenu>View</guisubmenu><guimenuitem>Show line numbers</guimenuitem></menuchoice>, making it easier to match compiler error messages or debug messages with locations in the code. In the same submenu you may also want to switch on the <emphasis>Icon border</emphasis> - a column to the left of your code in which &kdevelop; will show icons such as whether there is a breakpoint on the current line.</para>
+</sect1>
+<sect1 id="customizing-code-indentation"><title>Customizing code indentation</title>
+<para>Many of us like code formatted in a particular way. Many projects also enforce a particular indentation style. Neither may match &kdevelop;'s default indentation style. However, this can be customized: Go to the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Customize &kdevelop;</guimenuitem></menuchoice> menu item, then click on <guilabel>Source Formatter</guilabel> on the left. You can choose one of the predefined indentation styles that are widely in use, or define your own one by adding a new style and then editing it. There may not be a way to exactly re-create the style in which your project's sources have been indented in the past, but you can come close by using the settings for a new style; an example is shown in the two pictures below.</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-5.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-6.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para><note><para> With <guilabel>&kdevelop; 4.2.2</guilabel>, you can create a new style for a particular mimetype (&eg; for C++ header files) but this style does not show up among the list of possible styles for other mimetypes (&eg; for C++ source files) although it would of course be useful to use the same style for both kinds of files. You will therefore have to define the style twice, once for header and once for source files. This has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=272335">&kdevelop; bug 272335</ulink>.</para></note></para>
+</sect1>
+<sect1 id="customizing-keyboard-shortcuts"><title>Customizing keyboard shortcuts</title>
+<para>&kdevelop; has an almost boundless list of keyboard shortcuts (some of them are listed in the <quote>Useful keyboard shortcuts sections</quote> of several chapters in this manual) that can be changed to your taste through the menu <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts</guimenuitem></menuchoice>. At the top of the dialog you can enter a searchword and it only shows those commands that match; you can then edit which key combination is bound to this command.</para>
+<para>Two that have been found to be very useful to change are to set <guilabel>Align</guilabel> to the &Tab; key (many people don't usually enter tabs by hand and rather prefer if the editor chooses the layout of code; with the changed shortcut, hitting &Tab; makes &kdevelop; indent/outdent/align the code). The second one is putting <guilabel>Toggle Breakpoint</guilabel> on <keycombo>&Ctrl;<keycap>B</keycap></keycombo> since this is quite a frequent operation.</para>
+</sect1>
+<sect1 id="customizing-code-auto-completion"><title>Customizing code auto-completion</title>
+<para>Code completion is discussed in <link linkend="auto-completion">this manual's section on writing source code</link>. In &kdevelop;, it comes from two sources: the editor, and the parse engine. The editor (&kate;) is a component of the larger KDE environment and offers auto-completion based on words it has already seen in other parts of the same document. Such auto-completions can be identified in the tooltip by the icon that precedes it:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-20.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>The editor's code completion can be customized via <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure Editor</guisubmenu><guimenuitem>Editing</guimenuitem><guimenuitem>Auto Completion</guimenuitem></menuchoice>. In particular, you can select how many characters you need to type in a word before auto-completion kicks in.</para>
+<para>On the other hand, &kdevelop;'s own auto-completion is much more powerful as it takes into account semantic information about the context. For example, it knows which member functions to offer when you type <varname>object.</varname>, &etc;, as shown here:</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-42.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+    <caption>
+      <para></para>
+    </caption>
+  </mediaobject>
+</screenshot></para>
+<para>This context information comes from various language support plugins, which can be used after a given file has been saved (so it can check the filetype and use the correct language support).</para>
+<para>&kdevelop;'s completion is set to appear as you type, right away, pretty much everywhere that it could possibly complete something. This is configurable in <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Language Support</guimenuitem></menuchoice>. If it isn't already set (as it should, by default), make sure <guilabel>Enable Automatic Invocation</guilabel> is set.</para>
+<para>&kdevelop; has two ways to show a completion: <guilabel>Minimal Automatic Completion</guilabel> shows just the basic information in completion tooltips (&ie; the namespace, class, function, or variable name). This will look similar to &kate; completion (except for the icons).</para>
+<para>On the other hand, <guilabel>Full completion</guilabel> will additionally show the type for each entry, and in the case of functions, also the arguments they take. Also, if you are currently filling in the arguments to a function, full completion will have an additional info-box above the cursor that will show you the current argument you are working on.</para>
+<para>&kdevelop;'s code completion should also bring-to-top and highlight in green any completion items that match the currently expected type in both minimal and full completion, known as <quote>best-matches</quote>.</para>
+<para>The three possible choices for the completion level in the configuration dialog are:</para>
+<itemizedlist>
+<listitem><para><guilabel>Always minimal completion</guilabel>: Never show <quote>Full Completion</quote>
+</para></listitem>
+<listitem><para><guilabel>Minimal automatic completion</guilabel>: Only show <quote>Full Completion</quote> when auto-completion has been triggered manually (&ie;, whenever you hit <keycombo>&Ctrl;<keycap>Space</keycap></keycombo>)
+</para></listitem>
+<listitem><para><guilabel>Always full completion</guilabel>: Always show <quote>Full Completion</quote>
+</para></listitem>
+</itemizedlist>
+</sect1>
+</chapter>
+<chapter id="building-kdevelop-from-sources"><title>Building &kdevelop; from Sources</title>
+<para>If you want to have the latest features and bugfixes, you can build &kdevelop; yourself from the sources.</para>
+<para>There exists a more in-detail article <ulink url="http://techbase.kde.org/KDevelop4/HowToCompile">here</ulink>.</para>
+<para>Be aware that you <emphasis>could</emphasis> build an unstable version. To help the developers fix bugs, please keep the <varname>RelWithDebInfo</varname> and report bugs to http://bugs.kde.org, either per hand or using Dr. Konqi.</para>
+<sect1 id="requirements"><title>Requirements</title>
+<itemizedlist>
+<listitem><para>kdelibs-devel &gt;= 4.3 - http://www.kde.org
+</para></listitem>
+<listitem><para>qt-devel &gt;= 4.5.2 - http://qt.nokia.com
+</para></listitem>
+<listitem><para>boost-devel &gt;= 1.35 - http://www.boost.org
+</para></listitem>
+<listitem><para>g++ &gt;= 4.0 - http://gcc.gnu.org
+</para></listitem>
+<listitem><para>CMake &gt;= 2.6.2 - http://www.cmake.org
+</para></listitem>
+<listitem><para>qjson-devel
+</para></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="install-for-all-users"><title>Install for all users</title>
+<para><programlisting>
+mkdir kdevgit
+cd kdevgit
+git clone git://anongit.kde.org/kdevplatform
+git clone git://anongit.kde.org/kdevelop
+cd kdevplatform
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+make &amp;&amp; sudo make install
+kbuildsycoca4
+cd ../..
+cd kdevelop
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+make &amp;&amp; sudo make install
+kbuildsycoca4
+</programlisting>
+</para>
+</sect1>
+<sect1 id="install-for-local-user"><title>Install for local user</title>
+<para><programlisting>
+mkdir kdevgit
+cd kdevgit
+git clone git://anongit.kde.org/kdevplatform
+git clone git://anongit.kde.org/kdevelop
+cd kdevplatform
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/kdevelop4 ..
+make &amp;&amp; make install
+</programlisting>
+</para>
+<para>the following line is needed so that <application>kbuildsycoca4</application> finds all .desktop files
+</para>
+<para><programlisting>
+export KDEDIRS=$HOME/kdevelop4:/usr
+kbuildsycoca4
+cd ../..
+cd kdevelop
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/kdevelop4 ..
+make &amp;&amp; make install
+kbuildsycoca4
+</programlisting>
+</para>
+<para>Please note: Whenever you do some package or distribution update that calls <application>kbuildsycoca4</application>, you need to execute the following lines after the update:</para>
+<para><programlisting>
+export KDEDIRS=$HOME/kdevelop4:/usr
+kbuildsycoca4
+</programlisting>
+</para>
+</sect1>
+</chapter>
+<!--userbase-content-->
+<chapter id="credits">
+<title>Credits and License</title>
+    <para>
+Documentation Copyright see the UserBase
+    <ulink url="http://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history">KDevelop4/Manual page history</ulink></para>
+    <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+</chapter>
+&documentation.index;
+</book>

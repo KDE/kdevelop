@@ -43,10 +43,10 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
     
-    connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
-    connect(m_chooserUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
-    connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
-    connect(m_chooserUi->extraArguments, SIGNAL(textEdited(const QString &)), this, SLOT(updated()));
+    connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(QString)), this, SLOT(updated()));
+    connect(m_chooserUi->buildFolder, SIGNAL(textChanged(QString)), this, SLOT(updated()));
+    connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(QString)), this, SLOT(updated()));
+    connect(m_chooserUi->extraArguments, SIGNAL(textEdited(QString)), this, SLOT(updated()));
     updated();
 }
 

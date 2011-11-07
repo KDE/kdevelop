@@ -84,7 +84,7 @@ void RefactoringProgressDialog::setProcessing(IndexedString processing) {
 CollectorProgressDialog::CollectorProgressDialog(QString action, UsesCollector& collector) : RefactoringProgressDialog(action), m_collector(collector) {
   
   connect(&m_collector, SIGNAL(processUsesSignal(KDevelop::ReferencedTopDUContext)), this, SLOT(processUses(KDevelop::ReferencedTopDUContext)));
-  connect(&m_collector, SIGNAL(progressSignal(uint, uint)), this, SLOT(progress(uint, uint)));
+  connect(&m_collector, SIGNAL(progressSignal(uint,uint)), this, SLOT(progress(uint,uint)));
   connect(&m_collector, SIGNAL(maximumProgressSignal(uint)), this, SLOT(maximumProgress(uint)));
 }
     

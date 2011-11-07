@@ -549,8 +549,8 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
 
   QualifiedIdentifier functionName;
-  if (compilingContexts() && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    identifierForNode(node->init_declarator->declarator->id, functionName);
+  if (compilingContexts() && node->declarator && node->declarator->id) {
+    identifierForNode(node->declarator->id, functionName);
 
     if (functionName.count() >= 2) {
       
@@ -604,7 +604,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 void ContextBuilder::visitFunctionDeclaration (FunctionDefinitionAST* node)
 {
   visit(node->type_specifier);
-  visit(node->init_declarator);
+  visit(node->declarator);
 }
 
 DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextType type)

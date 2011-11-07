@@ -496,5 +496,5 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
 }
 
 Cpp::SourceCodeInsertion::SourceCodeInsertion(TopDUContext* topContext) : KDevelop::SourceCodeInsertion(topContext){
-    m_changeSet.setFormatPolicy(KDevelop::DocumentChangeSet::AutoFormatChangesKeepIndentation);
+    m_changeSet.setFormatPolicy(KDevelop::DocumentChangeSet::AutoFormatChanges);
 }

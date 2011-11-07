@@ -37,6 +37,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/interfaces/iproblem.h>
@@ -70,27 +71,6 @@ QString urlsToString(const QList<KUrl>& urlList) {
       paths += u.pathOrUrl() + "\n";
 
   return paths;
-}
-
-TopDUContext* contentContextFromProxyContext(TopDUContext* top)
-{
-  if(!top)
-    return 0;
-  if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
-    if(!top->importedParentContexts().isEmpty())
-    {
-      TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
-      if(ret->url() != top->url())
-        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
-      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
-        return ret;
-    }
-    else {
-      kDebug() << "Proxy-context imports no content-context";
-    }
-  } else
-    return top;
-  return 0;
 }
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
@@ -148,6 +128,8 @@ void PreprocessJob::run()
     //kDebug(9007) << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
     kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document().str();
+    if( parentJob()->parentPreprocessor() )
+      kDebug(9007) << "PARENT:" << parentJob()->parentPreprocessor()->parentJob()->document().toUrl();
 
     if (checkAbort())
         return;
@@ -158,8 +140,7 @@ void PreprocessJob::run()
       if(Cpp::EnvironmentManager::self()->isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
         m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
-        IndexedString u = parentJob()->document();
-        m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
+        m_secondEnvironmentFile = new Cpp::EnvironmentFile( parentJob()->document(), 0 );
       }
     }
 
@@ -364,7 +345,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         KDevelop::ReferencedTopDUContext content;
 
         if(m_updatingEnvironmentFile)
-          content = KDevelop::ReferencedTopDUContext(contentContextFromProxyContext(m_updatingEnvironmentFile->topContext()));
+          content = KDevelop::ReferencedTopDUContext(DUChainUtils::contentContextFromProxyContext(m_updatingEnvironmentFile->topContext()));
         else
           content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false);
 
@@ -494,7 +475,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
             
-            //Check if the same file is being processed by one of the parents, and if it is, import it later on
+            //Check if the same file _is_ one of the parents, and if it is, import it later on
             if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive) {
               
               CPPParseJob* job = parentJob();

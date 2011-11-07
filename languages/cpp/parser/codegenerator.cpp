@@ -134,6 +134,13 @@ void CodeGenerator::visitBinaryExpression(BinaryExpressionAST* node)
   visit(node->right_expression);
 }
 
+void CodeGenerator::visitBracedInitList(BracedInitListAST* node)
+{
+  m_output << "{";
+  visit(node->list);
+  m_output << "}";
+}
+
 void CodeGenerator::visitCastExpression(CastExpressionAST* node)
 {
   m_output << "(";
@@ -370,7 +377,7 @@ void CodeGenerator::visitFunctionCall(FunctionCallAST* node)
 void CodeGenerator::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
   visit(node->type_specifier);
-  visit(node->init_declarator);
+  visit(node->declarator);
   visit(node->constructor_initializers);
   visit(node->function_body);
   visit(node->win_decl_specifiers);
@@ -417,13 +424,14 @@ void CodeGenerator::visitInitializer(InitializerAST* node)
 
 void CodeGenerator::visitInitializerClause(InitializerClauseAST* node)
 {
-  if (node->initializer_list) {
-    m_output << "{";
-    visitCommaPrint(node->initializer_list);
-    m_output << "}";
+  visit(node->expression);
+}
 
-  } else {
-    visit(node->expression);
+void CodeGenerator::visitInitializerList(InitializerListAST* node)
+{
+  visitCommaPrint(node->clauses);
+  if (node->isVariadic) {
+    m_output << "...";
   }
 }
 

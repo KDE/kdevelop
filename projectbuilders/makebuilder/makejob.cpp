@@ -82,10 +82,16 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     kDebug(9037) << "Building with make" << m_command << m_overrideTarget;
+    if (!m_item)
+    {
+        setError(ItemNoLongerValidError);
+        setErrorText(i18n("Build item no longer available"));
+        return emitResult();
+    }
 
     if( m_item->type() == KDevelop::ProjectBaseItem::File ) {
         setError(IncorrectItemError);
-        setErrorText("Internal error: cannot build a file item");
+        setErrorText(i18n("Internal error: cannot build a file item"));
         return emitResult();
     }
 
@@ -129,12 +135,12 @@ void MakeJob::start()
     m_process = new KProcess(this);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     m_lineMaker = new ProcessLineMaker( m_process );
-    connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             this, SLOT( addStandardOutput( const QStringList& ) ) );
-    connect( m_process, SIGNAL( error( QProcess::ProcessError ) ),
-             this, SLOT( procError( QProcess::ProcessError ) ) );
-    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
+    connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+             this, SLOT(addStandardOutput(QStringList)) );
+    connect( m_process, SIGNAL(error(QProcess::ProcessError)),
+             this, SLOT(procError(QProcess::ProcessError)) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(procFinished(int,QProcess::ExitStatus)) );
 
     m_process->setEnvironment( environmentVars() );
     m_process->setWorkingDirectory( buildDir.toLocalFile() );

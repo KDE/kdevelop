@@ -37,8 +37,16 @@ class QStringPrinter:
         #        ret += chr(char)
         #    i = i + 1
         #return ret
-        dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
-        return dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
+        ret = ""
+        # The QString object might be not yet initialized. In this case size is a bogus value
+        # and the following 2 lines might throw memory access error. Hence the try/catch.
+        try:
+            dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
+            ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
+        except Exception:
+            # swallow the exception and return empty string
+            pass
+        return ret
 
     def display_hint (self):
         return 'string'

@@ -71,7 +71,9 @@
 #include <interfaces/launchconfigurationtype.h>
 
 #include "disassemblewidget.h"
+#ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
 #include "processselection.h"
+#endif
 #include "memviewdlg.h"
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
@@ -180,8 +182,8 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     // is undesirable. Besides, this makes tracepoint look even more similar
     // to printf debugging.
 // PORTING TODO broken - need intermediate signal?
-//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
-//              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(QByteArray)),
+//              procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
 }
 
 void CppDebuggerPlugin::unload()
@@ -219,12 +221,13 @@ void CppDebuggerPlugin::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExamineCore()));
     ac->addAction("debug_core", action);
 
-
+    #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
     action = new KAction(KIcon("connect_creating"), i18n("Attach to Process"), this);
     action->setToolTip( i18n("Attach to process...") );
     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
     ac->addAction("debug_attach", action);
+    #endif
 }
 
 void CppDebuggerPlugin::setupDBus()
@@ -382,7 +385,7 @@ void CppDebuggerPlugin::slotExamineCore()
     job->start();
 }
 
-
+#ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
 void CppDebuggerPlugin::slotAttachProcess()
 {
     emit showMessage(this, i18n("Choose a process to attach to..."), 1000);
@@ -398,6 +401,7 @@ void CppDebuggerPlugin::slotAttachProcess()
     else
         attachProcess(pid);
 }
+#endif
 
 void CppDebuggerPlugin::attachProcess(int pid)
 {

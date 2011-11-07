@@ -142,7 +142,8 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
         problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
 
         CppEditorIntegrator editor(session());
-        problem->setFinalLocation(DocumentRange(currentContext()->url(), editor.findRange(node).castToSimpleRange()));
+        Q_ASSERT(topContext());
+        problem->setFinalLocation(DocumentRange(topContext()->url(), editor.findRange(node).castToSimpleRange()));
 
         if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
           realProblem(problem);

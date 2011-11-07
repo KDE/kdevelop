@@ -125,6 +125,11 @@ KDevelop::IndexedString Token::symbol() const {
     return KDevelop::IndexedString();
 }
 
+uint Token::symbolIndex() const
+{
+  return session->contents()[position];
+}
+
 QByteArray Token::symbolByteArray() const {
   if (size == 0) // esp. for EOF
     return QByteArray();

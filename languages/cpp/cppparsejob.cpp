@@ -596,7 +596,7 @@ void CPPInternalParseJob::run()
 
       bool isStandardContext = false;
       {
-        DUChainWriteLocker l(DUChain::lock());
+        DUChainReadLocker l(DUChain::lock());
         TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
         isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
@@ -813,7 +813,7 @@ void CPPInternalParseJob::run()
           Q_ASSERT(0); //Failure
         }
 
-        Q_ASSERT(contentContextFromProxyContext(proxyContext) == contentContext.data());
+        Q_ASSERT(DUChainUtils::contentContextFromProxyContext(proxyContext) == contentContext.data());
 
         //Make sure the imported contextsa re added
         foreach ( const LineContextPair &context, parentJob()->includedFiles() )

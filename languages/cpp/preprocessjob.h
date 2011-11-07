@@ -106,7 +106,5 @@ private:
 };
 
 KDevelop::ParsingEnvironment* CreateStandardEnvironment();
-
-KDevelop::TopDUContext* contentContextFromProxyContext(KDevelop::TopDUContext* top);
 #endif
 

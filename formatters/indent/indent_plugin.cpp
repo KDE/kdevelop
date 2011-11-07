@@ -96,24 +96,35 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 			return text;
 		}
 	}
+	
+	QString useText = text;
+	useText = leftContext + useText + rightContext;
+	
 	QString command = style.content();
 	if(command.contains("$TMPFILE"))
 	{
 		tmpFile = std::auto_ptr<QTemporaryFile>(new QTemporaryFile(QDir::tempPath() + "/code"));
-		tmpFile->setAutoRemove(true);
+		tmpFile->setAutoRemove(false);
 		if(tmpFile->open())
 		{
 			kDebug() << "using temporary file" << tmpFile->fileName();
 			command.replace("$TMPFILE", tmpFile->fileName());
-			tmpFile->write(text.toUtf8());
+			QByteArray useTextArray = useText.toLocal8Bit();
+			if( tmpFile->write(useTextArray) != useTextArray.size() )
+			{
+				kWarning() << "failed to write text to temporary file";
+				return text;
+			}
+			
 		}else{
 			kWarning() << "Failed to create a temporary file";
 			return text;
 		}
+		tmpFile->close();
 	}
 	
-	kDebug() << "using shell command for indentation: " << style.content();
-	proc.setShellCommand(style.content());
+	kDebug() << "using shell command for indentation: " << command;
+	proc.setShellCommand(command);
 	proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
 	
 	proc.start();
@@ -121,14 +132,6 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 		kDebug() << "Unable to start indent" << endl;
 		return text;
 	}
-	
-	QString useText = text;
-	//We can only respect the context if it is in a separate line
-	if(leftContext.endsWith("\n"))
-		useText = leftContext + useText;
-	
-	if(rightContext.startsWith("\n"))
-		useText = useText + rightContext;
 	
 	if(!tmpFile.get())
 		proc.write(useText.toLocal8Bit());
@@ -143,12 +146,17 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	
 	if(tmpFile.get())
 	{
-		tmpFile->seek(0);
-		output = QString::fromUtf8(tmpFile->readAll());
+		QFile f(tmpFile->fileName());
+		if( f.open(QIODevice::ReadOnly) )
+		{
+			output = QString::fromLocal8Bit(f.readAll());
+		}else{
+			kWarning() << "Failed opening the temporary file for reading";
+			return text;
+		}
 	}else{
 		output = ios.readAll();
 	}
-
 	if (output.isEmpty())
 	{
 		kWarning() << "indent returned empty text for style" << style.name() << style.content();
@@ -318,7 +326,7 @@ IndentPreferences::IndentPreferences()
 {
     m_updateTimer = new QTimer ( this );
     m_updateTimer->setSingleShot ( true );
-    connect ( m_updateTimer, SIGNAL ( timeout() ), SLOT ( updateTimeout() ) );
+    connect ( m_updateTimer, SIGNAL (timeout()), SLOT (updateTimeout()) );
     m_vLayout = new QVBoxLayout ( this );
     m_captionLabel = new QLabel;
     m_vLayout->addWidget ( m_captionLabel );
@@ -336,14 +344,14 @@ IndentPreferences::IndentPreferences()
     m_bottomLabel->setTextFormat ( Qt::RichText );
     m_bottomLabel->setText (
         i18n ( "<i>You can enter an arbitrary shell command.</i><br />"
-               "Normally, the source-code to format will be reached "
-               "to the command through the standard-input, and the "
+               "Normally, the source-code to format will be reached <br />"
+               "to the command through the standard-input, and the <br />"
                "result will be read from its standard-output.<br /><br />"
-               "If you add <b>$TMPFILE</b> into the command, then "
-               "the code will be written into a temporary file, the temporary "
-               "file will be substituted into that position, and the result "
+               "If you add <b>$TMPFILE</b> into the command, then <br />"
+               "the code will be written into a temporary file, the temporary <br />"
+               "file will be substituted into that position, and the result <br />"
                "will be read out of that file instead." ) );
-    connect ( m_commandEdit, SIGNAL ( textEdited ( QString ) ), SLOT ( textEdited ( QString ) ) );
+    connect ( m_commandEdit, SIGNAL (textEdited(QString)), SLOT (textEdited(QString)) );
 }
 
 void IndentPreferences::load ( const KDevelop::SourceFormatterStyle& style )

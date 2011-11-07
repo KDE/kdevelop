@@ -138,18 +138,14 @@ private slots:
   void testTemplateRecursiveInstantiation();
   void testTemplateInternalSearch();
   void testTemplateImplicitInstantiations();
-  void testStringSets();
   void testAssignedContexts();
   void testTryCatch();
-  void testIndexedStrings();
   void testEnum();
   void testCaseUse();
   void testConstructorOperatorUses();
   void testSizeofUse();
   void testDefinitionUse();
   void testOperatorUses();
-  void testImportStructure();
-  void testImportCache();
   void testDeclareSubClass();
   void testDeclarationId();
   void testConst();
@@ -160,8 +156,6 @@ private slots:
   void testConstructorUses();
   void testExternalMemberDeclaration();
 
-  void testSymbolTableValid();
-  
   void testSeparateVariableDefinition();
   
   void testBaseUses();
@@ -192,6 +186,7 @@ private slots:
 
   void testCommentAfterFunctionCall();
   void testPointerToMember();
+  void testMemberPtrCrash();
   void testNestedNamespace();
   
   void testDeclarationHasUses();
@@ -200,11 +195,15 @@ private slots:
   void testRangeBasedFor();
   void testRValueReference();
   void testDefaultDelete();
+  void testDelete_Bug278781();
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
   void testTrailingReturnType();
   void testConstexpr();
+  void testInitListRegressions();
+  void testBug284536();
+  void testBug285004();
   //END C++2011
 
 private:

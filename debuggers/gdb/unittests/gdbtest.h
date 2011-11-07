@@ -76,6 +76,9 @@ private Q_SLOTS:
     void testRunGdbScript();
     void testRemoteDebug();
     void testRemoteDebugInsertBreakpoint();
+    void testRemoteDebugInsertBreakpointPickupOnlyOnce();
+    void testBreakpointWithSpaceInPath();
+
 private:
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
 };

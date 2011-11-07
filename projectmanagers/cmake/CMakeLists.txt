@@ -27,6 +27,7 @@ set( cmakecommon_SRCS
   parser/cmakeparserutils.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
+  cmakemodelitems.cpp
  )
 
 set( cmakecommon_UI
@@ -35,7 +36,6 @@ set( cmakecommon_UI
 
 set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
-  cmakemodelitems.cpp
   cmakemanager.cpp
   cmakecodecompletionmodel.cpp
 )

@@ -32,6 +32,7 @@
 #include <QStandardItemModel>
 #include "kdeprojectsmodel.h"
 #include "kdeprojectsreader.h"
+#include <QSortFilterProxyModel>
 
 using namespace KDevelop;
 
@@ -44,7 +45,6 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
     connect(reader, SIGNAL(downloadDone()), reader, SLOT(deleteLater()));
     connect(m_projects, SIGNAL(currentIndexChanged(QString)), this, SIGNAL(changed(QString)));
-    m_projects->setModel(model);
     
     layout()->addWidget(m_projects);
     
@@ -60,19 +60,20 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     Ui::KDEConfig().setupUi(page);
     
     m_dialog->addPage(page, i18n("General") );
-    connect(m_dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
+    connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
+    
+    QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(model);
+    proxyModel->setDynamicSortFilter(true);
+    proxyModel->sort(0);
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_projects->setModel(proxyModel);
 }
 
 VcsLocation extractLocation(const QVariantMap& urls)
 {
-    if(urls.contains("svn")) {
-        QString svnPrefix=KDEProviderSettings::self()->svnPrefix();
-        QString path = QString(urls["ssh"].toString()).replace("%PREFIX", svnPrefix);
-        return VcsLocation(path);
-    } else {
-        QString gitUrl=KDEProviderSettings::self()->gitProtocol();
-        return VcsLocation(urls["git"].toUrl());
-    }
+    QString gitUrl=KDEProviderSettings::self()->gitProtocol();
+    return VcsLocation(urls[gitUrl].toUrl());
 }
 
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
@@ -84,7 +85,7 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
     QModelIndex idx = m_projects->model()->index(pos, 0);
     Q_ASSERT(idx.isValid());
     
-    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", idx.data(KDEProjectsModel::PluginRole).toString());
+    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
     VcsJob* ret = vcIface->createWorkingCopy(extractLocation(idx.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
     

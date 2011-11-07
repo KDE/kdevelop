@@ -60,6 +60,7 @@
 #include "configureandbuildjob.h"
 #include "cmakejob.h"
 #include "cmakeutils.h"
+#include <cmakemodelitems.h>
 
 K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
 K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"),
@@ -95,13 +96,14 @@ CMakeBuilder::~CMakeBuilder()
 void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
 {
     if(m_deleteWhenDone.remove(it)) {
-        delete it;
+        delete it->parent();
     }
 }
 
 KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     KDevelop::ProjectBaseItem* builditem = dom;
+    KDevelop::IProject* p = dom->project();
     if( m_builder )
     {
         if(dom->file())
@@ -110,19 +112,19 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             int lastDot = file->text().lastIndexOf('.');
             QString target = file->text().mid(0, lastDot)+".o";
              
-            KDevelop::ProjectBuildFolderItem *fldr = new KDevelop::ProjectBuildFolderItem(dom->project(), file->url().upUrl());
-            KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(dom->project(), target);
+            CMakeFolderItem *fldr = new CMakeFolderItem(p, dom->url().upUrl(), KUrl::relativeUrl(p->folder(), file->url().upUrl()), 0);
+            KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(p, target);
             fldr->appendRow(it);
              
             builditem=it;
             m_deleteWhenDone << fldr << it;
         }
         KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(builditem) )
+        if( CMake::checkForNeedingConfigure(dom) )
         {
             kDebug() << "Needing configure, adding item and setting job";
-            configure = this->configure(builditem->project());
-        } else if( CMake::currentBuildDir( builditem->project() ).isEmpty() ) 
+            configure = this->configure(p);
+        } else if( CMake::currentBuildDir(p).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
                                i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );

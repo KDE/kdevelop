@@ -1,16 +1,16 @@
-#ifndef %{APPNAME}_H
-#define %{APPNAME}_H
+#ifndef %{APPNAMEID}_H
+#define %{APPNAMEID}_H
 
 #include <QtCore/QObject>
 
-class %{APPNAME} : public QObject
+class %{APPNAMEID} : public QObject
 {
 Q_OBJECT
 public:
-    %{APPNAME}();
-    virtual ~%{APPNAME}();
+    %{APPNAMEID}();
+    virtual ~%{APPNAMEID}();
 private slots:
     void output();
 };
 
-#endif // %{APPNAME}_H
+#endif // %{APPNAMEID}_H

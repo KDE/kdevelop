@@ -295,7 +295,7 @@ bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
   return ParsingEnvironmentFile::needsUpdate(environment) || d_func()->m_includePathDependencies.needsUpdate();
 }
 
-EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
+EnvironmentFile::EnvironmentFile( const IndexedString& url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
 
   d_func_dynamic()->setClassId(this);
   setLanguage(IndexedString("C++"));

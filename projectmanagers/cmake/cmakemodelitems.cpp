@@ -117,3 +117,14 @@ void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
             delete target;
     }
 }
+
+CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl& basepath)
+    : KDevelop::ProjectExecutableTargetItem( project, name, parent)
+    , DUChainAttatched(c)
+    , outputName(_outputName)
+    , path(basepath)
+{}
+
+CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl&)
+    : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName)
+{}

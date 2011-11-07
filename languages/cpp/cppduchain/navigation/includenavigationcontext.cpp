@@ -48,7 +48,10 @@ void IncludeNavigationContext::getFileInfo(TopDUContext* duchain)
 {
     const Cpp::EnvironmentFile* f = dynamic_cast<const Cpp::EnvironmentFile*>(duchain->parsingEnvironmentFile().data());
     Q_ASSERT(f); //Should always be for c++
-    modifyHtml() += QString("%1: %2 %3: %4 %5: %6").arg(labelHighlight(i18nc("Headers included into this header", "Included"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this header was included into", "Included by")).arg(duchain->importers().count()).arg(i18nc("Count of macros defined in this header", "Defined macros")).arg(f->definedMacros().set().count());
+    modifyHtml() += QString("%1: %2 %3: %4 %5: %6")
+                      .arg(labelHighlight(i18nc("Headers included into this header", "Includes"))).arg(duchain->importedParentContexts().count())
+                      .arg(labelHighlight(i18nc("Count of files this header was included into", "Included by"))).arg(duchain->importers().count())
+                      .arg(labelHighlight(i18nc("Count of macros defined in this header", "Defined macros"))).arg(f->definedMacros().set().count());
     modifyHtml() += "<br />";
 }
 
