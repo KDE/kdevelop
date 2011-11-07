@@ -114,29 +114,39 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
     return pos;
 }
 
+QStringList CMakeProjectVisitor::variableValue(const QString& var) const
+{
+    VariableMap::const_iterator it=m_vars->constFind(var);
+    if(it!=m_vars->constEnd())
+        return *it;
+    else {
+        CacheValues::const_iterator it=m_cache->constFind(var);
+        if(it!=m_cache->constEnd())
+            return it->value.split(';');
+    }
+    return QStringList();
+}
+
 QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& thecase) const
 {
     int dollar=exp.lastIndexOf('$', thecase.first);
     QString type=exp.mid(dollar+1, thecase.first-dollar-1);
     QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
-    QStringList vars;
+    QStringList value;
 //     kDebug() << "lalalallalala" << exp << thecase.print();
     if(type.isEmpty())
     {
-        if(m_vars->contains(var))
-            vars = m_vars->value(var);
-        else if(m_cache->contains(var))
-            vars = m_cache->value(var).value.split(';');
+        value=variableValue(var);
     }
     else if(type=="ENV")
     {
-        vars=envVarDirectories(var);
+        value=envVarDirectories(var);
     }
     else
         kDebug() << "error: I do not understand the key: " << type;
 
 //     kDebug() << "solving: " << var << vars << exp;
-    return vars;
+    return value;
 }
 
 QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
@@ -298,8 +308,9 @@ int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
     QStringList value;
     
-    if(m_props[TargetProperty].contains(prop->target())) {
-        QMap<QString, QStringList>& targetProps = m_props[TargetProperty][prop->target()];
+    CategoryType::iterator itTarget = m_props[TargetProperty].find(prop->target());
+    if(itTarget!=m_props.value(TargetProperty).constEnd()) {
+        QMap<QString, QStringList>& targetProps = itTarget.value();
         if(!targetProps.contains(prop->property())) {
             if(prop->property().startsWith("LOCATION_") && targetProps.contains("IMPORTED_"+prop->property()))
                 targetProps[prop->property()]=targetProps["IMPORTED_"+prop->property()];
@@ -438,8 +449,9 @@ int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //TODO: Must deal with ENV{something} case
     QStringList values;
-    if(set->storeInCache() && m_cache->contains(set->variableName()))
-        values = m_cache->value(set->variableName()).value.split(';');
+    CacheValues::const_iterator itCache= m_cache->constFind(set->variableName());
+    if(set->storeInCache() && itCache!=m_cache->constEnd())
+        values = itCache->value.split(';');
     else
         values = set->values();
     kDebug(9042) << "setting variable:" << set->variableName() /*<< "to" << values*/;
@@ -710,8 +722,8 @@ bool CMakeProjectVisitor::haveToFind(const QString &varName)
 {
     if(m_vars->contains(varName+"_FOUND"))
         return false;
-    else if(m_vars->contains(varName+"-NOTFOUND"))
-        m_vars->remove(varName+"-NOTFOUND");
+    
+    m_vars->remove(varName+"-NOTFOUND");
     return true;
 }
 
@@ -973,8 +985,9 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
     }
     
     QString value;
-    if(m_cache->contains(tca->resultName()))
-        value=m_cache->value(tca->resultName()).value;
+    CacheValues::const_iterator it=m_cache->constFind(tca->resultName());
+    if(it!=m_cache->constEnd())
+        value=it->value;
     else
         value="TRUE";
     
