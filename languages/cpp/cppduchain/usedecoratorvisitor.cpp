@@ -384,7 +384,8 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
   if(node->initializer && node->declarator) {
-    m_mods->addModification(cursorForToken(node->declarator->start_token), DataAccess::Write, rangeForNode(node->initializer));
+//     qDebug() << "lalala" << nodeToString(node->declarator->id);
+    m_mods->addModification(cursorForToken(node->declarator->id->start_token), DataAccess::Write, rangeForNode(node->initializer));
     
     FunctionType::Ptr type=m_session->typeFromCallAst(node);
     QList<AbstractType::Ptr> args;
