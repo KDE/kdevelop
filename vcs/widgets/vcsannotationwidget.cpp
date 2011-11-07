@@ -76,8 +76,8 @@ VcsAnnotationWidget::VcsAnnotationWidget( const KUrl& url, KDevelop::VcsJob* job
 //     header->setResizeMode(3, QHeaderView::ResizeToContents );
     header->setResizeMode(2, QHeaderView::Stretch );
 //     annotations->setIndentation(-7);
-    connect( d->m_job, SIGNAL( resultsReady( KDevelop::VcsJob* ) ),
-             this, SLOT( addAnnotations( KDevelop::VcsJob* ) ) );
+    connect( d->m_job, SIGNAL(resultsReady(KDevelop::VcsJob*)),
+             this, SLOT(addAnnotations(KDevelop::VcsJob*)) );
     d->m_job->setAutoDelete(false);
     ICore::self()->runController()->registerJob( d->m_job );
 }

@@ -17,9 +17,9 @@ SnippetFilterProxyModel::SnippetFilterProxyModel(QObject *parent)
  : QSortFilterProxyModel(parent)
 {
     connect(SnippetStore::self(),
-            SIGNAL( dataChanged(const QModelIndex&, const QModelIndex&) ),
+            SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this,
-            SLOT( dataChanged(const QModelIndex&, const QModelIndex&) ));
+            SLOT(dataChanged(QModelIndex,QModelIndex)));
 }
 
 

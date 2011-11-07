@@ -198,15 +198,9 @@ class TemporaryDataManager {
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
 //This might be a little slow
 #define FOREACH_FUNCTION(item, container) \
-    for(uint a = 0, mustDo = 1, containerSize = container ## Size(); a < containerSize; ++a) \
-      if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) \
-        for(item(container()[a]); mustDo; mustDo = 0)
-//More efficient version that does not repeatedly call functions on the container, but the syntax is a bit less nice
-/*
-#define FOREACH_FUNCTION_EFFICIENT(itemType, itemName, container) \
-    for(itemType* start = container(), end = start + container ## Size(), fake = start; start != end; ++start) \
-      for( itemType itemName(*start); fake != end; fake = end)
-*/
+    for(uint a__ = 0, mustDo__ = 1, containerSize = container ## Size(); a__ < containerSize; ++a__) \
+      if((mustDo__ == 0 || mustDo__ == 1) && (mustDo__ = 2)) \
+        for(item(container()[a__]); mustDo__; mustDo__ = 0)
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
     typedef KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \

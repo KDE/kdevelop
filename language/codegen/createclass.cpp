@@ -695,8 +695,8 @@ OutputPage::OutputPage(CreateClassWizard* parent)
     
     
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
-    connect(d->output->headerUrl, SIGNAL(textChanged(const QString &)), this, SLOT(updateHeaderRanges(const QString &)));
-    connect(d->output->implementationUrl, SIGNAL(textChanged(const QString &)), this, SLOT(updateImplementationRanges(const QString &)));
+    connect(d->output->headerUrl, SIGNAL(textChanged(QString)), this, SLOT(updateHeaderRanges(QString)));
+    connect(d->output->implementationUrl, SIGNAL(textChanged(QString)), this, SLOT(updateImplementationRanges(QString)));
     
     registerField("headerUrl", d->output->headerUrl);
     registerField("implementationUrl", d->output->implementationUrl);

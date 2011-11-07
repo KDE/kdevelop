@@ -31,12 +31,12 @@ AsyncTreeView::AsyncTreeView(TreeModel* model, QWidget *parent = 0)
 : QTreeView(parent)
 {
     setModel(model);
-    connect (this, SIGNAL(expanded(const QModelIndex &)),
-             this, SLOT(slotExpanded(const QModelIndex &)));
-    connect (this, SIGNAL(collapsed(const QModelIndex &)),
-             this, SLOT(slotCollapsed(const QModelIndex &)));
-    connect (this, SIGNAL(clicked(const QModelIndex &)),
-             this, SLOT(slotClicked(const QModelIndex &)));
+    connect (this, SIGNAL(expanded(QModelIndex)),
+             this, SLOT(slotExpanded(QModelIndex)));
+    connect (this, SIGNAL(collapsed(QModelIndex)),
+             this, SLOT(slotCollapsed(QModelIndex)));
+    connect (this, SIGNAL(clicked(QModelIndex)),
+             this, SLOT(slotClicked(QModelIndex)));
     connect (model, SIGNAL(itemChildrenReady()),
             this, SLOT(slotExpandedDataReady()));
 }

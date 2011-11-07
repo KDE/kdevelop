@@ -97,8 +97,6 @@ public:
     /// Opens a text document containing the @p data text.
     Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
 
-    virtual void notifyDocumentClosed(IDocument* doc) = 0;
-
     virtual IDocumentFactory* factory(const QString& mime) const = 0;
     
     Q_SCRIPTABLE virtual KTextEditor::Document* globalTextEditorInstance()=0;

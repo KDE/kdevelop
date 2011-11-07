@@ -88,6 +88,7 @@ public:
     virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations, RecursionMode recursion);
     virtual KDevelop::VcsJob* update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion);
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
+    virtual void setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const;
     //End of
 
     KDevelop::VcsJob* add(const KUrl::List& localLocations,
@@ -162,6 +163,7 @@ private slots:
     void parseGitStatusOutput_old(KDevelop::DVcsJob* job);
     void parseGitVersionOutput(KDevelop::DVcsJob* job);
     void parseGitBranchOutput(KDevelop::DVcsJob* job);
+    void parseGitCurrentBranch(KDevelop::DVcsJob* job);
     
     void ctxPushStash();
     void ctxPopStash();
@@ -187,8 +189,6 @@ private:
 
     bool m_hasError;
     QString m_errorDescription;
-    public slots:
-        void parseGitCurrentBranch(KDevelop::DVcsJob*);
 };
 
 #endif

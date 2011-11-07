@@ -77,9 +77,9 @@ public:
    
    virtual void run () {
      //We connect directly, so we can do the pre-grouping within the background thread
-     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
+     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
 
-     connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
+     connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), Qt::QueuedConnection);
      connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
      exec();
    }

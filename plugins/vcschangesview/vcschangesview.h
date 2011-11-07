@@ -38,6 +38,7 @@ class VcsChangesView : public QTreeView
     public slots:
         void popupContextMenu( const QPoint &pos );
         void selectCurrentDocument();
+        void openSelected(const QModelIndex& idx);
         
     signals:
         void reload(const QList<KDevelop::IProject*>& p);

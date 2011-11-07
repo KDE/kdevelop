@@ -45,6 +45,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -157,6 +159,12 @@ struct DocumentControllerPrivate {
                 }
 
                 documents.insert(document->url(), document);
+
+                if (!controller->isEmptyDocumentUrl(document->url()))
+                {
+                    fileOpenRecent->addUrl(document->url());
+                }
+
                 break;
             }
         }
@@ -339,7 +347,8 @@ struct DocumentControllerPrivate {
             return false;
         }
         //react on document deletion - we need to cleanup controller structures
-        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
+        
+        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(notifyDocumentClosed(Sublime::Document*)));
         //We check if it was already opened before
         bool emitOpened = !documents.contains(url);
         if(emitOpened)
@@ -400,13 +409,23 @@ struct DocumentControllerPrivate {
                         Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
 
                         if(sublimeDocBuddy) {
-                            // try to find existing View of buddy document:
-                            foreach (Sublime::View *view, sublimeDocBuddy->views())
-                            {
-                                if (area->views().contains(view))
-                                {
-                                    buddyView = view;
-                                    break;
+                            Sublime::AreaIndex *pActiveViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
+                            if(pActiveViewIndex) {
+                                // try to find existing View of buddy document in current active view's tab
+                                foreach (Sublime::View *pView, pActiveViewIndex->views()) {
+                                    if(sublimeDocBuddy->views().contains(pView)) {
+                                        buddyView = pView;
+                                        break;
+                                    }
+                                }
+                            }
+                            // if we did not find it, then search in the whole area
+                            if(!buddyView) {
+                                foreach (Sublime::View *view, sublimeDocBuddy->views()) {
+                                    if (area->views().contains(view)) {
+                                        buddyView = view;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -482,7 +501,10 @@ struct DocumentControllerPrivate {
             {
                 uiController->activeSublimeWindow()->activateView(partView);
             }
-            fileOpenRecent->addUrl( url );
+            if (!controller->isEmptyDocumentUrl(url))
+            {
+                fileOpenRecent->addUrl( url );
+            }
 
             if( applyRange && range.isValid() )
             {
@@ -559,6 +581,7 @@ DocumentController::DocumentController( QObject *parent )
 
 void KDevelop::DocumentController::initialize()
 {
+    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(slotProjectOpened(KDevelop::IProject*)));
 }
 
 void DocumentController::cleanup()
@@ -589,27 +612,28 @@ void DocumentController::setupActions()
     action->setIcon(KIcon("document-open"));
     action->setShortcut( Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
-                    SLOT(slotOpenDocument(const KUrl&)), ac);
+                    SLOT(slotOpenDocument(KUrl)), ac);
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 
     action = d->saveAll = ac->addAction( "file_save_all" );
     action->setIcon(KIcon("document-save"));
     action->setText(i18n( "Save Al&l" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotSaveAllDocuments() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
     action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setShortcut( QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
     action->setIcon(KIcon("document-revert"));
-    action->setText(i18n( "Rever&t All" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( reloadAllDocuments() ) );
+    action->setText(i18n( "Reload All" ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
     action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
     action->setEnabled(false);
@@ -618,7 +642,7 @@ void DocumentController::setupActions()
     action->setIcon(KIcon("window-close"));
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
     action->setToolTip( i18n( "Close File" ) );
     action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
     action->setEnabled(false);
@@ -626,7 +650,7 @@ void DocumentController::setupActions()
     action = d->closeAll = ac->addAction( "file_close_all" );
     action->setIcon(KIcon("window-close"));
     action->setText(i18n( "Clos&e All" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllDocuments() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
     action->setToolTip( i18n( "Close all open documents" ) );
     action->setWhatsThis( i18n( "<b>Close all documents</b><p>Close all open documents, prompting for additional information when necessary.</p>" ) );
     action->setEnabled(false);
@@ -635,7 +659,7 @@ void DocumentController::setupActions()
     action->setIcon(KIcon("window-close"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllOtherDocuments() ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
     action->setToolTip( i18n( "Close all other documents" ) );
     action->setWhatsThis( i18n( "<b>Close all other documents</b><p>Close all open documents, with the exception of the currently active document.</p>" ) );
     action->setEnabled(false);
@@ -659,6 +683,7 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 IDocument* DocumentController::openDocumentFromText( const QString& data )
 {
     IDocument* d = openDocument(nextEmptyDocumentUrl());
+    Q_ASSERT(d->textDocument());
     d->textDocument()->setText( data );
     return d;
 }
@@ -719,10 +744,13 @@ void DocumentController::closeDocument( const KUrl &url )
     d->documents[url]->close();
 }
 
-void DocumentController::notifyDocumentClosed(IDocument* doc)
+void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
-    d->documents.remove(doc->url());
-
+    IDocument* doc = dynamic_cast<IDocument*>(doc_);
+    Q_ASSERT(doc);
+    
+    d->removeDocument(doc_);
+    
     if (d->documents.isEmpty()) {
         if (d->saveAll)
             d->saveAll->setEnabled(false);
@@ -1150,6 +1178,26 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     }
 
     return ret;
+}
+
+void DocumentController::slotProjectOpened(IProject* p)
+{
+    connect(p->managerPlugin(), SIGNAL(fileRenamed(KUrl,KDevelop::ProjectFileItem*)), SLOT(slotFileRenamed(KUrl,KDevelop::ProjectFileItem*)));
+}
+
+void DocumentController::slotFileRenamed(const KUrl& oldname, ProjectFileItem* newitem)
+{
+    IDocument* doc=documentForUrl(oldname);
+    if(!doc)
+        return;
+    
+    KTextEditor::Cursor c;
+    KTextEditor::Document* textdoc=doc->textDocument();
+    if(textdoc && textdoc->activeView())
+        c = textdoc->activeView()->cursorPosition();
+    
+    doc->close(IDocument::Default);
+    ICore::self()->documentController()->openDocument(newitem->url(), c);
 }
 
 }

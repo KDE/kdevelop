@@ -20,7 +20,7 @@ SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     m_ui->srcEdit->setUrl( KUrl() );
     connect( m_ui->srcEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
     connect( m_ui->srcEdit, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
-    connect( m_ui->dest, SIGNAL(textChanged(QString) ), this, SIGNAL(changed()) );
+    connect( m_ui->dest, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
     connect( m_ui->message, SIGNAL(textChanged()), this, SIGNAL(changed()) );
 }
 

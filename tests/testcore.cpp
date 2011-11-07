@@ -30,6 +30,7 @@
 #include "../shell/core_p.h"
 
 #include <QCoreApplication>
+#include <QTest>
 
 #include <KParts/MainWindow>
 
@@ -77,9 +78,13 @@ void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
 
 void TestCore::shutdown()
 {
-    if (Core::m_self) {
+    if (self()) {
+        // trigger eventloop to handle Queued connections
+        // before entering cleanup
+        // this can fix random crashes under certain conditions
+        QTest::qWait(1);
         self()->cleanup();
-        Core::m_self->deleteLater();
+        self()->deleteLater();
     }
 }
 

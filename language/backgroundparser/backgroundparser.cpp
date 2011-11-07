@@ -205,8 +205,8 @@ public:
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
             QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
-                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
+            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*,float,QString)),
+                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*,float,QString)), Qt::QueuedConnection);
 
             m_parseJobs.insert(url, job);
 
@@ -624,6 +624,11 @@ void BackgroundParser::setThreadCount(int threadCount)
         d->m_threads = threadCount;
         d->m_weaver.setMaximumNumberOfThreads(d->m_threads+1); //1 Additional thread for high-priority parsing
     }
+}
+
+int BackgroundParser::threadCount() const
+{
+    return d->m_threads;
 }
 
 void BackgroundParser::setDelay(int miliseconds)

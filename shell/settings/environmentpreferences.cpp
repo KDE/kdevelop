@@ -53,8 +53,8 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
     d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );
 
-    connect( d->preferencesDialog, SIGNAL( changed() ),
-             this, SLOT( settingsChanged() ) );
+    connect( d->preferencesDialog, SIGNAL(changed()),
+             this, SLOT(settingsChanged()) );
 
 
     d->skel = new KConfigSkeleton(KGlobal::config());

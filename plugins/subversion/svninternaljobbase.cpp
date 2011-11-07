@@ -48,12 +48,12 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
       m_success( true ), sendFirstDelta( false ), killed( false )
 {
     m_ctxt->setListener(this);
-    connect( this, SIGNAL( failed( ThreadWeaver::Job* ) ),
-             parent, SLOT( internalJobFailed( ThreadWeaver::Job* ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( done( ThreadWeaver::Job* ) ),
-             parent, SLOT( internalJobDone( ThreadWeaver::Job* ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( started( ThreadWeaver::Job* ) ),
-             parent, SLOT( internalJobStarted( ThreadWeaver::Job* ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL(failed(ThreadWeaver::Job*)),
+             parent, SLOT(internalJobFailed(ThreadWeaver::Job*)), Qt::QueuedConnection );
+    connect( this, SIGNAL(done(ThreadWeaver::Job*)),
+             parent, SLOT(internalJobDone(ThreadWeaver::Job*)), Qt::QueuedConnection );
+    connect( this, SIGNAL(started(ThreadWeaver::Job*)),
+             parent, SLOT(internalJobStarted(ThreadWeaver::Job*)), Qt::QueuedConnection );
 }
 
 SvnInternalJobBase::~SvnInternalJobBase()
@@ -207,22 +207,22 @@ bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 
 void SvnInternalJobBase::initBeforeRun()
 {
-    connect( this, SIGNAL( needCommitMessage() ),
-             parent(), SLOT( askForCommitMessage() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( needLogin( const QString& ) ),
-             parent(), SLOT( askForLogin( const QString& ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL(needCommitMessage()),
+             parent(), SLOT(askForCommitMessage()), Qt::QueuedConnection );
+    connect( this, SIGNAL(needLogin(QString)),
+             parent(), SLOT(askForLogin(QString)), Qt::QueuedConnection );
     connect( this, SIGNAL( needSslServerTrust( const QStringList&,
                            const QString&, const QString&, const QString&,
                            const QString&, const QString&, const QString& ) ),
              parent(), SLOT( askForSslServerTrust( const QStringList&,
                              const QString&, const QString&, const QString&,
                              const QString&, const QString&, const QString& ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( showNotification( const QString&, const QString& ) ),
-             parent(), SLOT( showNotification( const QString&, const QString& ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( needSslClientCert( const QString& ) ),
-             parent(), SLOT( askForSslClientCert( const QString& ) ), Qt::QueuedConnection );
-    connect( this, SIGNAL( needSslClientCertPassword( const QString& ) ),
-             parent(), SLOT( askForSslClientCertPassword( const QString& ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL(showNotification(QString,QString)),
+             parent(), SLOT(showNotification(QString,QString)), Qt::QueuedConnection );
+    connect( this, SIGNAL(needSslClientCert(QString)),
+             parent(), SLOT(askForSslClientCert(QString)), Qt::QueuedConnection );
+    connect( this, SIGNAL(needSslClientCertPassword(QString)),
+             parent(), SLOT(askForSslClientCertPassword(QString)), Qt::QueuedConnection );
 }
 
 svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerTrustPrompt(

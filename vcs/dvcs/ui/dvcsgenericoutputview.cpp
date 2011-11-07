@@ -32,8 +32,8 @@ DVCSgenericOutputView::DVCSgenericOutputView(KDevelop::DistributedVersionControl
     Ui::CvsGenericOutputViewBase::setupUi(this);
 
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( slotJobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(slotJobFinished(KJob*)));
     }
 }
 

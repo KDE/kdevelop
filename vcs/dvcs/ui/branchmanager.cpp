@@ -56,7 +56,7 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     m_valid = !branchname.isEmpty();
     if(m_valid) {
         QList< QStandardItem* > items = m_model->findItems(branchname);
-        m_ui->branchView->selectionModel()->select(items.first()->index(), QItemSelectionModel::ClearAndSelect);
+        m_ui->branchView->setCurrentIndex(items.first()->index());
     }
     
     connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
@@ -71,8 +71,18 @@ BranchManager::~BranchManager()
 
 void BranchManager::createBranch()
 {
-    QString baseBranch = m_ui->branchView->currentIndex().data().toString();
-    QString newBranch = QInputDialog::getText(this, i18n("New branch"), i18n("Name of the new branch:"));
+    const QModelIndex currentBranchIdx = m_ui->branchView->currentIndex();
+    if (!currentBranchIdx.isValid()) {
+        KMessageBox::messageBox(this, KMessageBox::Error,
+                                i18n("You must select a base branch from the list before creating a new branch."));
+        return;
+    }
+    QString baseBranch = currentBranchIdx.data().toString();
+    bool branchNameEntered = false;
+    QString newBranch = QInputDialog::getText(this, i18n("New branch"), i18n("Name of the new branch:"),
+            QLineEdit::Normal, QString(), &branchNameEntered);
+    if (!branchNameEntered)
+        return;
 
     if (!m_model->findItems(newBranch).isEmpty())
     {

@@ -72,8 +72,8 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         tabwidget = new KTabWidget(this);
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
-        connect( m_closeButton, SIGNAL( clicked() ),
-                 this, SLOT( closeActiveView() ) );
+        connect( m_closeButton, SIGNAL(clicked()),
+                 this, SLOT(closeActiveView()) );
         m_closeButton->setIcon( KIcon("tab-close") );
         m_closeButton->adjustSize();
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
@@ -140,11 +140,11 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 
     addActions(data->actionList);
 
-    connect( data, SIGNAL( outputAdded( int ) ),
-             this, SLOT( addOutput( int ) ) );
+    connect( data, SIGNAL(outputAdded(int)),
+             this, SLOT(addOutput(int)) );
 
-    connect( this, SIGNAL( outputRemoved( int, int ) ),
-             data->plugin, SIGNAL( outputRemoved( int, int ) ) );
+    connect( this, SIGNAL(outputRemoved(int,int)),
+             data->plugin, SIGNAL(outputRemoved(int,int)) );
 
     connect( data->plugin, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
     connect( data->plugin, SIGNAL(selectPrevItem()), this, SLOT(selectPrevItem()) );
@@ -197,12 +197,12 @@ void OutputWidget::changeModel( int id )
         if (!od->model)
             return;
 
-        disconnect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), this,
-                    SLOT(rowsInserted(const QModelIndex&, int, int)) );
+        disconnect( od->model,SIGNAL(rowsInserted(QModelIndex,int,int)), this,
+                    SLOT(rowsInserted(QModelIndex,int,int)) );
         if( od->behaviour & KDevelop::IOutputView::AutoScroll )
         {
-            connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                     SLOT(rowsInserted(const QModelIndex&, int, int)) );
+            connect( od->model,SIGNAL(rowsInserted(QModelIndex,int,int)),
+                     SLOT(rowsInserted(QModelIndex,int,int)) );
         }
     }
     else
@@ -251,8 +251,8 @@ void OutputWidget::removeOutput( int id )
                 filters.remove( 0 );
             }
         }
-        disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                    this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
+        disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(QModelIndex,int,int)),
+                    this, SLOT(rowsInserted(QModelIndex,int,int)) );
         
         views.remove( id );
         emit outputRemoved( data->toolViewId, id );
@@ -393,10 +393,10 @@ QTreeView* OutputWidget::createListView(int id)
             listview->setRootIsDecorated(false);
             
             views[id] = listview;
-            connect( listview, SIGNAL(activated(const QModelIndex&)),
-                     this, SLOT(activate(const QModelIndex&)));
-            connect( listview, SIGNAL(clicked(const QModelIndex&)),
-                     this, SLOT(activate(const QModelIndex&)));
+            connect( listview, SIGNAL(activated(QModelIndex)),
+                     this, SLOT(activate(QModelIndex)));
+            connect( listview, SIGNAL(clicked(QModelIndex)),
+                     this, SLOT(activate(QModelIndex)));
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
@@ -417,10 +417,10 @@ QTreeView* OutputWidget::createListView(int id)
                 listview->setHeaderHidden(true);
 
                 layout()->addWidget( listview );
-                connect( listview, SIGNAL(activated(const QModelIndex&)),
-                         this, SLOT(activate(const QModelIndex&)));
-                connect( listview, SIGNAL(clicked(const QModelIndex&)),
-                         this, SLOT(activate(const QModelIndex&)));
+                connect( listview, SIGNAL(activated(QModelIndex)),
+                         this, SLOT(activate(QModelIndex)));
+                connect( listview, SIGNAL(clicked(QModelIndex)),
+                         this, SLOT(activate(QModelIndex)));
             } else
             {
                 listview = views.begin().value();

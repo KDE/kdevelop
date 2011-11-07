@@ -149,18 +149,18 @@ ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
       }
     }
     // connect all signals
-    connect ( t, SIGNAL( progressItemCompleted(KDevelop::ProgressItem*) ),
-              this, SLOT( slotTransactionCompleted(KDevelop::ProgressItem*) ) );
-    connect ( t, SIGNAL( progressItemProgress(KDevelop::ProgressItem*, unsigned int) ),
-              this, SIGNAL( progressItemProgress(KDevelop::ProgressItem*, unsigned int) ) );
-    connect ( t, SIGNAL( progressItemAdded(KDevelop::ProgressItem*) ),
-              this, SIGNAL( progressItemAdded(KDevelop::ProgressItem*) ) );
-    connect ( t, SIGNAL( progressItemCanceled(KDevelop::ProgressItem*) ),
-              this, SIGNAL( progressItemCanceled(KDevelop::ProgressItem*) ) );
-    connect ( t, SIGNAL( progressItemStatus(KDevelop::ProgressItem*, const QString&) ),
-              this, SIGNAL( progressItemStatus(KDevelop::ProgressItem*, const QString&) ) );
-    connect ( t, SIGNAL( progressItemLabel(KDevelop::ProgressItem*, const QString&) ),
-              this, SIGNAL( progressItemLabel(KDevelop::ProgressItem*, const QString&) ) );
+    connect ( t, SIGNAL(progressItemCompleted(KDevelop::ProgressItem*)),
+              this, SLOT(slotTransactionCompleted(KDevelop::ProgressItem*)) );
+    connect ( t, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)),
+              this, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)) );
+    connect ( t, SIGNAL(progressItemAdded(KDevelop::ProgressItem*)),
+              this, SIGNAL(progressItemAdded(KDevelop::ProgressItem*)) );
+    connect ( t, SIGNAL(progressItemCanceled(KDevelop::ProgressItem*)),
+              this, SIGNAL(progressItemCanceled(KDevelop::ProgressItem*)) );
+    connect ( t, SIGNAL(progressItemStatus(KDevelop::ProgressItem*,QString)),
+              this, SIGNAL(progressItemStatus(KDevelop::ProgressItem*,QString)) );
+    connect ( t, SIGNAL(progressItemLabel(KDevelop::ProgressItem*,QString)),
+              this, SIGNAL(progressItemLabel(KDevelop::ProgressItem*,QString)) );
 
     emit progressItemAdded( t );
   } else {

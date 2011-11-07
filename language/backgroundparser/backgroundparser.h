@@ -98,6 +98,11 @@ public:
     Q_SCRIPTABLE void setThreadCount(int threadCount);
 
     /**
+     * Return how many ThreadWeaver threads the background parser should set up and use.
+     */
+    Q_SCRIPTABLE int threadCount() const;
+
+    /**
      * Set the delay in miliseconds before the background parser starts parsing.
      */
     Q_SCRIPTABLE void setDelay(int miliseconds);

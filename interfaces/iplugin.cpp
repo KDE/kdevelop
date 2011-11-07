@@ -101,16 +101,16 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
         if (! guiWindow)
             continue;
 
-        connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient *)),
-		this, SLOT(_k_guiClientAdded(KXMLGUIClient *)));
+        connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
+		this, SLOT(_k_guiClientAdded(KXMLGUIClient*)));
     }
 
     connect(ICore::self()->projectController(),
-	    SIGNAL(projectOpened(KDevelop::IProject *)),
+	    SIGNAL(projectOpened(KDevelop::IProject*)),
 	    this, SLOT(_k_updateState()));
 
     connect(ICore::self()->projectController(),
-	    SIGNAL(projectClosed(KDevelop::IProject *)),
+	    SIGNAL(projectClosed(KDevelop::IProject*)),
 	    this, SLOT(_k_updateState()));
 }
 

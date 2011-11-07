@@ -40,11 +40,13 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {
     Q_OBJECT
     public:
-        DocumentationView(QWidget* parent);
+        DocumentationView(QWidget* parent, ProvidersModel* m);
         
         void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
         
     public slots:
+        void initialize();
+        
         void addHistory(KSharedPtr< KDevelop::IDocumentation > doc);
         void emptyHistory();
         

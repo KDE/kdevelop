@@ -139,7 +139,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     
     m_browseManager = new BrowseManager(this);
     
-    connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+    connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
     
     m_previousButton = new QToolButton();
     m_previousButton->setToolTip(i18n("Go back in context history"));
@@ -267,15 +267,15 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 {
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
-  connect( core()->documentController(), SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), this, SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
+  connect( core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
-  connect( DUChain::self(), SIGNAL( declarationSelected(DeclarationPointer) ), this, SLOT( declarationSelectedInUI(DeclarationPointer) ) );
+  connect( DUChain::self(), SIGNAL(declarationSelected(DeclarationPointer)), this, SLOT(declarationSelectedInUI(DeclarationPointer)) );
 
 
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
-  connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
+  connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateViews()) );
   
   //Needed global action for the context-menu extensions
   m_findUses = new QAction(i18n("Find Uses"), this);
@@ -685,7 +685,7 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 {
   Q_ASSERT(document->textDocument());
 
-  connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
+  connect( document->textDocument(), SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)) );
 
   foreach( View* view, document->textDocument()->views() )
     viewCreated( document->textDocument(), view );
@@ -739,9 +739,9 @@ void ContextBrowserPlugin::textInserted(KTextEditor::Document* doc, KTextEditor:
 
 void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
 {
-  disconnect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) ); ///Just to make sure that multiple connections don't happen
-  connect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) );
-  connect( v, SIGNAL(destroyed( QObject* )), this, SLOT( viewDestroyed( QObject* ) ) );
+  disconnect( v, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)) ); ///Just to make sure that multiple connections don't happen
+  connect( v, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)) );
+  connect( v, SIGNAL(destroyed(QObject*)), this, SLOT(viewDestroyed(QObject*)) );
   disconnect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
   connect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
   disconnect( v, SIGNAL(selectionChanged(KTextEditor::View*)), this, SLOT(selectionChanged(KTextEditor::View*)));
@@ -752,7 +752,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
 
   iface->enableTextHints(highlightingTimeout);
 
-  connect(v, SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)), this, SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));
+  connect(v, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
 }
 
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)
@@ -1037,11 +1037,11 @@ void ContextBrowserPlugin::openDocument(int historyIndex) {
     DocumentCursor c = m_history[historyIndex].computePosition();
     if (c.isValid() && !c.document.str().isEmpty()) {
         
-        disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+        disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
         
         ICore::self()->documentController()->openDocument(c.document.toUrl(), c.textCursor());
         
-        connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+        connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
 
         KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
         updateDeclarationListBox(m_history[historyIndex].context.data());

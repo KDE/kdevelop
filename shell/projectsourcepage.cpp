@@ -55,6 +55,8 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
     connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
     
+    emit isCorrect(false);
+
     sourceChanged(0);
 }
 
@@ -128,7 +130,6 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
 
 void ProjectSourcePage::getVcsProject()
 {
-    emit isCorrect(false);
     KUrl url=m_ui->workingDir->url();
     QDir d(url.toLocalFile());
     if(!url.isLocalFile() && !d.exists()) {
@@ -141,9 +142,13 @@ void ProjectSourcePage::getVcsProject()
     
     VcsJob* job=jobPerCurrent();
     
+    m_ui->sources->setEnabled(false);
+    m_ui->sourceBox->setEnabled(false);
+    m_ui->workingDir->setEnabled(false);
+    m_ui->get->setEnabled(false);
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
-    connect(job, SIGNAL(percent(KJob*, unsigned long)), SLOT(progressChanged(KJob*, unsigned long)));
+    connect(job, SIGNAL(percent(KJob*,ulong)), SLOT(progressChanged(KJob*,ulong)));
     connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(infoMessage(KJob*,QString,QString)));
     ICore::self()->runController()->registerJob(job);
 }
@@ -173,7 +178,7 @@ void ProjectSourcePage::reevaluateCorrection()
     //to support checking out to remote directories
     KUrl cwd=m_ui->workingDir->url();
     bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
-    emit isCorrect(correct);
+    emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
     
     QDir d(cwd.toLocalFile());
     bool validToCheckout=correct && (!m_locationWidget || m_locationWidget->isCorrect()); //To checkout, if it exists, it should be an empty dir
@@ -186,7 +191,7 @@ void ProjectSourcePage::reevaluateCorrection()
     
     if(!correct)
         setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
-    else if(!m_ui->get->isEnabled())
+    else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
         setStatus(i18n("You need to specify a valid location for the project"));
     else
         validStatus();

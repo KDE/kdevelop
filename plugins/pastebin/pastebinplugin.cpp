@@ -81,7 +81,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
     KIO::TransferJob *tf = KIO::http_post(url, bytearray);
 
     tf->addMetaData("content-type","Content-Type: application/x-www-form-urlencoded");
-    connect(tf, SIGNAL(data(KIO::Job *, const QByteArray &)), this, SLOT(data(KIO::Job*, const QByteArray&)));
+    connect(tf, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data(KIO::Job*,QByteArray)));
     
     m_result.insert(tf, QByteArray());
     ICore::self()->runController()->registerJob(tf);

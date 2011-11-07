@@ -136,14 +136,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     templateEdit->setEditable(true);
     templateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
-    connect(templateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    connect(templateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
     replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
     replacementTemplateEdit->setEditable(true);
     replacementTemplateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
-    connect(replacementTemplateEdit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    connect(replacementTemplateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
         comp->addItem(replacementTemplateEdit->itemText(i));
     
@@ -166,12 +166,12 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     connect(this, SIGNAL(buttonClicked(KDialog::ButtonCode)), this, SLOT(performAction(KDialog::ButtonCode)));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
-    connect(patternCombo, SIGNAL(editTextChanged(const QString&)),
-            this, SLOT(patternComboEditTextChanged( const QString& )));
+    connect(patternCombo, SIGNAL(editTextChanged(QString)),
+            this, SLOT(patternComboEditTextChanged(QString)));
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
     
-    connect(directoryRequester, SIGNAL(textChanged(const QString&)), this, SLOT(directoryChanged(const QString&)));
+    connect(directoryRequester, SIGNAL(textChanged(QString)), this, SLOT(directoryChanged(QString)));
 }
 
 void GrepDialog::addUrlToMenu(QMenu* menu, KUrl url)
@@ -430,18 +430,16 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
         description = i18n("%1, and %2 more items", choice[0].pathOrUrl(), choice.size()-1);
     
-    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
-                               findToolView(i18n("Find/Replace in Files"), m_factory, IUiController::CreateAndRaise);
+                               findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
     GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
-    toolView->setPlugin(m_plugin);
     
-    connect(job, SIGNAL(showErrorMessage(QString, int)),
+    connect(job, SIGNAL(showErrorMessage(QString,int)),
             toolView, SLOT(showErrorMessage(QString)));
     //the GrepOutputModel gets the 'showMessage' signal to store it and forward
     //it to toolView
-    connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*, QString)));    
+    connect(job, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)),
+            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*,QString)));    
     connect(outputModel, SIGNAL(showMessage(KDevelop::IStatus*,QString)),
             toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
     

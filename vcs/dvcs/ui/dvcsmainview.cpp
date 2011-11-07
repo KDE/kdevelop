@@ -40,8 +40,8 @@ DVCSmainView::DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QW
     connect(m_plugin, SIGNAL(jobFinished(KJob*)),
             this, SLOT(slotJobFinished(KJob*)));
 
-    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*, QString)),
-            this, SLOT(slotAddTab(QWidget*, QString)) );
+    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*,QString)),
+            this, SLOT(slotAddTab(QWidget*,QString)) );
 
     // create a default output view
     m_mainview = new DVCSgenericOutputView(m_plugin);
@@ -54,8 +54,8 @@ DVCSmainView::DVCSmainView(KDevelop::DistributedVersionControlPlugin *plugin, QW
     m_closeButton->setAutoRaise(true);
     m_closeButton->setEnabled(false);
     tabwidget->setCornerWidget( m_closeButton );
-    connect(m_closeButton, SIGNAL( clicked() ),
-            this, SLOT( slotTabClose() ));
+    connect(m_closeButton, SIGNAL(clicked()),
+            this, SLOT(slotTabClose()));
 }
 
 DVCSmainView::~DVCSmainView()

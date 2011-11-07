@@ -10,7 +10,6 @@ kde4_add_library(kdevplatformdocumentation SHARED ${kdevplatformdocumentation_LI
 install(TARGETS kdevplatformdocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 target_link_libraries(kdevplatformdocumentation
-        ${QT_QTDESIGNER_LIBRARY}
         ${QT_QTWEBKIT_LIBRARY}
         kdevplatforminterfaces)
 

@@ -44,8 +44,8 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
     snippetTree->setContextMenuPolicy( Qt::CustomContextMenu );
     snippetTree->viewport()->installEventFilter( this );
-    connect(snippetTree, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(contextMenu(const QPoint&)));
+    connect(snippetTree, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(contextMenu(QPoint)));
 
     m_proxy = new SnippetFilterProxyModel(this);
 

@@ -54,7 +54,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     setXMLFile("kdevdocumentswitcher.rc");
     kDebug() << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow(); 
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
-    connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
+    connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL(mainWindowAdded(Sublime::MainWindow*)), SLOT(addMainWindow(Sublime::MainWindow*)) );
     
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
     forwardAction->setText( i18n( "Last Used Views" ) );
@@ -77,8 +77,8 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->setSelectionMode( QAbstractItemView::SingleSelection );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
-    connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
-    connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
+    connect( view, SIGNAL(clicked(QModelIndex)), SLOT(switchToView(QModelIndex)) );
+    connect( view, SIGNAL(activated(QModelIndex)), SLOT(switchToView(QModelIndex)) );
     
     model = new QStandardItemModel( view );
     view->setModel( model );    

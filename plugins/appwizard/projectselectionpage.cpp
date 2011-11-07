@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>                    *
+ *   Copyright 2011 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,21 +31,29 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 {
     ui = new Ui::ProjectSelectionPage();
     ui->setupUi(this);
+    setContentsMargins(0,0,0,0);
+    ui->descriptionContent->setBackgroundRole(QPalette::Base);
+    ui->descriptionContent->setForegroundRole(QPalette::Text);
     ui->templateView->setModel(templatesModel);
+    ui->templateView->setFocus();
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
 
     ui->locationValidLabel->setText(QString(" "));
     
-    connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(const QString&)),
-             this, SLOT(urlEdited() ));
-    connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
-             this, SLOT(urlEdited() ));
-    connect( ui->templateView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( itemChanged( const QModelIndex&, const QModelIndex& ) ) );
-    connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
-             this, SLOT( nameChanged() ) );
+    connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(QString)),
+             this, SLOT(urlEdited()));
+    connect( ui->locationUrl, SIGNAL(urlSelected(KUrl)),
+             this, SLOT(urlEdited()));
+    connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
+             this, SLOT(nameChanged()) );
+    
+    
+    connect( ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(templateFamilyChanged(QModelIndex,QModelIndex)) );
+    connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
+             this, SLOT(templateChanged(int)) );
 }
 
 
@@ -60,22 +69,54 @@ ProjectSelectionPage::~ProjectSelectionPage()
     delete ui;
 }
 
-void ProjectSelectionPage::itemChanged( const QModelIndex& current, const QModelIndex& )
+void ProjectSelectionPage::templateFamilyChanged(const QModelIndex& current, const QModelIndex& )
+{
+    ui->templatesIconView->setModel(m_templatesModel);
+    ui->templatesIconView->setRootIndex(current);
+
+    connect( ui->templatesIconView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(typeChanged(QModelIndex)) );
+
+    ui->templatesIconView->setCurrentIndex(m_templatesModel->index(0,0, current));
+}
+
+void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
+{
+    bool hasChildren = idx.model()->rowCount(idx)>0;
+    if(hasChildren) {
+        ui->templateType->setModel(m_templatesModel);
+        ui->templateType->setRootModelIndex(idx);
+        ui->templateType->setCurrentIndex(0);
+    } else
+        itemChanged(idx);
+    
+    ui->templateType->setVisible(hasChildren);
+}
+
+void ProjectSelectionPage::templateChanged(int current)
+{
+    QModelIndex idx=m_templatesModel->index(current, 0, ui->templateType->rootModelIndex());
+    itemChanged(idx);
+}
+
+void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
     KStandardDirs* dirs = m_templatesModel->plugin()->componentData().dirs();
-    QString picPath = dirs->findResource("apptemplate_previews", m_templatesModel->data( current, Qt::UserRole+2 ).toString() );
+    QString picPath = dirs->findResource("apptemplate_previews", current.data( Qt::UserRole+2 ).toString() );
     if( picPath.isEmpty() ) 
     {
         picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
     }
     ui->preview->setPixmap( QPixmap( picPath ) );
-    ui->description->setText( m_templatesModel->data( current ).toString() );
+    ui->description->setText( current.data( Qt::UserRole+4 ).toString()+"\n"+current.data( Qt::UserRole+3 ).toString() );
     validateData();
+    
+    ui->propertiesBox->setEnabled(true);
 }
 
 QString ProjectSelectionPage::selectedTemplate()
 {
-    QStandardItem *item = m_templatesModel->itemFromIndex(ui->templateView->currentIndex());
+    QStandardItem *item = getCurrentItem();
     if (item)
         return item->data().toString();
     else
@@ -151,7 +192,7 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    QStandardItem* item = getCurrentItem();
     if( item && !item->hasChildren() )
     {
         ui->locationValidLabel->setText( QString(" ") );
@@ -202,6 +243,21 @@ QString ProjectSelectionPage::pathUp(const QString& aPath)
     tPath = tPath.remove(tIndex, tPath.length() - tIndex);
     return tPath;
 }
+
+QStandardItem* ProjectSelectionPage::getCurrentItem() const
+{
+    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    if ( item && item->hasChildren() )
+        item = m_templatesModel->itemFromIndex( ui->templatesIconView->currentIndex() );
+    if ( item && item->hasChildren() )
+    {
+        const int currect = ui->templateType->currentIndex();
+        const QModelIndex idx = m_templatesModel->index( currect, 0, ui->templateType->rootModelIndex() );
+        item = m_templatesModel->itemFromIndex(idx);
+    }
+    return item;
+}
+
 
 bool ProjectSelectionPage::shouldContinue()
 {

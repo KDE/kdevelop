@@ -2,6 +2,7 @@
 project(KDevSubversionPlugin)
 
 add_subdirectory(tests)
+add_subdirectory(icons)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
 
@@ -84,7 +85,6 @@ kde4_add_plugin(kdevsubversion ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_
 
 target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}
-                    ${QT_QTDESIGNER_LIBRARY}
                     ${KDE4_KDEUI_LIBS}
                     ${KDE4_KIO_LIBS}
                     ${KDE4_KTEXTEDITOR_LIBS}

@@ -44,8 +44,8 @@ void SvnInternalLogJob::run()
     initBeforeRun();
 
     SvnClient cli(m_ctxt);
-    connect( &cli, SIGNAL( logEventReceived( const KDevelop::VcsEvent& ) ),
-             this, SIGNAL(logEvent( const KDevelop::VcsEvent&) ) );
+    connect( &cli, SIGNAL(logEventReceived(KDevelop::VcsEvent)),
+             this, SIGNAL(logEvent(KDevelop::VcsEvent)) );
     try
     {
         QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
@@ -135,8 +135,8 @@ void SvnLogJob::start()
         setErrorText( i18n( "Not enough information to log location" ) );
     }else
     {
-        connect( m_job, SIGNAL(logEvent(const KDevelop::VcsEvent&)),
-               this, SLOT(logEventReceived(const KDevelop::VcsEvent&)), Qt::QueuedConnection );
+        connect( m_job, SIGNAL(logEvent(KDevelop::VcsEvent)),
+               this, SLOT(logEventReceived(KDevelop::VcsEvent)), Qt::QueuedConnection );
         kDebug(9510) << "logging url:" << m_job->location();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }

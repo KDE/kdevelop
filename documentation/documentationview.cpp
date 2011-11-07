@@ -39,8 +39,8 @@
 
 using namespace KDevelop;
 
-DocumentationView::DocumentationView(QWidget* parent)
-    : QWidget(parent)
+DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
+    : QWidget(parent), mProvidersModel(m)
 {
     setWindowIcon(KIcon("documentation"));
     setLayout(new QVBoxLayout(this));
@@ -64,15 +64,7 @@ DocumentationView::DocumentationView(QWidget* parent)
     mActions->addAction(KIcon("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
     mProviders->setFocusPolicy(Qt::NoFocus);
-    mProvidersModel=new ProvidersModel(mProviders);
-    mProviders->setModel(mProvidersModel);
-    foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
-                SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
-    }
     
-    connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
-    connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     mIdentifiers=new KLineEdit(mActions);
     mIdentifiers->setClearButtonShown(true);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
@@ -96,6 +88,19 @@ DocumentationView::DocumentationView(QWidget* parent)
     layout()->addWidget(mActions);
     layout()->addWidget(new QWidget(this));
     layout()->addWidget(mFindDoc);
+    
+    QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
+}
+
+void DocumentationView::initialize()
+{
+    mProviders->setModel(mProvidersModel);
+    connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
+    foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
+                SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
+    }
+    connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     
     if(mProvidersModel->rowCount()>0)
         changedProvider(0);

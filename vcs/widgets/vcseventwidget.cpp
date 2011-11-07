@@ -198,15 +198,15 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
     header->setResizeMode( 2, QHeaderView::ResizeToContents );
     header->setResizeMode( 3, QHeaderView::Stretch );
 
-    connect( d->m_ui->eventView, SIGNAL( clicked( const QModelIndex& ) ),
-             this, SLOT( eventViewClicked( const QModelIndex& ) ) );
+    connect( d->m_ui->eventView, SIGNAL(clicked(QModelIndex)),
+             this, SLOT(eventViewClicked(QModelIndex)) );
     connect( d->m_ui->eventView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
              this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));
-    connect( d->m_ui->eventView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
-             this, SLOT( eventViewCustomContextMenuRequested( const QPoint& ) ) );
+    connect( d->m_ui->eventView, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(eventViewCustomContextMenuRequested(QPoint)) );
 
-    connect( d->m_job, SIGNAL(resultsReady( KDevelop::VcsJob*) ),
-             this, SLOT( jobReceivedResults( KDevelop::VcsJob* ) ) );
+    connect( d->m_job, SIGNAL(resultsReady(KDevelop::VcsJob*)),
+             this, SLOT(jobReceivedResults(KDevelop::VcsJob*)) );
     ICore::self()->runController()->registerJob( d->m_job );
 }
 

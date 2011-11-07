@@ -281,29 +281,29 @@ void PatchReviewToolView::showEditDialog() {
     
     m_editPatch.exportReview->setMenu(exportMenu);
     
-    connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
-    connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
-    connect( m_editPatch.filesList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( fileDoubleClicked( const QModelIndex& ) ) );
+    connect( m_editPatch.previousHunk, SIGNAL(clicked(bool)), this, SLOT(prevHunk()) );
+    connect( m_editPatch.nextHunk, SIGNAL(clicked(bool)), this, SLOT(nextHunk()) );
+    connect( m_editPatch.filesList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(fileDoubleClicked(QModelIndex)) );
     
     connect( m_editPatch.cancelReview, SIGNAL(clicked(bool)), m_plugin, SLOT(cancelReview()) );
     connect( m_editPatch.finishReview, SIGNAL(clicked(bool)), this, SLOT(finishReview()) );
-    //connect( m_editPatch.cancelButton, SIGNAL( pressed() ), this, SLOT( slotEditCancel() ) );
+    //connect( m_editPatch.cancelButton, SIGNAL(pressed()), this, SLOT(slotEditCancel()) );
 
-    //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
+    //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
     connect( m_editPatch.applied, SIGNAL(stateChanged(int)), SLOT(slotAppliedChanged(int)) );
-    connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
+    connect( m_editPatch.filename, SIGNAL(textChanged(QString)), SLOT(slotEditFileNameChanged()) );
 
     
     
     m_editPatch.baseDir->setMode(KFile::Directory);
 
-    connect( m_editPatch.command, SIGNAL( textChanged( const QString& ) ), this, SLOT(slotEditCommandChanged()) );
-//   connect( m_editPatch.commandToFile, SIGNAL( clicked( bool ) ), this, SLOT( slotToFile() ) );
+    connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
+//   connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
 
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT(slotEditFileNameChanged()) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL(returnPressed()), this, SLOT(slotEditFileNameChanged()) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL(editingFinished()), this, SLOT(slotEditFileNameChanged()) );
+    connect( m_editPatch.filename, SIGNAL(urlSelected(KUrl)), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
 //     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
@@ -950,11 +950,11 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
   : m_doc( kdoc ), m_plugin(plugin), m_model(model), m_applying(false)
 {
-//     connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+//     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
     connect( kdoc->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)) );
-    connect( kdoc->textDocument(), SIGNAL(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)), this, SLOT(textChanged(KTextEditor::Document*, const KTextEditor::Range&, const KTextEditor::Range&)) );
-    connect( kdoc->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)), this, SLOT(textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString&)) );
-    connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+    connect( kdoc->textDocument(), SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)), this, SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)) );
+    connect( kdoc->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), this, SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)) );
+    connect( kdoc->textDocument(), SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
 
     KTextEditor::Document* doc = kdoc->textDocument();
     if ( doc->lines() == 0 )
@@ -962,7 +962,7 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
 
     connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)), this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
-    connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+    connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
     
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
@@ -1542,7 +1542,7 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
-    connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
+    connect( m_updateKompareTimer, SIGNAL(timeout()), this, SLOT(updateKompareModel()) );
     
     setPatch(IPatchSource::Ptr(new LocalPatchSource));
 }

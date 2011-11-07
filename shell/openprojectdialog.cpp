@@ -43,27 +43,37 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     resize(QSize(700, 500));
     
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    KPageWidgetItem* currentPage;
     start.adjustPath(KUrl::AddTrailingSlash);
-    sourcePageWidget = new ProjectSourcePage( start, this );
-    connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
-    sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+
+    if( fetch ) {
+        sourcePageWidget = new ProjectSourcePage( start, this );
+        connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
+        sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+        currentPage = sourcePage;
+    }
     
     openPageWidget = new OpenProjectPage( start, this );
-    connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
+    connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
+    connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
     openPage = addPage( openPageWidget, i18n("Select the project") );
     
+    if( !fetch ) {
+        currentPage = openPage;
+    }
+
     QWidget* page = new ProjectInfoPage( this );
-    connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
-    connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
+    connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
+    connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
     projectInfoPage = addPage( page, i18n("Project information") );
     
-    setValid( sourcePage, true );
+    setValid( sourcePage, false );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
     
-    setCurrentPage( fetch ? sourcePage : openPage );
+    setCurrentPage( currentPage );
 }
 
 void OpenProjectDialog::validateSourcePage(bool valid)
@@ -168,8 +178,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
                 if( isDir ) {
                     // If a dir was selected fetch all files in it
                     KIO::ListJob* job = KIO::listDir( m_url );
-                    connect( job, SIGNAL(entries(KIO::Job*, const KIO::UDSEntryList&)), 
-                                  SLOT(storeFileList(KIO::Job*, const KIO::UDSEntryList&)));
+                    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), 
+                                  SLOT(storeFileList(KIO::Job*,KIO::UDSEntryList)));
                     KIO::NetAccess::synchronousRun( job, Core::self()->uiController()->activeMainWindow() );
                 } else {
                     // Else we'lll just take the given file
@@ -203,6 +213,22 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     }
     validateProjectInfo();
     setValid( openPage, true );
+}
+
+void OpenProjectDialog::openPageAccepted()
+{
+    if ( isValid( openPage ) )
+    {
+        ///TODO: cleanup to just call next() once we depend on kde 4.7.3 or higher
+        ///      requires bugfix in kdelibs, workaround for now
+        if ( isAppropriate( projectInfoPage ) )
+        {
+            next();
+        } else
+        {
+            accept();
+        }
+    }
 }
 
 void OpenProjectDialog::validateProjectName( const QString& name )

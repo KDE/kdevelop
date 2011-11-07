@@ -47,7 +47,7 @@ struct AreaPrivate {
         controller = p.controller;
         toolViewPositions.clear();
         desiredToolViews = p.desiredToolViews;
-        shownToolView = p.shownToolView;
+        shownToolViews = p.shownToolViews;
         workingSet = p.workingSet;
 
         title = p.title;
@@ -89,7 +89,7 @@ struct AreaPrivate {
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;
     QMap<QString, Sublime::Position> desiredToolViews;
-    QMap<Sublime::Position, QString> shownToolView;
+    QMap<Sublime::Position, QStringList> shownToolViews;
     QMap<Sublime::Position, int> thickness;
     QString iconName;
     QString workingSet;
@@ -128,15 +128,15 @@ Area::Area(const Area &area)
 
 void Area::initialize()
 {
-    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*, Sublime::View*)));
-    connect(this, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-            d->controller, SLOT(notifyToolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*, Sublime::Position)));
-    connect(this, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
+            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*,Sublime::View*)));
+    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
+            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
+    connect(this, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
+            d->controller, SLOT(notifyToolViewAdded(Sublime::View*,Sublime::Position)));
+    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
+            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*,Sublime::Position)));
+    connect(this, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
             d->controller, SIGNAL(toolViewMoved(Sublime::View*)));
 
     /* In theory, ownership is passed to us, so should not bother detecting
@@ -167,7 +167,7 @@ void Area::addView(View *view, AreaIndex *index, View *after)
         after = activeView();
     }
     index->add(view, after);
-    connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
+    connect(view, SIGNAL(positionChanged(Sublime::View*,int)), this, SLOT(positionChanged(Sublime::View*,int)));
     kDebug() << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
     emit viewAdded(index, view);
@@ -306,10 +306,10 @@ void Area::save(KConfigGroup& group) const
     }
     group.writeEntry("desired views", desired);
     kDebug() << "save " << this << "wrote" << group.readEntry("desired views", "");
-    group.writeEntry("view on left", shownToolView(Sublime::Left));
-    group.writeEntry("view on right", shownToolView(Sublime::Right));
-    group.writeEntry("view on top", shownToolView(Sublime::Top));
-    group.writeEntry("view on bottom", shownToolView(Sublime::Bottom));
+    group.writeEntry("view on left", shownToolViews(Sublime::Left));
+    group.writeEntry("view on right", shownToolViews(Sublime::Right));
+    group.writeEntry("view on top", shownToolViews(Sublime::Top));
+    group.writeEntry("view on bottom", shownToolViews(Sublime::Bottom));
     group.writeEntry("thickness left", thickness(Sublime::Left));
     group.writeEntry("thickness right", thickness(Sublime::Right));
     group.writeEntry("thickness bottom", thickness(Sublime::Bottom));
@@ -336,12 +336,12 @@ void Area::load(const KConfigGroup& group)
             d->desiredToolViews[id] = pos;
         }
     }
-    setShownToolView(Sublime::Left, group.readEntry("view on left", QString()));
-    setShownToolView(Sublime::Right, 
-                     group.readEntry("view on right", QString()));
-    setShownToolView(Sublime::Top, group.readEntry("view on top", QString()));
-    setShownToolView(Sublime::Bottom,
-                     group.readEntry("view on bottom", QString()));
+    setShownToolViews(Sublime::Left, group.readEntry("view on left", QStringList()));
+    setShownToolViews(Sublime::Right,
+                     group.readEntry("view on right", QStringList()));
+    setShownToolViews(Sublime::Top, group.readEntry("view on top", QStringList()));
+    setShownToolViews(Sublime::Bottom,
+                     group.readEntry("view on bottom", QStringList()));
     setThickness(Sublime::Left, group.readEntry("thickness left", -1));
     setThickness(Sublime::Right, group.readEntry("thickness right", -1));
     setThickness(Sublime::Bottom, group.readEntry("thickness bottom", -1));
@@ -355,14 +355,14 @@ bool Area::wantToolView(const QString& id)
     return (d->desiredToolViews.contains(id));
 }
 
-void Area::setShownToolView(Sublime::Position pos, const QString& id)
+void Area::setShownToolViews(Sublime::Position pos, const QStringList& ids)
 {
-    d->shownToolView[pos] = id;
+    d->shownToolViews[pos] = ids;
 }
 
-QString Area::shownToolView(Sublime::Position pos) const
+QStringList Area::shownToolViews(Sublime::Position pos) const
 {
-    return d->shownToolView[pos];
+    return d->shownToolViews[pos];
 }
 
 void Area::setDesiredToolViews(
@@ -427,22 +427,23 @@ bool Area::closeView(View* view, bool silent)
 
     QWeakPointer<Document> doc = view->document();
 
-    
+    // We don't just delete the view, because if silent is false, we might need to ask the user.
     if(doc)
     {
-        int otherViewsInCurrentWorkingSet = 0;
-        int viewsInOtherWorkingSet = 0;
+        kDebug() << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
+        int viewsInCurrentArea = 0; // Number of views for the same document in the current area
+        int viewsInOtherAreas = 0; // Number of views for the same document in other areas
 
         foreach(View* otherView, doc.data()->views())
         {
             Area* area = controller()->areaForView(otherView);
-            if(area == this && otherView != view)
-                otherViewsInCurrentWorkingSet += 1;
-            if(!area || (area != this && area->workingSet() != workingSet()))
-                viewsInOtherWorkingSet += 1;
+            if(area == this)
+                viewsInCurrentArea += 1;
+            if(!area || (area != this))
+                viewsInOtherAreas += 1;
         }
 
-        if(otherViewsInCurrentWorkingSet == 0 && viewsInOtherWorkingSet == 0)
+        if(viewsInCurrentArea == 1 && viewsInOtherAreas == 0)
         {
             alreadyClosingViews = doc.data()->views().toSet();
             bool ret = doc.data()->closeDocument(silent);

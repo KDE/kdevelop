@@ -66,14 +66,14 @@ CommandExecutor::CommandExecutor( const QString& command, QObject* parent )
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
     d->m_lineMaker = new ProcessLineMaker( d->m_process );
     d->m_command = command;
-    connect( d->m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             this, SIGNAL( receivedStandardOutput( const QStringList& ) ) );
-    connect( d->m_lineMaker, SIGNAL(receivedStderrLines( const QStringList& ) ),
-             this, SIGNAL( receivedStandardError( const QStringList& ) ) );
-    connect( d->m_process, SIGNAL( error( QProcess::ProcessError ) ),
-             this, SLOT( procError( QProcess::ProcessError ) ) );
-    connect( d->m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
+    connect( d->m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+             this, SIGNAL(receivedStandardOutput(QStringList)) );
+    connect( d->m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
+             this, SIGNAL(receivedStandardError(QStringList)) );
+    connect( d->m_process, SIGNAL(error(QProcess::ProcessError)),
+             this, SLOT(procError(QProcess::ProcessError)) );
+    connect( d->m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(procFinished(int,QProcess::ExitStatus)) );
 }
 
 

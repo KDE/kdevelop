@@ -32,12 +32,13 @@
 
 using namespace KDevelop;
 
-GrepOutputViewFactory::GrepOutputViewFactory()
+GrepOutputViewFactory::GrepOutputViewFactory(GrepViewPlugin* plugin)
+: m_plugin(plugin)
 {}
 
 QWidget* GrepOutputViewFactory::create(QWidget* parent)
 {
-    return new GrepOutputView(parent);
+    return new GrepOutputView(parent, m_plugin);
 }
 
 Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
@@ -53,8 +54,15 @@ QString GrepOutputViewFactory::id() const
 
 const int GrepOutputView::HISTORY_SIZE = 5;
 
-GrepOutputView::GrepOutputView(QWidget* parent)
+GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
   : QWidget(parent)
+  , m_next(0)
+  , m_prev(0)
+  , m_collapseAll(0)
+  , m_expandAll(0)
+  , m_clearSearchHistory(0)
+  , m_statusLabel(0)
+  , m_plugin(plugin)
 {
     Ui::GrepOutputView::setupUi(this);
 
@@ -93,8 +101,8 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     
     modelSelector->setEditable(false);
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(modelSelector, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(modelSelectorContextMenu(const QPoint&)));
+    connect(modelSelector, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(modelSelectorContextMenu(QPoint)));
     connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
     
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
@@ -158,7 +166,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
-    connect(newModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+    connect(newModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(rowsRemoved()));
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
@@ -222,11 +230,6 @@ void GrepOutputView::changeModel(int index)
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
-void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
-{
-    m_plugin = plugin;
-}
-
 void GrepOutputView::setMessage(const QString& msg)
 {
     m_statusLabel->setText(msg);
@@ -280,6 +283,10 @@ void GrepOutputView::expandElements(const QModelIndex&)
 
 void GrepOutputView::selectPreviousItem()
 {
+    if (!model()) {
+        return;
+    }
+
     QModelIndex prev_idx = model()->previousItemIndex(resultsTreeView->currentIndex());
     if (prev_idx.isValid()) {
         resultsTreeView->setCurrentIndex(prev_idx);
@@ -289,6 +296,10 @@ void GrepOutputView::selectPreviousItem()
 
 void GrepOutputView::selectNextItem()
 {
+    if (!model()) {
+        return;
+    }
+
     QModelIndex next_idx = model()->nextItemIndex(resultsTreeView->currentIndex());
     if (next_idx.isValid()) {
         resultsTreeView->setCurrentIndex(next_idx);
@@ -299,12 +310,11 @@ void GrepOutputView::selectNextItem()
 
 void GrepOutputView::collapseAllItems()
 {
-    // Collapse the first children, which correspond to the files.
-    QModelIndex base = resultsTreeView->model()->index(0, 0);
-    
-    int rows = resultsTreeView->model()->rowCount(base);
-    for(int row = 0; row < rows; ++row)
-        resultsTreeView->collapse(base.child(row, 0));
+    // Collapse everything
+    resultsTreeView->collapseAll();
+
+    // Now reopen the first children, which correspond to the files.
+    resultsTreeView->expand(resultsTreeView->model()->index(0, 0));
 }
 
 void GrepOutputView::expandAllItems()

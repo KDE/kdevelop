@@ -67,8 +67,8 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     d->m_patchSource = patchSource;
     d->m_model = new VcsFileChangesModel( this, true );
     d->ui.files->setModel( d->m_model );
-    connect(this, SIGNAL( okClicked() ), SLOT( ok() ) );
-    connect(this, SIGNAL( cancelClicked() ), SLOT( cancel() ) );
+    connect(this, SIGNAL(okClicked()), SLOT(ok()) );
+    connect(this, SIGNAL(cancelClicked()), SLOT(cancel()) );
 }
 
 VcsCommitDialog::~VcsCommitDialog()

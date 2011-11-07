@@ -42,6 +42,7 @@ private slots:
     void complexViewAdditionAndDeletion();
     void toolViewAdditionAndDeletion();
     void testAddingViewAfter();
+    void splitViewActiveTabsTest();
 
 private:
     void checkArea1(Sublime::MainWindow *mw);
@@ -58,6 +59,10 @@ private:
     Sublime::Area *m_area2;
     Sublime::Area *m_area3;
 
+    Sublime::View *m_pView111;
+    Sublime::View *m_pView121;
+    Sublime::View *m_pView122;
+    Sublime::View *m_pView131;
 };
 
 #endif

@@ -312,5 +312,20 @@ unsigned int IndexedString::hashString(const char* str, unsigned short length) {
   return running.hash;
 }
 
+uint IndexedString::indexForString( const char* str, short unsigned length, uint hash) {
+  if(!length)
+    return 0;
+  else if(length == 1)
+    return 0xffff0000 | str[0];
+  else {
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+    return getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+  }
+}
+
+uint IndexedString::indexForString(const QString& str, uint hash) {
+  const QByteArray array(str.toUtf8());
+  return indexForString(array.constBegin(), array.size(), hash);
+}
 
 }

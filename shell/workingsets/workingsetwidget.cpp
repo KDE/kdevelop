@@ -44,8 +44,8 @@ WorkingSetWidget::WorkingSetWidget(MainWindow* parent, Sublime::Area* area)
     : WorkingSetToolButton(0, 0, parent), m_area(area)
 {
     //Queued connect so the change is already applied to the area when we start processing
-    connect(m_area, SIGNAL(changingWorkingSet(Sublime::Area*, QString, QString)), this,
-            SLOT(changingWorkingSet(Sublime::Area*, QString, QString)), Qt::QueuedConnection);
+    connect(m_area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)), this,
+            SLOT(changingWorkingSet(Sublime::Area*,QString,QString)), Qt::QueuedConnection);
 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 

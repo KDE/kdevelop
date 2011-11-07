@@ -64,16 +64,16 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->setSpacing(0);
     KFilePlacesModel* model = new KFilePlacesModel( this );
     urlnav = new KUrlNavigator(model, KUrl( QDir::homePath() ), this );
-    connect(urlnav, SIGNAL(urlChanged(const KUrl& )), SLOT(gotoUrl(const KUrl&)));
+    connect(urlnav, SIGNAL(urlChanged(KUrl)), SLOT(gotoUrl(KUrl)));
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
-    connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
+    connect(dirop, SIGNAL(urlEntered(KUrl)), SLOT(updateNav(KUrl)));
     connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
     l->addWidget(dirop);
 
-    connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
+    connect( dirop, SIGNAL(fileSelected(KFileItem)), this, SLOT(openFile(KFileItem)) );
 
     setupActions();
 }

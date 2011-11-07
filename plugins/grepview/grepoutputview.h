@@ -30,10 +30,12 @@ class GrepOutputDelegate;
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    GrepOutputViewFactory();
-    virtual QWidget* create(QWidget *parent = 0);
+    GrepOutputViewFactory(GrepViewPlugin* plugin);
+    virtual QWidget* create(QWidget* parent = 0);
     virtual Qt::DockWidgetArea defaultPosition();
     virtual QString id() const;
+private:
+    GrepViewPlugin* m_plugin;
 };
 
 class GrepOutputView : public QWidget, Ui::GrepOutputView
@@ -41,7 +43,7 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
   Q_OBJECT
 
 public:
-    GrepOutputView(QWidget* parent);
+    GrepOutputView(QWidget* parent, GrepViewPlugin* plugin);
     ~GrepOutputView();
     GrepOutputModel* model();
     
@@ -53,7 +55,6 @@ public:
     GrepOutputModel* renewModel(QString name, QString descriptionOrUrl);
     
     void setMessage(const QString& msg);
-    void setPlugin(GrepViewPlugin *plugin);
 
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );

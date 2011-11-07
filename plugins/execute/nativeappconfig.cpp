@@ -124,14 +124,14 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
-    connect( projectTarget, SIGNAL(currentIndexChanged(const QString&)), SIGNAL(changed()) );
+    connect( projectTarget, SIGNAL(currentIndexChanged(QString)), SIGNAL(changed()) );
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( executablePath->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
-    connect( arguments, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
-    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
+    connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( executablePath, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
     connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );

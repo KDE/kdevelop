@@ -20,6 +20,7 @@
 
 class KJob;
 class GrepJob;
+class GrepOutputViewFactory;
 
 class GrepViewPlugin : public KDevelop::IPlugin
 {
@@ -28,6 +29,7 @@ class GrepViewPlugin : public KDevelop::IPlugin
 public:
     GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPlugin();
+    virtual void unload();
 
     void rememberSearchDirectory(QString const & directory);
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
@@ -39,6 +41,7 @@ public:
      */
     GrepJob *newGrepJob();
     GrepJob *grepJob();
+    GrepOutputViewFactory* toolViewFactory() const;
 public Q_SLOTS:
     ///@param pattern the pattern to search
     ///@param directory the directory, or a semicolon-separated list of files
@@ -54,6 +57,7 @@ private:
     GrepJob *m_currentJob;
     QString m_directory;
     QString m_contextMenuDirectory;
+    GrepOutputViewFactory* m_factory;
 };
 
 #endif

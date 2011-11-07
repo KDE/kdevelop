@@ -109,11 +109,11 @@ function help! {
     echo ""
     echo "Examples:"
     echo "open! file1 / file2                 - The active view is split horizontally."
-         "                                      file1 is opened in the left view, and file2 in the right view."
+    echo "                                      file1 is opened in the left view, and file2 in the right view."
     echo "open! file1 / [ file2 - file3 ]     - The active view is split horizontally, and the right split-view is split vertically."
-         "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
+    echo "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
     echo "open! / file1                       - The active view is split horizontally."
-         "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
+    echo "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
     fi
     
     if [ "$1" == "remote" ]; then
@@ -131,7 +131,7 @@ function help! {
     
     if [ "$1" == "env" ]; then
       echo "env!                                 - List all available shell environment-ids for this session."
-      echo "updateenv! [id]                      - Set the shell environmnet-id for this session to the given id, or update the current one."
+      echo "setenv! [id]                         - Set the shell environmnet-id for this session to the given id, or update the current one."
       echo "showenv! [id]                        - Show the current shell environment or the one with the optionally given id."
       echo "editenv! [id]                        - Edit the current shell environment or the one with the optionally given id."
     fi
@@ -189,8 +189,8 @@ function ctc! {
     copytoclient! $@
 }
 
-function ue! {
-    updateenv! $@
+function sev! {
+    setenv! $@
 }
 
 function ee! {
@@ -344,11 +344,15 @@ function mapFileToClient {
             # If we are forwarding, map it to the client somehow.
             if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
                     # We can eventually map the file using the fish protocol
-                    if ! [[ "$KDEV_SSH_FORWARD_CHAIN" == *\,* ]]; then
-                        # We can only map through fish if the forward-chains contains no comma, which means that
-                        # we forward only once.
-                        FILE="fish://$KDEV_SSH_FORWARD_CHAIN$FILE"
+                    FISH_HOST=$KDEV_SSH_FORWARD_CHAIN
+                    if [[ "$FISH_HOST" == *\,* ]]; then
+                        # Extracts everything before the first comma
+                        FISH_HOST=$(echo $FISH_HOST | sed 's/\([^,]*\),\(.*\)/\1/')
+                        echo "ssh chain is too long: $KDEV_SSH_FORWARD_CHAIN mapping anyway using $FISH_HOST" 1>&2
                     fi
+                    # Theoretically, we can only map through fish if the forward-chains contains no comma, which means that
+                    # we forward only once. Try anyway, there might be the same filesystem on the whole forward-chain.
+                    FILE="fish://$FISH_HOST$FILE"
             fi
         fi
     fi
@@ -640,8 +644,14 @@ function ssh! {
                    -i"
 
 
-    
-    kill %1 # Stop the dbus forwarding subprocess
+
+    if [ "$FORWARD_DBUS_FROM_PORT" ]; then
+        # We created the 2nd subprocess
+        kill %2 # Stop the dbus forwarding subprocess
+    else
+        # We created the 1st subprocess
+        kill %1 # Stop the dbus forwarding subprocess
+    fi
 }
 
 # A version of ssh! that preserves the current working directory
@@ -674,7 +684,7 @@ function editenv! {
     openDocument "$(getCurrentShellEnvPath $ENV_ID)"
 }
 
-function updateenv! {
+function setenv! {
     if [ "$1" ]; then
         KDEV_SHELL_ENVIRONMENT_ID=$1
     fi
@@ -683,6 +693,10 @@ function updateenv! {
     local TEMP=$(mktemp)
     RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
     echo "$RESULT" > $TEMP
+    if ! [ "$RESULT" ]; then
+        # If the environment shell file doesn't exist, create it
+        executeInAppSync "if ! [ -e $(getCurrentShellEnvPath) ]; then touch $(getCurrentShellEnvPath); fi" ""
+    fi
     source $TEMP
     rm $TEMP
 }
@@ -705,7 +719,7 @@ if [ "$FORWARD_DBUS_FROM_PORT" ]; then
     keepForwardingDBusFromTCPSocket
 fi
 
-updateenv!
+setenv!
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 

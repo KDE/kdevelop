@@ -42,6 +42,7 @@
 #include "controller.h"
 #include "mainwindow.h"
 #include "ideal.h"
+#include "holdupdates.h"
 #include <KToolBar>
 #include <KSelectAction>
 #include <ktoggleaction.h>
@@ -130,17 +131,17 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     recreateCentralWidget();
 
     connect(idealController,
-            SIGNAL(dockShown(Sublime::View*, Sublime::Position, bool)),
+            SIGNAL(dockShown(Sublime::View*,Sublime::Position,bool)),
             this,
-            SLOT(slotDockShown(Sublime::View*, Sublime::Position, bool)));
+            SLOT(slotDockShown(Sublime::View*,Sublime::Position,bool)));
 
     connect(idealController,
-            SIGNAL(widgetResized(Qt::DockWidgetArea, int)),
+            SIGNAL(widgetResized(Qt::DockWidgetArea,int)),
             this,
-            SLOT(widgetResized(Qt::DockWidgetArea, int)));
+            SLOT(widgetResized(Qt::DockWidgetArea,int)));
 
-   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)),
-            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)));
+   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)),
+            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)));
 }
 
 
@@ -257,8 +258,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
             connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,KMenu*)),
                     d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,KMenu*)));
-            connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*, int)),
-                    d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*, int)));
+            connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)),
+                    d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)));
             connect(container, SIGNAL(closeRequest(QWidget*)),
                     d, SLOT(widgetCloseRequest(QWidget*)), Qt::QueuedConnection);
             splitter->addWidget(container);
@@ -271,11 +272,16 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
-            if (widget && !container->hasWidget(widget))
+            if (widget)
             {
-                container->addWidget(view, position);
-                d->viewContainers[view] = container;
-                d->widgetToView[widget] = view;
+                if(!container->hasWidget(widget))
+                {
+                    container->addWidget(view, position);
+                    d->viewContainers[view] = container;
+                    d->widgetToView[widget] = view;
+                }
+                if(d->activeView == view)
+                    container->setCurrentWidget(widget);
             }
             position++;
         }
@@ -307,15 +313,15 @@ void MainWindowPrivate::reconstruct()
 
     m_mainWindow->blockSignals(true);
 
-    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolView(Sublime::Left) << "\n";
+    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolViews(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
         QString id = view->document()->documentSpecifier();
         if (!id.isEmpty())
         {
             Sublime::Position pos = area->toolViewPosition(view);
-            if (area->shownToolView(pos) == id)
-                idealController->raiseView(view);
+            if (area->shownToolViews(pos).contains(id))
+                idealController->raiseView(view, IdealController::GroupWithOtherViews);
         }
     }
     m_mainWindow->blockSignals(false);
@@ -367,17 +373,31 @@ void MainWindowPrivate::recreateCentralWidget()
     centralWidget->setLayout(layout);
 }
 
+struct ShownToolViewFinder {
+    ShownToolViewFinder() {}
+    Area::WalkerMode operator()(View *v, Sublime::Position /*position*/)
+    {
+        if (v->hasWidget() && v->widget()->isVisible())
+            views << v;
+        return Area::ContinueWalker;
+    }
+    QList<View *> views;
+};
+
 void MainWindowPrivate::
 slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 {
     if (ignoreDockShown)
         return;
 
-    QString id;
-    if (shown)
-        id = view->document()->documentSpecifier();
-    kDebug() << "View " << view->document()->documentSpecifier() << " " << shown;
-    area->setShownToolView(pos, id);
+    ShownToolViewFinder finder;
+    m_mainWindow->area()->walkToolViews(finder, pos);
+
+    QStringList ids;
+    foreach (View *v, finder.views) {
+        ids << v->document()->documentSpecifier();
+    }
+    area->setShownToolViews(pos, ids);
 }
 
 void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
@@ -524,7 +544,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
             if(siblingSplitter)
             {
-                parentSplitter->setUpdatesEnabled(false);
+                HoldUpdates du(parentSplitter);
                 //save sizes and orientation of the sibling splitter
                 parentSplitter->setOrientation(siblingSplitter->orientation());
                 QList<int> sizes = siblingSplitter->sizes();
@@ -545,8 +565,6 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                 delete siblingSplitter;
                 parentSplitter->setSizes(sizes);
             }
-
-            parentSplitter->setUpdatesEnabled(true);
 
             kDebug() << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";

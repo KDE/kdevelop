@@ -52,8 +52,8 @@ void ImportDialog::accept()
 {
     KDevelop::VcsJob *job = m_plugin->init(m_widget->source());
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                m_plugin, SLOT( jobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                m_plugin, SLOT(jobFinished(KJob*)));
         job->start();
     }
     KDialog::accept();

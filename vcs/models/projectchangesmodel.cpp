@@ -47,8 +47,10 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
     
     connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
                                                 SLOT(documentSaved(KDevelop::IDocument*)));
-    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                                                SLOT(itemsAdded(QModelIndex, int, int)));
+    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+                                                SLOT(itemsAdded(QModelIndex,int,int)));
+    
+    connect(ICore::self()->runController(), SIGNAL(jobUnregistered(KJob*)), SLOT(jobUnregistered(KJob*)));
 }
 
 ProjectChangesModel::~ProjectChangesModel()
@@ -67,6 +69,7 @@ void ProjectChangesModel::addProject(IProject* p)
         
         itStatus->setIcon(KIcon(info.icon()));
         itStatus->setText(vcs->name());
+        reload(QList<IProject*>() << p);
     } else {
         it->setEnabled(false);
         itStatus->setEnabled(false);
@@ -193,4 +196,21 @@ void ProjectChangesModel::reloadAll()
 {
     QList< IProject* > projects = ICore::self()->projectController()->projects();
     reload(projects);
+}
+
+void ProjectChangesModel::jobUnregistered(KJob* job)
+{
+    static QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>()
+		<< KDevelop::VcsJob::Add
+		<< KDevelop::VcsJob::Remove
+		<< KDevelop::VcsJob::Pull
+		<< KDevelop::VcsJob::Commit
+		<< KDevelop::VcsJob::Move
+		<< KDevelop::VcsJob::Copy
+		;
+    
+    VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
+    if(vcsjob && readOnly.contains(vcsjob->type())) {
+        reloadAll();
+    }
 }

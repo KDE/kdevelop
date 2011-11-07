@@ -148,7 +148,9 @@ public:
     IdealController(Sublime::MainWindow *mainWindow);
 
     void addView(Qt::DockWidgetArea area, View* view);
-    void raiseView(View* view);
+
+    enum RaiseMode { HideOtherViews, GroupWithOtherViews };
+    void raiseView(View* view, RaiseMode mode = HideOtherViews);
     void showDockWidget(IdealDockWidget* dock, bool show);
     void focusEditor();
     QWidget *statusBarLocation() const;

@@ -278,6 +278,7 @@ public:
 
     virtual ProjectTargetItem *target() const;
     virtual QString iconName() const;
+    virtual void setUrl(const KUrl& );
 };
 
 /**
@@ -372,6 +373,10 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual Qt::DropActions supportedDropActions() const;
 
+    /**
+     * Returns all items for the given URL.
+     */
+    QList<ProjectBaseItem*> itemsForUrl(const KUrl& url);
 private:
     class ProjectModelPrivate* const d;
     friend class ProjectBaseItem;

@@ -37,6 +37,7 @@
 #include "controller.h"
 #include "container.h"
 #include "ideal.h"
+#include "holdupdates.h"
 
 namespace Sublime {
 
@@ -127,9 +128,6 @@ void MainWindow::setArea(Area *area)
 {
     if (d->area)
         disconnect(d->area, 0, this, 0);
-    
-    bool wasEnabled = updatesEnabled();
-    setUpdatesEnabled(false);
 
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
@@ -143,6 +141,7 @@ void MainWindow::setArea(Area *area)
     if (d->area)
         clearArea();
 
+    HoldUpdates hu(this);
     d->area = area;
     d->reconstruct();
     
@@ -154,28 +153,27 @@ void MainWindow::setArea(Area *area)
     initializeStatusBar();
     emit areaChanged(area);
     d->ignoreDockShown = false;
-
-    setUpdatesEnabled(wasEnabled);
-
+    
+    hu.stop();
     // delay loading settings: we need to finish with area activation
     // and only then load mainwindow/dockwidget settings
     // this way dock sizes get properly restored
     QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
 
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
+        this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
     connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)),
-        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*, Sublime::View*)));
+        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*,Sublime::View*)));
     connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
         this, SLOT(raiseToolView(Sublime::View*)));
-    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-        this, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-        this, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
-        this, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
+        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)));
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
+        this, SLOT(toolViewAdded(Sublime::View*,Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
+        this, SLOT(aboutToRemoveToolView(Sublime::View*,Sublime::Position)));
+    connect(area, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
+        this, SLOT(toolViewMoved(Sublime::View*,Sublime::Position)));
      connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
         this, SLOT(setupAreaSelector()));
 }
@@ -274,7 +272,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::loadSettings()
 {
-    setUpdatesEnabled(false);
+    HoldUpdates hu(this);
 
     kDebug(9504) << "loading settings for " << (area() ? area()->objectName() : "");
     QString group = "MainWindow";
@@ -357,8 +355,8 @@ void MainWindow::loadSettings()
 
     cg.sync();
 
-    setUpdatesEnabled(true);
-
+    hu.stop();
+    
     emit settingsLoaded();
 }
 

@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kstandarddirs.h>
-#include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
 
@@ -35,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <util/fileutils.h>
 
 namespace KDevelop
 {
@@ -163,7 +163,7 @@ QUuid Session::id() const
 
 void Session::deleteFromDisk()
 {
-    KIO::NetAccess::del( KUrl( d->sessionDirectory ), Core::self()->uiController()->activeMainWindow() );
+    removeDirectory(d->sessionDirectory);
 }
 
 void Session::setName( const QString& newname )

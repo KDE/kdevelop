@@ -128,7 +128,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
 
-    connect(m_ui->projectTreeView, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
+    connect(m_ui->projectTreeView, SIGNAL(activateUrl(KUrl)), this, SLOT(openUrl(KUrl)));
 
 //     m_filters = new KLineEdit(this);
 //     m_filters->setClearButtonShown(true);
@@ -154,11 +154,11 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
             this, SLOT(filterChanged(QString)));
     addAction(filterAction);
 
-    connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
-             this, SLOT(selectionChanged() ) );
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
+    connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(selectionChanged()) );
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)),
              SLOT(updateSyncAction()));
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*) ),
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
              SLOT(updateSyncAction()));
     connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), SIGNAL(areaChanged(Sublime::Area*)),
              SLOT(updateSyncAction()));

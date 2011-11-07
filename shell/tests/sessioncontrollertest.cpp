@@ -118,7 +118,7 @@ void SessionControllerTest::renameSession()
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     verifySessionDir( s );
-    QSignalSpy spy(s, SIGNAL(nameChanged(const QString&, const QString&)));
+    QSignalSpy spy(s, SIGNAL(nameChanged(QString,QString)));
     s->setName( newSessionName );
     QCOMPARE( newSessionName, s->name() );
     
@@ -138,7 +138,7 @@ void SessionControllerTest::canRenameActiveSession()
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     m_sessionCtrl->loadSession( sessionName );
-    QSignalSpy spy(s, SIGNAL(nameChanged(const QString&, const QString&)));
+    QSignalSpy spy(s, SIGNAL(nameChanged(QString,QString)));
     s->setName( newSessionName );
     QCOMPARE( newSessionName, s->name() );
     
@@ -158,7 +158,7 @@ void SessionControllerTest::deleteSession()
     Session* s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
-    QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(const QString&)));
+    QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
     m_sessionCtrl->deleteSession( sessionName );
     QCOMPARE( sessionCount, m_sessionCtrl->sessionNames().count() );
 

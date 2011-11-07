@@ -85,6 +85,12 @@ VcsRevision::RevisionType VcsRevision::revisionType() const
     return d->type;
 }
 
+VcsRevision::RevisionSpecialType VcsRevision::specialType() const
+{
+    Q_ASSERT(d->type==Special);
+    return d->value.value<RevisionSpecialType>();
+}
+
 QVariant VcsRevision::revisionValue() const
 {
     return d->value;

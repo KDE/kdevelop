@@ -92,7 +92,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
     
-    connect( lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)), model(), SLOT(appendLines(QStringList)) );
+    connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
     connect( proc, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)) );
 

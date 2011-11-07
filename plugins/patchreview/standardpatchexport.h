@@ -23,13 +23,10 @@
 
 #include <QObject>
 
-namespace KDevelop {
-class IPatchExporter;
-}
-
 class QMenu;
 class QAction;
 class PatchReviewPlugin;
+class StandardExporter;
 
 /**
  * This class contains the minimum patch export interfaces that we won't want to have
@@ -46,12 +43,11 @@ class StandardPatchExport : public QObject
         void addActions(QMenu* m);
         
     public slots:
-        void runKIOExport();
-        void runEMailExport();
+        void runExport();
         
     private:
         PatchReviewPlugin* m_plugin;
-        QList<KDevelop::IPatchExporter*> m_exporters;
+        QList<StandardExporter*> m_exporters;
 };
 
 #endif // STANDARDPATCHEXPORT_H

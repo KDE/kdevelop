@@ -84,9 +84,6 @@ void Manager::init()
         QCoreApplication::exit(1);
     }
 
-    verbose=m_args->isSet("verbose");
-    warnings=m_args->isSet("warnings");
-
     uint features = TopDUContext::VisibleDeclarationsAndContexts;
     if(m_args->isSet("features"))
     {
@@ -145,6 +142,8 @@ void Manager::init()
 
     if ( m_total ) {
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
+        const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
+        std::cout << "parsing with " << threads << " threads" << std::endl;
         if (m_waiting.isEmpty()) {
             std::cout << "ready" << std::endl;
             QApplication::quit();
@@ -214,7 +213,6 @@ QSet< KUrl > Manager::waiting()
 using namespace KDevelop;
 int main(int argc, char** argv)
 {
-    qInstallMsgHandler(messageOutput);
     KAboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
                           "1", ki18n("Duchain builder application"), KAboutData::License_GPL,
                           ki18n( "(c) 2009 David Nolden" ), KLocalizedString(), "http://www.kdevelop.org" );
@@ -232,6 +230,10 @@ int main(int argc, char** argv)
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+    verbose = args->isSet("verbose");
+    warnings = args->isSet("warnings");
+    qInstallMsgHandler(messageOutput);
 
     KApplication app(false);
 

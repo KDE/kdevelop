@@ -20,20 +20,20 @@
 
 #include <QDataStream>
 #include <QUuid>
-
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
-#include <klockfile.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-
-#include <interfaces/icore.h>
-
-#include "../duchain.h"
-#include <interfaces/isession.h>
-
 #include <QApplication>
 #include <QTextStream>
+
+#include <KStandardDirs>
+#include <KComponentData>
+#include <KLockFile>
+#include <KMessageBox>
+#include <KLocale>
+
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
+#include <util/fileutils.h>
+
+#include "../duchain.h"
 
 namespace KDevelop {
 
@@ -181,42 +181,9 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
   m_repositories.remove(repository);
 }
 
-//Recursive delete, copied from a mailing-list
-//Returns true on success
-bool removeDirectory(const QDir &aDir)
-{
-  bool has_err = false;
-  if (aDir.exists())//QDir::NoDotAndDotDot
-  {
-    QFileInfoList entries = aDir.entryInfoList(QDir::NoDotAndDotDot | 
-    QDir::Dirs | QDir::Files);
-    int count = entries.size();
-    for (int idx = 0; ((idx < count) && !has_err); idx++)
-    {
-      QFileInfo entryInfo = entries[idx];
-      QString path = entryInfo.absoluteFilePath();
-      if (entryInfo.isDir())
-      {
-        has_err = !removeDirectory(QDir(path));
-      }
-      else
-      {
-        QFile file(path);
-        if (!file.remove())
-        has_err = true;
-      }
-    }
-    if (!aDir.rmdir(aDir.absolutePath()))
-      has_err = true;
-  }
-  return !has_err;
-}
-
 //After calling this, the data-directory may be a new one
 void ItemRepositoryRegistry::deleteDataDirectory() {
   QMutexLocker lock(&m_mutex);
-  QFileInfo pathInfo(m_path);
-  QDir d(m_path);
 
   //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
   //Instead, the other instance will try to delete the directory as well.
@@ -226,7 +193,7 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   // to be released before deleting a directory that contains these files
   
   m_lock->unlock();
-  bool result = removeDirectory(d);
+  bool result = removeDirectory(m_path);
   Q_ASSERT(result);
   Q_ASSERT(m_lock);
   //Just remove the old directory, and allocate a new one. Probably it'll be the same one.

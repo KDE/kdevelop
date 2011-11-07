@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
+#include <QtGui/QTextEdit>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -50,6 +51,7 @@
 #include <KMessageBox>
 #include <KStandardDirs>
 #include "gitjob.h"
+#include "gitmessagehighlighter.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -282,6 +284,7 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
 VcsJob* GitPlugin::init(const KUrl &directory)
 {
     DVcsJob* job = new DVcsJob(urlDir(directory), this);
+    job->setType(VcsJob::Import);
     *job << "git" << "init";
     return job;
 }
@@ -289,6 +292,7 @@ VcsJob* GitPlugin::init(const KUrl &directory)
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
     DVcsJob* job = new GitCloneJob(urlDir(dest), this);
+    job->setType(VcsJob::Import);
     *job << "git" << "clone" << "--progress" << "--" << source.localUrl().url() << dest;
     return job;
 }
@@ -299,6 +303,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
+    job->setType(VcsJob::Add);
     *job << "git" << "add" << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     return job;
 }
@@ -309,6 +314,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
+    job->setType(VcsJob::Status);
     
     if(m_oldVersion) {
         *job << "git" << "ls-files" << "-t" << "-m" << "-c" << "-o" << "-d" << "-k" << "--directory";
@@ -328,10 +334,18 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     //TODO: control different types
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
-    QString revstr = revisionInterval(srcRevision, dstRevision);
-    if(!revstr.isEmpty())
-        *job << revstr;
+    if(srcRevision.revisionType()==VcsRevision::Special
+        && dstRevision.revisionType()==VcsRevision::Special
+        && srcRevision.specialType()==VcsRevision::Base
+        && dstRevision.specialType()==VcsRevision::Working)
+        *job << "HEAD";
+    else {
+        QString revstr = revisionInterval(srcRevision, dstRevision);
+        if(!revstr.isEmpty())
+            *job << revstr;
+    }
     
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
@@ -345,6 +359,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
         return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
     
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
+    job->setType(VcsJob::Revert);
     *job << "git" << "checkout" << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     
@@ -363,6 +378,7 @@ VcsJob* GitPlugin::commit(const QString& message,
 
     QDir dir = dotGitDirectory(localLocations.front());
     DVcsJob* job = new DVcsJob(dir, this);
+    job->setType(VcsJob::Commit);
     KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     addNotVersionedFiles(dir, files);
     
@@ -404,6 +420,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << files.front().toLocalFile(), KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
         DVcsJob* job = new GitJob(dir, this);
+        job->setType(VcsJob::Remove);
         *job << "git" << "rm" << "-r";
         *job << "--" << files;
         return job;
@@ -416,6 +433,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Log);
     *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/;
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
@@ -429,6 +447,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Log);
     *job << "git" << "log" << "--date=raw" /*<< "--numstat"*/ << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
@@ -441,6 +460,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& r
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
+    job->setType(VcsJob::Annotate);
     *job << "git" << "blame" << "--porcelain";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
@@ -1032,10 +1052,14 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     QStringList versionString = job->output().trimmed().split(' ').last().split('.');
-    static QList<int> minimumVersion = QList<int>() << 1 << 7;
-    
+    static const QList<int> minimumVersion = QList<int>() << 1 << 7;
     kDebug() << "checking git version" << versionString << "against" << minimumVersion;
     m_oldVersion = false;
+    if (versionString.size() < minimumVersion.size()) {
+        m_oldVersion = true;
+        kWarning() << "invalid git version string:" << job->output().trimmed();
+        return;
+    }
     foreach(int num, minimumVersion) {
         QString curr = versionString.takeFirst();
         int valcurr = curr.toInt();
@@ -1199,6 +1223,21 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
             return job;
         }
     }
+}
+
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
+{
+    new GitMessageHighlighter(editor);
+    QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
+    // Some limit on the file size should be set since whole content is going to be read into
+    // the memory. 1Mb seems to be good value since it's rather strange to have so huge commit
+    // message.
+    static const qint64 maxMergeMsgFileSize = 1024*1024;
+    if (!mergeMsgFile.exists() || mergeMsgFile.size() > maxMergeMsgFileSize)
+        return;
+    mergeMsgFile.open(QIODevice::ReadOnly);
+    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.readAll());
+    editor->setPlainText(mergeMsg);
 }
 
 class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget

@@ -53,7 +53,7 @@ ClassTree::ClassTree(QWidget* parent, ClassBrowserPlugin* plugin)
   header()->hide();
   setIndentation(10);
 
-  connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
+  connect(this, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)));
 }
 
 ClassTree::~ClassTree()

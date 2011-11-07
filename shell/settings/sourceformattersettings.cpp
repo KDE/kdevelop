@@ -52,6 +52,7 @@ using KDevelop::ISourceFormatter;
 using KDevelop::SourceFormatterStyle;
 using KDevelop::SourceFormatterController;
 
+
 const QString SourceFormatterSettings::userStylePrefix( "User" );
 
 SourceFormatter::~SourceFormatter()
@@ -154,7 +155,21 @@ void SourceFormatterSettings::load()
             l.formatters.insert( formatter );
         }
     }
+    
+    // Sort the languages, preferring firstly active, then loaded languages
+    QList<QString> sortedLanguages;
+    
+    foreach( KDevelop::ILanguage* language, 
+                KDevelop::ICore::self()->languageController()->activeLanguages() +
+                KDevelop::ICore::self()->languageController()->loadedLanguages() )
+        if( languages.contains( language->name() ) && !sortedLanguages.contains(language->name()) )
+            sortedLanguages.push_back( language->name() );
+
     foreach( const QString& name, languages.keys() )
+        if( !sortedLanguages.contains( name ) )
+            sortedLanguages.push_back( name );
+        
+    foreach( const QString& name, sortedLanguages )
     {
         // Pick the first appropriate mimetype for this language
         KConfigGroup grp = fmtctrl->configuration();
@@ -196,7 +211,7 @@ void SourceFormatterSettings::load()
     cbFormatters->clear();
     styleList->clear();
     chkKateModelines->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
-    foreach( const QString& name, languages.keys() )
+    foreach( const QString& name, sortedLanguages )
     {
         cbLanguages->addItem( name );
     }

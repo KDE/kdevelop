@@ -18,6 +18,7 @@ class ProjectSelectionPage;
 
 class ProjectTemplatesModel;
 class QModelIndex;
+class QStandardItem;
 class KUrl;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
@@ -36,13 +37,18 @@ signals:
     void valid();
     void invalid();
 private slots:
-    void itemChanged( const QModelIndex&, const QModelIndex& );
+    void itemChanged( const QModelIndex& current );
+    void templateFamilyChanged(const QModelIndex&, const QModelIndex&);
     void urlEdited();
     void validateData();
     void nameChanged();
+    void typeChanged(const QModelIndex& idx);
+    void templateChanged(int);
+    
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);
+    inline QStandardItem* getCurrentItem() const;
 
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

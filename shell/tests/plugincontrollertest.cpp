@@ -95,7 +95,7 @@ void PluginControllerTest::pluginInfo()
 void PluginControllerTest::loadUnloadPlugin()
 {
     QSignalSpy spy(m_pluginCtrl, SIGNAL(pluginLoaded(KDevelop::IPlugin*)));
-    QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(const QString&)));
+    QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(QString)));
     QVERIFY(spy.isValid());
     QVERIFY(spyloading.isValid());
     m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );

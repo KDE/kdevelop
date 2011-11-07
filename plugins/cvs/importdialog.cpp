@@ -42,8 +42,8 @@ void ImportDialog::accept()
     KDevelop::VcsJob *job = m_plugin->import(m_widget->message(), m_widget->source(),
                                                 m_widget->destination());
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( jobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                this, SLOT(jobFinished(KJob*)));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }

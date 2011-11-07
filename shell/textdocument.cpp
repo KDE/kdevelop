@@ -295,8 +295,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         if (iface)
         {
             iface->setModifiedOnDiskWarning(true);
-            connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
-                this, SLOT(modifiedOnDisk(KTextEditor::Document*, bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
+            connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
+                this, SLOT(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
 
         notifyTextDocumentCreated();
@@ -673,14 +673,14 @@ void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
 {
     if (d->view)
     {
-        disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
+        disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
         removeChildClient(view);
     }
 
     d->view = view;
     insertChildClient(d->view);
-    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), 
-            this, SLOT(viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
+    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), 
+            this, SLOT(viewStatusChanged(KTextEditor::View*,KTextEditor::Cursor)));
     
     viewStatusChanged(view, view->cursorPosition());
 

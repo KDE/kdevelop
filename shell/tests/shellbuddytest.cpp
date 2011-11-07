@@ -20,6 +20,7 @@
 
 #include <qtest_kde.h>
 
+#include <QtGui/QSplitter>
 #include <QtTest/QtTest>
 
 #include <kactioncollection.h>
@@ -38,6 +39,7 @@
 
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
+#include <sublime/container.h>
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
 #include <iostream>
@@ -372,6 +374,60 @@ void ShellBuddyTest::testMultipleFolders()
     for(int i = 0; i < 3; i++)
         m_documentController->openDocuments()[0]->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void ShellBuddyTest::testsplitViewBuddies()
+{
+    Sublime::MainWindow *pMainWindow = m_uiController->activeSublimeWindow();
+
+    QCOMPARE(m_documentController->openDocuments().count(), 0);
+    enableBuddies();
+    enableOpenAfterCurrent();
+
+    KTempDir dirA;
+
+    createFile(dirA, "classA.cpp");
+    createFile(dirA, "classA.h");
+
+    Sublime::Area *pCodeArea = m_uiController->activeArea();
+    QVERIFY(pCodeArea);
+
+    IDocument *pClassAHeader = m_documentController->openDocument(KUrl(dirA.name() + "classA.h"));
+    QVERIFY(pClassAHeader);
+    pMainWindow->activeView()->setObjectName("classA.h");
+
+    // now, create a splitted view of the active view (pClassAHeader)
+    Sublime::View *pNewView = pMainWindow->activeView()->document()->createView();
+    pNewView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
+    pCodeArea->addView(pNewView, pMainWindow->activeView(), Qt::Vertical);
+    // and activate it
+    pMainWindow->activateView(pNewView);
+
+    // get the current view's container from the mainwindow
+    QWidget *pCentral = pMainWindow->centralWidget();
+    QVERIFY(pCentral);
+    QVERIFY(pCentral->inherits("QWidget"));
+
+    QWidget *pSplitter = pCentral->findChild<QSplitter*>();
+    QVERIFY(pSplitter);
+    QVERIFY(pSplitter->inherits("QSplitter"));
+
+    Sublime::Container *pContainer = pSplitter->findChild<Sublime::Container*>();
+    QVERIFY(pContainer);
+
+    // check that it only contains pNewView
+    QVERIFY(pContainer->count() == 1 && pContainer->hasWidget(pNewView->widget()));
+
+    // now open the correponding definition file, classA.cpp
+    IDocument *pClassAImplem = m_documentController->openDocument(KUrl(dirA.name() + "classA.cpp"));
+    QVERIFY(pClassAImplem);
+    pMainWindow->activeView()->setObjectName("classA.cpp");
+
+    // and check its presence alongside pNewView in pContainer
+    QVERIFY(pContainer->hasWidget(pNewView->widget()));
+    QVERIFY(pContainer->hasWidget(pMainWindow->activeView()->widget()));
 }
 
 

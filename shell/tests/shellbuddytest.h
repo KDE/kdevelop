@@ -41,6 +41,7 @@ private slots:
     void testDisableAll();
 
     void testMultipleFolders();
+    void testsplitViewBuddies();
 
 private:
     void verifyFilename(Sublime::View *view, const QString& endOfFilename);

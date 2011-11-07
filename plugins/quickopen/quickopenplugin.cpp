@@ -335,17 +335,17 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   o.scopesButton->setFocusPolicy(Qt::NoFocus);
   o.itemsButton->setFocusPolicy(Qt::NoFocus);
 
-  connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
+  connect( o.searchLine, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)) );
 
-  connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
+  connect( o.list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClicked(QModelIndex)) );
 
   connect(o.okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
   connect(o.okButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   
   updateProviders();
-
-  m_model->restart();
+// no need to call this, it's done by updateProviders already
+//   m_model->restart();
 }
 
 
@@ -361,7 +361,7 @@ void QuickOpenWidget::setAlternativeSearchField(KLineEdit* alterantiveSearchFiel
 {
     o.searchLine = alterantiveSearchField;
     o.searchLine->installEventFilter( this );
-    connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
+    connect( o.searchLine, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)) );
 }
 
 
@@ -387,8 +387,8 @@ void QuickOpenWidget::prepareShow()
     o.searchLine->setText(m_preselectedText);
     o.searchLine->selectAll();
   }
-  connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
-  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& )), this, SLOT(currentChanged( const QItemSelection&, const QItemSelection& )) );
+  connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
+  connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(currentChanged(QItemSelection,QItemSelection)) );
   
   updateScrollBarState();
 }
@@ -899,9 +899,9 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
     }
   }
 
-  connect( dialog->widget(), SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
+  connect( dialog->widget(), SIGNAL(scopesChanged(QStringList)), this, SLOT(storeScopes(QStringList)) );
   //Not connecting itemsChanged to storeItems, as showQuickOpen doesn't use lastUsedItems and so shouldn't store item changes
-  //connect( dialog->widget(), SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
+  //connect( dialog->widget(), SIGNAL(itemsChanged(QStringList)), this, SLOT(storeItems(QStringList)) );
   dialog->widget()->o.itemsButton->setEnabled(false);
 
   if(quickOpenLine()) {
@@ -1424,8 +1424,8 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
     connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
 
-    connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
-    connect( m_widget, SIGNAL( itemsChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeItems( const QStringList& ) ) );
+    connect( m_widget, SIGNAL(scopesChanged(QStringList)), QuickOpenPlugin::self(), SLOT(storeScopes(QStringList)) );
+    connect( m_widget, SIGNAL(itemsChanged(QStringList)), QuickOpenPlugin::self(), SLOT(storeItems(QStringList)) );
     Q_ASSERT(m_widget->o.searchLine == this);
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));

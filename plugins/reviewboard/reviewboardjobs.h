@@ -23,6 +23,8 @@
 
 #include <KJob>
 #include <KUrl>
+#include <QList>
+#include <QPair>
 #include <QNetworkAccessManager>
 
 class QNetworkReply;
@@ -39,7 +41,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            HttpPostCall(const KUrl& s, const QString& apiPath, const QByteArray& post, bool multipart, QObject* parent);
+            HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
             
             virtual void start();
             
@@ -91,10 +93,13 @@ namespace ReviewBoard
             QVariantList repositories() const;
     
         private slots:
+            void gotRepositoryCount(KJob*);
             void done(KJob*);
             
         private:
-            HttpPostCall* m_req;
+            KUrl m_server;
+            HttpPostCall* m_countRequest;
+            HttpPostCall* m_repositoriesRequest;
     };
     
     QByteArray urlToData(const KUrl&);

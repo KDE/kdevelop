@@ -60,8 +60,8 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
             }
         }
     }
-    connect( m_ui->vcsTypes, SIGNAL( activated(int) ),
-             m_ui->vcsImportOptions, SLOT( setCurrentIndex(int) ) );
+    connect( m_ui->vcsTypes, SIGNAL(activated(int)),
+             m_ui->vcsImportOptions, SLOT(setCurrentIndex(int)) );
     connect( m_ui->vcsTypes, SIGNAL(activated(int)),
              this, SLOT(vcsTypeChanged(int)) );
     validateData();

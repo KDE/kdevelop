@@ -220,13 +220,22 @@ public:
         if( !url.isValid() ) {
             return QList<ProjectBaseItem*>();
         }
-        // TODO: This is moderately efficient, but could be much faster with a
-        // QHash<QString, ProjectFolderItem> member. Would it be worth it?
-        KUrl u = topItem->url();
-        if ( u.protocol() != url.protocol() || u.host() != url.host() )
+        if ( folder.protocol() != url.protocol() || folder.host() != url.host() )
             return QList<ProjectBaseItem*>();
-    
-        return itemsForUrlInternal( url, topItem );
+
+        Q_ASSERT(topItem->model());
+        QList<ProjectBaseItem*> items = topItem->model()->itemsForUrl(url);
+
+        QList<ProjectBaseItem*>::iterator it = items.begin();
+        while(it != items.end()) {
+            if ((*it)->project() != project) {
+                it = items.erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+        return items;
     }
 
 
@@ -454,7 +463,6 @@ QString Project::projectTempFile() const
 
 KSharedConfig::Ptr Project::projectConfiguration() const
 {
-    d->m_cfg->reparseConfiguration();
     return d->m_cfg;
 }
 
@@ -515,7 +523,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
+    connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)) );
     Core::self()->runController()->registerJob( importJob );
     return true;
 }

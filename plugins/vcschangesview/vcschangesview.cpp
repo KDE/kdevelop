@@ -53,6 +53,7 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     
     QAction* action = plugin->actionCollection()->action("locate_document");
     connect(action, SIGNAL(triggered(bool)), SLOT(selectCurrentDocument()));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(openSelected(QModelIndex)));
 }
 
 static void appendActions(KMenu* menu, const QList<QAction*>& actions)
@@ -155,4 +156,12 @@ void VcsChangesView::setModel(QAbstractItemModel* model)
 {
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expand(QModelIndex)));
     QTreeView::setModel(model);
+}
+
+void VcsChangesView::openSelected(const QModelIndex& idx)
+{
+    VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
+    KUrl url = info.url();
+    
+    ICore::self()->documentController()->openDocument(url);
 }

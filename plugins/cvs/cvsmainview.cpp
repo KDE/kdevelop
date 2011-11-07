@@ -30,8 +30,8 @@ CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
             this, SLOT(slotJobFinished(KJob*)));
 
     // allow appending of new views
-    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*, QString)),
-            this, SLOT(slotAddTab(QWidget*, QString)) );
+    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*,QString)),
+            this, SLOT(slotAddTab(QWidget*,QString)) );
 
     // create a default output view
     m_mainview = new CvsGenericOutputView(m_plugin);
@@ -44,8 +44,8 @@ CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
     m_closeButton->setAutoRaise(true);
     m_closeButton->setEnabled(false);
     tabwidget->setCornerWidget( m_closeButton );
-    connect(m_closeButton, SIGNAL( clicked() ),
-            this, SLOT( slotTabClose() ));
+    connect(m_closeButton, SIGNAL(clicked()),
+            this, SLOT(slotTabClose()));
 }
 
 CvsMainView::~CvsMainView()
