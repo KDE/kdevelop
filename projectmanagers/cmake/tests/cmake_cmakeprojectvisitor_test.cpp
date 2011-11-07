@@ -493,6 +493,8 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::newRow("Qt4") << "Qt4" << QString();
     QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
     QTest::newRow("KDE4") << "KDE4" << QString();
+    QTest::newRow("Automoc4") << "Automoc4" << QString();
+//     QTest::newRow("Boost") << "Boost" << QString("1.39");
 //     QTest::newRow("Eigen2") << "Eigen2";
 //     QTest::newRow("Exiv2") << "Exiv2";
 //     QTest::newRow("QtGStreamer") << "QtGStreamer"; //commented because it might not be installed, but works
@@ -550,7 +552,7 @@ void CMakeProjectVisitorTest::testFinder()
     v.setCacheValues( &data.cache );
     v.walk(code, 0);
     
-    QString foundvar=QString("%1_FOUND").arg(module.toUpper());
+    QString foundvar=QString("%1_FOUND").arg(module);
     bool found=CMakeCondition(&v).condition(QStringList(foundvar));
     if(!found)
         qDebug() << "result: " << data.vm.value(foundvar);

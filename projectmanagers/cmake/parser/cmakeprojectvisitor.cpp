@@ -579,7 +579,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     if(!haveToFind(pack->name()))
         return 1;
-    kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
+    kDebug(9042) << "Find:" << pack->name() << "package." << pack->version() << m_modulePath << "No module: " << pack->noModule();
 
     QStringList possibleModuleNames;
     if(!pack->noModule()) //TODO Also implied by a whole slew of additional options.
@@ -600,13 +600,14 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     
     foreach(const QString& lookup, lookupPaths)
     {
-        foreach(const QString& post, postfix)
-        {
-            configPath.prepend(lookup+"/share/"+name.toLower()+post);
-            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
-            configPath.prepend(lookup+"/share/"+name+post);
-            configPath.prepend(lookup+"/lib/"+name+post);
-        }
+        if(QFile::exists(lookup))
+            foreach(const QString& post, postfix)
+            {
+                configPath.prepend(lookup+"/share/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+                configPath.prepend(lookup+"/share/"+name+post);
+                configPath.prepend(lookup+"/lib/"+name+post);
+            }
     }
 
     QString varName=pack->name()+"_DIR";
@@ -617,11 +618,13 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     possibleConfigNames+=QString("%1Config.cmake").arg(pack->name());
     possibleConfigNames+=QString("%1-config.cmake").arg(pack->name().toLower());
 
+    bool isConfig=false;
     QString path;
     foreach(const QString& possib, possibleConfigNames) {
         path = findFile(possib, configPath);
         if (!path.isEmpty()) {
             m_vars->insert(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
+            isConfig=true;
             break;
         }
     }
@@ -645,6 +648,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         if(pack->isQuiet())
             m_vars->insert(pack->name()+"_FIND_QUIET", QStringList("TRUE"));
         m_vars->insert(pack->name()+"_FIND_COMPONENTS", pack->components());
+        m_vars->insert(pack->name()+"_FIND_VERSION", QStringList(pack->version()));
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
@@ -663,6 +667,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         }
         m_vars->remove("CMAKE_CURRENT_LIST_FILE");
         m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        
+        if(isConfig)
+            m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
     }
     else
     {
@@ -945,6 +952,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
+    
     QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
