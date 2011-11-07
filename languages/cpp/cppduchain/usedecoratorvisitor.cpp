@@ -94,7 +94,6 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
 //   qDebug() << "found name" << nodeToString(node) << (type ? type->toString() : "no type");
   
   if(type) {
-    DUChainWriteLocker lock;
     //Use extraction
     CursorInRevision cursor = cursorForToken(node->start_token);
     
@@ -218,6 +217,27 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
     }
   }
 }
+
+void UseDecoratorVisitor::visitInitializerList(InitializerListAST* node)
+{
+  const ListNode< InitializerClauseAST* >* nodes=node->clauses;
+
+  if (!nodes)
+    return;
+
+  const ListNode<InitializerClauseAST*>
+    *it = nodes->toFront(),
+    *end = it;
+
+  do
+    {
+      visit(it->element);
+      ++m_argStack.top();
+      it = it->next;
+    }
+  while (it != end);
+}
+
 
 void UseDecoratorVisitor::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
