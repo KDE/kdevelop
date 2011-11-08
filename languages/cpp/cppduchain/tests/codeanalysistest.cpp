@@ -150,7 +150,7 @@ class ControlFlowToDot
       int i=0;
       *m_dev << "digraph G {\n";
       *m_dev << "  label = \""+escapeQuotes(m_sources)+"\";\n";
-      QList<ControlFlowNode*> n=graph->graphNodes();
+      QList<ControlFlowNode*> n=graph->rootNodes();
       for(QList<ControlFlowNode*>::const_iterator it=n.constBegin(), itEnd=n.constEnd(); it!=itEnd; ++it, ++i) {
         *m_dev << "  subgraph cluster_" << i << "  {\n\tcolor=black;\n";
         Declaration* d=declarationForNode(graph, *it);
@@ -177,7 +177,7 @@ class ControlFlowToDot
     
     Declaration* declarationForNode(const ControlFlowGraph* graph, const ControlFlowNode* node) const {
       foreach(Declaration* d, graph->declarations()) {
-        if(graph->nodePerDeclaration(d)==node)
+        if(graph->nodeForDeclaration(d)==node)
           return d;
       }
       return 0;
@@ -257,7 +257,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   
-  QList<ControlFlowNode*> n=graph->graphNodes();
+  QList<ControlFlowNode*> n=graph->rootNodes();
   QList<ControlFlowNode*>::const_iterator it=n.constBegin(), itEnd=n.constEnd();
   QSet<ControlFlowNode*> visited;
   int entries=0;
