@@ -119,7 +119,7 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/configurablecolors.cpp
     highlighting/codehighlighting.cpp
 
-    checks/dataaccessrepository.cpp
+    checks/dataaccessrepository.cpp checks/dataaccess.cpp
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
 
@@ -329,6 +329,7 @@ install(FILES
 )
 
 install(FILES
+    checks/dataaccess.h
     checks/dataaccessrepository.h
     checks/controlflowgraph.h
     checks/controlflownode.h
