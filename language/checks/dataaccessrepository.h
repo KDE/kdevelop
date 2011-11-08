@@ -36,7 +36,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 {
     public:
         /** Defines the flags that will tell what this data access is about */
-        enum DataAccessFlag { None=0,
+        enum DataAccessFlag {
+            None=0,
             Read=1, /**< This data access reads data */
             Write=2,/**< This data access writes data */
             Call=4  /**< This call is modifying some outsider data*/
@@ -100,7 +101,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
         /** @returns all the data accesses inside the @p range range */
         QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
     private:
-        QList<DataAccess*> m_modifications;
+        class Private;
+        Private* d;
 };
 
 }

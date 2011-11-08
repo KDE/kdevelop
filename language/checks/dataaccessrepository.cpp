@@ -21,31 +21,39 @@
 
 namespace KDevelop {
 
+class DataAccessRepository::Private
+{
+public:
+    QList<DataAccess*> m_modifications;
+};
+    
 DataAccessRepository::DataAccessRepository()
+: d(new Private)
 {}
 
 DataAccessRepository::~DataAccessRepository()
 {
     clear();
+    delete d;
 }
 
 void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
 {
     Q_ASSERT(!range.isValid() || flags == DataAccess::Write);
-    m_modifications.append(new DataAccess(cursor, flags, range));
+    d->m_modifications.append(new DataAccess(cursor, flags, range));
 }
 
 void DataAccessRepository::clear()
 {
-    qDeleteAll(m_modifications);
-    m_modifications.clear();
+    qDeleteAll(d->m_modifications);
+    d->m_modifications.clear();
 }
 
-QList< DataAccess* > DataAccessRepository::modifications() const { return m_modifications; }
+QList< DataAccess* > DataAccessRepository::modifications() const { return d->m_modifications; }
 
 DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
 {
-    foreach(DataAccess* a, m_modifications) {
+    foreach(DataAccess* a, d->m_modifications) {
         if(a->pos() == cursor)
             return a;
     }
@@ -55,7 +63,7 @@ DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
 QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& range) const
 {
     QList<DataAccess*> ret;
-    foreach(DataAccess* a, m_modifications) {
+    foreach(DataAccess* a, d->m_modifications) {
         if(range.contains(a->pos()))
             ret+=a;
     }
