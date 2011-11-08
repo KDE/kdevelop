@@ -222,7 +222,7 @@ void UseDecoratorVisitor::visitInitializerList(InitializerListAST* node)
 {
   const ListNode< InitializerClauseAST* >* nodes=node->clauses;
 
-  if (!nodes)
+  if (!nodes || m_argStack.isEmpty())
     return;
 
   const ListNode<InitializerClauseAST*>
@@ -405,7 +405,8 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
   
   if(node->initializer && node->declarator) {
 //     qDebug() << "lalala" << nodeToString(node->declarator->id);
-    m_mods->addModification(cursorForToken(node->declarator->id->start_token), DataAccess::Write, rangeForNode(node->initializer));
+    uint start = node->declarator->id ? node->declarator->id->start_token : node->declarator->start_token;
+    m_mods->addModification(cursorForToken(start), DataAccess::Write, rangeForNode(node->initializer));
     
     FunctionType::Ptr type=m_session->typeFromCallAst(node);
     QList<AbstractType::Ptr> args;
