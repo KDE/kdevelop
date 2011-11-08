@@ -137,7 +137,7 @@ public:
     /// Returns whether there is minimum features set up for some url
     static bool hasStaticMinimumFeatures();
     
-    ///Returns a structure containing data modification inside the parsed file.
+    ///Returns a structure containing information about data accesses in the parsed file.
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::DataAccessRepository* dataAccessInformation() = 0;
     

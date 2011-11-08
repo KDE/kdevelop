@@ -21,20 +21,32 @@
 
 namespace KDevelop {
 
+DataAccessRepository::DataAccessRepository()
+{}
+
+DataAccessRepository::~DataAccessRepository()
+{
+    clear();
+}
+
 void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
 {
-    Q_ASSERT(!range.isValid() || flags==DataAccess::Write);
+    Q_ASSERT(!range.isValid() || flags == DataAccess::Write);
     m_modifications.append(new DataAccess(cursor, flags, range));
 }
 
-DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
-  : m_flags(flags), m_pos(cur), m_value(range)
-{}
+void DataAccessRepository::clear()
+{
+    qDeleteAll(m_modifications);
+    m_modifications.clear();
+}
+
+QList< DataAccess* > DataAccessRepository::modifications() const { return m_modifications; }
 
 DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
 {
     foreach(DataAccess* a, m_modifications) {
-        if(a->pos()==cursor)
+        if(a->pos() == cursor)
             return a;
     }
     return 0;
@@ -47,9 +59,21 @@ QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& 
         if(range.contains(a->pos()))
             ret+=a;
     }
-    
+
     return ret;
 }
+
+/////////DataAccess
+DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
+  : m_flags(flags), m_pos(cur), m_value(range)
+{}
+
+bool DataAccess::isRead() const { return m_flags&Read; }
+bool DataAccess::isWrite() const { return m_flags&Write; }
+bool DataAccess::isCall() const { return m_flags&Call; }
+CursorInRevision DataAccess::pos() const { return m_pos; }
+DataAccess::DataAccessFlags DataAccess::flags() const { return m_flags; }
+RangeInRevision DataAccess::value() const { return m_value; }
 
 }
 

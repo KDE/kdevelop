@@ -30,7 +30,7 @@ class ControlFlowNode;
 
 /**
  * @brief The ControlFlowGraph describes the way a code interacts with the current state of a system
- * 
+ *
  * This class will store the information regarding how is the code flow going to change depending
  * on what current state we have in our system. It will tell us what different code paths we have
  * available by listing them in different ways and it will let us know what those paths depend on
@@ -43,28 +43,28 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
     /** Creates an empty graph. */
     ControlFlowGraph();
     ~ControlFlowGraph();
-    
-    /** Adds an entry @p n to the graph */
+
+    /** Adds an entry @p n to the graph. The graph takes the ownership of @p n */
     void addEntry(KDevelop::ControlFlowNode* n);
-    
-    /** Adds an entry @p n to the graph given @p decl declaration */
+
+    /** Adds an entry @p n to the graph given @p decl declaration. The graph takes the ownership of @p n */
     void addEntry(KDevelop::Declaration* d, KDevelop::ControlFlowNode* n);
-    
-    /** Adds a node that does belong to the graph but that can't be accessed by any means. */
+
+    /** Adds a node that does belong to the graph but that can't be accessed by any means. The graph takes the ownership of @p n */
     void addDeadNode(ControlFlowNode* n);
-    
+
     /** Clears the current graph as if it was just constructed */
     void clear();
-    
+
     /** @returns all declarations that have a node attached to */
     QList<KDevelop::Declaration*> declarations() const;
-    
+
     /** @returns  the node attached to the declaration @p d*/
-    ControlFlowNode* nodePerDeclaration(KDevelop::Declaration* d) const;
-    
+    ControlFlowNode* nodeForDeclaration(KDevelop::Declaration* d) const;
+
     /** @returns all root nodes in the graph */
-    QList<ControlFlowNode*> graphNodes() const;
-    
+    QList<ControlFlowNode*> rootNodes() const;
+
     /** @returns all dead nodes in the graph */
     QVector<ControlFlowNode*> deadNodes() const;
   private:

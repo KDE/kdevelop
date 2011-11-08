@@ -28,7 +28,7 @@ class Declaration;
 
 /**
  * @brief Represents a data access in some code
- * 
+ *
  * This class provides the position of a data access in the code
  * and tells us whether it's writing or reading the data.
  */
@@ -42,31 +42,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
             Call=4  /**< This call is modifying some outsider data*/
         };
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
-        
+
         /** Constructs a DataAccess instance with its @p cur position and
          * its @p flags DataAccessFlags that will tell us how is it modifying the data.
          * In case it's a Write, a @p range can be provided
          */
         DataAccess(const CursorInRevision& cur, DataAccessFlags flags, const KDevelop::RangeInRevision& range);
-        
+
         /** Checks the flags and returns if it's reading the data */
-        bool isRead()  const { return m_flags&Read; }
-        
+        bool isRead()  const;
+
         /** Checks the flags and returns if it's writing the data */
-        bool isWrite() const { return m_flags&Write; }
-        
+        bool isWrite() const;
+
         /** Checks the flags and returns if it's just some call */
-        bool isCall() const { return m_flags&Call; }
-        
+        bool isCall() const;
+
         /** @returns the cursor */
-        KDevelop::CursorInRevision pos() const { return m_pos; }
-        
+        KDevelop::CursorInRevision pos() const;
+
         /** @returns the flags that specify how is this access interacting with the data */
-        DataAccessFlags flags() const { return m_flags; }
-        
+        DataAccessFlags flags() const;
+
         /** @returns the range that contains the written value in case it's a Write access */
-        KDevelop::RangeInRevision value() const { return m_value; }
-        
+        KDevelop::RangeInRevision value() const;
+
     private:
         DataAccessFlags m_flags;
         KDevelop::CursorInRevision m_pos;
@@ -75,27 +75,28 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
 
 /**
  * @brief Stores all the data accesses in a file
- * 
+ *
  * Provides the data accesses in a file and provides different ways to accessing them
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 {
     public:
-        ~DataAccessRepository() { clear(); }
-        
+        DataAccessRepository();
+        ~DataAccessRepository();
+
         /** Constructs a DataAccess instance and adds it to the repository */
         void addModification(const KDevelop::CursorInRevision& cursor, KDevelop::DataAccess::DataAccessFlags flags,
                              const KDevelop::RangeInRevision& range=RangeInRevision::invalid());
-      
+
         /** Clears the whole structure as if it was never used before */
-        void clear() { qDeleteAll(m_modifications); m_modifications.clear(); }
-        
+        void clear();
+
         /** @returns all the data access stored in this repository */
-        QList<DataAccess*> modifications() const { return m_modifications; }
-        
+        QList<DataAccess*> modifications() const;
+
         /** @returns the access located at the position specified by @p cursor */
         DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
-        
+
         /** @returns all the data accesses inside the @p range range */
         QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
     private:

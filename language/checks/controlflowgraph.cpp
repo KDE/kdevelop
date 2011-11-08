@@ -36,6 +36,7 @@ ControlFlowGraph::ControlFlowGraph()
 ControlFlowGraph::~ControlFlowGraph()
 {
   clear();
+  delete d;
 }
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)
@@ -85,7 +86,7 @@ void ControlFlowGraph::clear()
   d->m_deadNodes.clear();
 }
 
-QList< ControlFlowNode* > ControlFlowGraph::graphNodes() const
+QList< ControlFlowNode* > ControlFlowGraph::rootNodes() const
 {
     return d->m_funcNodes.values()+d->m_nodes;
 }
@@ -100,7 +101,7 @@ QList<Declaration*> ControlFlowGraph::declarations() const
     return d->m_funcNodes.keys();
 }
 
-ControlFlowNode* ControlFlowGraph::nodePerDeclaration(Declaration* decl) const
+ControlFlowNode* ControlFlowGraph::nodeForDeclaration(Declaration* decl) const
 {
     return d->m_funcNodes.value(decl);
 }
