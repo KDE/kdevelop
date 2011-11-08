@@ -32,6 +32,26 @@
 #include <language/duchain/declaration.h>
 
 using namespace KDevelop;
+
+DataAccess::DataAccessFlags typeToDataAccessFlags(const AbstractType::Ptr& type)
+{
+  DataAccess::DataAccessFlags ret = DataAccess::Read;
+  TypePtr< ReferenceType > reftype=type.cast<ReferenceType>();
+  if(reftype && reftype->baseType() && !reftype->baseType()->modifiers() & AbstractType::ConstModifier)
+    ret |= DataAccess::Write;
+  
+  return ret;
+}
+
+QList<DataAccess::DataAccessFlags> typesToDataAccessFlags(const QList<AbstractType::Ptr>& types)
+{
+  QList<DataAccess::DataAccessFlags> ret;
+  foreach(const AbstractType::Ptr& t, types)
+    ret += typeToDataAccessFlags(t);
+  
+  return ret;
+}
+
 QString UseDecoratorVisitor::nodeToString(AST* node)
 {
   QString ret;
@@ -41,21 +61,6 @@ QString UseDecoratorVisitor::nodeToString(AST* node)
     ret += ' '+m_session->token_stream->token(i).symbolString();
   }
   return ret;
-}
-
-AbstractType::Ptr constructReadOnlyType()
-{
-  static AbstractType::Ptr ntype(new DelayedType);
-  return ntype;
-}
-
-ReferenceType::Ptr constructReferenceType()
-{
-  static AbstractType::Ptr ntype(new DelayedType);
-  static ReferenceType::Ptr reftype(new ReferenceType);
-  reftype->setBaseType(ntype);
-  
-  return reftype;
 }
 
 UseDecoratorVisitor::UseDecoratorVisitor(const ParseSession* session, DataAccessRepository* repo)
@@ -85,25 +90,21 @@ void UseDecoratorVisitor::run(AST* node)
 void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
 {
   //Type exctraction
-  AbstractType::Ptr type;
+  DataAccess::DataAccessFlags flags = DataAccess::None;
   if(!m_argStack.isEmpty()) {
     int arg = m_argStack.top();
     if(arg<m_callStack.top().size())
-      type = m_callStack.top()[arg];
+      flags = m_callStack.top()[arg];
   }
 //   qDebug() << "found name" << nodeToString(node) << (type ? type->toString() : "no type");
   
-  if(type) {
+  if(flags) {
     //Use extraction
     CursorInRevision cursor = cursorForToken(node->start_token);
     
     //use rw computation
-    KDevelop::DataAccess::DataAccessFlags f = m_defaultFlags;
+    KDevelop::DataAccess::DataAccessFlags f = m_defaultFlags | flags;
     
-    TypePtr< ReferenceType > reftype=type.cast<ReferenceType>();
-    if(reftype && reftype->baseType() && !reftype->baseType()->modifiers() & AbstractType::ConstModifier) {
-      f |= DataAccess::Write;
-    }
 //     qDebug() << "adding..." << f << nodeToString(node);
     m_mods->addModification(cursor, f);
   }
@@ -120,7 +121,7 @@ void UseDecoratorVisitor::visitFunctionCall(FunctionCallAST* node)
 //   qDebug() << "function call" << (type ? type->toString() : "<null>") << nodeToString(node);
   
   if(type) {
-    m_callStack.push(type->arguments());
+    m_callStack.push(typesToDataAccessFlags(type->arguments()));
     m_argStack.push(0);
     DefaultVisitor::visitFunctionCall(node);
     m_argStack.pop();
@@ -134,13 +135,13 @@ void UseDecoratorVisitor::visitNewExpression(NewExpressionAST* node)
 {
     FunctionType::Ptr type = m_session->typeFromCallAst(node);
 //     qDebug() << "new constructor call" << nodeToString(node) << (type ? type->toString() : "<null>") << node;
-    QList<AbstractType::Ptr> args;
+    QList<DataAccess::DataAccessFlags> args;
     if(type)
-      args = type->arguments();
+      args = typesToDataAccessFlags(type->arguments());
     else {
       kDebug() << "couldn't find the type for " << node << nodeToString(node);
       
-      args.append(constructReadOnlyType());
+      args.append(DataAccess::Read);
     }
     
     m_callStack.push(args);
@@ -166,31 +167,27 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   Token optoken = m_session->token_stream->token(node->op);
   bool isFunctionArguments = optoken.kind==',';
   
-  QList< AbstractType::Ptr > args;
+  QList<DataAccess::DataAccessFlags> args;
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   PrimaryExpressionAST* primary = static_cast<PrimaryExpressionAST*>(node->left_expression);
   if(!optype && optoken.kind=='=' && node->left_expression->kind==AST::Kind_PrimaryExpression && primary->name) {
 //     qDebug() << "lalala" << node->left_expression->kind << nodeToString(primary) << nodeToString(primary->name) << nodeToString(node->right_expression);
     m_mods->addModification(cursorForToken(primary->name->start_token), DataAccess::Write, rangeForNode(node->right_expression));
     
-    m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+    m_callStack.push(QList<DataAccess::DataAccessFlags>() << DataAccess::Read);
     m_argStack.push(0);
     visit(node->right_expression);
     m_argStack.pop();
     m_callStack.pop();
   } else {
     if(optype) {
-      args = optype->arguments();
-      if(args.size()==1) { //if there's just the last argument, create a delayed type of the first with the proper flags
-        AbstractType::Ptr ntype(new DelayedType);
-        ntype->setModifiers(optype->modifiers());
-        args.prepend(ntype);
+      args = typesToDataAccessFlags(optype->arguments());
+      if(args.size()==1) { //if there's just the last argument, add the argument provided by this
+        args.prepend(typeToDataAccessFlags(optype.cast<AbstractType>()));
       }
     } else if(!isFunctionArguments) {
-      AbstractType::Ptr ntype(constructReadOnlyType());
-      
-      args += ntype;
-      args += ntype;
+      args += DataAccess::Read;
+      args += DataAccess::Read;
     }
     
     if(!args.isEmpty()) {
@@ -252,26 +249,20 @@ void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   Token optoken = m_session->token_stream->token(node->op);
   
-  QList< AbstractType::Ptr > args;
+  QList<DataAccess::DataAccessFlags> args;
   if(optype) {
-    args = optype->arguments();
+    args = typesToDataAccessFlags(optype->arguments());
     if(args.isEmpty()) { //if there's no argument, create a delayed type of the first with the proper flags
-      AbstractType::Ptr ntype(new DelayedType);
-      ntype->setModifiers(optype->modifiers());
-      if(optype->modifiers()&AbstractType::ConstModifier) {
-        ReferenceType::Ptr reftype(new ReferenceType);
-        reftype->setBaseType(ntype);
-        
-        args.append(reftype.cast<AbstractType>());
-      } else
-        args.append(ntype);
+      if(optype->modifiers()&AbstractType::ConstModifier)
+        args.append(DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write));
+      else
+        args.append(DataAccess::Read);
     }
   } else {
     if(optoken.kind==Token_incr || optoken.kind==Token_decr) {
-      
-      args.append(constructReferenceType().cast<AbstractType>());
+      args.append(DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write));
     } else {
-      args.append(constructReadOnlyType());
+      args.append(DataAccess::Read);
     }
   }
   
@@ -290,13 +281,13 @@ void UseDecoratorVisitor::visitMemInitializer(MemInitializerAST* node)
   m_mods->addModification(cursorForToken(node->initializer_id->unqualified_name->start_token), DataAccess::Write, rangeForNode(node->expression));
   
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
-  QList<AbstractType::Ptr> args;
+  QList<DataAccess::DataAccessFlags> args;
   
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   if(optype)
-    args = optype->arguments();
+    args = typesToDataAccessFlags(optype->arguments());
   else
-    args << constructReadOnlyType();
+    args << DataAccess::Read;
   m_callStack.push(args);
   m_argStack.push(0);
   
@@ -310,7 +301,7 @@ void UseDecoratorVisitor::visitConditionalExpression(ConditionalExpressionAST* n
 {
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
-  m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+  m_callStack.push(QList<DataAccess::DataAccessFlags>() << DataAccess::Read);
   m_argStack.push(0);
   
   visit(node->condition);
@@ -348,7 +339,7 @@ void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 //   qDebug() << "visit: PostfixExpression" << nodeToString(node) << nodeToString(node->expression);
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
-  m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+  m_callStack.push(QList<DataAccess::DataAccessFlags>() << DataAccess::Read);
   m_argStack.push(0);
   
   visit(node->type_specifier); //visit specifiers
@@ -363,7 +354,7 @@ void UseDecoratorVisitor::visitCppCastExpression(CppCastExpressionAST* node)
 {
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   
-  m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());
+  m_callStack.push(QList<DataAccess::DataAccessFlags>() << DataAccess::Read);
   m_argStack.push(0);
   
   visit(node->type_id); //visit specifiers
@@ -380,9 +371,9 @@ void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
   
   if(optype)
-    m_callStack.top()=optype->arguments();
+    m_callStack.top()=typesToDataAccessFlags(optype->arguments());
   else
-    m_callStack.top()=(QList< AbstractType::Ptr >() << constructReferenceType().cast<AbstractType>());
+    m_callStack.top()=(QList<DataAccess::DataAccessFlags>() << (DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write)));
   
   m_argStack.top() = 0;
 }
@@ -396,7 +387,7 @@ void UseDecoratorVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
   DataAccess::DataAccessFlags flags(DataAccess::Call | DataAccess::Read | (modif ? DataAccess::Write : DataAccess::None));
   m_mods->addModification(cursorForToken(node->name->start_token), flags);
 //   qDebug() << "class member access" << nodeToString(node->name) << modif << (optype ? optype->toString() : "null") << (node->kind);
-  m_callStack.top()=(QList< AbstractType::Ptr >() << (modif ? constructReferenceType().cast<AbstractType>() : constructReadOnlyType()));
+  m_callStack.top()=(QList<DataAccess::DataAccessFlags>() << flags);
 }
 
 void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
@@ -409,11 +400,11 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
     m_mods->addModification(cursorForToken(start), DataAccess::Write, rangeForNode(node->initializer));
     
     FunctionType::Ptr type=m_session->typeFromCallAst(node);
-    QList<AbstractType::Ptr> args;
+    QList<DataAccess::DataAccessFlags> args;
     if(type)
-      args=type->arguments();
+      args = typesToDataAccessFlags(type->arguments());
     else
-      args += constructReadOnlyType();
+      args += DataAccess::Read;
     
     m_callStack.push(args);
     m_argStack.push(0);
@@ -428,7 +419,7 @@ void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, b);\
 /*   qDebug() << "visit: " #a << nodeToString(node);*/\
-  m_callStack.push(QList< AbstractType::Ptr >() << constructReadOnlyType());\
+  m_callStack.push(QList<DataAccess::DataAccessFlags>() << DataAccess::Read);\
   m_argStack.push(0);\
   \
   DefaultVisitor::visit##a(node);\

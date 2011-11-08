@@ -65,7 +65,7 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     QString nodeToString(AST* node);
     
     const ParseSession* m_session;
-    QStack< QList<KDevelop::AbstractType::Ptr> > m_callStack;
+    QStack< QList<KDevelop::DataAccess::DataAccessFlags> > m_callStack;
     QStack<int> m_argStack;
     KDevelop::DataAccess::DataAccessFlags m_defaultFlags;
     KDevelop::DataAccessRepository* m_mods;
