@@ -39,11 +39,42 @@ void ControlFlowNode::setConditionRange(const RangeInRevision& range)
     m_conditionRange = range;
 }
 
-void ControlFlowNode::setStartCursor(const CursorInRevision& cursor) { m_nodeRange.start = cursor; }
-void ControlFlowNode::setEndCursor(const CursorInRevision& cursor) { m_nodeRange.end = cursor; }
-void ControlFlowNode::setNext(ControlFlowNode* next) { m_next=next; }
-void ControlFlowNode::setAlternative(ControlFlowNode* alt) { m_alternative=alt; }
-ControlFlowNode* ControlFlowNode::next() const { return m_next; }
-ControlFlowNode* ControlFlowNode::alternative() const { return m_alternative; }
-RangeInRevision ControlFlowNode::nodeRange() const { return m_nodeRange; }
-RangeInRevision ControlFlowNode::conditionRange() const { return m_conditionRange; }
+void ControlFlowNode::setStartCursor(const CursorInRevision& cursor)
+{
+    m_nodeRange.start = cursor;
+}
+
+void ControlFlowNode::setEndCursor(const CursorInRevision& cursor)
+{
+    m_nodeRange.end = cursor;
+}
+
+void ControlFlowNode::setNext(ControlFlowNode* next)
+{
+    m_next = next;
+}
+
+void ControlFlowNode::setAlternative(ControlFlowNode* alt)
+{
+    m_alternative=alt;
+}
+
+ControlFlowNode* ControlFlowNode::next() const
+{
+    return m_next;
+}
+
+ControlFlowNode* ControlFlowNode::alternative() const
+{
+    return m_alternative;
+}
+
+RangeInRevision ControlFlowNode::nodeRange() const
+{
+    return m_nodeRange;
+}
+
+RangeInRevision ControlFlowNode::conditionRange() const
+{
+    return m_conditionRange;
+}

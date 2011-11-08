@@ -40,7 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 
         /** Constructs a DataAccess instance and adds it to the repository */
         void addModification(const KDevelop::CursorInRevision& cursor, KDevelop::DataAccess::DataAccessFlags flags,
-                             const KDevelop::RangeInRevision& range=RangeInRevision::invalid());
+                             const KDevelop::RangeInRevision& range = RangeInRevision::invalid());
 
         /** Clears the whole structure as if it was never used before */
         void clear();

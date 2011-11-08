@@ -26,7 +26,7 @@ class DataAccessRepository::Private
 public:
     QList<DataAccess*> m_modifications;
 };
-    
+
 DataAccessRepository::DataAccessRepository()
 : d(new Private)
 {}
@@ -72,4 +72,3 @@ QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& 
 }
 
 }
-

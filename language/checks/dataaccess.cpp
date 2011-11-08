@@ -24,14 +24,32 @@ DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags 
   : m_flags(flags), m_pos(cur), m_value(range)
 {}
 
-bool DataAccess::isRead() const{ return m_flags&Read; }
+bool DataAccess::isRead() const
+{
+    return m_flags & Read;
+}
 
-bool DataAccess::isWrite() const { return m_flags&Write; }
+bool DataAccess::isWrite() const
+{
+    return m_flags & Write;
+}
 
-bool DataAccess::isCall() const { return m_flags&Call; }
+bool DataAccess::isCall() const
+{
+    return m_flags & Call;
+}
 
-CursorInRevision DataAccess::pos() const { return m_pos; }
+CursorInRevision DataAccess::pos() const
+{
+    return m_pos; 
+}
 
-DataAccess::DataAccessFlags DataAccess::flags() const { return m_flags; }
+DataAccess::DataAccessFlags DataAccess::flags() const
+{
+    return m_flags;
+}
 
-RangeInRevision DataAccess::value() const { return m_value; }
+RangeInRevision DataAccess::value() const
+{
+    return m_value;
+}

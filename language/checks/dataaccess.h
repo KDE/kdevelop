@@ -37,10 +37,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccess
     public:
         /** Defines the flags that will tell what this data access is about */
         enum DataAccessFlag {
-            None=0,
-            Read=1, /**< This data access reads data */
-            Write=2,/**< This data access writes data */
-            Call=4  /**< This call is modifying some outsider data*/
+            None = 0,
+            Read = 1, /**< This data access reads data */
+            Write = 2,/**< This data access writes data */
+            Call = 4  /**< This call is modifying some outsider data*/
         };
         Q_DECLARE_FLAGS(DataAccessFlags, DataAccessFlag)
 
