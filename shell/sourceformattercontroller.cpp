@@ -386,7 +386,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 			// read file
 			if (file.open(QFile::ReadOnly)) {
 				QTextStream is(&file);
-				output = formatter->formatSource(is.readAll(), doc->url(), mime);
+				output = formatter->formatSource(is.readAll(), list[fileCount], mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to read %1", list[fileCount].prettyUrl()));
