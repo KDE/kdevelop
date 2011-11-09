@@ -80,7 +80,7 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 	return "C++";
 }
 
-QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -109,6 +109,7 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 		{
 			kDebug() << "using temporary file" << tmpFile->fileName();
 			command.replace("$TMPFILE", tmpFile->fileName());
+			command.replace("$FILE", url.toLocalFile());
 			QByteArray useTextArray = useText.toLocal8Bit();
 			if( tmpFile->write(useTextArray) != useTextArray.size() )
 			{
@@ -166,9 +167,9 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
     return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
-QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString IndentPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
-	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
+	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
 KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name)
@@ -184,6 +185,9 @@ KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name
 	} else if (name == "GNU_indent_orig") {
 		result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
 		result.setContent("indent -orig");
+	} else if(name == "kdev_format_source.sh") {
+		result.setCaption("KDevelop: kdev_format_source.sh");
+		result.setContent("kdev_format_source.sh $FILE $TMPFILE");
 	}
 	return result;
 }
@@ -191,6 +195,7 @@ KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name
 QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
+	styles << predefinedStyle("kdev_format_source.sh");
 	styles << predefinedStyle("GNU_indent_GNU");
 	styles << predefinedStyle("GNU_indent_KR");
 	styles << predefinedStyle("GNU_indent_orig");
@@ -301,24 +306,18 @@ QString IndentPlugin::previewText(const KMimeType::Ptr &)
 ISourceFormatter::IndentationType IndentPlugin::indentationType()
 {
 	///@todo Format a sample, and extract the indentation type
-	if(m_options.contains("-nut"))
-		return ISourceFormatter::IndentWithSpaces;
-	else
-		return ISourceFormatter::IndentWithTabs;
+	return ISourceFormatter::IndentWithSpaces;
 }
 
 int IndentPlugin::indentationLength()
 {
 	///@todo Format a sample, and extract the indentation length
-	int idx = m_options.indexOf("^-i\\d+");
-	if(idx < 0)
-		return 2;
-	return m_options[idx].mid(2).toInt();
+	return 4;
 }
 
 void IndentPreferences::updateTimeout()
 {
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KMimeType::Ptr() );
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KUrl(), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }
 

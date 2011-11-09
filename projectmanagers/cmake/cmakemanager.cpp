@@ -995,6 +995,8 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
             it = it->parent();
             item = dynamic_cast<CMakeFolderItem*>(it);
         }
+        if(!item)
+            return false;
     }
 
     reimport(item);
