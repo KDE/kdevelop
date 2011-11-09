@@ -461,7 +461,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Annotate);
-    *job << "git" << "blame" << "--porcelain";
+    *job << "git" << "blame" << "--porcelain" << "-w";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
     return job;
