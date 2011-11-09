@@ -143,7 +143,7 @@ LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
 
     if ( !ips )
         return 0;
-    return dynamic_cast< LocalPatchSource* >( ips.data() );
+    return dynamic_cast<LocalPatchSource*>( ips.data() );
 }
 
 void PatchReviewToolView::updatePatchFromEdit() {
@@ -200,7 +200,7 @@ void PatchReviewToolView::fillEditFromPatch() {
         kDebug() << "got custom widget";
     }
 
-    LocalPatchSource* lpatch = dynamic_cast< LocalPatchSource* >( ipatch.data() );
+    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
     m_editPatch.tabWidget->setVisible( lpatch );
     m_editPatch.baseDir->setVisible( lpatch );
     m_editPatch.label->setVisible( lpatch );
@@ -222,7 +222,7 @@ void PatchReviewToolView::fillEditFromPatch() {
 void PatchReviewToolView::patchSelectionChanged( int selection ) {
     m_fileModel->removeRows( 0, m_fileModel->rowCount() );
     if( selection >= 0 && selection < m_plugin->knownPatches().size() ) {
-        m_plugin->setPatch( m_plugin->knownPatches()[ selection ] );
+        m_plugin->setPatch( m_plugin->knownPatches()[selection] );
     }
 }
 
@@ -266,7 +266,7 @@ void PatchReviewToolView::showEditDialog() {
     {
         KPluginInfo info = pluginManager->pluginInfo( p );
         QAction* action = exportMenu->addAction( KIcon( info.icon() ), info.name() );
-        action->setData( qVariantFromValue< QObject* >( p ) );
+        action->setData( qVariantFromValue<QObject*>( p ) );
     }
 
     m_editPatch.exportReview->setMenu( exportMenu );
@@ -333,18 +333,18 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
 
             IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
 
-            if ( doc && doc == ICore::self()->documentController()->activeDocument() && m_highlighters.contains( doc->url() ) && m_highlighters[ doc->url() ] ) {
+            if ( doc && doc == ICore::self()->documentController()->activeDocument() && m_highlighters.contains( doc->url() ) && m_highlighters[doc->url()] ) {
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
-                    KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( doc->textDocument() );
+                    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc->textDocument() );
                     Q_ASSERT( moving );
-                    const QList< KTextEditor::MovingRange* > ranges = m_highlighters[ doc->url() ]->ranges();
+                    const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
 
                     KTextEditor::View * v = doc->textDocument()->activeView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
-                        for ( QList< KTextEditor::MovingRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
+                        for ( QList<KTextEditor::MovingRange*>::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
                             int line;
 
                             line = ( *it )->start().line();
@@ -401,7 +401,7 @@ void PatchReviewPlugin::addHighlighting( const KUrl& highlightFile, IDocument* d
 
             removeHighlighting( file );
 
-            m_highlighters[ file ] = new PatchHighlighter( model, doc, this );
+            m_highlighters[file] = new PatchHighlighter( model, doc, this );
         }
     } catch ( const QString & str ) {
         kDebug() << "highlightFile():" << str;
@@ -432,7 +432,7 @@ void PatchReviewPlugin::highlightPatch() {
 }
 
 void PatchReviewToolView::finishReview() {
-    QList< KUrl > selectedUrls = m_fileModel->checkedUrls();
+    QList<KUrl> selectedUrls = m_fileModel->checkedUrls();
     kDebug() << "finishing review with" << selectedUrls;
     m_plugin->finishReview( selectedUrls );
 }
@@ -462,7 +462,7 @@ void PatchReviewToolView::kompareModelChanged() {
     if ( !m_plugin->modelList() )
         return;
 
-    QMap< KUrl, KDevelop::VcsStatusInfo::State > additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
 
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if( models )
@@ -486,7 +486,7 @@ void PatchReviewToolView::kompareModelChanged() {
         }
     }
 
-    for( QMap< KUrl, KDevelop::VcsStatusInfo::State >::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++ ) {
+    for( QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++ ) {
         VcsStatusInfo status;
         status.setUrl( it.key() );
         status.setState( it.value() );
@@ -532,17 +532,17 @@ QSize sizeHintForHtml( QString html, QSize maxSize ) {
 
 namespace
 {
-QPointer< QWidget > currentTooltip;
+QPointer<QWidget> currentTooltip;
 KTextEditor::MovingRange* currentTooltipMark;
 }
 
-void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange* markRange, QPair< int, int > highlightMark ) {
+void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange* markRange, QPair<int, int> highlightMark ) {
     if( currentTooltipMark == markRange && currentTooltip )
         return;
     delete currentTooltip;
 
     //Got the difference
-    Diff2::Difference* diff = m_differencesForRanges[ markRange ];
+    Diff2::Difference* diff = m_differencesForRanges[markRange];
 
     QString html;
 #if 0
@@ -581,15 +581,15 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
     }
 
     for( int a = 0; a < lines.size(); ++a ) {
-        Diff2::DifferenceString* line = lines[ a ];
+        Diff2::DifferenceString* line = lines[a];
         uint currentPos = 0;
         QString string = line->string();
 
         Diff2::MarkerList markers = line->markerList();
 
         for( int b = 0; b < markers.size(); ++b ) {
-            QString spanText = Qt::escape( string.mid( currentPos, markers[ b ]->offset() - currentPos ) );
-            if( markers[ b ]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[ b ]->offset() != static_cast< uint >( string.size() ) ) )
+            QString spanText = Qt::escape( string.mid( currentPos, markers[b]->offset() - currentPos ) );
+            if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
             {
                 if( a == highlightMark.first && b == highlightMark.second )
                     html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
@@ -598,7 +598,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
             }else{
                 html += spanText;
             }
-            currentPos = markers[ b ]->offset();
+            currentPos = markers[b]->offset();
         }
 
         html += Qt::escape( string.mid( currentPos, string.length()-currentPos ) );
@@ -645,11 +645,11 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
     KTextEditor::MovingRange* range = rangeForMark( mark );
 
     if( range ) {
-        KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( doc );
+        KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
         Q_ASSERT( moving );
 
         QString currentText = doc->text( range->toRange() );
-        Diff2::Difference* diff = m_differencesForRanges[ range ];
+        Diff2::Difference* diff = m_differencesForRanges[range];
 
         removeLineMarker( range );
 
@@ -707,7 +707,7 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
 }
 
 KTextEditor::MovingRange* PatchHighlighter::rangeForMark( KTextEditor::Mark mark ) {
-    for( QMap< KTextEditor::MovingRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it ) {
+    for( QMap<KTextEditor::MovingRange*, Diff2::Difference*>::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it ) {
         if( it.key()->start().line() == mark.line )
         {
             return it.key();
@@ -753,13 +753,13 @@ QStringList PatchHighlighter::splitAndAddNewlines( const QString& text ) const {
 }
 
 void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber ) {
-    QPair< QList< Diff2::Difference* >, QList< Diff2::Difference* > > diffChange = m_model->linesChanged( oldLines, newLines, editLineNumber );
-    QList< Diff2::Difference* > inserted = diffChange.first;
-    QList< Diff2::Difference* > removed = diffChange.second;
+    QPair<QList<Diff2::Difference*>, QList<Diff2::Difference*> > diffChange = m_model->linesChanged( oldLines, newLines, editLineNumber );
+    QList<Diff2::Difference*> inserted = diffChange.first;
+    QList<Diff2::Difference*> removed = diffChange.second;
 
     // Remove all ranges that are in the same line (the line markers)
     foreach( KTextEditor::MovingRange* r, m_differencesForRanges.keys() ) {
-        Diff2::Difference* diff = m_differencesForRanges[ r ];
+        Diff2::Difference* diff = m_differencesForRanges[r];
         if ( removed.contains( diff ) ) {
             removeLineMarker( r );
             m_ranges.remove( r );
@@ -769,7 +769,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
         }
     }
 
-    KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( doc );
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
     if ( !moving )
         return;
 
@@ -785,7 +785,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
         KTextEditor::Range newRange( lineStart, 0, lineEnd, 0 );
         KTextEditor::MovingRange * r = moving->newMovingRange( newRange );
 
-        m_differencesForRanges[ r ] = diff;
+        m_differencesForRanges[r] = diff;
         m_ranges.insert( r );
         addLineMarker( r, diff );
     }
@@ -817,11 +817,11 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, KTextEditor::Ra
         //The document was loaded / reloaded
         if ( !m_model->differences() )
             return;
-        KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( doc );
+        KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
         if ( !moving )
             return;
 
-        KTextEditor::MarkInterface* markIface = dynamic_cast< KTextEditor::MarkInterface* >( doc );
+        KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
         if( !markIface )
             return;
 
@@ -879,7 +879,7 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, KTextEditor::Ra
                 KTextEditor::MovingRange * r = moving->newMovingRange( KTextEditor::Range( c, endC ) );
                 m_ranges << r;
 
-                m_differencesForRanges[ r ] = *it;
+                m_differencesForRanges[r] = *it;
 
                 addLineMarker( r, diff );
             }
@@ -926,11 +926,11 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
 }
 
 void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
-    KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( range->document() );
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
     if ( !moving )
         return;
 
-    KTextEditor::MarkInterface* markIface = dynamic_cast< KTextEditor::MarkInterface* >( range->document() );
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
     if( !markIface )
         return;
 
@@ -954,15 +954,15 @@ void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
 }
 
 void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Difference* diff ) {
-    KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( range->document() );
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
     if ( !moving )
         return;
 
-    KTextEditor::MarkInterface* markIface = dynamic_cast< KTextEditor::MarkInterface* >( range->document() );
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
     if( !markIface )
         return;
 
-    KSharedPtr< KTextEditor::Attribute > t( new KTextEditor::Attribute() );
+    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
 
@@ -1001,28 +1001,28 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
         lines = diff->sourceLines();
 
     for( int a = 0; a < lines.size(); ++a ) {
-        Diff2::DifferenceString* line = lines[ a ];
+        Diff2::DifferenceString* line = lines[a];
         int currentPos = 0;
         QString string = line->string();
 
         Diff2::MarkerList markers = line->markerList();
 
         for( int b = 0; b < markers.size(); ++b ) {
-            if( markers[ b ]->type() == Diff2::Marker::End )
+            if( markers[b]->type() == Diff2::Marker::End )
             {
-                if( currentPos != 0 || markers[ b ]->offset() != static_cast< uint >( string.size() ) )
+                if( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) )
                 {
-                    KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), markers[ b ]->offset() ) ) );
+                    KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), markers[b]->offset() ) ) );
                     m_ranges << r2;
 
-                    KSharedPtr< KTextEditor::Attribute > t( new KTextEditor::Attribute() );
+                    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
                     t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 0 ), 70 ) ) );
                     r2->setAttribute( t );
                     r2->setZDepth( -600 );
                 }
             }
-            currentPos = markers[ b ]->offset();
+            currentPos = markers[b]->offset();
         }
     }
 }
@@ -1031,15 +1031,15 @@ void PatchHighlighter::clear() {
     if( m_ranges.empty() )
         return;
 
-    KTextEditor::MovingInterface* moving = dynamic_cast< KTextEditor::MovingInterface* >( m_doc->textDocument() );
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( m_doc->textDocument() );
     if ( !moving )
         return;
 
-    KTextEditor::MarkInterface* markIface = dynamic_cast< KTextEditor::MarkInterface* >( m_doc->textDocument() );
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( m_doc->textDocument() );
     if( !markIface )
         return;
 
-    QHash< int, KTextEditor::Mark* > marks = markIface->marks();
+    QHash<int, KTextEditor::Mark*> marks = markIface->marks();
     foreach( int line, marks.keys() ) {
         markIface->removeMark( line, KTextEditor::MarkInterface::markType22 );
         markIface->removeMark( line, KTextEditor::MarkInterface::markType23 );
@@ -1172,7 +1172,7 @@ void PatchReviewPlugin::updateKompareModel() {
     emit patchChanged();
 }
 
-K_PLUGIN_FACTORY( KDevProblemReporterFactory, registerPlugin< PatchReviewPlugin >(); )
+K_PLUGIN_FACTORY( KDevProblemReporterFactory, registerPlugin<PatchReviewPlugin>(); )
 K_EXPORT_PLUGIN( KDevProblemReporterFactory( KAboutData( "kdevpatchreview", "kdevpatchreview", ki18n( "Patch Review" ), "0.1", ki18n( "Highlights code affected by a patch" ), KAboutData::License_GPL ) ) )
 
 class PatchReviewToolViewFactory : public KDevelop::IToolViewFactory
@@ -1238,7 +1238,7 @@ void showDiff( const KDevelop::VcsDiff& d ) {
             temp2.setAutoRemove( false );
             temp2.open();
             QTextStream t2( &temp2 );
-            t2 << d.rightTexts()[ l ];
+            t2 << d.rightTexts()[l];
             temp2.close();
             to = temp2.fileName();
         }
@@ -1250,11 +1250,11 @@ void showDiff( const KDevelop::VcsDiff& d ) {
 
         IDocumentFactory* docf = ICore::self()->documentController()->factory( "text/x-patch" );
         IDocument* doc = docf->create( fakeUrl, ICore::self() );
-        IPatchDocument* pdoc = dynamic_cast< IPatchDocument* >( doc );
+        IPatchDocument* pdoc = dynamic_cast<IPatchDocument*>( doc );
 
         Q_ASSERT( pdoc );
         ICore::self()->documentController()->openDocument( doc );
-        pdoc->setDiff( d.leftTexts()[ l ], to );
+        pdoc->setDiff( d.leftTexts()[l], to );
     }
 }
 #endif
@@ -1268,13 +1268,13 @@ void PatchReviewPlugin::cancelReview() {
 
         emit patchChanged();
 
-        if( !dynamic_cast< LocalPatchSource* >( m_patch.data() ) ) {
+        if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
             delete m_patch;
             // make sure "show" button still openes the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
         }
 
-        Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+        Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
         if( w->area()->objectName() == "review" ) {
             if( setUniqueEmptyWorkingSet() )
                 ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
@@ -1282,7 +1282,7 @@ void PatchReviewPlugin::cancelReview() {
     }
 }
 
-void PatchReviewPlugin::finishReview( QList< KUrl > selection ) {
+void PatchReviewPlugin::finishReview( QList<KUrl> selection ) {
     if( m_patch ) {
         if( !m_patch->finishReview( selection ) )
             return;
@@ -1291,13 +1291,13 @@ void PatchReviewPlugin::finishReview( QList< KUrl > selection ) {
 
         emit patchChanged();
 
-        if( !dynamic_cast< LocalPatchSource* >( m_patch.data() ) ) {
+        if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
             delete m_patch;
             // make sure "show" button still openes the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
         }
 
-        Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+        Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
         if( w->area()->objectName() == "review" ) {
             if( setUniqueEmptyWorkingSet() )
                 ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
@@ -1312,7 +1312,7 @@ void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMo
 }
 
 void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique() {
-    Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     if ( w->area()->objectName() != "review" )
         ICore::self()->uiController()->switchToArea( "review", KDevelop::IUiController::ThisWindow );
 
@@ -1320,7 +1320,7 @@ void PatchReviewPlugin::switchAreaAndMakeWorkingSetUique() {
 }
 
 bool PatchReviewPlugin::isWorkingSetUnique() const {
-    Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     foreach( Sublime::Area* area, w->areas() )
         if( area != w->area() && area->workingSet() == w->area()->workingSet() )
             return false;
@@ -1328,7 +1328,7 @@ bool PatchReviewPlugin::isWorkingSetUnique() const {
 }
 
 bool PatchReviewPlugin::setUniqueEmptyWorkingSet() {
-    Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
 
     if( !ICore::self()->documentController()->saveAllDocumentsForWindow( ICore::self()->uiController()->activeMainWindow(), KDevelop::IDocument::Default, true ) )
         return false;
@@ -1358,9 +1358,9 @@ void PatchReviewPlugin::updateReview() {
         return;
 
     // list of opened documents to prevent flicker
-    QMap< KUrl, IDocument* > documents;
+    QMap<KUrl, IDocument*> documents;
     foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
-        documents[ doc->url() ] = doc;
+        documents[doc->url()] = doc;
     }
 
     IDocument* futureActiveDoc = 0;
@@ -1370,7 +1370,7 @@ void PatchReviewPlugin::updateReview() {
     fakeUrl.setScheme( "kdevpatch" );
     IDocumentFactory* docf = ICore::self()->documentController()->factory( "text/x-patch" );
     IDocument* doc = docf->create( fakeUrl, ICore::self() );
-    IPatchDocument* pdoc = dynamic_cast< IPatchDocument* >( doc );
+    IPatchDocument* pdoc = dynamic_cast<IPatchDocument*>( doc );
 
     Q_ASSERT( pdoc );
     futureActiveDoc = ICore::self()->documentController()->openDocument( doc );
@@ -1390,7 +1390,7 @@ void PatchReviewPlugin::updateReview() {
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
     IDocument* doc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
-    KTextEditor::ModificationInterface* modif = dynamic_cast< KTextEditor::ModificationInterface* >( doc->textDocument() );
+    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( doc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
@@ -1417,11 +1417,11 @@ void PatchReviewPlugin::updateReview() {
         }
     }
 
-    Sublime::MainWindow* w = dynamic_cast< Sublime::MainWindow* >( ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     // Close views for documents that were loaded from the working set, but are not in the patch
-    QList< IDocument* > documentsList = documents.values();
+    QList<IDocument*> documentsList = documents.values();
     foreach( Sublime::View* view, w->area()->views() ) {
-        IDocument* doc = dynamic_cast< IDocument* >( view->document() );
+        IDocument* doc = dynamic_cast<IDocument*>( view->document() );
         if( doc && documentsList.contains( doc ) ) {
             w->area()->closeView( view );
         }
@@ -1441,7 +1441,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
     if( m_patch ) {
         disconnect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
-        if ( qobject_cast< LocalPatchSource* >( m_patch ) ) {
+        if ( qobject_cast<LocalPatchSource*>( m_patch ) ) {
             // make sure we don't leak this
             // TODO: what about other patch sources?
             delete m_patch;
@@ -1463,7 +1463,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( KDevProblemReporterFactory::componentData(), parent ),
     m_patch( 0 ), m_factory( new PatchReviewToolViewFactory( this ) ) {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
-    qRegisterMetaType< const Diff2::DiffModel* >( "const Diff2::DiffModel*" );
+    qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
 
     core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
     setXMLFile( "kdevpatchreview.rc" );
@@ -1506,11 +1506,11 @@ QWidget* PatchReviewPlugin::createToolView( QWidget* parent ) {
 }
 
 void PatchReviewPlugin::exporterSelected( QAction* action ) {
-    IPlugin* exporter = qobject_cast< IPlugin* >( action->data().value< QObject* >() );
+    IPlugin* exporter = qobject_cast<IPlugin*>( action->data().value<QObject*>() );
 
     if( exporter ) {
         qDebug() << "exporting patch" << exporter << action->text();
-        exporter->extension< IPatchExporter >()->exportPatch( patch() );
+        exporter->extension<IPatchExporter>()->exportPatch( patch() );
     }
 }
 

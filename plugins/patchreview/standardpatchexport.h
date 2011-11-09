@@ -47,7 +47,7 @@ public slots:
 
 private:
     PatchReviewPlugin* m_plugin;
-    QList< StandardExporter* > m_exporters;
+    QList<StandardExporter*> m_exporters;
 };
 
 #endif // STANDARDPATCHEXPORT_H
