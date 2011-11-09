@@ -128,4 +128,4 @@ sp_square_fparen=remove
 sp_fparen_brace=add
 nl_namespace_brace=add
 nl_class_brace=add
-nl_fdef_brace=remove
+nl_fdef_brace=ignore
