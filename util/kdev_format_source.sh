@@ -28,9 +28,13 @@ if ! [ "$ORIGFILE" ]; then
     exit
 fi
 
+ORIGFILE=$(readlink -f $ORIGFILE)
+
 if ! [ $TMPFILE ]; then
     echo "No tempfile given, formatting the original file"
     TMPFILE=$ORIGFILE
+else
+    TMPFILE=$(readlink -f $TMPFILE)
 fi
 
 # Helper: Returns the relative path from a given source directory to a target path
