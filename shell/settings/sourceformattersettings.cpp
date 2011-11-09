@@ -470,7 +470,7 @@ void SourceFormatterSettings::updatePreview()
         ISourceFormatter* ifmt = fmt->formatter;
         KMimeType::Ptr mime = l.mimetypes.first();
         m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
-        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), mime ) );
+        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
     } else
     {
         m_document->setText( i18n( "No Language selected" ) );

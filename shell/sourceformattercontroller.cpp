@@ -271,7 +271,7 @@ void SourceFormatterController::beautifySource()
 	if (has_selection) {
 		QString original = view->selectionText();
 
-		QString output = formatter->formatSource(view->selectionText(), mime,
+		QString output = formatter->formatSource(view->selectionText(), doc->url(), mime,
 												  view->document()->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
 												  view->document()->text(KTextEditor::Range(view->selectionRange().end(), view->document()->documentRange().end())));
 
@@ -307,7 +307,7 @@ void SourceFormatterController::beautifyLine()
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
 	const QString post = tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 	
-	const QString formatted = formatter->formatSource(line, mime, prev, post);
+	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
 	tDoc->replaceText(KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), formatted);
 	// advance cursor one line
 	tDoc->activeView()->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
@@ -318,7 +318,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 	KTextEditor::Document *textDoc = doc->textDocument();
 
 	KTextEditor::Cursor cursor = doc->cursorPosition();
-	QString text = formatter->formatSource(textDoc->text(), mime);
+	QString text = formatter->formatSource(textDoc->text(), doc->url(), mime);
 	text = addModelineForCurrentLang(text, mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
@@ -386,7 +386,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 			// read file
 			if (file.open(QFile::ReadOnly)) {
 				QTextStream is(&file);
-				output = formatter->formatSource(is.readAll(), mime);
+				output = formatter->formatSource(is.readAll(), doc->url(), mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to read %1", list[fileCount].prettyUrl()));
