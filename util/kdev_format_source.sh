@@ -6,21 +6,21 @@
 #
 # The rules within a "format_sources" file apply to all subdirectories,
 # and follow this syntax:
-# Each line defines a list of wildcards followed by a colon and the formatting-command.
-# Example: "*.cpp *.h : my_custom_formatting_script.sh $TMPFILE"
+#   Each line defines a list of wildcards followed by a colon and the formatting-command.
+#   Example: "*.cpp *.h : my_custom_formatting_script.sh $TMPFILE"
+#
+# The file must be terminated by a trailing newline.
 #
 # If no colon and no wildcards are given, the command is
 # used for everything, equivalently to the "*" wildcard.
 #
 # The contents is processed in linear order, and the first matching command is used.
-#
-#
 
 ORIGFILE=$1
 TMPFILE=$2
 
 if ! [ "$ORIGFILE" ]; then
-    echo "Usage: kdev_format_sources.sh [FILE] [TEMPFILE]"
+    echo "Usage: kdev_format_source.sh [FILE] [TEMPFILE]"
     echo ""
     echo "Where FILE represents the original location of the formatted contents,"
     echo "and TEMPFILE is used as the actual, potentially different,"
@@ -68,6 +68,17 @@ while ! [ "$(pwd)" == "/" ]; do
             IFS="\:"
             array=
             pos=0
+            
+            # remove leading whitespace
+            line="${line#"${line%%[![:space:]]*}"}"
+
+            if [[ "$line" == \#* ]] || ! [ "$line" ]; then 
+                # Ignore lines starting with #
+                # Those can be used for comments.
+                # Also ignore empty lines
+                continue
+            fi
+            
             for item in $line;
             do
                 array[$pos]=$item
@@ -93,7 +104,7 @@ while ! [ "$(pwd)" == "/" ]; do
                     # This if-command does wildcard matching
 #                     echo "matching $RELATIVE_ORIGFILE and $WILDCARD"
                     if [[ "$RELATIVE_ORIGFILE" == $WILDCARD ]]; then
-                        echo "matched $RELATIVE_ORIGFILE with wildcard $WILDCARD, using command $COMMAND"
+                        echo "matched $RELATIVE_ORIGFILE with wildcard $WILDCARD, using command \"$COMMAND\""
                         eval $COMMAND
                         exit
                     fi
