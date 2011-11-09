@@ -107,7 +107,7 @@ QString CustomScriptPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 	return "C++";
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -135,6 +135,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 	
 	// Replace ${Project} with the project path
 	command = replaceVariables( command, projectVariables );
+	command.replace("$FILE", url.toLocalFile());
 	
 	if(command.contains("$TMPFILE"))
 	{
@@ -201,9 +202,9 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
-QString CustomScriptPlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
-	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
+	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
 KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name)
@@ -219,6 +220,9 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 	} else if (name == "GNU_indent_orig") {
 		result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
 		result.setContent("indent -orig");
+	} else if(name == "kdev_format_source.sh") {
+		result.setCaption("KDevelop: kdev_format_source.sh");
+		result.setContent("kdev_format_source.sh $FILE $TMPFILE");
 	}
 	return result;
 }
@@ -226,6 +230,7 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
+	styles << predefinedStyle("kdev_format_source.sh");
 	styles << predefinedStyle("GNU_indent_GNU");
 	styles << predefinedStyle("GNU_indent_KR");
 	styles << predefinedStyle("GNU_indent_orig");
@@ -336,24 +341,18 @@ QString CustomScriptPlugin::previewText(const KMimeType::Ptr &)
 ISourceFormatter::IndentationType CustomScriptPlugin::indentationType()
 {
 	///@todo Format a sample, and extract the indentation type
-	if(m_options.contains("-nut"))
-		return ISourceFormatter::IndentWithSpaces;
-	else
-		return ISourceFormatter::IndentWithTabs;
+	return ISourceFormatter::IndentWithSpaces;
 }
 
 int CustomScriptPlugin::indentationLength()
 {
 	///@todo Format a sample, and extract the indentation length
-	int idx = m_options.indexOf("^-i\\d+");
-	if(idx < 0)
-		return 2;
-	return m_options[idx].mid(2).toInt();
+	return 4;
 }
 
 void CustomScriptPreferences::updateTimeout()
 {
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KMimeType::Ptr() );
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KUrl(), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }
 
@@ -416,6 +415,10 @@ void CustomScriptPreferences::moreVariablesClicked ( bool )
 		 "The code will be written into the file, the temporary <br />"
          "file will be substituted into that position, and the result <br />"
          "will be read out of that file. <br />"
+		 "<br />"
+		 "<b>$FILE</b> will be replaced with the path of the original file. <br />"
+		 "The contents of the file must not be modified, changes are allowed <br />"
+         "only in $TMPFILE.<br />"
 		 "<br />"
 		 "<b>${PROJECT_NAME}</b> will be replaced by the path of <br />"
 		 "the currently open project with the matching name."
