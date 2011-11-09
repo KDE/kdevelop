@@ -1,15 +1,15 @@
 /***************************************************************************
-Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 ***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #ifndef PATCHREVIEW_H
 #define PATCHREVIEW_H
@@ -28,74 +28,81 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 class PatchReviewToolViewFactory;
 class PatchReviewPlugin;
 
-namespace KParts {
+namespace KParts
+{
 class Part;
 }
 
 class QDialog;
 
-namespace Diff2 {
+namespace Diff2
+{
 class KompareModelList;
 class DiffModel;
 class DiffModel;
 }
-namespace KTextEditor {
+namespace KTextEditor
+{
 class Document;
 class Range;
 class MovingRange;
 class Mark;
 }
-namespace Kompare {
+namespace Kompare
+{
 class Info;
 }
-namespace KDevelop {
+namespace KDevelop
+{
 class IDocument;
 class VcsFileChangesModel;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class PatchHighlighter : public QObject {
+class PatchHighlighter : public QObject
+{
     Q_OBJECT
 public:
     PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
-    QList<KTextEditor::MovingRange*> ranges() const {
-      return m_differencesForRanges.keys();
+    QList< KTextEditor::MovingRange* > ranges() const {
+        return m_differencesForRanges.keys();
     }
 private slots:
     void documentDestroyed();
-    void aboutToDeleteMovingInterfaceContent(KTextEditor::Document*);
+    void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
 private:
 
-    void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
-    void removeLineMarker(KTextEditor::MovingRange* range);
-    QStringList splitAndAddNewlines(const QString& text) const;
-    void performContentChange(KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
-  
-    KTextEditor::MovingRange* rangeForMark(KTextEditor::Mark mark);
+    void addLineMarker( KTextEditor::MovingRange* arg1, Diff2::Difference* arg2 );
+    void removeLineMarker( KTextEditor::MovingRange* range );
+    QStringList splitAndAddNewlines( const QString& text ) const;
+    void performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber );
+
+    KTextEditor::MovingRange* rangeForMark( KTextEditor::Mark mark );
 
     void clear();
-    QSet<KTextEditor::MovingRange*> m_ranges;
-    QMap<KTextEditor::MovingRange*, Diff2::Difference*> m_differencesForRanges;
+    QSet< KTextEditor::MovingRange* > m_ranges;
+    QMap< KTextEditor::MovingRange*, Diff2::Difference* > m_differencesForRanges;
     KDevelop::IDocument* m_doc;
     PatchReviewPlugin* m_plugin;
     Diff2::DiffModel* m_model;
     bool m_applying;
 public slots:
-    void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
-    void showToolTipForMark(QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
-    bool isRemoval(Diff2::Difference*);
-    bool isInsertion(Diff2::Difference*);
-    void markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&);
-    void textInserted(KTextEditor::Document*,KTextEditor::Range);
-    void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText);
+    void markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & );
+    void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair( -1, -1 ) );
+    bool isRemoval( Diff2::Difference* );
+    bool isInsertion( Diff2::Difference* );
+    void markClicked( KTextEditor::Document*, KTextEditor::Mark, bool& );
+    void textInserted( KTextEditor::Document*, KTextEditor::Range );
+    void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
 };
 
 class DiffSettings;
 class PatchReviewPlugin;
 
-class PatchReviewToolView : public QWidget {
+class PatchReviewToolView : public QWidget
+{
     Q_OBJECT
 public:
     PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin );
@@ -118,10 +125,10 @@ private slots:
     void slotEditCommandChanged();
 
     void slotEditFileNameChanged();
-    void slotAppliedChanged(int newState);
+    void slotAppliedChanged( int newState );
 
     void finishReview();
-    
+
 private:
     void kompareModelChanged();
 
@@ -136,38 +143,38 @@ private:
     QTime m_lastDataTime;
     QString m_lastTerminalData;
 
-    QPointer<KParts::Part> m_konsolePart;
+    QPointer< KParts::Part > m_konsolePart;
 
     bool m_reversed;
 
-
     PatchReviewPlugin* m_plugin;
-    
-    QPointer<QWidget> m_customWidget;
+
+    QPointer< QWidget > m_customWidget;
 
     class PatchFilesModel* m_fileModel;
 public slots:
-    void documentActivated(KDevelop::IDocument*);
-    void patchSelectionChanged(int);
+    void documentActivated( KDevelop::IDocument* );
+    void patchSelectionChanged( int );
 };
 
-class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview {
+class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview
+{
     Q_OBJECT
     Q_INTERFACES( KDevelop::IPatchReview )
-    
-public:
-    PatchReviewPlugin(QObject *parent, const QVariantList & = QVariantList() );
+
+public :
+        PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
     virtual void unload();
 
-    QWidget* createToolView(QWidget* parent);
+    QWidget* createToolView( QWidget* parent );
 
     KDevelop::IPatchSource::Ptr patch() const {
         return m_patch;
     }
 
-    QList<KDevelop::IPatchSource::Ptr> knownPatches() const {
-      return m_knownPatches;
+    QList< KDevelop::IPatchSource::Ptr > knownPatches() const {
+        return m_knownPatches;
     }
 
     Diff2::KompareModelList* modelList() const {
@@ -177,40 +184,40 @@ public:
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
     KUrl diffFile();
-    
-    void setPatch(KDevelop::IPatchSource* patch);
 
-    void registerPatch(KDevelop::IPatchSource::Ptr patch);
-    
-    virtual void startReview(KDevelop::IPatchSource* patch, ReviewMode mode);
-    
-    void finishReview(QList<KUrl> selection);
+    void setPatch( KDevelop::IPatchSource* patch );
 
-    KUrl urlForFileModel(const Diff2::DiffModel* model);
+    void registerPatch( KDevelop::IPatchSource::Ptr patch );
+
+    virtual void startReview( KDevelop::IPatchSource* patch, ReviewMode mode );
+
+    void finishReview( QList< KUrl > selection );
+
+    KUrl urlForFileModel( const Diff2::DiffModel* model );
 
 Q_SIGNALS:
     void patchChanged();
 
-public Q_SLOTS:
+    public Q_SLOTS :
     //Does parts of the review-starting that are problematic to do directly in startReview, as they may open dialogs etc.
     void updateReview();
-    
+
     void cancelReview();
-    void clearPatch(QObject* patch);
+    void clearPatch( QObject* patch );
     void notifyPatchChanged();
     void highlightPatch();
     void updateKompareModel();
     void showPatch();
     void forceUpdate();
 
-private Q_SLOTS:
-    void documentClosed(KDevelop::IDocument*);
-    void textDocumentCreated(KDevelop::IDocument*);
-    void documentSaved(KDevelop::IDocument*);
-    void exporterSelected(QAction* action);
-    
+    private Q_SLOTS :
+    void documentClosed( KDevelop::IDocument* );
+    void textDocumentCreated( KDevelop::IDocument* );
+    void documentSaved( KDevelop::IDocument* );
+    void exporterSelected( QAction* action );
+
 private:
-    // Switches to the review area, 
+    // Switches to the review area,
     // makes sure that the working set active in the current area starts with "review" and
     // is not active in any other area. Creates new working sets if required.
     void switchAreaAndMakeWorkingSetUique();
@@ -219,8 +226,8 @@ private:
     // Makes sure that this working set is active only in this area, and that its name starts with "review".
     // Returns false on failure (if the user disagreed).
     bool setUniqueEmptyWorkingSet();
-  
-    QList<KDevelop::IPatchSource::Ptr> m_knownPatches;
+
+    QList< KDevelop::IPatchSource::Ptr > m_knownPatches;
 
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
@@ -235,10 +242,10 @@ private:
     void determineState();
     #endif
 
-    QPointer<DiffSettings> m_diffSettings;
-    std::auto_ptr<Kompare::Info> m_kompareInfo;
-    std::auto_ptr<Diff2::KompareModelList> m_modelList;
-    typedef QMap<KUrl, QPointer<PatchHighlighter> > HighlightMap;
+    QPointer< DiffSettings > m_diffSettings;
+    std::auto_ptr< Kompare::Info > m_kompareInfo;
+    std::auto_ptr< Diff2::KompareModelList > m_modelList;
+    typedef QMap< KUrl, QPointer< PatchHighlighter > > HighlightMap;
     HighlightMap m_highlighters;
 };
 
