@@ -39,30 +39,21 @@ Boston, MA 02110-1301, USA.
 #include <qfile.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <ktexteditor/commandinterface.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/editor.h>
 #include "plugincontroller.h"
 #include <interfaces/isession.h>
-
-/**
- * Kate commands:
- * Use spaces for indentation:
- *   "set-replace-tabs 1"
- * Use tabs for indentation (eventually mixed):
- *   "set-replace-tabs 0"
- * Indent width:
- * 	 "set-indent-width X"
- * Tab width:
- *   "set-tab-width X"
- * */
 
 namespace KDevelop
 {
 
 const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
+const QString SourceFormatterController::kateOverrideIndentationConfigKey = "OverrideKateIndentationMode";
 const QString SourceFormatterController::styleCaptionKey = "Caption";
 const QString SourceFormatterController::styleContentKey = "Content";
 const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
@@ -101,8 +92,16 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 	connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
 	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
+	connect(Core::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
+	        this, SLOT(documentLoaded(KDevelop::IDocument*)));
 
 	activeDocumentChanged(Core::self()->documentController()->activeDocument());
+}
+
+void SourceFormatterController::documentLoaded( IDocument* doc )
+{
+	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	adaptEditorIndentationMode( doc, formatterForMimeType(mime), mime );
 }
 
 void SourceFormatterController::initialize()
@@ -183,10 +182,14 @@ QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
 QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr& mime)
 {
 	if( !isMimeTypeSupported(mime) )
-	{
 		return input;
-	}
-	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) )
+	
+	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+	
+	// If there already is a modeline in the document, adapt it while formatting, even
+	// if "add modeline" is disabled.
+	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) && 
+		      kateModelineWithNewline.indexIn( input ) == -1 )
 		return input;
 
 	ISourceFormatter* fmt = formatterForMimeType( mime );
@@ -221,8 +224,9 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
 	kDebug() << "created modeline: " << modeline << endl;
 
-	bool modelinefound = false;
 	QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
+	
+	bool modelinefound = false;
 	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)");
 	while (!is.atEnd()) {
 		QString line = is.readLine();
@@ -282,8 +286,10 @@ void SourceFormatterController::beautifySource()
             return;
         }
 
+	adaptEditorIndentationMode( doc, formatter, mime );
+
 	bool has_selection = false;
-	KTextEditor::View *view = doc->textDocument()->views().first();
+	KTextEditor::View *view = doc->textDocument()->activeView();
 	if (view && view->selection())
 		has_selection = true;
 
@@ -324,7 +330,7 @@ void SourceFormatterController::beautifyLine()
 	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
-	const QString post = tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+	const QString post = "\n" + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 	
 	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
 	tDoc->replaceText(KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), formatted);
@@ -341,6 +347,63 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 	text = addModelineForCurrentLang(text, doc->url(), mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
+}
+
+/**
+ * Kate commands:
+ * Use spaces for indentation:
+ *   "set-replace-tabs 1"
+ * Use tabs for indentation (eventually mixed):
+ *   "set-replace-tabs 0"
+ * Indent width:
+ * 	 "set-indent-width X"
+ * Tab width:
+ *   "set-tab-width X"
+ * */
+
+void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &/*mime*/)
+{
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+		return;
+
+	KTextEditor::Document *textDoc = doc->textDocument();
+	kDebug() << "adapting mode for" << doc->url();
+	Q_ASSERT(textDoc);
+	ISourceFormatter::Indentation indentation = formatter->indentation(doc->url());
+	if(indentation.isValid())
+	{
+		struct CommandCaller {
+			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(doc->editor())) {
+			}
+			void operator()(QString cmd) {
+				KTextEditor::Command* command = ci->queryCommand( cmd );
+				Q_ASSERT(command);
+				QString msg;
+				kDebug() << "calling" << cmd;
+				if( !command->exec( doc->activeView(), cmd, msg ) )
+					kWarning() << "setting indentation width failed: " << msg;
+			}
+			
+			KTextEditor::Document* doc;
+			KTextEditor::CommandInterface* ci;
+		} call(textDoc);
+		
+		if( indentation.length )
+		{
+			call( QString("set-indent-width %1").arg(indentation.length) );
+			call( QString("set-tab-width %1").arg(indentation.length) );
+		}
+
+		if( indentation.type != KDevelop::ISourceFormatter::NoChange )
+		{
+
+			call( QString("set-replace-tabs %1").arg( 
+				(indentation.type == KDevelop::ISourceFormatter::IndentWithSpaces ||
+				 indentation.type == KDevelop::ISourceFormatter::IndentWithSpacesAndConvertTabs) ? 1 : 0 ) );
+		}
+	}else{
+		kDebug() << "found no valid indentation";
+	}
 }
 
 void SourceFormatterController::formatFiles()

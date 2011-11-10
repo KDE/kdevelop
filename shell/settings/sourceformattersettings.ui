@@ -18,9 +18,19 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
+       <widget class="QCheckBox" name="chkKateOverrideIndentation">
+        <property name="toolTip">
+         <string>Override the kate indentation mode according to the source formatting style (applied while document-loading and reformatting).</string>
+        </property>
+        <property name="text">
+         <string>Override Kate Indentation Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkKateModelines">
         <property name="toolTip">
-         <string>Add kate modeline to formatted documents.</string>
+         <string>Add kate modeline representing the indentation to formatted documents.</string>
         </property>
         <property name="text">
          <string>Add Kate modeline</string>
@@ -173,9 +183,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
@@ -183,9 +193,9 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>klistwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
