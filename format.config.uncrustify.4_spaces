@@ -93,6 +93,7 @@ pp_region_indent_code=false
 pp_if_indent_code=false
 pp_define_at_level=false
 indent_columns=4
+indent_switch_case=4
 nl_max=2
 mod_add_long_ifdef_endif_comment=0
 mod_add_long_ifdef_else_comment=0
