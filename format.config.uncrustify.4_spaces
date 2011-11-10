@@ -122,6 +122,7 @@ sp_before_class_colon=add
 sp_before_case_colon=remove
 sp_inside_paren_cast=add
 sp_func_def_paren=remove
+sp_func_call_paren=remove
 sp_inside_fparens=remove
 sp_inside_fparen=add
 sp_square_fparen=remove
