@@ -220,7 +220,10 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 	}
 	
 	if( indentation.length != 0 )
+	{
+		modeline.append("indent-width ").append(length).append("; ");
 		modeline.append("tab-width ").append(length).append("; ");
+	}
 
 	kDebug() << "created modeline: " << modeline << endl;
 
@@ -238,8 +241,10 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			QStringList optionList = options.split(';', QString::SkipEmptyParts);
 
 			os <<  modeline;
-			foreach(const QString &s, optionList) {
+			foreach(QString s, optionList) {
 				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
+					if(s.startsWith(" "))
+						s=s.mid(1);
 					os << s << ";";
 					kDebug() << "Found unknown option: " << s << endl;
 				}
@@ -286,7 +291,8 @@ void SourceFormatterController::beautifySource()
             return;
         }
 
-	adaptEditorIndentationMode( doc, formatter );
+	// Ignore the modeline, as the modeline will be changed anyway
+	adaptEditorIndentationMode( doc, formatter, true );
 
 	bool has_selection = false;
 	KTextEditor::View *view = doc->textDocument()->activeView();
@@ -368,7 +374,7 @@ void SourceFormatterController::settingsChanged()
  *   "set-tab-width X"
  * */
 
-void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter)
+void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
 	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
 		return;
@@ -376,6 +382,16 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 	KTextEditor::Document *textDoc = doc->textDocument();
 	kDebug() << "adapting mode for" << doc->url();
 	Q_ASSERT(textDoc);
+	
+	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+	
+	// modelines should always take precedence
+	if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->textDocument()->text() ) != -1 )
+	{
+		kDebug() << "ignoring because a kate modeline was found";
+		return;
+	}
+	
 	ISourceFormatter::Indentation indentation = formatter->indentation(doc->url());
 	if(indentation.isValid())
 	{
