@@ -212,7 +212,7 @@ private slots:
 
 private:
     Qt::DockWidgetArea positionToDockArea(Position position);
-    void recreateCentralWidget();
+    void cleanCentralWidget();
 
     MainWindow *m_mainWindow;
     // uses QPointer to make already-deleted splitters detectable

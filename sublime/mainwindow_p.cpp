@@ -50,7 +50,7 @@
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
-:controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
+:controller(controller), area(0), activeView(0), activeToolView(0),
  ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
@@ -127,8 +127,12 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     // adymo: intentionally do not add a toolbar for top buttonbar
     // this doesn't work well with toolbars added via xmlgui
-
-    recreateCentralWidget();
+    
+    centralWidget = new QWidget;
+    centralWidget->setLayout(new QVBoxLayout(centralWidget));
+    centralWidget->layout()->setMargin(0);
+    m_mainWindow->setCentralWidget(centralWidget);
+    cleanCentralWidget();
 
     connect(idealController,
             SIGNAL(dockShown(Sublime::View*,Sublime::Position,bool)),
@@ -354,7 +358,7 @@ void MainWindowPrivate::clearArea()
         if (view->hasWidget())
             view->widget()->setParent(0);
     }
-    recreateCentralWidget();
+    cleanCentralWidget();
     m_mainWindow->setActiveView(0);
     m_indexSplitters.clear();
     area = 0;
@@ -363,14 +367,15 @@ void MainWindowPrivate::clearArea()
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
-void MainWindowPrivate::recreateCentralWidget()
+void MainWindowPrivate::cleanCentralWidget()
 {
-    centralWidget = new QWidget();
-    m_mainWindow->setCentralWidget(centralWidget);
-
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-    layout->setMargin(0);
-    centralWidget->setLayout(layout);
+    QLayout* layout = centralWidget->layout();
+    
+    while(layout->count()) {
+        QLayoutItem* li=layout->takeAt(0);
+        delete li->widget();
+        delete li;
+    }
 }
 
 struct ShownToolViewFinder {
