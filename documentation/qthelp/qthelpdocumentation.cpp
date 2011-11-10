@@ -25,6 +25,7 @@
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
+#include <QMenu>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
@@ -173,15 +174,9 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
         KDevelop::StandardDocumentationView* view=new KDevelop::StandardDocumentationView(findWidget, parent);
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-        view->setContextMenuPolicy(Qt::ActionsContextMenu);
+        view->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(viewContextMenuRequested(QPoint)));
 
-        foreach(const QString& name, m_info.keys()) {
-            QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, view);
-
-            act->setCheckable(true);
-            act->setChecked(name==m_current.key());
-            view->addAction(act);
-        }
         QObject::connect(view, SIGNAL(linkClicked(QUrl)), SLOT(jumpedTo(QUrl)));
 
         view->load(m_current.value());
@@ -190,6 +185,30 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
     }
     return ret;
 }
+
+void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
+{
+    KDevelop::StandardDocumentationView* view = qobject_cast<KDevelop::StandardDocumentationView*>(sender());
+    if (!view)
+        return;
+
+    QMenu menu;
+    menu.addAction(view->pageAction(QWebPage::Copy));
+
+    menu.addSeparator();
+
+    QActionGroup* actionGroup = new QActionGroup(&menu);
+    foreach(const QString& name, m_info.keys()) {
+        QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
+        act->setCheckable(true);
+        act->setChecked(name==m_current.key());
+        menu.addAction(act);
+    }
+
+    menu.move(view->mapToGlobal(pos));
+    menu.exec();
+}
+
 
 void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {

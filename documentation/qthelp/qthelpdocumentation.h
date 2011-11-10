@@ -49,6 +49,10 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         QMap<QString, QUrl> info() const { return m_info; }
 
         static QtHelpProviderAbstract* s_provider;
+
+    public slots:
+        void viewContextMenuRequested(const QPoint& pos);
+
     private slots:
         void jumpedTo(const QUrl& newUrl);
 
