@@ -270,6 +270,8 @@ void SourceFormatterSettings::save()
     grp.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
     
     grp.sync();
+    
+    Core::self()->sourceFormatterControllerInternal()->settingsChanged();
 }
 
 void SourceFormatterSettings::enableStyleButtons()

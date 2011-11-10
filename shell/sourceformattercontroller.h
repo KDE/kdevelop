@@ -83,6 +83,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		
 		KConfigGroup configuration();
 
+		void settingsChanged();
+		
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
 		void beautifySource();
@@ -100,7 +102,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		QString indentationMode(const KMimeType::Ptr &mime);
 		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
 		// Adapts the mode of the editor regarding indentation-style
-		void adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
+		void adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter);
 		void formatFiles(KUrl::List &list);
 		// GUI actions
 		KAction* m_formatTextAction;

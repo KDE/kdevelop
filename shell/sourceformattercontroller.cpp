@@ -101,7 +101,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 void SourceFormatterController::documentLoaded( IDocument* doc )
 {
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-	adaptEditorIndentationMode( doc, formatterForMimeType(mime), mime );
+	adaptEditorIndentationMode( doc, formatterForMimeType(mime) );
 }
 
 void SourceFormatterController::initialize()
@@ -286,7 +286,7 @@ void SourceFormatterController::beautifySource()
             return;
         }
 
-	adaptEditorIndentationMode( doc, formatter, mime );
+	adaptEditorIndentationMode( doc, formatter );
 
 	bool has_selection = false;
 	KTextEditor::View *view = doc->textDocument()->activeView();
@@ -349,6 +349,13 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 	doc->setCursorPosition(cursor);
 }
 
+void SourceFormatterController::settingsChanged()
+{
+	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
+			adaptEditorIndentationMode( doc, formatterForUrl(doc->url()) );
+}
+
 /**
  * Kate commands:
  * Use spaces for indentation:
@@ -361,7 +368,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
  *   "set-tab-width X"
  * */
 
-void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &/*mime*/)
+void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter)
 {
 	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
 		return;
