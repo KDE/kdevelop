@@ -88,6 +88,12 @@ public:
     /**Should return a navigation-widget for the
       *special language-object that contains @param position refers, or 0. */
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position);
+    
+    /**Should return a tiny piece of code which makes it possible for KDevelop to derive the indentation
+      *settings from an automatic source formatter. Example for C++: "class C{\nint m;\n};\n"
+      *The sample must be completely unindented (no line must start with leading whitespace).
+      *The default implementation returns an empty string.*/
+    virtual QString indentationSample() const;
 };
 
 }

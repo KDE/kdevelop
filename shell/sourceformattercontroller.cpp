@@ -47,6 +47,18 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include <interfaces/isession.h>
 
+/**
+ * Kate commands:
+ * Use spaces for indentation:
+ *   "set-replace-tabs 1"
+ * Use tabs for indentation (eventually mixed):
+ *   "set-replace-tabs 0"
+ * Indent width:
+ * 	 "set-indent-width X"
+ * Tab width:
+ *   "set-tab-width X"
+ * */
+
 namespace KDevelop
 {
 
@@ -168,7 +180,7 @@ QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
 	return "none";
 }
 
-QString SourceFormatterController::addModelineForCurrentLang(QString input, const KMimeType::Ptr& mime)
+QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr& mime)
 {
 	if( !isMimeTypeSupported(mime) )
 	{
@@ -177,28 +189,35 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) )
 		return input;
 
+	ISourceFormatter* fmt = formatterForMimeType( mime );
+	ISourceFormatter::Indentation indentation = fmt->indentation(url);
+	
+	if( !indentation.isValid() )
+		return input;
+	
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
 
-	ISourceFormatter* fmt = formatterForMimeType( mime );
 	Q_ASSERT(fmt);
 
+	
     QString modeline("// kate: ");
-	QString length = QString::number(fmt->indentationLength());
+	QString length = QString::number(indentation.length);
 	// add indentation style
 	modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
 
-	ISourceFormatter::IndentationType type = fmt->indentationType();
+	ISourceFormatter::IndentationType type = indentation.type;
 	if (type == ISourceFormatter::IndentWithTabs) {
 		modeline.append("replace-tabs off; ");
-		modeline.append("tab-width ").append(length).append("; ");
-	} else {
+	} else if(type != ISourceFormatter::NoChange) {
 		modeline.append("space-indent on; ");
-		modeline.append("indent-width ").append(length).append("; ");
 		if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs)
 			modeline.append("replace-tabs on; ");
 	}
+	
+	if( indentation.length != 0 )
+		modeline.append("tab-width ").append(length).append("; ");
 
 	kDebug() << "created modeline: " << modeline << endl;
 
@@ -319,7 +338,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 
 	KTextEditor::Cursor cursor = doc->cursorPosition();
 	QString text = formatter->formatSource(textDoc->text(), doc->url(), mime);
-	text = addModelineForCurrentLang(text, mime);
+	text = addModelineForCurrentLang(text, doc->url(), mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
 }
@@ -394,7 +413,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 			//write new content
 			if (file.open(QFile::WriteOnly | QIODevice::Truncate)) {
 				QTextStream os(&file);
-				os << addModelineForCurrentLang(output, mime);
+				os << addModelineForCurrentLang(output, list[fileCount], mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to write to %1", list[fileCount].prettyUrl()));

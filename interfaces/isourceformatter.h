@@ -149,13 +149,21 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QString previewText(const KMimeType::Ptr &mime) = 0;
 
-		/** \return The indentation type of the currently selected style.
+		struct Indentation {
+			Indentation() : type(NoChange), length(0) {
+			}
+			// If this indentation is really valid
+			bool isValid() const {
+				return type != NoChange || length != 0;
+			}
+			
+			IndentationType type; // The indentation type of the style.
+			int length; // The number of spaces used for indentation if IndentWithSpaces is used.
+						// If this is zero, the default should be used
+		};
+		/** \return The indentation of the style applicable for the given url.
 		*/
-		virtual IndentationType indentationType() = 0;
-		/** \return The number of spaces used for indentation if IndentWithSpaces is used,
-		* or the number of spaces per tab if IndentWithTabs is selected.
-		*/
-		virtual int indentationLength() = 0;
+		virtual Indentation indentation(const KUrl& url) = 0;
 
 		/** \return A string representing the map. Values are written in the form
 		* key=value and separated with ','.

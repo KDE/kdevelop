@@ -91,7 +91,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return A modeline string (to add at the end or the beginning of a file)
 		* corresponding to the settings of the active language.
 		*/
-		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr&);
+		QString addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr&);
 		/** \return The name of kate indentation mode for the mime type.
 		* examples are cstyle, python, etc.
 		*/
