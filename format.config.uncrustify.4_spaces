@@ -126,6 +126,7 @@ sp_inside_fparens=remove
 sp_inside_fparen=add
 sp_square_fparen=remove
 sp_fparen_brace=add
+sp_func_call_paren=remove
 nl_namespace_brace=add
 nl_class_brace=add
 nl_fdef_brace=ignore
