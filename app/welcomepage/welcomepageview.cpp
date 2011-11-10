@@ -18,18 +18,32 @@
 
 #include "welcomepageview.h"
 #include <QDeclarativeView>
+#include <QDeclarativeContext>
 #include <QLabel>
 #include <KLocalizedString>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <KParts/MainWindow>
+#include <QDebug>
+#include "uihelper.h"
 
 WelcomePageView::WelcomePageView(const QString &title, Sublime::Controller *controller)
     : Sublime::Document(title, controller)
-{}
+{
+    qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
+}
 
 QWidget* WelcomePageView::createViewWidget(QWidget* parent)
 {
+    
     QDeclarativeView* view = new QDeclarativeView(parent);
-    view->setSource(QUrl("qrc:/main.qml"));
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    
+    UiHelper* helper = new UiHelper(view);
+    view->rootContext()->setContextProperty("kdev", helper);
+    view->rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
+    
+    view->setSource(QUrl("qrc:/main.qml"));
     return view;
 }
 

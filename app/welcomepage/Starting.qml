@@ -13,9 +13,15 @@ StandardPage
         anchors.margins: 30
         spacing: 50
 
-        Link { text: qsTr("New Project") }
+        Link {
+            text: qsTr("New Project")
+            onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+        }
 
-        Link { text: qsTr("Import project") }
+        Link {
+            text: qsTr("Import project")
+            onClicked: ICore.projectController().openProject()
+        }
     }
 
     ListView {
@@ -24,28 +30,34 @@ StandardPage
         anchors.bottom: parent.bottom
         anchors.margins: 30
 
-        delegate: Item {
-            height: 40
-            Row {
+        delegate: Row {
                 spacing: 10
-                Rectangle {
-                    width: 40
-                    height: 40
-                    color: colorCode
-                }
+//                 Rectangle {
+//                     width: 40
+//                     height: 40
+//                     color: colorCode
+//                 }
 
                 Link {
-                    text: name
-                    anchors.verticalCenter: parent.verticalCenter
+                    function justName(str) {
+                        var idx = str.indexOf(" [")
+                        
+                        return str.substr(0, idx);
+                    }
+                    font.pixelSize: 15
+                    
+                    text: justName(modelData["text"])
+                    onClicked: modelData.trigger()
                 }
             }
-        }
 
-        model: ListModel {
-            ListElement { name: "Grey"; colorCode: "grey" }
-            ListElement { name: "Red"; colorCode: "red" }
-            ListElement { name: "Blue"; colorCode: "blue" }
-            ListElement { name: "Green"; colorCode: "green" }
-        }
+        model: kdev.recentProjects()
+        
+//         ListModel {
+//             ListElement { name: "Grey"; colorCode: "grey" }
+//             ListElement { name: "Red"; colorCode: "red" }
+//             ListElement { name: "Blue"; colorCode: "blue" }
+//             ListElement { name: "Green"; colorCode: "green" }
+//         }
     }
 }

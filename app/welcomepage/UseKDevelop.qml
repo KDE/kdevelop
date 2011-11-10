@@ -16,7 +16,7 @@ StandardPage {
         Link { text: qsTr("Official Website"); onClicked: info.state="kdevelop.org" }
         Link { text: qsTr("Userbase"); onClicked: info.state="userbase" }
         Link { text: qsTr("Techbase"); onClicked: info.state="techbase" }
-        Link { text: "Handbook" }
+        Link { text: qsTr("Handbook"); onClicked: kdev.retrieveMenuAction("help/help_contents").trigger() }
     }
     
     Column {
@@ -39,7 +39,10 @@ StandardPage {
             text: ""
         }
         
-        Link { text: "Go!" }
+        Link {
+            text: "Go!"
+            onClicked: kdev.openUrl(webview.url)
+        }
         states: [
             State {
                 name: "userbase"
