@@ -66,11 +66,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         
         /** \return The indentation type of the currently selected style.
         */
-        virtual IndentationType indentationType();
-        /** \return The number of spaces used for indentation if IndentWithSpaces is used,
-        * or the number of spaces per tab if IndentWithTabs is selected.
-        */
-        virtual int indentationLength();
+        virtual Indentation indentation(const KUrl& url);
 
         static QString formattingSample();
         static QString indentingSample();

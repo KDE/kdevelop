@@ -146,20 +146,21 @@ QString AStylePlugin::previewText(const KMimeType::Ptr &)
         + formattingSample();
 }
 
-ISourceFormatter::IndentationType AStylePlugin::indentationType()
+AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& /*url*/ )
 {
+    Indentation ret;
+    
     QString s = m_formatter->option("Fill").toString();
     if(s == "Tabs")
-        return ISourceFormatter::IndentWithTabs;
+        ret.type = ISourceFormatter::IndentWithTabs;
     else if(m_formatter->option("FillForce").toBool())
-        return ISourceFormatter::IndentWithSpacesAndConvertTabs;
+        ret.type = ISourceFormatter::IndentWithSpacesAndConvertTabs;
     else
-        return ISourceFormatter::IndentWithSpaces;
-}
-
-int AStylePlugin::indentationLength()
-{
-    return m_formatter->option("FillCount").toInt();
+        ret.type = ISourceFormatter::IndentWithSpaces;
+    
+    ret.length = m_formatter->option("FillCount").toInt();
+    
+    return ret;
 }
 
 QString AStylePlugin::formattingSample()

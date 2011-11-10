@@ -37,6 +37,9 @@
 #include <KMessageBox>
 #include <interfaces/iuicontroller.h>
 #include <KParts/MainWindow>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+#include <language/interfaces/ilanguagesupport.h>
 
 using namespace KDevelop;
 
@@ -338,16 +341,58 @@ QString CustomScriptPlugin::previewText(const KMimeType::Ptr &)
 	return formattingSample() + "\n\n" + indentingSample();
 }
 
-ISourceFormatter::IndentationType CustomScriptPlugin::indentationType()
+
+QString CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
 {
-	///@todo Format a sample, and extract the indentation type
-	return ISourceFormatter::IndentWithSpaces;
+    QList<ILanguage*> lang = ICore::self()->languageController()->languagesForUrl( url );
+    if( lang.isEmpty() )
+        return QString();
+
+    QString sample = lang[0]->languageSupport()->indentationSample();
+    QString formattedSample = formatSource( sample, url, KMimeType::findByUrl( url ), QString(), QString() );
+
+    QStringList lines = formattedSample.split( "\n" );
+    foreach( QString line, lines )
+	{
+	  if( !line.isEmpty() && line[0].isSpace() )
+	  {
+		QString ret;
+		foreach( QChar c, line )
+		{
+		  if( c.isSpace() )
+			ret.push_back( c );
+		  else
+			break;
+		}
+		return ret;
+	  }
+	}
+	
+	return QString();
 }
 
-int CustomScriptPlugin::indentationLength()
+CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url )
 {
-	///@todo Format a sample, and extract the indentation length
-	return 4;
+    Indentation ret;
+    QString indent = computeIndentationFromSample( url );
+    if( indent.isEmpty() )
+    {
+        kDebug() << "failed extracting a valid indentation from sample for url" << url;
+        return ret; // No valid indentation could be extracted
+    }
+
+    if( indent.contains( ' ' ) && !indent.contains( '	') )
+    {
+		ret.type = IndentWithSpaces;
+		ret.length = indent.count(' ');
+    }else if( !indent.contains( ' ') )
+    {
+        ret.type = IndentWithTabs;
+    }
+    
+    kDebug() << "indent-sample" << "\"" + indent + "\"" << "extracted type" << ret.type << "extracted length" << ret.length;
+    
+    return ret;
 }
 
 void CustomScriptPreferences::updateTimeout()

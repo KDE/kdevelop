@@ -67,15 +67,13 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 		*/
 		virtual QString previewText(const KMimeType::Ptr &mime);
 
-		/** \return The indentation type of the currently selected style.
+		/** \return The indentation of the currently selected style.
 		*/
-		virtual IndentationType indentationType();
-		/** \return The number of spaces used for indentation if IndentWithSpaces is used,
-		* or the number of spaces per tab if IndentWithTabs is selected.
-		*/
-		virtual int indentationLength();
+		virtual Indentation indentation(const KUrl& url);
 
 	private:
+		QString computeIndentationFromSample(const KUrl& url);
+		
 		QStringList m_options;
 		KDevelop::SourceFormatterStyle m_currentStyle;
 		KDevelop::SourceFormatterStyle predefinedStyle(const QString& name);
