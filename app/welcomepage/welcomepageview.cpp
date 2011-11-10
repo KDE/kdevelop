@@ -27,8 +27,8 @@
 #include <QDebug>
 #include "uihelper.h"
 
-WelcomePageView::WelcomePageView(const QString &title, Sublime::Controller *controller)
-    : Sublime::Document(title, controller)
+WelcomePageView::WelcomePageView(const QString &title, QObject* parent)
+    : QObject(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
 }
@@ -45,14 +45,4 @@ QWidget* WelcomePageView::createViewWidget(QWidget* parent)
     
     view->setSource(QUrl("qrc:/main.qml"));
     return view;
-}
-
-QString WelcomePageView::documentType() const
-{
-    return i18n("Welcome");
-}
-
-QString WelcomePageView::documentSpecifier() const
-{
-    return i18n("Welcome to KDevelop");
 }

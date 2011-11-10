@@ -483,8 +483,7 @@ int main( int argc, char *argv[] )
     }
     
     WelcomePageView* v=new WelcomePageView("lalalal", core->uiControllerInternal()->controller());
-    if(args->count()==0)
-        core->uiController()->activeArea()->addView(v->createView());
+    core->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(v->createViewWidget());
 
     return app.exec();
 }

@@ -21,15 +21,13 @@
 
 #include <sublime/document.h>
 
-class WelcomePageView : public Sublime::Document
+class WelcomePageView : public QObject
 {
     Q_OBJECT
     public:
-        WelcomePageView(const QString &title, Sublime::Controller *controller);
+        WelcomePageView(const QString& title, QObject* parent);
         
         virtual QWidget* createViewWidget(QWidget* parent = 0);
-        virtual QString documentSpecifier() const;
-        virtual QString documentType() const;
 };
 
 #endif // WELCOMEPAGEVIEW_H
