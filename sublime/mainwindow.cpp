@@ -454,6 +454,11 @@ View* MainWindow::viewForPosition(QPoint globalPos) const
     return 0;
 }
 
+void MainWindow::setBackgroundCentralWidget(QWidget* w)
+{
+    d->setBackgroundCentralWidget(w);
+}
+
 }
 
 #include "mainwindow.moc"
