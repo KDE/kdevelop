@@ -178,7 +178,7 @@ void MainWindowPrivate::setBackgroundCentralWidget(QWidget* w)
     QLayout* l=m_mainWindow->centralWidget()->layout();
     l->addWidget(w);
     bgCentralWidget=w;
-    bgCentralWidget->setVisible(area->views().isEmpty());
+    setBackgroundVisible(area->views().isEmpty());
 }
 
 void MainWindowPrivate::setBackgroundVisible(bool v)
