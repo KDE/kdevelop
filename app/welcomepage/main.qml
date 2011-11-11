@@ -20,7 +20,8 @@
 
 import QtQuick 1.0
 
-Rectangle {
+Rectangle
+{
     id: root
     width: 360
     height: 360

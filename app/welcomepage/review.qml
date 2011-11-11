@@ -24,8 +24,8 @@ Rectangle
 {
     id: root
     gradient: Gradient {
-         GradientStop { position: 0.0; color: "#21257C" }
-         GradientStop { position: 1.0; color: "#62B6F1" }
+         GradientStop { position: 0.0; color: "#B85B5B" }
+         GradientStop { position: 1.0; color: "#EEBABA" }
     }
     
     Column {
@@ -54,8 +54,8 @@ Rectangle
             margins: 10
         }
         
-        color: "#5BD3A1"
-        border.color: "#1F2374"
+        color: "#F1D7D7"
+        border.color: "#66191A"
 
 //         anchors.fill: parent
         
@@ -65,9 +65,8 @@ Rectangle
             spacing: 30
             
             Text { text: "Area explaination..." }
-            Link { text: "Configure a new Target" }
-            Link { text: "Execute" }
-            Link { text: "Debug" }
+            Link { text: "Import a patch from URL" }
+            Link { text: "Import a patch from Reviewboard" }
         }
     }
 }
