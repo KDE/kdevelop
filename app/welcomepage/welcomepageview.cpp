@@ -36,12 +36,12 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     UiHelper* helper = new UiHelper(this);
     rootContext()->setContextProperty("kdev", helper);
     rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
-    rootContext()->setContextProperty("area", KDevelop::ICore::self()->uiController()->activeArea()->title());
+    areaChanged(KDevelop::ICore::self()->uiController()->activeArea());
     
     setSource(QUrl("qrc:/main.qml"));
 }
 
 void WelcomePageView::areaChanged(Sublime::Area* area)
 {
-    rootContext()->setContextProperty("area", area->title());
+    rootContext()->setContextProperty("area", area->objectName());
 }

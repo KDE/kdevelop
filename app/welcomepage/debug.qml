@@ -22,28 +22,34 @@ import QtQuick 1.0
 
 Rectangle {
     id: root
-    width: 360
-    height: 360
-    property Item current
-    
-    function areasComponent(area)
-    {
-        var component = Qt.createComponent(":/"+area+".qml")
-        console.log(component)
-        if (component.status == Component.Ready) {
-            console.log(component)
-            return component.createObject(root);
-        } else
-            throw("Error loading component "+component.errorString());
+    gradient: Gradient {
+         GradientStop { position: 0.0; color: "#2B4F69" }
+         GradientStop { position: 1.0; color: "#569FD3" }
     }
     
-    state: area
-    onStateChanged: {
-        if(current)
-            current.visible=false
-        
-        try { current = areasComponent(area) }
-        catch(e) { console.log(e); }
-        current.anchors.fill=root
+    Column {
+        id: tabs
+        width: 250
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        anchors.margins: 30
+        spacing: 30
+
+        Link {
+            width: parent.width
+
+            text: "Back to code"
+//             onClicked: /*TODO*/
+        }
+    }
+
+    StandardPage {
+        id: startingPage
+        anchors.left: tabs.right
+        height: parent.height
+        width: parent.width-x
+        color: "#5BD3A1"
+
+//         anchors.fill: parent
     }
 }

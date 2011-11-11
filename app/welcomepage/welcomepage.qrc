@@ -1,6 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
     <file>main.qml</file>
+    <file>code.qml</file>
+    <file>debug.qml</file>
     <file>Starting.qml</file>
     <file>UseKDevelop.qml</file>
     <file>Link.qml</file>
