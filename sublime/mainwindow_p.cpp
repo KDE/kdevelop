@@ -316,6 +316,7 @@ void MainWindowPrivate::reconstructViews()
 {
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, area->rootIndex());
+    setBackgroundVisible(area->views().isEmpty());
 }
 
 void MainWindowPrivate::reconstruct()
