@@ -21,6 +21,7 @@
 #define FORMATTINGHELPERS_H
 
 #include "utilexport.h"
+#include <QString>
 
 class QString;
 
@@ -35,10 +36,11 @@ namespace KDevelop {
  * @param text The text fragment of which the re-formatted version will be returned
  * @param leftContext The left context of the text fragment
  * @param rightContext The right context of the text fragment
+ * @param fuzzyCharacters Characters which are ignored in case of mismatches
  * 
  * @return The re-formatted version of @p text
  * */
-KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& originalMergedText, const QString& text, const QString& leftContext, const QString& rightContext);
+KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& originalMergedText, const QString& text, const QString& leftContext, const QString& rightContext, const QString& fuzzyCharacters = "{}()/*/");
 }
 
 #endif // FORMATTINGHELPERS_H

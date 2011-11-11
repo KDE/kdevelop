@@ -27,12 +27,13 @@ namespace KDevelop
 
 ///Matches the given prefix to the given text, ignoring all whitespace
 ///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
-int matchPrefixIgnoringWhitespace(QString text, QString prefix)
+int matchPrefixIgnoringWhitespace(QString text, QString prefix, QString fuzzyCharacters)
 {
     int prefixPos = 0;
     int textPos = 0;
     
     while (prefixPos < prefix.length() && textPos < text.length()) {
+        skipWhiteSpace:
         while (prefixPos < prefix.length() && prefix[prefixPos].isSpace())
             ++prefixPos;
         while (textPos < text.length() && text[textPos].isSpace())
@@ -42,7 +43,24 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix)
             break;
 
         if(prefix[prefixPos] != text[textPos])
+        {
+            bool skippedFuzzy = false;
+            while( prefixPos < prefix.length() && fuzzyCharacters.indexOf(prefix[prefixPos]) != -1 )
+            {
+                ++prefixPos;
+                skippedFuzzy = true;
+            }
+            while( textPos < text.length() && fuzzyCharacters.indexOf(text[textPos]) != -1 )
+            {
+                ++textPos;
+                skippedFuzzy = true;
+            }
+            
+            if( skippedFuzzy )
+                goto skipWhiteSpace;
+            
             return -1;
+        }
         ++prefixPos;
         ++textPos;
     }
@@ -159,15 +177,19 @@ std::pair<int, int> skipRedundantWhiteSpaceB( QString context, QString text )
         return std::make_pair(textPosition + textWhiteSpace.size(), contextPosition + textWhiteSpace.size());
 }
 
-QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& /*originalMergedText*/, const QString& text, const QString& leftContext, const QString& rightContext)
+QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& /*originalMergedText*/, const QString& text, const QString& leftContext, const QString& rightContext, const QString& fuzzyCharacters)
 {
     QString formattedMergedText = _formattedMergedText;
     //Now remove "leftContext" and "rightContext" from the sides
     if(!leftContext.isEmpty()) {
-        int endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext);
+        int endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext, QString() );
         if(endOfLeftContext == -1) {
-            kWarning() << "problem matching the left context";
-            return text;
+            // Try 2: Ignore the fuzzy characters while matching
+            endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext, fuzzyCharacters );
+            if(endOfLeftContext == -1) {
+                kWarning() << "problem matching the left context";
+                return text; 
+            }
         }
         
         int startOfWhiteSpace = endOfLeftContext;
@@ -182,14 +204,17 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
         formattedMergedText = formattedMergedText.mid(skip);
     }
 
-    {
+    if(!rightContext.isEmpty()) {
         //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
-        int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ");
+        int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ", QString() );
         if(endOfText == -1) {
-            kWarning() << "problem matching the text while formatting";
-            return text;
+            // Try 2: Ignore the fuzzy characters while matching
+            endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ", fuzzyCharacters );
+            if(endOfText == -1) {
+                kWarning() << "problem matching the text while formatting";
+                return text;
+            }
         }
-
         formattedMergedText = formattedMergedText.left(endOfText);
 
         int skip = skipRedundantWhiteSpace( reverse(rightContext), reverse(formattedMergedText) );
@@ -201,3 +226,5 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
 }
 
 }
+
+
