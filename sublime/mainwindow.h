@@ -97,7 +97,9 @@ public:
     /**Returns all areas that belong to this main-window*/
     QList<Area*> areas() const;
     
-    /** Sets a @p w widget that will be shown when there are no opened documents */
+    /** Sets a @p w widget that will be shown when there are no opened documents.
+     * This method takes the ownership of @p w.
+     */
     void setBackgroundCentralWidget(QWidget* w);
     
 public Q_SLOTS:
