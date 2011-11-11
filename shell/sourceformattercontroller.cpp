@@ -82,9 +82,9 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	connect(m_formatLine, SIGNAL(triggered()), this, SLOT(beautifyLine()));
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
-	m_formatFilesAction->setText(i18n("Format files"));
+	m_formatFilesAction->setText(i18n("Format Files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-	m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
+	m_formatFilesAction->setWhatsThis(i18n("<b>Format Files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
 	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatFiles()));
 
 	m_formatTextAction->setEnabled(false);
@@ -481,7 +481,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 		if (doc) {
 			kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
 			formatDocument(doc, formatter, mime);
-			return;
+			continue;
 		}
 
 		kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
