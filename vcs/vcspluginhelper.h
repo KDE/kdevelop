@@ -58,6 +58,7 @@ public Q_SLOTS:
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
     void diffToBase();
     void diffForRev();
+    void diffForRevGlobal();
     void update();
     void diffJobFinished(KJob* job);
     void commitReviewed(QString);
