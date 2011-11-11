@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Author: David Nolden <david.nolden.kdevelop@art-master.de>
+# This script is made available under the GPLv2 licence.
+#
 # This script formats a given source-file automatically by
 # using formatting scripts as defined in specific meta-information
 # "format_sources" files contained in the file system hierarchy.
@@ -20,7 +23,7 @@ ORIGFILE=$1
 TMPFILE=$2
 
 if ! [ "$ORIGFILE" ]; then
-    echo "Usage: kdev_format_source.sh [FILE] [TEMPFILE]"
+    echo "Usage: $(basename $0) [FILE] [TEMPFILE]"
     echo ""
     echo "Where FILE represents the original location of the formatted contents,"
     echo "and TEMPFILE is used as the actual, potentially different,"
