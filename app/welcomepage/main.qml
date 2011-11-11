@@ -38,6 +38,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.margins: 30
         spacing: 30
+        
+        Link { text: area }
 
         Link {
             width: parent.width

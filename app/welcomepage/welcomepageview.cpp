@@ -17,32 +17,31 @@
 */
 
 #include "welcomepageview.h"
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
-#include <QLabel>
-#include <KLocalizedString>
-#include <interfaces/icore.h>
-#include <interfaces/iuicontroller.h>
-#include <KParts/MainWindow>
-#include <QDebug>
 #include "uihelper.h"
+#include <QDeclarativeContext>
+#include <QDebug>
+#include <shell/core.h>
+#include <shell/uicontroller.h>
+#include <sublime/area.h>
+#include <sublime/mainwindow.h>
 
-WelcomePageView::WelcomePageView(const QString &title, QObject* parent)
-    : QObject(parent)
+WelcomePageView::WelcomePageView(QWidget* parent)
+    : QDeclarativeView(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
+    connect(KDevelop::Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
+    
+    setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    
+    UiHelper* helper = new UiHelper(this);
+    rootContext()->setContextProperty("kdev", helper);
+    rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
+    rootContext()->setContextProperty("area", KDevelop::ICore::self()->uiController()->activeArea()->title());
+    
+    setSource(QUrl("qrc:/main.qml"));
 }
 
-QWidget* WelcomePageView::createViewWidget(QWidget* parent)
+void WelcomePageView::areaChanged(Sublime::Area* area)
 {
-    
-    QDeclarativeView* view = new QDeclarativeView(parent);
-    view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    
-    UiHelper* helper = new UiHelper(view);
-    view->rootContext()->setContextProperty("kdev", helper);
-    view->rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
-    
-    view->setSource(QUrl("qrc:/main.qml"));
-    return view;
+    rootContext()->setContextProperty("area", area->title());
 }

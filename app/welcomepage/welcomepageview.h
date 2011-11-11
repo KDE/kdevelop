@@ -20,14 +20,16 @@
 #define WELCOMEPAGEVIEW_H
 
 #include <sublime/document.h>
+#include <QDeclarativeView>
 
-class WelcomePageView : public QObject
+class WelcomePageView : public QDeclarativeView
 {
     Q_OBJECT
     public:
-        WelcomePageView(const QString& title, QObject* parent);
+        WelcomePageView(QWidget* parent=0);
         
-        virtual QWidget* createViewWidget(QWidget* parent = 0);
+    public slots:
+        void areaChanged(Sublime::Area* a);
 };
 
 #endif // WELCOMEPAGEVIEW_H
