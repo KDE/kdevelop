@@ -497,7 +497,7 @@ void CMakeProjectVisitorTest::testFinder_data()
 //     QTest::newRow("Boost") << "Boost" << QString("1.39");
 //     QTest::newRow("Eigen2") << "Eigen2";
 //     QTest::newRow("Exiv2") << "Exiv2";
-//     QTest::newRow("QtGStreamer") << "QtGStreamer"; //commented because it might not be installed, but works
+    QTest::newRow("QtGStreamer") << "QtGStreamer" << QString(); //commented because it might not be installed, but works
 }
 
 void CMakeProjectVisitorTest::testFinder_init()
@@ -553,7 +553,7 @@ void CMakeProjectVisitorTest::testFinder()
     v.walk(code, 0);
     
     QString foundvar=QString("%1_FOUND").arg(module);
-    bool found=CMakeCondition(&v).condition(QStringList(foundvar));
+    bool found=CMakeCondition(&v).condition(QStringList(foundvar)) || CMakeCondition(&v).condition(QStringList(foundvar.toUpper()));
     if(!found)
         qDebug() << "result: " << data.vm.value(foundvar);
     
