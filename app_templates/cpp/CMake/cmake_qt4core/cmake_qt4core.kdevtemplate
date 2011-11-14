@@ -3,6 +3,7 @@
 Name=CMake QtCore C++
 Name[cs]=CMake QtCore C++
 Name[de]=CMake QtCore C++
+Name[el]=CMake QtCore C++
 Name[es]=CMake QtCore C++
 Name[fr]=CMake QtCore C++
 Name[it]=CMake QtCore C++
@@ -17,6 +18,7 @@ Name[zh_CN]=CMake QtCore C++
 Name[zh_TW]=CMake QtCore C++
 Comment=Qt4 CMake Core application. Generate a CMake/Qt4 based application (crossplatform compatible)
 Comment[cs]=Aplikace Qt4 CMake Core. Generuje aplikaci typu CMake/Qt4 (multiplatformní)
+Comment[el]=Qt4 CMake Core εφαρμογή. Δημιουργία μιας εφαρμογής με βάση τα CMake/Qt4 (συμβατή με πολλαπλές πλατφόρμες)
 Comment[es]=Aplicación Qt4 CMake Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
 Comment[fr]=Application principale CMake pour Qt4. Génère une application utilisant QMake / Qt4 (compatible multi-plateforme)
 Comment[it]=Applicazione base CMake in Qt4. Genera un'applicazione basata su CMake/Qt4 (multipiattaforma)
