@@ -212,8 +212,6 @@ private:
       AST* node;
       size_t start_token, end_token;
       KDevelop::DeclarationPointer declaration;
-      bool read;
-      bool write;
     } m_currentUse; //This is used to temporarily delay the calling of usingDeclaration.
 
     ParseSession* m_session;
