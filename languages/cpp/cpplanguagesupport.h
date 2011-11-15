@@ -93,6 +93,10 @@ public:
     
     static CppLanguageSupport* self();
 
+    virtual QString indentationSample() const {
+      return "class A{\nint member;\n};\n";
+    }
+    
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.

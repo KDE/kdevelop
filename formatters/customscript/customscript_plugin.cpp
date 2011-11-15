@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
  */
 
-#include "indent_plugin.h"
+#include "customscript_plugin.h"
 
 #include <KPluginLoader>
 #include <KPluginFactory>
@@ -32,38 +32,68 @@
 #include <memory>
 #include <QDir>
 #include <util/formattinghelpers.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <KMessageBox>
+#include <interfaces/iuicontroller.h>
+#include <KParts/MainWindow>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+#include <language/interfaces/ilanguagesupport.h>
 
 using namespace KDevelop;
 
-static QWeakPointer<IndentPlugin> indentPluginSingleton;
+static QWeakPointer<CustomScriptPlugin> indentPluginSingleton;
 
-K_PLUGIN_FACTORY(IndentFactory, registerPlugin<IndentPlugin>();)
-K_EXPORT_PLUGIN(IndentFactory(KAboutData("kdevindent","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
+K_PLUGIN_FACTORY(CustomScriptFactory, registerPlugin<CustomScriptPlugin>();)
+K_EXPORT_PLUGIN(CustomScriptFactory(KAboutData("kdevcustomscript","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
 
-IndentPlugin::IndentPlugin(QObject *parent, const QVariantList&)
-		: IPlugin(IndentFactory::componentData(), parent)
+// Replaces ${KEY} in command with variables[KEY]
+static QString replaceVariables( QString command, QMap<QString, QString> variables )
+{
+	while( command.contains("${"))
+	{
+		int pos = command.indexOf("${");
+		int end = command.indexOf("}", pos+2);
+		if(end == -1)
+			break;
+		QString key = command.mid( pos+2, end-pos-2 );
+		
+		if( variables.contains( key ) )
+		{
+			command.replace( pos, 1 + end - pos, variables[key] );
+		}else{
+			kDebug() << "found no variable while replacing in shell-command" << command << "key" << key << "available:" << variables;
+			command.replace( pos, 1 + end - pos, "" );
+		}
+	}
+	return command;
+}
+
+CustomScriptPlugin::CustomScriptPlugin(QObject *parent, const QVariantList&)
+		: IPlugin(CustomScriptFactory::componentData(), parent)
 {
 	KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
         m_currentStyle = predefinedStyles().at(0);
 	indentPluginSingleton = this;
 }
 
-IndentPlugin::~IndentPlugin()
+CustomScriptPlugin::~CustomScriptPlugin()
 {
 }
 
-QString IndentPlugin::name()
+QString CustomScriptPlugin::name()
 {
 	// This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
-	return "kdevindent";
+	return "kdevcustomscript";
 }
 
-QString IndentPlugin::caption()
+QString CustomScriptPlugin::caption()
 {
 	return "Custom Script Formatter";
 }
 
-QString IndentPlugin::description()
+QString CustomScriptPlugin::description()
 {
 	return i18n("<b>Indent and Format Source Code.</b><br />"
 				"This plugin allows using powerful external formatting tools "
@@ -74,13 +104,13 @@ QString IndentPlugin::description()
 				"can be easily shared by all team members, independent of their preferred IDE.");
 }
 
-QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
+QString CustomScriptPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 {
 	Q_UNUSED(mime);
 	return "C++";
 }
 
-QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -100,7 +130,16 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 	QString useText = text;
 	useText = leftContext + useText + rightContext;
 	
+	QMap<QString, QString> projectVariables;
+	foreach(IProject* project, ICore::self()->projectController()->projects())
+		projectVariables[project->name()] = project->folder().toLocalFile();
+	
 	QString command = style.content();
+	
+	// Replace ${Project} with the project path
+	command = replaceVariables( command, projectVariables );
+	command.replace("$FILE", url.toLocalFile());
+	
 	if(command.contains("$TMPFILE"))
 	{
 		tmpFile = std::auto_ptr<QTemporaryFile>(new QTemporaryFile(QDir::tempPath() + "/code"));
@@ -109,7 +148,6 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
 		{
 			kDebug() << "using temporary file" << tmpFile->fileName();
 			command.replace("$TMPFILE", tmpFile->fileName());
-			command.replace("$FILE", url.toLocalFile());
 			QByteArray useTextArray = useText.toLocal8Bit();
 			if( tmpFile->write(useTextArray) != useTextArray.size() )
 			{
@@ -167,12 +205,12 @@ QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QS
     return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
 }
 
-QString IndentPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
-KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name)
+KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name)
 {
 	SourceFormatterStyle result(name);
 	if (name == "GNU_indent_GNU")
@@ -192,7 +230,7 @@ KDevelop::SourceFormatterStyle IndentPlugin::predefinedStyle(const QString& name
 	return result;
 }
 
-QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
+QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
 	styles << predefinedStyle("kdev_format_source.sh");
@@ -202,10 +240,10 @@ QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 	return styles;
 }
 
-KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
+KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
 	Q_UNUSED(mime);
-	return new IndentPreferences();
+	return new CustomScriptPreferences();
 }
 
 static QString formattingSample()
@@ -298,30 +336,72 @@ static QString indentingSample()
     "\tbarArg3);\n";
 }
 
-QString IndentPlugin::previewText(const KMimeType::Ptr &)
+QString CustomScriptPlugin::previewText(const KMimeType::Ptr &)
 {
 	return formattingSample() + "\n\n" + indentingSample();
 }
 
-ISourceFormatter::IndentationType IndentPlugin::indentationType()
+
+QString CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
 {
-	///@todo Format a sample, and extract the indentation type
-	return ISourceFormatter::IndentWithSpaces;
+    QList<ILanguage*> lang = ICore::self()->languageController()->languagesForUrl( url );
+    if( lang.isEmpty() )
+        return QString();
+
+    QString sample = lang[0]->languageSupport()->indentationSample();
+    QString formattedSample = formatSource( sample, url, KMimeType::findByUrl( url ), QString(), QString() );
+
+    QStringList lines = formattedSample.split( "\n" );
+    foreach( QString line, lines )
+	{
+	  if( !line.isEmpty() && line[0].isSpace() )
+	  {
+		QString ret;
+		foreach( QChar c, line )
+		{
+		  if( c.isSpace() )
+			ret.push_back( c );
+		  else
+			break;
+		}
+		return ret;
+	  }
+	}
+	
+	return QString();
 }
 
-int IndentPlugin::indentationLength()
+CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url )
 {
-	///@todo Format a sample, and extract the indentation length
-	return 4;
+    Indentation ret;
+    QString indent = computeIndentationFromSample( url );
+    if( indent.isEmpty() )
+    {
+        kDebug() << "failed extracting a valid indentation from sample for url" << url;
+        return ret; // No valid indentation could be extracted
+    }
+
+    if( indent.contains( ' ' ) && !indent.contains( '	') )
+    {
+		ret.type = IndentWithSpaces;
+		ret.length = indent.count(' ');
+    }else if( !indent.contains( ' ') )
+    {
+        ret.type = IndentWithTabs;
+    }
+    
+    kDebug() << "indent-sample" << "\"" + indent + "\"" << "extracted type" << ret.type << "extracted length" << ret.length;
+    
+    return ret;
 }
 
-void IndentPreferences::updateTimeout()
+void CustomScriptPreferences::updateTimeout()
 {
     QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), KUrl(), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }
 
-IndentPreferences::IndentPreferences()
+CustomScriptPreferences::CustomScriptPreferences()
 {
     m_updateTimer = new QTimer ( this );
     m_updateTimer->setSingleShot ( true );
@@ -343,17 +423,23 @@ IndentPreferences::IndentPreferences()
     m_bottomLabel->setTextFormat ( Qt::RichText );
     m_bottomLabel->setText (
         i18n ( "<i>You can enter an arbitrary shell command.</i><br />"
-               "Normally, the source-code to format will be reached <br />"
-               "to the command through the standard-input, and the <br />"
-               "result will be read from its standard-output.<br /><br />"
+               "The unformatted source-code is reached to the command <br />"
+			   "through the standard input, and the <br />"
+               "formatted result is read from the standard output.<br />"
+			   "<br />"
                "If you add <b>$TMPFILE</b> into the command, then <br />"
-               "the code will be written into a temporary file, the temporary <br />"
-               "file will be substituted into that position, and the result <br />"
-               "will be read out of that file instead." ) );
+               "a temporary file is used for transferring the code." ) );
     connect ( m_commandEdit, SIGNAL (textEdited(QString)), SLOT (textEdited(QString)) );
+
+	m_vLayout->addSpacing ( 10 );
+
+	m_moreVariablesButton = new QPushButton( i18n("More Variables") );
+	connect( m_moreVariablesButton, SIGNAL(clicked(bool)), SLOT(moreVariablesClicked(bool)) );
+	m_vLayout->addWidget( m_moreVariablesButton );
+	
 }
 
-void IndentPreferences::load ( const KDevelop::SourceFormatterStyle& style )
+void CustomScriptPreferences::load ( const KDevelop::SourceFormatterStyle& style )
 {
     m_style = style;
     m_commandEdit->setText ( style.content() );
@@ -362,11 +448,29 @@ void IndentPreferences::load ( const KDevelop::SourceFormatterStyle& style )
     updateTimeout();
 }
 
-QString IndentPreferences::save()
+QString CustomScriptPreferences::save()
 {
     return m_commandEdit->text();
 }
 
-#include "indent_plugin.moc"
+void CustomScriptPreferences::moreVariablesClicked ( bool )
+{
+	KMessageBox::information( ICore::self()->uiController()->activeMainWindow(),
+	i18n("<b>$TMPFILE</b> will be replaced with the path to a temporary file. <br />"
+		 "The code will be written into the file, the temporary <br />"
+         "file will be substituted into that position, and the result <br />"
+         "will be read out of that file. <br />"
+		 "<br />"
+		 "<b>$FILE</b> will be replaced with the path of the original file. <br />"
+		 "The contents of the file must not be modified, changes are allowed <br />"
+         "only in $TMPFILE.<br />"
+		 "<br />"
+		 "<b>${PROJECT_NAME}</b> will be replaced by the path of <br />"
+		 "the currently open project with the matching name."
+			
+	), i18n("Variable Replacements") );
+}
+
+#include "customscript_plugin.moc"
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

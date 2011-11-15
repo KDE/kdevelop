@@ -1,0 +1,5 @@
+# 2-space indentation
+languages/cpp/*.h languages/cpp/*.cpp : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.2_spaces -o $TMPFILE
+
+# Default: 4-space indentation
+* : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.4_spaces -o $TMPFILE

@@ -19,8 +19,8 @@
 
  */
 
-#ifndef INDENTPLUGIN_H
-#define INDENTPLUGIN_H
+#ifndef CUSTOMSCRIPTPLUGIN_H
+#define CUSTOMSCRIPTPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/isourceformatter.h>
@@ -28,15 +28,16 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QTimer>
+#include <QPushButton>
 
-class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
+class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 {
 		Q_OBJECT
 		Q_INTERFACES(KDevelop::ISourceFormatter)
 
 	public:
-		explicit IndentPlugin(QObject *parent, const QVariantList & = QVariantList());
-		~IndentPlugin();
+		explicit CustomScriptPlugin(QObject *parent, const QVariantList & = QVariantList());
+		~CustomScriptPlugin();
 
 		virtual QString name();
 		virtual QString caption();
@@ -46,7 +47,7 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
 		/** Formats using the current style.
 		*/
-		virtual QString formatSource( const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext );
+		virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
 
 		virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
 											  const KUrl& url,
@@ -66,24 +67,22 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 		*/
 		virtual QString previewText(const KMimeType::Ptr &mime);
 
-		/** \return The indentation type of the currently selected style.
+		/** \return The indentation of the currently selected style.
 		*/
-		virtual IndentationType indentationType();
-		/** \return The number of spaces used for indentation if IndentWithSpaces is used,
-		* or the number of spaces per tab if IndentWithTabs is selected.
-		*/
-		virtual int indentationLength();
+		virtual Indentation indentation(const KUrl& url);
 
 	private:
+		QString computeIndentationFromSample(const KUrl& url);
+		
 		QStringList m_options;
 		KDevelop::SourceFormatterStyle m_currentStyle;
 		KDevelop::SourceFormatterStyle predefinedStyle(const QString& name);
 };
 
-class IndentPreferences : public KDevelop::SettingsWidget {
+class CustomScriptPreferences : public KDevelop::SettingsWidget {
 Q_OBJECT
 public:
-	IndentPreferences() ;
+	CustomScriptPreferences() ;
 		
     virtual void load ( const KDevelop::SourceFormatterStyle& style ) ;
     
@@ -96,6 +95,7 @@ private:
 	QLineEdit* m_commandEdit;
 	QLabel* m_bottomLabel;
 	QTimer* m_updateTimer;
+	QPushButton* m_moreVariablesButton;
 	KDevelop::SourceFormatterStyle m_style;
 	
 private slots:
@@ -103,10 +103,11 @@ private slots:
 		m_updateTimer->start(1000);
 	}
 	
-	void updateTimeout() ;
+	void updateTimeout();
+    void moreVariablesClicked ( bool );
 };
 
 
-#endif // INDENTPLUGIN_H
+#endif // CUSTOMSCRIPTPLUGIN_H
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4; 

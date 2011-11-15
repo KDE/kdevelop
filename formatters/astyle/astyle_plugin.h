@@ -44,7 +44,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** Formats using the current style.
         */
-        virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
+        virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
 
         /** \return A map of predefined styles (a key and a caption for each type)
         */
@@ -55,6 +55,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         virtual KDevelop::SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime);
 
         virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
+                                              const KUrl& url,
                                               const KMimeType::Ptr &mime,
                                               const QString& leftContext = QString(),
                                               const QString& rightContext = QString() );
@@ -65,11 +66,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         
         /** \return The indentation type of the currently selected style.
         */
-        virtual IndentationType indentationType();
-        /** \return The number of spaces used for indentation if IndentWithSpaces is used,
-        * or the number of spaces per tab if IndentWithTabs is selected.
-        */
-        virtual int indentationLength();
+        virtual Indentation indentation(const KUrl& url);
 
         static QString formattingSample();
         static QString indentingSample();

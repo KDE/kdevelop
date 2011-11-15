@@ -75,7 +75,7 @@ QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
     return "C++";
 }
 
-QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext )
+QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KUrl& /*url*/, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext )
 {
     if(mime->is("text/x-java"))
         m_formatter->setJavaStyle();
@@ -95,9 +95,9 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
-QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString AStylePlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
-    return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
+    return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
 KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
@@ -146,20 +146,21 @@ QString AStylePlugin::previewText(const KMimeType::Ptr &)
         + formattingSample();
 }
 
-ISourceFormatter::IndentationType AStylePlugin::indentationType()
+AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& /*url*/ )
 {
+    Indentation ret;
+    
     QString s = m_formatter->option("Fill").toString();
     if(s == "Tabs")
-        return ISourceFormatter::IndentWithTabs;
+        ret.type = ISourceFormatter::IndentWithTabs;
     else if(m_formatter->option("FillForce").toBool())
-        return ISourceFormatter::IndentWithSpacesAndConvertTabs;
+        ret.type = ISourceFormatter::IndentWithSpacesAndConvertTabs;
     else
-        return ISourceFormatter::IndentWithSpaces;
-}
-
-int AStylePlugin::indentationLength()
-{
-    return m_formatter->option("FillCount").toInt();
+        ret.type = ISourceFormatter::IndentWithSpaces;
+    
+    ret.length = m_formatter->option("FillCount").toInt();
+    
+    return ret;
 }
 
 QString AStylePlugin::formattingSample()

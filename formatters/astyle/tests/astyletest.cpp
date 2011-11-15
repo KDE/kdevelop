@@ -20,6 +20,7 @@
 #include <QDebug>
 
 #include "../astyle_formatter.h"
+#include <util/formattinghelpers.h>
 
 QTEST_MAIN(AstyleTest)
 
@@ -50,6 +51,25 @@ void AstyleTest::renameVariable()
     );
     qDebug() << "formatted source:" << formattedSource;
     QCOMPARE(formattedSource, QString("asdf"));
+}
+
+void AstyleTest::testFuzzyMatching()
+{
+    
+    // Some formatting styles inserts "{" and "}" parens behind "ifs", or change comment styles
+    // The actual text changes, thus it is difficult to match original and formatted text
+
+    QString leftContext = "void b() {/*some comment*/\nif( ";
+    QString center = "a[   0]";
+    QString rightContext =  " ) q;\n }\n";
+    QString text = leftContext + center + rightContext;
+    QString formatted = "void b() {// some comment\n    if( a[0] ) {\n        q;\n    }\n }\n";
+    QString extracted = KDevelop::extractFormattedTextFromContext( formatted, text, text, QString(), QString() );
+    QCOMPARE( extracted, formatted );
+    
+    extracted = KDevelop::extractFormattedTextFromContext( formatted, text, center, leftContext, rightContext );
+    qDebug() << "extracted" << extracted << "formatted" << formatted;
+    QCOMPARE( extracted, QString("a[0]") );
 }
 
 void AstyleTest::overrideHelper()
@@ -213,6 +233,7 @@ void AstyleTest::testContext()
     // Reduce padding as much as possible
     QCOMPARE(formattedSource, QString(""));
     
+    delete formatter;
 }
 
 #include "astyletest.moc"

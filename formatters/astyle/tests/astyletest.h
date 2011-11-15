@@ -28,6 +28,7 @@ class AstyleTest : public QObject
 private slots:
     void initTestCase();
 
+    void testFuzzyMatching();
     void renameVariable();
     void overrideHelper();
     void varTypeAssistant();
