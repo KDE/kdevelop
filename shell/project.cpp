@@ -223,6 +223,8 @@ public:
         if ( folder.protocol() != url.protocol() || folder.host() != url.host() )
             return QList<ProjectBaseItem*>();
 
+        // this gets hit when the project has not yet been added to the model
+        // TODO: should we just return-early in these cases?
         Q_ASSERT(topItem->model());
         QList<ProjectBaseItem*> items = topItem->model()->itemsForUrl(url);
 

@@ -246,6 +246,10 @@ void AbstractFileManagerPlugin::Private::created(const QString &path)
     KUrl parent = url.upUrl();
 
     foreach ( IProject* p, m_watchers.keys() ) {
+        if ( !p->projectItem()->model() ) {
+            // not yet finished with loading
+            continue;
+        }
         if ( !q->isValid(url, info.isDir(), p) ) {
             continue;
         }
