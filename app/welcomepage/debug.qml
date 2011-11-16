@@ -40,7 +40,7 @@ Rectangle
             width: parent.width
 
             text: "Back to code"
-//             onClicked: /*TODO*/
+            onClicked: kdev.setArea("code")
         }
     }
 
@@ -65,9 +65,9 @@ Rectangle
             spacing: 30
             
             Text { text: "Area explaination..." }
-            Link { text: "Configure a new Target" }
-            Link { text: "Execute" }
-            Link { text: "Debug" }
+            Link { text: "Configure a new Target"; onClicked: kdev.retrieveMenuAction("run/configure_launches") }
+            Link { text: "Execute"; onClicked: kdev.retrieveMenuAction("run/run_execute") }
+            Link { text: "Debug"; onClicked: kdev.retrieveMenuAction("run/run_debug") }
         }
     }
 }

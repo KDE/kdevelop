@@ -34,6 +34,7 @@ class UiHelper : public QObject
         bool openUrl(const QUrl& url);
         QAction* retrieveMenuAction(const QString& name);
         QList<QObject*> recentProjects();
+        void setArea(const QString& name);
 };
 
 #endif // UIHELPER_H
