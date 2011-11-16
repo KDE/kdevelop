@@ -25,6 +25,8 @@
 #include <QDebug>
 #include <KMenuBar>
 #include <qdesktopservices.h>
+#include <sublime/area.h>
+#include <sublime/view.h>
 
 using namespace KDevelop;
 
@@ -82,3 +84,12 @@ void UiHelper::setArea(const QString& name)
     ICore::self()->uiController()->switchToArea(name, IUiController::ThisWindow);
 }
 
+void UiHelper::raiseToolView(const QString& id)
+{
+    QList< Sublime::View* > views = ICore::self()->uiController()->activeArea()->toolViews();
+    foreach(Sublime::View* v, views) {
+        QWidget* w=v->widget();
+        if(w && id==w->objectName())
+            ICore::self()->uiController()->raiseToolView(w);
+    }
+}

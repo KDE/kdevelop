@@ -67,12 +67,9 @@ Rectangle
             Text { text: "Area explaination..." }
             
             Link {
-                text: "Import a patch from URL"
+                text: "Review a Patch"
                 onClicked: {
-                    console.log("fefefe "+ICore.pluginController().loadPlugin)
-                    var p = ICore.pluginController().loadPlugin("kdevpatchreview")
-                    console.log("fififi "+p)
-                    console.log("lalala "+p.objectName())
+                    kdev.raiseToolView("EditPatch")
                 }
             }
         }

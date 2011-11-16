@@ -35,6 +35,7 @@ class UiHelper : public QObject
         QAction* retrieveMenuAction(const QString& name);
         QList<QObject*> recentProjects();
         void setArea(const QString& name);
+        void raiseToolView(const QString& id);
 };
 
 #endif // UIHELPER_H
