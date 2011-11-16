@@ -40,7 +40,7 @@ Rectangle
             width: parent.width
 
             text: "Back to code"
-//             onClicked: /*TODO*/
+            onClicked: kdev.setArea("code")
         }
     }
 
@@ -65,8 +65,16 @@ Rectangle
             spacing: 30
             
             Text { text: "Area explaination..." }
-            Link { text: "Import a patch from URL" }
-            Link { text: "Import a patch from Reviewboard" }
+            
+            Link {
+                text: "Import a patch from URL"
+                onClicked: {
+                    console.log("fefefe "+ICore.pluginController().loadPlugin)
+                    var p = ICore.pluginController().loadPlugin("kdevpatchreview")
+                    console.log("fififi "+p)
+                    console.log("lalala "+p.objectName())
+                }
+            }
         }
     }
 }

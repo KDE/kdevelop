@@ -29,6 +29,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     : QDeclarativeView(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
+    qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
+    qRegisterMetaType<QObject*>("PatchReviewPlugin*"); //-.- fix qml? wtf...
     connect(KDevelop::Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
     
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
