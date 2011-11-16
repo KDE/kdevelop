@@ -64,7 +64,13 @@ Rectangle
             anchors.fill: parent
             spacing: 30
             
-            Text { text: "Area explaination..." }
+            Text {
+                width: parent.width
+                text: "On the <em>Review</em> area you will be able to find the tools you need "+
+                      "to review changes in your projects, either the ones you made or some external patch. "
+                wrapMode: Text.WordWrap
+                
+            }
             
             Link {
                 text: "Review a Patch"

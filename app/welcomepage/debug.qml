@@ -64,7 +64,15 @@ Rectangle
             anchors.fill: parent
             spacing: 30
             
-            Text { text: "Area explaination..." }
+            Text {
+                width: parent.width
+                text: "On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
+                      "On the <em>Run</em> menu you will find all the possible options.<p/><p/>"+
+                      "As you can see, here you can just execute your application or debug it if you need "+
+                      "further runtime information. You can select what is going to be run by configuring "+
+                      "the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu."
+                wrapMode: Text.WordWrap
+            }
             Link { text: "Configure a new Target"; onClicked: kdev.retrieveMenuAction("run/configure_launches") }
             Link { text: "Execute"; onClicked: kdev.retrieveMenuAction("run/run_execute") }
             Link { text: "Debug"; onClicked: kdev.retrieveMenuAction("run/run_debug") }
