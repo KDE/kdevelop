@@ -117,14 +117,20 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
 
   //HACK Should actually use DUChain::updateContextForUrl
   kDebug() << "update->features & TopDUContext::AST: " << (update ? update->features() & TopDUContext::AST : 0);
-  if(keepAst)
-  {
+  if(keepAst) {
     definitionBuilder.setMapAst(true);
-    update->setAst( IAstContainer::Ptr( session.data() ) );
+    if (update) {
+      DUChainWriteLocker lock(DUChain::lock());
+      update->setAst( IAstContainer::Ptr( session.data() ) );
+    }
   }
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, 0, ReferencedTopDUContext(update));
   if(update) {
     Q_ASSERT(top == update);
+  }
+  if (top && keepAst) {
+    DUChainWriteLocker lock(DUChain::lock());
+    top->setAst( IAstContainer::Ptr( session.data() ) );
   }
 
   UseBuilder useBuilder(session.data());
