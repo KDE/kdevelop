@@ -24,6 +24,7 @@
 
 // subversion api
 #include "svn_path.h"
+#include "svn_dirent_uri.h"
 
 // apr api
 #include "apr_file_io.h"
@@ -63,8 +64,7 @@ namespace svn
       m_path = "";
     else
     {
-      const char * int_path =
-        svn_path_internal_style(path, pool.pool());
+      const char * int_path = svn_dirent_canonicalize(path, pool);
 
       m_path = int_path;
 
