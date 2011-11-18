@@ -328,18 +328,16 @@ void TestDUChain::testDeclareInt()
 
 void TestDUChain::testMultiByteCStrings()
 {
-  ///@todo This currently does not work, the range has an offset of 1 to the right
-#if 0
-  int c;
+  //                 01234567 89 012345678901234567890123456789
   QByteArray method("char* c=\"ä\";void test() { c = 1; }");
-  LockedTopDUContext top = parse(method, DumpNone);
+  LockedTopDUContext top = parse(method, DumpAST, 0, true);
+  QVERIFY(top);
   Declaration* cDec = top->localDeclarations().first();
   QCOMPARE(cDec->uses().size(), 1);
   QCOMPARE(cDec->uses().begin()->size(), 1);
-  kDebug() << cDec->uses().begin()->first().textRange();
-  
-//   QVERIFY(cDec->uses().begin()->first() == RangeInRevision(0, 28, 0, 29));
-#endif
+  kDebug() << cDec->uses().begin()->first();
+  QEXPECT_FAIL("", "The wide ä-char is seen as two, breaking anything afterwards. see also parser test of same name", Abort);
+  QVERIFY(cDec->uses().begin()->first() == RangeInRevision(0, 26, 0, 27));
 }
 
 void TestDUChain::testEllipsis()

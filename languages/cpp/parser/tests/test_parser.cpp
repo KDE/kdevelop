@@ -850,6 +850,27 @@ void TestParser::inlineTemplate()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testMultiByteCStrings()
+{
+  //                 0         1         2          3          4
+  //                 01234567890123456789012345678 90 1234567890123456789
+  QByteArray code = "int main() { const char* a = \"ä\"; a = 0; }\n";
+  TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+  AST* str = getAST(ast, AST::Kind_StringLiteral);
+  QVERIFY(str);
+  QCOMPARE(stringForNode(str), QString::fromUtf8("\"ä\""));
+  Token token = lastSession->token_stream->token(str->start_token);
+  QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
+  QCOMPARE(token.size, 3u);
+  QCOMPARE(token.symbolLength(), 3u);
+  Token endToken = lastSession->token_stream->token(str->end_token);
+  rpp::Anchor pos = lastSession->positionAt(endToken.position);
+  // should end just before the semicolon
+  QVERIFY(pos == KDevelop::CursorInRevision(0, 32));
+}
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems

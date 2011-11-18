@@ -84,6 +84,8 @@ private slots:
   void testRegister();
   void inlineTemplate();
 
+  void testMultiByteCStrings();
+
   //BEGIN C++2011 support
   void testRangeBasedFor();
   void testRValueReference();
