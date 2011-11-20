@@ -29,7 +29,7 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     m_ui=new Ui::ReviewPatch;
     QWidget* w= new QWidget(this);
     m_ui->setupUi(w);
-    m_ui->repositories->setInsertPolicy(QComboBox::InsertAlphabetically);
+    m_ui->repositoriesFilter->setListWidget(m_ui->repositories);
     setMainWidget(w);
     
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
@@ -76,14 +76,19 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     QVariantList repos = pl->repositories();
     foreach(const QVariant& repo, repos) {
         QVariantMap repoMap=repo.toMap();
-        m_ui->repositories->addItem(repoMap["name"].toString(), repoMap["path"].toString());
+        QListWidgetItem *repoItem = new QListWidgetItem();
+
+        repoItem->setText(repoMap["name"].toString());
+        repoItem->setData(Qt::UserRole, repoMap["path"]);
+        m_ui->repositories->addItem(repoItem);
     }
     
+    m_ui->repositories->sortItems(Qt::AscendingOrder);
     m_ui->repositoriesBox->setEnabled(job->error()==0);
 }
 
 QString ReviewPatchDialog::repository() const
 {
-    Q_ASSERT(m_ui->repositories->currentIndex()>=0);
-    return m_ui->repositories->itemData(m_ui->repositories->currentIndex(),Qt::UserRole).toString();
+    Q_ASSERT(m_ui->repositories->currentIndex().isValid());
+    return m_ui->repositories->currentItem()->data(Qt::UserRole).toString();
 }
