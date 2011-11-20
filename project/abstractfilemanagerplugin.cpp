@@ -106,7 +106,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
         // see also addLotsOfFiles test
         foreach( FileManagerListJob* job, m_projectJobs[project] ) {
             kDebug(9517) << "killing project job:" << job;
-            job->kill();
+            job->abort();
         }
         m_projectJobs.remove(project);
     }
@@ -135,7 +135,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
     Q_ASSERT(gmlJob);
-    ifDebug(kDebug() << job << gmlJob;)
+    ifDebug(kDebug(9517) << job << gmlJob << gmlJob->item();)
     m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
 }
 
@@ -361,13 +361,27 @@ void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* fold
     m_watchers[folder->project()]->restartDirScan(folder->url().toLocalFile());
 }
 
+bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
+{
+    do {
+        if (child == parent) {
+            return true;
+        }
+        child = child->parent();
+    } while(child);
+    return false;
+}
+
 void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
 {
     ifDebug(kDebug(9517) << "removing folder:" << folder << folder->url();)
     foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
-        if (job->item() == folder) {
+        if (isChildItem(folder, job->item())) {
             kDebug(9517) << "killing list job for removed folder" << job << folder->url();
-            job->kill();
+            job->abort();
+            Q_ASSERT(!m_projectJobs.value(folder->project()).contains(job));
+        } else {
+            job->removeSubDir(folder);
         }
     }
     folder->parent()->removeRow( folder->row() );
