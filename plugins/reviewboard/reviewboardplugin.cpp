@@ -77,7 +77,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
             
             KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
-                                     QString(), QString(), KMessageBox::Option::AllowLink);
+                                     QString(), QString(), KMessageBox::AllowLink);
         } else {
             KMessageBox::error(0, job->errorText());
         }

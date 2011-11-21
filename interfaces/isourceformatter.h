@@ -90,13 +90,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 	public:
 		virtual ~ISourceFormatter();
 
-		enum IndentationType {
-			NoChange,
-			IndentWithTabs,
-			IndentWithSpaces,
-			IndentWithSpacesAndConvertTabs
-		};
-
 		/** \return The name of the plugin. This should contain only
 		* ASCII chars and no spaces. This will be used internally to identify
 		* the plugin.
@@ -150,17 +143,22 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		virtual QString previewText(const KMimeType::Ptr &mime) = 0;
 
 		struct Indentation {
-			Indentation() : type(NoChange), length(0) {
+			Indentation() : indentationTabWidth(0), indentWidth(0) {
 			}
 			// If this indentation is really valid
 			bool isValid() const {
-				return type != NoChange || length != 0;
+				return indentationTabWidth != 0 || indentWidth != 0;
 			}
 			
-			IndentationType type; // The indentation type of the style.
-			int length; // The number of spaces used for indentation if IndentWithSpaces is used.
-						// If this is zero, the default should be used
+			// The length of one tab used for indentation.
+			// Zero if unknown, -1 if tabs should not be used for indentation
+			int indentationTabWidth;
+
+			// The number of columns that equal one indentation level.
+			// If this is zero, the default should be used.
+			int indentWidth;
 		};
+
 		/** \return The indentation of the style applicable for the given url.
 		*/
 		virtual Indentation indentation(const KUrl& url) = 0;
