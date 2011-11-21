@@ -10,8 +10,6 @@
 
 #include "custommakemodelitems.h"
 #include <QHash>
-// #include <QFileSystemWatcher>
-#include "custommaketreesynchronizer.h"
 #include <interfaces/iproject.h>
 #include "custommakemanager.h"
 
@@ -34,22 +32,3 @@ QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
 {
     return m_defines;
 }
-
-///////////////////////////////////////////////////////////////
-
-CustomMakeFolderItem::CustomMakeFolderItem( CustomMakeManager* manager, KDevelop::IProject* project, const KUrl& url, ProjectBaseItem*parent )
-    : KDevelop::ProjectBuildFolderItem( project, url, parent )
-{
-    m_watcher = new CustomMakeTreeSynchronizer( manager );
-}
-
-CustomMakeFolderItem::~CustomMakeFolderItem()
-{
-    delete m_watcher;
-}
-
-CustomMakeTreeSynchronizer* CustomMakeFolderItem::fsWatcher()
-{
-    return m_watcher;
-}
-
