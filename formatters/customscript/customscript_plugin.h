@@ -72,7 +72,7 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 		virtual Indentation indentation(const KUrl& url);
 
 	private:
-		QString computeIndentationFromSample(const KUrl& url);
+		QStringList computeIndentationFromSample(const KUrl& url);
 		
 		QStringList m_options;
 		KDevelop::SourceFormatterStyle m_currentStyle;
