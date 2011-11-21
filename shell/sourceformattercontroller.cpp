@@ -207,23 +207,19 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
 	
     QString modeline("// kate: ");
-	QString length = QString::number(indentation.length);
+	QString indentLength = QString::number(indentation.indentWidth);
+	QString tabLength = QString::number(indentation.indentationTabWidth);
 	// add indentation style
 	modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
 
-	ISourceFormatter::IndentationType type = indentation.type;
-	if (type == ISourceFormatter::IndentWithTabs) {
-		modeline.append("replace-tabs off; ");
-	} else if(type != ISourceFormatter::NoChange) {
-		modeline.append("space-indent on; ");
-		if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs)
-			modeline.append("replace-tabs on; ");
-	}
-	
-	if( indentation.length != 0 )
+	if(indentation.indentWidth) // We know something about indentation-width
+		modeline.append(QString("indent-width %1; ").arg(indentation.indentWidth));
+
+	if(indentation.indentationTabWidth != 0) // We know something about tab-usage
 	{
-		modeline.append("indent-width ").append(length).append("; ");
-		modeline.append("tab-width ").append(length).append("; ");
+		modeline.append(QString("replace-tabs %1; ").arg((indentation.indentationTabWidth == -1) ? "on" : "off"));
+		if(indentation.indentationTabWidth > 0)
+			modeline.append(QString("tab-width %1; ").arg(indentation.indentationTabWidth));
 	}
 
 	kDebug() << "created modeline: " << modeline << endl;
@@ -412,18 +408,14 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 			KTextEditor::CommandInterface* ci;
 		} call(textDoc);
 		
-		if( indentation.length )
-		{
-			call( QString("set-indent-width %1").arg(indentation.length) );
-			call( QString("set-tab-width %1").arg(indentation.length) );
-		}
+		if( indentation.indentWidth ) // We know something about indentation-width
+			call( QString("set-indent-width %1").arg(indentation.indentWidth ) );
 
-		if( indentation.type != KDevelop::ISourceFormatter::NoChange )
+		if( indentation.indentationTabWidth != 0 ) // We know something about tab-usage
 		{
-
-			call( QString("set-replace-tabs %1").arg( 
-				(indentation.type == KDevelop::ISourceFormatter::IndentWithSpaces ||
-				 indentation.type == KDevelop::ISourceFormatter::IndentWithSpacesAndConvertTabs) ? 1 : 0 ) );
+			call( QString("set-replace-tabs %1").arg( (indentation.indentationTabWidth == -1) ? 1 : 0 ) );
+			if( indentation.indentationTabWidth > 0 )
+				call( QString("set-tab-width %1").arg(indentation.indentationTabWidth ) );
 		}
 	}else{
 		kDebug() << "found no valid indentation";
