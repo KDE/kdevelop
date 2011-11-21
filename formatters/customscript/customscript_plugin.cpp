@@ -342,11 +342,13 @@ QString CustomScriptPlugin::previewText(const KMimeType::Ptr &)
 }
 
 
-QString CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
+QStringList CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
 {
+	QStringList ret;
+
     QList<ILanguage*> lang = ICore::self()->languageController()->languagesForUrl( url );
     if( lang.isEmpty() )
-        return QString();
+        return ret;
 
     QString sample = lang[0]->languageSupport()->indentationSample();
     QString formattedSample = formatSource( sample, url, KMimeType::findByUrl( url ), QString(), QString() );
@@ -356,41 +358,74 @@ QString CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
 	{
 	  if( !line.isEmpty() && line[0].isSpace() )
 	  {
-		QString ret;
+		QString indent;
 		foreach( QChar c, line )
 		{
 		  if( c.isSpace() )
-			ret.push_back( c );
+			indent.push_back( c );
 		  else
 			break;
 		}
-		return ret;
+		if(!indent.isEmpty() && !ret.contains(indent))
+			ret.push_back(indent);
 	  }
 	}
 	
-	return QString();
+	return ret;
 }
 
 CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url )
 {
     Indentation ret;
-    QString indent = computeIndentationFromSample( url );
+    QStringList indent = computeIndentationFromSample( url );
     if( indent.isEmpty() )
     {
         kDebug() << "failed extracting a valid indentation from sample for url" << url;
         return ret; // No valid indentation could be extracted
     }
 
-    if( indent.contains( ' ' ) && !indent.contains( '	') )
-    {
-		ret.type = IndentWithSpaces;
-		ret.length = indent.count(' ');
-    }else if( !indent.contains( ' ') )
-    {
-        ret.type = IndentWithTabs;
-    }
+	if( indent[0].contains( ' ' ) )
+		ret.indentWidth = indent[0].count(' ');
+
+	if( !indent.join("").contains('	') )
+		ret.indentationTabWidth = -1; // Tabs are not used for indentation
+	
+	if( indent[0] == "	" )
+	{
+		// The script indents with tabs-only
+		// The problem is that we don't know how
+		// wide a tab is supposed to be.
+		//
+		// We need indentation-width=tab-width
+		// to make the editor do tab-only formatting,
+		// so choose a random with of 4.
+		ret.indentWidth = 4;
+		ret.indentationTabWidth = 4;
+	}else if(ret.indentWidth) {
+		// Tabs are used for indentation, alongside with spaces
+		// Try finding out how many spaces one tab stands for.
+		// Do it by assuming a uniform indentation-step with each level.
+		
+		for(int pos = 0; pos < indent.size(); ++pos)
+		{
+			if(indent[pos] == "	" && pos >= 1)
+			{
+				// This line consists of only a tab.
+				int prevWidth = indent[pos-1].length();
+				int prevPrevWidth = (pos >= 2) ? indent[pos-2].length() : 0;
+				int step = prevWidth - prevPrevWidth;
+				kDebug() << "found in line " << pos << prevWidth << prevPrevWidth << step;
+				if(step > 0 && step <= prevWidth)
+				{
+					kDebug() << "Done";
+					ret.indentationTabWidth = prevWidth + step;
+					break;
+				}
+			}
+		}
+	}
     
-    kDebug() << "indent-sample" << "\"" + indent + "\"" << "extracted type" << ret.type << "extracted length" << ret.length;
+    kDebug() << "indent-sample" << "\"" + indent.join("\n") + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
     
     return ret;
 }
