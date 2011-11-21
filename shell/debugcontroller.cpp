@@ -383,13 +383,15 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
         if (session == m_currentSession.data()) {
             m_currentSession.clear();
             emit currentSessionChanged(0);
-            Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
-            if (mainWindow && mainWindow->area()->objectName() != "code") {
-                QString workingSet = mainWindow->area()->workingSet();
-                ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
-                mainWindow->area()->setWorkingSet(workingSet);
+            if (!Core::self()->shuttingDown()) {
+                Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
+                if (mainWindow && mainWindow->area()->objectName() != "code") {
+                    QString workingSet = mainWindow->area()->workingSet();
+                    ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
+                    mainWindow->area()->setWorkingSet(workingSet);
+                }
+                ICore::self()->uiController()->findToolView(i18n("Debug"), 0, IUiController::Raise);
             }
-            ICore::self()->uiController()->findToolView(i18n("Debug"), 0, IUiController::Raise);
         }
         session->deleteLater();
     }

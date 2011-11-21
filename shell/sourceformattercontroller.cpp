@@ -92,8 +92,9 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 	connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
 	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
+	// Use a queued connection, because otherwise the view is not yet fully set up
 	connect(Core::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
-	        this, SLOT(documentLoaded(KDevelop::IDocument*)));
+	        this, SLOT(documentLoaded(KDevelop::IDocument*)), Qt::QueuedConnection);
 
 	activeDocumentChanged(Core::self()->documentController()->activeDocument());
 }

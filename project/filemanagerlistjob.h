@@ -36,6 +36,9 @@ public:
     ProjectFolderItem* item() const;
 
     void addSubDir(ProjectFolderItem* item);
+    void removeSubDir(ProjectFolderItem* item);
+
+    void abort();
 
 signals:
     void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
@@ -53,6 +56,8 @@ private:
     ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
     const bool m_forceRecursion;
+    // kill does not delete the job instantaniously
+    bool m_aborted;
 };
 
 }

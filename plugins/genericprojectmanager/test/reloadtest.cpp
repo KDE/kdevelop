@@ -37,6 +37,7 @@
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
+///FIXME: get rid of this, use temporary dir+file classes!
 void exec(const QString &cmd)
 {
     QProcess proc;
@@ -102,6 +103,7 @@ void ProjectLoadTest::addRemoveFiles()
     f.close();
 
     KDevelop::ICore::self()->projectController()->openProject(p.second);
+    ///FIXME: wait for signal
     QTest::qWait(500);
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
@@ -137,6 +139,17 @@ void ProjectLoadTest::addRemoveFiles()
     exec("rm -r "+p.first);
 }
 
+void createFile(const QString& path)
+{
+    QFile f(path);
+    f.open(QIODevice::WriteOnly);
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.close();
+}
+
 void _writeRandomStructure(QString path, int files)
 {
     QDir p(path);
@@ -144,16 +157,10 @@ void _writeRandomStructure(QString path, int files)
     if (qrand() < RAND_MAX / 5) {
         p.mkdir(name);
         path += "/" + name;
-        kDebug() << "wrote path" << path;
+//         kDebug() << "wrote path" << path;
     } else {
-        QFile f(path+"/"+name);
-        f.open(QIODevice::WriteOnly);
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.close();
-        kDebug() << "wrote file" << path+"/"+name;
+        createFile(path+"/"+name);
+//         kDebug() << "wrote file" << path+"/"+name;
     }
     files--;
     if (files > 0) {
@@ -212,4 +219,50 @@ void ProjectLoadTest::addMultipleJobs()
     QTest::qWait(500);
     exec("rm -r "+p1.first);
     exec("rm -r "+p2.first);
+}
+
+void ProjectLoadTest::raceJob()
+{
+    // our goal here is to try to reproduce https://bugs.kde.org/show_bug.cgi?id=260741
+    // my idea is that this can be triggered by the following:
+    // - list dir foo/bar containing lots of files
+    // - remove dir foo while listjob is still running
+    QPair<QString, KUrl> p = makeProject();
+    QDir dir(p.first);
+    QVERIFY(dir.mkpath("test/zzzzz"));
+    for(int i = 0; i < 1000; ++i) {
+        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.first + "/test/%1").arg(i));
+    }
+
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 1);
+    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->projectAt(0);
+    KDevelop::ProjectFolderItem* root = project->projectItem();
+    QCOMPARE(root->rowCount(), 1);
+    KDevelop::ProjectBaseItem* testItem = root->child(0);
+    QVERIFY(testItem->folder());
+    QCOMPARE(testItem->baseName(), QString("test"));
+    QCOMPARE(testItem->rowCount(), 1001);
+    KDevelop::ProjectBaseItem* asdfItem = testItem->children().last();
+    QVERIFY(asdfItem->folder());
+
+    // move dir
+    qDebug() << "moving dir";
+    dir.rename("test", "test2");
+    // move sub dir
+    dir.rename("test2/zzzzz", "test2/bla");
+
+    QTest::qWait(500);
+    QCOMPARE(root->rowCount(), 1);
+    QVERIFY(!root->children().contains(testItem));
+    testItem = root->child(0);
+    QVERIFY(testItem->folder());
+    QCOMPARE(testItem->baseName(), QString("test2"));
+
+    KDevelop::ICore::self()->projectController()->closeProject(project);
+
+    exec("rm -r " + p.first);
 }
