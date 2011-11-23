@@ -67,7 +67,8 @@ public:
     }
     virtual QString id() const
     {
-        return "org.kdevelop.OutputView";
+        //NOTE: id must be unique, see e.g. https://bugs.kde.org/show_bug.cgi?id=287093
+        return "org.kdevelop.OutputView." + QString::number(m_data->toolViewId);
     }
 private:
     ToolViewData *m_data;
