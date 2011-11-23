@@ -248,6 +248,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path)
     foreach ( IProject* p, m_watchers.keys() ) {
         if ( !p->projectItem()->model() ) {
             // not yet finished with loading
+            // FIXME: how should this be handled? see unit test
             continue;
         }
         if ( !q->isValid(url, info.isDir(), p) ) {
@@ -299,6 +300,11 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path)
                                     "The project has to be closed.", p->name()),
                                i18n("Project Folder Deleted") );
             ICore::self()->projectController()->closeProject(p);
+            continue;
+        }
+        if ( !p->projectItem()->model() ) {
+            // not yet finished with loading
+            // FIXME: how should this be handled? see unit test
             continue;
         }
         foreach ( ProjectFolderItem* item, p->foldersForUrl(url) ) {

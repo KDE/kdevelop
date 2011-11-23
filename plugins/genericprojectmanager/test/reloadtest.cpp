@@ -37,6 +37,8 @@
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
+Q_DECLARE_METATYPE(KDevelop::IProject*);
+
 ///FIXME: get rid of this, use temporary dir+file classes!
 void exec(const QString &cmd)
 {
@@ -52,6 +54,8 @@ void ProjectLoadTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore::initialize();
+
+    qRegisterMetaType<KDevelop::IProject*>("KDevelop::IProject*");
 }
 
 void ProjectLoadTest::cleanupTestCase()
@@ -265,4 +269,51 @@ void ProjectLoadTest::raceJob()
     KDevelop::ICore::self()->projectController()->closeProject(project);
 
     exec("rm -r " + p.first);
+}
+
+void ProjectLoadTest::addDuringImport()
+{
+    // our goal here is to try to reproduce an issue in the optimized filesForUrl implementation
+    // which requires the project to be associated to the model to function properly
+    // to trigger this we create a big project, import it and then call filesForUrl during
+    // the import action
+    QPair<QString, KUrl> p = makeProject();
+    QDir dir(p.first);
+    QVERIFY(dir.mkpath("test/zzzzz"));
+    for(int i = 0; i < 1000; ++i) {
+        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.first + "/test/%1").arg(i));
+    }
+
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    // not yet ready
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 0);
+    // but about to be opened
+    QCOMPARE(spy.count(), 1);
+    KDevelop::IProject* project = spy.value(0).first().value<KDevelop::IProject*>();
+    QVERIFY(project);
+    QCOMPARE(project->folder(), p.second.upUrl());
+    KUrl file(p.second, "test/zzzzz/999");
+    QVERIFY(QFile::exists(file.toLocalFile()));
+    // this most probably is not yet loaded
+    // and this should not crash
+    QCOMPARE(project->itemsForUrl(file).size(), 0);
+    // now delete that file and don't crash
+    QFile::remove(file.toLocalFile());
+    // now create another file
+    KUrl file2 = file;
+    file2.setFileName("999v2");
+    createFile(file2.toLocalFile());
+    QVERIFY(!project->isReady());
+    // now wait for finish
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QVERIFY(project->isReady());
+    // make sure our file removal + addition was properly tracked
+    QCOMPARE(project->filesForUrl(file).size(), 0);
+    QCOMPARE(project->filesForUrl(file2).size(), 1);
+
+    //NOTE: this test is probabably incomplete, I bet there are some race conditions left,
+    //      esp. when adding a file at a point where the parent folder was already imported
+    //      or removing a file that was already imported
 }
