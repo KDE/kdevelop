@@ -47,6 +47,32 @@ QStringList CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
+CMakeDefinitions CMakeFolderItem::definitions() const
+{
+    CMakeDefinitions result = m_defines;
+
+    // This goes up recursively through the hierarchy of cmake-parent-dirs 
+    // and fetches their definitions too. This makes sure that defines set in a parent CMakeLists.txt
+    // are also applied in this subdirectory.
+    //
+    // This is not 100% correct, since the current CMakeLists.txt might have removed one of the parent
+    // defines again, but at this point we cannot take care of that anymore, this would need to be
+    // fixed in the parser. In addition this does not take into account wether a define in a parent
+    // was added before or after the add_subdirectory for this cmakelists.txt. And last but not least
+    // CMake actually adds all defines as-is, even if two add_definitions are adding the same define
+    // with the same or different values. Our code will only take the 'last' value.
+    CMakeFolderItem* parentFolder = formerParent();
+    if( parentFolder ) {
+        QHash<QString,QString> parentDefs = parentFolder->definitions();
+        for( QHash<QString,QString>::const_iterator it = parentDefs.constBegin(); it != parentDefs.constEnd(); it++ ) {
+            if( !result.contains( it.key() ) ) {
+                result[it.key()] = it.value();
+            }
+        }
+    }
+    return result;
+}
+
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
     KUrl ret;
