@@ -838,10 +838,19 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 
   DUContext* secondParentContext = openContext(first, second, DUContext::Other);
 
-  visit(node->init_statement);
-  visit(node->condition);
-  visit(node->range_declaration);
-  visit(node->expression);
+  if (node->range_declaration) {
+    // in range-based for we first visit the expression
+    // since it might define the type for cases like
+    // for(auto i : foo)
+    visit(node->expression);
+    visit(node->range_declaration);
+    Q_ASSERT(!node->init_statement);
+    Q_ASSERT(!node->condition);
+  } else {
+    visit(node->init_statement);
+    visit(node->condition);
+    visit(node->expression);
+  }
 
   closeContext();
 

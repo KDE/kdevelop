@@ -97,6 +97,7 @@ protected:
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
+  virtual void visitForRangeDeclaration(ForRangeDeclarationAst *node);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
@@ -202,6 +203,7 @@ private:
 
 private:
   QStack<Declaration*> m_declarationStack;
+  Declaration* m_lastDeclaration;
   QByteArray m_lastComment;  
 };
 
