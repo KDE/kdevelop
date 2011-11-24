@@ -39,10 +39,9 @@ QStringList CMakeFolderItem::includeDirectories() const
     QStringList urls(m_includeList);
 
     CMakeFolderItem *folder = formerParent();
-    while(folder)
+    if(folder)
     {
         urls += folder->includeDirectories();
-        folder = folder->formerParent();
     }
     return urls;
 }
