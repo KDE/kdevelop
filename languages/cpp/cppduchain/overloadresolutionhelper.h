@@ -26,11 +26,6 @@
 #include "viablefunctions.h"
 #include <language/duchain/identifier.h>
 
-namespace KDevelop {
-  class QualifiedIdentifier;
-  class Declaration;
-}
-
 namespace Cpp
 {
   class ViableFunction;
@@ -101,6 +96,9 @@ namespace Cpp
      * 
      * Returns only the most viable matched function. If no function is viable, a nonviable
      * function will be returned.
+     *
+     * NOTE: you *must* call @c setFunctions before, if not looking for operators!
+     *
      * @param forceIsInstance If this is true, all encountered class types will be considered _instances_
      *                        of the class.
      * */
