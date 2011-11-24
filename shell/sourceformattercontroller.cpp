@@ -373,7 +373,7 @@ void SourceFormatterController::settingsChanged()
 
 void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
-	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) || !doc->isTextDocument() )
 		return;
 
 	KTextEditor::Document *textDoc = doc->textDocument();
@@ -383,7 +383,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
 	
 	// modelines should always take precedence
-	if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->textDocument()->text() ) != -1 )
+	if( !ignoreModeline && kateModelineWithNewline.indexIn( textDoc->text() ) != -1 )
 	{
 		kDebug() << "ignoring because a kate modeline was found";
 		return;
@@ -394,6 +394,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 	{
 		struct CommandCaller {
 			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(doc->editor())) {
+				Q_ASSERT(ci);
 			}
 			void operator()(QString cmd) {
 				KTextEditor::Command* command = ci->queryCommand( cmd );
