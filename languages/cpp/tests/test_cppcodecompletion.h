@@ -143,6 +143,8 @@ private slots:
   void testOverride();
   void testExecuteKeepWord_data();
   void testExecuteKeepWord();
+  void testAfterVisibility_data();
+  void testAfterVisibility();
 public:
   enum DumpArea {
     DumpNone = 0,
