@@ -60,7 +60,10 @@ TestFile::TestFile (const QString& contents, const QString& fileExtension, TestP
     d->file.write(contents.toLocal8Bit());
     d->file.close();
 
-    d->url = IndexedString(d->file.fileName());
+    QFileInfo info(d->file.fileName());
+    QVERIFY(info.exists());
+    QVERIFY(info.isFile());
+    d->url = IndexedString(info.absoluteFilePath());
 
     project->addToFileSet(d->url);
 }
@@ -71,6 +74,11 @@ TestFile::~TestFile()
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
+}
+
+IndexedString TestFile::url() const
+{
+    return d->url;
 }
 
 void TestFile::parse (TopDUContext::Features features, int priority)

@@ -64,6 +64,11 @@ public:
     ~TestFile();
 
     /**
+     * Returns the URL to this file.
+     */
+    IndexedString url() const;
+
+    /**
      * Trigger (re-)parsing of this file with given @p features and @p priority.
      * 
      * @see KDevelop::DUChain::updateContextForUrl
