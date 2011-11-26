@@ -61,7 +61,7 @@ namespace Cpp
      * @param identifierForADL The identifier will be used for performing argument-dependent look-up.
      *                         This should only be non-empty if the function is not being called as a member.
      * */
-    void setFunctionNameForADL( const QualifiedIdentifier& identifierForADL );
+    void setFunctionNameForADL( const KDevelop::QualifiedIdentifier& identifierForADL );
     
     /**
      * @param base Sets the base-type, which is used while searching overloaded operators as:
@@ -113,7 +113,7 @@ namespace Cpp
       bool m_isOperator;
       QList< DeclarationWithArgument > m_declarations; //Declarations are paired with the optional first argument for the declared functions
       OverloadResolver::ParameterList m_knownParameters;
-      QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
+      QMap<KDevelop::Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
       QualifiedIdentifier m_identifierForADL;
   };
 
