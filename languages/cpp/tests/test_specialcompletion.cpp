@@ -30,6 +30,7 @@
 #include <language/duchain/dumpchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
+#include <language/duchain/duchainutils.h>
 
 #include "codecompletion/missingincludeitem.h"
 #include "codecompletion/context.h"
@@ -37,7 +38,6 @@
 
 #include <QTest>
 #include <qtest_kde.h>
-#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 using namespace Cpp;
