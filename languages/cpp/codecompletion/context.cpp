@@ -196,7 +196,7 @@ bool isLegalIdentifier( const QChar &theChar ) {
 ///Gets the longest str from @param list which matches the ending of @param str
 QString getEndingFromSet( const QString &str, const QSet<QString> &set, int maxMatchLen) {
   QString end;
-  for ( int i = maxMatchLen; i > 0; --i ) {
+  for ( int i = qMin(str.length(), maxMatchLen); i > 0; --i ) {
     end = str.right( i );
     if ( i + i < str.length() &&
          isLegalIdentifier( end[0] ) &&
