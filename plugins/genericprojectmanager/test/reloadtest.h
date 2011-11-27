@@ -41,6 +41,8 @@ private slots:
   void addMultipleJobs();
 
   void raceJob();
+
+  void addDuringImport();
 };
 
 #endif

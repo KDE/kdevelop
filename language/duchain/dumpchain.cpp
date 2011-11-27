@@ -84,8 +84,15 @@ public:
 
 void DumpChain::dump( DUContext * context, int allowedDepth )
 {
-  if(!top)
+  if(!top || top != context->topContext()) {
     top = context->topContext();
+    if (!top->problems().isEmpty()) {
+        qout << "PROBLEMS:" << endl;
+        foreach(const ProblemPointer& p, top->problems()) {
+            qout << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
+        }
+    }
+  }
 
   enum ContextType {
     Global    /**< A context that declares functions, namespaces or classes */,
