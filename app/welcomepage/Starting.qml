@@ -72,12 +72,11 @@ StandardPage
             }
 
         model: kdev.recentProjects()
+        spacing: 5
         
-//         ListModel {
-//             ListElement { name: "Grey"; colorCode: "grey" }
-//             ListElement { name: "Red"; colorCode: "red" }
-//             ListElement { name: "Blue"; colorCode: "blue" }
-//             ListElement { name: "Green"; colorCode: "green" }
-//         }
+        header: Text {
+            font.pixelSize: 25
+            text: "Recent Projects:"
+        }
     }
 }
