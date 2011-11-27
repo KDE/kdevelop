@@ -213,7 +213,7 @@ void SourceFormatterSettings::load()
     cbFormatters->clear();
     styleList->clear();
     chkKateModelines->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
-    chkKateOverrideIndentation->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) );
+    chkKateOverrideIndentation->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) );
     foreach( const QString& name, sortedLanguages )
     {
         cbLanguages->addItem( name );
