@@ -39,7 +39,7 @@ namespace {
   KDevelop::IndexedString startCompletionAfterParsingUrl;
 }
 
-void MissingIncludeCompletionModel::startCompletionAfterParsing(KDevelop::IndexedString url) {
+void MissingIncludeCompletionModel::startCompletionAfterParsing(const KDevelop::IndexedString& url) {
   startCompletionAfterParsingUrl = url;
 }
 
@@ -77,7 +77,7 @@ void MissingIncludeCompletionModel::stop() {
   worker()->context = KDevelop::IndexedDUContext();
 }
 
-void MissingIncludeCompletionModel::startWithExpression(KDevelop::DUContextPointer context, QString expression, QString localExpression) {
+void MissingIncludeCompletionModel::startWithExpression(KDevelop::DUContextPointer context, const QString& expression, const QString& localExpression) {
   QMutexLocker lock(&worker()->mutex);
   worker()->prefixExpression = expression;
   worker()->localExpression = localExpression;

@@ -46,6 +46,10 @@ void doStuff()
     pointerList << new int(1) << new int(2);
     pointerList << new int(3);
     qDeleteAll(pointerList);
+
+    Container<QPair<int, int> > pairList;
+    pairList << QPair<int, int>(1, 2) << qMakePair(2, 3);
+    pairList << qMakePair(4, 5);
 }
 
 int main()

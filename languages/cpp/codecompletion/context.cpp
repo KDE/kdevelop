@@ -196,7 +196,7 @@ bool isLegalIdentifier( const QChar &theChar ) {
 ///Gets the longest str from @param list which matches the ending of @param str
 QString getEndingFromSet( const QString &str, const QSet<QString> &set, int maxMatchLen) {
   QString end;
-  for ( int i = maxMatchLen; i > 0; --i ) {
+  for ( int i = qMin(str.length(), maxMatchLen); i > 0; --i ) {
     end = str.right( i );
     if ( i + i < str.length() &&
          isLegalIdentifier( end[0] ) &&
@@ -585,8 +585,14 @@ DUContextPointer CodeCompletionContext::findLocalClass() const {
 
 KDevelop::CodeCompletionContext::Ptr
 CodeCompletionContext::getParentContext( const QString &expressionPrefix ) const {
-  QString access = getEndingFromSet( expressionPrefix, PARENT_ACCESS_STRINGS, ACCESS_STR_MATCH );
-  if ( access.isEmpty() )
+  //this is essentially a poor-mans tokenizer, and we want to find out
+  //whether the last token is part of PARENT_ACCESS_STRINGS
+  //but we must take into account that longer versions exist in ACCESS_STRINGS,
+  //esp. for e.g. "parent:", here ":" would be a PARENT_ACCESS_STRINGS but
+  //it is actually not. So we first search in the long version and then
+  //double-check that it's actually a proper access string
+  QString access = getEndingFromSet( expressionPrefix, ACCESS_STRINGS, ACCESS_STR_MATCH );
+  if ( access.isEmpty() || !PARENT_ACCESS_STRINGS.contains(access) )
     return KDevelop::CodeCompletionContext::Ptr();
 
   QStringList previousArguments;

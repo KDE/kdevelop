@@ -42,11 +42,11 @@ public:
   ~MissingIncludeCompletionModel();
 
   //Bridge from Cpp::CodeCompletionModel to this model
-  void startWithExpression(KDevelop::DUContextPointer context, QString prefixExpression, QString localExpression);
+  void startWithExpression(KDevelop::DUContextPointer context, const QString& prefixExpression, const QString& localExpression);
   
   static MissingIncludeCompletionModel& self();
   
-  static void startCompletionAfterParsing(KDevelop::IndexedString url);
+  static void startCompletionAfterParsing(const KDevelop::IndexedString& url);
   
   private slots:
   void parseJobFinished(KDevelop::ParseJob* job);

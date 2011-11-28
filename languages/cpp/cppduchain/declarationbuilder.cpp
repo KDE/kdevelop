@@ -59,6 +59,8 @@
 #include "name_visitor.h"
 #include "usebuilder.h"
 
+#include "overloadresolutionhelper.h"
+
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
@@ -83,7 +85,7 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_functionFlag(NoFunctionFlag), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_functionFlag(NoFunctionFlag), m_collectQtFunctionSignature(false), m_lastDeclaration(0)
 {
 }
 
@@ -265,6 +267,51 @@ void DeclarationBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node
   }
 
   m_pendingPropertyDeclarations.insert(currentContext(), qMakePair(decl, node));
+}
+
+void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
+{
+  AbstractType::Ptr listType = lastType();
+
+  DefaultVisitor::visitForRangeDeclaration(node);
+
+  if (lastTypeWasAuto() && listType && m_lastDeclaration) {
+    // auto support for range-based for
+    AbstractType::Ptr realListType = TypeUtils::realType(listType);
+    // step 1: find type of elements in list
+    AbstractType::Ptr elementType;
+    if (ArrayType::Ptr array = realListType.cast<ArrayType>()) {
+      // case a: c-array, i.e. foo bar[5]; -> type is foo
+      elementType = array->elementType();
+    } else {
+      // case b: look for begin(listType) function using ADL
+      DUChainReadLocker lock;
+      OverloadResolutionHelper helper = OverloadResolutionHelper( DUContextPointer(currentContext()), TopDUContextPointer(topContext()) );
+      static const QualifiedIdentifier begin("begin");
+      helper.setFunctionNameForADL(begin);
+      helper.setKnownParameters(OverloadResolver::ParameterList(listType, false));
+      helper.setFunctions( currentContext()->findDeclarations(begin, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions) );
+      ViableFunction func = helper.resolve();
+      if (func.isValid()) {
+        AbstractType::Ptr type = func.declaration()->type<FunctionType>()->returnType();
+        // see spec: for-range-declaration = *__begin;
+        elementType = TypeUtils::decreasePointerDepth(type, topContext(), true);
+      }
+    }
+
+    // step 2: set last type, but keep const&
+    if (elementType) {
+      DUChainWriteLocker lock;
+      AbstractType::Ptr type = m_lastDeclaration->abstractType();
+      elementType->setModifiers(type->modifiers());
+      if (ReferenceType::Ptr ref = type.cast<ReferenceType>()) {
+        ref->setBaseType(elementType);
+      } else {
+        type = elementType;
+      }
+      m_lastDeclaration->setAbstractType(type);
+    }
+  }
 }
 
 KDevelop::IndexedDeclaration DeclarationBuilder::resolveMethodName(NameAST *node)
@@ -816,7 +863,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
-  m_declarationStack.pop();
+  m_lastDeclaration = m_declarationStack.pop();
 }
 
 void DeclarationBuilder::visitTypedef(TypedefAST *def)

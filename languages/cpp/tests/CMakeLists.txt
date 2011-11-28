@@ -5,63 +5,68 @@ include_directories(
     ${KDevelop_BINARY_DIR}/languages/cpp
 )
 
+set(test_common_SRCS
+
+  ../codecompletion/context.cpp
+  ../codecompletion/item.cpp
+  ../codecompletion/helpers.cpp
+  ../codecompletion/implementationhelperitem.cpp
+  ../cpphighlighting.cpp
+  ../codecompletion/model.cpp
+  ../quickopen.cpp
+  ../codegen/simplerefactoring.cpp
+  ../includepathresolver.cpp
+  ../setuphelpers.cpp
+  ../setuphelpers_gcc.cpp
+  ../codegen/cppnewclass.cpp
+  ../codegen/progressdialogs.cpp
+  ../codegen/unresolvedincludeassistant.cpp
+  ../cpputils.cpp
+  ../codecompletion/worker.cpp
+  ../includepathcomputer.cpp
+  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/missingincludeitem.cpp
+)
+
+if(MSVC)
+    list(APPEND test_common_SRCS ../setuphelpers_msvc.cpp)
+endif(MSVC)
+
+########### next target ###############
+
+set(specialcompletiontest_SRCS
+  test_specialcompletion.cpp
+
+  ${test_common_SRCS}
+)
+
+kde4_add_unit_test(cppspecialcompletion ${specialcompletiontest_SRCS})
+target_link_libraries(cppspecialcompletion
+    kdev4cppduchain
+    kdev4cpprpp
+    kdev4cppparser
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+)
+
 ########### next target ###############
 
 add_definitions(-DTEST_COMPLETION)
 
 set(cppcodecompletiontest_SRCS
   test_cppcodecompletion.cpp
-  
-  ../codecompletion/context.cpp
-  ../codecompletion/item.cpp
-  ../codecompletion/helpers.cpp
-  ../codecompletion/implementationhelperitem.cpp
-  ../cpphighlighting.cpp
-  ../codecompletion/model.cpp
-  ../quickopen.cpp
-  ../codegen/simplerefactoring.cpp
-  ../includepathresolver.cpp
-  ../setuphelpers.cpp
-  ../setuphelpers_gcc.cpp
-  ../codegen/cppnewclass.cpp
-  ../codegen/progressdialogs.cpp
-  ../codegen/unresolvedincludeassistant.cpp
-  ../cpputils.cpp
-  ../codecompletion/worker.cpp
-  ../includepathcomputer.cpp
-  ../codecompletion/missingincludemodel.cpp
-  ../codecompletion/missingincludeitem.cpp
+
+  ${test_common_SRCS}
 )
-if(MSVC)
-    list(APPEND cppcodecompletiontest_SRCS ../setuphelpers_msvc.cpp)
-endif(MSVC)
 
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
-  
-  ../codecompletion/context.cpp
-  ../codecompletion/item.cpp
-  ../codecompletion/helpers.cpp
-  ../codecompletion/implementationhelperitem.cpp
-  ../cpphighlighting.cpp
-  ../codecompletion/model.cpp
-  ../quickopen.cpp
-  ../codegen/simplerefactoring.cpp
-  ../includepathresolver.cpp
-  ../setuphelpers.cpp
-  ../setuphelpers_gcc.cpp
-  ../codegen/cppnewclass.cpp
-  ../codegen/progressdialogs.cpp
-  ../codegen/unresolvedincludeassistant.cpp
-  ../cpputils.cpp
-  ../codecompletion/worker.cpp
-  ../includepathcomputer.cpp
-  ../codecompletion/missingincludemodel.cpp
-  ../codecompletion/missingincludeitem.cpp
+
+  ${test_common_SRCS}
 )
-if(MSVC)
-    list(APPEND cppcodegentest_SRCS ../setuphelpers_msvc.cpp)
-endif(MSVC)
 
 add_definitions(-DBUILD_TESTS)
 

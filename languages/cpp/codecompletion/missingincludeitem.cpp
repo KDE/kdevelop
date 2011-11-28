@@ -65,21 +65,20 @@ int moveBehindComment(KTextEditor::Document* document, int line, int maxLine) {
 }
 
 ///Decide whether the file is allowed to be included directly. If yes, this should return false.
-bool isBlacklistedInclude(KUrl url) {
+bool isBlacklistedInclude(const KUrl& url) {
   QString fileName = url.fileName();
   if(isSource(fileName))
     return true;
 
-  url = url.upUrl();
   //Do not allow including directly from the bits directory. Instead use one of the forwarding headers in other directories, when possible.
-  if(url.fileName() == "bits" && url.toLocalFile().contains("/include/c++/")) {
+  if(url.upUrl().fileName() == "bits" && url.path().contains("/include/c++/")) {
     return true;
   }
-  
+
   return false;
 }
 
-QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier) {
+QualifiedIdentifier removeTemplateParameters(const QualifiedIdentifier& baseIdentifier) {
   QualifiedIdentifier  identifier;
   for(int a = 0; a < baseIdentifier.count(); ++a) {
     Identifier part = baseIdentifier.at(a);
@@ -89,7 +88,12 @@ QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier)
   return identifier;
 }
 
-QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefix, QString file, KUrl::List includePaths, KUrl currentPath, IndexedDeclaration decl, uint argumentHintDepth, QSet<QString>& directives) {
+QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTextPrefix, const QString& file,
+                                                        const KUrl::List& includePaths, const KUrl& currentPath,
+                                                        const IndexedDeclaration& decl,
+                                                        uint argumentHintDepth,
+                                                        QSet<QString>& directives)
+{
   QList<KDevelop::CompletionTreeItemPointer> ret;
   //We have found a potential declaration. Now find the shortest include path.
   QString shortestDirective;
@@ -159,7 +163,7 @@ QStringList candidateIncludeFiles(Declaration* decl) {
   return ret;
 }
 
-KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, KDevelop::IndexedDeclaration decl) {
+KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
   KSharedPtr<MissingIncludeCompletionItem> item;
   if(decl.data()) {
     QSet<QString> temp;
@@ -177,10 +181,15 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, K
   return item;
 }
 
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool needInstance) {
-  
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const QString& expression,
+                                                                         const QString& displayTextPrefix,
+                                                                         const Cpp::ExpressionEvaluationResult& expressionResult,
+                                                                         KDevelop::DUContext* context,
+                                                                         int argumentHintDepth,
+                                                                         bool needInstance)
+{
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.abstractType(), context->topContext());
-  
+
   //Collect all visible "using namespace" imports
   QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier() );
   QSet<QualifiedIdentifier> prefixes;
@@ -343,6 +352,15 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(ret.begin(), ret.end(), DirectiveShorterThan());
   
   return ret;
+}
+
+MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedInclude, const QString& displayTextPrefix,
+                                                           const IndexedDeclaration& decl, int argumentHintDepth)
+: m_argumentHintDepth(argumentHintDepth)
+, m_addedInclude(addedInclude)
+, m_displayTextPrefix(displayTextPrefix)
+, m_decl(decl)
+{
 }
 
 #define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}

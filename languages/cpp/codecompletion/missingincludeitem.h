@@ -24,10 +24,11 @@
 
 namespace Cpp {
 
-class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem {
+class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem
+{
 public:
-  MissingIncludeCompletionItem(QString addedInclude, QString displayTextPrefix, KDevelop::IndexedDeclaration decl, int argumentHintDepth) : m_argumentHintDepth(argumentHintDepth), m_addedInclude(addedInclude), m_displayTextPrefix(displayTextPrefix), m_decl(decl) {
-  }
+  MissingIncludeCompletionItem(const QString& addedInclude, const QString& displayTextPrefix,
+                               const KDevelop::IndexedDeclaration& decl, int argumentHintDepth);
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
@@ -37,7 +38,7 @@ public:
   virtual int argumentHintDepth() const {
     return m_argumentHintDepth;
   }
-  
+
   QString lineToInsert() const;
 
   int m_argumentHintDepth;
@@ -54,10 +55,15 @@ class ForwardDeclarationItem : public NormalDeclarationCompletionItem {
 
 ///DUChain must be locked
 ///@param displayTextPrefix may be needed so the created items pass a specific filtering in the completion-list
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0, bool needInstance = false);
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const QString& expression,
+                                                                         const QString& displayTextPrefix,
+                                                                         const Cpp::ExpressionEvaluationResult& expressionResult,
+                                                                         KDevelop::DUContext* context,
+                                                                         int argumentHintDepth = 0,
+                                                                         bool needInstance = false);
 
 ///DUChain must be locked
-KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, KDevelop::IndexedDeclaration decl);
+KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const KDevelop::IndexedDeclaration& decl);
 
 }
 
