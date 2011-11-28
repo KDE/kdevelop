@@ -57,7 +57,8 @@ QPair<KTextEditor::View*, QToolButton*> getViewForTab(QWidget* tabWidget)
 }
 
 EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidget* parent)
-    : KDialog(parent), m_ui(new Ui::EditSnippetBase), m_repo(repository), m_snippet(snippet)
+    : KDialog(parent), m_ui(new Ui::EditSnippetBase), m_repo(repository)
+    , m_snippet(snippet), m_topBoxModified(false)
 {
     Q_ASSERT(m_repo);
 
@@ -77,6 +78,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     m_scriptsView = pair.first;
     m_scriptsView->document()->setMode("JavaScript");
     m_scriptsView->document()->setText(m_repo->script());
+    m_scriptsView->document()->setModified(false);
     connect(pair.second, SIGNAL(clicked(bool)),
             this, SLOT(slotScriptDocumentation()));
 
@@ -88,13 +90,16 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
 
-    connect(m_ui->snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
+    connect(m_ui->snippetNameEdit,       SIGNAL(textEdited(QString)), this, SLOT(topBoxModified()));
+    connect(m_ui->snippetNameEdit,       SIGNAL(textEdited(QString)), this, SLOT(validate()));
+    connect(m_ui->snippetArgumentsEdit,  SIGNAL(textEdited(QString)), this, SLOT(topBoxModified()));
+    connect(m_ui->snippetPostfixEdit,    SIGNAL(textEdited(QString)), this, SLOT(topBoxModified()));
+    connect(m_ui->snippetPrefixEdit,     SIGNAL(textEdited(QString)), this, SLOT(topBoxModified()));
+    connect(m_ui->snippetShortcutWidget, SIGNAL(shortcutChanged(KShortcut)), this, SLOT(topBoxModified()));
     connect(m_snippetView->document(), SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(validate()));
 
     // if we edit a snippet, add all existing data
     if ( m_snippet ) {
-        m_ui->snippetNameEdit->setText(m_repo->text());
-
         setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
 
         m_ui->snippetArgumentsEdit->setText(m_snippet->arguments());
@@ -103,6 +108,10 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         m_ui->snippetPostfixEdit->setText(m_snippet->postfix());
         m_ui->snippetPrefixEdit->setText(m_snippet->prefix());
         m_ui->snippetShortcutWidget->setShortcut(m_snippet->action()->shortcut());
+
+        // unset modified flags
+        m_snippetView->document()->setModified(false);
+        m_topBoxModified = false;
     } else {
         setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
     }
@@ -161,6 +170,7 @@ void EditSnippet::save()
     m_snippet->action()->setShortcut(m_ui->snippetShortcutWidget->shortcut());
     m_repo->setScript(m_scriptsView->document()->text());
     m_scriptsView->document()->setModified(false);
+    m_topBoxModified = false;
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
@@ -178,7 +188,7 @@ void EditSnippet::slotScriptDocumentation()
 
 void EditSnippet::reject()
 {
-    if (m_snippetView->document()->isModified() || m_scriptsView->document()->isModified()) {
+    if (m_topBoxModified || m_snippetView->document()->isModified() || m_scriptsView->document()->isModified()) {
         int ret = KMessageBox::warningContinueCancel(qApp->activeWindow(),
             i18n("The snippet contains unsaved changes. Do you want to continue and lose all changes?"),
             i18n("Warning - Unsaved Changes")
@@ -188,6 +198,11 @@ void EditSnippet::reject()
         }
     }
     QDialog::reject();
+}
+
+void EditSnippet::topBoxModified()
+{
+    m_topBoxModified = true;
 }
 
 #include "editsnippet.moc"

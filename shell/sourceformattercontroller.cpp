@@ -53,7 +53,7 @@ namespace KDevelop
 {
 
 const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
-const QString SourceFormatterController::kateOverrideIndentationConfigKey = "OverrideKateIndentationMode";
+const QString SourceFormatterController::kateOverrideIndentationConfigKey = "OverrideKateIndentation";
 const QString SourceFormatterController::styleCaptionKey = "Caption";
 const QString SourceFormatterController::styleContentKey = "Content";
 const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
