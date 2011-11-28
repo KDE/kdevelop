@@ -55,7 +55,6 @@ void AstyleTest::renameVariable()
 
 void AstyleTest::testFuzzyMatching()
 {
-    
     // Some formatting styles inserts "{" and "}" parens behind "ifs", or change comment styles
     // The actual text changes, thus it is difficult to match original and formatted text
 
@@ -64,12 +63,76 @@ void AstyleTest::testFuzzyMatching()
     QString rightContext =  " ) q;\n }\n";
     QString text = leftContext + center + rightContext;
     QString formatted = "void b() {// some comment\n    if( a[0] ) {\n        q;\n    }\n }\n";
-    QString extracted = KDevelop::extractFormattedTextFromContext( formatted, text, text, QString(), QString() );
+    QString extracted = KDevelop::extractFormattedTextFromContext( formatted, text, QString(), QString() );
     QCOMPARE( extracted, formatted );
     
-    extracted = KDevelop::extractFormattedTextFromContext( formatted, text, center, leftContext, rightContext );
+    extracted = KDevelop::extractFormattedTextFromContext( formatted, center, leftContext, rightContext );
     qDebug() << "extracted" << extracted << "formatted" << formatted;
     QCOMPARE( extracted, QString("a[0]") );
+}
+
+void AstyleTest::testTabMatching()
+{
+    // Some formatting styles inserts "{" and "}" parens behind "ifs", or change comment styles
+    // The actual text changes, thus it is difficult to match original and formatted text
+
+{
+	// Mismatch: There is a preceding tab, but the formatter replaces the tab with spaces
+	// The tab is matched with 2 spaces, since we set tab-width 2
+    QString extracted = KDevelop::extractFormattedTextFromContext(
+		"class C {\n  class A;\n}\n",
+		"class A;", "class C {\n	", "\n}\n", 2 );
+    QCOMPARE( extracted, QString("class A;") );
+	
+	// Two tabs are inserted insead of 1
+	extracted = KDevelop::extractFormattedTextFromContext(
+		"class C {\n		class A;\n}\n",
+		"class A;", "class C {\n	", "\n}\n", 2 );
+    QCOMPARE( extracted, QString("	class A;") );
+	
+	// One space is inserted behind the tab
+	extracted = KDevelop::extractFormattedTextFromContext(
+		"class C {\n	 class A;\n}\n",
+		"class A;", "class C {\n	", "\n}\n", 2 );
+    QCOMPARE( extracted, QString(" class A;") );
+
+	// Two tabs are inserted, with 2 preceding whitespaces
+	// Add only 1 tab
+	extracted = KDevelop::extractFormattedTextFromContext(
+		"class C {\n		class A;\n}\n",
+		"class A;", "class C {\n  ", "\n}\n", 2 );
+    QCOMPARE( extracted, QString("	class A;") );
+
+	extracted = KDevelop::extractFormattedTextFromContext(
+		"class C {\n          class A;\n}\n",
+		"class A;", "class C {\n		", "\n}\n", 4 );
+    QCOMPARE( extracted, QString("  class A;") );
+}
+{
+	// Already correctly formatted
+    QString leftContext = "void b() {\n c = 4;\n	";
+    QString center = "a = 3;";
+    QString rightContext =  "\n b = 5;\n }\n";
+    QString text = leftContext + center + rightContext;
+    QString formatted = "void b() {\n	c = 4;\n	a = 3;\n	b = 5;\n }\n";
+    QString extracted = KDevelop::extractFormattedTextFromContext( formatted, text, QString(), QString() );
+    QCOMPARE( extracted, formatted );
+    
+    extracted = KDevelop::extractFormattedTextFromContext( formatted, center, leftContext, rightContext );
+    QCOMPARE( extracted, QString("a = 3;") );
+}
+{
+    QString leftContext = "void b() {\n c = 4;\n";
+    QString center = "a = 3;\n";
+    QString rightContext =  "b = 5;\n }\n";
+    QString text = leftContext + center + rightContext;
+    QString formatted = "void b() {\n	c = 4;\n	a = 3;\n	b = 5;\n }\n";
+    QString extracted = KDevelop::extractFormattedTextFromContext( formatted, text, QString(), QString() );
+    QCOMPARE( extracted, formatted );
+    
+    extracted = KDevelop::extractFormattedTextFromContext( formatted, center, leftContext, rightContext );
+    QCOMPARE( extracted, QString("	a = 3;\n	") );
+}
 }
 
 void AstyleTest::overrideHelper()

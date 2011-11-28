@@ -29,6 +29,7 @@ private slots:
     void initTestCase();
 
     void testFuzzyMatching();
+    void testTabMatching();
     void renameVariable();
     void overrideHelper();
     void varTypeAssistant();

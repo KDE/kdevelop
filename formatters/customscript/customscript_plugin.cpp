@@ -202,7 +202,17 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 		return text;
 	}
 
-    return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
+	int tabWidth = 4;
+	if((!leftContext.isEmpty() || !rightContext.isEmpty()) && (text.contains('	') || output.contains('	')))
+	{
+		// If we have to do contex-matching with tabs, determine the correct tab-width so that the context
+		// can be matched correctly
+		Indentation indent = indentation(url);
+		if(indent.indentationTabWidth > 0)
+			tabWidth = indent.indentationTabWidth;
+	}
+
+    return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, tabWidth);
 }
 
 QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)

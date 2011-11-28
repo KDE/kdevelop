@@ -55,7 +55,7 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
 
     init(0);
 
-    return KDevelop::extractFormattedTextFromContext(output, useText, text, leftContext, rightContext);
+    return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options["FillCount"].toInt());
 }
 
 void AStyleFormatter::setOption(const QString &key, const QVariant &value)
