@@ -76,7 +76,7 @@ static QString reverse( const QString& str ) {
 }
 
 // Returns the text start position with all whitespace that is redundant in the given context skipped
-int skipRedundantWhiteSpace( QString context, QString text )
+int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
 {
     if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
         return 0;
@@ -115,69 +115,31 @@ int skipRedundantWhiteSpace( QString context, QString text )
     // Skip redundant ordinary whitespace
     while( contextOffset < contextWhiteSpace.size() && textOffset < textWhiteSpace.size() && contextWhiteSpace[contextOffset].isSpace() && contextWhiteSpace[contextOffset] != '\n' && textWhiteSpace[textOffset].isSpace() && textWhiteSpace[textOffset] != '\n' )
     {
+		bool contextWasTab = contextWhiteSpace[contextOffset] == '	';
+		bool textWasTab = textWhiteSpace[contextOffset] == '	';
         ++contextOffset;
         ++textOffset;
+        if( contextWasTab != textWasTab )
+        {
+            // Problem: We have a mismatch of tabs and/or ordinary whitespaces
+            if( contextWasTab )
+			{
+				for( int s = 1; s < tabWidth; ++s )
+					if( textOffset < textWhiteSpace.size() && textWhiteSpace[textOffset] == ' ' )
+						++textOffset;
+			}else if( textWasTab )
+			{
+				for( int s = 1; s < tabWidth; ++s )
+					if( contextOffset < contextWhiteSpace.size() && contextWhiteSpace[contextOffset] == ' ' )
+						++contextOffset;
+			}
+        }
     }
 
     return textPosition+textOffset;
 }
 
-std::pair<int, int> skipRedundantWhiteSpaceB( QString context, QString text )
-{
-    if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
-        return std::make_pair(0, 0);
-    
-    int textPosition = 0;
-    
-    // Extract trailing whitespace in the context
-    int contextPosition = context.size()-1;
-    while( contextPosition > 0 && context[contextPosition-1].isSpace() )
-        --contextPosition;
-    
-    
-    int textWhitespaceEnd = 0;
-    while(textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
-        ++textWhitespaceEnd;
-    
-    QString contextWhiteSpace = context.mid(contextPosition);
-    contextPosition = 0;
-    QString textWhiteSpace = text.left(textWhitespaceEnd);
-    
-    // Step 1: Remove redundant newlines
-    while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
-    {
-        int contextOffset = contextWhiteSpace.indexOf('\n')+1;
-        int textOffset = textWhiteSpace.indexOf('\n')+1;
-
-        contextPosition += contextOffset;
-        contextWhiteSpace.remove(0, contextOffset);
-
-        textPosition += textOffset;
-        textWhiteSpace.remove(0, textOffset);
-    }
-    
-    while(textWhiteSpace.contains('\n'))
-    {
-        // There are remaining newlines which are not redundant, no more matching required.
-        return std::make_pair(textPosition, contextPosition);
-    }
-    
-    while(contextWhiteSpace.contains('\n'))
-    {
-        // There are too many newlines in the context. To make everything correct, we would have
-        // to remove those newlines, however we're not editing that area, thus there is nothing we can do.
-        return std::make_pair(textPosition, contextPosition);
-    }
-    
-    // Step 2: Remove redundant whitespace
-    
-    if( textWhiteSpace.size() > contextWhiteSpace.size() )
-        return std::make_pair(textPosition + contextWhiteSpace.size(), contextPosition + contextWhiteSpace.size()); // Skip the context white space
-    else
-        return std::make_pair(textPosition + textWhiteSpace.size(), contextPosition + textWhiteSpace.size());
-}
-
-QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& /*originalMergedText*/, const QString& text, const QString& leftContext, const QString& rightContext, const QString& fuzzyCharacters)
+QString extractFormattedTextFromContext( const QString& _formattedMergedText, const QString& text, const QString& leftContext, const QString& rightContext, int tabWidth, const QString& fuzzyCharacters)
 {
     QString formattedMergedText = _formattedMergedText;
     //Now remove "leftContext" and "rightContext" from the sides
@@ -199,7 +161,7 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
         
         formattedMergedText = formattedMergedText.mid(startOfWhiteSpace);
         
-        int skip = skipRedundantWhiteSpace( leftContext, formattedMergedText );
+        int skip = skipRedundantWhiteSpace( leftContext, formattedMergedText, tabWidth );
         
         formattedMergedText = formattedMergedText.mid(skip);
     }
@@ -217,7 +179,7 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
         }
         formattedMergedText = formattedMergedText.left(endOfText);
 
-        int skip = skipRedundantWhiteSpace( reverse(rightContext), reverse(formattedMergedText) );
+        int skip = skipRedundantWhiteSpace( reverse(rightContext), reverse(formattedMergedText), tabWidth );
 
         formattedMergedText = formattedMergedText.left(formattedMergedText.size() - skip);
     }
