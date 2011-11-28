@@ -114,7 +114,7 @@ class QListPrinter:
                'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
                'QXmlStreamEntityDeclaration']
             #this list of types that use Q_DECLARE_TYPEINFO(T, Q_PRIMITIVE_TYPE) (from qglobal.h)
-            primitiveTypes = ['bool', 'char', 'signed char', 'uchar', 'short', 'ushort', 'int', 'unit', 'long', 'ulong', 'qint64', 'qunit64', 'float', 'double']
+            primitiveTypes = ['bool', 'char', 'signed char', 'uchar', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'qint64', 'qunit64', 'float', 'double']
             if movableTypes.count(self.nodetype.tag) or primitiveTypes.count(str(self.nodetype)):
                isStatic = False
             else:
