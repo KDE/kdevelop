@@ -50,7 +50,7 @@
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
-:controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
+:controller(controller), area(0), activeView(0), activeToolView(0), bgCentralWidget(0),
  ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
@@ -128,7 +128,13 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     // adymo: intentionally do not add a toolbar for top buttonbar
     // this doesn't work well with toolbars added via xmlgui
 
-    recreateCentralWidget();
+    centralWidget = new QWidget;
+    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+    centralWidget->setLayout(layout);
+    layout->setMargin(0);
+    splitterCentralWidget = new QSplitter(centralWidget);
+    layout->addWidget(splitterCentralWidget);
+    m_mainWindow->setCentralWidget(centralWidget);
 
     connect(idealController,
             SIGNAL(dockShown(Sublime::View*,Sublime::Position,bool)),
@@ -164,6 +170,24 @@ void MainWindowPrivate::showBottomDock(bool b)
 void MainWindowPrivate::showRightDock(bool b)
 {
     idealController->showRightDock(b);
+}
+
+void MainWindowPrivate::setBackgroundCentralWidget(QWidget* w)
+{
+    delete bgCentralWidget;
+    QLayout* l=m_mainWindow->centralWidget()->layout();
+    l->addWidget(w);
+    bgCentralWidget=w;
+    setBackgroundVisible(area->views().isEmpty());
+}
+
+void MainWindowPrivate::setBackgroundVisible(bool v)
+{
+    if(!bgCentralWidget)
+        return;
+    
+    bgCentralWidget->setVisible(v);
+    splitterCentralWidget->setVisible(!v);
 }
 
 void MainWindowPrivate::focusEditor()
@@ -210,7 +234,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             kDebug() << "reconstructing root area";
             //this is root area
-            splitter = new QSplitter(d->centralWidget);
+            splitter = d->splitterCentralWidget;
             d->m_indexSplitters[index] = splitter;
             d->centralWidget->layout()->addWidget(splitter);
         }
@@ -232,7 +256,6 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         }
         Q_ASSERT(splitter);
     }
-    splitter->show();
 
     if (index->isSplitted()) //this is a visible splitter
         splitter->setOrientation(index->orientation());
@@ -293,6 +316,7 @@ void MainWindowPrivate::reconstructViews()
 {
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, area->rootIndex());
+    setBackgroundVisible(area->views().isEmpty());
 }
 
 void MainWindowPrivate::reconstruct()
@@ -354,7 +378,7 @@ void MainWindowPrivate::clearArea()
         if (view->hasWidget())
             view->widget()->setParent(0);
     }
-    recreateCentralWidget();
+    cleanCentralWidget();
     m_mainWindow->setActiveView(0);
     m_indexSplitters.clear();
     area = 0;
@@ -363,14 +387,13 @@ void MainWindowPrivate::clearArea()
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
-void MainWindowPrivate::recreateCentralWidget()
+void MainWindowPrivate::cleanCentralWidget()
 {
-    centralWidget = new QWidget();
-    m_mainWindow->setCentralWidget(centralWidget);
-
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-    layout->setMargin(0);
-    centralWidget->setLayout(layout);
+    for(int i=0; i<splitterCentralWidget->count(); ++i) {
+        delete splitterCentralWidget->widget(i);
+    }
+    
+    setBackgroundVisible(true);
 }
 
 struct ShownToolViewFinder {
@@ -407,6 +430,8 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
     // A formerly non-empty working-set has become empty, and a relayout of the area-selector may be required
     if(m_mainWindow->area()->views().size() == 0)
         m_mainWindow->setupAreaSelector();
+    
+    setBackgroundVisible(area->views().isEmpty());
 }
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
@@ -455,6 +480,8 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     // A formerly empty working-set may become non-empty, and a relayout of the area-selector may be required
     if(m_mainWindow->area()->views().size() == 1)
         m_mainWindow->setupAreaSelector();
+    
+    setBackgroundVisible(false);
 }
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)

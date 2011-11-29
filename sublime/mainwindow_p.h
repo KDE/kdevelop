@@ -164,6 +164,9 @@ public:
     void reconstructViews();    
     /**Clears the area leaving mainwindow empty.*/
     void clearArea();
+    
+    /** Sets a @p w widget that will be shown when there are no documents on the area */
+    void setBackgroundCentralWidget(QWidget* w);
 
     void activateFirstVisibleView();
 
@@ -177,6 +180,8 @@ public:
     View *activeToolView;
 
     QWidget *centralWidget;
+    QWidget* bgCentralWidget;
+    QSplitter* splitterCentralWidget;
     AreaTabWidget* areaSwitcher;
 
     IdealController *idealController;
@@ -211,8 +216,9 @@ private slots:
     void selectPreviousDock();
 
 private:
+    void setBackgroundVisible(bool v);
     Qt::DockWidgetArea positionToDockArea(Position position);
-    void recreateCentralWidget();
+    void cleanCentralWidget();
 
     MainWindow *m_mainWindow;
     // uses QPointer to make already-deleted splitters detectable

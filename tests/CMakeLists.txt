@@ -7,6 +7,7 @@ set(kdevplatformtests_LIB_SRCS
     kdevsignalspy.cpp
     testcore.cpp
     testproject.cpp
+    testfile.cpp
 )
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
@@ -23,6 +24,7 @@ install( FILES
          kdevsignalspy.h
          testcore.h
          testproject.h
+         testfile.h
          kdevplatformtestsexport.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/ 
          COMPONENT Devel )

@@ -63,4 +63,9 @@ DocumentChangeTracker* ILanguageSupport::createChangeTrackerForDocument ( KTextE
     return new DocumentChangeTracker(document);
 }
 
+QString ILanguageSupport::indentationSample() const
+{
+    return "";
+}
+
 }

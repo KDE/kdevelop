@@ -52,10 +52,12 @@ private:
     Snippet* m_snippet;
     KTextEditor::View* m_snippetView;
     KTextEditor::View* m_scriptsView;
+    bool m_topBoxModified;
 
 private slots:
     void save();
     void validate();
+    void topBoxModified();
 
     void slotSnippetDocumentation();
     void slotScriptDocumentation();

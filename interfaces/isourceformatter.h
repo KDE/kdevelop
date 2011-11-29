@@ -90,13 +90,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 	public:
 		virtual ~ISourceFormatter();
 
-		enum IndentationType {
-			NoChange,
-			IndentWithTabs,
-			IndentWithSpaces,
-			IndentWithSpacesAndConvertTabs
-		};
-
 		/** \return The name of the plugin. This should contain only
 		* ASCII chars and no spaces. This will be used internally to identify
 		* the plugin.
@@ -117,12 +110,13 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		
 		/** Formats using the current style.
 		 * @param text The text to format
+		 * @param url The URL to which the text belongs (its contents must not be changed).
 		 * @param leftContext The context at the left side of the text. If it is in another line, it must end with a newline.
 		 * @param rightContext The context at the right side of the text. If it is in the next line, it must start with a newline.
 		 *
 		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
 		*/
-		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
+		virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
 
 		/**
 		 * Format with the given style, this is mostly for the kcm to format the preview text
@@ -131,6 +125,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 */
 		virtual QString formatSourceWithStyle( SourceFormatterStyle,
 											   const QString& text,
+											   const KUrl& url,
 											   const KMimeType::Ptr &mime,
 											   const QString& leftContext = QString(),
 											   const QString& rightContext = QString() ) = 0;
@@ -147,13 +142,26 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QString previewText(const KMimeType::Ptr &mime) = 0;
 
-		/** \return The indentation type of the currently selected style.
+		struct Indentation {
+			Indentation() : indentationTabWidth(0), indentWidth(0) {
+			}
+			// If this indentation is really valid
+			bool isValid() const {
+				return indentationTabWidth != 0 || indentWidth != 0;
+			}
+			
+			// The length of one tab used for indentation.
+			// Zero if unknown, -1 if tabs should not be used for indentation
+			int indentationTabWidth;
+
+			// The number of columns that equal one indentation level.
+			// If this is zero, the default should be used.
+			int indentWidth;
+		};
+
+		/** \return The indentation of the style applicable for the given url.
 		*/
-		virtual IndentationType indentationType() = 0;
-		/** \return The number of spaces used for indentation if IndentWithSpaces is used,
-		* or the number of spaces per tab if IndentWithTabs is selected.
-		*/
-		virtual int indentationLength() = 0;
+		virtual Indentation indentation(const KUrl& url) = 0;
 
 		/** \return A string representing the map. Values are written in the form
 		* key=value and separated with ','.

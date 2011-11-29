@@ -54,6 +54,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 	Q_OBJECT
 	public:
 		static const QString kateModeLineConfigKey;
+		static const QString kateOverrideIndentationConfigKey;
 		static const QString styleCaptionKey;
 		static const QString styleContentKey;
 		static const QString supportedMimeTypesKey;
@@ -82,21 +83,26 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		
 		KConfigGroup configuration();
 
+		void settingsChanged();
+		
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
 		void beautifySource();
 		void beautifyLine();
 		void formatFiles();
+		void documentLoaded( KDevelop::IDocument* );
 	private:
 		/** \return A modeline string (to add at the end or the beginning of a file)
 		* corresponding to the settings of the active language.
 		*/
-		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr&);
+		QString addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr&);
 		/** \return The name of kate indentation mode for the mime type.
 		* examples are cstyle, python, etc.
 		*/
 		QString indentationMode(const KMimeType::Ptr &mime);
 		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
+		// Adapts the mode of the editor regarding indentation-style
+		void adaptEditorIndentationMode(KDevelop::IDocument* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
 		void formatFiles(KUrl::List &list);
 		// GUI actions
 		KAction* m_formatTextAction;

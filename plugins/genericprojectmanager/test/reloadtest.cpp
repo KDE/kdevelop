@@ -37,6 +37,9 @@
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
+Q_DECLARE_METATYPE(KDevelop::IProject*);
+
+///FIXME: get rid of this, use temporary dir+file classes!
 void exec(const QString &cmd)
 {
     QProcess proc;
@@ -51,6 +54,8 @@ void ProjectLoadTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore::initialize();
+
+    qRegisterMetaType<KDevelop::IProject*>("KDevelop::IProject*");
 }
 
 void ProjectLoadTest::cleanupTestCase()
@@ -102,6 +107,7 @@ void ProjectLoadTest::addRemoveFiles()
     f.close();
 
     KDevelop::ICore::self()->projectController()->openProject(p.second);
+    ///FIXME: wait for signal
     QTest::qWait(500);
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
@@ -137,6 +143,17 @@ void ProjectLoadTest::addRemoveFiles()
     exec("rm -r "+p.first);
 }
 
+void createFile(const QString& path)
+{
+    QFile f(path);
+    f.open(QIODevice::WriteOnly);
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.write(QByteArray::number(qrand()));
+    f.close();
+}
+
 void _writeRandomStructure(QString path, int files)
 {
     QDir p(path);
@@ -144,16 +161,10 @@ void _writeRandomStructure(QString path, int files)
     if (qrand() < RAND_MAX / 5) {
         p.mkdir(name);
         path += "/" + name;
-        kDebug() << "wrote path" << path;
+//         kDebug() << "wrote path" << path;
     } else {
-        QFile f(path+"/"+name);
-        f.open(QIODevice::WriteOnly);
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.write(QByteArray::number(qrand()));
-        f.close();
-        kDebug() << "wrote file" << path+"/"+name;
+        createFile(path+"/"+name);
+//         kDebug() << "wrote file" << path+"/"+name;
     }
     files--;
     if (files > 0) {
@@ -212,4 +223,97 @@ void ProjectLoadTest::addMultipleJobs()
     QTest::qWait(500);
     exec("rm -r "+p1.first);
     exec("rm -r "+p2.first);
+}
+
+void ProjectLoadTest::raceJob()
+{
+    // our goal here is to try to reproduce https://bugs.kde.org/show_bug.cgi?id=260741
+    // my idea is that this can be triggered by the following:
+    // - list dir foo/bar containing lots of files
+    // - remove dir foo while listjob is still running
+    QPair<QString, KUrl> p = makeProject();
+    QDir dir(p.first);
+    QVERIFY(dir.mkpath("test/zzzzz"));
+    for(int i = 0; i < 1000; ++i) {
+        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.first + "/test/%1").arg(i));
+    }
+
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 1);
+    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->projectAt(0);
+    KDevelop::ProjectFolderItem* root = project->projectItem();
+    QCOMPARE(root->rowCount(), 1);
+    KDevelop::ProjectBaseItem* testItem = root->child(0);
+    QVERIFY(testItem->folder());
+    QCOMPARE(testItem->baseName(), QString("test"));
+    QCOMPARE(testItem->rowCount(), 1001);
+    KDevelop::ProjectBaseItem* asdfItem = testItem->children().last();
+    QVERIFY(asdfItem->folder());
+
+    // move dir
+    qDebug() << "moving dir";
+    dir.rename("test", "test2");
+    // move sub dir
+    dir.rename("test2/zzzzz", "test2/bla");
+
+    QTest::qWait(500);
+    QCOMPARE(root->rowCount(), 1);
+    QVERIFY(!root->children().contains(testItem));
+    testItem = root->child(0);
+    QVERIFY(testItem->folder());
+    QCOMPARE(testItem->baseName(), QString("test2"));
+
+    KDevelop::ICore::self()->projectController()->closeProject(project);
+
+    exec("rm -r " + p.first);
+}
+
+void ProjectLoadTest::addDuringImport()
+{
+    // our goal here is to try to reproduce an issue in the optimized filesForUrl implementation
+    // which requires the project to be associated to the model to function properly
+    // to trigger this we create a big project, import it and then call filesForUrl during
+    // the import action
+    QPair<QString, KUrl> p = makeProject();
+    QDir dir(p.first);
+    QVERIFY(dir.mkpath("test/zzzzz"));
+    for(int i = 0; i < 1000; ++i) {
+        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.first + "/test/%1").arg(i));
+    }
+
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
+    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    // not yet ready
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 0);
+    // but about to be opened
+    QCOMPARE(spy.count(), 1);
+    KDevelop::IProject* project = spy.value(0).first().value<KDevelop::IProject*>();
+    QVERIFY(project);
+    QCOMPARE(project->folder(), p.second.upUrl());
+    KUrl file(p.second, "test/zzzzz/999");
+    QVERIFY(QFile::exists(file.toLocalFile()));
+    // this most probably is not yet loaded
+    // and this should not crash
+    QCOMPARE(project->itemsForUrl(file).size(), 0);
+    // now delete that file and don't crash
+    QFile::remove(file.toLocalFile());
+    // now create another file
+    KUrl file2 = file;
+    file2.setFileName("999v2");
+    createFile(file2.toLocalFile());
+    QVERIFY(!project->isReady());
+    // now wait for finish
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QVERIFY(project->isReady());
+    // make sure our file removal + addition was properly tracked
+    QCOMPARE(project->filesForUrl(file).size(), 0);
+    QCOMPARE(project->filesForUrl(file2).size(), 1);
+
+    //NOTE: this test is probabably incomplete, I bet there are some race conditions left,
+    //      esp. when adding a file at a point where the parent folder was already imported
+    //      or removing a file that was already imported
 }

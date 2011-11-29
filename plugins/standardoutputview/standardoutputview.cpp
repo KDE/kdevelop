@@ -67,7 +67,8 @@ public:
     }
     virtual QString id() const
     {
-        return "org.kdevelop.OutputView";
+        //NOTE: id must be unique, see e.g. https://bugs.kde.org/show_bug.cgi?id=287093
+        return "org.kdevelop.OutputView." + QString::number(m_data->toolViewId);
     }
 private:
     ToolViewData *m_data;
@@ -126,36 +127,39 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         return standardViews.value( view );
     }
+    int ret = -1;
     switch( view )
     {
         case KDevelop::IOutputView::BuildView:
         {
-            return registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18n("Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::RunView:
         {
-            return registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18n("Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::DebugView:
         {
-            return registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18n("Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:
         {
-            return registerToolView( i18n("Test"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
+            ret = registerToolView( i18n("Test"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
             break;
         }
         case KDevelop::IOutputView::VcsView:
         {
-            return registerToolView( i18n("Version Control"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
+            ret = registerToolView( i18n("Version Control"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
             break;
         }
     }
 
-    return -1;
+    Q_ASSERT(ret != -1);
+    standardViews[view] = ret;
+    return ret;
 }
 
 int StandardOutputView::registerToolView( const QString& title,
@@ -168,11 +172,13 @@ int StandardOutputView::registerToolView( const QString& title,
         newid = 0;
     else
     {
+#ifndef NDEBUG
+        //verify that the title stays unique
         foreach( ToolViewData* d, toolviews )
         {
-            if( d->title == title )
-                return d->toolViewId;
+            Q_ASSERT(d->title != title );
         }
+#endif
         newid = ids.last()+1;
     }
     kDebug() << "Registering view" << title << "with type:" << type;

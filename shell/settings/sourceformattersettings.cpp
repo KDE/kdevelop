@@ -70,7 +70,8 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     setupUi(this);
     connect( cbLanguages, SIGNAL(currentIndexChanged(int)), SLOT(selectLanguage(int)) );
     connect( cbFormatters, SIGNAL(currentIndexChanged(int)), SLOT(selectFormatter(int)) );
-    connect( chkKateModelines, SIGNAL(toggled(bool)), SIGNAL(changed(bool)) );
+    connect( chkKateModelines, SIGNAL(toggled(bool)), SLOT(somethingChanged()) );
+    connect( chkKateOverrideIndentation, SIGNAL(toggled(bool)), SLOT(somethingChanged()) );
     connect( styleList, SIGNAL(currentRowChanged(int)), SLOT(selectStyle(int)) );
     connect( btnDelStyle, SIGNAL(clicked()), SLOT(deleteStyle()) );
     connect( btnNewStyle, SIGNAL(clicked()), SLOT(newStyle()) );
@@ -207,10 +208,12 @@ void SourceFormatterSettings::load()
     cbFormatters->blockSignals( !b );
     styleList->blockSignals( !b );
     chkKateModelines->blockSignals( !b );
+    chkKateOverrideIndentation->blockSignals( !b );
     cbLanguages->clear();
     cbFormatters->clear();
     styleList->clear();
     chkKateModelines->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
+    chkKateOverrideIndentation->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) );
     foreach( const QString& name, sortedLanguages )
     {
         cbLanguages->addItem( name );
@@ -230,6 +233,7 @@ void SourceFormatterSettings::load()
     cbFormatters->blockSignals( b );
     styleList->blockSignals( b );
     chkKateModelines->blockSignals( b );
+    chkKateOverrideIndentation->blockSignals( b );
 }
 
 void SourceFormatterSettings::save()
@@ -263,7 +267,11 @@ void SourceFormatterSettings::save()
         }
     }
     grp.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
+    grp.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
+    
     grp.sync();
+    
+    Core::self()->sourceFormatterControllerInternal()->settingsChanged();
 }
 
 void SourceFormatterSettings::enableStyleButtons()
@@ -470,13 +478,21 @@ void SourceFormatterSettings::updatePreview()
         ISourceFormatter* ifmt = fmt->formatter;
         KMimeType::Ptr mime = l.mimetypes.first();
         m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
-        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), mime ) );
+        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
     } else
     {
         m_document->setText( i18n( "No Language selected" ) );
     }
     m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
     m_document->setReadWrite( false );
+}
+
+void SourceFormatterSettings::somethingChanged()
+{
+    // Widgets are managed manually, so we have to explicitly tell KCModule
+    // that we have some changes, otherwise it won't call "save" and/or will not activate
+    // "Appy"
+    unmanagedWidgetChangeState(true);
 }
 
 #include "sourceformattersettings.moc"

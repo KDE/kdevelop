@@ -80,6 +80,7 @@ private slots:
     void selectFormatter( int );
     void selectStyle( int );
     void styleNameChanged( QListWidgetItem* );
+    void somethingChanged();
 private:
     void updatePreview();
     QListWidgetItem* addStyle( const KDevelop::SourceFormatterStyle& s );

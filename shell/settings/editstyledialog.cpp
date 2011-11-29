@@ -97,7 +97,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 	m_document->setReadWrite(true);
 	m_style.setContent( content() );
 	if (m_sourceFormatter) {
-		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, m_mimeType ));
+		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, KUrl(), m_mimeType ));
 	} else {
 		m_document->setText( i18n( "No Source Formatter available" ) );
 	}

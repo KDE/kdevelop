@@ -95,6 +95,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffToBaseAction;
     KAction * revertAction;
     KAction * diffForRevAction;
+    KAction * diffForRevGlobalAction;
     QPointer<QTimer> modificationTimer;
     
     void createActions(QObject * parent) {
@@ -106,6 +107,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
         diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
+        diffForRevGlobalAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff (all files)..."), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
@@ -115,6 +117,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
         connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
+        connect(diffForRevGlobalAction, SIGNAL(triggered()), parent, SLOT(diffForRevGlobal()));
     }
     
     bool allLocalFiles(const KUrl::List& urls)
@@ -328,6 +331,18 @@ void VcsPluginHelper::diffForRev()
     d->plugin->core()->runController()->registerJob(job);
 }
 
+void VcsPluginHelper::diffForRevGlobal()
+{
+    for(int a = 0; a < d->ctxUrls.size(); ++a)
+    {
+        KUrl& url(d->ctxUrls[a]);
+        IProject* project = ICore::self()->projectController()->findProjectForUrl( url );
+        if( project )
+            url = project->folder();
+    }
+    diffForRev();
+}
+
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
@@ -412,10 +427,12 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
     VcsRevision rev = model->revisionForLine(line);
     d->diffForRevAction->setData(QVariant::fromValue(rev));
+    d->diffForRevGlobalAction->setData(QVariant::fromValue(rev));
     menu->addSeparator();
     menu->addAction(d->diffForRevAction);
-    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision history..."), new HistoryFunction(this, rev), menu));
+    menu->addAction(d->diffForRevGlobalAction);
+    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision History..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()

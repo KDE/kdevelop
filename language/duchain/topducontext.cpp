@@ -1155,6 +1155,12 @@ void TopDUContext::addProblem(const ProblemPointer& problem)
   m_local->m_problems << problem;
 }
 
+void TopDUContext::removeProblem(const ProblemPointer& problem)
+{
+  ENSURE_CAN_WRITE
+  m_local->m_problems.removeOne(problem);
+}
+
 void TopDUContext::clearProblems()
 {
   ENSURE_CAN_WRITE

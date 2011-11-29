@@ -172,6 +172,11 @@ public:
    * */
   void addProblem(const ProblemPointer& problem);
 
+  /**
+   * Remove a parsing-problem from this context.
+   * */
+  void removeProblem(const ProblemPointer& problem);
+
   /// Clear the list of problems
   void clearProblems();
 

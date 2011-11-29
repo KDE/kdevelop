@@ -39,11 +39,13 @@ Boston, MA 02110-1301, USA.
 #include <qfile.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <ktexteditor/commandinterface.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/editor.h>
 #include "plugincontroller.h"
 #include <interfaces/isession.h>
 
@@ -51,6 +53,7 @@ namespace KDevelop
 {
 
 const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
+const QString SourceFormatterController::kateOverrideIndentationConfigKey = "OverrideKateIndentation";
 const QString SourceFormatterController::styleCaptionKey = "Caption";
 const QString SourceFormatterController::styleContentKey = "Content";
 const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
@@ -79,9 +82,9 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	connect(m_formatLine, SIGNAL(triggered()), this, SLOT(beautifyLine()));
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
-	m_formatFilesAction->setText(i18n("Format files"));
+	m_formatFilesAction->setText(i18n("Format Files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-	m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
+	m_formatFilesAction->setWhatsThis(i18n("<b>Format Files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
 	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatFiles()));
 
 	m_formatTextAction->setEnabled(false);
@@ -89,8 +92,17 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 	connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
 	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
+	// Use a queued connection, because otherwise the view is not yet fully set up
+	connect(Core::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
+	        this, SLOT(documentLoaded(KDevelop::IDocument*)), Qt::QueuedConnection);
 
 	activeDocumentChanged(Core::self()->documentController()->activeDocument());
+}
+
+void SourceFormatterController::documentLoaded( IDocument* doc )
+{
+	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	adaptEditorIndentationMode( doc, formatterForMimeType(mime) );
 }
 
 void SourceFormatterController::initialize()
@@ -168,42 +180,53 @@ QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
 	return "none";
 }
 
-QString SourceFormatterController::addModelineForCurrentLang(QString input, const KMimeType::Ptr& mime)
+QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr& mime)
 {
 	if( !isMimeTypeSupported(mime) )
-	{
 		return input;
-	}
-	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) )
+	
+	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+	
+	// If there already is a modeline in the document, adapt it while formatting, even
+	// if "add modeline" is disabled.
+	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) && 
+		      kateModelineWithNewline.indexIn( input ) == -1 )
 		return input;
 
+	ISourceFormatter* fmt = formatterForMimeType( mime );
+	ISourceFormatter::Indentation indentation = fmt->indentation(url);
+	
+	if( !indentation.isValid() )
+		return input;
+	
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
 
-	ISourceFormatter* fmt = formatterForMimeType( mime );
 	Q_ASSERT(fmt);
 
+	
     QString modeline("// kate: ");
-	QString length = QString::number(fmt->indentationLength());
+	QString indentLength = QString::number(indentation.indentWidth);
+	QString tabLength = QString::number(indentation.indentationTabWidth);
 	// add indentation style
 	modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
 
-	ISourceFormatter::IndentationType type = fmt->indentationType();
-	if (type == ISourceFormatter::IndentWithTabs) {
-		modeline.append("replace-tabs off; ");
-		modeline.append("tab-width ").append(length).append("; ");
-	} else {
-		modeline.append("space-indent on; ");
-		modeline.append("indent-width ").append(length).append("; ");
-		if (type == ISourceFormatter::IndentWithSpacesAndConvertTabs)
-			modeline.append("replace-tabs on; ");
+	if(indentation.indentWidth) // We know something about indentation-width
+		modeline.append(QString("indent-width %1; ").arg(indentation.indentWidth));
+
+	if(indentation.indentationTabWidth != 0) // We know something about tab-usage
+	{
+		modeline.append(QString("replace-tabs %1; ").arg((indentation.indentationTabWidth == -1) ? "on" : "off"));
+		if(indentation.indentationTabWidth > 0)
+			modeline.append(QString("tab-width %1; ").arg(indentation.indentationTabWidth));
 	}
 
 	kDebug() << "created modeline: " << modeline << endl;
 
-	bool modelinefound = false;
 	QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
+	
+	bool modelinefound = false;
 	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)");
 	while (!is.atEnd()) {
 		QString line = is.readLine();
@@ -215,8 +238,10 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			QStringList optionList = options.split(';', QString::SkipEmptyParts);
 
 			os <<  modeline;
-			foreach(const QString &s, optionList) {
+			foreach(QString s, optionList) {
 				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
+					if(s.startsWith(" "))
+						s=s.mid(1);
 					os << s << ";";
 					kDebug() << "Found unknown option: " << s << endl;
 				}
@@ -263,15 +288,18 @@ void SourceFormatterController::beautifySource()
             return;
         }
 
+	// Ignore the modeline, as the modeline will be changed anyway
+	adaptEditorIndentationMode( doc, formatter, true );
+
 	bool has_selection = false;
-	KTextEditor::View *view = doc->textDocument()->views().first();
+	KTextEditor::View *view = doc->textDocument()->activeView();
 	if (view && view->selection())
 		has_selection = true;
 
 	if (has_selection) {
 		QString original = view->selectionText();
 
-		QString output = formatter->formatSource(view->selectionText(), mime,
+		QString output = formatter->formatSource(view->selectionText(), doc->url(), mime,
 												  view->document()->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
 												  view->document()->text(KTextEditor::Range(view->selectionRange().end(), view->document()->documentRange().end())));
 
@@ -305,9 +333,9 @@ void SourceFormatterController::beautifyLine()
 	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
-	const QString post = tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+	const QString post = "\n" + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 	
-	const QString formatted = formatter->formatSource(line, mime, prev, post);
+	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
 	tDoc->replaceText(KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), formatted);
 	// advance cursor one line
 	tDoc->activeView()->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
@@ -318,10 +346,81 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 	KTextEditor::Document *textDoc = doc->textDocument();
 
 	KTextEditor::Cursor cursor = doc->cursorPosition();
-	QString text = formatter->formatSource(textDoc->text(), mime);
-	text = addModelineForCurrentLang(text, mime);
+	QString text = formatter->formatSource(textDoc->text(), doc->url(), mime);
+	text = addModelineForCurrentLang(text, doc->url(), mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
+}
+
+void SourceFormatterController::settingsChanged()
+{
+	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
+			adaptEditorIndentationMode( doc, formatterForUrl(doc->url()) );
+}
+
+/**
+ * Kate commands:
+ * Use spaces for indentation:
+ *   "set-replace-tabs 1"
+ * Use tabs for indentation (eventually mixed):
+ *   "set-replace-tabs 0"
+ * Indent width:
+ * 	 "set-indent-width X"
+ * Tab width:
+ *   "set-tab-width X"
+ * */
+
+void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
+{
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) || !doc->isTextDocument() )
+		return;
+
+	KTextEditor::Document *textDoc = doc->textDocument();
+	kDebug() << "adapting mode for" << doc->url();
+	Q_ASSERT(textDoc);
+	
+	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+	
+	// modelines should always take precedence
+	if( !ignoreModeline && kateModelineWithNewline.indexIn( textDoc->text() ) != -1 )
+	{
+		kDebug() << "ignoring because a kate modeline was found";
+		return;
+	}
+	
+	ISourceFormatter::Indentation indentation = formatter->indentation(doc->url());
+	if(indentation.isValid())
+	{
+		struct CommandCaller {
+			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(doc->editor())) {
+				Q_ASSERT(ci);
+			}
+			void operator()(QString cmd) {
+				KTextEditor::Command* command = ci->queryCommand( cmd );
+				Q_ASSERT(command);
+				QString msg;
+				kDebug() << "calling" << cmd;
+				if( !command->exec( doc->activeView(), cmd, msg ) )
+					kWarning() << "setting indentation width failed: " << msg;
+			}
+			
+			KTextEditor::Document* doc;
+			KTextEditor::CommandInterface* ci;
+		} call(textDoc);
+		
+		if( indentation.indentWidth ) // We know something about indentation-width
+			call( QString("set-indent-width %1").arg(indentation.indentWidth ) );
+
+		if( indentation.indentationTabWidth != 0 ) // We know something about tab-usage
+		{
+			call( QString("set-replace-tabs %1").arg( (indentation.indentationTabWidth == -1) ? 1 : 0 ) );
+			if( indentation.indentationTabWidth > 0 )
+				call( QString("set-tab-width %1").arg(indentation.indentationTabWidth ) );
+		}
+	}else{
+		kDebug() << "found no valid indentation";
+	}
 }
 
 void SourceFormatterController::formatFiles()
@@ -376,7 +475,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 		if (doc) {
 			kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
 			formatDocument(doc, formatter, mime);
-			return;
+			continue;
 		}
 
 		kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
@@ -386,7 +485,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 			// read file
 			if (file.open(QFile::ReadOnly)) {
 				QTextStream is(&file);
-				output = formatter->formatSource(is.readAll(), mime);
+				output = formatter->formatSource(is.readAll(), list[fileCount], mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to read %1", list[fileCount].prettyUrl()));
@@ -394,7 +493,7 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 			//write new content
 			if (file.open(QFile::WriteOnly | QIODevice::Truncate)) {
 				QTextStream os(&file);
-				os << addModelineForCurrentLang(output, mime);
+				os << addModelineForCurrentLang(output, list[fileCount], mime);
 				file.close();
 			} else
 				KMessageBox::error(0, i18n("Unable to write to %1", list[fileCount].prettyUrl()));

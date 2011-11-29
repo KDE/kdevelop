@@ -30,7 +30,7 @@ class TestCore;
 class ProjectLoadTest : public QObject
 {
 Q_OBJECT
-  void self();
+
 private slots:
   void initTestCase();
   void cleanupTestCase();
@@ -39,6 +39,10 @@ private slots:
   void addRemoveFiles();
   void addLotsOfFiles();
   void addMultipleJobs();
+
+  void raceJob();
+
+  void addDuringImport();
 };
 
 #endif

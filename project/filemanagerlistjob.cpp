@@ -27,7 +27,7 @@
 using namespace KDevelop;
 
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion)
-    : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion)
+    : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion), m_aborted(false)
 {
     /* the following line is not an error in judgement, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
@@ -50,6 +50,11 @@ void FileManagerListJob::addSubDir( ProjectFolderItem* item )
     m_listQueue.enqueue(item);
 }
 
+void FileManagerListJob::removeSubDir(ProjectFolderItem* item)
+{
+    m_listQueue.removeAll(item);
+}
+
 void FileManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
 {
     Q_UNUSED(job);
@@ -58,7 +63,7 @@ void FileManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& ent
 
 void FileManagerListJob::startNextJob()
 {
-    if ( m_listQueue.isEmpty() ) {
+    if ( m_listQueue.isEmpty() || m_aborted ) {
         return;
     }
 
@@ -72,6 +77,10 @@ void FileManagerListJob::startNextJob()
 
 void FileManagerListJob::slotResult(KJob* job)
 {
+    if (m_aborted) {
+        return;
+    }
+
     emit entries(this, m_item, entryList, m_forceRecursion);
     entryList.clear();
 
@@ -84,6 +93,15 @@ void FileManagerListJob::slotResult(KJob* job)
     } else {
         emit nextJob();
     }
+}
+
+void FileManagerListJob::abort()
+{
+    bool killed = kill();
+    Q_ASSERT(killed);
+    Q_UNUSED(killed);
+
+    m_aborted = true;
 }
 
 #include "filemanagerlistjob.moc"

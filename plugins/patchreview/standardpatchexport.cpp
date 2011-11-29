@@ -34,81 +34,76 @@
 
 class StandardExporter : public KDevelop::IPatchExporter
 {
-    public:
-        virtual QString name() const = 0;
-        virtual KIcon icon() const = 0;
+public:
+    virtual QString name() const = 0;
+    virtual KIcon icon() const = 0;
 };
 
-class KIOExport : public StandardExporter {
-    virtual void exportPatch(KDevelop::IPatchSource::Ptr source)
-    {
-        KUrl dest=KFileDialog::getSaveUrl();
-        if(!dest.isEmpty()) { //We let KDE do the rest of the job including the notification
-            KIO::CopyJob* job=KIO::copy(source->file(), dest);
-            KDevelop::ICore::self()->runController()->registerJob(job);
+class KIOExport : public StandardExporter
+{
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+        KUrl dest = KFileDialog::getSaveUrl();
+        if( !dest.isEmpty() ) { //We let KDE do the rest of the job including the notification
+            KIO::CopyJob* job = KIO::copy( source->file(), dest );
+            KDevelop::ICore::self()->runController()->registerJob( job );
         }
     }
-    
-    virtual KIcon icon() const { return KIcon("document-save"); }
-    virtual QString name() const { return i18n("Save As..."); }
+
+    virtual KIcon icon() const { return KIcon( "document-save" ); }
+    virtual QString name() const { return i18n( "Save As..." ); }
 };
 
-class EMailExport : public StandardExporter {
-    virtual void exportPatch(KDevelop::IPatchSource::Ptr source)
-    {
-        KToolInvocation::invokeMailer(QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile());
+class EMailExport : public StandardExporter
+{
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+        KToolInvocation::invokeMailer( QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile() );
     }
-    
-    virtual KIcon icon() const { return KIcon("internet-mail"); }
-    virtual QString name() const { return i18n("Send..."); }
+
+    virtual KIcon icon() const { return KIcon( "internet-mail" ); }
+    virtual QString name() const { return i18n( "Send..." ); }
 };
 
-class KompareExport : public StandardExporter {
-  public:
-    KompareExport(const QString& exe) : m_exe(exe) {}
-    
-    virtual void exportPatch(KDevelop::IPatchSource::Ptr source) {
-        KProcess::startDetached(QStringList() << "kompare" << source->baseDir().prettyUrl() << source->file().prettyUrl());
+class KompareExport : public StandardExporter
+{
+public:
+    KompareExport( const QString& exe ) : m_exe( exe ) {}
+
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+        KProcess::startDetached( QStringList() << "kompare" << source->baseDir().prettyUrl() << source->file().prettyUrl() );
     }
-    
-    virtual KIcon icon() const { return KIcon("kompare"); }
-    virtual QString name() const { return i18n("Side view (Kompare)..."); }
-    
-    
+
+    virtual KIcon icon() const { return KIcon( "kompare" ); }
+    virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
+
     QString m_exe;
 };
 
-StandardPatchExport::StandardPatchExport(PatchReviewPlugin* plugin, QObject* parent)
-    : QObject(parent), m_plugin(plugin)
-{
-    m_exporters.append(new KIOExport);
-    m_exporters.append(new EMailExport);
-    
-    
-    QString kompare=KStandardDirs::findExe("kompare");
-    if(!kompare.isEmpty()) {
-        m_exporters.append(new KompareExport(kompare));
+StandardPatchExport::StandardPatchExport( PatchReviewPlugin* plugin, QObject* parent )
+    : QObject( parent ), m_plugin( plugin ) {
+    m_exporters.append( new KIOExport );
+    m_exporters.append( new EMailExport );
+
+    QString kompare = KStandardDirs::findExe( "kompare" );
+    if( !kompare.isEmpty() ) {
+        m_exporters.append( new KompareExport( kompare ) );
     }
 }
 
-StandardPatchExport::~StandardPatchExport()
-{
-    qDeleteAll(m_exporters);
+StandardPatchExport::~StandardPatchExport() {
+    qDeleteAll( m_exporters );
 }
 
-Q_DECLARE_METATYPE(StandardExporter*);
+Q_DECLARE_METATYPE( StandardExporter* );
 
-void StandardPatchExport::addActions(QMenu* m)
-{
-    foreach(StandardExporter* exp, m_exporters) {
-        QAction* act=m->addAction(exp->icon(), exp->name(), this, SLOT(runExport()));
-        act->setData(qVariantFromValue(exp));
+void StandardPatchExport::addActions( QMenu* m ) {
+    foreach( StandardExporter* exp, m_exporters ) {
+        QAction* act = m->addAction( exp->icon(), exp->name(), this, SLOT( runExport() ) );
+        act->setData( qVariantFromValue( exp ) );
     }
 }
 
-void StandardPatchExport::runExport()
-{
-    QAction* act = qobject_cast<QAction*>(sender());
-    StandardExporter* exp = act->data().value<StandardExporter*>();
-    exp->exportPatch(m_plugin->patch());
+void StandardPatchExport::runExport() {
+    QAction* act = qobject_cast< QAction* >( sender() );
+    StandardExporter* exp = act->data().value< StandardExporter* >();
+    exp->exportPatch( m_plugin->patch() );
 }

@@ -312,6 +312,7 @@ void MainWindow::initialize()
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
+    connect(Core::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
     
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateCaption()));
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateCaption()));

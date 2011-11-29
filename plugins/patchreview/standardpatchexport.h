@@ -36,18 +36,18 @@ class StandardExporter;
 class StandardPatchExport : public QObject
 {
     Q_OBJECT
-    public:
-        StandardPatchExport(PatchReviewPlugin* plugin, QObject* parent = 0);
-        virtual ~StandardPatchExport();
-        
-        void addActions(QMenu* m);
-        
-    public slots:
-        void runExport();
-        
-    private:
-        PatchReviewPlugin* m_plugin;
-        QList<StandardExporter*> m_exporters;
+public:
+    StandardPatchExport( PatchReviewPlugin* plugin, QObject* parent = 0 );
+    virtual ~StandardPatchExport();
+
+    void addActions( QMenu* m );
+
+public slots:
+    void runExport();
+
+private:
+    PatchReviewPlugin* m_plugin;
+    QList<StandardExporter*> m_exporters;
 };
 
 #endif // STANDARDPATCHEXPORT_H

@@ -291,7 +291,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     //Create the actual new modified file
     QStringList textLines = repr->text().split('\n');
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(file.toUrl());
+    KUrl url = file.toUrl();
+    
+    KMimeType::Ptr mime = KMimeType::findByUrl(url);
     
     for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
         DocumentChange& change(*sortedChanges[pos]);
@@ -308,7 +310,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             if(formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation))
             {
                 QString oldNewText = change.m_newText;
-                change.m_newText = formatter->formatSource(change.m_newText, mime, leftContext, rightContext);
+                change.m_newText = formatter->formatSource(change.m_newText, url, mime, leftContext, rightContext);
                 
                 if(formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation)
                 {
