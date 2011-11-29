@@ -3299,4 +3299,31 @@ void TestCppCodeCompletion::testMultipleIncludeCompletionItems()
   QCOMPARE(includeItems[0].basePath, KUrl(innerDir1.absolutePath()));
 }
 
+void TestCppCodeCompletion::testAfterVisibility_data()
+{
+  QTest:: addColumn<QString>("vis");
+  QTest::newRow("public") << "public:";
+  QTest::newRow("protected") << "public:";
+  QTest::newRow("private") << "public:";
+  // happens e.g. after Q_OBJECT
+  QTest::newRow("private-private") << "private:private:";
+  QTest::newRow("private-public") << "private:public:";
+  QTest::newRow("private-protected") << "private:protected:";
+}
+
+void TestCppCodeCompletion::testAfterVisibility()
+{
+  QByteArray code("struct b { virtual void foo(); }; struct c : public b {};");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QFETCH(QString, vis);
+  CompletionItemTester complCtx(top->childContexts().last(), vis);
+  QVERIFY(complCtx.completionContext->isValid());
+  QVERIFY(complCtx.containsDeclaration(top->findDeclarations(QualifiedIdentifier("b::foo")).first()));
+
+  release(top);
+}
+
 #include "test_cppcodecompletion.moc"

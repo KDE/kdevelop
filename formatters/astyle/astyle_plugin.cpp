@@ -149,16 +149,18 @@ QString AStylePlugin::previewText(const KMimeType::Ptr &)
 AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& /*url*/ )
 {
     Indentation ret;
+
+    ret.indentWidth = m_formatter->option("FillCount").toInt();
     
     QString s = m_formatter->option("Fill").toString();
     if(s == "Tabs")
-        ret.type = ISourceFormatter::IndentWithTabs;
-    else if(m_formatter->option("FillForce").toBool())
-        ret.type = ISourceFormatter::IndentWithSpacesAndConvertTabs;
-    else
-        ret.type = ISourceFormatter::IndentWithSpaces;
-    
-    ret.length = m_formatter->option("FillCount").toInt();
+    {
+        // Do tabs-only indentation
+        ret.indentationTabWidth = ret.indentWidth;
+    }else{
+        // Don't use tabs at all
+        ret.indentationTabWidth = -1;
+    }
     
     return ret;
 }

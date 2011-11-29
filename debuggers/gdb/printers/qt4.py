@@ -104,21 +104,21 @@ class QListPrinter:
             #from QTypeInfo::isLarge
             isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
 
-            #isStatic is not needed anymore since Qt 4.6
-            #isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
-            #
-            ##unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
-            ##this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
-            ##(obviously it won't work for custom types)
-            #movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
-            #    'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
-            #    'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
-            #    'QXmlStreamEntityDeclaration']
-            #if movableTypes.count(self.nodetype.tag):
-            #    isStatic = False
-            #else:
-            #    isStatic = not isPointer
-            isStatic = False
+            isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
+
+            #unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
+            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
+            #(obviously it won't work for custom types)
+            movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
+               'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
+               'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
+               'QXmlStreamEntityDeclaration']
+            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_PRIMITIVE_TYPE) (from qglobal.h)
+            primitiveTypes = ['bool', 'char', 'signed char', 'uchar', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'qint64', 'qunit64', 'float', 'double']
+            if movableTypes.count(self.nodetype.tag) or primitiveTypes.count(str(self.nodetype)):
+               isStatic = False
+            else:
+                isStatic = not isPointer
 
             if isLarge or isStatic: #see QList::Node::t()
                 node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype).pointer())

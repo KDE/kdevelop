@@ -78,6 +78,60 @@ void TestDUChain::testRangeBasedFor() {
   QVERIFY(decls.at(0)->uses().isEmpty());
 }
 
+void TestDUChain::testRangeBasedForClass() {
+  //                                         1         2         3
+  //                                123456789012345678901234567890
+  LockedTopDUContext top = parse(  "struct MyType{};"
+                                 "\nstruct Iterator{"
+                                 "\n  MyType operator*(){return 0;}"
+                                 "\n  bool operator!=(const Iterator&){return false;}"
+                                 "\n  Iterator& operator++(){return *this;}"
+                                 "\n};"
+                                 // begin + end as normal functions
+                                 "\nstruct List1{ }; Iterator begin(List1); Iterator end(List1);"
+                                 // begin with const& + end as normal functions
+                                 "\nstruct List2{ }; Iterator begin(const List2&); Iterator end(const List2&);"
+                                 "\nint main() {"
+                                 "\n  List1 l1;"
+                                 "\n  for(auto i : l1) { }"
+                                 "\n  List2 l2;"
+                                 "\n  for(auto i : l2) { }"
+                                 "\n}"
+                                 "\n", DumpAll
+                           );
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->childContexts().size(), 10);
+  QCOMPARE(top->localDeclarations().size(), 9);
+  DUContext* ctx = top->childContexts().last();
+  QVector< Declaration* > decls = ctx->localDeclarations();
+  QCOMPARE(decls.size(), 2);
+
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("l1"));
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("List1"));
+  QCOMPARE(decls.at(0)->uses().constBegin()->size(), 1);
+  QCOMPARE(decls.at(0)->uses().constBegin()->first().start.line, 10);
+
+  QCOMPARE(decls.at(1)->identifier().toString(), QString("l2"));
+  QCOMPARE(decls.at(1)->abstractType()->toString(), QString("List2"));
+  QCOMPARE(decls.at(1)->uses().constBegin()->size(), 1);
+  QCOMPARE(decls.at(1)->uses().constBegin()->first().start.line, 12);
+
+  QCOMPARE(ctx->childContexts().size(), 4);
+  decls = ctx->childContexts().at(0)->localDeclarations();
+  QCOMPARE(decls.size(), 1);
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("MyType"));
+  QCOMPARE(decls.at(0)->range().start.line, 10);
+
+  decls = ctx->childContexts().at(2)->localDeclarations();
+  QCOMPARE(decls.size(), 1);
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("MyType"));
+  QCOMPARE(decls.at(0)->range().start.line, 12);
+}
+
 void TestDUChain::testRValueReference() {
   //                                         1         2         3
   //                                123456789012345678901234567890

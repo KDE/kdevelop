@@ -1,6 +1,7 @@
 /* KDevelop Custom Makefile Support
  *
  * Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
+ * Copyright 2011 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -10,7 +11,6 @@
 
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
-#include "custommaketreesynchronizer.h"
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -31,6 +31,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KDirWatch>
 
 using namespace KDevelop;
 
@@ -48,12 +49,11 @@ public:
 };
 
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
-    : KDevelop::IPlugin( CustomMakeSupportFactory::componentData(), parent )
+    : KDevelop::AbstractFileManagerPlugin( CustomMakeSupportFactory::componentData(), parent )
     , d( new Private )
 {
     Q_UNUSED(args)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
 
     setXMLFile( "kdevcustommakemanager.rc" );
 
@@ -131,146 +131,66 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
     return ret;
 }
 
-QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *item)
+//TODO: make filtering generic
+bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* project) const
 {
-    QList<KDevelop::ProjectFolderItem*> folder_list;
-    QDir dir( item->url().toLocalFile() );
-
-    QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-
-    CustomMakeFolderItem *topItem = dynamic_cast<CustomMakeFolderItem*>( item->project()->projectItem() );
-
-    foreach ( const QFileInfo& fileInfo, entries )
+    const QString name = url.fileName();
+    const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS"
+                                                     << ".bzr" << "_darcs" << ".hg";
+    if (isFolder && invalidFolders.contains( name )) {
+        return false;
+    } else if (!isFolder && (name.endsWith(".o") || name.endsWith(".a")
+                          || name.startsWith("moc_") || name.endsWith(".moc")
+                          || name.endsWith(".so") || name.contains(".so.")
+                          || name.startsWith(".swp.")
+                          || (name.startsWith('.') && name.endsWith(".kate-swp"))))
     {
-        QString fileName = fileInfo.fileName();
-        QString absFilePath = fileInfo.absoluteFilePath();
-        
-        if ( fileInfo.isDir() )
+        return false;
+    } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
+{
+    KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, url, parent );
+    if( url.fileName() == "Makefile" )
+    {
+        QStringList targetlist = parseCustomMakeFile( url );
+        foreach( const QString &target, targetlist )
         {
-            //TODO: make filtering generic
-            if ( fileName == QLatin1String(".svn") || fileName == QLatin1String("CVS") || fileName == QLatin1String(".git") || fileName == QLatin1String(".bzr") || fileName == QLatin1String(".hg") || fileName == QLatin1String("_darcs") )
-            {
-                continue;
-            }
-//             KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
-//                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
-            // TODO more faster algorithm. should determine whether this directory
-            // contains makefile or not.
-            KDevelop::ProjectBuildFolderItem *cmfi = new KDevelop::ProjectBuildFolderItem(
-                    item->project(), KUrl( absFilePath ), item );
-            folder_list.append( cmfi );
-//             d->m_testItems.append( cmfi ); // debug
-            if( topItem )
-                topItem->fsWatcher()->addDirectory( cmfi );
-        }
-        //TODO: make filtering generic
-        else if ( fileInfo.isFile() && !fileName.endsWith('~') && !fileName.endsWith(".o") )
-        {
-            KUrl fileUrl( absFilePath );
-            KDevelop::ProjectFileItem *fileItem =
-                new KDevelop::ProjectFileItem( item->project(), fileUrl, item );
-            if( topItem && fileName == "Makefile" )
-            {
-                topItem->fsWatcher()->addFile( fileItem );
-                QStringList targetlist = this->parseCustomMakeFile( fileUrl );
-                foreach( const QString &target, targetlist )
-                {
-                    new CustomMakeTargetItem( item->project(), target, item );
-    //             d->m_testItems.append( targetItem ); // debug
-                }
-            }
+            new CustomMakeTargetItem( project, target, parent );
+//             d->m_testItems.append( targetItem ); // debug
         }
     }
-    // find makefile, parse and get the target list
-//     KUrl makefileUrl = this->findMakefile( item );
-//     if( makefileUrl.isValid() )
-//     {
-//         QStringList targetlist = this->parseCustomMakeFile( makefileUrl );
-//         foreach(const  QString& target, targetlist )
-//         {
-//             new CustomMakeTargetItem( item->project(), target, item );
-// //             d->m_testItems.append( targetItem ); // debug
-//         }
-//         if( topItem )
-//             topItem->fsWatcher()->addFile( makefileUrl.toLocalFile() );
-//     }
+    return item;
+}
 
-    return folder_list;
+ProjectFolderItem* CustomMakeManager::createFolderItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
+{
+    // TODO more faster algorithm. should determine whether this directory
+    // contains makefile or not.
+    return new KDevelop::ProjectBuildFolderItem( project, url, parent );
 }
 
 KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
-    if( !project ) return NULL;
-//     return new KDevelop::ProjectFolderItem( project, project->folder().pathOrUrl(), NULL );
-    CustomMakeFolderItem *item = new CustomMakeFolderItem( this, project, project->folder(), NULL );
-    item->fsWatcher()->addDirectory( item );
-
-    return item;
-}
-
-ProjectFolderItem* CustomMakeManager::addFolder(const KUrl& folder, KDevelop::ProjectFolderItem *parent)
-{
-    KDevelop::createFolder(folder);
-    Q_UNUSED(parent);
-    return 0;
-}
-
-ProjectFileItem* CustomMakeManager::addFile(const KUrl& file, KDevelop::ProjectFolderItem *parent)
-{
-    KDevelop::createFile(file);
-    Q_UNUSED(parent);
-    return 0;
-}
-
-bool CustomMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
-{
-    foreach(KDevelop::ProjectBaseItem* item, items)
+    KUrl dirName = project->folder();
+    if( !dirName.isLocalFile() )
     {
-        Q_ASSERT(item->folder() || item->file());
-        Q_ASSERT(!item->file() || !item->file()->parent()->target());
-
-        if (!KDevelop::removeUrl(item->project(), item->url(), false))
-            return false;
+        //FIXME turn this into a real warning
+        kWarning(9025) << "not a local file. Custom make support doesn't handle remote projects";
+        return 0;
     }
-    return true;
-}
 
-bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
-{
-    CustomMakeFolderItem* p = dynamic_cast<CustomMakeFolderItem*>(oldFile->project()->projectItem());
-    Q_ASSERT(p);
-    p->fsWatcher()->stopWatcher();
-    bool success = KDevelop::renameUrl( oldFile->project(), oldFile->url(), newFile );
-    if (success) {
-        foreach(KDevelop::ProjectFolderItem* folder, oldFile->project()->foldersForUrl(newFile.upUrl())) {
-            if (folder != oldFile->parent()) {
-                oldFile->parent()->takeRow(oldFile->row());
-                folder->appendRow(oldFile);
-            }
-            break;
-        }
-    }
-    p->fsWatcher()->continueWatcher();
-    return success;
-}
+    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
 
-bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder )
-{
-    return KDevelop::renameUrl( oldFolder->project(), oldFolder->url(), newFolder );
-}
+    connect(projectWatcher(project), SIGNAL(dirty(QString)),
+            this, SLOT(slotDirty(QString)));
 
-bool CustomMakeManager::moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent)
-{
-    bool success = true;
-    foreach (KDevelop::ProjectBaseItem *item, items)
-    {
-        Q_ASSERT(item->folder() || item->file());
-
-        KUrl newUrl = newParent->url();
-        newUrl.addPath(item->baseName());
-        success &= KDevelop::renameUrl( item->project(), item->url(), newUrl );
-    }
-    return success;
+    return ret;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -324,6 +244,14 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
     }
     f.close();
     return ret;
+}
+
+void CustomMakeManager::slotDirty(const QString& path)
+{
+    if (!path.endsWith("Makefile")) {
+        return;
+    }
+
 }
 
 #include "custommakemanager.moc"

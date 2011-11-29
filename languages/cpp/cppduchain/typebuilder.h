@@ -144,6 +144,9 @@ protected:
   /// (in contrast to a type-declaration like a class-declaration or a typedef)
   bool lastTypeWasInstance() const;
 
+  /// Returns true when last type was an auto-type
+  bool lastTypeWasAuto() const;
+
   // Use PushValue<bool> to manipulate this.
   bool m_inTypedef;
   

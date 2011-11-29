@@ -68,7 +68,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
-        CMakeDefinitions definitions() const { return m_defines; }
+        CMakeDefinitions definitions() const;
         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
         
         void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }

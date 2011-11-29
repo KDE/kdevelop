@@ -42,20 +42,4 @@ private:
 
 };
 
-
-/** Represents the root item */
-class CustomMakeFolderItem : public KDevelop::ProjectBuildFolderItem
-{
-public:
-    CustomMakeFolderItem( CustomMakeManager*, KDevelop::IProject* project, const KUrl& , ProjectBaseItem*parent = 0 );
-    virtual ~CustomMakeFolderItem();
-
-    // watcher is reentrant. Only project parsing thread can call the methods of Watcher.
-    // No locking is required because parsing thread is the only one to access this.
-    CustomMakeTreeSynchronizer* fsWatcher();
-
-private:
-    CustomMakeTreeSynchronizer *m_watcher;
-};
-
 #endif

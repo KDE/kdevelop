@@ -210,6 +210,11 @@ bool TypeBuilder::lastTypeWasInstance() const
   return m_lastTypeWasInstance;
 }
 
+bool TypeBuilder::lastTypeWasAuto() const
+{
+  return m_lastTypeWasAuto;
+}
+
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
   if(m_onlyComputeSimplified) {
