@@ -58,9 +58,14 @@ void CodeAnalysisTest::testUseReadWrite()
   foreach(const QVariant& f, modFlags) {
 //     qDebug() << "flags" << repo->modifications().at(i)->flags() << f;
     KDevelop::DataAccess::DataAccessFlags p(f.toUInt());
-    QCOMPARE(repo->modifications().at(i)->isRead(), bool(p&DataAccess::Read));
-    QCOMPARE(repo->modifications().at(i)->isWrite(), bool(p&DataAccess::Write));
+    DataAccess* da=repo->modifications().at(i);
+    QCOMPARE(da->isRead(), bool(p&DataAccess::Read));
+    QCOMPARE(da->isWrite(), bool(p&DataAccess::Write));
     
+    DUContext* ctx=top->findContextAt(da->pos());
+    int u=ctx->findUseAt(da->pos());
+    Declaration* d=ctx->findDeclarationAt(da->pos());
+    QVERIFY(u>=0 || d);
     i++;
   }
 }
