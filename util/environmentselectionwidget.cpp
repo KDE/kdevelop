@@ -33,6 +33,15 @@ class EnvironmentSelectionWidgetPrivate
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     : KComboBox( parent ), d( new EnvironmentSelectionWidgetPrivate )
 {
+    // Taken from kdelibs/kdeui/dialogs/kconfigdialogmanager.cpp (no idea wether this is documented)
+    // Commits d44186bce4670d2985fb6aba8dba59bbd2c4c77a and 8edc1932ecc62370d9a31836dfa9b2bd0175a293
+    // introduced a regression in kdelibs to fix problems running some apps against Qt4.8. Unfortunately
+    // this fix breaks exactly our use-case, which is to store the text-value in kconfig instead of
+    // the index even though the combobox is editable. Since that change the special combobox-code in
+    // kconfigdialogmanager.cpp is run before check a user-property and hence our user-property is
+    // ignored. Setting this special kcfg_property to the name of our user-property again overrides
+    // the hardcoded combobox-behaviour - until the next one breaks things in kdelibs :|
+    setProperty("kcfg_property", QByteArray("currentProfile"));
 }
 
 EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
