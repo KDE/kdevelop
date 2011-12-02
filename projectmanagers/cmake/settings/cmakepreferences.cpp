@@ -116,7 +116,7 @@ void CMakePreferences::load()
     m_prefsUi->buildDirs->clear();
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
-    m_prefsUi->kcfg_environment->setCurrentProfile(CMakeSettings::currentEnvironment());
+    m_prefsUi->kcfg_environment->setCurrentProfile(CMakeSettings::environment());
     
     m_srcFolder=m_subprojFolder;
     m_srcFolder.cd(CMakeSettings::projectRootRelative());

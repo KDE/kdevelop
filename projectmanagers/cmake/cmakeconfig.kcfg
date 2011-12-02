@@ -14,5 +14,6 @@
     <entry name="cmakeDir" key="CMakeDir" type="Url" />
     
     <entry name="cmakeBin" key="Current CMake Binary" type="Url" />
+    <entry name="environment" key="Environment Profile" type="String" />
   </group>
 </kcfg>
