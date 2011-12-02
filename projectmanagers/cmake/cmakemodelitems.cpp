@@ -46,7 +46,7 @@ QStringList CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
-CMakeDefinitions CMakeFolderItem::definitions() const
+CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) const
 {
     CMakeDefinitions result = m_defines;
 
@@ -60,9 +60,8 @@ CMakeDefinitions CMakeFolderItem::definitions() const
     // was added before or after the add_subdirectory for this cmakelists.txt. And last but not least
     // CMake actually adds all defines as-is, even if two add_definitions are adding the same define
     // with the same or different values. Our code will only take the 'last' value.
-    CMakeFolderItem* parentFolder = formerParent();
     if( parentFolder ) {
-        QHash<QString,QString> parentDefs = parentFolder->definitions();
+        QHash<QString,QString> parentDefs = parentFolder->definitions(parentFolder->formerParent());
         for( QHash<QString,QString>::const_iterator it = parentDefs.constBegin(); it != parentDefs.constEnd(); it++ ) {
             if( !result.contains( it.key() ) ) {
                 result[it.key()] = it.value();
@@ -71,6 +70,13 @@ CMakeDefinitions CMakeFolderItem::definitions() const
     }
     return result;
 }
+
+void DefinesAttached::defineVariables(const QStringList& vars)
+{
+    foreach(const QString& v, vars)
+        m_defines.insert(v, QString());
+}
+
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {

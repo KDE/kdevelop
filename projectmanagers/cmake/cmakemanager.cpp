@@ -840,6 +840,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                                                                 folder, t.declaration, outputName );
                         break;
                 }
+            
+            DefinesAttached* a = dynamic_cast<DefinesAttached*>(targetItem);
+            if(a)
+                a->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
+            
             DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
             datt->setDescriptor(t.desc);
 
@@ -933,20 +938,25 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
-    CMakeFolderItem* folder=0;
-    kDebug(9042) << "Querying defines dirs for " << item;
-    while(!folder && item)
+    DefinesAttached* att=0;
+    ProjectBaseItem* it=item;
+    kDebug(9042) << "Querying defines for " << item << dynamic_cast<ProjectTargetItem*>(item);
+    while(!att && item)
     {
-        folder = dynamic_cast<CMakeFolderItem*>( item );
+        att = dynamic_cast<DefinesAttached*>( item );
+        it = item;
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
-    if( !folder ) {
+    if( !att ) {
         // Not a CMake folder, so no defines to be returned;
         return QHash<QString,QString>();
     }
 
-    return folder->definitions();
+    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(it);
+    CMakeDefinitions defs = att->definitions(folder ? folder->formerParent() : dynamic_cast<CMakeFolderItem*>(item));
+    qDebug() << "lalala" << defs << it->url();
+    return defs;
 }
 
 KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *) const
