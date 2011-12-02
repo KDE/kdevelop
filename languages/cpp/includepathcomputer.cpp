@@ -66,12 +66,18 @@ void IncludePathComputer::computeForeground() {
 
     foreach (KDevelop::IProject *project, KDevelop::ICore::self()->projectController()->projects()) {
         QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(m_source);
-        ProjectFileItem* file = 0;
-        if( !files.isEmpty() )
-            file = files.first();
-        if (!file) {
+        if (files.isEmpty())
             continue;
+
+        ProjectFileItem* file = 0;
+        //A file might be defined in different targets.
+        //Prefer file items defined inside a target, at least
+        foreach(ProjectFileItem* f, files) {
+          file = f;
+          if(dynamic_cast<ProjectTargetItem*>(f->parent()))
+            break;
         }
+        qDebug() << "lololo" << file->url() << dynamic_cast<ProjectTargetItem*>(file->parent());
 
         KDevelop::IBuildSystemManager* buildManager = project->buildSystemManager();
         if (!buildManager) {
