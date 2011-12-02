@@ -56,9 +56,15 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUCon
 {
 }
 
-QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
+QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 {
-    QString env=QString::fromLatin1(qgetenv(varName.toLatin1()));
+    QString env;
+    QMap< QString, QString >::const_iterator it=m_environmentProfile.constFind(varName);
+    if(it!=m_environmentProfile.constEnd())
+        env = *it;
+    else
+        env = QString::fromLatin1(qgetenv(varName.toLatin1()));
+    
 //     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
     if(!env.isEmpty())
     {

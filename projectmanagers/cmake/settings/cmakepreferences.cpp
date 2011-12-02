@@ -43,6 +43,7 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iruncontroller.h>
 #include <KStandardDirs>
+#include <util/environmentgrouplist.h>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
@@ -55,6 +56,7 @@ static const QString currentInstallDirItemName = "currentInstallDir";
 static const QString currentBuildTypeItemName = "currentBuildType";
 static const QString cmakeBinItemName = "cmakeBin";
 static const QString currentExtraArgsItemName = "currentExtraArguments";
+static const QString currentEnvironment = "environment";
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
@@ -92,6 +94,10 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 //     {
 //         kDebug(9042) << "arg: " << v.toString();
 //     }
+    
+    KDevelop::EnvironmentGroupList env( KGlobal::config() );
+    m_prefsUi->kcfg_environment->addItems( env.groups() );
+    m_prefsUi->configureEnvironment->setSelectionWidget(m_prefsUi->kcfg_environment);
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
@@ -110,6 +116,7 @@ void CMakePreferences::load()
     m_prefsUi->buildDirs->clear();
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
+    m_prefsUi->kcfg_environment->setCurrentProfile(CMakeSettings::currentEnvironment());
     
     m_srcFolder=m_subprojFolder;
     m_srcFolder.cd(CMakeSettings::projectRootRelative());
@@ -165,6 +172,9 @@ void CMakePreferences::save()
     
     item = CMakeSettings::self()->findItem(currentBuildTypeItemName);
     item->setProperty( qVariantFromValue<QString>(buildType));
+    
+    item = CMakeSettings::self()->findItem(currentEnvironment);
+    item->setProperty( qVariantFromValue<QString>(m_prefsUi->kcfg_environment->currentProfile()));
     
     kDebug(9042) << "doing real save from ProjectKCModule";
     ProjectKCModule<CMakeSettings>::save();

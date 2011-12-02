@@ -108,7 +108,8 @@ CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
     
     foreach(const QString& script, initials.second)
     {
-        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &data, sourcedir);
+        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()),
+                                              ref, &data, sourcedir, QMap<QString,QString>());
     }
     
     data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));

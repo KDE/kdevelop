@@ -86,6 +86,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <util/environmentgrouplist.h>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -641,7 +642,9 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
                                                         KDevelop::IProject * project, const QString& dir, ReferencedTopDUContext parent)
 {
     m_watchers[project]->addFile(file);
-    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir);
+    QString profile = CMake::currentEnvironment(project);
+    const KDevelop::EnvironmentGroupList env( KGlobal::config() );
+    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
 }
 
 

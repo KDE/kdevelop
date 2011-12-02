@@ -100,6 +100,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
         void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
+        
+        /** sets the @p profile env variables that will be used to override those in the current system */
+        void setEnvironmentProfile(const QMap<QString, QString>& profile) { m_environmentProfile = profile; }
 
         const VariableMap* variables() const { return m_vars; }
         const CacheValues* cache() const { return m_cache; }
@@ -112,9 +115,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList includeDirectories() const { return m_includeDirectories; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
-        
-//         static VariableType hasVariable(const QString &name);
-        static QStringList envVarDirectories(const QString &varName);
         
 //         enum FileType { Location, File, Executable, Library };
         static QString findFile(const QString& files, const QStringList &folders,
@@ -155,6 +155,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static QList< IntPair > parseArgument(const QString &exp);
         
     private:
+        QStringList envVarDirectories(const QString &varName) const;
         static message_callback s_msgcallback;
         
         static KDevelop::ReferencedTopDUContext
@@ -196,7 +197,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
         bool m_hitBreak;
-
+        QMap<QString, QString> m_environmentProfile;
 };
 
 #endif

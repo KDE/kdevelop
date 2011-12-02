@@ -56,6 +56,7 @@
 #include <kjob.h>
 
 #include "cmakeutils.h"
+#include <util/environmentgrouplist.h>
 
 using namespace KDevelop;
 
@@ -99,6 +100,7 @@ void CMakeJob::start()
     }
     m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
+    m_executor->setEnvironment(buildEnvironment());
     connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
@@ -187,6 +189,16 @@ void CMakeJob::setProject(KDevelop::IProject* project)
     
     if (m_project)
         setObjectName(i18n("CMake: %1", m_project->name()));
+}
+
+QStringList CMakeJob::buildEnvironment()
+{
+    QString profile = CMake::currentEnvironment(m_project);
+
+    const KDevelop::EnvironmentGroupList l(KGlobal::config());
+    QStringList env = QProcess::systemEnvironment();
+    env.append( "LC_MESSAGES=C" );
+    return l.createEnvironment( profile, env );
 }
 
 #include "cmakejob.moc"

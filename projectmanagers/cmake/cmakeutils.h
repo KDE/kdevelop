@@ -72,7 +72,7 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QString currentExtraArguments( KDevelop::IProject* project );
 
     /**
-     * Sets the current build dir for the given project.
+     * @returns the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
     
@@ -80,6 +80,11 @@ namespace CMake
      * Convenience function to get the project root.
      */
     KDEVCMAKECOMMON_EXPORT KUrl projectRoot( KDevelop::IProject* project );
+    
+    /**
+     * @returns the environment configuration for a @p project
+     */
+    KDEVCMAKECOMMON_EXPORT QString currentEnvironment( KDevelop::IProject* project );
 
     /**
      * Sets the current install dir for the given project.

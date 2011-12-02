@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>CMakeBuildSettings</class>
- <widget class="QWidget" name="CMakeBuildSettings" >
-  <property name="geometry" >
+ <widget class="QWidget" name="CMakeBuildSettings">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,40 +10,40 @@
     <height>537</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="KComboBox" name="buildDirs" />
+      <widget class="KComboBox" name="buildDirs"/>
      </item>
      <item>
-      <widget class="QPushButton" name="addBuildDir" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QPushButton" name="addBuildDir">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="removeBuildDir" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QPushButton" name="removeBuildDir">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Remove</string>
        </property>
       </widget>
@@ -50,30 +51,30 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Cache Values</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <widget class="QTableView" name="cacheList" />
+       <widget class="QTableView" name="cacheList"/>
       </item>
       <item>
-       <widget class="QLabel" name="label_6" >
-        <property name="font" >
+       <widget class="QLabel" name="label_6">
+        <property name="font">
          <font>
           <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Comment:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="commentText" >
-        <property name="text" >
+       <widget class="QLabel" name="commentText">
+        <property name="text">
          <string/>
         </property>
        </widget>
@@ -82,44 +83,74 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="showAdvanced" >
-     <property name="text" >
+    <widget class="QPushButton" name="showAdvanced">
+     <property name="text">
       <string>Show Advanced</string>
      </property>
-     <property name="checkable" >
+     <property name="checkable">
       <bool>true</bool>
      </property>
-     <property name="flat" >
+     <property name="flat">
       <bool>false</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="advancedBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+    <widget class="QGroupBox" name="advancedBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Advanced</string>
      </property>
-     <layout class="QVBoxLayout" >
-      <item>
-       <widget class="QLabel" name="label" >
-        <property name="text" >
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
          <string>CMake Directory</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="KUrlRequester" name="kcfg_cmakeDir" />
+      <item row="1" column="1">
+       <widget class="KUrlRequester" name="kcfg_cmakeDir"/>
       </item>
-      <item>
-       <widget class="QCheckBox" name="showInternal" >
-        <property name="text" >
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="showInternal">
+        <property name="text">
          <string>Show Advanced Values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environment">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Select an environment to be used</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment"/>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Configure Environment</string>
         </property>
        </widget>
       </item>
@@ -138,6 +169,16 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentSelectionWidget</class>
+   <extends>KComboBox</extends>
+   <header>util/environmentselectionwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentConfigureButton</class>
+   <extends>QToolButton</extends>
+   <header>util/environmentconfigurebutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

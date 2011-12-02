@@ -542,7 +542,7 @@ void CMakeProjectVisitorTest::testFinder()
     foreach(const QString& script, buildstrap)
     {
         QString scriptfile=CMakeProjectVisitor::findFile(script, modulePath, QStringList());
-        fakeContext=CMakeParserUtils::includeScript(scriptfile, fakeContext, &data, "./");
+        fakeContext=CMakeParserUtils::includeScript(scriptfile, fakeContext, &data, "./", QMap<QString,QString>());
     }
     
     data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));

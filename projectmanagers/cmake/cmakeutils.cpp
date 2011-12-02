@@ -48,6 +48,7 @@ static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
 static QString currentBuildTypeKey = "CurrentBuildType";
 static QString currentInstallDirKey = "CurrentInstallDir";
+static QString currentEnvironmentKey = "CurrentEnvironment";
 static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
@@ -195,6 +196,12 @@ void setCurrentExtraArguments( KDevelop::IProject* project, const QString& strin
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentExtraArgumentsKey, string );
     cmakeGrp.sync();
+}
+
+QString currentEnvironment(KDevelop::IProject* project)
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry(currentEnvironmentKey, QString());
 }
 
 ICMakeDocumentation* cmakeDocumentation()

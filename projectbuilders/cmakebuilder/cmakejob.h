@@ -59,6 +59,7 @@ private Q_SLOTS:
     void slotCompleted();
 
 private:
+    QStringList buildEnvironment();
     QStringList cmakeArguments( KDevelop::IProject* project );
     KUrl buildDir( KDevelop::IProject* project );
     QString cmakeBinary( KDevelop::IProject* project );
