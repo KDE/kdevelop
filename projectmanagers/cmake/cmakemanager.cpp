@@ -792,11 +792,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         {
             QStringList files=t.files;
             QString outputName=t.name;
-            if(data.properties[TargetProperty].contains(t.name)) {
-                if(data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
-                    outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
-                else if(data.properties[TargetProperty][t.name].contains("FOLDER") &&
-                            data.properties[TargetProperty][t.name]["FOLDER"].first()=="CTestDashboardTargets")
+            QMap< QString, QStringList > targetProps = data.properties[TargetProperty][t.name];
+            if(!targetProps.isEmpty()) {
+                if(targetProps.contains("OUTPUT_NAME"))
+                    outputName=targetProps["OUTPUT_NAME"].first();
+                else if(targetProps.contains("FOLDER") && targetProps["FOLDER"].first()=="CTestDashboardTargets")
                     continue; //filter some annoying targets
             }
             
@@ -804,10 +804,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             switch(t.type)
             {
                 case Target::Library:
-                    path=data.vm.value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+                    if(targetProps.contains("LIBRARY_OUTPUT_DIRECTORY"))
+                        path=targetProps["LIBRARY_OUTPUT_DIRECTORY"].first();
+                    else
+                        path=data.vm.value("LIBRARY_OUTPUT_PATH").join(QString());
                     break;
                 case Target::Executable:
-                    path=data.vm.value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+                    if(targetProps.contains("RUNTIME_OUTPUT_DIRECTORY"))
+                        path=targetProps["RUNTIME_OUTPUT_DIRECTORY"].first();
+                    else
+                        path=data.vm.value("EXECUTABLE_OUTPUT_PATH").join(QString());
                     break;
                 case Target::Custom:
                     break;
