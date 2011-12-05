@@ -77,7 +77,6 @@ void IncludePathComputer::computeForeground() {
           if(dynamic_cast<ProjectTargetItem*>(f->parent()))
             break;
         }
-        qDebug() << "lololo" << file->url() << dynamic_cast<ProjectTargetItem*>(file->parent());
 
         KDevelop::IBuildSystemManager* buildManager = project->buildSystemManager();
         if (!buildManager) {
