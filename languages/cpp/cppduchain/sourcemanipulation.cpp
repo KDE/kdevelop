@@ -78,7 +78,7 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
 
   if(chosen != -1) {
     // if chosen == 0 we can only add at the start of the document
-    return qMax(0, chosen - 1);
+    return chosen;
   } else
     return lineNumber;
 }

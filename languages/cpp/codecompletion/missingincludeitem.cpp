@@ -424,10 +424,16 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
   QString insertLine = lineToInsert();
   int lastLineWithInclude = -1;
   int checkLines = word.start().line() -1;
+  // make sure we don't add an include in a conditional #if or #ifdef block
+  int rppConditionalLevel = 0;
   for(int a = 0; a < checkLines; ++a) {
-    QString lineText = document->line(a);
-    if(lineText.trimmed().startsWith("#include")) {
-      QString ending = lineText.trimmed();
+    QString lineText = document->line(a).trimmed();
+    if(lineText.startsWith("#if")) {
+      rppConditionalLevel++;
+    } else if (rppConditionalLevel > 0 && lineText.startsWith("#endif")) {
+      rppConditionalLevel--;
+    } else if(rppConditionalLevel == 0 && lineText.startsWith("#include")) {
+      QString ending = lineText;
       if(!ending.isEmpty())
         ending = ending.left( ending.length()-1 ).trimmed(); //Remove the last > or "
       
