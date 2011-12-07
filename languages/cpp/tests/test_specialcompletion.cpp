@@ -38,6 +38,8 @@
 
 #include <QTest>
 #include <qtest_kde.h>
+#include <KTextEditor/Editor>
+#include <KTextEditor/EditorChooser>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -110,6 +112,67 @@ void TestSpecialCompletion::testMissingInclude()
     QVERIFY(item);
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
+}
+#if 0
+ asdf
+#endif
+void TestSpecialCompletion::testIncludeDefine()
+{
+    TestProject* project = new TestProject(this);
+    m_projects->addProject(project);
+
+    TestFile include("class A {};", "h", project);
+    include.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    TestFile active("#if 0\n"
+                    "#include \"asdf.h\"\n"
+                    "#endif\n"
+                    "int main() {}",
+                    "cpp", project);
+    active.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QCOMPARE(include.url().toUrl().upUrl(), active.url().toUrl().upUrl());
+
+    QVERIFY(include.waitForParsed());
+    QVERIFY(active.waitForParsed());
+
+    DUChainReadLocker lock;
+
+    QVERIFY(include.topContext());
+    TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
+    QVERIFY(includeTop);
+    QEXPECT_FAIL("", "include path resolver complains", Continue);
+    QVERIFY(includeTop->problems().isEmpty());
+    QCOMPARE(includeTop->localDeclarations().size(), 1);
+    QCOMPARE(includeTop->childContexts().size(), 1);
+
+    QVERIFY(active.topContext());
+    TopDUContext* top = DUChainUtils::contentContextFromProxyContext(active.topContext());
+    QVERIFY(top);
+
+    CompletionItemTester tester(top->childContexts().last(), "A::");
+    QVERIFY(tester.completionContext->isValid());
+    QCOMPARE(tester.items.size(), 1);
+    MissingIncludeCompletionItem* item = dynamic_cast<MissingIncludeCompletionItem*>(tester.items.first().data());
+    QVERIFY(item);
+
+    QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+    QVERIFY(doc->openUrl(active.url().toUrl()));
+
+    item->execute(doc, KTextEditor::Range(3, 12, 3, 12));
+
+    QCOMPARE(doc->text(), QString(
+                    "#if 0\n"
+                    "#include \"asdf.h\"\n"
+                    "#endif\n"
+                    "#include \"" + include.url().toUrl().fileName() + "\"\n"
+                    "int main() {}"));
 }
 
 #include "test_specialcompletion.moc"
