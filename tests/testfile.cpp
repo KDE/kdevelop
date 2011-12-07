@@ -49,6 +49,7 @@ struct TestFile::TestFilePrivate {
     bool ready;
     ReferencedTopDUContext topContext;
     IndexedString url;
+    TestProject* project;
 };
 
 TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project)
@@ -65,6 +66,7 @@ TestFile::TestFile (const QString& contents, const QString& fileExtension, TestP
     QVERIFY(info.isFile());
     d->url = IndexedString(info.absoluteFilePath());
 
+    d->project = project;
     project->addToFileSet(d->url);
 }
 
@@ -74,6 +76,7 @@ TestFile::~TestFile()
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
+    d->project->removeFromFileSet(d->url);
 }
 
 IndexedString TestFile::url() const
