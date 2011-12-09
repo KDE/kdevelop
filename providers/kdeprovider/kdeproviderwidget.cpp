@@ -57,7 +57,10 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     m_dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
     m_dialog->setFaceType(KPageDialog::Auto);
     QWidget* page = new QWidget(m_dialog);
-    Ui::KDEConfig().setupUi(page);
+
+    Ui::KDEConfig configUi;
+    configUi.setupUi(page);
+    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
     
     m_dialog->addPage(page, i18n("General") );
     connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
