@@ -2462,7 +2462,7 @@ OptionAst::~OptionAst()
 
 bool OptionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="option" || (func.arguments.count()<2 && func.arguments.count()>3))
+    if(func.name.toLower()!="option" || func.arguments.count()<2 || func.arguments.count()>3)
         return false;
     m_variableName = func.arguments[0].value;
     m_description = func.arguments[1].value;
