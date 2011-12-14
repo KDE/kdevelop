@@ -1975,8 +1975,14 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
     else
     {
         CategoryType& cm=m_props[setp->type()];
-        foreach(const QString &it, setp->args())
-            cm[it].insert(setp->name(), setp->values());
+        if(setp->append()) {
+            foreach(const QString &it, setp->args()) {
+                cm[it][setp->name()].append(setp->values());
+            }
+        } else {
+            foreach(const QString &it, setp->args())
+                cm[it].insert(setp->name(), setp->values());
+        }
     }
     return 1;
 }
