@@ -23,15 +23,17 @@
 #ifndef OKTETADOCUMENT_H
 #define OKTETADOCUMENT_H
 
+// Plugin
+#include "oktetaglobal.h"
 // Kasten core
-#include <kasten/kastencore.h>
+#include <kastencore.h>
 // KDevPlatform
 #include <sublime/urldocument.h>
 #include <interfaces/idocument.h>
 //Qt
 #include <QtCore/QList>
 
-namespace Kasten {
+namespace KASTEN_NAMESPACE {
 class ByteArrayDocument;
 class AbstractDocument;
 }
@@ -82,7 +84,12 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
 
   protected Q_SLOTS:
     void onByteArrayDocumentChanged();
+    // Moc is too primitive to know about namespace aliase
+#if KASTEN_VERSION == 1
+    void onByteArrayDocumentLoaded( Kasten1::AbstractDocument* document );
+#else
     void onByteArrayDocumentLoaded( Kasten::AbstractDocument* document );
+#endif
 
   private:
     OktetaPlugin* mPlugin;

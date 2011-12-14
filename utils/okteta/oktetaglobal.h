@@ -1,7 +1,7 @@
 /*
     This file is part of the KDevelop Okteta module, part of the KDE project.
 
-    Copyright 2010 Friedrich W. H. Kossebau <kossebau@kde.org>
+    Copyright 2011 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -20,47 +20,16 @@
     License along with this library. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef OKTETAVIEW_H
-#define OKTETAVIEW_H
+#ifndef OKTETAGLOBAL_H
+#define OKTETAGLOBAL_H
 
-// Plugin
-#include "oktetaglobal.h"
-// KDevPlatform
-#include <sublime/view.h>
-
-namespace KASTEN_NAMESPACE {
-class ByteArrayView;
-}
-
-
-namespace KDevelop
-{
-class OktetaDocument;
-
-
-class OktetaView : public Sublime::View
-{
-  Q_OBJECT
-
-  public:
-    explicit OktetaView( OktetaDocument* document );
-
-    virtual ~OktetaView();
-
-  public:
-    Kasten::ByteArrayView* byteArrayView() const;
-
-  protected: // Sublime::View API
-    QWidget* createWidget( QWidget* parent = 0 );
-
-  protected:
-    Kasten::ByteArrayView* mByteArrayView;
-};
-
-
-inline Kasten::ByteArrayView* OktetaView::byteArrayView() const { return mByteArrayView; }
-
-}
-
+// Adaptions for the different version of Kasten and Okteta
+#if KASTEN_VERSION == 1
+namespace Kasten1 {}
+namespace Kasten = Kasten1;
+#define KASTEN_NAMESPACE Kasten1
+#else
+#define KASTEN_NAMESPACE Kasten
 #endif
 
+#endif

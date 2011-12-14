@@ -1,7 +1,7 @@
 /*
     This file is part of the KDevelop Okteta module, part of the KDE project.
 
-    Copyright 2010 Friedrich W. H. Kossebau <kossebau@kde.org>
+    Copyright 2010-2011 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,14 +25,27 @@
 // plugin
 #include "oktetaview.h"
 // Okteta
+#if KASTEN_VERSION == 1
+#include <kasten1/okteta1/bytearrayrawfilesynchronizerfactory.h>
+#include <kasten1/okteta1/bytearraydocument.h>
+#else
 #include <kasten/bytearrayrawfilesynchronizerfactory.h>
 #include <kasten/bytearraydocument.h>
+#endif
 // Kasten
+#if KASTEN_VERSION == 1
+#include <Kasten1/JobManager>
+#include <Kasten1/AbstractLoadJob>
+#include <Kasten1/AbstractSyncToRemoteJob>
+#include <Kasten1/AbstractSyncFromRemoteJob>
+#include <Kasten1/AbstractModelSynchronizer>
+#else
 #include <Kasten/JobManager>
 #include <Kasten/AbstractLoadJob>
 #include <Kasten/AbstractSyncToRemoteJob>
 #include <Kasten/AbstractSyncFromRemoteJob>
 #include <Kasten/AbstractModelSynchronizer>
+#endif
 // KDevelop
 #include <shell/core.h>
 #include <shell/uicontroller.h>
@@ -91,7 +104,12 @@ bool OktetaDocument::save( IDocument::DocumentSaveMode mode )
     Kasten::AbstractModelSynchronizer* synchronizer = mByteArrayDocument->synchronizer();
 
     Kasten::AbstractSyncToRemoteJob* syncJob = synchronizer->startSyncToRemote();
-    const bool syncSucceeded = Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
+    const bool syncSucceeded =
+#if KASTEN_VERSION == 1
+        Kasten::JobManager::executeJob( syncJob );
+#else
+        Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
+#endif
 
     if( syncSucceeded )
     {
@@ -108,7 +126,12 @@ void OktetaDocument::reload()
     Kasten::AbstractModelSynchronizer* synchronizer = mByteArrayDocument->synchronizer();
 
     Kasten::AbstractSyncFromRemoteJob* syncJob = synchronizer->startSyncFromRemote();
-    const bool syncSucceeded = Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
+    const bool syncSucceeded =
+#if KASTEN_VERSION == 1
+        Kasten::JobManager::executeJob( syncJob );
+#else
+        Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
+#endif
 
     if( syncSucceeded )
         notifyStateChanged();
@@ -207,9 +230,19 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         Kasten::AbstractModelSynchronizer* synchronizer = synchronizerFactory->createSynchronizer();
 
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
-        connect( loadJob, SIGNAL(documentLoaded( Kasten::AbstractDocument* )),
-                 SLOT(onByteArrayDocumentLoaded( Kasten::AbstractDocument* )) );
+#if KASTEN_VERSION == 1
+        connect( loadJob, SIGNAL(documentLoaded(Kasten1::AbstractDocument*)),
+                 SLOT(onByteArrayDocumentLoaded(Kasten1::AbstractDocument*)) );
+#else
+        connect( loadJob, SIGNAL(documentLoaded(Kasten::AbstractDocument*)),
+                 SLOT(onByteArrayDocumentLoaded(Kasten::AbstractDocument*)) );
+#endif
+    const bool syncSucceeded =
+#if KASTEN_VERSION == 1
+        Kasten::JobManager::executeJob( loadJob );
+#else
         Kasten::JobManager::executeJob( loadJob, qApp->activeWindow() );
+#endif
 
         delete synchronizerFactory;
     }
@@ -227,7 +260,11 @@ void OktetaDocument::onByteArrayDocumentLoaded( Kasten::AbstractDocument* docume
     if( document )
     {
         mByteArrayDocument = static_cast<Kasten::ByteArrayDocument*>( document );
-        connect( mByteArrayDocument, SIGNAL(localSyncStateChanged( Kasten::LocalSyncState )),
+#if KASTEN_VERSION == 1
+        connect( mByteArrayDocument, SIGNAL(localSyncStateChanged(Kasten1::LocalSyncState)),
+#else
+        connect( mByteArrayDocument, SIGNAL(localSyncStateChanged(Kasten::LocalSyncState)),
+#endif
                  SLOT(onByteArrayDocumentChanged()) );
     }
 }

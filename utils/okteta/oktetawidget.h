@@ -23,12 +23,14 @@
 #ifndef OKTETAWIDGET_H
 #define OKTETAWIDGET_H
 
+// Plugin
+#include "oktetaglobal.h"
 // KDE
 #include <KXMLGUIClient>
 // Qt
 #include <QtGui/QWidget>
 
-namespace Kasten {
+namespace KASTEN_NAMESPACE {
 class ByteArrayView;
 class AbstractXmlGuiController;
 }
