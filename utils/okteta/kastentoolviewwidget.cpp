@@ -25,10 +25,15 @@
 // plugin
 #include "oktetaview.h"
 // Okteta Kasten
-#include <kasten/bytearrayview.h>
+#include <bytearrayview.h>
 // Kasten
+#if KASTEN_VERSION == 1
+#include <Kasten1/AbstractToolView>
+#include <Kasten1/AbstractTool>
+#else
 #include <Kasten/AbstractToolView>
 #include <Kasten/AbstractTool>
+#endif
 // KDev
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

@@ -3,11 +3,14 @@ project( okteta )
 
 include_directories( ${okteta_SOURCE_DIR} ${okteta_BINARY_DIR} )
 
-# add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9038 )
+add_definitions(
+    -DKASTEN_VERSION=${LIBKASTEN_VERSION}
+)
 
 include_directories(
   ${LIBKASTEN_INCLUDE_DIRS}
   ${LIBOKTETA_INCLUDE_DIRS}
+  ${LIBOKTETAKASTEN_INCLUDE_DIRS}
 )
 SET( kdevokteta_PART_SRCS
     kastentoolviewwidget.cpp

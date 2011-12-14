@@ -23,10 +23,12 @@
 #ifndef OKTETAVIEW_H
 #define OKTETAVIEW_H
 
+// Plugin
+#include "oktetaglobal.h"
 // KDevPlatform
 #include <sublime/view.h>
 
-namespace Kasten {
+namespace KASTEN_NAMESPACE {
 class ByteArrayView;
 }
 

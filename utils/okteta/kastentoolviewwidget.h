@@ -23,10 +23,12 @@
 #ifndef KASTENTOOLVIEWWIDGET_H
 #define KASTENTOOLVIEWWIDGET_H
 
+// Plugin
+#include "oktetaglobal.h"
 // Qt
 #include <QtGui/QWidget>
 
-namespace Kasten {
+namespace KASTEN_NAMESPACE {
 class AbstractToolView;
 }
 namespace Sublime {
