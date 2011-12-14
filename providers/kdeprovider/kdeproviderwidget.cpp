@@ -109,7 +109,7 @@ void KDEProviderWidget::showSettings()
     m_dialog->show();
 }
 
-void KDEProviderWidget::projectIndexChanged(QModelIndex currentIndex)
+void KDEProviderWidget::projectIndexChanged(const QModelIndex& currentIndex)
 {
     if (currentIndex.isValid()) {
         QString currentProjectName = currentIndex.data(Qt::DisplayRole).toString();

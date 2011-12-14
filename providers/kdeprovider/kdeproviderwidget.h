@@ -37,7 +37,7 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         
     private slots:
         void showSettings();
-        void projectIndexChanged(QModelIndex currentIndex);
+        void projectIndexChanged(const QModelIndex& currentIndex);
         
     private:
         QListView* m_projects;
