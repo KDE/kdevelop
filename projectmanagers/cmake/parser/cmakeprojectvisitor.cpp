@@ -711,8 +711,9 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     else
     {
         IndexedString idxpath(path);
-        topctx=new TopDUContext(idxpath, RangeInRevision(0,0, endl, endc),
-                                new ParsingEnvironmentFile(idxpath));
+        ParsingEnvironmentFile* env = new ParsingEnvironmentFile(idxpath);
+        env->setLanguage(IndexedString("cmake"));
+        topctx=new TopDUContext(idxpath, RangeInRevision(0,0, endl, endc), env);
         DUChain::self()->addDocumentChain(topctx);
 
         Q_ASSERT(DUChain::self()->chainForDocument(path));
@@ -1030,6 +1031,15 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
     int idx;
+    
+    //Only consider declarations in a CMake file
+    IndexedString cmakeName("cmake");
+    for(QList<Declaration*>::iterator it=decls.begin(); it!=decls.end(); ) {
+        if((*it)->topContext()->parsingEnvironmentFile()->language() == cmakeName)
+            ++it;
+        else
+            it = decls.erase(it);
+    }
     
     if(!decls.isEmpty())
     {
