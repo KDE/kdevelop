@@ -236,6 +236,23 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 	} else if(name == "kdev_format_source.sh") {
 		result.setCaption("KDevelop: kdev_format_source.sh");
 		result.setContent("kdev_format_source.sh $FILE $TMPFILE");
+		result.setUsePreview(false);
+		result.setDescription(i18n( "Description:<br />"
+									"<b>kdev_format_source.sh</b> is a script bundled with KDevelop "
+			                        "which allows using fine-grained formatting rules by placing "   
+									"meta-files called <b>format_sources</b> into the file-system.<br /><br />"
+									"Each line of the <b>format_sources</b> files defines a list of wildcards "
+									"followed by a colon and the used formatting-command.<br /><br />"
+									"The formatting-command should use <b>$TMPFILE</b> to reference the "
+									"temporary file to reformat.<br /><br />"
+									"Example:<br />"
+									"<b>*.cpp *.h : myformatter.sh $TMPFILE</b><br />"
+									"This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
+									"the custom formatting script <b>myformatter.sh</b>.<br /><br />"
+									"Example: <br />"
+									"<b>subdir/*.h : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
+									"This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
+									"tool with the config-file <b>uncrustify.config</b>." ));
 	}
 	return result;
 }
