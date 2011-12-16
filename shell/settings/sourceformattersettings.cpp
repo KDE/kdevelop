@@ -475,10 +475,25 @@ void SourceFormatterSettings::updatePreview()
         LanguageSettings& l = languages[ langName ];
         SourceFormatter* fmt = l.selectedFormatter;
         SourceFormatterStyle* style = l.selectedStyle;
-        ISourceFormatter* ifmt = fmt->formatter;
-        KMimeType::Ptr mime = l.mimetypes.first();
-        m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
-        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+
+        descriptionLabel->setText( style->description() );
+        if( style->description().isEmpty() )
+            descriptionLabel->hide();
+        else
+            descriptionLabel->show();
+
+        if( style->usePreview() )
+        {
+            ISourceFormatter* ifmt = fmt->formatter;
+            KMimeType::Ptr mime = l.mimetypes.first();
+            m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
+            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+            previewLabel->show();
+            textEditor->show();
+        }else{
+            previewLabel->hide();
+            textEditor->hide();
+        }
     } else
     {
         m_document->setText( i18n( "No Language selected" ) );
