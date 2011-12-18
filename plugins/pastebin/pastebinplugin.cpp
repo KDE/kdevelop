@@ -74,7 +74,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
     kDebug() << "exporting patch to pastebin" << source->file();
     
     QByteArray bytearray = "paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
-    bytearray += "&paste_format=dff&paste_expiry_date=1D&paste_email=";
+    bytearray += "&paste_format=diff&paste_expiry_date=1D&paste_email=";
 
     KUrl url("http://pastebin.com/api_public.php");
 
