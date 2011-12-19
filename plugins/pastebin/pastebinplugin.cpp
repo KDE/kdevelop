@@ -84,7 +84,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
     connect(tf, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data(KIO::Job*,QByteArray)));
     
     m_result.insert(tf, QByteArray());
-    ICore::self()->runController()->registerJob(tf);
+    KIO::getJobTracker()->registerJob(tf);
 }
 
 void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
