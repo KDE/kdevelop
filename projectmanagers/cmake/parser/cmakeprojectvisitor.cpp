@@ -456,14 +456,19 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //TODO: Must deal with ENV{something} case
-    QStringList values;
-    CacheValues::const_iterator itCache= m_cache->constFind(set->variableName());
-    if(set->storeInCache() && itCache!=m_cache->constEnd())
-        values = itCache->value.split(';');
-    else
-        values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName() /*<< "to" << values*/;
-    m_vars->insert(set->variableName(), values);
+    if(set->storeInCache()) {
+        QStringList values;
+        CacheValues::const_iterator itCache= m_cache->constFind(set->variableName());
+        if(itCache!=m_cache->constEnd())
+            values = itCache->value.split(';');
+        else
+            values = set->values();
+        
+        m_vars->insertGlobal(set->variableName(), values);
+    } else
+        m_vars->insert(set->variableName(), set->values(), set->parentScope());
+    
+    kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope() /*<< "to" << values*/;
     return 1;
 }
 
@@ -631,7 +636,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     foreach(const QString& possib, possibleConfigNames) {
         path = findFile(possib, configPath);
         if (!path.isEmpty()) {
-            m_vars->insert(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
+            m_vars->insertGlobal(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
             isConfig=true;
             break;
         }
@@ -678,7 +683,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 
         if(pack->noModule())
         {
-            m_vars->insert(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
+            m_vars->insertGlobal(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
         m_vars->remove("CMAKE_CURRENT_LIST_FILE");
         m_vars->remove("CMAKE_CURRENT_LIST_DIR");
@@ -692,7 +697,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             //FIXME: Put here the error.
             kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
         }
-        m_vars->insert(QString("%1_DIR").arg(pack->name()), QStringList(QString("%1_DIR-NOTFOUND").arg(pack->name())));
+        m_vars->insertGlobal(QString("%1_DIR").arg(pack->name()), QStringList(QString("%1_DIR-NOTFOUND").arg(pack->name())));
     }
     kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
 
@@ -759,7 +764,6 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     if(m_cache->contains(fprog->variableName()))
     {
         kDebug(9042) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName()).value;
-        m_vars->insert(fprog->variableName(), m_cache->value(fprog->variableName()).value.split(';'));
         return 1;
     }
 
@@ -782,9 +786,9 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     }
 
     if(!path.isEmpty())
-        m_vars->insert(fprog->variableName(), QStringList(path));
+        m_vars->insertGlobal(fprog->variableName(), QStringList(path));
     else
-        m_vars->insert(fprog->variableName()+"-NOTFOUND", QStringList());
+        m_vars->insertGlobal(fprog->variableName()+"-NOTFOUND", QStringList());
 
     kDebug(9042) << "FindProgram:" << fprog->variableName() << "=" << m_vars->value(fprog->variableName()) << modulePath;
     return 1;
@@ -814,7 +818,6 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     if(m_cache->contains(fpath->variableName()))
     {
         kDebug() << "FindPath: cache" << fpath->variableName();
-        m_vars->insert(fpath->variableName(), m_cache->value(fpath->variableName()).value.split(';'));
         return 1;
     }
 
@@ -858,7 +861,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!path.isEmpty())
     {
-        m_vars->insert(fpath->variableName(), QStringList(path));
+        m_vars->insertGlobal(fpath->variableName(), QStringList(path));
     }
     else
     {
@@ -876,7 +879,6 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     if(m_cache->contains(flib->variableName()))
     {
         kDebug(9042) << "FindLibrary: cache" << flib->variableName();
-        m_vars->insert(flib->variableName(), m_cache->value(flib->variableName()).value.split(';'));
         return 1;
     }
 
@@ -929,7 +931,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
     if(!path.isEmpty())
     {
-        m_vars->insert(flib->variableName(), QStringList(path));
+        m_vars->insertGlobal(flib->variableName(), QStringList(path));
     }
     else
         kDebug(9032) << "error. Library" << flib->filenames() << "not found";
@@ -945,7 +947,6 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     if(m_cache->contains(ffile->variableName()))
     {
         kDebug(9042) << "FindFile: cache" << ffile->variableName();
-        m_vars->insert(ffile->variableName(), m_cache->value(ffile->variableName()).value.split(';'));
         return 1;
     }
 
@@ -988,7 +989,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
 
     if(!path.isEmpty())
     {
-        m_vars->insert(ffile->variableName(), QStringList(path));
+        m_vars->insertGlobal(ffile->variableName(), QStringList(path));
     }
     else
         kDebug(9032) << "error. File" << ffile->filenames() << "not found";
@@ -1172,11 +1173,16 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
 
+            bool isfunc = code.isFunction;
+            if(isfunc)
+                m_vars->pushScope();
             //Executing
             int len = walk(code.code, 1);
             kDebug(9042) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
 
+            if(isfunc)
+                m_vars->popScope();
             //Restoring
             i=1;
             foreach(const QString& name, code.knownArgs)
@@ -2206,7 +2212,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 
         createDefinitions(element);
 
-        m_vars->insert("CMAKE_CURRENT_LIST_LINE", QStringList(QString::number(it->line)));
+        m_vars->insertGlobal("CMAKE_CURRENT_LIST_LINE", QStringList(QString::number(it->line)));
         int lines=element->accept(this);
         line+=lines;
         m_backtrace.top().line = line;

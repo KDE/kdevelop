@@ -24,14 +24,20 @@
 #include <QHash>
 #include <QStringList>
 #include "cmakeexport.h"
+#include <QSet>
+#include <QStack>
 
 class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
 {
     public:
+        VariableMap();
 //         bool contains(const QString& varName) const;
-        iterator insert(const QString& varName, const QStringList& value);
+        void insert(const QString& varName, const QStringList& value, bool parentScope = false);
+        
+        ///only for very special cases, usually should use insert. bypasses scopes
         iterator insertMulti(const QString& varName, const QStringList& value);
-//         QStringList value(const QString& varName) const;
+        
+        QStringList value(const QString& varName) const;
 //         QStringList take(const QString& varName);
 //         int remove(const QString& varName);
 // 
@@ -43,6 +49,13 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
 #else
         static QString regexEnvVar() { return "\\$ENV\\{[A-z0-9\\-._]+\\}"; }
 #endif
+        void pushScope();
+        void popScope();
+        
+        /** will create a variable without adding a scope on it */
+        void insertGlobal(const QString& key, const QStringList& value);
+    private:
+        QStack<QSet<QString> > m_scopes;
 };
 
 #endif

@@ -137,6 +137,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeProperties properties() { return m_props; }
         
         static void setMessageCallback(message_callback f) { s_msgcallback=f; }
+        
+        QStringList variableValue(const QString& var) const;
+        
     protected:
         struct IntPair
         {
@@ -178,7 +181,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 
         QStringList traverseGlob(const QString& startPath, const QString& expression,
             bool recursive = false, bool followSymlinks = false);
-        QStringList variableValue(const QString& var) const;
         
         CMakeProperties m_props;
         QStringList m_modulePath;

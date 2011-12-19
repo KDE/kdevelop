@@ -435,6 +435,36 @@ void CMakeProjectVisitorTest::testRun_data()
     QTest::newRow("unfinished foreach") <<
                             "foreach(VAR 1)\n"
                             << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("X", "123");
+    QTest::newRow("var scope") <<
+                            "function(HOLA)\n"
+                            "  set(X something_else)\n"
+                            "endfunction(HOLA)\n"
+                            "set(X 123)"
+                            "HOLA()\n"
+                            << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("X", "something_else");
+    QTest::newRow("var scope parent") <<
+                            "function(HOLA)\n"
+                            "  set(X something_else PARENT_SCOPE)\n"
+                            "endfunction(HOLA)\n"
+                            "set(X 123)\n"
+                            "HOLA()\n"
+                            << cacheValues << results;
+                            cacheValues.clear();
+    results.clear();
+    results << StringPair("X", "something_else");
+    QTest::newRow("var scope cache") <<
+                            "function(HOLA)\n"
+                            "  set(X something_else CACHE STRING lala)\n"
+                            "endfunction(HOLA)\n"
+                            "set(X 123)\n"
+                            "HOLA()\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -477,7 +507,7 @@ void CMakeProjectVisitorTest::testRun()
         CMakeFunctionArgument arg;
         arg.value=vp.first;
         
-        QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
+        QCOMPARE(v.variableValue(vp.first).join(QString(";")), vp.second);
     }
     {
         KDevelop::DUChainWriteLocker lock(DUChain::lock());
@@ -490,14 +520,16 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::addColumn<QString>("module");
     QTest::addColumn<QString>("args");
     
+    QTest::newRow("ZLIB") << "ZLIB" << QString();
+    QTest::newRow("PNG") << "PNG" << QString();
     QTest::newRow("Qt4") << "Qt4" << QString();
     QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
     QTest::newRow("KDE4") << "KDE4" << QString();
     QTest::newRow("Automoc4") << "Automoc4" << QString();
-//     QTest::newRow("Boost") << "Boost" << QString("1.39");
-//     QTest::newRow("Eigen2") << "Eigen2";
-//     QTest::newRow("Exiv2") << "Exiv2";
-    QTest::newRow("QtGStreamer") << "QtGStreamer" << QString(); //commented because it might not be installed, but works
+    QTest::newRow("Boost") << "Boost" << QString("1.39");
+//     QTest::newRow("Eigen2") << "Eigen2" << QString();
+//     QTest::newRow("Exiv2") << "Exiv2" << QString();
+//     QTest::newRow("QtGStreamer") << "QtGStreamer" << QString(); //commented because it might not be installed
 }
 
 void CMakeProjectVisitorTest::testFinder_init()
