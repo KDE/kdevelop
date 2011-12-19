@@ -48,8 +48,11 @@ class CMakeCacheModel : public QStandardItemModel
         
         QList<QModelIndex> persistentIndices() const;
         KUrl filePath() const;
+        void read();
+        
     private slots:
         void edited() { m_changed=true; }
+        void reset();
         
     private:
         bool writeBack(const KUrl& path) const;
@@ -57,7 +60,6 @@ class CMakeCacheModel : public QStandardItemModel
         KUrl m_filePath;
         bool m_changed;
         int m_internalBegin;
-        QHash<QString, int> m_variablePos;
         QSet<QString> m_internal;
 };
 

@@ -334,6 +334,7 @@ void CMakePreferences::configure()
     KDevelop::ProjectFolderItem* it=p->projectItem();
     KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
     KJob* job=b->configure(p);
+    connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
     
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
