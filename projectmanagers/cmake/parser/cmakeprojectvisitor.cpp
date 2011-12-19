@@ -655,8 +655,15 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
             m_vars->insert(pack->name()+"_FIND_QUIET", QStringList("TRUE"));
-        m_vars->insert(pack->name()+"_FIND_COMPONENTS", pack->components());
+        if(!pack->components().isEmpty()) m_vars->insert(pack->name()+"_FIND_COMPONENTS", pack->components());
         m_vars->insert(pack->name()+"_FIND_VERSION", QStringList(pack->version()));
+        QStringList version = pack->version().split('.');
+        if(version.size()>=1) m_vars->insert(pack->name()+"_FIND_VERSION_MAJOR", QStringList(version[0]));
+        if(version.size()>=2) m_vars->insert(pack->name()+"_FIND_VERSION_MINOR", QStringList(version[1]));
+        if(version.size()>=3) m_vars->insert(pack->name()+"_FIND_VERSION_PATCH", QStringList(version[2]));
+        if(version.size()>=4) m_vars->insert(pack->name()+"_FIND_VERSION_TWEAK", QStringList(version[3]));
+        m_vars->insert(pack->name()+"_FIND_VERSION_COUNT", QStringList(QString::number(version.size())));
+        
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
@@ -1512,7 +1519,7 @@ int CMakeProjectVisitor::visit(const MathAst *math)
         kDebug(9032) << "error: found an error while calculating" << math->expression();
     }
     kDebug(9042) << "math. " << math->expression() << "=" << result.toString();
-    m_vars->insert(math->outputVariable(), QStringList(result.toString()));
+    m_vars->insert(math->outputVariable(), QStringList(QString::number(result.toInteger())));
     return 1;
 }
 
