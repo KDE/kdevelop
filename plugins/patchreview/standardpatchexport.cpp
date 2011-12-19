@@ -45,7 +45,7 @@ class KIOExport : public StandardExporter
         KUrl dest = KFileDialog::getSaveUrl();
         if( !dest.isEmpty() ) { //We let KDE do the rest of the job including the notification
             KIO::CopyJob* job = KIO::copy( source->file(), dest );
-            KDevelop::ICore::self()->runController()->registerJob( job );
+            KIO::getJobTracker()->registerJob( job );
         }
     }
 
