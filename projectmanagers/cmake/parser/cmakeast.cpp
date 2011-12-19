@@ -1308,7 +1308,7 @@ bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindLibraryAst::FindLibraryAst()
-    : m_noDefaultPath(false)
+    : m_noDefaultPath(false), m_cmakeFindRootPath(false)
 {
 }
 
@@ -1344,6 +1344,8 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_noCmakeEnvironmentPath = true;
         else if(it->value=="NO_CMAKE_PATH")
             m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_FIND_ROOT_PATH")
+            m_cmakeFindRootPath = true;
         else if(it->value=="DOC") {
             ++it;
             if(it==itEnd)
@@ -1460,6 +1462,10 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_CMAKE_ENVIRONMENT_PATH")
             m_noCmakeEnvironmentPath = true;
         else if(it->value=="NO_CMAKE_PATH")
+            m_noCmakePath = true;
+        else if(it->value=="NO_CMAKE_SYSTEM_PATH")
+            m_noCmakeSystemPath = true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
             m_noSystemEnvironmentPath = true;
         else if(it->value=="DOC") {
             ++it;
@@ -1495,7 +1501,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 FindProgramAst::FindProgramAst()
 {
         m_noDefaultPath = m_noCmakeEnvironmentPath = m_noCmakePath =
-        m_noSystemEnvironmentPath = false;
+        m_noSystemEnvironmentPath = m_noCMakeFindRootPath = false;
 }
 
 FindProgramAst::~FindProgramAst()
@@ -1529,8 +1535,8 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_noCmakePath=true;
         else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
             m_noSystemEnvironmentPath = true;
-        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
-            m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_FIND_ROOT_PATH")
+            m_noCMakeFindRootPath = true;
         else if(it->value=="DOC") {
             ++it;
             if(it==itEnd)
