@@ -69,7 +69,7 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
 {
     CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
     
-    QCOMPARE(v.targets().count(), 3);
+    QCOMPARE(v.targets().count(), 2);
     QCOMPARE(v.projectName(), QString("kde4app"));
     QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
     QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
