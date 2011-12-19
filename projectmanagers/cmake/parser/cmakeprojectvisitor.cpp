@@ -1495,6 +1495,29 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
+        case FileAst::Strings: {
+            KUrl filename=file->path();
+            QFileInfo ifile(filename.toLocalFile());
+            kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
+            if(!ifile.isFile())
+                return 1;
+            QFile f(filename.toLocalFile());
+            if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+                return 1;
+            QStringList output=QString(f.readAll()).split('\n');
+            
+            if(!file->regex().isEmpty()) {
+                QRegExp rx(file->regex());
+                for(QStringList::iterator it=output.begin(); it!=output.end(); ) {
+                    if(rx.indexIn(*it)>=0)
+                        ++it;
+                    else
+                        it = output.erase(it);
+                }
+            }
+            
+            m_vars->insert(file->variable(), output);
+        }   break;
         default:
             kDebug(9032) << "error: not implemented. file:" << file->type() <<
                 "variable:" << file->variable() << "file:" << file->path() << file->content()[file->line()].arguments[0].value;
