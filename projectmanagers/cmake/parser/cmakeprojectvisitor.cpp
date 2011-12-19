@@ -234,10 +234,12 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     }
     ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
 
-    if(exp.quoted)
-    {
+    if(exp.quoted) {
         ret=QStringList(ret.join(QChar(';')));
+    } else if(ret.size()==1 && ret.first().isEmpty()) {
+        ret.clear();
     }
+    
     return ret;
 }
 

@@ -1586,11 +1586,11 @@ ForeachAst::~ForeachAst()
 
 bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="foreach" || func.arguments.count()<2)
+    if(func.name.toLower()!="foreach" || func.arguments.count()<1)
         return false;
     addOutputArgument(func.arguments.first());
     m_loopVar=func.arguments.first().value;
-    if(func.arguments[1].value=="RANGE") {
+    if(func.arguments.count()>1 && func.arguments[1].value=="RANGE") {
         bool correctStart = true, correctStop = true, correctRange = true;
         m_type=Range;
         if(func.arguments.count()<3)
@@ -1609,7 +1609,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_ranges.step = func.arguments[4].value.toInt(&correctRange);
         if(!correctStart || !correctStop || !correctRange)
             return false;
-    } else if(func.arguments[1].value=="IN") {
+    } else if(func.arguments.count()>1 && func.arguments[1].value=="IN") {
         if(func.arguments[2].value=="LISTS") {
             m_type = InLists;
         } else if(func.arguments[2].value=="ITEMS") {
@@ -1624,8 +1624,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     } else {
         m_type=InItems;
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
-        for(; it!=itEnd; ++it)
-        {
+        for(; it!=itEnd; ++it) {
             m_arguments += it->value;
         }
     }
