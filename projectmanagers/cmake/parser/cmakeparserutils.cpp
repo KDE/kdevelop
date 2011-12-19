@@ -190,7 +190,4 @@ namespace CMakeParserUtils
         
         return v.context();
     }
-
-    
 }
-    

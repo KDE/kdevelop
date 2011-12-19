@@ -474,8 +474,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 
 KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project)
 {
-    KUrl baseUrl=project->folder();
-    baseUrl.cd(CMake::projectRootRelative(project));
+    KUrl baseUrl=CMake::projectRoot(project);
     
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     CMakeProjectData* data = &m_projectsData[project];
