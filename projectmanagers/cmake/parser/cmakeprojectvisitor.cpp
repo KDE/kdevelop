@@ -316,12 +316,13 @@ int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
     QStringList value;
     
-    CategoryType::iterator itTarget = m_props[TargetProperty].find(prop->target());
-    if(itTarget!=m_props.value(TargetProperty).constEnd()) {
+    CategoryType& category = m_props[TargetProperty];
+    CategoryType::iterator itTarget = category.find(prop->target());
+    if(itTarget!=category.end()) {
         QMap<QString, QStringList>& targetProps = itTarget.value();
         if(!targetProps.contains(prop->property())) {
             if(prop->property().startsWith("LOCATION_") && targetProps.contains("IMPORTED_"+prop->property()))
-                targetProps[prop->property()]=targetProps["IMPORTED_"+prop->property()];
+                targetProps[prop->property()] = targetProps["IMPORTED_"+prop->property()];
         }
         value = targetProps.value(prop->property());
     }
