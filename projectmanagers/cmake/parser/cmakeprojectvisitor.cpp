@@ -1622,7 +1622,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             if(contains) {
                 foreach(int idx, list->index())
                 {
-                    if(idx>=theList.count())
+                    if(idx>=theList.count() || (-idx)>=theList.count())
                         kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
                     else if(idx>=0)
                         indices += theList[idx];
