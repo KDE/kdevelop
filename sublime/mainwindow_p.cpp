@@ -389,10 +389,9 @@ void MainWindowPrivate::clearArea()
 
 void MainWindowPrivate::cleanCentralWidget()
 {
-    for(int i=0; i<splitterCentralWidget->count(); ++i) {
-        delete splitterCentralWidget->widget(i);
-    }
-    
+    while(splitterCentralWidget->count())
+        delete splitterCentralWidget->widget(0);
+
     setBackgroundVisible(true);
 }
 
