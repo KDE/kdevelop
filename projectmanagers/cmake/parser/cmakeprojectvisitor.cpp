@@ -1698,18 +1698,20 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     return 1;
 }
 
-int toForeachEnd(const ForeachAst* fea)
+int toCommandEnd(const CMakeAst* fea)
 {
+    QString command = fea->content()[fea->line()].name;
+    QString endCommand = "end"+command;
     int lines=fea->line()+1, depth=1;
     CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
     CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
     for(; depth>0 && it!=itEnd; ++it, lines++)
     {
-        if(it->name=="foreach")
+        if(it->name==command)
         {
             depth++;
         }
-        else if(it->name=="endforeach")
+        else if(it->name==endCommand)
         {
             depth--;
         }
@@ -1760,7 +1762,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     }
     
     if(end<0)
-        end = toForeachEnd(fea);
+        end = toCommandEnd(fea);
     
     m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
@@ -2012,7 +2014,7 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
     {
         res += value.split(' ');
     }
-    m_vars->insert(separgs->variableName(), res);
+    m_vars->insert(varName, res);
     return 1;
 }
 
@@ -2076,25 +2078,13 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
 
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
-    int end=whileast->line()+1;
-    CMakeFileContent::const_iterator it=whileast->content().constBegin()+end;
-    CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
-    int lines=0, inside=1;
-    for(; inside>0 && it!=itEnd; ++it, lines++)
-    {
-        QString funcName=it->name;
-        if(funcName=="while")
-            inside++;
-        else if(funcName=="endwhile")
-            inside--;
-    }
+    int end = toCommandEnd(whileast);
 
-    if(it!=itEnd) {
-        usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
-    } else
-        lines++;
+    if(end<whileast->content().size()) {
+        usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[end]);
+    }
     
-    if(result && inside==0)
+    if(result && end<whileast->content().size())
     {
         walk(whileast->content(), whileast->line()+1);
         
@@ -2104,7 +2094,10 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
         } else
             walk(whileast->content(), whileast->line());
     }
-    return lines;
+    
+    kDebug(9042) << "endwhile" << whileast->condition() << whileast->content()[end];
+    
+    return end-whileast->line()+1;
 }
 
 CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp)
@@ -2405,7 +2398,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     QStringList matchedDirs;
     if (dirGlob.contains('*') || dirGlob.contains('?') || dirGlob.contains('['))
     {
-        kDebug(9042) << "Got a dir glob " << dirGlob;
+        kDebug(9042) << "Got a dir glob " << dirGlob;separgs->variableName()
         if (startPath.isEmpty())
             return QStringList();
         //it's really a glob, not just dir name
