@@ -1716,7 +1716,7 @@ int toCommandEnd(const CMakeAst* fea)
             depth--;
         }
     }
-    return lines-1;
+    return lines;
 }
 
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
@@ -1763,10 +1763,12 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     
     if(end<0)
         end = toCommandEnd(fea);
+    else
+        end++;
     
     m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
-    return end-fea->line()+1;
+    return end-fea->line();
 }
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
@@ -2080,24 +2082,25 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
     int end = toCommandEnd(whileast);
 
-    if(end<whileast->content().size()) {
-        usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[end]);
-    }
-    
-    if(result && end<whileast->content().size())
+    if(end<whileast->content().size())
     {
-        walk(whileast->content(), whileast->line()+1);
+        usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[end]);
         
-        if(m_hitBreak) {
-            kDebug() << "break found. leaving loop";
-            m_hitBreak=false;
-        } else
-            walk(whileast->content(), whileast->line());
+        if(result)
+        {
+            walk(whileast->content(), whileast->line()+1);
+            
+            if(m_hitBreak) {
+                kDebug() << "break found. leaving loop";
+                m_hitBreak=false;
+            } else
+                walk(whileast->content(), whileast->line());
+        }
     }
     
     kDebug(9042) << "endwhile" << whileast->condition() /*<< whileast->content()[end]*/;
     
-    return end-whileast->line()+1;
+    return end-whileast->line();
 }
 
 CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc & exp)
