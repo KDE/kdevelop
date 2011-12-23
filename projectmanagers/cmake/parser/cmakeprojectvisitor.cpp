@@ -2095,7 +2095,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
             walk(whileast->content(), whileast->line());
     }
     
-    kDebug(9042) << "endwhile" << whileast->condition() << whileast->content()[end];
+    kDebug(9042) << "endwhile" << whileast->condition() /*<< whileast->content()[end]*/;
     
     return end-whileast->line()+1;
 }
@@ -2398,7 +2398,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     QStringList matchedDirs;
     if (dirGlob.contains('*') || dirGlob.contains('?') || dirGlob.contains('['))
     {
-        kDebug(9042) << "Got a dir glob " << dirGlob;separgs->variableName()
+        kDebug(9042) << "Got a dir glob " << dirGlob;
         if (startPath.isEmpty())
             return QStringList();
         //it's really a glob, not just dir name
