@@ -96,6 +96,24 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ), KUrl( "file:///home/andreas/projects/testcustom/build/" ) );
 }
 
+void CustomBuildSystemPluginTest::buildDirProject()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
+    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
+    ICore::self()->projectController()->openProject( projecturl );
+    // Wait for the project to be opened
+    if( !projectSpy->wait( 20000 ) ) {
+        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+    }
+    IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
+    QVERIFY( project );
+   
+    KUrl currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
+
+    QCOMPARE( currentBuilddir, KUrl( projecturl.directory(KUrl::AppendTrailingSlash) ) );
+}
+
+
 void CustomBuildSystemPluginTest::loadMultiPathProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );

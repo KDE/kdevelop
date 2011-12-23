@@ -95,6 +95,10 @@ KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
     KUrl projecturl = item->project()->projectItem()->url();
     QString relative = KUrl::relativeUrl( projecturl, u );
     KUrl builddir = configuration( item->project() ).readEntry( ConfigConstants::buildDirKey, projecturl );
+    if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
+    {
+        builddir = projecturl;
+    }
     builddir.addPath( relative );
     builddir.cleanPath();
     return builddir;
