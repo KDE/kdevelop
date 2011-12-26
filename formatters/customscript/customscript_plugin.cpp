@@ -250,7 +250,7 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 									"This will reformat all files ending with <b>.cpp</b> or <b>.h</b> using "
 									"the custom formatting script <b>myformatter.sh</b>.<br /><br />"
 									"Example: <br />"
-									"<b>subdir/*.h : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
+									"<b>subdir/* : uncrustify -l CPP -f $TMPFILE -c uncrustify.config -o $TMPFILE</b> <br />"
 									"This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
 									"tool with the config-file <b>uncrustify.config</b>." ));
 	}
