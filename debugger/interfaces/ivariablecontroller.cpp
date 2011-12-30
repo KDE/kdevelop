@@ -109,8 +109,9 @@ void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 {
     IDebugSession::DebuggerState state = session()->state();
     m_autoUpdate = autoUpdate;
+    kDebug() << m_autoUpdate;
     if (m_autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
-        updateIfFrameOrThreadChanged();
+        update();
     }
 }
 
