@@ -392,5 +392,12 @@ void GDB::processErrored(QProcess::ProcessError error)
         emit showMessage(i18n("Process didn't start"), 3000);
         */
         emit userCommandOutput("(gdb) didn't start\n");
+    } else if (error == QProcess::Crashed) {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>Gdb crashed.</b>"
+                 "<p>Because of that the debug session has to be ended.<br>"
+                 "Try to reproduce the crash with plain gdb and report a bug.<br>"),
+            i18n("Gdb crashed"));
     }
 }
