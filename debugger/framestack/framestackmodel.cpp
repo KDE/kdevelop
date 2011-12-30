@@ -100,7 +100,7 @@ void FrameStackModel::insertFrames(int threadNumber, const QList<FrameItem> &fra
     Q_ASSERT(threadIndex.isValid());
 
     beginInsertRows(threadIndex, m_frames[threadNumber].count()-1,
-                    m_frames[threadNumber].count()+frames.count()-2);
+                    m_frames[threadNumber].count()+frames.count()-1);
     m_frames[threadNumber] << frames;
     endInsertRows();
 }
@@ -318,6 +318,7 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 void FrameStackModel::fetchMoreFrames()
 {    
     if (m_currentThread != -1 && m_hasMoreFrames[m_currentThread]) {
+        setHasMoreFrames(m_currentThread, false);
         fetchFrames(m_currentThread,
                     m_frames[m_currentThread].count(),
                     m_frames[m_currentThread].count()-1+20);
