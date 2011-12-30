@@ -954,7 +954,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(it);
     CMakeDefinitions defs = att->definitions(folder ? folder->formerParent() : dynamic_cast<CMakeFolderItem*>(item));
-    qDebug() << "lalala" << defs << it->url();
+    //qDebug() << "lalala" << defs << it->url();
     return defs;
 }
 
