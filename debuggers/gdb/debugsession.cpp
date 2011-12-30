@@ -660,7 +660,11 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
     if (reason == "exited-normally" || reason == "exited")
     {
-        programNoApp(i18n("Exited normally"));
+        if (r.hasField("exit-code")) {
+            programNoApp(i18n("Exited with return code: %1").arg(r["exit-code"].literal()));
+        } else {
+            programNoApp(i18n("Exited normally"));
+        }
         programHasExited_ = true;
         state_reload_needed = false;
         return;
