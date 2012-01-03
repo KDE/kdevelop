@@ -67,6 +67,8 @@ class ProjectTreeView: public QTreeView
         void slotActivated( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
+        void saveState();
+        void restoreState();
 
     protected:
         virtual void keyPressEvent(QKeyEvent *event);

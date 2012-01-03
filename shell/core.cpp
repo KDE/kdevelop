@@ -334,7 +334,8 @@ bool Core::shuttingDown() const
 void Core::cleanup()
 {
     d->m_shuttingDown = true;
-    
+    emit aboutToShutdown();
+
     if (!d->m_cleanedUp) {
         d->debugController.data()->cleanup();
         d->selectionController.data()->cleanup();
