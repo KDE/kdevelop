@@ -37,6 +37,8 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     labels.append(i18n("Comment"));
     labels.append(i18n("Advanced"));
     setHorizontalHeaderLabels(labels);
+    
+    read();
 }
 
 void CMakeCacheModel::reset()
