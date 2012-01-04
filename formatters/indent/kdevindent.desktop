@@ -95,7 +95,7 @@ GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevindent
-X-KDevelop-Version=12
+X-KDevelop-Version=14
 X-KDE-PluginInfo-Name=kdevindent
 X-KDE-PluginInfo-Author=Cedric Pasteur
 X-KDE-PluginInfo-License=LGPL
