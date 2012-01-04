@@ -94,6 +94,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevkonsoleview
 X-KDE-PluginInfo-Name=kdevkonsoleview
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=12
+X-KDevelop-Version=14
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

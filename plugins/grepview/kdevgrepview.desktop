@@ -87,6 +87,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevgrepview
 X-KDE-PluginInfo-Name=kdevgrepview
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=12
+X-KDevelop-Version=14
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI
