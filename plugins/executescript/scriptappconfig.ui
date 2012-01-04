@@ -35,7 +35,7 @@
            <bool>false</bool>
           </property>
           <property name="clickMessage">
-           <string>Enter the absolute path to an script file</string>
+           <string>Enter the absolute path to a script file</string>
           </property>
          </widget>
         </item>
