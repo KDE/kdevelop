@@ -50,7 +50,9 @@
 #include "qmakejob.h"
 
 K_PLUGIN_FACTORY(QMakeBuilderFactory, registerPlugin<QMakeBuilder>(); )
-K_EXPORT_PLUGIN(QMakeBuilderFactory(KAboutData("kdevqmakebuilder","kdevqmakebuilder", ki18n("QMake Builder"), "0.1", ki18n("Support for building QMake projects"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(QMakeBuilderFactory(KAboutData(
+    "kdevqmakebuilder","kdevqmakebuilder", ki18n("QMake Builder"),
+    "1.3.60", ki18n("Support for building QMake projects"), KAboutData::License_GPL)))
 
 QMakeBuilder::QMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QMakeBuilderFactory::componentData(), parent)

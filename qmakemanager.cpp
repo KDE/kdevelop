@@ -76,7 +76,7 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData(
-    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1",
+    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "1.3.60",
     ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager* QMakeProjectManager::m_self = 0;

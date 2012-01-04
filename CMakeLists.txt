@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 find_package(KDE4 4.5.0 REQUIRED)
-find_package(KDevPlatform 1.2.60 REQUIRED)
+find_package(KDevPlatform 1.3.60 REQUIRED)
 find_package(KDevelop REQUIRED)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INCLUDE_DIR} )
