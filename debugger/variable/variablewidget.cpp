@@ -297,7 +297,7 @@ void VariableTree::changeVariableFormat(int format)
 void VariableTree::watchDelete()
 {
     if (!selectedVariable()) return;
-    Q_ASSERT(dynamic_cast<Watches*>(selectedVariable()->parent()));
+    if (!dynamic_cast<Watches*>(selectedVariable()->parent())) return;
     selectedVariable()->die();
 }
 
