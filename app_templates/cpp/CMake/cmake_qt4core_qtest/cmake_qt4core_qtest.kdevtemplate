@@ -1,33 +1,19 @@
 # KDE Config File
 [General]
 Name=CMake QtTest
-Name[de]=CMake QtTest
-Name[el]=CMake QtTest
+Name[da]=CMake QtTest
 Name[es]=CMake QtTest
-Name[fr]=CMake QtTest
-Name[it]=CMake QtTest
 Name[nb]=CMake QtTest
-Name[nl]=CMake QtTest
-Name[pt]=QtTest com CMake
 Name[pt_BR]=CMake QtTest
 Name[sv]=CMake QtTest
 Name[uk]=CMake QtTest
 Name[x-test]=xxCMake QtTestxx
-Name[zh_CN]=CMake QtTest
-Name[zh_TW]=CMake QtTest
 Comment=Qt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)
-Comment[el]=Qt4 CMake QTest Core εφαρμογή. Δημιουργία μιας εφαρμογής με βάση τα CMake/Qt4 (συμβατή με πολλαπλές πλατφόρμες)
+Comment[da]=Qt4 CMake QTest Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform)
 Comment[es]=Aplicación Qt4 CMake QTest Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
-Comment[fr]=Application principale QTest CMake pour Qt4. Génère une application utilisant CMake / Qt4 (compatible multi-plateforme)
-Comment[it]=Applicazione base QTest CMake in Qt4. Genera un'applicazione basata su CMake/Qt4 (multipiattaforma)
-Comment[nb]=Qt4 CMake QTest kjerneprogram. Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
-Comment[nl]=Kerntoepassing van Qt4 CMake QTest. Genereert een op CMake/Qt4-gebaseerd programma (crossplatform compatibel)
-Comment[pt]=Gera uma aplicação baseada no CMake/Qt4 Core com QTest (compatível com várias plataformas)
 Comment[pt_BR]=Aplicativo principal QTest com CMake para Qt4. Gera um aplicativo em CMake/Qt4 (compatível com várias plataformas)
 Comment[sv]=Qt4 CMake QTest-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
 Comment[uk]=Створити програму QTest, засновану на CMake/Qt4 (сумісну з декількома платформами)
 Comment[x-test]=xxQt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)xx
-Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台)
-Comment[zh_TW]=Qt4 CMake QTest Core 應用程式。產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
 Category=KDE/Test
