@@ -2,11 +2,13 @@
 [General]
 Name=CMake C++
 Name[cs]=CMake C++
+Name[da]=CMake C++
 Name[de]=CMake C++
 Name[el]=CMake C++
 Name[es]=CMake C++
 Name[et]=CMake C++
 Name[fr]=CMake C++
+Name[ga]=CMake C++
 Name[hu]=CMake C++
 Name[it]=CMake C++
 Name[nb]=CMake C++
@@ -20,11 +22,13 @@ Name[zh_CN]=CMake C++
 Name[zh_TW]=CMake C++
 Comment=Simple CMake-based C++ application
 Comment[cs]=Jednoduchá aplikace C++ založená na CMake
+Comment[da]=Simpel CMake-baseret C++-applikation
 Comment[de]=Einfache auf CMake basierende C++-Anwendung
 Comment[el]=Απλή εφαρμογή C++ με βάση το CMake
 Comment[es]=Aplicación C++ sencilla basada en CMake
 Comment[et]=Lihtne CMake'i põhine C++ rakendus
 Comment[fr]=Application C++ simple utilisant CMake
+Comment[ga]=Feidhmchlár simplí C++ bunaithe ar CMake
 Comment[hu]=Egyszerű CMake alapú C++ alkalmazás
 Comment[it]=Semplice applicazione in C++ basata su CMake
 Comment[lt]=Paprasta CMake-paremta C++ programa

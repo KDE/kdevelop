@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=KDevelop Sessions
 Name[cs]=relace KDevelop
+Name[da]=KDevelop-sessioner
 Name[de]=KDevelop-Sitzungen
 Name[el]=Συνεδρίες KDevelop
 Name[es]=Sesiones de KDevelop
 Name[et]=KDevelopi seansid
 Name[fr]=Sessions KDevelop 4
+Name[ga]=Seisiúin KDevelop
 Name[hu]=KDevelop munkamenetek
 Name[it]=Sessioni KDevelop
 Name[lt]=KDevelop seansas
@@ -21,11 +23,13 @@ Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=Matches KDevelop Sessions
+Comment[da]=Matcher KDevelop-sessioner
 Comment[de]=Findet KDevelop-Sitzungen
 Comment[el]=Ταιριάζει με συνεδρίες KDevelop
 Comment[es]=Sesiones coincidentes de KDevelop
 Comment[et]=KDevelopi seansside leidmine
 Comment[fr]=Correspond aux sessions KDevelop
+Comment[ga]=Comhoiriúnach le Seisiúin KDevelop
 Comment[it]=Sessioni KDevelop corrispondenti
 Comment[nb]=Treffer KDevelop-økter
 Comment[nds]=Kiekt na passen KDevelop-Törns
