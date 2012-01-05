@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Project File Element
+Name[da]=Filelement for projekt
 Name[de]=Datei des Projekts
 Name[el]=Αντικείμενο αρχείου του έργου
 Name[es]=Elemento del archivo del proyecto
@@ -19,6 +20,7 @@ Name[zh_CN]=项目文件元素
 Name[zh_TW]=專案檔案元素
 Icon=kdevelop
 Comment=Draws a project file into a Dashboard element
+Comment[da]=Tegner en projektfil ind i et instrumentbræt-element
 Comment[de]=Zeichnet eine Projektdatei in ein Dashboard-Element
 Comment[el]=Εμφανίζει ένα αρχείο έργου σε ένα αντικείμενο πίνακα ελέγχου
 Comment[es]=Muestra un archivo de proyecto en un elemento del tablero de mandos
