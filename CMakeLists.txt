@@ -11,7 +11,7 @@ if(KDevPlatform_VERSION VERSION_GREATER 1.3.59)
     MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.4, version 1.3 is required")
 endif(KDevPlatform_VERSION VERSION_GREATER 1.3.59)
 
-set(CUSTOM_BUILDSYSTEM_VERSION 1.1.60)
+set(CUSTOM_BUILDSYSTEM_VERSION 1.2.1)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
