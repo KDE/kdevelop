@@ -16,6 +16,7 @@ Comment[cs]=Aplikace Qt4 CMake Core. Generuje aplikaci typu CMake/Qt4 (multiplat
 Comment[da]=Qt4 CMake Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform kompatibelt)
 Comment[es]=Aplicación Qt4 CMake Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
 Comment[ga]=Feidhmchlár bunúsach CMake Qt4. Cruthaigh feidhmchlár bunaithe ar CMake/Qt4 (feidhmchlár trasardáin)
+Comment[nb]=Qt4 CMake kjerneprogram.  Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nl]=Kerntoepassing van Qt4 CMake. Genereert een op CMake/Qt4 gebaseerd programma (crossplatform compatibel)
 Comment[pt_BR]=Aplicativo principal com CMake para Qt4. Gera um aplicativo em CMake/Qt4 (compatível com várias plataformas)
 Comment[sv]=Qt4 CMake-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
