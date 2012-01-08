@@ -54,9 +54,13 @@ public:
     /**
      * Create a temporary file from @p contents with file extension @p extension.
      *
-     * It is added to @p project's fileset.
+     * @param project this file will be added to the project's fileset and gets
+     *                removed from there on destruction
+     * @param dir optional path to a (sub-) directory in which this file should
+     *            be created. The directory must exist.
      */
-    TestFile(const QString& contents, const QString& fileExtenion, KDevelop::TestProject *project);
+    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project,
+             const QString& dir = QString());
 
     /**
      * Removes temporary file and cleans up.

@@ -22,7 +22,7 @@
 
 #include "testproject.h"
 
-#include <QTemporaryFile>
+#include <KTemporaryFile>
 #include <QTime>
 #include <QTest>
 
@@ -32,9 +32,8 @@
 using namespace KDevelop;
 
 struct TestFile::TestFilePrivate {
-    TestFilePrivate(const QString& fileExtension)
-    : file("XXXXXX." + fileExtension)
-    , ready(false)
+    TestFilePrivate()
+    : ready(false)
     {
     }
 
@@ -45,24 +44,26 @@ struct TestFile::TestFilePrivate {
         ready = true;
     }
 
-    QTemporaryFile file;
+    KTemporaryFile file;
     bool ready;
     ReferencedTopDUContext topContext;
     IndexedString url;
 };
 
-TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project)
-: d(new TestFilePrivate(fileExtension))
+TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project, const QString& dir)
+: d(new TestFilePrivate())
 {
+    d->file.setSuffix('.' + fileExtension);
+    d->file.setPrefix(dir);
     d->file.open();
-    QVERIFY(d->file.isOpen());
-    QVERIFY(d->file.isWritable());
+    Q_ASSERT(d->file.isOpen());
+    Q_ASSERT(d->file.isWritable());
     d->file.write(contents.toLocal8Bit());
     d->file.close();
 
     QFileInfo info(d->file.fileName());
-    QVERIFY(info.exists());
-    QVERIFY(info.isFile());
+    Q_ASSERT(info.exists());
+    Q_ASSERT(info.isFile());
     d->url = IndexedString(info.absoluteFilePath());
 
     project->addToFileSet(d->url);
