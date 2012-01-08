@@ -78,6 +78,7 @@ TestFile::~TestFile()
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
     d->project->removeFromFileSet(d->url);
+    delete d;
 }
 
 IndexedString TestFile::url() const
