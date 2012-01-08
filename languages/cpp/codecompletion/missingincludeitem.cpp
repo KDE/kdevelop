@@ -48,18 +48,62 @@ using namespace KDevelop;
 
 namespace Cpp {
 
-///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
-int moveBehindComment(KTextEditor::Document* document, int line, int maxLine) {
+int sharedPathLevel(const QString& a, const QString& b)
+{
+  int levelsShared = -1;
+  for(int i = 0, c = qMin(a.length(), b.length()); i < c; ++i) {
+    const QChar aC = a.at(i);
+    const QChar bC = b.at(i);
+    if (aC != bC) {
+      break;
+    } else if (aC == QDir::separator()) {
+      ++levelsShared;
+    }
+  }
+  return levelsShared;
+}
 
-  DUChainReadLocker lock(DUChain::lock());
+/**
+ * Try to find a proper include position from the DUChain:
+ *
+ * first look at existing imports (i.e. #include's) and find a fitting
+ * file with the same/similar path to the new include file and use that
+ *
+ * otherwise fallback and use the first valid code line before @p maxLine
+ */
+int findIncludeLineFromDUChain(KTextEditor::Document* document, int maxLine, const QString& includeFile)
+{
+  DUChainReadLocker lock;
   TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
-  if(!top)
-    return line;
-  Cpp::SourceCodeInsertion insertion(top);
+  if (!top) {
+    return -1;
+  }
 
-  int firstValid = insertion.firstValidCodeLineBefore(maxLine);
-  if(firstValid > line && firstValid <= maxLine)
-    return firstValid;
+  int line = -1;
+
+  // first approach: look at existing #include statements and re-use them
+  int currentMatchQuality = -1;
+  foreach(const DUContext::Import& import, top->importedParentContexts()) {
+    if (import.position.line > maxLine) {
+      continue;
+    }
+    const int matchQuality = sharedPathLevel(import.context(top)->url().str(), includeFile);
+    if (matchQuality >= currentMatchQuality) {
+      line = import.position.line + 1;
+      currentMatchQuality = matchQuality;
+    }
+  }
+
+  if (line == -1) {
+    // Makes sure the line is not in a comment, moving it behind if needed.
+    // Just does very simple matching, should be ok for header copyright-notices and such.
+    Cpp::SourceCodeInsertion insertion(top);
+
+    int firstValid = insertion.firstValidCodeLineBefore(maxLine);
+    if(firstValid <= maxLine) {
+      line = firstValid;
+    }
+  }
 
   return line;
 }
@@ -101,9 +145,11 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
   
   if(isSource(file))
     return ret;
-  
+
+  const QString canonicalFile = QFileInfo(file).canonicalFilePath();
+
   foreach(const KUrl& includePath, includePaths) {
-    QString relative = KUrl::relativePath( QFileInfo(includePath.toLocalFile()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
+    QString relative = KUrl::relativePath( QFileInfo(includePath.toLocalFile()).canonicalFilePath(), canonicalFile );
     if(relative.startsWith("./"))
       relative = relative.mid(2);
     
@@ -120,7 +166,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
       shortestDirective = "<" + shortestDirective + ">";
     
     if(!directives.contains(shortestDirective))
-      ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, (int)argumentHintDepth));
+      ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, file, displayTextPrefix, decl, (int)argumentHintDepth));
     
     directives.insert(shortestDirective);
   }
@@ -354,10 +400,12 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
   return ret;
 }
 
-MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedInclude, const QString& displayTextPrefix,
+MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedInclude, const QString& canonicalFile,
+                                                           const QString& displayTextPrefix,
                                                            const IndexedDeclaration& decl, int argumentHintDepth)
 : m_argumentHintDepth(argumentHintDepth)
 , m_addedInclude(addedInclude)
+, m_canonicalPath(canonicalFile)
 , m_displayTextPrefix(displayTextPrefix)
 , m_decl(decl)
 {
@@ -420,36 +468,38 @@ QString MissingIncludeCompletionItem::lineToInsert() const {
 }
 
 void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  // first try to find a proper include position from the DUChain
+  int line = findIncludeLineFromDUChain(document, word.start().line(), m_canonicalPath);
 
-  QString insertLine = lineToInsert();
-  int lastLineWithInclude = -1;
-  int checkLines = word.start().line() -1;
-  // make sure we don't add an include in a conditional #if or #ifdef block
-  int rppConditionalLevel = 0;
-  for(int a = 0; a < checkLines; ++a) {
-    QString lineText = document->line(a).trimmed();
-    if(lineText.startsWith("#if")) {
-      rppConditionalLevel++;
-    } else if (rppConditionalLevel > 0 && lineText.startsWith("#endif")) {
-      rppConditionalLevel--;
-    } else if(rppConditionalLevel == 0 && lineText.startsWith("#include")) {
-      QString ending = lineText;
-      if(!ending.isEmpty())
-        ending = ending.left( ending.length()-1 ).trimmed(); //Remove the last > or "
-      
-      if(!ending.endsWith(".moc"))
-        lastLineWithInclude = a;
+  // in case we couldn't find a duchain for this document, fallback to simple
+  // "parsing" of the file and look for other #include statements we could
+  // use as a position to add our line to
+  // TODO: never add inside comments!
+  if (line == -1) {
+    int lastLineWithInclude = -1;
+    int checkLines = word.start().line() -1;
+    // make sure we don't add an include in a conditional #if or #ifdef block
+    int rppConditionalLevel = 0;
+    for(int a = 0; a < checkLines; ++a) {
+      QString lineText = document->line(a).trimmed();
+      if(lineText.startsWith("#if")) {
+        rppConditionalLevel++;
+      } else if (rppConditionalLevel > 0 && lineText.startsWith("#endif")) {
+        rppConditionalLevel--;
+      } else if(rppConditionalLevel == 0 && lineText.startsWith("#include")) {
+        QString ending = lineText;
+        if(!ending.isEmpty())
+          ending = ending.left( ending.length()-1 ).trimmed(); //Remove the last > or "
+
+        if(!ending.endsWith(".moc"))
+          lastLineWithInclude = a;
+      }
     }
   }
+  // otherwise we just add ad the beginning for the document
+  // TODO: skip first comment block, if it exists
 
-  int line;
-  if (lastLineWithInclude != -1) {
-    line = lastLineWithInclude + 1;
-  } else {
-    line = moveBehindComment(document, 0, word.start().line());
-  }
-
-  document->insertLine(line, insertLine);
+  document->insertLine(line, lineToInsert());
   MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
 }
 

@@ -27,7 +27,8 @@ namespace Cpp {
 class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
-  MissingIncludeCompletionItem(const QString& addedInclude, const QString& displayTextPrefix,
+  MissingIncludeCompletionItem(const QString& addedInclude, const QString& canonicalFile,
+                               const QString& displayTextPrefix,
                                const KDevelop::IndexedDeclaration& decl, int argumentHintDepth);
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
@@ -42,7 +43,9 @@ public:
   QString lineToInsert() const;
 
   int m_argumentHintDepth;
-  QString m_addedInclude, m_displayTextPrefix;
+  QString m_addedInclude;
+  QString m_canonicalPath;
+  QString m_displayTextPrefix;
   KDevelop::IndexedDeclaration m_decl;
 };
 

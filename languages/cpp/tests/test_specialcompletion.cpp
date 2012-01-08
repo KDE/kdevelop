@@ -40,6 +40,7 @@
 #include <qtest_kde.h>
 #include <KTextEditor/Editor>
 #include <KTextEditor/EditorChooser>
+#include <KTempDir>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -113,9 +114,7 @@ void TestSpecialCompletion::testMissingInclude()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
 }
-#if 0
- asdf
-#endif
+
 void TestSpecialCompletion::testIncludeDefine()
 {
     TestProject* project = new TestProject(this);
@@ -173,6 +172,82 @@ void TestSpecialCompletion::testIncludeDefine()
                     "#endif\n"
                     "#include \"" + include.url().toUrl().fileName() + "\"\n"
                     "int main() {}"));
+}
+
+void TestSpecialCompletion::testGrouping()
+{
+    TestProject* project = new TestProject(this);
+    m_projects->addProject(project);
+
+    KTempDir dir1;
+    const QString dir1Name = QFileInfo(dir1.name()).dir().dirName() + "/";
+    KTempDir dir2;
+    const QString dir2Name = QFileInfo(dir2.name()).dir().dirName() + "/";
+
+    TestFile includeA("class A {};", "h", project, dir1Name);
+    includeA.parse(TopDUContext::AllDeclarationsAndContexts);
+    TestFile includeB("class B {};", "h", project, dir2Name);
+    includeB.parse(TopDUContext::AllDeclarationsAndContexts);
+    TestFile includeD("class D {};", "h", project, dir2Name);
+    includeD.parse(TopDUContext::AllDeclarationsAndContexts);
+    TestFile includeC("class C {};", "h", project, dir1Name);
+    includeC.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    TestFile active("#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
+                    "#include \"" + dir2Name + includeB.url().toUrl().fileName() + "\"\n"
+                    "#include \"" + dir2Name + includeD.url().toUrl().fileName() + "\"\n"
+                    "\n"
+                    "int main() {\n"
+                    "\n"
+                    "}",
+                    "cpp", project);
+    active.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QCOMPARE(includeA.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
+    QCOMPARE(includeB.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
+    QCOMPARE(includeC.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
+    QCOMPARE(includeD.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
+
+    QCOMPARE(includeA.url().toUrl().upUrl(), includeC.url().toUrl().upUrl());
+    QCOMPARE(includeB.url().toUrl().upUrl(), includeD.url().toUrl().upUrl());
+    QVERIFY(includeC.url().toUrl().upUrl() != includeB.url().toUrl().upUrl());
+
+    QVERIFY(includeA.waitForParsed());
+    QVERIFY(includeB.waitForParsed());
+    QVERIFY(includeC.waitForParsed());
+    QVERIFY(includeD.waitForParsed());
+    QVERIFY(active.waitForParsed());
+
+    DUChainReadLocker lock;
+
+    QVERIFY(active.topContext());
+    TopDUContext* top = DUChainUtils::contentContextFromProxyContext(active.topContext());
+    QVERIFY(top);
+
+    CompletionItemTester tester(top->childContexts().last(), "C::");
+    QVERIFY(tester.completionContext->isValid());
+    QCOMPARE(tester.items.size(), 1);
+    MissingIncludeCompletionItem* item = dynamic_cast<MissingIncludeCompletionItem*>(tester.items.first().data());
+    QVERIFY(item);
+
+    QCOMPARE(item->lineToInsert(), QString("#include \"" + dir1Name + includeC.url().toUrl().fileName() + "\""));
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+    QVERIFY(doc->openUrl(active.url().toUrl()));
+
+    item->execute(doc, KTextEditor::Range(3, 0, 3, 3));
+
+    QCOMPARE(doc->text(), QString(
+                    "#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
+                    "#include \"" + dir1Name + includeC.url().toUrl().fileName() + "\"\n"
+                    "#include \"" + dir2Name + includeB.url().toUrl().fileName() + "\"\n"
+                    "#include \"" + dir2Name + includeD.url().toUrl().fileName() + "\"\n"
+                    "\n"
+                    "int main() {\n\n}"));
 }
 
 #include "test_specialcompletion.moc"
