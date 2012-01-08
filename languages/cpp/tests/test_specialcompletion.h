@@ -39,6 +39,7 @@ private slots:
 
     void testMissingInclude();
     void testIncludeDefine();
+    void testGrouping();
 
 private:
     KDevelop::TestProjectController* m_projects;
