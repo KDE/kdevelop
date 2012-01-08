@@ -174,7 +174,7 @@ void TestSpecialCompletion::testIncludeDefine()
                     "int main() {}"));
 }
 
-void TestSpecialCompletion::testGrouping()
+void TestSpecialCompletion::testIncludeGrouping()
 {
     TestProject* project = new TestProject(this);
     m_projects->addProject(project);
@@ -248,6 +248,79 @@ void TestSpecialCompletion::testGrouping()
                     "#include \"" + dir2Name + includeD.url().toUrl().fileName() + "\"\n"
                     "\n"
                     "int main() {\n\n}"));
+}
+
+void TestSpecialCompletion::testIncludeComment()
+{
+    TestProject* project = new TestProject(this);
+    m_projects->addProject(project);
+
+    TestFile include("class A {};", "h", project);
+    include.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    TestFile active("/*\n"
+                    "#include \"asdf.h\"\n"
+                    "*/\n"
+                    "/**\n"
+                    "#include \"asdf.h\"\n"
+                    "*/\n"
+                    "// #include \"asdf.h\"\n"
+                    "int main()\n"
+                    "{\n"
+                    "\n"
+                    "}",
+                    "cpp", project);
+    active.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QCOMPARE(include.url().toUrl().upUrl(), active.url().toUrl().upUrl());
+
+    QVERIFY(include.waitForParsed());
+    QVERIFY(active.waitForParsed());
+
+    DUChainReadLocker lock;
+
+    QVERIFY(include.topContext());
+    TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
+    QVERIFY(includeTop);
+    QEXPECT_FAIL("", "include path resolver complains", Continue);
+    QVERIFY(includeTop->problems().isEmpty());
+    QCOMPARE(includeTop->localDeclarations().size(), 1);
+    QCOMPARE(includeTop->childContexts().size(), 1);
+
+    QVERIFY(active.topContext());
+    TopDUContext* top = DUChainUtils::contentContextFromProxyContext(active.topContext());
+    QVERIFY(top);
+
+    CompletionItemTester tester(top->childContexts().last(), "A::");
+    QVERIFY(tester.completionContext->isValid());
+    QCOMPARE(tester.items.size(), 1);
+    MissingIncludeCompletionItem* item = dynamic_cast<MissingIncludeCompletionItem*>(tester.items.first().data());
+    QVERIFY(item);
+
+    QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+    QVERIFY(doc->openUrl(active.url().toUrl()));
+
+    item->execute(doc, KTextEditor::Range(9, 0, 9, 3));
+
+    QCOMPARE(doc->text(), QString(
+                    "/*\n"
+                    "#include \"asdf.h\"\n"
+                    "*/\n"
+                    "/**\n"
+                    "#include \"asdf.h\"\n"
+                    "*/\n"
+                    "// #include \"asdf.h\"\n"
+                    "#include \"" + include.url().toUrl().fileName() + "\"\n"
+                    "int main()\n"
+                    "{\n"
+                    "\n"
+                    "}"));
 }
 
 #include "test_specialcompletion.moc"
