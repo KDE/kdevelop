@@ -89,12 +89,11 @@ void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointe
   makeLink(name, targetId, action);
 }
 
-void AbstractNavigationContext::makeLink( const QString& name, QString targetId, const NavigationAction& action)
+QString AbstractNavigationContext::createLink(const QString& name, QString targetId, const NavigationAction& action)
 {
   if(m_shorten) {
     //Do not create links in shortened mode, it's only for viewing
-    modifyHtml() += typeHighlight(Qt::escape(name));
-    return;
+    return typeHighlight(Qt::escape(name));
   }
   
   m_links[ targetId ] = action;
@@ -109,12 +108,18 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
   if( m_linkCount == m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
-  modifyHtml() +=  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QString(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
+  QString ret =  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QString(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
   if( m_selectedLink == m_linkCount )
     m_selectedLinkAction = action;
 
   ++m_linkCount;
+  return ret;
+}
+
+void AbstractNavigationContext::makeLink( const QString& name, QString targetId, const NavigationAction& action)
+{
+  modifyHtml() += createLink(name, targetId, action);
 }
 
 void AbstractNavigationContext::clear() {
