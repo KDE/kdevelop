@@ -73,9 +73,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }
   
   if( m_previousContext ) {
-    modifyHtml() += navigationHighlight(i18n("Back to "));
-    makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
-    modifyHtml() += "<br>";
+    QString link = createLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
+    modifyHtml() += navigationHighlight(i18n("Back to %1<br />", link));
   }
   
   KSharedPtr<IDocumentation> doc;

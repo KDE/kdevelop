@@ -141,8 +141,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     ///Creates and registers a link to the given declaration, labeled by the given name
     virtual void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType );
 
-    ///Creates a link that executes the given action
+    ///Creates a link that executes the given action and adds it to the current context
     void makeLink( const QString& name, QString targetId, const NavigationAction& action);
+    
+    ///Creates a link that executes the given action and returns it
+    QString createLink(const QString& name, QString targetId, const NavigationAction& action);
 
     int m_selectedLink; //The link currently selected
     NavigationAction m_selectedLinkAction; //Target of the currently selected link
