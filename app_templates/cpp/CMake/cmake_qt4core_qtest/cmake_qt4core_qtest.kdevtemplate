@@ -3,6 +3,8 @@
 Name=CMake QtTest
 Name[da]=CMake QtTest
 Name[es]=CMake QtTest
+Name[et]=CMake QtTest
+Name[fi]=CMake QtTest
 Name[nb]=CMake QtTest
 Name[nl]=CMake QtTest
 Name[pl]=CMake QtTest
@@ -14,6 +16,8 @@ Name[x-test]=xxCMake QtTestxx
 Comment=Qt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)
 Comment[da]=Qt4 CMake QTest Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform)
 Comment[es]=Aplicación Qt4 CMake QTest Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
+Comment[et]=Qt4 CMake QTest Core rakendus. Rakenduse loomine CMake/Qt4 põhjal (mitmeplatvormne)
+Comment[fi]=Qt4 CMake QTest Core -sovellus. Generoi CMake/Qt4-perustainen sovellus (eri käyttöjärjestelmissä yhteensopiva)
 Comment[nb]=Qt4 CMake QTest kjerneprogram. Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nl]=Kerntoepassing van Qt4 CMake QTest. Genereert een op CMake/Qt4-gebaseerd programma (crossplatform compatibel)
 Comment[pl]=Program jądra Qt4 CMake QTest. Generuj programy oparte o CMake/Qt4 (kompatybilne na wielu platformach)
