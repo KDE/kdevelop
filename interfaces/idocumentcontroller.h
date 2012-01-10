@@ -222,9 +222,10 @@ Q_SIGNALS:
     friend class IDocument;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(IDocumentController::DocumentActivationParams)
 
-}
+} // namespace KDevelop
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IDocumentController::DocumentActivationParams)
 
 #endif
 

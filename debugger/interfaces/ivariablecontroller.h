@@ -93,9 +93,9 @@ private:
     int m_activeFrame;
 
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(IVariableController::UpdateTypes)
  
-}
+} // namespace KDevelop
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IVariableController::UpdateTypes)
 
 #endif
