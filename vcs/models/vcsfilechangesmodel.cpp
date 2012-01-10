@@ -131,7 +131,7 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
     }
 }
 
-QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const QUrl& url)
+QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const KUrl& url)
 {
     for(int i=0; i<parent->rowCount(); i++) {
         QStandardItem* curr=parent->child(i);
