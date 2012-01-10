@@ -101,6 +101,13 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 void SourceFormatterController::documentLoaded( IDocument* doc )
 {
+	// NOTE: explicitly check this here to prevent crashes on shutdown
+	//       when this slot gets called (note: delayed connection)
+	//       but the text document was already destroyed
+	//       there have been unit tests that failed due to that...
+	if (!doc->textDocument()) {
+		return;
+	}
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 	adaptEditorIndentationMode( doc, formatterForMimeType(mime) );
 }
