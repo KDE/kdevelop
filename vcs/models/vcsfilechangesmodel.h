@@ -55,7 +55,7 @@ public:
     /**
      * Returns item for particular url.
      */
-    QStandardItem* fileItemForUrl(const QUrl &url) {
+    QStandardItem* fileItemForUrl(const KUrl &url) {
         return fileItemForUrl(invisibleRootItem(), url);
     }
 
@@ -91,7 +91,7 @@ public:
     /**
      * Returns item for particular url.
      */
-    static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
+    static QStandardItem* fileItemForUrl(QStandardItem *parent, const KUrl &url);
 
     void setIsCheckbable(bool checkable);
 public slots:
