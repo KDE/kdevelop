@@ -2,6 +2,7 @@
 Name=KDevelop Sessions
 Name[cs]=relace KDevelop
 Name[da]=KDevelop-sessioner
+Name[de]=KDevelop-Sitzungen
 Name[es]=Sesiones de KDevelop
 Name[et]=KDevelopi seansid
 Name[fi]=KDevelop-istunnot
@@ -17,6 +18,7 @@ Name[uk]=Сеанси KDevelop
 Name[x-test]=xxKDevelop Sessionsxx
 Comment=Matches KDevelop Sessions
 Comment[da]=Matcher KDevelop-sessioner
+Comment[de]=Findet KDevelop-Sitzungen
 Comment[es]=Sesiones coincidentes de KDevelop
 Comment[et]=KDevelopi seansside leidmine
 Comment[fi]=Täsmää KDevelop-istuntoihin

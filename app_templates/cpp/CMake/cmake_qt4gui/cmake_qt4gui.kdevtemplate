@@ -2,6 +2,7 @@
 [General]
 Name=CMake Qt-C++
 Name[da]=CMake Qt-C++
+Name[de]=CMake Qt-C++
 Name[es]=CMake Qt-C++
 Name[et]=CMake Qt-C++
 Name[fi]=CMake Qt-C++
@@ -16,6 +17,7 @@ Name[uk]=CMake Qt-C++
 Name[x-test]=xxCMake Qt-C++xx
 Comment=Qt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)
 Comment[da]=Qt4 CMake GUI-program. Genererer et CMake-/Qt4-baseret GUI-program (krydsplatform kompatibelt)
+Comment[de]=Qt4/CMake-GUI-Anwendung. Eine auf CMake und Qt4 basierende GUI-Anwendung (plattformunabhängig) erstellen.
 Comment[es]=Aplicación con interfaz gráfica Qt4 CMake. Genera una aplicación con interfaz gráfica basada en CMake/Qt4 (compatible multiplataforma)
 Comment[et]=Qt4 CMake GUI rakendus. Rakenduse loomine CMake/Qt4 põhjal (mitmeplatvormne)
 Comment[fi]=Qt4 CMake Gui -sovellus. Generoi CMake/Qt4-perustainen graafinen käyttöliittymäsovellus (eri käyttöjärjestelmissä yhteensopiva)
