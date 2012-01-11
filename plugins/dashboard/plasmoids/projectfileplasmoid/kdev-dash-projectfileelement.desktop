@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Project File Element
 Name[da]=Filelement for projekt
+Name[de]=Datei des Projekts
 Name[es]=Elemento del archivo del proyecto
 Name[et]=Projektifaili element
 Name[fi]=Projektin tiedosto -elementti
@@ -15,6 +16,7 @@ Name[x-test]=xxProject File Elementxx
 Icon=kdevelop
 Comment=Draws a project file into a Dashboard element
 Comment[da]=Tegner en projektfil ind i et instrumentbræt-element
+Comment[de]=Zeichnet eine Projektdatei in ein Dashboard-Element
 Comment[es]=Muestra un archivo de proyecto en un elemento del tablero de mandos
 Comment[et]=Kuvab projektifaili vidinavaate elemendis
 Comment[fi]=Piirtää projektin tiedoston kojelautaelementtiin
