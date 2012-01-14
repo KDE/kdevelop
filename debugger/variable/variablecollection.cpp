@@ -186,7 +186,10 @@ QVariant Variable::data(int column, int role) const
         if(!inScope_) return QColor(128, 128, 128);
         if(changed_) return QColor(255, 0, 0);
     }
-   
+    if (role == Qt::ToolTipRole) {
+        return TreeItem::data(column, Qt::DisplayRole);
+    }
+
     return TreeItem::data(column, role);
 }
 
