@@ -488,6 +488,13 @@ uint collectNaiveNodeCount(uint currentNode) {
   return ret;
 }
 
+#if 0
+
+///NOTE: the "unit tests" below are not automated, they - so far - require
+///      human interpretation which is not useful for a unit test!
+///      someone should investigate what the expected output should be
+///      and add proper QCOMPARE/QVERIFY checks accordingly
+
 void TestDUChain::testImportStructure()
 {
   clock_t startClock = clock();
@@ -595,5 +602,7 @@ void TestDUChain::testImportCache()
   kDebug() << "count of reachable nodes:" << reachableNodes.size();
   kDebug() << "naive node-count:" << naiveNodeCount << "sharing compression factor:" << ((float)reachableNodes.size()) / ((float)naiveNodeCount);
 }
+
+#endif
 
 #include "test_duchain.moc"

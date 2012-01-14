@@ -37,8 +37,9 @@ private slots:
     void testStringSets();
     void testSymbolTableValid();
     void testIndexedStrings();
-    void testImportStructure();
-    void testImportCache();
+    ///NOTE: these are not "automated"!
+//     void testImportStructure();
+//     void testImportCache();
 };
 
 #endif // TEST_DUCHAIN_H
