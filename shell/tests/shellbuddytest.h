@@ -25,6 +25,8 @@
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
 
+class TestBuddyFinder;
+
 using namespace KDevelop;
 
 class ShellBuddyTest: public QObject {
@@ -34,23 +36,21 @@ private slots:
     void cleanupTestCase();
 
     void testDeclarationDefinitionOrder();
-    void testMultiDotFilenames();
     void testActivation();
     void testDisableBuddies();
     void testDisableOpenAfterCurrent();
     void testDisableAll();
 
-    void testMultipleFolders();
     void testsplitViewBuddies();
 
 private:
-    void verifyFilename(Sublime::View *view, const QString& endOfFilename);
     void createFile(const KTempDir& dir, const QString& filename);
     void enableBuddies(bool enable = true);
     void enableOpenAfterCurrent(bool enable = true);
 
     IDocumentController *m_documentController;
     UiController *m_uiController;
+    TestBuddyFinder* m_finder;
 };
 
 #endif
