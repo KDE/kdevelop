@@ -86,7 +86,7 @@ void DebugJob::start()
     }
     
     setStandardToolView(KDevelop::IOutputView::DebugView);
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
+    setBehaviours(KDevelop::IOutputView::Behaviours(KDevelop::IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
     setTitle(m_launchcfg->name());
     
