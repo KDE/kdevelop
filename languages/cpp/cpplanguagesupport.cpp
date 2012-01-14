@@ -160,13 +160,12 @@ static QStringList mimeTypesList()
     QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
 }
-const QStringList CppLanguageSupport::s_mimeTypes = mimeTypesList();
-
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport(),
-      m_standardMacros(0)
+      m_standardMacros(0),
+      m_mimeTypes(mimeTypesList())
 {
     m_self = this;
 
@@ -202,7 +201,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_assistant = new Cpp::StaticCodeAssistant;
 
-    foreach(QString mimeType, s_mimeTypes){
+    foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);
     }
 }
@@ -409,7 +408,7 @@ CppLanguageSupport::~CppLanguageSupport()
 #endif
     delete m_assistant;
 
-    foreach(QString mimeType, s_mimeTypes){
+    foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::removeFinder(mimeType);
     }
 }
