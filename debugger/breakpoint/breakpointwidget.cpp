@@ -130,7 +130,7 @@ void BreakpointWidget::setupPopupMenu()
     #endif
 
     QAction* breakpointDelete = popup_->addAction(
-        KIcon("breakpoint_delete"),
+        KIcon("edit-delete"),
         i18n( "&Delete" ),
         this,
         SLOT(slotRemoveBreakpoint()));
