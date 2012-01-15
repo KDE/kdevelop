@@ -1596,7 +1596,7 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
             parseTrailingReturnType(ast->trailing_return_type);
           }
 
-        parseVirtSpecifier(ast->virt_specifiers);
+        parseMemberVirtSpecifier(ast->virt_specifiers);
       }
 
     if (skipParen)
@@ -2163,6 +2163,9 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
 
   NameAST *name = 0;
   parseName(name, AcceptTemplate);
+
+  const ListNode<uint> *virt_specifiers = 0;
+  parseClassVirtSpecifier(virt_specifiers);
 
   BaseClauseAST *bases = 0;
   if (session->token_stream->lookAhead() == ':')
@@ -5429,13 +5432,28 @@ bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
   return true;
 }
 
-bool Parser::parseVirtSpecifier (const ListNode< uint >*& node)
+bool Parser::parseMemberVirtSpecifier(const ListNode< uint >*& node)
 {
   uint start = session->token_stream->cursor();
 
   int tk;
   while (0 != (tk = session->token_stream->lookAhead())
          && (tk == Token_override || tk == Token_final || tk == Token_new))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
+}
+
+bool Parser::parseClassVirtSpecifier(const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_final || tk == Token_explicit))
     {
       node = snoc(node, session->token_stream->cursor(), session->mempool);
       advance();

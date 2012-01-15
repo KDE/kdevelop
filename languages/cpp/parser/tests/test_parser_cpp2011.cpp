@@ -522,3 +522,21 @@ void TestParser::memberVirtSpec_data()
     "  void f() new;\n"
     "};\n");
 }
+
+void TestParser::classVirtSpec()
+{
+  QFETCH(QString, data);
+  TranslationUnitAST* ast = parse( data.toLocal8Bit() );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::classVirtSpec_data()
+{
+  QTest::addColumn<QString>("data");
+  QTest::newRow("final") <<
+    QString("struct A final {};\n");
+  QTest::newRow("explicit") <<
+    QString("struct A explicit {};\n");
+}

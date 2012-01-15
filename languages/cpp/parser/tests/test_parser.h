@@ -120,6 +120,8 @@ private slots:
   void testInitListFalsePositives();
   void memberVirtSpec();
   void memberVirtSpec_data();
+  void classVirtSpec();
+  void classVirtSpec_data();
   //END C++2011 Support
 
 protected:

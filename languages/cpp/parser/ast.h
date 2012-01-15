@@ -381,6 +381,7 @@ public:
   NameAST *name;
   BaseClauseAST *base_clause;
   const ListNode<DeclarationAST*> *member_specs;
+  const ListNode<uint> *virt_specifiers;
 };
 
 class CompoundStatementAST : public StatementAST
