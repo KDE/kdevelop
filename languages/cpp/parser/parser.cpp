@@ -5434,9 +5434,8 @@ bool Parser::parseVirtSpecifier (const ListNode< uint >*& node)
   uint start = session->token_stream->cursor();
 
   int tk;
-  ///TODO: extend with final + new tokens
   while (0 != (tk = session->token_stream->lookAhead())
-         && (tk == Token_override || tk == Token_final))
+         && (tk == Token_override || tk == Token_final || tk == Token_new))
     {
       node = snoc(node, session->token_stream->cursor(), session->mempool);
       advance();

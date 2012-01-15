@@ -483,10 +483,20 @@ void TestParser::testInitListFalsePositives()
   }
 }
 
-void TestParser::testOverride()
+void TestParser::memberVirtSpec()
 {
-  TranslationUnitAST* ast = parse(
-    "struct A {\n"
+  QFETCH(QString, data);
+  TranslationUnitAST* ast = parse( data.toLocal8Bit() );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::memberVirtSpec_data()
+{
+  QTest::addColumn<QString>("data");
+  QTest::newRow("override") <<
+    QString("struct A {\n"
     "  virtual void f();\n"
     "};\n"
     "\n"
@@ -495,24 +505,20 @@ void TestParser::testOverride()
     "};\n"
     "void foo() {\n"
     "  int override = 0;\n" // identifier with special meaning
-    "}\n"
-  );
-  QVERIFY(ast);
-  dump(ast);
-  QVERIFY(control.problems().isEmpty());
-}
-
-void TestParser::testFinal()
-{
-  TranslationUnitAST* ast = parse(
-    "struct A {\n"
+    "}\n");
+  QTest::newRow("final") <<
+    QString("struct A {\n"
     "  virtual void f() final;\n"
     "};\n"
     "void foo() {\n"
     "  int final = 0;\n" // identifier with special meaning
-    "}\n"
-  );
-  QVERIFY(ast);
-  dump(ast);
-  QVERIFY(control.problems().isEmpty());
+    "}\n");
+  QTest::newRow("new") <<
+    QString("struct A {\n"
+    "  virtual void f(int);\n"
+    "};\n"
+    "\n"
+    "struct B : A {\n"
+    "  void f() new;\n"
+    "};\n");
 }
