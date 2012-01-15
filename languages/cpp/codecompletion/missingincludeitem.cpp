@@ -495,6 +495,9 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
           lastLineWithInclude = a;
       }
     }
+    if (lastLineWithInclude != -1) {
+      line = lastLineWithInclude;
+    }
   }
   // otherwise we just add ad the beginning for the document
   // TODO: skip first comment block, if it exists
