@@ -482,3 +482,22 @@ void TestParser::testInitListFalsePositives()
   QVERIFY(control.problems().isEmpty());
   }
 }
+
+void TestParser::testOverride()
+{
+  TranslationUnitAST* ast = parse(
+    "struct A {\n"
+    "  virtual void f();\n"
+    "};\n"
+    "\n"
+    "struct B : A {\n"
+    "  void f() override;\n" // actual override token
+    "};\n"
+    "void foo() {\n"
+    "  int override = 0;\n" // identifier with special meaning
+    "}\n"
+  );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}

@@ -218,6 +218,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(operator);
   ADD_TOKEN(or);
   ADD_TOKEN(or_eq);
+  ADD_TOKEN(override);
   ADD_TOKEN(private);
   ADD_TOKEN(protected);
   ADD_TOKEN(public);

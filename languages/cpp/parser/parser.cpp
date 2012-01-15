@@ -1595,6 +1595,8 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
           {
             parseTrailingReturnType(ast->trailing_return_type);
           }
+
+        parseVirtSpecifier(ast->virt_specifiers);
       }
 
     if (skipParen)
@@ -2825,7 +2827,9 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   bool ellipsis = false;
   OperatorFunctionIdAST *operator_id = 0;
 
-  if (session->token_stream->lookAhead() == Token_identifier)
+  if (session->token_stream->lookAhead() == Token_identifier
+       // identifier with special meaning
+      || session->token_stream->lookAhead() == Token_override)
     {
       id = session->token_stream->cursor();
       advance();
@@ -5422,6 +5426,22 @@ bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   return true;
+}
+
+bool Parser::parseVirtSpecifier (const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  ///TODO: extend with final + new tokens
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_override))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
 }
 
 bool Parser::holdErrors(bool hold)

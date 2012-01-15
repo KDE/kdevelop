@@ -467,6 +467,7 @@ public:
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
   TrailingReturnTypeAST* trailing_return_type;
+  const ListNode<uint> *virt_specifiers;
   bool isVariadic;
 };
 

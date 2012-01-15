@@ -96,6 +96,7 @@ enum TOKEN_KIND
     Token_operator,
     Token_or,
     Token_or_eq,
+    Token_override,
     Token_preproc,
     Token_private,
     Token_protected,

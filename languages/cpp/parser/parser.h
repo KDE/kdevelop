@@ -234,6 +234,7 @@ public:
   bool parseLambdaExpression(ExpressionAST *&node);
   bool parseLambdaCapture(LambdaCaptureAST *&node);
   bool parseLambdaDeclarator(LambdaDeclaratorAST *&node);
+  bool parseVirtSpecifier(const ListNode<uint> *&node);
 
   bool skipUntil(int token);
   bool skipUntilDeclaration();
