@@ -932,7 +932,7 @@ void GdbTest::testVariablesLocalsStruct()
 void GdbTest::testVariablesWatches()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+    KDevelop::ICore::self()->debugController()->variableCollection()->variableWidgetShown();
 
     TestLaunchConfiguration cfg;
 
