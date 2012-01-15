@@ -2829,7 +2829,8 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
 
   if (session->token_stream->lookAhead() == Token_identifier
        // identifier with special meaning
-      || session->token_stream->lookAhead() == Token_override)
+      || session->token_stream->lookAhead() == Token_override
+      || session->token_stream->lookAhead() == Token_final)
     {
       id = session->token_stream->cursor();
       advance();
@@ -5435,7 +5436,7 @@ bool Parser::parseVirtSpecifier (const ListNode< uint >*& node)
   int tk;
   ///TODO: extend with final + new tokens
   while (0 != (tk = session->token_stream->lookAhead())
-         && (tk == Token_override))
+         && (tk == Token_override || tk == Token_final))
     {
       node = snoc(node, session->token_stream->cursor(), session->mempool);
       advance();

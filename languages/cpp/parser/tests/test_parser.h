@@ -119,6 +119,7 @@ private slots:
   void testInitList();
   void testInitListFalsePositives();
   void testOverride();
+  void testFinal();
   //END C++2011 Support
 
 protected:

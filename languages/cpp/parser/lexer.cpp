@@ -200,6 +200,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(extern);
   ADD_TOKEN(false);
   ADD_TOKEN(float);
+  ADD_TOKEN(final);
   ADD_TOKEN(for);
   ADD_TOKEN(friend);
   ADD_TOKEN(goto);

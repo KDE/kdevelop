@@ -501,3 +501,18 @@ void TestParser::testOverride()
   dump(ast);
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testFinal()
+{
+  TranslationUnitAST* ast = parse(
+    "struct A {\n"
+    "  virtual void f() final;\n"
+    "};\n"
+    "void foo() {\n"
+    "  int final = 0;\n" // identifier with special meaning
+    "}\n"
+  );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}

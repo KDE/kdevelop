@@ -72,6 +72,7 @@ enum TOKEN_KIND
     Token_export,
     Token_extern,
     Token_false,
+    Token_final,
     Token_float,
     Token_for,
     Token_friend,
