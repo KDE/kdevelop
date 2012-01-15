@@ -86,6 +86,7 @@ private slots:
     void changeVariableFormat(int);
     void watchDelete();
     void copyVariableValue();
+    void stopOnChange();
 
 #if 0
 Q_SIGNALS:

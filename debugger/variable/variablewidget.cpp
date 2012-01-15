@@ -251,6 +251,9 @@ void VariableTree::setupActions()
     m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_copyVariableValue->setShortcut(QKeySequence::Copy);
     connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
+
+    m_copyVariableValue = new QAction(i18n("&Stop on change"), this);
+    connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
 }
 
 Variable* VariableTree::selectedVariable() const
@@ -305,6 +308,15 @@ void VariableTree::copyVariableValue()
 {
     if (!selectedVariable()) return;
     QApplication::clipboard()->setText(selectedVariable()->value());
+}
+
+void VariableTree::stopOnChange()
+{
+    if (!selectedVariable()) return;
+    IDebugSession *session = ICore::self()->debugController()->currentSession();
+    if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
+        session->variableController()->addWatchpoint(selectedVariable());
+    }
 }
 
 #if 0
