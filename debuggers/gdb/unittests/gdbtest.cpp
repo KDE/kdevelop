@@ -1499,6 +1499,31 @@ void GdbTest::testBreakpointWithSpaceInPath()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testBreakpointDisabledOnStart()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 28)
+        ->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 29);
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(debugeeFileName, 31);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 29);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 31);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+}
+
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
