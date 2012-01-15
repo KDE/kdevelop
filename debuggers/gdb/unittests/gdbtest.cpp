@@ -290,12 +290,12 @@ void GdbTest::testDeleteBreakpoint()
 
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1); //one for the "insert here" entry
     //add breakpoint before startProgram
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
     breakpoints()->removeRow(0);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1);
 
-    b = breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
