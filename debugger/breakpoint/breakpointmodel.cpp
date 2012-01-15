@@ -36,6 +36,8 @@
 #include "../interfaces/ipartcontroller.h"
 #include "breakpoint.h"
 #include <KConfigGroup>
+#include <QAction>
+#include <QMenu>
 
 #define IF_DEBUG(x)
 
@@ -89,7 +91,6 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
         iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setEditableMarks( MarkInterface::Bookmark | BreakpointMark );
-        
         updateMarks();
     }
 }
@@ -108,8 +109,46 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
                  SLOT(markChanged(KTextEditor::Document*,
                                  KTextEditor::Mark,
                                   KTextEditor::MarkInterface::MarkChangeAction)));
+        connect(doc->textDocument(), SIGNAL(markContextMenuRequested(KTextEditor::Document*, KTextEditor::Mark, QPoint, bool&)),
+                SLOT(markContextMenuRequested(KTextEditor::Document*, KTextEditor::Mark, QPoint, bool&)));
     }
 }
+
+void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
+{
+
+    int type = mark.type;
+    kDebug() << type;
+
+    /* Is this a breakpoint mark, to begin with? */
+    if (!(type & AllBreakpointMarks)) return;
+
+    Breakpoint *b = breakpoint(document->url(), mark.line);
+    Q_ASSERT(b);
+    if (!b) return;
+
+    QMenu menu;
+    QAction deleteAction(KIcon("edit-delete"), i18n("&Delete Breakpoint"), 0);
+    QAction disableAction(KIcon("dialog-cancel"), i18n("&Disable Breakpoint"), 0);
+    QAction enableAction(KIcon("dialog-ok-apply"), i18n("&Enable Breakpoint"), 0);
+    menu.addAction(&deleteAction);
+    if (b->enabled()) {
+        menu.addAction(&disableAction);
+    } else {
+        menu.addAction(&enableAction);
+    }
+    QAction *a = menu.exec(pos);
+    if (a == &deleteAction) {
+        b->setDeleted();
+    } else if (a == &disableAction) {
+        b->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+    } else if (a == &enableAction) {
+        b->setData(Breakpoint::EnableColumn, Qt::Checked);
+    }
+
+    handled = true;
+}
+
 
 QVariant 
 BreakpointModel::headerData(int section, Qt::Orientation orientation,
