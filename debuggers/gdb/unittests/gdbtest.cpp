@@ -1426,14 +1426,14 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.write("gdbserver localhost:2345 "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("file "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
