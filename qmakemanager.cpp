@@ -363,7 +363,11 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    Q_ASSERT(project);
+    if (!project) {
+        // this can happen when we create/remove lots of files in a
+        // sub dir of a project - ignore such cases for now
+        return;
+    }
 
     bool finished = false;
     foreach(ProjectFolderItem* folder, project->foldersForUrl(url.upUrl())) {
