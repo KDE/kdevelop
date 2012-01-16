@@ -39,6 +39,7 @@ public:
         //m_mutex = PTHREAD_MUTEX_INITIALIZER;
         int result = pthread_mutex_init(&m_mutex, 0);
         Q_ASSERT(result == 0);
+        Q_UNUSED(result);
     }
     ~SimplePThreadMutex() {
         pthread_mutex_destroy(&m_mutex);
@@ -46,10 +47,12 @@ public:
     void lock() {
         int result = pthread_mutex_lock(&m_mutex);
         Q_ASSERT(result == 0);
+        Q_UNUSED(result);
     }
     void unlock() {
         int result = pthread_mutex_unlock(&m_mutex);
         Q_ASSERT(result == 0);
+        Q_UNUSED(result);
     }
     bool tryLock(int interval) {
         if(interval == 0)
