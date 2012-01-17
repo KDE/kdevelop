@@ -30,6 +30,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/codemodel.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -604,5 +605,16 @@ void TestDUChain::testImportCache()
 }
 
 #endif
+
+void TestDUChain::benchCodeModel()
+{
+  const IndexedString file("testFile");
+
+  int i = 0;
+  QBENCHMARK {
+    CodeModel::self().addItem(file, QualifiedIdentifier("testQID" + QString::number(i++)),
+                              KDevelop::CodeModelItem::Class);
+  }
+}
 
 #include "test_duchain.moc"

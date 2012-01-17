@@ -40,6 +40,8 @@ private slots:
     ///NOTE: these are not "automated"!
 //     void testImportStructure();
 //     void testImportCache();
+
+    void benchCodeModel();
 };
 
 #endif // TEST_DUCHAIN_H
