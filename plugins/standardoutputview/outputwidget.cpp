@@ -226,7 +226,7 @@ void OutputWidget::removeOutput( int id )
                     tabwidget->removeTab( idx );
                     if( proxyModels.contains( idx ) )
                     {
-                        delete proxyModels[idx];
+                        delete proxyModels.take( idx );
                         filters.remove( idx );
                     }
                 }
@@ -235,7 +235,7 @@ void OutputWidget::removeOutput( int id )
                 int idx = stackwidget->indexOf( w );
                 if( idx != -1 && proxyModels.contains( idx ) )
                 {
-                    delete proxyModels[idx];
+                    delete proxyModels.take( idx );
                     filters.remove( idx );
                 }
                 stackwidget->removeWidget( w );
@@ -247,7 +247,7 @@ void OutputWidget::removeOutput( int id )
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
             if( proxyModels.contains( 0 ) ) {
-                delete proxyModels[0];
+                delete proxyModels.take( 0 );
                 filters.remove( 0 );
             }
         }
