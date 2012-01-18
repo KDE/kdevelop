@@ -529,3 +529,23 @@ void TestDUChain::testLambda()
   QVERIFY(funType->returnType().cast<IntegralType>());
   QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 }
+
+void TestDUChain::testLambdaReturn()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=279699
+  const QByteArray code = "int main() {\n"
+                          "  auto f = [] () -> int { return 1 };\n"
+                          "}\n";
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  dumpDUContext(top);
+
+  DUContext* mainCtx = top->childContexts().last();
+  QCOMPARE(mainCtx->localDeclarations().size(), 1);
+  Declaration* fDecl = mainCtx->localDeclarations().at(0);
+  TypePtr< FunctionType > funType = fDecl->type<FunctionType>();
+  QVERIFY(funType->returnType());
+  QVERIFY(funType->returnType().cast<IntegralType>());
+  QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
+}
