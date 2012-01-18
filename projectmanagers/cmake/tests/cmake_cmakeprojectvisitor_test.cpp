@@ -465,6 +465,10 @@ void CMakeProjectVisitorTest::testRun_data()
                             "set(X 123)\n"
                             "HOLA()\n"
                             << cacheValues << results;
+    results.clear();
+    QTest::newRow("reducedemptyvars") <<
+                            "string(REPLACE ${A} ${B} X ${A})\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
