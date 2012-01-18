@@ -248,13 +248,6 @@ private:
   AbstractType::Ptr realLastType(bool* constant = 0) const;
 
   /**
-   * Returns true when m_lastType either is a pointer, or a reference to a pointer
-   *
-   *  !!DU-Chain must be locked!
-   **/
-  bool isPointerType() const;
-
-  /**
    * Dereferences m_lastType if it is a pointer-type, else returns false.
    *
    * !!DU-Chain must be locked!
