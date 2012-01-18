@@ -204,6 +204,7 @@ private slots:
   void testInitListRegressions();
   void testBug284536();
   void testBug285004();
+  void testLambda();
   //END C++2011
 
 private:

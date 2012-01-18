@@ -31,6 +31,7 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
+#include <language/duchain/dumpchain.h>
 
 #include "typeutils.h"
 
@@ -483,4 +484,48 @@ void TestDUChain::testBug285004()
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
+}
+
+void TestDUChain::testLambda()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=279699
+  const QByteArray code = "int main() {\n"
+                          "  int i;\n"
+                          "  auto f = [] (int i) { i = 0; };\n"
+                          "}\n";
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  dumpDUContext(top);
+
+  DUContext* mainCtx = top->childContexts().last();
+  QCOMPARE(mainCtx->childContexts().size(), 2);
+  // (int i)
+  QCOMPARE(mainCtx->childContexts().first()->type(), DUContext::Function);
+  QCOMPARE(mainCtx->childContexts().first()->range(), RangeInRevision(2, 15, 2, 20));
+  // { i = 0; }
+  QCOMPARE(mainCtx->childContexts().last()->type(), DUContext::Other);
+  QCOMPARE(mainCtx->childContexts().last()->range(), RangeInRevision(2, 22, 2, 32));
+
+  // int i; in main context
+  QCOMPARE(mainCtx->localDeclarations().size(), 2);
+  Declaration* iDecl = mainCtx->localDeclarations().at(0);
+  // no uses
+  QCOMPARE(iDecl->uses().size(), 0);
+
+  // (int i) in lambda argument context
+  QCOMPARE(mainCtx->childContexts().first()->localDeclarations().size(), 1);
+  Declaration* iLambdaDecl = mainCtx->childContexts().first()->localDeclarations().first();
+  QCOMPARE(iLambdaDecl->uses().size(), 1);
+  QCOMPARE(iLambdaDecl->uses().begin()->size(), 1);
+  QCOMPARE(iLambdaDecl->uses().begin()->first(), RangeInRevision(2, 24, 2, 25));
+
+  Declaration* fDecl = mainCtx->localDeclarations().at(1);
+  TypePtr< FunctionType > funType = fDecl->type<FunctionType>();
+  QVERIFY(funType);
+  QCOMPARE(funType->indexedArgumentsSize(), 1u);
+  QVERIFY(funType->arguments().first()->equals(iLambdaDecl->abstractType().constData()));
+  QVERIFY(funType->returnType());
+  QVERIFY(funType->returnType().cast<IntegralType>());
+  QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 }

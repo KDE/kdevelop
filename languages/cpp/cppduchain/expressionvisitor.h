@@ -340,6 +340,7 @@ private:
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   virtual void visitTypeIDOperator(TypeIDOperatorAST *);
+  virtual void visitLambdaExpression(LambdaExpressionAST *);
   virtual void visit(AST* node);
 
   void putStringType();
