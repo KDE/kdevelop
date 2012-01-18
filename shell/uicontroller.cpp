@@ -239,7 +239,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
-    if(!d->areasRestored)
+    if(!d->areasRestored || !activeArea())
         return 0;
 
     QList< Sublime::View* > views = activeArea()->toolViews();
