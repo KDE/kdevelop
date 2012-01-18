@@ -22,6 +22,7 @@
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
+#include "cmake-test-paths.h"
 
 #include <KDebug>
 #include <KProcess>

@@ -19,6 +19,7 @@
  */
 
 #include "cmakeloadprojecttest.h"
+#include "cmake-test-paths.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
