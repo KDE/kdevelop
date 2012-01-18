@@ -248,7 +248,7 @@ namespace Cpp {
       ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
       QList<CompletionTreeItemPointer> standardAccessCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
-      QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
+      QList<CompletionTreeItemPointer> getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context);
 
       ///*DUChain must be locked*
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true, bool typeIsConst = false);
