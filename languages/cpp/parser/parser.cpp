@@ -5383,8 +5383,10 @@ bool Parser::parseLambdaCapture(LambdaCaptureAST*& node)
       advance();
     }
 
-  ADVANCE(Token_identifier, "identifier");
-  ast->identifier = session->token_stream->cursor();
+  if (!parseName(ast->identifier)) {
+    rewind(start);
+    return false;
+  }
 
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {

@@ -549,3 +549,39 @@ void TestDUChain::testLambdaReturn()
   QVERIFY(funType->returnType().cast<IntegralType>());
   QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeInt);
 }
+
+void TestDUChain::testLambdaCapture()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=279699
+  const QByteArray code = "int main() {\n"
+                          "  int i;\n"
+                          "  auto f = [&i] { i = 0; };\n"
+                          "}\n";
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  dumpDUContext(top);
+
+  DUContext* mainCtx = top->childContexts().last();
+  QCOMPARE(mainCtx->childContexts().size(), 1);
+  // { i = 0; }
+  QCOMPARE(mainCtx->childContexts().last()->type(), DUContext::Other);
+  QCOMPARE(mainCtx->childContexts().last()->range(), RangeInRevision(2, 16, 2, 26));
+
+  // int i; in main context
+  QCOMPARE(mainCtx->localDeclarations().size(), 2);
+  Declaration* iDecl = mainCtx->localDeclarations().at(0);
+  // no uses
+  QCOMPARE(iDecl->uses().size(), 1);
+  QCOMPARE(iDecl->uses().begin()->size(), 2);
+  QCOMPARE(iDecl->uses().begin()->first(), RangeInRevision(2, 13, 2, 14));
+  QCOMPARE(iDecl->uses().begin()->last(), RangeInRevision(2, 18, 2, 19));
+
+  Declaration* fDecl = mainCtx->localDeclarations().at(1);
+  TypePtr< FunctionType > funType = fDecl->type<FunctionType>();
+  QVERIFY(funType);
+  QCOMPARE(funType->indexedArgumentsSize(), 0u);
+  QVERIFY(funType->returnType());
+  QVERIFY(funType->returnType().cast<IntegralType>());
+  QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
+}

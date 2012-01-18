@@ -206,6 +206,7 @@ private slots:
   void testBug285004();
   void testLambda();
   void testLambdaReturn();
+  void testLambdaCapture();
   //END C++2011
 
 private:

@@ -341,6 +341,7 @@ private:
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   virtual void visitTypeIDOperator(TypeIDOperatorAST *);
   virtual void visitLambdaExpression(LambdaExpressionAST *);
+  virtual void visitLambdaCapture(LambdaCaptureAST *);
   virtual void visit(AST* node);
 
   void putStringType();

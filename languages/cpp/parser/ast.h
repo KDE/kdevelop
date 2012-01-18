@@ -742,7 +742,7 @@ public:
 
   DECLARE_AST_NODE(LambdaCapture)
 
-  uint identifier;
+  NameAST* identifier;
 
   bool isThis : 1;
   bool isRef : 1;
