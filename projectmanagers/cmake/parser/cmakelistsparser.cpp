@@ -71,7 +71,9 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
 
 void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
-    foreach( const QString& arg, args )
+    if(args.isEmpty())
+        arguments += QString();
+    else foreach( const QString& arg, args )
     {
         CMakeFunctionArgument cmakeArg( arg );
         arguments.append( cmakeArg );
