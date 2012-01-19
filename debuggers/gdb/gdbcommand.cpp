@@ -24,12 +24,14 @@ GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
 : type_(type), command_(command), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
+    handlesError_ = false;
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
 : type_(type), command_(QString::number(index)), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
+    handlesError_ = false;
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
