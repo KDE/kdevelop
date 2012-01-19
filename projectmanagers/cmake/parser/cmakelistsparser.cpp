@@ -69,9 +69,9 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
     return newValue;
 }
 
-void CMakeFunctionDesc::addArguments( const QStringList& args )
+void CMakeFunctionDesc::addArguments( const QStringList& args, bool addEvenIfEmpty )
 {
-    if(args.isEmpty())
+    if(addEvenIfEmpty && args.isEmpty())
         arguments += QString();
     else foreach( const QString& arg, args )
     {

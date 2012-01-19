@@ -1631,8 +1631,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         }
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+incr, itEnd=func.arguments.constEnd();
         for(; it!=itEnd; ++it) {
-            if(it->isValid())
-                m_arguments += it->value;
+            m_arguments += it->value;
         }
     }
     return true;
@@ -2946,14 +2945,16 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="REPLACE")
     {
+        if(func.arguments.count()<4)
+            return false;
+        
         m_type=Replace;
         m_regex = func.arguments[1].value;
         m_replace=func.arguments[2].value;
         m_outputVariable = func.arguments[3].value;
         addOutputArgument(func.arguments[3]);
         
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4;
-        QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4, itEnd=func.arguments.end();
         for(; it!=itEnd; ++it)
         {
             m_input += it->value;
