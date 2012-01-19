@@ -62,6 +62,8 @@ public:
   uint symbolLength() const;
 };
 
+Q_DECLARE_TYPEINFO(Token, Q_MOVABLE_TYPE);
+
 /**Stream of tokens found by lexer.
 Internally works like an array of @ref Token continuosly allocated.
 All tokens are destructed when this stream is deleted.
