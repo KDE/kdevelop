@@ -29,10 +29,13 @@ namespace KDevelop {
   class TopDUContext;
   class QualifiedIdentifier;
   class IndexedString;
-  
 
-  struct CodeModelItem {
-    CodeModelItem() : referenceCount(0), kind(Unknown) {
+  struct CodeModelItem
+  {
+    CodeModelItem()
+      : referenceCount(0)
+      , kind(Unknown)
+    {
     }
     enum Kind {
       Unknown = 0,
@@ -53,35 +56,42 @@ namespace KDevelop {
       return id < rhs.id;
     }
   };
-  
-/**
- * Persistent store that efficiently holds a list of identifiers and their kind for each declaration-string.
- * */
-  class KDEVPLATFORMLANGUAGE_EXPORT CodeModel {
+
+  /**
+   * Persistent store that efficiently holds a list of identifiers
+   * and their kind for each declaration-string.
+   */
+  class KDEVPLATFORMLANGUAGE_EXPORT CodeModel
+  {
     public:
-    /// Constructor.
     CodeModel();
-    /// Destructor.
     ~CodeModel();
 
-    ///There can only be one item for each identifier. If an item with this identifier already exists,
-    ///the kind is updated.
+    /**
+     * There can only be one item for each identifier.
+     * If an item with this identifier already exists, the kind is updated.
+     */
     void addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind);
 
     void removeItem(const IndexedString& file, const IndexedQualifiedIdentifier& id);
 
-    ///Updates the kind for the given item. The item must already be in the symbol table.
+    /**
+     * Updates the kind for the given item. The item must already be in the symbol table.
+     */
     void updateItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind);
-    
-    ///Retrieves all the global identifiers for a file-name in an efficient way.
-    ///@param count A reference that will be filled with the count of retrieved items
-    ///@param items A reference to a pointer, that will represent the array of items.
-    ///             The array may contain items with an invalid identifier, those should be ignored.
-    ///             The list is sorted by identifier-index(except for the invalid identifiers in between).
+
+    /**
+     * Retrieves all the global identifiers for a file-name in an efficient way.
+     *
+     * @param count A reference that will be filled with the count of retrieved items
+     * @param items A reference to a pointer, that will represent the array of items.
+     *              The array may contain items with an invalid identifier, those should be ignored.
+     *              The list is sorted by identifier-index(except for the invalid identifiers in between).
+     */
     void items(const IndexedString& file, uint& count, const CodeModelItem*& items) const;
 
     static CodeModel& self();
-    
+
     private:
       class CodeModelPrivate* d;
   };
