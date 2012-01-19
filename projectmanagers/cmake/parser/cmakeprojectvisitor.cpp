@@ -2111,7 +2111,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
         if(arg.value.contains('$'))
-            ret.addArguments(resolveVariable(arg));
+            ret.addArguments(resolveVariable(arg), arg.quoted);
         else
             ret.arguments.append(arg);
     }

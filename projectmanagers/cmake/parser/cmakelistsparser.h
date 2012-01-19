@@ -109,7 +109,7 @@ public:
     }
 
     bool operator==(const CMakeFunctionDesc &other) const;
-    void addArguments( const QStringList& );
+    void addArguments( const QStringList&, bool addEvenIfEmpty=true );
     QString writeBack() const;
 };
 Q_DECLARE_METATYPE( CMakeFunctionDesc )
