@@ -587,7 +587,8 @@ class CppDUContext : public BaseContext {
       return (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class) || BaseContext::shouldSearchInParent(flags);
     }
 
-    virtual DUContext* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+    virtual DUContext* specialize(const IndexedInstantiationInformation& specialization,
+                                  const TopDUContext* topContext, int upDistance) {
       if(specialization.index() == 0)
         return this;
       else {
@@ -605,7 +606,7 @@ class CppDUContext : public BaseContext {
     }
 
     ///@see TemplateDeclaration::instantiate
-    DUContext* instantiate(InstantiationInformation info, const TopDUContext* source) {
+    DUContext* instantiate(const InstantiationInformation& info, const TopDUContext* source) {
       if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
         return this;
 
