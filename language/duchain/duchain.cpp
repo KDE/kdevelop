@@ -636,8 +636,6 @@ public:
 
           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
           DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
-          static DUChainBaseData* dataCopy;
-          dataCopy = theData;
 
           Q_ASSERT(theData->m_range == file->d_func()->m_range);
           Q_ASSERT(theData->m_dynamic == false);

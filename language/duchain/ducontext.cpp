@@ -1217,8 +1217,8 @@ bool DUContext::inDUChain() const {
   return top && top->inDUChain();
 }
 
-DUContext* DUContext::specialize(const IndexedInstantiationInformation& specialization,
-                                 const TopDUContext* topContext, int upDistance /*upDistance*/)
+DUContext* DUContext::specialize(const IndexedInstantiationInformation& /*specialization*/,
+                                 const TopDUContext* topContext, int /*upDistance*/)
 {
   if(!topContext)
     return 0;
