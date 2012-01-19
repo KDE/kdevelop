@@ -90,7 +90,7 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
     QStack<int> opened;
     QList< IntPair > pos;
     bool gotDollar=false;
-    for(int i=exp.indexOf('$'); i<exp.size(); i++)
+    for(int i=exp.indexOf('$'); i<exp.size() && i>=0; i++)
     {
         switch(exp[i].unicode())
         {
