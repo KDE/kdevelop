@@ -20,18 +20,20 @@
 #define SPECIALIZATIONSTORE_H
 
 #include <QtCore/QHash>
-#include "instantiationinformation.h"
-#include "../languageexport.h"
 
+#include "instantiationinformation.h"
+
+#include "../languageexport.h"
 
 namespace KDevelop {
   class DeclarationId;
   class Declaration;
   class DUContext;
   class TopDUContext;
-  
+
   /**
    * This class allows dynamic management of "current" specializations for declarations.
+   *
    * The specializations will be applied in editors, and wherever it makes sense.
    * For example, this is used in C++ to get code-completion and use-building within
    * instantiated template-classes/functions.
@@ -39,43 +41,50 @@ namespace KDevelop {
   class KDEVPLATFORMLANGUAGE_EXPORT SpecializationStore {
     public:
       static SpecializationStore& self();
-      
+
       /**
        * Adds/updates the current specialization for the given declaration-id
        * */
-      void set(DeclarationId declaration, IndexedInstantiationInformation specialization);
+      void set(const DeclarationId& declaration, const IndexedInstantiationInformation& specialization);
       /**
        * Gets the registered specialization for the given declaration-id, or zero.
        */
-      IndexedInstantiationInformation get(DeclarationId declaration);
+      IndexedInstantiationInformation get(const DeclarationId& declaration);
       /**
        * Clears the specialization registered for the given declaration-id
        */
-      void clear(DeclarationId declaration);
+      void clear(const DeclarationId& declaration);
       /**
        * Clears all registered specializations
        */
       void clear();
-      
+
       /**
        * Applies the known specializations for the given declaration using the Declaration::specialize() function.
+       *
        * If no specializations are known, the original declaration is returned.
+       *
        * @param declaration The declaration to specialize
        * @param source The top-context from where to start searching
        * @param recursive Whether parent-contexts should be checked for known specializations, and those applied.
        *                  This is a bit more expensive then just doing a local check.
        */
-      KDevelop::Declaration* applySpecialization(KDevelop::Declaration* declaration, KDevelop::TopDUContext* source, bool recursive = true);
+      KDevelop::Declaration* applySpecialization(KDevelop::Declaration* declaration,
+                                                 KDevelop::TopDUContext* source, bool recursive = true);
       /**
        * Applies the known specializations for the given context using the DUContext::specialize() function.
+       *
        * If no specializations are known, returns the original context.
+       *
        * @param context The context to specialize
        * @param source The top-context from where to start searching
        * @param recursive Whether parent-contexts should be checked for known specializations, and those applied.
        *                  This is a bit more expensive then just doing a local check.
        */
-      DUContext* applySpecialization(KDevelop::DUContext* context, KDevelop::TopDUContext* source, bool recursive = true);
-      
+      DUContext* applySpecialization(KDevelop::DUContext* context,
+                                     KDevelop::TopDUContext* source,
+                                     bool recursive = true);
+
     private:
       SpecializationStore();
       ~SpecializationStore();

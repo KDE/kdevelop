@@ -76,7 +76,8 @@ public:
   /**
    * Constructor.
    *
-   * If \a parentContext is in the symbol table, the declaration will automatically be added into the symbol table.
+   * If \a parentContext is in the symbol table, the declaration will automatically
+   * be added into the symbol table.
    *
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
@@ -92,14 +93,26 @@ public:
 
   virtual TopDUContext* topContext() const;
 
-  /// Determine whether this declaration is a forward declaration. \returns true if this is a forward declaration, otherwise returns false.
+  /**
+   * Determine whether this declaration is a forward declaration.
+   *
+   * \returns true if this is a forward declaration, otherwise returns false.
+   */
   virtual bool isForwardDeclaration() const;
-  /// Returns this declaration as a forward declaration, if it is one. \returns this declaration as a forward declaration if it is one, otherwise null.
+  /**
+   * \returns this declaration as a forward declaration if it is one, otherwise null.
+   */
   ForwardDeclaration* toForwardDeclaration();
-  /// Returns this declaration as a forward declaration, if it is one. \returns this declaration as a forward declaration if it is one, otherwise null.
+  /**
+   * \returns this declaration as a forward declaration, if it is one, otherwise null.
+   */
   const ForwardDeclaration* toForwardDeclaration() const;
 
-  /// Determine whether this declaration is a function declaration. \returns true if this is a function declaration, otherwise returns false.
+  /**
+   * Determine whether this declaration is a function declaration.
+   *
+   * \returns true if this is a function declaration, otherwise returns false.
+   */
   virtual bool isFunctionDeclaration() const;
 
   /**
@@ -113,57 +126,96 @@ public:
    */
   virtual bool inDUChain() const;
 
-  /// Access whether this declaration is also a definition. \returns true if this declaration is also a definition, otherwise false.
+  /**
+   * Determine whether this declaration is also a definition.
+   *
+   * \returns true if this declaration is also a definition, otherwise false.
+   */
   bool isDefinition() const;
-  /// Set whether this declaration is also a definition. \param dd set to true if this declaration is also a definition, otherwise false.
+  /**
+   * Set whether this declaration is also a definition.
+   *
+   * \param dd set this to true if this declaration is also a definition, otherwise false.
+   */
   void setDeclarationIsDefinition(bool dd);
 
-  /// Determine if this declaration is a type-alias (in c++ typedef).  \returns true if the declaration is a type alias, otherwise false.
+  /**
+   * Determine if this declaration is a type-alias (in c++ typedef).
+   *
+   * \returns true if the declaration is a type alias, otherwise false.
+   */
   bool isTypeAlias() const;
-  /// Set whether this declaration is a type alias. \param typeAlias true if the declaration is a type alias, otherwise false.
+  /**
+   * Set whether this declaration is a type alias.
+   *
+   * \param typeAlias true if the declaration is a type alias, otherwise false.
+   */
   void setIsTypeAlias(bool typeAlias);
 
-  /// Access whether the declaration is final, ie, it can only be written to once [Java]
+  /**
+   * Determine whether the declaration is final, ie, it can only be written to once.
+   */
   bool isFinal() const;
-  /// Set whether the declaration is final. \param final true if the declaration is final, otherwise false.
+  /**
+   * Set whether the declaration is final.
+   *
+   * \param final true if the declaration is final, otherwise false.
+   */
   void setFinal(bool final);
-  
+
   /**
-   * Changes whether this declaration must be direct in all cases or not. Needed for some languages, i.e. Python.
-   * "false" is the default.
+   * Changes whether this declaration must be direct in all cases or not.
+   *
+   * By default this is set to false.
+   *
    * \param direct true to force direct, false otherwise.
-   * */
+   */
   void setAlwaysForceDirect(bool direct);
-  /// Access whether this declaration must always be direct.
-  bool alwaysForceDirect() const;
-  
   /**
-   * Changes whether this declaration is "implicitly created", i.e. not declared in the class context, but written somewhere else outside
+   * Determine whether this declaration must always be direct.
+   */
+  bool alwaysForceDirect() const;
+
+  /**
+   * Changes whether this declaration is "implicitly created".
+   *
+   * An implicit declaration is not declared in the class context,
+   * but written somewhere else outside.
+   *
+   * Declarations are by default not implicitly declared.
+   *
    * \param _auto true for implicit, false for default behaviour
-   * */
+   */
   void setAutoDeclaration(bool _auto);
-  /// Access whether this declaration is implicitly created or not.
+  /**
+   * Determine whether this declaration is implicitly created or not.
+   */
   bool isAutoDeclaration() const;
-  
+
   /**
    * Changes whether this declaration is "explicitly deleted", i.e. not implicitly declared or accessible.
    *
    * \param deleted true for deleted, false for default behaviour
    * */
   void setExplicitlyDeleted(bool deleted);
-  /// Access whether this declaration is implicitly created or not.
-  bool isExplicitlyDeleted() const;
-  
   /**
-   * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
+   * Determine whether this declaration is implicitly created or not.
+   */
+  bool isExplicitlyDeleted() const;
+
+  /**
+   * Retrieve the declaration which is specialized with the given
+   * \a specialization index as seen from \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)
    * \param topContext the top context representing the perspective from which to specialize.
-   *                                if @p topContext is zero, only already existing specializations are returned, and if none exists, zero is returned.
+   *                   if @p topContext is zero, only already existing specializations are returned,
+   *                   and if none exists, zero is returned.
    * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
-   * */
-  virtual Declaration* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance = 0);
+   */
+  virtual Declaration* specialize(const IndexedInstantiationInformation& specialization,
+                                  const TopDUContext* topContext, int upDistance = 0);
 
   /**
    * Retrieve the context that is opened by this declaration, if one exists.
@@ -174,7 +226,7 @@ public:
    * The declaration has to be part of the same top-context.
    *
    * \returns the internal context for this declaration
-   * */
+   */
   DUContext * internalContext() const;
 
   /**
@@ -187,14 +239,16 @@ public:
   /**
    * Determine the logical internal context for the resolved form of this declaration.
    *
-   * * If this declaration has a definition, and the definition is resolved, it returns the internal context of the definition.
-   * * If this declaration is a forward-declaration, the forward-declaration is resolved, it returns the internal context of the resolved declaration.
-   * * If this is a type-alias, it returns the internal context of the actual type.
-   * * Otherwise, it returns the same as internalContext().
+   * \li If this declaration has a definition, and the definition is resolved,
+   *     it returns the internal context of the definition.
+   * \li If this declaration is a forward-declaration, the forward-declaration is
+   *     resolved, it returns the internal context of the resolved declaration.
+   * \li If this is a type-alias, it returns the internal context of the actual type.
+   * \li Otherwise, it returns the same as internalContext().
    *
    * \param topContext Needed to resolve forward-declarations.
    * \returns the resolved internal context, as described above
-   * */
+   */
   virtual DUContext * logicalInternalContext(const TopDUContext* topContext) const;
 
   /**
@@ -211,7 +265,7 @@ public:
   /**
    * Access the parent context of this declaration.
    * \returns the parent context of this declaration.
-   * */
+   */
   DUContext* context() const;
 
   /**
@@ -222,17 +276,23 @@ public:
    * for the context, because addDeclaration(..) works separately to that.
    *
    * If the given context is not in the symbol-table, or if the declaration is inserted anonymously,
-   *  or if the context is zero, this declaration is removed from the symbol-table.
-   * Else it is added to the symbol table with the new scope. See TopDUContext for information about the symbol table.
+   * or if the context is zero, this declaration is removed from the symbol-table.
+   * Else it is added to the symbol table with the new scope. See TopDUContext for information
+   * about the symbol table.
    *
-   * \param context New context which contains this declaration. The context must have a top-context if it is not zero.
+   * \param context New context which contains this declaration. The context must have a
+   *                top-context if it is not zero.
    * \param anonymous If this is set, this declaration will be added anonymously into the parent-context.
    *                  This way it can never be found through any of the context's functions, and will
    *                  not be deleted when the context is deleted, so it must be deleted from elsewhere.
-   * */
+   */
   void setContext(DUContext* context, bool anonymous = false);
 
-  /// Convenience function to return this declaration's type dynamically casted to \a T. \returns this declaration's type as \a T, or null if there is no type or it is not of type \a T.
+  /**
+   * Convenience function to return this declaration's type dynamically casted to \a T.
+   *
+   * \returns this declaration's type as \a T, or null if there is no type or it is not of type \a T.
+   */
   template <class T>
   TypePtr<T> type() const { return TypePtr<T>::dynamicCast(abstractType()); }
 
@@ -246,6 +306,7 @@ public:
 
   /**
    * Set this declaration's type.
+   *
    * \param type the type to assign.
    */
   template <class T>
@@ -307,27 +368,33 @@ public:
 
   /**
    * Returns the kind of this declaration. @see Kind
-   * */
+   */
   Kind kind() const;
 
   /**
    * Set the kind.
    *
    * \param kind new kind
-   * */
+   */
   void setKind(Kind kind);
 
   /**
-   * Returns the comment associated to this declaration in the source-code, or an invalid string if there is none.
+   * Returns the comment associated to this declaration in the source-code,
+   * or an invalid string if there is none.
+   *
    * Stored in utf-8 encoding.
-   * */
+   */
   QByteArray comment() const;
 
   /**
-   * Sets the comment for this declaration. Should be utf-8 encoded.
-   * */
+   * Sets the comment for this declaration.
+   *
+   * @note Should be utf-8 encoded.
+   */
   void setComment(const QByteArray& str);
-  /// Sets the comment for this declaration.
+  /**
+   * Sets the comment for this declaration.
+   */
   void setComment(const QString& str);
 
   /**
@@ -346,6 +413,7 @@ public:
 
   /**
    * Equivalence operator.
+   *
    * \param other Other declaration to compare.
    * \returns true if the declarations are equal, otherwise false.
    */
@@ -357,57 +425,71 @@ public:
   virtual QString toString() const;
 
   /**
-   * Returns a list of pairs:
-   * An url of a file, paired together with all use-ranges of this declaration in that file.
-   * The ranges are in the documents local revision (use DUChainUtils::transformFromRevision or usesCurrentRevision())
-   * The uses are unique, no 2 uses are returend that have the same range within the same file.
-   * 
-   * This is a non-trivial operation.
-   * */
+   * Returns a map of files to use-ranges.
+   *
+   * The key of the returned map is an url of a file. The value
+   * is a list with all use-ranges of this declaration in that file.
+   *
+   * \note The ranges are in the documents local revision,
+   *       use \c DUChainUtils::transformFromRevision or \c usesCurrentRevision()
+   *
+   * \note The uses are unique, no 2 uses are returend that have the same range within the same file.
+   *
+   * \note This is a non-trivial operation and hence expensive.
+   */
   QMap<IndexedString, QList<RangeInRevision> > uses() const;
-  
+
   /**
    * Determines whether the declaration has any uses or not.
+   *
    * Cheaper than calling uses().
-   * */
+   */
   bool hasUses() const;
 
   /**
-   * Returns a list of pairs:
-   * An url of a file, paired together with all use-ranges of this declaration in that file.
-   * The ranges are in the most current document revisions available.
-   * The uses are unique, no 2 uses are returend that have the same range within the same file.
-   * 
-   * @warning This must be called only from within the foreground, or with the foreground lock locked.
-   * This is a non-trivial operation.
-   * */
+   * Returns a map of files to use-ranges.
+   *
+   * The key of the returned map is an url of a file. The value
+   * is a list with all use-ranges of this declaration in that file.
+   *
+   * \note The uses are unique, no 2 uses are returend that have the same range within the same file.
+   *
+   * \warning This must be called only from within the foreground, or with the foreground lock locked.
+   *
+   * \note This is a non-trivial operation and hence expensive.
+   */
   QMap<IndexedString, QList<SimpleRange> > usesCurrentRevision() const;
-  
+
   /**
     * This hash-value should differentiate between multiple different
     * declarations that have the same qualifiedIdentifier, but should have a different
     * identity, and thus own Definitions and own Uses assigned.
     *
     * Affected by function-arguments, whether this is a template-declaration, etc..
-    * */
+    */
   virtual uint additionalIdentity() const;
 
   /**
-   *
+   * TODO document
    * */
   virtual IndexedInstantiationInformation specialization() const;
 
   /**
-   * @see DeclarationId
-   * @param forceDirect When this is true, the DeclarationId is force to be direct, and can be resolved without a symbol-table and top-context.
-   * The same goes for Declarations that have @c alwaysForceDirect() set to true.
-   * */
+   * \see DeclarationId
+   *
+   * \param forceDirect When this is true, the DeclarationId is force to be direct,
+   *                    and can be resolved without a symbol-table and top-context.
+   *                    The same goes for Declarations that have \c alwaysForceDirect()
+   *                    set to true.
+   */
   virtual DeclarationId id(bool forceDirect = false) const;
 
   /**
-   * Returns an index that uniquely identifies this declaration within its surrounding top-context. That index can be passed
-   * to TopDUContext::declarationFromIndex(index) to get the declaration.
-   * This is only valid when the declaration is not a specialization (specialization() returns 0), and if it is not anonymous in its context.
+   * Returns an index that uniquely identifies this declaration within its surrounding top-context.
+   *
+   * That index can be passed to \c TopDUContext::declarationFromIndex(index) to get the declaration.
+   * This is only valid when the declaration is not a specialization (\c specialization() returns 0),
+   * and if it is not anonymous in its context.
    *
    * \note for this to be valid, allocateOwnIndex() must have been called first.
    * \note the highest big of the index is always zero!
@@ -415,7 +497,9 @@ public:
    */
   uint ownIndex() const;
 
-  ///Whether this declaration has been inserted anonymously into its parent-context
+  /**
+   * Whether this declaration has been inserted anonymously into its parent-context
+   */
   bool isAnonymous() const;
 
   /**
@@ -429,20 +513,21 @@ public:
   void allocateOwnIndex();
 
   /**
-   * Returns a clone of this declaration, with the difference that:
-   * - context will be zero
+   * Returns a clone of this declaration, with the difference that the returned declaration
+   * has no context set, i.e. \c context() returns zero.
    *
    * The declaration will not be registered anywhere, so you must care about its deletion.
    *
-   * This declaration's text-range will be referenced from the clone, so the clone must not live longer than the original.
-   *
-   * */
+   * This declaration's text-range will be referenced from the clone, so the clone must not
+   * live longer than the original.
+   */
   Declaration* clone() const;
 
   /**
    * Signalized that among multiple possible specializations, this one should be used in the UI from now on.
-   * Currently mainly used in C++ for template support. The default-implementation registers the current specialization
-   * of this declaration to SpecializationStore if it is nonzero.
+   *
+   * Currently mainly used in C++ for template support. The default-implementation registers the current
+   * specialization of this declaration to SpecializationStore if it is nonzero.
    */
   virtual void activateSpecialization();
 
