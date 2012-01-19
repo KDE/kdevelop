@@ -66,16 +66,24 @@ QString findSourceFile(const QString& name)
     return info.canonicalFilePath();
 }
 
-void GdbTest::init()
+void GdbTest::initTestCase()
 {
     AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+}
 
+void GdbTest::cleanupTestCase()
+{
+    KDevelop::TestCore::shutdown();
+}
+
+void GdbTest::init()
+{
     //remove all breakpoints - so we can set our own in the test
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     breakpoints.writeEntry("number", 0);
     breakpoints.sync();
-    
+
     KDevelop::BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
     m->removeRows(0, m->rowCount());
 
@@ -84,7 +92,6 @@ void GdbTest::init()
         delete vc->watches()->child(i);
     }
     vc->watches()->clear();
-
 }
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration

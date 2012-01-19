@@ -41,6 +41,7 @@ class GDB : public QObject
     Q_OBJECT
 public:
     explicit GDB(QObject* parent = 0);
+    virtual ~GDB();
 
     /** Starts GDB.  This should be done after connecting to all
         signals the client is interested in.  */

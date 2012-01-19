@@ -48,6 +48,17 @@ GDB::GDB(QObject* parent)
 {
 }
 
+GDB::~GDB()
+{
+    // prevent Qt warning: QProcess: Destroyed while process is still running.
+    if (process_ && process_->state() == QProcess::Running) {
+        disconnect(process_, SIGNAL(error(QProcess::ProcessError)),
+                    this, SLOT(processErrored(QProcess::ProcessError)));
+        process_->kill();
+        process_->waitForFinished(10);
+    }
+}
+
 void GDB::start(KConfigGroup& config)
 {
     // FIXME: verify that default value leads to something sensible
