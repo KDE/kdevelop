@@ -262,7 +262,7 @@ inline bool isContextTemporary(uint index) {
 
 void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 {
-  // The definition may not have its identifier set when it's assigned...
+  // The definition may not have its identifier set when it's assigned... 
   // allow dupes here, TODO catch the error elsewhere
   {
     QMutexLocker lock(&m_localDeclarationsMutex);

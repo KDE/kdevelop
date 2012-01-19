@@ -55,27 +55,6 @@ public:
   virtual ~DUChainVisitor();
 };
 
-/**
- * This class is used to trace imports while findDeclarationsInternal.
- * The back-tracing may be needed for correctly resolving delayed types(templates)
- */
-class ImportTraceItem
-{
-  public:
-    ImportTraceItem(const DUContext* _ctx, CursorInRevision _pos = CursorInRevision::invalid())
-    : ctx(_ctx), position(_pos)
-    { }
-    ImportTraceItem()
-    { }
-
-    // The trace goes backwards. This means that for each imported context,
-    // it contains the context the new one is imported to, not the imported context.
-    const DUContext* ctx;
-    CursorInRevision position;
-};
-
-typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
-
 typedef DUChainPointer<DUContext> DUContextPointer;
 
 /**

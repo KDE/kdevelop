@@ -190,16 +190,6 @@ public:
    */
   virtual bool imports(const DUContext* origin, const CursorInRevision& position) const;
 
-  /**
-   * Returns the trace of imports from this context top the given target.
-   * The positions in the returned trace may be invalid.
-   * This is more efficient then the version below, because the trace doesn't need to be copied
-   * */
-//   void importTrace(const TopDUContext* target, ImportTrace& store) const;
-
-  ///More convenient version of the above
-//   ImportTrace importTrace(const TopDUContext* target) const;
-
   enum {
     Identity = 4
   };
