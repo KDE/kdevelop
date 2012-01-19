@@ -93,7 +93,10 @@ class QuickOpenWidgetCreator {
 
 class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
   public:
-    StandardQuickOpenWidgetCreator(QStringList items, QStringList scopes) : m_items(items), m_scopes(scopes) {
+    StandardQuickOpenWidgetCreator(const QStringList& items, const QStringList& scopes)
+      : m_items(items)
+      , m_scopes(scopes)
+    {
     }
 
     virtual QString objectNameForLine() {

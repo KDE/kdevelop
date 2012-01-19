@@ -208,7 +208,7 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
     
-    virtual void setDefaultText(QString text) {
+    virtual void setDefaultText(const QString& text) {
       m_defaultText = text;
       setClickMessage(m_defaultText);
     }
