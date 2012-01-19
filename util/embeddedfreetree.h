@@ -828,7 +828,6 @@ namespace KDevelop {
                Q_ASSERT(!ItemHandler::isFree(m_items[removeIndex]));
                
                //Find the free item that is nearest to the target position in the item order
-               int previousItem = -1;
                int currentItem = *m_centralFreeItem;
                
                int lowerBound = 0; //The minimum position the searched item can have
@@ -853,7 +852,6 @@ namespace KDevelop {
                        //Follow left child
                        if(ItemHandler::leftChild(current) != -1) {
                            //Continue traversing
-                           previousItem = currentItem;
                            currentItem = ItemHandler::leftChild(current);
                            Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
@@ -871,7 +869,6 @@ namespace KDevelop {
                        //Follow right child
                        if(ItemHandler::rightChild(current) != -1) {
                            //Continue traversing
-                           previousItem = currentItem;
                            currentItem = ItemHandler::rightChild(current);
                            Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
