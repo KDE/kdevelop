@@ -22,6 +22,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/waitforupdate.cpp
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
+    duchain/indexedducontext.cpp
+    duchain/localindexedducontext.cpp
     duchain/topducontext.cpp
     duchain/topducontextdynamicdata.cpp
     duchain/functiondefinition.cpp
@@ -236,6 +238,8 @@ install(FILES
     duchain/specializationstore.h
     duchain/persistentsetmap.h
     duchain/indexeditems.h
+    duchain/indexedducontext.h
+    duchain/localindexedducontext.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 

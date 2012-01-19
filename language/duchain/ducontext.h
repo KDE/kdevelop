@@ -33,6 +33,8 @@
 #include "duchainpointer.h"
 #include "declarationid.h"
 #include "indexeditems.h"
+#include "indexedducontext.h"
+#include "localindexedducontext.h"
 
 class QWidget;
 
@@ -51,134 +53,6 @@ public:
   virtual void visit(DUContext* context) = 0;
   virtual void visit(Declaration* declaration) = 0;
   virtual ~DUChainVisitor();
-};
-
-/**
- * Represents a context only by its global indices
- */
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
-  public:
-    IndexedDUContext(DUContext* decl);
-    IndexedDUContext(uint topContext = 0, uint contextIndex = 0);
-
-    ///Duchain must be read locked
-    DUContext* context() const;
-
-    ///Duchain must be read locked
-    DUContext* data() const {
-      return context();
-    }
-
-    bool operator==(const IndexedDUContext& rhs) const {
-      return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
-    }
-    uint hash() const {
-      return (m_topContext * 57 + m_contextIndex) * 29;
-    }
-
-    bool isValid() const {
-      return !isDummy() && context() != 0;
-    }
-
-    bool operator<(const IndexedDUContext& rhs) const {
-      Q_ASSERT(!isDummy());
-      return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_contextIndex < rhs.m_contextIndex);
-    }
-
-    //Index within the top-context
-    uint localIndex() const {
-      if(isDummy())
-        return 0;
-
-      return m_contextIndex;
-    }
-
-    uint topContextIndex() const {
-      return m_topContext;
-    }
-
-    IndexedTopDUContext indexedTopContext() const;
-
-    /**
-     * The following functions allow storing 2 integers in this object and marking it as a dummy,
-     * which makes the isValid() function always return false for this object, and use the integers
-     * for other purposes
-     * Clears the contained data
-     */
-    void setIsDummy(bool dummy) {
-      if(isDummy() == dummy)
-        return;
-      if(dummy)
-        m_topContext = 1 << 31;
-      else
-        m_topContext = 0;
-      m_contextIndex = 0;
-    }
-
-    bool isDummy() const {
-      //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
-      //integers
-      return (bool)(m_topContext & (1 << 31));
-    }
-
-    QPair<uint, uint> dummyData() const {
-      Q_ASSERT(isDummy());
-      return qMakePair(m_topContext & (~(1<<31)), m_contextIndex);
-    }
-
-    ///Do not call this when this object is valid. The first integer loses one bit of precision.
-    void setDummyData(QPair<uint, uint> data) {
-      Q_ASSERT(isDummy());
-
-      m_topContext = data.first;
-      m_contextIndex = data.second;
-      Q_ASSERT(!isDummy());
-      m_topContext |= (1 << 31); //Mark as dummy
-      Q_ASSERT(isDummy());
-      Q_ASSERT(dummyData() == data);
-    }
-
-  private:
-    uint m_topContext;
-    uint m_contextIndex;
-};
-
-/**
- * Represents a DUContext within a TopDUContext, without storing the TopDUContext(It must be given to data())
- */
-class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
-  public:
-    LocalIndexedDUContext(DUContext* decl);
-    LocalIndexedDUContext(uint contextIndex = 0);
-    //Duchain must be read locked
-
-    DUContext* data(TopDUContext* top) const;
-
-    bool operator==(const LocalIndexedDUContext& rhs) const {
-      return m_contextIndex == rhs.m_contextIndex;
-    }
-
-    bool isValid() const {
-      return m_contextIndex != 0;
-    }
-
-    uint hash() const {
-      return m_contextIndex * 29;
-    }
-
-    bool operator<(const LocalIndexedDUContext& rhs) const {
-      return m_contextIndex < rhs.m_contextIndex;
-    }
-
-    //Index within the top-context
-    uint localIndex() const {
-      return m_contextIndex;
-    }
-
-    bool isLoaded(TopDUContext* top) const;
-
-  private:
-    uint m_contextIndex;
 };
 
 /**
