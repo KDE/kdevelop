@@ -1548,7 +1548,7 @@ int CMakeProjectVisitor::visit(const MathAst *math)
     {
         kDebug(9032) << "error: found an error while calculating" << math->expression();
     }
-    kDebug(9042) << "math. " << math->expression() << "=" << result.toString();
+    kDebug(9042) << "math. " << math->expression() << "=" << result.toInteger();
     m_vars->insert(math->outputVariable(), QStringList(QString::number(result.toInteger())));
     return 1;
 }

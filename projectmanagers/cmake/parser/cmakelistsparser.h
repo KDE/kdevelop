@@ -64,6 +64,8 @@ struct CMakeFunctionArgument
     KDevelop::RangeInRevision range() const
     { return KDevelop::RangeInRevision(line-1, column-1, line-1, column+value.length()-1); }
 
+    bool isValid() const { return quoted || !value.isEmpty(); }
+    
     QString value;
     bool quoted;
     quint32 line;
