@@ -24,7 +24,6 @@
 
 #include "ducontext.h"
 #include <language/util/setrepository.h>
-#include "indexeditems.h"
 #include <QMetaType>
 
 template< class T >

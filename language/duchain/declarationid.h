@@ -21,8 +21,8 @@
 
 #include "../editor/cursorinrevision.h"
 
+#include "indexeddeclaration.h"
 #include "identifier.h"
-#include "indexeditems.h"
 #include "instantiationinformation.h"
 
 //krazy:excludeall=dpointer

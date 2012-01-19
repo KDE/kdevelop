@@ -32,7 +32,6 @@
 #include "types/abstracttype.h"
 #include "duchainpointer.h"
 #include "declarationid.h"
-#include "indexeditems.h"
 #include "indexedducontext.h"
 #include "localindexedducontext.h"
 

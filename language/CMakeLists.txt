@@ -240,7 +240,6 @@ install(FILES
     duchain/instantiationinformation.h
     duchain/specializationstore.h
     duchain/persistentsetmap.h
-    duchain/indexeditems.h
     duchain/indexedducontext.h
     duchain/indexedtopducontext.h
     duchain/localindexedducontext.h

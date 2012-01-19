@@ -29,7 +29,6 @@
 #include "types/abstracttype.h"
 #include "duchainbase.h"
 #include "topducontext.h"
-#include "indexeditems.h"
 
 class QByteArray;
 

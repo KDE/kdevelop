@@ -22,7 +22,6 @@
 #include <QtCore/QSet>
 #include <KDE/KUrl>
 #include "../languageexport.h"
-#include <language/duchain/indexeditems.h>
 #include <KDE/KLineEdit>
 
 class QStringList;
