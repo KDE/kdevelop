@@ -248,7 +248,8 @@ TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m
 TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0) {
 }
 
-Declaration* TemplateDeclaration::specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+Declaration* TemplateDeclaration::specialize(const IndexedInstantiationInformation& specialization,
+                                             const TopDUContext* topContext, int upDistance) {
   if(!specialization.isValid())
     return dynamic_cast<Declaration*>(this);
   else {
@@ -725,7 +726,7 @@ void TemplateDeclaration::deleteAllInstantiations()
 // #define ifDebugMatching(x) x
 #define ifDebugMatching(x)
 
-QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(Cpp::InstantiationInformation info, const TopDUContext* source) {
+QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(const Cpp::InstantiationInformation& info, const TopDUContext* source) {
   Q_ASSERT(source);
   ///@todo match higher scopes
   InstantiationInformation specializedWith(this->specializedWith().information());

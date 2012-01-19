@@ -922,7 +922,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
     TopDUContext* m_top;
 };
 
-Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
+Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(const Cpp::InstantiationInformation& base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
     if(name->template_arguments || base.isValid()) 
     {
       //Append a scope part
