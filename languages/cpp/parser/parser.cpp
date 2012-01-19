@@ -1595,6 +1595,8 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
           {
             parseTrailingReturnType(ast->trailing_return_type);
           }
+
+        parseMemberVirtSpecifier(ast->virt_specifiers);
       }
 
     if (skipParen)
@@ -2161,6 +2163,9 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
 
   NameAST *name = 0;
   parseName(name, AcceptTemplate);
+
+  const ListNode<uint> *virt_specifiers = 0;
+  parseClassVirtSpecifier(virt_specifiers);
 
   BaseClauseAST *bases = 0;
   if (session->token_stream->lookAhead() == ':')
@@ -2825,7 +2830,10 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   bool ellipsis = false;
   OperatorFunctionIdAST *operator_id = 0;
 
-  if (session->token_stream->lookAhead() == Token_identifier)
+  if (session->token_stream->lookAhead() == Token_identifier
+       // identifier with special meaning
+      || session->token_stream->lookAhead() == Token_override
+      || session->token_stream->lookAhead() == Token_final)
     {
       id = session->token_stream->cursor();
       advance();
@@ -5375,8 +5383,10 @@ bool Parser::parseLambdaCapture(LambdaCaptureAST*& node)
       advance();
     }
 
-  ADVANCE(Token_identifier, "identifier");
-  ast->identifier = session->token_stream->cursor();
+  if (!parseName(ast->identifier)) {
+    rewind(start);
+    return false;
+  }
 
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {
@@ -5422,6 +5432,36 @@ bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
   return true;
+}
+
+bool Parser::parseMemberVirtSpecifier(const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_override || tk == Token_final || tk == Token_new))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
+}
+
+bool Parser::parseClassVirtSpecifier(const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_final || tk == Token_explicit))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
 }
 
 bool Parser::holdErrors(bool hold)

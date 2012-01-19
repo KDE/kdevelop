@@ -66,16 +66,24 @@ QString findSourceFile(const QString& name)
     return info.canonicalFilePath();
 }
 
-void GdbTest::init()
+void GdbTest::initTestCase()
 {
     AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+}
 
+void GdbTest::cleanupTestCase()
+{
+    KDevelop::TestCore::shutdown();
+}
+
+void GdbTest::init()
+{
     //remove all breakpoints - so we can set our own in the test
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     breakpoints.writeEntry("number", 0);
     breakpoints.sync();
-    
+
     KDevelop::BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
     m->removeRows(0, m->rowCount());
 
@@ -84,7 +92,6 @@ void GdbTest::init()
         delete vc->watches()->child(i);
     }
     vc->watches()->clear();
-
 }
 
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
@@ -290,12 +297,12 @@ void GdbTest::testDeleteBreakpoint()
 
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1); //one for the "insert here" entry
     //add breakpoint before startProgram
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
     breakpoints()->removeRow(0);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1);
 
-    b = breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -932,7 +939,7 @@ void GdbTest::testVariablesLocalsStruct()
 void GdbTest::testVariablesWatches()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+    KDevelop::ICore::self()->debugController()->variableCollection()->variableWidgetShown();
 
     TestLaunchConfiguration cfg;
 
@@ -1426,14 +1433,14 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
     shellScript.open();
-    shellScript.write("gdbserver localhost:2345 "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    shellScript.write("gdbserver localhost:2345 "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
     shellScript.close();
     shellScript.setPermissions(shellScript.permissions() | QFile::ExeUser);
     QFile::copy(shellScript.fileName(), shellScript.fileName()+"-copy"); //to avoid "Text file busy" on executing (why?)
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file "+QDir::currentPath().toLatin1()+"/unittests/debugee\n");
+    runScript.write("file "+findExecutable("debugee").toLocalFile().toLatin1()+"\n");
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1498,6 +1505,31 @@ void GdbTest::testBreakpointWithSpaceInPath()
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
+
+void GdbTest::testBreakpointDisabledOnStart()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 28)
+        ->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 29);
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(debugeeFileName, 31);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 29);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 31);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+}
+
 
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,

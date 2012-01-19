@@ -2387,6 +2387,29 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
   }
 
+  void ExpressionVisitor::visitLambdaExpression(LambdaExpressionAST *node)
+  {
+    DefaultVisitor::visitLambdaExpression(node);
+    FunctionType* type = new FunctionType;
+    if (node->declarator && node->declarator->parameter_declaration_clause) {
+      if (buildParametersFromDeclaration(node->declarator->parameter_declaration_clause)) {
+        foreach(const OverloadResolver::Parameter& param, m_parameters) {
+          type->addArgument(param.type);
+        }
+      }
+    }
+    if (node->declarator && node->declarator->trailing_return_type) {
+      visit(node->declarator->trailing_return_type);
+      type->setReturnType(m_lastType);
+    }
+    if (!type->returnType()) {
+      ///TODO: if body consists of only a single return statement, use that type as return type
+      type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    }
+    m_lastType = AbstractType::Ptr( type );
+    m_lastInstance = Instance(true);
+  }
+
   void ExpressionVisitor::visit(AST* node)
   {
     if (!node) {

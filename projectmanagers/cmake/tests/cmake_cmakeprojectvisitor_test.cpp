@@ -19,6 +19,8 @@
  */
 
 #include "cmake_cmakeprojectvisitor_test.h"
+#include "cmake-test-paths.h"
+
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
