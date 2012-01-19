@@ -1132,32 +1132,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
               }
             }
           }
-
-          //Update instantiations in case of template forward-declarations
-//           SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
-//           SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
-//
-//           if( templateForward && currentTemplate )
-//           {
-//             //Change the types of all the forward-template instantiations
-//             TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
-//
-//             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
-//             {
-//               Declaration* realInstance = currentTemplate->instantiate(it.key().args, ImportTrace());
-//               Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
-//               //Now change the type of forwardInstance so it matches the type of realInstance
-//               CppClassType::Ptr realClass = realInstance->type<CppClassType>();
-//               CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
-//
-//               if( realClass && forwardClass ) {
-//                 //Copy the class from real into the forward-declaration's instance
-//                 copyCppClass(realClass.data(), forwardClass.data());
-//               } else {
-//                 kDebug(9007) << "Bad types involved in formward-declaration";
-//               }
-//             }
-//           }//templateForward && currentTemplate
         }
       }
     }//foreach
