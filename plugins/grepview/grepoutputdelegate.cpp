@@ -149,7 +149,6 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     //and line numbers. These are not included in the default Qt size calculation.
     if(item && item->isText())
     {
-        const KDevelop::SimpleRange rng = item->change()->m_range;
         QFont font = option.font;
         font.setBold(true);
         QFontMetrics bMetrics(font);
