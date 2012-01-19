@@ -45,9 +45,9 @@ class TopDUContext;
  * identifier and an additional index to disambiguate instances of multiple declarations with the same
  * identifier.
  *
- * Both forms also have a specialization index. It can be used in a language-specific way to pick other versions of the declaration.
- * When the declaration is found, Declaration::specialize() is called on the found declaration with this value, and
- * the returned value is the actually found declaration.
+ * Both forms also have a specialization index. It can be used in a language-specific way to pick other
+ * versions of the declaration. When the declaration is found, Declaration::specialize() is called on
+ * the found declaration with this value, and the returned value is the actually found declaration.
  *
  * \note This only works when the Declaration is in the symbol table.
  * */
@@ -61,7 +61,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param additionalId Additional index to disambiguate
      * \param specialization Specialization index (see class documentation).
      */
-    explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0, IndexedInstantiationInformation specialization = IndexedInstantiationInformation());
+    explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(),
+                           uint additionalId = 0,
+                           const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
 
     /**
      * Constructor for direct access to a declaration.  The resulting DeclarationId will
@@ -70,7 +72,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param decl Declaration to reference.
      * \param specialization Specialization index (see class documentation).
      */
-    explicit DeclarationId(const IndexedDeclaration& decl, IndexedInstantiationInformation specialization = IndexedInstantiationInformation());
+    explicit DeclarationId(const IndexedDeclaration& decl,
+                           const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
 
     /**
      * Equality operator.
@@ -108,7 +111,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     /**
      * Hash function for this declaration identifier.
      *
-     * \warning This may return different hashes for the same declaration, depending on whether the id is direct or indirect,
+     * \warning This may return different hashes for the same declaration,
+     *          depending on whether the id is direct or indirect,
      *          and thus you cannot compare hashes for declaration equality (use operator==() instead)
      */
     uint hash() const {
@@ -128,15 +132,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * */
     Declaration* getDeclaration(const TopDUContext* context, bool instantiateIfRequired = true) const;
 
-    ///Same as getDeclaration(..), but returns all matching declarations if there are multiple. This also returns found forward-declarations.
+    /**
+     * Same as getDeclaration(..), but returns all matching declarations if there are multiple.
+     * This also returns found forward-declarations.
+     */
     KDevVarLengthArray<Declaration*> getDeclarations(const TopDUContext* context) const;
-    
+
     /**
      * Set the specialization index (see class documentation).
      *
      * \param specializationIndex the new specialization index.
      */
-    void setSpecialization(IndexedInstantiationInformation specialization);
+    void setSpecialization(const IndexedInstantiationInformation& spec);
 
     /**
      * Retrieve the specialization index (see class documentation).
@@ -164,7 +171,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
   private:
     struct Indirect {
       IndexedQualifiedIdentifier m_identifier;
-      uint m_additionalIdentity; //Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
+      // Hash from signature, or similar.
+      // Used to disambiguate multiple declarations of the same name.
+      uint m_additionalIdentity;
     } ;
 
     //union {
@@ -174,9 +183,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
       IndexedDeclaration direct;
     //};
     bool m_direct;
-    IndexedInstantiationInformation m_specialization; //Can be used in a language-specific way to pick other versions of the declaration.
-                           //When the declaration is found, pickSpecialization is called on the found declaration with this value, and
-                           //the returned value is the actually found declaration.
+    // Can be used in a language-specific way to pick other versions of the declaration.
+    // When the declaration is found, pickSpecialization is called on the found declaration
+    // with this value, and the returned value is the actually found declaration.
+    IndexedInstantiationInformation m_specialization;
 };
 
 inline uint qHash(const KDevelop::DeclarationId& id) {
