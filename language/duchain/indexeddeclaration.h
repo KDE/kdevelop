@@ -143,5 +143,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
+Q_DECLARE_TYPEINFO(KDevelop::IndexedDeclaration, Q_MOVABLE_TYPE);
 
 #endif // INDEXEDDECLARATION_H

@@ -103,4 +103,6 @@ inline uint qHash(const KDevelop::SimpleRange& range) {
 
 } // namespace KDevelop
 
+Q_DECLARE_TYPEINFO(KDevelop::SimpleRange, Q_MOVABLE_TYPE);
+
 #endif

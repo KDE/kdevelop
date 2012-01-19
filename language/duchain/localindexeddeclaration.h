@@ -70,4 +70,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedDeclaration, Q_MOVABLE_TYPE);
+
 #endif // LOCALINDEXEDDECLARATION_H

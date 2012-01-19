@@ -230,5 +230,6 @@ inline uint qHash( const KDevelop::IndexedString& str ) {
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString);
+Q_DECLARE_TYPEINFO(KDevelop::IndexedString, Q_MOVABLE_TYPE);
 
 #endif

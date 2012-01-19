@@ -97,4 +97,6 @@ namespace KDevelop {
   };
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::CodeModelItem, Q_MOVABLE_TYPE);
+
 #endif

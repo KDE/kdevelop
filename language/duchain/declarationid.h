@@ -195,4 +195,6 @@ inline uint qHash(const KDevelop::DeclarationId& id) {
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::DeclarationId, Q_MOVABLE_TYPE);
+
 #endif

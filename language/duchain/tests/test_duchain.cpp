@@ -610,6 +610,8 @@ void TestDUChain::benchCodeModel()
 {
   const IndexedString file("testFile");
 
+  QVERIFY(!QTypeInfo< KDevelop::CodeModelItem >::isStatic);
+
   int i = 0;
   QBENCHMARK {
     CodeModel::self().addItem(file, QualifiedIdentifier("testQID" + QString::number(i++)),

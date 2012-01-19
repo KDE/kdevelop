@@ -146,4 +146,7 @@ namespace KDevelop {
   }
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::IndexedInstantiationInformation, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::InstantiationInformation, Q_MOVABLE_TYPE);
+
 #endif // INSTANTIATIONINFORMATION_H

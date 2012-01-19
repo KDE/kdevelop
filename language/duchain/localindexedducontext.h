@@ -71,4 +71,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedDUContext, Q_MOVABLE_TYPE);
+
 #endif // LOCALINDEXEDDUCONTEXT_H
