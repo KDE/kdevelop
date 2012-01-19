@@ -69,6 +69,7 @@ class TemporaryDataManager {
     TemporaryDataManager(QString id = QString()) : m_itemsUsed(0), m_itemsSize(0), m_items(0), m_id(id) {
       uint first = alloc();  //Allocate the zero item, just to reserve that index
       Q_ASSERT(first == (uint)DynamicAppendedListMask);
+      Q_UNUSED(first);
     }
     ~TemporaryDataManager() {
       free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
