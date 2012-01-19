@@ -2410,23 +2410,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastInstance = Instance(true);
   }
 
-  void ExpressionVisitor::visitLambdaCapture(LambdaCaptureAST *node)
-  {
-    if (node->isThis)
-    {
-      LOCKDUCHAIN;
-      Declaration* declaration = 0;
-      if (currentContext()->parentContext()
-            && currentContext()->parentContext()->type() == DUContext::Class)
-      {
-        declaration = currentContext()->parentContext()->owner();
-      }
-      newUse(node, node->start_token, node->end_token, DeclarationPointer(declaration));
-    } else {
-      visit(node->identifier);
-    }
-  }
-
   void ExpressionVisitor::visit(AST* node)
   {
     if (!node) {

@@ -496,6 +496,7 @@ void TestDUChain::testLambda()
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
   dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
@@ -539,6 +540,7 @@ void TestDUChain::testLambdaReturn()
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
   dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
@@ -560,6 +562,7 @@ void TestDUChain::testLambdaCapture()
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
   dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
@@ -571,7 +574,6 @@ void TestDUChain::testLambdaCapture()
   // int i; in main context
   QCOMPARE(mainCtx->localDeclarations().size(), 2);
   Declaration* iDecl = mainCtx->localDeclarations().at(0);
-  // no uses
   QCOMPARE(iDecl->uses().size(), 1);
   QCOMPARE(iDecl->uses().begin()->size(), 2);
   QCOMPARE(iDecl->uses().begin()->first(), RangeInRevision(2, 13, 2, 14));
