@@ -136,4 +136,6 @@ struct IndexedTopDUContextIndexConversion {
 
 }
 
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
+
 #endif // INDEXEDTOPDUCONTEXT_H
