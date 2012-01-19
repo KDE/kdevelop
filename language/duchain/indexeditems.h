@@ -18,130 +18,13 @@
 #include "../languageexport.h"
 #include <QMetaType>
 
+#include "indexedtopducontext.h"
+
 namespace KDevelop {
 
 class Declaration;
 class TopDUContext;
 class IndexedString;
-  
-///Allows simple indirect access to top-contexts with on-demand loading
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
-  public:
-    inline IndexedTopDUContext(uint index) : m_index(index) {
-      if(!index)
-        setIsDummy(true);
-    }
-    IndexedTopDUContext(TopDUContext* context = 0);
-    
-    enum {
-      DummyMask = 1u<<31u
-    };
-    
-    ///Returns the top-context represented by this indexed top-context. If it wasn't loaded yet, it is loaded.
-    ///The duchain must be read-locked when this is called!
-    ///To prevent it from being unloaded, store it into a ReferencedTopDUContext before releasing the duchain lock.
-    TopDUContext* data() const;
-    
-    ///Returns whether the top-context is currently loaded. If not, it will be loaded when you call data().
-    bool isLoaded() const;
-    
-    inline bool operator==(const IndexedTopDUContext& rhs) const {
-      return m_index == rhs.m_index;
-    }
-    
-    inline bool operator!=(const IndexedTopDUContext& rhs) const {
-      return m_index != rhs.m_index;
-    }
-    
-    inline bool operator<(const IndexedTopDUContext& rhs) const {
-      return m_index < rhs.m_index;
-    }
-    
-    inline bool isValid() const {
-      return m_index && !isDummy();
-    }
-    
-    inline uint index() const {
-      if(isDummy())
-        return 0;
-      else
-        return m_index;
-    }
-    
-    inline bool isDummy() const {
-      return m_index & DummyMask;
-    }
-    
-    void setIsDummy(bool isDummy) {
-      if(isDummy)
-        m_index |= DummyMask;
-      else
-        m_index &= ~((uint)DummyMask);
-    }
-    
-    ///Allows giving this IndexedTopDUContext some data while logically keeping it invalid.
-    ///It will still return zero on index(), data(), etc.
-    ///@param first The highest of this value bit will be removed
-    void setDummyData(ushort first, ushort second) {
-      Q_ASSERT(isDummy());
-      m_index = ((((uint)first)<<16) + second) | DummyMask;
-    }
-
-    ///The data previously set through setDummyData(). Initially 0.
-    QPair<ushort, ushort> dummyData() const {
-      uint withoutMask = m_index & (~((uint)DummyMask));
-      return qMakePair((ushort)(withoutMask >> 16), (ushort)withoutMask);
-    }
-    
-    IndexedString url() const;
-  private:
-  uint m_index;
-  friend class IndexedTopDUContextEmbeddedTreeHandler;
-};
-
-struct IndexedTopDUContextIndexConversion {
-  inline static uint toIndex(const IndexedTopDUContext& top) {
-    return top.index();
-  }
-  
-  inline static IndexedTopDUContext toItem(uint index) {
-    return IndexedTopDUContext(index);
-  }
-};
-
-class IndexedTopDUContextEmbeddedTreeHandler {
-    public:
-    static int leftChild(const IndexedTopDUContext& m_data) {
-        return int(m_data.dummyData().first)-1;
-    }
-    static void setLeftChild(IndexedTopDUContext& m_data, int child) {
-        m_data.setDummyData((ushort)(child+1), m_data.dummyData().second);
-    }
-    static int rightChild(const IndexedTopDUContext& m_data) {
-        return int(m_data.dummyData().second)-1;
-    }
-    static void setRightChild(IndexedTopDUContext& m_data, int child) {
-        m_data.setDummyData(m_data.dummyData().first, (ushort)(child+1));
-    }
-    static void createFreeItem(IndexedTopDUContext& data) {
-        data = IndexedTopDUContext();
-        data.setIsDummy(true);
-        data.setDummyData(0u, 0u); //Since we subtract 1, this equals children -1, -1
-    }
-    //Copies this item into the given one
-    static void copyTo(const IndexedTopDUContext& m_data, IndexedTopDUContext& data) {
-        data = m_data;
-    }
-    static bool isFree(const IndexedTopDUContext& m_data) {
-        return m_data.isDummy();
-    }
-
-    static bool equals(const IndexedTopDUContext& m_data, const IndexedTopDUContext& rhs) {
-      return m_data == rhs;
-    }
-};
-
-
 
 ///Represents a declaration only by its global indices
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {

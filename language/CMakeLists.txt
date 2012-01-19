@@ -23,6 +23,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
     duchain/indexedducontext.cpp
+    duchain/indexedtopducontext.cpp
     duchain/localindexedducontext.cpp
     duchain/topducontext.cpp
     duchain/topducontextdynamicdata.cpp
@@ -239,6 +240,7 @@ install(FILES
     duchain/persistentsetmap.h
     duchain/indexeditems.h
     duchain/indexedducontext.h
+    duchain/indexedtopducontext.h
     duchain/localindexedducontext.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )

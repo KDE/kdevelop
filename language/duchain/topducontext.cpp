@@ -92,35 +92,6 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
   return *this;
 }
 
-IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
-  if(context)
-    m_index = context->ownIndex();
-  else
-    m_index = DummyMask;
-}
-
-bool IndexedTopDUContext::isLoaded() const {
-  if(index())
-    return DUChain::self()->isInMemory(index());
-  else
-    return false;
-}
-
-IndexedString IndexedTopDUContext::url() const {
-  if(index())
-    return DUChain::self()->urlForIndex(index());
-  else
-    return IndexedString();
-}
-
-TopDUContext* IndexedTopDUContext::data() const {
-//   ENSURE_CHAIN_READ_LOCKED
-  if(index())
-    return DUChain::self()->chainForIndex(index());
-  else
-    return 0;
-}
-
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
