@@ -179,6 +179,18 @@ class TestItemRepository : public QObject {
       QVERIFY(stats.freeUnreachableSpace < stats.freeSpaceInBuckets/100); // < 1% of the free space is unreachable
       QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
     }
+    void testLeaks()
+    {
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
+      QList<TestItem*> items;
+      for(int i = 0; i < 10000; ++i) {
+        TestItem* item = createItem(i, (rand() % 1000) + sizeof(TestItem));
+        items << item;
+        repository.index(TestItemRequest(*item));
+      }
+      qDeleteAll(items);
+      items.clear();
+    }
 };
 
 #include "test_itemrepository.moc"
