@@ -36,6 +36,7 @@ private slots:
     void testMultipleFormatters();
     void testMacroFormatting();
     void testContext();
+    void testTabIndentation();
 
 private:
     AStyleFormatter* m_formatter;
