@@ -37,8 +37,6 @@ namespace KDevelop {
 }
 class CMakeFolderItem;
 
-void deleteLater(KDevelop::ProjectBaseItem* item);
-
 class DescriptorAttatched
 {
     public:
@@ -98,8 +96,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
         
         KDevelop::ProjectTargetItem* targetNamed(Target::Type type, const QString& targetName) const;
         KDevelop::ProjectFolderItem* folderNamed(const QString& name) const;
-        void cleanupBuildFolders(const QList< Subdirectory >& subs);
-        void cleanupTargets(const QList<CMakeTarget>& targets);
+        QList<ProjectBaseItem*> cleanupBuildFolders(const QList<Subdirectory>& subs);
+        QList<ProjectBaseItem*> cleanupTargets(const QList<CMakeTarget>& targets);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;

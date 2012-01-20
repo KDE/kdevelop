@@ -28,28 +28,6 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-template <typename T>
-class DeleteMe : public QObject
-{
-public:
-    explicit DeleteMe(T* ptr) : m_ptr(ptr) {}
-    virtual ~DeleteMe() { delete m_ptr; }
-    
-private:
-    T* m_ptr;
-};
-
-void deleteLater(KDevelop::ProjectBaseItem* item)
-{
-    if(item->parent() && item->model() && item->model()->thread()!=QThread::currentThread()) {
-        KDevelop::ProjectBaseItem* it = item->parent();
-        item->removeRow(item->row());
-        DeleteMe<KDevelop::ProjectBaseItem> *del = new DeleteMe<KDevelop::ProjectBaseItem>(it);
-        del->deleteLater();
-    } else 
-        delete item;
-}
-
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folder, const QString& build,
                                   CMakeFolderItem* item)
     : KDevelop::ProjectBuildFolderItem( project, folder, item ), m_formerParent(item), m_buildDir(build)
@@ -153,23 +131,27 @@ bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
     return false;
 }
 
-void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectFolderItem*> folders = folderList();
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
         CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
         if(cmfolder && cmfolder->formerParent()==this && !textInList<Subdirectory>(subs, folder))
-            deleteLater(folder);
+            ret += folder;
     }
+    return ret;
 }
 
-void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectTargetItem*> targetl = targetList();
     foreach(KDevelop::ProjectTargetItem* target, targetl) {
         if(!textInList<CMakeTarget>(targets, target))
-            deleteLater(target);
+            ret += target;
     }
+    return ret;
 }
 
 CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl& basepath)
