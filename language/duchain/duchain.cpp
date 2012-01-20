@@ -357,6 +357,7 @@ public:
     m_cleanup->stopThread();
     delete m_cleanup;
     delete instance;
+    delete notifier;
   }
 
   void clear() {
