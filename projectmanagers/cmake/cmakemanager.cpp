@@ -732,7 +732,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(ProjectFolderItem* ff = folder->folderNamed(subf.name))
                 {
                     if(ff->type()!=ProjectBaseItem::BuildFolder)
-                        delete ff;
+                        deleteLater(ff);
                     else
                         a = static_cast<CMakeFolderItem*>(ff);
                     
@@ -1229,6 +1229,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
     }
     
     //We look for new elements
+    QList<ProjectBaseItem*> newItems;
     foreach( const QString& entry, entries )
     {
         KUrl fileurl = folderurl;
@@ -1243,18 +1244,22 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
             
             if(pendingfolder) {
-                item->appendRow(pendingfolder);
+                newItems += pendingfolder;
             } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
+                ProjectFolderItem* it = new ProjectFolderItem( item->project(), fileurl, 0 );
+                reloadFiles(it);
                 m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
-                reloadFiles(new ProjectFolderItem( item->project(), fileurl, item ));
+                newItems += it;
             }
         }
         else
         {
-            new KDevelop::ProjectFileItem( item->project(), fileurl, item );
+            newItems = new KDevelop::ProjectFileItem( item->project(), fileurl, 0 );
         }
     }
+    foreach(ProjectBaseItem* it, newItems)
+        item->appendRow(it);
 }
 
 bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const

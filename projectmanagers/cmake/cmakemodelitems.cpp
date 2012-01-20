@@ -21,11 +21,34 @@
 
 #include "cmakemodelitems.h"
 #include <QString>
+#include <QThread>
 #include <kdebug.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+
+template <typename T>
+class DeleteMe : public QObject
+{
+public:
+    explicit DeleteMe(T* ptr) : m_ptr(ptr) {}
+    virtual ~DeleteMe() { delete m_ptr; }
+    
+private:
+    T* m_ptr;
+};
+
+void deleteLater(KDevelop::ProjectBaseItem* item)
+{
+    if(item->parent() && item->model() && item->model()->thread()!=QThread::currentThread()) {
+        KDevelop::ProjectBaseItem* it = item->parent();
+        item->removeRow(item->row());
+        DeleteMe<KDevelop::ProjectBaseItem> *del = new DeleteMe<KDevelop::ProjectBaseItem>(it);
+        del->deleteLater();
+    } else 
+        delete item;
+}
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folder, const QString& build,
                                   CMakeFolderItem* item)
@@ -136,7 +159,7 @@ void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
         CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
         if(cmfolder && cmfolder->formerParent()==this && !textInList<Subdirectory>(subs, folder))
-            delete folder;
+            deleteLater(folder);
     }
 }
 
@@ -145,7 +168,7 @@ void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
     QList<KDevelop::ProjectTargetItem*> targetl = targetList();
     foreach(KDevelop::ProjectTargetItem* target, targetl) {
         if(!textInList<CMakeTarget>(targets, target))
-            delete target;
+            deleteLater(target);
     }
 }
 
