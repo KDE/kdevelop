@@ -46,6 +46,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
+#include <ktexteditor/configinterface.h>
 #include "plugincontroller.h"
 #include <interfaces/isession.h>
 
@@ -303,6 +304,15 @@ void SourceFormatterController::beautifySource()
 	if (view && view->selection())
 		has_selection = true;
 
+	//NOTE: this is ugly, but otherwise kate might remove tabs again :-/
+	// see also: https://bugs.kde.org/show_bug.cgi?id=291074
+	KTextEditor::ConfigInterface* iface = qobject_cast<KTextEditor::ConfigInterface*>(doc->textDocument());
+	QVariant oldReplaceTabs;
+	if (iface) {
+		oldReplaceTabs = iface->configValue("replace-tabs");
+		iface->setConfigValue("replace-tabs", false);
+	}
+
 	if (has_selection) {
 		QString original = view->selectionText();
 
@@ -317,7 +327,10 @@ void SourceFormatterController::beautifySource()
 		doc->textDocument()->replaceText(view->selectionRange(), output);
 	} else {
 		formatDocument(doc, formatter, mime);
-        }
+	}
+	if (iface) {
+		iface->setConfigValue("replace-tabs", oldReplaceTabs);
+	}
 }
 
 void SourceFormatterController::beautifyLine()

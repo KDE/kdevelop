@@ -487,7 +487,22 @@ void SourceFormatterSettings::updatePreview()
             ISourceFormatter* ifmt = fmt->formatter;
             KMimeType::Ptr mime = l.mimetypes.first();
             m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
+
+            //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
+            // see also: https://bugs.kde.org/show_bug.cgi?id=291074
+            KTextEditor::ConfigInterface* iface = qobject_cast<KTextEditor::ConfigInterface*>(m_document);
+            QVariant oldReplaceTabs;
+            if (iface) {
+                oldReplaceTabs = iface->configValue("replace-tabs");
+                iface->setConfigValue("replace-tabs", false);
+            }
+
             m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+
+            if (iface) {
+                iface->setConfigValue("replace-tabs", oldReplaceTabs);
+            }
+
             previewLabel->show();
             textEditor->show();
         }else{
