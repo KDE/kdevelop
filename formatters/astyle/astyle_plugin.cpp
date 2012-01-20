@@ -46,6 +46,7 @@ AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
 
 AStylePlugin::~AStylePlugin()
 {
+    delete m_formatter;
 }
 
 QString AStylePlugin::name()
