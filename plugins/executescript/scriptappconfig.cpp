@@ -85,7 +85,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
-    setupUi(this);    
+    setupUi(this);
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -192,6 +192,12 @@ ScriptAppPageFactory::ScriptAppPageFactory()
 ScriptAppConfigType::ScriptAppConfigType()
 {
     factoryList.append( new ScriptAppPageFactory() );
+}
+
+ScriptAppConfigType::~ScriptAppConfigType()
+{
+    qDeleteAll(factoryList);
+    factoryList.clear();
 }
 
 QString ScriptAppConfigType::name() const

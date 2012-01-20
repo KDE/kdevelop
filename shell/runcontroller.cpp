@@ -119,6 +119,9 @@ public:
     QSignalMapper* launchAsMapper;
     QMap<int,QPair<QString,QString> > launchAsInfo;
     KDevelop::ProjectBaseItem* contextItem;
+    DebugMode* debugMode;
+    ExecuteMode* executeMode;
+    ProfileMode* profileMode;
     bool hasLaunchConfigType( const QString& typeId )
     {
         return launchConfigurationTypes.contains( typeId );
@@ -299,6 +302,9 @@ RunController::RunController(QObject *parent)
     d->launchChangeMapper = new QSignalMapper( this );
     d->launchAsMapper = 0;
     d->contextItem = 0;
+    d->executeMode = 0;
+    d->debugMode = 0;
+    d->profileMode = 0;
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
@@ -325,15 +331,25 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 
 void RunController::cleanup()
 {
+    delete d->executeMode;
+    d->executeMode = 0;
+    delete d->profileMode;
+    d->profileMode = 0;
+    delete d->debugMode;
+    d->debugMode = 0;
+
     stopAllProcesses();
     d->saveCurrentLaunchAction();
 }
 
 void RunController::initialize()
 {
-    addLaunchMode( new ExecuteMode() );
-    addLaunchMode( new ProfileMode() );
-    addLaunchMode( new DebugMode() );
+    d->executeMode = new ExecuteMode();
+    addLaunchMode( d->executeMode );
+    d->profileMode = new ProfileMode();
+    addLaunchMode( d->profileMode );
+    d->debugMode = new DebugMode;
+    addLaunchMode( d->debugMode );
     d->readLaunchConfigs( Core::self()->activeSession()->config(), 0 );
 
     foreach (IProject* project, Core::self()->projectController()->projects()) {

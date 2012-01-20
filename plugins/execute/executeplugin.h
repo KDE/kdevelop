@@ -30,6 +30,8 @@
 class KUrl;
 class KJob;
 
+class NativeAppConfigType;
+
 class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
 {
     Q_OBJECT
@@ -62,6 +64,8 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString terminal( KDevelop::ILaunchConfiguration* ) const;
     QString nativeAppConfigTypeId() const;
+
+    NativeAppConfigType* m_configType;
 };
 
 #endif // EXECUTEPLUGIN_H

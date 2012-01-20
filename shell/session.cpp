@@ -76,8 +76,9 @@ public:
     }
 };
 
-Session::Session( const QUuid& id )
-        : d( new SessionPrivate )
+Session::Session( const QUuid& id, QObject* parent )
+        : ISession(parent)
+        , d( new SessionPrivate )
 {
     d->id = id;
     d->initialize();
