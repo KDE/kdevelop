@@ -26,6 +26,7 @@
 #include <QDomDocument>
 #include <QDir>
 #include <QQueue>
+#include <QThread>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -437,6 +438,16 @@ CMakeFolderItem* nearestCMakeFolder(ProjectBaseItem* item)
     return dynamic_cast<CMakeFolderItem*>(item);
 }
 
+template<class T>
+QList<ProjectBaseItem*> castToBase(const QList<T*>& ptrs)
+{
+    QList<ProjectBaseItem*> ret;
+    foreach(ProjectBaseItem* ptr, ptrs)
+        ret += ptr;
+    
+    return ret;
+}
+
 }
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
@@ -707,7 +718,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         }*/
 
         QStringList alreadyAdded;
-        folder->cleanupBuildFolders(data.subdirectories);
+        deleteAllLater(castToBase(folder->cleanupBuildFolders(data.subdirectories)));
         foreach (const Subdirectory& subf, data.subdirectories)
         {
             if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
@@ -732,7 +743,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(ProjectFolderItem* ff = folder->folderNamed(subf.name))
                 {
                     if(ff->type()!=ProjectBaseItem::BuildFolder)
-                        deleteLater(ff);
+                        deleteItemLater(ff);
                     else
                         a = static_cast<CMakeFolderItem*>(ff);
                     
@@ -786,7 +797,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 //             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << folder->includeDirectories();
         folder->setDefinitions(data.definitions);
 
-        folder->cleanupTargets(data.targets);
+        deleteAllLater(castToBase(folder->cleanupTargets(data.targets)));
         foreach ( const Target& t, data.targets)
         {
             QStringList files=t.files;
@@ -867,8 +878,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         }
     } else if( folder ) {
         // Only do cmake-stuff if its a cmake folder
-        folder->cleanupBuildFolders(QList<Subdirectory>());
-        folder->cleanupTargets(QList<CMakeTarget>());
+        deleteAllLater(castToBase(folder->cleanupBuildFolders(QList<Subdirectory>())));
+        deleteAllLater(castToBase(folder->cleanupTargets(QList<CMakeTarget>())));
     } else {
         // Log non-cmake folders for debugging purposes
         kDebug(9042) << "Folder Item which is not a CMake folder parsed:" << item->url() << item->type();
@@ -893,7 +904,7 @@ void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& f
     QList<ProjectFileItem*> tfiles = target->fileList();
     foreach(ProjectFileItem* file, tfiles) {
         if(!files.contains(file->url()))
-            target->removeRow(file->row());
+            deleteItemLater(file);
     }
     
     tfiles = target->fileList(); //We need to recreate the list without the removed items
@@ -1065,7 +1076,7 @@ void CMakeManager::cleanupToDelete(IProject* p)
     for(QSet<QString>::iterator it=m_toDelete.begin(), itEnd=m_toDelete.end(); it!=itEnd; ) {
         IndexedString url(*it);
         if(p->fileSet().contains(url)) {
-            qDeleteAll(p->filesForUrl(url.toUrl()));
+            deleteAllLater(castToBase(p->itemsForUrl(url.toUrl())));
             it=m_toDelete.erase(it);
         } else 
             ++it;
@@ -1223,7 +1234,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         m_toDelete.remove(fileurl.toLocalFile());
         
         if(!entries.contains(current))
-            qDeleteAll(item->project()->itemsForUrl(fileurl));
+            deleteAllLater(item->project()->itemsForUrl(fileurl));
         else if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash))
             it->setUrl(fileurl);
     }
@@ -1255,7 +1266,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         }
         else
         {
-            newItems = new KDevelop::ProjectFileItem( item->project(), fileurl, 0 );
+            newItems += new KDevelop::ProjectFileItem( item->project(), fileurl, 0 );
         }
     }
     foreach(ProjectBaseItem* it, newItems)
@@ -1687,6 +1698,42 @@ void CMakeManager::projectClosing(IProject* p)
 {
     m_projectsData.remove(p); 
     m_watchers.remove(p);
+}
+
+void CMakeManager::addDeleteItem(ProjectBaseItem* item)
+{
+    if(item->parent() && item->model() && item->model()->thread()!=QThread::currentThread()) {
+        KDevelop::ProjectBaseItem* it = item->parent();
+        it->takeRow(item->row());
+        m_cleanupItems += item;
+    } else 
+        delete item;
+}
+
+void CMakeManager::deleteItemLater(ProjectBaseItem* item)
+{
+    addDeleteItem(item);
+    
+    if(!m_cleanupItems.isEmpty()) {
+        QMetaObject::invokeMethod(this, "cleanupItems", Qt::BlockingQueuedConnection);
+    }
+}
+
+void CMakeManager::deleteAllLater(const QList< ProjectBaseItem* >& items)
+{
+    foreach(KDevelop::ProjectBaseItem* item, items) {
+        addDeleteItem(item);
+    }
+    
+    if(!m_cleanupItems.isEmpty()) {
+        QMetaObject::invokeMethod(this, "cleanupItems", Qt::BlockingQueuedConnection);
+    }
+}
+
+void CMakeManager::cleanupItems()
+{
+    qDeleteAll(m_cleanupItems);
+    m_cleanupItems.clear();
 }
 
 #include "cmakemanager.moc"
