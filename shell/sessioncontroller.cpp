@@ -625,7 +625,7 @@ void SessionController::initialize( const QString& session )
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* ses = new Session( id );
+        Session* ses = new Session( id, this );
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()

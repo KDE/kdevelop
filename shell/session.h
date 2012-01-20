@@ -35,7 +35,7 @@ class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 public:
     static const QString cfgSessionNameEntry;
     static const QString cfgSessionPrettyContentsEntry;
-    Session( const QUuid& );
+    Session( const QUuid&, QObject * parent = 0 );
     virtual ~Session();
 
     virtual KUrl pluginDataArea( const IPlugin* );
