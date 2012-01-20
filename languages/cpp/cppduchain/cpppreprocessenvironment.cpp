@@ -21,7 +21,14 @@ void CppPreprocessEnvironment::setRecordOnlyImportantString(bool onlyImportant) 
   onlyRecordImportantMacroUses = onlyImportant;
 }
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_identityOffsetRestrictionEnabled(false), m_finished(false), m_environmentFile(environmentFile) {
+CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor,
+                                                    KSharedPtr<Cpp::EnvironmentFile> environmentFile )
+  : Environment(preprocessor)
+  , m_identityOffsetRestriction(0)
+  , m_identityOffsetRestrictionEnabled(false)
+  , m_finished(false)
+  , m_environmentFile(environmentFile)
+{
     //If this is included from another preprocessed file, take the current macro-set from there.
     ///NOTE: m_environmentFile may be zero, this must be treated
 }
