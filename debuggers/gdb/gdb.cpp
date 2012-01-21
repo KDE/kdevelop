@@ -85,12 +85,11 @@ void GDB::start(KConfigGroup& config)
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    QString shell = config.readEntry(GDBDebugger::debuggerShellEntry);
+    KUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, KUrl());
     if( !shell.isEmpty() )
     {
-        kDebug(9012) << "have shell\n";
-        shell = shell.simplified();
-        QString shell_without_args = shell.split(QChar(' ')).first();
+        kDebug(9012) << "have shell" << shell;
+        QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();
 
         QFileInfo info( shell_without_args );
         /*if( info.isRelative() )
@@ -109,7 +108,7 @@ void GDB::start(KConfigGroup& config)
         }
 
         arguments.insert(0, gdbBinary_);
-        arguments.insert(0, shell);
+        arguments.insert(0, shell.toLocalFile());
         process_->setShellCommand( KShell::joinArgs( arguments ) );
     }
     else
@@ -120,7 +119,7 @@ void GDB::start(KConfigGroup& config)
     process_->start();
 
     kDebug(9012) << "STARTING GDB\n";
-    emit userCommandOutput(shell + ' ' + gdbBinary_
+    emit userCommandOutput(shell.toLocalFile() + ' ' + gdbBinary_
                            + " --interpreter=mi2 -quiet\n" );
 }
 
