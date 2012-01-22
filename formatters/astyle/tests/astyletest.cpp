@@ -299,4 +299,16 @@ void AstyleTest::testContext()
     delete formatter;
 }
 
+void AstyleTest::testTabIndentation()
+{
+    AStyleFormatter formatter;
+    formatter.setTabSpaceConversionMode(false);
+    formatter.setTabIndentation(2, false);
+
+    const QString initial("int a() {\n  return 0;\n}\n");
+    const QString expected("int a() {\n\treturn 0;\n}\n");
+    const QString formatted = formatter.formatSource(initial);
+    QCOMPARE(formatted, expected);
+}
+
 #include "astyletest.moc"

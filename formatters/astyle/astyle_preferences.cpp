@@ -86,7 +86,7 @@ void AStylePreferences::init()
         item->setCheckState(Qt::Checked);
     }
 
-    connect(tabWidget, SIGNAL(currentChanged(QWidget*)), this, SLOT(currentTabChanged()));
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged()));
 
     connect(cbIndentType, SIGNAL(currentIndexChanged(int)), this, SLOT(indentChanged()));
     connect(inpNuberSpaces, SIGNAL(valueChanged(int)), this, SLOT(indentChanged()));

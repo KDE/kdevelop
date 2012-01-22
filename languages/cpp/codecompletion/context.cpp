@@ -1379,9 +1379,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::returnAccessCompletionIt
 QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItems()
 {
   QList<CompletionTreeItemPointer> items;
-  LOCKDUCHAIN; if (!m_duContext) return items;
 
   IndexedType switchExprType = switchExpressionType(m_duContext);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
+
   if (switchExprType.abstractType())
     items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
   return items;
