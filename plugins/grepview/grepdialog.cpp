@@ -286,6 +286,7 @@ void GrepDialog::templateTypeComboActivated(int index)
 void GrepDialog::setEnableProjectBox(bool enable)
 {
     limitToProjectCheck->setEnabled(enable);
+    limitToProjectLabel->setEnabled(enable);
     if (!enable) limitToProjectCheck->setChecked(false);
 }
 
