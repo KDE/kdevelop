@@ -425,10 +425,15 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
       }
 
       if ( !delay && res.isValid() && res.isInstance ) {
-        openType( res.type.abstractType() );
-        if ( m_lastTypeWasAuto ) {
-          currentAbstractType()->setModifiers( integral->modifiers() );
+        AbstractType::Ptr type = res.type.abstractType();
+        if ( m_lastTypeWasAuto )
+        {
+          type->setModifiers( integral->modifiers() );
+          // Turn "5" into "int"
+          type = TypeUtils::removeConstants( type, topContext() );
         }
+        
+        openType( type );
         openedType = true;
       }
     }
