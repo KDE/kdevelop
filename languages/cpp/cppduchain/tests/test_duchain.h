@@ -199,6 +199,7 @@ private slots:
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
+  void testDecltypeUses();
   void testTrailingReturnType();
   void testConstexpr();
   void testInitListRegressions();

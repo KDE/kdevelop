@@ -507,6 +507,20 @@ void TestExpressionParser::testSimpleExpression() {
   Cpp::ExpressionParser parser;
   Cpp::ExpressionEvaluationResult result;
 
+  result = parser.evaluateType( "decltype(1+2)", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int"));
+  QVERIFY(!result.isInstance);
+  lock.unlock();
+  
+  result = parser.evaluateType( "decltype(c)()", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont"));
+  QVERIFY(!result.isInstance);
+  lock.unlock();
+
   result = parser.evaluateType( "const Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());

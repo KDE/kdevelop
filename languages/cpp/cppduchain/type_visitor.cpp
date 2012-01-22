@@ -105,13 +105,11 @@ void TypeASTVisitor::run(TypeSpecifierAST *node)
   _M_cv.clear();
 
   visit(node);
-
   
   if (node && node->cv && m_type) {
       LOCKDUCHAIN;
       m_type->setModifiers((AbstractType::CommonModifiers)(m_type->modifiers() | TypeBuilder::parseConstVolatile(m_session, node->cv)));
   }
-  
 }
 
 void TypeASTVisitor::visitClassSpecifier(ClassSpecifierAST *node)
@@ -252,9 +250,9 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       {
          bool isDecltypeInParen = false;
         if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
-          ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
           int startPosition = m_session->token_stream->position(node->expression->start_token);
-          isDecltypeInParen = stringFromContents(m_session->contentsVector(), startPosition, 1) == "(";
+          static IndexedString paren("(");
+          isDecltypeInParen = m_session->contentsVector()[startPosition] == paren.index();
         }
 
         ExpressionParser parser(false, false, isDecltypeInParen);
@@ -262,6 +260,12 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         ExpressionEvaluationResult result = parser.evaluateType(node->expression, m_session);
         m_type = result.type.abstractType();
         m_typeId = QualifiedIdentifier(result.toString());
+
+        {
+          LOCKDUCHAIN;
+          // Transform specific constants like '5' into their type 'int'
+          m_type = TypeUtils::removeConstants(m_type, m_source);
+        }
         // make reference for decltype in additional parens - but only if it's not already a reference
         // see spec 7.1.6/4
         if (isDecltypeInParen && m_type && !TypeUtils::isReferenceType(m_type))
@@ -273,6 +277,8 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           ///TODO: anything todo with m_typeId ?
         }
 
+        if(m_visitor)
+          m_visitor->parse(node->expression); // Give the visitor a chance to build uses
       }
     }
 
