@@ -815,23 +815,22 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       expressionType( node, m_lastType, m_lastInstance );
   }
 
-  /** A postfix-expression is a primary expression together with a chain of sub-expressions that are applied from left to right
-   *
-   * have test */
+  /** A postfix-expression is a primary expression (or type-specifier)
+   * together with a chain of sub-expressions that are applied from left to right
+   */
 
   void ExpressionVisitor::visitPostfixExpression(PostfixExpressionAST* node)
   {
     clearLast();
-    if( node->type_specifier ) {
-      problem( node, "unexpected type-specifier" );
-      return;
-    }
-    if( !node->expression ) {
-      problem( node, "primary expression missing" );
-      return;
-    }
-    //First evaluate the primary expression, and then pass the result from sub-expression to sub-expression through m_lastType
-    visit( node->expression );
+    
+    //First evaluate the primary expression, or the type-specifier,
+    //and then pass the result from sub-expression to sub-expression through m_lastType
+    
+    if( node->type_specifier )
+      visit( node->type_specifier );
+
+    if( node->expression )
+      visit( node->expression );
 
     if( !node->sub_expressions )
       return;

@@ -931,6 +931,8 @@ public:
 
   DECLARE_AST_NODE(PostfixExpression)
 
+  // Eventually the type-specifier of a constructed type, eg. "MyClass(expression)"
+  // If this is nonzero, then expression is most probably zero.
   TypeSpecifierAST *type_specifier;
   ExpressionAST *expression;
   const ListNode<ExpressionAST*> *sub_expressions;

@@ -4364,6 +4364,13 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
   const ListNode<ExpressionAST*> *sub_expressions = 0;
 
+  if (typeSpec && expr)
+  {
+    // If we have a type-specifier, make the expression a sub-expression
+    sub_expressions = snoc(sub_expressions, expr, session->mempool);
+    expr = 0;
+  }
+  
   ExpressionAST *sub_expression = 0;
   while (parsePostfixExpressionInternal(sub_expression))
     {

@@ -261,6 +261,20 @@ void TestDUChain::testEnum2011()
   }
 }
 
+void TestDUChain::testDecltypeUses()
+{
+  QByteArray method("int c; decltype(c) c2 = decltype(c2)(c+5) + Test(q+5);");
+
+  LockedTopDUContext top = parse(method, DumpAll);
+
+  QCOMPARE(top->localDeclarations().size(), 2);
+  QVERIFY(top->localDeclarations()[0]->indexedType() == top->localDeclarations()[1]->indexedType());
+  QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 2);
+  QCOMPARE(top->localDeclarations()[1]->uses().size(), 1);
+  QCOMPARE(top->localDeclarations()[1]->uses().begin()->size(), 1);
+}
+
 void TestDUChain::testDecltype()
 {
   // see also: spec 7.1.6/4
