@@ -5295,11 +5295,12 @@ void TestDUChain::testAutoTypeIntegral_data()
   QTest::addColumn<QString>("code");
   QTest::addColumn<uint>("datatype");
   QTest::addColumn<bool>("constness");
+  QTest::addColumn<QString>("string");
 
-  QTest::newRow("int") << "auto x = 1;" << (uint) IntegralType::TypeInt << false;
-  QTest::newRow("double") << "auto x = 1.0;" << (uint) IntegralType::TypeDouble << false;
-  QTest::newRow("bool") << "auto x = false;" << (uint) IntegralType::TypeBoolean << false;
-  QTest::newRow("const-int-var") << "int a = 1; const auto x = a;" << (uint) IntegralType::TypeInt << true;
+  QTest::newRow("int") << "auto x = 1;" << (uint) IntegralType::TypeInt << false << "int";
+  QTest::newRow("double") << "auto x = 1.0;" << (uint) IntegralType::TypeDouble << false << "double";
+  QTest::newRow("bool") << "auto x = false;" << (uint) IntegralType::TypeBoolean << false << "bool";
+  QTest::newRow("const-int-var") << "int a = 1; const auto x = a;" << (uint) IntegralType::TypeInt << true << "const int";
 }
 
 void TestDUChain::testAutoTypeIntegral()
@@ -5307,6 +5308,7 @@ void TestDUChain::testAutoTypeIntegral()
   QFETCH(QString, code);
   QFETCH(uint, datatype);
   QFETCH(bool, constness);
+  QFETCH(QString, string);
 
   LockedTopDUContext top = parse(code.toLocal8Bit(), DumpAll);
   QVERIFY(top);
@@ -5319,8 +5321,8 @@ void TestDUChain::testAutoTypeIntegral()
   IntegralType::Ptr type = dec->abstractType().cast<IntegralType>();
   QVERIFY(type);
   QCOMPARE(type->dataType(), datatype);
-
   QCOMPARE((bool) (type->modifiers() & AbstractType::ConstModifier), constness);
+  QCOMPARE(type->toString(), string);
 }
 
 void TestDUChain::testAutoTypes()
