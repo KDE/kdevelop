@@ -155,10 +155,8 @@ void MainWindow::setArea(Area *area)
     d->ignoreDockShown = false;
     
     hu.stop();
-    // delay loading settings: we need to finish with area activation
-    // and only then load mainwindow/dockwidget settings
-    // this way dock sizes get properly restored
-    QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
+
+    loadSettings();
 
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
         this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
