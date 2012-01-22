@@ -7,7 +7,7 @@ include_directories(
 
 ########### next target ###############
 
-set(expressionparsertest_SRCS test_expressionparser.cpp)
+set(expressionparsertest_SRCS test_expressionparser.cpp testhelper.cpp)
 
 
 kde4_add_unit_test(cppexpressionparsertest ${expressionparsertest_SRCS})
