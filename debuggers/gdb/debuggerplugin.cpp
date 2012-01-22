@@ -117,7 +117,7 @@ public:
 
   virtual void viewCreated(Sublime::View* view)
   {
-      if (view->widget()->metaObject()->indexOfSignal(SIGNAL(requestRaise())) != -1)
+      if (view->widget()->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("requestRaise()")) != -1)
           QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
 
@@ -360,8 +360,7 @@ DebugSession* CppDebuggerPlugin::createSession()
     connect(session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
     connect(session, SIGNAL(reset()), SIGNAL(reset()));
     connect(session, SIGNAL(finished()), SLOT(slotFinished()));
-    connect(session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
-    connect(session, SIGNAL(raiseVariableViews()), SIGNAL(raiseVariableViews()));
+    connect(session, SIGNAL(raiseGdbConsoleViews()), SIGNAL(raiseGdbConsoleViews()));
     return session;
 }
 

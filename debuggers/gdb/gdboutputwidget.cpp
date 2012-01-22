@@ -110,12 +110,14 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
+    connect(plugin, SIGNAL(raiseGdbConsoleViews()), SIGNAL(requestRaise()));
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 
     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
             this, SLOT(updateColors()));
     updateColors();
+
 }
 
 void GDBOutputWidget::updateColors()

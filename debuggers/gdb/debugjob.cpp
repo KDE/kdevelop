@@ -89,9 +89,18 @@ void DebugJob::start()
     setBehaviours(KDevelop::IOutputView::Behaviours(KDevelop::IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
     setTitle(m_launchcfg->name());
-    
+
+    QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
+    if (startWith == "GdbConsole") {
+        setVerbosity(Silent);
+    } else if (startWith == "FrameStack") {
+        setVerbosity(Silent);
+    } else {
+        setVerbosity(Verbose);
+    }
+
     startOutput();
-    
+
     m_session->startProgram( m_launchcfg );
 }
 
