@@ -17,6 +17,7 @@
 */
 
 #include "test_expressionparser.h"
+#include "testhelper.h"
 
 #include <QtTest/QtTest>
 
@@ -479,6 +480,30 @@ void TestExpressionParser::testSmartPointer() {
   QCOMPARE(result.type.abstractType()->toString(), QString("int"));*/
 
   release(top);
+}
+
+void TestExpressionParser::testAutoTemplate()
+{
+  QByteArray code = "struct C { float m(); }; C c; template<class T> auto foo(T n) -> decltype(n.m()); template<class T> auto foo2(T n) -> decltype(n);";
+  LockedTopDUContext top = parse(code);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QCOMPARE(top->localDeclarations().size(), 4);
+  FunctionType::Ptr fType = top->localDeclarations()[2]->abstractType().cast<FunctionType>();
+  QVERIFY(fType);
+  QVERIFY(fType->returnType());
+  DelayedType::Ptr ret = fType->returnType().cast<DelayedType>();
+  QVERIFY(ret);
+  QVERIFY(ret->kind() == DelayedType::Delayed);
+  Cpp::ExpressionParser parser;
+
+  ExpressionEvaluationResult res = parser.evaluateExpression("foo(c)", DUContextPointer(top));
+  QVERIFY(res.isValid());
+  QCOMPARE(res.type.abstractType()->toString(), QString("float"));
+
+  res = parser.evaluateExpression("foo2(c)", DUContextPointer(top));
+  QVERIFY(res.isValid());
+  QCOMPARE(res.type.abstractType()->toString(), QString("C"));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1243,7 +1268,7 @@ void TestExpressionParser::release(DUContext* top)
   //delete top;
 }
 
-DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
+TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;

@@ -295,15 +295,15 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
   if ((node->isTypeof || node->isDecltype) && node->expression) {
     bool isDecltypeInParen = false;
-    if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
-      ///TODO: is this fast enough? or should we rather check the members of PrimaryExpressionAST ?
-      int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
-      isDecltypeInParen = stringFromContents(editor()->parseSession()->contentsVector(), startPosition, 1) == "(";
-    }
+        if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
+          int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
+          static IndexedString paren("(");
+          isDecltypeInParen = editor()->parseSession()->contentsVector()[startPosition] == paren.index();
+        }
 
     node->expression->ducontext = currentContext();
     ExpressionParser parser(false, false, isDecltypeInParen);
-    ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
+    ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession(), topContext());
     AbstractType::Ptr type = result.type.abstractType();
     // make reference for decltype in additional parens - but only if it's not already a reference
     // see spec 7.1.6/4
@@ -315,6 +315,17 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       type = refType.cast<AbstractType>();
     }
 
+    if(!type)
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      DelayedType::Ptr delayed( new DelayedType() );
+      delayed->setIdentifier( IndexedTypeIdentifier( stringFromSessionTokens(editor()->parseSession(),
+                                                     node->expression->start_token,
+                                                     node->expression->end_token), true ) );
+      delayed->setKind( templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
+      type = delayed.cast<AbstractType>();
+    }
+    
     openType(type);
     openedType = true;
   } else if (node->integrals) {
