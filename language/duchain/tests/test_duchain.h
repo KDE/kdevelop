@@ -37,8 +37,8 @@ private slots:
     void testStringSets();
     void testSymbolTableValid();
     void testIndexedStrings();
+    void testImportStructure();
     ///NOTE: these are not "automated"!
-//     void testImportStructure();
 //     void testImportCache();
 
     void benchCodeModel();
