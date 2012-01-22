@@ -100,14 +100,14 @@ public:
     {
         if (!m_variable) return;
         bool hasValue = false;
+        GdbVariable* variable = m_variable.data();
+        variable->deleteChildren();
+        variable->setInScope(true);
         if (r.reason == "error") {
-            /* Probably should mark this disabled, or something.  */
+            variable->setShowError(true);
         } else {
-            GdbVariable* variable = m_variable.data();
-            variable->deleteChildren();
-            variable->setInScope(true);
             variable->setVarobj(r["name"].literal());
-            
+
             bool hasMore = false;
             if (r.hasField("has_more") && r["has_more"].toInt())
                 // GDB swears there are more children. Trust it

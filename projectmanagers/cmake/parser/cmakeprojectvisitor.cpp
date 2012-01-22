@@ -90,7 +90,7 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
     QStack<int> opened;
     QList< IntPair > pos;
     bool gotDollar=false;
-    for(int i=exp.indexOf('$'); i<exp.size(); i++)
+    for(int i=exp.indexOf('$'); i<exp.size() && i>=0; i++)
     {
         switch(exp[i].unicode())
         {
@@ -1548,7 +1548,7 @@ int CMakeProjectVisitor::visit(const MathAst *math)
     {
         kDebug(9032) << "error: found an error while calculating" << math->expression();
     }
-    kDebug(9042) << "math. " << math->expression() << "=" << result.toString();
+    kDebug(9042) << "math. " << math->expression() << "=" << result.toInteger();
     m_vars->insert(math->outputVariable(), QStringList(QString::number(result.toInteger())));
     return 1;
 }
@@ -1622,7 +1622,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             if(contains) {
                 foreach(int idx, list->index())
                 {
-                    if(idx>=theList.count() || (-idx)>=theList.count())
+                    if(idx>=theList.count() || (-idx)>theList.count())
                         kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
                     else if(idx>=0)
                         indices += theList[idx];
@@ -2111,7 +2111,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
         if(arg.value.contains('$'))
-            ret.addArguments(resolveVariable(arg));
+            ret.addArguments(resolveVariable(arg), arg.quoted);
         else
             ret.arguments.append(arg);
     }

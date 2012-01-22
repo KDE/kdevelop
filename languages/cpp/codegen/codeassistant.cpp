@@ -17,77 +17,103 @@
 */
 
 #include "codeassistant.h"
+
+#include <QTimer>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <ktexteditor/document.h>
 #include <interfaces/iuicontroller.h>
-#include <ktexteditor/view.h>
+#include <interfaces/ilanguagecontroller.h>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/declaration.h>
-#include <language/backgroundparser/parsejob.h>
-#include "signatureassistant.h"
-#include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainutils.h>
 
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
+
+#include "signatureassistant.h"
+
 using namespace KDevelop;
+using namespace KTextEditor;
 
 namespace Cpp {
 
-StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
+StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false)
+{
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),
   m_timer->setInterval(400);
+
   connect(m_timer, SIGNAL(timeout()), SLOT(timeout()));
-  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), SLOT(documentLoaded(KDevelop::IDocument*)));
-  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-  foreach(KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments())
+  connect(KDevelop::ICore::self()->documentController(),
+          SIGNAL(documentLoaded(KDevelop::IDocument*)),
+          SLOT(documentLoaded(KDevelop::IDocument*)));
+  connect(KDevelop::ICore::self()->documentController(),
+          SIGNAL(documentActivated(KDevelop::IDocument*)),
+          SLOT(documentActivated(KDevelop::IDocument*)));
+
+  foreach(IDocument* document, ICore::self()->documentController()->openDocuments()) {
     documentLoaded(document);
-  connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
+  }
+  connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
+          SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
+          SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
-void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
-  
-  if(document->textDocument())
-  {
-    ///@todo Make these connections non-queued, and then reach forward using a QPointer, since else a crash may happen when the document is destroyed before the message is processed
-    connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
+void StaticCodeAssistant::documentLoaded(IDocument* document)
+{
+  if(document->textDocument()) {
+    ///@todo Make these connections non-queued, and then reach forward using a QPointer,
+    /// since else a crash may happen when the document is destroyed before the message is processed
+    connect(document->textDocument(),
+            SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)),
+            SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document->textDocument(),
+            SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)),
+            SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
   }
 }
 
-void StaticCodeAssistant::assistantHide() {
+void StaticCodeAssistant::assistantHide()
+{
   m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
   m_activeProblemAssistant = false;
 }
 
-void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
+void StaticCodeAssistant::textInserted(Document* document, const Range& range)
+{
   m_eventualDocument = document;
   m_eventualRange = range;
   m_eventualRemovedText.clear();
   QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
 
-void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range, const QString &removedText) {
+void StaticCodeAssistant::textRemoved(Document* document, const Range& range,
+                                      const QString& removedText)
+{
   m_eventualDocument = document;
   m_eventualRange = range;
   m_eventualRemovedText = removedText;
   QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
 
-void StaticCodeAssistant::eventuallyStartAssistant() {
+void StaticCodeAssistant::eventuallyStartAssistant()
+{
   if(!m_eventualDocument)
     return;
 
-  KTextEditor::View* view = m_eventualDocument.data()->activeView();
+  View* view = m_eventualDocument.data()->activeView();
   //Eventually pop up an assistant
   if(!view)
     return;
 
   //FIXME: update signature assistant to play well with the rename assistant
-  KTextEditor::Range sigAssistRange = m_eventualRange;
+  Range sigAssistRange = m_eventualRange;
   if (!m_eventualRemovedText.isEmpty()) {
     sigAssistRange.setRange(sigAssistRange.start(), sigAssistRange.start());
   }
@@ -104,7 +130,8 @@ void StaticCodeAssistant::eventuallyStartAssistant() {
   if (!renameAssistant) {
     renameAssistant =  new RenameAssistant(view);
     m_renameAssistants[view].attach(renameAssistant);
-    connect(m_eventualDocument.data(), SIGNAL(aboutToClose(KTextEditor::Document*)),
+    connect(m_eventualDocument.data(),
+            SIGNAL(aboutToClose(KTextEditor::Document*)),
             SLOT(deleteRenameAssistantsForDocument(KTextEditor::Document*)));
   }
 
@@ -117,35 +144,37 @@ void StaticCodeAssistant::eventuallyStartAssistant() {
   // optimize, esp. for setText() calls as done in e.g. reformat source
   // only start the assitant once for multiple textRemoved/textInserted signals
   m_eventualDocument.clear();
-  m_eventualRange = KTextEditor::Range::invalid();
+  m_eventualRange = Range::invalid();
   m_eventualRemovedText.clear();
 }
 
-void StaticCodeAssistant::deleteRenameAssistantsForDocument(KTextEditor::Document* document)
+void StaticCodeAssistant::deleteRenameAssistantsForDocument(Document* document)
 {
-  foreach(KTextEditor::View *view, document->views()) {
+  foreach(View *view, document->views()) {
     if (m_renameAssistants.contains(view))
       m_renameAssistants.remove(view);
   }
 }
 
-void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assistant) {
+void StaticCodeAssistant::startAssistant(IAssistant::Ptr assistant)
+{
   if(m_activeAssistant)
     m_activeAssistant->doHide();
-  
+
   if(!m_currentView)
     return;
-  
+
   m_activeAssistant = assistant;
   if(m_activeAssistant) {
     connect(m_activeAssistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
     ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
-    
+
     m_assistantStartedAt =  m_currentView.data()->cursorPosition();
   }
 }
 
-void StaticCodeAssistant::parseJobFinished(KDevelop::ParseJob* job) {
+void StaticCodeAssistant::parseJobFinished(ParseJob* job)
+{
   if(job->document() == m_currentDocument) {
     if(m_activeAssistant) {
       if(m_activeProblemAssistant)
@@ -153,7 +182,7 @@ void StaticCodeAssistant::parseJobFinished(KDevelop::ParseJob* job) {
       else
         return;
     }
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
+    DUChainReadLocker lock(DUChain::lock(), 300);
     if(!lock.locked())
       return;
     if(job->duChain()) {
@@ -162,32 +191,42 @@ void StaticCodeAssistant::parseJobFinished(KDevelop::ParseJob* job) {
   }
 }
 
-void StaticCodeAssistant::cursorPositionChanged(KTextEditor::View* , KTextEditor::Cursor pos ) {
-  if(m_activeAssistant && m_assistantStartedAt.isValid())
-    if(abs(m_assistantStartedAt.line() - pos.line()) >= 1)
-      m_activeAssistant->doHide();
-    
+void StaticCodeAssistant::cursorPositionChanged(View*, const Cursor& pos)
+{
+  if(m_activeAssistant && m_assistantStartedAt.isValid()
+      && abs(m_assistantStartedAt.line() - pos.line()) >= 1)
+  {
+    m_activeAssistant->doHide();
+  }
+
   m_timer->start();
 }
 
-void StaticCodeAssistant::documentActivated(KDevelop::IDocument* doc) {
+void StaticCodeAssistant::documentActivated(IDocument* doc)
+{
   if(doc)
-    m_currentDocument = KDevelop::IndexedString(doc->url());
-  
+    m_currentDocument = IndexedString(doc->url());
+
   if(m_currentView) {
-    disconnect(m_currentView.data(), SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+    disconnect(m_currentView.data(),
+               SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+               this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
     m_currentView.clear();
   }
-  
+
   if(doc->textDocument()) {
     m_currentView = doc->textDocument()->activeView();
-    if(m_currentView)
-      connect(m_currentView.data(), SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+    if(m_currentView) {
+      connect(m_currentView.data(),
+              SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+              SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+    }
   }
 }
 
-void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top) {
-    foreach(KDevelop::ProblemPointer problem, top->problems()) {
+void StaticCodeAssistant::checkAssistantForProblems(TopDUContext* top)
+{
+    foreach(ProblemPointer problem, top->problems()) {
       if(m_currentView && m_currentView.data()->cursorPosition().line() == problem->range().start.line) {
         IAssistant::Ptr solution = problem->solutionAssistant();
         if(solution) {
@@ -201,11 +240,11 @@ void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top)
 
 void StaticCodeAssistant::timeout() {
   if(!m_activeAssistant && m_currentView) {
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
+    DUChainReadLocker lock(DUChain::lock(), 300);
     if(!lock.locked())
       return;
-    
-    TopDUContext* top = KDevelop::DUChainUtils::standardContextForUrl(m_currentDocument.toUrl());
+
+    TopDUContext* top = DUChainUtils::standardContextForUrl(m_currentDocument.toUrl());
     if(top)
       checkAssistantForProblems(top);
   }

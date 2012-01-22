@@ -1379,6 +1379,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::returnAccessCompletionIt
 QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItems()
 {
   QList<CompletionTreeItemPointer> items;
+  LOCKDUCHAIN; if (!m_duContext) return items;
+
   IndexedType switchExprType = switchExpressionType(m_duContext);
   if (switchExprType.abstractType())
     items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
@@ -1864,19 +1866,40 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   return ret;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context) {
+QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context)
+{
   QList<CompletionTreeItemPointer> ret;
 
   foreach(Declaration* decl, context->localDeclarations()) {
-    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (decl->range().isEmpty() || decl->isDefinition() || FunctionDefinition::definition(decl)) {
+      continue;
+    }
+    if (!decl->qualifiedIdentifier().toString().startsWith(minimumScope.toString())) {
+      continue;
+    }
     AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
-    if(funDecl  && !decl->range().isEmpty() && (!classFun || (!classFun->isAbstract() && !classFun->isSignal())) && !decl->isDefinition() && !FunctionDefinition::definition(decl) && decl->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
-      ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(decl), KSharedPtr<CodeCompletionContext>(this)));
+    if (!funDecl) {
+      continue;
+    }
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (classFun && (classFun->isAbstract() || classFun->isSignal())) {
+      continue;
+    }
+    ret << KDevelop::CompletionTreeItemPointer(
+      new ImplementationHelperItem( ImplementationHelperItem::CreateDefinition,
+                                    DeclarationPointer(decl),
+                                    KSharedPtr<CodeCompletionContext>(this)));
   }
 
-  foreach(DUContext* child, context->childContexts())
-    if(child->type() == DUContext::Namespace || child->type() == DUContext::Class || child->type() == DUContext::Helper)
+  foreach(DUContext* child, context->childContexts()) {
+    if(child->type() == DUContext::Namespace
+        || child->type() == DUContext::Class
+        || child->type() == DUContext::Helper)
+    {
       ret += getImplementationHelpersInternal(minimumScope, child);
+    }
+  }
+
   return ret;
 }
 

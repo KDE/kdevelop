@@ -1615,21 +1615,21 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_ranges.step = func.arguments[4].value.toInt(&correctRange);
         if(!correctStart || !correctStop || !correctRange)
             return false;
-    } else if(func.arguments.count()>1 && func.arguments[1].value=="IN") {
-        if(func.arguments[2].value=="LISTS") {
-            m_type = InLists;
-        } else if(func.arguments[2].value=="ITEMS") {
-            m_type = InItems;
-        } else
-            return false;
-        
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+4, itEnd=func.arguments.constEnd();
-        for(; it!=itEnd; ++it) {
-            m_arguments += it->value;
-        }
     } else {
-        m_type=InItems;
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
+        int incr;
+        if(func.arguments.count()>1 && func.arguments[1].value=="IN") {
+            if(func.arguments[2].value=="LISTS") {
+                m_type = InLists;
+            } else if(func.arguments[2].value=="ITEMS") {
+                m_type = InItems;
+            } else
+                return false;
+            incr=4;
+        } else {
+            m_type=InItems;
+            incr=1;
+        }
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+incr, itEnd=func.arguments.constEnd();
         for(; it!=itEnd; ++it) {
             m_arguments += it->value;
         }
@@ -2945,14 +2945,16 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="REPLACE")
     {
+        if(func.arguments.count()<4)
+            return false;
+        
         m_type=Replace;
         m_regex = func.arguments[1].value;
         m_replace=func.arguments[2].value;
         m_outputVariable = func.arguments[3].value;
         addOutputArgument(func.arguments[3]);
         
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4;
-        QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4, itEnd=func.arguments.end();
         for(; it!=itEnd; ++it)
         {
             m_input += it->value;

@@ -32,6 +32,7 @@ class ProcessSelectionDialog : public KDialog
     Q_OBJECT
     public:
         ProcessSelectionDialog( QWidget *parent=0 );
+        ~ProcessSelectionDialog();
         long int pidSelected();
         
     private slots:

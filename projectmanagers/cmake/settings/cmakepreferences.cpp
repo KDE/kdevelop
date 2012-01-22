@@ -101,7 +101,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
-    load();
 }
 
 CMakePreferences::~CMakePreferences()
@@ -121,10 +120,7 @@ void CMakePreferences::load()
     m_srcFolder=m_subprojFolder;
     m_srcFolder.cd(CMakeSettings::projectRootRelative());
 
-    if(m_prefsUi->buildDirs->count()==0)
-    {
-        m_prefsUi->removeBuildDir->setEnabled(false);
-    }
+    m_prefsUi->removeBuildDir->setEnabled(m_prefsUi->buildDirs->count()==0);
 //     QString cmDir=group.readEntry("CMakeDirectory");
 //     m_prefsUi->kcfg_cmakeDir->setUrl(KUrl(cmDir));
 //     kDebug(9032) << "cmakedir" << cmDir;

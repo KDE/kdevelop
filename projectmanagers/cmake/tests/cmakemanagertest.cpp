@@ -18,6 +18,7 @@
 */
 
 #include "cmakemanagertest.h"
+#include "cmake-test-paths.h"
 
 #include <icmakemanager.h>
 #include <cmakebuilddirchooser.h>

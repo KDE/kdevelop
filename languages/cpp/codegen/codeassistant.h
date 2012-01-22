@@ -19,49 +19,58 @@
 #ifndef CPP_CODEASSISTANT_H
 #define CPP_CODEASSISTANT_H
 
-#include <interfaces/iassistant.h>
 #include <QObject>
-#include <ktexteditor/cursor.h>
+
+#include <interfaces/iassistant.h>
+
+#include <KTextEditor/Cursor>
+
 #include <language/duchain/declarationid.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/types/indexedtype.h>
-#include <QTimer>
+
 #include "renameassistant.h"
 
 typedef QWeakPointer<KTextEditor::Document> SafeDocumentPointer;
+
+class QTimer;
 
 namespace KTextEditor {
 class Document;
 class Range;
 class View;
 }
+
 namespace KDevelop {
 class IDocument;
 class ParseJob;
 class DUContext;
 }
+
 namespace Cpp {
 
 class StaticCodeAssistant : public QObject {
   Q_OBJECT
   public:
     StaticCodeAssistant();
-    
+
   private slots:
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
-    void textInserted(KTextEditor::Document*,KTextEditor::Range);
-    void textRemoved(KTextEditor::Document*,KTextEditor::Range,const QString& removedText);
+    void textInserted(KTextEditor::Document*, const KTextEditor::Range&);
+    void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& removedText);
     void parseJobFinished(KDevelop::ParseJob*);
     void documentActivated(KDevelop::IDocument*);
-    void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
+    void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&);
     void timeout();
     void eventuallyStartAssistant();
     void deleteRenameAssistantsForDocument(KTextEditor::Document*);
+
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
-    void startAssistant(KSharedPtr< KDevelop::IAssistant > assistant);
+    void startAssistant(KDevelop::IAssistant::Ptr assistant);
+
     QWeakPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
@@ -73,8 +82,6 @@ class StaticCodeAssistant : public QObject {
     SafeDocumentPointer m_eventualDocument;
     KTextEditor::Range m_eventualRange;
     QString m_eventualRemovedText;
-    //Singleton pointer
-    static StaticCodeAssistant * instance;
 };
 
 }

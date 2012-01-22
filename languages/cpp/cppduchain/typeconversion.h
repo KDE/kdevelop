@@ -34,8 +34,6 @@
 
 namespace KDevelop {
   class TopDUContext;
-  class ImportTraceItem;
-  class ImportTrace;
 }
 
 namespace Cpp {

@@ -213,7 +213,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
                 {
                     justRestarted_ = false;
                     //mainWindow()->setViewAvailable(variableWidget, true);
-                    emit raiseVariableViews();
+                    //FIXME: emit raiseVariableViews();
                 }
             }
         }
@@ -412,8 +412,6 @@ void DebugSession::stepIntoInstruction()
 
 void DebugSession::slotDebuggerAbnormalExit()
 {
-    emit raiseOutputViews();
-
     KMessageBox::information(
         KDevelop::ICore::self()->uiController()->activeMainWindow(),
         i18n("<b>GDB exited abnormally</b>"
@@ -660,7 +658,11 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
     if (reason == "exited-normally" || reason == "exited")
     {
-        programNoApp(i18n("Exited normally"));
+        if (r.hasField("exit-code")) {
+            programNoApp(i18n("Exited with return code: %1").arg(r["exit-code"].literal()));
+        } else {
+            programNoApp(i18n("Exited normally"));
+        }
         programHasExited_ = true;
         state_reload_needed = false;
         return;
@@ -1090,6 +1092,17 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     }
 
     setStateOff(s_appNotStarted|s_programExited);
+
+    {
+        QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
+        if (startWith == "GdbConsole") {
+            emit raiseGdbConsoleViews();
+        } else if (startWith == "FrameStack") {
+            emit raiseFramestackViews();
+        } else {
+            //ApplicationOutput is raised in DebugJob (by setting job to Verbose/Silent)
+        }
+    }
 
     return true;
 }

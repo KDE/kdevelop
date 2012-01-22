@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>578</width>
-    <height>638</height>
+    <width>549</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -91,8 +91,21 @@
        <property name="title">
         <string>Options</string>
        </property>
-       <layout class="QVBoxLayout">
-        <item>
+       <layout class="QFormLayout" name="formLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::ExpandingFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Display static &amp;members:</string>
+          </property>
+          <property name="buddy">
+           <cstring>kcfg_displayStaticMembers</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
          <widget class="QCheckBox" name="kcfg_displayStaticMembers">
           <property name="whatsThis">
            <string>Displaying static members makes GDB slower in
@@ -103,11 +116,21 @@ but if you need to debug into these values then
 check this option.</string>
           </property>
           <property name="text">
-           <string>Display static &amp;members</string>
+           <string/>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Display &amp;demangled names:</string>
+          </property>
+          <property name="buddy">
+           <cstring>kcfg_asmDemangle</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
          <widget class="QCheckBox" name="kcfg_asmDemangle">
           <property name="whatsThis">
            <string>When displaying the disassembled code you
@@ -115,37 +138,38 @@ can select to see the methods' mangled names.
 However, non-mangled names are easier to read.</string>
           </property>
           <property name="text">
-           <string>Display &amp;demangled names</string>
+           <string/>
           </property>
          </widget>
         </item>
-        <!--
-        <item>
-         <widget class="QCheckBox" name="kcfg_dbgTerminal">
-          <property name="whatsThis">
-           <string>This allows you to enter terminal input when your
-application contains terminal input code (e.g. cin, fgets, etc.).
-If you use terminal input in your application then check this option.
-Otherwise leave it unchecked.</string>
-          </property>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label">
           <property name="text">
-           <string>Enable separate terminal for application &amp;IO</string>
+           <string>Start Debugger with:</string>
+          </property>
+          <property name="buddy">
+           <cstring>kcfg_startWith</cstring>
           </property>
          </widget>
         </item>
-        -->
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="kcfg_startWith">
+          <item>
+           <property name="text">
+            <string>Application Output</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>GDB Console</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Frame Stack</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -277,10 +301,6 @@ This script is intended for the actual commands needed to connect to a remotely 
  <tabstops>
   <tabstop>kcfg_debuggingShell</tabstop>
   <tabstop>kcfg_gdbPath</tabstop>
-  <tabstop>kcfg_displayStaticMembers</tabstop>
-  <tabstop>kcfg_asmDemangle</tabstop>
-  <tabstop>kcfg_breakOnLoadingLibrary</tabstop>
-  <tabstop>kcfg_dbgTerminal</tabstop>
   <tabstop>kcfg_configGdbScript</tabstop>
   <tabstop>kcfg_runShellScript</tabstop>
   <tabstop>kcfg_runGdbScript</tabstop>

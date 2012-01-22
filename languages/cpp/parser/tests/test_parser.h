@@ -118,6 +118,10 @@ private slots:
   void testInitList_data();
   void testInitList();
   void testInitListFalsePositives();
+  void memberVirtSpec();
+  void memberVirtSpec_data();
+  void classVirtSpec();
+  void classVirtSpec_data();
   //END C++2011 Support
 
 protected:

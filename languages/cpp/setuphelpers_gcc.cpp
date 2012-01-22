@@ -46,7 +46,6 @@ QStringList gccSetupStandardIncludePaths()
     
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
-    proc.setTextModeEnabled(true);
 
     // The following command will spit out a bnuch of information we don't care
     // about before spitting out the include paths.  The parts we care about
@@ -114,7 +113,6 @@ QVector<rpp::pp_macro*> computeGccStandardMacros()
     //Get standard macros from gcc
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
-    proc.setTextModeEnabled(true);
 
     // The output of the following gcc commands is several line in the format:
     // "#define MACRO [definition]", where definition may or may not be present.

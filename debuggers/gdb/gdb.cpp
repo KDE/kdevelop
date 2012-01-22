@@ -48,6 +48,17 @@ GDB::GDB(QObject* parent)
 {
 }
 
+GDB::~GDB()
+{
+    // prevent Qt warning: QProcess: Destroyed while process is still running.
+    if (process_ && process_->state() == QProcess::Running) {
+        disconnect(process_, SIGNAL(error(QProcess::ProcessError)),
+                    this, SLOT(processErrored(QProcess::ProcessError)));
+        process_->kill();
+        process_->waitForFinished(10);
+    }
+}
+
 void GDB::start(KConfigGroup& config)
 {
     // FIXME: verify that default value leads to something sensible
@@ -392,5 +403,12 @@ void GDB::processErrored(QProcess::ProcessError error)
         emit showMessage(i18n("Process didn't start"), 3000);
         */
         emit userCommandOutput("(gdb) didn't start\n");
+    } else if (error == QProcess::Crashed) {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>Gdb crashed.</b>"
+                 "<p>Because of that the debug session has to be ended.<br>"
+                 "Try to reproduce the crash with plain gdb and report a bug.<br>"),
+            i18n("Gdb crashed"));
     }
 }

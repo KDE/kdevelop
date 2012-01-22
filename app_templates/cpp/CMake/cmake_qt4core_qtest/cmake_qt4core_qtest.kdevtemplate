@@ -1,13 +1,17 @@
 # KDE Config File
 [General]
 Name=CMake QtTest
+Name[da]=CMake QtTest
 Name[de]=CMake QtTest
 Name[el]=CMake QtTest
 Name[es]=CMake QtTest
+Name[et]=CMake QtTest
+Name[fi]=CMake QtTest
 Name[fr]=CMake QtTest
 Name[it]=CMake QtTest
 Name[nb]=CMake QtTest
 Name[nl]=CMake QtTest
+Name[pl]=CMake QtTest
 Name[pt]=QtTest com CMake
 Name[pt_BR]=CMake QtTest
 Name[sv]=CMake QtTest
@@ -16,12 +20,17 @@ Name[x-test]=xxCMake QtTestxx
 Name[zh_CN]=CMake QtTest
 Name[zh_TW]=CMake QtTest
 Comment=Qt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)
+Comment[da]=Qt4 CMake QTest Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform)
+Comment[de]=Qt4/CMake/QTest-Core-Anwendung. Eine auf CMake und Qt4 basierende Anwendung (plattformunabhängig) erstellen.
 Comment[el]=Qt4 CMake QTest Core εφαρμογή. Δημιουργία μιας εφαρμογής με βάση τα CMake/Qt4 (συμβατή με πολλαπλές πλατφόρμες)
 Comment[es]=Aplicación Qt4 CMake QTest Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
+Comment[et]=Qt4 CMake QTest Core rakendus. Rakenduse loomine CMake/Qt4 põhjal (mitmeplatvormne)
+Comment[fi]=Qt4 CMake QTest Core -sovellus. Generoi CMake/Qt4-perustainen sovellus (eri käyttöjärjestelmissä yhteensopiva)
 Comment[fr]=Application principale QTest CMake pour Qt4. Génère une application utilisant CMake / Qt4 (compatible multi-plateforme)
 Comment[it]=Applicazione base QTest CMake in Qt4. Genera un'applicazione basata su CMake/Qt4 (multipiattaforma)
 Comment[nb]=Qt4 CMake QTest kjerneprogram. Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nl]=Kerntoepassing van Qt4 CMake QTest. Genereert een op CMake/Qt4-gebaseerd programma (crossplatform compatibel)
+Comment[pl]=Program jądra Qt4 CMake QTest. Generuj programy oparte o CMake/Qt4 (kompatybilne na wielu platformach)
 Comment[pt]=Gera uma aplicação baseada no CMake/Qt4 Core com QTest (compatível com várias plataformas)
 Comment[pt_BR]=Aplicativo principal QTest com CMake para Qt4. Gera um aplicativo em CMake/Qt4 (compatível com várias plataformas)
 Comment[sv]=Qt4 CMake QTest-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)

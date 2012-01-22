@@ -34,6 +34,22 @@ endif(MSVC)
 
 ########### next target ###############
 
+set(buddiestest_SRCS
+  test_buddies.cpp
+)
+
+kde4_add_unit_test(buddiestest ${buddiestest_SRCS})
+target_link_libraries(buddiestest
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDEVPLATFORM_SUBLIME_LIBRARIES}
+)
+
+########### next target ###############
+
 set(specialcompletiontest_SRCS
   test_specialcompletion.cpp
 

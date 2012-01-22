@@ -531,9 +531,9 @@ void DefaultVisitor::visitLambdaExpression(LambdaExpressionAST* node)
   visit(node->compound);
 }
 
-void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* /*node*/)
+void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* node)
 {
-  // nothing to do
+  visit(node->identifier);
 }
 
 void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)

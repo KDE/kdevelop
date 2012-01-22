@@ -19,6 +19,8 @@
  */
 
 #include "cmake_cmakeprojectvisitor_test.h"
+#include "cmake-test-paths.h"
+
 #include "cmakeast.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
@@ -464,6 +466,10 @@ void CMakeProjectVisitorTest::testRun_data()
                             "endfunction(HOLA)\n"
                             "set(X 123)\n"
                             "HOLA()\n"
+                            << cacheValues << results;
+    results.clear();
+    QTest::newRow("reducedemptyvars") <<
+                            "string(REPLACE ${A} ${B} X ${A})\n"
                             << cacheValues << results;
 }
 

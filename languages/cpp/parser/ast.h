@@ -381,6 +381,7 @@ public:
   NameAST *name;
   BaseClauseAST *base_clause;
   const ListNode<DeclarationAST*> *member_specs;
+  const ListNode<uint> *virt_specifiers;
 };
 
 class CompoundStatementAST : public StatementAST
@@ -467,6 +468,7 @@ public:
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
   TrailingReturnTypeAST* trailing_return_type;
+  const ListNode<uint> *virt_specifiers;
   bool isVariadic;
 };
 
@@ -740,7 +742,7 @@ public:
 
   DECLARE_AST_NODE(LambdaCapture)
 
-  uint identifier;
+  NameAST* identifier;
 
   bool isThis : 1;
   bool isRef : 1;

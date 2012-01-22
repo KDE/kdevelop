@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -20,18 +20,22 @@
 #define CPP_SIGNATUREASSISTANT_H
 
 #include <interfaces/iassistant.h>
+
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/view.h>
 
+#include <ktexteditor/view.h>
 
 namespace KDevelop {
 class ParseJob;
 }
+
 namespace Cpp {
+
 typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
+
 struct Signature
 {
   QList<ParameterItem> parameters;
@@ -43,22 +47,28 @@ struct Signature
 class AdaptDefinitionSignatureAssistant : public KDevelop::IAssistant {
   Q_OBJECT
   public:
-    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted);
+    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, const KTextEditor::Range& inserted);
+
     bool isUseful();
-    
+
   private:
+    KDevelop::DUContext* findFunctionContext(const KUrl& url, const KDevelop::SimpleRange& position) const;
+
     KDevelop::Identifier m_declarationName;
-    
-    bool m_editingDefinition; //If this is true, the user is editing on the definition side, and the declaration should be updated
-    
+
+    // If this is true, the user is editing on the definition side,
+    // and the declaration should be updated
+    bool m_editingDefinition;
+
     KDevelop::DeclarationId m_definitionId;
     KDevelop::ReferencedTopDUContext m_definitionContext;
-    Signature m_oldSignature; //old signature of the _other_side
+    //old signature of the _other_side
+    Signature m_oldSignature;
     KDevelop::IndexedString m_document;
     KDevelop::SimpleRange m_invocationRange;
-    
-    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleRange position) const;
+
     KTextEditor::View *m_view;
+
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
 };

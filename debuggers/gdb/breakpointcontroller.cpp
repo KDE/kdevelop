@@ -261,7 +261,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         handler.
         FIXME: should handle and annotate the errors?
     */
-    kDebug() << breakpoint;
+    kDebug() << breakpoint << breakpoint->location();
     if (breakpoint->deleted())
     {
         kDebug() << "deleted";
@@ -282,46 +282,41 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     }
     else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
         kDebug() << "location changed";
-        if (!breakpoint->enabled()) {
-            m_dirty[breakpoint].clear();
-            breakpointStateChanged(breakpoint);
+        if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
+            /* We already have GDB breakpoint for this, so we need to remove
+            this one.  */
+            kDebug() << "We already have GDB breakpoint for this, so we need to remove this one";
+            debugSession()->addCommandToFront(
+                new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
+                            new DeletedHandler(this, breakpoint)));
+            addedCommand = true;
         } else {
-            if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
-                /* We already have GDB breakpoint for this, so we need to remove
-                this one.  */
-                kDebug() << "We already have GDB breakpoint for this, so we need to remove this one";
+            m_ids[breakpoint] = 0; //add to m_ids so we don't delete it while insert command is still pending
+            if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                QString location;
+                if (breakpoint->line() != -1) {
+                    location = quoteExpression(breakpoint->url().pathOrUrl(KUrl::RemoveTrailingSlash)) + ':' + QString::number(breakpoint->line()+1);
+                } else {
+                    location = breakpoint->location();
+                }
                 debugSession()->addCommandToFront(
-                    new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
-                                new DeletedHandler(this, breakpoint)));
+                    new GDBCommand(BreakInsert,
+                                quoteExpression(location),
+                                new InsertedHandler(this, breakpoint)));
                 addedCommand = true;
             } else {
-                m_ids[breakpoint] = 0; //add to m_ids so we don't delete it while insert command is still pending
-                if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-                    QString location;
-                    if (breakpoint->line() != -1) {
-                        location = quoteExpression(breakpoint->url().pathOrUrl(KUrl::RemoveTrailingSlash)) + ':' + QString::number(breakpoint->line()+1);
-                    } else {
-                        location = breakpoint->location();
-                    }
-                    debugSession()->addCommandToFront(
-                        new GDBCommand(BreakInsert,
-                                    quoteExpression(location),
-                                    new InsertedHandler(this, breakpoint)));
-                    addedCommand = true;
-                } else {
-                    QString opt;
-                    if (breakpoint->kind() == KDevelop::Breakpoint::ReadBreakpoint)
-                        opt = "-r ";
-                    else if (breakpoint->kind() == KDevelop::Breakpoint::AccessBreakpoint)
-                        opt = "-a ";
+                QString opt;
+                if (breakpoint->kind() == KDevelop::Breakpoint::ReadBreakpoint)
+                    opt = "-r ";
+                else if (breakpoint->kind() == KDevelop::Breakpoint::AccessBreakpoint)
+                    opt = "-a ";
 
-                    debugSession()->addCommandToFront(
-                        new GDBCommand(
-                            BreakWatch,
-                            opt + quoteExpression(breakpoint->location()),
-                            new InsertedHandler(this, breakpoint)));
-                    addedCommand = true;
-                }
+                debugSession()->addCommandToFront(
+                    new GDBCommand(
+                        BreakWatch,
+                        opt + quoteExpression(breakpoint->location()),
+                        new InsertedHandler(this, breakpoint)));
+                addedCommand = true;
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {

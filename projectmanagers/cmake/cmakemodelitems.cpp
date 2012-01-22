@@ -21,6 +21,7 @@
 
 #include "cmakemodelitems.h"
 #include <QString>
+#include <QThread>
 #include <kdebug.h>
 
 #include <language/duchain/duchain.h>
@@ -130,23 +131,27 @@ bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
     return false;
 }
 
-void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectFolderItem*> folders = folderList();
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
         CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
         if(cmfolder && cmfolder->formerParent()==this && !textInList<Subdirectory>(subs, folder))
-            delete folder;
+            ret += folder;
     }
+    return ret;
 }
 
-void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectTargetItem*> targetl = targetList();
     foreach(KDevelop::ProjectTargetItem* target, targetl) {
         if(!textInList<CMakeTarget>(targets, target))
-            delete target;
+            ret += target;
     }
+    return ret;
 }
 
 CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl& basepath)

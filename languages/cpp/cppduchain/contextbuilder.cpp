@@ -1112,6 +1112,22 @@ void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
   }
 }
 
+void ContextBuilder::visitLambdaDeclarator(LambdaDeclaratorAST* node)
+{
+  if (node->parameter_declaration_clause) {
+    DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function);
+    addImportedContexts();
+    if(compilingContexts())
+      queueImportedContext(ctx);
+  }
+
+  DefaultVisitor::visitLambdaDeclarator(node);
+
+  if (node->parameter_declaration_clause) {
+    closeContext();
+  }
+}
+
 bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)
 {
   QVector<DUContext::Import> imports;
