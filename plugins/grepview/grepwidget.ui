@@ -409,9 +409,9 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
@@ -419,15 +419,16 @@ p, li { white-space: pre-wrap; }
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>patternCombo</tabstop>
   <tabstop>templateEdit</tabstop>
   <tabstop>templateTypeCombo</tabstop>
+  <tabstop>replacementTemplateEdit</tabstop>
   <tabstop>regexCheck</tabstop>
   <tabstop>caseSensitiveCheck</tabstop>
   <tabstop>directoryRequester</tabstop>
