@@ -243,10 +243,11 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
 void GrepDialog::directoryChanged(const QString& dir)
 {
-    setEnableProjectBox(false);
     KUrl currentUrl = dir;
-    if( !currentUrl.isValid() )
+    if( !currentUrl.isValid() ) {
+        setEnableProjectBox(false);
         return;
+    }
     
     bool projectAvailable = true;
     
@@ -286,6 +287,7 @@ void GrepDialog::templateTypeComboActivated(int index)
 void GrepDialog::setEnableProjectBox(bool enable)
 {
     limitToProjectCheck->setEnabled(enable);
+    limitToProjectLabel->setEnabled(enable);
     if (!enable) limitToProjectCheck->setChecked(false);
 }
 

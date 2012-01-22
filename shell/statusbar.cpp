@@ -102,14 +102,24 @@ void StatusBar::pluginLoaded(IPlugin* plugin)
 void StatusBar::registerStatus(QObject* status)
 {
     Q_ASSERT(qobject_cast<IStatus*>(status));
-    connect(status, SIGNAL(clearMessage(KDevelop::IStatus*)), SLOT(clearMessage(KDevelop::IStatus*)));
-    connect(status, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)), SLOT(showMessage(KDevelop::IStatus*,QString,int)));
-    connect(status, SIGNAL(hideProgress(KDevelop::IStatus*)), SLOT(hideProgress(KDevelop::IStatus*)));
-    connect(status, SIGNAL(showProgress(KDevelop::IStatus*,int,int,int)), SLOT(showProgress(KDevelop::IStatus*,int,int,int)));
+    connect(status, SIGNAL(clearMessage(KDevelop::IStatus*)),
+            SLOT(clearMessage(KDevelop::IStatus*)),
+            Qt::QueuedConnection);
+    connect(status, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)),
+            SLOT(showMessage(KDevelop::IStatus*,QString,int)),
+            Qt::QueuedConnection);
+    connect(status, SIGNAL(hideProgress(KDevelop::IStatus*)),
+            SLOT(hideProgress(KDevelop::IStatus*)),
+            Qt::QueuedConnection);
+    connect(status, SIGNAL(showProgress(KDevelop::IStatus*,int,int,int)),
+            SLOT(showProgress(KDevelop::IStatus*,int,int,int)),
+            Qt::QueuedConnection);
 
     // Don't try to connect when the status object doesn't provide an error message signal (ie. avoid warning)
-    if (status->metaObject()->indexOfSignal(SIGNAL(showErrorMessage(QString,int))) != -1)
-        connect(status, SIGNAL(showErrorMessage(QString,int)), SLOT(showErrorMessage(QString,int)));
+    if (status->metaObject()->indexOfSignal(SIGNAL(showErrorMessage(QString,int))) != -1) {
+        connect(status, SIGNAL(showErrorMessage(QString,int)),
+                SLOT(showErrorMessage(QString,int)), Qt::QueuedConnection);
+    }
 }
 
 QWidget* errorMessage(QWidget* parent, const QString& text)

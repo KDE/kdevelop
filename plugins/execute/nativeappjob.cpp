@@ -115,9 +115,9 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         QStringList args = KShell::splitArgs(iface->terminal(cfg));
         for (QStringList::iterator it = args.begin(); it != args.end(); ++it) {
             if (*it == "%exe") {
-                *it = executable.toLocalFile();
+                *it = KShell::quoteArg(executable.toLocalFile());
             } else if (*it == "%workdir") {
-                *it = wc.toLocalFile();
+                *it = KShell::quoteArg(wc.toLocalFile());
             }
         }
         args.append( arguments );
