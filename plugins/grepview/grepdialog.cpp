@@ -243,10 +243,11 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
 void GrepDialog::directoryChanged(const QString& dir)
 {
-    setEnableProjectBox(false);
     KUrl currentUrl = dir;
-    if( !currentUrl.isValid() )
+    if( !currentUrl.isValid() ) {
+        setEnableProjectBox(false);
         return;
+    }
     
     bool projectAvailable = true;
     
