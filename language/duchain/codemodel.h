@@ -76,7 +76,7 @@ namespace KDevelop {
     void removeItem(const IndexedString& file, const IndexedQualifiedIdentifier& id);
 
     /**
-     * Updates the kind for the given item. The item must already be in the symbol table.
+     * Updates the kind for the given item. The item must already be in the code model.
      */
     void updateItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind);
 
