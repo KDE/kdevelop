@@ -131,7 +131,8 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
                           || name.startsWith("moc_") || name.endsWith(".moc")
                           || name.endsWith(".so") || name.contains(".so.")
                           || name.startsWith(".swp.") || name.endsWith('~')
-                          || (name.startsWith('.') && name.endsWith(".kate-swp"))))
+                          || (name.startsWith('.')
+                                && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
     {
         return false;
     } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
