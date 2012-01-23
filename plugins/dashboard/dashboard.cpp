@@ -70,7 +70,7 @@ void Dashboard::updateView()
     }
 }
 
-void Dashboard::resizeEvent(QResizeEvent* event)
+void Dashboard::resizeEvent(QResizeEvent* /*event*/)
 {
 // 	QGraphicsView::resizeEvent(event);
     updateView();
@@ -85,6 +85,7 @@ void Dashboard::addApplet(const QString& name)
 {
     Applet* app=containment()->addApplet(name);
     Q_ASSERT(app);
+    Q_UNUSED(app);
 }
 
 KConfigGroup configurationDialog(Plasma::Containment* containment, const QString& plugin)

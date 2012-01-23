@@ -62,9 +62,7 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
     if(search[a].endsWith(':')) //Don't get confused while the :: is being typed
       search[a] = search[a].left(search[a].length()-1);
   }
-  bool mustMatchEnd = false;
   if(!search.isEmpty() && search.back().endsWith('(')) {
-    mustMatchEnd = true;
     search.back() = search.back().left(search.back().length()-1);
   }
 
@@ -73,14 +71,14 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
     return;
   }
   KDevVarLengthArray<SubstringCache, 5> cache;
-  for(int a = 0; a < search.count(); ++a)
+  for(int a = 0; a < search.count(); ++a) {
     cache.append(SubstringCache(search.at(a)));
+  }
 
-  foreach(const QString &str, search)
-    kDebug() << "filtering for" << str;
-
-  if(!text.startsWith(m_currentFilter))
+  if(!text.startsWith(m_currentFilter)) {
     m_filteredItems = m_currentItems;
+  }
+
   m_currentFilter = text;
 
   QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
@@ -93,9 +91,8 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
     bool mismatch = false;
     for(int b = 0; b < search.count(); ++b) {
       bool localMatch = false;
-      
+
       for(int q = nextMatchPos; q < currentId.count(); ++q) {
-//         kDebug() << "substring check" << 
         if(cache[b].containedIn( currentId.at(q) )) {
           localMatch = true;
           nextMatchPos = q+1;
@@ -108,25 +105,6 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
       }else{
         continue;
       }
-
-//     uint scopePosition = 0;
-// scopePosition = 0;
-//       for(; scopePosition < (uint)oldFiltered[a].m_id.count(); ++scopePosition) {
-//         QString id = oldFiltered[a].m_id.at(scopePosition).identifier().str();
-//         QString s = search.at(b);
-//         uint lastScopePosition = (uint)(oldFiltered[a].m_id.count()-1);
-//         bool endMatchNow = mustMatchEnd && scopePosition == lastScopePosition && b == search.count()-1;
-//         if((endMatchNow && id.endsWith(s, Qt::CaseInsensitive)) ||
-//            (!endMatchNow && id.contains(s, Qt::CaseInsensitive))) {
-//           localMatch = true;
-//           break;
-//         }
-//       }
-//       ++scopePosition;
-//       if(!localMatch) {
-//         mismatch = true;
-//         break;
-//       }
     }
     if(!mismatch)
       m_filteredItems << oldFiltered[a];

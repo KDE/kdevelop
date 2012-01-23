@@ -57,6 +57,7 @@ QByteArray urlToData(const KUrl& url)
         Q_ASSERT(f.exists());
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
+        Q_UNUSED(corr);
         
         ret = f.readAll();
         

@@ -485,7 +485,6 @@ QPair<QList<Difference*>, QList<Difference*> > DiffModel::linesChanged(const QSt
 			}
 		}
 
-		QStringList::const_iterator oldLinesIter = oldLines.begin();
 		for (DifferenceListConstIterator iter = appliedBegin; iter != appliedEnd;) {
 			int startPos = (*iter)->trackingDestinationLineNumber();
 			if ((*iter)->applied()) {

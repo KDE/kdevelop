@@ -42,6 +42,7 @@ QByteArray ReviewBoard::urlToData(const KUrl& url)
         Q_ASSERT(f.exists());
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
+        Q_UNUSED(corr);
 
         ret = f.readAll();
 
@@ -215,7 +216,8 @@ void NewRequest::done()
 }
 
 ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
-    : m_server(server), KJob(parent)
+    : KJob(parent)
+    , m_server(server)
 {
     QList<QPair<QString,QString> > countParameters;
 
@@ -248,7 +250,7 @@ void ProjectsListRequest::gotRepositoryCount(KJob* )
     m_repositoriesRequest->start();
 }
 
-void ProjectsListRequest::done(KJob* job)
+void ProjectsListRequest::done(KJob* /*job*/)
 {
     emitResult();
 }
