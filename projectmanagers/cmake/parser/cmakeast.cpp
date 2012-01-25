@@ -1877,7 +1877,7 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         i++;
     }
 
-    if(func.arguments[i].value=="SYSTEM") {
+    if(i<func.arguments.size() && func.arguments[i].value=="SYSTEM") {
         m_isSystem = true;
         i++;
     }
