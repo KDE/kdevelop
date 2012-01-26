@@ -371,7 +371,7 @@ void Parser::reportPendingErrors()
   holdErrors(hold);
 }
 
-void Parser::reportError(const QString& msg)
+void Parser::reportError(const QString& msg, KDevelop::ProblemData::Severity severity)
 {
   if (!_M_hold_errors && _M_problem_count < _M_max_problem_count)
     {
@@ -386,6 +386,7 @@ void Parser::reportError(const QString& msg)
       p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(position.castToSimpleCursor(), 0)));
       p->setDescription(msg);
       p->setSource(KDevelop::ProblemData::Parser);
+      p->setSeverity(severity);
 
       control->reportProblem(p);
     }
@@ -4998,12 +4999,12 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
       advance();
 
       ExpressionAST *leftExpr = 0;
-      //NOTE: the spec - as far as I understand it - has a requirement
-      //on a non-empty expression. yet GCC happily parses something like
-      // int a = false ?: 0;
-      //without any complaint, even with -Wall
-      //see also: https://bugs.kde.org/show_bug.cgi?id=292357
-      parseExpression(leftExpr);
+      if (!parseExpression(leftExpr)) {
+        //NOTE: allow ommitting operand, for compatibility with gcc, see also:
+        // http://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_4.html#SEC70
+        // https://bugs.kde.org/show_bug.cgi?id=292357
+        reportError("ISO C++ does not allow ?: with omitted middle operand", KDevelop::ProblemData::Warning);
+      }
 
       CHECK(':');
 

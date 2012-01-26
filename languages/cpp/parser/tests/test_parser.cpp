@@ -896,7 +896,9 @@ void TestParser::testTernaryEmptyExpression()
   QByteArray code = "int a = false ?: 0;";
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
-  QVERIFY(control.problems().isEmpty());
+  QCOMPARE(control.problems().count(), 1);
+  QCOMPARE(control.problems().first()->severity(), KDevelop::ProblemData::Warning);
+  QVERIFY(ast);
 }
 
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
