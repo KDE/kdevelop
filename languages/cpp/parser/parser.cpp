@@ -4998,8 +4998,12 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
       advance();
 
       ExpressionAST *leftExpr = 0;
-      if (!parseExpression(leftExpr))
-        return false;
+      //NOTE: the spec - as far as I understand it - has a requirement
+      //on a non-empty expression. yet GCC happily parses something like
+      // int a = false ?: 0;
+      //without any complaint, even with -Wall
+      //see also: https://bugs.kde.org/show_bug.cgi?id=292357
+      parseExpression(leftExpr);
 
       CHECK(':');
 

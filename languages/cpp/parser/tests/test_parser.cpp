@@ -887,6 +887,18 @@ void TestParser::testMultiByteComments()
   QVERIFY(pos == KDevelop::CursorInRevision(0, 17));
 }
 
+void TestParser::testTernaryEmptyExpression()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=292357
+  // mostly GCC compatibility
+  //                 0         1         2         3          4
+  //                 01234567890123456789012345678901234567890123456789
+  QByteArray code = "int a = false ?: 0;";
+  TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
+  QVERIFY(control.problems().isEmpty());
+}
+
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 {
   control = Control(); // Clear the problems
