@@ -181,13 +181,16 @@ KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::R
     QString txt=doc->text(r);
     QRegExp match("([\\s]|^)(\\./)?"+QRegExp::escape(name));
     int namepos = match.indexIn(txt);
+    int length = match.cap(0).size();
     
     if(namepos == -1)
         return KTextEditor::Range::invalid();
     //QRegExp doesn't support lookbehind asserts, and \b isn't good enough
     //so either match "^" or match "\s" and then +1 here
-    if (txt[namepos].isSpace())
+    if (txt[namepos].isSpace()) {
         ++namepos;
+        --length;
+    }
     
     KTextEditor::Cursor c(r.start());
     c.setLine(c.line() + txt.left(namepos).count('\n'));
@@ -197,7 +200,7 @@ KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::R
     else
         c.setColumn(namepos - lastNewLinePos - 1);
     
-    return KTextEditor::Range(c, KTextEditor::Cursor(c.line(), c.column()+match.matchedLength()));
+    return KTextEditor::Range(c, KTextEditor::Cursor(c.line(), c.column()+length));
 }
 
 bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
