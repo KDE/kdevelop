@@ -352,20 +352,22 @@ void ShellBuddyTest::testsplitViewBuddies()
 
     createFile(dirA, "classA.r.txt");
     createFile(dirA, "classA.l.txt");
+    createFile(dirA, "foo.txt");
 
     Sublime::Area *pCodeArea = m_uiController->activeArea();
     QVERIFY(pCodeArea);
 
     IDocument *pClassAHeader = m_documentController->openDocument(KUrl(dirA.name() + "classA.l.txt"));
     QVERIFY(pClassAHeader);
-    pMainWindow->activeView()->setObjectName("classA.l.txt");
+    Sublime::View *pClassAHeaderView = pMainWindow->activeView();
+    pClassAHeaderView->setObjectName("classA.l.txt");
 
     // now, create a splitted view of the active view (pClassAHeader)
-    Sublime::View *pNewView = pMainWindow->activeView()->document()->createView();
-    pNewView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
-    pCodeArea->addView(pNewView, pMainWindow->activeView(), Qt::Vertical);
+    Sublime::View *pClassAHeaderSplittedView = dynamic_cast<Sublime::Document*>(pClassAHeader)->createView();
+    pClassAHeaderSplittedView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
+    pCodeArea->addView(pClassAHeaderSplittedView, pMainWindow->activeView(), Qt::Vertical);
     // and activate it
-    pMainWindow->activateView(pNewView);
+    pMainWindow->activateView(pClassAHeaderSplittedView);
 
     // get the current view's container from the mainwindow
     QWidget *pCentral = pMainWindow->centralWidget();
@@ -376,20 +378,42 @@ void ShellBuddyTest::testsplitViewBuddies()
     QVERIFY(pSplitter);
     QVERIFY(pSplitter->inherits("QSplitter"));
 
-    Sublime::Container *pContainer = pSplitter->findChild<Sublime::Container*>();
-    QVERIFY(pContainer);
+    Sublime::Container *pLeftContainer  = pSplitter->findChildren<Sublime::Container*>().at(1);
+    QVERIFY(pLeftContainer);
+    Sublime::Container *pRightContainer = pSplitter->findChildren<Sublime::Container*>().at(0);
+    QVERIFY(pRightContainer);
 
-    // check that it only contains pNewView
-    QVERIFY(pContainer->count() == 1 && pContainer->hasWidget(pNewView->widget()));
+    // check that it only contains pClassAHeaderSplittedView
+    QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
 
-    // now open the correponding definition file, classA.cpp
+    // now open the correponding definition file, classA.r.txt
     IDocument *pClassAImplem = m_documentController->openDocument(KUrl(dirA.name() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName("classA.r.txt");
 
-    // and check its presence alongside pNewView in pContainer
-    QVERIFY(pContainer->hasWidget(pNewView->widget()));
-    QVERIFY(pContainer->hasWidget(pMainWindow->activeView()->widget()));
+    // and check its presence alongside pClassAHeaderSplittedView in pRightContainer
+    QVERIFY(pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
+    QVERIFY(pRightContainer->hasWidget(pMainWindow->activeView()->widget()));
+
+    // Now reactivate left side ClassAHeaderview
+    pMainWindow->activateView(pClassAHeaderView);
+
+    // open another file
+    IDocument *pLeftSideCpp = m_documentController->openDocument(KUrl(dirA.name() + "foo.txt"));
+    QVERIFY(pLeftSideCpp);
+    pMainWindow->activeView()->setObjectName("foo.txt");
+
+    // and close left side ClassAHeaderview
+    pCodeArea->closeView(pClassAHeaderView);
+
+    // try to open classAImpl (which is already on the right)
+    // but this time it should open on the left
+    bool successfullyReOpened = m_documentController->openDocument(pClassAImplem);
+    QVERIFY(successfullyReOpened);
+    pMainWindow->activeView()->setObjectName("classA.r.txt");
+
+    // and check if it correctly opened on the left side
+    QVERIFY(pLeftContainer->hasWidget(pMainWindow->activeView()->widget()));
 }
 
 

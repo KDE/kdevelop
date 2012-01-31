@@ -419,15 +419,6 @@ struct DocumentControllerPrivate {
                                     }
                                 }
                             }
-                            // if we did not find it, then search in the whole area
-                            if(!buddyView) {
-                                foreach (Sublime::View *view, sublimeDocBuddy->views()) {
-                                    if (area->views().contains(view)) {
-                                        buddyView = view;
-                                        break;
-                                    }
-                                }
-                            }
                         }
                     }
                 }
