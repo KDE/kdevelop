@@ -738,7 +738,7 @@ QString ProjectFileItem::fileName() const
     return baseName();
 }
 
-///NOTE: this is kind of slow due to KMimeType::findByUrl
+///NOTE: this is kind of slow due to KMimeType access
 ///      maybe we should also introduce an extension-cache
 ///      similar to what the language controller is doing
 void ProjectFileItem::setUrl( const KUrl& url )
@@ -751,7 +751,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
 
     ProjectBaseItem::setUrl( url );
 
-    d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName(url);
+    d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName();
 }
 
 int ProjectFileItem::type() const
