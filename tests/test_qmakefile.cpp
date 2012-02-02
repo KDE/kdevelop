@@ -59,7 +59,7 @@ template<>
 char *toString(const QMakeFile::VariableMap &variables)
 {
     QByteArray ba = "VariableMap(";
-    QMap< QString, QStringList >::const_iterator it = variables.constBegin();
+    QMakeFile::VariableMap::const_iterator it = variables.constBegin();
     while (it != variables.constEnd()) {
         ba += "[" + it.key() + "] = " + toString(it.value());
         ++it;

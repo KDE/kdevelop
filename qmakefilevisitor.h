@@ -22,12 +22,14 @@
 
 #include "variablereferenceparser.h"
 
+#include <QHash>
+
 class QMakeVariableResolver {
 public:
     virtual ~QMakeVariableResolver() {}
     virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const = 0;
 
-    typedef QMap< QString, QStringList > VariableMap;
+    typedef QHash< QString, QStringList > VariableMap;
 };
 
 class QMakeFile;
@@ -61,7 +63,7 @@ private:
     QMakeFile* m_baseFile;
     VariableMap m_variableValues;
 
-    QMap<QString, QMake::ScopeBodyAST*> m_userMacros;
+    QHash<QString, QMake::ScopeBodyAST*> m_userMacros;
     QStringList m_arguments;
     QStringList m_lastReturn;
 };
