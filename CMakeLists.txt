@@ -54,6 +54,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions( -DGXX_LT_4_3 )
   endif (GCC_IS_NEWER_THAN_4_3)
 endif(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  # TODO: version check?
+  add_definitions( -std=c++0x )
+endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 
