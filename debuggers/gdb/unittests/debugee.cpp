@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     foo();
     foo();
 
-    char *x = "Hello";
+    const char *x = "Hello";
     std::cout << x << std::endl;
     
     testStruct ts;

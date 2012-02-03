@@ -54,7 +54,7 @@ Record *MIParser::parse(FileSymbol *file)
 
     TokenStream *tokenStream = lexer.tokenize(file);
     if (!tokenStream)
-        return false;
+        return 0;
 
     lex = file->tokenStream = tokenStream;
 
