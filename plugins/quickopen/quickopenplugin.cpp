@@ -1007,7 +1007,7 @@ QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
   if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
-    return false;
+    return 0;
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
