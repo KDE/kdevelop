@@ -119,7 +119,7 @@ public:
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_urlIndex(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
@@ -129,6 +129,7 @@ public:
     Qt::ItemFlags flags;
     ProjectModel* model;
     KUrl m_url;
+    uint m_urlIndex;
     QString iconName;
 };
 
@@ -149,8 +150,8 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
 
-    if (model()) {
-        model()->d->urlLookupTable.remove(indexForUrl(d->m_url), this);
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
     }
 
     if( parent() ) {
@@ -303,17 +304,18 @@ void ProjectBaseItem::setModel( ProjectModel* model )
 {
     Q_D(ProjectBaseItem);
 
-    const uint urlIndex = indexForUrl(d->m_url);
-
     if (model == d->model) {
         return;
-    } else if (d->model) {
-        d->model->d->urlLookupTable.remove(urlIndex, this);
+    }
+
+    if (d->model && d->m_urlIndex) {
+        d->model->d->urlLookupTable.remove(d->m_urlIndex, this);
     }
 
     d->model = model;
-    if (model) {
-        model->d->urlLookupTable.insert(urlIndex, this);
+
+    if (model && d->m_urlIndex) {
+        model->d->urlLookupTable.insert(d->m_urlIndex, this);
     }
 
     foreach( ProjectBaseItem* item, d->children ) {
@@ -434,14 +436,18 @@ QString ProjectBaseItem::baseName() const
 void ProjectBaseItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectBaseItem);
-    const KUrl oldUrl = d->m_url;
+
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    }
+
     d->m_url = url;
+    d->m_urlIndex = indexForUrl(url);
     const QString baseName = url.fileName();
     setText( baseName );
 
-    if (model()) {
-        model()->d->urlLookupTable.remove(indexForUrl(oldUrl), this);
-        model()->d->urlLookupTable.insert(indexForUrl(d->m_url), this);
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.insert(d->m_urlIndex, this);
     }
 }
 
@@ -684,15 +690,15 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
     setUrl( file );
     // Need to this manually here as setUrl() is virtual and hence the above
     // only calls the version in ProjectBaseItem and not ours
-    if( project ) {
-        project->addToFileSet( KDevelop::IndexedString(file) );
+    if( project && d_ptr->m_urlIndex ) {
+        project->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 }
 
 ProjectFileItem::~ProjectFileItem()
 {
-    if( project() ) {
-        project()->removeFromFileSet(KDevelop::IndexedString(url()));
+    if( project() && d_ptr->m_urlIndex ) {
+        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 }
 
@@ -743,13 +749,21 @@ QString ProjectFileItem::fileName() const
 ///      similar to what the language controller is doing
 void ProjectFileItem::setUrl( const KUrl& url )
 {
-    if( project() ) {
-        if(!this->url().isEmpty())
-            project()->removeFromFileSet( KDevelop::IndexedString(this->url()) );
-        project()->addToFileSet( KDevelop::IndexedString(url) );
+    if (url == d_ptr->m_url) {
+        return;
+    }
+
+    if( project() && d_ptr->m_urlIndex ) {
+        // remove from fileset if we are in there
+        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 
     ProjectBaseItem::setUrl( url );
+
+    if( project() && d_ptr->m_urlIndex ) {
+        // add to fileset with new url index
+        project()->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
+    }
 
     d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName();
 }
