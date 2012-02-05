@@ -61,8 +61,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
 
-Q_DECLARE_METATYPE(ProjectBaseItem*)
-
 using namespace KDevelop;
 
 // #define WARN_BEFORE_REFACTORING

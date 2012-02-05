@@ -96,8 +96,6 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
-Q_DECLARE_METATYPE ( KDevelop::ProjectFolderItem* )
-
 namespace {
 
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
