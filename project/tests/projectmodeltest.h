@@ -49,6 +49,8 @@ private slots:
     void testWithProject();
     void testTakeRow();
     void testAddItemInThread();
+    void testItemsForUrl();
+    void testItemsForUrl_data();
 
     // benchmarking
     void testDeleteLots();
