@@ -69,6 +69,7 @@ install( FILES
     executecompositejob.h
     convenientfreelist.h
     spinlock.h
+    fileutils.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES

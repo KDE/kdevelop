@@ -113,7 +113,7 @@ protected:
    */
   void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
-    newUse(node, editorFindRange(node, node), declaration);
+    newUse(node, this->editorFindRange(node, node), declaration);
   }
 
   /**

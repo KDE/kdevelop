@@ -71,9 +71,9 @@ protected:
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    RangeInRevision newRange = editorFindRange(name ? name : range, name ? name : range);
+    RangeInRevision newRange = this->editorFindRange(name ? name : range, name ? name : range);
 
-    QualifiedIdentifier id = identifierForNode(name);
+    QualifiedIdentifier id = this->identifierForNode(name);
 
     return openDeclaration<DeclarationT>(id, newRange, flags);
   }

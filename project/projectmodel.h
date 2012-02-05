@@ -387,4 +387,12 @@ KDEVPLATFORMPROJECT_EXPORT QStringList removeProjectBasePath( const QStringList&
 
 }
 
+Q_DECLARE_METATYPE(KDevelop::ProjectBaseItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectFolderItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectFileItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectLibraryTargetItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectExecutableTargetItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectTargetItem*)
+Q_DECLARE_METATYPE(KDevelop::ProjectBuildFolderItem*)
+
 #endif // KDEVPROJECTMODEL_H

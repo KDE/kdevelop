@@ -29,6 +29,7 @@
 #include <cerrno>
 #include <assert.h>
 #include <sstream>
+#include <unistd.h>
 
 #ifndef HAVE_MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0

@@ -150,7 +150,7 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
     if (!info.isFile())
-        return false;
+        return 0;
 
     CvsLogJob* job = new CvsLogJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {

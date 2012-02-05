@@ -1333,7 +1333,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
     }
 
   foreach(const ParsingEnvironmentFilePointer &file, list)
-    if((proxyContext == file->isProxyContext())) {
+    if(proxyContext == file->isProxyContext()) {
       return file->topContext();
     }
 

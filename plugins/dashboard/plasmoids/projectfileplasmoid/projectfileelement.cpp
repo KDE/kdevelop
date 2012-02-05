@@ -32,7 +32,9 @@
 using namespace Plasma;
 
 ProjectFileItem::ProjectFileItem(QObject *parent, const QVariantList &args)
-	: Applet(parent, args), m_args(args), m_output(0)
+    : Applet(parent, args)
+    , m_output(0)
+    , m_args(args)
 {
 	setAspectRatioMode(IgnoreAspectRatio);
 }

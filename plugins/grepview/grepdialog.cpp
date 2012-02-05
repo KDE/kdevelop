@@ -288,7 +288,6 @@ void GrepDialog::setEnableProjectBox(bool enable)
 {
     limitToProjectCheck->setEnabled(enable);
     limitToProjectLabel->setEnabled(enable);
-    if (!enable) limitToProjectCheck->setChecked(false);
 }
 
 void GrepDialog::setPattern(const QString &pattern)
@@ -333,6 +332,7 @@ QString GrepDialog::excludeString() const
 
 bool GrepDialog::useProjectFilesFlag() const
 {
+    if (!limitToProjectCheck->isEnabled()) return false;
     return limitToProjectCheck->isChecked();
 }
 
