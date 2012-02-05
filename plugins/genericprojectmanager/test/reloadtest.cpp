@@ -186,12 +186,12 @@ void _writeRandomStructure(QString path, int files)
     }
 }
 
-void fillProject(int /*filesPerDir*/, int /*Dirs*/, const TestProject& project, bool wait)
+void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wait)
 {
-    for(int i=0; i < 100; ++i) {
+    for(int i=0; i < dirs; ++i) {
         const QString name = "foox" + QString::number(i);
         QDir(project.dir->name()).mkdir(name);
-        _writeRandomStructure(project.dir->name() + name, 50);
+        _writeRandomStructure(project.dir->name() + name, filesPerDir);
         if (wait) {
             QTest::qWait(100);
         }
@@ -220,11 +220,17 @@ void ProjectLoadTest::addMultipleJobs()
     const TestProject p2 = makeProject();
     fillProject(10, 25, p2, false);
 
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     KDevelop::ICore::self()->projectController()->openProject(p1.file);
     KDevelop::ICore::self()->projectController()->openProject(p2.file);
 
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    const int wait = 25;
+    const int maxWait = 2000;
+    int waited = 0;
+    while(waited < maxWait && spy.count() != 2) {
+        QTest::qWait(wait);
+        waited += wait;
+    }
 
     QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 2);
 }
