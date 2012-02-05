@@ -744,9 +744,67 @@ QString ProjectFileItem::fileName() const
     return baseName();
 }
 
-///NOTE: this is kind of slow due to KMimeType access
-///      maybe we should also introduce an extension-cache
-///      similar to what the language controller is doing
+// Maximum length of a string to still consider it as a file extension which we cache
+// This has to be a slow value, so that we don't fill our file extension cache with crap
+static const int maximumCacheExtensionLength = 3;
+
+bool isNumeric(const QStringRef& str)
+{
+    int len = str.length();
+    if(len == 0)
+        return false;
+    for(int a = 0; a < len; ++a)
+        if(!str.at(a).isNumber())
+            return false;
+    return true;
+}
+
+class IconNameCache
+{
+public:
+    QString iconNameForUrl(const KUrl& url, const QString& fileName)
+    {
+        // find icon name based on file extension, if possible
+        QString extension;
+        int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
+        if( extensionStart != -1 && fileName.length() - extensionStart - 1 <= maximumCacheExtensionLength ) {
+            QStringRef extRef = fileName.midRef(extensionStart + 1);
+            if( isNumeric(extRef) ) {
+                // don't cache numeric extensions
+                extRef.clear();
+            }
+            if( !extRef.isEmpty() ) {
+                extension = extRef.toString();
+                QMutexLocker lock(&mutex);
+                QHash< QString, QString >::const_iterator it = fileExtensionToIcon.constFind( extension );
+                if( it != fileExtensionToIcon.constEnd() ) {
+                    return *it;
+                }
+            }
+        }
+
+        KMimeType::Ptr mime = KMimeType::findByUrl( url, 0, false, true );
+        QMutexLocker lock(&mutex);
+        QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
+        QString iconName;
+        if ( it == mimeToIcon.constEnd() ) {
+            iconName = mime->iconName();
+            mimeToIcon.insert(mime->name(), iconName);
+        } else {
+            iconName = *it;
+        }
+        if ( !extension.isEmpty() ) {
+            fileExtensionToIcon.insert(extension, iconName);
+        }
+        return iconName;
+    }
+    QMutex mutex;
+    QHash<QString, QString> mimeToIcon;
+    QHash<QString, QString> fileExtensionToIcon;
+};
+
+K_GLOBAL_STATIC(IconNameCache, s_cache);
+
 void ProjectFileItem::setUrl( const KUrl& url )
 {
     if (url == d_ptr->m_url) {
@@ -765,7 +823,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
         project()->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 
-    d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName();
+    d_ptr->iconName = s_cache->iconNameForUrl( url, d_ptr->text );
 }
 
 int ProjectFileItem::type() const
