@@ -219,29 +219,29 @@ void ProjectBaseItem::removeRows(int row, int count)
     if( model() ) {
         QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
-    QList<ProjectBaseItem*> toRemove;
-#if QT_VERSION >= 0x040700
-    toRemove.reserve(count);
-#endif
+
+    //NOTE: we unset parent, row and model manually to speed up the deletion
     if (row == 0 && count == d->children.size()) {
-        // optimize shutdown for big projects
-        toRemove = d->children;
+        // optimize if we want to delete all
+        foreach(ProjectBaseItem* item, d->children) {
+            item->d_func()->parent = 0;
+            item->d_func()->row = -1;
+            item->setModel( 0 );
+            delete item;
+        }
         d->children.clear();
     } else {
         for (int i = row; i < count; ++i) {
-            toRemove << d->children.takeAt( row );
+            ProjectBaseItem* item = d->children.at(i);
+            item->d_func()->parent = 0;
+            item->d_func()->row = -1;
+            item->setModel( 0 );
+            delete d->children.takeAt( row );
         }
         for(int i = row; i < d->children.size(); ++i) {
             d->children.at(i)->d_func()->row--;
             Q_ASSERT(child(i)->d_func()->row==i);
         }
-    }
-
-    foreach(ProjectBaseItem* item, toRemove) {
-        item->d_func()->parent = 0;
-        item->d_func()->row = -1;
-        item->setModel( 0 );
-        delete item;
     }
 
     if( model() ) {
