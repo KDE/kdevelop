@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake Qt-C++
+Name[ca]=CMake Qt-C++
 Name[da]=CMake Qt-C++
 Name[de]=CMake Qt-C++
 Name[el]=CMake Qt-C++
@@ -23,6 +24,7 @@ Name[x-test]=xxCMake Qt-C++xx
 Name[zh_CN]=CMake Qt-C++
 Name[zh_TW]=CMake Qt-C++
 Comment=Qt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)
+Comment[ca]=Aplicació IGU CMake Qt4. Genera una aplicació IGU basada en CMake/Qt4 (multi plataforma)
 Comment[da]=Qt4 CMake GUI-program. Genererer et CMake-/Qt4-baseret GUI-program (krydsplatform kompatibelt)
 Comment[de]=Qt4/CMake-GUI-Anwendung. Eine auf CMake und Qt4 basierende GUI-Anwendung (plattformunabhängig) erstellen.
 Comment[el]=Qt4 CMake Gui εφαρμογή. Δημιουργία μιας CMake/Qt4 εφαρμογής με γραφικό περιβάλλον (συμβατή με πολλαπλές πλατφόρμες)

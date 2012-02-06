@@ -27,6 +27,7 @@ Name[x-test]=xxKDevelop 4 (Pick Session)xx
 Name[zh_CN]=KDevelop 4 (选择会话)
 Name[zh_TW]=KDevelop 4（選擇工作階段）
 GenericName=Integrated Development Environment (Pick Session to start with)
+GenericName[ca]=Entorn integrat de desenvolupament (Seleccioneu una sessió)
 GenericName[cs]=Integrované Vývojové Prostředí (Zvolte si relaci, se kterou chcete začít0
 GenericName[da]=Integreret udviklingsmiljø (IDE) (vælg session at starte med)
 GenericName[de]=Integrierte Entwicklungsumgebung (zu startende Sitzung auswählen)
