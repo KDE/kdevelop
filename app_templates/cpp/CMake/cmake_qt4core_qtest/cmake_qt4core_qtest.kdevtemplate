@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake QtTest
+Name[ca]=CMake QtTest
 Name[da]=CMake QtTest
 Name[de]=CMake QtTest
 Name[es]=CMake QtTest
@@ -18,6 +19,7 @@ Name[uk]=CMake QtTest
 Name[x-test]=xxCMake QtTestxx
 Name[zh_TW]=CMake QtTest
 Comment=Qt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)
+Comment[ca]=Aplicació de nucli QTest CMake Qt4. Genera una aplicació basada en CMake/Qt4 (multi plataforma)
 Comment[da]=Qt4 CMake QTest Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform)
 Comment[de]=Qt4/CMake/QTest-Core-Anwendung. Eine auf CMake und Qt4 basierende Anwendung (plattformunabhängig) erstellen.
 Comment[es]=Aplicación Qt4 CMake QTest Core. Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)
