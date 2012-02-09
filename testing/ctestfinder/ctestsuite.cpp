@@ -19,9 +19,10 @@
 
 #include "ctestsuite.h"
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable) :
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& args) :
 m_url(executable),
-m_name(name)
+m_name(name),
+m_args(args)
 {
     loadCases();
 }

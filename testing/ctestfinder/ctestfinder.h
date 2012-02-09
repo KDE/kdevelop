@@ -23,6 +23,8 @@
 #include <interfaces/iplugin.h>
 
 class QVariant;
+class KUrl;
+
 namespace KDevelop
 {
    class IProject;
@@ -37,6 +39,7 @@ public:
 
 private slots:
     void findTestsForProject(KDevelop::IProject* project);
+    void findTestsInDirectory(const KUrl& directory);
 };
 
 #endif // CTESTFINDER_H

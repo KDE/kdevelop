@@ -24,11 +24,11 @@
 
 #include <KUrl>
 
-class CTestSuite : public KDevelop::ITestSuite
+class CTestSuite : public QObject, public KDevelop::ITestSuite
 {
 
 public:
-    CTestSuite(const QString& name, const KUrl& executable);
+    CTestSuite(const QString& name, const KUrl& executable, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
     virtual KDevelop::ILaunchConfiguration* launchCase(const QString& testCase) const;
@@ -43,6 +43,7 @@ private:
     KUrl m_url;
     QString m_name;
     QStringList m_cases;
+    QStringList m_args;
 };
 
 #endif // CTESTSUITE_H
