@@ -20,8 +20,7 @@
 #ifndef CTESTLAUNCHER_H
 #define CTESTLAUNCHER_H
 
-#include <../../home/miha/Programiranje/KDevelop/kdevplatform/interfaces/ilauncher.h>
-
+#include <interfaces/ilauncher.h>
 
 class CTestLauncher : public KDevelop::ILauncher
 {
