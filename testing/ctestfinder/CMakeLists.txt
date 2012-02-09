@@ -7,6 +7,7 @@ set(ctestfinder_LIB_SRCS
     ctestfinder.cpp
     ctestlauncher.cpp
     ctestsuite.cpp
+    ctestlaunchconfigurationtype.cpp
 )
 
 kde4_add_plugin(kdevctestfinder ${ctestfinder_LIB_SRCS})
