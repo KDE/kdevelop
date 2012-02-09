@@ -38,6 +38,10 @@ public:
     Q_SCRIPTABLE virtual void removeTestSuite(ITestSuite* suite) = 0;
 
     Q_SCRIPTABLE virtual QList<ITestSuite*> testSuites() const = 0;
+
+Q_SIGNALS:
+    void testSuiteAdded(ITestSuite* suite);
+    void testSuiteRemoved(ITestSuite* suite);
 };
 
 }
