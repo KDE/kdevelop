@@ -27,6 +27,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/itestcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
@@ -34,7 +35,6 @@
 #include <KAboutData>
 #include <KLocale>
 #include <QFile>
-#include <../kdevplatform/interfaces/itestcontroller.h>
 
 K_PLUGIN_FACTORY(CTestFinderFactory, registerPlugin<CTestFinder>(); )
 K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Finder"), "0.1", ki18n("Finds CTest unit tests"), KAboutData::License_GPL)))
