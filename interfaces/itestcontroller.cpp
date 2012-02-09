@@ -1,5 +1,5 @@
 /*  This file is part of KDevelop
-    Copyright 2012 Miha ÄanÄula <miha@noughmad.eu>
+    Copyright 2012 Miha Čančula <miha@noughmad.eu>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

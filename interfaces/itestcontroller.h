@@ -1,5 +1,5 @@
 /*  This file is part of KDevelop
-    Copyright 2012 Miha ÄanÄula <miha@noughmad.eu>
+    Copyright 2012 Miha Čančula <miha@noughmad.eu>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,24 +17,29 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QObject>
+#ifndef KDEVELOP_ITESTCONTROLLER_H
+#define KDEVELOP_ITESTCONTROLLER_H
+
+#include "interfacesexport.h"
+#include <QtCore/QObject>
 
 namespace KDevelop {
 
 class ITestSuite;
 
-class ITestController : public QObject
+class KDEVPLATFORMINTERFACES_EXPORT ITestController : public QObject
 {
-
+    Q_OBJECT
 public:
     explicit ITestController(QObject* parent = 0);
     virtual ~ITestController();
 
-    virtual void addTestSuite(ITestSuite* suite) = 0;
-    virtual void removeTestSuite(ITestSuite* suite) = 0;
+    Q_SCRIPTABLE virtual void addTestSuite(ITestSuite* suite) = 0;
+    Q_SCRIPTABLE virtual void removeTestSuite(ITestSuite* suite) = 0;
 
-    virtual QList<ITestSuite*> testSuites() const = 0;
+    Q_SCRIPTABLE virtual QList<ITestSuite*> testSuites() const = 0;
 };
 
 }
 
+#endif // KDEVELOP_ITESTCONTROLLER_H
