@@ -43,6 +43,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 	iprojectprovider.cpp
 	ibuddydocumentfinder.cpp
 	itemplateprovider.cpp
+    itestsuite.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
@@ -109,6 +110,7 @@ install(FILES
     iprojectprovider.h
     ibuddydocumentfinder.h
     itemplateprovider.h
+    itestsuite.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
