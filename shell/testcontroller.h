@@ -37,6 +37,7 @@ public:
     virtual QList< KDevelop::ITestSuite* > testSuites() const;
     virtual void removeTestSuite(KDevelop::ITestSuite* suite);
     virtual void addTestSuite(KDevelop::ITestSuite* suite);
+    virtual ITestSuite* testSuiteForUrl(const KUrl& url) const;
 
 private:
     TestControllerPrivate* const d;

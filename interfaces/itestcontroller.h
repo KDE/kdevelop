@@ -23,6 +23,8 @@
 #include "interfacesexport.h"
 #include <QtCore/QObject>
 
+class KUrl;
+
 namespace KDevelop {
 
 class ITestSuite;
@@ -38,6 +40,7 @@ public:
     Q_SCRIPTABLE virtual void removeTestSuite(ITestSuite* suite) = 0;
 
     Q_SCRIPTABLE virtual QList<ITestSuite*> testSuites() const = 0;
+    Q_SCRIPTABLE virtual ITestSuite* testSuiteForUrl(const KUrl& url) const = 0;
 
 Q_SIGNALS:
     void testSuiteAdded(ITestSuite* suite);

@@ -20,6 +20,8 @@
 #include "testcontroller.h"
 #include "interfaces/itestsuite.h"
 
+#include <KUrl>
+
 using namespace KDevelop;
 
 class KDevelop::TestControllerPrivate
@@ -54,5 +56,17 @@ void TestController::addTestSuite(KDevelop::ITestSuite* suite)
 {
     d->suites.append(suite);
     emit testSuiteRemoved(suite);
+}
+
+ITestSuite* TestController::testSuiteForUrl(const KUrl& url) const
+{
+    foreach(ITestSuite* suite, d->suites)
+    {
+        if (suite->url() == url)
+        {
+            return suite;
+        }
+    }
+    return 0;
 }
 
