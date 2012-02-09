@@ -43,6 +43,7 @@ class SelectionController;
 class DocumentationController;
 class DebugController;
 class WorkingSetController;
+class TestController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore
 {
@@ -103,6 +104,9 @@ public:
 
     /** @copydoc ICore::debugController() */
     virtual IDebugController* debugController();
+
+    /** @copydoc ICore::testController() */
+    virtual ITestController* testController();
     
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
@@ -137,6 +141,9 @@ public:
 
     /** @return debug controller */
     DebugController *debugControllerInternal();
+
+    /** @return test controller */
+    TestController *testControllerInternal();
 
     /** @return working set controller */
     WorkingSetController* workingSetControllerInternal();
