@@ -18,34 +18,41 @@
 */
 
 #include "ctestlauncher.h"
+#include <KLocalizedString>
 
 KJob* CTestLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
 {
-
+    if (!cfg || launchMode != "test")
+    {
+        return 0;
+    }
+    
+    // TODO: Implement
+    return 0;
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > CTestLauncher::configPages() const
 {
-
+    return QList<KDevelop::LaunchConfigurationPageFactory*>();
 }
 
 QStringList CTestLauncher::supportedModes() const
 {
-
+    return QStringList() << "test";
 }
 
 QString CTestLauncher::description() const
 {
-
+    return i18n("Runs CTest unit tests");
 }
 
 QString CTestLauncher::name() const
 {
-
+    return i18n("CTest unit test");
 }
 
 QString CTestLauncher::id()
 {
-
+    return "CTestLauncher";
 }
 
