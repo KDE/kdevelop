@@ -70,6 +70,7 @@ add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(doc)
 add_subdirectory(file_templates)
+add_subdirectory(testing)
 #macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()
