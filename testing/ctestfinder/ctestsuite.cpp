@@ -18,6 +18,7 @@
 */
 
 #include "ctestsuite.h"
+#include <KProcess>
 
 CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& args) :
 m_url(executable),
@@ -34,7 +35,27 @@ CTestSuite::~CTestSuite()
 
 void CTestSuite::loadCases()
 {
-    // TODO
+    m_cases.clear();
+    if (!m_args.isEmpty())
+    {
+        m_cases.clear();
+        m_cases << QString();
+    }
+    KProcess process;
+    process.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+    process.setProgram(m_url.toLocalFile(), QStringList() << "-functions");
+    process.start();
+    if (!process.waitForFinished())
+    {
+        return;
+    }
+    while(!process.atEnd())
+    {
+        QString line = process.readLine().trimmed();
+        line.remove('(');
+        line.remove(')');
+        m_cases << line;
+    }
 }
 
 KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) const
@@ -67,4 +88,3 @@ QString CTestSuite::name() const
 {
     return m_name;
 }
-
