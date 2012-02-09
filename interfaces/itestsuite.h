@@ -41,7 +41,7 @@ public:
 
     virtual ILaunchConfiguration* launchAllCases() const = 0;
     virtual ILaunchConfiguration* launchCases(const QStringList& testCases) const = 0;
-    virtual ILaunchConfiguration* launchcase(const QString& testCase) const = 0;
+    virtual ILaunchConfiguration* launchCase(const QString& testCase) const = 0;
 };
 
 }
