@@ -25,8 +25,19 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KIcon>
+#include "ctestlauncher.h"
 
 using namespace KDevelop;
+
+CTestLaunchConfigurationType::CTestLaunchConfigurationType()
+{
+    addLauncher(new CTestLauncher);
+}
+
+CTestLaunchConfigurationType::~CTestLaunchConfigurationType()
+{
+
+}
 
 bool CTestLaunchConfigurationType::canLaunch(const KUrl& file) const
 {

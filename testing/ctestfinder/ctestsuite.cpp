@@ -18,13 +18,25 @@
 */
 
 #include "ctestsuite.h"
+#include "ctestlaunchconfigurationtype.h"
+
+#include <execute/iexecuteplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
+
 #include <KProcess>
+
+
+using namespace KDevelop;
 
 CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& args) :
 m_url(executable),
 m_name(name),
 m_args(args)
 {
+    m_launchType = new CTestLaunchConfigurationType();
     loadCases();
 }
 
@@ -65,8 +77,15 @@ KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) 
 
 KDevelop::ILaunchConfiguration* CTestSuite::launchCases(const QStringList& testCases) const
 {
-    // TODO: Implement
-    return 0;
+    ILaunchConfiguration* launch =  ICore::self()->runController()->createLaunchConfiguration(m_launchType, qMakePair<QString, QString>("test", "CTestLauncher"));
+
+    KConfigGroup group = launch->config();
+    group.writeEntry("TestExecutable", m_url);
+    group.writeEntry("TestCases", testCases);
+    group.writeEntry("TestRunArguments", m_args);
+    group.sync();
+    
+    return launch;
 }
 
 KDevelop::ILaunchConfiguration* CTestSuite::launchAllCases() const

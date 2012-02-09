@@ -27,6 +27,9 @@ class CTestLaunchConfigurationType : public KDevelop::LaunchConfigurationType
 {
 
 public:
+    CTestLaunchConfigurationType();
+    virtual ~CTestLaunchConfigurationType();
+    
     virtual bool canLaunch(const KUrl& file) const;
     virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
     virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;

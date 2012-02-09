@@ -24,6 +24,8 @@
 
 #include <KUrl>
 
+class CTestLaunchConfigurationType;
+
 class CTestSuite : public QObject, public KDevelop::ITestSuite
 {
 
@@ -44,6 +46,7 @@ private:
     QString m_name;
     QStringList m_cases;
     QStringList m_args;
+    CTestLaunchConfigurationType* m_launchType;
 };
 
 #endif // CTESTSUITE_H
