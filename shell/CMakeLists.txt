@@ -51,6 +51,7 @@ set(kdevplatformshell_LIB_SRCS
     overlaywidget.cpp
     progressdialog.cpp
     projectsourcepage.cpp
+    testcontroller.cpp
 
 # TODO: Re-Enable after generating new kross bindings for project model
 #     kross/krossplugin.cpp
@@ -139,6 +140,7 @@ install(FILES
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h
+    testcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 
