@@ -29,7 +29,7 @@ namespace KDevelop {
 
 class ILaunchConfiguration;
 
-class ITestSuite
+class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
 {
 
 public:
