@@ -37,8 +37,10 @@ using namespace KDevelop;
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
 , m_plugin(plugin)
 {
+    setIndentation(10);
     m_model = new QStandardItemModel(this);
     setModel(m_model);
+    buildTestModel();
 }
 
 TestView::~TestView()
