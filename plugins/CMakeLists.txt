@@ -23,6 +23,7 @@ add_subdirectory(git)
 add_subdirectory(vcschangesview)
 add_subdirectory(templatemanager)
 add_subdirectory(filetemplates)
+add_subdirectory(testcontroller)
 
 if(${KDE_VERSION} VERSION_GREATER 4.6)
     macro_optional_add_subdirectory(dashboard)

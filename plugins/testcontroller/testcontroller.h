@@ -17,30 +17,29 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ITESTCONTROLLER_H
-#define KDEVELOP_ITESTCONTROLLER_H
+#ifndef KDEVELOP_TESTCONTROLLER_H
+#define KDEVELOP_TESTCONTROLLER_H
 
-#include "interfacesexport.h"
-#include <QtCore/QList>
+#include "interfaces/itestcontroller.h"
+#include "interfaces/iplugin.h"
+#include <QtCore/QVariantList>
 
-class KUrl;
+class TestControllerPrivate;
 
-namespace KDevelop {
-
-class ITestSuite;
-
-class KDEVPLATFORMINTERFACES_EXPORT ITestController
+class TestController : public KDevelop::IPlugin, public KDevelop::ITestController
 {
+    Q_OBJECT
 public:
-    virtual ~ITestController();
+    explicit TestController(QObject *parent, const QVariantList &args = QVariantList());
+    virtual ~TestController();
+    
+    virtual QList< KDevelop::ITestSuite* > testSuites() const;
+    virtual void removeTestSuite(KDevelop::ITestSuite* suite);
+    virtual void addTestSuite(KDevelop::ITestSuite* suite);
+    virtual KDevelop::ITestSuite* testSuiteForUrl(const KUrl& url) const;
 
-    virtual void addTestSuite(ITestSuite* suite) = 0;
-    virtual void removeTestSuite(ITestSuite* suite) = 0;
-
-    virtual QList<ITestSuite*> testSuites() const = 0;
-    virtual ITestSuite* testSuiteForUrl(const KUrl& url) const = 0;
+private:
+    TestControllerPrivate* const d;
 };
 
-}
-
-#endif // KDEVELOP_ITESTCONTROLLER_H
+#endif // KDEVELOP_TESTCONTROLLER_H
