@@ -75,3 +75,17 @@ ITestSuite* TestController::testSuiteForUrl(const KUrl& url) const
     return 0;
 }
 
+QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) const
+{
+    QList<ITestSuite*> suites;
+    foreach (ITestSuite* suite, d->suites)
+    {
+        if (suite->project() == project)
+        {
+            suites << suite;
+        }
+    }
+    return suites;
+}
+
+

@@ -27,6 +27,7 @@ class KUrl;
 
 namespace KDevelop {
 
+class IProject;
 class ITestSuite;
 
 class KDEVPLATFORMINTERFACES_EXPORT ITestController
@@ -39,6 +40,7 @@ public:
 
     virtual QList<ITestSuite*> testSuites() const = 0;
     virtual ITestSuite* testSuiteForUrl(const KUrl& url) const = 0;
+    virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
 };
 
 }
