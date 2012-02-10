@@ -27,6 +27,7 @@ class KUrl;
 
 namespace KDevelop {
 
+class IProject;
 class ILaunchConfiguration;
 
 class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
@@ -38,6 +39,7 @@ public:
     virtual QString name() const = 0;
     virtual QStringList cases() const = 0;
     virtual KUrl url() const = 0;
+    virtual IProject* project() const = 0;
 
     virtual ILaunchConfiguration* launchAllCases() const = 0;
     virtual ILaunchConfiguration* launchCases(const QStringList& testCases) const = 0;
