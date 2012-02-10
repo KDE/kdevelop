@@ -52,7 +52,6 @@ class IDocumentationController;
 class IDebugController;
 class IPartController;
 class IDashboardController;
-class ITestController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -116,9 +115,6 @@ public:
 
     /** @return the debug controller */
     Q_SCRIPTABLE virtual KDevelop::IDebugController* debugController() = 0;
-    
-    /** @return the test controller */
-    Q_SCRIPTABLE virtual KDevelop::ITestController* testController() = 0;
 
     /** @return the component data of the framework, different from the main component which is created by the application */
     virtual KComponentData componentData() const = 0;

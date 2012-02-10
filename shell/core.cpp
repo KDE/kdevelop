@@ -54,7 +54,6 @@
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
-#include "testcontroller.h"
 #include <KMessageBox>
 
 #include <KTextEditor/Document>
@@ -224,11 +223,6 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     if( !debugController )
     {
         debugController = new DebugController(m_core);
-    }
-
-    if( !testController )
-    {
-        testController = new TestController(m_core);
     }
     
     kDebug() << "initializing ui controller";
@@ -534,16 +528,6 @@ DebugController* Core::debugControllerInternal()
 WorkingSetController* Core::workingSetControllerInternal()
 {
     return d->workingSetController.data();
-}
-
-ITestController* Core::testController()
-{
-    return d->testController.data();
-}
-
-TestController* Core::testControllerInternal()
-{
-    return d->testController.data();
 }
 
 QString Core::version()

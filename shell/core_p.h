@@ -42,7 +42,6 @@ class SelectionController;
 class DocumentationController;
 class DebugController;
 class WorkingSetController;
-class TestController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
@@ -63,7 +62,6 @@ public:
     QWeakPointer<DocumentationController> documentationController;
     QWeakPointer<DebugController> debugController;
     QWeakPointer<WorkingSetController> workingSetController;
-    QWeakPointer<TestController> testController;
 
     KComponentData m_componentData;
     Core *m_core;
