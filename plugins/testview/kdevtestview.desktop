@@ -2,8 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=Lets you see and run unit tests.
-Name=Unit Tests
-GenericName=Unit Tests
+Name=Unit Test View
+GenericName=Unit Test View
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevtestview

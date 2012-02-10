@@ -28,7 +28,7 @@
 #include <KLocalizedString>
 
 K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
-K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Tests"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -61,7 +61,7 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlug
 {
     Q_UNUSED(args)
     m_viewFactory = new TestToolViewFactory(this);
-    core()->uiController()->addToolView(i18n("Test View"), m_viewFactory);
+    core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
 }
 
 TestViewPlugin::~TestViewPlugin()
