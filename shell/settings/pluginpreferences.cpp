@@ -55,6 +55,7 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
     categories["Documentation"] = i18n("Documentation");
     categories["Language Support"] = i18n("Language Support");
     categories["Debugging"] = i18n("Debugging");
+    categories["Testing"] = i18n("Testing");
     categories["Other"] = i18n("Other");
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->allPluginInfos() )
     {
