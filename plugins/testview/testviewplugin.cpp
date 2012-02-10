@@ -28,7 +28,7 @@
 #include <KLocalizedString>
 
 K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
-K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Tests"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
