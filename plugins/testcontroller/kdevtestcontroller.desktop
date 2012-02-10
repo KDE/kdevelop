@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Manages unit tests.
+Name=Test Controller
+GenericName=Test Controller
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevtestcontroller
+X-KDE-PluginInfo-Name=kdevtestcontroller
+X-KDE-PluginInfo-Author=Miha Čančula
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Testing
+X-KDevelop-Version=14
+X-KDevelop-Category=Global
+X-KDevelop-Interfaces=org.kdevelop.ITestController
+X-KDevelop-Mode=NoGUI
