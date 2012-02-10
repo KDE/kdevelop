@@ -13,4 +13,5 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Testing
 X-KDevelop-Version=14
 X-KDevelop-Category=Global
+X-KDevelop-IRequired=org.kdevelop.ITestController
 X-KDevelop-Mode=GUI
