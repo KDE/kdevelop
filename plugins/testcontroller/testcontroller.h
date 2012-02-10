@@ -29,6 +29,7 @@ class TestControllerPrivate;
 class TestController : public KDevelop::IPlugin, public KDevelop::ITestController
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::ITestController)
 public:
     explicit TestController(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~TestController();
@@ -39,6 +40,10 @@ public:
     virtual QList< KDevelop::ITestSuite* > testSuites() const;    
     virtual KDevelop::ITestSuite* testSuiteForUrl(const KUrl& url) const;
     virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
+
+signals:
+    virtual void testSuiteAdded(KDevelop::ITestSuite* suite) const;
+    virtual void testSuiteRemoved(KDevelop::ITestSuite* suite) const;
 
 private:
     TestControllerPrivate* const d;

@@ -56,11 +56,13 @@ QList< KDevelop::ITestSuite* > TestController::testSuites() const
 void TestController::removeTestSuite(KDevelop::ITestSuite* suite)
 {
     d->suites.removeAll(suite);
+    emit testSuiteRemoved(suite);
 }
 
 void TestController::addTestSuite(KDevelop::ITestSuite* suite)
 {
     d->suites.append(suite);
+    emit testSuiteAdded(suite);
 }
 
 ITestSuite* TestController::testSuiteForUrl(const KUrl& url) const
