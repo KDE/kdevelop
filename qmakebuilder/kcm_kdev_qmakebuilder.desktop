@@ -35,6 +35,7 @@ Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
 Comment[ca]=Configura els arranjaments de QMake
 Comment[ca@valencia]=Configura els arranjaments de QMake
+Comment[de]=QMake-Einstellungen festlegen
 Comment[en_GB]=Configure QMake settings
 Comment[es]=Configurar preferencias de QMake
 Comment[et]=QMake'i seadistamine
