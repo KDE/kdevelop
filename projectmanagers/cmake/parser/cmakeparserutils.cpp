@@ -190,17 +190,19 @@ namespace CMakeParserUtils
         KDevelop::IPlugin* testProviderPlugin = KDevelop::ICore::self()->pluginController()->loadPlugin("kdevctestfinder");
         if (testProviderPlugin)
         {
-            kDebug(9042) << "Found test provider plugin" << testProviderPlugin->extensions();
             ICTestProvider* testProvider = testProviderPlugin->extension<ICTestProvider>();
             if (testProvider)
             {
-                kDebug(9042) << "Test provider supports the correct interface, creating" <<
-                                v.testSuites().size() << "test suites for" << file;
                 QMultiMap<QString, QString>::const_iterator it = v.testSuites().constBegin();
                 QMultiMap<QString, QString>::const_iterator end = v.testSuites().constEnd();
                 for (; it != end; ++it)
                 {
-                    testProvider->createTestSuite(it.value(), it.key(), project);
+                    QString exe = it.key();
+                    if (!exe.startsWith("#[bin_dir]") && QFileInfo(exe).isRelative())
+                    {
+                        exe = binDir + exe;
+                    }
+                    testProvider->createTestSuite(it.value(), exe, project);
                 }
             }
         }
