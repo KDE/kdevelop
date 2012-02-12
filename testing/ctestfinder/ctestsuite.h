@@ -24,13 +24,18 @@
 
 #include <KUrl>
 
+class KProcess;
+namespace KDevelop {
+class ITestController;
+}
+
 class CTestLaunchConfigurationType;
 
 class CTestSuite : public QObject, public KDevelop::ITestSuite
 {
-
+    Q_OBJECT
 public:
-    CTestSuite(const QString& name, const KUrl& executable, const QStringList& args = QStringList());
+    CTestSuite(const QString& name, const KUrl& executable, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
     virtual KDevelop::ILaunchConfiguration* launchCase(const QString& testCase) const;
@@ -39,14 +44,26 @@ public:
     virtual KUrl url() const;
     virtual QStringList cases() const;
     virtual QString name() const;
+    virtual KDevelop::IProject* project() const;
 
     void loadCases();
+    void setTestController(KDevelop::ITestController* controller);
+    QStringList arguments();
+    
 private:
     KUrl m_url;
     QString m_name;
     QStringList m_cases;
     QStringList m_args;
+    KDevelop::IProject* m_project;
     CTestLaunchConfigurationType* m_launchType;
+    KDevelop::ITestController* m_controller;
+    KProcess* m_process;
+
+private slots:
+    void loadCasesProcessFinished(int exitCode);
+public slots:
+    void readFromProcess();
 };
 
 #endif // CTESTSUITE_H

@@ -26,6 +26,7 @@
 #include <KConfigGroup>
 #include <KIcon>
 #include "ctestlauncher.h"
+#include <interfaces/iplugincontroller.h>
 
 using namespace KDevelop;
 
@@ -41,7 +42,8 @@ CTestLaunchConfigurationType::~CTestLaunchConfigurationType()
 
 bool CTestLaunchConfigurationType::canLaunch(const KUrl& file) const
 {
-    return ICore::self()->testController()->testSuiteForUrl(file);
+    ITestController* controller = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    return controller->testSuiteForUrl(file);
 }
 
 void CTestLaunchConfigurationType::configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const

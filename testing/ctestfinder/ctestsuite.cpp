@@ -27,46 +27,58 @@
 #include <interfaces/ilaunchconfiguration.h>
 
 #include <KProcess>
+#include <KDebug>
+#include <QFileInfo>
+#include <interfaces/itestcontroller.h>
+#include <interfaces/iproject.h>
 
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& args) :
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, IProject* project, const QStringList& args): QObject(),
 m_url(executable),
 m_name(name),
-m_args(args)
+m_args(args),
+m_project(project),
+m_controller(0)
 {
     m_launchType = new CTestLaunchConfigurationType();
-    loadCases();
+    Q_ASSERT(project);
+    kDebug() << name << executable << project->name();
 }
 
 CTestSuite::~CTestSuite()
 {
-
+    m_controller->removeTestSuite(this);
 }
 
 void CTestSuite::loadCases()
 {
+    kDebug() << "Loading test cases for suite" << m_name << m_url;
     m_cases.clear();
     if (!m_args.isEmpty())
     {
-        m_cases.clear();
-        m_cases << QString();
-    }
-    KProcess process;
-    process.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    process.setProgram(m_url.toLocalFile(), QStringList() << "-functions");
-    process.start();
-    if (!process.waitForFinished())
-    {
+        m_cases << name();
+        m_controller->addTestSuite(this);
         return;
     }
-    while(!process.atEnd())
+    QFileInfo info(m_url.toLocalFile());
+    if (info.exists() && info.isExecutable())
     {
-        QString line = process.readLine().trimmed();
-        line.remove('(');
-        line.remove(')');
-        m_cases << line;
+        m_process = new KProcess;
+        m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+        m_process->setProgram(m_url.toLocalFile(), QStringList() << "-functions");
+        connect (m_process, SIGNAL(finished(int)), this, SLOT(loadCasesProcessFinished(int)));
+        connect (m_process, SIGNAL(started()), this, SLOT(readFromProcess()));
+        connect (m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(readFromProcess()));
+        connect (m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readFromProcess()));
+        kDebug() << "Starting a process to determine the test cases for" << m_name;
+        m_process->start();
+    }
+    else
+    {
+        m_cases << m_url.toLocalFile(); // TODO: Remove
+        m_controller->addTestSuite(this);
     }
 }
 
@@ -77,12 +89,19 @@ KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) 
 
 KDevelop::ILaunchConfiguration* CTestSuite::launchCases(const QStringList& testCases) const
 {
-    ILaunchConfiguration* launch =  ICore::self()->runController()->createLaunchConfiguration(m_launchType, qMakePair<QString, QString>("test", "CTestLauncher"));
+    ILaunchConfiguration* launch = ICore::self()->runController()->createLaunchConfiguration(m_launchType, qMakePair<QString, QString>("test", "CTestLauncher"));
 
     KConfigGroup group = launch->config();
     group.writeEntry("TestExecutable", m_url);
-    group.writeEntry("TestCases", testCases);
-    group.writeEntry("TestRunArguments", m_args);
+    if (!m_cases.isEmpty())
+    {
+        group.writeEntry("TestCases", testCases);
+    }
+    else if (!m_args.isEmpty())
+    {
+        group.writeEntry("TestRunArguments", m_args);
+
+    }
     group.sync();
     
     return launch;
@@ -107,3 +126,46 @@ QString CTestSuite::name() const
 {
     return m_name;
 }
+
+KDevelop::IProject* CTestSuite::project() const
+{
+    return m_project;
+}
+
+QStringList CTestSuite::arguments()
+{
+    return m_args;
+}
+
+void CTestSuite::setTestController(ITestController* controller)
+{
+    m_controller = controller;
+}
+
+void CTestSuite::loadCasesProcessFinished(int exitCode)
+{
+    kDebug() << exitCode;
+    if (!m_process)
+    {
+        kWarning() << "Loading cases finished but process is 0";
+        return;
+    }
+    while(!m_process->atEnd())
+    {
+        QString line = m_process->readLine().trimmed();
+        line.remove('(');
+        line.remove(')');
+        m_cases << line;
+    }
+    kDebug() << m_url << m_cases;
+    m_controller->addTestSuite(this);
+    
+    m_process->deleteLater();
+    m_process = 0;
+}
+
+void CTestSuite::readFromProcess()
+{
+    kDebug() << m_process->errorString();
+}
+

@@ -21,6 +21,5 @@ target_link_libraries(
 install(TARGETS kdevctestfinder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
+install( FILES ictestprovider.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/ctest COMPONENT Devel)
 install( FILES kdevctestfinder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
-

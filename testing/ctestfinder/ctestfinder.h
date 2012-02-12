@@ -20,26 +20,29 @@
 #ifndef CTESTFINDER_H
 #define CTESTFINDER_H
 
+#include "ictestprovider.h"
 #include <interfaces/iplugin.h>
 
 class QVariant;
-class KUrl;
 
 namespace KDevelop
 {
-   class IProject;
+    class IProject;
+    class ITestController;
 }
 
-class CTestFinder : public KDevelop::IPlugin
+class CTestFinder : public KDevelop::IPlugin, public ICTestProvider
 {
-   Q_OBJECT 
+   Q_OBJECT
+   Q_INTERFACES(ICTestProvider)
 public:
     CTestFinder(QObject* parent, const QList<QVariant>& args);
     virtual ~CTestFinder();
 
-private slots:
-    void findTestsForProject(KDevelop::IProject* project);
-    void findTestsInDirectory(const KUrl& directory);
+    virtual void createTestSuite(const QString& name, const QString& executable, KDevelop::IProject* project, const QStringList& arguments = QStringList());
+
+private:
+    KDevelop::ITestController* m_controller;
 };
 
 #endif // CTESTFINDER_H

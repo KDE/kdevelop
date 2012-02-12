@@ -677,7 +677,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     m_watchers[project]->addPath(file);
     QString profile = CMake::currentEnvironment(project);
     const KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
+    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile), project);
 }
 
 

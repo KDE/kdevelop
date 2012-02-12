@@ -30,6 +30,7 @@ set( cmakecommon_SRCS
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
   cmakemodelitems.cpp
+ 
  )
 
 set( cmakecommon_UI

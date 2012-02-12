@@ -30,11 +30,12 @@
 #include <interfaces/itestcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <interfaces/iplugincontroller.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocale>
-#include <QFile>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(CTestFinderFactory, registerPlugin<CTestFinder>(); )
 K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Finder"), "0.1", ki18n("Finds CTest unit tests"), KAboutData::License_GPL)))
@@ -44,11 +45,10 @@ using namespace KDevelop;
 CTestFinder::CTestFinder(QObject* parent, const QList<QVariant>& args): IPlugin(CTestFinderFactory::componentData(), parent)
 {
     Q_UNUSED(args);
-    foreach (IProject* project, core()->projectController()->projects())
-    {
-        findTestsForProject(project);
-    }
-    connect (core()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(findTestsForProject(KDevelop::IProject*)));
+
+    KDEV_USE_EXTENSION_INTERFACE( ICTestProvider )
+
+    m_controller = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
 }
 
 CTestFinder::~CTestFinder()
@@ -56,78 +56,20 @@ CTestFinder::~CTestFinder()
 
 }
 
-void CTestFinder::findTestsForProject(IProject* project)
+void CTestFinder::createTestSuite(const QString& name, const QString& executable, IProject* project, const QStringList& arguments)
 {
-    IBuildSystemManager* bm = project->buildSystemManager();
-    if (!bm)
+    QString exe = executable;
+    if (exe.startsWith("#[bin_dir]"))
     {
-        return;
+        exe.remove("#[bin_dir]");
     }
-    findTestsInDirectory(bm->buildDirectory(project->projectItem()));
+    KUrl exeUrl = project->buildSystemManager()->buildDirectory(project->projectItem());
+    exeUrl.addPath(exe);
+    Q_ASSERT(exeUrl.isLocalFile());
+    kDebug() << exeUrl << exeUrl.toLocalFile();
+    CTestSuite* suite = new CTestSuite(name, exeUrl, project, arguments);
+    suite->setTestController(m_controller);
+    suite->loadCases();
 }
 
-void CTestFinder::findTestsInDirectory(const KUrl& directory)
-{
-    KUrl fileUrl = directory;
-    fileUrl.addPath("CTestTestfile.cmake");
-    QFile file(fileUrl.toLocalFile());
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        return;
-    }
-
-    while (!file.atEnd())
-    {
-        QString line = file.readLine();
-        if (line.startsWith('#'))
-        {
-            continue;
-        }
-        else if (line.startsWith("SUBDIRS("))
-        {
-            line = line.trimmed();
-            line.remove("SUBDIRS(");
-            line.remove(')');
-
-            KUrl subDirUrl = directory;
-            subDirUrl.cd(line);
-            findTestsInDirectory(subDirUrl);
-        }
-        else if (line.startsWith("ADD_TEST("))
-        {
-            line = line.trimmed();
-            line.remove("ADD_TEST(");
-            line.remove(')');
-            int firstSpace = line.indexOf(' ');
-            if (firstSpace == -1)
-            {
-                continue;
-            }
-            QString name = line.mid(0, firstSpace);
-            line.remove(0, firstSpace);
-            QStringList args = line.split('\"');
-            QMutableStringListIterator it(args);
-            while(it.hasNext())
-            {
-                QString arg = it.next().trimmed();
-                if (arg.isEmpty())
-                {
-                    it.remove();
-                }
-            }
-            int n = args.size();
-            if (n < 1)
-            {
-                continue;
-            }
-            QString exe = args.takeFirst();
-            if (!exe.startsWith(directory.toLocalFile()))
-            {
-                exe = directory.toLocalFile(KUrl::AddTrailingSlash) + exe;
-            }
-            CTestSuite* suite = new CTestSuite(name, exe, args);
-            core()->testController()->addTestSuite(suite);
-        }
-    }
-}
 

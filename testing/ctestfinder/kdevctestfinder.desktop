@@ -2,15 +2,18 @@
 Type=Service
 Icon=cmake
 Exec=blubb
-Comment=This plugin finds CTest unit tests
+Comment=Finds and executes CTest unit tests
 Name=CTest Finder
 GenericName=CTest Finder
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevctestfinder
-X-KDevelop-Version=14
-X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevctestfinder
 X-KDE-PluginInfo-Author=Miha Čančula
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Testing
+X-KDE-PluginInfo-Interfaces=org.kdevelop.ICTestProvider
+X-KDE-PluginInfo-IRequired=org.kdevelop.ITestController
+X-KDevelop-Version=14
+X-KDevelop-Category=Global
 X-KDevelop-Mode=NoGUI
+

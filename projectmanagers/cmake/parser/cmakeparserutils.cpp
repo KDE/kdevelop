@@ -31,6 +31,11 @@
 #include <ktempdir.h>
 #include <cmakeprojectdata.h>
 
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include "testing/ctestfinder/ictestprovider.h"
+
 namespace CMakeParserUtils
 {
     QList<int> parseVersion(const QString& version, bool* ok)
@@ -149,7 +154,7 @@ namespace CMakeParserUtils
     }
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent,
-                                                   CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env)
+                    CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env, KDevelop::IProject* project)
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
@@ -181,6 +186,28 @@ namespace CMakeParserUtils
         data->includeDirectories=v.includeDirectories();
         data->targets=v.targets();
         data->properties=v.properties();
+
+        KDevelop::IPlugin* testProviderPlugin = KDevelop::ICore::self()->pluginController()->loadPlugin("kdevctestfinder");
+        if (testProviderPlugin)
+        {
+            kDebug(9042) << "Found test provider plugin" << testProviderPlugin->extensions();
+            ICTestProvider* testProvider = testProviderPlugin->extension<ICTestProvider>();
+            if (testProvider)
+            {
+                kDebug(9042) << "Test provider supports the correct interface, creating" <<
+                                v.testSuites().size() << "test suites for" << file;
+                QMultiMap<QString, QString>::const_iterator it = v.testSuites().constBegin();
+                QMultiMap<QString, QString>::const_iterator end = v.testSuites().constEnd();
+                for (; it != end; ++it)
+                {
+                    testProvider->createTestSuite(it.value(), it.key(), project);
+                }
+            }
+        }
+        else
+        {
+            kDebug(9042) << "No test provider plugin loaded";
+        }
         
         //printSubdirectories(data->subdirectories);
         

@@ -50,6 +50,12 @@ using namespace KDevelop;
 
 void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
 
+
+bool isGenerated(const QString& name)
+{
+    return name.indexOf("#[")>=0;
+}
+
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
@@ -270,7 +276,7 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
-    Q_UNUSED(test);
+    m_testSuites.insert(test->exeName(), test->testName());
     return 1;
 }
 
@@ -2332,11 +2338,6 @@ void CMakeProjectVisitor::setCacheValues( CacheValues* cache)
 void CMakeProjectVisitor::setVariableMap(VariableMap * vars)
 {
     m_vars=vars;
-}
-
-bool isGenerated(const QString& name)
-{
-    return name.indexOf("#[")>=0;
 }
 
 QStringList CMakeProjectVisitor::dependees(const QString& s) const
