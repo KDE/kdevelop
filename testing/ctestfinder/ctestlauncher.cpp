@@ -18,17 +18,38 @@
 */
 
 #include "ctestlauncher.h"
+#include "ctestrunjob.h"
+#include "ctestfinder.h"
+
 #include <KLocalizedString>
+#include <KDebug>
+
+#include <outputview/outputjob.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/ilaunchconfiguration.h>
+
+using namespace KDevelop;
+
+CTestLauncher::CTestLauncher(CTestFinder* plugin) : m_plugin(plugin)
+{
+
+}
+
+CTestLauncher::~CTestLauncher()
+{
+
+}
 
 KJob* CTestLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
 {
+    kDebug() << launchMode << cfg->name();
     if (!cfg || launchMode != "test")
     {
         return 0;
     }
     
-    // TODO: Implement
-    return 0;
+    CTestRunJob* job = new CTestRunJob(cfg, m_plugin);
+    return job;
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > CTestLauncher::configPages() const

@@ -25,14 +25,16 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KIcon>
+#include <KDebug>
 #include "ctestlauncher.h"
 #include <interfaces/iplugincontroller.h>
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 
 CTestLaunchConfigurationType::CTestLaunchConfigurationType()
 {
-    addLauncher(new CTestLauncher);
+    
 }
 
 CTestLaunchConfigurationType::~CTestLaunchConfigurationType()
@@ -48,16 +50,19 @@ bool CTestLaunchConfigurationType::canLaunch(const KUrl& file) const
 
 void CTestLaunchConfigurationType::configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const
 {
+    kDebug() << args;
     // TODO
 }
 
 void CTestLaunchConfigurationType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
+    kDebug() << item->url();
     // TODO
 }
 
 bool CTestLaunchConfigurationType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
+    kDebug() << item->url();
     return false;
 }
 

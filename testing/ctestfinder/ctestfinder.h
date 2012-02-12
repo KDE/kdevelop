@@ -24,6 +24,7 @@
 #include <interfaces/iplugin.h>
 
 class QVariant;
+class CTestLaunchConfigurationType;
 
 namespace KDevelop
 {
@@ -38,11 +39,13 @@ class CTestFinder : public KDevelop::IPlugin, public ICTestProvider
 public:
     CTestFinder(QObject* parent, const QList<QVariant>& args);
     virtual ~CTestFinder();
+    virtual void unload();
 
     virtual void createTestSuite(const QString& name, const QString& executable, KDevelop::IProject* project, const QStringList& arguments = QStringList());
 
 private:
     KDevelop::ITestController* m_controller;
+    CTestLaunchConfigurationType* m_configType;
 };
 
 #endif // CTESTFINDER_H

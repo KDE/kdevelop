@@ -3,7 +3,7 @@ project(ctestfinder)
 
 ########### next target ###############
 
-set(ctestfinder_LIB_SRCS
+set(ctestfinder_LIB_SRCS ctestrunjob.cpp
     ctestfinder.cpp
     ctestlauncher.cpp
     ctestsuite.cpp
@@ -16,6 +16,8 @@ target_link_libraries(
         ${KDE4_KIO_LIBS}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
+        ${KDEVPLATFORM_UTIL_LIBRARIES}
 )
 
 install(TARGETS kdevctestfinder DESTINATION ${PLUGIN_INSTALL_DIR} )

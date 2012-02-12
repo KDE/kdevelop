@@ -22,9 +22,14 @@
 
 #include <interfaces/ilauncher.h>
 
+class CTestFinder;
+
 class CTestLauncher : public KDevelop::ILauncher
 {
-
+public:
+    CTestLauncher(CTestFinder* plugin);
+    virtual ~CTestLauncher();
+    
 public:
     virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
@@ -32,6 +37,9 @@ public:
     virtual QString description() const;
     virtual QString name() const;
     virtual QString id();
+    
+private:
+    CTestFinder* m_plugin;
 };
 
 #endif // CTESTLAUNCHER_H

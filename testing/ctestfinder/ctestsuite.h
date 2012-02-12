@@ -60,6 +60,7 @@ private slots:
     void loadCasesProcessFinished(int exitCode);
 public slots:
     void readFromProcess();
+    void setLaunchConfigurationType(CTestLaunchConfigurationType* configType);
 };
 
 #endif // CTESTSUITE_H

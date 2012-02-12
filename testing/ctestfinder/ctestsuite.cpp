@@ -40,9 +40,9 @@ m_url(executable),
 m_name(name),
 m_args(args),
 m_project(project),
-m_controller(0)
+m_controller(0),
+m_launchType(0)
 {
-    m_launchType = new CTestLaunchConfigurationType();
     m_url.cleanPath();
     Q_ASSERT(project);
     kDebug() << m_name << m_url << m_project->name();
@@ -85,17 +85,19 @@ KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) 
 
 KDevelop::ILaunchConfiguration* CTestSuite::launchCases(const QStringList& testCases) const
 {
+    kDebug() << "Configuring test run" << m_name << "with cases" << testCases;
     ILaunchConfiguration* launch = ICore::self()->runController()->createLaunchConfiguration(m_launchType, qMakePair<QString, QString>("test", "CTestLauncher"));
 
     KConfigGroup group = launch->config();
-    group.writeEntry("TestExecutable", m_url);
+    group.writeEntry("TestExecutable", m_url.toLocalFile());
+    group.writeEntry("TestSuiteName", m_name);
     if (!m_cases.isEmpty())
     {
         group.writeEntry("TestCases", testCases);
     }
     else if (!m_args.isEmpty())
     {
-        group.writeEntry("TestRunArguments", m_args);
+        group.writeEntry("TestArguments", m_args);
 
     }
     group.sync();
@@ -137,3 +139,9 @@ void CTestSuite::setTestController(ITestController* controller)
 {
     m_controller = controller;
 }
+
+void CTestSuite::setLaunchConfigurationType(CTestLaunchConfigurationType* configType)
+{
+    m_launchType = configType;
+}
+
