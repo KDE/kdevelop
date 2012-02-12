@@ -26,6 +26,9 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KAction>
+#include <KActionCollection>
+#include <KActionCollection>
 
 K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
 K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
@@ -60,6 +63,12 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
 TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlugin(TestViewFactory::componentData(), parent)
 {
     Q_UNUSED(args)
+    
+    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all"), this );
+    actionCollection()->addAction("run_all_tests", runAll);
+    
+    setXMLFile("kdevctestmanager.rc");
+    
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
 }
@@ -73,4 +82,5 @@ void TestViewPlugin::unload()
 {
     core()->uiController()->removeToolView(m_viewFactory);
 }
+
 

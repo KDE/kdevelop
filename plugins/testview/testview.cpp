@@ -28,6 +28,8 @@
 #include <interfaces/itestsuite.h>
 
 #include <KIcon>
+#include <KActionCollection>
+#include <KAction>
 
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
@@ -41,6 +43,18 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     m_model = new QStandardItemModel(this);
     setModel(m_model);
     buildTestModel();
+    
+    QAction* action;
+
+    KAction* reloadAction = new KAction( KIcon("view-refresh"), i18n("Reload"), this );
+    connect (reloadAction, SIGNAL(triggered(bool)), SLOT(buildTestModel()));
+    addAction(reloadAction);
+    
+    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected"), this );
+    addAction(runSelected);
+    
+    action = plugin->actionCollection()->action("run_all_tests");
+    addAction(action);
 }
 
 TestView::~TestView()
@@ -57,7 +71,7 @@ void TestView::buildTestModel()
         QStandardItem* projectItem = new QStandardItem(KIcon("project-development"), project->name());
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
-            QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
+            QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name() + " (" + suite->url().toLocalFile() + ")");
             foreach (QString caseName, suite->cases())
             {
                 QStandardItem* caseItem = new QStandardItem(caseName);
