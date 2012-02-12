@@ -39,6 +39,7 @@ using namespace KDevelop;
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
 , m_plugin(plugin)
 {
+    setWindowIcon(KIcon("preflight-verifier"));
     setIndentation(10);
     m_model = new QStandardItemModel(this);
     setModel(m_model);
@@ -71,7 +72,7 @@ void TestView::buildTestModel()
         QStandardItem* projectItem = new QStandardItem(KIcon("project-development"), project->name());
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
-            QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name() + " (" + suite->url().toLocalFile() + ")");
+            QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
             foreach (QString caseName, suite->cases())
             {
                 QStandardItem* caseItem = new QStandardItem(caseName);
