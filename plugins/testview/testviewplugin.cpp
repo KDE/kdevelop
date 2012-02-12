@@ -29,6 +29,9 @@
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/ilauncher.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <util/executecompositejob.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -93,20 +96,34 @@ void TestViewPlugin::unload()
 
 void TestViewPlugin::runAllTests()
 {
-    foreach (ITestSuite* suite, core()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>()->testSuites())
+    QString jobName = "Run %1 tests in %2";
+    ITestController* tc = core()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    foreach (IProject* project, core()->projectController()->projects())
     {
-        ILaunchConfiguration* config = suite->launchAllCases();
-        ILauncher* launcher = 0;
-        foreach (ILauncher* l, config->type()->launchers())
+        QList<KJob*> jobs;
+        foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
-            if (l->supportedModes().contains("test"));
+            ILaunchConfiguration* config = suite->launchAllCases();
+            ILauncher* launcher = 0;
+            foreach (ILauncher* l, config->type()->launchers())
             {
-                launcher = l;
-                break;
+                if (l->supportedModes().contains("test"))
+                {
+                    launcher = l;
+                    break;
+                }
+            }
+            if (launcher)
+            {
+                jobs << launcher->start("test", config);
             }
         }
-        KJob* job = launcher->start("test", config);
-        core()->runController()->registerJob(job);
+        if (!jobs.isEmpty())
+        {
+            KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
+            compositeJob->setObjectName(i18np("Run 1 test in %2", "Run %1 tests in %2", jobs.size(), project->name()));
+            core()->runController()->registerJob(compositeJob);
+        }
     }
 }
 
