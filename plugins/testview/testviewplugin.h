@@ -36,6 +36,9 @@ public:
 
 private:
     TestToolViewFactory* m_viewFactory;
+    
+public slots:
+    void runAllTests();
 };
 
 #endif // TESTVIEWPLUGIN_H

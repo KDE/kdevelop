@@ -22,6 +22,13 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/itestcontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/launchconfigurationtype.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/ilauncher.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -65,6 +72,7 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlug
     Q_UNUSED(args)
     
     KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all"), this );
+    connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
     
     setXMLFile("kdevctestmanager.rc");
@@ -82,5 +90,25 @@ void TestViewPlugin::unload()
 {
     core()->uiController()->removeToolView(m_viewFactory);
 }
+
+void TestViewPlugin::runAllTests()
+{
+    foreach (ITestSuite* suite, core()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>()->testSuites())
+    {
+        ILaunchConfiguration* config = suite->launchAllCases();
+        ILauncher* launcher = 0;
+        foreach (ILauncher* l, config->type()->launchers())
+        {
+            if (l->supportedModes().contains("test"));
+            {
+                launcher = l;
+                break;
+            }
+        }
+        KJob* job = launcher->start("test", config);
+        core()->runController()->registerJob(job);
+    }
+}
+
 
 
