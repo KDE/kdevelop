@@ -98,7 +98,7 @@ private:
   /**Convenience method to report problems. Constructs the problem
   using the information about the current line and column in the buffer
   that is being parsed. Then stores the problem in the control object.*/
-  void reportError(const QString& msg);
+  void reportError(const QString& msg, KDevelop::ProblemData::Severity severity = KDevelop::ProblemData::Error);
   /**Reports a syntax error about unexpected token. The token
   reported is LA (look-ahead) from the stream.*/
   void syntaxError();

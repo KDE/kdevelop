@@ -17,6 +17,7 @@
 */
 #include <iostream>
 #include <QtCore/QThread>
+#include <unistd.h>
 
 class TestThread : public QThread
 {
