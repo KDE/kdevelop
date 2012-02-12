@@ -373,7 +373,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
     if (closeButton) {
     disconnect(closeButton, SIGNAL(clicked()), 0, 0);
 
-    connect(closeButton, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
+    connect(closeButton, SIGNAL(clicked(bool)), SIGNAL(close()));
     }
 
     setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
@@ -620,6 +620,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
         m_docks->addAction(action);
         bar->show();
+        connect(dock, SIGNAL(close()), action, SLOT(toggle()));
     }
 
     connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
