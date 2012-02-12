@@ -305,7 +305,7 @@ public:
     }
     
 public slots:
-    void documentSaved( KDevelop::IDocument* document )
+    void documentSavedOrClosed( KDevelop::IDocument* document )
     {
         if(currentRecoveryFiles.contains(document->url()))
         {
@@ -323,9 +323,10 @@ private slots:
     void lateInitialization()
     {
         performRecovery();
-        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)));
-        
+        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
+        connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
     }
+
     void performRecovery()
     {
         kDebug() << "Checking recovery";
