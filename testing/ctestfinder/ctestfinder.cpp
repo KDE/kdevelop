@@ -70,6 +70,7 @@ void CTestFinder::createTestSuite(const QString& name, const QString& executable
     CTestSuite* suite = new CTestSuite(name, exeUrl, project, arguments);
     suite->setTestController(m_controller);
     suite->loadCases();
+    m_controller->addTestSuite(suite);
 }
 
 

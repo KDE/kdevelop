@@ -21,19 +21,16 @@
 #define CTESTSUITE_H
 
 #include <interfaces/itestsuite.h>
-
 #include <KUrl>
 
-class KProcess;
 namespace KDevelop {
 class ITestController;
 }
 
 class CTestLaunchConfigurationType;
 
-class CTestSuite : public QObject, public KDevelop::ITestSuite
+class CTestSuite : public KDevelop::ITestSuite
 {
-    Q_OBJECT
 public:
     CTestSuite(const QString& name, const KUrl& executable, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
@@ -58,7 +55,6 @@ private:
     KDevelop::IProject* m_project;
     CTestLaunchConfigurationType* m_launchType;
     KDevelop::ITestController* m_controller;
-    KProcess* m_process;
 
 private slots:
     void loadCasesProcessFinished(int exitCode);

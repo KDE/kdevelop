@@ -35,7 +35,7 @@
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable, IProject* project, const QStringList& args): QObject(),
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, IProject* project, const QStringList& args): 
 m_url(executable),
 m_name(name),
 m_args(args),
@@ -43,8 +43,9 @@ m_project(project),
 m_controller(0)
 {
     m_launchType = new CTestLaunchConfigurationType();
+    m_url.cleanPath();
     Q_ASSERT(project);
-    kDebug() << name << executable << project->name();
+    kDebug() << m_name << m_url << m_project->name();
 }
 
 CTestSuite::~CTestSuite()
@@ -56,29 +57,24 @@ void CTestSuite::loadCases()
 {
     kDebug() << "Loading test cases for suite" << m_name << m_url;
     m_cases.clear();
-    if (!m_args.isEmpty())
-    {
-        m_cases << name();
-        m_controller->addTestSuite(this);
-        return;
-    }
     QFileInfo info(m_url.toLocalFile());
-    if (info.exists() && info.isExecutable())
+    
+    if (m_args.isEmpty() && info.exists() && info.isExecutable())
     {
-        m_process = new KProcess;
-        m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
-        m_process->setProgram(m_url.toLocalFile(), QStringList() << "-functions");
-        connect (m_process, SIGNAL(finished(int)), this, SLOT(loadCasesProcessFinished(int)));
-        connect (m_process, SIGNAL(started()), this, SLOT(readFromProcess()));
-        connect (m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(readFromProcess()));
-        connect (m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readFromProcess()));
-        kDebug() << "Starting a process to determine the test cases for" << m_name;
-        m_process->start();
-    }
-    else
-    {
-        m_cases << m_url.toLocalFile(); // TODO: Remove
-        m_controller->addTestSuite(this);
+        KProcess process;
+        process.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+        process.setProgram(m_url.toLocalFile(), QStringList() << "-functions");
+        process.start();
+        if (process.waitForFinished())
+        {       
+            while(!process.atEnd())
+            {
+                QString line = process.readLine().trimmed();
+                line.remove('(');
+                line.remove(')');
+                m_cases << line;
+            }
+        }
     }
 }
 
@@ -141,31 +137,3 @@ void CTestSuite::setTestController(ITestController* controller)
 {
     m_controller = controller;
 }
-
-void CTestSuite::loadCasesProcessFinished(int exitCode)
-{
-    kDebug() << exitCode;
-    if (!m_process)
-    {
-        kWarning() << "Loading cases finished but process is 0";
-        return;
-    }
-    while(!m_process->atEnd())
-    {
-        QString line = m_process->readLine().trimmed();
-        line.remove('(');
-        line.remove(')');
-        m_cases << line;
-    }
-    kDebug() << m_url << m_cases;
-    m_controller->addTestSuite(this);
-    
-    m_process->deleteLater();
-    m_process = 0;
-}
-
-void CTestSuite::readFromProcess()
-{
-    kDebug() << m_process->errorString();
-}
-
