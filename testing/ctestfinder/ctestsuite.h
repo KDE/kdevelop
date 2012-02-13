@@ -53,8 +53,8 @@ private:
     QStringList m_cases;
     QStringList m_args;
     KDevelop::IProject* m_project;
-    CTestLaunchConfigurationType* m_launchType;
     KDevelop::ITestController* m_controller;
+    CTestLaunchConfigurationType* m_launchType;
 
 private slots:
     void loadCasesProcessFinished(int exitCode);
