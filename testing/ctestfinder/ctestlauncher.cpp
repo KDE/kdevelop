@@ -43,7 +43,7 @@ CTestLauncher::~CTestLauncher()
 KJob* CTestLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
 {
     kDebug() << launchMode << cfg->name();
-    if (!cfg || launchMode != "test")
+    if (!cfg)
     {
         return 0;
     }
@@ -59,7 +59,7 @@ QList< KDevelop::LaunchConfigurationPageFactory* > CTestLauncher::configPages() 
 
 QStringList CTestLauncher::supportedModes() const
 {
-    return QStringList() << "test";
+    return QStringList() << "execute";
 }
 
 QString CTestLauncher::description() const

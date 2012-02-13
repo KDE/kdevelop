@@ -45,7 +45,12 @@ CTestLaunchConfigurationType::~CTestLaunchConfigurationType()
 bool CTestLaunchConfigurationType::canLaunch(const KUrl& file) const
 {
     ITestController* controller = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
-    return controller->testSuiteForUrl(file);
+    ITestSuite* suite = controller->testSuiteForUrl(file);
+    if (suite)
+    {
+        return true;
+    }
+    return false;
 }
 
 void CTestLaunchConfigurationType::configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const
@@ -62,7 +67,9 @@ void CTestLaunchConfigurationType::configureLaunchFromItem(KConfigGroup config, 
 
 bool CTestLaunchConfigurationType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
-    kDebug() << item->url();
+    if( item->target() && item->target()->executable() ) {
+        return canLaunch( item->target()->executable()->builtUrl() );
+    }
     return false;
 }
 
