@@ -193,16 +193,14 @@ namespace CMakeParserUtils
             ICTestProvider* testProvider = testProviderPlugin->extension<ICTestProvider>();
             if (testProvider)
             {
-                QMultiMap<QString, QString>::const_iterator it = v.testSuites().constBegin();
-                QMultiMap<QString, QString>::const_iterator end = v.testSuites().constEnd();
-                for (; it != end; ++it)
+                foreach (const Test& test, v.testSuites())
                 {
-                    QString exe = it.key();
+                    QString exe = test.executable;
                     if (!exe.startsWith("#[bin_dir]") && QFileInfo(exe).isRelative())
                     {
                         exe = binDir + exe;
                     }
-                    testProvider->createTestSuite(it.value(), exe, project);
+                    testProvider->createTestSuite(test.name, exe, project, test.arguments);
                 }
             }
         }

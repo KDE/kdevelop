@@ -276,7 +276,11 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
-    m_testSuites.insert(test->exeName(), test->testName());
+    Test t;
+    t.name = test->testName();
+    t.executable = test->exeName();
+    t.arguments = test->testArgs();
+    m_testSuites << t;
     return 1;
 }
 
