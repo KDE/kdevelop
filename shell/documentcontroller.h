@@ -159,7 +159,7 @@ private Q_SLOTS:
 
 private:
     bool openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView );
-    QList<IDocument*> documentsInWindow(MainWindow* mw) const;
+    QList<IDocument*> visibleDocumentsInWindow(MainWindow* mw) const;
     QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw, bool currentAreaOnly = false) const;
     QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;
 
