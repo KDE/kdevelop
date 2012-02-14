@@ -741,6 +741,15 @@ void IdealController::slotDockBarContextMenuRequested(QPoint position)
 
 void IdealController::raiseView(View* view, RaiseMode mode)
 {
+    /// @todo GroupWithOtherViews is disabled for now by forcing "mode = HideOtherViews".
+    ///       for the release of KDevelop 4.3.
+    ///       Reason: Inherent bugs which need significant changes to be fixed.
+    ///       Example: Open two equal toolviews (for example 2x konsole),
+    ///                activate one, switch area, switch back, -> Both are active instead of one.
+    ///       The problem is that views are identified purely by their factory-id, which is equal
+    ///       for toolviews of the same type.
+    mode = HideOtherViews;
+   
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 
