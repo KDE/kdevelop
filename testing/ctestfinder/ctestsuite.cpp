@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
+#include "ctestlaunchconfiguration.h"
 
 
 using namespace KDevelop;
@@ -86,7 +87,8 @@ KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) 
 KDevelop::ILaunchConfiguration* CTestSuite::launchCases(const QStringList& testCases) const
 {
     kDebug() << "Configuring test run" << m_name << "with cases" << testCases;
-    ILaunchConfiguration* launch = ICore::self()->runController()->createLaunchConfiguration(m_launchType, qMakePair<QString, QString>("test", "CTestLauncher"));
+    
+    CTestLaunchConfiguration* launch = new CTestLaunchConfiguration(this, testCases);
 
     KConfigGroup group = launch->config();
     group.writeEntry("TestExecutable", m_url.toLocalFile());

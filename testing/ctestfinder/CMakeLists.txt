@@ -3,7 +3,7 @@ project(ctestfinder)
 
 ########### next target ###############
 
-set(ctestfinder_LIB_SRCS ctestrunjob.cpp
+set(ctestfinder_LIB_SRCS ctestlaunchconfiguration.cpp ctestrunjob.cpp
     ctestfinder.cpp
     ctestlauncher.cpp
     ctestsuite.cpp
