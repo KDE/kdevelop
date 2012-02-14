@@ -185,8 +185,8 @@ public:
                 ILaunchConfiguration* ilaunch = 0;
                 foreach (LaunchConfiguration *l, launchConfigurations) {
                     QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
-                    if (path == itemPath) {
-                        //kDebug() << "allready generated ilaunch" << ilaunch;
+                    if (l->type() == type && path == itemPath) {
+                        kDebug() << "allready generated ilaunch" << path;
                         ilaunch = l;
                         break;
                     }
