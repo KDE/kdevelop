@@ -1,4 +1,4 @@
-/*  This file is part of KDevelop
+\/*  This file is part of KDevelop
     Copyright 2012 Miha ?an?ula <miha@noughmad.eu>
 
     This program is free software; you can redistribute it and/or
@@ -107,7 +107,7 @@ void TestViewPlugin::runAllTests()
             ILauncher* launcher = 0;
             foreach (ILauncher* l, config->type()->launchers())
             {
-                if (l->supportedModes().contains("test"))
+                if (l->supportedModes().contains("execute"))
                 {
                     launcher = l;
                     break;
@@ -115,7 +115,7 @@ void TestViewPlugin::runAllTests()
             }
             if (launcher)
             {
-                jobs << launcher->start("test", config);
+                jobs << launcher->start("execute", config);
             }
         }
         if (!jobs.isEmpty())
