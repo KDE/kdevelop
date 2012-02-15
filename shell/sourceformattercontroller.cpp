@@ -377,7 +377,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISource
 
 void SourceFormatterController::settingsChanged()
 {
-	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) )
 		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
 			adaptEditorIndentationMode( doc, formatterForUrl(doc->url()) );
 }
@@ -396,7 +396,7 @@ void SourceFormatterController::settingsChanged()
 
 void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
-	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) || !doc->isTextDocument() )
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc->isTextDocument() )
 		return;
 
 	KTextEditor::Document *textDoc = doc->textDocument();
