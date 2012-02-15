@@ -128,8 +128,9 @@ QIcon Document::statusIcon() const
     return d->statusIcon;
 }
 
-bool Document::closeDocument(bool silent)
+void Document::closeViews()
 {
+    kDebug() << "closing all views for the document";
     foreach (Sublime::Area *area, controller()->allAreas())
     {
         QList<Sublime::View*> areaViews = area->views();
@@ -140,6 +141,19 @@ bool Document::closeDocument(bool silent)
             }
         }
     }
+    Q_ASSERT(views().isEmpty());
+}
+
+bool Document::askForCloseFeedback()
+{
+   return true;
+}
+
+bool Document::closeDocument(bool silent)
+{
+    if( !silent && !askForCloseFeedback() )
+        return false;
+    closeViews();
     deleteLater();
     return true;
 }

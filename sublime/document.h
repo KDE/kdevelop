@@ -69,13 +69,24 @@ public:
     /**@return the specifics of this document which can be written to config.*/
     virtual QString documentSpecifier() const = 0;
 
+    /**
+     * If the document is in a state where data may be lost while closking,
+     * asks the user whether he really wants to close the document.
+     * 
+     * This function may also take actions like saving the document before closing
+     * if the user desires so.
+     * 
+     * @return true if the document is allowed to be closed, otherwise false.
+     *
+     * The default implementation always returns true.
+     *
+     * */
+    virtual bool askForCloseFeedback();
+    
     /**Should try closing the document, eventually asking the user for feedback.
       *
       *If closing is successful, all views should be deleted, and the document itself
       *be scheduled for deletion using deleteLater().
-      *
-      *The default implementation will close all views and then deletes the document itself.
-      *Override this if you want to confirm closing with the user.
       *
       * @param silent If this is true, the user must not be asked.
       * 
@@ -105,7 +116,9 @@ protected:
     this document in the view. This method is used by View class when it
     is asked for its widget.*/
     virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
-
+    /** Closes all views associated to this document */
+    virtual void closeViews();
+    
 private:
     Q_PRIVATE_SLOT(d, void removeView(QObject*))
 

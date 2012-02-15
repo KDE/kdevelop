@@ -295,15 +295,14 @@ void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString&
     kDebug() << "changed working-set from" << from << "to" << to << "area" << area;
     if (from == to || m_changingWorkingSet)
         return;
-
-    // We have to always clear the target area first, because else we cannot perform the switch safely
-    // (sublime doesn't accept all kinds of changes to the area structure)
-    area->clearViews(true);
     
     if (!to.isEmpty()) {
         WorkingSet* newSet = getWorkingSet(to);
         newSet->connectArea(area);
-        newSet->loadToArea(area, area->rootIndex(), !from.isEmpty());
+        newSet->loadToArea(area, area->rootIndex());
+    }else{
+        // Clear silently, any user-interaction should have happened before
+        area->clearViews(true);
     }
 
     emit workingSetSwitched();
