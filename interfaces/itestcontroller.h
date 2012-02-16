@@ -25,6 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
+class KJob;
 class KUrl;
 
 namespace KDevelop {
@@ -44,7 +45,7 @@ public:
     virtual ITestSuite* testSuiteForUrl(const KUrl& url) const = 0;
     virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
     
-    virtual void reloadTestSuites() = 0;
+    virtual KJob* reloadTestSuites() = 0;
 
 protected:
     virtual void testSuiteAdded(ITestSuite* suite) const = 0;
