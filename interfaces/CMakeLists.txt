@@ -114,6 +114,7 @@ install(FILES
     itemplateprovider.h
     itestsuite.h
     itestcontroller.h
+    itestprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

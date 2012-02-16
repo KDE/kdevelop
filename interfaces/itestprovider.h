@@ -20,19 +20,24 @@
 #ifndef KDEVELOP_ITESTPROVIDER_H
 #define KDEVELOP_ITESTPROVIDER_H
 
+#include <QtCore/QObject>
+#include "interfacesexport.h"
+
 class KJob;
 
 namespace KDevelop {
 class IProject;
 
-class ITestProvider
+class KDEVPLATFORMINTERFACES_EXPORT ITestProvider
 {
 
 public:
     virtual ~ITestProvider();
-    virtual KJob* findTestsForProject(KDevelop::IProject* project) = 0;
+    virtual KJob* findTests() = 0;
 };
 
 }
+
+Q_DECLARE_INTERFACE( KDevelop::ITestProvider, "org.kdevelop.ITestProvider")
 
 #endif // KDEVELOP_ITESTPROVIDER_H

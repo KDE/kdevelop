@@ -8,7 +8,7 @@ set(kdevtestcontroller_PLUGIN_SRCS
 )
 
 kde4_add_plugin(kdevtestcontroller ${kdevtestcontroller_PLUGIN_SRCS})
-target_link_libraries(kdevtestcontroller kdevplatforminterfaces kdevplatformproject  )
+target_link_libraries(kdevtestcontroller kdevplatforminterfaces kdevplatformproject kdevplatformutil )
 
 install(TARGETS kdevtestcontroller DESTINATION ${PLUGIN_INSTALL_DIR} )
 
