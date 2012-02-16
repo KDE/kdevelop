@@ -45,6 +45,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 	itemplateprovider.cpp
     itestsuite.cpp
     itestcontroller.cpp
+    itestprovider.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})

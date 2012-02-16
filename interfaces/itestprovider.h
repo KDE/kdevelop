@@ -1,5 +1,5 @@
 /*  This file is part of KDevelop
-    Copyright 2012 Miha Čančula <miha@noughmad.eu>
+    Copyright 2012 Miha ?an?ula <miha@noughmad.eu>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,36 +17,22 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ITESTSUITE_H
-#define KDEVELOP_ITESTSUITE_H
-
-#include "interfacesexport.h"
-#include <QtCore/QStringList>
+#ifndef KDEVELOP_ITESTPROVIDER_H
+#define KDEVELOP_ITESTPROVIDER_H
 
 class KJob;
-class KUrl;
 
 namespace KDevelop {
-
 class IProject;
-class ILaunchConfiguration;
 
-class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
+class ITestProvider
 {
 
 public:
-    virtual ~ITestSuite();
-
-    virtual QString name() const = 0;
-    virtual QStringList cases() const = 0;
-    virtual KUrl url() const = 0;
-    virtual IProject* project() const = 0;
-
-    virtual KJob* launchAllCases() const = 0;
-    virtual KJob* launchCases(const QStringList& testCases) const = 0;
-    virtual KJob* launchCase(const QString& testCase) const = 0;
+    virtual ~ITestProvider();
+    virtual KJob* findTestsForProject(KDevelop::IProject* project) = 0;
 };
 
 }
 
-#endif // KDEVELOP_ITESTSUITE_H
+#endif // KDEVELOP_ITESTPROVIDER_H

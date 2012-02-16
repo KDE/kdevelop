@@ -1,4 +1,4 @@
-\/*  This file is part of KDevelop
+/*  This file is part of KDevelop
     Copyright 2012 Miha ?an?ula <miha@noughmad.eu>
 
     This program is free software; you can redistribute it and/or
@@ -103,19 +103,9 @@ void TestViewPlugin::runAllTests()
         QList<KJob*> jobs;
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
-            ILaunchConfiguration* config = suite->launchAllCases();
-            ILauncher* launcher = 0;
-            foreach (ILauncher* l, config->type()->launchers())
+            if (KJob* job = suite->launchAllCases())
             {
-                if (l->supportedModes().contains("execute"))
-                {
-                    launcher = l;
-                    break;
-                }
-            }
-            if (launcher)
-            {
-                jobs << launcher->start("execute", config);
+                jobs << jobs;
             }
         }
         if (!jobs.isEmpty())
