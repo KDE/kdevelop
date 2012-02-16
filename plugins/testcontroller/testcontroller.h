@@ -41,7 +41,7 @@ public:
     virtual KDevelop::ITestSuite* testSuiteForUrl(const KUrl& url) const;
     virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
     
-    virtual void reloadTestSuites();
+    virtual KJob* reloadTestSuites();
 
 signals:
     virtual void testSuiteAdded(KDevelop::ITestSuite* suite) const;

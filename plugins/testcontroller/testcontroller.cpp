@@ -20,15 +20,17 @@
 #include "testcontroller.h"
 #include "interfaces/itestsuite.h"
 
-#include <KUrl>
-#include <KPluginFactory>
-#include <KLocalizedString>
-#include <KAboutData>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/itestprovider.h>
 #include <interfaces/iruncontroller.h>
 #include <util/executecompositejob.h>
+
+#include <KUrl>
+#include <KPluginFactory>
+#include <KLocalizedString>
+#include <KAboutData>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(TestControllerFactory, registerPlugin<TestController>(); )
 K_EXPORT_PLUGIN(TestControllerFactory(KAboutData("kdevtestcontroller","kdevtestcontroller", ki18n("Test Controller"), "0.1", ki18n("Manages unit tests"), KAboutData::License_GPL)))
@@ -95,7 +97,7 @@ QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) con
     return suites;
 }
 
-void TestController::reloadTestSuites()
+KJob* TestController::reloadTestSuites()
 {
     QList<KJob*> jobs;
     foreach (IPlugin* plugin, core()->pluginController()->allPluginsForExtension("org.kdevelop.ITestProvider"))
@@ -112,7 +114,8 @@ void TestController::reloadTestSuites()
     {
         ExecuteCompositeJob* compositeJob = new ExecuteCompositeJob(this, jobs);
         compositeJob->setObjectName("Searching for unit tests");
-        core()->runController()->registerJob(compositeJob);
+        return compositeJob;
     }
+    return 0;
 }
 

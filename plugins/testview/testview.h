@@ -33,6 +33,7 @@ public:
     virtual ~TestView();
 
 public slots:
+    void reloadTests();
     void buildTestModel();
 
 private:

@@ -33,6 +33,8 @@
 
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
+#include <KJob>
+#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -48,7 +50,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     QAction* action;
 
     KAction* reloadAction = new KAction( KIcon("view-refresh"), i18n("Reload"), this );
-    connect (reloadAction, SIGNAL(triggered(bool)), SLOT(buildTestModel()));
+    connect (reloadAction, SIGNAL(triggered(bool)), SLOT(reloadTests()));
     addAction(reloadAction);
     
     KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected"), this );
@@ -62,6 +64,18 @@ TestView::~TestView()
 {
 
 }
+
+void TestView::reloadTests()
+{
+    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    KJob* reloadJob = tc->reloadTestSuites();
+    if (reloadJob)
+    {
+        connect (reloadJob, SIGNAL(finished(KJob*)), SLOT(buildTestModel()));
+        ICore::self()->runController()->registerJob(reloadJob);
+    }
+}
+
 
 void TestView::buildTestModel()
 {
