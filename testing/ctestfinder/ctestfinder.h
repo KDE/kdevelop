@@ -22,7 +22,10 @@
 
 #include "ictestprovider.h"
 #include <interfaces/iplugin.h>
+#include <interfaces/itestprovider.h>
 
+class KJob;
+class CTestSuite;
 class QVariant;
 class CTestLaunchConfigurationType;
 
@@ -32,9 +35,10 @@ namespace KDevelop
     class ITestController;
 }
 
-class CTestFinder : public KDevelop::IPlugin, public ICTestProvider
+class CTestFinder : public KDevelop::IPlugin, public KDevelop::ITestProvider, public ICTestProvider
 {
    Q_OBJECT
+   Q_INTERFACES(KDevelop::ITestProvider)
    Q_INTERFACES(ICTestProvider)
 public:
     CTestFinder(QObject* parent, const QList<QVariant>& args);
@@ -42,10 +46,10 @@ public:
     virtual void unload();
 
     virtual void createTestSuite(const QString& name, const QString& executable, KDevelop::IProject* project, const QStringList& arguments = QStringList());
+    virtual KJob* findTests();
 
 private:
-    KDevelop::ITestController* m_controller;
-    CTestLaunchConfigurationType* m_configType;
+    QList<CTestSuite*> m_pendingSuites;
 };
 
 #endif // CTESTFINDER_H

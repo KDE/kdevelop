@@ -3,11 +3,11 @@ project(ctestfinder)
 
 ########### next target ###############
 
-set(ctestfinder_LIB_SRCS ctestlaunchconfiguration.cpp ctestrunjob.cpp
+set(ctestfinder_LIB_SRCS ctestfindjob.cpp ctestrunjob.cpp
     ctestfinder.cpp
-    ctestlauncher.cpp
+   
     ctestsuite.cpp
-    ctestlaunchconfigurationtype.cpp
+   
 )
 
 kde4_add_plugin(kdevctestfinder ${ctestfinder_LIB_SRCS})

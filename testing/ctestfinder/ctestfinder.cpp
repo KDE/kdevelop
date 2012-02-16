@@ -23,8 +23,6 @@
 
 #include "ctestfinder.h"
 #include "ctestsuite.h"
-#include "ctestlaunchconfigurationtype.h"
-#include "ctestlauncher.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -39,6 +37,8 @@
 #include <KAboutData>
 #include <KLocale>
 #include <KDebug>
+#include "ctestfindjob.h"
+#include <util/executecompositejob.h>
 
 K_PLUGIN_FACTORY(CTestFinderFactory, registerPlugin<CTestFinder>(); )
 K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Finder"), "0.1", ki18n("Finds CTest unit tests"), KAboutData::License_GPL)))
@@ -49,13 +49,8 @@ CTestFinder::CTestFinder(QObject* parent, const QList<QVariant>& args): IPlugin(
 {
     Q_UNUSED(args);
 
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ITestProvider )
     KDEV_USE_EXTENSION_INTERFACE( ICTestProvider )
-
-    m_controller = core()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
-    
-    m_configType = new CTestLaunchConfigurationType;
-    m_configType->addLauncher(new CTestLauncher(this));
-    core()->runController()->addConfigurationType(m_configType);
 }
 
 CTestFinder::~CTestFinder()
@@ -65,7 +60,6 @@ CTestFinder::~CTestFinder()
 
 void CTestFinder::unload()
 {
-    core()->runController()->removeConfigurationType(m_configType);
 }
 
 void CTestFinder::createTestSuite(const QString& name, const QString& executable, IProject* project, const QStringList& arguments)
@@ -80,10 +74,23 @@ void CTestFinder::createTestSuite(const QString& name, const QString& executable
     Q_ASSERT(exeUrl.isLocalFile());
     kDebug() << exeUrl << exeUrl.toLocalFile();
     CTestSuite* suite = new CTestSuite(name, exeUrl, project, arguments);
-    suite->setTestController(m_controller);
-    suite->setLaunchConfigurationType(m_configType);
-    suite->loadCases();
-    m_controller->addTestSuite(suite);
+    m_pendingSuites << suite;
+}
+
+KJob* CTestFinder::findTests()
+{
+    kDebug() << "Finding tests with" << m_pendingSuites.size() << "pending suites"; 
+    QList<KJob*> jobs;
+    foreach (CTestSuite* suite, m_pendingSuites)
+    {
+        jobs << new CTestFindJob(suite, this);
+    }
+    if (jobs.isEmpty())
+    {
+        return 0;
+    }
+    m_pendingSuites.clear();
+    return new KDevelop::ExecuteCompositeJob(this, jobs);
 }
 
 

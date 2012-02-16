@@ -24,37 +24,34 @@
 #include <KConfigGroup>
 #include <KProcess>
 #include <KDebug>
+#include "ctestsuite.h"
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(KDevelop::ILaunchConfiguration* cfg, QObject* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity): OutputJob(parent, verbosity), 
-m_configuration(cfg)
+CTestRunJob::CTestRunJob(const CTestSuite* suite, const QStringList& cases, QObject* parent): OutputJob(parent), 
+m_suite(suite),
+m_cases(cases),
+m_process(0),
+m_lineMaker(0)
 {
-    setStandardToolView(KDevelop::IOutputView::TestView);
-    QString name = cfg->config().readEntry("TestSuiteName");
-    setObjectName("Test: " + name);
-    setTitle(name);
+
 }
+
+
 
 void CTestRunJob::start()
 {
-    const KConfigGroup group = m_configuration->config();
-    QString executable = group.readEntry("TestExecutable");
-    QStringList cases = group.readEntry("TestCases", QStringList());
-    QStringList arguments = group.readEntry("TestArguments", QStringList());
-    
-    kDebug() << "Starting test job" << group.readEntry("TestSuiteName");
-    
-    if (arguments.isEmpty())
-    {
-        // In QTestLib-based tests, the names of the functions can be passed as arguments to the test executable
-        arguments = cases;
-    }
     KDevelop::OutputModel* outputModel = new KDevelop::OutputModel;
     setModel( outputModel, KDevelop::IOutputView::TakeOwnership );
     
+    QStringList arguments = m_cases;
+    if (m_cases.isEmpty() && !m_suite->arguments().isEmpty())
+    {
+        arguments = m_suite->arguments();
+    }
+    
     m_process = new KProcess(this);
-    m_process->setProgram(executable, arguments);
+    m_process->setProgram(m_suite->url().toLocalFile(), arguments);
     m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
     
     kDebug() << m_process->program();

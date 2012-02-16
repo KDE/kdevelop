@@ -27,25 +27,22 @@ namespace KDevelop {
 class ITestController;
 }
 
-class CTestLaunchConfigurationType;
-
 class CTestSuite : public KDevelop::ITestSuite
 {
 public:
     CTestSuite(const QString& name, const KUrl& executable, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
-    virtual KDevelop::ILaunchConfiguration* launchCase(const QString& testCase) const;
-    virtual KDevelop::ILaunchConfiguration* launchCases(const QStringList& testCases) const;
-    virtual KDevelop::ILaunchConfiguration* launchAllCases() const;
+    virtual KJob* launchCase(const QString& testCase) const;
+    virtual KJob* launchCases(const QStringList& testCases) const;
+    virtual KJob* launchAllCases() const;
     virtual KUrl url() const;
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
 
     void loadCases();
-    void setTestController(KDevelop::ITestController* controller);
-    QStringList arguments();
+    QStringList arguments() const;
     
 private:
     KUrl m_url;
@@ -53,14 +50,6 @@ private:
     QStringList m_cases;
     QStringList m_args;
     KDevelop::IProject* m_project;
-    KDevelop::ITestController* m_controller;
-    CTestLaunchConfigurationType* m_launchType;
-
-private slots:
-    void loadCasesProcessFinished(int exitCode);
-public slots:
-    void readFromProcess();
-    void setLaunchConfigurationType(CTestLaunchConfigurationType* configType);
 };
 
 #endif // CTESTSUITE_H

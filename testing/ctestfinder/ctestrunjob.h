@@ -22,6 +22,7 @@
 
 #include <outputview/outputjob.h>
 
+class CTestSuite;
 class KProcess;
 
 namespace KDevelop {
@@ -34,16 +35,18 @@ class CTestRunJob : public KDevelop::OutputJob
 {
     Q_OBJECT
 public:
-    CTestRunJob(KDevelop::ILaunchConfiguration* cfg, QObject* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = OutputJob::Verbose);
+    CTestRunJob(const CTestSuite* suite, const QStringList& cases, QObject* parent = 0);
     virtual void start();
 
 protected:
     virtual bool doKill();
     
 private:
-    KDevelop::ILaunchConfiguration* m_configuration;
+    const CTestSuite* m_suite;
+    QStringList m_cases;
     KProcess* m_process;
     KDevelop::ProcessLineMaker* m_lineMaker;
+    
 public slots:
     void processFinished(int exitCode);
     void processError();

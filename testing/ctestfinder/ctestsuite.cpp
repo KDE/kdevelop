@@ -18,20 +18,13 @@
 */
 
 #include "ctestsuite.h"
-#include "ctestlaunchconfigurationtype.h"
-
-#include <execute/iexecuteplugin.h>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iruncontroller.h>
-#include <interfaces/ilaunchconfiguration.h>
+#include "ctestrunjob.h"
 
 #include <KProcess>
 #include <KDebug>
 #include <QFileInfo>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
-#include "ctestlaunchconfiguration.h"
 
 
 using namespace KDevelop;
@@ -40,9 +33,7 @@ CTestSuite::CTestSuite(const QString& name, const KUrl& executable, IProject* pr
 m_url(executable),
 m_name(name),
 m_args(args),
-m_project(project),
-m_controller(0),
-m_launchType(0)
+m_project(project)
 {
     m_url.cleanPath();
     Q_ASSERT(project);
@@ -51,7 +42,7 @@ m_launchType(0)
 
 CTestSuite::~CTestSuite()
 {
-    m_controller->removeTestSuite(this);
+
 }
 
 void CTestSuite::loadCases()
@@ -79,35 +70,19 @@ void CTestSuite::loadCases()
     }
 }
 
-KDevelop::ILaunchConfiguration* CTestSuite::launchCase(const QString& testCase) const
+KJob* CTestSuite::launchCase(const QString& testCase) const
 {
     return launchCases(QStringList() << testCase);
 }
 
-KDevelop::ILaunchConfiguration* CTestSuite::launchCases(const QStringList& testCases) const
+KJob* CTestSuite::launchCases(const QStringList& testCases) const
 {
-    kDebug() << "Configuring test run" << m_name << "with cases" << testCases;
+    kDebug() << "Launching test run" << m_name << "with cases" << testCases;
     
-    CTestLaunchConfiguration* launch = new CTestLaunchConfiguration(this, testCases);
-
-    KConfigGroup group = launch->config();
-    group.writeEntry("TestExecutable", m_url.toLocalFile());
-    group.writeEntry("TestSuiteName", m_name);
-    if (!m_cases.isEmpty())
-    {
-        group.writeEntry("TestCases", testCases);
-    }
-    else if (!m_args.isEmpty())
-    {
-        group.writeEntry("TestArguments", m_args);
-
-    }
-    group.sync();
-    
-    return launch;
+    return new CTestRunJob(this, testCases);
 }
 
-KDevelop::ILaunchConfiguration* CTestSuite::launchAllCases() const
+KJob* CTestSuite::launchAllCases() const
 {
     return launchCases(cases());
 }
@@ -132,18 +107,8 @@ KDevelop::IProject* CTestSuite::project() const
     return m_project;
 }
 
-QStringList CTestSuite::arguments()
+QStringList CTestSuite::arguments() const
 {
     return m_args;
-}
-
-void CTestSuite::setTestController(ITestController* controller)
-{
-    m_controller = controller;
-}
-
-void CTestSuite::setLaunchConfigurationType(CTestLaunchConfigurationType* configType)
-{
-    m_launchType = configType;
 }
 
