@@ -164,3 +164,19 @@ CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project
 CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl&)
     : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName)
 {}
+
+CMakeFolderItem::~CMakeFolderItem() {
+}
+
+DescriptorAttatched::~DescriptorAttatched() {
+}
+
+DUChainAttatched::~DUChainAttatched() {
+}
+
+DefinesAttached::~DefinesAttached() {
+}
+
+KUrl CMakeExecutableTargetItem::installedUrl() const {
+    return KUrl();
+}
