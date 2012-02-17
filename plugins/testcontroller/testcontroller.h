@@ -42,10 +42,12 @@ public:
     virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
     
     virtual KJob* reloadTestSuites();
+    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite);
 
 signals:
-    virtual void testSuiteAdded(KDevelop::ITestSuite* suite) const;
-    virtual void testSuiteRemoved(KDevelop::ITestSuite* suite) const;
+    void testSuiteAdded(KDevelop::ITestSuite* suite) const;
+    void testSuiteRemoved(KDevelop::ITestSuite* suite) const;
+    void testRunFinished(KDevelop::ITestSuite* suite) const;
 
 private:
     TestControllerPrivate* const d;

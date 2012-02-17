@@ -46,10 +46,12 @@ public:
     virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
     
     virtual KJob* reloadTestSuites() = 0;
+    virtual void notifyTestRunFinished(ITestSuite* suite) = 0;
 
 protected:
     virtual void testSuiteAdded(ITestSuite* suite) const = 0;
     virtual void testSuiteRemoved(ITestSuite* suite) const = 0;
+    virtual void testRunFinished(ITestSuite* suite) const = 0;
 };
 
 }

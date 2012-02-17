@@ -119,3 +119,8 @@ KJob* TestController::reloadTestSuites()
     return 0;
 }
 
+void TestController::notifyTestRunFinished(ITestSuite* suite)
+{
+    emit testRunFinished(suite);
+}
+

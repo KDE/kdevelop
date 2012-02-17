@@ -21,7 +21,9 @@
 #define KDEVELOP_ITESTSUITE_H
 
 #include "interfacesexport.h"
+
 #include <QtCore/QStringList>
+#include <QtCore/QMap>
 
 class KJob;
 class KUrl;
@@ -30,6 +32,18 @@ namespace KDevelop {
 
 class IProject;
 class ILaunchConfiguration;
+
+struct KDEVPLATFORMINTERFACES_EXPORT TestResult
+{
+    enum TestCaseResult
+    {
+        NotRun,
+        Skipped,
+        Passed,
+        Failed
+    };
+    QMap<QString, TestCaseResult> testCaseResults;
+};
 
 class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
 {
@@ -45,6 +59,8 @@ public:
     virtual KJob* launchAllCases() const = 0;
     virtual KJob* launchCases(const QStringList& testCases) const = 0;
     virtual KJob* launchCase(const QString& testCase) const = 0;
+    
+    virtual TestResult result() const = 0;
 };
 
 }
