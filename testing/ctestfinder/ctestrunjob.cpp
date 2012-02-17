@@ -19,6 +19,9 @@
 
 #include "ctestrunjob.h"
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/itestcontroller.h>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
 #include <KConfigGroup>
@@ -28,13 +31,16 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(const CTestSuite* suite, const QStringList& cases, QObject* parent): OutputJob(parent), 
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent): OutputJob(parent), 
 m_suite(suite),
 m_cases(cases),
 m_process(0),
 m_lineMaker(0)
 {
-
+    foreach (const QString& testCase, cases)
+    {
+        m_caseResults[testCase] = TestResult::NotRun;
+    }
 }
 
 
@@ -58,7 +64,7 @@ void CTestRunJob::start()
     
     m_lineMaker = new ProcessLineMaker(m_process, this);
     startOutput();
-    connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)), outputModel, SLOT(appendLines(QStringList)));
+    connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)), SLOT(receivedLines(QStringList)));
     connect(m_process, SIGNAL(finished(int)), this, SLOT(processFinished(int)));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError()));
     m_process->start();
@@ -76,6 +82,13 @@ bool CTestRunJob::doKill()
 void CTestRunJob::processFinished(int exitCode)
 {
     QString line = QString("*** Test process exited with exit code %1 ***").arg(exitCode);
+    TestResult result;
+    result.testCaseResults = m_caseResults;
+    m_suite->setResult(result);
+
+    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    tc->notifyTestRunFinished(m_suite);
+    
     kDebug() << line;
     emitResult();
 }
@@ -86,3 +99,31 @@ void CTestRunJob::processError()
     emitResult();
 }
 
+void CTestRunJob::receivedLines(const QStringList& lines)
+{
+    foreach (const QString& line, lines )
+    {
+        QString testCase = line.split("::").last().trimmed();
+        testCase.remove("()");
+        if (m_suite->cases().contains(testCase))
+        {
+            TestResult::TestCaseResult result;
+            if (line.startsWith("PASS"))
+            {
+                result = TestResult::Passed;
+            }
+            else if (line.startsWith("FAIL"))
+            {
+                result = TestResult::Failed;
+            }
+            else if (line.startsWith("SKIP"))
+            {
+                result = TestResult::Skipped;
+            }
+            m_caseResults[testCase] = result;
+        }
+        
+        // TODO: Highlight parts of the line
+        qobject_cast<OutputModel*>(model())->appendLine(line);
+    }
+}

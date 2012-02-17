@@ -33,16 +33,19 @@ public:
     CTestSuite(const QString& name, const KUrl& executable, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
-    virtual KJob* launchCase(const QString& testCase) const;
-    virtual KJob* launchCases(const QStringList& testCases) const;
-    virtual KJob* launchAllCases() const;
+    virtual KJob* launchCase(const QString& testCase);
+    virtual KJob* launchCases(const QStringList& testCases);
+    virtual KJob* launchAllCases();
+    
     virtual KUrl url() const;
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
-
+    virtual KDevelop::TestResult result() const;
+    
     void loadCases();
     QStringList arguments() const;
+    void setResult(const KDevelop::TestResult& result);
     
 private:
     KUrl m_url;
@@ -50,6 +53,7 @@ private:
     QStringList m_cases;
     QStringList m_args;
     KDevelop::IProject* m_project;
+    KDevelop::TestResult m_result;
 };
 
 #endif // CTESTSUITE_H

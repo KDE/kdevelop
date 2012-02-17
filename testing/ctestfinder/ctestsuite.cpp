@@ -70,19 +70,19 @@ void CTestSuite::loadCases()
     }
 }
 
-KJob* CTestSuite::launchCase(const QString& testCase) const
+KJob* CTestSuite::launchCase(const QString& testCase)
 {
     return launchCases(QStringList() << testCase);
 }
 
-KJob* CTestSuite::launchCases(const QStringList& testCases) const
+KJob* CTestSuite::launchCases(const QStringList& testCases)
 {
     kDebug() << "Launching test run" << m_name << "with cases" << testCases;
     
     return new CTestRunJob(this, testCases);
 }
 
-KJob* CTestSuite::launchAllCases() const
+KJob* CTestSuite::launchAllCases()
 {
     return launchCases(cases());
 }
@@ -111,4 +111,15 @@ QStringList CTestSuite::arguments() const
 {
     return m_args;
 }
+
+TestResult CTestSuite::result() const
+{
+    return m_result;
+}
+
+void CTestSuite::setResult(const TestResult& result)
+{
+    m_result = result;
+}
+
 

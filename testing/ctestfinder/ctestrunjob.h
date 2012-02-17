@@ -21,6 +21,7 @@
 #define CTESTRUNJOB_H
 
 #include <outputview/outputjob.h>
+#include <interfaces/itestsuite.h>
 
 class CTestSuite;
 class KProcess;
@@ -35,21 +36,23 @@ class CTestRunJob : public KDevelop::OutputJob
 {
     Q_OBJECT
 public:
-    CTestRunJob(const CTestSuite* suite, const QStringList& cases, QObject* parent = 0);
+    CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent = 0);
     virtual void start();
 
 protected:
     virtual bool doKill();
     
+private slots:
+    void processFinished(int exitCode);
+    void processError();
+    void receivedLines(const QStringList& lines);
+
 private:
-    const CTestSuite* m_suite;
+    CTestSuite* m_suite;
     QStringList m_cases;
     KProcess* m_process;
     KDevelop::ProcessLineMaker* m_lineMaker;
-    
-public slots:
-    void processFinished(int exitCode);
-    void processError();
+    QMap<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
 };
 
 #endif // CTESTRUNJOB_H
