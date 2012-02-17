@@ -25,7 +25,6 @@
 #include <editor/modificationrevision.h>
 #include <ktexteditor/movinginterface.h>
 #include <ktexteditor/configinterface.h>
-#include <tuple>
 
 namespace KDevelop {
     
