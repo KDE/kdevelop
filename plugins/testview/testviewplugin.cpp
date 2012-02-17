@@ -105,7 +105,7 @@ void TestViewPlugin::runAllTests()
         {
             if (KJob* job = suite->launchAllCases())
             {
-                jobs << jobs;
+                jobs << job;
             }
         }
         if (!jobs.isEmpty())
@@ -116,6 +116,3 @@ void TestViewPlugin::runAllTests()
         }
     }
 }
-
-
-

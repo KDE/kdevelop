@@ -34,6 +34,7 @@
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
 #include <KJob>
+#include <KDebug>
 #include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
@@ -58,6 +59,8 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     
     action = plugin->actionCollection()->action("run_all_tests");
     addAction(action);
+    
+    connect (ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController"), SIGNAL(testRunFinished(KDevelop::ITestSuite*)), SLOT(updateTestSuite(KDevelop::ITestSuite*)));
 }
 
 TestView::~TestView()
@@ -97,5 +100,48 @@ void TestView::buildTestModel()
         m_model->appendRow(projectItem);
     }
 }
+
+void TestView::updateTestSuite(ITestSuite* suite)
+{
+    kDebug() << "Updating test suite" << suite->name();
+    foreach (QStandardItem* item, m_model->findItems(suite->name(), Qt::MatchRecursive))
+    {
+        kDebug() << "Found matching item" << item->text();
+        if (item->parent() && item->parent()->text() == suite->project()->name() && !item->parent()->parent())
+        {
+            kDebug() << "Item is really a suite";
+            TestResult result = suite->result();
+            for (int i = 0; i < item->rowCount(); ++i)
+            {
+                kDebug() << "Found a test case" << item->text();
+                QStandardItem* caseItem = item->child(i);
+                caseItem->setIcon(iconForTestResult(result.testCaseResults.value(item->text(), TestResult::NotRun)));
+            }
+        }
+    }
+}
+
+KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
+{
+    kDebug() << result;
+    switch (result)
+    {
+        case TestResult::NotRun:
+            return KIcon();
+            
+        case TestResult::Skipped:
+            return KIcon();
+            
+        case TestResult::Passed:
+            return KIcon("dialog-ok");
+            
+        case TestResult::Failed:
+            return KIcon("dialog-cancel");
+            
+        default:
+            return KIcon();
+    }
+}
+
 
 

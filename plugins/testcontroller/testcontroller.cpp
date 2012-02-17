@@ -121,6 +121,7 @@ KJob* TestController::reloadTestSuites()
 
 void TestController::notifyTestRunFinished(ITestSuite* suite)
 {
+    kDebug() << "Test run finished for suite" << suite->name();
     emit testRunFinished(suite);
 }
 

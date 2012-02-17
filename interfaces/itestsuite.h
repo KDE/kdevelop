@@ -56,9 +56,9 @@ public:
     virtual KUrl url() const = 0;
     virtual IProject* project() const = 0;
 
-    virtual KJob* launchAllCases() const = 0;
-    virtual KJob* launchCases(const QStringList& testCases) const = 0;
-    virtual KJob* launchCase(const QString& testCase) const = 0;
+    virtual KJob* launchAllCases() = 0;
+    virtual KJob* launchCases(const QStringList& testCases) = 0;
+    virtual KJob* launchCase(const QString& testCase) = 0;
     
     virtual TestResult result() const = 0;
 };

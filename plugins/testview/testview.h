@@ -21,9 +21,15 @@
 #define TESTVIEW_H
 
 #include <QtGui/QTreeView>
+#include <interfaces/itestsuite.h>
+
+namespace KDevelop {
+class ITestSuite;
+}
 
 class TestViewPlugin;
 class QStandardItemModel;
+class KIcon;
 
 class TestView : public QTreeView
 {
@@ -35,10 +41,15 @@ public:
 public slots:
     void reloadTests();
     void buildTestModel();
+    void updateTestSuite(KDevelop::ITestSuite* suite);
 
 private:
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
+    
+    KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
 };
 
 #endif // TESTVIEW_H
+
+class KIcon;
