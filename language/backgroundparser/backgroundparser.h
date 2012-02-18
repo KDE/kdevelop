@@ -34,6 +34,7 @@
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
+#include "parsejob.h"
 
 class QMutex;
 
@@ -162,7 +163,7 @@ public Q_SLOTS:
      *                    The notification is guaranteed to be called once for each call to addDocument. The given top-context
      *                    may be invalid if the update failed.
      */
-    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0);
+    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
 
     /**
      * Queues up the list of @p urls to be parsed.
@@ -197,6 +198,10 @@ public Q_SLOTS:
     
     ///Returns true if the given url is queued for parsing
     bool isQueued(KUrl url) const;
+
+    ///Retrieve the current priority for the given URL.
+    ///You need to check whether @param url is queued before calling this function.
+    int priorityForDocument(const KUrl& url) const;
 
     ///Returns the number of currently active or queued jobs
     int queuedCount() const;

@@ -87,25 +87,22 @@ struct LanguageControllerPrivate {
     BackgroundParser *backgroundParser;
     bool m_cleanedUp;
     
+    ILanguage* addLanguageForSupport(ILanguageSupport* support, const QStringList& mimetypes);
     ILanguage* addLanguageForSupport(ILanguageSupport* support);
 
 private:
     LanguageController *m_controller;
 };
 
-ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageSupport* languageSupport) {
-
-    if(languages.contains(languageSupport->name()))
-        return languages[languageSupport->name()];
-
-    Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
+ILanguage* LanguageControllerPrivate::addLanguageForSupport(ILanguageSupport* languageSupport,
+                                                            const QStringList& mimetypes)
+{
+    Q_ASSERT(!languages.contains(languageSupport->name()));
 
     ILanguage* ret = new Language(languageSupport, m_controller);
     languages.insert(languageSupport->name(), ret);
 
-    QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property("X-KDevelop-SupportedMimeTypes");
-
-    foreach(const QString& mimeTypeName, mimetypes.toStringList()) {
+    foreach(const QString& mimeTypeName, mimetypes) {
         kDebug(9505) << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
         languageCache[mimeTypeName] << ret;
         KMimeType::Ptr mime = KMimeType::mimeType(mimeTypeName);
@@ -117,6 +114,18 @@ ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageS
     }
 
     return ret;
+}
+
+ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageSupport* languageSupport)
+{
+    if(languages.contains(languageSupport->name()))
+        return languages[languageSupport->name()];
+
+    Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
+
+    QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property("X-KDevelop-SupportedMimeTypes");
+
+    return addLanguageForSupport(languageSupport, mimetypes.toStringList());
 }
 
 LanguageController::LanguageController(QObject *parent)
@@ -347,6 +356,11 @@ QList<QString> LanguageController::mimetypesForLanguageName(const QString& langu
 BackgroundParser *LanguageController::backgroundParser() const
 {
     return d->backgroundParser;
+}
+
+void LanguageController::addLanguageSupport(ILanguageSupport* languageSupport, const QStringList& mimetypes)
+{
+    d->addLanguageForSupport(languageSupport, mimetypes);
 }
 
 }

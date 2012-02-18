@@ -73,6 +73,8 @@ public:
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
+        , parsePriority( 0 )
+        , sequentialProcessingFlags( ParseJob::IgnoresSequentialProcessing )
     {
     }
 
@@ -99,6 +101,9 @@ public:
     QWeakPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
+
+    int parsePriority;
+    ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
 };
 
 ParseJob::ParseJob( const KUrl &url )
@@ -114,6 +119,31 @@ ParseJob::~ParseJob()
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
 
     delete d;
+}
+
+void ParseJob::setParsePriority(int priority)
+{
+    d->parsePriority = priority;
+}
+
+int ParseJob::parsePriority() const
+{
+    return d->parsePriority;
+}
+
+bool ParseJob::requiresSequentialProcessing() const
+{
+    return d->sequentialProcessingFlags & RequiresSequentialProcessing;
+}
+
+bool ParseJob::respectsSequentialProcessing() const
+{
+    return d->sequentialProcessingFlags & RespectsSequentialProcessing;
+}
+
+void ParseJob::setSequentialProcessingFlags(SequentialProcessingFlags flags)
+{
+    d->sequentialProcessingFlags = flags;
 }
 
 IndexedString ParseJob::document() const
