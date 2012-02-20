@@ -74,11 +74,11 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlug
 {
     Q_UNUSED(args)
     
-    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all"), this );
+    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
     
-    setXMLFile("kdevctestmanager.rc");
+    setXMLFile("kdevtestview.rc");
     
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);

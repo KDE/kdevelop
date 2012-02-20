@@ -63,7 +63,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     connect (reloadAction, SIGNAL(triggered(bool)), SLOT(reloadTests()));
     addAction(reloadAction);
     
-    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected"), this );
+    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     addAction(runSelected);
     
