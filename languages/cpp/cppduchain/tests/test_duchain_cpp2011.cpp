@@ -639,6 +639,7 @@ void TestDUChain::testTemplateSpecializeArray()
   TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(tplDecRaw);
   QVERIFY(tplDec);
   QCOMPARE(tplDec->specializationsSize(), 1u);
+  QCOMPARE(tplDec->instantiations().size(), 2);
 
   Declaration* specRaw = top->localDeclarations().at(1);
   TemplateDeclaration* spec = dynamic_cast<TemplateDeclaration*>(specRaw);
@@ -653,9 +654,15 @@ void TestDUChain::testTemplateSpecializeArray()
   QVERIFY(specParam.cast<ArrayType>());
   QCOMPARE(specParam->toString(), QString("T[]"));
 
-  QEXPECT_FAIL("", "array specialization not honored for <int[]>...", Abort);
-  QCOMPARE(tplDec->instantiations().size(), 1);
-  QCOMPARE(spec->instantiations().size(), 1);
+  QCOMPARE(top->childContexts().last()->localDeclarations().size(), 2);
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(0)->abstractType()->toString(),
+           QString("test< int >"));
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(1)->abstractType()->toString(),
+           QString("test< int[] >"));
+  // should work
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(13, 9)) != -1);
+  // should not work
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(16, 9)) == -1);
 }
 
 void TestDUChain::testTemplateSpecializeRValue()
@@ -693,6 +700,7 @@ void TestDUChain::testTemplateSpecializeRValue()
   TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(tplDecRaw);
   QVERIFY(tplDec);
   QCOMPARE(tplDec->specializationsSize(), 1u);
+  QCOMPARE(tplDec->instantiations().size(), 2);
 
   Declaration* specRaw = top->localDeclarations().at(1);
   TemplateDeclaration* spec = dynamic_cast<TemplateDeclaration*>(specRaw);
@@ -708,7 +716,14 @@ void TestDUChain::testTemplateSpecializeRValue()
   QVERIFY(specParam.cast<ReferenceType>()->isRValue());
   QCOMPARE(specParam->toString(), QString("T&&"));
 
-  QEXPECT_FAIL("", "rvalue specialization not honored for <int&&>...", Abort);
-  QCOMPARE(tplDec->instantiations().size(), 1);
-  QCOMPARE(spec->instantiations().size(), 1);
+  QCOMPARE(top->childContexts().last()->localDeclarations().size(), 2);
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(0)->abstractType()->toString(),
+           QString("test< int >"));
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(1)->abstractType()->toString(),
+           QString("test< int&& >"));
+
+  // should work
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(13, 9)) != -1);
+  // should not work
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(16, 9)) == -1);
 }
