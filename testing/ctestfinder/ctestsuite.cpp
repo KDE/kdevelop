@@ -104,15 +104,16 @@ void CTestSuite::loadCases()
             
             if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
             {
-                if (function->isConstructor())
-                {
-                    kDebug() << "Found constructor" << function->identifier().toString();
-                    m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
-                }
-                else if (function->accessPolicy() == Declaration::Private && function->isSlot())
+                if (function->accessPolicy() == Declaration::Private && function->isSlot())
                 {
                     QString name = function->qualifiedIdentifier().last().toString();
                     kDebug() << "Found private slot in test" << name; 
+                    
+                    if (!m_suiteDeclaration.data())
+                    {
+                        m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
+                    }
+                    
                     if (m_cases.contains(name))
                     {
                         kDebug() << "Found test case function declaration" << function->identifier().toString();
