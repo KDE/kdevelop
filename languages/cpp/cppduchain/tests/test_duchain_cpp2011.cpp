@@ -34,6 +34,7 @@
 #include <language/duchain/dumpchain.h>
 
 #include "typeutils.h"
+#include "templatedeclaration.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -600,4 +601,59 @@ void TestDUChain::testLambdaCapture()
   QVERIFY(funType->returnType());
   QVERIFY(funType->returnType().cast<IntegralType>());
   QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
+}
+
+void TestDUChain::testTemplateSpecializeArray()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=294306
+  const QByteArray code(
+    "template <typename T>\n"
+    "class test\n"
+    "{\n"
+    "public:\n"
+    "    void foo() {}\n"
+    "};\n"
+    "template<typename T>\n"
+    "class test<T[]>\n"
+    "{\n"
+    "};\n"
+    "int main() {\n"
+    "    test<int> t1;\n"
+    "    // should work:\n"
+    "    t1.foo();\n"
+    "    test<int[]> t2;\n"
+    "    // should not work:\n"
+    "    t2.foo();\n"
+    "\n"
+    "    return 0;\n"
+    "}\n"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().size(), 3);
+
+  Declaration* tplDecRaw = top->localDeclarations().at(0);
+  TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(tplDecRaw);
+  QVERIFY(tplDec);
+  QCOMPARE(tplDec->specializationsSize(), 1u);
+
+  Declaration* specRaw = top->localDeclarations().at(1);
+  TemplateDeclaration* spec = dynamic_cast<TemplateDeclaration*>(specRaw);
+  QVERIFY(spec);
+  QVERIFY(spec->specializedFrom().isValid());
+  QVERIFY(spec->specializedWith().isValid());
+  InstantiationInformation info = spec->specializedWith().information();
+  QCOMPARE(info.templateParametersSize(), 1u);
+  QVERIFY(info.templateParameters()[0].isValid());
+  AbstractType::Ptr specParam = info.templateParameters()[0].abstractType();
+  QVERIFY(specParam);
+  QVERIFY(specParam.cast<ArrayType>());
+  QCOMPARE(specParam->toString(), QString("T[]"));
+
+  QEXPECT_FAIL("", "array specialization not honored for <int[]>...", Abort);
+  QCOMPARE(tplDec->instantiations().size(), 1);
+  QCOMPARE(spec->instantiations().size(), 1);
 }

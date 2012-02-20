@@ -94,6 +94,15 @@ void TypeASTVisitor::run(TypeIdAST *node)
             it = it->next;
           }
         while (it != end);
+      } else if (node->declarator && node->declarator->array_dimensions) {
+        const ListNode< ExpressionAST* >* it = node->declarator->array_dimensions->toFront();
+        const ListNode< ExpressionAST* >* end = node->declarator->array_dimensions-> toBack();
+        do {
+          ArrayType::Ptr array(new ArrayType);
+          array->setElementType(m_type);
+          m_type = array.cast<AbstractType>();
+          it = it->next;
+        } while (it != end);
       }
     }
   }

@@ -806,7 +806,7 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
     //Use the information from the specialization-information to build the template-identifiers
     for(uint a = 0; a < instantiationSpecializedWith.templateParametersSize(); ++a) {
       if(instantiationSpecializedWith.templateParameters()[a] != info.templateParameters()[a]) {
-        ifDebugMatching( kDebug() << "mismatch in final parameters at" << a << instantiationSpecializedWith.templateParameters()[a].type()->toString() << info.templateParameters()[a].type()->toString(); )
+        ifDebugMatching( kDebug() << "mismatch in final parameters at" << a << instantiationSpecializedWith.templateParameters()[a].abstractType()->toString() << info.templateParameters()[a].abstractType()->toString(); )
         return qMakePair(0u, (TemplateDeclaration*)0);
       }
     }

@@ -110,6 +110,20 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
           it = it->next;
         }
       while (it != end);
+    } else if (node->type_id->declarator && node->type_id->declarator->array_dimensions) {
+      ///FIXME: find a way to put this information into the identifier
+      ///       e.g.: id.setArrayDepth(id.arrayDepth() + 1) ?
+      const ListNode< ExpressionAST* >* it = node->type_id->declarator->array_dimensions->toFront();
+      const ListNode< ExpressionAST* >* end = node->type_id->declarator->array_dimensions-> toBack();
+      do {
+        QualifiedIdentifier qid = id.identifier();
+        Identifier last = qid.last();
+        qid.pop();
+        last.setIdentifier(last.toString() + "[]");
+        qid.push(last);
+        id.setIdentifier(IndexedQualifiedIdentifier( qid ));
+        it = it->next;
+      } while (it != end);
     }
   }
   return id;
