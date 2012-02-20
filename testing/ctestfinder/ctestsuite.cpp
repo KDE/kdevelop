@@ -96,7 +96,7 @@ void CTestSuite::loadCases()
         foreach (Declaration* decl, context->localDeclarations(context))
         {
             kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
-            FunctionDefinition* def;
+            FunctionDefinition* def = 0;
             if (decl->isDefinition() && (def = dynamic_cast<FunctionDefinition*>(decl)))
             {
                 decl = def->declaration(context);
@@ -116,7 +116,7 @@ void CTestSuite::loadCases()
                     if (m_cases.contains(name))
                     {
                         kDebug() << "Found test case function declaration" << function->identifier().toString();
-                        m_declarations[name] = IndexedDeclaration(function);
+                        m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
                     }
                 }
             }
