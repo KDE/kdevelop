@@ -36,8 +36,13 @@
 #include <KJob>
 #include <KDebug>
 #include <interfaces/iruncontroller.h>
+#include <util/executecompositejob.h>
 
 using namespace KDevelop;
+
+const int ProjectRole = Qt::UserRole + 1;
+const int SuiteRole = Qt::UserRole + 2;
+const int CaseRole = Qt::UserRole + 3;
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
 , m_plugin(plugin)
@@ -55,6 +60,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     addAction(reloadAction);
     
     KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected"), this );
+    connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     addAction(runSelected);
     
     action = plugin->actionCollection()->action("run_all_tests");
@@ -87,12 +93,15 @@ void TestView::buildTestModel()
     foreach (IProject* project, ICore::self()->projectController()->projects())
     {
         QStandardItem* projectItem = new QStandardItem(KIcon("project-development"), project->name());
+        projectItem->setData(project->name(), ProjectRole);
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
             QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
+            suiteItem->setData(suite->url(), SuiteRole);
             foreach (QString caseName, suite->cases())
             {
                 QStandardItem* caseItem = new QStandardItem(caseName);
+                caseItem->setData(caseName, CaseRole);
                 suiteItem->appendRow(caseItem);
             }
             projectItem->appendRow(suiteItem);
@@ -149,5 +158,54 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
     }
 }
 
+void TestView::runSelectedTests()
+{
+    QModelIndexList indexes = selectedIndexes();
+    if (indexes.isEmpty())
+    {
+        return;
+    }
+        
+    QList<KJob*> jobs;
+    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    
+    foreach (const QModelIndex& index, indexes)
+    {
+        if (index.parent().isValid() && indexes.contains(index.parent()))
+        {
+            continue;
+        }
+        QStandardItem* item = m_model->itemFromIndex(index);
+        if (item->parent() == 0)
+        {
+            // A project was selected
+            IProject* project = ICore::self()->projectController()->findProjectByName(item->data(ProjectRole).toString());
+            foreach (ITestSuite* suite, tc->testSuitesForProject(project))
+            {
+                jobs << suite->launchAllCases();
+            }
+        }
+        else if (item->parent()->parent() == 0)
+        {
+            // A suite was selected
+            ITestSuite* suite =  tc->testSuiteForUrl(item->data(SuiteRole).value<KUrl>());
+            jobs << suite->launchAllCases();
+        }
+        else
+        {
+            // This was a single test case
+            ITestSuite* suite = tc->testSuiteForUrl(item->parent()->data(SuiteRole).value<KUrl>());
+            const QString testCase = item->data(CaseRole).toString();
+            jobs << suite->launchCase(testCase);
+        }
+    }
+    
+    if (!jobs.isEmpty())
+    {
+        KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
+        compositeJob->setObjectName(i18np("Run 1 test", "Run %1 tests", jobs.size()));
+        ICore::self()->runController()->registerJob(compositeJob);
+    }
+}
 
 

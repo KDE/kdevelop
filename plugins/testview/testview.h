@@ -42,6 +42,7 @@ public slots:
     void reloadTests();
     void buildTestModel();
     void updateTestSuite(KDevelop::ITestSuite* suite);
+    void runSelectedTests();
 
 private:
     TestViewPlugin* m_plugin;
