@@ -30,7 +30,7 @@ class ITestController;
 class CTestSuite : public KDevelop::ITestSuite
 {
 public:
-    CTestSuite(const QString& name, const KUrl& executable, KDevelop::IProject* project, const QStringList& args = QStringList());
+    CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
     virtual KJob* launchCase(const QString& testCase);
@@ -55,6 +55,7 @@ private:
     QString m_name;
     QStringList m_cases;
     QStringList m_args;
+    QStringList m_files;
     KDevelop::IProject* m_project;
     KDevelop::TestResult m_result;
 };

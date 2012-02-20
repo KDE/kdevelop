@@ -280,6 +280,32 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
     t.name = test->testName();
     t.executable = test->exeName();
     t.arguments = test->testArgs();
+
+    if (m_targetForId.contains(t.executable))
+    {
+        t.files = m_targetForId[t.executable].files;
+    }
+    else 
+    {
+        // Strip the extensions and full path added by kde4_add_unit_test
+        QString exe = t.executable;
+        if (exe.endsWith(".shell"))
+        {
+            exe.chop(6);
+        }
+        else if (exe.endsWith(".bat"))
+        {
+            exe.chop(4);
+        }
+        exe = exe.split('/').last();
+        if (m_targetForId.contains(exe))
+        {
+            t.files = m_targetForId[exe].files;
+        }
+    }
+    t.files.removeAll("TEST"); // Added by kde4_add_unit_test
+    
+    kDebug(9042) << "AddTestAst" << t.executable << t.files;
     m_testSuites << t;
     return 1;
 }

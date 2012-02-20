@@ -63,6 +63,7 @@ struct Test
     QString name;
     QString executable;
     QStringList arguments;
+    QStringList files;
 };
 
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };

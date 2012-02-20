@@ -26,14 +26,20 @@
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/indexeddeclaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/use.h>
+#include <language/duchain/declaration.h>
+#include <project/projectmodel.h>
 
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable, IProject* project, const QStringList& args): 
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, IProject* project, const QStringList& args): 
 m_url(executable),
 m_name(name),
 m_args(args),
+m_files(files),
 m_project(project)
 {
     m_url.cleanPath();
@@ -67,6 +73,26 @@ void CTestSuite::loadCases()
                 line.remove(')');
                 m_cases << line;
             }
+        }
+    }
+    
+    QStringList candidateFiles;
+    foreach (const QString& file, m_files)
+    {
+        ReferencedTopDUContext ref = DUChain::self()->waitForUpdate(IndexedString(file), TopDUContext::AllDeclarationsAndContexts);
+        
+        DUChainReadLocker locker(DUChain::lock());
+        TopDUContext* context = ref.data();
+        if (!context)
+        {
+            kDebug() << "No top context in" << file;
+            continue;
+        }
+        
+        kDebug() << "Found" << context->localDeclarations(context).size() << "declarations in file" << file;
+        foreach (Declaration* decl, context->localDeclarations(context))
+        {
+            kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
         }
     }
 }

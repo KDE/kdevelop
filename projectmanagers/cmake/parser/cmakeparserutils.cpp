@@ -200,7 +200,18 @@ namespace CMakeParserUtils
                     {
                         exe = binDir + exe;
                     }
-                    testProvider->createTestSuite(test.name, exe, project, test.arguments);
+                    QStringList files;
+                    foreach (const QString& file, test.files)
+                    {
+                        KUrl fileUrl(file);
+                        if (fileUrl.isRelative())
+                        {
+                            fileUrl = sourcedir;
+                            fileUrl.addPath(file);
+                        }
+                        files << fileUrl.toLocalFile();
+                    }
+                    testProvider->createTestSuite(test.name, exe, files, project, test.arguments);
                 }
             }
         }

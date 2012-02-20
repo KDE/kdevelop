@@ -33,7 +33,7 @@ class ICTestProvider
 public:
     virtual ~ICTestProvider() {}
 
-    virtual void createTestSuite(const QString& name, const QString& executable, KDevelop::IProject* project, const QStringList& arguments = QStringList()) = 0;
+    virtual void createTestSuite(const QString& name, const QString& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& arguments = QStringList()) = 0;
 };
 
 Q_DECLARE_INTERFACE( ICTestProvider, "org.kdevelop.ICTestProvider" )

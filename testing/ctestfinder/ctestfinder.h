@@ -45,7 +45,7 @@ public:
     virtual ~CTestFinder();
     virtual void unload();
 
-    virtual void createTestSuite(const QString& name, const QString& executable, KDevelop::IProject* project, const QStringList& arguments = QStringList());
+    virtual void createTestSuite(const QString& name, const QString& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& arguments = QStringList());
     virtual KJob* findTests();
 
 private:

@@ -62,7 +62,7 @@ void CTestFinder::unload()
 {
 }
 
-void CTestFinder::createTestSuite(const QString& name, const QString& executable, IProject* project, const QStringList& arguments)
+void CTestFinder::createTestSuite(const QString& name, const QString& executable, const QStringList& files, IProject* project, const QStringList& arguments)
 {
     QString exe = executable;
     if (exe.startsWith("#[bin_dir]"))
@@ -73,7 +73,7 @@ void CTestFinder::createTestSuite(const QString& name, const QString& executable
     exeUrl.addPath(exe);
     Q_ASSERT(exeUrl.isLocalFile());
     kDebug() << exeUrl << exeUrl.toLocalFile();
-    CTestSuite* suite = new CTestSuite(name, exeUrl, project, arguments);
+    CTestSuite* suite = new CTestSuite(name, exeUrl, files, project, arguments);
     m_pendingSuites << suite;
 }
 
