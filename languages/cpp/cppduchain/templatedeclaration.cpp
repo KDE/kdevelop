@@ -111,6 +111,7 @@ AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::
     ReferenceType::Ptr newRet( new ReferenceType() );
     newRet->setModifiers(modifiers);
     newRet->setBaseType( ret );
+    newRet->setIsRValue(id.isRValue());
     ret = newRet.cast<AbstractType>();
   }
 

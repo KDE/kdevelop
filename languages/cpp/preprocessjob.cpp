@@ -663,8 +663,6 @@ bool PreprocessJob::readContents()
     
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()
-    << "<== readFromDisk:" << readFromDisk
-    << "size:" << contents.contents.length()
     << endl; )
     
     return true;
