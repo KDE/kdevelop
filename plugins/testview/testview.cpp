@@ -49,6 +49,10 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
 {
     setWindowIcon(KIcon("preflight-verifier"));
     setIndentation(10);
+    setEditTriggers(NoEditTriggers);
+    setSelectionBehavior(SelectRows);
+    setSelectionMode(MultiSelection);
+    
     m_model = new QStandardItemModel(this);
     setModel(m_model);
     buildTestModel();
