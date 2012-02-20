@@ -25,6 +25,7 @@
 #include <QFileInfo>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
+#include <language/duchain/indexeddeclaration.h>
 
 
 using namespace KDevelop;
@@ -121,5 +122,17 @@ void CTestSuite::setResult(const TestResult& result)
 {
     m_result = result;
 }
+
+IndexedDeclaration CTestSuite::declaration() const
+{
+    return IndexedDeclaration(0);
+}
+
+IndexedDeclaration CTestSuite::caseDeclaration(const QString& testCase) const
+{
+    return IndexedDeclaration(0);
+}
+
+
 
 

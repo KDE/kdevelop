@@ -43,6 +43,9 @@ public:
     virtual KDevelop::IProject* project() const;
     virtual KDevelop::TestResult result() const;
     
+    virtual KDevelop::IndexedDeclaration declaration() const;
+    virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
+    
     void loadCases();
     QStringList arguments() const;
     void setResult(const KDevelop::TestResult& result);
