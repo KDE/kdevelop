@@ -111,12 +111,18 @@ void TestView::updateTestSuite(ITestSuite* suite)
         {
             kDebug() << "Item is really a suite";
             TestResult result = suite->result();
+            bool failed = false;
+            bool passed = false;
             for (int i = 0; i < item->rowCount(); ++i)
             {
-                kDebug() << "Found a test case" << item->text();
+                kDebug() << "Found a test case" << item->child(i)->text();
                 QStandardItem* caseItem = item->child(i);
-                caseItem->setIcon(iconForTestResult(result.testCaseResults.value(item->text(), TestResult::NotRun)));
+                TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
+                failed |= (caseResult == TestResult::Failed);
+                passed |= (caseResult == TestResult::Passed);
+                caseItem->setIcon(iconForTestResult(caseResult));
             }
+            item->setIcon( failed ? KIcon("dialog-error") : KIcon("dialog-ok-apply") );
         }
     }
 }
@@ -136,7 +142,7 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
             return KIcon("dialog-ok");
             
         case TestResult::Failed:
-            return KIcon("dialog-cancel");
+            return KIcon("edit-delete");
             
         default:
             return KIcon();
