@@ -130,10 +130,13 @@ void TestView::updateTestSuite(ITestSuite* suite)
             {
                 kDebug() << "Found a test case" << item->child(i)->text();
                 QStandardItem* caseItem = item->child(i);
-                TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
-                failed |= (caseResult == TestResult::Failed);
-                passed |= (caseResult == TestResult::Passed);
-                caseItem->setIcon(iconForTestResult(caseResult));
+                if (result.testCaseResults.contains(caseItem->text()))
+                {
+                    TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
+                    failed |= (caseResult == TestResult::Failed);
+                    passed |= (caseResult == TestResult::Passed);
+                    caseItem->setIcon(iconForTestResult(caseResult));
+                }
             }
             item->setIcon( failed ? KIcon("dialog-error") : KIcon("dialog-ok-apply") );
         }
