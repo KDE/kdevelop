@@ -30,6 +30,7 @@ class KUrl;
 
 namespace KDevelop {
 
+class IndexedDeclaration;
 class IProject;
 class ILaunchConfiguration;
 
@@ -61,6 +62,9 @@ public:
     virtual KJob* launchCase(const QString& testCase) = 0;
     
     virtual TestResult result() const = 0;
+    
+    virtual IndexedDeclaration declaration() const = 0;
+    virtual IndexedDeclaration caseDeclaration(const QString& testCase) const = 0;
 };
 
 }
