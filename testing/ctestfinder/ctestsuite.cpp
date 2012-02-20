@@ -30,6 +30,9 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/use.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <project/projectmodel.h>
 
 
@@ -93,6 +96,30 @@ void CTestSuite::loadCases()
         foreach (Declaration* decl, context->localDeclarations(context))
         {
             kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+            FunctionDefinition* def;
+            if (decl->isDefinition() && (def = dynamic_cast<FunctionDefinition*>(decl)))
+            {
+                decl = def->declaration(context);
+            }
+            
+            if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
+            {
+                if (function->isConstructor())
+                {
+                    kDebug() << "Found constructor" << function->identifier().toString();
+                    m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
+                }
+                else if (function->accessPolicy() == Declaration::Private && function->isSlot())
+                {
+                    QString name = function->qualifiedIdentifier().last().toString();
+                    kDebug() << "Found private slot in test" << name; 
+                    if (m_cases.contains(name))
+                    {
+                        kDebug() << "Found test case function declaration" << function->identifier().toString();
+                        m_declarations[name] = IndexedDeclaration(function);
+                    }
+                }
+            }
         }
     }
 }
@@ -151,12 +178,12 @@ void CTestSuite::setResult(const TestResult& result)
 
 IndexedDeclaration CTestSuite::declaration() const
 {
-    return IndexedDeclaration(0);
+    return m_suiteDeclaration;
 }
 
 IndexedDeclaration CTestSuite::caseDeclaration(const QString& testCase) const
 {
-    return IndexedDeclaration(0);
+    return m_declarations.value(testCase, IndexedDeclaration(0));
 }
 
 

@@ -21,6 +21,7 @@
 #define CTESTSUITE_H
 
 #include <interfaces/itestsuite.h>
+#include <language/duchain/indexeddeclaration.h>
 #include <KUrl>
 
 namespace KDevelop {
@@ -57,6 +58,9 @@ private:
     QStringList m_args;
     QStringList m_files;
     KDevelop::IProject* m_project;
+    
+    QMap<QString, KDevelop::IndexedDeclaration> m_declarations;
+    KDevelop::IndexedDeclaration m_suiteDeclaration;
     KDevelop::TestResult m_result;
 };
 
