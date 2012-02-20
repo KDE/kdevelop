@@ -82,6 +82,7 @@ bool CTestRunJob::doKill()
 void CTestRunJob::processFinished(int exitCode)
 {
     QString line = QString("*** Test process exited with exit code %1 ***").arg(exitCode);
+    
     TestResult result;
     result.testCaseResults = m_caseResults;
     m_suite->setResult(result);
@@ -103,16 +104,32 @@ void CTestRunJob::receivedLines(const QStringList& lines)
 {
     foreach (const QString& line, lines )
     {
-        QString testCase = line.split("::").last().trimmed();
-        testCase.remove("()");
+        // TODO: Highlight parts of the line
+        qobject_cast<OutputModel*>(model())->appendLine(line);
+    
+        if (!line.contains("()"))
+        {
+            continue;
+        }
+        
+        QString testCase = line.split("()").first();
+        if (line.contains("::"))
+        {
+            testCase = testCase.split("::").last();
+        }
+        else
+        {
+            testCase = testCase.split(' ').last();
+        }
+        
         if (m_suite->cases().contains(testCase))
         {
-            TestResult::TestCaseResult result;
+            TestResult::TestCaseResult result = TestResult::NotRun;
             if (line.startsWith("PASS"))
             {
                 result = TestResult::Passed;
             }
-            else if (line.startsWith("FAIL"))
+            else if (line.startsWith("FAIL") || line.startsWith("XFAIL"))
             {
                 result = TestResult::Failed;
             }
@@ -120,10 +137,11 @@ void CTestRunJob::receivedLines(const QStringList& lines)
             {
                 result = TestResult::Skipped;
             }
-            m_caseResults[testCase] = result;
+            
+            if (result != TestResult::NotRun)
+            {
+                m_caseResults[testCase] = result;
+            }
         }
-        
-        // TODO: Highlight parts of the line
-        qobject_cast<OutputModel*>(model())->appendLine(line);
     }
 }
