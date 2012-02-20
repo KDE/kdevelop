@@ -36,7 +36,12 @@
 #include <KJob>
 #include <KDebug>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <util/executecompositejob.h>
+#include <language/duchain/indexeddeclaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/declaration.h>
 
 using namespace KDevelop;
 
@@ -66,6 +71,10 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     addAction(runSelected);
+    
+    KAction* showSource = new KAction( KIcon("code-context"), i18n("Show source"), this );
+    connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
+    addAction(showSource);
     
     action = plugin->actionCollection()->action("run_all_tests");
     addAction(action);
@@ -214,5 +223,50 @@ void TestView::runSelectedTests()
         ICore::self()->runController()->registerJob(compositeJob);
     }
 }
+
+void TestView::showSource()
+{
+    QModelIndexList indexes = selectedIndexes();
+    if (indexes.isEmpty())
+    {
+        return;
+    }
+    
+    IndexedDeclaration declaration;
+    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+
+    QStandardItem* item = m_model->itemFromIndex(indexes.first());
+    if (item->parent() == 0)
+    {
+        // No sense in finding source code for projects. 
+        return;
+    }
+    else if (item->parent()->parent() == 0)
+    {
+        ITestSuite* suite =  tc->testSuiteForUrl(item->data(SuiteRole).value<KUrl>());
+        declaration = suite->declaration();
+    }
+    else
+    {
+        ITestSuite* suite =  tc->testSuiteForUrl(item->parent()->data(SuiteRole).value<KUrl>());
+        declaration = suite->caseDeclaration(item->data(CaseRole).toString());
+    }
+    
+    DUChainReadLocker locker(DUChain::lock());
+    Declaration* d = declaration.data();
+    if (!d)
+    {
+        return;
+    }
+    
+    KUrl url = d->url().toUrl();
+    KTextEditor::Cursor cursor = d->rangeInCurrentRevision().textRange().start();
+    locker.unlock();
+    
+    IDocumentController* dc = ICore::self()->documentController();
+    kDebug() << "Activating declaration in" << url;
+    dc->openDocument(url, cursor);
+}
+
 
 

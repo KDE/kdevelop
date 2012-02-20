@@ -43,6 +43,7 @@ public slots:
     void buildTestModel();
     void updateTestSuite(KDevelop::ITestSuite* suite);
     void runSelectedTests();
+    void showSource();
 
 private:
     TestViewPlugin* m_plugin;
