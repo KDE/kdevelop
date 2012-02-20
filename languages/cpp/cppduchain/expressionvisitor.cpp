@@ -1370,29 +1370,23 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       p->setClassType( m_lastType );
       m_lastType = p.cast<AbstractType>();
     } else {
+      int op = m_session->token_stream->kind(node->op);
 
-    static const IndexedString ref("&");
-    static const IndexedString rvalueRef("&&");
-    static const IndexedString ptr("*");
+      if(op == '*') {
+        PointerType::Ptr p( new PointerType() );
+        p->setBaseType( m_lastType );
+        p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
 
-    IndexedString op = m_session->token_stream->token(node->op).symbol();
+        m_lastType = p.cast<AbstractType>();
+      } else {
+        ReferenceType::Ptr p( new ReferenceType() );
+        p->setBaseType( m_lastType );
+        p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+        if (op == Token_and)
+          p->setIsRValue(true);
 
-    if(op == ptr) {
-
-      PointerType::Ptr p( new PointerType() );
-      p->setBaseType( m_lastType );
-      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-
-      m_lastType = p.cast<AbstractType>();
-    }else{
-      ReferenceType::Ptr p( new ReferenceType() );
-      p->setBaseType( m_lastType );
-      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-      if (op == rvalueRef)
-        p->setIsRValue(true);
-
-      m_lastType = p.cast<AbstractType>();
-    }
+        m_lastType = p.cast<AbstractType>();
+      }
     }
     m_lastInstance = Instance(false);
   }
