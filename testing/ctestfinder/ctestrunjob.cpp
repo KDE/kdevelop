@@ -49,6 +49,7 @@ void CTestRunJob::start()
 {
     KDevelop::OutputModel* outputModel = new KDevelop::OutputModel;
     setModel( outputModel, KDevelop::IOutputView::TakeOwnership );
+    setStandardToolView(IOutputView::TestView);
     
     QStringList arguments = m_cases;
     if (m_cases.isEmpty() && !m_suite->arguments().isEmpty())
