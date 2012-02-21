@@ -56,11 +56,7 @@ TestFile::TestFile (const QString& contents, const QString& fileExtension, TestP
 {
     d->file.setSuffix('.' + fileExtension);
     d->file.setPrefix(dir);
-    d->file.open();
-    Q_ASSERT(d->file.isOpen());
-    Q_ASSERT(d->file.isWritable());
-    d->file.write(contents.toLocal8Bit());
-    d->file.close();
+    setFileContents(contents);
 
     QFileInfo info(d->file.fileName());
     Q_ASSERT(info.exists());
@@ -106,6 +102,29 @@ ReferencedTopDUContext TestFile::topContext()
 {
     waitForParsed();
     return d->topContext;
+}
+
+void TestFile::setFileContents(const QString& contents)
+{
+    d->file.open();
+    Q_ASSERT(d->file.isOpen());
+    Q_ASSERT(d->file.isWritable());
+    // manually truncate since we cannot give .open()
+    // any arguments in QTemporaryFile...)
+    d->file.resize(0);
+    d->file.write(contents.toLocal8Bit());
+    d->file.close();
+    d->ready = false;
+}
+
+QString TestFile::fileContents() const
+{
+    d->file.open();
+    Q_ASSERT(d->file.isOpen());
+    Q_ASSERT(d->file.isReadable());
+    QString ret = QString::fromLocal8Bit(d->file.readAll());
+    d->file.close();
+    return ret;
 }
 
 #include "testfile.moc"

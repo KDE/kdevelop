@@ -95,6 +95,19 @@ public:
      */
     KDevelop::ReferencedTopDUContext topContext();
 
+    /**
+     * Change the file contents to @p contents.
+     *
+     * Use this to test behavior of your parsing code over
+     * file changes.
+     */
+    void setFileContents(const QString& contents);
+
+    /**
+     * Read the files contents and return them.
+     */
+    QString fileContents() const;
+
 private:
     struct TestFilePrivate;
     TestFilePrivate* d;

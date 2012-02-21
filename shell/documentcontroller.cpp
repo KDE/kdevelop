@@ -582,9 +582,8 @@ void DocumentController::cleanup()
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.
-    foreach (Sublime::MainWindow* mw, Core::self()->uiControllerInternal()->mainWindows())
-        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
-            doc->close(IDocument::Discard);
+    foreach (IDocument* doc, openDocuments())
+        doc->close(IDocument::Discard);
 }
 
 DocumentController::~DocumentController()
@@ -830,9 +829,10 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
     return true;
 }
 
-QList< IDocument * > KDevelop::DocumentController::documentsInWindow(MainWindow * mw) const
+QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(MainWindow * mw) const
 {
     // Gather a list of all documents which do have a view in the given main window
+    // Does not find documents which are open in inactive areas
     QList<IDocument*> list;
     foreach (IDocument* doc, openDocuments()) {
         if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
@@ -888,7 +888,7 @@ bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDeve
 void DocumentController::reloadAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
@@ -902,7 +902,7 @@ void DocumentController::reloadAllDocuments()
 void DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error

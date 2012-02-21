@@ -81,7 +81,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
 
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
   public:
-      /** Used to group edit-history together. Call this before a bunch of replace(), and endEdit in the end. */
+      /** Used to group edit-history together. Call this optionally before a bunch
+       *  of replace() calls, and then call endEdit in the end, to group them together. */
       virtual void startEdit() = 0;
       virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
                            const QString& newText, bool ignoreOldText = false) = 0;

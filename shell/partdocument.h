@@ -70,6 +70,7 @@ public:
 
     //Overridden from Sublime::Document
     virtual bool closeDocument(bool silent);
+    virtual bool askForCloseFeedback();
 protected:
     /** Gives us access to the KParts */
     QMap<QWidget*, KParts::Part*> partForView() const;

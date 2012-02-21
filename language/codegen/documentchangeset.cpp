@@ -113,7 +113,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePoint
 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(DocumentChangePointer change) {
     if(change->m_range.start.line != change->m_range.end.line)
+    {
+        kWarning() << "Multi-line changes are not supported in DocumentChangeSet";
         return DocumentChangeSet::ChangeResult("Multi-line ranges are not supported");
+    }
     
     changes[change->m_document].append(change);
     return true;

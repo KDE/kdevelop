@@ -1048,7 +1048,9 @@ QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
       ret += "const";
   }
 
-  if(isReference())
+  if(isRValue())
+    ret += "&&";
+  else if(isReference())
     ret += '&';
   return ret;
 }
