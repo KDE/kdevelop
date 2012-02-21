@@ -59,7 +59,7 @@ private:
     QStringList m_files;
     KDevelop::IProject* m_project;
     
-    QMap<QString, KDevelop::IndexedDeclaration> m_declarations;
+    QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
     KDevelop::IndexedDeclaration m_suiteDeclaration;
     KDevelop::TestResult m_result;
 };
