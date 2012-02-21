@@ -411,9 +411,18 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
-  if(integral && ((integral->modifiers() & AbstractType::ConstModifier) || m_lastTypeWasAuto) && node->initializer_clause && node->initializer_clause->expression) {
+  if (!integral && m_lastTypeWasAuto) {
+    ReferenceType::Ptr ref = lastType().cast<ReferenceType>();
+    if (ref) {
+      integral = ref->baseType().cast<IntegralType>();
+    }
+  }
+
+  if(integral && (integral->modifiers() & AbstractType::ConstModifier || m_lastTypeWasAuto)
+      && node->initializer_clause && node->initializer_clause->expression)
+  {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
     Cpp::ExpressionParser parser;
 
@@ -442,6 +451,10 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
           type->setModifiers( integral->modifiers() );
           // Turn "5" into "int"
           type = TypeUtils::removeConstants( type, topContext() );
+          if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
+            ref->setBaseType( type );
+            type = ref.cast<AbstractType>();
+          }
         }
         
         openType( type );

@@ -762,3 +762,57 @@ void TestDUChain::testAliasDeclaration()
   QCOMPARE(dec->uses().begin()->count(), 1);
   QCOMPARE(dec->uses().begin()->first().start.line, 2);
 }
+
+void TestDUChain::testAuto()
+{
+  const QByteArray code(
+    "char i = 1;\n"
+    "auto a1 = i;\n"
+    "auto& a2 = i;\n"
+    "auto&& a3 = i;\n"
+    "const auto a4 = i;\n"
+    "const auto& a5 = i;\n"
+    "const auto&& a6 = i;\n"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().count(), 7);
+
+  Declaration* dec = top->localDeclarations().at(1);
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(2);
+  QVERIFY(dec->type<ReferenceType>());
+  QVERIFY(!dec->type<ReferenceType>()->isRValue());
+  QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(3);
+  QVERIFY(dec->type<ReferenceType>());
+  QVERIFY(dec->type<ReferenceType>()->isRValue());
+  QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(4);
+  QVERIFY(dec->type<IntegralType>());
+  QVERIFY(dec->abstractType()->modifiers() & AbstractType::ConstModifier);
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(5);
+  QVERIFY(dec->type<ReferenceType>());
+  QVERIFY(dec->type<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(!dec->type<ReferenceType>()->isRValue());
+  QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(6);
+  QVERIFY(dec->type<ReferenceType>());
+  QVERIFY(dec->type<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(dec->type<ReferenceType>()->isRValue());
+  QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
+  QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+}

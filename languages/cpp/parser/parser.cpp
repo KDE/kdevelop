@@ -3308,6 +3308,7 @@ bool Parser::parseRangeBasedFor(ForRangeDeclarationAst *&node)
   parseCvQualify(cv);
 
   TypeSpecifierAST *spec = 0;
+
   // auto support: right now it is part of the storage spec, put it back
   if (storageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
     rewind(storageSpec->toBack()->element);

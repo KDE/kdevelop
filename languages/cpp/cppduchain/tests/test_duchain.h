@@ -211,6 +211,7 @@ private slots:
   void testTemplateSpecializeArray();
   void testTemplateSpecializeRValue();
   void testAliasDeclaration();
+  void testAuto();
   //END C++2011
 
 private:
