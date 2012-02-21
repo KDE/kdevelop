@@ -217,6 +217,7 @@ public:
       Kind_LambdaDeclarator,                    // 85
       Kind_InitializerList,                     // 86
       Kind_BracedInitList,                      // 87
+      Kind_AliasDeclaration,                    // 88
       NODE_KIND_COUNT
     };
 
@@ -1260,6 +1261,16 @@ public:
   DECLARE_AST_NODE(UsingDirective)
 
   NameAST *name;
+};
+
+class AliasDeclarationAST : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(AliasDeclaration)
+
+  NameAST *name;
+  TypeIdAST *type_id;
 };
 
 class WhileStatementAST : public StatementAST

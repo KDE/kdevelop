@@ -923,18 +923,38 @@ bool Parser::parseUsing(DeclarationAST *&node)
   if (session->token_stream->lookAhead() == Token_namespace)
     return parseUsingDirective(node);
 
-  UsingAST *ast = CreateNode<UsingAST>(session->mempool);
+  uint type_name = 0;
+  NameAST* name = 0;
 
   if (session->token_stream->lookAhead() == Token_typename)
     {
-      ast->type_name = session->token_stream->cursor();
+      type_name = session->token_stream->cursor();
       advance();
     }
 
-  if (!parseName(ast->name))
+  if (!parseName(name))
     return false;
 
-  ADVANCE(';', ";");
+  DeclarationAST* ast = 0;
+
+  if (type_name || session->token_stream->lookAhead() == ';') {
+    ADVANCE(';', ";");
+    UsingAST *usingAst = CreateNode<UsingAST>(session->mempool);
+    usingAst->type_name = type_name;
+    usingAst->name = name;
+    ast = usingAst;
+  } else {
+    ADVANCE('=', "=");
+    TypeIdAST* type_id = 0;
+    if (!parseTypeId(type_id)) {
+      return false;
+    }
+    ADVANCE(';', ";");
+    AliasDeclarationAST *aliasAST = CreateNode<AliasDeclarationAST>(session->mempool);
+    aliasAST->name = name;
+    aliasAST->type_id = type_id;
+    ast = aliasAST;
+  }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;

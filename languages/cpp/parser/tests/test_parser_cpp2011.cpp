@@ -540,3 +540,11 @@ void TestParser::classVirtSpec_data()
   QTest::newRow("explicit") <<
     QString("struct A explicit {};\n");
 }
+
+void TestParser::testUsingAlias()
+{
+  TranslationUnitAST* ast = parse( "using foo = bar; ");
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}

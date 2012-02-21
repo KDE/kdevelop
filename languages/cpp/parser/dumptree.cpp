@@ -114,7 +114,8 @@ char const * const names[] = {
   "LambdaCapture",
   "LambdaDeclarator",
   "InitializerList",
-  "BracedInitList"
+  "BracedInitList",
+  "AliasDeclaration"
 };
 
 DumpTree::DumpTree()
