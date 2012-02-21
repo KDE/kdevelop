@@ -40,6 +40,7 @@ private slots:
   void testTokenTable();
   void testParser();
   void testTemplateArguments();
+  void testTemplatedDTor();
   void testManyComparisons();
   void testParserFail();
   void testPartialParseFail();

@@ -2892,7 +2892,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   ast->ellipsis = ellipsis;
   ast->operator_id = operator_id;
 
-  if (parseTemplateId && !tilde)
+  if (parseTemplateId)
     {
       uint index = session->token_stream->cursor();
 
