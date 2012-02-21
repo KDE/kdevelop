@@ -208,6 +208,10 @@ private slots:
   void testLambda();
   void testLambdaReturn();
   void testLambdaCapture();
+  void testTemplateSpecializeArray();
+  void testTemplateSpecializeRValue();
+  void testAliasDeclaration();
+  void testAuto();
   //END C++2011
 
 private:

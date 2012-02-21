@@ -5,6 +5,7 @@ MimeType=application/x-kdevelop;
 Icon=kdevelop
 Terminal=false
 Name=KDevelop 4 (Pick Session)
+Name[ca]=KDevelop 4 (Selecció de sessió)
 Name[cs]=KDevelop 4 (Zvolte relaci)
 Name[de]=KDevelop 4 (Sitzung auswählen)
 Name[el]=KDevelop 4 (Επιλογή συνεδρίας)

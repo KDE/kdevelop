@@ -321,11 +321,11 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       DelayedType::Ptr delayed( new DelayedType() );
       delayed->setIdentifier( IndexedTypeIdentifier( stringFromSessionTokens(editor()->parseSession(),
                                                      node->expression->start_token,
-                                                     node->expression->end_token), true ) );
+                                                     node->expression->end_token).trimmed(), true ) );
       delayed->setKind( templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
       type = delayed.cast<AbstractType>();
     }
-    
+
     openType(type);
     openedType = true;
   } else if (node->integrals) {
@@ -411,9 +411,18 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
-  if(integral && ((integral->modifiers() & AbstractType::ConstModifier) || m_lastTypeWasAuto) && node->initializer_clause && node->initializer_clause->expression) {
+  if (!integral && m_lastTypeWasAuto) {
+    ReferenceType::Ptr ref = lastType().cast<ReferenceType>();
+    if (ref) {
+      integral = ref->baseType().cast<IntegralType>();
+    }
+  }
+
+  if(integral && (integral->modifiers() & AbstractType::ConstModifier || m_lastTypeWasAuto)
+      && node->initializer_clause && node->initializer_clause->expression)
+  {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
     Cpp::ExpressionParser parser;
 
@@ -421,7 +430,7 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
     Cpp::ExpressionEvaluationResult res;
 
     bool delay = false;
-    ///@todo This is nearly a copy of visitEnumerator, merge it
+    ///@todo This is nearly a copy of visitEnumerator and parts of visitSimpleTypeSpecifier, merge it
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
       node->initializer_clause->expression->ducontext = currentContext();
@@ -442,6 +451,10 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
           type->setModifiers( integral->modifiers() );
           // Turn "5" into "int"
           type = TypeUtils::removeConstants( type, topContext() );
+          if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
+            ref->setBaseType( type );
+            type = ref.cast<AbstractType>();
+          }
         }
         
         openType( type );

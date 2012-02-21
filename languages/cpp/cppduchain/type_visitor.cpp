@@ -61,24 +61,21 @@ void TypeASTVisitor::run(TypeIdAST *node)
         do
           {
             PtrOperatorAST* ptrOp = it->element;
-            if (ptrOp){
+            if (ptrOp) {
               if(ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
-              IndexedString op = m_session->token_stream->token(ptrOp->op).symbol();
-              static IndexedString ref("&");
-              static IndexedString ptr("*");
-              if (!op.isEmpty()) {
-                if (op == ref) {
+                int op = m_session->token_stream->kind(ptrOp->op);
+                if (op == '&' || op == Token_and) {
                   ReferenceType::Ptr pointer(new ReferenceType());
                   pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
                   pointer->setBaseType(m_type);
+                  pointer->setIsRValue(op == Token_and);
                   m_type = pointer.cast<AbstractType>();
-                } else if (op == ptr) {
+                } else if (op == '*') {
                   PointerType::Ptr pointer(new PointerType());
                   pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
                   pointer->setBaseType(m_type);
                   m_type = pointer.cast<AbstractType>();
                 }
-              }
               } else{ ///ptr-to-member
                 PtrToMemberType::Ptr pointer(new PtrToMemberType);
                 pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
@@ -94,6 +91,15 @@ void TypeASTVisitor::run(TypeIdAST *node)
             it = it->next;
           }
         while (it != end);
+      } else if (node->declarator && node->declarator->array_dimensions) {
+        const ListNode< ExpressionAST* >* it = node->declarator->array_dimensions->toFront();
+        const ListNode< ExpressionAST* >* end = node->declarator->array_dimensions-> toBack();
+        do {
+          ArrayType::Ptr array(new ArrayType);
+          array->setElementType(m_type);
+          m_type = array.cast<AbstractType>();
+          it = it->next;
+        } while (it != end);
       }
     }
   }

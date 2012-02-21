@@ -40,6 +40,7 @@ private slots:
   void testTokenTable();
   void testParser();
   void testTemplateArguments();
+  void testTemplatedDTor();
   void testManyComparisons();
   void testParserFail();
   void testPartialParseFail();
@@ -124,6 +125,7 @@ private slots:
   void memberVirtSpec_data();
   void classVirtSpec();
   void classVirtSpec_data();
+  void testUsingAlias();
   //END C++2011 Support
 
 protected:

@@ -140,6 +140,16 @@ void TestParser::testTemplateArguments()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testTemplatedDTor()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=253618
+  QByteArray templatetest("template <typename T> struct A{ ~A<T>(); };");
+  TranslationUnitAST* ast = parse(templatetest);
+  QVERIFY(ast != 0);
+  QVERIFY(ast->declarations != 0);
+  QVERIFY(control.problems().isEmpty());
+}
+
 void TestParser::testManyComparisons()
 {
   //Should not crash

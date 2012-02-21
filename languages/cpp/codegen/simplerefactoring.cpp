@@ -509,6 +509,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
   changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
+  changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
   result = changes.applyAllChanges();
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));

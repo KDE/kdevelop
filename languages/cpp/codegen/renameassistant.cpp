@@ -49,6 +49,8 @@ public:
   virtual void execute() {
     UsesList::iterator it;
     DocumentChangeSet changes;
+    changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
+    changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
 
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     for (it = m_oldDeclarationUses.begin(); it != m_oldDeclarationUses.end(); ++it) {
@@ -63,7 +65,6 @@ public:
         DocumentChange useRename
             (it.key(), topContext->transformFromLocalRevision(range), m_oldDeclarationName.toString(), m_newDeclarationName);
         changes.addChange( useRename );
-        changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
       }
     }
     lock.unlock();

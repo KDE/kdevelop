@@ -1283,6 +1283,17 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
   }
 }
 
+void DeclarationBuilder::visitAliasDeclaration(AliasDeclarationAST* node)
+{
+  DeclarationBuilderBase::visitAliasDeclaration(node);
+
+  if( compilingContexts() ) {
+    PushValue<bool> setTypeDef(m_inTypedef, true);
+    Declaration* decl = openDeclaration<Declaration>(node->name, node->name);
+    closeDeclaration();
+  }
+}
+
 void DeclarationBuilder::visitTypeId(TypeIdAST * typeId)
 {
   //TypeIdAST contains a declarator, but that one does not declare anything

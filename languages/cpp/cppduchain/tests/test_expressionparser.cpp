@@ -1209,6 +1209,32 @@ void TestExpressionParser::testConstness()
   QVERIFY(TypeUtils::isConstant(result.type.abstractType()));
 }
 
+void TestExpressionParser::testReference()
+{
+  QByteArray method("");
+
+  KDevelop::DUContextPointer testContext(parse(method, DumpNone));
+  DUChainWriteLocker lock;
+  Cpp::ExpressionParser parser(false, true, true);
+  Cpp::ExpressionEvaluationResult result;
+
+  result = parser.evaluateType( "int&", testContext);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int&"));
+  QVERIFY(!result.isInstance);
+  QVERIFY(result.type.type<ReferenceType>());
+  QVERIFY(!result.type.type<ReferenceType>()->isRValue());
+
+  result = parser.evaluateType( "int&&", testContext);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int&&"));
+  QVERIFY(!result.isInstance);
+  QVERIFY(result.type.type<ReferenceType>());
+  QVERIFY(result.type.type<ReferenceType>()->isRValue());
+
+}
+
+
 void TestExpressionParser::testCharacterTypes_data()
 {
   QTest::addColumn<QString>("code");

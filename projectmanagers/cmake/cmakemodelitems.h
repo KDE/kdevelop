@@ -37,18 +37,22 @@ namespace KDevelop {
 }
 class CMakeFolderItem;
 
-class DescriptorAttatched
+class KDEVCMAKECOMMON_EXPORT DescriptorAttatched
 {
     public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DescriptorAttatched();
         void setDescriptor(const CMakeFunctionDesc & desc) { m_desc=desc; }
         CMakeFunctionDesc descriptor() const { return m_desc; }
     private:
         CMakeFunctionDesc m_desc;
 };
 
-class DUChainAttatched
+class KDEVCMAKECOMMON_EXPORT DUChainAttatched
 {
     public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DUChainAttatched();
         DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
         KDevelop::IndexedDeclaration declaration() const { return decl; }
     private:
@@ -58,6 +62,8 @@ class DUChainAttatched
 class KDEVCMAKECOMMON_EXPORT DefinesAttached
 {
     public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DefinesAttached();
         CMakeDefinitions definitions(CMakeFolderItem* parent) const;
         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
         void defineVariables(const QStringList& vars);
@@ -78,6 +84,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
 {
     public:
         CMakeFolderItem( KDevelop::IProject* project, const KUrl& folder, const QString& build, CMakeFolderItem* item);
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~CMakeFolderItem();
         
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
@@ -115,7 +123,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
                                   const QString& _outputName, const KUrl& basepath);
         
         virtual KUrl builtUrl() const;
-        virtual KUrl installedUrl() const { return KUrl(); }
+        virtual KUrl installedUrl() const;
         
     private:
         QString outputName;

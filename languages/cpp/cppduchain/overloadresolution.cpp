@@ -405,6 +405,12 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   if ( argumentPointer && parameterPointer && (( argumentPointer->modifiers() & AbstractType::ConstModifier ) == ( parameterPointer->modifiers() & AbstractType::ConstModifier ) ) )
     return incrementIfSuccessful( matchParameterTypes( argumentPointer->baseType(), parameterPointer->baseType(), instantiatedTypes, keepValue ) );
 
+  ///In case of arrays on both sides, match the target-types
+    ArrayType::Ptr argumentArray = argumentType.cast<ArrayType>();
+    ArrayType::Ptr parameterArray = parameterType.cast<ArrayType>();
+    if ( argumentArray && parameterArray && (( argumentArray->modifiers() & AbstractType::ConstModifier ) == ( parameterArray->modifiers() & AbstractType::ConstModifier ) ) ) {
+      return incrementIfSuccessful( matchParameterTypes( argumentArray->elementType(), parameterArray->elementType(), instantiatedTypes, keepValue ) );
+    }
 
   if ( CppTemplateParameterType::Ptr templateParam = parameterType.cast<CppTemplateParameterType>() )
   {
