@@ -94,6 +94,7 @@ void TestParser::testVariadicTemplates_data()
                                                  "template<typename _Res, typename... _ArgTypes> struct is_function<_Res(_ArgTypes...) const> { };\n";
   QTest::newRow("pack-expansion-funcptr") << "template<typename ... Args> void foo(Args... args) { typedef int (*t5)(Args...); }\n";
   QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
+  QTest::newRow("template-template-param") << "template<template <typename> class... Magic> struct foo{};\n";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
   ///TODO: capture-list?

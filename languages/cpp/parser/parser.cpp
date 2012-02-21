@@ -1919,11 +1919,14 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
 
         ADVANCE('>', ">");
 
-        // TODO: can a template-template parameter be variadic?
-
         // TODO add to AST
         if (session->token_stream->lookAhead() == Token_class)
           advance();
+
+        if (session->token_stream->lookAhead() == Token_ellipsis) {
+          advance();
+          ast->isVariadic = true;
+        }
 
         // parse optional name
         if (parseName(ast->name, AcceptTemplate))
