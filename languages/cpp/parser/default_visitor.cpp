@@ -542,3 +542,9 @@ void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)
   visit(node->exception_spec);
   visit(node->trailing_return_type);
 }
+
+void DefaultVisitor::visitAliasDeclaration(AliasDeclarationAST* node)
+{
+  visit(node->name);
+  visit(node->type_id);
+}

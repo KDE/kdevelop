@@ -98,6 +98,7 @@ protected:
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
   virtual void visitForRangeDeclaration(ForRangeDeclarationAst *node);
+  virtual void visitAliasDeclaration(AliasDeclarationAST* );
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);

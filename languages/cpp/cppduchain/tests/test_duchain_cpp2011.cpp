@@ -727,3 +727,38 @@ void TestDUChain::testTemplateSpecializeRValue()
   // should not work
   QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(16, 9)) == -1);
 }
+
+void TestDUChain::testAliasDeclaration()
+{
+  const QByteArray code(
+    "struct foo { static void asdf(); };\n"
+    "using bar = foo;\n"
+    "void t() { bar::asdf(); }"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().count(), 3);
+
+  // foo
+  Declaration* dec = top->localDeclarations().at(0);
+  QCOMPARE(dec->kind(), Declaration::Type);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->first().start.line, 1);
+
+  // bar
+  dec = top->localDeclarations().at(1);
+  QVERIFY(dec->isTypeAlias());
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->first().start.line, 2);
+
+  // foo::asdf
+  dec = top->childContexts().first()->localDeclarations().at(0);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->first().start.line, 2);
+}
