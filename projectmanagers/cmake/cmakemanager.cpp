@@ -1035,6 +1035,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 void CMakeManager::reimport(CMakeFolderItem* fi)
 {
+    Q_ASSERT(fi && fi->project());
     Q_ASSERT(!isReloading(fi->project()));
     KJob *job=createImportJob(fi);
     job->setProperty("project", qVariantFromValue(fi->project()));
