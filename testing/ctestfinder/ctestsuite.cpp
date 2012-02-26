@@ -114,7 +114,7 @@ void CTestSuite::loadCases()
                         m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
                     }
                     
-                    if (m_cases.contains(name))
+                    if (m_cases.contains(name) || name == "initTestCase" || name == "cleanupTestCase")
                     {
                         kDebug() << "Found test case function declaration" << function->identifier().toString();
                         m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
