@@ -18,16 +18,19 @@
 */
 
 #include "ctestrunjob.h"
+#include "ctestsuite.h"
+#include "qttestdelegate.h"
+
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
+
 #include <KConfigGroup>
 #include <KProcess>
 #include <KDebug>
-#include "ctestsuite.h"
 
 using namespace KDevelop;
 
@@ -49,6 +52,12 @@ void CTestRunJob::start()
 {
     KDevelop::OutputModel* outputModel = new KDevelop::OutputModel;
     setModel( outputModel, KDevelop::IOutputView::TakeOwnership );
+    if (!m_suite->cases().isEmpty())
+    {
+        // TODO: Find a better way of determining whether QTestLib is used by this test
+        kDebug() << "Setting a QtTestDelegate";
+        setDelegate(new QtTestDelegate(this), KDevelop::IOutputView::TakeOwnership);
+    }
     setStandardToolView(IOutputView::TestView);
     
     QStringList arguments = m_cases;
