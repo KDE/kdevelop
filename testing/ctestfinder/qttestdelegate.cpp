@@ -38,7 +38,6 @@ QtTestDelegate::~QtTestDelegate()
 void QtTestDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     const QString line = index.data().toString();
-    kDebug() << line;
     QStyleOptionViewItem opt = option;
     if (line.startsWith("PASS"))
     {

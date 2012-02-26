@@ -20,6 +20,7 @@
 #include "ctestrunjob.h"
 #include "ctestsuite.h"
 #include "qttestdelegate.h"
+#include "ctestoutputmodel.h"
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
@@ -50,13 +51,13 @@ m_lineMaker(0)
 
 void CTestRunJob::start()
 {
-    KDevelop::OutputModel* outputModel = new KDevelop::OutputModel;
+    CTestOutputModel* outputModel = new CTestOutputModel(m_suite);
     setModel( outputModel, KDevelop::IOutputView::TakeOwnership );
     if (!m_suite->cases().isEmpty())
     {
         // TODO: Find a better way of determining whether QTestLib is used by this test
         kDebug() << "Setting a QtTestDelegate";
-        setDelegate(new QtTestDelegate(this), KDevelop::IOutputView::TakeOwnership);
+        setDelegate(new QtTestDelegate, KDevelop::IOutputView::TakeOwnership);
     }
     setStandardToolView(IOutputView::TestView);
     

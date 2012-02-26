@@ -8,6 +8,7 @@ set(ctestfinder_LIB_SRCS
     ctestfindjob.cpp
     ctestsuite.cpp
     ctestrunjob.cpp
+    ctestoutputmodel.cpp
     qttestdelegate.cpp
 )
 
