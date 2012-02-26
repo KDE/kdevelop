@@ -56,7 +56,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     setIndentation(10);
     setEditTriggers(NoEditTriggers);
     setSelectionBehavior(SelectRows);
-    setSelectionMode(MultiSelection);
+    setSelectionMode(SingleSelection);
     
     m_model = new QStandardItemModel(this);
     setModel(m_model);
