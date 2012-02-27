@@ -85,8 +85,7 @@ void TestCore::shutdown()
         // before entering cleanup
         // this can fix random crashes under certain conditions
         QTest::qWait(1);
-        self()->cleanup();
-        self()->deleteLater();
+        self()->shutdown();
     }
 }
 

@@ -122,8 +122,7 @@ MainWindow::~ MainWindow()
 
     if (memberList().count() == 1) {
         // We're closing down...
-        Core::self()->cleanup();
-        Core::self()->deleteLater();
+        Core::self()->shutdown();
     }
 
     delete d;
