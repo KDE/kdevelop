@@ -34,36 +34,111 @@ class IndexedDeclaration;
 class IProject;
 class ILaunchConfiguration;
 
+/**
+ * The result of a single unit test run
+ **/
 struct KDEVPLATFORMINTERFACES_EXPORT TestResult
 {
+    /**
+     * Enumeration of possible test case results
+     **/
     enum TestCaseResult
     {
-        NotRun,
-        Skipped,
-        Passed,
-        Failed
+        NotRun, ///< The test case was not selected for running. 
+        Skipped, ///< The test case was skipped. 
+        Passed, ///< The test case was run and passed. 
+        Failed ///< The test case was run and failed. 
     };
+    
+    /**
+     * The individual result of all test cases. 
+     **/
     QMap<QString, TestCaseResult> testCaseResults;
 };
 
+/**
+ * A unit test suite class. 
+ **/
 class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
 {
 
 public:
+    /**
+     * Destructor
+     **/
     virtual ~ITestSuite();
 
+    /**
+     * @returns the display name of this suite. It does not have to be unique. 
+     **/
     virtual QString name() const = 0;
+    /**
+     * @returns the list of all test cases in this suite. 
+     **/
     virtual QStringList cases() const = 0;
+    /**
+     * @returns a unique URL. 
+     **/
     virtual KUrl url() const = 0;
+    /**
+     * Get the project to which this test suite belongs. 
+     * Since all suites must have a project associated, 
+     * this function should never return 0. 
+     * 
+     * @returns the test suite's project. 
+     **/
     virtual IProject* project() const = 0;
 
+    /**
+     * Return a job that will execute all the test cases in this suite. 
+     * 
+     * The implementation of this class is responsible for creating the job
+     * and interpreting its results. After the job is finished, the test results
+     * should be made available to the result() function. 
+     * 
+     * Starting the job is up to the caller, usually by registering it with 
+     * the run controller. 
+     **/
     virtual KJob* launchAllCases() = 0;
+    
+    /**
+     * @param testCases list of test cases to run
+     * @returns a KJob that will run the specified @p testCases. 
+     * @sa launchAllCases()
+     **/
     virtual KJob* launchCases(const QStringList& testCases) = 0;
+    
+    /**
+     * @param testCase the test case to run
+     * @returns a KJob that will run only @p testCase. 
+     * @sa launchAllCases()
+     **/
     virtual KJob* launchCase(const QString& testCase) = 0;
     
+    /**
+     * Get the last result obtained by running this suite. 
+     * This function only has to return a valid result after at least one
+     * of the launch functions has been called and the returned KJob finished. 
+     * 
+     * @sa launchAllCases(), KJob::finished()
+     **/
     virtual TestResult result() const = 0;
     
+    /**
+     * The location in source code where the test suite is declared. 
+     * If no such declaration can be found, an invalid declaration is returned. 
+     **/
     virtual IndexedDeclaration declaration() const = 0;
+    
+    /**
+     * The location in source code where the test case @p testCase is declared. 
+     * If no such declaration can be found, an invalid declaration is returned. 
+     * 
+     * This function may also return declarations for setup and teardown functions,
+     * even though these functions are not included in cases(). 
+     * 
+     * @param testCase the test case
+     **/
     virtual IndexedDeclaration caseDeclaration(const QString& testCase) const = 0;
 };
 
