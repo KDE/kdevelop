@@ -420,7 +420,7 @@ void CPPInternalParseJob::highlightIfNeeded()
 void CPPInternalParseJob::run()
 {
     //Happens during shutdown
-    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
+    if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
     
     //If we have a parent, the parse-mutex is already locked

@@ -73,6 +73,8 @@ private slots:
   void testDynamicArray();
   void testTypeID();
   void testConstness();
+  void testConstnessOverload();
+  void testConstnessOverloadSubscript();
   void testReference();
 
   void testCharacterTypes_data();

@@ -67,12 +67,20 @@ KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDeve
 QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::CursorInRevision& position);
 
 /**
- * Takes and returns a list of declarations together with inheritance-depth.
- * Since in c++ one declaration with a name in one depth overloads deeper
- * declarations, they are hidden here.
- * This also removes forward-declarations when real declarations with the same identifier are in the list.
+ * Takes and returns a list of declarations together with their inheritance-depth.
+ *
+ * In c++, declarations with a lower inheritance-depth overload those with a higher
+ * inheritance-depth. Hence such entries are hidden here.
+ *
+ * This also removes forward-declarations when real declarations with the same
+ * identifier are in the list.
+ *
+ * Furthermore this method removes const methods if @p preferConst is false and removes
+ * non-const methods if @p preferConst is true. If there methods are not overloaded
+ * by constness though, we only hide non-const methods if @p preferConst is true, i.e.
+ * const methods will also be shown if @p preferConst is false.
  * */
-KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<KDevelop::Declaration*, int> >& declarations );
+KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloadedDeclarations(const QList< QPair<KDevelop::Declaration*, int> >& declarations, bool preferConst);
 
   /**Tries determining the local class that the given code-context belongs to.
    *

@@ -113,6 +113,7 @@ private slots:
   void testLocalUsingNamespace();
   void testInheritanceVisibility();
   void testConstVisibility();
+  void testConstOverloadVisibility();
   void testNamespaceCompletion();
   void testNamespaceAliasCompletion();
   void testNamespaceAliasCycleCompletion();

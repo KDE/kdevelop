@@ -39,7 +39,15 @@ inline bool ViableFunction::ParameterConversion::operator<(const ParameterConver
     return baseConversionLevels > rhs.baseConversionLevels; //Conversion-rank is same, so use the base-conversion levels for ranking
 }
 
-ViableFunction::ViableFunction( TopDUContext* topContext, Declaration* decl, bool noUserDefinedConversion ) : m_declaration(decl), m_topContext(topContext), m_type(0), m_parameterCountMismatch(true), m_noUserDefinedConversion(noUserDefinedConversion) {
+ViableFunction::ViableFunction( TopDUContext* topContext, Declaration* decl,
+                                OverloadResolver::Constness constness, bool noUserDefinedConversion )
+: m_declaration(decl)
+, m_topContext(topContext)
+, m_type(0)
+, m_parameterCountMismatch(true)
+, m_noUserDefinedConversion(noUserDefinedConversion)
+, m_constness(constness)
+{
   if( decl )
     m_type = decl->abstractType().cast<KDevelop::FunctionType>();
   m_funDecl = dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data());
@@ -122,7 +130,13 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
   /**Until now both functions have the same match-quality. Iso c++ says this is better when:
    * - this is a non-template function while other is one
    * - this is a template-function that is more specialized than other
+   * - we are looking for a const function and we are const or vice-versa
    */
+  if((m_constness == Cpp::OverloadResolver::Const && TypeUtils::isConstant(m_declaration->abstractType()))
+    || (m_constness == Cpp::OverloadResolver::NonConst && !TypeUtils::isConstant(m_declaration->abstractType())))
+  {
+    return true;
+  }
   if(!dynamic_cast<TemplateDeclaration*>(m_declaration.data()) && dynamic_cast<TemplateDeclaration*>(other.m_declaration.data()))
     return true;
 //   if( m_type->isMoreSpecialized( other.m_type.data() ) )
