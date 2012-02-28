@@ -33,17 +33,17 @@
            </property>
            <item>
             <property name="text">
-             <string>Tabs</string>
+             <string comment="Indentation type">Tabs</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Force tabs</string>
+             <string comment="Indentation type">Force tabs</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Spaces</string>
+             <string comment="Indentation type">Spaces</string>
             </property>
            </item>
           </widget>
@@ -566,14 +566,14 @@ multiple single-statement lines.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>klistwidget.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>

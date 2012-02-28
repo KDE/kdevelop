@@ -206,7 +206,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     }
 
     virtual QString description() const {
-      return i18n("Update %1 signature", m_editingDefinition ? i18n("declaration") : i18n("definition"));
+      return m_editingDefinition ? i18n("Update declaration signature") : i18n("Update definition signature");
     }
 
     virtual QString toolTip() const {

@@ -123,7 +123,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         m_endAddress->setMinimumContentsLength( 2+2*sizeof(void*) );
         m_endAddress->setInsertPolicy(QComboBox::InsertAtTop);
         
-        m_evalButton = new QPushButton(i18n("Display"), this);
+        m_evalButton = new QPushButton(i18nc("@action:button", "Display"), this);
         controlsLayout->addWidget(startAddr);
         controlsLayout->addWidget(m_startAddress);
         controlsLayout->addWidget(endAddr);

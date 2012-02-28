@@ -1731,7 +1731,7 @@ void CodeCompletionContext::addImplementationHelpers()
 {
   QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
   if(!helpers.isEmpty()) {
-    eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
+    eventuallyAddGroup(i18nc("@action", "Implement Function"), 0, helpers);
   }
 }
 
