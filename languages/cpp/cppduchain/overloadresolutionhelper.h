@@ -81,7 +81,13 @@ namespace Cpp
      * or for the operator-call.(For operators, this should not include the base-type)
      * */
     void setKnownParameters( const OverloadResolver::ParameterList& parameters );
-    
+
+    /**
+     * Call this to set the whether we are looking for a const or a non-const method.
+     * By default, the constness is not taken into account.
+     */
+    void setConstness(OverloadResolver::Constness constness);
+
     /**
      * @param partial If partial is given, it is not required that all parameters of the functions have a value.
      *
@@ -115,6 +121,7 @@ namespace Cpp
       OverloadResolver::ParameterList m_knownParameters;
       QMap<KDevelop::Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
       QualifiedIdentifier m_identifierForADL;
+      OverloadResolver::Constness m_constness;
   };
 
 }

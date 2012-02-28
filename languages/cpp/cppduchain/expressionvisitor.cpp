@@ -570,7 +570,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
+        // by default ignore constness (see below)
         m_lastType = m_lastDeclarations.first()->abstractType();
+        // if possible, pick the const-fitting method though
+        foreach(const DeclarationPointer& p, m_lastDeclarations) {
+          if (p->abstractType() && isConstant(p->abstractType()) == isConst) {
+            m_lastType = p->abstractType();
+            break;
+          }
+        }
         if (m_propagateConstness && isConst && m_lastType && !isConstant(m_lastType)) {
           m_lastType->setModifiers(m_lastType->modifiers() | AbstractType::ConstModifier);
         }
@@ -1214,6 +1222,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldInstance
         );
 
@@ -1479,6 +1488,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldInstance
         );
 
@@ -1909,6 +1919,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       DUContextPointer(const_cast<DUContext*>(m_currentContext)),
       TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
     );
+    helper.setConstness(TypeUtils::isConstant(oldLastType) ? OverloadResolver::Const : OverloadResolver::NonConst);
 
     MissingDeclarationType::Ptr missing;
     
@@ -2163,6 +2174,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       DUContextPointer(const_cast<DUContext*>(m_currentContext)),
       TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
     );
+    helper.setConstness(isConstant(masterType) ? OverloadResolver::Const : OverloadResolver::NonConst);
     helper.setFunctionNameForADL( QualifiedIdentifier("operator[]") );
     helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ) );
 
@@ -2358,6 +2370,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldLastInstance
         );
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));

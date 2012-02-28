@@ -43,7 +43,11 @@ OverloadResolutionFunction::OverloadResolutionFunction() : matchedArguments(0) {
 OverloadResolutionFunction::OverloadResolutionFunction( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
 }
 
-OverloadResolutionHelper::OverloadResolutionHelper(const KDevelop::DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext) : m_context(context), m_topContext(topContext), m_isOperator(false)
+OverloadResolutionHelper::OverloadResolutionHelper(const KDevelop::DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext)
+: m_context(context)
+, m_topContext(topContext)
+, m_isOperator(false)
+, m_constness(OverloadResolver::Unknown)
 {
 }
 
@@ -67,6 +71,11 @@ void OverloadResolutionHelper::setFunctions( const QList<Declaration*>& function
 void OverloadResolutionHelper::setKnownParameters( const OverloadResolver::ParameterList& parameters )
 {
   m_knownParameters = parameters;
+}
+
+void OverloadResolutionHelper::setConstness( OverloadResolver::Constness constness )
+{
+  m_constness = constness;
 }
 
 void OverloadResolutionHelper::initializeResolver(OverloadResolver& resolv)
@@ -132,7 +141,7 @@ void OverloadResolutionHelper::initializeResolver(OverloadResolver& resolv)
 
 QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool partial)
 {
-  OverloadResolver resolv( m_context, m_topContext );
+  OverloadResolver resolv( m_context, m_topContext, m_constness );
 
   QList< ViableFunction > viableFunctions;
 
@@ -167,7 +176,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool p
 
 ViableFunction OverloadResolutionHelper::resolve(bool forceInstance)
 {
-  OverloadResolver resolv( m_context, m_topContext, forceInstance );
+  OverloadResolver resolv( m_context, m_topContext, m_constness, forceInstance );
 
   initializeResolver(resolv);
   

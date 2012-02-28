@@ -40,7 +40,9 @@ namespace Cpp {
   class KDEVCPPDUCHAIN_EXPORT ViableFunction {
     public:
 
-    explicit ViableFunction( TopDUContext* topContext = 0, Declaration* decl = 0, bool noUserDefinedConversion = false );
+    explicit ViableFunction( TopDUContext* topContext = 0, Declaration* decl = 0,
+                             OverloadResolver::Constness constness = OverloadResolver::Unknown,
+                             bool noUserDefinedConversion = false );
 
     /**
      * Is it a valid function?
@@ -87,6 +89,7 @@ namespace Cpp {
     TypePtr<KDevelop::FunctionType> m_type;
     KDevelop::AbstractFunctionDeclaration* m_funDecl;
     bool m_parameterCountMismatch, m_noUserDefinedConversion;
+    OverloadResolver::Constness m_constness;
   };
 }
 

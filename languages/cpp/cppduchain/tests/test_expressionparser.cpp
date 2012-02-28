@@ -1209,6 +1209,84 @@ void TestExpressionParser::testConstness()
   QVERIFY(TypeUtils::isConstant(result.type.abstractType()));
 }
 
+void TestExpressionParser::testConstnessOverload()
+{
+  QByteArray method("struct A { const A& foo() const; A foo(); };\n"
+                    "const A constA; A nonConstA;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  Declaration* constA = top->localDeclarations().at(1);
+  QVERIFY(TypeUtils::isConstant(constA->abstractType()));
+
+  Declaration* nonConstA = top->localDeclarations().at(2);
+  QVERIFY(!TypeUtils::isConstant(nonConstA->abstractType()));
+
+  Cpp::ExpressionParser parser(false, true, true);
+
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("constA.foo()", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be the const& version
+  AbstractType::Ptr type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(type.cast<ReferenceType>());
+  QVERIFY(TypeUtils::isConstant(type.cast<ReferenceType>()->baseType()));
+  QVERIFY(type.cast<ReferenceType>()->baseType().cast<StructureType>());
+
+  result = parser.evaluateExpression("nonConstA.foo()", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be plain a
+  type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(!TypeUtils::isReferenceType(type));
+  QVERIFY(type.cast<StructureType>());
+}
+
+void TestExpressionParser::testConstnessOverloadSubscript()
+{
+  QByteArray method("struct A { const A& operator[](int i) const; A operator[](int i); };\n"
+                    "const A constA; A nonConstA;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  Declaration* constA = top->localDeclarations().at(1);
+  QVERIFY(TypeUtils::isConstant(constA->abstractType()));
+
+  Declaration* nonConstA = top->localDeclarations().at(2);
+  QVERIFY(!TypeUtils::isConstant(nonConstA->abstractType()));
+
+  Cpp::ExpressionParser parser(false, true, true);
+
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("constA[0]", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be the const& version
+  AbstractType::Ptr type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(type.cast<ReferenceType>());
+  QVERIFY(TypeUtils::isConstant(type.cast<ReferenceType>()->baseType()));
+  QVERIFY(type.cast<ReferenceType>()->baseType().cast<StructureType>());
+
+  result = parser.evaluateExpression("nonConstA[0]", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be plain a
+  type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(!TypeUtils::isReferenceType(type));
+  QVERIFY(type.cast<StructureType>());
+}
+
 void TestExpressionParser::testReference()
 {
   QByteArray method("");
