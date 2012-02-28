@@ -73,7 +73,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
-    action = new KAction(i18n("Focus Editor"), this);
+    action = new KAction(i18nc("@action", "Focus Editor"), this);
     action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
     ac->addAction("focus_editor", action);

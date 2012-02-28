@@ -132,17 +132,17 @@ QVariant Breakpoint::data(int column, int role) const
             }
         } else if (role == Qt::ToolTipRole) {
             if (!errors().isEmpty()) {
-                return i18n("error");
+                return i18nc("@info:tooltip", "error");
             }
             switch (state()) {
                 case NotStartedState:
                     return "";
                 case DirtyState:
-                    return i18n("dirty");
+                    return i18nc("@info:tooltip", "dirty");
                 case PendingState:
-                    return i18n("pending");
+                    return i18nc("@info:tooltip", "pending");
                 case CleanState:
-                    return i18n("clean");
+                    return i18nc("@info:tooltip", "clean");
             }
         } else if (role == Qt::DisplayRole) {
             return "";

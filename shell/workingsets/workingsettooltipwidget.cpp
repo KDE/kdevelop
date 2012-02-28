@@ -162,7 +162,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         fileLabel->setTextFormat(Qt::RichText);
         // We add spaces behind and after, to make it look nicer
         fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(KUrl(file)) + "&nbsp;");
-        fileLabel->setToolTip(i18n("Click to open and activate this document."));
+        fileLabel->setToolTip(i18nc("@info:tooltip", "Click to open and activate this document."));
         fileLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);

@@ -159,7 +159,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     , _corner(0)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
-    setToolTip(i18n("Right click to add new tool views."));
+    setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
 
     if (area == Qt::BottomDockWidgetArea)
     {

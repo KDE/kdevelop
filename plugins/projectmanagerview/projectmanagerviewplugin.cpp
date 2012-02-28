@@ -238,15 +238,15 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsBuildItems ) {
-        KAction* action = new KAction( i18n( "Build" ), this );
+        KAction* action = new KAction( i18nc( "@action", "Build" ), this );
         action->setIcon(KIcon("run-build"));
         connect( action, SIGNAL(triggered()), this, SLOT(buildItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Install" ), this );
+        action = new KAction( i18nc( "@action", "Install" ), this );
         action->setIcon(KIcon("run-install"));
         connect( action, SIGNAL(triggered()), this, SLOT(installItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Clean" ), this );
+        action = new KAction( i18nc( "@action", "Clean" ), this );
         action->setIcon(KIcon("run-clean"));
         connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );

@@ -1,3 +1,4 @@
+
 /* This file is part of KDevelop
 Copyright 2006 Adam Treat <treat@kde.org>
 Copyright 2007 Andreas Pakulat <apaku@gmx.de>
@@ -354,14 +355,14 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
         {
             KGuiItem yes = KStandardGuiItem::yes();
             yes.setText(i18n("Override"));
-            yes.setToolTip(i18n("Continue to open the project and use the just provided project configuration."));
+            yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration."));
             yes.setIcon(KIcon());
             KGuiItem no = KStandardGuiItem::no();
             no.setText(i18n("Open Existing File"));
-            no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
+            no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration."));
             no.setIcon(KIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
-            cancel.setToolTip(i18n("Cancel and do not open the project."));
+            cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
                      "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
@@ -453,16 +454,16 @@ void ProjectController::setupActions()
     KAction *action;
 
     d->m_openProject = action = ac->addAction( "project_open" );
-    action->setText(i18n( "Open / Import Project..." ) );
-    action->setToolTip( i18n( "Open / Import Project" ) );
-    action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
+    action->setText(i18nc( "@action", "Open / Import Project..." ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Open / Import Project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
-    action->setText(i18n( "Fetch Project..." ) );
-    action->setToolTip( i18n( "Fetch Project" ) );
-    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
+    action->setText(i18nc( "@action", "Fetch Project..." ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Fetch Project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
@@ -475,9 +476,9 @@ void ProjectController::setupActions()
 
     d->m_closeProject = action = ac->addAction( "project_close" );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeSelectedProjects()) );
-    action->setText( i18n( "Close Project(s)" ) );
+    action->setText( i18nc( "@action", "Close Project(s)" ) );
     action->setIcon( KIcon( "project-development-close" ) );
-    action->setToolTip( i18n( "Closes all currently selected projects" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( "project_open_config" );
@@ -499,9 +500,9 @@ void ProjectController::setupActions()
                             openProject( const KUrl& ) ));
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent" ) );
-    d->m_recentAction->setToolTip( i18n( "Open recent project" ) );
+    d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
     d->m_recentAction->setWhatsThis(
-        i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
+        i18nc( "@info:whatsthis", "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
     KAction* openProjectForFileAction = new KAction( this );

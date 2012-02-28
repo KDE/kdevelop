@@ -48,8 +48,8 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 : QWidget(parent), firstShow_(true), m_debugController(controller),
   breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
-    setWindowTitle(i18n("Debugger Breakpoints"));
-    setWhatsThis(i18n("<b>Breakpoint list</b><p>"
+    setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
+    setWhatsThis(i18nc("@info:whatsthis", "<b>Breakpoint list</b><p>"
                         "Displays a list of breakpoints with "
                         "their current status. Clicking on a "
                         "breakpoint item allows you to change "

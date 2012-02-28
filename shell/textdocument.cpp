@@ -372,7 +372,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                 int code = KMessageBox::warningYesNoCancel(
                     Core::self()->uiController()->activeMainWindow(),
                     i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
-                    i18n("Close Document"));
+                    i18nc("@title:window", "Close Document"));
                 if (code != KMessageBox::Yes)
                     return false;
             }
@@ -387,7 +387,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
                         "you sure you want to overwrite it? (External "
                         "changes will be lost.)", d->document->url().toLocalFile()),
-                    i18n("Document Externally Modified"));
+                    i18nc("@title:window", "Document Externally Modified"));
                 if (code != KMessageBox::Yes)
                     return false;
             }

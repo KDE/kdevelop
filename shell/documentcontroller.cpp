@@ -301,7 +301,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18n("Could Not Find Editor"));
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18nc("@title:window", "Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else

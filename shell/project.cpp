@@ -116,7 +116,7 @@ void ProjectProgress::setBuzzy()
     kDebug() << "showing busy prorgess" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
-    emit showMessage(this, i18n("Loading %1", projectName));
+    emit showMessage(this, i18nc("%1: Project name", "Loading %1", projectName));
 }
 
 

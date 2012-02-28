@@ -66,7 +66,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 {
     Ui::GrepOutputView::setupUi(this);
 
-    setWindowTitle(i18n("Replace output view"));
+    setWindowTitle(i18nc("@title:window", "Replace output view"));
     setWindowIcon(SmallIcon("edit-find"));
     
     m_prev = new QAction(KIcon("go-previous"), i18n("&Previous item"), this);

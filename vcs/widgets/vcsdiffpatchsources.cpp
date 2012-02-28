@@ -180,7 +180,7 @@ QWidget* VCSCommitDiffPatchSource::customWidget() const {
 }
 
 QString VCSCommitDiffPatchSource::finishReviewCustomText() const {
-    return i18n("Commit");
+    return i18nc("@action:button To make a commit", "Commit");
 }
 
 bool VCSCommitDiffPatchSource::canCancel() const {
