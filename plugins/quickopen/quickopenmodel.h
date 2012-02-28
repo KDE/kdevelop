@@ -91,6 +91,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
   private slots:
     void destroyed( QObject* obj );
     void resetTimer();
+    void restart_internal( bool keepFilterText );
   
   private:
     virtual bool indexIsItem(const QModelIndex& index) const;

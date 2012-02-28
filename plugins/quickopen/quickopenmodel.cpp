@@ -155,6 +155,14 @@ void QuickOpenModel::textChanged( const QString& str )
 
 void QuickOpenModel::restart(bool keepFilterText)
 {
+    // make sure we do not restart recursivly which could lead to
+    // recursive loading of provider plugins e.g. (happened for the cpp plugin)
+    QMetaObject::invokeMethod(this, "restart_internal", Qt::QueuedConnection,
+                              Q_ARG(bool, keepFilterText));
+}
+
+void QuickOpenModel::restart_internal(bool keepFilterText)
+{
   if(!keepFilterText)
     m_filterText.clear();
   
