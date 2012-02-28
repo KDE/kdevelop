@@ -762,10 +762,7 @@ IDocument * DocumentController::documentForUrl( const KUrl & dirtyUrl ) const
     //Fix urls that might not be absolute
     KUrl url(dirtyUrl);
     url.cleanPath();
-    if ( d->documents.contains( url ) )
-        return d->documents.value( url );
-
-    return 0;
+    return d->documents.value( url, 0 );
 }
 
 QList<IDocument*> DocumentController::openDocuments() const
