@@ -269,10 +269,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         //Load state
         for (int i = 0; i < viewCount; ++i)
         {
-            if( !createdViews.contains(i) )
-                continue;
             QString state = areaGroup.readEntry(QString("View %1 State").arg(i));
-            if (state.length())
+            if (state.length() && createdViews.contains(i))
                 createdViews[i]->setState(state);
         }
     }
