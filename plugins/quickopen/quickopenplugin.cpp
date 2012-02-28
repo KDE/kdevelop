@@ -272,6 +272,9 @@ void QuickOpenWidget::showStandardButtons(bool show)
 }
 
 QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
+  m_filterTimer.setSingleShot(true);
+  m_filterTimer.setInterval(150);
+  connect(&m_filterTimer, SIGNAL(timeout()), this, SLOT(applyFilter()));
 
   Q_UNUSED( title );
   o.setupUi( this );
@@ -483,11 +486,18 @@ void QuickOpenWidget::updateScrollBarState()
     o.list->verticalScrollBar()->setEnabled(true);
 }
 
-void QuickOpenWidget::textChanged( const QString& str ) {
-  m_model->textChanged( str );
+void QuickOpenWidget::textChanged( const QString& str )
+{
+  m_filter = str;
+  m_filterTimer.start();
+}
+
+void QuickOpenWidget::applyFilter()
+{
+  m_model->textChanged( m_filter );
 
   updateScrollBarState();
-  
+
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
   o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
 
