@@ -210,7 +210,8 @@ void ProjectItemDataProvider::reset() {
          ((m_itemTypes & Functions) && (items[a].kind & CodeModelItem::Function)))
       {
         QualifiedIdentifier id = items[a].id.identifier();
-        if (id.toString().isEmpty()) {
+        
+        if (id.isEmpty() || id.at(0).identifier().isEmpty()) {
             // id.isEmpty() not always hit when .toString() is actually empty...
             // anyhow, this makes sure that we don't show duchain items without
             // any name that could be searched for. This happens e.g. in the c++
