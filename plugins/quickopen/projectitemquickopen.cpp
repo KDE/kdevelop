@@ -206,10 +206,20 @@ void ProjectItemDataProvider::reset() {
     for(uint a = 0; a < count; ++a) {
       if(!items[a].id.isValid() || items[a].kind & CodeModelItem::ForwardDeclaration)
         continue;
-      
       if(((m_itemTypes & Classes) && (items[a].kind & CodeModelItem::Class)) ||
          ((m_itemTypes & Functions) && (items[a].kind & CodeModelItem::Function)))
-        m_currentItems << CodeModelViewItem(u, items[a].id.identifier());
+      {
+        QualifiedIdentifier id = items[a].id.identifier();
+        if (id.toString().isEmpty()) {
+            // id.isEmpty() not always hit when .toString() is actually empty...
+            // anyhow, this makes sure that we don't show duchain items without
+            // any name that could be searched for. This happens e.g. in the c++
+            // plugin for anonymous structs or sometimes for declarations in macro
+            // expressions
+            continue;
+        }
+        m_currentItems << CodeModelViewItem(u, id);
+      }
     }
   }
 

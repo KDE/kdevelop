@@ -230,11 +230,17 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             loadToArea(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), KConfigGroup(&areaGroup, "0"), recycle);
 
             loadToArea(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), KConfigGroup(&areaGroup, "1"), recycle);
+            
+            if( areaIndex->first()->viewCount() == 0 )
+                areaIndex->unsplit(areaIndex->first());
+            else if( areaIndex->second()->viewCount() == 0 )
+                areaIndex->unsplit(areaIndex->second());
         }
     } else {
         
         //Load all documents from the workingset into this areaIndex
         int viewCount = setGroup.readEntry("View Count", 0);
+        QMap<int, Sublime::View*> createdViews;
         for (int i = 0; i < viewCount; ++i) {
             QString type = setGroup.readEntry(QString("View %1 Type").arg(i), "");
             QString specifier = setGroup.readEntry(QString("View %1").arg(i), "");
@@ -254,6 +260,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             if (document) {
                 Sublime::View* view = document->createView();
                 area->addView(view, areaIndex, previousView);
+                createdViews[i] = view;
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }
@@ -262,9 +269,11 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         //Load state
         for (int i = 0; i < viewCount; ++i)
         {
+            if( !createdViews.contains(i) )
+                continue;
             QString state = areaGroup.readEntry(QString("View %1 State").arg(i));
             if (state.length())
-                areaIndex->views()[i]->setState(state);
+                createdViews[i]->setState(state);
         }
     }
 }
