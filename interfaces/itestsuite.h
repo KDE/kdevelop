@@ -32,7 +32,6 @@ namespace KDevelop {
 
 class IndexedDeclaration;
 class IProject;
-class ILaunchConfiguration;
 
 /**
  * The result of a single unit test run
