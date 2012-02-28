@@ -130,25 +130,44 @@ IndexedTypeIdentifier identifierForType(AbstractType::Ptr type, TopDUContext* to
   return ret;
 }
 
-QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations ) {
+QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations,
+                                                              bool preferConst )
+{
   QHash<Identifier, Declaration*> nearestDeclaration;
   QHash<Declaration*, int> depthHash;
   QSet<Identifier> hadNonForwardDeclaration; //Set of all non function-declarations that had a declaration that was not a forward-declaration.
+  // Set of function-declarations with a const overload
+  QSet<IndexedIdentifier> hasConstOverload;
 
   typedef QPair<Declaration*, int> Pair;
   foreach(  const Pair& decl, declarations ) {
     depthHash[decl.first] = decl.second;
-    
+
     QHash<Identifier, Declaration*>::iterator it = nearestDeclaration.find(decl.first->identifier());
 
+    bool prefer = false;
     if(it == nearestDeclaration.end()) {
-      nearestDeclaration[ decl.first->identifier() ] = decl.first;
-    }else if(decl.first->isForwardDeclaration() == (*it)->isForwardDeclaration() || (!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration())){
+      prefer = true;
+    } else if((!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration())) {
       //Always prefer non forward-declarations over forward-declarations
-      if((!decl.first->isForwardDeclaration() && (*it)->isForwardDeclaration()) || decl.second < depthHash[*it])
-        nearestDeclaration[ decl.first->identifier() ] = decl.first;
+      prefer = true;
+    } else if(decl.first->isForwardDeclaration() == (*it)->isForwardDeclaration()) {
+      const int depth = depthHash.value(*it);
+      if (decl.second < depth) {
+        prefer = true;
+      } else if (decl.second == depth && decl.first->isFunctionDeclaration()
+                && decl.first->context()->type() == DUContext::Class
+                && TypeUtils::isConstant((*it)->abstractType()) != TypeUtils::isConstant(decl.first->abstractType()))
+      {
+        // const overload
+        hasConstOverload << decl.first->indexedIdentifier();
+      }
     }
-    
+
+    if(prefer) {
+      nearestDeclaration[ decl.first->identifier() ] = decl.first;
+    }
+
     if(!decl.first->isForwardDeclaration() && !decl.first->isFunctionDeclaration())
       hadNonForwardDeclaration.insert(decl.first->identifier());
   }
@@ -158,6 +177,20 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
   ///Only keep the declarations of each name on the lowest inheritance-level, or that are not forward-declarations
   foreach( const Pair& decl, declarations ) {
     if( depthHash[nearestDeclaration[decl.first->identifier()]] == decl.second ) {
+      if(decl.first->isFunctionDeclaration() && decl.first->context()->type() == DUContext::Class)
+      {
+        // hide non-const methods if preferConst is set, or vice-versa
+        const bool isConst = TypeUtils::isConstant(decl.first->abstractType());
+        const bool hasOverload = hasConstOverload.contains(decl.first->indexedIdentifier());
+        if (hasOverload && isConst != preferConst) {
+          // if we have an overload, always prefer the version with correct constness
+          continue;
+        } else if (preferConst && !isConst) {
+          // otherwise only hide non-cost methods if we are looking for const methods
+          // const-methods should be shown when we are looking for non-const methods though
+          continue;
+        }
+      }
       if(decl.first->isFunctionDeclaration() || !decl.first->isForwardDeclaration() || !hadNonForwardDeclaration.contains(decl.first->identifier()))
         ret << decl;
     }

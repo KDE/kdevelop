@@ -251,9 +251,9 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context);
 
       ///*DUChain must be locked*
-      bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true, bool typeIsConst = false);
+      bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true);
       ///*DUChain must be locked*
-      bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0, bool typeIsConst = false);
+      bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       ///*DUChain must be locked*
       void replaceCurrentAccess(QString old, QString _new);
