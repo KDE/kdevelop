@@ -240,7 +240,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "show_editorconfig", this, SLOT(showEditorConfig()) );
     action->setIcon( KIcon("preferences-other") );
-    action->setText( i18nc("@info:tooltip", "Configure Editor..."));
+    action->setText( i18n("Configure Editor..."));
     action->setWhatsThis( i18nc("@info:whatsthis", "Configure various aspects of this editor.") );
 
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
