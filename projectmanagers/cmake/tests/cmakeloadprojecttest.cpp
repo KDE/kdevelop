@@ -69,7 +69,7 @@ void CMakeLoadProjectTest::testSmallQt4Project()
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
     CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
-    QCOMPARE(v.targets().count(), 3);
+    QCOMPARE(v.targets().count(), 2);
     QCOMPARE(v.projectName(), QString("kde4app"));
     QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
     QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
@@ -77,8 +77,8 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
-    QCOMPARE(v.targets().at( 1 ).name, QString("kde4app_automoc") );
-    QCOMPARE(v.targets().at( 2 ).name, QString("uninstall") );
+//     QCOMPARE(v.targets().at( 1 ).name, QString("kde4app_automoc") );
+    QCOMPARE(v.targets().at( 1 ).name, QString("uninstall") );
 }
 
 CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
