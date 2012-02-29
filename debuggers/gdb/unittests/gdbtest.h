@@ -83,7 +83,10 @@ private Q_SLOTS:
     void testBreakpointDisabledOnStart();
 
 private:
-    void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
+    void waitForState(GDBDebugger::DebugSession *session,
+                      KDevelop::IDebugSession::DebuggerState state,
+                      const char *file, int line,
+                      bool expectFail = false);
 };
 
 }

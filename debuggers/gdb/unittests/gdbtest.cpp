@@ -170,6 +170,9 @@ private:
 #define WAIT_FOR_STATE(session, state) \
     waitForState((session), (state), __FILE__, __LINE__)
 
+#define WAIT_FOR_STATE_FAIL(session, state) \
+    waitForState((session), (state), __FILE__, __LINE__, true)
+
 #define COMPARE_DATA(index, expected) \
     compareData((index), (expected), __FILE__, __LINE__)
 void compareData(QModelIndex index, QString expected, const char *file, int line)
@@ -1500,7 +1503,8 @@ void GdbTest::testBreakpointWithSpaceInPath()
     QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
 
     session->startProgram(&cfg);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR_STATE_FAIL(session, DebugSession::PausedState);
+    QEXPECT_FAIL("", "this does not work, not even in gdb", Abort);
     QCOMPARE(session->line(), 20);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1533,7 +1537,7 @@ void GdbTest::testBreakpointDisabledOnStart()
 
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
-                            const char *file, int line)
+                            const char *file, int line, bool expectFail)
 {
     QWeakPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
     kDebug() << "waiting for state" << state;
@@ -1542,12 +1546,20 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     while (s.data()->state() != state) {
         if (stopWatch.elapsed() > 5000) {
             kWarning() << "current state" << s.data()->state() << "waiting for" << state;
-            QFAIL(qPrintable(QString("Didn't reach state in %0:%1").arg(file).arg(line)));
+            if (!expectFail) {
+                QFAIL(qPrintable(QString("Didn't reach state in %0:%1").arg(file).arg(line)));
+            } else {
+                break;
+            }
         }
         QTest::qWait(20);
         if (!s) {
             if (state == DebugSession::EndedState) break;
-            QFAIL(qPrintable(QString("Didn't reach state; session ended in %0:%1").arg(file).arg(line)));
+            if (!expectFail) {
+                QFAIL(qPrintable(QString("Didn't reach state; session ended in %0:%1").arg(file).arg(line)));
+            } else {
+                break;
+            }
         }
     }
     QTest::qWait(100);
