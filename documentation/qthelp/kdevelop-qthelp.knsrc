@@ -1,4 +1,4 @@
 [KNewStuff3]
-ProvidersUrl=http://synchrotron.bddf.ca/kdevelop-qthelp/providers.xml
+ProvidersUrl=http://collect.kde.org/kdevelop-qthelp/providers.xml
 TargetDir=kdevelop-qthelp
 Uncompress=never
