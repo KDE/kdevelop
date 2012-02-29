@@ -22,11 +22,15 @@
 #ifndef QUICKOPENPLUGIN_H
 #define QUICKOPENPLUGIN_H
 
-#include <interfaces/iplugin.h>
-#include <language/interfaces/iquickopen.h>
 #include <QtCore/QVariant>
+#include <QtCore/QTimer>
 #include <QtGui/QMenu>
+
+#include <interfaces/iplugin.h>
+
+#include <language/interfaces/iquickopen.h>
 #include <language/interfaces/quickopendataprovider.h>
+
 #include "ui_quickopen.h"
 
 class KAction;
@@ -163,7 +167,9 @@ class QuickOpenWidget : public QMenu {
   void doubleClicked ( const QModelIndex & index );
 
   void updateScrollBarState();
-  
+
+  void applyFilter();
+
   private:
   virtual void showEvent(QShowEvent *);
   void callRowSelected();
@@ -174,6 +180,8 @@ class QuickOpenWidget : public QMenu {
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
   QString m_preselectedText;
+  QTimer m_filterTimer;
+  QString m_filter;
   public:
   Ui::QuickOpen o;
   

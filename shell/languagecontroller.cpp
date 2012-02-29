@@ -272,15 +272,24 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
     KMimeType::Ptr mimeType;
     
-    if(!extension.isEmpty())
+    if(!extension.isEmpty()) {
         // If we have recognized a file extension, allow using the file-contents
         // to look up the type. We will cache it after all.
         mimeType = KMimeType::findByUrl(url);
-    else
+    } else {
         // If we have not recognized a file extension, do not allow using the file-contents
         // to look up the type. We cannot cache the result, and thus we might end up reading
         // the contents of every single file, which can make the application very unresponsive.
         mimeType = KMimeType::findByUrl(url, 0, false, true);
+
+        if (mimeType->isDefault()) {
+            // ask the document controller about a more concrete mimetype
+            IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
+            if (doc) {
+                mimeType = doc->mimeType();
+            }
+        }
+    }
 
     languages = languagesForMimetype(mimeType->name());
 

@@ -709,7 +709,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
       IndexedIdentifier indexedIdentifier(identifier);
       while(it) {
         Declaration* declaration = *it;
-        if(declaration->indexedIdentifier() == indexedIdentifier) {
+        if(declaration && declaration->indexedIdentifier() == indexedIdentifier) {
           Declaration* checked = checker.check(declaration);
           if(checked)
               ret.append(checked);
