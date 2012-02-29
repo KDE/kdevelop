@@ -80,6 +80,9 @@ struct TextDocumentPrivate {
             delete m_addedContextMenu;
             m_addedContextMenu = 0;
         }
+        if (document) {
+            delete document;
+        }
     }
 
     QPointer<KTextEditor::Document> document;
