@@ -289,7 +289,7 @@ void MainWindowPrivate::setupActions()
      connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
      action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
      action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
-     action->setWhatsThis( i18n( "@info:whatsthis", "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
+     action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
      action->setIcon(KIcon("go-previous"));
 
     /*action = actionCollection()->addAction( "new_window" );
