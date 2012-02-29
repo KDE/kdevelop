@@ -112,8 +112,20 @@ bool PartDocument::askForCloseFeedback()
 
     /// @todo Is this behavior right?
     } else if (state() == IDocument::DirtyAndModified) {
-        if (!save(Default))
+        int code = KMessageBox::warningYesNoCancel(
+            Core::self()->uiController()->activeMainWindow(),
+            i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
+                 "Do you want to override the external changes?", url().toLocalFile()),
+            i18n("Close Document"));
+
+        if (code == KMessageBox::Yes) {
+            if (!save(Default))
+                return false;
+
+        } else if (code == KMessageBox::Cancel) {
             return false;
+        }
+
     }
     return true;
 }
