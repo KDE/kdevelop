@@ -1572,7 +1572,7 @@ void DUChain::aboutToQuit()
 {
   // if core is not shutting down, we can end up in deadlocks or crashes
   // since language plugins might still try to access static duchain stuff
-  Q_ASSERT(ICore::self()->shuttingDown());
+  Q_ASSERT(!ICore::self() || ICore::self()->shuttingDown());
 
   QMutexLocker lock(&sdDUChainPrivate->cleanupMutex());
 
