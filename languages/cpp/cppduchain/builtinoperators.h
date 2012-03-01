@@ -25,6 +25,6 @@
 ///Returns the type that the builtin binary operator given through @param tokenKind with the given left and right operand types yields.
 ///When the types are constant integral types with values, the returned type will also have the value evaluated
 ///@return Zero if the given types can not be handled by a builtin operator
-KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr left, KDevelop::AbstractType::Ptr right, int tokenKind);
+KDevelop::AbstractType::Ptr binaryOperatorReturnType(KDevelop::AbstractType::Ptr left, KDevelop::AbstractType::Ptr right, quint16 tokenKind);
 
 #endif

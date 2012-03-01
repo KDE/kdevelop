@@ -1175,7 +1175,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
         instance.access = KDevelop::Declaration::Private;
 
       if( node->access_specifier ) {
-        int tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
+        quint16 tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
 
         switch( tk ) {
           case Token_private:

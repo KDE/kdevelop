@@ -40,7 +40,7 @@ class KDEVCPPPARSER_EXPORT Token
 {
 public:
   ///kind of the token @see TOKEN_KIND enum reference.
-  int kind;
+  quint16 kind;
   ///position in the preprocessed buffer
   uint position;
   ///size of the token in the preprocessed buffer. Do not confuse this with symbolLength.
@@ -109,11 +109,11 @@ public:
   { return index++; }
 
   /**@return the kind of the next (LA) token in the stream.*/
-  inline int lookAhead(uint i = 0) const
+  inline quint16 lookAhead(uint i = 0) const
   { return at(index + i).kind; }
 
   /**@return the kind of the current token in the stream.*/
-  inline int kind(uint i) const
+  inline quint16 kind(uint i) const
   { return at(i).kind; }
 
   /**@return the position of the current token in the c++ source buffer.*/

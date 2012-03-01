@@ -110,8 +110,8 @@ bool isNumber( const IndexedString& str ) {
   return str == _0 || str == _1 || str == _2 || str == _3 || str == _4 || str == _5 || str == _6 || str == _7 || str == _8 || str == _9;
 }
 
-QHash<int, QString> initOperatorNames() {
-  QHash<int, QString> ret;
+QHash<quint16, QString> initOperatorNames() {
+  QHash<quint16, QString> ret;
   ret['+'] = "+";
   ret['-'] = "-";
   ret['*'] = "*";
@@ -140,11 +140,11 @@ QHash<int, QString> initOperatorNames() {
   return ret;
 }
 
-QHash<int, QString> operatorNames = initOperatorNames();
+QHash<quint16, QString> operatorNames = initOperatorNames();
 //BUG use the much more complete list from tokens.cpp
-QString operatorNameFromTokenKind( int tokenKind )
+QString operatorNameFromTokenKind( quint16 tokenKind )
 {
-  QHash<int, QString>::const_iterator it = operatorNames.constFind(tokenKind);
+  QHash<quint16, QString>::const_iterator it = operatorNames.constFind(tokenKind);
   if( it == operatorNames.constEnd() )
     return QString();
   else
@@ -858,7 +858,7 @@ struct ConstantUnaryExpressionEvaluator {
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantUnaryExpressionEvaluator( int tokenKind, ConstantIntegralType* left ) {
+  ConstantUnaryExpressionEvaluator( quint16 tokenKind, ConstantIntegralType* left ) {
     endValue = 0;
     type = left->dataType();
     modifier = left->modifiers();
@@ -878,7 +878,7 @@ struct ConstantUnaryExpressionEvaluator {
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+  void evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
     switch( tokenKind ) {
       case '~':
         endValue = ~left->value<Type>();
@@ -898,13 +898,13 @@ struct ConstantUnaryExpressionEvaluator {
 };
 
 template<>
-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
 
 template<>
-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
@@ -1050,7 +1050,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return;
     }
 
-    int tokenKind = tokenFromIndex(node->op).kind;
+    quint16 tokenKind = tokenFromIndex(node->op).kind;
 
     if(rightType && leftType && rightInstance && leftInstance) {
       LOCKDUCHAIN;
