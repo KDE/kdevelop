@@ -433,9 +433,9 @@ void TestParser::testInitListFalsePositives()
   FunctionDefinitionAST* funcDef = static_cast<FunctionDefinitionAST*>(ast->declarations->at(0)->element);
   QVERIFY(!funcDef->constructor_initializers);
   QVERIFY(funcDef->type_specifier);
-  QCOMPARE(stringForNode(funcDef->type_specifier).trimmed(), QString("void"));
+  QCOMPARE(lastSession->stringForNode(funcDef->type_specifier, true).trimmed(), QString("void"));
   QVERIFY(funcDef->function_body);
-  QCOMPARE(stringForNode(funcDef->function_body).trimmed(), QString("{}"));
+  QCOMPARE(lastSession->stringForNode(funcDef->function_body, true).trimmed(), QString("{}"));
   // ;
   QVERIFY(!ast->declarations->at(1)->element);
   }

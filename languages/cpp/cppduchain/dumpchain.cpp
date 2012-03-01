@@ -67,13 +67,7 @@ void DumpChain::visit(AST *node)
 
   if (node) {
     if (m_editor) {
-      QString nodeText;
-      for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
-        const Token& tok( m_editor->parseSession()->token_stream->token((int) a) );
-        if( !nodeText.isEmpty() )
-          nodeText += ' ';
-        nodeText += stringFromContents( tok.session->contentsVector(), tok.position, tok.size );
-      }
+      QString nodeText = m_editor->parseSession()->stringForNode(node);
       if( !nodeText.isEmpty() ) nodeText = "\"" + nodeText + "\"";
 
 

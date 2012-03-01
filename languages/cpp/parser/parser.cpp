@@ -197,7 +197,7 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -213,7 +213,7 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -229,7 +229,7 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -280,7 +280,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   uint start = session->token_stream->cursor();
 
-  const uint tokenIndex = session->token_stream->token(session->token_stream->cursor()).symbolIndex();
+  const uint tokenIndex = session->token_stream->symbolIndex(session->token_stream->cursor());
   static const KDevelop::IndexedString declSpecString("__declspec");
   if (declSpecString.index() != tokenIndex)
     return false;
@@ -5184,8 +5184,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     static KDevelop::IndexedString finalStr("FINAL");
 
     while(session->token_stream->lookAhead() != ')') {
-      const Token token = session->token_stream->token(session->token_stream->cursor());
-      const KDevelop::IndexedString propertyField = token.symbol();
+      const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());
       if(propertyField == readStr) {
         advance(); // skip READ
         if(!parseName(ast->getter))
@@ -5513,9 +5512,5 @@ QString Parser::stringForNode(AST* node) const
     return "<invalid node>";
   }
 
-  QString str;
-  for(int i = node->start_token; i < node->end_token; ++i) {
-    str += session->token_stream->token(i).symbolString();
-  }
-  return str;
+  return session->stringForNode(node);
 }

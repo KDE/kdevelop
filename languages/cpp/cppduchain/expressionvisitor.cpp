@@ -622,9 +622,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       if( isNumber(startNumber) )
       {
-        QString num;
-        for( size_t a = node->start_token; a < node->end_token; a++ )
-          num += tokenFromIndex(a).symbolString();
+        QString num = m_session->stringForNode(node, true);
 
         LOCKDUCHAIN;
         if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
@@ -684,9 +682,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       LOCKDUCHAIN;
       ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
       if ( token.size == 3 ) {
-        charType->setValue<char>( token.symbolByteArray().at(1) );
+        charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
       } else {
-        QByteArray symbol = token.symbolByteArray();
+        QByteArray symbol = m_session->token_stream->symbolByteArray(token);
         if (symbol.startsWith('L')) {
           charType->setDataType(IntegralType::TypeWchar_t);
           symbol.right(symbol.size() - 1);
@@ -710,12 +708,12 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       m_lastType = AbstractType::Ptr(charType);
       m_lastInstance = Instance( true );
-    } else if(token.symbol() == True || token.symbol() == False) {
+    } else if(token.kind == Token_true || token.kind == Token_false) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
       m_lastInstance = Instance( true );
-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.symbol() == True );
+      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.kind == Token_true );
     }
 
     //Respect "this" token
@@ -917,9 +915,7 @@ QString toString(AbstractType::Ptr t) {
 
 void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   DelayedType::Ptr type(new DelayedType());
-  QString id;
-  for( size_t s = node->start_token; s < node->end_token; ++s )
-    id += m_session->token_stream->token(s).symbolString();
+  QString id = m_session->stringForNode(node, true);
 
   //We have  to prevent automatic parsing and splitting by QualifiedIdentifier and Identifier
   Identifier idd;
@@ -2107,7 +2103,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       sig = sig.mid(1, sig.length()-2);
     }
 
-    Identifier id(tokenFromIndex(node->name->id).symbol());
+    Identifier id(m_session->token_stream->symbol(node->name->id));
 
     if(!id.isEmpty()) {
       foreach(Declaration* decl, container->findDeclarations(id, CursorInRevision::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {

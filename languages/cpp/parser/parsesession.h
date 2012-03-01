@@ -128,6 +128,16 @@ public:
 
   CommentFormatter m_commentFormatter;
 
+  /**
+   * Get the string representation of all tokens in the AST's token range
+   *
+   * @param withSpaces if set to true, no additional space are added
+   *                   between every token string
+   *
+   * @note This is very expensive
+   */
+  QString stringForNode(AST* node, bool withoutSpaces = false) const;
+
   /// useful for debugging, can be called from GDB
   void dumpNode(AST* node) const;
 

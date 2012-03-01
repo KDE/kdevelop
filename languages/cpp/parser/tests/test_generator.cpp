@@ -23,16 +23,29 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+static ParseSession* lastSession = 0;
+static ParseSession* lastGeneratedSession = 0;
+
+QString tokenString(const Token& t)
+{
+  if (lastSession->token_stream->contains(t)) {
+    return lastSession->token_stream->symbolString(t);
+  } else {
+    Q_ASSERT(lastGeneratedSession->token_stream->contains(t));
+    return lastGeneratedSession->token_stream->symbolString(t);
+  }
+}
+
 bool operator==(const Token& t1, const Token& t2)
 {
-  return t1.kind == t2.kind && t1.symbolString() == t2.symbolString();
+  return t1.kind == t2.kind && tokenString(t1) == tokenString(t2);
 }
 
 namespace QTest {
   template<>
   char* toString(const Token& t)
   {
-    return qstrdup(QString("%1 [ %2 ]").arg(token_name(t.kind)).arg(t.symbolString()).toUtf8());
+    return qstrdup(QString("%1 [ %2 ]").arg(token_name(t.kind)).arg(tokenString(t)).toUtf8());
   }
 }
 
@@ -222,9 +235,6 @@ private slots:
   }
 
 private:
-  ParseSession* lastSession;
-  ParseSession* lastGeneratedSession;
-
   TranslationUnitAST* parseOriginal(const QByteArray& unit)
   {
     Parser parser(&control);

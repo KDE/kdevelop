@@ -29,24 +29,6 @@
 
 using namespace KDevelop;
 
-///@todo this is very expensive
-QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
-{
-  QString ret;
-  if( without_spaces ) {
-    //Decode operator-names without spaces for now, since we rely on it in other places.
-    ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
-    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      ret += session->token_stream->token(a).symbolString();
-    }
-  } else {
-    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      ret += session->token_stream->token(a).symbolString() + ' ';
-    }
-  }
-  return ret;
-}
-
 uint parseConstVolatile(ParseSession* session, const ListNode<uint> *cv)
 {
   uint ret = AbstractType::NoModifiers;
@@ -72,7 +54,7 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
 {
   IndexedTypeIdentifier id;
   if(node->expression) {
-    id = IndexedTypeIdentifier(decode(session, node), true);
+    id = IndexedTypeIdentifier(session->stringForNode(node), true);
   }else if(node->type_id) {
     //Parse the pointer operators
     TypeCompiler tc(session);
@@ -145,7 +127,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
   IndexedString tmp_name;
 
   if (node->id)
-    tmp_name = m_session->token_stream->token(node->id).symbol();
+    tmp_name = m_session->token_stream->symbol(node->id);
 
   if (node->ellipsis)
     tmp_name = IndexedString("...");
@@ -162,7 +144,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       QString tmp = operatorString;
 
       if (op_id->op && op_id->op->op)
-        tmp +=  decode(m_session, op_id->op, true);
+        tmp +=  m_session->stringForNode(op_id->op, true);
       else
         tmp += QLatin1String("{...cast...}");
 
@@ -175,7 +157,10 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->template_arguments)
     {
       visitNodes(this, node->template_arguments);
-    }else if(node->end_token == node->start_token + 3 && node->id == node->start_token && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<')) {
+    }
+  else if (node->end_token == node->start_token + 3 && node->id == node->start_token
+      && m_session->token_stream->kind(node->id+1) == '<')
+    {
       ///@todo Represent this nicer in the AST
       ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
       m_currentIdentifier.appendTemplateIdentifier( IndexedTypeIdentifier() );

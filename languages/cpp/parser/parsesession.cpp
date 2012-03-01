@@ -190,6 +190,21 @@ const KDevelop::IndexedString& ParseSession::url() const
   return m_url;
 }
 
+QString ParseSession::stringForNode(AST* node, bool withoutSpaces) const
+{
+  QString ret;
+  for( uint a = node->start_token; a < node->end_token; a++ ) {
+    ret += token_stream->symbolString(a);
+    if (!withoutSpaces) {
+      // Decode operator-names without spaces for now, since we rely on it in other places.
+      /// @todo change this, here and in all the places that rely on it.
+      /// Operators should then by written like "operator [ ]"(space between each token)
+      ret += QLatin1Char(' ');
+    }
+  }
+  return ret;
+}
+
 void ParseSession::dumpNode(AST* node) const
 {
   DumpTree dumper;

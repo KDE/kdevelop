@@ -978,7 +978,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   uint oldEndToken = node->end_token;
   node->end_token = node->id + 1;
 
-  Identifier id(editor()->parseSession()->token_stream->token(node->id).symbol());
+  Identifier id(editor()->parseSession()->token_stream->symbol(node->id));
   Declaration* decl = openNormalDeclaration(0, node, id);
 
   node->end_token = oldEndToken;
@@ -1317,7 +1317,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
   if( compilingContexts() ) {
     RangeInRevision range = editor()->findRange(node->namespace_name);
     DUChainWriteLocker lock(DUChain::lock());
-    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()), false, false, &range);
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->symbol(node->namespace_name)), false, false, &range);
     {
       QualifiedIdentifier id;
       identifierForNode(node->alias_name, id);

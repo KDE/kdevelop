@@ -53,7 +53,7 @@ CursorInRevision CppEditorIntegrator::findPosition( const Token & token, Edge ed
     if(position.collapsed)
       return position;
     else {
-      uint length = token.symbolLength();
+      uint length = m_session->token_stream->symbolLength(token);
       if(a.second && length > a.second)
         length = a.second;
       //We have to check the following anchor in the location-table to make sure we don't make the range longer than possible
@@ -81,7 +81,7 @@ RangeInRevision CppEditorIntegrator::findRangeForContext( size_t start_token, si
   rpp::Anchor start = m_session->positionAt(tStart.position, true);
   rpp::Anchor end = m_session->positionAt(tEnd.position, true);
   if(!end.collapsed)
-    end.column += tEnd.symbolLength(); //We want the back edge
+    end.column += m_session->token_stream->symbolLength(tEnd); //We want the back edge
   
   if(start.macroExpansion.isValid() && start.macroExpansion == end.macroExpansion)
     return RangeInRevision(start.macroExpansion, start.macroExpansion);
@@ -111,7 +111,7 @@ RangeInRevision CppEditorIntegrator::findRange( const Token & token )
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const
 {
-  return m_session->token_stream->token(token).symbolString();
+  return m_session->token_stream->symbolString(token);
 }
 
 QString CppEditorIntegrator::tokensToStrings(std::size_t start, std::size_t end) const
@@ -125,7 +125,7 @@ QString CppEditorIntegrator::tokensToStrings(std::size_t start, std::size_t end)
 
 QByteArray CppEditorIntegrator::tokenToByteArray(std::size_t token) const
 {
-  return m_session->token_stream->token(token).symbolByteArray();
+  return m_session->token_stream->symbolByteArray(token);
 }
 
 QByteArray CppEditorIntegrator::tokensToByteArray(std::size_t start, std::size_t end) const

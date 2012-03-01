@@ -90,8 +90,9 @@ private:
           qout << "token stream:" << endl;
           for(int i = 0; i < m_session.token_stream->count(); ++i) {
             const Token& t = m_session.token_stream->at(i);
-            Q_ASSERT(t.size || t.symbolString().isEmpty());
-            qout << token_name(t.kind) << ": " << t.symbolString() << endl;
+            const QString str = m_session.token_stream->symbolString(t);
+            Q_ASSERT(t.size || str.isEmpty());
+            qout << token_name(t.kind) << ": " << str << endl;
           }
         }
       }

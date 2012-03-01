@@ -870,11 +870,11 @@ void TestParser::testMultiByteCStrings()
   QVERIFY(control.problems().isEmpty());
   AST* str = getAST(ast, AST::Kind_StringLiteral);
   QVERIFY(str);
-  QCOMPARE(stringForNode(str), QString::fromUtf8("\"ä\""));
+  QCOMPARE(lastSession->stringForNode(str, true), QString::fromUtf8("\"ä\""));
   Token token = lastSession->token_stream->token(str->start_token);
   QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
   QCOMPARE(token.size, 3u);
-  QCOMPARE(token.symbolLength(), 3u);
+  QCOMPARE(lastSession->token_stream->symbolLength(token), 3u);
   Token endToken = lastSession->token_stream->token(str->end_token);
   rpp::Anchor pos = lastSession->positionAt(endToken.position);
   // should end just before the semicolon
@@ -972,15 +972,6 @@ AST* TestParser::getAST(AST* ast, AST::NODE_KIND kind, int num)
   HasKindVisitor visitor(kind, num);
   visitor.visit(ast);
   return visitor.ast;
-}
-
-QString TestParser::stringForNode(AST* node) const
-{
-  QString ret;
-  for(int i = node->start_token; i < node->end_token; ++i) {
-    ret += lastSession->token_stream->token(i).symbolString();
-  }
-  return ret;
 }
 
 #include "test_parser.moc"
