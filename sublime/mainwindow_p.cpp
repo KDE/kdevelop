@@ -263,15 +263,12 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     {
         Container *container = 0;
         
-        if(splitter->count())
+        while(splitter->count() && qobject_cast<QSplitter*>(splitter->widget(0)))
         {
-            // After unsplitting, we might have to remove an old QSplitter here
+            // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
-            if(qobject_cast<QSplitter*>(widget))
-            {
-                widget->setParent(0);
-                delete widget;
-            }
+            widget->setParent(0);
+            delete widget;
         }
         
         if (!splitter->widget(0))
