@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=KDevelop Sessions
+Comment=List and launch KDevelop sessions
+
+Icon=kdevelop
+Type=Service
+X-KDE-ServiceTypes=Plasma/Applet,Plasma/PopupApplet
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/kdevelopsessions.qml
+X-Plasma-DefaultSize=290,340
+
+X-KDE-PluginInfo-Author=Eike Hein
+X-KDE-PluginInfo-Email=hein@kde.org
+X-KDE-PluginInfo-Name=kdevelopsessions
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Category=Utilities
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+#X-Plasma-Requires-FileDialog=Unused
+#X-Plasma-Requires-LaunchApp=Required
+#X-Plasma-NotificationArea=true

@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=KDevelop Sessions
+Comment=List and launch KDevelop sessions
+
+Type=Service
+Icon=kdevelop
+
+X-KDE-ServiceTypes=Plasma/DataEngine
+X-KDE-Library=plasma_engine_kdevelopsessions
+
+X-KDE-PluginInfo-Author=Eike Hein
+X-KDE-PluginInfo-Email=hein@kde.org
+X-KDE-PluginInfo-Name=org.kde.kdevelopsessions
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Category=Utiltities
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
