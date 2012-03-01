@@ -248,11 +248,11 @@ KDevelop::ProblemPointer ParseJob::readContents()
         if (fileInfo.size() > maximumFileSize) {
             KDevelop::ProblemPointer p(new Problem());
             p->setSource(KDevelop::ProblemData::Disk);
-            ///NOTE: no i18n to get it in for 4.3, will be fixed in 4.4
-            p->setDescription(QString("Skipped file that is too large: '%1'").arg(localFile));
-            p->setExplanation(QString("The file is %1 and exceeds the limit of %2.")
-                                 .arg(KGlobal::locale()->formatByteSize(fileInfo.size()))
-                                 .arg(KGlobal::locale()->formatByteSize(maximumFileSize)));
+            p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
+            p->setExplanation(i18nc("%1: file size, %2: limit file size",
+                                    "The file is %1 and exceeds the limit of %2.",
+                                    KGlobal::locale()->formatByteSize(fileInfo.size()),
+                                    KGlobal::locale()->formatByteSize(maximumFileSize)));
             p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
             kWarning( 9007 ) << p->description() << p->explanation();
             return p;
