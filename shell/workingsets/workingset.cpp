@@ -176,7 +176,11 @@ QStringList WorkingSet::fileList() const
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) {
     PushValue<bool> enableLoading(m_loading, true);
 
-    DisableMainWindowUpdatesFromArea updatesDisabler(area);
+    /// We cannot disable the updates here, because (probably) due to a bug in Qt,
+    /// which causes the updates to stay disabled forever after some complex operations
+    /// on the sub-views. This could be reproduced by creating two working-sets with complex
+    /// split-view configurations and switching between them. Re-enabling the updates doesn't help.
+//     DisableMainWindowUpdatesFromArea updatesDisabler(area);
 
     kDebug() << "loading working-set" << m_id << "into area" << area;
     
