@@ -41,7 +41,7 @@
 #include <time.h>
 #include <set>
 #include <algorithm>
-// #include <iterator>
+#include <iterator> // needed for std::insert_iterator on windows
 
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
