@@ -40,6 +40,7 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/configinterface.h>
+#include <ktexteditor/sessionconfiginterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -81,6 +82,7 @@ struct TextDocumentPrivate {
             m_addedContextMenu = 0;
         }
         if (document) {
+            saveSessionConfig();
             delete document;
         }
     }
@@ -200,6 +202,42 @@ struct TextDocumentPrivate {
         m_textDocument->notifyStateChanged();
     }
 
+    inline QString configGroupName()
+    {
+        Q_ASSERT(document);
+        return QString("Document %1").arg(document->url().url());
+    }
+
+    inline KConfigGroup configGroup()
+    {
+        return KGlobal::config()->group(configGroupName());
+    }
+
+    void saveSessionConfig()
+    {
+        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
+            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
+        {
+            KConfigGroup docConfigGroup = configGroup();
+            sessionConfigIface->writeParameterizedSessionConfig(docConfigGroup,
+                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
+        }
+    }
+
+    void loadSessionConfig()
+    {
+        if (!document || !KGlobal::config()->hasGroup(configGroupName())) {
+            return;
+        }
+        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
+            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
+        {
+            sessionConfigIface->readParameterizedSessionConfig(configGroup(),
+                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
+        }
+    }
+
+
 private:
     TextDocument *m_textDocument;
     bool m_loaded;
@@ -285,6 +323,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         Core::self()->partController()->addPart(d->document, false);
 
+        d->loadSessionConfig();
+
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
         connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)),
@@ -293,6 +333,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(documentUrlChanged(KTextEditor::Document*)));
         connect(d->document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)),
                  this, SLOT(documentSaved(KTextEditor::Document*,bool)));
+        connect(d->document, SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)),
+                 this, SLOT(saveSessionConfig()));
 
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)
@@ -523,6 +565,7 @@ bool TextDocument::close(DocumentSaveMode mode)
         return false;
 
     if ( d->document ) {
+        d->saveSessionConfig();
         delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
     }
 

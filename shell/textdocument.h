@@ -81,6 +81,7 @@ private:
     Q_PRIVATE_SLOT(d, void documentUrlChanged(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void slotDocumentLoaded())
     Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
+    Q_PRIVATE_SLOT(d, void saveSessionConfig());
 
     class TextDocumentPrivate * const d;
     friend class TextDocumentPrivate;
