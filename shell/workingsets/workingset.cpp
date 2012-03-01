@@ -198,7 +198,13 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
     KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
 
     loadToArea(area, areaIndex, setGroup, areaGroup, recycle);
-
+    
+    // Delete views which were not recycled
+    kDebug() << "deleting " << recycle.size() << " old views";
+    qDeleteAll( recycle.values() );
+    
+    area->setActiveView(0);
+    
     //activate view in the working set
     /// @todo correctly select one out of multiple equal views
     QString activeView = areaGroup.readEntry("Active View", QString());
@@ -209,9 +215,16 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
         }
     }
     
-    // Delete views which were not recycled
-    kDebug() << "deleting " << recycle.size() << " old views";
-    qDeleteAll( recycle.values() );
+    if( !area->activeView() && area->views().size() )
+        area->setActiveView( area->views()[0] );
+    
+    if( area->activeView() ) {
+        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+                if(window->area() == area) {
+                    window->activateView( area->activeView() );
+                }
+        }
+    }
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle)
