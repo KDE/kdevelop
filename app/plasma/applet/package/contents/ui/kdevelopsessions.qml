@@ -91,12 +91,16 @@ Item {
 
         anchors { left: parent.left; right: scrollBar.left; bottom: parent.bottom; top: separator.bottom; topMargin: 5}
 
-        model: sessionsModel
+        model: PlasmaCore.SortFilterModel {
+            id: filterModel
+            sourceModel: sessionsModel
+            sortRole: "prettyName"
+        }
         clip: true
 
         delegate: Item {
             id: listdelegate
-       height: textMetric.paintedHeight * 2
+            height: textMetric.paintedHeight * 2
             anchors { left: parent.left; leftMargin: 10; right: parent.right;  }
 
             PlasmaComponents.Label {
