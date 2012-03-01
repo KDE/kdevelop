@@ -385,11 +385,18 @@ void QuickOpenWidget::prepareShow()
   o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
+  
+  m_filterTimer.stop();
+  m_filter = QString();
+  
   if (!m_preselectedText.isEmpty())
   {
     o.searchLine->setText(m_preselectedText);
     o.searchLine->selectAll();
   }
+  
+  applyFilter();
+  
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(currentChanged(QItemSelection,QItemSelection)) );
   
