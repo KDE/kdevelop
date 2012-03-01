@@ -59,7 +59,7 @@ void KDevelopSessionsEngine::loadSessions()
     const QStringList lst = KGlobal::dirs()->findDirs( "data", "kdevelop/sessions/" );
     for ( int i = 0; i < lst.count(); i++ )
     {
-        m_dirWatch->addDir( lst[i] );
+        m_dirWatch->addDir( lst[i], KDirWatch::WatchSubDirs );
     }
 
     const QStringList list = KGlobal::dirs()->findAllResources( "data", "kdevelop/sessions/*/sessionrc", KStandardDirs::NoDuplicates );
