@@ -2746,13 +2746,6 @@ bool Parser::parseBracedInitList(ExpressionAST*& node)
   InitializerListAST *list = 0;
   parseInitializerList(list);
 
-  if (list && session->token_stream->lookAhead() == ',') {
-    // see https://bugs.kde.org/show_bug.cgi?id=233328
-    // and grammar spec on braced-init-list
-    // init lists may have a trailing comma
-    advance();
-  }
-
   CHECK('}');
 
   BracedInitListAST *ast = CreateNode<BracedInitListAST>(session->mempool);
@@ -2772,7 +2765,17 @@ bool Parser::parseInitializerList(InitializerListAST *&node)
   do
     {
       if (clauses)
-        advance(); // skip ',' separator between clauses
+        {
+          advance(); // skip ',' separator between clauses
+
+          if (session->token_stream->lookAhead() == '}')
+            {
+              // see https://bugs.kde.org/show_bug.cgi?id=233328
+              // and grammar spec on braced-init-list
+              // init lists may have a trailing comma
+              break;
+            }
+        }
 
       InitializerClauseAST *init_clause = 0;
       if (!parseInitializerClause(init_clause))
