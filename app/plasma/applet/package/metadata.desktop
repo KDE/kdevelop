@@ -1,5 +1,31 @@
 [Desktop Entry]
 Name=KDevelop Sessions
+Name[ca]=Sessions del KDevelop
+Name[cs]=relace KDevelop
+Name[da]=KDevelop-sessioner
+Name[de]=KDevelop-Sitzungen
+Name[el]=Συνεδρίες KDevelop
+Name[es]=Sesiones de KDevelop
+Name[et]=KDevelopi seansid
+Name[fi]=KDevelop-istunnot
+Name[fr]=Sessions KDevelop 4
+Name[ga]=Seisiúin KDevelop
+Name[gl]=Sesións de KDevelop
+Name[hu]=KDevelop munkamenetek
+Name[it]=Sessioni KDevelop
+Name[lt]=KDevelop seansas
+Name[nb]=KDevelop-økter
+Name[nds]=KDevelop-Törns
+Name[nl]=KDevelop sessies
+Name[pl]=Sesje KDevelop
+Name[pt]=Sessões do KDevelop
+Name[pt_BR]=Sessões do KDevelop
+Name[sk]=Sedenia KDevelop
+Name[sv]=KDevelop-sessioner
+Name[uk]=Сеанси KDevelop
+Name[x-test]=xxKDevelop Sessionsxx
+Name[zh_CN]=KDevelop 会话
+Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
 
 Icon=kdevelop
