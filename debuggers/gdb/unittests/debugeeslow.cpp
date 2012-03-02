@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+#include <unistd.h>
+
 void foo() {
     static int i=0;
     ++i;
