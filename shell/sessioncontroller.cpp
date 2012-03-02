@@ -885,6 +885,9 @@ void SessionChooserDialog::updateState() {
 
 QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
 {
+    // The catalog hasn't been loaded yet
+    KGlobal::locale()->insertCatalog("kdevplatform");
+
     QTreeView* view = new QTreeView;
     QStandardItemModel* model = new QStandardItemModel(view);
     SessionChooserDialog dialog(view, model);
