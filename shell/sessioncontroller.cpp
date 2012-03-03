@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
+#include <kpushbutton.h>
 
 #include "session.h"
 #include "core.h"
@@ -832,21 +833,49 @@ class SessionChooserDialog : public KDialog {
     Q_OBJECT
 public:
     SessionChooserDialog(QTreeView* view, QStandardItemModel* model);
-    
+    bool eventFilter(QObject* object, QEvent* event);
+
 public Q_SLOTS:
     void updateState();
     void doubleClicked(QModelIndex);
+
+private Q_SLOTS:
+    void deleteButtonPressed();
+    void showDeleteButton();
+    void itemEntered(const QModelIndex& index);
+
 private:
+    QTreeView* m_view;
     QStandardItemModel* m_model;
     QTimer m_updateStateTimer;
+
+    QPushButton* m_deleteButton;
+    QTimer m_deleteButtonTimer;
+    int m_deleteCandidateRow;
 };
 
-SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model) : m_model(model) {
+SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model)
+    : m_view(view), m_model(model), m_deleteCandidateRow(-1)
+{
     m_updateStateTimer.setInterval(5000);
     m_updateStateTimer.setSingleShot(false);
     m_updateStateTimer.start();
     connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(updateState()));
     connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+    connect(view, SIGNAL(entered(QModelIndex)), SLOT(itemEntered(QModelIndex)));
+
+    m_deleteButton = new KPushButton(view);
+    m_deleteButton->setIcon(KIcon("edit-delete"));
+    m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
+    m_deleteButton->hide();
+    connect(m_deleteButton, SIGNAL(clicked(bool)), SLOT(deleteButtonPressed()));
+
+    m_deleteButtonTimer.setInterval(500);
+    m_deleteButtonTimer.setSingleShot(true);
+    connect(&m_deleteButtonTimer, SIGNAL(timeout()), SLOT(showDeleteButton()));
+
+    view->setMouseTracking(true);
+    view->installEventFilter(this);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
@@ -971,9 +1000,73 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         }
         return ret;
     }
-    
+
     return QString();
 }
+
+void SessionChooserDialog::itemEntered(const QModelIndex& index)
+{
+    // The last row says "Create new session", we don't want to delete that
+    if(index.row() == m_model->rowCount()-1) {
+        m_deleteButton->hide();
+        m_deleteButtonTimer.stop();
+        return;
+    }
+
+    // align the delete-button to stay on the right border of the item
+    // we need the right most column's index
+    QModelIndex in = m_model->index( index.row(), 2 );
+    const QRect rect = m_view->visualRect(in);
+    const int x = rect.right() - m_deleteButton->size().width();
+    //FIXME: Figure out why visualRect is giving wrong coordinates. Ideally the code should be
+    //       y = rect.top()
+    const int y = rect.bottom() + rect.height()/2 + 3;
+    m_deleteButton->setGeometry( x, y, rect.height(), rect.height() );
+
+    m_deleteCandidateRow = index.row();
+    m_deleteButtonTimer.start();
+}
+
+void SessionChooserDialog::showDeleteButton()
+{
+    m_deleteButton->show();
+}
+
+bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
+{
+    if(object == m_view && event->type() == QEvent::Leave ) {
+        m_deleteButtonTimer.stop();
+        m_deleteButton->hide();
+    }
+
+    return false;
+}
+
+
+void SessionChooserDialog::deleteButtonPressed()
+{
+    if(m_deleteCandidateRow == -1)
+        return;
+
+    const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
+    const QString caption = i18nc("@title", "Delete Session");
+    const KGuiItem deleteItem(i18nc("@action:button", "Delete"), KIcon("edit-delete"));
+    const KGuiItem cancelItem(i18nc("@action:button", "Cancel"), KIcon("dialog-cancel"));
+
+    if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
+        QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
+        QStandardItem *item = m_model->itemFromIndex(index);
+        const QString uuid = item->text();
+
+        //FIXME: What about running sessions?
+        KDevelop::Session session( uuid );
+        session.deleteFromDisk();
+
+        m_model->removeRows( m_deleteCandidateRow, 1 );
+        m_deleteCandidateRow = -1;
+    }
+}
+
 
 QString SessionController::sessionName()
 {
