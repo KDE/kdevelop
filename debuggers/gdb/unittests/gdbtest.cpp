@@ -1504,7 +1504,8 @@ void GdbTest::testBreakpointWithSpaceInPath()
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE_FAIL(session, DebugSession::PausedState);
-    QEXPECT_FAIL("", "this does not work, not even in gdb", Abort);
+    //see upstream bugreport: http://sourceware.org/bugzilla/show_bug.cgi?id=13798
+    QEXPECT_FAIL("", "this does not work in gdb 7.4", Abort);
     QCOMPARE(session->line(), 20);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
