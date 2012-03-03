@@ -147,8 +147,11 @@ QString AStylePlugin::previewText(const KMimeType::Ptr &)
         + formattingSample();
 }
 
-AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& /*url*/ )
+AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& url )
 {
+    // Call formatSource first, to initialize the m_formatter data structures according to the URL
+    formatSource( "", url, KMimeType::findByUrl(url), QString(), QString() );
+
     Indentation ret;
 
     ret.indentWidth = m_formatter->option("FillCount").toInt();
