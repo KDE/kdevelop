@@ -286,6 +286,14 @@ TextDocument::~TextDocument()
 
 bool TextDocument::isTextDocument() const
 {
+    if( !d->document )
+    {
+        /// @todo Somehow it can happen that d->document is zero, which makes
+        /// code relying on "isTextDocument() == (bool)textDocument()" crash
+        qWarning() << "Broken text-document: " << url();
+        return false;
+    }
+    
     return true;
 }
 
