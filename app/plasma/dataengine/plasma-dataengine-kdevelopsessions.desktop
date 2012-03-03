@@ -27,6 +27,12 @@ Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
+Comment[nl]=Maak een lijst van en start KDevelop sessies
+Comment[pt]=Listar e lançar sessões do KDevelop
+Comment[pt_BR]=Listar e lançar sessões do KDevelop
+Comment[sv]=Lista och starta KDevelop-sessioner
+Comment[uk]=Показ списку і запуск сеансів KDevelop
+Comment[x-test]=xxList and launch KDevelop sessionsxx
 
 Type=Service
 Icon=kdevelop
