@@ -72,17 +72,18 @@ void TestController::addTestSuite(KDevelop::ITestSuite* suite)
     emit testSuiteAdded(suite);
 }
 
-ITestSuite* TestController::testSuiteForUrl(const KUrl& url) const
+ITestSuite* TestController::findTestSuite(IProject* project, const QString& name) const
 {
-    foreach(ITestSuite* suite, d->suites)
+    foreach (ITestSuite* suite, testSuitesForProject(project))
     {
-        if (suite->url() == url)
+        if (suite->name() == name)
         {
             return suite;
         }
     }
     return 0;
 }
+
 
 QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) const
 {

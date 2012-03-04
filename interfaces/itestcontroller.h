@@ -26,7 +26,6 @@
 #include <QtCore/QObject>
 
 class KJob;
-class KUrl;
 
 namespace KDevelop {
 
@@ -42,7 +41,7 @@ public:
     virtual void removeTestSuite(ITestSuite* suite) = 0;
 
     virtual QList<ITestSuite*> testSuites() const = 0;
-    virtual ITestSuite* testSuiteForUrl(const KUrl& url) const = 0;
+    virtual ITestSuite* findTestSuite(IProject* project, const QString& name) const = 0;
     virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
     
     virtual KJob* reloadTestSuites() = 0;

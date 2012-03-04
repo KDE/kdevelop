@@ -112,7 +112,7 @@ void TestView::buildTestModel()
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
             QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
-            suiteItem->setData(suite->url(), SuiteRole);
+            suiteItem->setData(suite->name(), SuiteRole);
             foreach (QString caseName, suite->cases())
             {
                 QStandardItem* caseItem = new QStandardItem(caseName);
@@ -206,13 +206,15 @@ void TestView::runSelectedTests()
         else if (item->parent()->parent() == 0)
         {
             // A suite was selected
-            ITestSuite* suite =  tc->testSuiteForUrl(item->data(SuiteRole).value<KUrl>());
+            IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
+            ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());
             jobs << suite->launchAllCases();
         }
         else
         {
             // This was a single test case
-            ITestSuite* suite = tc->testSuiteForUrl(item->parent()->data(SuiteRole).value<KUrl>());
+            IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->parent()->data(ProjectRole).toString());
+            ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
             const QString testCase = item->data(CaseRole).toString();
             jobs << suite->launchCase(testCase);
         }
@@ -245,12 +247,14 @@ void TestView::showSource()
     }
     else if (item->parent()->parent() == 0)
     {
-        ITestSuite* suite =  tc->testSuiteForUrl(item->data(SuiteRole).value<KUrl>());
+        IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
+        ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());
         declaration = suite->declaration();
     }
     else
     {
-        ITestSuite* suite =  tc->testSuiteForUrl(item->parent()->data(SuiteRole).value<KUrl>());
+        IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->parent()->data(ProjectRole).toString());
+        ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
         declaration = suite->caseDeclaration(item->data(CaseRole).toString());
     }
     
