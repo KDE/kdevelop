@@ -21,7 +21,14 @@
 #define CTESTFINDJOB_H
 
 #include <KJob>
+#include <QStringList>
 
+namespace KDevelop {
+class IndexedString;
+class ReferencedTopDUContext;
+}
+
+class KProcess;
 class CTestSuite;
 
 class CTestFindJob : public KJob
@@ -33,10 +40,15 @@ public:
     virtual void start();
     
 private slots:
-    virtual void findTestCases();
-    
+    void findTestCases();
+    void processFinished();
+    void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
+
 private:
     CTestSuite* m_suite;
+    KProcess* m_process;
+    QStringList m_pendingFiles;
+    
 };
 
 #endif // CTESTFINDJOB_H

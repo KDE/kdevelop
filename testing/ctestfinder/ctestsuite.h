@@ -26,6 +26,7 @@
 
 namespace KDevelop {
 class ITestController;
+class ReferencedTopDUContext;
 }
 
 class CTestSuite : public KDevelop::ITestSuite
@@ -47,9 +48,11 @@ public:
     virtual KDevelop::IndexedDeclaration declaration() const;
     virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
     
-    void loadCases();
     QStringList arguments() const;
     void setResult(const KDevelop::TestResult& result);
+    void setTestCases(QStringList cases);
+    QStringList sourceFiles() const;
+    void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
     
 private:
     KUrl m_url;

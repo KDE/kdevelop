@@ -55,70 +55,42 @@ CTestSuite::~CTestSuite()
 
 }
 
-void CTestSuite::loadCases()
+void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop::ReferencedTopDUContext& ref)
 {
-    kDebug() << "Loading test cases for suite" << m_name << m_url;
-    m_cases.clear();
-    QFileInfo info(m_url.toLocalFile());
-    
-    if (m_args.isEmpty() && info.exists() && info.isExecutable())
+    DUChainReadLocker locker(DUChain::lock());
+    TopDUContext* context = ref.data();
+    if (!context)
     {
-        KProcess process;
-        process.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-        process.setProgram(m_url.toLocalFile(), QStringList() << "-functions");
-        process.start();
-        if (process.waitForFinished())
-        {       
-            while(!process.atEnd())
-            {
-                QString line = process.readLine().trimmed();
-                line.remove('(');
-                line.remove(')');
-                m_cases << line;
-            }
-        }
+        kDebug() << "No top context in" << document.str();
+        return;
     }
     
-    QStringList candidateFiles;
-    foreach (const QString& file, m_files)
+    kDebug() << "Found" << context->localDeclarations(context).size() << "declarations in file" << document.str();
+    foreach (Declaration* decl, context->localDeclarations(context))
     {
-        ReferencedTopDUContext ref = DUChain::self()->waitForUpdate(IndexedString(file), TopDUContext::AllDeclarationsAndContexts);
-        
-        DUChainReadLocker locker(DUChain::lock());
-        TopDUContext* context = ref.data();
-        if (!context)
+        kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+        FunctionDefinition* def = 0;
+        if (decl->isDefinition() && (def = dynamic_cast<FunctionDefinition*>(decl)))
         {
-            kDebug() << "No top context in" << file;
-            continue;
+            decl = def->declaration(context);
         }
         
-        kDebug() << "Found" << context->localDeclarations(context).size() << "declarations in file" << file;
-        foreach (Declaration* decl, context->localDeclarations(context))
+        if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
         {
-            kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
-            FunctionDefinition* def = 0;
-            if (decl->isDefinition() && (def = dynamic_cast<FunctionDefinition*>(decl)))
+            if (function->accessPolicy() == Declaration::Private && function->isSlot())
             {
-                decl = def->declaration(context);
-            }
-            
-            if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
-            {
-                if (function->accessPolicy() == Declaration::Private && function->isSlot())
+                QString name = function->qualifiedIdentifier().last().toString();
+                kDebug() << "Found private slot in test" << name; 
+                
+                if (!m_suiteDeclaration.data())
                 {
-                    QString name = function->qualifiedIdentifier().last().toString();
-                    kDebug() << "Found private slot in test" << name; 
-                    
-                    if (!m_suiteDeclaration.data())
-                    {
-                        m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
-                    }
-                    
-                    if (m_cases.contains(name) || name == "initTestCase" || name == "cleanupTestCase")
-                    {
-                        kDebug() << "Found test case function declaration" << function->identifier().toString();
-                        m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
-                    }
+                    m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
+                }
+                
+                if (m_cases.contains(name) || name == "initTestCase" || name == "cleanupTestCase")
+                {
+                    kDebug() << "Found test case function declaration" << function->identifier().toString();
+                    m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
                 }
             }
         }
@@ -187,6 +159,15 @@ IndexedDeclaration CTestSuite::caseDeclaration(const QString& testCase) const
     return m_declarations.value(testCase, IndexedDeclaration(0));
 }
 
+void CTestSuite::setTestCases(QStringList cases)
+{
+    m_cases = cases;
+}
+
+QStringList CTestSuite::sourceFiles() const
+{
+    return m_files;
+}
 
 
 

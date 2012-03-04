@@ -20,12 +20,16 @@
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
 #include <QTimer>
+#include <QFileInfo>
+#include <KProcess>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
+#include <language/duchain/duchain.h>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent): KJob(parent), 
-m_suite(suite)
+m_suite(suite),
+m_process(0)
 {
 
 }
@@ -45,7 +49,68 @@ void CTestFindJob::findTestCases()
         tc->removeTestSuite(existingSuite);
     }
     
-    m_suite->loadCases();
-    tc->addTestSuite(m_suite);
-    emitResult();
+    if (!m_suite->arguments().isEmpty())
+    {
+        tc->addTestSuite(m_suite);
+        emitResult();
+        return;
+    }
+    
+    QFileInfo info(m_suite->url().toLocalFile());
+    if (info.exists() && info.isExecutable())
+    {
+        kDebug() << "Starting process to find test cases" << m_suite->name();
+        m_process = new KProcess(this);
+        m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+        m_process->setProgram(info.absoluteFilePath(), QStringList() << "-functions");
+        connect (m_process, SIGNAL(finished(int)), SLOT(processFinished()));
+        m_process->start();
+    }
 }
+
+void CTestFindJob::processFinished()
+{
+    kDebug();
+    if (m_process->exitStatus() == KProcess::NormalExit)
+    {
+        QStringList cases;
+        foreach (const QByteArray& line, m_process->readAllStandardOutput().split('\n'))
+        {
+            QString str = line.trimmed();
+            str.remove("()");
+            if (!str.isEmpty())
+            {
+                cases << str;
+            }
+        }
+        m_suite->setTestCases(cases);
+    }
+    
+    m_pendingFiles = m_suite->sourceFiles();
+    if (m_pendingFiles.isEmpty())
+    {
+        KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<KDevelop::ITestController>()->addTestSuite(m_suite);
+        emitResult();
+        return;
+    }
+    
+    foreach (const QString& file, m_pendingFiles)
+    {
+        KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
+    }
+}
+
+void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
+{
+    kDebug() << m_pendingFiles << document.str();
+    m_suite->loadDeclarations(document, context);
+    m_pendingFiles.removeAll(document.str());
+    
+    if (m_pendingFiles.isEmpty())
+    {
+        KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<KDevelop::ITestController>()->addTestSuite(m_suite);
+        emitResult();
+    }
+}
+
+
