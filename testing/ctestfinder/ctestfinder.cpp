@@ -41,7 +41,7 @@
 #include <util/executecompositejob.h>
 
 K_PLUGIN_FACTORY(CTestFinderFactory, registerPlugin<CTestFinder>(); )
-K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Finder"), "0.1", ki18n("Finds CTest unit tests"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Integration"), "0.1", ki18n("Finds and executes CTest unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 

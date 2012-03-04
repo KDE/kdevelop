@@ -187,7 +187,7 @@ namespace CMakeParserUtils
         data->targets=v.targets();
         data->properties=v.properties();
 
-        KDevelop::IPlugin* testProviderPlugin = KDevelop::ICore::self()->pluginController()->loadPlugin("kdevctestfinder");
+        KDevelop::IPlugin* testProviderPlugin = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICTestProvider");
         if (testProviderPlugin)
         {
             ICTestProvider* testProvider = testProviderPlugin->extension<ICTestProvider>();

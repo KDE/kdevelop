@@ -111,6 +111,7 @@ X-KDevelop-Version=15
 X-KDevelop-Category=Project
 X-KDevelop-Language=CMake
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,ILanguageSupport
+X-KDevelop-IOptional=org.kdevelop.ICTestProvider
 X-KDevelop-SupportedMimeTypes=text/x-cmake
 X-KDevelop-Mode=GUI
 X-KDevelop-ProjectFilesFilter=CMakeLists.txt
