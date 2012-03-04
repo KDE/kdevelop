@@ -64,16 +64,20 @@ void CTestFinder::unload()
 
 void CTestFinder::createTestSuite(const QString& name, const QString& executable, const QStringList& files, IProject* project, const QStringList& arguments)
 {
+    // CMake parser replaces all references to the project build directory by #[bin_dir]
+    // We replace it back for the test executable and arguments
+    
     QString exe = executable;
-    if (exe.startsWith("#[bin_dir]"))
+    QString binDir = project->buildSystemManager()->buildDirectory(project->projectItem()).toLocalFile();
+    exe.replace("#[bin_dir]", binDir);
+    
+    QStringList args = arguments;
+    for (QStringList::iterator it = args.begin(); it != args.end(); ++it)
     {
-        exe.remove("#[bin_dir]");
+        (*it).replace("#[bin_dir]", binDir);
     }
-    KUrl exeUrl = project->buildSystemManager()->buildDirectory(project->projectItem());
-    exeUrl.addPath(exe);
-    Q_ASSERT(exeUrl.isLocalFile());
-    kDebug() << exeUrl << exeUrl.toLocalFile();
-    CTestSuite* suite = new CTestSuite(name, exeUrl, files, project, arguments);
+    
+    CTestSuite* suite = new CTestSuite(name, exe, files, project, args);
     m_pendingSuites << suite;
 }
 
