@@ -33,6 +33,7 @@
 
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
+#include <QHeaderView>
 #include <KJob>
 #include <KDebug>
 #include <interfaces/iruncontroller.h>
@@ -53,6 +54,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
 , m_plugin(plugin)
 {
     setWindowIcon(KIcon("preflight-verifier"));
+    header()->hide();
     setIndentation(10);
     setEditTriggers(NoEditTriggers);
     setSelectionBehavior(SelectRows);
@@ -68,13 +70,13 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     connect (reloadAction, SIGNAL(triggered(bool)), SLOT(reloadTests()));
     addAction(reloadAction);
     
-    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
-    connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
-    addAction(runSelected);
-    
     KAction* showSource = new KAction( KIcon("code-context"), i18n("Show source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
     addAction(showSource);
+    
+    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
+    connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
+    addAction(runSelected);
     
     action = plugin->actionCollection()->action("run_all_tests");
     addAction(action);
