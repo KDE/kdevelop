@@ -27,6 +27,7 @@ Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
+Comment[el]=Καταγραφή και έναρξη συνεδριών KDevelop
 Comment[es]=Listar y lanzar sesiones de KDevelop
 Comment[nl]=Maak een lijst van en start KDevelop sessies
 Comment[pt]=Listar e lançar sessões do KDevelop
