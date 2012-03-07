@@ -22,6 +22,14 @@
 
 #include <Plasma/DataEngine>
 
+struct Session
+{
+    QString hash;
+    QString name;
+    QString contents;
+    QString sessionString;
+};
+
 class KDirWatch;
 
 class KDevelopSessionsEngine : public Plasma::DataEngine
@@ -35,11 +43,13 @@ public:
     void init();
     Plasma::Service *serviceForSource(const QString &source);
 
-private Q_SLOTS:
-    void sessionsChanged();
+    private Q_SLOTS:
+        void updateSessions();
 
 private:
-    void loadSessions();
+    QString makeSessionString(const Session& session);
+
+    QHash<QString, Session> m_currentSessions;
 
     KDirWatch *m_dirWatch;
 };

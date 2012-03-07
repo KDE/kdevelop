@@ -39,57 +39,116 @@ KDevelopSessionsEngine::~KDevelopSessionsEngine()
 void KDevelopSessionsEngine::init()
 {
     m_dirWatch = new KDirWatch( this );
-    loadSessions();
-    connect(m_dirWatch, SIGNAL(dirty(QString)), this, SLOT(sessionsChanged()));
+
+    const QStringList sessionDirs = KGlobal::dirs()->findDirs( "data", "kdevelop/sessions/" );
+
+    for ( int i = 0; i < sessionDirs.count(); ++i )
+        m_dirWatch->addDir( sessionDirs[i], KDirWatch::WatchSubDirs );
+
+    connect(m_dirWatch, SIGNAL(dirty(QString)), this, SLOT(updateSessions()));
+
+    updateSessions();
 }
 
 Plasma::Service *KDevelopSessionsEngine::serviceForSource(const QString &source)
 {
-    return new KDevelopSessionsService(this, source);
+    return new KDevelopSessionsService( this, source );
 }
 
-void KDevelopSessionsEngine::sessionsChanged()
+void KDevelopSessionsEngine::updateSessions()
 {
-    removeAllSources();
-    loadSessions();
-}
+   const QStringList sessionrcs = KGlobal::dirs()->findAllResources( "data", "kdevelop/sessions/*/sessionrc", KStandardDirs::NoDuplicates );
 
-void KDevelopSessionsEngine::loadSessions()
-{
-    const QStringList lst = KGlobal::dirs()->findDirs( "data", "kdevelop/sessions/" );
-    for ( int i = 0; i < lst.count(); i++ )
-    {
-        m_dirWatch->addDir( lst[i], KDirWatch::WatchSubDirs );
-    }
+    QHash<QString, Session> sessions;
 
-    const QStringList list = KGlobal::dirs()->findAllResources( "data", "kdevelop/sessions/*/sessionrc", KStandardDirs::NoDuplicates );
-    const QStringList::ConstIterator end = list.constEnd();
-    for (QStringList::ConstIterator it = list.constBegin(); it != end; ++it)
+    QStringList::const_iterator it;
+
+    for (it = sessionrcs.constBegin(); it != sessionrcs.constEnd(); ++it)
     {
         KConfig cfg( *it, KConfig::SimpleConfig );
 
+        // Only consider sessions that have open projects.
         if ( cfg.hasGroup( "General Options" ) && !cfg.group( "General Options" ).readEntry( "Open Projects", "" ).isEmpty() )
         {
-            QString sessionName = cfg.group("").readEntry("SessionName", "");
-            QString sessionContents = cfg.group("").readEntry("SessionPrettyContents", "");
+            Session session;
+            session.hash = QFileInfo( *it ).dir().dirName();
+            session.name = cfg.group( "" ).readEntry( "SessionName", "" );
+            session.contents = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
+            session.sessionString = makeSessionString( session );
 
-            if (!sessionName.isEmpty() || !sessionContents.isEmpty())
+            sessions.insert(session.hash, session);
+        }
+    }
+
+    QHash<QString, Session>::const_iterator it2;
+
+    for (it2 = sessions.constBegin(); it2 != sessions.constEnd(); ++it2)
+    {
+        const Session& session = it2.value();
+
+        if ( !m_currentSessions.contains( session.hash ) )
+        {
+            // Publish new session.
+
+            m_currentSessions.insert( session.hash, session );
+            setData( session.hash, "sessionName", session.name );
+            setData( session.hash, "sessionContents", session.contents );
+            setData( session.hash, "sessionString", session.sessionString );
+        }
+        else
+        {
+            // Publish data changes for older sessions.
+
+            Session oldSession( m_currentSessions.value(session.hash) );
+
+            bool modified = false;
+
+            if ( session.name != oldSession.name )
             {
-                QString sessionHash = QFileInfo( *it ).dir().dirName();
+                oldSession.name = session.name;
+                modified = true;
+                setData( session.hash, "sessionName", session.name );
+            }
 
-                if (!sessionName.isEmpty())
-                {
-                    setData(sessionHash, "sessionName", sessionName);
-                    setData(sessionHash, "sessionString", QString("%1: %2").arg(sessionName).arg(sessionContents));
-                }
-                else
-                    setData(sessionHash, "sessionString", sessionContents);
+            if ( session.contents != oldSession.contents )
+            {
+                oldSession.contents = session.contents;
+                modified = true;
+                setData( session.hash, "sessionContents", session.contents );
+            }
 
-                if (!sessionContents.isEmpty())
-                    setData(sessionHash, "sessionContents", sessionContents);
+            if ( modified )
+            {
+                oldSession.sessionString = makeSessionString( session );
+                setData( session.hash, "sessionString", oldSession.sessionString );
+
+                m_currentSessions.insert( oldSession.hash, oldSession );
             }
         }
     }
+
+    QHash<QString, Session>::iterator it3 = m_currentSessions.begin();
+
+    while ( it3 != m_currentSessions.end() )
+    {
+        const Session& session = it3.value();
+
+        if ( !sessions.contains( session.hash ) )
+        {
+            removeSource( session.hash );
+            it3 = m_currentSessions.erase( it3 );
+        }
+        else
+            ++it3;
+    }
+}
+
+QString KDevelopSessionsEngine::makeSessionString(const Session& session)
+{
+    if ( !session.name.isEmpty() )
+        return QString( "%1: %2" ).arg( session.name ).arg( session.contents );
+    else
+        return session.contents;
 }
 
 K_EXPORT_PLASMA_DATAENGINE(kdevelopsessionsengine, KDevelopSessionsEngine)
