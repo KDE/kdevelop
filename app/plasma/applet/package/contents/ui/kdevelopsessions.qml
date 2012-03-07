@@ -120,6 +120,7 @@ Item {
                     rightMargin: 10
                 }
 
+                verticalAlignment: Text.AlignVCenter
                 text: model.sessionString
                 elide: Text.ElideRight
             }
