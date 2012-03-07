@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -65,6 +65,8 @@
 
 namespace KDevelop {
 
+const int MAX_DOC_SETTINGS = 20;
+
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
         : encoding(""), m_textDocument(textDocument)
@@ -89,7 +91,6 @@ struct TextDocumentPrivate {
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
     QString encoding;
-
 
     void newDocumentStatus(KTextEditor::Document *document)
     {
@@ -201,37 +202,59 @@ struct TextDocumentPrivate {
         m_textDocument->notifyStateChanged();
     }
 
-    inline QString configGroupName()
+    inline KConfigGroup katePartSettingsGroup() const
     {
-        Q_ASSERT(document);
-        return QString("Document %1").arg(document->url().url());
+        return KGlobal::config()->group("KatePart Settings");
     }
 
-    inline KConfigGroup configGroup()
+    inline QString docConfigGroupName() const
     {
-        return KGlobal::config()->group(configGroupName());
+        return document->url().pathOrUrl();
+    }
+
+    inline KConfigGroup docConfigGroup() const
+    {
+        return katePartSettingsGroup().group(docConfigGroupName());
     }
 
     void saveSessionConfig()
     {
+        if(!document->url().isValid()) {
+            return;
+        }
         if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
             qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
         {
-            KConfigGroup docConfigGroup = configGroup();
-            sessionConfigIface->writeParameterizedSessionConfig(docConfigGroup,
+            // make sure only MAX_DOC_SETTINGS entries are stored
+            KConfigGroup katePartSettings = katePartSettingsGroup();
+            // ordered list of documents
+            QStringList documents = katePartSettings.readEntry("documents", QStringList());
+            // ensure this document is "new", i.e. at the end of the list
+            documents.removeOne(docConfigGroupName());
+            documents.append(docConfigGroupName());
+            // remove "old" documents + their group
+            while(documents.size() >= MAX_DOC_SETTINGS) {
+                katePartSettings.group(documents.takeFirst()).deleteGroup();
+            }
+            // update order
+            katePartSettings.writeEntry("documents", documents);
+
+            // actually save session config
+            KConfigGroup group = docConfigGroup();
+            sessionConfigIface->writeParameterizedSessionConfig(group,
                 KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
         }
     }
 
     void loadSessionConfig()
     {
-        if (!document || !KGlobal::config()->hasGroup(configGroupName())) {
+        if (!document || !katePartSettingsGroup().hasGroup(docConfigGroupName())) {
             return;
         }
         if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
             qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
         {
-            sessionConfigIface->readParameterizedSessionConfig(configGroup(),
+            sessionConfigIface->readParameterizedSessionConfig(docConfigGroup(),
                 KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
         }
     }
@@ -340,7 +363,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(documentUrlChanged(KTextEditor::Document*)));
         connect(d->document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)),
                  this, SLOT(documentSaved(KTextEditor::Document*,bool)));
-        connect(d->document, SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)),
+        connect(d->document, SIGNAL(marksChanged(KTextEditor::Document*)),
                  this, SLOT(saveSessionConfig()));
 
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
