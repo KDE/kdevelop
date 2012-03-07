@@ -57,6 +57,7 @@ Item {
         anchors { left: parent.left; right: parent.right }
 
         QIconItem {
+            id: appIcon
             icon: QIcon("kdevelop")
             width: 32
             height: 32
@@ -66,7 +67,7 @@ Item {
             id: header
             text: i18n("KDevelop Sessions")
             horizontalAlignment: Text.AlignHCenter | Text.AlignVCenter
-            width: parent.width - 32
+            width: parent.width - appIcon.width * 2
             height: parent.height
         }
     }
