@@ -94,7 +94,7 @@ Item {
         model: PlasmaCore.SortFilterModel {
             id: filterModel
             sourceModel: sessionsModel
-            sortRole: "prettyName"
+            sortRole: "sessionString"
         }
         clip: true
 
@@ -113,7 +113,7 @@ Item {
                     rightMargin: 20
                 }
 
-                text: model.prettyName
+                text: model.sessionString
                 elide: Text.ElideRight
             }
 

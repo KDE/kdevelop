@@ -70,13 +70,23 @@ void KDevelopSessionsEngine::loadSessions()
 
         if ( cfg.hasGroup( "General Options" ) && !cfg.group( "General Options" ).readEntry( "Open Projects", "" ).isEmpty() )
         {
-            QString prettyName = cfg.group("").readEntry("SessionPrettyContents", "");
+            QString sessionName = cfg.group("").readEntry("SessionName", "");
+            QString sessionContents = cfg.group("").readEntry("SessionPrettyContents", "");
 
-            if (!prettyName.isEmpty())
+            if (!sessionName.isEmpty() || !sessionContents.isEmpty())
             {
-                QString hash = QFileInfo( *it ).dir().dirName();
+                QString sessionHash = QFileInfo( *it ).dir().dirName();
 
-                setData(hash, "prettyName", prettyName);
+                if (!sessionName.isEmpty())
+                {
+                    setData(sessionHash, "sessionName", sessionName);
+                    setData(sessionHash, "sessionString", QString("%1: %2").arg(sessionName).arg(sessionContents));
+                }
+                else
+                    setData(sessionHash, "sessionString", sessionContents);
+
+                if (!sessionContents.isEmpty())
+                    setData(sessionHash, "sessionContents", sessionContents);
             }
         }
     }
