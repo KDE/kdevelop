@@ -26,7 +26,7 @@ Item {
    id: kdevelopSessions
 
     property int minimumWidth: 200
-    property int minimumHeight: 300
+    property int minimumHeight: 150
 
     PlasmaCore.DataSource {
         id: sessionsSource
@@ -54,7 +54,7 @@ Item {
 
     Row {
         id: headerRow
-        anchors { left: parent.left; right: parent.right}
+        anchors { left: parent.left; right: parent.right }
 
         QIconItem {
             icon: QIcon("kdevelop")
@@ -65,11 +65,9 @@ Item {
         PlasmaComponents.Label {
             id: header
             text: i18n("KDevelop Sessions")
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter: parent.verticalCenter
-            }
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignHCenter | Text.AlignVCenter
+            width: parent.width - 32
+            height: parent.height
         }
     }
 
@@ -92,7 +90,7 @@ Item {
     ListView {
         id: view
 
-        anchors { left: parent.left; right: scrollBar.left; bottom: parent.bottom; top: separator.bottom; topMargin: 5}
+        anchors { left: parent.left; right: scrollBar.left; bottom: parent.bottom; top: separator.bottom; topMargin: 5 }
 
         model: PlasmaCore.SortFilterModel {
             id: filterModel
@@ -104,7 +102,11 @@ Item {
         delegate: Item {
             id: listdelegate
             height: textMetric.paintedHeight * 2
-            anchors { left: parent.left; leftMargin: 10; right: parent.right; }
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
 
             PlasmaComponents.Label {
                 id: sessionText
@@ -113,7 +115,8 @@ Item {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
                     right: parent.right
-                    rightMargin: 20
+                    leftMargin: 10
+                    rightMargin: 10
                 }
 
                 text: model.sessionString
