@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <QLabel>
 
-
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
@@ -33,6 +32,7 @@
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
+#include <kdeversion.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -47,8 +47,14 @@
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 #include <language/interfaces/editorcontext.h>
+
+#include <project/projectutils.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -56,13 +62,6 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
-#include <interfaces/ilanguagecontroller.h>
-#include <interfaces/icompletionsettings.h>
-
-#include <kdeversion.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <project/projectutils.h>
 
 namespace KDevelop {
 
