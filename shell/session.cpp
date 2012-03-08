@@ -130,7 +130,7 @@ void Session::updateDescription()
     }
     
     d->config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
-    d->config->group("").sync()
+    d->config->group("").sync();
 }
 
 QString Session::description() const
