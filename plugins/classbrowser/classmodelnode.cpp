@@ -182,8 +182,8 @@ bool ClassNode::updateClassDeclarations()
 
       if ( EnumerationType::Ptr enumType = decl->type<EnumerationType>() )
         newNode = new EnumNode( decl, m_model );
-      else if ( ClassFunctionDeclaration* funcDecl = dynamic_cast<ClassFunctionDeclaration*>(decl) )
-        newNode = new FunctionNode( funcDecl, m_model );
+      else if ( decl->isFunctionDeclaration() )
+        newNode = new FunctionNode( decl, m_model );
       else if ( ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(decl) )
         newNode = new ClassNode(classDecl, m_model);
       else if ( ClassMemberDeclaration* memDecl = dynamic_cast<ClassMemberDeclaration*>(decl) )
@@ -282,7 +282,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesModelInterface* a_model)
+FunctionNode::FunctionNode(Declaration* a_decl, NodesModelInterface* a_model)
   : IdentifierNode(a_decl, a_model)
 {
   // Append the argument signature to the identifier's name (which is what the displayName is.
@@ -290,10 +290,13 @@ FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesMode
     m_displayName += type->partToString(FunctionType::SignatureArguments);
 
   // Add special values for ctor / dtor to sort first
-  if ( a_decl->isConstructor() || a_decl->isDestructor() )
-    m_sortableString = '0' + m_displayName;
-  else
-    m_sortableString = '1' + m_displayName;
+  ClassFunctionDeclaration* classmember = dynamic_cast<ClassFunctionDeclaration*>(a_decl);
+  if ( classmember ) {
+    if ( classmember->isConstructor() || classmember->isDestructor() )
+      m_sortableString = '0' + m_displayName;
+    else
+      m_sortableString = '1' + m_displayName;
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
