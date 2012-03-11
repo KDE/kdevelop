@@ -88,6 +88,17 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
         endInsertRows();
     }
 
+    m_currentFrame = 0;
+    foreach (const FrameItem &frame, frames) {
+        if (!frame.file.isEmpty() && frame.line != -1) {
+            session()->setCurrentPosition(frame.file, frame.line, QString());
+            m_currentFrame = frame.nr;
+            break;
+        }
+    }
+
+    session()->raiseEvent(IDebugSession::thread_or_frame_changed);
+
     // FIXME: Ugly hack. Apparently, when rows are added, the selection
     // in the view is cleared. Emit this so that some frame is still
     // selected.

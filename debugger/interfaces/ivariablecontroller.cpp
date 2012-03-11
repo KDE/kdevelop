@@ -85,7 +85,6 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
     if (!variableCollection()) return;
 
     switch (event) {
-    case IDebugSession::program_state_changed:
     case IDebugSession::thread_or_frame_changed:
         kDebug() << m_autoUpdate;
         if (!(m_autoUpdate & UpdateLocals)) {
