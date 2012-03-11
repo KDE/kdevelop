@@ -199,6 +199,8 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
 
 void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord &r)
 {
+    if (!breakpointModel()) return;
+
     m_dontSendChanges++;
 
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
@@ -357,6 +359,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
 
 void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 {
+    if (!breakpointModel()) return;
+
     m_dontSendChanges++;
 
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
