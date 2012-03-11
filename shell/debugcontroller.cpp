@@ -409,7 +409,6 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
         case IDebugSession::StoppingState:
             kDebug() << "new state: stopped";
             stateChanged("stopped");
-            clearExecutionPoint();
             //m_restartDebugger->setEnabled(session->restartAvaliable());
             break;
         case IDebugSession::StartingState:
@@ -422,12 +421,10 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
             kDebug() << "new state: active";
             stateChanged("active");
             //m_restartDebugger->setEnabled(false);
-            clearExecutionPoint();
             break;
         case IDebugSession::EndedState:
             kDebug() << "new state: ended";
             stateChanged("ended");
-            clearExecutionPoint();
             //m_restartDebugger->setEnabled(false);
             break;
     }
