@@ -287,6 +287,7 @@ void DebugController::setupActions()
     ac->addAction("debug_stepout", action);
 
     m_toggleBreakpoint = action = new KAction(KIcon("script-error"), i18n("Toggle Breakpoint"), this);
+    action->setShortcut( i18n("Ctrl+Alt+B") );
     action->setToolTip(i18n("Toggle breakpoint"));
     action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
