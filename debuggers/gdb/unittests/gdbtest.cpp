@@ -1531,10 +1531,47 @@ void GdbTest::testBreakpointDisabledOnStart()
     QCOMPARE(session->line(), 31);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-
 }
 
+void GdbTest::testCatchpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
+    TestLaunchConfiguration cfg(findExecutable("debugeeexception"));
+
+    breakpoints()->addCodeBreakpoint(findSourceFile("debugeeexception.cpp"), 29);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
+    TestFrameStackModel* fsModel = session->frameStackModel();
+    QCOMPARE(fsModel->currentFrame(), 0);
+    QCOMPARE(session->line(), 29);
+
+    QModelIndex i = variableCollection()->index(1, 0);
+    COMPARE_DATA(i, "Locals");
+    qDebug() << variableCollection()->index(0, 1, i);
+    qDebug() << variableCollection()->index(1, 1, i);
+    QCOMPARE(variableCollection()->rowCount(i), 2);
+
+    session->addCommand(new GDBCommand(GDBMI::NonMI, "catch throw"));
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
+    QCOMPARE(fsModel->currentFrame(), 1); //first frame skiped because somewhere inside stdlib
+    QCOMPARE(session->line(), 22);
+
+    qDebug() << variableCollection()->index(0, 1, i);
+    qDebug() << variableCollection()->index(1, 1, i);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "20");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+}
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)

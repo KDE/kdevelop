@@ -81,6 +81,7 @@ private Q_SLOTS:
     void testRemoteDebugInsertBreakpointPickupOnlyOnce();
     void testBreakpointWithSpaceInPath();
     void testBreakpointDisabledOnStart();
+    void testCatchpoint();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,
