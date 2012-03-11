@@ -427,7 +427,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
         if (!recursive)
             *job << "-l";
 
-        *job << "-d" << targetDir.toLocalFile();
+        *job << "-d" << targetDir.toLocalFile(KUrl::RemoveTrailingSlash);
 
         *job << module;
 
