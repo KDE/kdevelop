@@ -23,10 +23,10 @@
 #include <tests/testcore.h>
 
 #define CVSTEST_BASEDIR         "/tmp/kdevcvs_testdir/"
-#define CVS_REPO                CVSTEST_BASEDIR"repo/"
-#define CVS_IMPORT              CVSTEST_BASEDIR"import/"
+#define CVS_REPO                CVSTEST_BASEDIR "repo/"
+#define CVS_IMPORT              CVSTEST_BASEDIR "import/"
 #define CVS_TESTFILE_NAME       "testfile"
-#define CVS_CHECKOUT            CVSTEST_BASEDIR"working/"
+#define CVS_CHECKOUT            CVSTEST_BASEDIR "working/"
 
 void CvsTest::initTestCase()
 {
