@@ -59,6 +59,7 @@ IDebugSession* IBreakpointController::debugSession() const
 
 BreakpointModel* IBreakpointController::breakpointModel() const
 {
+    if (!ICore::self()) return 0;
     return ICore::self()->debugController()->breakpointModel();
 }
 
