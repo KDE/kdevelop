@@ -33,51 +33,36 @@
 
 //@TODO: Make the globbing stuff work with drives on win32
 
-QStringList resolveShellGlobbingInternal( const QString& relativefile,
-        const QString& dir )
+QStringList resolveShellGlobbingInternal( const QStringList& segments, QDir& dir, int offset = 0 )
 {
-    QStringList result;
-    if( !relativefile.isEmpty() )
-    {
-        int index = relativefile.indexOf( QRegExp( "[^\\\\]/" ) );
-        QString firstpath = relativefile.mid( 0,  index+1 );
-        QString remainder = relativefile.mid( index+2 );
-        if( index == -1 )
-        {
-            firstpath = relativefile;
-            remainder = "";
-        }
-        QStringList entries;
-        if( firstpath.contains( QRegExp( "[^\\\\]?(\\*|\\?|\\[)" ) ) )
-        {
-            QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::Wildcard );
-            foreach(const  QString& entry, QDir( dir ).entryList()  )
-            {
-                if( wildcard.exactMatch( entry ) )
-                {
-                    entries << entry;
-                }
-            }
-        }else
-        {
-            entries << firstpath;
-        }
-        foreach( const QString& entry, entries )
-        {
-            const QStringList subentries = resolveShellGlobbingInternal( remainder, dir+'/'+entry );
-            if( !subentries.isEmpty() )
-            {
-                foreach( const QString& subentry, subentries )
-                {
-                    result << entry+'/'+subentry;
-                }
-            }else if( QFileInfo( dir+'/'+entry ).exists() && remainder.isEmpty() )
-            {
-                result << entry;
-            }
+    Q_ASSERT(segments.size() > offset);
+
+    const QString& pathPattern = segments.at(offset);
+    QStringList entries;
+    foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot)) {
+        if (match.isDir() && offset + 1 < segments.size()) {
+            dir.cd(match.fileName());
+            entries += resolveShellGlobbingInternal(segments, dir, offset + 1);
+            dir.cdUp();
+        } else {
+            entries << match.canonicalFilePath();
         }
     }
-    return result;
+
+    return entries;
+}
+
+QStringList resolveShellGlobbingInternal( const QString& pattern, const QString& dir )
+{
+    if( pattern.isEmpty() )
+    {
+        return QStringList();
+    }
+
+    QDir dir_(pattern.startsWith('/') ? QLatin1String("/") : dir);
+
+    // break up pattern into path segments
+    return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);
 }
 
 QMakeFile::QMakeFile( const QString& file )
@@ -180,14 +165,9 @@ QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::Va
     }
 }
 
-QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile ) const
+QStringList QMakeFile::resolveShellGlobbing( const QString& pattern ) const
 {
-    QStringList result;
-    foreach( const QString& s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
-    {
-        result << '/'+s;
-    }
-    return result;
+    return resolveShellGlobbingInternal(pattern, absoluteDir());
 }
 
 QString QMakeFile::resolveToSingleFileName( const QString& file ) const
@@ -201,17 +181,7 @@ QString QMakeFile::resolveToSingleFileName( const QString& file ) const
 
 QStringList QMakeFile::resolveFileName( const QString& file ) const
 {
-    QString absolutepath = file;
-    if( QFileInfo( absolutepath ).isRelative() )
-    {
-        absolutepath = absoluteDir() + '/' + file;
-    }
-    QStringList result;
-    foreach( const QString& s, resolveShellGlobbing( absolutepath ) )
-    {
-        result << QFileInfo( s ).canonicalFilePath();
-    }
-    return result;
+    return resolveShellGlobbing( file );
 }
 
 //kate: hl c++;
