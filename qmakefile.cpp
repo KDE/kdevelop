@@ -39,7 +39,7 @@ QStringList resolveShellGlobbingInternal( const QStringList& segments, QDir& dir
 
     const QString& pathPattern = segments.at(offset);
     QStringList entries;
-    foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot)) {
+    foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
         if (match.isDir() && offset + 1 < segments.size()) {
             dir.cd(match.fileName());
             entries += resolveShellGlobbingInternal(segments, dir, offset + 1);
