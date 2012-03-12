@@ -631,4 +631,42 @@ void TestQMakeFile::benchGlobbing()
     QCOMPARE(found, files * folders);
 }
 
+void TestQMakeFile::benchGlobbingNoPattern()
+{
+    KTempDir tempDir;
+    QDir dir(tempDir.name());
+    const int folders = 10;
+    const int files = 100;
+    for(int i = 0; i < folders; ++i) {
+        QString folder = QString("folder%1").arg(i);
+        dir.mkdir(folder);
+        for(int j = 0; j < files; ++j) {
+            QFile f1(dir.filePath(folder + QString("/file%1.cpp").arg(j)));
+            QVERIFY(f1.open(QIODevice::WriteOnly));
+            QFile f2(dir.filePath(folder + QString("/file%1.h").arg(j)));
+            QVERIFY(f2.open(QIODevice::WriteOnly));
+        }
+    }
+
+    KTemporaryFile testFile;
+    testFile.setPrefix(tempDir.name());
+    testFile.setSuffix(".pro");
+    QVERIFY(testFile.open());
+    testFile.write("SOURCES = folder0/file1.cpp\n");
+    testFile.close();
+
+    QMakeProjectFile pro(testFile.fileName());
+
+    setDefaultMKSpec(pro);
+
+    QVERIFY(pro.read());
+
+    int found = 0;
+    QBENCHMARK {
+        found = pro.files().size();
+    }
+
+    QCOMPARE(found, 1);
+}
+
 #include "test_qmakefile.moc"

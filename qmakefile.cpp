@@ -33,23 +33,40 @@
 
 //@TODO: Make the globbing stuff work with drives on win32
 
+void resolveShellGlobbingInternal( QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset );
+
 QStringList resolveShellGlobbingInternal( const QStringList& segments, QDir& dir, int offset = 0 )
 {
     Q_ASSERT(segments.size() > offset);
 
     const QString& pathPattern = segments.at(offset);
+
     QStringList entries;
-    foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
-        if (match.isDir() && offset + 1 < segments.size()) {
-            dir.cd(match.fileName());
-            entries += resolveShellGlobbingInternal(segments, dir, offset + 1);
-            dir.cdUp();
-        } else {
-            entries << match.canonicalFilePath();
+    if (pathPattern.contains('*') || pathPattern.contains('?') || pathPattern.contains('[')) {
+        // pattern contains globbing chars
+        foreach(const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern, QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
+            resolveShellGlobbingInternal(entries, segments, match, dir, offset);
+        }
+    } else {
+        // pattern is "simple" hence be fast, but make sure the file exists
+        QFileInfo info(dir.filePath(pathPattern));
+        if (info.exists()) {
+            resolveShellGlobbingInternal(entries, segments, info, dir, offset);
         }
     }
 
     return entries;
+}
+
+void resolveShellGlobbingInternal( QStringList& entries, const QStringList& segments, const QFileInfo& match, QDir& dir, int offset )
+{
+    if (match.isDir() && offset + 1 < segments.size()) {
+        dir.cd(match.fileName());
+        entries += resolveShellGlobbingInternal(segments, dir, offset + 1);
+        dir.cdUp();
+    } else {
+        entries << match.canonicalFilePath();
+    }
 }
 
 QStringList resolveShellGlobbingInternal( const QString& pattern, const QString& dir )
