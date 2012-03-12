@@ -528,7 +528,7 @@ public:
     QMutexLocker l(&m_chainsMutex);
     
     //Add those information that have not been added to the stored lists yet
-    foreach(const ParsingEnvironmentFilePointer& file, m_fileEnvironmentInformations)
+    foreach(ParsingEnvironmentFilePointer file, m_fileEnvironmentInformations.values(url))
       if(!ret.contains(file))
         ret << file;
 

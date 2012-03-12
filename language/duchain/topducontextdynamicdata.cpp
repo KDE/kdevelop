@@ -144,11 +144,17 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_d
 void KDevelop::TopDUContextDynamicData::clearContextsAndDeclarations() {
   //Due to template specialization it's possible that a declaration is not reachable through the normal context structure.
   //For that reason we have to check here, and delete all remaining declarations.
-  qDeleteAll(m_temporaryContexts);
-  qDeleteAll(m_temporaryDeclarations);
-  qDeleteAll(m_contexts);
-  qDeleteAll(m_declarations);
-  //NOTE: not clearing, is called oly from the dtor anyways
+  for(int a = 0; a < m_temporaryContexts.size(); ++a)
+    delete m_temporaryContexts[a];
+
+  for(int a = 0; a < m_temporaryDeclarations.size(); ++a)
+    delete m_temporaryDeclarations[a];
+
+  for(int a = 0; a < m_contexts.size(); ++a)
+    delete m_contexts[a];
+
+  for(int a = 0; a < m_declarations.size(); ++a)
+    delete m_declarations[a];
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
@@ -462,8 +468,8 @@ void TopDUContextDynamicData::store() {
     uint currentDataOffset = 1;
     m_data.append( qMakePair(QByteArray(newDataSize, 0), currentDataOffset) );
 
-    const QVector<ItemDataInfo> oldContextDataOffsets = m_contextDataOffsets;
-    const QVector<ItemDataInfo> oldDeclarationDataOffsets = m_declarationDataOffsets;
+    QVector<ItemDataInfo> oldContextDataOffsets = m_contextDataOffsets;
+    QVector<ItemDataInfo> oldDeclarationDataOffsets = m_declarationDataOffsets;
 
     m_contextDataOffsets.clear();
     m_declarationDataOffsets.clear();
