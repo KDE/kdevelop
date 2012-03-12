@@ -174,7 +174,7 @@ public:
                 }
 
                 // Remove all mentions of this document.
-                foreach(DocumentParseTarget target, parsePlan.targets) {
+                foreach(const DocumentParseTarget& target, parsePlan.targets) {
                     if (target.priority != it1.key()) {
                         m_documentsForPriority[target.priority].remove(*it);
                     }
@@ -378,7 +378,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         }
     };
     // A list of documents that are planned to be parsed, and their priority
-    QMap<KUrl, DocumentParsePlan > m_documents;
+    QHash<KUrl, DocumentParsePlan > m_documents;
     // The documents ordered by priority
     QMap<int, QSet<KUrl> > m_documentsForPriority;
     // Currently running parse jobs
@@ -397,7 +397,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     int m_maxParseJobs;
     int m_doneParseJobs;
-    QMap<KDevelop::ParseJob*, float> m_jobProgress;
+    QHash<KDevelop::ParseJob*, float> m_jobProgress;
     int m_neededPriority; //The minimum priority needed for processed jobs
 };
 
@@ -463,7 +463,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     QWeakPointer<QObject> p(notifyWhenReady);
 
     QMutexLocker lock(&d->m_mutex);
-    for(QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
+    for(QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
 
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
@@ -502,7 +502,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         target.sequentialProcessingFlags = flags;
         target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
 
-        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
+        QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
@@ -537,9 +537,11 @@ void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
         
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
         
-        foreach(BackgroundParserPrivate::DocumentParseTarget target, d->m_documents[url].targets)
-            if(target.notifyWhenReady.data() == notifyWhenReady)
+        foreach(const BackgroundParserPrivate::DocumentParseTarget& target, d->m_documents[url].targets) {
+            if(target.notifyWhenReady.data() == notifyWhenReady) {
                 d->m_documents[url].targets.removeAll(target);
+            }
+        }
 
         if(d->m_documents[url].targets.isEmpty()) {
             d->m_documents.remove(url);
@@ -645,7 +647,7 @@ void BackgroundParser::updateProgressBar()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for(QMap<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it)
+        for(QHash<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it)
             additionalProgress += *it;
 
         emit showProgress(this, 0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
