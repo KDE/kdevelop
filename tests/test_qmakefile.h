@@ -46,6 +46,9 @@ private slots:
     void qtIncludeDirs();
 
     void testInclude();
+
+    void globbing_data();
+    void globbing();
 };
 
 #endif // TEST_QMAKEFILE_H

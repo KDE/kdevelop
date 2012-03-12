@@ -32,6 +32,7 @@
 #include <KTemporaryFile>
 #include <KProcess>
 #include <QFileInfo>
+#include <QDir>
 #include <KTempDir>
 
 QTEST_MAIN(TestQMakeFile);
@@ -102,6 +103,18 @@ QHash<QString,QString> queryQMake( const QString& path )
     }
     qDebug() << "Ran qmake, found:" << hash;
     return hash;
+}
+
+QHash<QString,QString> setDefaultMKSpec(QMakeProjectFile& file)
+{
+    QHash<QString,QString> qmvars = queryQMake( file.absoluteFile() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    Q_ASSERT(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+
+    return qmvars;
 }
 
 void TestQMakeFile::varResolution()
@@ -205,12 +218,7 @@ void TestQMakeFile::libTarget()
 
     QMakeProjectFile file(tmpfile.fileName());
 
-    QHash<QString,QString> qmvars = queryQMake( tmpfile.fileName() );
-    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
-    QVERIFY(QFile::exists(specFile));
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
-    mkspecs->read();
-    file.setMkSpecs(mkspecs);
+    setDefaultMKSpec(file);
     QVERIFY(file.read());
 
     QCOMPARE(file.targets(), QStringList() << resolved);
@@ -239,12 +247,8 @@ void TestQMakeFile::defines()
 
     QMakeProjectFile file(tmpfile.fileName());
 
-    QHash<QString,QString> qmvars = queryQMake( tmpfile.fileName() );
-    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
-    QVERIFY(QFile::exists(specFile));
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
-    mkspecs->read();
-    file.setMkSpecs(mkspecs);
+    setDefaultMKSpec(file);
+
     QVERIFY(file.read());
 
     QList<QMakeProjectFile::DefinePair> list=file.defines();
@@ -313,12 +317,8 @@ void TestQMakeFile::replaceFunctions()
 
     QMakeProjectFile file(tmpFile.fileName());
 
-    QHash<QString,QString> qmvars = queryQMake( tmpFile.fileName() );
-    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
-    QVERIFY(QFile::exists(specFile));
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
-    mkspecs->read();
-    file.setMkSpecs(mkspecs);
+    setDefaultMKSpec(file);
+
     QVERIFY(file.read());
 
     QMakeFile::VariableMap::const_iterator it = definedVariables.constBegin();
@@ -396,12 +396,8 @@ void TestQMakeFile::qtIncludeDirs()
 
     QMakeProjectFile file(tmpFile.fileName());
 
-    QHash<QString,QString> qmvars = queryQMake( tmpFile.fileName() );
-    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
-    QVERIFY(QFile::exists(specFile));
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
-    mkspecs->read();
-    file.setMkSpecs(mkspecs);
+    QHash<QString, QString> qmvars = setDefaultMKSpec(file);
+
     QVERIFY(file.read());
 
     const KUrl::List includes = file.includeDirectories();
@@ -504,12 +500,8 @@ void TestQMakeFile::testInclude()
 
     QMakeProjectFile file(baseFile.fileName());
 
-    QHash<QString,QString> qmvars = queryQMake( baseFile.fileName() );
-    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
-    QVERIFY(QFile::exists(specFile));
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
-    mkspecs->read();
-    file.setMkSpecs(mkspecs);
+    setDefaultMKSpec(file);
+
     QVERIFY(file.read());
 
     QCOMPARE(file.variableValues("DEFINES"), QStringList() << "SOME_DEF" << "SOME_INCLUDE_DEF");
@@ -521,5 +513,84 @@ void TestQMakeFile::testInclude()
     QVERIFY(file.includeDirectories().contains(includePath));
 }
 
+void TestQMakeFile::globbing_data()
+{
+    QTest::addColumn<QStringList>("files");
+    QTest::addColumn<QString>("pattern");
+    QTest::addColumn<QStringList>("matches");
+
+    QTest::newRow("wildcard-simple")
+        << (QStringList() << "foo.cpp")
+        << "*.cpp"
+        << (QStringList() << "foo.cpp");
+
+    QTest::newRow("wildcard-extended")
+        << (QStringList() << "foo.cpp" << "bar.h" << "asdf.cpp")
+        << "*.cpp"
+        << (QStringList() << "foo.cpp" << "asdf.cpp");
+
+    QTest::newRow("wildcard-multiple")
+        << (QStringList() << "foo.cpp" << "bar.h" << "asdf.cpp")
+        << "*.cpp *.h"
+        << (QStringList() << "foo.cpp" << "bar.h" << "asdf.cpp");
+
+    QTest::newRow("wildcard-subdir")
+        << (QStringList() << "foo/bar.cpp" << "fooasdf/bar.cpp" << "asdf/asdf.cpp")
+        << "foo*/*.cpp"
+        << (QStringList() << "foo/bar.cpp" << "fooasdf/bar.cpp");
+
+    QTest::newRow("bracket")
+        << (QStringList() << "foo1.cpp" << "foo2.cpp" << "fooX.cpp")
+        << "foo[0-9].cpp"
+        << (QStringList() << "foo1.cpp" << "foo2.cpp");
+
+    QTest::newRow("questionmark")
+        << (QStringList() << "foo1.cpp" << "fooX.cpp" << "foo.cpp" << "fooXY.cpp")
+        << "foo?.cpp"
+        << (QStringList() << "foo1.cpp" << "fooX.cpp");
+
+    QTest::newRow("mixed")
+        << (QStringList() << "foo/asdf/test.cpp" << "fooX/asdf1/test.cpp")
+        << "foo?/asdf[0-9]/*.cpp"
+        << (QStringList() << "fooX/asdf1/test.cpp");
+}
+
+void TestQMakeFile::globbing()
+{
+    QFETCH(QStringList, files);
+    QFETCH(QString, pattern);
+    QFETCH(QStringList, matches);
+
+    KTempDir tempDir;
+    QDir tempDirDir(tempDir.name());
+    QVERIFY(tempDir.exists());
+
+    foreach(const QString& file, files) {
+        tempDirDir.mkpath(QFileInfo(file).path());
+        QFile f(tempDir.name() + file);
+        QVERIFY(f.open(QIODevice::WriteOnly));
+    }
+
+    KTemporaryFile testFile;
+    testFile.setPrefix(tempDir.name());
+    testFile.setSuffix(".pro");
+    QVERIFY(testFile.open());
+    testFile.write(("SOURCES = " + pattern + "\n").toUtf8());
+    testFile.close();
+
+    QMakeProjectFile pro(testFile.fileName());
+
+    setDefaultMKSpec(pro);
+
+    QVERIFY(pro.read());
+
+    QStringList actual;
+    foreach(const KUrl& url, pro.files()) {
+        actual << url.pathOrUrl().remove(tempDir.name());
+    }
+    qSort(actual);
+    qSort(matches);
+    QCOMPARE(actual, matches);
+}
 
 #include "test_qmakefile.moc"
