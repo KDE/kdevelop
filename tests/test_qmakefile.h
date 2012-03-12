@@ -49,6 +49,8 @@ private slots:
 
     void globbing_data();
     void globbing();
+
+    void benchGlobbing();
 };
 
 #endif // TEST_QMAKEFILE_H
