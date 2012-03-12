@@ -553,19 +553,6 @@ void TestQMakeFile::globbing_data()
         << (QStringList() << "foo/asdf/test.cpp" << "fooX/asdf1/test.cpp")
         << "foo?/asdf[0-9]/*.cpp"
         << (QStringList() << "fooX/asdf1/test.cpp");
-
-    QTest::newRow("escape-?")
-        << (QStringList() << "foo?.cpp" << "foo*.cpp" << "foo[.cpp")
-        << "foo\\?.cpp"
-        << (QStringList() << "foo?.cpp");
-    QTest::newRow("escape-*")
-        << (QStringList() << "foo?.cpp" << "foo*.cpp" << "foo[.cpp")
-        << "foo\\*.cpp"
-        << (QStringList() << "foo*.cpp");
-    QTest::newRow("escape-[")
-        << (QStringList() << "foo?.cpp" << "foo*.cpp" << "foo[.cpp")
-        << "foo\\[.cpp"
-        << (QStringList() << "foo[.cpp");
 }
 
 void TestQMakeFile::globbing()

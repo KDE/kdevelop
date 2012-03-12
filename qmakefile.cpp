@@ -50,7 +50,7 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
         QStringList entries;
         if( firstpath.contains( QRegExp( "[^\\\\]?(\\*|\\?|\\[)" ) ) )
         {
-            QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::WildcardUnix );
+            QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::Wildcard );
             foreach(const  QString& entry, QDir( dir ).entryList()  )
             {
                 if( wildcard.exactMatch( entry ) )
