@@ -257,7 +257,7 @@ QStringList QMakeFileVisitor::evaluateMacro(const QString& function, const QStri
         return QStringList() << arguments.first();
     } ///  TODO: support more built-in qmake functions
 
-    QMap< QString, QMake::ScopeBodyAST* >::const_iterator it = m_userMacros.find(function);
+    QHash< QString, QMake::ScopeBodyAST* >::const_iterator it = m_userMacros.find(function);
     if (it != m_userMacros.constEnd()) {
         qDebug() << "calling user macro:" << function << arguments;
         QMakeFileVisitor visitor(this, m_baseFile);

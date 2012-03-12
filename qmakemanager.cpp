@@ -130,8 +130,9 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
     } else if (!isFolder && (name.startsWith("Makefile") || name.endsWith(".o")
                           || name.startsWith("moc_") || name.endsWith(".moc")
                           || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.")
-                          || (name.startsWith('.') && name.endsWith(".kate-swp"))))
+                          || name.startsWith(".swp.") || name.endsWith('~')
+                          || (name.startsWith('.')
+                                && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
     {
         return false;
     } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
@@ -363,7 +364,11 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    Q_ASSERT(project);
+    if (!project) {
+        // this can happen when we create/remove lots of files in a
+        // sub dir of a project - ignore such cases for now
+        return;
+    }
 
     bool finished = false;
     foreach(ProjectFolderItem* folder, project->foldersForUrl(url.upUrl())) {
