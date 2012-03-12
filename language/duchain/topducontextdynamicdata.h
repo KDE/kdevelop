@@ -100,7 +100,15 @@ class TopDUContextDynamicData {
   bool isTemporaryDeclarationIndex(uint index) const ;
   
   bool m_deleting; ///Flag used during destruction
-  
+
+  struct ItemDataInfo {
+    //parentContext 0 means the global context
+    ItemDataInfo(uint _dataOffset = 0, uint _parentContext = 0) : dataOffset(_dataOffset), parentContext(_parentContext) {
+    }
+    uint dataOffset; //Offset of the data
+    uint parentContext; //Parent context of the data
+  };
+
   private:
     void unmap();
     //Converts away from an mmap opened file to a data array
@@ -108,14 +116,7 @@ class TopDUContextDynamicData {
     QString filePath() const;
 
     void loadData() const;
-    
-    struct ItemDataInfo {
-      //parentContext 0 means the global context
-      ItemDataInfo(uint _dataOffset = 0, uint _parentContext = 0) : dataOffset(_dataOffset), parentContext(_parentContext) {
-      }
-      uint dataOffset; //Offset of the data
-      uint parentContext; //Parent context of the data
-    };
+
     
     static void verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data);
 
@@ -156,5 +157,7 @@ class TopDUContextDynamicData {
     mutable bool m_itemRetrievalForbidden;
 };
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::TopDUContextDynamicData::ItemDataInfo, Q_MOVABLE_TYPE);
 
 #endif
