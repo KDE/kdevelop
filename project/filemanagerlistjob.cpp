@@ -36,6 +36,10 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool force
 
     addSubDir(item);
     startNextJob();
+
+#ifdef TIME_IMPORT_JOB
+    m_timer.start();
+#endif
 }
 
 ProjectFolderItem* FileManagerListJob::item() const
@@ -90,6 +94,10 @@ void FileManagerListJob::slotResult(KJob* job)
 
     if( m_listQueue.isEmpty() ) {
         emitResult();
+
+#ifdef TIME_IMPORT_JOB
+    qDebug() << "TIME FOR LISTJOB:" << m_timer.elapsed();
+#endif
     } else {
         emit nextJob();
     }
