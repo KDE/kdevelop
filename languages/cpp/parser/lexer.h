@@ -45,6 +45,11 @@ public:
   uint size;
   ///kind of the token @see TOKEN_KIND enum reference.
   quint16 kind;
+
+  inline bool operator==(const Token& o) const
+  {
+    return o.position == position && o.size == size && o.kind == kind;
+  }
 };
 
 Q_DECLARE_TYPEINFO(Token, Q_PRIMITIVE_TYPE);
