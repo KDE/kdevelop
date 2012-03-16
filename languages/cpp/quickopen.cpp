@@ -78,8 +78,12 @@ QString IncludeFileData::text() const
 }
 
 bool IncludeFileData::execute( QString& filterText ) {
+  QString path = QString(filterText);   // default to filterText in case extracting number fails
+  uint lineNumber;
+  bool hasLineNumber = extractLineNumber(filterText, path, lineNumber);
   if( m_item.isDirectory ) {
     //Change the filter-text to match the sub-directory
+    // Line number not expected for directory
     KUrl u( filterText );
 //     kDebug() << "filter-text:" << u;
     QString addName = m_item.name;
@@ -87,13 +91,16 @@ bool IncludeFileData::execute( QString& filterText ) {
       addName = addName.split('/').last();
     u.setFileName( addName );                                   
 //     kDebug() << "with added:" << u;
-    filterText = u.toLocalFile( KUrl::AddTrailingSlash ); 
+    filterText = u.toLocalFile( KUrl::AddTrailingSlash );
 //     kDebug() << "new:" << filterText;
     return false;
   } else {
     KUrl u = m_item.url();
     
-    ICore::self()->documentController()->openDocument( u );
+    IDocument* doc = ICore::self()->documentController()->openDocument( u );
+    if (hasLineNumber) {
+      doc->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
+    }
 
     return true;
   }
@@ -221,6 +228,8 @@ QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixP
 void IncludeFileDataProvider::setFilterText( const QString& _text )
 {
   QString text(_text);
+  uint lineNumber;
+  extractLineNumber(text, text, lineNumber);
     ///If the text contains '/', list items under the given prefix additionally
 
   if( text.contains( '/' ) )
