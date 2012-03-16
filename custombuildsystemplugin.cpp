@@ -104,7 +104,7 @@ KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
     return builddir;
 }
 
-IProjectBuilder* CustomBuildSystem::builder( ProjectFolderItem*  ) const
+IProjectBuilder* CustomBuildSystem::builder() const
 {
     return const_cast<IProjectBuilder*>(dynamic_cast<const IProjectBuilder*>(this));
 }

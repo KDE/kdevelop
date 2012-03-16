@@ -70,7 +70,7 @@ public:
 public:
     bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent );
     KUrl buildDirectory( KDevelop::ProjectBaseItem* ) const;
-    IProjectBuilder* builder( KDevelop::ProjectFolderItem* ) const;
+    IProjectBuilder* builder() const;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
     KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
