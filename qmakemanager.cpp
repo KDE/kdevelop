@@ -412,7 +412,7 @@ QList<ProjectTargetItem*> QMakeProjectManager::targets(ProjectFolderItem* item) 
     return QList<ProjectTargetItem*>();
 }
 
-IProjectBuilder* QMakeProjectManager::builder(ProjectFolderItem*) const
+IProjectBuilder* QMakeProjectManager::builder() const
 {
     Q_ASSERT(m_builder);
     return m_builder;
