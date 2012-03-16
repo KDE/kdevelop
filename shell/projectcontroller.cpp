@@ -57,6 +57,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -171,12 +173,46 @@ public:
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
-            IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
             const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
             if (info.property("X-KDevelop-Category").toString() != "Project")
                 continue;
-            if( !iface || plugin == project->managerPlugin() )
-                pluginnames << info.pluginName();
+            IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
+            if( manager && manager != project->projectFileManager() )
+            {
+                // current plugin is a manager but does not apply to given project, skip
+                continue;
+            }
+            IProjectBuilder* builder = plugin->extension<KDevelop::IProjectBuilder>();
+            if (builder)
+            {
+                // hide builder plugins that are not required
+                if(!project->buildSystemManager())
+                {
+                    // current plugin is a builder yet the project cannot be build - skip
+                    continue;
+                }
+                if (builder && builder != project->buildSystemManager()->builder())
+                {
+                    const KPluginInfo builderInfo = m_core->pluginController()->pluginInfo(
+                        dynamic_cast<IPlugin*>(project->buildSystemManager()->builder()) );
+                    bool shouldBeHidden = true;
+                    // hide if this plugin does not implement an interface that is required by the builder
+                    // i.e. makebuilder should be shown for cmake projects
+                    const QStringList dependencies = builderInfo.property("X-KDevelop-IRequired").toStringList();
+                    foreach(const QString& interface, info.property("X-KDevelop-Interfaces").toStringList()) {
+                        if (dependencies.contains(interface))
+                        {
+                            shouldBeHidden = false;
+                            break;
+                        }
+                    }
+                    if (shouldBeHidden)
+                    {
+                        continue;
+                    }
+                }
+            }
+            pluginnames << info.pluginName();
         }
 
         return pluginnames;
