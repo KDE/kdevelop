@@ -48,7 +48,7 @@ public:
     /**
      * Provide access to the builder
      */
-    virtual KDevelop::IProjectBuilder* builder( KDevelop::ProjectFolderItem*) const;
+    virtual KDevelop::IProjectBuilder* builder() const;
 
     /**
      * Provide a list of include directories.

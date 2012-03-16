@@ -327,8 +327,7 @@ void CMakePreferences::removeBuildDir()
 void CMakePreferences::configure()
 {
     KDevelop::IProject* p=project();
-    KDevelop::ProjectFolderItem* it=p->projectItem();
-    KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
+    KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder();
     KJob* job=b->configure(p);
     connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
     

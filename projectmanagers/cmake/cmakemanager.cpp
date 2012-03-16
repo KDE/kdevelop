@@ -970,7 +970,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
     return defs;
 }
 
-KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *) const
+KDevelop::IProjectBuilder * CMakeManager::builder() const
 {
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IProjectBuilder", "KDevCMakeBuilder");
     Q_ASSERT(i);

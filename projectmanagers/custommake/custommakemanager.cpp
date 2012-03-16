@@ -69,7 +69,7 @@ CustomMakeManager::~CustomMakeManager()
     delete d;
 }
 
-IProjectBuilder* CustomMakeManager::builder(KDevelop::ProjectFolderItem*) const
+IProjectBuilder* CustomMakeManager::builder() const
 {
     Q_ASSERT(d->m_builder);
     return d->m_builder;
