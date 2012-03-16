@@ -52,8 +52,13 @@ QString ProjectFileData::htmlDescription() const {
   return "<small><small>" + i18n("Project") + ' ' + m_file.m_project.str() + /*", " + i18n("path") + totalUrl().toLocalFile() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
-bool ProjectFileData::execute( QString& /*filterText*/ ) {
+bool ProjectFileData::execute( QString& filterText ) {
   IOpenWith::openFiles(KUrl::List() << totalUrl());
+  QString path;
+  uint lineNumber;
+  if (extractLineNumber(filterText, path, lineNumber)) {
+    ICore::self()->documentController()->documentForUrl(totalUrl())->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
+  }
   return true;
 }
 
@@ -117,19 +122,21 @@ ProjectFileDataProvider::ProjectFileDataProvider() {
 }
 
 void ProjectFileDataProvider::setFilterText( const QString& text ) {
-  QString filterText = text;
-  if (filterText.startsWith(QLatin1String("./")) || filterText.startsWith(QLatin1String("../")) ) {
+  QString path(text);
+  uint lineNumber;
+  extractLineNumber(text, path, lineNumber);
+  if ( path.startsWith(QLatin1String("./")) || path.startsWith(QLatin1String("../")) ) {
     // assume we want to filter relative to active document's url
     IDocument* doc = ICore::self()->documentController()->activeDocument();
     if (doc) {
       KUrl url = doc->url().upUrl();
-      url.addPath(text);
+      url.addPath( path);
       url.cleanPath();
       url.adjustPath(KUrl::RemoveTrailingSlash);
-      filterText = url.pathOrUrl();
+      path = url.pathOrUrl();
     }
   }
-  Base::setFilter( filterText.split('/', QString::SkipEmptyParts), QChar('/') );
+  Base::setFilter( path.split('/', QString::SkipEmptyParts), QChar('/') );
 }
 
 namespace
