@@ -58,7 +58,7 @@ public:
      * null, if it does thats a bug in the plugin. A BuildSystemManager
      * always has a project builder associated with it.
      */
-    virtual IProjectBuilder* builder(ProjectFolderItem*) const = 0;
+    virtual IProjectBuilder* builder() const = 0;
 
     /**
      * Provide a list of include directories.

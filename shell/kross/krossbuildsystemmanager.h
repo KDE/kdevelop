@@ -47,7 +47,7 @@ public:
     KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
     bool reload(KDevelop::ProjectFolderItem *item);
 
-    KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
+    KDevelop::IProjectBuilder* builder() const;
     KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
 
     KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;

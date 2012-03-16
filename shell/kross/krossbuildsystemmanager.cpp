@@ -95,7 +95,7 @@ bool KrossBuildSystemManager::reload(KDevelop::ProjectFolderItem */*item*/)
     return false;
 }
 
-KDevelop::IProjectBuilder* KrossBuildSystemManager::builder(KDevelop::ProjectFolderItem*) const
+KDevelop::IProjectBuilder* KrossBuildSystemManager::builder() const
 {
     return 0;
 }

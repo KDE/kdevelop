@@ -62,24 +62,24 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseIt
         return;
     }
     kDebug() << "got build system manager";
-    Q_ASSERT(item->project()->buildSystemManager()->builder( item->project()->projectItem() ));
+    Q_ASSERT(item->project()->buildSystemManager()->builder());
     KJob* j = 0;
     switch( t )
     {
         case BuilderJob::Build:
-            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->build( item );
+            j = item->project()->buildSystemManager()->builder()->build( item );
             break;
         case BuilderJob::Clean:
-            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->clean( item );
+            j = item->project()->buildSystemManager()->builder()->clean( item );
             break;
         case BuilderJob::Install:
-            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->install( item );
+            j = item->project()->buildSystemManager()->builder()->install( item );
             break;
         case BuilderJob::Prune:
-            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->prune( item->project() );
+            j = item->project()->buildSystemManager()->builder()->prune( item->project() );
             break;
         case BuilderJob::Configure:
-            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->configure( item->project() );
+            j = item->project()->buildSystemManager()->builder()->configure( item->project() );
             break;
         default:
             break;

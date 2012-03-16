@@ -14,7 +14,7 @@ def compileCurrent():
 		items=project.filesForUrl(comp)
 		
 		for item in items:
-			builder=project.buildSystemManager().builder(item)
+			builder=project.buildSystemManager().builder()
 			buildjob=builder.build(item)
 			ICore.runController().registerJob(buildjob)
 

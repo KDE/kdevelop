@@ -299,7 +299,7 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
     IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
     if( mgr )
     {
-        return mgr->builder( prjitem );
+        return mgr->builder();
     }
     return 0;
 }
