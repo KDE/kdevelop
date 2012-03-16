@@ -17,16 +17,23 @@
 #include "includepathcomputer.h"
 #include "cpplanguagesupport.h"
 #include "cpputils.h"
+
+#include <QDirIterator>
+#include <QCoreApplication>
+
+#include <KLocalizedString>
+#include <KConfigGroup>
+
+#include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
+
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <project/projectmodel.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <klocalizedstring.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <QDirIterator>
-#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 
@@ -40,7 +47,19 @@ QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   return ret;
 }
 
-IncludePathComputer::IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems) : m_source(file), m_problems(problems), m_ready(false), m_gotPathsFromManager(false) {
+IncludePathComputer::IncludePathComputer( const KUrl& file, QList< ProblemPointer >* problems )
+: m_source(file)
+, m_problems(problems)
+, m_ready(false)
+, m_gotPathsFromManager(false)
+, m_useIncludeResolver(enableIncludePathResolution)
+{
+  Q_ASSERT(QThread::currentThread() == QCoreApplication::instance()->thread());
+  KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
+  if (project) {
+    KSharedConfig::Ptr configPtr = project->projectConfiguration();
+    m_useIncludeResolver = configPtr->group("MakeBuilder").readEntry("Resolve Using Make", m_useIncludeResolver);
+  }
 }
 
 void IncludePathComputer::computeForeground() {
@@ -169,7 +188,7 @@ void IncludePathComputer::computeBackground() {
     
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
 
-    if( (m_ret.isEmpty() || DEBUG_INCLUDE_PATHS) && enableIncludePathResolution ) {
+    if( (m_ret.isEmpty() || DEBUG_INCLUDE_PATHS) && m_useIncludeResolver ) {
         //Fallback-search using include-path resolver
 
         if(!m_effectiveBuildDirectory.isEmpty()) {

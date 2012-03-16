@@ -15,6 +15,9 @@
     <entry name="installAsRoot" key="Install As Root" type="Bool">
         <default>false</default>
     </entry>
+    <entry name="useMakeForInclude" key="Resolve Using Make" type="Bool">
+        <default>true</default>
+    </entry>
     <entry name="suCommand" key="Su Command" type="Int">
     </entry>
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
