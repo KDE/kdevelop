@@ -59,8 +59,12 @@ struct TestProjectPaths {
     KUrl configFile;
 };
 
-TestProjectPaths projectPaths(const QString& project)
+TestProjectPaths projectPaths(const QString& project, QString name = QString())
 {
+    if (name.isEmpty()) {
+        name = project;
+    }
+
     TestProjectPaths paths;
     QFileInfo info(CMAKE_TESTS_PROJECTS_DIR "/" + project);
     Q_ASSERT(info.exists());
@@ -69,11 +73,11 @@ TestProjectPaths projectPaths(const QString& project)
     paths.sourceDir.adjustPath(KUrl::AddTrailingSlash);
 
     paths.projectFile = paths.sourceDir;
-    paths.projectFile.addPath(project + ".kdev4");
+    paths.projectFile.addPath(name + ".kdev4");
     Q_ASSERT(QFile::exists(paths.projectFile.toLocalFile()));
 
     paths.configFile = paths.sourceDir;
-    paths.configFile.addPath(".kdev4/" + project + ".kdev4");
+    paths.configFile.addPath(".kdev4/" + name + ".kdev4");
 
     return paths;
 }
@@ -193,4 +197,42 @@ void CMakeManagerTest::testIncludePaths()
 
     KUrl subDir(paths.sourceDir, "subdir/");
     QVERIFY(includeDirs.contains(subDir));
+}
+
+void CMakeManagerTest::testRelativePaths()
+{
+    const TestProjectPaths paths = projectPaths("relative_paths/out", "relative_paths");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("relative_paths");
+    QVERIFY(project);
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl codeCpp(paths.sourceDir, "../src/code.cpp");
+    codeCpp.cleanPath();
+    QVERIFY(QFile::exists( codeCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl( codeCpp );
+    QCOMPARE(items.size(), 1); // once in the target
+    ProjectBaseItem* fooCppItem = items.first();
+
+    KUrl::List _includeDirs = project->buildSystemManager()->includeDirectories(fooCppItem);
+    QSet<KUrl> includeDirs;
+    foreach(KUrl url, _includeDirs) {
+        url.cleanPath(KUrl::SimplifyDirSeparators);
+        url.adjustPath(KUrl::AddTrailingSlash);
+        includeDirs << url;
+    }
+
+    QCOMPARE(includeDirs.size(), _includeDirs.size());
+
+    KUrl incDir(paths.sourceDir, "../inc/");
+    incDir.cleanPath();
+    QVERIFY(includeDirs.contains( incDir ));
 }
