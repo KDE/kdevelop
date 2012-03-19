@@ -870,7 +870,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     sourceFile = folder->url();
                     sourceFile.addPath( sFile );
                 }
-                
+                sourceFile.cleanPath();
                 tfiles += sourceFile;
                 kDebug(9042) << "..........Adding:" << sourceFile << sFile << folder->url();
             }
