@@ -75,19 +75,6 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="whatsThis">
-      <string>If checked and some include files cannot be resolved, make will be invoked in dry mode to try and figure out include paths from the command line.</string>
-     </property>
-     <property name="text">
-      <string>Use make to find unresolved &amp;includes:</string>
-     </property>
-     <property name="buddy">
-      <cstring>kcfg_useMakeForInclude</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
     <widget class="QLabel" name="rootinstallationcommandLabel">
      <property name="text">
       <string>Root installation &amp;command:</string>
@@ -97,7 +84,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="3" column="1">
     <widget class="KComboBox" name="kcfg_suCommand">
      <property name="enabled">
       <bool>false</bool>
@@ -119,7 +106,7 @@
      </item>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Number of simultaneous jobs:</string>
@@ -132,14 +119,14 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="4" column="1">
     <widget class="QSpinBox" name="kcfg_numberOfJobs">
      <property name="minimum">
       <number>1</number>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>&amp;Make executable:</string>
@@ -152,7 +139,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="5" column="1">
     <widget class="KUrlRequester" name="makeBinary">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -162,7 +149,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>Default make &amp;target:</string>
@@ -175,14 +162,14 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="6" column="1">
     <widget class="KLineEdit" name="kcfg_defaultTarget">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Additional make &amp;options:</string>
@@ -195,14 +182,14 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="7" column="1">
     <widget class="KLineEdit" name="kcfg_additionalOptions">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Active Environment &amp;Profile:</string>
@@ -215,7 +202,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="9" column="1">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="margin">
@@ -241,25 +228,18 @@
        </widget>
       </item>
       <item>
-       <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment"/>
+       <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment" />
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QCheckBox" name="kcfg_useMakeForInclude">
-     <property name="text">
-      <string/>
-     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
@@ -267,9 +247,9 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>

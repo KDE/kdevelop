@@ -27,31 +27,30 @@ class IncludePathComputer  {
     void computeForeground();
     ///Can be called from within background thread, but does not have to. May lock for a long time.
     void computeBackground();
-
+    
     KUrl::List result() const {
       return m_ret;
     }
-
+    
     const QHash<QString,QString>& defines() const {
       return m_defines;
     }
-
+    
     KDevelop::ModificationRevisionSet m_includePathDependency;
-
+    
   private:
     QHash<QString,QString> m_defines;
     KUrl m_source;
     QList<KDevelop::ProblemPointer>* m_problems;
     KUrl::List m_ret;
     QSet<KUrl> m_hasPath;
-
+    bool m_ready;
+    
     KUrl m_effectiveBuildDirectory;
     KUrl m_buildDirectory;
     KUrl m_projectDirectory;
     QString m_projectName;
+    bool m_gotPathsFromManager;
     CppTools::IncludePathResolver m_includeResolver;
-    bool m_ready : 1;
-    bool m_gotPathsFromManager : 1;
-    bool m_useIncludeResolver : 1;
 };
 #endif // INCLUDEPATHCOMPUTER_H
