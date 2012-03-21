@@ -460,8 +460,6 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
-    QWeakPointer<QObject> p(notifyWhenReady);
-
     QMutexLocker lock(&d->m_mutex);
     for(QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
 
