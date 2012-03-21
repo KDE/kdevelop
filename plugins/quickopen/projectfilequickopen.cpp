@@ -165,21 +165,25 @@ void ProjectFileDataProvider::reset() {
   QList<ProjectFile> projectFiles;
   QSet<IndexedString> openFiles_ = openFiles();
 
+  //note: for performance reasons, we use a QMap to sort
+  //      files and then it's sorted list of values.
+  //      this is faster b/c we only need to call the slow
+  //      IndexedString::byteArray method once per file
   foreach( IProject* project, ICore::self()->projectController()->projects() ) {
     QSet<IndexedString> allFiles = project->fileSet();
     allFiles -= openFiles_;
     IndexedString projectFolder(project->folder().pathOrUrl());
     IndexedString projectName(project->name());
+    QMap<QByteArray, ProjectFile> sortedFiles;
     foreach(const IndexedString &file, allFiles) {
       ProjectFile f;
       f.m_projectUrl = projectFolder;
       f.m_url = file;
       f.m_project = projectName;
-      projectFiles << f;
+      sortedFiles.insert(file.byteArray(), f);
     }
+    projectFiles += sortedFiles.values();
   }
-
-  qSort(projectFiles.begin(), projectFiles.end(), sortProjectFiles);
 
   setItems(projectFiles);
 }

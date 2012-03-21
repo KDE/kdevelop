@@ -30,13 +30,13 @@ namespace KDevelop {
 }
 
 struct ProjectFile {
-  ProjectFile() {
-  }
   KDevelop::IndexedString m_url;
   KDevelop::IndexedString m_projectUrl;
   KDevelop::IndexedString m_project;
   KIcon m_icon;
 };
+
+Q_DECLARE_TYPEINFO(ProjectFile, Q_PRIMITIVE_TYPE);
 
 class ProjectFileData : public KDevelop::QuickOpenDataBase {
   public:
