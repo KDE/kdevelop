@@ -246,7 +246,7 @@ void TestBackgroundparser::testParseOrdering_simple()
 
 void TestBackgroundparser::benchmark()
 {
-    const int jobs = 1000;
+    const int jobs = 10000;
 
     QVector<KUrl> jobUrls;
     jobUrls.reserve(jobs);
