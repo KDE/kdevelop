@@ -251,4 +251,27 @@ void TestBackgroundparser::testParseOrdering_simple()
     QVERIFY(m_jobPlan.runJobs(1000));
 }
 
+void TestBackgroundparser::benchmark()
+{
+    const int jobs = 1000;
+
+    QVector<KUrl> jobUrls;
+    jobUrls.reserve(jobs);
+    for ( int i = 0; i < jobs; ++i ) {
+        jobUrls << KUrl("test" + QString::number(i) + ".txt");
+    }
+
+    QBENCHMARK {
+        foreach ( const KUrl& url, jobUrls ) {
+            ICore::self()->languageController()->backgroundParser()->addDocument(url);
+        }
+
+        ICore::self()->languageController()->backgroundParser()->parseDocuments();
+
+        while ( ICore::self()->languageController()->backgroundParser()->queuedCount() ) {
+            QTest::qWait(50);
+        }
+    }
+}
+
 #include "test_backgroundparser.moc"

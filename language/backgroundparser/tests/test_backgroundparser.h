@@ -101,6 +101,8 @@ private slots:
     void testParseOrdering_foregroundThread();
     void testParseOrdering_noSequentialProcessing();
 
+    void benchmark();
+
 private:
     JobPlan m_jobPlan;
 };
