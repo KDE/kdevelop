@@ -22,14 +22,17 @@
 #include "testparsejob.h"
 #include <QTest>
 
-TestParseJob::TestParseJob(const KUrl& url): ParseJob(url)
+TestParseJob::TestParseJob(const KUrl& url)
+: ParseJob(url)
+, duration_ms(0)
 {
 }
 
 void TestParseJob::run()
 {
     kDebug() << "Running parse job for" << document().toUrl();
-    emit(started(this));
-    kDebug() << "waiting" << duration_ms << "ms";
-    QTest::qWait(duration_ms);
+    if (duration_ms) {
+        kDebug() << "waiting" << duration_ms << "ms";
+        QTest::qWait(duration_ms);
+    }
 }

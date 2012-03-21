@@ -74,17 +74,14 @@ public:
 
     JobPrototype jobForUrl(const KUrl& url);
 
-    const QVector<KUrl>& startedJobs();
-
 private slots:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
-    void jobStarted(TestParseJob* job);
     void parseJobCreated(KDevelop::ParseJob*);
 
 private:
     QVector<JobPrototype> m_jobs;
     QVector<KUrl> m_finishedJobs;
-    QVector<KUrl> m_startedJobs;
+    QVector<KUrl> m_createdJobs;
 };
 
 class TestBackgroundparser : public QObject

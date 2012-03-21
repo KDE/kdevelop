@@ -62,11 +62,16 @@ void JobPlan::clear()
 {
     m_jobs.clear();
     m_finishedJobs.clear();
-    m_startedJobs.clear();
+    m_createdJobs.clear();
 }
 
 void JobPlan::parseJobCreated(ParseJob* job)
 {
+    // e.g. for the benchmark
+    if (m_jobs.isEmpty()) {
+        return;
+    }
+
     TestParseJob* testJob = dynamic_cast<TestParseJob*>(job);
     Q_ASSERT(testJob);
 
@@ -74,14 +79,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
     kDebug() << "assigning propierties for created job" << url;
     testJob->duration_ms = jobForUrl(url).m_duration;
 
-    connect(testJob, SIGNAL(started(TestParseJob*)), SLOT(jobStarted(TestParseJob*)));
-}
-
-void JobPlan::jobStarted(TestParseJob* job)
-{
-    const KUrl url = job->document().toUrl();
-    m_startedJobs.append(url);
-    kDebug() << "job was started: " << url;
+    m_createdJobs.append(url);
 }
 
 bool JobPlan::runJobs(int timeoutMS)
@@ -102,13 +100,13 @@ bool JobPlan::runJobs(int timeoutMS)
         QTest::qWait(50);
     }
 
-    QVERIFY_RETURN(m_jobs.size() == m_startedJobs.size(), false);
+    QVERIFY_RETURN(m_jobs.size() == m_createdJobs.size(), false);
 
     QVERIFY_RETURN(m_finishedJobs.size() == m_jobs.size(), false);
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
-    foreach ( const KUrl& url, m_startedJobs ) {
+    foreach ( const KUrl& url, m_createdJobs ) {
         const JobPrototype p = jobForUrl(url);
         QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
         currentBestPriority = p.m_priority;
@@ -125,11 +123,6 @@ JobPrototype JobPlan::jobForUrl(const KUrl& url)
         }
     }
     return JobPrototype();
-}
-
-const QVector< KUrl >& JobPlan::startedJobs()
-{
-    return m_startedJobs;
 }
 
 void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& context)

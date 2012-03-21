@@ -32,10 +32,8 @@ Q_OBJECT
 public:
     TestParseJob(const KUrl& url);
     virtual void run();
+
     int duration_ms;
-signals:
-    void started(TestParseJob* job);
-    void created(TestParseJob* job);
 };
 
 #endif
