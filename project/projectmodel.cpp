@@ -137,6 +137,7 @@ public:
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, ProjectBaseItem *parent )
         : d_ptr(new ProjectBaseItemPrivate)
 {
+    Q_ASSERT(!name.isEmpty() || !parent);
     Q_D(ProjectBaseItem);
     d->project = project;
     d->text = name;
@@ -295,7 +296,6 @@ QString ProjectBaseItem::text() const
     if( project() && !parent() ) {
         return project()->name();
     } else {
-        Q_ASSERT(!d->text.isEmpty());
         return d->text;
     }
 }
@@ -331,6 +331,7 @@ void ProjectBaseItem::setRow( int row )
 
 void ProjectBaseItem::setText( const QString& text )
 {
+    Q_ASSERT(!text.isEmpty() || !parent());
     Q_D(ProjectBaseItem);
     d->text = text;
     if( model() ) {
