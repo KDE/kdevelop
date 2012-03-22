@@ -26,7 +26,7 @@
 #include <language/duchain/indexedstring.h>
 
 namespace KDevelop {
-  class ICore;
+class IProject;
 }
 
 struct ProjectFile {
@@ -67,24 +67,41 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase {
 
 typedef KDevelop::FilterWithSeparator<ProjectFile> Base;
 
-class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface {
+class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface
+{
+    Q_OBJECT
   public:
-    ProjectFileDataProvider();
+    BaseFileDataProvider();
     virtual void setFilterText( const QString& text );
-    virtual void reset();
     virtual uint itemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-    virtual QSet<KDevelop::IndexedString> files() const;
 
   private:
-  
     //Reimplemented from Base<..>
     virtual QString itemText( const ProjectFile& data ) const;
 };
 
-
-class OpenFilesDataProvider : public ProjectFileDataProvider
+class ProjectFileDataProvider : public BaseFileDataProvider
 {
+    Q_OBJECT
+  public:
+    ProjectFileDataProvider();
+    virtual void reset();
+    virtual QSet<KDevelop::IndexedString> files() const;
+
+  private slots:
+    void projectClosing( KDevelop::IProject* );
+    void projectOpened( KDevelop::IProject* );
+    void fileAddedToSet( KDevelop::IProject*, const KDevelop::IndexedString& );
+    void fileRemovedFromSet( KDevelop::IProject*, const KDevelop::IndexedString& );
+
+  private:
+    QMap<QByteArray, ProjectFile> m_projectFiles;
+};
+
+class OpenFilesDataProvider : public BaseFileDataProvider
+{
+  Q_OBJECT
 public:
     virtual void reset();
     virtual QSet<KDevelop::IndexedString> files() const;

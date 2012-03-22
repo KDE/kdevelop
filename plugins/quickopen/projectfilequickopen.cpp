@@ -19,6 +19,7 @@
 #include "projectfilequickopen.h"
 #include <QIcon>
 #include <QTextBrowser>
+#include <QApplication>
 #include <klocale.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -117,11 +118,11 @@ QIcon ProjectFileData::icon() const {
   return m_file.m_icon;
 }
 
-ProjectFileDataProvider::ProjectFileDataProvider() {
-  reset();
+BaseFileDataProvider::BaseFileDataProvider()
+{
 }
 
-void ProjectFileDataProvider::setFilterText( const QString& text ) {
+void BaseFileDataProvider::setFilterText( const QString& text ) {
   QString path(text);
   uint lineNumber;
   extractLineNumber(text, path, lineNumber);
@@ -137,6 +138,77 @@ void ProjectFileDataProvider::setFilterText( const QString& text ) {
     }
   }
   Base::setFilter( path.split('/', QString::SkipEmptyParts), QChar('/') );
+}
+
+uint BaseFileDataProvider::itemCount() const {
+  return Base::filteredItems().count();
+}
+
+QList<KDevelop::QuickOpenDataPointer> BaseFileDataProvider::data( uint start, uint end ) const {
+  if( end > (uint)Base::filteredItems().count() )
+    end = Base::filteredItems().count();
+
+  QList<KDevelop::QuickOpenDataPointer> ret;
+  ret.reserve(end - start);
+
+  for( uint a = start; a < end; a++ ) {
+    ProjectFile f( Base::filteredItems()[a] );
+    ret << KDevelop::QuickOpenDataPointer( new ProjectFileData( Base::filteredItems()[a] ) );
+  }
+
+  return ret;
+}
+
+QString BaseFileDataProvider::itemText( const ProjectFile& data ) const {
+  return data.m_url.str();
+}
+
+ProjectFileDataProvider::ProjectFileDataProvider()
+{
+  connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+          this, SLOT(projectClosing(KDevelop::IProject*)));
+  connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+          this, SLOT(projectOpened(KDevelop::IProject*)));
+}
+
+void ProjectFileDataProvider::projectClosing( IProject* project )
+{
+    foreach(const IndexedString& str, project->fileSet()) {
+        m_projectFiles.remove(str.byteArray());
+    }
+}
+
+void ProjectFileDataProvider::projectOpened( IProject* project )
+{
+    const int processAfter = 1000;
+    int processed = 0;
+    foreach(const IndexedString& url, project->fileSet()) {
+        fileAddedToSet(project, url);
+        if (++processed == processAfter) {
+            // prevent UI-lockup when a huge project was imported
+            QApplication::processEvents();
+            processed = 0;
+        }
+    }
+
+    connect(project, SIGNAL(fileAddedToSet(KDevelop::IProject*, KDevelop::IndexedString)),
+            this, SLOT(fileAddedToSet(KDevelop::IProject*, KDevelop::IndexedString)));
+    connect(project, SIGNAL(fileRemovedFromSet(KDevelop::IProject*, KDevelop::IndexedString)),
+            this, SLOT(fileRemovedFromSet(KDevelop::IProject*, KDevelop::IndexedString)));
+}
+
+void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedString& url )
+{
+    ProjectFile f;
+    f.m_url = url;
+    f.m_project = IndexedString(project->name());
+    f.m_projectUrl = IndexedString(project->folder());
+    m_projectFiles.insert(url.byteArray(), f);
+}
+
+void ProjectFileDataProvider::fileRemovedFromSet( IProject*, const IndexedString& url )
+{
+    m_projectFiles.remove(url.byteArray());
 }
 
 namespace
@@ -162,34 +234,20 @@ bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
 
 void ProjectFileDataProvider::reset() {
   Base::clearFilter();
-  QList<ProjectFile> projectFiles;
-  QSet<IndexedString> openFiles_ = openFiles();
 
-  //note: for performance reasons, we use a QMap to sort
-  //      files and then it's sorted list of values.
-  //      this is faster b/c we only need to call the slow
-  //      IndexedString::byteArray method once per file
-  foreach( IProject* project, ICore::self()->projectController()->projects() ) {
-    QSet<IndexedString> allFiles = project->fileSet();
-    allFiles -= openFiles_;
-    IndexedString projectFolder(project->folder().pathOrUrl());
-    IndexedString projectName(project->name());
-    QMap<QByteArray, ProjectFile> sortedFiles;
-    foreach(const IndexedString &file, allFiles) {
-      ProjectFile f;
-      f.m_projectUrl = projectFolder;
-      f.m_url = file;
-      f.m_project = projectName;
-      sortedFiles.insert(file.byteArray(), f);
+  QSet<IndexedString> openFiles_ = openFiles();
+  QList<ProjectFile> projectFiles;
+  projectFiles.reserve(m_projectFiles.size());
+
+  for(QMap< QByteArray, ProjectFile >::const_iterator it = m_projectFiles.constBegin();
+      it != m_projectFiles.constEnd(); ++it)
+  {
+    if (!openFiles_.contains(it->m_url)) {
+        projectFiles << *it;
     }
-    projectFiles += sortedFiles.values();
   }
 
   setItems(projectFiles);
-}
-
-uint ProjectFileDataProvider::itemCount() const {
-  return Base::filteredItems().count();
 }
 
 QSet<IndexedString> ProjectFileDataProvider::files() const {
@@ -199,24 +257,6 @@ QSet<IndexedString> ProjectFileDataProvider::files() const {
     ret += project->fileSet();
 
   return ret - openFiles();
-}
-
-QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start, uint end ) const {
-  if( end > (uint)Base::filteredItems().count() )
-    end = Base::filteredItems().count();
-
-  QList<KDevelop::QuickOpenDataPointer> ret;
-  
-  for( uint a = start; a < end; a++ ) {
-    ProjectFile f( Base::filteredItems()[a] );
-    ret << KDevelop::QuickOpenDataPointer( new ProjectFileData( Base::filteredItems()[a] ) );
-  }
-
-  return ret;
-}
-
-QString ProjectFileDataProvider::itemText( const ProjectFile& data ) const {
-  return data.m_url.str();
 }
 
 void OpenFilesDataProvider::reset()
@@ -251,3 +291,4 @@ QSet<KDevelop::IndexedString> OpenFilesDataProvider::files() const
   return openFiles();
 }
 
+#include "projectfilequickopen.moc"

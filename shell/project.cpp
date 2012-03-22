@@ -657,12 +657,22 @@ IPlugin* Project::versionControlPlugin() const
 
 void Project::addToFileSet( const IndexedString& file )
 {
+    if (d->fileSet.contains(file)) {
+        return;
+    }
+
     d->fileSet.insert( file );
+    emit fileAddedToSet( this, file );
 }
 
 void Project::removeFromFileSet( const IndexedString& file )
 {
+    if (!d->fileSet.contains(file)) {
+        return;
+    }
+
     d->fileSet.remove( file );
+    emit fileRemovedFromSet( this, file );
 }
 
 QSet<IndexedString> Project::fileSet() const
