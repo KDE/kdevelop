@@ -82,6 +82,14 @@ class Filter {
     ///Changes the filter-text and refilters the data
     void setFilter( const QString& text )
     {
+      if (m_oldFilterText == text) {
+        return;
+      }
+      if (text.isEmpty()) {
+        clearFilter();
+        return;
+      }
+
       QList<Item> filterBase = m_filtered;
       if( !text.startsWith( m_oldFilterText ) )
         filterBase = m_items; //Start filtering based on the whole data
@@ -140,6 +148,14 @@ class FilterWithSeparator {
     template<class SeparatorType>
     void setFilter( const QStringList& text, const SeparatorType& separator )
     {
+      if (m_oldFilterText == text) {
+        return;
+      }
+      if (text.isEmpty()) {
+        clearFilter();
+        return;
+      }
+
       QList<Item> filterBase = m_filtered;
       
       if(text.isEmpty() || m_oldFilterText.isEmpty()) {
