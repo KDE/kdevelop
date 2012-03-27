@@ -326,7 +326,7 @@ int main( int argc, char *argv[] )
                                   session, state.holderApp, state.holderHostname, state.holderPid );
 
             KGuiItem overwrite = KStandardGuiItem::cont();
-            overwrite.setText(i18n("remove lock file"));
+            overwrite.setText(i18n("Remove lock file"));
             KGuiItem cancel = KStandardGuiItem::quit();
             int ret = KMessageBox::warningYesNo(0, errmsg, i18n("Failed to Lock Session %1", session),
                                                 overwrite, cancel, QString() );
