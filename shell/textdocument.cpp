@@ -346,6 +346,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         if (!url().isEmpty() && !DocumentController::isEmptyDocumentUrl(url()))
             d->document->openUrl( url() );
 
+        d->setStatus(d->document, false);
+
         /* It appears, that by default a part will be deleted the the
            first view containing it is deleted.  Since we do want
            to have several views, disable that behaviour.  */
