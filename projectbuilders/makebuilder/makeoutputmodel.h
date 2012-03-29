@@ -30,7 +30,17 @@
 #include <QMap>
 #include <QVector>
 
-class FilteredItem;
+class FilteredItem
+{
+public:
+    FilteredItem( const QString& line );
+    QString originalLine;
+    QVariant type;
+    QString shortenedText;
+    bool isActivatable;
+    KUrl url;
+    int lineNo, columnNo;
+};
 
 class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {

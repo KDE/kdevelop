@@ -1,6 +1,8 @@
 project(makebuilder)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9037 )
 
+add_subdirectory(tests)
+
 ########### next target ###############
 
 set(kdevmakebuilder_LIB_SRCS
@@ -46,4 +48,3 @@ install( FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/make C
 install( FILES kcm_kdev_makebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 # install( FILES kdevmakebuilder.rc DESTINATION ${DATA_INSTALL_DIR}/kdevmakebuilder )
-

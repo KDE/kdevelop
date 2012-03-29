@@ -34,20 +34,16 @@
 
 #include "outputfilters.h"
 
-class FilteredItem
+FilteredItem::FilteredItem(const QString& line)
+: originalLine( line )
+, type( QVariant::fromValue( MakeOutputModel::StandardItem ) )
+, shortenedText( line )
+, isActivatable(false)
+, lineNo(-1)
+, columnNo(-1)
 {
-    public:
-        FilteredItem( const QString& line )
-            : originalLine( line ), 
-              type( QVariant::fromValue( MakeOutputModel::StandardItem ) ),
-              shortenedText( line ), isActivatable(false), lineNo(-1), columnNo(-1) { kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>(); }
-        QString originalLine;
-        QVariant type;
-        QString shortenedText;
-        bool isActivatable;
-        KUrl url;
-        int lineNo, columnNo;
-};
+    kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>();
+}
 
 const int MakeOutputModel::MakeItemTypeRole = Qt::UserRole + 1;
 
