@@ -41,6 +41,7 @@ public:
     KUrl url;
     int lineNo, columnNo;
 };
+Q_DECLARE_TYPEINFO(FilteredItem, Q_MOVABLE_TYPE);
 
 class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
