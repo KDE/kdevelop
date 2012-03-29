@@ -312,9 +312,8 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
             //we are in the same class, so we can provide private, protected and public
             addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Private)));
             addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
-          } else {
+          } else if (Declaration* containerClass = Cpp::localClassFromCodeContext(problem->type->containerContext.data())) {
             //if we are in a subclass, we can provide the protected option
-            Declaration* containerClass = Cpp::localClassFromCodeContext(problem->type->containerContext.data());
             CppClassType::Ptr searchFromClassType = CppClassType::Ptr::dynamicCast(searchFromClass->abstractType());
             CppClassType::Ptr containerClassType = CppClassType::Ptr::dynamicCast(containerClass->abstractType());
 
