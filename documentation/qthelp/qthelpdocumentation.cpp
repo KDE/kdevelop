@@ -22,6 +22,7 @@
 #include "qthelpdocumentation.h"
 #include <QLabel>
 #include <KLocale>
+#include <KIcon>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
@@ -193,7 +194,9 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
         return;
 
     QMenu menu;
-    menu.addAction(view->pageAction(QWebPage::Copy));
+    QAction* copyAction = view->pageAction(QWebPage::Copy);
+    copyAction->setIcon(KIcon("edit-copy"));
+    menu.addAction(copyAction);
 
     menu.addSeparator();
 
