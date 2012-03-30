@@ -66,7 +66,7 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
         QWebView* lastView;
-        QTemporaryFile* m_lastStyleSheet;
+        QWeakPointer<QTemporaryFile> m_lastStyleSheet;
 };
 
 class HomeDocumentation : public QObject, public KDevelop::IDocumentation

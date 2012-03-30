@@ -37,11 +37,11 @@
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0), m_lastStyleSheet(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)
 {}
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0), m_lastStyleSheet(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
 QString QtHelpDocumentation::description() const
@@ -169,18 +169,21 @@ QString QtHelpDocumentation::description() const
 
 void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
 {
-    delete m_lastStyleSheet;
-    m_lastStyleSheet = new QTemporaryFile(view);
-    m_lastStyleSheet->open();
 
-    QTextStream ts(m_lastStyleSheet);
+    QTemporaryFile* file = new QTemporaryFile(view);
+    file->open();
+
+    QTextStream ts(file);
     ts << "html { background: white !important; }\n";
     if (url.scheme() == "qthelp" && url.host().startsWith("com.trolltech.qt.")) {
        ts << ".content .toc + .title + p { clear:left; }\n"
           << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
-    m_lastStyleSheet->close();
-    view->settings()->setUserStyleSheetUrl(KUrl(m_lastStyleSheet->fileName()));
+    file->close();
+    view->settings()->setUserStyleSheetUrl(KUrl(file->fileName()));
+
+    delete m_lastStyleSheet.data();
+    m_lastStyleSheet = file;
 }
 
 QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
