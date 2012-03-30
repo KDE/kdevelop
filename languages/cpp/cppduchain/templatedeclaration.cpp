@@ -39,6 +39,7 @@
 #include "expressionparser.h"
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainregister.h>
+#include <util/pushvalue.h>
 #include <name_compiler.h>
 #include <parsesession.h>
 #include <rpp/chartools.h>
@@ -243,10 +244,16 @@ namespace Cpp {
 //   return true;
 // }
 
-TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_instantiatedFrom(0) {
+TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/)
+: m_instantiatedFrom(0)
+, m_instantiationDepth(0)
+{
 }
 
-TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0) {
+TemplateDeclaration::TemplateDeclaration()
+: m_instantiatedFrom(0)
+, m_instantiationDepth(0)
+{
 }
 
 Declaration* TemplateDeclaration::specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
@@ -819,7 +826,6 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
 Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _templateArguments, const TopDUContext* source, bool forceLocal )
 {
   InstantiationInformation templateArguments(_templateArguments);
-  
 /*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
     Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
   }*/
@@ -852,6 +858,12 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   if(!source)
     return 0;
   
+  if (m_instantiationDepth > 5) {
+      kWarning() << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
+      return 0;
+  }
+  PushValue<int> depthCounter(m_instantiationDepth, m_instantiationDepth + 1);
+
   DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
   if(!surroundingContext) {
     kDebug() << "Declaration has no context:" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString() << dynamic_cast<Declaration*>(this)->toString();

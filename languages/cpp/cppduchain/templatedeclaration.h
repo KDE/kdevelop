@@ -147,6 +147,8 @@ namespace Cpp {
       typedef QHash<IndexedInstantiationInformation, IndexedInstantiationInformation> DefaultParameterInstantiationHash;
       DefaultParameterInstantiationHash m_defaultParameterInstantiations;
       InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
+      // recursion counter
+      int m_instantiationDepth;
   };
   
   
