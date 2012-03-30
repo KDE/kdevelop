@@ -198,18 +198,19 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
     copyAction->setIcon(KIcon("edit-copy"));
     menu.addAction(copyAction);
 
-    menu.addSeparator();
+    if (m_info.count() > 1) {
+        menu.addSeparator();
 
-    QActionGroup* actionGroup = new QActionGroup(&menu);
-    foreach(const QString& name, m_info.keys()) {
-        QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
-        act->setCheckable(true);
-        act->setChecked(name==m_current.key());
-        menu.addAction(act);
+        QActionGroup* actionGroup = new QActionGroup(&menu);
+        foreach(const QString& name, m_info.keys()) {
+            QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
+            act->setCheckable(true);
+            act->setChecked(name==m_current.key());
+            menu.addAction(act);
+        }
     }
 
-    menu.move(view->mapToGlobal(pos));
-    menu.exec();
+    menu.exec(view->mapToGlobal(pos));
 }
 
 
