@@ -202,10 +202,22 @@ void MakeOutputModel::addLines( const QStringList& lines )
 {
     if( lines.isEmpty() )
         return;
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + lines.count() - 1 );
-    foreach( const QString& line, lines )
-    {
 
+    lineBuffer << lines;
+    QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+}
+
+void MakeOutputModel::addLineBatch()
+{
+    // only add this many lines in one batch, then return to the event loop
+    // this prevents overly long UI lockup and is simple enough to implement
+    const int maxLines = 50;
+    const int linesInBatch = qMin(lineBuffer.count(), maxLines);
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
+
+    for(int i = 0; i < linesInBatch; ++i) {
+        const QString line = lineBuffer.dequeue();
         FilteredItem item( line );
         bool matched = false;
         
@@ -305,6 +317,10 @@ void MakeOutputModel::addLines( const QStringList& lines )
         items << item;
     }
     endInsertRows();
+
+    if (!lineBuffer.isEmpty()) {
+        QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+    }
 }
 
 void MakeOutputModel::addLine( const QString& l )
