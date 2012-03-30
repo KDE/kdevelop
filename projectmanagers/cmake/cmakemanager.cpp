@@ -486,6 +486,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 
 KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project)
 {
+    QMutexLocker locker(&m_reparsingMutex);
     KUrl baseUrl=CMake::projectRoot(project);
     
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
@@ -1139,7 +1140,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
     
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
-        QMutexLocker locker(&m_reparsingMutex); //Maybe we should have a mutex per project
+        QMutexLocker locker(&m_reparsingMutex);
         
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
         kDebug(9032) << dirtyFile << "is dirty" << files.count();
