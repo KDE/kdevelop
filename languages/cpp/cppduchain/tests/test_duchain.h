@@ -189,6 +189,7 @@ private slots:
   void testNestedNamespace();
   
   void testDeclarationHasUses();
+  void testBug269352();
 
   //BEGIN C++2011
   void testRangeBasedFor();

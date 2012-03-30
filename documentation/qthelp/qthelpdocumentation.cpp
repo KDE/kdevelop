@@ -22,6 +22,7 @@
 #include "qthelpdocumentation.h"
 #include <QLabel>
 #include <KLocale>
+#include <KIcon>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
@@ -32,6 +33,7 @@
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 #include "kdebug.h"
+#include <QTemporaryFile>
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
@@ -39,7 +41,7 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString
 {}
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key))
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
 QString QtHelpDocumentation::description() const
@@ -165,6 +167,25 @@ QString QtHelpDocumentation::description() const
     return QStringList(m_info.keys()).join(", ");
 }
 
+void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
+{
+
+    QTemporaryFile* file = new QTemporaryFile(view);
+    file->open();
+
+    QTextStream ts(file);
+    ts << "html { background: white !important; }\n";
+    if (url.scheme() == "qthelp" && url.host().startsWith("com.trolltech.qt.")) {
+       ts << ".content .toc + .title + p { clear:left; }\n"
+          << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
+    }
+    file->close();
+    view->settings()->setUserStyleSheetUrl(KUrl(file->fileName()));
+
+    delete m_lastStyleSheet.data();
+    m_lastStyleSheet = file;
+}
+
 QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
     QWidget* ret;
@@ -179,6 +200,7 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 
         QObject::connect(view, SIGNAL(linkClicked(QUrl)), SLOT(jumpedTo(QUrl)));
 
+        setUserStyleSheet(view, m_current.value());
         view->load(m_current.value());
         ret=view;
         lastView=view;
@@ -193,20 +215,23 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
         return;
 
     QMenu menu;
-    menu.addAction(view->pageAction(QWebPage::Copy));
+    QAction* copyAction = view->pageAction(QWebPage::Copy);
+    copyAction->setIcon(KIcon("edit-copy"));
+    menu.addAction(copyAction);
 
-    menu.addSeparator();
+    if (m_info.count() > 1) {
+        menu.addSeparator();
 
-    QActionGroup* actionGroup = new QActionGroup(&menu);
-    foreach(const QString& name, m_info.keys()) {
-        QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
-        act->setCheckable(true);
-        act->setChecked(name==m_current.key());
-        menu.addAction(act);
+        QActionGroup* actionGroup = new QActionGroup(&menu);
+        foreach(const QString& name, m_info.keys()) {
+            QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
+            act->setCheckable(true);
+            act->setChecked(name==m_current.key());
+            menu.addAction(act);
+        }
     }
 
-    menu.move(view->mapToGlobal(pos));
-    menu.exec();
+    menu.exec(view->mapToGlobal(pos));
 }
 
 
@@ -214,6 +239,7 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
     Q_ASSERT(lastView);
     m_provider->jumpedTo(newUrl);
+    setUserStyleSheet(lastView, newUrl);
     lastView->load(newUrl);
 }
 

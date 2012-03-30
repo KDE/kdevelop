@@ -29,8 +29,20 @@
 #include <QLinkedList>
 #include <QMap>
 #include <QVector>
+#include <QQueue>
 
-class FilteredItem;
+class FilteredItem
+{
+public:
+    FilteredItem( const QString& line );
+    QString originalLine;
+    QVariant type;
+    QString shortenedText;
+    bool isActivatable;
+    KUrl url;
+    int lineNo, columnNo;
+};
+Q_DECLARE_TYPEINFO(FilteredItem, Q_MOVABLE_TYPE);
 
 class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
@@ -61,6 +73,10 @@ public:
     void addLines( const QStringList& );
     void addLine( const QString& );
 
+private slots:
+    /// add batches of lines to prevent UI-lockup
+    void addLineBatch();
+
 private:
     KUrl urlForFile( const QString& ) const;
     bool isValidIndex( const QModelIndex& ) const;
@@ -73,6 +89,7 @@ private:
     PositionMap positionInCurrentDirs;
 
     KUrl buildDir;
+    QQueue<QString> lineBuffer;
 };
 
 Q_DECLARE_METATYPE( MakeOutputModel::OutputItemType )

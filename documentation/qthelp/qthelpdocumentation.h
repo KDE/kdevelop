@@ -30,6 +30,7 @@
 class QModelIndex;
 class QWebView;
 class QtHelpProviderAbstract;
+class QTemporaryFile;
 
 class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
 {
@@ -57,11 +58,15 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         void jumpedTo(const QUrl& newUrl);
 
     private:
+        void setUserStyleSheet(QWebView* view, const QUrl& url);
+
+    private:
         QtHelpProviderAbstract *m_provider;
         const QString m_name;
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
         QWebView* lastView;
+        QWeakPointer<QTemporaryFile> m_lastStyleSheet;
 };
 
 class HomeDocumentation : public QObject, public KDevelop::IDocumentation

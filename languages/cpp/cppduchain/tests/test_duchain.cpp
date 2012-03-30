@@ -5547,5 +5547,22 @@ void TestDUChain::testInitListRegressions()
     QVERIFY(top->problems().isEmpty());
   }
 }
+void TestDUChain::testBug269352()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=269352
+  QByteArray code(
+    "template <typename> class A;\n"
+    "template <typename, typename> struct B;\n"
+    "template <typename T1, typename T2>\n"
+    "struct B<T1, T2> : B<A<T1>, T2> {};\n"
+    // crucial: same typename like class above above
+    "template <typename A> struct B<A, true> {};\n"
+  );
+
+  LockedTopDUContext top = parse(code, DumpNone);
+  QVERIFY(top);
+  QVERIFY(top->problems().isEmpty());
+  // do not hang
+}
 
 #include "test_duchain.moc"
