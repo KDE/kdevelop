@@ -589,7 +589,7 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
         if (plugin)
             plugins << plugin;
         else
-            kWarning(9501) << "Null plugin retrieved! Loading error?";
+            kWarning(9501) << "Null plugin retrieved! Loading error?" << extension << constraints;
     }
     return plugins;
 }
