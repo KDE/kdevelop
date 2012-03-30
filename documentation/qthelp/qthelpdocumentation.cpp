@@ -33,14 +33,15 @@
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 #include "kdebug.h"
+#include <QTemporaryFile>
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0), m_lastStyleSheet(0)
 {}
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key))
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(0), m_lastStyleSheet(0)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
 QString QtHelpDocumentation::description() const
@@ -166,6 +167,22 @@ QString QtHelpDocumentation::description() const
     return QStringList(m_info.keys()).join(", ");
 }
 
+void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
+{
+    delete m_lastStyleSheet;
+    m_lastStyleSheet = new QTemporaryFile(view);
+    m_lastStyleSheet->open();
+
+    QTextStream ts(m_lastStyleSheet);
+    ts << "html { background: white !important; }\n";
+    if (url.scheme() == "qthelp" && url.host().startsWith("com.trolltech.qt.")) {
+       ts << ".content .toc + .title + p { clear:left; }\n"
+          << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
+    }
+    m_lastStyleSheet->close();
+    view->settings()->setUserStyleSheetUrl(KUrl(m_lastStyleSheet->fileName()));
+}
+
 QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
     QWidget* ret;
@@ -180,6 +197,7 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 
         QObject::connect(view, SIGNAL(linkClicked(QUrl)), SLOT(jumpedTo(QUrl)));
 
+        setUserStyleSheet(view, m_current.value());
         view->load(m_current.value());
         ret=view;
         lastView=view;
@@ -218,6 +236,7 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
     Q_ASSERT(lastView);
     m_provider->jumpedTo(newUrl);
+    setUserStyleSheet(lastView, newUrl);
     lastView->load(newUrl);
 }
 
