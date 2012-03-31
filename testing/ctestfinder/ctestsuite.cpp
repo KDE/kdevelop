@@ -42,12 +42,18 @@ CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStrin
 m_executable(executable),
 m_name(name),
 m_args(args),
-m_files(files),
 m_project(project)
 {
     m_executable.cleanPath();
     Q_ASSERT(project);
     kDebug() << m_name << m_executable << m_project->name();
+    
+    foreach (const QString& file, files)
+    {
+        KUrl url(file);
+        url.cleanPath();
+        m_files << url.toLocalFile();
+    }
 }
 
 CTestSuite::~CTestSuite()
