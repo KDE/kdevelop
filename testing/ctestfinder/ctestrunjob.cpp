@@ -68,7 +68,7 @@ void CTestRunJob::start()
     }
     
     m_process = new KProcess(this);
-    m_process->setProgram(m_suite->url().toLocalFile(), arguments);
+    m_process->setProgram(m_suite->executable().toLocalFile(), arguments);
     m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
     
     kDebug() << m_process->program();

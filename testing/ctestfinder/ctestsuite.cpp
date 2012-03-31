@@ -39,15 +39,15 @@
 using namespace KDevelop;
 
 CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, IProject* project, const QStringList& args): 
-m_url(executable),
+m_executable(executable),
 m_name(name),
 m_args(args),
 m_files(files),
 m_project(project)
 {
-    m_url.cleanPath();
+    m_executable.cleanPath();
     Q_ASSERT(project);
-    kDebug() << m_name << m_url << m_project->name();
+    kDebug() << m_name << m_executable << m_project->name();
 }
 
 CTestSuite::~CTestSuite()
@@ -114,9 +114,9 @@ KJob* CTestSuite::launchAllCases()
     return launchCases(cases());
 }
 
-KUrl CTestSuite::url() const
+KUrl CTestSuite::executable() const
 {
-    return m_url;
+    return m_executable;
 }
 
 QStringList CTestSuite::cases() const

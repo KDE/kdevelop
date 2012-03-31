@@ -56,7 +56,7 @@ void CTestFindJob::findTestCases()
         return;
     }
     
-    QFileInfo info(m_suite->url().toLocalFile());
+    QFileInfo info(m_suite->executable().toLocalFile());
     if (info.exists() && info.isExecutable())
     {
         kDebug() << "Starting process to find test cases" << m_suite->name();

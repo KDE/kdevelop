@@ -39,7 +39,7 @@ public:
     virtual KJob* launchCases(const QStringList& testCases);
     virtual KJob* launchAllCases();
     
-    virtual KUrl url() const;
+    virtual KUrl executable() const;
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
@@ -55,7 +55,7 @@ public:
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
     
 private:
-    KUrl m_url;
+    KUrl m_executable;
     QString m_name;
     QStringList m_cases;
     QStringList m_args;
