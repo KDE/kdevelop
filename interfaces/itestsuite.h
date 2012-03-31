@@ -68,17 +68,13 @@ public:
     virtual ~ITestSuite();
 
     /**
-     * @returns the display name of this suite. It does not have to be unique. 
+     * @returns the display name of this suite. It has to be unique within a project. 
      **/
     virtual QString name() const = 0;
     /**
      * @returns the list of all test cases in this suite. 
      **/
     virtual QStringList cases() const = 0;
-    /**
-     * @returns a unique URL. 
-     **/
-    virtual KUrl url() const = 0;
     /**
      * Get the project to which this test suite belongs. 
      * Since all suites must have a project associated, 
