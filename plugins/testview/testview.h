@@ -23,6 +23,7 @@
 #include <QtGui/QTreeView>
 #include <interfaces/itestsuite.h>
 
+class QStandardItem;
 namespace KDevelop {
 class ITestSuite;
 }
@@ -40,16 +41,22 @@ public:
 
 public slots:
     void reloadTests();
-    void buildTestModel();
-    void updateTestSuite(KDevelop::ITestSuite* suite);
     void runSelectedTests();
     void showSource();
+
+    void addTestSuite(KDevelop::ITestSuite* suite);
+    void removeTestSuite(KDevelop::ITestSuite* suite);
+    void updateTestSuite(KDevelop::ITestSuite* suite);
+    void addProject(KDevelop::IProject* project);
+    void removeProject(KDevelop::IProject* project);
 
 private:
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
     
     KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
+    QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);
+    QStandardItem* itemForProject(KDevelop::IProject* project);
 };
 
 #endif // TESTVIEW_H
