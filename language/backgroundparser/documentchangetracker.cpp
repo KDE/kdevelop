@@ -70,8 +70,8 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0), m_whitespaceSensitivity(ILanguageSupport::Insensitive)
 {
     m_url = IndexedString(document->url());
-    Q_ASSERT(document->url().isValid());
     Q_ASSERT(document);
+    Q_ASSERT(document->url().isValid());
     
     // Check whether a language plugin is tracking the document which belongs to a 
     // whitespace-sensitive language (e.g. python)
