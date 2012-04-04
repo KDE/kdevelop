@@ -16,13 +16,13 @@
 // @todo could get these from emacs compile.el
 QList<ErrorFormat> ErrorFormat::errorFormats = QList<ErrorFormat>()
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-    << ErrorFormat( "([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 )
+    << ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 )
     // GCC
-    << ErrorFormat( "([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 )
+    << ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 )
     // ICC
-    << ErrorFormat( "([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" )
+    << ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" )
     //libtool link
-    << ErrorFormat( "(libtool):( link):( warning): ", 0, 0, 0 )
+    << ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 )
     // ld
     << ErrorFormat( "undefined reference", 0, 0, 0 )
     << ErrorFormat( "undefined symbol", 0, 0, 0 )
@@ -33,9 +33,9 @@ QList<ErrorFormat> ErrorFormat::errorFormats = QList<ErrorFormat>()
     // Fortran
     << ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
     // Jade
-    << ErrorFormat( "[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 )
+    << ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 )
     // ifort
-    << ErrorFormat( "fortcom: Error: (.*), line ([0-9]+):(.*)", 1, 2, 3, "intel" )
+    << ErrorFormat( "^fortcom: Error: (.*), line ([0-9]+):(.*)", 1, 2, 3, "intel" )
     // PGI
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" )
     // PGI (2)

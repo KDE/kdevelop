@@ -33,6 +33,9 @@ public:
 private slots:
     void benchAddLongLine();
     void benchAddLines();
+
+    void testErrors_data();
+    void testErrors();
 };
 
 #endif // TEST_MAKEOUTPUTMODEL_H

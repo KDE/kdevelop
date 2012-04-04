@@ -22,6 +22,7 @@
 #include "test_makeoutputmodel.h"
 
 #include "../makeoutputmodel.h"
+#include "../outputfilters.h"
 
 #include <QStringList>
 #include <QTest>
@@ -111,6 +112,58 @@ void TestMakeOutputModel::benchAddLongLine()
     const double avgUiLockup = double(elapsed) / spy.count();
     qDebug() << "average UI lockup in ms: " << avgUiLockup;
     QVERIFY(avgUiLockup < 200);
+}
+
+void TestMakeOutputModel::testErrors_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<QString>("file");
+    QTest::addColumn<int>("lineNr");
+    QTest::addColumn<int>("column");
+
+    QTest::newRow("gcc-with-col")
+        << "/path/to/file.cpp:123:45: fatal error: ..."
+        << "/path/to/file.cpp" << 123 << 45;
+    QTest::newRow("gcc-no-col")
+        << "/path/to/file.cpp:123: error ..."
+        << "/path/to/file.cpp" << 123 << -1;
+    QTest::newRow("fortcom")
+        << "fortcom: Error: Ogive8.f90, line 123: ..."
+        << "Ogive8.f90" << 123 << -1;
+    QTest::newRow("libtool")
+        << "libtool: link: warning: ..."
+        << "" << -1 << -1;
+}
+
+void TestMakeOutputModel::testErrors()
+{
+    QFETCH(QString, line);
+    QFETCH(QString, file);
+    QFETCH(int, lineNr);
+    QFETCH(int, column);
+    bool matched = false;
+    foreach(const ErrorFormat& format, ErrorFormat::errorFormats) {
+        if (format.expression.indexIn(line) != -1) {
+            matched = true;
+            if (format.fileGroup > 0) {
+                QCOMPARE(format.expression.cap( format.fileGroup ), file);
+            } else {
+                QVERIFY(file.isEmpty());
+            }
+            if (format.lineGroup > 0) {
+                QCOMPARE(format.expression.cap( format.lineGroup ).toInt(), lineNr);
+            } else {
+                QCOMPARE(lineNr, -1);
+            }
+            if(format.columnGroup > 0) {
+                QCOMPARE(format.expression.cap( format.columnGroup ).toInt(), column);
+            } else {
+                QCOMPARE(column, -1);
+            }
+            break;
+        }
+    }
+    QVERIFY(matched);
 }
 
 #include "test_makeoutputmodel.moc"
