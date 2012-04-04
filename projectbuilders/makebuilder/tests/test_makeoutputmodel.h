@@ -31,6 +31,7 @@ public:
     explicit TestMakeOutputModel(QObject* parent = 0);
 
 private slots:
+    void benchAddLongLine();
     void benchAddLines();
 };
 

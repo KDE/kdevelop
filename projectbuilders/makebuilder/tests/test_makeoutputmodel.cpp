@@ -69,4 +69,48 @@ void TestMakeOutputModel::benchAddLines()
     QVERIFY(avgUiLockup < 200);
 }
 
+void TestMakeOutputModel::benchAddLongLine()
+{
+    // see also: https://bugs.kde.org/show_bug.cgi?id=295361
+    const int objects = 100; // *.o files
+    const int libs = 20; // -l...
+    const int libPaths = 20; // -L...
+    QString line = "g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui";
+    for(int i = 0; i < objects; ++i) {
+        line += QString(" .obj/file%1.o").arg(i);
+    }
+    for(int i = 0; i < libPaths; ++i) {
+        line += QString(" -Lsome/path/to/lib%1").arg(i);
+    }
+    for(int i = 0; i < libs; ++i) {
+        line += QString(" -lsomelib%1").arg(i);
+    }
+
+    MakeOutputModel model(KUrl("/tmp/build-foo"));
+
+    qRegisterMetaType<QModelIndex>("QModelIndex");
+    QSignalSpy spy(&model, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)));
+
+    QElapsedTimer totalTime;
+    totalTime.start();
+
+    QStringList lines;
+    lines << line;
+    QBENCHMARK {
+        model.addLines(lines);
+        while(model.rowCount() != lines.count()) {
+            QCoreApplication::instance()->processEvents();
+        }
+    }
+
+    QVERIFY(model.rowCount() == lines.count());
+    const qint64 elapsed = totalTime.elapsed();
+
+    qDebug() << "ms elapsed to add lines: " << elapsed;
+    qDebug() << "total number of added lines: " << lines.count();
+    const double avgUiLockup = double(elapsed) / spy.count();
+    qDebug() << "average UI lockup in ms: " << avgUiLockup;
+    QVERIFY(avgUiLockup < 200);
+}
+
 #include "test_makeoutputmodel.moc"
