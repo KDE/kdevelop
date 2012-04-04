@@ -33,6 +33,7 @@
 #include <duchain/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
 #include "backgroundparser.h"
 #include <QApplication>
 
@@ -66,11 +67,23 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0)
+    : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0), m_whitespaceSensitivity(ILanguageSupport::Insensitive)
 {
     m_url = IndexedString(document->url());
     Q_ASSERT(document->url().isValid());
     Q_ASSERT(document);
+    
+    // Check whether a language plugin is tracking the document which belongs to a 
+    // whitespace-sensitive language (e.g. python)
+    foreach ( KDevelop::ILanguage* lang, ICore::self()->languageController()->languagesForUrl(document->url()) ) {
+        if ( ! lang || ! lang->languageSupport() ) {
+            continue;
+        }
+        if ( lang->languageSupport()->whitespaceSensititivy() >= m_whitespaceSensitivity ) {
+            m_whitespaceSensitivity = lang->languageSupport()->whitespaceSensititivy();
+        }
+    }
+    
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
     connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)));
@@ -207,14 +220,36 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
 void DocumentChangeTracker::textInserted( Document* document, Range range )
 {
     QString text = document->text(range);
-    QString textWithoutWhitespace = text;
-    textWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(textWithoutWhitespace.isEmpty() && checkMergeTokens(range, "", text))
-    {
-        // Only whitespace was changed, no update is required
-    }else{
-        m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
+    if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
+        m_needUpdate = true;
+    }
+    
+    if ( ! m_needUpdate ) {
+        QString textWithoutWhitespace = text;
+        textWithoutWhitespace.remove(whiteSpaceRegExp);
+        bool changeIsWhitespaceOnly = textWithoutWhitespace.isEmpty() && checkMergeTokens(range, "", text);
+        if ( m_whitespaceSensitivity == ILanguageSupport::IndentOnly && changeIsWhitespaceOnly ) {
+            // The language requires a document to be re-parsed if the indentation changes (e.g. python),
+            // so do some special checks here to see if that is the case.
+            if ( changeIsWhitespaceOnly ) {
+                QString fromLineBeginning = document->text(Range(Cursor(range.start().line(), 0), range.end()));
+                bool inIndent = true;
+                for ( int i = fromLineBeginning.length() - 1; i >= 0; --i ) {
+                    if ( ! fromLineBeginning.at(i).isSpace() ) {
+                        inIndent = false;
+                        break;
+                    }
+                }
+                if ( inIndent ) {
+                    m_needUpdate = true;
+                }
+            }
+        }
+        if ( ! changeIsWhitespaceOnly ) {
+            // If we've inserted something else than whitespace, an update is required for all languages.
+            m_needUpdate = true;
+        }
     }
     
     #ifdef ALWAYS_UPDATE

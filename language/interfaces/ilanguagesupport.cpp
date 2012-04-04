@@ -63,6 +63,11 @@ DocumentChangeTracker* ILanguageSupport::createChangeTrackerForDocument ( KTextE
     return new DocumentChangeTracker(document);
 }
 
+ILanguageSupport::WhitespaceSensitivity ILanguageSupport::whitespaceSensititivy() const
+{
+    return ILanguageSupport::Insensitive;
+}
+
 QString ILanguageSupport::indentationSample() const
 {
     return "";

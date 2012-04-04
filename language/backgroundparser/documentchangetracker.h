@@ -28,6 +28,7 @@
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/indexedstring.h>
+#include <language/interfaces/ilanguagesupport.h>
 
 namespace KTextEditor
 {
@@ -257,6 +258,7 @@ private:
     void unlockRevision(qint64 revision);
     
     QMap<qint64, int> m_revisionLocks;
+    ILanguageSupport::WhitespaceSensitivity m_whitespaceSensitivity;
 };
 
 }
