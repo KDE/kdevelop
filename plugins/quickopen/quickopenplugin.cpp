@@ -668,6 +668,10 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_Return:
       case Qt::Key_Enter: {
+        if (m_filterTimer.isActive()) {
+          m_filterTimer.stop();
+          applyFilter();
+        }
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
