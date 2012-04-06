@@ -39,6 +39,8 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+extern template char *QTest::toString(const KDevelop::RangeInRevision &range);
+
 void TestDUChain::testRangeBasedFor() {
   //                                         1         2         3
   //                                123456789012345678901234567890
