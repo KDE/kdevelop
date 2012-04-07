@@ -90,6 +90,7 @@ enum TOKEN_KIND
     Token_mutable,
     Token_namespace,
     Token_new,
+    Token_noexcept,
     Token_not,
     Token_not_eq,
     Token_nullptr,

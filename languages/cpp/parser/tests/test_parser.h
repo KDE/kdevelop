@@ -126,6 +126,7 @@ private slots:
   void classVirtSpec();
   void classVirtSpec_data();
   void testUsingAlias();
+  void testNoexcept();
   //END C++2011 Support
 
 protected:

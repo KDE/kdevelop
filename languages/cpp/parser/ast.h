@@ -540,6 +540,12 @@ public:
   // the exception spec is variadic (pack expansion)
   uint ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
+
+  // noexcept token
+  uint no_except;
+  // if set, this is actually a noexcept(...) expression
+  // and the ast node below points to the ...
+  ExpressionAST *noexcept_expression;
 };
 
 class ExpressionOrDeclarationStatementAST : public StatementAST

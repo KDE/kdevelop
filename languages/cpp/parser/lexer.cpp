@@ -214,6 +214,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(mutable);
   ADD_TOKEN(namespace);
   ADD_TOKEN(new);
+  ADD_TOKEN(noexcept);
   ADD_TOKEN(not);
   ADD_TOKEN(not_eq);
   ADD_TOKEN(nullptr);

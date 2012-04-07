@@ -2440,33 +2440,61 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  CHECK(Token_throw);
-  ADVANCE('(', "(");
-
-  ExceptionSpecificationAST *ast
-    = CreateNode<ExceptionSpecificationAST>(session->mempool);
-
-  if (session->token_stream->lookAhead() == Token_ellipsis)
+  if (session->token_stream->lookAhead() == Token_throw)
     {
-      ast->ellipsis = session->token_stream->cursor();
       advance();
+
+      ADVANCE('(', "(");
+
+      ExceptionSpecificationAST *ast
+        = CreateNode<ExceptionSpecificationAST>(session->mempool);
+
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          ast->ellipsis = session->token_stream->cursor();
+          advance();
+        }
+
+      parseTypeIdList(ast->type_ids);
+
+      if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          ast->ellipsis = session->token_stream->cursor();
+          advance();
+        }
+
+
+      ADVANCE(')', ")");
+
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
+      node = ast;
+
+      return true;
+
     }
 
-  parseTypeIdList(ast->type_ids);
-
-  if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
+  else if (session->token_stream->lookAhead() == Token_noexcept)
     {
-      ast->ellipsis = session->token_stream->cursor();
+      ExceptionSpecificationAST *ast
+        = CreateNode<ExceptionSpecificationAST>(session->mempool);
+
+      ast->no_except = session->token_stream->cursor();
       advance();
+
+      if (session->token_stream->lookAhead() == '(')
+        {
+          advance();
+          parseExpression(ast->noexcept_expression);
+          CHECK(')');
+        }
+
+      UPDATE_POS (ast, start, _M_last_valid_token+1);
+      node = ast;
+
+      return true;
     }
 
-
-  ADVANCE(')', ")");
-
-  UPDATE_POS(ast, start, _M_last_valid_token+1);
-  node = ast;
-
-  return true;
+  return false;
 }
 
 bool Parser::parseEnumerator(EnumeratorAST *&node)
@@ -4486,6 +4514,29 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
 
         if (!parseUnaryExpression(ast->expression))
           return false;
+
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
+        node = ast;
+        return true;
+      }
+
+    case Token_noexcept: // same as generic case, but parentheses are not optional
+      {
+        advance();
+
+        if (session->token_stream->lookAhead() != '(')
+          {
+            tokenRequiredError ('(');
+            return false;
+          }
+
+        ExpressionAST *expr = 0;
+        if (!parseUnaryExpression(expr))
+          return false;
+
+        UnaryExpressionAST *ast = CreateNode<UnaryExpressionAST>(session->mempool);
+        ast->op = Token_noexcept;
+        ast->expression = expr;
 
         UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
