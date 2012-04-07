@@ -1170,10 +1170,18 @@ int pp::next_token (Stream& input)
           base = 8;
         }
 
-        if (number.endsWith('u', Qt::CaseInsensitive)) {
+        if (number.endsWith("lu", Qt::CaseInsensitive) || number.endsWith("ul", Qt::CaseInsensitive)) {
+          number.chop(2);
           token_uvalue = number.toULong(0, base);
           nextToken = TOKEN_UNUMBER;
-
+        } else if (number.endsWith('l', Qt::CaseInsensitive)) {
+          number.chop(1);
+          token_value = number.toLong(0, base);
+          nextToken = TOKEN_NUMBER;
+        } else if (number.endsWith('u', Qt::CaseInsensitive)) {
+          number.chop(1);
+          token_uvalue = number.toULong(0, base);
+          nextToken = TOKEN_UNUMBER;
         } else {
           token_value = number.toLong(0, base);
           nextToken = TOKEN_NUMBER;

@@ -479,7 +479,17 @@ void TestParser::testPreprocessor() {
   QCOMPARE(preprocess("#define MM(x) NN\n#define OO(NN) MM(NN)\nOO(2)\n").trimmed(), QString("NN"));
   QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OO)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("2 2 2"));
   QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OOO)\n").replace(QRegExp("[\n\t ]+"), ""), QString("OOOO(2)"));
-  
+
+  QCOMPARE(preprocess("#if 1\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1u\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1l\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1lu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1ul\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QEXPECT_FAIL("", "not yet handled", Continue);
+  QCOMPARE(preprocess("#if 1ll\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QEXPECT_FAIL("", "not yet handled", Continue);
+  QCOMPARE(preprocess("#if 1llu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+
   QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
   
   QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
