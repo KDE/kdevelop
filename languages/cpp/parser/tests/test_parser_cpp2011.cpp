@@ -549,3 +549,13 @@ void TestParser::testUsingAlias()
   dump(ast);
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testNoexcept()
+{
+  TranslationUnitAST* ast = parse( "void f1() noexcept;\n"
+                                   "void f2() noexcept(false);\n"
+                                   "class a { void m1() noexcept; void m2() noexcept(true); };" );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}

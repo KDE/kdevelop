@@ -145,6 +145,7 @@ void DefaultVisitor::visitEnumerator(EnumeratorAST *node)
 
 void DefaultVisitor::visitExceptionSpecification(ExceptionSpecificationAST *node)
 {
+  visit(node->noexcept_expression);
   visitNodes(this, node->type_ids);
 }
 

@@ -321,15 +321,32 @@ void CodeGenerator::visitEnumerator(EnumeratorAST* node)
 
 void CodeGenerator::visitExceptionSpecification(ExceptionSpecificationAST* node)
 {
-  printToken(Token_throw);
+  if (node->no_except)
+    {
+      printToken(Token_noexcept);
 
-  m_output << "(";
+      if (node->noexcept_expression)
+        {
+          m_output << "(";
 
-  print(node->ellipsis);
+          DefaultVisitor::visitExceptionSpecification(node);
 
-  DefaultVisitor::visitExceptionSpecification(node);
+          m_output << ")";
+        }
+    }
 
-  m_output << ")";
+  else
+    {
+      printToken(Token_throw);
+
+      m_output << "(";
+
+      print(node->ellipsis);
+
+      DefaultVisitor::visitExceptionSpecification(node);
+
+      m_output << ")";
+    }
 }
 
 void CodeGenerator::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
