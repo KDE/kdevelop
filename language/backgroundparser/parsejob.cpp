@@ -367,6 +367,10 @@ struct MovingRangeTranslator : public DUChainVisitor
     void translateRange(RangeInRevision& r)
     {
         moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
+        // PHP and python use top contexts that end at INT_MAX, so make sure that doesn't overflow
+        if ( r.end.line == std::numeric_limits<int>::max() || r.end.column == std::numeric_limits<int>::max() ) {
+            return;
+        }
         moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
     }
 
