@@ -1156,11 +1156,15 @@ int pp::next_token (Stream& input)
       }
       else if (isNumber(ch))
       {
+        KDevelop::SimpleCursor numericBeginPosition = input.inputPosition().castToSimpleCursor();
+
         PreprocessedContents byteNumber;
         {
           Stream ns(&byteNumber);
           skip_number(input, ns);
         }
+
+        KDevelop::SimpleCursor numericEndPosition = input.inputPosition().castToSimpleCursor();
 
         QString number(QString::fromUtf8(stringFromContents(byteNumber)));
         int base = 10;
@@ -1170,21 +1174,43 @@ int pp::next_token (Stream& input)
           base = 8;
         }
 
-        if (number.endsWith("lu", Qt::CaseInsensitive) || number.endsWith("ul", Qt::CaseInsensitive)) {
-          number.chop(2);
-          token_uvalue = number.toULong(0, base);
-          nextToken = TOKEN_UNUMBER;
-        } else if (number.endsWith('l', Qt::CaseInsensitive)) {
-          number.chop(1);
-          token_value = number.toLong(0, base);
-          nextToken = TOKEN_NUMBER;
-        } else if (number.endsWith('u', Qt::CaseInsensitive)) {
-          number.chop(1);
-          token_uvalue = number.toULong(0, base);
+        uint countUnsigned = 0, countLong = 0, countLongLong = 0;
+        while (true) {
+          if (number.endsWith("u", Qt::CaseInsensitive)) {
+                  ++countUnsigned;
+            number.chop(1);
+          } else if (number.endsWith("ll", Qt::CaseInsensitive)) { // "ll" before "l"
+                  ++countLongLong;
+            number.chop(2);
+          } else if (number.endsWith("l", Qt::CaseInsensitive)) {
+                  ++countLong;
+            number.chop (1);
+          } else {
+            break;
+          }
+        }
+
+        if ((countUnsigned > 1) || ((countLong + countLongLong) > 1)) {
+          KDevelop::ProblemPointer problem(new KDevelop::Problem);
+          problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(numericBeginPosition, numericEndPosition)));
+          problem->setDescription(i18n("Invalid suffix combination"));
+          problemEncountered(problem);
+        }
+
+        bool parsedOk = 0;
+        if (countUnsigned) {
+          token_uvalue = number.toULongLong (&parsedOk, base);
           nextToken = TOKEN_UNUMBER;
         } else {
-          token_value = number.toLong(0, base);
+          token_value = number.toLongLong (&parsedOk, base);
           nextToken = TOKEN_NUMBER;
+        }
+
+        if (!parsedOk) {
+          KDevelop::ProblemPointer problem(new KDevelop::Problem);
+          problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(numericBeginPosition, numericEndPosition)));
+          problem->setDescription(i18n("Invalid numeric value"));
+          problemEncountered(problem);
         }
       }
       else

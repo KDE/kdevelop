@@ -485,10 +485,23 @@ void TestParser::testPreprocessor() {
   QCOMPARE(preprocess("#if 1l\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
   QCOMPARE(preprocess("#if 1lu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
   QCOMPARE(preprocess("#if 1ul\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
-  QEXPECT_FAIL("", "not yet handled", Continue);
   QCOMPARE(preprocess("#if 1ll\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
-  QEXPECT_FAIL("", "not yet handled", Continue);
   QCOMPARE(preprocess("#if 1llu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if ~0ull == 0u + ~0u\n 10\n #endif\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if 1Ul\n 10\n #endif\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1Lu\n 10\n #endif\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1LlU\n 10\n #endif\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if 1_u\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1u_\n #endif\n").trimmed(), QString("*ERROR*"));
+
+  QCOMPARE(preprocess("#if 1uu\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1lll\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1lul\n #endif\n").trimmed(), QString("*ERROR*"));
+
+  QCOMPARE(preprocess("#if (2147483647L + 10L) > 0\n 10\n #endif\n").trimmed(), QString("10"));
 
   QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
   

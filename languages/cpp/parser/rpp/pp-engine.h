@@ -54,8 +54,8 @@ struct Value
   Kind kind;
 
   union {
-    long l;
-    unsigned long ul;
+    long long l;
+    unsigned long long ul;
   };
 
   inline bool is_ulong () const { return kind == Kind_ULong; }
@@ -141,8 +141,8 @@ class KDEVCPPRPP_EXPORT pp
   KDevelop::IndexedString guardCandidate;
 
   union {
-    long token_value;
-    unsigned long token_uvalue;
+    long long token_value;
+    unsigned long long token_uvalue;
   };
   KDevelop::IndexedString token_text;
 
