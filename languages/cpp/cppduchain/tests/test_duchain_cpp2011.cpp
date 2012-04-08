@@ -818,3 +818,17 @@ void TestDUChain::testAuto()
   QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
   QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
 }
+
+void TestDUChain::testNoexcept()
+{
+    const QByteArray code(
+    "void f1() noexcept;\n"
+    "void f2() noexcept(false);\n"
+    "class a { void m1() noexcept; void m2() noexcept(true); };\n"
+    "void asdf() { bool a = noexcept(true); }\n"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+}

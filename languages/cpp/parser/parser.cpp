@@ -4522,6 +4522,7 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
 
     case Token_noexcept: // same as generic case, but parentheses are not optional
       {
+        uint op = session->token_stream->cursor();
         advance();
 
         if (session->token_stream->lookAhead() != '(')
@@ -4535,7 +4536,7 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
           return false;
 
         UnaryExpressionAST *ast = CreateNode<UnaryExpressionAST>(session->mempool);
-        ast->op = Token_noexcept;
+        ast->op = op;
         ast->expression = expr;
 
         UPDATE_POS(ast, start, _M_last_valid_token+1);
