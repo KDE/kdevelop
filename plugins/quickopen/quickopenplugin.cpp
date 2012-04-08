@@ -71,7 +71,6 @@
 #include <qdesktopwidget.h>
 #include <util/activetooltip.h>
 #include <qboxlayout.h>
-#include <curses.h>
 #include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
