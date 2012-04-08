@@ -71,6 +71,7 @@
 #include <qdesktopwidget.h>
 #include <util/activetooltip.h>
 #include <qboxlayout.h>
+#include <curses.h>
 #include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
@@ -274,9 +275,8 @@ void QuickOpenWidget::showStandardButtons(bool show)
   }
 }
 
-QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
+QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false), m_worstCaseUpdateInterval(0) {
   m_filterTimer.setSingleShot(true);
-  m_filterTimer.setInterval(150);
   connect(&m_filterTimer, SIGNAL(timeout()), this, SLOT(applyFilter()));
 
   Q_UNUSED( title );
@@ -350,10 +350,23 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   
   updateProviders();
+  updateTimerInterval();
+  
 // no need to call this, it's done by updateProviders already
 //   m_model->restart();
 }
 
+void QuickOpenWidget::updateTimerInterval(bool filterChangeIsExpensive)
+{
+  int newHint = m_model->getUpdateTimeoutHint();
+  m_worstCaseUpdateInterval = qMax(m_worstCaseUpdateInterval, newHint);
+  if ( filterChangeIsExpensive ) {
+    m_filterTimer.setInterval(m_worstCaseUpdateInterval);
+  }
+  else {
+    m_filterTimer.setInterval(newHint);
+  }
+}
 
 void QuickOpenWidget::showEvent(QShowEvent* e)
 {
@@ -498,6 +511,7 @@ void QuickOpenWidget::updateScrollBarState()
 
 void QuickOpenWidget::textChanged( const QString& str )
 {
+  updateTimerInterval(m_filter.startsWith(str));
   m_filter = str;
   m_filterTimer.start();
 }

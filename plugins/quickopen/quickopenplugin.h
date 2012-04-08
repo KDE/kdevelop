@@ -160,6 +160,8 @@ class QuickOpenWidget : public QMenu {
   private slots:
   void currentChanged( const QModelIndex& current, const QModelIndex& previous );
   void currentChanged( const QItemSelection& current, const QItemSelection& previous );
+  
+  void updateTimerInterval(bool filterChangeIsExpensive = false);
 
   void accept();
   void textChanged( const QString& str );
@@ -182,6 +184,7 @@ class QuickOpenWidget : public QMenu {
   QString m_preselectedText;
   QTimer m_filterTimer;
   QString m_filter;
+  int m_worstCaseUpdateInterval;
   public:
   Ui::QuickOpen o;
   
