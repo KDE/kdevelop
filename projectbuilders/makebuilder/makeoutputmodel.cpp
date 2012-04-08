@@ -214,6 +214,10 @@ void MakeOutputModel::addLineBatch()
     const int maxLines = 50;
     const int linesInBatch = qMin(lineBuffer.count(), maxLines);
 
+    // If there is nothing to insert we are done.
+    if ( linesInBatch == 0 )
+            return;
+
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {
