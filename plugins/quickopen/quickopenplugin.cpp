@@ -549,13 +549,11 @@ void QuickOpenWidget::accept() {
 }
 
 void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
-  QString filterText = o.searchLine->text();
-  if(  m_model->execute( index, filterText ) )
-    emit ready();
-  else if( filterText != o.searchLine->text() )
-    o.searchLine->setText( filterText );
+  // crash guard: https://bugs.kde.org/show_bug.cgi?id=297178
+  o.list->setCurrentIndex(index);
+  QMetaObject::invokeMethod(this, "accept", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(this, "ready", Qt::QueuedConnection);
 }
-
 
 bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 {

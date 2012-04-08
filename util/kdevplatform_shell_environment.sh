@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This file is part of KDevelop
 # Copyright 2011 David Nolden <david.nolden.kdevelop@art-master.de>

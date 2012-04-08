@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Author: David Nolden <david.nolden.kdevelop@art-master.de>
 # This script is made available under the GPLv2 licence.
