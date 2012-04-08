@@ -394,6 +394,7 @@ void TestParser::testInitList_data()
 
   // exmaples taken from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm
   QTest::newRow("assign") << "int a = {1};";
+  QTest::newRow("assign-extended") << "void f() { std::vector lst; lst = {1,2,3}; }";
   QTest::newRow("ctor") << "std::complex<double> z{1,2};";
   QTest::newRow("new") << "auto i = new std::vector<std::string>{\"once\", \"upon\", \"a\", \"time\"};"; // 4 string elements
   QTest::newRow("func-arg") << "void foo() { f( {\"Nicholas\",\"Annemarie\"} ); }"; // pass list of two elements

@@ -5102,6 +5102,10 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
   return true;
 }
 
+//note: this does not really follow the grammar,
+//      esp. the braced-init-list support might need to be
+//      reworked, since the grammar says:
+//      logical-or-expression assignment-operator initializer-clause
 bool Parser::parseAssignmentExpression(ExpressionAST *&node)
 {
   uint start = session->token_stream->cursor();
@@ -5123,7 +5127,8 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
 
       ExpressionAST *rightExpr = 0;
       if (!parseConditionalExpression(rightExpr) &&
-          !parseSignalSlotExpression(rightExpr))
+          !parseSignalSlotExpression(rightExpr) &&
+          !parseBracedInitList(rightExpr))
         return false;
 
       BinaryExpressionAST *ast = CreateNode<BinaryExpressionAST>(session->mempool);
