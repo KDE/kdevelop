@@ -12,7 +12,6 @@ X-KDE-PluginInfo-Author=Miha Čančula
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Testing
 X-KDevelop-Interfaces=org.kdevelop.ITestProvider,org.kdevelop.ICTestProvider
-X-KDevolop-IRequired=org.kdevelop.ITestController
 X-KDevelop-Version=14
 X-KDevelop-Category=Global
 X-KDevelop-Mode=NoGUI
