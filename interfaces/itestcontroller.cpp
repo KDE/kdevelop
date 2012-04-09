@@ -21,8 +21,15 @@
 
 using namespace KDevelop;
 
+ITestController::ITestController(QObject* parent)
+: QObject(parent)
+{
+
+}
+
 ITestController::~ITestController()
 {
 
 }
 
+#include "itestcontroller.moc"

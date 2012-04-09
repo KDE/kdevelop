@@ -20,35 +20,39 @@
 #include "testview.h"
 #include "testviewplugin.h"
 
-#include "interfaces/icore.h"
-#include "interfaces/iproject.h"
-#include "interfaces/iplugincontroller.h"
-#include "interfaces/iprojectcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/itestsuite.h>
-
-#include <KIcon>
-#include <KActionCollection>
-#include <KAction>
-
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QStandardItem>
-#include <QHeaderView>
-#include <KJob>
-#include <KDebug>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
+
 #include <util/executecompositejob.h>
+
 #include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 
+#include <KIcon>
+#include <KActionCollection>
+#include <KAction>
+#include <KLocalizedString>
+#include <KJob>
+#include <KDebug>
+
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QHeaderView>
+
 using namespace KDevelop;
 
-const int ProjectRole = Qt::UserRole + 1;
-const int SuiteRole = Qt::UserRole + 2;
-const int CaseRole = Qt::UserRole + 3;
+enum CustomRoles {
+    ProjectRole = Qt::UserRole + 1,
+    SuiteRole,
+    CaseRole
+};
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QTreeView(parent)
@@ -85,7 +89,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect (pc, SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(addProject(KDevelop::IProject*)));
     connect (pc, SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(removeProject(KDevelop::IProject*)));
 
-    IPlugin* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
+    ITestController* tc = ICore::self()->testController();
     connect (tc, SIGNAL(testSuiteAdded(KDevelop::ITestSuite*)),
              SLOT(addTestSuite(KDevelop::ITestSuite*)));
     connect (tc, SIGNAL(testSuiteRemoved(KDevelop::ITestSuite*)),
@@ -98,8 +102,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
         addProject(project);
     }
 
-    ITestController* testController = tc->extension<ITestController>();
-    foreach (ITestSuite* suite, testController->testSuites())
+    foreach (ITestSuite* suite, tc->testSuites())
     {
         addTestSuite(suite);
     }
@@ -112,7 +115,7 @@ TestView::~TestView()
 
 void TestView::reloadTests()
 {
-    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    ITestController* tc = ICore::self()->testController();
     KJob* reloadJob = tc->reloadTestSuites();
     if (reloadJob)
     {
@@ -201,7 +204,7 @@ void TestView::runSelectedTests()
     }
 
     QList<KJob*> jobs;
-    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    ITestController* tc = ICore::self()->testController();
 
     foreach (const QModelIndex& index, indexes)
     {
@@ -253,7 +256,7 @@ void TestView::showSource()
     }
 
     IndexedDeclaration declaration;
-    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    ITestController* tc = ICore::self()->testController();
 
     QStandardItem* item = m_model->itemFromIndex(indexes.first());
     if (item->parent() == 0)

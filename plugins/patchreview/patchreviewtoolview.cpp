@@ -413,18 +413,6 @@ QList< ITestSuite* > PatchReviewToolView::testSuites()
         return ret;
     }
 
-    IPlugin* testPlugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
-    if (!testPlugin) {
-        kDebug() << "No plugin";
-        return ret;
-    }
-
-    ITestController* tc = testPlugin->extension<ITestController>();
-    if (!tc) {
-        kDebug() << "No test controller";
-        return ret;
-    }
-
     kDebug() << "Everything ok, returning test suites";
-    return tc->testSuitesForProject(project);
+    return ICore::self()->testController()->testSuitesForProject(project);
 }

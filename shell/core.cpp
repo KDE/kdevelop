@@ -54,6 +54,8 @@
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
+#include "testcontroller.h"
+
 #include <KMessageBox>
 
 #include <KTextEditor/Document>
@@ -214,7 +216,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         selectionController = new SelectionController(m_core);
     }
-    
+
     if( !documentationController && !(mode & Core::NoUi) )
     {
         documentationController = new DocumentationController(m_core);
@@ -224,7 +226,12 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         debugController = new DebugController(m_core);
     }
-    
+
+    if( !testController )
+    {
+        testController = new TestController(m_core);
+    }
+
     kDebug() << "initializing ui controller";
 
     sessionController.data()->initialize( session );
@@ -269,6 +276,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         documentationController.data()->initialize();
     }
     debugController.data()->initialize();
+    testController.data()->initialize();
 
     installSignalHandler();
 
@@ -289,6 +297,7 @@ CorePrivate::~CorePrivate()
     delete documentationController.data();
     delete debugController.data();
     delete workingSetController.data();
+    delete testController.data();
 
     selectionController.clear();
     projectController.clear();
@@ -303,6 +312,7 @@ CorePrivate::~CorePrivate()
     documentationController.clear();
     debugController.clear();
     workingSetController.clear();
+    testController.clear();
 }
 
 
@@ -391,7 +401,9 @@ void Core::cleanup()
         d->sourceFormatterController.data()->cleanup();
         d->pluginController.data()->cleanup();
         d->sessionController.data()->cleanup();
-        
+
+        d->testController.data()->cleanup();
+
         //Disable the functionality of the language controller
         d->languageController.data()->cleanup();
     }
@@ -523,6 +535,16 @@ IDebugController* Core::debugController()
 DebugController* Core::debugControllerInternal()
 {
     return d->debugController.data();
+}
+
+ITestController* Core::testController()
+{
+    return d->testController.data();
+}
+
+TestController* Core::testControllerInternal()
+{
+    return d->testController.data();
 }
 
 WorkingSetController* Core::workingSetControllerInternal()

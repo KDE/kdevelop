@@ -27,32 +27,36 @@
 #include <util/executecompositejob.h>
 
 #include <KUrl>
-#include <KPluginFactory>
 #include <KLocalizedString>
-#include <KAboutData>
 #include <KDebug>
-
-K_PLUGIN_FACTORY(TestControllerFactory, registerPlugin<TestController>(); )
-K_EXPORT_PLUGIN(TestControllerFactory(KAboutData("kdevtestcontroller","kdevtestcontroller", ki18n("Test Controller"), "0.1", ki18n("Manages unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
-class TestControllerPrivate
+class TestController::TestControllerPrivate
 {
 public:
     QList<ITestSuite*> suites;
 };
 
-TestController::TestController(QObject *parent, const QVariantList &args) : IPlugin(TestControllerFactory::componentData(), parent),
-d(new TestControllerPrivate)
+TestController::TestController(QObject *parent)
+: ITestController(parent)
+, d(new TestControllerPrivate)
 {
-    KDEV_USE_EXTENSION_INTERFACE(ITestController);
-    Q_UNUSED(args)
 }
 
 TestController::~TestController()
 {
     delete d;
+}
+
+void TestController::initialize()
+{
+
+}
+
+void TestController::cleanup()
+{
+    d->suites.clear();
 }
 
 QList< KDevelop::ITestSuite* > TestController::testSuites() const
@@ -101,7 +105,7 @@ QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) con
 KJob* TestController::reloadTestSuites()
 {
     QList<KJob*> jobs;
-    foreach (IPlugin* plugin, core()->pluginController()->allPluginsForExtension("org.kdevelop.ITestProvider"))
+    foreach (IPlugin* plugin, ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITestProvider"))
     {
         if (ITestProvider* provider = plugin->extension<ITestProvider>())
         {
@@ -126,3 +130,4 @@ void TestController::notifyTestRunFinished(ITestSuite* suite)
     emit testRunFinished(suite);
 }
 
+#include "testcontroller.moc"

@@ -21,18 +21,21 @@
 #define KDEVELOP_TESTCONTROLLER_H
 
 #include "interfaces/itestcontroller.h"
-#include "interfaces/iplugin.h"
-#include <QtCore/QVariantList>
 
-class TestControllerPrivate;
+#include "shellexport.h"
 
-class TestController : public KDevelop::IPlugin, public KDevelop::ITestController
+namespace KDevelop {
+
+class KDEVPLATFORMSHELL_EXPORT TestController : public KDevelop::ITestController
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::ITestController)
+
 public:
-    explicit TestController(QObject *parent, const QVariantList &args = QVariantList());
+    explicit TestController(QObject *parent);
     virtual ~TestController();
+
+    void initialize();
+    void cleanup();
 
     virtual void removeTestSuite(KDevelop::ITestSuite* suite);
     virtual void addTestSuite(KDevelop::ITestSuite* suite);
@@ -44,13 +47,11 @@ public:
     virtual KJob* reloadTestSuites();
     virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite);
 
-signals:
-    void testSuiteAdded(KDevelop::ITestSuite* suite) const;
-    void testSuiteRemoved(KDevelop::ITestSuite* suite) const;
-    void testRunFinished(KDevelop::ITestSuite* suite) const;
-
 private:
+    class TestControllerPrivate;
     TestControllerPrivate* const d;
 };
+
+}
 
 #endif // KDEVELOP_TESTCONTROLLER_H

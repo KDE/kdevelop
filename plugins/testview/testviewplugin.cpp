@@ -23,7 +23,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/itestsuite.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/launchconfigurationtype.h>
@@ -97,7 +96,7 @@ void TestViewPlugin::unload()
 void TestViewPlugin::runAllTests()
 {
     QString jobName = "Run %1 tests in %2";
-    ITestController* tc = core()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    ITestController* tc = core()->testController();
     foreach (IProject* project, core()->projectController()->projects())
     {
         QList<KJob*> jobs;
