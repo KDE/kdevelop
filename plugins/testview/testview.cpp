@@ -64,6 +64,9 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     setEditTriggers(NoEditTriggers);
     setSelectionBehavior(SelectRows);
     setSelectionMode(SingleSelection);
+    setExpandsOnDoubleClick(false);
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(doubleClicked(QModelIndex)));
 
     m_model = new QStandardItemModel(this);
     setModel(m_model);
@@ -326,5 +329,8 @@ void TestView::removeProject(IProject* project)
     delete itemForProject(project);
 }
 
-
-
+void TestView::doubleClicked(const QModelIndex& index)
+{
+    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    runSelectedTests();
+}

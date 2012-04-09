@@ -49,6 +49,7 @@ public slots:
     void updateTestSuite(KDevelop::ITestSuite* suite);
     void addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
+    void doubleClicked(const QModelIndex& index);
 
 private:
     TestViewPlugin* m_plugin;
