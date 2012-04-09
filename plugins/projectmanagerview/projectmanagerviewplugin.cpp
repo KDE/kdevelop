@@ -467,7 +467,7 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
     removeItems(d->ctxProjectItemList);
 }
 
-void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* > items)
+void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& items)
 {
     if (items.isEmpty()) {
         return;
@@ -537,7 +537,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
     renameItems(d->ctxProjectItemList);
 }
 
-void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* > items)
+void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& items)
 {
     if (items.isEmpty()) {
         return;

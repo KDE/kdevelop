@@ -57,8 +57,8 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
-    void removeItems(const QList<KDevelop::ProjectBaseItem*> items);
-    void renameItems(const QList<KDevelop::ProjectBaseItem*> items);
+    void removeItems(const QList<KDevelop::ProjectBaseItem*>& items);
+    void renameItems(const QList< KDevelop::ProjectBaseItem* >& items);
 
 public Q_SLOTS:
     void buildProjectItems();
