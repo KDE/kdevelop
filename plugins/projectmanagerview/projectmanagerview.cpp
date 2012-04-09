@@ -183,6 +183,9 @@ bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
             if (keyEvent->key() == Qt::Key_Delete) {
                 m_plugin->removeItems(selectedItems());
                 return true;
+            } else if (keyEvent->key() == Qt::Key_F2) {
+                m_plugin->renameItems(selectedItems());
+                return true;
             }
         }
     }

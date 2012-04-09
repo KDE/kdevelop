@@ -534,9 +534,18 @@ void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
 
 void ProjectManagerViewPlugin::renameItemFromContextMenu()
 {
-    QWidget* window=ICore::self()->uiController()->activeMainWindow()->window();
+    renameItems(d->ctxProjectItemList);
+}
 
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* > items)
+{
+    if (items.isEmpty()) {
+        return;
+    }
+
+    QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
+
+    foreach( KDevelop::ProjectBaseItem* item, items )
     {
         if ((item->type()!=ProjectBaseItem::BuildFolder
                 && item->type()!=ProjectBaseItem::Folder
@@ -556,8 +565,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
 
         if (!name.isEmpty() && name != src) {
             ProjectBaseItem::RenameStatus status = item->rename( name );
-            
-            QWidget* window(QApplication::activeWindow());
+
             switch(status) {
                 case ProjectBaseItem::RenameOk:
                     break;
