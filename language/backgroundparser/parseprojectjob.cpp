@@ -72,6 +72,10 @@ void ParseProjectJob::updateReady(KDevelop::IndexedString url, KDevelop::Referen
 }
 
 void ParseProjectJob::start() {
+    if (KDevelop::ICore::self()->shuttingDown()) {
+        return;
+    }
+
     kDebug() << "starting project parse job";
     QSet< IndexedString > files = m_project->fileSet();
 

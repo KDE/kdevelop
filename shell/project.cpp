@@ -250,8 +250,8 @@ public:
     {
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
-        
-        if(job->errorText().isEmpty()) {
+
+        if(job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
             loading=false;
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
