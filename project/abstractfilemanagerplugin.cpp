@@ -95,8 +95,8 @@ struct AbstractFileManagerPlugin::Private {
 
     void removeFolder(ProjectFolderItem* folder);
 
-    QMap<IProject*, KDirWatch*> m_watchers;
-    QMap<IProject*, QList<FileManagerListJob*> > m_projectJobs;
+    QHash<IProject*, KDirWatch*> m_watchers;
+    QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
     QSet<QString> importFileNameFilter;
 };
 
