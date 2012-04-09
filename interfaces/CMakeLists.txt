@@ -10,7 +10,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     ipatchexporter.cpp
     iassistant.cpp
     context.cpp
-	ipatchdocument.cpp
+    ipatchdocument.cpp
     iplugin.cpp
     idocument.cpp
     icore.cpp
@@ -37,12 +37,12 @@ set(kdevplatforminterfaces_LIB_SRCS
     ipartcontroller.cpp
     launchconfigurationpage.cpp
     launchconfigurationtype.cpp
-	ilauncher.cpp
-	ilaunchconfiguration.cpp
-	ilaunchmode.cpp
-	iprojectprovider.cpp
-	ibuddydocumentfinder.cpp
-	itemplateprovider.cpp
+    ilauncher.cpp
+    ilaunchconfiguration.cpp
+    ilaunchmode.cpp
+    iprojectprovider.cpp
+    ibuddydocumentfinder.cpp
+    itemplateprovider.cpp
     itestsuite.cpp
     itestcontroller.cpp
     itestprovider.cpp

@@ -37,10 +37,10 @@ public:
     virtual void removeTestSuite(KDevelop::ITestSuite* suite);
     virtual void addTestSuite(KDevelop::ITestSuite* suite);
 
-    virtual QList< KDevelop::ITestSuite* > testSuites() const;    
+    virtual QList< KDevelop::ITestSuite* > testSuites() const;
     virtual KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const;
     virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
-    
+
     virtual KJob* reloadTestSuites();
     virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite);
 

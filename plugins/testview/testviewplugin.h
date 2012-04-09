@@ -31,12 +31,12 @@ class TestViewPlugin : public KDevelop::IPlugin
 public:
     TestViewPlugin(QObject* parent, const QVariantList& args = QVariantList());
     virtual ~TestViewPlugin();
-    
+
     virtual void unload();
 
 private:
     TestToolViewFactory* m_viewFactory;
-    
+
 public slots:
     void runAllTests();
 };

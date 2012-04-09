@@ -73,13 +73,13 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
 TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlugin(TestViewFactory::componentData(), parent)
 {
     Q_UNUSED(args)
-    
+
     KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
-    
+
     setXMLFile("kdevtestview.rc");
-    
+
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
 }
@@ -111,7 +111,8 @@ void TestViewPlugin::runAllTests()
         if (!jobs.isEmpty())
         {
             KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
-            compositeJob->setObjectName(i18np("Run 1 test in %2", "Run %1 tests in %2", jobs.size(), project->name()));
+            compositeJob->setObjectName(i18np("Run 1 test in %2", "Run %1 tests in %2",
+                                              jobs.size(), project->name()));
             core()->runController()->registerJob(compositeJob);
         }
     }

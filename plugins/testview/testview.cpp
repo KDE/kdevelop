@@ -50,7 +50,8 @@ const int ProjectRole = Qt::UserRole + 1;
 const int SuiteRole = Qt::UserRole + 2;
 const int CaseRole = Qt::UserRole + 3;
 
-TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
+TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
+: QTreeView(parent)
 , m_plugin(plugin)
 {
     setWindowIcon(KIcon("preflight-verifier"));
@@ -59,46 +60,49 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent): QTreeView(parent)
     setEditTriggers(NoEditTriggers);
     setSelectionBehavior(SelectRows);
     setSelectionMode(SingleSelection);
-    
+
     m_model = new QStandardItemModel(this);
     setModel(m_model);
-    
+
     QAction* action;
 
     KAction* reloadAction = new KAction( KIcon("view-refresh"), i18n("Reload"), this );
     connect (reloadAction, SIGNAL(triggered(bool)), SLOT(reloadTests()));
     addAction(reloadAction);
-    
+
     KAction* showSource = new KAction( KIcon("code-context"), i18n("Show source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
     addAction(showSource);
-    
+
     KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     addAction(runSelected);
-    
+
     action = plugin->actionCollection()->action("run_all_tests");
     addAction(action);
-    
+
     IProjectController* pc = ICore::self()->projectController();
     connect (pc, SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(addProject(KDevelop::IProject*)));
     connect (pc, SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(removeProject(KDevelop::IProject*)));
 
     IPlugin* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
-    connect (tc, SIGNAL(testSuiteAdded(KDevelop::ITestSuite*)), SLOT(addTestSuite(KDevelop::ITestSuite*)));
-    connect (tc, SIGNAL(testSuiteRemoved(KDevelop::ITestSuite*)), SLOT(removeTestSuite(KDevelop::ITestSuite*)));
-    connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*)), SLOT(updateTestSuite(KDevelop::ITestSuite*)));
-    
+    connect (tc, SIGNAL(testSuiteAdded(KDevelop::ITestSuite*)),
+             SLOT(addTestSuite(KDevelop::ITestSuite*)));
+    connect (tc, SIGNAL(testSuiteRemoved(KDevelop::ITestSuite*)),
+             SLOT(removeTestSuite(KDevelop::ITestSuite*)));
+    connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*)),
+             SLOT(updateTestSuite(KDevelop::ITestSuite*)));
+
     foreach (IProject* project, pc->projects())
     {
         addProject(project);
     }
-    
+
     ITestController* testController = tc->extension<ITestController>();
     foreach (ITestSuite* suite, testController->testSuites())
     {
         addTestSuite(suite);
-    }    
+    }
 }
 
 TestView::~TestView()
@@ -123,7 +127,7 @@ void TestView::updateTestSuite(ITestSuite* suite)
     {
         return;
     }
-    
+
     kDebug() << "Updating test suite" << suite->name();
     TestResult result = suite->result();
     bool failed = false;
@@ -150,16 +154,16 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
     {
         case TestResult::NotRun:
             return KIcon();
-            
+
         case TestResult::Skipped:
             return KIcon();
-            
+
         case TestResult::Passed:
             return KIcon("dialog-ok");
-            
+
         case TestResult::Failed:
             return KIcon("edit-delete");
-            
+
         default:
             return KIcon();
     }
@@ -169,7 +173,8 @@ QStandardItem* TestView::itemForSuite(ITestSuite* suite)
 {
     foreach (QStandardItem* item, m_model->findItems(suite->name(), Qt::MatchRecursive))
     {
-        if (item->parent() && item->parent()->text() == suite->project()->name() && !item->parent()->parent())
+        if (item->parent() && item->parent()->text() == suite->project()->name()
+            && !item->parent()->parent())
         {
             return item;
         }
@@ -194,10 +199,10 @@ void TestView::runSelectedTests()
     {
         return;
     }
-        
+
     QList<KJob*> jobs;
     ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
-    
+
     foreach (const QModelIndex& index, indexes)
     {
         if (index.parent().isValid() && indexes.contains(index.parent()))
@@ -230,7 +235,7 @@ void TestView::runSelectedTests()
             jobs << suite->launchCase(testCase);
         }
     }
-    
+
     if (!jobs.isEmpty())
     {
         KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
@@ -246,14 +251,14 @@ void TestView::showSource()
     {
         return;
     }
-    
+
     IndexedDeclaration declaration;
     ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
 
     QStandardItem* item = m_model->itemFromIndex(indexes.first());
     if (item->parent() == 0)
     {
-        // No sense in finding source code for projects. 
+        // No sense in finding source code for projects.
         return;
     }
     else if (item->parent()->parent() == 0)
@@ -268,18 +273,18 @@ void TestView::showSource()
         ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
         declaration = suite->caseDeclaration(item->data(CaseRole).toString());
     }
-    
+
     DUChainReadLocker locker(DUChain::lock());
     Declaration* d = declaration.data();
     if (!d)
     {
         return;
     }
-    
+
     KUrl url = d->url().toUrl();
     KTextEditor::Cursor cursor = d->rangeInCurrentRevision().textRange().start();
     locker.unlock();
-    
+
     IDocumentController* dc = ICore::self()->documentController();
     kDebug() << "Activating declaration in" << url;
     dc->openDocument(url, cursor);
@@ -289,7 +294,7 @@ void TestView::addTestSuite(ITestSuite* suite)
 {
     QStandardItem* projectItem = itemForProject(suite->project());
     Q_ASSERT(projectItem);
-    
+
     QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (QString caseName, suite->cases())

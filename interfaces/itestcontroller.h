@@ -43,7 +43,7 @@ public:
     virtual QList<ITestSuite*> testSuites() const = 0;
     virtual ITestSuite* findTestSuite(IProject* project, const QString& name) const = 0;
     virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
-    
+
     virtual KJob* reloadTestSuites() = 0;
     virtual void notifyTestRunFinished(ITestSuite* suite) = 0;
 

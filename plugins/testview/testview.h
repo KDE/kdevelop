@@ -53,12 +53,10 @@ public slots:
 private:
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
-    
+
     KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
     QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);
     QStandardItem* itemForProject(KDevelop::IProject* project);
 };
 
 #endif // TESTVIEW_H
-
-class KIcon;
