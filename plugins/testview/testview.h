@@ -23,6 +23,7 @@
 #include <QtGui/QTreeView>
 #include <interfaces/itestsuite.h>
 
+class QSortFilterProxyModel;
 class QStandardItem;
 namespace KDevelop {
 class ITestSuite;
@@ -32,7 +33,7 @@ class TestViewPlugin;
 class QStandardItemModel;
 class KIcon;
 
-class TestView : public QTreeView
+class TestView : public QWidget
 {
     Q_OBJECT
 public:
@@ -54,6 +55,8 @@ public slots:
 private:
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
+    QTreeView* m_tree;
+    QSortFilterProxyModel* m_filter;
 
     KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
     QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);

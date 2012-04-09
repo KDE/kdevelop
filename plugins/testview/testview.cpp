@@ -41,10 +41,14 @@
 #include <KLocalizedString>
 #include <KJob>
 #include <KDebug>
+#include <KFilterProxySearchLine>
+#include <krecursivefilterproxymodel.h>
 
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QHeaderView>
+#include <QSortFilterProxyModel>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
@@ -55,21 +59,35 @@ enum CustomRoles {
 };
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
-: QTreeView(parent)
+: QWidget(parent)
 , m_plugin(plugin)
+, m_model(new QStandardItemModel(this))
+, m_tree(new QTreeView(this))
+, m_filter(new KRecursiveFilterProxyModel(this))
 {
     setWindowIcon(KIcon("preflight-verifier"));
-    header()->hide();
-    setIndentation(10);
-    setEditTriggers(NoEditTriggers);
-    setSelectionBehavior(SelectRows);
-    setSelectionMode(SingleSelection);
-    setExpandsOnDoubleClick(false);
-    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+
+    KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
+    filterLine->setProxy(m_filter);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
+    layout->addWidget(filterLine);
+    layout->addWidget(m_tree);
+
+    m_tree->header()->hide();
+    m_tree->setIndentation(10);
+    m_tree->setEditTriggers(QTreeView::NoEditTriggers);
+    m_tree->setSelectionBehavior(QTreeView::SelectRows);
+    m_tree->setSelectionMode(QTreeView::SingleSelection);
+    m_tree->setExpandsOnDoubleClick(false);
+    connect(m_tree, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(doubleClicked(QModelIndex)));
 
     m_model = new QStandardItemModel(this);
-    setModel(m_model);
+    m_filter->setSourceModel(m_model);
+    m_tree->setModel(m_filter);
 
     QAction* action;
 
@@ -200,7 +218,7 @@ QStandardItem* TestView::itemForProject(IProject* project)
 
 void TestView::runSelectedTests()
 {
-    QModelIndexList indexes = selectedIndexes();
+    QModelIndexList indexes = m_tree->selectionModel()->selectedIndexes();
     if (indexes.isEmpty())
     {
         return;
@@ -209,8 +227,9 @@ void TestView::runSelectedTests()
     QList<KJob*> jobs;
     ITestController* tc = ICore::self()->testController();
 
-    foreach (const QModelIndex& index, indexes)
+    foreach (const QModelIndex& idx, indexes)
     {
+        QModelIndex index = m_filter->mapToSource(idx);
         if (index.parent().isValid() && indexes.contains(index.parent()))
         {
             continue;
@@ -252,7 +271,7 @@ void TestView::runSelectedTests()
 
 void TestView::showSource()
 {
-    QModelIndexList indexes = selectedIndexes();
+    QModelIndexList indexes = m_tree->selectionModel()->selectedIndexes();
     if (indexes.isEmpty())
     {
         return;
@@ -261,7 +280,8 @@ void TestView::showSource()
     IndexedDeclaration declaration;
     ITestController* tc = ICore::self()->testController();
 
-    QStandardItem* item = m_model->itemFromIndex(indexes.first());
+    QModelIndex index = m_filter->mapToSource(indexes.first());
+    QStandardItem* item = m_model->itemFromIndex(index);
     if (item->parent() == 0)
     {
         // No sense in finding source code for projects.
@@ -301,7 +321,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* projectItem = itemForProject(suite->project());
     Q_ASSERT(projectItem);
 
-    QStandardItem* suiteItem = new QStandardItem(KIcon("preflight-verifier"), suite->name());
+    QStandardItem* suiteItem = new QStandardItem(KIcon("view-list-tree"), suite->name());
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (QString caseName, suite->cases())
     {
@@ -331,6 +351,6 @@ void TestView::removeProject(IProject* project)
 
 void TestView::doubleClicked(const QModelIndex& index)
 {
-    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    m_tree->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
     runSelectedTests();
 }
