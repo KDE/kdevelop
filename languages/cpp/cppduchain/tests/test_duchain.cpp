@@ -19,48 +19,49 @@
 
 #include "test_duchain.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QWidget>
+
+#include "declarationbuilder.h"
+#include "usebuilder.h"
+#include "cpptypes.h"
+#include "templateparameterdeclaration.h"
+#include "cppeditorintegrator.h"
+#include "dumptypes.h"
+#include "environmentmanager.h"
+#include "typeutils.h"
+#include "templatedeclaration.h"
+#include "tokens.h"
+#include "qtfunctiondeclaration.h"
+#include "sourcemanipulation.h"
+
+#include "rpp/chartools.h"
+#include "rpp/pp-engine.h"
+#include "rpp/preprocessor.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/functiondefinition.h>
-#include "declarationbuilder.h"
-#include "usebuilder.h"
 #include <language/duchain/declarationid.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/dumpdotgraph.h>
 #include <language/duchain/dumpchain.h>
-#include "cpptypes.h"
-#include "templateparameterdeclaration.h"
-#include "cppeditorintegrator.h"
-#include "dumptypes.h"
-#include "environmentmanager.h"
-
-#include <language/editor/documentrange.h>
-
-#include "typeutils.h"
-#include "templatedeclaration.h"
-#include "rpp/chartools.h"
-#include "rpp/pp-engine.h"
-#include "rpp/preprocessor.h"
-
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
-#include <language/codegen/coderepresentation.h>
+#include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <language/duchain/duchainutils.h>
 
-#include "tokens.h"
+#include <language/codegen/coderepresentation.h>
+#include <language/editor/documentrange.h>
 
 #include <typeinfo>
-#include <language/duchain/duchainutils.h>
-#include <qtfunctiondeclaration.h>
-#include <qwidget.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <sourcemanipulation.h>
+
+#include <tests/testhelpers.h>
 
 using namespace KTextEditor;
 using namespace TypeUtils;
@@ -69,72 +70,6 @@ using namespace Cpp;
 using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
-
-namespace QTest {
-  template<>
-  char* toString(const Cursor& cursor)
-  {
-    QByteArray ba = "Cursor(";
-    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
-    ba += ')';
-    return qstrdup(ba.data());
-  }
-  template<>
-  char *toString(const RangeInRevision &range)
-  {
-      QByteArray ba = "[ (";
-      ba += QByteArray::number(range.start.line) + ", " + QByteArray::number(range.start.column);
-      ba += ") -> (";
-      ba += QByteArray::number(range.end.line) + ", " + QByteArray::number(range.end.column);
-      ba += ") ]";
-      return qstrdup(ba.data());
-  }
-  template<>
-  char* toString(const QualifiedIdentifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  template<>
-  char* toString(const Identifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  /*template<>
-  char* toString(QualifiedIdentifier::MatchTypes t)
-  {
-    QString ret;
-    switch (t) {
-      case QualifiedIdentifier::NoMatch:
-        ret = "No Match";
-        break;
-      case QualifiedIdentifier::Contains:
-        ret = "Contains";
-        break;
-      case QualifiedIdentifier::ContainedBy:
-        ret = "Contained By";
-        break;
-      case QualifiedIdentifier::ExactMatch:
-        ret = "Exact Match";
-        break;
-    }
-    QByteArray arr = ret.toString().toLatin1();
-    return qstrdup(arr.data());
-  }*/
-  template<>
-  char* toString(const Declaration& def)
-  {
-    QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
-    return qstrdup(s.toLatin1().constData());
-  }
-  template<>
-  char* toString(const TypePtr<AbstractType>& type)
-  {
-    QString s = QString("Type: %1 (%2 %3)").arg(type ? type->toString() : QString("<null>")).arg(typeid(*type).name()).arg((size_t)type.unsafeData());
-    return qstrdup(s.toLatin1().constData());
-  }
-}
 
 Declaration* getDeclaration( AbstractType::Ptr base, TopDUContext* top ) {
   if( !base ) return 0;

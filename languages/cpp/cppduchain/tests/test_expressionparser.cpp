@@ -48,6 +48,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 
 #include <typeinfo>
 
@@ -77,62 +78,6 @@ char* debugString( const QString& str ) {
   QByteArray b = str.toAscii();
   strcpy( ret, b.data() );
   return ret;
-}
-
-namespace QTest {
-  template<>
-  char* toString(const Cursor& cursor)
-  {
-    QByteArray ba = "Cursor(";
-    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
-    ba += ')';
-    return qstrdup(ba.data());
-  }
-  template<>
-  char* toString(const QualifiedIdentifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  template<>
-  char* toString(const Identifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  /*template<>
-  char* toString(QualifiedIdentifier::MatchTypes t)
-  {
-    QString ret;
-    switch (t) {
-      case QualifiedIdentifier::NoMatch:
-        ret = "No Match";
-        break;
-      case QualifiedIdentifier::Contains:
-        ret = "Contains";
-        break;
-      case QualifiedIdentifier::ContainedBy:
-        ret = "Contained By";
-        break;
-      case QualifiedIdentifier::ExactMatch:
-        ret = "Exact Match";
-        break;
-    }
-    QByteArray arr = ret.toString().toLatin1();
-    return qstrdup(arr.data());
-  }*/
-  template<>
-  char* toString(const Declaration& def)
-  {
-    QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
-    return qstrdup(s.toLatin1().constData());
-  }
-  template<>
-  char* toString(const TypePtr<AbstractType>& type)
-  {
-    QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
-    return qstrdup(s.toLatin1().constData());
-  }
 }
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
