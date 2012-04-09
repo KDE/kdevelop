@@ -23,13 +23,13 @@
 #include <QFileInfo>
 #include <KProcess>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <language/duchain/duchain.h>
 
-CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent): KJob(parent), 
-m_suite(suite),
-m_process(0)
+CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
+: KJob(parent)
+, m_suite(suite)
+, m_process(0)
 {
 
 }
@@ -42,20 +42,20 @@ void CTestFindJob::start()
 void CTestFindJob::findTestCases()
 {
     // Test suite names must be unique within a project
-    // If we have a clash, it's probably an update and the old one should be removed. 
-    KDevelop::ITestController* tc = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<KDevelop::ITestController>();
+    // If we have a clash, it's probably an update and the old one should be removed.
+    KDevelop::ITestController* tc = KDevelop::ICore::self()->testController();
     if (KDevelop::ITestSuite* existingSuite = tc->findTestSuite(m_suite->project(), m_suite->name()))
     {
         tc->removeTestSuite(existingSuite);
     }
-    
+
     if (!m_suite->arguments().isEmpty())
     {
         tc->addTestSuite(m_suite);
         emitResult();
         return;
     }
-    
+
     QFileInfo info(m_suite->executable().toLocalFile());
     if (info.exists() && info.isExecutable())
     {
@@ -85,15 +85,15 @@ void CTestFindJob::processFinished()
         }
         m_suite->setTestCases(cases);
     }
-    
+
     m_pendingFiles = m_suite->sourceFiles();
     if (m_pendingFiles.isEmpty())
     {
-        KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<KDevelop::ITestController>()->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
         emitResult();
         return;
     }
-    
+
     foreach (const QString& file, m_pendingFiles)
     {
         KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
@@ -105,10 +105,10 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
     kDebug() << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(document.str());
-    
+
     if (m_pendingFiles.isEmpty())
     {
-        KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<KDevelop::ITestController>()->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
         emitResult();
     }
 }

@@ -24,7 +24,6 @@
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
@@ -35,11 +34,12 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent): OutputJob(parent), 
-m_suite(suite),
-m_cases(cases),
-m_process(0),
-m_lineMaker(0)
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent)
+: OutputJob(parent)
+, m_suite(suite)
+, m_cases(cases)
+, m_process(0)
+, m_lineMaker(0)
 {
     foreach (const QString& testCase, cases)
     {
@@ -60,19 +60,19 @@ void CTestRunJob::start()
         setDelegate(new QtTestDelegate, KDevelop::IOutputView::TakeOwnership);
     }
     setStandardToolView(IOutputView::TestView);
-    
+
     QStringList arguments = m_cases;
     if (m_cases.isEmpty() && !m_suite->arguments().isEmpty())
     {
         arguments = m_suite->arguments();
     }
-    
+
     m_process = new KProcess(this);
     m_process->setProgram(m_suite->executable().toLocalFile(), arguments);
     m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    
+
     kDebug() << m_process->program();
-    
+
     m_lineMaker = new ProcessLineMaker(m_process, this);
     startOutput();
     connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)), SLOT(receivedLines(QStringList)));
@@ -93,14 +93,14 @@ bool CTestRunJob::doKill()
 void CTestRunJob::processFinished(int exitCode)
 {
     QString line = QString("*** Test process exited with exit code %1 ***").arg(exitCode);
-    
+
     TestResult result;
     result.testCaseResults = m_caseResults;
     m_suite->setResult(result);
 
-    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    ITestController* tc = ICore::self()->testController();
     tc->notifyTestRunFinished(m_suite);
-    
+
     kDebug() << line;
     emitResult();
 }
@@ -117,12 +117,12 @@ void CTestRunJob::receivedLines(const QStringList& lines)
     {
         // TODO: Highlight parts of the line
         qobject_cast<OutputModel*>(model())->appendLine(line);
-    
+
         if (!line.contains("()"))
         {
             continue;
         }
-        
+
         QString testCase = line.split("()").first();
         if (line.contains("::"))
         {
@@ -132,7 +132,7 @@ void CTestRunJob::receivedLines(const QStringList& lines)
         {
             testCase = testCase.split(' ').last();
         }
-        
+
         if (m_suite->cases().contains(testCase))
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
@@ -148,7 +148,7 @@ void CTestRunJob::receivedLines(const QStringList& lines)
             {
                 result = TestResult::Skipped;
             }
-            
+
             if (result != TestResult::NotRun)
             {
                 m_caseResults[testCase] = result;
