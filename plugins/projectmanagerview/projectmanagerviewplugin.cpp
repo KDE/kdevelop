@@ -464,14 +464,23 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
 
 void ProjectManagerViewPlugin::removeFromContextMenu()
 {
+    removeItems(d->ctxProjectItemList);
+}
+
+void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* > items)
+{
+    if (items.isEmpty()) {
+        return;
+    }
+
     //copy the list of selected items and sort it to guarantee parents will come before children
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
-    filteredItems[0] += d->ctxProjectItemList;
+    filteredItems[0] = items;
     qSort(filteredItems[0].begin(), filteredItems[0].end(), ProjectBaseItem::urlLessThan);
 
     KUrl lastFolder;
-    QStringList itemPaths;
 
+    QStringList itemPaths;
     foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
     {
         Q_ASSERT(item->folder() || item->file());

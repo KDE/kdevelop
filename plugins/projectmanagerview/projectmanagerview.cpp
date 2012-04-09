@@ -26,6 +26,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QStandardItem>
 #include <QtGui/QToolButton>
+#include <QtGui/QKeyEvent>
 
 #include <kxmlguiwindow.h>
 #include <kiconloader.h>
@@ -102,6 +103,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 {
     m_ui->setupUi( this );
 
+    m_ui->projectTreeView->installEventFilter(this);
+
     setWindowIcon( SmallIcon( "project-development" ) );
 
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
@@ -170,6 +173,20 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     // Need to set this to get horizontal scrollbar. Also needs to be done after
     // the setModel call
     m_ui->projectTreeView->header()->setResizeMode( QHeaderView::ResizeToContents );
+}
+
+bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == m_ui->projectTreeView) {
+        if (event->type() == QEvent::KeyRelease) {
+            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Delete) {
+                m_plugin->removeItems(selectedItems());
+                return true;
+            }
+        }
+    }
+    return QObject::eventFilter(obj, event);
 }
 
 void ProjectManagerView::selectionChanged()

@@ -56,11 +56,14 @@ public:
     virtual void unload();
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+
+    void removeItems(const QList<KDevelop::ProjectBaseItem*> items);
+
 public Q_SLOTS:
     void buildProjectItems();
     void installProjectItems();
     void cleanProjectItems();
- 
+
 protected Q_SLOTS:
     void closeProjects();
     void buildItemsFromContextMenu();
