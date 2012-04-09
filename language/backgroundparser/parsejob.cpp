@@ -366,12 +366,14 @@ struct MovingRangeTranslator : public DUChainVisitor
 
     void translateRange(RangeInRevision& r)
     {
-        moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
-        // PHP and python use top contexts that end at INT_MAX, so make sure that doesn't overflow
-        if ( r.end.line == std::numeric_limits<int>::max() || r.end.column == std::numeric_limits<int>::max() ) {
-            return;
+        // PHP and python use top contexts that start at (0, 0) end at INT_MAX, so make sure that doesn't overflow
+        // or translate the start of the top context away from (0, 0)
+        if ( r.start.line != 0 || r.start.column != 0 ) {
+            moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
         }
-        moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+        if ( r.end.line != std::numeric_limits<int>::max() || r.end.column != std::numeric_limits<int>::max() ) {
+            moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+        }
     }
 
     KTextEditor::Range range;
