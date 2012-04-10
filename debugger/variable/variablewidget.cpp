@@ -252,8 +252,8 @@ void VariableTree::setupActions()
     m_copyVariableValue->setShortcut(QKeySequence::Copy);
     connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
 
-    m_copyVariableValue = new QAction(i18n("&Stop on change"), this);
-    connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
+    m_stopOnChange = new QAction(i18n("&Stop on change"), this);
+    connect(m_stopOnChange, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
 }
 
 Variable* VariableTree::selectedVariable() const
@@ -287,6 +287,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     contextMenu.addSeparator();
     contextMenu.addAction(m_copyVariableValue);
+    contextMenu.addAction(m_stopOnChange);
 
     contextMenu.exec(event->globalPos());
 }
