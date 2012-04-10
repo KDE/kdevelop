@@ -111,6 +111,7 @@ private:
     QMenu *m_formatMenu;
     QAction *m_watchDelete;
     QAction *m_copyVariableValue;
+    QAction *m_stopOnChange;
     QSignalMapper *m_signalMapper;
 };
 
