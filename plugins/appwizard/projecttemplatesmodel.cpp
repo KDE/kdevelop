@@ -114,7 +114,7 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
     {
         kDebug(9010) << "processing template" << archName;
 #ifdef Q_WS_WIN
-	KZip templateArchive(archName);
+        KZip templateArchive(archName);
 #else
         KTar templateArchive(archName, "application/x-bzip");
 #endif //Q_WS_WIN
