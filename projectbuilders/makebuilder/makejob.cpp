@@ -46,12 +46,14 @@
 
 using namespace KDevelop;
 
-MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType c,  const QString& overrideTarget )
+MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType c,  const QStringList& overrideTargets,
+                 const MakeVariables& variables )
     : OutputJob(builder)
     , m_builder(builder)
     , m_item(item)
     , m_command(c)
-    , m_overrideTarget(overrideTarget)
+    , m_overrideTargets(overrideTargets)
+    , m_variables(variables)
     , m_lineMaker(0)
     , m_process(0)
     , m_killed(false)
@@ -60,8 +62,8 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
     setCapabilities(Killable);
 
     QString title;
-    if( !m_overrideTarget.isEmpty() )
-        title = i18n("Make: %1", m_overrideTarget);
+    if( !m_overrideTargets.isEmpty() )
+        title = i18n("Make: %1", m_overrideTargets.join(" "));
     else
         title = i18n("Make: %1", m_item->text());
 
@@ -81,7 +83,7 @@ MakeJob::~MakeJob()
 
 void MakeJob::start()
 {
-    kDebug(9037) << "Building with make" << m_command << m_overrideTarget;
+    kDebug(9037) << "Building with make" << m_command << m_overrideTargets.join(" ");
     if (!m_item)
     {
         setError(ItemNoLongerValidError);
@@ -115,7 +117,7 @@ void MakeJob::start()
     QStringList cmd = computeBuildCommand();
     if( cmd.isEmpty() ) {
         setError(BuildCommandError);
-        setErrorText(i18n("Could not create build command for target '%1'", m_overrideTarget));
+        setErrorText(i18n("Could not create build command for targets '%1'", m_overrideTargets.join(" ")));
         return emitResult();
     }
 
@@ -159,9 +161,9 @@ MakeJob::CommandType MakeJob::commandType()
     return m_command;
 }
 
-const QString & MakeJob::customTarget() const
+const QStringList & MakeJob::customTargets() const
 {
-    return m_overrideTarget;
+    return m_overrideTargets;
 }
 
 KUrl MakeJob::computeBuildDir(KDevelop::ProjectBaseItem* item) const
@@ -229,7 +231,14 @@ QStringList MakeJob::computeBuildCommand() const
             cmdline << option;
     }
 
-    if( m_overrideTarget.isEmpty() )
+    MakeVariables::const_iterator it = m_variables.constBegin();
+    while ( it != m_variables.constEnd() )
+    {
+        cmdline += QString("%1=%2").arg(it->first).arg(it->second);
+        ++it;
+    }
+
+    if( m_overrideTargets.isEmpty() )
     {
         QString target;
         switch (m_item->type()) {
@@ -247,7 +256,7 @@ QStringList MakeJob::computeBuildCommand() const
         default: break; }
     }else
     {
-        cmdline << m_overrideTarget;
+        cmdline += m_overrideTargets;
     }
 
     bool runAsRoot = builderGroup.readEntry("Install As Root", false);

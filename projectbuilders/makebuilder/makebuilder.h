@@ -75,7 +75,10 @@ public:
     virtual KJob* install(KDevelop::ProjectBaseItem *dom);
 
     virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
-    KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QString& = QString() );
+    virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,
+                                     const MakeVariables& variables = MakeVariables() );
+    KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
+                   const MakeVariables& variables = MakeVariables() );
 
     MakeOutputDelegate* delegate() const;
 

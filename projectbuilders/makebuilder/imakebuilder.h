@@ -23,11 +23,19 @@
 
 #include <project/interfaces/iprojectbuilder.h>
 
+#include <QList>
+#include <QStringList>
+
 class KJob;
 
 /**
 @author Andreas Pakulat
 */
+
+/**
+ * Used to create make variables of the form KEY=VALUE.
+ */
+typedef QList<QPair<QString, QString> > MakeVariables;
 
 class IMakeBuilder : public KDevelop::IProjectBuilder
 {
@@ -36,7 +44,25 @@ public:
     virtual ~IMakeBuilder() {}
     virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item,
                                    const QString& targetname ) = 0;
+
+    /**
+     * Return a build job for the given targets with optional make variables defined.
+     * e.g., if @a targetnames is {'all', 'modules'} and @a variables is
+     * { 'CFLAGS' : '-Wall', 'CC' : 'gcc-3.4' }, the returned job should execute this command:
+     * "make CFLAGS=-Wall CC=gcc-3.4 all"
+     * inside the directory of @a item and using the configuration of its project.
+     *
+     * @arg item Item of the project to build.
+     * @arg targetnames Optional command-line targets names to pass to make.
+     * @arg variables Optional list of command-line variables to pass to make.
+     */
+    virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item,
+                                     const QStringList& targetnames = QStringList(),
+                                     const MakeVariables& variables = MakeVariables() ) = 0;
 signals:
+    /**
+     * Emitted every time a target is finished being built for a project item.
+     */
     void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );
 };
 

@@ -27,6 +27,8 @@
 
 #include <QString>
 #include <QProcess>
+#include <QMap>
+#include "imakebuilder.h"
 
 namespace KDevelop {
 class ProjectBaseItem;
@@ -60,14 +62,15 @@ public:
         FailedError = FailedShownError
     };
 
-    MakeJob( MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType command, const QString& overrideTarget = QString() );
+    MakeJob( MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType command, const QStringList& overrideTargets = QStringList(),
+             const MakeVariables& variables = MakeVariables() );
     virtual ~MakeJob();
 
     virtual void start();
 
     KDevelop::ProjectBaseItem* item() const;
     CommandType commandType();
-    const QString& customTarget() const;
+    const QStringList& customTargets() const;
 
     MakeOutputModel* model() const;
 
@@ -90,7 +93,8 @@ private:
     MakeBuilder* m_builder;
     KDevelop::ProjectBaseItem* m_item;
     CommandType m_command;
-    QString m_overrideTarget;
+    QStringList m_overrideTargets;
+    MakeVariables m_variables;
     KDevelop::ProcessLineMaker* m_lineMaker;
     KProcess* m_process;
     bool m_killed;
