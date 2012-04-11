@@ -76,7 +76,7 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
     const KConfigGroup build = cg.group(config);
 
     // sets values into fields
-    setQmakeBin( build.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(KStandardDirs::findExe("qmake"))) );
+    setQmakeBin( KUrl(QMakeConfig::qmakeBinary(m_project)) );
     setBuildDir( KUrl(config) );
     setInstallPrefix( build.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl("")) );
     setExtraArgs( build.readEntry<QString>(QMakeConfig::EXTRA_ARGUMENTS, ""));

@@ -63,10 +63,6 @@ public:
     virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const;
     QList< DefinePair > defines() const;
 
-    /// required for proper build-dir resolution
-    void setProject(KDevelop::IProject* project);
-    KDevelop::IProject* project() const;
-
     /// current pwd, e.g. absoluteDir even for included files
     virtual QString pwd() const;
     /// path to build dir for the current .pro file
@@ -81,7 +77,6 @@ private:
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
-    KDevelop::IProject* m_project;
     static QString m_qtIncludeDir;
 };
 

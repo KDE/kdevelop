@@ -58,9 +58,12 @@ KUrl QMakeConfig::buildDirFromSrc(const IProject* project, const KUrl& srcDir)
 QString QMakeConfig::qmakeBinary(const IProject* project)
 {
     QMutexLocker lock(&s_buildDirMutex);
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), CONFIG_GROUP);
-    QString exe = group.readEntry(QMAKE_BINARY, KUrl() ).toLocalFile();
+    QString exe;
+    if (project) {
+        KSharedConfig::Ptr cfg = project->projectConfiguration();
+        KConfigGroup group(cfg.data(), CONFIG_GROUP);
+        exe = group.readEntry(QMAKE_BINARY, KUrl() ).toLocalFile();
+    }
     if (exe.isEmpty()) {
         exe = KStandardDirs::findExe("qmake");
     }

@@ -29,6 +29,11 @@
 
 #include "qmakefilevisitor.h"
 
+namespace KDevelop
+{
+class IProject;
+}
+
 namespace QMake
 {
     class ProjectAST;
@@ -55,6 +60,9 @@ public:
 
     virtual QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const;
 
+    /// required for proper build-dir resolution
+    void setProject(KDevelop::IProject* project);
+    KDevelop::IProject* project() const;
 protected:
     VariableMap m_variableValues;
 
@@ -64,6 +72,7 @@ protected:
 private:
     QMake::ProjectAST* m_ast;
     QString m_projectFile;
+    KDevelop::IProject* m_project;
 };
 
 #endif

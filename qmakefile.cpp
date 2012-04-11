@@ -83,7 +83,7 @@ QStringList resolveShellGlobbingInternal( const QString& pattern, const QString&
 }
 
 QMakeFile::QMakeFile( const QString& file )
-    : m_ast(0), m_projectFile(file)
+    : m_ast(0), m_projectFile(file), m_project(0)
 {
     Q_ASSERT(!m_projectFile.isEmpty());
 }
@@ -201,4 +201,12 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
     return resolveShellGlobbing( file );
 }
 
-//kate: hl c++;
+void QMakeFile::setProject(KDevelop::IProject* project)
+{
+    m_project = project;
+}
+
+KDevelop::IProject* QMakeFile::project() const
+{
+    return m_project;
+}

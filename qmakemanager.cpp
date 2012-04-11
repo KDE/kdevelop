@@ -204,6 +204,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
+    mkspecs->setProject( project );
     mkspecs->read();
     QMakeCache* cache = findQMakeCache( project );
     if( cache ) {
@@ -551,10 +552,9 @@ void QMakeProjectManager::slotRunQMake()
     KUrl buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
     QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
 
+    job->setQMakePath(QMakeConfig::qmakeBinary(m_actionItem->project()));
+
     KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl qmakePath = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl(""));
-    if(!qmakePath.isEmpty())
-        job->setQMakePath(qmakePath.path());
     KUrl installPrefix = cg.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl(""));
     if(!installPrefix.isEmpty())
         job->setInstallPrefix(installPrefix.path());

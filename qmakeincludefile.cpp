@@ -31,11 +31,12 @@ QMakeIncludeFile::QMakeIncludeFile( const QString& incfile, QMakeFile* parent,
 {
     m_variableValues = variables;
 
+    setProject( parent->project() );
+
     QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(parent);
     if( pro ) {
         setMkSpecs( pro->mkSpecs() );
         setQMakeCache( pro->qmakeCache() );
-        setProject( pro->project() );
     } else {
         QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(parent);
         setMkSpecs( specs );

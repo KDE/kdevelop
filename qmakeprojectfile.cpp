@@ -45,7 +45,7 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0), m_project(0)
+    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
 {
 }
 
@@ -97,7 +97,7 @@ bool QMakeProjectFile::read()
     if (m_qtIncludeDir.isEmpty()) {
         // Let's cache the Qt include dir
         KProcess qtInc;
-        qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
+        qtInc << QMakeConfig::qmakeBinary(project()) << "-query" << "QT_INSTALL_HEADERS";
         qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
         qtInc.start();
         if ( !qtInc.waitForFinished() ) {
@@ -387,16 +387,6 @@ QList< QMakeProjectFile::DefinePair > QMakeProjectFile::defines() const
     return d;
 }
 
-void QMakeProjectFile::setProject(KDevelop::IProject* project)
-{
-    m_project = project;
-}
-
-KDevelop::IProject* QMakeProjectFile::project() const
-{
-    return m_project;
-}
-
 QString QMakeProjectFile::pwd() const
 {
     return absoluteDir();
@@ -404,10 +394,10 @@ QString QMakeProjectFile::pwd() const
 
 QString QMakeProjectFile::outPwd() const
 {
-    if (!m_project) {
+    if (!project()) {
         return absoluteDir();
     } else {
-        return QMakeConfig::buildDirFromSrc(m_project, absoluteDir()).toLocalFile();
+        return QMakeConfig::buildDirFromSrc(project(), absoluteDir()).toLocalFile();
     }
 }
 
