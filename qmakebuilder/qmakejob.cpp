@@ -21,6 +21,8 @@
 
 #include "qmakejob.h"
 
+#include "../qmakeconfig.h"
+
 #include "make/imakebuilder.h"
 
 //#include <config.h>
@@ -69,7 +71,7 @@ void QMakeJob::start()
     startOutput();
 
     m_item = m_project->projectItem();
-    QString cmd = qmakeBinary( m_project );
+    QString cmd = QMakeConfig::qmakeBinary( m_project );
     m_cmd = new KDevelop::CommandExecutor(cmd, this);
     connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)),
             model(), SLOT(appendLines(const QStringList&) ) );
@@ -79,14 +81,6 @@ void QMakeJob::start()
     connect( m_cmd, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
     connect( m_cmd, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
     m_cmd->start();
-}
-
-QString QMakeJob::qmakeBinary( KDevelop::IProject* project )
-{
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "QMake Builder");
-    KUrl v = group.readEntry("QMake Binary", KUrl( "file:///usr/bin/qmake" ) );
-    return v.toLocalFile();
 }
 
 void QMakeJob::setProject(KDevelop::IProject* project)

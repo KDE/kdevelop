@@ -43,6 +43,11 @@ public:
      * srcDir must contain a *.pro file !
      */
     static KUrl buildDirFromSrc(const KDevelop::IProject* project, const KUrl& srcDir);
+
+    /**
+     * Returns the QMake binary configured for the given @p project.
+     */
+    static QString qmakeBinary(const KDevelop::IProject* project);
 };
 
 #endif

@@ -496,13 +496,13 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
         p.setWorkingDirectory( project->folder().toLocalFile() );
         //To be implemented when there's an API to fetch Env from Project
         //p.setEnv();
-        p << m_builder->qmakeBinary( project ) << "-query" << var;
+        p << QMakeConfig::qmakeBinary( project ) << "-query" << var;
         p.execute();
         QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
         if( result != "**Unknown**")
             hash[var] = result;
     }
-    kDebug(9024) << "Ran qmake (" << m_builder->qmakeBinary( project ) << "), found:" << hash;
+    kDebug(9024) << "Ran qmake (" << QMakeConfig::qmakeBinary( project ) << "), found:" << hash;
     return hash;
 }
 

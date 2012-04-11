@@ -50,8 +50,6 @@ public:
     void setProject(KDevelop::IProject* project);
     
     virtual void start();
-    
-    QString qmakeBinary( KDevelop::IProject* project );
 
 protected:
     bool doKill();

@@ -8,6 +8,7 @@ include_directories( ${qmakebuilder_BINARY_DIR} )
 set(qmakebuilder_LIB_SRCS
     qmakebuilder.cpp
     qmakejob.cpp
+    ../qmakeconfig.cpp
 )
 
 

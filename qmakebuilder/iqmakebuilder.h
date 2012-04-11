@@ -32,7 +32,6 @@ class IProject;
 class IQMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
-    virtual QString qmakeBinary(  KDevelop::IProject* project  ) = 0;
     virtual ~IQMakeBuilder() {}
 
 };

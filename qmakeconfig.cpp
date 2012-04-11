@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include <KConfigGroup>
+#include <KStandardDirs>
 
 #include <interfaces/iproject.h>
 
@@ -52,4 +53,19 @@ KUrl QMakeConfig::buildDirFromSrc(const IProject* project, const KUrl& srcDir)
         buildDir.cleanPath();
     }
     return buildDir;
+}
+
+QString QMakeConfig::qmakeBinary(const IProject* project)
+{
+    QMutexLocker lock(&s_buildDirMutex);
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), CONFIG_GROUP);
+    QString exe = group.readEntry(QMAKE_BINARY, KUrl() ).toLocalFile();
+    if (exe.isEmpty()) {
+        exe = KStandardDirs::findExe("qmake");
+    }
+    if (exe.isEmpty()) {
+        exe = KStandardDirs::findExe("qmake-qt4");
+    }
+    return exe;
 }

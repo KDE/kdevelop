@@ -55,8 +55,6 @@ public:
     virtual KJob* configure(KDevelop::IProject *dom);
     virtual KJob* prune(KDevelop::IProject *dom);
 
-    QString qmakeBinary( KDevelop::IProject* project );
-
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
