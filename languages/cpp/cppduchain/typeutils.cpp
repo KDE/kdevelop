@@ -206,6 +206,9 @@ using namespace KDevelop;
     }
   }
   bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
+    if (!c || !base) {
+      return false;
+    }
     ClassDeclaration* fromDecl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
     ClassDeclaration* toDecl = dynamic_cast<ClassDeclaration*>(base->declaration(topContext));
     if(fromDecl && toDecl)
