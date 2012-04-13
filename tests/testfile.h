@@ -59,7 +59,7 @@ public:
      * @param dir optional path to a (sub-) directory in which this file should
      *            be created. The directory must exist.
      */
-    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project,
+    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = 0,
              const QString& dir = QString());
 
     /**
@@ -89,6 +89,11 @@ public:
      * within the timeout interval.
      */
     bool waitForParsed(int timeout = 60000);
+
+    /**
+     * Check whether the file has been processed after the last call to @c parse().
+     */
+    bool isReady() const;
 
     /**
      * Returns the @c TopDUContext for the current file, if it has been successfully parsed.

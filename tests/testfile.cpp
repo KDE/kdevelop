@@ -64,7 +64,9 @@ TestFile::TestFile (const QString& contents, const QString& fileExtension, TestP
     d->url = IndexedString(info.absoluteFilePath());
 
     d->project = project;
-    project->addToFileSet(d->url);
+    if (project) {
+        project->addToFileSet(d->url);
+    }
 }
 
 TestFile::~TestFile()
@@ -73,7 +75,9 @@ TestFile::~TestFile()
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
-    d->project->removeFromFileSet(d->url);
+    if (d->project) {
+        d->project->removeFromFileSet(d->url);
+    }
     delete d;
 }
 
@@ -95,6 +99,11 @@ bool TestFile::waitForParsed(int timeout)
     while (!d->ready && t.elapsed() < timeout) {
         QTest::qWait(10);
     }
+    return d->ready;
+}
+
+bool TestFile::isReady() const
+{
     return d->ready;
 }
 
