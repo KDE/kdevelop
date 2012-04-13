@@ -314,7 +314,10 @@ void GDBOutputWidget::flushPending()
         pendingOutput_.remove(pendingOutput_.length()-1, 1);
     Q_ASSERT(!pendingOutput_.endsWith('\n'));
 
-    m_gdbView->insertHtml(pendingOutput_);
+    QTextDocument *document = m_gdbView->document();
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::End);
+    cursor.insertHtml(pendingOutput_);
     pendingOutput_ = "";
 
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
