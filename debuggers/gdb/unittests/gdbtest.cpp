@@ -136,10 +136,9 @@ class TestDebugSession : public DebugSession
 {
     Q_OBJECT
 public:
-    TestDebugSession() : DebugSession(), m_line(0)
+    TestDebugSession() : DebugSession()
     {
         qRegisterMetaType<KUrl>("KUrl");
-        Q_ASSERT(connect(this, SIGNAL(showStepInSource(KUrl,int,QString)), SLOT(slotShowStepInSource(KUrl,int))));
         
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
@@ -149,20 +148,11 @@ public:
         return new TestFrameStackModel(this);
     }
         
-    KUrl url() { return m_url; }
-    int line() { return m_line; }
+    KUrl url() { return currentUrl(); }
+    int line() { return currentLine(); }
     TestFrameStackModel *frameStackModel() const 
     { return static_cast<TestFrameStackModel*>(DebugSession::frameStackModel()); }
 
-private slots:
-    void slotShowStepInSource(const KUrl &url, int line)
-    {
-        m_url = url;
-        m_line = line;
-    }
-private:
-    KUrl m_url;
-    int m_line;
 
 };
 
@@ -810,7 +800,7 @@ void GdbTest::testAttach()
     KProcess debugeeProcess;
     debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
     debugeeProcess.start();
-    Q_ASSERT(debugeeProcess.waitForStarted());
+    QVERIFY(debugeeProcess.waitForStarted());
     QTest::qWait(100);
 
     TestDebugSession *session = new TestDebugSession;
