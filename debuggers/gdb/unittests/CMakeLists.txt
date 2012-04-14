@@ -1,3 +1,6 @@
+# force debug symbols for our debugees
+set(CMAKE_BUILD_TYPE debugfull)
+
 add_executable(debugee debugee.cpp)
 add_executable(debugeeslow debugeeslow.cpp)
 add_executable(debugeecrash debugeecrash.cpp)
