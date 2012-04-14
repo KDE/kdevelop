@@ -271,7 +271,6 @@ void ProjectLoadTest::raceJob()
 
     QTest::qWait(500);
     QCOMPARE(root->rowCount(), 1);
-    QVERIFY(!root->children().contains(testItem));
     testItem = root->child(0);
     QVERIFY(testItem->folder());
     QCOMPARE(testItem->baseName(), QString("test2"));
