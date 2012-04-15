@@ -87,6 +87,9 @@ private slots:
 
   void testMultiByteCStrings();
   void testMultiByteComments();
+  //BEGIN C99 support
+  void testDesignatedInitializers();
+  //END C99 support
 
   void testTernaryEmptyExpression();
 
