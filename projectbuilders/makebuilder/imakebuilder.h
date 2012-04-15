@@ -25,6 +25,7 @@
 
 #include <QList>
 #include <QStringList>
+#include <QPair>
 
 class KJob;
 
@@ -35,30 +36,51 @@ class KJob;
 /**
  * Used to create make variables of the form KEY=VALUE.
  */
-typedef QList<QPair<QString, QString> > MakeVariables;
+typedef QList< QPair<QString, QString> > MakeVariables;
 
 class IMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
 
     virtual ~IMakeBuilder() {}
+
+    /**
+     * Return a build job for the given target.
+     *
+     * E.g. if @a targetnames is \c 'myModule', the returned job
+     * will execute the command:
+     *
+     * \code make myModule \endcode
+     *
+     * The command is executed inside the directory of @a item and uses the
+     * configuration of its project.
+     *
+     * @param item Item of the project to build.
+     * @param targetname Command-line target name to pass to make.
+     */
     virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item,
                                    const QString& targetname ) = 0;
 
     /**
      * Return a build job for the given targets with optional make variables defined.
-     * e.g., if @a targetnames is {'all', 'modules'} and @a variables is
-     * { 'CFLAGS' : '-Wall', 'CC' : 'gcc-3.4' }, the returned job should execute this command:
-     * "make CFLAGS=-Wall CC=gcc-3.4 all"
-     * inside the directory of @a item and using the configuration of its project.
      *
-     * @arg item Item of the project to build.
-     * @arg targetnames Optional command-line targets names to pass to make.
-     * @arg variables Optional list of command-line variables to pass to make.
+     * E.g. if @a targetnames is \code {'all', 'modules'} \endcode and @a variables is
+     * \code { 'CFLAGS' : '-Wall', 'CC' : 'gcc-3.4' } \endcode, the returned job should
+     * execute this command:
+     *
+     * \code make CFLAGS=-Wall CC=gcc-3.4 all modules \endcode
+     *
+     * The command is executed inside the directory of @a item and uses the
+     * configuration of its project.
+     *
+     * @param item Item of the project to build.
+     * @param targetnames Optional command-line targets names to pass to make.
+     * @param variables Optional list of command-line variables to pass to make.
      */
     virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item,
                                      const QStringList& targetnames = QStringList(),
                                      const MakeVariables& variables = MakeVariables() ) = 0;
+
 signals:
     /**
      * Emitted every time a target is finished being built for a project item.

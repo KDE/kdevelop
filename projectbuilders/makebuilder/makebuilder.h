@@ -22,23 +22,18 @@
 #define MAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include "imakebuilder.h"
+
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QVariant>
+
+#include "imakebuilder.h"
 #include "makejob.h"
 
-class QStringList;
-class MakeOutputModel;
-class KDialog;
-class QString;
-class QStandardItem;
-class KUrl;
 class MakeOutputDelegate;
 
 namespace KDevelop {
 class ProjectBaseItem;
-class CommandExecutor;
 }
 
 /**

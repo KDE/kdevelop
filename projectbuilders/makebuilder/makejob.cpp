@@ -22,23 +22,22 @@
 
 #include "makejob.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
 #include <QtCore/QFileInfo>
 
 #include <KDebug>
-#include <kshell.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kprocess.h>
+#include <KShell>
+#include <KGlobal>
+#include <KProcess>
+
+#include <util/environmentgrouplist.h>
+#include <util/processlinemaker.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <util/environmentgrouplist.h>
+#include <interfaces/iproject.h>
+
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <util/processlinemaker.h>
-#include <interfaces/iproject.h>
 
 #include "makeoutputdelegate.h"
 #include "makeoutputmodel.h"
@@ -46,7 +45,8 @@
 
 using namespace KDevelop;
 
-MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType c,  const QStringList& overrideTargets,
+MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item,
+                 CommandType c,  const QStringList& overrideTargets,
                  const MakeVariables& variables )
     : OutputJob(builder)
     , m_builder(builder)
@@ -161,7 +161,7 @@ MakeJob::CommandType MakeJob::commandType()
     return m_command;
 }
 
-const QStringList & MakeJob::customTargets() const
+QStringList MakeJob::customTargets() const
 {
     return m_overrideTargets;
 }
@@ -192,12 +192,6 @@ KUrl MakeJob::computeBuildDir(KDevelop::ProjectBaseItem* item) const
 QStringList MakeJob::computeBuildCommand() const
 {
     QStringList cmdline;
-//     QString cmdline = DomUtil::readEntry(dom, makeTool);
-//     int prio = DomUtil::readIntEntry(dom, priority);
-//     QString nice;
-//     if (prio != 0) {
-//         nice = QString("nice -n%1 ").arg(prio);
-//     }
 
     KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
@@ -213,17 +207,18 @@ QStringList MakeJob::computeBuildCommand() const
     {
         cmdline << "-k";
     }
-    
+
     int jobnumber = builderGroup.readEntry("Number Of Jobs", 1);
     if(jobnumber>1) {
         QString jobNumberArg = QString("-j%1").arg(jobnumber);
         cmdline << jobNumberArg;
     }
-    
+
     if( builderGroup.readEntry("Display Only", false) )
     {
         cmdline << "-n";
     }
+
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());
     if( ! extraOptions.isEmpty() )
     {
@@ -242,18 +237,19 @@ QStringList MakeJob::computeBuildCommand() const
     {
         QString target;
         switch (m_item->type()) {
-        case KDevelop::ProjectBaseItem::Target:
-        case KDevelop::ProjectBaseItem::ExecutableTarget:
-        case KDevelop::ProjectBaseItem::LibraryTarget:
-            Q_ASSERT(m_item->target());
-            cmdline << m_item->target()->text();
-            break;
-        case KDevelop::ProjectBaseItem::BuildFolder:
-            target = builderGroup.readEntry("Default Target", QString());
-            if( !target.isEmpty() )
-                cmdline << target;
-            break;
-        default: break; }
+            case KDevelop::ProjectBaseItem::Target:
+            case KDevelop::ProjectBaseItem::ExecutableTarget:
+            case KDevelop::ProjectBaseItem::LibraryTarget:
+                Q_ASSERT(m_item->target());
+                cmdline << m_item->target()->text();
+                break;
+            case KDevelop::ProjectBaseItem::BuildFolder:
+                target = builderGroup.readEntry("Default Target", QString());
+                if( !target.isEmpty() )
+                    cmdline << target;
+                break;
+            default: break;
+        }
     }else
     {
         cmdline += m_overrideTargets;
@@ -263,7 +259,6 @@ QStringList MakeJob::computeBuildCommand() const
     if (runAsRoot && m_command == InstallCommand)
     {
         int suCommand = builderGroup.readEntry("Su Command", 0);
-        QStringList kdesuline;
         QStringList arguments;
         QString suCommandName;
         if (suCommand == 1) {
@@ -273,11 +268,10 @@ QStringList MakeJob::computeBuildCommand() const
           suCommandName = "sudo";
           arguments << cmdline;
         } else { //default
-          suCommandName = "kdesu";   
+          suCommandName = "kdesu";
           arguments << "-t" << "--" << cmdline;
         }
-        kdesuline << suCommandName << arguments;
-        cmdline = kdesuline;
+        cmdline = QStringList() << suCommandName << arguments;
     }
 
     return cmdline;
@@ -327,6 +321,7 @@ void MakeJob::procError( QProcess::ProcessError err )
     }
     emitResult();
 }
+
 void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 {
     Q_UNUSED(code)
@@ -360,6 +355,5 @@ void MakeJob::setItem( ProjectBaseItem* item )
 {
     m_item = item;
 }
-
 
 #include "makejob.moc"
