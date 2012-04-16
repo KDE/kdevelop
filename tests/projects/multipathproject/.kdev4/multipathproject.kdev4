@@ -45,3 +45,6 @@ Enabled=false
 Environment=
 Executable=
 Type=2
+
+[Project]
+VersionControlSupport=
