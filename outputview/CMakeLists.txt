@@ -7,6 +7,7 @@ set( outputviewinterfaces_LIB_SRCS
     outputmodel.cpp
     ioutputview.cpp
     ioutputviewmodel.cpp
+    outputfilteringstrategies.cpp 
     outputjob.cpp
 )
 kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
