@@ -37,7 +37,7 @@
 #include "configconstants.h"
 
 CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
-    : OutputJob( plugin ), type( t ), killed( false ), enabled( false ), delegate( plugin )
+    : OutputJob( plugin ), type( t ), killed( false ), enabled( false ), m_plugin( plugin )
 {
     setCapabilities( Killable );
     QString subgrpname;
@@ -74,7 +74,6 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
     environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
     arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
-    KDevelop::OutputDelegate* delegate = new KDevelop::OutputDelegate( plugin );
 }
 
 void CustomBuildJob::start()
@@ -104,7 +103,7 @@ void CustomBuildJob::start()
         KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir, this );
         model->setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
         setModel( model, KDevelop::IOutputView::TakeOwnership );
-        setDelegate( delegate );
+        setDelegate( m_plugin->delegate() );
 
         startOutput();
 

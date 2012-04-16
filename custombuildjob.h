@@ -31,7 +31,6 @@ class ProjectBaseItem;
 class CommandExecutor;
 class OutputModel;
 class IProject;
-class OutputDelegate;
 }
 
 class CustomBuildJob : public KDevelop::OutputJob
@@ -64,7 +63,7 @@ private:
     KDevelop::CommandExecutor* exec;
     bool killed;
     bool enabled;
-    KDevelop::OutputDelegate* delegate;
+    CustomBuildSystem* m_plugin;
 };
 
 #endif 

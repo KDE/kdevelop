@@ -55,7 +55,7 @@ K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kde
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
     : AbstractFileManagerPlugin( CustomBuildSystemFactory::componentData(), parent )
-    , m_delegate( this )
+    , m_delegate( new KDevelop::OutputDelegate( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
