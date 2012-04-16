@@ -2,6 +2,7 @@
  *   This file is part of KDevelop                                         *
  *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
+ *   Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,81 +21,227 @@
  ***************************************************************************/
 
 #include "outputmodel.h"
+#include "filtereditem.h"
+#include "outputfilteringstrategies.h"
+
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
+#include <KDebug>
 #include <kglobalsettings.h>
+
+#include <QFont>
 
 namespace KDevelop
 {
-
-struct OutputModelPrivate
-{
-    QTimer* timer;
-    QVector<QStandardItem*> pending;
     
-    static const int MAX_SIZE_PENDING;
-    static const int INTERVAL_MS;
-    static const int MAX_SIZE;
-};
+const int OutputModel::OutputItemTypeRole = Qt::UserRole + 1;
 
-const int OutputModelPrivate::MAX_SIZE_PENDING=10000;
-const int OutputModelPrivate::INTERVAL_MS=50;
-
-const int OutputModelPrivate::MAX_SIZE=50000;
+OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
+    : QAbstractListModel(parent)
+    , m_filter( new NoFilterStrategy )
+    , m_buildDir( builddir )
+{
+}
 
 OutputModel::OutputModel( QObject* parent )
-    : QStandardItemModel( parent ), d(new OutputModelPrivate)
+    : QAbstractListModel(parent)
+    , m_filter( new NoFilterStrategy )
 {
-    d->timer = new QTimer(this);
-    d->timer->setInterval(OutputModelPrivate::INTERVAL_MS);
-    d->timer->setSingleShot(true);
-    
-    d->pending.reserve(OutputModelPrivate::MAX_SIZE_PENDING);
-    
-    connect(d->timer, SIGNAL(timeout()), SLOT(addPending()));
 }
 
-OutputModel::~OutputModel()
+QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 {
-    addPending();
-    delete d;
-}
-
-void OutputModel::appendLine( const QString& line )
-{
-    QStandardItem* item = new QStandardItem( line );
-    item->setFont( KGlobalSettings::fixedFont() );
-    
-    d->pending.append(item);
-    if(d->pending.size()<OutputModelPrivate::MAX_SIZE_PENDING)
-        d->timer->start();
-    else
-        addPending();
-}
-
-void OutputModel::appendLines( const QStringList& lines)
-{
-    Q_FOREACH( const QString& s, lines )
+    if( isValidIndex(idx) )
     {
-        appendLine( s );
+        switch( role )
+        {
+            case Qt::DisplayRole:
+                return m_filteredItems.at( idx.row() ).shortenedText;
+                break;
+            case OutputModel::OutputItemTypeRole:
+                return m_filteredItems.at( idx.row() ).type;
+                break;
+            case Qt::FontRole:
+                return KGlobalSettings::fixedFont();
+                break;
+            default:
+                break;
+        }
+    }
+    return QVariant();
+}
+
+int OutputModel::rowCount( const QModelIndex& parent ) const
+{
+    if( !parent.isValid() )
+        return m_filteredItems.count();
+    return 0;
+}
+
+QVariant OutputModel::headerData( int, Qt::Orientation, int ) const
+{
+    return QVariant();
+}
+
+bool OutputModel::isValidIndex( const QModelIndex& idx ) const
+{
+    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
+}
+
+void OutputModel::activate( const QModelIndex& index )
+{
+    if( index.model() != this || !isValidIndex(index) )
+    {
+        kDebug() << "not my model, returning";
+        return;
+    }
+    kDebug() << "Model activated" << index.row();
+
+
+    FilteredItem item = m_filteredItems.at( index.row() );
+    if( item.isActivatable )
+    {
+        kDebug() << "activating:" << item.lineNo << item.url;
+        KTextEditor::Cursor range( item.lineNo, item.columnNo );
+        KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
+        docCtrl->openDocument( item.url, range );
+    } else 
+    {
+        kDebug() << "not an activateable item";
     }
 }
 
-void OutputModel::addPending()
+QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
-    if(!d->pending.isEmpty()) {
-        const int aboutToAdd = d->pending.size();
-        if (aboutToAdd + invisibleRootItem()->rowCount() > OutputModelPrivate::MAX_SIZE) {
-            // https://bugs.kde.org/show_bug.cgi?id=263050
-            // make sure we don't add too many items
-            invisibleRootItem()->removeRows(0, aboutToAdd + invisibleRootItem()->rowCount() - OutputModelPrivate::MAX_SIZE);
-        }
-        invisibleRootItem()->appendRows(d->pending.toList());
-    }
+    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
 
-    d->pending.clear();
+    if( !m_activateableItems.empty() )
+    {
+        kDebug() << "searching next error";
+        // Jump to the next error item
+        std::set< int >::const_iterator next = m_activateableItems.lower_bound( startrow );
+        if( next == m_activateableItems.end() )
+            next = m_activateableItems.begin();
+        
+        return index( *next, 0, QModelIndex() );
+    }
+    
+    for( int row = 0; row < rowCount(); ++row ) 
+    {
+        int currow = (startrow + row) % rowCount();
+        if( m_filteredItems.at( currow ).isActivatable )
+        {
+            return index( currow, 0, QModelIndex() );
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
+{
+    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
+    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
+    
+    if(!m_activateableItems.empty())
+    {
+        kDebug() << "searching previous error";
+        
+        // Jump to the previous error item
+        std::set< int >::const_iterator previous = m_activateableItems.lower_bound( currentIdx.row() );
+        
+        if( previous == m_activateableItems.begin() )
+            previous = m_activateableItems.end();
+        
+        --previous;
+        
+        return index( *previous, 0, QModelIndex() );
+    }
+    
+    for ( int row = 0; row < rowCount(); ++row )
+    {
+        int currow = (startrow - row) % rowCount();
+        if( m_filteredItems.at( currow ).isActivatable )
+        {
+            return index( currow, 0, QModelIndex() );
+        }
+    }
+    return QModelIndex();
+}
+
+void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
+{
+    switch( currentStrategy )
+    {
+        case NoFilter:
+            m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            break;
+        case CompilerFilter:
+            m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy );
+            break;
+        case ScriptErrorFilter:
+            m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
+            break;
+        default:
+            // assert(false);
+            m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            break;
+    }
+}
+
+void OutputModel::appendLines( const QStringList& lines )
+{
+    if( lines.isEmpty() )
+        return;
+    
+    m_lineBuffer << lines;
+    QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+}
+
+void OutputModel::appendLine( const QString& l )
+{
+    appendLines( QStringList() << l );
+}
+
+
+void OutputModel::addLineBatch()
+{
+     // only add this many lines in one batch, then return to the event loop
+    // this prevents overly long UI lockup and is simple enough to implement
+    const int maxLines = 50;
+    const int linesInBatch = qMin(m_lineBuffer.count(), maxLines);
+
+    // If there is nothing to insert we are done.
+    if ( linesInBatch == 0 )
+            return;
+    
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
+
+    for(int i = 0; i < linesInBatch; ++i) {
+        const QString line = m_lineBuffer.dequeue();
+        FilteredItem item( line );
+        
+        bool matched = m_filter->isErrorInLine(line, item);
+        if( !matched )
+        {
+            matched = m_filter->isActionInLine(line, item);
+        }
+        
+        //kDebug() << "adding item:" << item.shortenedText << itemType;
+        if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
+            m_activateableItems.insert(m_activateableItems.size());
+
+        m_filteredItems << item;
+    }
+    
+    endInsertRows();
+    
+    if (!m_lineBuffer.isEmpty()) {
+        QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+    }
 }
 
 }
