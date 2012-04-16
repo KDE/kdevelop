@@ -24,8 +24,10 @@
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KShell>
+#include <KDebug>
 
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 #include <util/commandexecutor.h>
@@ -35,7 +37,7 @@
 #include "configconstants.h"
 
 CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
-    : OutputJob( plugin ), type( t ), killed( false ), enabled( false )
+    : OutputJob( plugin ), type( t ), killed( false ), enabled( false ), delegate( plugin )
 {
     setCapabilities( Killable );
     QString subgrpname;
@@ -72,6 +74,7 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
     environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
     arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    KDevelop::OutputDelegate* delegate = new KDevelop::OutputDelegate( plugin );
 }
 
 void CustomBuildJob::start()
@@ -98,8 +101,11 @@ void CustomBuildJob::start()
         }
         setStandardToolView( KDevelop::IOutputView::BuildView );
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-        KDevelop::OutputModel* model = new KDevelop::OutputModel( this );
+        KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir, this );
+        model->setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
         setModel( model, KDevelop::IOutputView::TakeOwnership );
+        setDelegate( delegate );
+
         startOutput();
 
         exec = new KDevelop::CommandExecutor( cmd, this );
@@ -151,6 +157,7 @@ KDevelop::OutputModel* CustomBuildJob::model()
 
 void CustomBuildJob::procFinished()
 {
+    kDebug(9507) << "In procFinished";
     model()->appendLine( i18n( "*** Finished ***" ) );
     emitResult();
 }
