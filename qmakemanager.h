@@ -61,7 +61,7 @@ public:
     virtual QHash<QString,QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
-            KDevelop::ProjectFolderItem* ) { return false; }
+            KDevelop::ProjectFolderItem* ) { return 0; }
 
     virtual bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*>&,
                                   KDevelop::ProjectTargetItem*) { return false; }

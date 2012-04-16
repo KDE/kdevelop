@@ -3,7 +3,6 @@ project(QMakeManager)
 enable_testing()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 find_package(KDE4 4.5.0 REQUIRED)
 find_package(KDevPlatform 1.3.60 REQUIRED)
@@ -13,6 +12,8 @@ include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INC
 
 add_subdirectory(qmakebuilder)
 add_subdirectory(app_templates)
+
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 find_package(KDevelop-PG-Qt REQUIRED)
 include_directories(
