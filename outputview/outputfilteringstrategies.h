@@ -52,7 +52,7 @@ public:
 
 /**
  * This filter stategy checks if a given line contains output
- * that is defined as an error (or an actions) from a compiler. 
+ * that is defined as an error (or an action) from a compiler. 
  **/
 class CompilerFilterStrategy : public IFilterStrategy
 {
