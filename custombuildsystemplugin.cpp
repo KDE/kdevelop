@@ -30,6 +30,7 @@
 #include <interfaces/icore.h>
 #include <util/environmentgrouplist.h>
 #include <interfaces/iplugincontroller.h>
+#include <outputview/outputdelegate.h>
 #include "configconstants.h"
 
 #include "custombuildjob.h"
@@ -54,6 +55,7 @@ K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kde
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
     : AbstractFileManagerPlugin( CustomBuildSystemFactory::componentData(), parent )
+    , m_delegate( this )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -220,5 +222,11 @@ QString CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, Projec
     }
     return candidategrp;
 }
+
+KDevelop::OutputDelegate* CustomBuildSystem::delegate() const
+{
+    return m_delegate;
+}
+
 
 #include "custombuildsystemplugin.moc"
