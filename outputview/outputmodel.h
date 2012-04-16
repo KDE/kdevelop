@@ -22,6 +22,7 @@
 #ifndef OUTPUTMODEL_H
 #define OUTPUTMODEL_H
 
+#include "outputviewexport.h"
 #include "ioutputviewmodel.h"
 #include "filtereditem.h"
 
@@ -40,7 +41,7 @@ namespace KDevelop
 class FilteredItem;
 class IFilterStrategy;
 
-class OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
 public:
