@@ -1,6 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
-set( outputviewinterfaces_LIB_SRCS
+set( outputviewinterfaces_LIB_SRCS 
+    ifilterstrategy.cpp
     outputmodel.cpp
     ioutputview.cpp
     ioutputviewmodel.cpp
