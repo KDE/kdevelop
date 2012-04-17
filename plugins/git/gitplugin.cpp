@@ -826,6 +826,7 @@ void GitPlugin::initBranchHash(const QString &repo)
     QScopedPointer<DVcsJob> job(gitRevList(repo, QStringList(root)));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
+    Q_UNUSED(ret);
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //     kDebug() << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);

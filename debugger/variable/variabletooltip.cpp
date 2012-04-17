@@ -193,6 +193,7 @@ void VariableToolTip::slotLinkActivated(const QString& link)
 void VariableToolTip::slotRangeChanged(int min, int max)
 {
     Q_ASSERT(min == 0);
+    Q_UNUSED(min);
     QRect rect = QApplication::desktop()->screenGeometry(this);
     if (pos().y() + height() + max*itemHeight_ < rect.bottom())
         resize(width(), height() + max*itemHeight_);    

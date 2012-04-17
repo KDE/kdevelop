@@ -85,7 +85,6 @@ protected Q_SLOTS:
     void updateActionState( KDevelop::Context* ctx );
     void updateFromBuildSetChange();
 private:
-    static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     void runBuilderJob( KDevelop::BuilderJob::BuildType );
     class ProjectManagerViewPluginPrivate* const d;

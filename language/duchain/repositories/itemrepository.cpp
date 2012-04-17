@@ -195,6 +195,7 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   m_lock->unlock();
   bool result = removeDirectory(m_path);
   Q_ASSERT(result);
+  Q_UNUSED(result);
   Q_ASSERT(m_lock);
   //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();

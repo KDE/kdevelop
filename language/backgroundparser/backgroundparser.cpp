@@ -410,12 +410,19 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-    bool connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)), this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
+    bool connected = QObject::connect(ICore::self()->projectController(),
+                                      SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
+                                      this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(),
+                                 SIGNAL(projectOpened(KDevelop::IProject*)),
+                                 this, SLOT(projectOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpeningAborted(KDevelop::IProject*)), this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(),
+                                 SIGNAL(projectOpeningAborted(KDevelop::IProject*)),
+                                 this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
     Q_ASSERT(connected);
+    Q_UNUSED(connected);
 }
 
 void BackgroundParser::aboutToQuit()

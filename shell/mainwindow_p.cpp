@@ -222,6 +222,7 @@ void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
        get a weird crash a bit later.  */
        Q_ASSERT(obj == lastXMLGUIClientView);
        Q_ASSERT(false && "xmlgui clients management is messed up");
+       Q_UNUSED(obj);
 }
 
 void MainWindowPrivate::setupActions()

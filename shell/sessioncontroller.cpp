@@ -895,14 +895,12 @@ void SessionChooserDialog::updateState() {
         if(session == i18n("Create New Session"))
             continue;
         
-        bool running = false;
         QString state;
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
             state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
                          lockState.holderApp, lockState.holderHostname);
-            running = true;
         }
         
         if(m_model->item(row, 2))

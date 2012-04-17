@@ -492,6 +492,8 @@ public:
       m_environmentInfo.deleteItem(index);
     }
 
+    Q_UNUSED(removed);
+    Q_UNUSED(removed2);
     Q_ASSERT(index || (removed && removed2));
     Q_ASSERT(!findInformation(info->indexedTopContext().index()));
   }
@@ -856,6 +858,7 @@ public:
         QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
+        Q_UNUSED(opened);
         f.write((char*)ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
       }
       
@@ -1252,6 +1255,7 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
     ///If this triggers, there has already been another environment-information registered for this top-context.
     ///removeFromEnvironmentManager should have been called before to remove the old environment-information.
     Q_ASSERT(alreadyHave == file.data());
+    Q_UNUSED(alreadyHave);
     return;
   }
 
