@@ -40,7 +40,7 @@ using namespace KDevelop;
 
 namespace CppTools {
 
-QStringList gccSetupStandardIncludePaths()
+QStringList gccSetupStandardIncludePaths(bool withStdCpp0x)
 {
     QStringList includePaths;
     
@@ -59,7 +59,12 @@ QStringList gccSetupStandardIncludePaths()
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc <<"gcc" << "-std=c++0x" <<"-xc++" <<"-E" <<"-v" <<NULL_DEVICE;
+    proc << "gcc";
+    if (withStdCpp0x) {
+        // see also: https://bugs.kde.org/show_bug.cgi?id=298252
+        proc << "-std=c++0x";
+    }
+    proc << "-xc++" << "-E" << "-v" << NULL_DEVICE;
 
     // We'll use the following constants to know what we're currently parsing.
     const short parsingInitial = 0;
@@ -100,6 +105,9 @@ QStringList gccSetupStandardIncludePaths()
                 }
             }
         }
+    } else if (withStdCpp0x) {
+        // fallback to include-path computation without -std=c++0x arg for old gcc versions
+        return gccSetupStandardIncludePaths(false);
     } else {
         kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
     }
@@ -107,7 +115,12 @@ QStringList gccSetupStandardIncludePaths()
     return includePaths;
 }
 
-QVector<rpp::pp_macro*> computeGccStandardMacros()
+QStringList gccSetupStandardIncludePaths()
+{
+  return gccSetupStandardIncludePaths(true);
+}
+
+QVector<rpp::pp_macro*> computeGccStandardMacros(bool withStdCpp0x = true)
 {
     QVector<rpp::pp_macro*> ret;
     //Get standard macros from gcc
@@ -117,7 +130,12 @@ QVector<rpp::pp_macro*> computeGccStandardMacros()
     // The output of the following gcc commands is several line in the format:
     // "#define MACRO [definition]", where definition may or may not be present.
     // Parsing each line sequentially, we can easily build the macro set.
-    proc <<"gcc" << "-std=c++0x" <<"-xc++" <<"-E" <<"-dM" <<NULL_DEVICE;
+    proc << "gcc";
+    if (withStdCpp0x) {
+        // see also: https://bugs.kde.org/show_bug.cgi?id=298252
+        proc << "-std=c++0x";
+    }
+    proc << "-xc++" << "-E" << "-dM" <<NULL_DEVICE;
 
     if (proc.execute(5000) == 0) {
         QString line;
@@ -141,6 +159,9 @@ QVector<rpp::pp_macro*> computeGccStandardMacros()
                 }
             }
         }
+    } else if (withStdCpp0x) {
+        // fallback to macro computation without -std=c++0x arg for old gcc versions
+        return computeGccStandardMacros(false);
     } else {
         kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
     }
