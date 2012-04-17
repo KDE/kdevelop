@@ -93,13 +93,12 @@ namespace ReviewBoard
             QVariantList repositories() const;
     
         private slots:
-            void gotRepositoryCount(KJob*);
+            void requestRepositoryList(int startingIndex);
             void done(KJob*);
             
         private:
             KUrl m_server;
-            HttpPostCall* m_countRequest;
-            HttpPostCall* m_repositoriesRequest;
+            QVariantList m_repositories;
     };
     
     QByteArray urlToData(const KUrl&);
