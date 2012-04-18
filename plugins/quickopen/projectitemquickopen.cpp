@@ -235,6 +235,14 @@ uint ProjectItemDataProvider::itemCount() const {
   return m_filteredItems.count() + add;
 }
 
+uint ProjectItemDataProvider::unfilteredItemCount() const
+{
+  uint add = 0;
+  for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.constBegin(); it != m_addedItems.constEnd(); ++it)
+    add += it.value().count();
+  return m_currentItems.count() + add;
+}
+
 QStringList ProjectItemDataProvider::supportedItemTypes() {
   QStringList ret;
   ret << i18n("Classes");

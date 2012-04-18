@@ -51,6 +51,7 @@ public:
   virtual void reset();
 
   virtual uint itemCount() const;
+  virtual uint unfilteredItemCount() const;
 
   static QStringList supportedItemTypes();
 private:

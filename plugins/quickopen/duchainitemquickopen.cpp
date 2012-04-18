@@ -196,6 +196,10 @@ uint DUChainItemDataProvider::itemCount() const {
   return Base::filteredItems().count();
 }
 
+uint DUChainItemDataProvider::unfilteredItemCount() const {
+  return Base::items().count();
+}
+
 QList<KDevelop::QuickOpenDataPointer> DUChainItemDataProvider::data( uint start, uint end ) const {
   if( end > (uint)Base::filteredItems().count() )
     end = Base::filteredItems().count();

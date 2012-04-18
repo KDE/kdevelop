@@ -274,7 +274,7 @@ void QuickOpenWidget::showStandardButtons(bool show)
   }
 }
 
-QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false), m_worstCaseUpdateInterval(0) {
+QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
   m_filterTimer.setSingleShot(true);
   connect(&m_filterTimer, SIGNAL(timeout()), this, SLOT(applyFilter()));
 
@@ -349,21 +349,26 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   
   updateProviders();
-  updateTimerInterval();
+  updateTimerInterval(true);
   
 // no need to call this, it's done by updateProviders already
 //   m_model->restart();
 }
 
-void QuickOpenWidget::updateTimerInterval(bool filterChangeIsExpensive)
+void QuickOpenWidget::updateTimerInterval(bool cheapFilterChange)
 {
-  int newHint = m_model->getUpdateTimeoutHint();
-  m_worstCaseUpdateInterval = qMax(m_worstCaseUpdateInterval, newHint);
-  if ( filterChangeIsExpensive ) {
-    m_filterTimer.setInterval(m_worstCaseUpdateInterval);
-  }
-  else {
-    m_filterTimer.setInterval(newHint);
+  const int MAX_ITEMS = 10000;
+  if ( cheapFilterChange && m_model->rowCount(QModelIndex()) < MAX_ITEMS ) {
+    // cheap change and there are currently just a few items,
+    // so apply filter instantly
+    m_filterTimer.setInterval(0);
+  } else if ( m_model->unfilteredRowCount() < MAX_ITEMS ) {
+    // not a cheap change, but there are generally
+    // just a few items in the list: apply filter instantly
+    m_filterTimer.setInterval(0);
+  } else {
+    // otherwise use a timer to prevent sluggishness while typing
+    m_filterTimer.setInterval(300);
   }
 }
 
@@ -510,7 +515,8 @@ void QuickOpenWidget::updateScrollBarState()
 
 void QuickOpenWidget::textChanged( const QString& str )
 {
-  updateTimerInterval(m_filter.startsWith(str));
+  // "cheap" when something was just appended to the current filter
+  updateTimerInterval(str.startsWith(m_filter));
   m_filter = str;
   m_filterTimer.start();
 }

@@ -72,6 +72,7 @@ class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
+    virtual uint unfilteredItemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
 
     virtual void reset();

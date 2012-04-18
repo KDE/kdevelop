@@ -144,6 +144,10 @@ uint BaseFileDataProvider::itemCount() const {
   return Base::filteredItems().count();
 }
 
+uint BaseFileDataProvider::unfilteredItemCount() const {
+  return Base::items().count();
+}
+
 QList<KDevelop::QuickOpenDataPointer> BaseFileDataProvider::data( uint start, uint end ) const {
   if( end > (uint)Base::filteredItems().count() )
     end = Base::filteredItems().count();

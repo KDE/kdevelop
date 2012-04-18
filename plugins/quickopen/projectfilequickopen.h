@@ -74,6 +74,7 @@ class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public 
     BaseFileDataProvider();
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
+    virtual uint unfilteredItemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
 
   private:
