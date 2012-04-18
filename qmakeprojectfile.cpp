@@ -330,8 +330,13 @@ QStringList QMakeProjectFile::targets() const
 
     foreach( const QString& target, variableValues("INSTALLS") )
     {
-        if( target != "target" )
+        if( !target.isEmpty() && target != "target" )
             list << target;
+    }
+
+    if (list.removeAll(QString())) {
+        // remove empty targets - which is probably a bug...
+        kWarning(9024) << "got empty entry in TARGET of file" << absoluteFile();
     }
 
     ifDebug(kDebug(9024) << "found" << list.size() << "targets";)
