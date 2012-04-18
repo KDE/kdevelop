@@ -216,7 +216,7 @@ void IncludePathComputer::computeBackground() {
                         m_ret << r;
                       m_hasPath.insert(r);
 
-                      kWarning() << "Include-path was missing in list returned by build-manager, adding it now. file was:" << m_source << "missing path:" << r.pathOrUrl();
+                      kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it now. file was:" << m_source << "missing path:" << r.pathOrUrl();
                   }
               }
 
