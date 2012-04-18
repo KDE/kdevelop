@@ -66,6 +66,7 @@ class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, publi
     virtual void setFilterText( const QString& text );
     virtual void reset();
     virtual uint itemCount() const;
+    virtual uint unfilteredItemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
     virtual void enableData( const QStringList& items, const QStringList& scopes );
 
