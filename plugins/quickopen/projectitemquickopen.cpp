@@ -87,8 +87,17 @@ struct ClosestMatchToText
      */
     inline bool operator()( const CodeModelViewItem& a, const CodeModelViewItem& b ) const
     {
-        const int height_a = cache[a.m_id.index()];
-        const int height_b = cache[b.m_id.index()];
+        const int height_a = cache.value(a.m_id.index(), -1);
+        const int height_b = cache.value(b.m_id.index(), -1);
+
+        Q_ASSERT(height_a != -1);
+        Q_ASSERT(height_b != -1);
+
+        if (height_a == height_b) {
+            // stable sorting for equal items based on index
+            // TODO: fast string-based sorting in such cases?
+            return a.m_id.index() < b.m_id.index();
+        }
 
         return height_a < height_b;
     }
