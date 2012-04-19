@@ -28,7 +28,13 @@ namespace KDevelop
 {
 
 ProjectModelSaver::ProjectModelSaver()
+: m_project(0)
 {
+}
+
+void ProjectModelSaver::setProject(IProject* project)
+{
+    m_project = project;
 }
 
 QModelIndex ProjectModelSaver::indexFromConfigString(const QAbstractItemModel *model, const QString &key) const
@@ -37,9 +43,19 @@ QModelIndex ProjectModelSaver::indexFromConfigString(const QAbstractItemModel *m
     if( !proxy ) {
         return QModelIndex();
     }
+
     const KDevelop::ProjectModel *projectModel = qobject_cast<const KDevelop::ProjectModel*>(proxy->sourceModel());
 
-    return proxy->mapFromSource( projectModel->pathToIndex(key.split("/")) );
+    const QModelIndex sourceIndex = projectModel->pathToIndex(key.split("/"));
+
+    if ( m_project && sourceIndex.isValid() ) {
+        ProjectBaseItem* item = projectModel->itemFromIndex(sourceIndex);
+        if ( !item || item->project() != m_project ) {
+            return QModelIndex();
+        }
+    }
+
+    return proxy->mapFromSource(sourceIndex);
 }
 
 QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
@@ -52,9 +68,19 @@ QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
     if( !proxy ) {
         return QString();
     }
+
+    const QModelIndex sourceIndex = proxy->mapToSource(index);
+
     const KDevelop::ProjectModel *projectModel = qobject_cast<const KDevelop::ProjectModel*>(proxy->sourceModel());
 
-    return projectModel->pathFromIndex( proxy->mapToSource(index) ).join("/");
+    if ( m_project ) {
+        ProjectBaseItem* item = projectModel->itemFromIndex( sourceIndex );
+        if ( !item || item->project() != m_project ) {
+            return QString();
+        }
+    }
+
+    return projectModel->pathFromIndex( sourceIndex ).join("/");
 }
 
 }

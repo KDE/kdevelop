@@ -27,15 +27,28 @@ class ProjectModel;
 namespace KDevelop
 {
 
+class IProject;
+
 class ProjectModelSaver: public KViewStateSaver
 {
     Q_OBJECT
 public:
     ProjectModelSaver();
 
+    /**
+     * If @p project is non-null, only files from that project will
+     * be handled by @code index{From,To}ConfigString @endcode.
+     *
+     * For other files, an invalid index or empty string is be returned.
+     */
+    void setProject(IProject* project);
+
     virtual QModelIndex indexFromConfigString(const QAbstractItemModel *model, const QString &key) const;
 
     virtual QString indexToConfigString(const QModelIndex &index) const;
+
+private:
+    IProject* m_project;
 };
 
 }

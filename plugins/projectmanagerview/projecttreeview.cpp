@@ -80,9 +80,13 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
 
     connect( ICore::self(), SIGNAL(aboutToShutdown()),
-             this, SLOT(saveState()) );
+             this, SLOT(aboutToShutdown()));
     connect( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-             this, SLOT(restoreState()) );
+             this, SLOT(restoreState(KDevelop::IProject*)) );
+    connect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+             this, SLOT(saveState()) );
+
+    restoreState();
 }
 
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
@@ -330,14 +334,23 @@ void ProjectTreeView::saveState()
     saver.saveState( configGroup );
 }
 
-void ProjectTreeView::restoreState()
+void ProjectTreeView::restoreState(IProject* project)
 {
     KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
 
     // Saver will delete itself when it is complete.
-    ProjectModelSaver *saver = new ProjectModelSaver();
+    ProjectModelSaver *saver = new ProjectModelSaver;
+    saver->setProject( project );
     saver->setView( this );
     saver->restoreState( configGroup );
+}
+
+void ProjectTreeView::aboutToShutdown()
+{
+    // save all projects, not just the last one that is closed
+    disconnect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+                this, SLOT(saveState(KDevelop::IProject*)) );
+    saveState();
 }
 
 bool ProjectTreeView::event(QEvent* event)
