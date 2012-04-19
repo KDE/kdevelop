@@ -41,6 +41,8 @@ struct DUChainItem
   bool m_noHtmlDestription;
 };
 
+Q_DECLARE_TYPEINFO(DUChainItem, Q_MOVABLE_TYPE);
+
 class DUChainItemData : public KDevelop::QuickOpenDataBase
 {
   public:
