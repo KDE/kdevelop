@@ -21,16 +21,15 @@
 
 #include "language/duchain/identifier.h"
 #include "language/duchain/duchainpointer.h"
+#include "language/duchain/types/structuretype.h"
 
-#include <KDE/KAssistantDialog>
-#include <KDE/KTextEdit>
-#include <KDE/KUrl>
+#include <KAssistantDialog>
+#include <KUrl>
 
 #include "../languageexport.h"
-#include <language/duchain/types/structuretype.h>
 
 class KLineEdit;
-class KUrl;
+class KTextEdit;
 
 namespace KDevelop {
 
@@ -43,7 +42,7 @@ class DocumentChangeSet;
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList inheritance READ inheritanceList())
+    Q_PROPERTY(QStringList inheritance READ inheritanceList)
 
 public:
     ClassIdentifierPage(QWidget* parent);
@@ -88,7 +87,7 @@ public Q_SLOTS:
      * To override in subclasses, don't call this implementation.
      */
     virtual void moveDownInheritance();
-    
+
     /**
      * Parses a parent class into a QualifiedIdentifier, the default implementation
      * Just returns the string converted to a QualifiedIdentifier
@@ -122,10 +121,11 @@ public Q_SLOTS:
 private:
     // data
     class LicensePagePrivate* const d;
-    
+
+    ///FIXME: ugly internal api, move to *Private
     // methods
     void        initializeLicenses();
-    QString &   readLicense(int licenseIndex);
+    QString&    readLicense(int licenseIndex);
     bool        saveLicense();
 };
 
@@ -136,96 +136,96 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 {
   public:
-    
+
     ClassGenerator();
     virtual ~ClassGenerator();
-      
+
     /**
      * Generate the actual DocumentChangeSet
      */
     virtual DocumentChangeSet generate() = 0;
-    
+
     /**
      * Remove all previous base classes
      */
     virtual void clearInheritance();
-    
+
     /**
      * Clear all in class declarations
      */
     void clearDeclarations();
-    
+
     /**
      * Add another base class, must be the pure identifier
-     * 
+     *
      * \return the current list of base classes
      */
-    virtual const QList<DeclarationPointer> & addBaseClass(const QString &);
-    
+    virtual QList<DeclarationPointer> addBaseClass(const QString&);
+
     /**
      * Add a declaration to insert to the new Class
      */
-    void addDeclaration(DeclarationPointer newDeclaration);
-    
+    void addDeclaration(const DeclarationPointer& newDeclaration);
+
     /**
      * @return All the current declarations for this class
      */
-    const QList<DeclarationPointer> declarations() const;
-    
+    QList<DeclarationPointer> declarations() const;
+
     /// \return The list of all of the inherited classes
-    const QList<DeclarationPointer> & inheritanceList() const;
+    QList<DeclarationPointer> inheritanceList() const;
 
     /// \return The list of directly inherited classes
-    const QList<DeclarationPointer> & directInheritanceList() const;
+    QList<DeclarationPointer> directInheritanceList() const;
 
     /**
      *Should return the suggested url of the header file for the given class-name
      */
-    virtual KUrl headerUrlFromBase(KUrl baseUrl, bool toLower=true);
+    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
 
     /**
      *Should return the suggested url of the implementation file for the given class-name,
      *if header and implementation are separate for this language.
      */
-    virtual KUrl implementationUrlFromBase(KUrl baseUrl, bool toLower=true);
-    
+    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+
     /**
      * Set the URL where the header will be implemented
      */
-    void setHeaderUrl(KUrl header);
-    
+    void setHeaderUrl(const KUrl& header);
+
     /**
      * Set the URL where the implementation will be implemented
      */
-    void setImplementationUrl(KUrl implementation);
-    
+    void setImplementationUrl(const KUrl& implementation);
+
     /**
      * Set the position where the header is to be inserted
      */
-    void setHeaderPosition(SimpleCursor position);
-    
+    void setHeaderPosition(const SimpleCursor& position);
+
     /**
      * Set the position where the implementation stubbs are to be inserted
      */
-    void setImplementationPosition(SimpleCursor position);
-    
+    void setImplementationPosition(const SimpleCursor& position);
+
     /**
      * \return The name of the class to generate (excluding namespaces)
      */
-    const QString & name() const;
-    
+    QString name() const;
+
     /**
      * \param identifier The Qualified identifier that the class will have
      */
-    virtual void setIdentifier(const QString & identifier);
-    
+    virtual void setIdentifier(const QString& identifier);
+
     /**
      * \return The Identifier of the class to generate (including all used namespaces)
      */
     virtual QString identifier() const;
-    
-    const QString & license() const;
-    void setLicense(const QString & license);
+
+    QString license() const;
+    void setLicense(const QString& license);
 
     /**
      * \return The class to be generated as a Type
@@ -233,30 +233,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     virtual StructureType::Ptr objectType() const = 0;
 
   protected:
-    
+
     /**
      * Set the name (without namespace) for this class
      */
-    void setName(const QString &);
-    
+    void setName(const QString&);
+
     SimpleCursor headerPosition();
     SimpleCursor implementationPosition();
-    
-    KUrl & headerUrl();
-    KUrl & implementationUrl();
-    
+
+    KUrl headerUrl();
+    KUrl implementationUrl();
+
     /**
      * Look recursively for parent classes, and add them to the Inheritance list
      */
     void fetchParentClasses(const Context * baseClass);
-    
+
     QList<DeclarationPointer> m_baseClasses;  //!< These are the base classes, that are directly inherited from
-    QList<DeclarationPointer> m_declarations; //!< Declarations 
-    
+    QList<DeclarationPointer> m_declarations; //!< Declarations
+
   private:
     struct ClassGeneratorPrivate * const d;
-    
-    void fetchSuperClasses(DeclarationPointer derivedClass);
+
+    ///FIXME: move to *Private
+    void fetchSuperClasses(const DeclarationPointer& derivedClass);
 };
 
 /**
@@ -267,13 +268,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT CreateClassAssistant : public KAssistantDialog
     Q_OBJECT
 
 public:
-    CreateClassAssistant(QWidget* parent, ClassGenerator * generator, KUrl baseUrl = KUrl());
+    CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl = KUrl());
     virtual ~CreateClassAssistant();
     /**
      * Creates the generic parts of the new class assistant.
      */
     virtual void setup();
-    
+
     /**
      * \return The generator that this assistant will use
      */
@@ -316,31 +317,31 @@ public:
     virtual ~OutputPage();
 
     virtual void initializePage();
-    
+
     virtual bool validatePage();
 
     virtual bool isComplete() const;
-    
+
 Q_SIGNALS:
     void isValid(bool valid);
 
 private:
     class OutputPagePrivate* const d;
-    
+
 private Q_SLOTS:
     virtual void updateFileNames();
-    
+
     /**
      * This implementation simply enables the position widgets on a file that exists.
      * Derived classes should overload to set the ranges where class generation should be allowed
      */
-    virtual void updateHeaderRanges(const QString &);
-    
+    virtual void updateHeaderRanges(const QString&);
+
     /**
      * This implementation simply enables the position widgets on a file that exists.
      * Derived classes should overload to set the ranges where class generation should be allowed
      */
-    virtual void updateImplementationRanges(const QString &);
+    virtual void updateImplementationRanges(const QString&);
 };
 }
 

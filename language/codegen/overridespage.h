@@ -56,7 +56,7 @@ public:
      * @p classItem The parent class from which @p childDeclaration stems from. Should be used as parent for the override item.
      * @p childDeclaration The overridable function.
      */
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
 
 protected:
     ClassGenerator* generator() const;

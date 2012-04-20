@@ -24,8 +24,8 @@
 #include <KListWidget>
 #include <KLineEdit>
 #include <KEMailSettings>
-#include <kdebug.h>
-#include <kmessagebox.h>
+#include <KDebug>
+#include <KMessageBox>
 
 #include "ui_newclass.h"
 #include "ui_licensechooser.h"
@@ -61,8 +61,7 @@ struct CreateClassAssistantPrivate
     KPageWidgetItem* outputPage;
 };
 
-
-CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * generator, KUrl baseUrl)
+CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl)
 : KAssistantDialog(parent)
 , d(new CreateClassAssistantPrivate)
 {
@@ -123,8 +122,9 @@ bool CreateClassAssistant::validateClassIdentifierPage()
 
     //Remove old base classes, and add the new ones
     generator()->clearInheritance();
-    foreach (const QString & inherited, d->classIdentifierPageWidget->inheritanceList())
+    foreach (const QString& inherited, d->classIdentifierPageWidget->inheritanceList()) {
         generator()->addBaseClass(inherited);
+    }
 
     //Update the overrides page with the new inheritance list
     d->overridesPageWidget->updateOverrideTree();
@@ -146,7 +146,7 @@ bool CreateClassAssistant::validateLicensePage()
         generator()->setLicense(d->licensePageWidget->licenseTextEdit()->toPlainText());
         d->outputPageWidget->initializePage();
     }
-    
+
     return valid;
 }
 
@@ -160,15 +160,17 @@ void CreateClassAssistant::next()
 {
     bool valid = false;
 
-    if (currentPage() == d->classIdentifierPage)
+    if (currentPage() == d->classIdentifierPage) {
         valid = validateClassIdentifierPage();
-    if (currentPage() == d->overridesPage)
+    } else if (currentPage() == d->overridesPage) {
         valid = validateOverridesPage();
-    if (currentPage() == d->licensePage)
+    } else if (currentPage() == d->licensePage) {
         valid = validateLicensePage();
+    }
 
-    if (valid)
+    if (valid) {
         KAssistantDialog::next();
+    }
 }
 
 void CreateClassAssistant::accept()
@@ -206,13 +208,13 @@ struct ClassGeneratorPrivate
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
     SimpleCursor headerPosition;
     SimpleCursor implementationPosition;
-    
+
     KUrl headerUrl;
     KUrl implementationUrl;
 };
 
-ClassGenerator::ClassGenerator() :
-                             d(new ClassGeneratorPrivate)
+ClassGenerator::ClassGenerator()
+: d(new ClassGeneratorPrivate)
 {
 }
 
@@ -221,12 +223,12 @@ ClassGenerator::~ClassGenerator()
     delete d;
 }
 
-const QString & ClassGenerator::name() const
+QString ClassGenerator::name() const
 {
     return d->name;
 }
 
-void ClassGenerator::setName(const QString & newName)
+void ClassGenerator::setName(const QString& newName)
 {
     d->name = newName;
 }
@@ -236,28 +238,28 @@ QString ClassGenerator::identifier() const
     return name();
 }
 
-void ClassGenerator::setIdentifier(const QString & identifier)
+void ClassGenerator::setIdentifier(const QString& identifier)
 {
     setName(identifier);
 }
 
-void ClassGenerator::addDeclaration(DeclarationPointer newDeclaration)
+void ClassGenerator::addDeclaration(const DeclarationPointer& newDeclaration)
 {
     m_declarations << newDeclaration;
 }
 
-const QList<DeclarationPointer> ClassGenerator::declarations() const
+QList<DeclarationPointer> ClassGenerator::declarations() const
 {
     return m_declarations;
 }
 
-const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  newBaseClass)
+QList<DeclarationPointer> ClassGenerator::addBaseClass(const QString&  newBaseClass)
 {
-    DUChainReadLocker lock(DUChain::lock());
-    
+    DUChainReadLocker lock;
+
     bool added = false;
     PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(newBaseClass)));
-    
+
     //Search for all super classes
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
     {
@@ -274,19 +276,19 @@ const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  
             break;
         }
     }
-    
+
     if(!added)
         m_baseClasses << DeclarationPointer(); //Some entities expect that there is always an item added to the list, so just add zero
-    
+
     return m_baseClasses;
 }
 
-const QList<DeclarationPointer> & ClassGenerator::inheritanceList() const
+QList<DeclarationPointer> ClassGenerator::inheritanceList() const
 {
     return d->inheritedClasses;
 }
 
-const QList< DeclarationPointer >& ClassGenerator::directInheritanceList() const
+QList<DeclarationPointer> ClassGenerator::directInheritanceList() const
 {
     return m_baseClasses;
 }
@@ -302,7 +304,7 @@ void ClassGenerator::clearDeclarations()
     m_declarations.clear();
 }
 
-KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl, bool toLower)
+KUrl ClassGenerator::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
     Q_UNUSED(toLower);
@@ -311,30 +313,30 @@ KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl, bool toLower)
     return url;
 }
 
-KUrl ClassGenerator::implementationUrlFromBase(KUrl baseUrl, bool toLower)
+KUrl ClassGenerator::implementationUrlFromBase(const KUrl& baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
     Q_UNUSED(toLower);
     return KUrl();
 }
 
-void ClassGenerator::setHeaderPosition ( SimpleCursor position )
+void ClassGenerator::setHeaderPosition(const SimpleCursor& position)
 {
     d->headerPosition = position;
 }
 
-void ClassGenerator::setImplementationPosition ( SimpleCursor position )
+void ClassGenerator::setImplementationPosition(const SimpleCursor& position)
 {
     d->implementationPosition = position;
 }
 
-void ClassGenerator::setHeaderUrl ( KUrl header )
+void ClassGenerator::setHeaderUrl(const KUrl& header)
 {
     d->headerUrl = header;
     kDebug() << "Header for the generated class: " << header;
 }
 
-void ClassGenerator::setImplementationUrl ( KUrl implementation )
+void ClassGenerator::setImplementationUrl(const KUrl& implementation)
 {
     d->implementationUrl = implementation;
     kDebug() << "Implementation for the generated class: " << implementation;
@@ -350,51 +352,54 @@ SimpleCursor ClassGenerator::implementationPosition()
     return d->implementationPosition;
 }
 
-KUrl & ClassGenerator::headerUrl()
+KUrl ClassGenerator::headerUrl()
 {
     return d->headerUrl;
 }
 
-KUrl & ClassGenerator::implementationUrl()
+KUrl ClassGenerator::implementationUrl()
 {
     return d->implementationUrl;
 }
 
 /// Specify license for this class
-void ClassGenerator::setLicense(const QString & license)
+void ClassGenerator::setLicense(const QString& license)
 {
     kDebug() << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
 }
 
 /// Get the license specified for this classes
-const QString & ClassGenerator::license() const
+QString ClassGenerator::license() const
 {
     return d->license;
 }
 
-void ClassGenerator::fetchSuperClasses(DeclarationPointer derivedClass)
+void ClassGenerator::fetchSuperClasses(const DeclarationPointer& derivedClass)
 {
-    DUChainReadLocker lock(DUChain::lock());
-    
+    DUChainReadLocker lock;
+
     //Prevent duplicity
-    if(d->inheritedClasses.contains(derivedClass))
+    if(d->inheritedClasses.contains(derivedClass)) {
         return;
-    
+    }
+
     d->inheritedClasses.append(derivedClass);
 
     DUContext* context = derivedClass->internalContext();
     if (context) {
-        foreach (const DUContext::Import& import, context->importedParentContexts())
-            if (DUContext * parentContext = import.context(context->topContext()))
-                if (parentContext->type() == DUContext::Class)
+        foreach (const DUContext::Import& import, context->importedParentContexts()) {
+            if (DUContext * parentContext = import.context(context->topContext())) {
+                if (parentContext->type() == DUContext::Class) {
                     fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+                }
+            }
+        }
     }
 }
 
-class ClassIdentifierPagePrivate
+struct ClassIdentifierPagePrivate
 {
-public:
     ClassIdentifierPagePrivate()
         : classid(0)
     {
@@ -404,8 +409,8 @@ public:
 };
 
 ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
-    : QWidget(parent)
-    , d(new ClassIdentifierPagePrivate())
+: QWidget(parent)
+, d(new ClassIdentifierPagePrivate())
 {
     d->classid = new Ui::NewClassDialog;
     d->classid->setupUi(this);
@@ -452,8 +457,9 @@ void ClassIdentifierPage::addInheritance()
 
     d->classid->removeInheritancePushButton->setEnabled(true);
 
-    if (d->classid->inheritanceList->count() > 1)
+    if (d->classid->inheritanceList->count() > 1) {
         checkMoveButtonState();
+    }
 
     emit inheritanceChanged();
 }
@@ -462,8 +468,9 @@ void ClassIdentifierPage::removeInheritance()
 {
     delete d->classid->inheritanceList->takeItem(d->classid->inheritanceList->currentRow());
 
-    if (d->classid->inheritanceList->count() == 0)
+    if (d->classid->inheritanceList->count() == 0) {
         d->classid->removeInheritancePushButton->setEnabled(false);
+    }
 
     checkMoveButtonState();
 
@@ -475,8 +482,9 @@ void ClassIdentifierPage::moveUpInheritance()
     int currentRow = d->classid->inheritanceList->currentRow();
 
     Q_ASSERT(currentRow > 0);
-    if (currentRow <= 0)
+    if (currentRow <= 0) {
         return;
+    }
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow - 1, item);
@@ -490,8 +498,9 @@ void ClassIdentifierPage::moveDownInheritance()
     int currentRow = d->classid->inheritanceList->currentRow();
 
     Q_ASSERT(currentRow != -1 && currentRow < d->classid->inheritanceList->count() - 1);
-    if (currentRow == -1 || currentRow >= d->classid->inheritanceList->count() - 1)
+    if (currentRow == -1 || currentRow >= d->classid->inheritanceList->count() - 1) {
         return;
+    }
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow + 1, item);
@@ -521,10 +530,8 @@ QStringList ClassIdentifierPage::inheritanceList() const
     return ret;
 }
 
-class LicensePagePrivate
+struct LicensePagePrivate
 {
-public:
-
     struct LicenseInfo
     {
         QString name;
@@ -544,8 +551,8 @@ public:
 };
 
 LicensePage::LicensePage(QWidget* parent)
-    : QWidget(parent)
-    , d(new LicensePagePrivate)
+: QWidget(parent)
+, d(new LicensePagePrivate)
 {
     d->license = new Ui::LicenseChooserDialog;
     d->license->setupUi(this);
@@ -555,7 +562,7 @@ LicensePage::LicensePage(QWidget* parent)
 
     // Read all the available licenses from the standard dirs
     initializeLicenses();
-    
+
     //Set the license selection to the previous one
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
@@ -575,14 +582,14 @@ LicensePage::~LicensePage()
     }
     else
         kWarning() << "Attempted to save an invalid license number: " << index << ". Number of licenses:" << d->availableLicenses.size();
-    
+
     delete d;
 }
 
 // If the user entered a custom license that they want to save, save it
 bool LicensePage::validatePage()
 {
-    if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) && 
+    if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) &&
         d->license->saveLicense->isChecked())
         return saveLicense();
     else
@@ -600,7 +607,7 @@ void LicensePage::initializeLicenses()
     kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
     QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
-    
+
     //Iterate through the possible directories that contain licenses, and load their names
     foreach(const QString& currentDir, licenseDirs)
     {
@@ -610,14 +617,14 @@ void LicensePage::initializeLicenses()
             LicensePagePrivate::LicenseInfo newLicense;
             newLicense.path = it.next();
             newLicense.name = it.fileName();
-            
+
             kDebug() << "Found License: " << newLicense.name;
-            
+
             d->availableLicenses.push_back(newLicense);
             d->license->licenseComboBox->addItem(newLicense.name);
         }
     }
-    
+
     //Finally add the option other for user specified licenses
     LicensePagePrivate::LicenseInfo license;
     d->availableLicenses.push_back(license);
@@ -625,7 +632,7 @@ void LicensePage::initializeLicenses()
 }
 
 // Read a license index, if it is not loaded, open it from the file
-QString & LicensePage::readLicense(int licenseIndex)
+QString& LicensePage::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
     if(d->availableLicenses[licenseIndex].contents.isEmpty())
@@ -636,7 +643,7 @@ QString & LicensePage::readLicense(int licenseIndex)
         {
             kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
             QFile newLicense(d->availableLicenses[licenseIndex].path);
-            
+
             if(newLicense.open(QIODevice::ReadOnly | QIODevice::Text))
             {
                 QTextStream newLicenseText(&newLicense);
@@ -688,7 +695,7 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->saveLicense->setEnabled(false);
         d->license->licenseTextEdit->setReadOnly(true);
     }
-    
+
     if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
         d->license->licenseTextEdit->setText(i18n("Could not load previous license"));
     else
@@ -698,20 +705,20 @@ void LicensePage::licenseComboChanged(int selectedLicense)
 bool LicensePage::saveLicense()
 {
     kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
-    
+
     QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/", KGlobal::activeComponent());
     QFile newFile(localDataDir + d->license->licenseName->text());
-    
+
     if(newFile.exists())
     {
         KMessageBox::sorry(this, i18n("The specified license already exists. Please provide a different name."));
         return false;
     }
-    
+
     newFile.open(QIODevice::WriteOnly);
     qint64 result = newFile.write(d->license->licenseTextEdit->toPlainText().toUtf8());
     newFile.close();
-    
+
     if(result == -1)
     {
         KMessageBox::sorry(this, i18n("There was an error writing the file."));
@@ -721,9 +728,8 @@ bool LicensePage::saveLicense()
     return true;
 }
 
-class OutputPagePrivate
+struct OutputPagePrivate
 {
-public:
     OutputPagePrivate()
         : output(0)
     {
@@ -731,7 +737,7 @@ public:
 
     Ui::OutputLocationDialog* output;
     CreateClassAssistant* parent;
-    
+
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
 
@@ -743,8 +749,8 @@ void OutputPagePrivate::updateRanges(KIntNumInput * line, KIntNumInput * column,
 }
 
 OutputPage::OutputPage(CreateClassAssistant* parent)
-    : QWidget(parent)
-    , d(new OutputPagePrivate)
+: QWidget(parent)
+, d(new OutputPagePrivate)
 {
     d->parent = parent;
 
@@ -754,8 +760,8 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
     d->output->headerUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
     d->output->implementationUrl->setMode( KFile::File | KFile::LocalOnly );
     d->output->implementationUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
-    
-    
+
+
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
     connect(d->output->headerUrl, SIGNAL(textChanged(QString)), this, SLOT(updateHeaderRanges(QString)));
     connect(d->output->implementationUrl, SIGNAL(textChanged(QString)), this, SLOT(updateImplementationRanges(QString)));
@@ -784,7 +790,7 @@ void OutputPage::updateFileNames() {
     emit isValid(isComplete());
 }
 
-void OutputPage::updateHeaderRanges(const QString & url)
+void OutputPage::updateHeaderRanges(const QString& url)
 {
     QFileInfo info(url);
     d->updateRanges(d->output->headerLineNumber, d->output->headerColumnNumber, info.exists() && !info.isDir());
@@ -792,7 +798,7 @@ void OutputPage::updateHeaderRanges(const QString & url)
     emit isValid(isComplete());
 }
 
-void OutputPage::updateImplementationRanges(const QString & url)
+void OutputPage::updateImplementationRanges(const QString& url)
 {
     QFileInfo info(url);
     d->updateRanges(d->output->implementationLineNumber, d->output->implementationColumnNumber, info.exists() && !info.isDir());
@@ -820,5 +826,7 @@ OutputPage::~OutputPage()
 }
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::LicensePagePrivate::LicenseInfo, Q_MOVABLE_TYPE);
 
 #include "createclass.moc"

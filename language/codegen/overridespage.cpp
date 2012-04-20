@@ -36,9 +36,8 @@
 
 using namespace KDevelop;
 
-class KDevelop::OverridesPagePrivate
+struct KDevelop::OverridesPagePrivate
 {
-public:
     OverridesPagePrivate(ClassGenerator* g)
         : generator(g), overrides(0)
     {
@@ -103,20 +102,18 @@ void OverridesPage::validateOverrideTree()
     }
 }
 
-void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseList)
+void OverridesPage::populateOverrideTree(const QList<DeclarationPointer>& baseList)
 {
     KDevelop::DUChainReadLocker lock(DUChain::lock());
-    
-    foreach(const DeclarationPointer baseClass, baseList)
-    {
+
+    foreach(const DeclarationPointer& baseClass, baseList) {
         DUContext* context = baseClass->internalContext();
 
         QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
         classItem->setIcon(0, DUChainUtils::iconForDeclaration(baseClass.data()));
 
         //For this internal context get all the function declarations inside the class
-        foreach (Declaration * childDeclaration, context->localDeclarations())
-        {
+        foreach (Declaration * childDeclaration, context->localDeclarations()) {
             if (AbstractFunctionDeclaration * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) {
                 if (func->isVirtual()) {
                     // Its a virtual function, add it to the list
@@ -133,7 +130,7 @@ void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseL
     }
 }
 
-void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration)
+void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration)
 {
     if (d->overriddenFunctions.contains(childDeclaration->identifier())) {
         foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
@@ -173,7 +170,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, Declaration
         overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
         overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
     }
-    
+
     ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if(classFunction && classFunction->isAbstract()) {
         overrideItem->setIcon(0, KIcon("flag-red"));
@@ -182,7 +179,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, Declaration
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);
     }
-    
+
     d->declarationMap[overrideItem] = childDeclaration;
 }
 
