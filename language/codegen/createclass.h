@@ -22,7 +22,8 @@
 #include "language/duchain/identifier.h"
 #include "language/duchain/duchainpointer.h"
 
-#include <QtGui/QWizard>
+#include <KDE/KAssistantDialog>
+#include <KDE/KTextEdit>
 #include <KDE/KUrl>
 
 #include "../languageexport.h"
@@ -39,13 +40,13 @@ class Context;
 class Declaration;
 class DocumentChangeSet;
 
-class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWizardPage
+class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QStringList inheritance READ inheritanceList())
 
 public:
-    ClassIdentifierPage(QWizard* parent);
+    ClassIdentifierPage(QWidget* parent);
     virtual ~ClassIdentifierPage();
 
     /// Returns the line edit which contains the new class identifier.
@@ -56,11 +57,10 @@ public:
 
     /// Returns a list of inheritances for the new class
     QStringList inheritanceList() const;
-    
-    virtual bool validatePage();
 
 Q_SIGNALS:
     void inheritanceChanged();
+    void isValid(bool valid);
 
 public Q_SLOTS:
     /// Called when an inheritance is to be added.  To override in subclasses,
@@ -97,6 +97,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void checkMoveButtonState();
+    void checkIdentifier();
 
 private:
 
@@ -104,14 +105,15 @@ private:
 };
 
 //!@todo Add the name of the Author at the top of the license
-class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWizardPage
+class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    LicensePage(QWizard* parent);
+    LicensePage(QWidget* parent);
     virtual ~LicensePage();
-    
+
+    KTextEdit* licenseTextEdit();
     bool validatePage();
 
 public Q_SLOTS:
@@ -258,44 +260,59 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 };
 
 /**
- * Provides a wizard for creating a new class using a ClassGenerator.
+ * Provides an assistant for creating a new class using a ClassGenerator.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CreateClassWizard : public QWizard
+class KDEVPLATFORMLANGUAGE_EXPORT CreateClassAssistant : public KAssistantDialog
 {
     Q_OBJECT
 
 public:
-    CreateClassWizard(QWidget* parent, ClassGenerator * generator, KUrl baseUrl = KUrl());
-    virtual ~CreateClassWizard();
+    CreateClassAssistant(QWidget* parent, ClassGenerator * generator, KUrl baseUrl = KUrl());
+    virtual ~CreateClassAssistant();
     /**
-     * Creates the generic parts of the new class wizard.
+     * Creates the generic parts of the new class assistant.
      */
-    
     virtual void setup();
-    /**
-     * Called when the wizard completes.
-     */
-    virtual void accept();
     
     /**
-     * \return The generator that this wizard will use
+     * \return The generator that this assistant will use
      */
     virtual ClassGenerator * generator();
 
     virtual ClassIdentifierPage* newIdentifierPage();
 
     virtual OverridesPage* newOverridesPage();
+
+public Q_SLOTS:
+    /**
+     * Called when the next button is clicked.
+     */
+    virtual void next();
+    /**
+     * Called when the assistant completes.
+     */
+    virtual void accept();
+
+private Q_SLOTS:
+    void checkClassIdentifierPage(bool valid);
+    void checkOutputPage(bool valid);
+
 private:
+    bool validateClassIdentifierPage();
+    bool validateOverridesPage();
+    bool validateLicensePage();
+    bool validateOutputPage();
+
     friend class OutputPage;
-    class CreateClassWizardPrivate* const d;
+    class CreateClassAssistantPrivate* const d;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
+class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    OutputPage(CreateClassWizard* parent);
+    OutputPage(CreateClassAssistant* parent);
     virtual ~OutputPage();
 
     virtual void initializePage();
@@ -303,6 +320,10 @@ public:
     virtual bool validatePage();
 
     virtual bool isComplete() const;
+    
+Q_SIGNALS:
+    void isValid(bool valid);
+
 private:
     class OutputPagePrivate* const d;
     

@@ -47,79 +47,156 @@
 
 namespace KDevelop {
 
-class CreateClassWizardPrivate {
-public:
-
-   KUrl baseUrl;
-    OutputPage* output;
+struct CreateClassAssistantPrivate
+{
+    KUrl baseUrl;
     ClassGenerator * generator;
+    ClassIdentifierPage* classIdentifierPageWidget;
+    OverridesPage *overridesPageWidget;
+    LicensePage *licensePageWidget;
+    OutputPage* outputPageWidget;
+    KPageWidgetItem* classIdentifierPage;
+    KPageWidgetItem* overridesPage;
+    KPageWidgetItem* licensePage;
+    KPageWidgetItem* outputPage;
 };
 
 
-CreateClassWizard::CreateClassWizard(QWidget* parent, ClassGenerator * generator, KUrl baseUrl)
-    : QWizard(parent)
-    , d(new CreateClassWizardPrivate)
+CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * generator, KUrl baseUrl)
+: KAssistantDialog(parent)
+, d(new CreateClassAssistantPrivate)
 {
     d->baseUrl = baseUrl;
     Q_ASSERT(generator);
     d->generator = generator;
-    
-    setDefaultProperty("KUrlRequester", "url", SIGNAL(textChanged(QString)));
-    setDefaultProperty("KTextEdit", "plainText", SIGNAL(textChanged()));
 }
 
-CreateClassWizard::~CreateClassWizard()
+CreateClassAssistant::~CreateClassAssistant()
 {
     delete d;
 }
 
-void CreateClassWizard::setup()
+void CreateClassAssistant::setup()
 {
     setWindowTitle(i18n("Create New Class in %1", d->baseUrl.prettyUrl()));
 
-    if (QWizardPage* page = newIdentifierPage())
-        addPage(page);
+    d->classIdentifierPageWidget = newIdentifierPage();
+    connect(d->classIdentifierPageWidget, SIGNAL(isValid(bool)), this, SLOT(checkClassIdentifierPage(bool)));
+    d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
+    d->classIdentifierPage->setIcon(KIcon("classnew"));
 
-    if (QWizardPage* page = newOverridesPage())
-        addPage(page);
+    d->overridesPageWidget = newOverridesPage();
+    d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
+    d->overridesPage->setIcon(KIcon("code-class"));
 
-    addPage(new LicensePage(this));
-    addPage(d->output = new OutputPage(this));
+    d->licensePageWidget = new LicensePage(this);
+    d->licensePage = addPage(d->licensePageWidget, i18n("License"));
+    d->licensePage->setIcon(KIcon("text-x-copying"));
+
+    d->outputPageWidget = new OutputPage(this);
+    connect(d->outputPageWidget, SIGNAL(isValid(bool)), this, SLOT(checkOutputPage(bool)));
+    d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
+    d->outputPage->setIcon(KIcon("document-save"));
+
+    setValid(d->classIdentifierPage, false);
+    setValid(d->overridesPage, true);
+    setValid(d->licensePage, true);
+    setValid(d->outputPage, false);
+    showButton(KDialog::Help, false);
+
+    setCurrentPage(d->classIdentifierPage);
 }
 
-void CreateClassWizard::accept()
+void CreateClassAssistant::checkClassIdentifierPage(bool valid)
 {
-    QWizard::accept();
+    setValid(d->classIdentifierPage, valid);
+}
+
+void CreateClassAssistant::checkOutputPage(bool valid)
+{
+    setValid(d->outputPage, valid);
+}
+
+bool CreateClassAssistant::validateClassIdentifierPage()
+{
+    generator()->setIdentifier(d->classIdentifierPageWidget->identifierLineEdit()->userText());
+
+    //Remove old base classes, and add the new ones
+    generator()->clearInheritance();
+    foreach (const QString & inherited, d->classIdentifierPageWidget->inheritanceList())
+        generator()->addBaseClass(inherited);
+
+    //Update the overrides page with the new inheritance list
+    d->overridesPageWidget->updateOverrideTree();
+
+    return true;
+}
+
+bool CreateClassAssistant::validateOverridesPage()
+{
+    d->overridesPageWidget->validateOverrideTree();
+    return true;
+}
+
+bool CreateClassAssistant::validateLicensePage()
+{
+    bool valid = d->licensePageWidget->validatePage();
+
+    if (valid) {
+        generator()->setLicense(d->licensePageWidget->licenseTextEdit()->toPlainText());
+        d->outputPageWidget->initializePage();
+    }
     
+    return valid;
+}
+
+bool CreateClassAssistant::validateOutputPage()
+{
+    d->outputPageWidget->validatePage();
+    return true;
+}
+
+void CreateClassAssistant::next()
+{
+    bool valid = false;
+
+    if (currentPage() == d->classIdentifierPage)
+        valid = validateClassIdentifierPage();
+    if (currentPage() == d->overridesPage)
+        valid = validateOverridesPage();
+    if (currentPage() == d->licensePage)
+        valid = validateLicensePage();
+
+    if (valid)
+        KAssistantDialog::next();
+}
+
+void CreateClassAssistant::accept()
+{
     //Transmit all the final information to the generator
-    d->generator->setLicense(field("license").toString());
-    kDebug() << "Header Url: " << field("headerUrl").toString();
-    /*
-    d->generator->setHeaderUrl(field("headerUrl").toString());
-    d->generator->setImplementationUrl(field("implementationUrl").toString());
-    d->generator->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
-    d->generator->setHeaderPosition(SimpleCursor(field("implementationLine").toInt(), field("implementationColumn").toInt()));
-    */
+    validateOutputPage();
+
     DocumentChangeSet changes = d->generator->generate();
-    
     changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
     changes.setActivationPolicy(KDevelop::DocumentChangeSet::Activate);
     changes.applyAllChanges();
+
+    KAssistantDialog::accept();
 }
 
-ClassGenerator * CreateClassWizard::generator()
+ClassGenerator * CreateClassAssistant::generator()
 {
     return d->generator;
 }
 
-ClassIdentifierPage* CreateClassWizard::newIdentifierPage()
+ClassIdentifierPage* CreateClassAssistant::newIdentifierPage()
 {
     return new ClassIdentifierPage(this);
 }
 
-OverridesPage* CreateClassWizard::newOverridesPage()
+OverridesPage* CreateClassAssistant::newOverridesPage()
 {
-    return new OverridesPage(d->generator, this);
+    return new OverridesPage(generator(), this);
 }
 
 struct ClassGeneratorPrivate
@@ -326,28 +403,25 @@ public:
     Ui::NewClassDialog* classid;
 };
 
-ClassIdentifierPage::ClassIdentifierPage(QWizard* parent)
-    : QWizardPage(parent)
-    , d(new ClassIdentifierPagePrivate)
+ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
+    : QWidget(parent)
+    , d(new ClassIdentifierPagePrivate())
 {
-    setTitle(i18n("Class Basics"));
-    setSubTitle( i18n("Identify the class and any classes from which it is to inherit.") );
-
     d->classid = new Ui::NewClassDialog;
     d->classid->setupUi(this);
     d->classid->addInheritancePushButton->setIcon(KIcon("list-add"));
     d->classid->removeInheritancePushButton->setIcon(KIcon("list-remove"));
     d->classid->moveDownPushButton->setIcon(KIcon("go-down"));
     d->classid->moveUpPushButton->setIcon(KIcon("go-up"));
-    
+
+    connect(d->classid->identifierLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkIdentifier()));
     connect(d->classid->addInheritancePushButton, SIGNAL(pressed()), this, SLOT(addInheritance()));
     connect(d->classid->removeInheritancePushButton, SIGNAL(pressed()), this, SLOT(removeInheritance()));
     connect(d->classid->moveUpPushButton, SIGNAL(pressed()), this, SLOT(moveUpInheritance()));
     connect(d->classid->moveDownPushButton, SIGNAL(pressed()), this, SLOT(moveDownInheritance()));
     connect(d->classid->inheritanceList, SIGNAL(currentRowChanged(int)), this, SLOT(checkMoveButtonState()));
 
-    registerField("classIdentifier*", d->classid->identifierLineEdit);
-    registerField("classInheritance", this, "inheritance", SIGNAL(inheritanceChanged()));
+    emit isValid(false);
 }
 
 ClassIdentifierPage::~ClassIdentifierPage()
@@ -363,6 +437,11 @@ KLineEdit* ClassIdentifierPage::identifierLineEdit() const
 KLineEdit* ClassIdentifierPage::inheritanceLineEdit() const
 {
     return d->classid->inheritanceLineEdit;
+}
+
+void ClassIdentifierPage::checkIdentifier()
+{
+    emit isValid(!identifierLineEdit()->userText().isEmpty());
 }
 
 void ClassIdentifierPage::addInheritance()
@@ -442,21 +521,6 @@ QStringList ClassIdentifierPage::inheritanceList() const
     return ret;
 }
 
-bool ClassIdentifierPage::validatePage ( void )
-{
-    //save the information in the generator
-    ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
-    generator->setIdentifier(field("classIdentifier").toString());
-    
-    //Remove old base classes, and add the new ones
-    generator->clearInheritance();
-    foreach (const QString & inherited, field("classInheritance").toStringList())
-        generator->addBaseClass(inherited);
-    
-    return true;
-}
-
-
 class LicensePagePrivate
 {
 public:
@@ -479,13 +543,10 @@ public:
     LicenseList availableLicenses;
 };
 
-LicensePage::LicensePage(QWizard* parent)
-    : QWizardPage(parent)
+LicensePage::LicensePage(QWidget* parent)
+    : QWidget(parent)
     , d(new LicensePagePrivate)
 {
-    setTitle(i18n("License"));
-    setSubTitle( i18n("Choose the license under which to place the new class.") );
-
     d->license = new Ui::LicenseChooserDialog;
     d->license->setupUi(this);
 
@@ -500,8 +561,6 @@ LicensePage::LicensePage(QWizard* parent)
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
     //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
     licenseComboChanged(d->license->licenseComboBox->currentIndex());
-
-    registerField("license", d->license->licenseTextEdit);
 }
 
 LicensePage::~LicensePage()
@@ -528,6 +587,11 @@ bool LicensePage::validatePage()
         return saveLicense();
     else
         return true;
+}
+
+KTextEdit* LicensePage::licenseTextEdit()
+{
+    return d->license->licenseTextEdit;
 }
 
 //! Read all the license files in the global and local config dirs
@@ -666,7 +730,7 @@ public:
     }
 
     Ui::OutputLocationDialog* output;
-    CreateClassWizard* parent;
+    CreateClassAssistant* parent;
     
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
@@ -678,13 +742,11 @@ void OutputPagePrivate::updateRanges(KIntNumInput * line, KIntNumInput * column,
     column->setEnabled(enable);
 }
 
-OutputPage::OutputPage(CreateClassWizard* parent)
-    : QWizardPage(parent)
+OutputPage::OutputPage(CreateClassAssistant* parent)
+    : QWidget(parent)
     , d(new OutputPagePrivate)
 {
     d->parent = parent;
-    setTitle(i18n("Output"));
-    setSubTitle( i18n("Choose where to save the new class.") );
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
@@ -697,9 +759,6 @@ OutputPage::OutputPage(CreateClassWizard* parent)
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
     connect(d->output->headerUrl, SIGNAL(textChanged(QString)), this, SLOT(updateHeaderRanges(QString)));
     connect(d->output->implementationUrl, SIGNAL(textChanged(QString)), this, SLOT(updateImplementationRanges(QString)));
-    
-    registerField("headerUrl", d->output->headerUrl);
-    registerField("implementationUrl", d->output->implementationUrl);
 }
 
 void OutputPage::initializePage()
@@ -711,7 +770,6 @@ void OutputPage::initializePage()
     d->output->lowerFilenameCheckBox->setChecked(lower);
 
     updateFileNames();
-    QWizardPage::initializePage();
 }
 
 void OutputPage::updateFileNames() {
@@ -722,18 +780,24 @@ void OutputPage::updateFileNames() {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup codegenGroup( config, "CodeGeneration" );
     codegenGroup.writeEntry( "LowerCaseFilenames", d->output->lowerFilenameCheckBox->isChecked() );
+
+    emit isValid(isComplete());
 }
 
 void OutputPage::updateHeaderRanges(const QString & url)
 {
     QFileInfo info(url);
     d->updateRanges(d->output->headerLineNumber, d->output->headerColumnNumber, info.exists() && !info.isDir());
+
+    emit isValid(isComplete());
 }
 
 void OutputPage::updateImplementationRanges(const QString & url)
 {
     QFileInfo info(url);
     d->updateRanges(d->output->implementationLineNumber, d->output->implementationColumnNumber, info.exists() && !info.isDir());
+
+    emit isValid(isComplete());
 }
 
 bool OutputPage::isComplete() const
