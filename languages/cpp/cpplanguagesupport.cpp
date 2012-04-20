@@ -217,7 +217,7 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 
     KAction* newClassAction = actions.addAction("code_new_class");
     newClassAction->setText( i18n("Create &New Class") );
-    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
+    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassAssistant()));
     
 //    KAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
@@ -743,7 +743,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
-void CppLanguageSupport::newClassWizard()
+void CppLanguageSupport::newClassAssistant()
 {
   //TODO: Should give some hint on where it should be added
   SimpleRefactoring::self().createNewClass(0);

@@ -59,7 +59,7 @@
 
 using namespace KDevelop;
 
-CppClassIdentifierPage::CppClassIdentifierPage(QWizard* parent)
+CppClassIdentifierPage::CppClassIdentifierPage(QWidget* parent)
   : KDevelop::ClassIdentifierPage(parent)
 {
     // Give the user a hint that the access info should be provided here too
@@ -75,7 +75,7 @@ QualifiedIdentifier CppClassIdentifierPage::parseParentClassId(const QString & i
   return QualifiedIdentifier(identifier);
 }
 
-CppOverridesPage::CppOverridesPage(ClassGenerator* generator, QWizard* parent)
+CppOverridesPage::CppOverridesPage(ClassGenerator* generator, QWidget* parent)
   : KDevelop::OverridesPage(generator, parent)
 {
 }
@@ -136,18 +136,18 @@ void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop
   OverridesPage::addPotentialOverride(classItem, childDeclaration);
 }
 
-CppNewClassWizard::CppNewClassWizard(QWidget* parent, CppNewClass* generator, KUrl baseUrl)
-  : CreateClassWizard(parent, generator, baseUrl)
+CppNewClassAssistant::CppNewClassAssistant(QWidget* parent, CppNewClass* generator, KUrl baseUrl)
+  : CreateClassAssistant(parent, generator, baseUrl)
 {
   setup();
 }
 
-CppClassIdentifierPage* CppNewClassWizard::newIdentifierPage()
+CppClassIdentifierPage* CppNewClassAssistant::newIdentifierPage()
 {
   return new CppClassIdentifierPage(this);
 }
 
-CppOverridesPage* CppNewClassWizard::newOverridesPage()
+CppOverridesPage* CppNewClassAssistant::newOverridesPage()
 {
   return new CppOverridesPage(generator(), this);
 }

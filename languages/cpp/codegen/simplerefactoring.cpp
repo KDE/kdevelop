@@ -169,7 +169,7 @@ void SimpleRefactoring::executeNewClassAction() {
 
 void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
-  ///TODO: refactor and put this also into the CppNewClassWizard
+  ///TODO: refactor and put this also into the CppNewClassAssistant
   KUrl u;
   
   //Pick a folder to guess Possible URL for new class
@@ -184,10 +184,10 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   else
     u = folderFromSelection();
 
-  //Run wizard
+  //Run assistant
   CppNewClass newClassGenerator(item);
-  CppNewClassWizard newClassWizard(qApp->activeWindow(), &newClassGenerator, u);
-  newClassWizard.exec();
+  CppNewClassAssistant newClassAssistant(qApp->activeWindow(), &newClassGenerator, u);
+  newClassAssistant.exec();
 }
 
 void SimpleRefactoring::executeMoveIntoSourceAction() {

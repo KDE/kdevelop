@@ -37,7 +37,7 @@ class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
   Q_OBJECT
 
 public:
-  CppClassIdentifierPage(QWizard* parent);
+  CppClassIdentifierPage(QWidget* parent);
   
   virtual KDevelop::QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 };
@@ -47,7 +47,7 @@ class CppOverridesPage : public KDevelop::OverridesPage
   Q_OBJECT
 
 public:
-    CppOverridesPage(KDevelop::ClassGenerator* generator, QWizard* parent);
+    CppOverridesPage(KDevelop::ClassGenerator* generator, QWidget* parent);
 
     virtual void populateOverrideTree(const QList< KDevelop::DeclarationPointer >& baseList);
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration);
@@ -98,18 +98,16 @@ class CppNewClass : public KDevelop::ClassGenerator
 };
 
 //!@todo  Tag the overrided methods with the name of the parent class
-class CppNewClassWizard : public KDevelop::CreateClassWizard
+class CppNewClassAssistant : public KDevelop::CreateClassAssistant
 {
   Q_OBJECT
 
 public:
-  CppNewClassWizard(QWidget* parent, CppNewClass * generator, KUrl baseUrl = KUrl());
+  CppNewClassAssistant(QWidget* parent, CppNewClass * generator, KUrl baseUrl = KUrl());
 
   virtual CppClassIdentifierPage* newIdentifierPage();
   virtual CppOverridesPage* newOverridesPage();
 
-  KUrl implementationUrl() const { return field("implementationUrl").value<KUrl>(); }
-  KUrl headerUrl() const { return field("headerUrl").value<KUrl>(); }
 private:
   QStringList m_baseClasses;
   KUrl m_url;
