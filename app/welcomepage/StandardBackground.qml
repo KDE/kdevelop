@@ -1,4 +1,4 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
  *
@@ -18,24 +18,34 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 1.0
 import org.kde.qtextracomponents 0.1
 
 Rectangle
 {
-    anchors.margins: 10
-    radius: 10
-    border.width: 3
+    property alias showGoCode: goCode.visible
+    property alias pageIcon: theIcon.icon
+    
+    Link {
+        id: goCode
+        anchors {
+            top: parent.top
+            left: parent.left
+        }
+
+        iconSource: "go-previous"
+        text: i18n("Back to code")
+        onClicked: kdev.setArea("code")
+    }
     
     QIconItem {
+        id: theIcon
         anchors {
             bottom: parent.bottom
-            right: parent.right
+            left: parent.left
             margins: 5
         }
-        opacity: 0.3
         width: 256
         height: width
-        icon: "kdevelop"
     }
 }

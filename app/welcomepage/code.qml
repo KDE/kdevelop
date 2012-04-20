@@ -19,6 +19,7 @@
  */
 
 import QtQuick 1.0
+import org.kde.plasma.components 0.1
 
 Rectangle {
     id: root
@@ -29,7 +30,7 @@ Rectangle {
     
     Component.onCompleted: root.state="starting"
 
-    Column {
+    ButtonColumn {
         id: tabs
         width: 250
         anchors.bottom: parent.bottom
@@ -40,14 +41,14 @@ Rectangle {
         Link {
             width: parent.width
 
-            text: "Starting"
+            text: i18n("Starting")
             onClicked: root.state = "starting"
         }
 
         Link {
             width: parent.width
 
-            text: "Learn KDevelop!"
+            text: i18n("Learn KDevelop!")
             onClicked: root.state = "learning"
         }
     }

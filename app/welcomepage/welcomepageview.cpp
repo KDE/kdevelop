@@ -24,6 +24,7 @@
 #include <shell/uicontroller.h>
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
+#include <kdeclarative.h>
 
 WelcomePageView::WelcomePageView(QWidget* parent)
     : QDeclarativeView(parent)
@@ -31,6 +32,14 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*"); //-.- fix qml? wtf...
+    
+    //setup kdeclarative library
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(engine());
+    kdeclarative.initialize();
+    //binds things like kconfig and icons
+    kdeclarative.setupBindings();
+    
     connect(KDevelop::Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
     
     setResizeMode(QDeclarativeView::SizeRootObjectToView);

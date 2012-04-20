@@ -34,29 +34,29 @@ StandardPage
         spacing: 50
 
         Link {
-            text: qsTr("New Project")
+            text: i18n("New Project")
             onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
         }
 
         Link {
-            text: qsTr("Import project")
+            text: i18n("Import project")
             onClicked: ICore.projectController().openProject()
         }
     }
 
     ListView {
-        anchors.left: column1.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        id: projectsView
+        anchors {
+            left: column1.right
+            top: parent.top
+            bottom: parent.bottom
+            right: parent.right
+        }
+        
         anchors.margins: 30
 
         delegate: Row {
                 spacing: 10
-//                 Rectangle {
-//                     width: 40
-//                     height: 40
-//                     color: colorCode
-//                 }
 
                 Link {
                     function justName(str) {
@@ -65,6 +65,7 @@ StandardPage
                         return str.substr(0, idx);
                     }
                     font.pixelSize: 15
+                    width: projectsView.width
                     
                     text: justName(modelData["text"])
                     onClicked: modelData.trigger()
@@ -76,7 +77,7 @@ StandardPage
         
         header: Text {
             font.pixelSize: 25
-            text: "Recent Projects:"
+            text: i18n("Recent Projects:")
         }
     }
 }

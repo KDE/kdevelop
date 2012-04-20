@@ -1,4 +1,4 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
  *
@@ -20,44 +20,26 @@
 
 import QtQuick 1.0
 
-Rectangle
+StandardBackground
 {
     id: root
     gradient: Gradient {
          GradientStop { position: 0.0; color: "#B85B5B" }
          GradientStop { position: 1.0; color: "#EEBABA" }
     }
-    
-    Column {
-        id: tabs
-        width: 250
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
-        anchors.margins: 30
-        spacing: 30
-
-        Link {
-            width: parent.width
-
-            text: "Back to code"
-            onClicked: kdev.setArea("code")
-        }
-    }
+    showGoCode: true
+    pageIcon: "applications-engineering"
 
     StandardPage {
         id: startingPage
         anchors {
-            left: tabs.right
-            right: root.right
-            top: root.top
-            bottom: root.bottom
+            fill: parent
+            leftMargin: 256
             margins: 10
         }
         
         color: "#F1D7D7"
         border.color: "#66191A"
-
-//         anchors.fill: parent
         
         Column {
             anchors.margins: 30
@@ -66,14 +48,14 @@ Rectangle
             
             Text {
                 width: parent.width
-                text: "On the <em>Review</em> area you will be able to find the tools you need "+
-                      "to review changes in your projects, either the ones you made or some external patch. "
+                text: i18n("On the <em>Review</em> area you will be able to find the tools you need "+
+                      "to review changes in your projects, either the ones you made or some external patch. ")
                 wrapMode: Text.WordWrap
                 
             }
             
             Link {
-                text: "Review a Patch"
+                text: i18n("Review a Patch")
                 onClicked: {
                     kdev.raiseToolView("EditPatch")
                 }

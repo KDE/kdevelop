@@ -33,10 +33,10 @@ StandardPage {
         spacing: 10
         
         width: 200
-        Link { text: qsTr("Official Website"); onClicked: info.state="kdevelop.org" }
-        Link { text: qsTr("Userbase"); onClicked: info.state="userbase" }
-        Link { text: qsTr("Techbase"); onClicked: info.state="techbase" }
-        Link { text: qsTr("Handbook"); onClicked: kdev.retrieveMenuAction("help/help_contents").trigger() }
+        Link { text: i18n("Official Website"); onClicked: info.state="kdevelop.org" }
+        Link { text: i18n("Userbase"); onClicked: info.state="userbase" }
+        Link { text: i18n("Techbase"); onClicked: info.state="techbase" }
+        Link { text: i18n("Handbook"); onClicked: kdev.retrieveMenuAction("help/help_contents").trigger() }
     }
     
     Column {
@@ -67,17 +67,17 @@ StandardPage {
             State {
                 name: "userbase"
                 PropertyChanges { target: webview; url: "http://userbase.kde.org/KDevelop" }
-                PropertyChanges { target: description; text: qsTr("Documentation for KDevelop users") }
+                PropertyChanges { target: description; text: i18n("Documentation for KDevelop users") }
             },
             State {
                 name: "kdevelop.org"
                 PropertyChanges { target: webview; url: "http://kdevelop.org" }
-                PropertyChanges { target: description; text: qsTr("Keep up with KDevelop's development!") }
+                PropertyChanges { target: description; text: i18n("Keep up with KDevelop's development!") }
             },
             State {
                 name: "techbase"
                 PropertyChanges { target: webview; url: "http://techbase.kde.org/KDevelop" }
-                PropertyChanges { target: description; text: qsTr("Help us improve KDevelop!") }
+                PropertyChanges { target: description; text: i18n("Help us improve KDevelop!") }
             }
         ]
     }

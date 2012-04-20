@@ -20,37 +20,21 @@
 
 import QtQuick 1.0
 
-Rectangle
+StandardBackground
 {
     id: root
     gradient: Gradient {
          GradientStop { position: 0.0; color: "#21257C" }
          GradientStop { position: 1.0; color: "#62B6F1" }
     }
-    
-    Column {
-        id: tabs
-        width: 250
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
-        anchors.margins: 30
-        spacing: 30
-
-        Link {
-            width: parent.width
-
-            text: "Back to code"
-            onClicked: kdev.setArea("code")
-        }
-    }
+    showGoCode: true
+    pageIcon: "tools-report-bug"
 
     StandardPage {
         id: startingPage
         anchors {
-            left: tabs.right
-            right: root.right
-            top: root.top
-            bottom: root.bottom
+            fill: parent
+            leftMargin: 256
             margins: 10
         }
         
@@ -66,16 +50,16 @@ Rectangle
             
             Text {
                 width: parent.width
-                text: "On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
+                text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
                       "On the <em>Run</em> menu you will find all the possible options.<p/><p/>"+
                       "As you can see, here you can just execute your application or debug it if you need "+
                       "further runtime information. You can select what is going to be run by configuring "+
-                      "the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu."
+                      "the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu.")
                 wrapMode: Text.WordWrap
             }
-            Link { text: "Configure a new Target"; onClicked: kdev.retrieveMenuAction("run/configure_launches") }
-            Link { text: "Execute"; onClicked: kdev.retrieveMenuAction("run/run_execute") }
-            Link { text: "Debug"; onClicked: kdev.retrieveMenuAction("run/run_debug") }
+            Link { text: i18n("Configure a new Target"); onClicked: kdev.retrieveMenuAction("run/configure_launches") }
+            Link { text: i18n("Execute"); onClicked: kdev.retrieveMenuAction("run/run_execute") }
+            Link { text: i18n("Debug"); onClicked: kdev.retrieveMenuAction("run/run_debug") }
         }
     }
 }

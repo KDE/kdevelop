@@ -23,6 +23,7 @@ target_link_libraries(kdevelop
     ${KDE4_THREADWEAVER_LIBRARIES}
 
     ${QT_QTDECLARATIVE_LIBRARIES}
+    kdeclarative
 )
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
