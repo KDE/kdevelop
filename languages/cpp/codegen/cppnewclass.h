@@ -24,6 +24,7 @@
 
 #include <language/codegen/createclass.h>
 #include <language/codegen/overridespage.h>
+
 #include "cppduchain/cpptypes.h"
 
 namespace KDevelop
@@ -38,7 +39,7 @@ class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
 
 public:
   CppClassIdentifierPage(QWidget* parent);
-  
+
   virtual KDevelop::QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 };
 
@@ -49,8 +50,8 @@ class CppOverridesPage : public KDevelop::OverridesPage
 public:
     CppOverridesPage(KDevelop::ClassGenerator* generator, QWidget* parent);
 
-    virtual void populateOverrideTree(const QList< KDevelop::DeclarationPointer >& baseList);
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration);
+    virtual void populateOverrideTree(const QList<KDevelop::DeclarationPointer>& baseList);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, const KDevelop::DeclarationPointer& childDeclaration );
 };
 
 class CppNewClass : public KDevelop::ClassGenerator
@@ -63,35 +64,35 @@ class CppNewClass : public KDevelop::ClassGenerator
       Class,
       Struct
     };
-    
+
     CppNewClass(KDevelop::ProjectBaseItem* parentItem)
       : m_type(DefaultType), m_objectType(new CppClassType), m_parentItem(parentItem)
     {};
     virtual ~CppNewClass() {};
-    
+
     virtual KDevelop::DocumentChangeSet generate();
-    
-    virtual const QList<KDevelop::DeclarationPointer> & addBaseClass(const QString &);
+
+    virtual QList<KDevelop::DeclarationPointer> addBaseClass(const QString &);
     virtual void clearInheritance();
 
-    virtual KUrl headerUrlFromBase(KUrl baseUrl, bool toLower=true);
-    virtual KUrl implementationUrlFromBase(KUrl baseUrl, bool toLower=true);
-    
-    virtual void setIdentifier(const QString & identifier);
+    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+
+    virtual void setIdentifier(const QString& identifier);
     virtual QString identifier() const;
-    
+
     virtual KDevelop::StructureType::Ptr objectType() const;
-    
+
     void setType(Type);
 
     void generateHeader(KDevelop::DocumentChangeSet& changes);
     void generateImplementation(KDevelop::DocumentChangeSet& changes);
-  
+
   private:
     QStringList m_namespaces;
     QStringList m_baseAccessSpecifiers;
     Type m_type;
-    
+
     mutable CppClassType::Ptr m_objectType;
 
     KDevelop::ProjectBaseItem* m_parentItem;
@@ -103,7 +104,7 @@ class CppNewClassAssistant : public KDevelop::CreateClassAssistant
   Q_OBJECT
 
 public:
-  CppNewClassAssistant(QWidget* parent, CppNewClass * generator, KUrl baseUrl = KUrl());
+  CppNewClassAssistant(QWidget* parent, CppNewClass * generator, const KUrl& baseUrl = KUrl());
 
   virtual CppClassIdentifierPage* newIdentifierPage();
   virtual CppOverridesPage* newOverridesPage();
