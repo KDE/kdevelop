@@ -240,6 +240,8 @@ void FrameStackModel::setCurrentThread(int threadNumber)
         // then to thread 2 and then to thread 3, we'll request frames
         // for thread 3 again, even if the program was not run in between
         // and therefore frames could not have changed.
+        m_currentFrame = 0; //set before fetchFrames else --frame argument would be wrong
+        m_updateCurrentFrameOnNextFetch = true;
         fetchFrames(threadNumber, 0, 20);
     }
     if (threadNumber != m_currentThread) {
