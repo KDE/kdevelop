@@ -1225,7 +1225,6 @@ void GdbTest::testSwitchFrameGdbConsole()
     session->slotUserGDBCmd("print x");
     QTest::qWait(500);
     //currentFrame must not reset to 0; Bug 222882
-    QEXPECT_FAIL("", "this does not work", Abort);
     QCOMPARE(stackModel->currentFrame(), 1);
 
 }
