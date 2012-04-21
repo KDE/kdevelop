@@ -88,10 +88,14 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
         endInsertRows();
     }
 
+    //if first frame doesn't contain debug ifnormation (no line numbers) set
+    //currentPosition to the first frame with debug information
     m_currentFrame = 0;
     foreach (const FrameItem &frame, frames) {
         if (!frame.file.isEmpty() && frame.line != -1) {
-            session()->setCurrentPosition(frame.file, frame.line, QString());
+            if (session()->currentUrl() != frame.file || session()->currentLine() != frame.line) {
+                session()->setCurrentPosition(frame.file, frame.line, QString());
+            }
             m_currentFrame = frame.nr;
             break;
         }
