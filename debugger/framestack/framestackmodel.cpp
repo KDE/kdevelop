@@ -33,7 +33,7 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1)
+: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1), m_updateCurrentFrameOnNextFetch(false)
 {
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
@@ -90,15 +90,18 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
 
     //if first frame doesn't contain debug ifnormation (no line numbers) set
     //currentPosition to the first frame with debug information
-    m_currentFrame = 0;
-    foreach (const FrameItem &frame, frames) {
-        if (!frame.file.isEmpty() && frame.line != -1) {
-            if (session()->currentUrl() != frame.file || session()->currentLine() != frame.line) {
-                session()->setCurrentPosition(frame.file, frame.line, QString());
+    if (m_updateCurrentFrameOnNextFetch) {
+        m_currentFrame = 0;
+        foreach (const FrameItem &frame, frames) {
+            if (!frame.file.isEmpty() && frame.line != -1) {
+                if (session()->currentUrl() != frame.file || session()->currentLine() != frame.line) {
+                    session()->setCurrentPosition(frame.file, frame.line, QString());
+                }
+                m_currentFrame = frame.nr;
+                break;
             }
-            m_currentFrame = frame.nr;
-            break;
         }
+        m_updateCurrentFrameOnNextFetch = false;
     }
 
     session()->raiseEvent(IDebugSession::thread_or_frame_changed);
@@ -323,6 +326,7 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::PausedState) {
         setCurrentFrame(0);
+        m_updateCurrentFrameOnNextFetch = true;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         setThreads(QList<FrameStackModel::ThreadItem>());
     }
