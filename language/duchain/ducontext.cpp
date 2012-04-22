@@ -633,7 +633,13 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
        }
 
        Declaration* check(Declaration* declaration) {
-          if( declaration->kind() == Declaration::Alias ) {
+          ///@todo This is C++-specific
+          if (m_ownType != Class && m_ownType != Template
+            && m_position.isValid() && m_position <= declaration->range().start)
+          {
+            return 0;
+          }
+          if( declaration->kind() == Declaration::Alias && ! m_flags & DontResolveAliases ) {
             //Apply alias declarations
             AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
             if(alias->aliasedDeclaration().isValid()) {
@@ -651,10 +657,10 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
           if((m_flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
             return 0;
 
-          if (!m_dataType || m_dataType->indexed() == declaration->abstractType()->indexed())
-            if (m_ownType == Class || m_ownType == Template || m_position > declaration->range().start || !m_position.isValid()) ///@todo This is C++-specific
-              return declaration;
-          return 0;
+          if (m_dataType && m_dataType->indexed() != declaration->indexedType()) {
+            return 0;
+          }
+          return declaration;
        }
 
        SearchFlags m_flags;
