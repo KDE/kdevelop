@@ -68,7 +68,7 @@ StandardPage
                     enabled: true
                     
                     Label {
-                        anchors.fill: parent
+                        width: parent.width
                         text: (display=="" ? projectNames.join(", ") : i18n("%1: %2", display, projectNames.join(", ")))
                         elide: Text.ElideRight
                     }
