@@ -1,4 +1,4 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
  *
