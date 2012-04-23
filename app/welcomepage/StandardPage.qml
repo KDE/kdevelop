@@ -20,12 +20,11 @@
 
 import QtQuick 1.1
 import org.kde.qtextracomponents 0.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 
-Rectangle
-{
-    anchors.margins: 10
-    radius: 10
-    border.width: 3
+PlasmaCore.FrameSvgItem {
+    imagePath: "widgets/tooltip"
+    prefix: "base"
     clip: true
     
     QIconItem {

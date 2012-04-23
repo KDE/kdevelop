@@ -22,7 +22,6 @@ import QtQuick 1.0
 import QtWebKit 1.0
 
 StandardPage {
-    color: "#CDDFE3"
     
     Column {
         id: options

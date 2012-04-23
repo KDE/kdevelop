@@ -38,9 +38,6 @@ StandardBackground
             margins: 10
         }
         
-        color: "#F1D7D7"
-        border.color: "#66191A"
-        
         Column {
             anchors.margins: 30
             anchors.fill: parent

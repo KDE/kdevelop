@@ -61,7 +61,6 @@ Rectangle {
 
         Starting {
             id: startingPage
-            border.color: "green"
             
             anchors.fill: parent
             visible: root.state=="starting"
@@ -69,7 +68,6 @@ Rectangle {
 
         UseKDevelop {
             id: usePage
-            border.color: "green"
 
             anchors.fill: parent
             visible: root.state=="learning"

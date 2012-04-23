@@ -37,9 +37,6 @@ StandardBackground
             leftMargin: 256
             margins: 10
         }
-        
-        color: "#5BD3A1"
-        border.color: "#1F2374"
 
 //         anchors.fill: parent
         

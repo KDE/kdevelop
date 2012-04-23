@@ -24,7 +24,7 @@ import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
-    color: "#FFF3EC"
+//     color: "#FFF3EC"
 //     color: "black"
     
     ToolBar {
