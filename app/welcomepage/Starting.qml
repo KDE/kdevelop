@@ -1,4 +1,4 @@
-/* KDevelop CMake Support
+/* KDevelop
  *
  * Copyright 2011 Aleix Pol <aleixpol@kde.org>
  *
@@ -19,58 +19,97 @@
  */
 
 import QtQuick 1.0
+import org.kde.plasma.components 0.1
+import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
     color: "#FFF3EC"
+//     color: "black"
     
-    Column {
-        id: column1
-        height: parent.height
-        anchors.left: parent.left
-        anchors.top: parent.top
-        width: parent.width/2
-        anchors.margins: 30
-        spacing: 50
+    ToolBar {
+        id: toolBar
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            margins: 5
+        }
+        tools: Row {
+            spacing: 50
 
-        Link {
-            text: i18n("New Project")
-            onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+            Link {
+                text: i18n("New Project")
+                onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
+            }
+
+            Link {
+                text: i18n("Import project")
+                onClicked: ICore.projectController().openProject()
+            }
+        }
+    }
+
+    ListView {
+        id: sessionsView
+        anchors {
+            left: parent.left
+            top: toolBar.bottom
+            bottom: parent.bottom
+            right: projectsView.left
+            margins: 30
         }
 
-        Link {
-            text: i18n("Import project")
-            onClicked: ICore.projectController().openProject()
+        delegate: ListItem {
+                    width: sessionsView.width
+                    height: visible ? 30 : 0
+                    visible: projects.length>0
+                    onClicked: sessions.loadSession(uuid)
+                    enabled: true
+                    
+                    Label {
+                        anchors.fill: parent
+                        text: (display=="" ? projectNames.join(", ") : i18n("%1: %2", display, projectNames.join(", ")))
+                        elide: Text.ElideRight
+                    }
+                }
+
+        model: SessionsModel { id: sessions }
+        
+        header: Text {
+            font.pixelSize: 25
+            text: i18n("Sessions:")
         }
     }
 
     ListView {
         id: projectsView
         anchors {
-            left: column1.right
-            top: parent.top
+            top: toolBar.bottom
             bottom: parent.bottom
             right: parent.right
+            margins: 30
         }
         
-        anchors.margins: 30
+        width: parent.width/3
 
-        delegate: Row {
-                spacing: 10
-
-                Link {
+        delegate: ListItem {
+                    enabled: true
                     function justName(str) {
                         var idx = str.indexOf(" [")
                         
                         return str.substr(0, idx);
                     }
-                    font.pixelSize: 15
                     width: projectsView.width
+                    height: 30
                     
-                    text: justName(modelData["text"])
+                    Label {
+                        anchors.fill: parent
+                        font.pixelSize: 15
+                        text: justName(modelData["text"])
+                    }
                     onClicked: modelData.trigger()
                 }
-            }
 
         model: kdev.recentProjects()
         spacing: 5

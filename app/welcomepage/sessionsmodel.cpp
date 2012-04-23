@@ -17,6 +17,7 @@
 */
 
 #include "sessionsmodel.h"
+#include <shell/core.h>
 
 SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -60,3 +61,7 @@ int SessionsModel::rowCount(const QModelIndex& parent) const
     return parent.isValid() ? 0 : m_sessions.size();
 }
 
+void SessionsModel::loadSession(const QString& nameOrId) const
+{
+    KDevelop::Core::self()->sessionController()->loadSession(nameOrId);
+}
