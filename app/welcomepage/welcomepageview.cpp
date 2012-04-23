@@ -18,6 +18,7 @@
 
 #include "welcomepageview.h"
 #include "uihelper.h"
+#include "sessionsmodel.h"
 #include <QDeclarativeContext>
 #include <QDebug>
 #include <shell/core.h>
@@ -25,13 +26,15 @@
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
 #include <kdeclarative.h>
+#include <qdeclarative.h>
 
 WelcomePageView::WelcomePageView(QWidget* parent)
     : QDeclarativeView(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
-    qRegisterMetaType<QObject*>("PatchReviewPlugin*"); //-.- fix qml? wtf...
+    qRegisterMetaType<QObject*>("PatchReviewPlugin*");
+    qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
     
     //setup kdeclarative library
     KDeclarative kdeclarative;
