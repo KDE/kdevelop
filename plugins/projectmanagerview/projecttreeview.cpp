@@ -349,7 +349,7 @@ void ProjectTreeView::aboutToShutdown()
 {
     // save all projects, not just the last one that is closed
     disconnect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-                this, SLOT(saveState(KDevelop::IProject*)) );
+                this, SLOT(saveState()) );
     saveState();
 }
 
