@@ -26,6 +26,7 @@ Rectangle
     anchors.margins: 10
     radius: 10
     border.width: 3
+    clip: true
     
     QIconItem {
         anchors {
