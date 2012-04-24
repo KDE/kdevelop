@@ -30,17 +30,19 @@ StandardPage
             top: parent.top
             left: parent.left
             right: parent.right
-            margins: 5
+            margins: 25
         }
         tools: Row {
             spacing: 50
 
             Link {
+                iconSource: "project-development-new-template"
                 text: i18n("New Project")
                 onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
             }
 
             Link {
+                iconSource: "project-development-open"
                 text: i18n("Import project")
                 onClicked: ICore.projectController().openProject()
             }
