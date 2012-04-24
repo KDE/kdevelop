@@ -19,6 +19,7 @@
  */
 
 import QtQuick 1.0
+import org.kde.plasma.components 0.1
 
 StandardBackground
 {
@@ -27,15 +28,20 @@ StandardBackground
          GradientStop { position: 0.0; color: "#B85B5B" }
          GradientStop { position: 1.0; color: "#EEBABA" }
     }
-    showGoCode: true
+    tools: Link {
+            id: goCode
+
+            iconSource: "go-previous"
+            text: i18n("Back to code")
+            onClicked: kdev.setArea("code")
+        }
     pageIcon: "applications-engineering"
 
     StandardPage {
         id: startingPage
         anchors {
             fill: parent
-            leftMargin: 256
-            margins: 10
+            leftMargin: root.marginLeft
         }
         
         Column {
@@ -43,19 +49,26 @@ StandardBackground
             anchors.fill: parent
             spacing: 30
             
+            ToolBar {
+                tools: Row {
+                    Link {
+                        iconSource: "kompare"
+                        text: i18n("Review a Patch")
+                        onClicked: {
+                            kdev.raiseToolView("EditPatch")
+                        }
+                    }
+                }
+            }
+            
             Text {
                 width: parent.width
                 text: i18n("On the <em>Review</em> area you will be able to find the tools you need "+
-                      "to review changes in your projects, either the ones you made or some external patch. ")
+                      "to review changes in your projects, either the ones you made or some external patch.<p/> Also it will help you send "+
+                      "the changes to the community you're contributing to, either by committing the changes, sending them by e-mail or "+
+                      "putting them on a ReviewBoard service.")
                 wrapMode: Text.WordWrap
-                
-            }
-            
-            Link {
-                text: i18n("Review a Patch")
-                onClicked: {
-                    kdev.raiseToolView("EditPatch")
-                }
+                horizontalAlignment: Text.AlignJustify
             }
         }
     }

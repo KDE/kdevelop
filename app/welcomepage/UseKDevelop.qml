@@ -20,9 +20,9 @@
 
 import QtQuick 1.0
 import QtWebKit 1.0
+import org.kde.plasma.components 0.1
 
 StandardPage {
-    
     Column {
         id: options
         anchors.top: parent.top
@@ -40,27 +40,29 @@ StandardPage {
     
     Column {
         id: info
-        anchors.top: parent.top
-        anchors.left: options.right
-        anchors.margins: 30
-        width: parent.width-200
+        anchors {
+            top: parent.top
+            left: options.right
+            right: parent.right
+            margins: 30
+        }
         
         spacing: 10
         
         WebView {
             id: webview
-            width: parent.width-3*parent.anchors.margins
+            width: parent.width
             height: 200
         }
         
         Text {
             id: description
-            text: ""
+            width: parent.width
         }
         
-        Link {
-            text: "Go!"
-            onClicked: kdev.openUrl(webview.url)
+        Button {
+            text: i18n("Go!")
+            onClicked: Qt.openUrlExternally(webview.url)
         }
         states: [
             State {

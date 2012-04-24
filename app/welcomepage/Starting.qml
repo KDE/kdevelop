@@ -24,9 +24,6 @@ import org.kdevelop.welcomepage 4.3
 
 StandardPage
 {
-//     color: "#FFF3EC"
-//     color: "black"
-    
     ToolBar {
         id: toolBar
         anchors {
@@ -112,7 +109,6 @@ StandardPage
                 }
 
         model: kdev.recentProjects()
-        spacing: 5
         
         header: Text {
             font.pixelSize: 25

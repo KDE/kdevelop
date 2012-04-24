@@ -21,7 +21,7 @@
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
 
-Rectangle {
+StandardBackground {
     id: root
     gradient: Gradient {
          GradientStop { position: 0.0; color: "#61B056" }
@@ -30,14 +30,8 @@ Rectangle {
     
     Component.onCompleted: root.state="starting"
 
-    ButtonColumn {
-        id: tabs
-        width: 250
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
-        anchors.margins: 30
-        spacing: 30
-
+    tools: ButtonColumn {
+        spacing: 10
         Link {
             width: parent.width
 
@@ -55,7 +49,7 @@ Rectangle {
 
     Item {
         id: item1
-        x: tabs.width+tabs.x
+        x: root.marginLeft
         height: parent.height
         width: parent.width-x
 

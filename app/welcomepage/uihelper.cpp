@@ -74,11 +74,6 @@ QList< QObject* > UiHelper::recentProjects()
     return ret;
 }
 
-bool UiHelper::openUrl(const QUrl& url)
-{
-    return QDesktopServices::openUrl(url);
-}
-
 void UiHelper::setArea(const QString& name)
 {
     ICore::self()->uiController()->switchToArea(name, IUiController::ThisWindow);

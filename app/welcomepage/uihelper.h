@@ -31,7 +31,6 @@ class UiHelper : public QObject
         UiHelper(QObject* parent);
         
     public slots:
-        bool openUrl(const QUrl& url);
         QAction* retrieveMenuAction(const QString& name);
         QList<QObject*> recentProjects();
         void setArea(const QString& name);

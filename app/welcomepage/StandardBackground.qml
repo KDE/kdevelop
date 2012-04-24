@@ -19,23 +19,27 @@
  */
 
 import QtQuick 1.0
+import org.kde.plasma.components 0.1
 import org.kde.qtextracomponents 0.1
 
 Rectangle
 {
-    property alias showGoCode: goCode.visible
+    property Component tools: null
     property alias pageIcon: theIcon.icon
-    
-    Link {
-        id: goCode
+    property alias marginLeft: toolbar.width
+    ToolBar {
+        id: toolbar
         anchors {
             top: parent.top
             left: parent.left
+            topMargin: 10
         }
-
-        iconSource: "go-previous"
-        text: i18n("Back to code")
-        onClicked: kdev.setArea("code")
+        width: 256
+        height: 100
+        tools: Loader {
+            sourceComponent: tools
+            anchors.fill: parent
+        }
     }
     
     QIconItem {
