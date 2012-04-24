@@ -53,9 +53,11 @@ StandardPage {
             id: webview
             width: parent.width
             height: 200
+            
+            MouseArea { anchors.fill: parent; hoverEnabled: true }
         }
         
-        Text {
+        Label {
             id: description
             width: parent.width
         }
