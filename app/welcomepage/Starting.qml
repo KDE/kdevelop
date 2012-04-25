@@ -75,8 +75,8 @@ StandardPage
 
         model: SessionsModel { id: sessions }
         
-        header: Text {
-            font.pixelSize: 25
+        header: Label {
+            font.pointSize: theme.defaultFont.pointSize*1.5
             text: i18n("Sessions:")
         }
     }
@@ -104,7 +104,6 @@ StandardPage
                     
                     Label {
                         anchors.fill: parent
-                        font.pixelSize: 15
                         text: justName(modelData["text"])
                     }
                     onClicked: modelData.trigger()
@@ -112,8 +111,8 @@ StandardPage
 
         model: kdev.recentProjects()
         
-        header: Text {
-            font.pixelSize: 25
+        header: Label {
+            font.pointSize: theme.defaultFont.pointSize*1.5
             text: i18n("Recent Projects:")
         }
     }

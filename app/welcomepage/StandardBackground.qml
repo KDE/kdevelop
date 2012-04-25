@@ -19,7 +19,7 @@
  */
 
 import QtQuick 1.0
-import org.kde.plasma.components 0.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.qtextracomponents 0.1
 
 Rectangle
@@ -27,18 +27,23 @@ Rectangle
     property Component tools: null
     property alias pageIcon: theIcon.icon
     property alias marginLeft: toolbar.width
-    ToolBar {
+    
+    PlasmaCore.FrameSvgItem {
+        imagePath: "widgets/tooltip"
+        prefix: "base"
         id: toolbar
         anchors {
             top: parent.top
             left: parent.left
-            topMargin: 10
         }
         width: 256
         height: 100
-        tools: Loader {
+        Loader {
             sourceComponent: tools
-            anchors.fill: parent
+            anchors {
+                fill: parent
+                margins: 20
+            }
         }
     }
     

@@ -57,7 +57,7 @@ StandardBackground
                     Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug") }
                 }
             }
-            Text {
+            Label {
                 width: parent.width
                 text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
                       "On the <em>Run</em> menu you will find all the possible options.<p/><p/>"+
