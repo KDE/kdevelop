@@ -39,12 +39,14 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
     QString current = newPath.takeFirst();
     
     foreach(QAction* a, actions) {
-//         qDebug() << "leee" << a->objectName() << current;
+        qDebug() << "leee" << a->objectName() << current;
         if(a->objectName() == current) {
             if(newPath.isEmpty())
                 return a;
             else if(a->menu())
                 return findActionRec(newPath, a->menu()->actions());
+            else
+                qDebug() << "shouldn't get here:" << path;
         }
     }
     

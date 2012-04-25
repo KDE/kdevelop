@@ -52,9 +52,9 @@ StandardBackground
             ToolBar {
                 tools: Row {
                     spacing: 20
-                    Link { iconSource: "configure"; text: i18n("Configure a new Target"); onClicked: kdev.retrieveMenuAction("run/configure_launches") }
-                    Link { iconSource: "system-run"; text: i18n("Execute your program"); onClicked: kdev.retrieveMenuAction("run/run_execute") }
-                    Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug") }
+                    Link { iconSource: "configure"; text: i18n("Configure a new Target"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
+                    Link { iconSource: "system-run"; text: i18n("Execute your program"); onClicked: kdev.retrieveMenuAction("run/run_execute").trigger() }
+                    Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
                 }
             }
             Label {
