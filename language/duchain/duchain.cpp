@@ -869,6 +869,7 @@ public:
         QFile f(globalItemRepositoryRegistry().path() + "/available_top_context_indices");
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
+        Q_UNUSED(opened);
 
         f.write((char*)m_availableTopContextIndices.data(), m_availableTopContextIndices.size() * sizeof(uint));
       }
