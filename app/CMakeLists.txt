@@ -3,7 +3,7 @@ add_subdirectory(plasma)
 ########### next target ###############
 
 find_package(SharedMimeInfo REQUIRED)
-find_package(KDeclarative REQUIRED)
+find_package(KDeclarative)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp)
 if(KDECLARATIVE_FOUND)
