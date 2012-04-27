@@ -42,7 +42,7 @@ QVariant SessionsModel::data(const QModelIndex& index, int role) const
         case Qt::ToolTip:
             return m_sessions[index.row()].description;
         case Uuid:
-            return m_sessions[index.row()].uuid.toByteArray();
+            return m_sessions[index.row()].uuid.toString();
         case Projects:
             return m_sessions[index.row()].projects;
         case ProjectNames: {
