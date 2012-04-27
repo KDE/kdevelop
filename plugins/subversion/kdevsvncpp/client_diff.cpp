@@ -98,7 +98,7 @@ namespace svn
     // svn_client_diff needs a temporary file to write diff output to
     error = svn_io_open_unique_file(&outfile, &outfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
@@ -109,7 +109,7 @@ namespace svn
     // and another one to write errors to
     error = svn_io_open_unique_file(&errfile, &errfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
@@ -183,7 +183,7 @@ namespace svn
     // svn_client_diff needs a temporary file to write diff output to
     error = svn_io_open_unique_file(&outfile, &outfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
@@ -194,7 +194,7 @@ namespace svn
     // and another one to write errors to
     error = svn_io_open_unique_file(&errfile, &errfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
@@ -268,7 +268,7 @@ namespace svn
     // svn_client_diff needs a temporary file to write diff output to
     error = svn_io_open_unique_file(&outfile, &outfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
@@ -279,7 +279,7 @@ namespace svn
     // and another one to write errors to
     error = svn_io_open_unique_file(&errfile, &errfileName,
                                     tmpPath.c_str(), ".tmp",
-                                    FALSE, pool);
+                                    false, pool);
 
     if (error != NULL)
     {
