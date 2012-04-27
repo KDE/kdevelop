@@ -477,7 +477,8 @@ int main( int argc, char *argv[] )
         args->clear();
     }
 
+#ifdef WITH_WELCOMEPAGE
     trySetupWelcomePageView();
-
+#endif
     return app.exec();
 }
