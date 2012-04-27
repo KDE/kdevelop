@@ -17,16 +17,25 @@
 */
 
 #include "welcomepageview.h"
+
 #include "uihelper.h"
 #include "sessionsmodel.h"
+
 #include <QDeclarativeContext>
+#include <QDeclarativeComponent>
+#include <QDeclarativeError>
 #include <QDebug>
+
 #include <shell/core.h>
 #include <shell/uicontroller.h>
+
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
+
 #include <kdeclarative.h>
 #include <qdeclarative.h>
+
+using namespace KDevelop;
 
 WelcomePageView::WelcomePageView(QWidget* parent)
     : QDeclarativeView(parent)
@@ -35,27 +44,43 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
-    
+
     //setup kdeclarative library
     KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine());
     kdeclarative.initialize();
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
-    
-    connect(KDevelop::Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
-    
+
+    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
+            this, SLOT(areaChanged(Sublime::Area*)));
+
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    
+
     UiHelper* helper = new UiHelper(this);
     rootContext()->setContextProperty("kdev", helper);
     rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
-    areaChanged(KDevelop::ICore::self()->uiController()->activeArea());
-    
+    areaChanged(ICore::self()->uiController()->activeArea());
+
     setSource(QUrl("qrc:/main.qml"));
 }
 
 void WelcomePageView::areaChanged(Sublime::Area* area)
 {
     rootContext()->setContextProperty("area", area->objectName());
+}
+
+void trySetupWelcomePageView()
+{
+    WelcomePageView* v = new WelcomePageView;
+
+    // make sure plasma component is available
+    QDeclarativeComponent component(v->engine());
+    component.setData("import org.kde.plasma.components 0.1\nText { text: \"Hello world!\" }", QUrl());
+
+    if (component.isError()) {
+        delete v;
+    } else {
+        Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(v);
+    }
 }

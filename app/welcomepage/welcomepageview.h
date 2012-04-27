@@ -19,17 +19,23 @@
 #ifndef WELCOMEPAGEVIEW_H
 #define WELCOMEPAGEVIEW_H
 
-#include <sublime/document.h>
 #include <QDeclarativeView>
+
+namespace Sublime
+{
+class Area;
+}
 
 class WelcomePageView : public QDeclarativeView
 {
     Q_OBJECT
-    public:
-        WelcomePageView(QWidget* parent=0);
-        
-    public slots:
-        void areaChanged(Sublime::Area* a);
+public:
+    WelcomePageView(QWidget* parent = 0);
+
+public slots:
+    void areaChanged(Sublime::Area* a);
 };
+
+void trySetupWelcomePageView();
 
 #endif // WELCOMEPAGEVIEW_H
