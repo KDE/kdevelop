@@ -174,7 +174,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     
     QString prettyUrl = descriptionOrUrl;
-    if(descriptionOrUrl.startsWith("/"))
+    if(descriptionOrUrl.startsWith('/'))
         prettyUrl = ICore::self()->projectController()->prettyFileName(descriptionOrUrl, KDevelop::IProjectController::FormatPlain);
     
     // appends new model to history

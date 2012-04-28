@@ -109,7 +109,7 @@ namespace svn
         strcpy(revstring, "HEAD");
       else
         sprintf(revstring, "%" SVN_REVNUM_T_FMT, revision.revnum());
-      filename += "-";
+      filename += '-';
       filename += revstring;
 
       // replace the dir component with tempdir

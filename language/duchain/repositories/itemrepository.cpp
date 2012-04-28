@@ -80,7 +80,7 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
     Q_ASSERT( ICore::self() );
     Q_ASSERT( ICore::self()->activeSession() );
 
-    baseDir += "/" + ICore::self()->activeSession()->id().toString();
+    baseDir += '/' + ICore::self()->activeSession()->id().toString();
 
     //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
     for(int a = 0; a < 100; ++a) {

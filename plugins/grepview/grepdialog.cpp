@@ -297,7 +297,7 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
-    if(dir.startsWith("/"))
+    if(dir.startsWith('/'))
     {
         directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
         directoryRequester->completionObject()->setDir( dir );
@@ -369,7 +369,7 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
         foreach(IProject* project, ICore::self()->projectController()->projects())
             ret << project->folder();
     }else{
-        QStringList semicolonSeparatedFileList = text.split(";");
+        QStringList semicolonSeparatedFileList = text.split(';');
         if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing

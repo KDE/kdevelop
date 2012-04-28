@@ -137,7 +137,7 @@ namespace svn
         apr_pcalloc(pool, sizeof(svn_wc_entry_t)));
 
     std::string url(path);
-    url += "/";
+    url += '/';
     url += dirEntry.name();
 
     e->name = dirEntry.name();

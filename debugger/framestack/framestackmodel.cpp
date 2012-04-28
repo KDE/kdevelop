@@ -166,7 +166,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 QString ret = ICore::self()->projectController()
                     ->prettyFileName(frame.file, IProjectController::FormatPlain);
                 if (frame.line != -1) {
-                    ret += ":" + QString::number(frame.line + 1);
+                    ret += ':' + QString::number(frame.line + 1);
                 }
                 return ret;
             } else if (role == Qt::DecorationRole) {

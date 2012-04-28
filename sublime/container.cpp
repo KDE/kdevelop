@@ -319,7 +319,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
                 } else {
                     pretty = udoc->url().prettyUrl();
                 }
-                txt = txt + " (" + pretty + ")";
+                txt = txt + " (" + pretty + ')';
             }
             d->fileNameCorner->setText( txt );
             int tabIndex = d->stack->indexOf(it.key());

@@ -105,7 +105,7 @@ public:
     }
     while (next != NULL && next->message != NULL)
     {
-      message = message + "\n" + next->message;
+      message = message + '\n' + next->message;
 
       next = next->child;
     }

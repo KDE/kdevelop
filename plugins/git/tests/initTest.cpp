@@ -195,7 +195,7 @@ void GitInitTest::commitFiles()
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD";
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
-        QStringList files = jobLs->output().split("\n");
+        QStringList files = jobLs->output().split('\n');
         QVERIFY(files.contains(gitTest_FileName));
         QVERIFY(files.contains(gitTest_FileName2));
         QVERIFY(files.contains("src/" + gitTest_FileName3));

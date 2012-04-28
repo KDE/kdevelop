@@ -518,7 +518,7 @@ namespace svn
       {
         if (s_svnIgnore != j->first)
           continue;
-        str += "\n"+j->second;
+        str += '\n'+j->second;
       }
     }
     const svn_string_t * propval =

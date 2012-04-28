@@ -70,7 +70,7 @@ public:
 
 //             interface->startProgram( "/home/nolden/kdedev/install-mini/bin/kdevelop_attach", QStringList() << "-s" << KDevelop::ICore::self()->activeSession()->id().toString() );
             interface->showShellInDir( QString() );
-            interface->sendInput( "kdevelop_attach -s " + KDevelop::ICore::self()->activeSession()->id().toString() + "\n" );
+            interface->sendInput( "kdevelop_attach -s " + KDevelop::ICore::self()->activeSession()->id().toString() + '\n' );
             
         }else
         {

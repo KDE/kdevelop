@@ -226,7 +226,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     if(!repr->fileExists())
     {
         KTemporaryFile * temp(new KTemporaryFile);
-        temp->setSuffix(url.fileName().split(".").last());
+        temp->setSuffix(url.fileName().split('.').last());
         temp->open();
         temp->write(repr->text().toUtf8());
         temp->close();

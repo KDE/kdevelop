@@ -318,8 +318,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 if(formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation)
                 {
                     // Reproduce the previous indentation
-                    QStringList oldLines = oldNewText.split("\n");
-                    QStringList newLines = change.m_newText.split("\n");
+                    QStringList oldLines = oldNewText.split('\n');
+                    QStringList newLines = change.m_newText.split('\n');
                     
                     if(oldLines.size() == newLines.size())
                     {

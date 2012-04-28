@@ -168,10 +168,10 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
 
     if(!rightContext.isEmpty()) {
         //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
-        int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ", QString() );
+        int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', QString() );
         if(endOfText == -1) {
             // Try 2: Ignore the fuzzy characters while matching
-            endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+" ", fuzzyCharacters );
+            endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', fuzzyCharacters );
             if(endOfText == -1) {
                 kWarning() << "problem matching the text while formatting";
                 return text;
