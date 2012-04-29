@@ -604,7 +604,6 @@ void GdbTest::testShowStepInSource()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
     {
-        QEXPECT_FAIL("", "the framestack model duplicates this number...", Abort);
         QCOMPARE(showStepInSourceSpy.count(), 3);
         QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
         QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(debugeeFileName));
@@ -1226,7 +1225,6 @@ void GdbTest::testSwitchFrameGdbConsole()
     session->slotUserGDBCmd("print x");
     QTest::qWait(500);
     //currentFrame must not reset to 0; Bug 222882
-    QEXPECT_FAIL("", "this does not work", Abort);
     QCOMPARE(stackModel->currentFrame(), 1);
 
 }

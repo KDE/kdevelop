@@ -736,6 +736,44 @@ void TestParser::testQProperty()
   QCOMPARE(propAst->final, isFinal);
 }
 
+void TestParser::testDesignatedInitializers()
+{
+  TranslationUnitAST* ast;
+  InitializerListAST* listAst;
+  //DumpTree dumper;
+
+  ast = parse("\nA a = {"
+              "\n  .b = {"
+              "\n    .a = 10,"
+              "\n  },"
+              "\n  .x = 10,"
+              "\n  .y = SOME_CONST,"
+              "\n  .z = 10,"
+              "\n};");
+
+  QVERIFY(ast != 0);
+  QVERIFY(control.problems().isEmpty());
+  QCOMPARE(ast->declarations->count(), 1);
+  QVERIFY(hasKind(ast, AST::Kind_InitializerList));
+  listAst = static_cast<InitializerListAST*>(getAST(ast, AST::Kind_InitializerList));
+  QVERIFY(hasKind(listAst, AST::Kind_ClassMemberAccess));
+  //dumper.dump(ast, lastSession->token_stream);
+
+  ast = parse("\nint ia[10][5] = {"
+              "\n  [1] = 10,"
+              "\n  [2][B] = SOME_CONST,"
+              "\n};");
+
+  QVERIFY(ast != 0);
+  QVERIFY(control.problems().isEmpty());
+  QCOMPARE(ast->declarations->count(), 1);
+  QVERIFY(hasKind(ast, AST::Kind_InitializerList));
+  listAst = static_cast<InitializerListAST*>(getAST(ast, AST::Kind_InitializerList));
+  QVERIFY(hasKind(listAst, AST::Kind_SubscriptExpression));
+  //dumper.dump(ast, lastSession->token_stream);
+
+}
+
 void TestParser::testCommentAfterFunctionCall() {
   //this is ambigous
   TranslationUnitAST* ast = parse("void TestParser::setView() {\n"

@@ -31,12 +31,13 @@
 using namespace KDevelop;
 
 namespace CppTools {
-QStringList gccSetupStandardIncludePaths();
-const QVector<rpp::pp_macro*>& gccStandardMacros();
 
 #ifdef _MSC_VER
 QStringList msvcSetupStandardIncludePaths();
 const QVector<rpp::pp_macro*>& msvcStandardMacros();
+#else
+QStringList gccSetupStandardIncludePaths();
+const QVector<rpp::pp_macro*>& gccStandardMacros();
 #endif
 
 QStringList setupStandardIncludePaths()

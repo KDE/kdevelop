@@ -2806,7 +2806,7 @@ bool Parser::parseInitializerList(InitializerListAST *&node)
         }
 
       InitializerClauseAST *init_clause = 0;
-      if (!parseInitializerClause(init_clause))
+      if (!parseInitializerClause(init_clause) && !parseDesignatedInitializer(init_clause))
         {
           return false;
         }
@@ -2825,6 +2825,94 @@ bool Parser::parseInitializerList(InitializerListAST *&node)
   UPDATE_POS(list, start, _M_last_valid_token+1);
   node = list;
 
+  return true;
+}
+
+/**
+ * Parse C99 designated initializers, e.g:
+ * struct foo_t foo = {
+ *   .has_cake = true,
+ *   .nb_candles = 12,
+ * };
+ *
+ * int bar[10] = {
+ *   [1] = 15,
+ *   [9] = 25,
+ * };
+ */
+bool Parser::parseDesignatedInitializer(InitializerClauseAST *&ast)
+{
+  uint start = session->token_stream->cursor();
+  uint memberOp = session->token_stream->cursor();
+
+  NameAST *member = 0;
+  ExpressionAST *index = 0;
+  const ListNode<ExpressionAST*> *indexes = 0;
+  if (session->token_stream->lookAhead() == '.')
+    {
+    // Designated member
+    advance();
+    if (!parseName(member, Parser::DontAcceptTemplate))
+      {
+        rewind(start);
+        return false;
+      }
+    }
+  else
+    {
+    do
+      {
+        // Designated array index
+        if (session->token_stream->lookAhead() != '[' || !parsePostfixExpressionInternal(index))
+          {
+            rewind(start);
+            return false;
+          }
+
+        indexes = snoc(indexes, index, session->mempool);
+      } while (session->token_stream->lookAhead() == '[');
+    }
+
+  uint cm_end = session->token_stream->cursor();
+
+  uint asop = session->token_stream->cursor();
+  if (session->token_stream->lookAhead() != '=')
+    {
+      rewind(start);
+      return false;
+    }
+  advance();
+
+  ExpressionAST *rightExpr = 0;
+  if (!parseConditionalExpression(rightExpr) && !parseBracedInitList(rightExpr))
+    {
+      rewind(start);
+      return false;
+    }
+
+  BinaryExpressionAST *binaryExpr = CreateNode<BinaryExpressionAST>(session->mempool);
+  binaryExpr->op = asop;
+  binaryExpr->right_expression = rightExpr;
+
+  if (member) {
+    ClassMemberAccessAST *memberAst = CreateNode<ClassMemberAccessAST>(session->mempool);
+    memberAst->op = memberOp;
+    memberAst->name = member;
+    UPDATE_POS(memberAst, start, cm_end);
+    binaryExpr->left_expression = memberAst;
+  } else {
+    PostfixExpressionAST *sub = CreateNode<PostfixExpressionAST>(session->mempool);
+    sub->sub_expressions = indexes;
+    UPDATE_POS(sub, start, cm_end);
+    binaryExpr->left_expression = sub;
+  }
+
+  UPDATE_POS(binaryExpr, start, _M_last_valid_token+1);
+
+  ast = CreateNode<InitializerClauseAST>(session->mempool);
+  ast->expression = binaryExpr;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   return true;
 }
 

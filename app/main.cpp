@@ -37,6 +37,8 @@
 #include <kdebug.h>
 #include <ksplashscreen.h>
 #include <ktexteditor/cursor.h>
+#include <KMessageBox>
+#include <KProcess>
 
 #include <QFileInfo>
 #include <QPixmap>
@@ -47,6 +49,7 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QTextStream>
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -62,11 +65,9 @@
 
 #include "kdevideextension.h"
 
-#include <KMessageBox>
-#include <KProcess>
-
 #include <iostream>
-#include <QtCore/QTextStream>
+
+#include "welcomepage/welcomepageview.h"
 
 using KDevelop::Core;
 
@@ -476,5 +477,8 @@ int main( int argc, char *argv[] )
         args->clear();
     }
 
+#ifdef WITH_WELCOMEPAGE
+    trySetupWelcomePageView();
+#endif
     return app.exec();
 }

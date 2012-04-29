@@ -352,6 +352,11 @@ uint IncludeFileDataProvider::itemCount() const
   return filteredItems().count();
 }
 
+uint IncludeFileDataProvider::unfilteredItemCount() const
+{
+  return items().count();
+}
+
 QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end ) const
 {
   QList<QuickOpenDataPointer> ret;

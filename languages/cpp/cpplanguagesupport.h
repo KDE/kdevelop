@@ -122,7 +122,7 @@ public slots:
     ///UI:
     void switchDefinitionDeclaration();
 
-    void newClassWizard();
+    void newClassAssistant();
 
 private:
 

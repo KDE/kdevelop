@@ -159,6 +159,7 @@ public:
   bool parseInitDeclarator(InitDeclaratorAST *&node);
   bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node);
   bool parseInitializer(InitializerAST *&node);
+  bool parseDesignatedInitializer(InitializerClauseAST *&node);
   bool parseInitializerClause(InitializerClauseAST *&node);
   bool parseInitializerList(InitializerListAST *&node);
   bool parseJumpStatement(StatementAST *&node);
