@@ -21,48 +21,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "ctestfinder.h"
+#include "ctestutils.h"
 #include "ctestsuite.h"
 
-#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
 #include <interfaces/itestcontroller.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/projectmodel.h>
+#include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/iruncontroller.h>
-
-#include <KPluginFactory>
-#include <KAboutData>
-#include <KLocale>
-#include <KDebug>
-#include "ctestfindjob.h"
-#include <util/executecompositejob.h>
-
-K_PLUGIN_FACTORY(CTestFinderFactory, registerPlugin<CTestFinder>(); )
-K_EXPORT_PLUGIN(CTestFinderFactory(KAboutData("kdevctestfinder","kdevctestfinder", ki18n("CTest Integration"), "0.1", ki18n("Finds and executes CTest unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
-CTestFinder::CTestFinder(QObject* parent, const QList<QVariant>& args): IPlugin(CTestFinderFactory::componentData(), parent)
-{
-    Q_UNUSED(args);
-
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ITestProvider )
-    KDEV_USE_EXTENSION_INTERFACE( ICTestProvider )
-}
-
-CTestFinder::~CTestFinder()
-{
-
-}
-
-void CTestFinder::unload()
-{
-}
-
-void CTestFinder::createTestSuite(const QString& name, const QString& executable, const QStringList& files, IProject* project, const QStringList& arguments)
+CTestUtils::createTestSuite(const QString& name, const QString& executable, const QStringList& files, IProject* project, const QStringList& arguments)
 {
     // CMake parser replaces all references to the project build directory by #[bin_dir]
     // We replace it back for the test executable and arguments
@@ -78,23 +47,10 @@ void CTestFinder::createTestSuite(const QString& name, const QString& executable
     }
     
     CTestSuite* suite = new CTestSuite(name, exe, files, project, args);
-    m_pendingSuites << suite;
-}
-
-KJob* CTestFinder::findTests()
-{
-    kDebug() << "Finding tests with" << m_pendingSuites.size() << "pending suites"; 
-    QList<KJob*> jobs;
-    foreach (CTestSuite* suite, m_pendingSuites)
+    
+    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
+    if (tc)
     {
-        jobs << new CTestFindJob(suite, this);
+        tc->addTestSuite(suite);
     }
-    if (jobs.isEmpty())
-    {
-        return 0;
-    }
-    m_pendingSuites.clear();
-    return new KDevelop::ExecuteCompositeJob(this, jobs);
 }
-
-

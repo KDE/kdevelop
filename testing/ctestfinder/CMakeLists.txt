@@ -4,12 +4,12 @@ project(ctestintegration)
 ########### next target ###############
 
 set(ctestintegration_LIB_SRCS
-    ctestfinder.cpp
-    ctestfindjob.cpp
-    ctestsuite.cpp
-    ctestrunjob.cpp
-    ctestoutputmodel.cpp
-    qttestdelegate.cpp
+    ../../projectmanagers/cmake/testing/ctestfinder.cpp
+    ../../projectmanagers/cmake/testing/ctestfindjob.cpp
+    ../../projectmanagers/cmake/testing/ctestsuite.cpp
+    ../../projectmanagers/cmake/testing/ctestrunjob.cpp
+    ../../projectmanagers/cmake/testing/ctestoutputmodel.cpp
+    ../../projectmanagers/cmake/testing/qttestdelegate.cpp
 )
 
 kde4_add_plugin(kdevctestintegration ${ctestintegration_LIB_SRCS})

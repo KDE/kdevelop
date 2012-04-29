@@ -103,4 +103,3 @@ install(FILES kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )
-

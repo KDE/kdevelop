@@ -34,6 +34,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/itestcontroller.h>
 #include "testing/ctestfinder/ictestprovider.h"
 
 namespace CMakeParserUtils
@@ -187,11 +188,11 @@ namespace CMakeParserUtils
         data->targets=v.targets();
         data->properties=v.properties();
 
-        KDevelop::IPlugin* testProviderPlugin = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICTestProvider");
-        if (testProviderPlugin)
+        KDevelop::IPlugin* testControllerPlugin = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
+        if (testControllerPlugin)
         {
-            ICTestProvider* testProvider = testProviderPlugin->extension<ICTestProvider>();
-            if (testProvider)
+            if (ITestController* testController = testControllerPlugin->extension<KDevelop::ITestController>())
+            if (testController)
             {
                 foreach (const Test& test, v.testSuites())
                 {
@@ -211,6 +212,7 @@ namespace CMakeParserUtils
                         }
                         files << fileUrl.toLocalFile();
                     }
+                    CTestSuite
                     testProvider->createTestSuite(test.name, exe, files, project, test.arguments);
                 }
             }
