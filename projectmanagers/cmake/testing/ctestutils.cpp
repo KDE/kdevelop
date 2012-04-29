@@ -23,15 +23,19 @@
 
 #include "ctestutils.h"
 #include "ctestsuite.h"
+#include "ctestfindjob.h"
 
 #include <interfaces/iproject.h>
 #include <interfaces/itestcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 
-CTestUtils::createTestSuite(const QString& name, const QString& executable, const QStringList& files, IProject* project, const QStringList& arguments)
+void CTestUtils::createTestSuite(const QString& name, const QString& executable, const QStringList& files, const QStringList& arguments, KDevelop::IProject* project)
 {
     // CMake parser replaces all references to the project build directory by #[bin_dir]
     // We replace it back for the test executable and arguments
@@ -48,9 +52,14 @@ CTestUtils::createTestSuite(const QString& name, const QString& executable, cons
     
     CTestSuite* suite = new CTestSuite(name, exe, files, project, args);
     
-    ITestController* tc = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController")->extension<ITestController>();
-    if (tc)
+    CTestFindJob* job = new CTestFindJob(suite);
+    ICore::self()->runController()->registerJob(job);
+}
+
+void CTestUtils::createTestSuites(const QList< Test >& testSuites, KDevelop::IProject* project)
+{
+    foreach (const Test& test, testSuites)
     {
-        tc->addTestSuite(suite);
+        createTestSuite(test.name, test.executable, test.files, test.arguments, project);
     }
 }

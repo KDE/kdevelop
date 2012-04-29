@@ -38,6 +38,12 @@ set( cmakecommon_UI
 )
 
 set( cmakemanager_SRCS
+  testing/ctestutils.cpp
+  testing/ctestfindjob.cpp
+  testing/ctestrunjob.cpp
+  testing/ctestsuite.cpp
+  testing/ctestoutputmodel.cpp
+  testing/qttestdelegate.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
   cmakecodecompletionmodel.cpp
@@ -80,7 +86,7 @@ kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDE4_KTEXTEDITOR_LIBS})
+                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
                         
 kde4_add_plugin( kdevcmakedocumentation ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation

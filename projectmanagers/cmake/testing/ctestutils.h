@@ -21,10 +21,18 @@
 #define CTESTUTILS_H
 
 #include <QtCore/QStringList>
+#include <cmaketypes.h>
+
+namespace KDevelop
+{
+class IProject;
+}
 
 namespace CTestUtils
 {
-    void createTestSuite(const QString& name, const QString& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& arguments = QStringList());
+    void createTestSuite(const QString& name, const QString& executable, const QStringList& files, const QStringList& arguments, KDevelop::IProject* project);
+    
+    void createTestSuites(const QList<Test>& testSuites, KDevelop::IProject* project);
 }
 
 #endif // CTESTUTILS_H

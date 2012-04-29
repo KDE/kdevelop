@@ -181,40 +181,7 @@ namespace CMakeParserUtils
         data->includeDirectories=v.includeDirectories();
         data->targets=v.targets();
         data->properties=v.properties();
-
-        KDevelop::IPlugin* testControllerPlugin = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
-        if (testControllerPlugin)
-        {
-            if (ITestController* testController = testControllerPlugin->extension<KDevelop::ITestController>())
-            if (testController)
-            {
-                foreach (const Test& test, v.testSuites())
-                {
-                    QString exe = test.executable;
-                    if (!exe.startsWith("#[bin_dir]") && QFileInfo(exe).isRelative())
-                    {
-                        exe = binDir + exe;
-                    }
-                    QStringList files;
-                    foreach (const QString& file, test.files)
-                    {
-                        KUrl fileUrl(file);
-                        if (fileUrl.isRelative())
-                        {
-                            fileUrl = sourcedir;
-                            fileUrl.addPath(file);
-                        }
-                        files << fileUrl.toLocalFile();
-                    }
-                    CTestSuite
-                    testProvider->createTestSuite(test.name, exe, files, project, test.arguments);
-                }
-            }
-        }
-        else
-        {
-            kDebug(9042) << "No test provider plugin loaded";
-        }
+        data->testSuites=v.testSuites();
         
         //printSubdirectories(data->subdirectories);
         

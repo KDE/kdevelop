@@ -73,6 +73,7 @@
 #include "cmaketypes.h"
 #include "parser/cmakeparserutils.h"
 #include "icmakedocumentation.h"
+#include "testing/ctestutils.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -677,7 +678,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     m_watchers[project]->addPath(file);
     QString profile = CMake::currentEnvironment(project);
     const KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile), project);
+    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
 }
 
 
@@ -932,6 +933,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
+        
+        CTestUtils::createTestSuites(data.testSuites, item->project());
+        
     } else if( folder ) {
         // Only do cmake-stuff if its a cmake folder
         deleteAllLater(castToBase(folder->cleanupBuildFolders(QList<Subdirectory>())));

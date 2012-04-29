@@ -31,7 +31,7 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 , m_suite(suite)
 , m_process(0)
 {
-
+    setObjectName(i18n("Parse test suite %1", suite->name()));
 }
 
 void CTestFindJob::start()
