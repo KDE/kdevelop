@@ -934,7 +934,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             setTargetFiles(targetItem, tfiles);
         }
         
-        CTestUtils::createTestSuites(data.testSuites, item->project());
+        CTestUtils::createTestSuites(data.testSuites, item);
         
     } else if( folder ) {
         // Only do cmake-stuff if its a cmake folder

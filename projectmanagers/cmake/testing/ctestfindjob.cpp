@@ -19,7 +19,6 @@
 
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
-#include <QTimer>
 #include <QFileInfo>
 #include <KProcess>
 #include <interfaces/icore.h>
@@ -31,16 +30,19 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 , m_suite(suite)
 , m_process(0)
 {
+    kDebug() << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
 }
 
 void CTestFindJob::start()
 {
-    QTimer::singleShot(0, this, SLOT(findTestCases()) );
+    kDebug();
+    QMetaObject::invokeMethod(this, "findTestCases");
 }
 
 void CTestFindJob::findTestCases()
 {
+    kDebug();
     // Test suite names must be unique within a project
     // If we have a clash, it's probably an update and the old one should be removed.
     KDevelop::ITestController* tc = KDevelop::ICore::self()->testController();
@@ -57,6 +59,9 @@ void CTestFindJob::findTestCases()
     }
 
     QFileInfo info(m_suite->executable().toLocalFile());
+    
+    kDebug() << m_suite->executable() << info.exists();
+    
     if (info.exists() && info.isExecutable())
     {
         kDebug() << "Starting process to find test cases" << m_suite->name();
@@ -65,6 +70,12 @@ void CTestFindJob::findTestCases()
         m_process->setProgram(info.absoluteFilePath(), QStringList() << "-functions");
         connect (m_process, SIGNAL(finished(int)), SLOT(processFinished()));
         m_process->start();
+    }
+    else
+    {
+        tc->addTestSuite(m_suite);
+        emitResult();
+        return;
     }
 }
 

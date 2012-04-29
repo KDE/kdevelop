@@ -35,31 +35,28 @@
 
 using namespace KDevelop;
 
-void CTestUtils::createTestSuite(const QString& name, const QString& executable, const QStringList& files, const QStringList& arguments, KDevelop::IProject* project)
+void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
 {
-    // CMake parser replaces all references to the project build directory by #[bin_dir]
-    // We replace it back for the test executable and arguments
-    
-    QString exe = executable;
-    QString binDir = project->buildSystemManager()->buildDirectory(project->projectItem()).toLocalFile();
-    exe.replace("#[bin_dir]", binDir);
-    
-    QStringList args = arguments;
-    for (QStringList::iterator it = args.begin(); it != args.end(); ++it)
-    {
-        (*it).replace("#[bin_dir]", binDir);
-    }
-    
-    CTestSuite* suite = new CTestSuite(name, exe, files, project, args);
-    
-    CTestFindJob* job = new CTestFindJob(suite);
-    ICore::self()->runController()->registerJob(job);
-}
-
-void CTestUtils::createTestSuites(const QList< Test >& testSuites, KDevelop::IProject* project)
-{
+    QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder).toLocalFile();
     foreach (const Test& test, testSuites)
     {
-        createTestSuite(test.name, test.executable, test.files, test.arguments, project);
+        QString exe = test.executable;
+        exe.replace("#[bin_dir]", binDir);
+        KUrl exeUrl = KUrl(exe);
+        if (exeUrl.isRelative())
+        {
+            exeUrl = KUrl(binDir);
+            exeUrl.addPath(test.executable);
+        }
+        
+        
+        QStringList args = test.arguments;
+        for (QStringList::iterator it = args.begin(); it != args.end(); ++it)
+        {
+            (*it).replace("#[bin_dir]", binDir);
+        }
+        
+        CTestSuite* suite = new CTestSuite(test.name, exeUrl, test.files, folder->project(), args);
+        ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }
