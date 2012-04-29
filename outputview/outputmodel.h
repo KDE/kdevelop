@@ -25,6 +25,7 @@
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"
 #include "filtereditem.h"
+#include "ifilterstrategy.h"
 
 #include <QtCore/QAbstractListModel>
 #include <QString>
@@ -39,7 +40,6 @@ namespace KDevelop
 {
     
 class FilteredItem;
-class IFilterStrategy;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
@@ -54,7 +54,8 @@ public:
     {
         NoFilter,
         CompilerFilter,
-        ScriptErrorFilter
+        ScriptErrorFilter,
+        StaticAnalysisFilter
     };
 
 
@@ -84,13 +85,12 @@ private slots:
 private:
     bool isValidIndex( const QModelIndex& ) const;
     QList<FilteredItem> m_filteredItems;
-    QSharedPointer<IFilterStrategy> m_filter;
     // We use std::set because that is ordered
     std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next 
     KUrl m_buildDir;
 
     QQueue<QString> m_lineBuffer;
-    
+    QSharedPointer<IFilterStrategy> m_filter;    
 };
 
 //Q_DECLARE_METATYPE( OutputModel::OutputItemType )

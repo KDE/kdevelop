@@ -28,6 +28,8 @@
 
 #include "ui_scriptappconfig.h"
 
+class ExecuteScriptPlugin;
+
 class ScriptAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::ScriptAppPage
 {
 Q_OBJECT
@@ -42,13 +44,15 @@ public:
 class ScriptAppLauncher : public KDevelop::ILauncher
 {
 public:
-    ScriptAppLauncher();
+    ScriptAppLauncher( ExecuteScriptPlugin* );
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
     virtual QString description() const;
     virtual QString id();
     virtual QString name() const;
     virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
     virtual QStringList supportedModes() const;
+private:
+    ExecuteScriptPlugin* m_plugin;
 };
 
 class ScriptAppPageFactory : public KDevelop::LaunchConfigurationPageFactory

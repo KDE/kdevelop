@@ -67,11 +67,12 @@ K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutes
 ))
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
+    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent),
+    KDevelop::DelegateHolder( this )
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
-    m_configType->addLauncher( new ScriptAppLauncher() );
+    m_configType->addLauncher( new ScriptAppLauncher( this ) );
     kDebug() << "adding script launch config";
     core()->runController()->addConfigurationType( m_configType );
 }

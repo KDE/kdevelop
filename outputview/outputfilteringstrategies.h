@@ -26,6 +26,8 @@
 
 
 #include "ifilterstrategy.h"
+#include <outputview/outputviewexport.h>
+
 
 #include <KUrl>
 
@@ -38,7 +40,7 @@ namespace KDevelop
 * This filter strategy is for not applying any filtering at all. Implementation of the
 * interface methods are basically noops 
 **/
-class NoFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 {
 
 public:
@@ -54,11 +56,11 @@ public:
  * This filter stategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler. 
  **/
-class CompilerFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
 {
 
 public:
-    CompilerFilterStrategy();
+    CompilerFilterStrategy(KUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
     
     virtual bool isErrorInLine(QString const& line, FilteredItem& item);
@@ -78,7 +80,7 @@ private:
 /**
 * This filter stategy filters out errors (no actions) from Python and PHP scripts.
 **/
-class ScriptErrorFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterStrategy
 {
 
 public:
@@ -90,6 +92,20 @@ public:
 
 };
 
+/**
+* This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
+**/
+class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
+{
+
+public:
+    StaticAnalysisFilterStrategy();
+    
+    virtual bool isErrorInLine(QString const& line, FilteredItem& item);
+
+    virtual bool isActionInLine(QString const& line, FilteredItem& item);
+
+};
 
 } // namespace KDevelop
 #endif // OUTPUTFILTERINGSTRATEGIES_H

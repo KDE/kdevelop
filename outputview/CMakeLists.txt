@@ -1,6 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
 set( outputviewinterfaces_LIB_SRCS 
+    delegateholder.cpp 
     outputdelegate.cpp 
     outputformats.cpp 
     filtereditem.cpp 
@@ -27,7 +28,11 @@ install(TARGETS kdevplatformoutputview EXPORT KDevPlatformTargets ${INSTALL_TARG
           ioutputview.h
           filtereditem.h
           outputmodel.h
+          outputdelegate.h
           ioutputviewmodel.h
+          ifilterstrategy.h
           outputviewexport.h
           outputjob.h
           DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview COMPONENT Devel)
+
+add_subdirectory(tests)

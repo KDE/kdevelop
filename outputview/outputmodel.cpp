@@ -42,8 +42,8 @@ const int OutputModel::OutputItemTypeRole = Qt::UserRole + 1;
 
 OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
     : QAbstractListModel(parent)
-    , m_filter( new NoFilterStrategy )
     , m_buildDir( builddir )
+    , m_filter( new NoFilterStrategy )
 {
 }
 
@@ -174,16 +174,20 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
+    kDebug() << "set filtering strategy was called";
     switch( currentStrategy )
     {
         case NoFilter:
             m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
             break;
         case CompilerFilter:
-            m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy );
+            m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy( m_buildDir ) );
             break;
         case ScriptErrorFilter:
             m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
+            break;
+        case StaticAnalysisFilter:
+            m_filter = QSharedPointer<IFilterStrategy>( new StaticAnalysisFilterStrategy );
             break;
         default:
             // assert(false);
@@ -217,7 +221,7 @@ void OutputModel::addLineBatch()
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
             return;
-    
+    kDebug() << "addLineBatch called with " << linesInBatch << "lines";
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {

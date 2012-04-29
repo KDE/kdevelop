@@ -33,6 +33,7 @@ namespace KDevelop
 
 NoFilterStrategy::NoFilterStrategy()
 {
+    kDebug() << "NoFilterStrategy was created";
 }
 
 bool NoFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -114,8 +115,10 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     
 
 
-CompilerFilterStrategy::CompilerFilterStrategy()
+CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir) 
+    : m_buildDir(buildDir)
 {
+    kDebug() << "CompilerFilterStrategy was created with builddir: " << buildDir;
 }
 
 CompilerFilterStrategy::~CompilerFilterStrategy()
@@ -241,18 +244,18 @@ KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
 
 // A list of filters for possible Python and PHP errors
 const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
-
     //QRegExp python("^  File \"(.*)\", line (\\d*), in(.*)$");
-    << ErrorFormat( "^  File \"(.*)\", line (\\d*), in(.*)$", 1, 2, -1 )
+    << ErrorFormat( "^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)", 1, 2, -1 )
     //QRegExp phpstacktrace("^.*(/.*):(\\d*).*$");
-    << ErrorFormat( "^.*(/.*):(\\d*).*$", 1, 2, -1 )
+    << ErrorFormat( "^.*(/.*):([0-9]+).*$", 1, 2, -1 )
     //QRegExp phperror("^.* in (/.*) on line (\\d*).*$");
-    << ErrorFormat( "^.* in (/.*) on line (\\d*).*$", 1, 2, -1 );
+    << ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 );
 
     
     
 ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
+        kDebug() << "ScriptErrorFilterStrategy was created";
 }
 
 bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -263,6 +266,56 @@ bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, Filtered
 bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
 {
     foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS )
+    {
+        kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+        QRegExp regEx = curErrFilter.expression;
+        if( regEx.indexIn( line ) != -1 )
+        {
+            item.url = regEx.cap( curErrFilter.fileGroup );
+            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
+            kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+            if(curErrFilter.columnGroup >= 0)
+                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
+            else
+                item.columnNo = 0;
+            
+            //item.shortenedText = regEx.cap( errFormat.textGroup );
+            QString txt = regEx.cap(curErrFilter.textGroup);
+            
+            item.type = QVariant::fromValue( FilteredItem::ErrorItem );
+
+            // Make the item clickable if it comes with the necessary file & line number information
+            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
+                item.isActivatable = true;
+
+            return true;
+        }
+    }
+    return false;
+}
+
+/// --- Static Analysis filter strategy ---
+
+// A list of filters for possible Python and PHP errors
+const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
+    // CppCheck
+    << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 );
+
+    
+    
+StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
+{
+        kDebug() << "StaticAnalysisFilterStrategy was created";
+}
+
+bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
+{
+    return false;
+}
+
+bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
+{
+    foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS )
     {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -289,6 +342,7 @@ bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem&
     }
     return false;
 }
+
 
 } // namespace KDevelop
 

@@ -22,17 +22,22 @@
 #ifndef OUTPUTDELEGATE_H
 #define OUTPUTDELEGATE_H
 
+#include "outputviewexport.h"
+
 #include <QtGui/QItemDelegate>
 #include <kcolorscheme.h>
 
 namespace KDevelop
 {
 
-class OutputDelegate : public QItemDelegate
+    
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 {
-  public:
+public:
     OutputDelegate( QObject* );
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
+protected:
+    
 private:
     KStatefulBrush errorBrush;
     KStatefulBrush warningBrush;

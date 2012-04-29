@@ -21,6 +21,8 @@
 
 #include "externalscriptoutputmodel.h"
 
+#include <QStringList>
+
 ExternalScriptOutputModel::ExternalScriptOutputModel( QObject* parent )
     : OutputModel( parent )
 {
@@ -52,14 +54,12 @@ QStringList ExternalScriptOutputModel::stdOut() const
 
 void ExternalScriptOutputModel::appendStderrLines( const QStringList& lines )
 {
-    addPending();
     m_stderrRanges[rowCount()] = lines.count();
     appendLines(lines);
 }
 
 void ExternalScriptOutputModel::appendStdoutLines( const QStringList& lines )
 {
-    addPending();
     m_stdoutRanges[rowCount()] = lines.count();
     appendLines(lines);
 }

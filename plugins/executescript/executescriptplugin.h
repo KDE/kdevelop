@@ -26,13 +26,14 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
+#include <outputview/delegateholder.h>
 #include "iexecutescriptplugin.h"
 
 class ScriptAppConfigType;
 class KUrl;
 class KJob;
 
-class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin
+class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin, public KDevelop::DelegateHolder
 {
     Q_OBJECT
     Q_INTERFACES( IExecuteScriptPlugin )

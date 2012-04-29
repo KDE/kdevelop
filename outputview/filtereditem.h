@@ -25,13 +25,15 @@
 #include <QString>
 #include <KUrl>
 
+#include <outputview/outputviewexport.h>
+
 namespace KDevelop
 {
 
 /** Holds all metadata of a given compiler output line. E.g. if it is an error or 
  * a warning, if it is clickable or not, etc. 
  **/
-class FilteredItem
+class KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 {
     public:
         enum FilteredOutputItemType

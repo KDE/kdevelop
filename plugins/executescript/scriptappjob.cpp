@@ -19,6 +19,7 @@
 */
 
 #include "scriptappjob.h"
+#include "executescriptplugin.h"
 
 #include <QFileInfo>
 
@@ -31,6 +32,7 @@
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
@@ -44,8 +46,8 @@
 
 #include "iexecutescriptplugin.h"
 
-ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
-    : KDevelop::OutputJob( parent ), proc(0)
+ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
+    : KDevelop::OutputJob( parent ), proc(0), plugin( parent )
 {
     kDebug() << "creating script app job";
     setCapabilities(Killable);
@@ -110,7 +112,9 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::ExecuteScriptOutputModel(), KDevelop::IOutputView::TakeOwnership );
+    setModel( new KDevelop::ExecuteScriptOutputModel( this ), KDevelop::IOutputView::TakeOwnership );
+    model()->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
+    setDelegate( plugin->delegate() );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );

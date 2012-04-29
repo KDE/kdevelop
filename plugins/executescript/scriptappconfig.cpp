@@ -155,7 +155,8 @@ QString ScriptAppLauncher::name() const
     return i18n("Script Application");
 }
 
-ScriptAppLauncher::ScriptAppLauncher()
+ScriptAppLauncher::ScriptAppLauncher(ExecuteScriptPlugin* plugin) :
+    m_plugin( plugin )
 {
 }
 
@@ -168,7 +169,8 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        return new ScriptAppJob( KDevelop::ICore::self()->runController(), cfg );
+        //return new ScriptAppJob( KDevelop::ICore::self()->runController(), cfg );
+        return new ScriptAppJob( m_plugin, cfg);
         
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();

@@ -20,6 +20,8 @@
 #ifndef IFILTERSTRATEGY_H
 #define IFILTERSTRATEGY_H
 
+#include "outputviewexport.h"
+
 class QString;
 
 namespace KDevelop
@@ -30,7 +32,7 @@ class FilteredItem;
 /**
 @author Morten Danielsen Volden
 */
-class IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_EXPORT IFilterStrategy
 {
 public:
 
