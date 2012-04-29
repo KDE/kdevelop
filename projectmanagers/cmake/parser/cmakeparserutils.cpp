@@ -31,12 +31,6 @@
 #include <ktempdir.h>
 #include <cmakeprojectdata.h>
 
-#include <interfaces/iproject.h>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/itestcontroller.h>
-#include "testing/ctestfinder/ictestprovider.h"
-
 namespace CMakeParserUtils
 {
     QList<int> parseVersion(const QString& version, bool* ok)
@@ -155,7 +149,7 @@ namespace CMakeParserUtils
     }
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent,
-                    CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env, KDevelop::IProject* project)
+                    CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env)
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
