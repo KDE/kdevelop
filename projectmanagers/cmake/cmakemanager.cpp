@@ -934,7 +934,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             setTargetFiles(targetItem, tfiles);
         }
         
-        CTestUtils::createTestSuites(data.testSuites, item);
+        qRegisterMetaType<QList<Test> >("QList<Test>");
+        qRegisterMetaType<KDevelop::ProjectFolderItem* >("KDevelop::ProjectFolderItem*");
+        QMetaObject::invokeMethod(this, "createTestSuites", Qt::QueuedConnection,
+                                  Q_ARG(QList<Test>, data.testSuites),
+                                  Q_ARG(KDevelop::ProjectFolderItem*, item));
         
     } else if( folder ) {
         // Only do cmake-stuff if its a cmake folder
@@ -1843,6 +1847,12 @@ void CMakeManager::cleanupItems()
 {
     qDeleteAll(m_cleanupItems);
     m_cleanupItems.clear();
+}
+
+void CMakeManager::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
+{
+    kDebug();
+    CTestUtils::createTestSuites(testSuites, folder);
 }
 
 #include "cmakemanager.moc"

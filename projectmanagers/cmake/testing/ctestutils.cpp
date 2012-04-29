@@ -38,7 +38,7 @@ using namespace KDevelop;
 void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
 {
     QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    QString currentDir = folder->project()->buildSystemManager()->buildDirectory(folder).toLocalFile();
+    KUrl currentDir = folder->project()->buildSystemManager()->buildDirectory(folder);
     foreach (const Test& test, testSuites)
     {
         QString exe = test.executable;
@@ -46,7 +46,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
         KUrl exeUrl = KUrl(exe);
         if (exeUrl.isRelative())
         {
-            exeUrl = KUrl(currentDir);
+            exeUrl = currentDir;
             exeUrl.addPath(test.executable);
         }
         

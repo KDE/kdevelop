@@ -74,4 +74,6 @@ typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> CMakeDefinitions;
 typedef QHash<QString, CacheEntry> CacheValues;
 
+Q_DECLARE_METATYPE(QList<Test>)
+
 #endif

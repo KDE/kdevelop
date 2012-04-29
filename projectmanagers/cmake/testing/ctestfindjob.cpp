@@ -37,7 +37,7 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 void CTestFindJob::start()
 {
     kDebug();
-    QMetaObject::invokeMethod(this, "findTestCases");
+    QMetaObject::invokeMethod(this, "findTestCases", Qt::QueuedConnection);
 }
 
 void CTestFindJob::findTestCases()
