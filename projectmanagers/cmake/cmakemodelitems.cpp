@@ -35,16 +35,32 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folde
     Q_ASSERT(folder.path().endsWith("/"));
 }
 
-QStringList CMakeFolderItem::includeDirectories() const
+static KDevelop::ProjectBaseItem* getRealCMakeParent(KDevelop::ProjectBaseItem* baseItem)
 {
-    QStringList urls(m_includeList);
-
-    CMakeFolderItem *folder = formerParent();
-    if(folder)
-    {
-        urls += folder->includeDirectories();
+    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( baseItem );
+    if(folder) {
+        return folder->formerParent();
     }
-    return urls;
+    return baseItem->parent();
+}
+
+QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const
+{
+    if (!placeInHierarchy) return m_includeList;
+
+    placeInHierarchy = getRealCMakeParent(placeInHierarchy);
+    while(placeInHierarchy)
+    {
+        IncludesAttached* includer = dynamic_cast<IncludesAttached*>( placeInHierarchy );
+        if(includer) {
+            QStringList includes(m_includeList);
+            includes += includer->includeDirectories(placeInHierarchy);
+            return includes;
+        }
+
+        placeInHierarchy = getRealCMakeParent(placeInHierarchy);
+    }
+    return m_includeList;
 }
 
 CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) const
@@ -175,6 +191,9 @@ DUChainAttatched::~DUChainAttatched() {
 }
 
 DefinesAttached::~DefinesAttached() {
+}
+
+IncludesAttached::~IncludesAttached() {
 }
 
 KUrl CMakeExecutableTargetItem::installedUrl() const {
