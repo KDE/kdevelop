@@ -48,7 +48,7 @@ public slots:
     void addTestSuite(KDevelop::ITestSuite* suite);
     void removeTestSuite(KDevelop::ITestSuite* suite);
     void updateTestSuite(KDevelop::ITestSuite* suite);
-    void addProject(KDevelop::IProject* project);
+    QStandardItem* addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);
 

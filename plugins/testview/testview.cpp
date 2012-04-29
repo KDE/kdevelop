@@ -107,7 +107,6 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     addAction(action);
 
     IProjectController* pc = ICore::self()->projectController();
-    connect (pc, SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(addProject(KDevelop::IProject*)));
     connect (pc, SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(removeProject(KDevelop::IProject*)));
 
     ITestController* tc = ICore::self()->testController();
@@ -212,7 +211,8 @@ QStandardItem* TestView::itemForProject(IProject* project)
     {
         return item;
     }
-    return 0;
+    
+    return addProject(project);
 }
 
 
@@ -322,6 +322,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     Q_ASSERT(projectItem);
 
     QStandardItem* suiteItem = new QStandardItem(KIcon("view-list-tree"), suite->name());
+
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (QString caseName, suite->cases())
     {
@@ -337,11 +338,12 @@ void TestView::removeTestSuite(ITestSuite* suite)
     delete itemForSuite(suite);
 }
 
-void TestView::addProject(IProject* project)
+QStandardItem* TestView::addProject(IProject* project)
 {
     QStandardItem* projectItem = new QStandardItem(KIcon("project-development"), project->name());
     projectItem->setData(project->name(), ProjectRole);
     m_model->appendRow(projectItem);
+    return projectItem;
 }
 
 void TestView::removeProject(IProject* project)
