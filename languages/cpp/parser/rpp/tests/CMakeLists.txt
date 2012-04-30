@@ -9,5 +9,5 @@ set(pp_SRCS
 )
 
 kde4_add_executable(pp TEST ${pp_SRCS})
-target_link_libraries(pp ${KDE4_KDECORE_LIBS} kdev4cpprpp)
+target_link_libraries(pp ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4cpprpp)
 
