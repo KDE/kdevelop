@@ -44,8 +44,7 @@ public:
     virtual KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const;
     virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
 
-    virtual KJob* reloadTestSuites();
-    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite);
+    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
 
 private:
     class TestControllerPrivate;

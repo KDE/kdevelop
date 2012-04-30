@@ -24,13 +24,48 @@
 
 #include <QtCore/QList>
 #include <QtCore/QObject>
+#include <QtCore/QHash>
 
 class KJob;
 
 namespace KDevelop {
 
+struct TestResult;
+
 class IProject;
 class ITestSuite;
+
+
+/**
+ * The result of a single unit test run
+ **/
+struct KDEVPLATFORMINTERFACES_EXPORT TestResult
+{
+    /**
+     * Enumeration of possible test case results
+     **/
+    enum TestCaseResult
+    {
+        NotRun, ///< The test case was not selected for running.
+        Skipped, ///< The test case was skipped.
+        Passed, ///< The test case was run and passed.
+        Failed, ///< The test case was run and failed.
+        Error, ///< There was an error while trying to run the test case
+    };
+
+    /**
+     * The individual results of all test cases.
+     **/
+    QHash<QString, TestCaseResult> testCaseResults;
+    
+    /**
+     * The total result of the entire suite. 
+     * 
+     * This is usually the worst outcome of the individual test cases, 
+     * but can be different especially when dealing with errors. 
+     */
+    TestCaseResult suiteResult;
+};
 
 class KDEVPLATFORMINTERFACES_EXPORT ITestController : public QObject
 {
@@ -68,10 +103,9 @@ public:
     virtual QList<ITestSuite*> testSuitesForProject(IProject* project) const = 0;
 
     /**
-     * Create a job to reload all test suites.
+     * Notify the controller that a test run for @p suite was finished with result @p result
      */
-    virtual KJob* reloadTestSuites() = 0;
-    virtual void notifyTestRunFinished(ITestSuite* suite) = 0;
+    virtual void notifyTestRunFinished(ITestSuite* suite, const TestResult& result) = 0;
 
 Q_SIGNALS:
     /**
@@ -85,7 +119,7 @@ Q_SIGNALS:
     /**
      * Emitted after a test suite was run.
      */
-    void testRunFinished(KDevelop::ITestSuite* suite) const;
+    void testRunFinished(KDevelop::ITestSuite* suite, const TestResult& result) const;
 };
 
 }

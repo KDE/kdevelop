@@ -114,8 +114,8 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
              SLOT(addTestSuite(KDevelop::ITestSuite*)));
     connect (tc, SIGNAL(testSuiteRemoved(KDevelop::ITestSuite*)),
              SLOT(removeTestSuite(KDevelop::ITestSuite*)));
-    connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*)),
-             SLOT(updateTestSuite(KDevelop::ITestSuite*)));
+    connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*, KDevelop::TestResult)),
+             SLOT(updateTestSuite(KDevelop::ITestSuite*, KDevelop::TestResult)));
 
     foreach (IProject* project, pc->projects())
     {
@@ -133,17 +133,7 @@ TestView::~TestView()
 
 }
 
-void TestView::reloadTests()
-{
-    ITestController* tc = ICore::self()->testController();
-    KJob* reloadJob = tc->reloadTestSuites();
-    if (reloadJob)
-    {
-        ICore::self()->runController()->registerJob(reloadJob);
-    }
-}
-
-void TestView::updateTestSuite(ITestSuite* suite)
+void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
 {
     QStandardItem* item = itemForSuite(suite);
     if (!item)
@@ -152,9 +142,9 @@ void TestView::updateTestSuite(ITestSuite* suite)
     }
 
     kDebug() << "Updating test suite" << suite->name();
-    TestResult result = suite->result();
-    bool failed = false;
-    bool passed = false;
+    
+    item->setIcon(iconForTestResult(result.suiteResult));
+    
     for (int i = 0; i < item->rowCount(); ++i)
     {
         kDebug() << "Found a test case" << item->child(i)->text();
@@ -162,12 +152,9 @@ void TestView::updateTestSuite(ITestSuite* suite)
         if (result.testCaseResults.contains(caseItem->text()))
         {
             TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
-            failed |= (caseResult == TestResult::Failed);
-            passed |= (caseResult == TestResult::Passed);
             caseItem->setIcon(iconForTestResult(caseResult));
         }
     }
-    item->setIcon( failed ? KIcon("dialog-error") : KIcon("dialog-ok-apply") );
 }
 
 KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)

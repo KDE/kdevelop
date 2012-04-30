@@ -20,12 +20,6 @@
 #include "testcontroller.h"
 #include "interfaces/itestsuite.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/itestprovider.h>
-#include <interfaces/iruncontroller.h>
-#include <util/executecompositejob.h>
-
 #include <KUrl>
 #include <KLocalizedString>
 #include <KDebug>
@@ -107,32 +101,10 @@ QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) con
     return suites;
 }
 
-KJob* TestController::reloadTestSuites()
-{
-    QList<KJob*> jobs;
-    foreach (IPlugin* plugin, ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITestProvider"))
-    {
-        if (ITestProvider* provider = plugin->extension<ITestProvider>())
-        {
-            if (KJob* job = provider->findTests())
-            {
-                jobs << job;
-            }
-        }
-    }
-    if (!jobs.isEmpty())
-    {
-        ExecuteCompositeJob* compositeJob = new ExecuteCompositeJob(this, jobs);
-        compositeJob->setObjectName("Searching for unit tests");
-        return compositeJob;
-    }
-    return 0;
-}
-
-void TestController::notifyTestRunFinished(ITestSuite* suite)
+void TestController::notifyTestRunFinished(ITestSuite* suite, const TestResult& result)
 {
     kDebug() << "Test run finished for suite" << suite->name();
-    emit testRunFinished(suite);
+    emit testRunFinished(suite, result);
 }
 
 #include "testcontroller.moc"

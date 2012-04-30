@@ -21,7 +21,7 @@
 #define TESTVIEW_H
 
 #include <QtGui/QTreeView>
-#include <interfaces/itestsuite.h>
+#include <interfaces/itestcontroller.h>
 
 class QSortFilterProxyModel;
 class QStandardItem;
@@ -41,13 +41,12 @@ public:
     virtual ~TestView();
 
 public slots:
-    void reloadTests();
     void runSelectedTests();
     void showSource();
 
     void addTestSuite(KDevelop::ITestSuite* suite);
     void removeTestSuite(KDevelop::ITestSuite* suite);
-    void updateTestSuite(KDevelop::ITestSuite* suite);
+    void updateTestSuite(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
     QStandardItem* addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);

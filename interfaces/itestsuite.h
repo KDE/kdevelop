@@ -23,7 +23,6 @@
 #include "interfacesexport.h"
 
 #include <QtCore/QStringList>
-#include <QtCore/QMap>
 
 class KJob;
 class KUrl;
@@ -32,28 +31,6 @@ namespace KDevelop {
 
 class IndexedDeclaration;
 class IProject;
-
-/**
- * The result of a single unit test run
- **/
-struct KDEVPLATFORMINTERFACES_EXPORT TestResult
-{
-    /**
-     * Enumeration of possible test case results
-     **/
-    enum TestCaseResult
-    {
-        NotRun, ///< The test case was not selected for running.
-        Skipped, ///< The test case was skipped.
-        Passed, ///< The test case was run and passed.
-        Failed ///< The test case was run and failed.
-    };
-
-    /**
-     * The individual result of all test cases.
-     **/
-    QMap<QString, TestCaseResult> testCaseResults;
-};
 
 /**
  * A unit test suite class.
@@ -109,15 +86,6 @@ public:
      * @sa launchAllCases()
      **/
     virtual KJob* launchCase(const QString& testCase) = 0;
-
-    /**
-     * Get the last result obtained by running this suite.
-     * This function only has to return a valid result after at least one
-     * of the launch functions has been called and the returned KJob finished.
-     *
-     * @sa launchAllCases(), KJob::finished()
-     **/
-    virtual TestResult result() const = 0;
 
     /**
      * The location in source code where the test suite is declared.
