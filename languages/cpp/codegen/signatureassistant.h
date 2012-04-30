@@ -64,7 +64,7 @@ class AdaptDefinitionSignatureAssistant : public IAssistant {
     //old signature of the _other_side
     Signature m_oldSignature;
     KUrl m_document;
-    KTextEditor::View *m_view;
+    QWeakPointer<KTextEditor::View> m_view;
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
