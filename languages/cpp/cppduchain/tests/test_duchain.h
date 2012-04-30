@@ -190,6 +190,7 @@ private slots:
   
   void testDeclarationHasUses();
   void testBug269352();
+  void testRenameClass();
 
   //BEGIN C++2011
   void testRangeBasedFor();
