@@ -19,11 +19,14 @@
 
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
-#include <QFileInfo>
-#include <KProcess>
+
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
 #include <language/duchain/duchain.h>
+
+#include <QFileInfo>
+#include <KProcess>
+#include <KLocale>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)
