@@ -28,6 +28,8 @@
 
 #include <KColorScheme>
 
+static const int maxExtraArgumentsInHistory = 15;
+
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : KDialog(parent)
 {
@@ -42,12 +44,28 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
-    
+
+    KConfigGroup config = KGlobal::config()->group("CMakeBuildDirChooser");
+    QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;
+    m_chooserUi->extraArguments->addItem("");
+    m_chooserUi->extraArguments->addItems(lastExtraArguments);
+    m_chooserUi->extraArguments->setInsertPolicy(QComboBox::InsertAtTop);
+    KCompletion *comp = m_chooserUi->extraArguments->completionObject();
+    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(QString&)));
+    comp->insertItems(lastExtraArguments);
+
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(QString)), this, SLOT(updated()));
     connect(m_chooserUi->buildFolder, SIGNAL(textChanged(QString)), this, SLOT(updated()));
     connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(QString)), this, SLOT(updated()));
     connect(m_chooserUi->extraArguments, SIGNAL(textEdited(QString)), this, SLOT(updated()));
     updated();
+}
+
+CMakeBuildDirChooser::~CMakeBuildDirChooser()
+{
+    KConfigGroup config = KGlobal::config()->group("CMakeBuildDirChooser");
+    config.writeEntry("LastExtraArguments", extraArgumentsHistory());
+    config.sync();
 }
 
 void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
@@ -213,7 +231,7 @@ void CMakeBuildDirChooser::setAlreadyUsed (const QStringList & used)
 
 void CMakeBuildDirChooser::setExtraArguments(const QString& args)
 {
-    m_chooserUi->extraArguments->setText(args);
+    m_chooserUi->extraArguments->setEditText(args);
     updated();
 }
 
@@ -238,7 +256,22 @@ KUrl CMakeBuildDirChooser::buildFolder() const { return m_chooserUi->buildFolder
 
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
 
-QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->text(); }
+QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->currentText(); }
+
+QStringList CMakeBuildDirChooser::extraArgumentsHistory() const
+{
+    QStringList list;
+    KComboBox* extraArguments = m_chooserUi->extraArguments;
+    if (!extraArguments->currentText().isEmpty()) {
+        list << extraArguments->currentText();
+    }
+    for (int i = 0; i < qMin(maxExtraArgumentsInHistory, extraArguments->count()); ++i) {
+        if (!extraArguments->itemText(i).isEmpty() &&
+            (extraArguments->currentText() != extraArguments->itemText(i))) {
+            list << extraArguments->itemText(i);
+        }
+    }
+    return list;
+}
 
 #include "cmakebuilddirchooser.moc"
-

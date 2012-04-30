@@ -60,14 +60,6 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
 
   AST* ast = 0;
 
-  DUContext::ContextType type;
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    if( !context )
-      return ExpressionEvaluationResult();
-    type = context->type();
-  }
-
   session.setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
 
   ast = parser.parseTypeOrExpression(&session, forceExpression);

@@ -177,10 +177,10 @@ LocationTable::AnchorInTable LocationTable::anchorForOffset(std::size_t offset, 
 void LocationTable::dump() const
 {
   QMapIterator<std::size_t, Anchor> it = m_offsetTable;
-  kDebug(9007) << "Location Table:";
+  qDebug() << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    kDebug(9007) << it.key() << " => " << it.value().castToSimpleCursor().textCursor();
+    qDebug() << it.key() << " => " << it.value().castToSimpleCursor().textCursor();
   }
 }
 

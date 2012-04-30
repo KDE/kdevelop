@@ -133,6 +133,9 @@ void TestMakeOutputModel::testErrors_data()
     QTest::newRow("libtool")
         << "libtool: link: warning: ..."
         << "" << -1 << -1;
+    QTest::newRow("gfortran")
+        << "/path/to/file.f90:123.456:"
+        << "/path/to/file.f90" << 123 << 456;
 }
 
 void TestMakeOutputModel::testErrors()

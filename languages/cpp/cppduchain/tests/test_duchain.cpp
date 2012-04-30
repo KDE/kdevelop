@@ -5500,4 +5500,31 @@ void TestDUChain::testBug269352()
   // do not hang
 }
 
+void TestDUChain::testRenameClass()
+{
+  QByteArray codeBefore(
+    "class A { };"
+  );
+
+  TopDUContext* top = parse(codeBefore, DumpDUChain);
+  {
+    DUChainReadLocker lock;
+    QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
+  }
+
+  QByteArray codeAfter(
+    "class B { };"
+  );
+
+  parse(codeAfter, DumpDUChain, top);
+  DUChainReadLocker lock;
+  QVERIFY(top);
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->localDeclarations().size(), 1);
+  QCOMPARE(top->localDeclarations().first()->identifier().toString(), QString("B"));
+  QCOMPARE(top->childContexts().size(), 1);
+  QCOMPARE(top->childContexts().first()->localScopeIdentifier().toString(), QString("B"));
+}
+
 #include "test_duchain.moc"

@@ -32,6 +32,10 @@ QList<ErrorFormat> ErrorFormat::errorFormats = QList<ErrorFormat>()
     << ErrorFormat( "No rule to make target", 0, 0, 0 )
     // Fortran
     << ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
+    // gfortran
+    // TODO: multi-line error formats...
+    << ErrorFormat( "^Error: ", 0, 0, 0 )
+    << ErrorFormat( "^([^ :\t]+):([0-9]+)\\.([0-9]+)", 1, 2, 0, "gfortran", 3 )
     // Jade
     << ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 )
     // ifort

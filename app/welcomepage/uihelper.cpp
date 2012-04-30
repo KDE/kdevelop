@@ -39,7 +39,6 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
     QString current = newPath.takeFirst();
     
     foreach(QAction* a, actions) {
-        qDebug() << "leee" << a->objectName() << current;
         if(a->objectName() == current) {
             if(newPath.isEmpty())
                 return a;

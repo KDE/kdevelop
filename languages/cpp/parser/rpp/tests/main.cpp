@@ -22,6 +22,10 @@
 
 #include <kdebug.h>
 
+#include <QCoreApplication>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
 #include "preprocessor.h"
 #include "pp-environment.h"
 #include "pp-location.h"
@@ -29,14 +33,18 @@
 
 using namespace rpp;
 
-int main (int /*argc*/, char *argv[])
+int main (int argc, char **argv)
 {
-  char const *filename = *++argv;
-  if (!filename)
+  QCoreApplication app(argc, argv);
+  if (app.arguments().count() < 2)
     {
       kDebug(9007) << "usage: pp file.cpp";
       return EXIT_FAILURE;
     }
+  const QString filename = app.arguments().at(1);
+
+  KDevelop::AutoTestShell::init();
+  KDevelop::TestCore::initialize(KDevelop::Core::NoUi, "kdev-pp");
 
   Preprocessor p;
 
@@ -46,11 +54,11 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.processFile(QString("pp-configuration")); // ### put your macros here!
 
-  QString result = QString::fromUtf8(stringFromContents(preprocess.processFile(QString(filename))));
+  QString result = QString::fromUtf8(stringFromContents(preprocess.processFile(filename)));
 
   QStringList resultLines = result.split('\n');
   for (int i = 0; i < resultLines.count(); ++i)
-    kDebug(9007) << i << ":" << resultLines[i];
+    qDebug() << i << ":" << resultLines[i];
 
   preprocess.environment()->locationTable()->dump();
   
