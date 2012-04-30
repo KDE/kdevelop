@@ -105,7 +105,7 @@ public:
     /**
      * Notify the controller that a test run for @p suite was finished with result @p result
      */
-    virtual void notifyTestRunFinished(ITestSuite* suite, const TestResult& result) = 0;
+    virtual void notifyTestRunFinished(ITestSuite* suite, const KDevelop::TestResult& result) = 0;
 
 Q_SIGNALS:
     /**
@@ -119,7 +119,7 @@ Q_SIGNALS:
     /**
      * Emitted after a test suite was run.
      */
-    void testRunFinished(KDevelop::ITestSuite* suite, const TestResult& result) const;
+    void testRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) const;
 };
 
 }
