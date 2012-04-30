@@ -618,8 +618,11 @@ protected:
 
         setInSymbolTable( ret );
       }else{
+        DUChainWriteLocker writeLock( DUChain::lock() );
         if(ret->parentContext())
           ret->setRange( range );
+        if ( !identifier.isEmpty() && ret->localScopeIdentifier() != identifier )
+          ret->setLocalScopeIdentifier( identifier );
       }
     }
 
