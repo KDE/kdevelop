@@ -199,7 +199,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
         QDirIterator contents(path);
         while(contents.hasNext()) {
             QString newPath = contents.next();
-            if(!newPath.endsWith("."))
+            if(!newPath.endsWith('.'))
                 addToBackgroundParser(newPath, features);
         }
     }

@@ -190,6 +190,7 @@ Declaration::~Declaration()
     setAbstractType(AbstractType::Ptr());
   }
   Q_ASSERT(d_func()->isDynamic() == (!topContext->deleting() || !topContext->isOnDisk() || topContext->m_dynamicData->isTemporaryDeclarationIndex(oldOwnIndex)));
+  Q_UNUSED(oldOwnIndex);
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 

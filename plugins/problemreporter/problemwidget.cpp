@@ -240,7 +240,7 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
                 {
                     actions << action->toKAction();
                     if(!solution->title().isEmpty())
-                        actions.back()->setText(solution->title() + " " + actions.back()->text());
+                        actions.back()->setText(solution->title() + ' ' + actions.back()->text());
                 }
             }
             if(!actions.isEmpty())

@@ -535,6 +535,7 @@ void ProjectModelTest::testItemsForUrl_data()
         ProjectFileItem* file = new ProjectFileItem(0, KUrl(folder->url(), "foo"), folder);
         ProjectTargetItem* target = new ProjectTargetItem(0, "b", root);
         ProjectFileItem* file2 = new ProjectFileItem(0, file->url(), target);
+        Q_UNUSED(file2);
         QTest::newRow("find two") << file->url() << static_cast<ProjectBaseItem*>(root) << 2;
     }
 }

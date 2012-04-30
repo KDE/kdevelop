@@ -403,8 +403,7 @@ struct ShownToolViewFinder {
     QList<View *> views;
 };
 
-void MainWindowPrivate::
-slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
+void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position pos, bool /*shown*/)
 {
     if (ignoreDockShown)
         return;
@@ -665,7 +664,7 @@ void MainWindowPrivate::activateFirstVisibleView()
         m_mainWindow->activateView(area->views().first());
 }
 
-void MainWindowPrivate::widgetResized(Qt::DockWidgetArea dockArea, int thickness)
+void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thickness*/)
 {
     //TODO: adymo: remove all thickness business
 }

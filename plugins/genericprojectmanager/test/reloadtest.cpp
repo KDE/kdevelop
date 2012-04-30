@@ -174,10 +174,10 @@ void _writeRandomStructure(QString path, int files)
     QString name = QString::number(qrand());
     if (qrand() < RAND_MAX / 5) {
         p.mkdir(name);
-        path += "/" + name;
+        path += '/' + name;
 //         kDebug() << "wrote path" << path;
     } else {
-        createFile(path+"/"+name);
+        createFile(path+'/'+name);
 //         kDebug() << "wrote file" << path+"/"+name;
     }
     files--;

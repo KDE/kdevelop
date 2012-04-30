@@ -140,8 +140,8 @@ public:
     virtual bool isReady() const=0;
 
 Q_SIGNALS:
-    virtual void fileAddedToSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
-    virtual void fileRemovedFromSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
+    void fileAddedToSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
+    void fileRemovedFromSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
 
 public Q_SLOTS:
     /**

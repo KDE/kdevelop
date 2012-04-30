@@ -43,7 +43,7 @@ using QTest::kWaitForSignal;
 
 QString sessionDir( ISession* s )
 {
-    return SessionController::sessionDirectory() + "/" + s->id().toString();
+    return SessionController::sessionDirectory() + '/' + s->id().toString();
 }
 
 void verifySessionDir( const QString& sessiondir, const QString& name, bool exists )

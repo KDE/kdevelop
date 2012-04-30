@@ -536,7 +536,7 @@ QByteArray formatComment( const QByteArray& comment ) {
 
     foreach(const QByteArray& line, lines) {
       if(!ret.isEmpty())
-        ret += "\n";
+        ret += '\n';
       ret += line;
     }
   }

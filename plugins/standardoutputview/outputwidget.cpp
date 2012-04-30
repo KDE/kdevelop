@@ -524,7 +524,7 @@ void OutputWidget::copySelection()
     QModelIndexList indexes = view->selectionModel()->selectedRows();
     QString content;
     Q_FOREACH( QModelIndex index, indexes) {
-      content += view->model()->data(index).toString() + "\n";
+      content += view->model()->data(index).toString() + '\n';
     }
     cb->setText(content);
 }

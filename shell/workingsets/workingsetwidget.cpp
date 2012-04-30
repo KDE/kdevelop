@@ -64,6 +64,7 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
     kDebug() << "re-creating widget" << m_area;
 
     Q_ASSERT(area == m_area);
+    Q_UNUSED(area);
 
     if (workingSet()) {
         disconnect(workingSet(), SIGNAL(setChangedSignificantly()),

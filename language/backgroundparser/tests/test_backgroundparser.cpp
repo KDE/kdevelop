@@ -125,7 +125,7 @@ JobPrototype JobPlan::jobForUrl(const KUrl& url)
     return JobPrototype();
 }
 
-void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& context)
+void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& /*context*/)
 {
     kDebug() << "update ready on " << url.toUrl();
 

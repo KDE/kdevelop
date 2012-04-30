@@ -33,7 +33,7 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1)
+: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1), m_updateCurrentFrameOnNextFetch(false)
 {
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
@@ -88,13 +88,20 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
         endInsertRows();
     }
 
-    m_currentFrame = 0;
-    foreach (const FrameItem &frame, frames) {
-        if (!frame.file.isEmpty() && frame.line != -1) {
-            session()->setCurrentPosition(frame.file, frame.line, QString());
-            m_currentFrame = frame.nr;
-            break;
+    //if first frame doesn't contain debug ifnormation (no line numbers) set
+    //currentPosition to the first frame with debug information
+    if (m_updateCurrentFrameOnNextFetch) {
+        m_currentFrame = 0;
+        foreach (const FrameItem &frame, frames) {
+            if (!frame.file.isEmpty() && frame.line != -1) {
+                if (session()->currentUrl() != frame.file || session()->currentLine() != frame.line) {
+                    session()->setCurrentPosition(frame.file, frame.line, QString());
+                }
+                m_currentFrame = frame.nr;
+                break;
+            }
         }
+        m_updateCurrentFrameOnNextFetch = false;
     }
 
     session()->raiseEvent(IDebugSession::thread_or_frame_changed);
@@ -159,7 +166,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 QString ret = ICore::self()->projectController()
                     ->prettyFileName(frame.file, IProjectController::FormatPlain);
                 if (frame.line != -1) {
-                    ret += ":" + QString::number(frame.line + 1);
+                    ret += ':' + QString::number(frame.line + 1);
                 }
                 return ret;
             } else if (role == Qt::DecorationRole) {
@@ -233,6 +240,8 @@ void FrameStackModel::setCurrentThread(int threadNumber)
         // then to thread 2 and then to thread 3, we'll request frames
         // for thread 3 again, even if the program was not run in between
         // and therefore frames could not have changed.
+        m_currentFrame = 0; //set before fetchFrames else --frame argument would be wrong
+        m_updateCurrentFrameOnNextFetch = true;
         fetchFrames(threadNumber, 0, 20);
     }
     if (threadNumber != m_currentThread) {
@@ -319,6 +328,7 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::PausedState) {
         setCurrentFrame(0);
+        m_updateCurrentFrameOnNextFetch = true;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         setThreads(QList<FrameStackModel::ThreadItem>());
     }

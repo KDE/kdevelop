@@ -100,7 +100,7 @@ static QStringList standardArguments()
         }else */
         if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
         {
-            ret << "-" + arg;
+            ret << '-' + arg;
             if(a+1 < argc)
                 ret << QString::fromLocal8Bit(argv[a+1]);
         }
@@ -297,7 +297,7 @@ public:
     QString ownSessionDirectory() const
     {
         Q_ASSERT(activeSession);
-        return SessionController::sessionDirectory() + "/" + activeSession->id().toString();
+        return SessionController::sessionDirectory() + '/' + activeSession->id().toString();
     }
     
     void clearRecoveryDirectory()
@@ -398,7 +398,7 @@ private slots:
                             urlFile.open(QIODevice::ReadOnly);
                             KUrl originalFile(QString::fromUtf8(urlFile.readAll()));
                             
-                            QFile f(recoverySubDir.path() + "/" + QString("/%1_text").arg(num));
+                            QFile f(recoverySubDir.path() + '/' + QString("/%1_text").arg(num));
                             f.open(QIODevice::ReadOnly);
                             QString text = QString::fromUtf8(f.readAll());
                             
@@ -499,7 +499,7 @@ private slots:
                             urlFile.write(document->url().pathOrUrl().toUtf8());
                             urlFile.close();
                             
-                            QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
+                            QString textFilePath = recoveryCurrentDir.path() + '/' + QString("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
@@ -681,7 +681,7 @@ QList< const KDevelop::Session* > SessionController::sessions() const
 Session* SessionController::createSession( const QString& name )
 {
     Session* s;
-    if(name.startsWith("{"))
+    if(name.startsWith('{'))
     {
         s = new Session( QUuid(name) );
     }else{
@@ -776,7 +776,7 @@ QList< SessionInfo > SessionController::availableSessionInfo()
         // TODO: Refactor the code here and in session.cpp so its shared
         SessionInfo si;
         si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
+        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + '/' + s +"/sessionrc" );
 
         QString desc = config->group( "" ).readEntry( "SessionName", "" );
         si.name = desc;
@@ -804,14 +804,14 @@ QString SessionController::sessionDirectory()
 
 QString SessionController::sessionDir()
 {
-    return sessionDirectory() + "/" + activeSession()->id().toString();
+    return sessionDirectory() + '/' + activeSession()->id().toString();
 }
 
 SessionController::LockSessionState SessionController::tryLockSession(QString id)
 {
     LockSessionState ret;
     
-    ret.lockFile = sessionDirectory() + "/" + id + "/lock";
+    ret.lockFile = sessionDirectory() + '/' + id + "/lock";
 
     if(!QFileInfo(ret.lockFile).exists())
     {
@@ -895,14 +895,12 @@ void SessionChooserDialog::updateState() {
         if(session == i18n("Create New Session"))
             continue;
         
-        bool running = false;
         QString state;
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
             state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
                          lockState.holderApp, lockState.holderHostname);
-            running = true;
         }
         
         if(m_model->item(row, 2))

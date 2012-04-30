@@ -39,7 +39,7 @@ template<> char* toString(const Marker& marker)
         result += "End, ";
     }
     result += QByteArray::number(marker.offset());
-    result += ")";
+    result += ')';
     return qstrdup(result.data());
 }
 

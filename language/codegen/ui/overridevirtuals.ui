@@ -20,10 +20,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Override virtual functions</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
+      <string>Select any methods you would like to override in the new class.</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="leftMargin">
@@ -91,9 +88,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="extraFunctionWidget" native="true">
-          <zorder>selectAllPushButton</zorder>
-         </widget>
+         <widget class="QWidget" name="extraFunctionWidget" native="true"/>
         </item>
        </layout>
       </item>

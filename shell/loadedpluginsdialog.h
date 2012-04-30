@@ -24,6 +24,7 @@
 
 class LoadedPluginsDialog : public KDialog
 {
+    Q_OBJECT
 public:
     LoadedPluginsDialog( QWidget* parent = 0 );
 };

@@ -428,6 +428,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
     if (!area->workingSet().isEmpty()) {
         WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
         Q_ASSERT(set->isConnected(area));
+        Q_UNUSED(set);
     }
 }
 

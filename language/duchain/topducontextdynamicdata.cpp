@@ -251,6 +251,7 @@ void TopDUContextDynamicData::loadData() const {
   QString fileName = baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
   QFile* file = new QFile(fileName);
   bool open = file->open(QIODevice::ReadOnly);
+  Q_UNUSED(open);
   Q_ASSERT(open);
   Q_ASSERT(file->size());
 
@@ -376,6 +377,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
   m_onDisk = false;
 
   bool successfullyRemoved = QFile::remove(filePath());
+  Q_UNUSED(successfullyRemoved);
   Q_ASSERT(successfullyRemoved);
   kDebug() << "deletion ready";
 }

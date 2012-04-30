@@ -19,7 +19,6 @@
 #ifndef DUCHAIN_ITEM_QUICKOPEN
 #define DUCHAIN_ITEM_QUICKOPEN
 
-#include <KUrl>
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/duchainpointer.h>
@@ -30,8 +29,11 @@ namespace KDevelop {
   class IQuickOpen;
 }
 
-struct DUChainItem {
-  DUChainItem() : m_noHtmlDestription(false) {
+struct DUChainItem
+{
+  DUChainItem()
+  : m_noHtmlDestription(false)
+  {
   }
   KDevelop::IndexedDeclaration m_item;
   QString m_text;
@@ -39,10 +41,13 @@ struct DUChainItem {
   bool m_noHtmlDestription;
 };
 
-class DUChainItemData : public KDevelop::QuickOpenDataBase {
+Q_DECLARE_TYPEINFO(DUChainItem, Q_MOVABLE_TYPE);
+
+class DUChainItemData : public KDevelop::QuickOpenDataBase
+{
   public:
     DUChainItemData( const DUChainItem& item, bool openDefinition = false );
-    
+
     virtual QString text() const;
     virtual QString htmlDescription() const;
     virtual QList<QVariant> highlighting() const;
@@ -64,28 +69,31 @@ private:
  * The declarations need to be set using setItems(..) in a re-implemented reset() function.
  * */
 
-class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<DUChainItem> {
-  public:
+class DUChainItemDataProvider : public KDevelop::QuickOpenDataProviderBase,
+                                public KDevelop::Filter<DUChainItem>
+{
+public:
     typedef KDevelop::Filter<DUChainItem> Base;
 
     /// When openDefinitions is true, the definitions will be opened if available on execute().
     DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
+    virtual uint unfilteredItemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
 
     virtual void reset();
-  
-  protected:
 
+protected:
     //Override to create own DUChainItemData derived classes
     DUChainItemData* createData( const DUChainItem& item ) const;
-      
+
     //Reimplemented from Base<..>
     virtual QString itemText( const DUChainItem& data ) const;
 
     KDevelop::IQuickOpen* m_quickopen;
-  private:
+
+private:
     bool m_openDefinitions;
 };
 

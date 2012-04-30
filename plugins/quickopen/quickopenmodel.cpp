@@ -230,6 +230,16 @@ int QuickOpenModel::rowCount( const QModelIndex& i ) const
   return count;
 }
 
+int QuickOpenModel::unfilteredRowCount() const
+{
+  int count = 0;
+  foreach( const ProviderEntry& provider, m_providers )
+    if( provider.enabled )
+      count += provider.provider->unfilteredItemCount();
+
+  return count;
+}
+
 int QuickOpenModel::columnCount() const
 {
   return 2;
@@ -386,18 +396,6 @@ QSet<IndexedString> QuickOpenModel::fileSet() const {
     }
   }
   return merged;
-}
-
-int QuickOpenModel::getUpdateTimeoutHint()
-{
-    // small projects can update immediately after a keypress.
-    // if many items are in the list, a timeout must be applied for the UI
-    // not to become unresponsive.
-    const int currentItemCount = rowCount(QModelIndex());
-    if ( currentItemCount < 10000 ) {
-        return 0;
-    }
-    return 150;
 }
 
 QTreeView* QuickOpenModel::treeView() const {

@@ -70,6 +70,11 @@ uint CustomItemDataProvider::itemCount() const {
   return CustomItemDataProviderBase::filteredItems().count();
 }
 
+uint CustomItemDataProvider::unfilteredItemCount() const
+{
+  return CustomItemDataProviderBase::items().count();
+}
+
 QList<KDevelop::QuickOpenDataPointer> CustomItemDataProvider::data( uint start, uint end ) const {
   if( end > (uint)CustomItemDataProviderBase::filteredItems().count() )
     end = CustomItemDataProviderBase::filteredItems().count();

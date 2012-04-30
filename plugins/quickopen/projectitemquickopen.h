@@ -19,19 +19,30 @@
 #define PROJECT_ITEM_QUICKOPEN
 
 #include "duchainitemquickopen.h"
+
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/identifier.h>
 
-struct CodeModelViewItem {
-    CodeModelViewItem() {
+struct CodeModelViewItem
+{
+    CodeModelViewItem()
+    {
     }
-    CodeModelViewItem(KDevelop::IndexedString file, KDevelop::QualifiedIdentifier id) : m_file(file), m_id(id) {
+    CodeModelViewItem(const KDevelop::IndexedString& file, const KDevelop::QualifiedIdentifier& id)
+    : m_file(file)
+    , m_id(id)
+    {
     }
     KDevelop::IndexedString m_file;
     KDevelop::QualifiedIdentifier m_id;
 };
 
-class ProjectItemDataProvider : public KDevelop::QuickOpenDataProviderBase {
+Q_DECLARE_TYPEINFO(CodeModelViewItem, Q_MOVABLE_TYPE);
+
+typedef QMap<uint, QList<KDevelop::QuickOpenDataPointer> > AddedItems;
+
+class ProjectItemDataProvider : public KDevelop::QuickOpenDataProviderBase
+{
 public:
   enum ItemTypes {
     NoItems = 0,
@@ -39,7 +50,7 @@ public:
     Functions = 2,
     AllItemTypes = Classes + Functions
   };
-  
+
   ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
 
   virtual void enableData( const QStringList& items, const QStringList& scopes );
@@ -47,14 +58,17 @@ public:
   virtual void setFilterText( const QString& text );
 
   virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
-  
+
   virtual void reset();
 
   virtual uint itemCount() const;
+  virtual uint unfilteredItemCount() const;
 
   static QStringList supportedItemTypes();
+
 private:
   KDevelop::QuickOpenDataPointer data( uint pos ) const;
+
   QSet<KDevelop::IndexedString> m_usingFiles;
   ItemTypes m_itemTypes;
   KDevelop::IQuickOpen* m_quickopen;
@@ -64,7 +78,7 @@ private:
   //Maps positions to the additional items behind those positions
   //Here additional inserted items are stored, that are not represented in m_filteredItems.
   //This is needed at least to also show overloaded function declarations
-  mutable QMap<uint, QList<KDevelop::QuickOpenDataPointer> > m_addedItems; 
+  mutable AddedItems m_addedItems;
 };
 
 #endif

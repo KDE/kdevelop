@@ -108,7 +108,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
         picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
     }
     ui->preview->setPixmap( QPixmap( picPath ) );
-    ui->description->setText( current.data( Qt::UserRole+4 ).toString()+"\n"+current.data( Qt::UserRole+3 ).toString() );
+    ui->description->setText( current.data( Qt::UserRole+4 ).toString()+'\n'+current.data( Qt::UserRole+3 ).toString() );
     validateData();
     
     ui->propertiesBox->setEnabled(true);

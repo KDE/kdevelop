@@ -36,9 +36,8 @@
 
 using namespace KDevelop;
 
-class KDevelop::OverridesPagePrivate
+struct KDevelop::OverridesPagePrivate
 {
-public:
     OverridesPagePrivate(ClassGenerator* g)
         : generator(g), overrides(0)
     {
@@ -50,18 +49,17 @@ public:
     QList<DeclarationPointer> chosenOverrides;
 };
 
-OverridesPage::OverridesPage(ClassGenerator* generator, QWizard* parent)
-    : QWizardPage(parent)
+OverridesPage::OverridesPage(ClassGenerator* generator, QWidget* parent)
+    : QWidget(parent)
     , d(new OverridesPagePrivate(generator))
 {
-    setTitle(i18n("Override Methods"));
-    setSubTitle( i18n("Select any methods you would like to override in the new class.") );
-
     d->overrides = new Ui::OverridesDialog;
     d->overrides->setupUi(this);
 
     connect(d->overrides->selectAllPushButton, SIGNAL(pressed()), this, SLOT(selectAll()));
     connect(d->overrides->deselectAllPushButton, SIGNAL(pressed()), this, SLOT(deselectAll()));
+
+    updateOverrideTree();
 }
 
 OverridesPage::~OverridesPage()
@@ -70,68 +68,52 @@ OverridesPage::~OverridesPage()
 }
 
 
-void OverridesPage::initializePage()
+void OverridesPage::updateOverrideTree()
 {
-    QWizardPage::initializePage();
-
     d->overriddenFunctions.clear();
     overrideTree()->clear();
     d->chosenOverrides.clear();
     d->declarationMap.clear();
-    
-    ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
-    generator->clearDeclarations();
 
-    
-    foreach (const DeclarationPointer override, generator->declarations()) {
+    d->generator->clearDeclarations();
+
+    foreach (const DeclarationPointer override, d->generator->declarations()) {
         d->chosenOverrides.append(override);
     }
 
     //Add All the virtual overridable classes to the treewidget
-    populateOverrideTree(dynamic_cast<CreateClassWizard *>(wizard())->generator()->inheritanceList());
+    populateOverrideTree(d->generator->inheritanceList());
 
     overrideTree()->expandAll();
     overrideTree()->header()->resizeSections(QHeaderView::ResizeToContents);
 }
 
-bool OverridesPage::validatePage()
+void OverridesPage::validateOverrideTree()
 {
-    ClassGenerator * gen = dynamic_cast<CreateClassWizard *>(wizard())->generator();
-    gen->clearDeclarations();
+    generator()->clearDeclarations();
 
     for (int i = 0; i < d->overrides->overridesTree->topLevelItemCount(); ++i) {
         QTreeWidgetItem* item = d->overrides->overridesTree->topLevelItem(i);
         for (int j = 0; j < item->childCount(); ++j) {
             QTreeWidgetItem* child = item->child(j);
             if (child->checkState(0) == Qt::Checked)
-                gen->addDeclaration(d->declarationMap[child]);//TODO add overrides to the generator
+                generator()->addDeclaration(d->declarationMap[child]);//TODO add overrides to the generator
         }
     }
-
-    return true;
 }
 
-void OverridesPage::cleanupPage()
-{
-    kDebug();
-
-    validatePage();
-}
-
-void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseList)
+void OverridesPage::populateOverrideTree(const QList<DeclarationPointer>& baseList)
 {
     KDevelop::DUChainReadLocker lock(DUChain::lock());
-    
-    foreach(const DeclarationPointer baseClass, baseList)
-    {
+
+    foreach(const DeclarationPointer& baseClass, baseList) {
         DUContext* context = baseClass->internalContext();
 
         QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
         classItem->setIcon(0, DUChainUtils::iconForDeclaration(baseClass.data()));
 
         //For this internal context get all the function declarations inside the class
-        foreach (Declaration * childDeclaration, context->localDeclarations())
-        {
+        foreach (Declaration * childDeclaration, context->localDeclarations()) {
             if (AbstractFunctionDeclaration * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) {
                 if (func->isVirtual()) {
                     // Its a virtual function, add it to the list
@@ -148,7 +130,7 @@ void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseL
     }
 }
 
-void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration)
+void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration)
 {
     if (d->overriddenFunctions.contains(childDeclaration->identifier())) {
         foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
@@ -188,7 +170,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, Declaration
         overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
         overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
     }
-    
+
     ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if(classFunction && classFunction->isAbstract()) {
         overrideItem->setIcon(0, KIcon("flag-red"));
@@ -197,7 +179,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, Declaration
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);
     }
-    
+
     d->declarationMap[overrideItem] = childDeclaration;
 }
 

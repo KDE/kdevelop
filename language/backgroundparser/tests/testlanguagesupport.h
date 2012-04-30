@@ -31,7 +31,7 @@ using namespace KDevelop;
 class TestLanguageSupport : public QObject, public KDevelop::ILanguageSupport
 {
     Q_OBJECT
-
+    Q_INTERFACES(KDevelop::ILanguageSupport)
 public:
     virtual KDevelop::ParseJob* createParseJob(const KUrl& url);
     virtual QString name() const;

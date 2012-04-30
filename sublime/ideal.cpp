@@ -568,7 +568,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     QString dockObjectName = view->document()->title();
     // support different configuration for same docks opened in different areas
     if (m_mainWindow->area())
-        dockObjectName += "_" + m_mainWindow->area()->objectName();
+        dockObjectName += '_' + m_mainWindow->area()->objectName();
 
     dock->setObjectName(dockObjectName);
 

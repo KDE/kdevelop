@@ -56,7 +56,7 @@ QString repairDiff(QString diff) {
             kDebug() << "found header for" << fileName;
             lines[a] = QString();
             if(lines[a+1].startsWith("======")) {
-                headers[fileName] += "\n" + lines[a+1];
+                headers[fileName] += '\n' + lines[a+1];
             lines[a+1] = QString();
             }
         }
@@ -72,7 +72,7 @@ QString repairDiff(QString diff) {
                 kDebug() << "checking for" << file;
                 if(headers.contains(file)) {
                     kDebug() << "adding header for" << file << ":" << headers[file];
-                    lines[a] = headers[file] + "\n" + lines[a];
+                    lines[a] = headers[file] + '\n' + lines[a];
                 }
             }
         }

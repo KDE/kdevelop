@@ -249,7 +249,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			os <<  modeline;
 			foreach(QString s, optionList) {
 				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
-					if(s.startsWith(" "))
+					if(s.startsWith(' '))
 						s=s.mid(1);
 					os << s << ";";
 					kDebug() << "Found unknown option: " << s << endl;
@@ -347,7 +347,7 @@ void SourceFormatterController::beautifyLine()
 	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
-	const QString post = "\n" + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+	const QString post = '\n' + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 	
 	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
 	

@@ -26,12 +26,11 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <interfaces/ipatchsource.h>
+#include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>
 #include <KDebug>
 #include <QFile>
-#include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -62,9 +61,7 @@ QByteArray urlToData(const KUrl& url)
         ret = f.readAll();
         
     } else {
-#if defined(__GNUC__)
-#warning TODO: add downloading the data
-#endif
+//TODO: add downloading the data
     }
     return ret;
 }

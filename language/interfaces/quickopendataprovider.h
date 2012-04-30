@@ -165,6 +165,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
     virtual uint itemCount() const = 0;
 
     /**
+     * Returns the count of *unfiltered* items this provider currently represents
+     */
+    virtual uint unfilteredItemCount() const = 0;
+
+    /**
      * Returns the data-items for a given range.
      * Generally, the items must addressed alphabetically,
      * they will be displayed in the same order in the

@@ -47,7 +47,7 @@ QString htmlColorElement(int element) {
 }
 
 QString htmlColor(QColor color) {
-    return "#" + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
+    return '#' + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
 }
 
 WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow)

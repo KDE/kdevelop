@@ -71,7 +71,7 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
         qDebug() << "found buddies: " << url1 << url2;
         return true;
     }
-    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2)
+    virtual bool buddyOrder(const KUrl& url1, const KUrl& /*url2*/)
     {
         const QStringList name1 = url1.fileName().split('.');
         return name1.at(1) == "l";

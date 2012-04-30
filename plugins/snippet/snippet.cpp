@@ -86,7 +86,7 @@ KAction* Snippet::action()
         // action needs to be added to a widget before it can work...
         KDevelop::ICore::self()->uiController()->activeMainWindow()->addAction(m_action);
     }
-    m_action->setText(i18n("insert snippet %1").arg(text()));
+    m_action->setText(i18n("insert snippet %1", text()));
     return m_action;
 }
 

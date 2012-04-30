@@ -153,7 +153,7 @@ void ProjectControllerTest::init()
     m_projFileUrl = writeProjectConfig(m_projName);
     m_projCtrl = m_core->projectControllerInternal();
     m_tmpConfigs << m_projFileUrl;
-    m_projFolder = KUrl(m_scratchDir.absolutePath() + "/");
+    m_projFolder = KUrl(m_scratchDir.absolutePath() + '/');
 }
 
 void ProjectControllerTest::cleanup()
@@ -189,7 +189,7 @@ void ProjectControllerTest::openProject()
     assertProjectOpened(m_projName, proj);QVERIFY(proj);
     assertSpyCaughtProject(spy, proj);
     QCOMPARE(proj->projectFileUrl(), m_projFileUrl);
-    QCOMPARE(proj->folder(), KUrl(m_scratchDir.absolutePath()+"/"));
+    QCOMPARE(proj->folder(), KUrl(m_scratchDir.absolutePath()+'/'));
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
 }
 
@@ -436,7 +436,7 @@ void ProjectControllerTest::fileInSubdirectory()
 
 KUrl ProjectControllerTest::writeProjectConfig(const QString& name)
 {
-    KUrl configUrl = KUrl(m_scratchDir.absolutePath() + "/" + name + ".kdev4");
+    KUrl configUrl = KUrl(m_scratchDir.absolutePath() + '/' + name + ".kdev4");
     QFile f(configUrl.pathOrUrl());
     f.open(QIODevice::WriteOnly);
     QTextStream str(&f);

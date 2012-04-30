@@ -86,6 +86,7 @@ QToolBar* ToolViewToolBarTest::fetchToolBarFor(Sublime::View* view)
 {
     QWidget* toolWidget = view->widget();
     const char* loc = "fetchToolBarFor";
+    Q_UNUSED(loc);
     Q_ASSERT_X(toolWidget, loc, "Tool refuses to create widget (null).");
     Q_ASSERT(toolWidget->parent());
     QMainWindow* toolWin = dynamic_cast<QMainWindow*>(toolWidget->parent());
@@ -93,6 +94,7 @@ QToolBar* ToolViewToolBarTest::fetchToolBarFor(Sublime::View* view)
     QList<QToolBar*> toolBars = toolWin->findChildren<QToolBar*>();
     int barCount = toolBars.count();
     char* failMsg = qstrdup(QString("Expected to find a toolbar but found %1").arg(barCount).toLatin1().data());
+    Q_UNUSED(failMsg);
     Q_ASSERT_X(barCount == 1, loc, failMsg);
     return toolBars.at(0);
 }

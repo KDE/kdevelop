@@ -9,6 +9,7 @@ set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 1000)
 set(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "/plugins/subversion/kdevsvncpp/"
+  "/tests/modeltest.cpp"
   )
 
 # Errors that will be ignored

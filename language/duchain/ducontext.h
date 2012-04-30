@@ -120,8 +120,9 @@ public:
     NoFiltering = 32              /**< Should be set when no filtering at all is wished, not even filtering that is natural for the underlying language(For example in C++, constructors are filtered out be default) */,
     OnlyFunctions = 64            /**< When this is given, only function-declarations are returned. In case of C++, this also means that constructors can be retrieved, while normally they are filtered out. */,
     NoImportsCheck = 128          /**< With this parameter, a global search will return all matching items, from all contexts, not only from imported ones. */,
-    NoSelfLookUp = 256             /**< With this parameter, the special-treatment during search that allows finding the context-class by its name is disabled. */,
-    LastSearchFlag = 512
+    NoSelfLookUp = 256            /**< With this parameter, the special-treatment during search that allows finding the context-class by its name is disabled. */,
+    DontResolveAliases = 512      /**< Disables the resolution of alias declarations in the returned list*/,
+    LastSearchFlag = 1024
   };
 
   Q_DECLARE_FLAGS(SearchFlags, SearchFlag)

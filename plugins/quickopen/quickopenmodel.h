@@ -62,6 +62,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     QModelIndex index( int, int, const QModelIndex& parent ) const;
     QModelIndex parent( const QModelIndex& ) const;
     int rowCount( const QModelIndex& ) const;
+    int unfilteredRowCount() const;
     int columnCount() const;
     int columnCount( const QModelIndex& ) const;
     QVariant data( const QModelIndex&, int ) const;
@@ -86,9 +87,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
 
     ///This value will be added to the height of all created expanding-widgets
     void setExpandingWidgetHeightIncrease(int pixels);
-    
-    ///The timeout before an update of the list should be performed on user input
-    int getUpdateTimeoutHint();
+
   public slots:
     void textChanged( const QString& str );
   private slots:
