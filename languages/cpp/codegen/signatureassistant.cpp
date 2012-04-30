@@ -205,7 +205,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
 
   DUChainReadLocker lock;
 
-  Declaration *functionDecl = getDeclarationAtCursor(SimpleCursor(m_view->cursorPosition()), m_document);
+  Declaration *functionDecl = getDeclarationAtCursor(SimpleCursor(m_view.data()->cursorPosition()), m_document);
   if (!functionDecl || functionDecl->identifier() != m_declarationName)
     return;
   DUContext *functionCtxt = DUChainUtils::getFunctionContext(functionDecl);
