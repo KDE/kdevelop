@@ -46,17 +46,10 @@ void CTestFindJob::start()
 void CTestFindJob::findTestCases()
 {
     kDebug();
-    // Test suite names must be unique within a project
-    // If we have a clash, it's probably an update and the old one should be removed.
-    KDevelop::ITestController* tc = KDevelop::ICore::self()->testController();
-    if (KDevelop::ITestSuite* existingSuite = tc->findTestSuite(m_suite->project(), m_suite->name()))
-    {
-        tc->removeTestSuite(existingSuite);
-    }
-
+    
     if (!m_suite->arguments().isEmpty())
     {
-        tc->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
         emitResult();
         return;
     }
@@ -76,7 +69,7 @@ void CTestFindJob::findTestCases()
     }
     else
     {
-        tc->addTestSuite(m_suite);
+        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
         emitResult();
         return;
     }
