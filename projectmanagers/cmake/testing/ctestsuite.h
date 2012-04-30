@@ -43,13 +43,11 @@ public:
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
-    virtual KDevelop::TestResult result() const;
     
     virtual KDevelop::IndexedDeclaration declaration() const;
     virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
     
     QStringList arguments() const;
-    void setResult(const KDevelop::TestResult& result);
     void setTestCases(QStringList cases);
     QStringList sourceFiles() const;
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
@@ -64,7 +62,6 @@ private:
     
     QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
     KDevelop::IndexedDeclaration m_suiteDeclaration;
-    KDevelop::TestResult m_result;
 };
 
 #endif // CTESTSUITE_H

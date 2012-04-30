@@ -145,16 +145,6 @@ QStringList CTestSuite::arguments() const
     return m_args;
 }
 
-TestResult CTestSuite::result() const
-{
-    return m_result;
-}
-
-void CTestSuite::setResult(const TestResult& result)
-{
-    m_result = result;
-}
-
 IndexedDeclaration CTestSuite::declaration() const
 {
     return m_suiteDeclaration;

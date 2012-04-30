@@ -96,12 +96,9 @@ void CTestRunJob::processFinished(int exitCode)
 
     TestResult result;
     result.testCaseResults = m_caseResults;
-    m_suite->setResult(result);
+    result.suiteResult = exitCode ? TestResult::Failed : TestResult::Passed;
 
-    ITestController* tc = ICore::self()->testController();
-    tc->notifyTestRunFinished(m_suite);
-
-    kDebug() << line;
+    ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
     emitResult();
 }
 

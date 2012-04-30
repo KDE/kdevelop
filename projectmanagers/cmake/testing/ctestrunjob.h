@@ -22,6 +22,7 @@
 
 #include <outputview/outputjob.h>
 #include <interfaces/itestsuite.h>
+#include <interfaces/itestcontroller.h>
 
 class CTestSuite;
 class KProcess;
@@ -52,7 +53,7 @@ private:
     QStringList m_cases;
     KProcess* m_process;
     KDevelop::ProcessLineMaker* m_lineMaker;
-    QMap<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
+    QHash<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
 };
 
 #endif // CTESTRUNJOB_H
