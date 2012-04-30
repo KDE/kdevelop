@@ -1289,7 +1289,7 @@ void DeclarationBuilder::visitAliasDeclaration(AliasDeclarationAST* node)
 
   if( compilingContexts() ) {
     PushValue<bool> setTypeDef(m_inTypedef, true);
-    Declaration* decl = openDeclaration<Declaration>(node->name, node->name);
+    openDeclaration<Declaration>(node->name, node->name);
     closeDeclaration();
   }
 }
