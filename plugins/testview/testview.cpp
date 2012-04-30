@@ -117,11 +117,6 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*, KDevelop::TestResult)),
              SLOT(updateTestSuite(KDevelop::ITestSuite*, KDevelop::TestResult)));
 
-    foreach (IProject* project, pc->projects())
-    {
-        addProject(project);
-    }
-
     foreach (ITestSuite* suite, tc->testSuites())
     {
         addTestSuite(suite);
@@ -174,6 +169,9 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
         case TestResult::Failed:
             return KIcon("edit-delete");
 
+        case TestResult::Error:
+            return KIcon("dialog-cancel");
+            
         default:
             return KIcon();
     }
