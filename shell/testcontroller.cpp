@@ -72,6 +72,11 @@ void TestController::removeTestSuite(KDevelop::ITestSuite* suite)
 
 void TestController::addTestSuite(KDevelop::ITestSuite* suite)
 {
+    if (ITestSuite* existingSuite = findTestSuite(suite->project(), suite->name()))
+    {
+        removeTestSuite(existingSuite);
+        delete existingSuite;
+    }
     d->suites.append(suite);
     emit testSuiteAdded(suite);
 }

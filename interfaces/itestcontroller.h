@@ -43,6 +43,8 @@ public:
      * Add a new test suite.
      *
      * No ownership is taken, the caller stays responsible for the suite.
+     * 
+     * If a suite with the same project and same name exists, the old one will be removed and deleted. 
      */
     virtual void addTestSuite(ITestSuite* suite) = 0;
     /**
