@@ -172,6 +172,34 @@ public:
     IToolViewFactory *factory;
 };
 
+
+class NewToolViewListWidget: public QListWidget {
+    Q_OBJECT
+
+public:
+    NewToolViewListWidget(MainWindow *mw, QWidget* parent = 0)
+        :QListWidget(parent), m_mw(mw)
+    {
+        connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNewToolViewByDoubleClick(QModelIndex)));
+    }
+
+Q_SIGNALS:
+    void addNewToolView(MainWindow *mw, QListWidgetItem *item);
+
+private Q_SLOTS:
+    void addNewToolViewByDoubleClick(QModelIndex index)
+    {
+        QListWidgetItem *item = itemFromIndex(index);
+        // Disable item so that the toolview can not be added again.
+        item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        emit addNewToolView(m_mw, item);
+    }
+
+private:
+    MainWindow *m_mw;
+};
+
+
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
@@ -356,36 +384,50 @@ void UiController::cleanup()
     saveAllAreas(KGlobal::config());
 }
 
-void UiController::addNewToolView(MainWindow *mw)
+void UiController::selectNewToolViewToAdd(MainWindow *mw)
 {
     if (!mw || !mw->area())
         return;
     KDialog *dia = new KDialog(mw);
     dia->setCaption(i18n("Select Tool View to Add"));
     dia->setButtons(KDialog::Ok | KDialog::Cancel);
-    QListWidget *list = new QListWidget(dia);
+    NewToolViewListWidget *list = new NewToolViewListWidget(mw, dia);
 
+    list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     list->setSortingEnabled(true);
     for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
         it != d->factoryDocuments.constEnd(); ++it)
     {
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
         item->factory = it.key();
+        if (toolViewPresent(it.value(), mw->area())) {
+            // Disable item if the toolview is already present.
+            item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        }
         list->addItem(item);
     }
 
     list->setFocus();
+    connect(list, SIGNAL(addNewToolView(MainWindow*,QListWidgetItem*)), this, SLOT(addNewToolView(MainWindow*,QListWidgetItem*)));
     dia->setMainWidget(list);
-    if (dia->exec() == QDialog::Accepted && list->currentItem())
+    if (dia->exec() == QDialog::Accepted)
     {
-        ViewSelectorItem *current = static_cast<ViewSelectorItem*>(list->currentItem());
-        Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
-        Sublime::View *view = doc->createView();
-        mw->area()->addToolView(view,
-            Sublime::dockAreaToPosition(current->factory->defaultPosition()));
-        current->factory->viewCreated(view);
+        foreach (QListWidgetItem* item, list->selectedItems())
+        {
+            addNewToolView(mw, item);
+        }
     }
     delete dia;
+}
+
+void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
+{
+    ViewSelectorItem *current = static_cast<ViewSelectorItem*>(item);
+    Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
+    Sublime::View *view = doc->createView();
+    mw->area()->addToolView(view,
+        Sublime::dockAreaToPosition(current->factory->defaultPosition()));
+    current->factory->viewCreated(view);
 }
 
 void UiController::showSettingsDialog()
@@ -553,6 +595,15 @@ void UiController::addToolViewToDockArea(const QString& /*name*/,
     activeArea()->moveToolView(view, Sublime::dockAreaToPosition(area));
 }
 
+bool UiController::toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area)
+{
+    foreach (Sublime::View *view, doc->views()) {
+        if( area->toolViews().contains( view ) )
+            return true;
+    }
+    return false;
+}
+
 void UiController::addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area)
@@ -652,7 +703,5 @@ void UiController::assistantActionsChanged() {
 }
 
 
-
-
-
 #include "uicontroller.moc"
+#include "moc_uicontroller.cpp"

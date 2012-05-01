@@ -459,6 +459,9 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         {
             QAction* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
             action->setIcon(it.value()->statusIcon());
+            if (Core::self()->uiControllerInternal()->toolViewPresent(it.value(), m_mainWindow->area())) {
+                action->setDisabled(true);
+            }
             actionToFactory.insert(action, it.key());
             actionMap[action->text()] = action;
         }
