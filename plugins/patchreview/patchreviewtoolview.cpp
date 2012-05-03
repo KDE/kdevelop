@@ -149,6 +149,21 @@ void PatchReviewToolView::fillEditFromPatch() {
         kDebug() << "got custom widget";
     }
 
+    bool showTests = false;
+    foreach (const KUrl& url, m_plugin->patch()->additionalSelectableFiles().keys()) {
+        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(url)) {
+            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
+                showTests = true;
+                break;
+            }
+        }
+    }
+
+    kDebug() << "Show tests:" << showTests;
+
+    m_editPatch.testsButton->setVisible(showTests);
+    m_editPatch.testProgressBar->hide();
+
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
     m_editPatch.localPatchOptions->setVisible( lpatch );
     if( !lpatch )
@@ -163,19 +178,6 @@ void PatchReviewToolView::fillEditFromPatch() {
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
     else
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
-
-    bool showTests = false;
-    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
-    if (!urls.isEmpty()) {
-        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first())) {
-            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
-                showTests = true;
-            }
-        }
-    }
-
-    m_editPatch.testsButton->setVisible(showTests);
-    m_editPatch.testProgressBar->hide();
 }
 
 void PatchReviewToolView::patchSelectionChanged( int selection ) {
@@ -399,15 +401,18 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
 
 void PatchReviewToolView::runTests()
 {
-    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
-    if (urls.isEmpty()) {
-        kDebug() << "No urls";
-        return;
+    IProject* project = 0;
+    foreach (const KUrl& url, m_plugin->patch()->additionalSelectableFiles().keys()) {
+        if (IProject* p = ICore::self()->projectController()->findProjectForUrl(url)) {
+            if (!ICore::self()->testController()->testSuitesForProject(p).isEmpty()) {
+                project = p;
+                break;
+            }
+        }
     }
 
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first());
     if (!project) {
-        kDebug() << "No project for" << urls;
+        kDebug() << "No project for";
         return;
     }
 
@@ -447,11 +452,14 @@ void PatchReviewToolView::projectTestFinished(KJob* job)
     QString format;
     if (result.passed > 0 && result.failed == 0 && result.error == 0)
     {
-        format = i18n("Congratulations, all tests passed");
+        format = i18np("Test passed", "All %1 tests passed", result.passed);
     }
     else
     {
         format = i18n("Test results: %1 passed, %3 failed, %3 errors", result.passed, result.failed, result.error);
     }
     m_editPatch.testProgressBar->setFormat(format);
+
+    // Needed because some test jobs may raise their own output views
+    ICore::self()->uiController()->raiseToolView(this);
 }
