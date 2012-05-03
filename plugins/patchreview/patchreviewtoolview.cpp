@@ -28,8 +28,10 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
 #include <util/executecompositejob.h>
+#include <util/projecttestjob.h>
 #include <KLineEdit>
 #include <QMenu>
+#include <QProgressBar>
 
 using namespace KDevelop;
 
@@ -194,12 +196,23 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
 
-    if (testSuites().isEmpty()) {
-      m_editPatch.testsButton->hide();
-    } else {
-      m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
-      connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
+    bool showTests = false;
+    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
+    if (!urls.isEmpty()) {
+        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first())) {
+            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
+                showTests = true;
+            }
+        }
     }
+
+    if (showTests) {
+        m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
+        connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
+    } else {
+        m_editPatch.testsButton->hide();
+    }
+    m_editPatch.testProgressBar->hide();
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -388,6 +401,26 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
 
 void PatchReviewToolView::runTests()
 {
+    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
+    if (urls.isEmpty()) {
+        kDebug() << "No urls";
+        return;
+    }
+
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first());
+    if (!project) {
+        kDebug() << "No project for" << urls;
+        return;
+    }
+
+    m_editPatch.testProgressBar->show();
+    m_editPatch.testProgressBar->setFormat(i18n("Testing: %1%%"));
+
+    ProjectTestJob* job = new ProjectTestJob(project, this);
+    connect (job, SIGNAL(finished(KJob*)), SLOT(projectTestFinished(KJob*)));
+    connect (job, SIGNAL(percent(KJob*,ulong)), SLOT(testRunPercent(KJob*,ulong)));
+    ICore::self()->runController()->registerJob(job);
+
     QList<KJob*> jobs;
     foreach (ITestSuite* suite, testSuites()) {
         KJob* job = suite->launchAllCases();
@@ -398,21 +431,29 @@ void PatchReviewToolView::runTests()
     ICore::self()->runController()->registerJob(new ExecuteCompositeJob(this, jobs));
 }
 
-QList< ITestSuite* > PatchReviewToolView::testSuites()
+void PatchReviewToolView::testRunPercent(KJob* job, ulong percent)
 {
-    QList<ITestSuite*> ret;
-    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
-    if (urls.isEmpty()) {
-        kDebug() << "No urls";
-        return ret;
+    Q_UNUSED(job);
+    m_editPatch.testProgressBar->setValue(percent);
+}
+
+void PatchReviewToolView::projectTestFinished(KJob* job)
+{
+    ProjectTestJob* testJob = qobject_cast<ProjectTestJob*>(job);
+    if (!testJob) {
+        return;
     }
 
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first());
-    if (!project) {
-        kDebug() << "No project for" << urls;
-        return ret;
-    }
+    ProjectTestResult result = testJob->testResult();
 
-    kDebug() << "Everything ok, returning test suites";
-    return ICore::self()->testController()->testSuitesForProject(project);
+    QString format;
+    if (result.passed > 0 && result.failed == 0 && result.error == 0)
+    {
+        format = i18n("Congratulations, all tests passed");
+    }
+    else
+    {
+        format = i18n("Test results: %1 passed, %3 failed, %3 errors", result.passed, result.failed, result.error);
+    }
+    m_editPatch.testProgressBar->setFormat(format);
 }

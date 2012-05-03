@@ -19,9 +19,9 @@
 #include <QTime>
 #include <ui_patchreview.h>
 
+class KJob;
 namespace KDevelop {
 class IDocument;
-class ITestSuite;
 }
 
 class LocalPatchSource;
@@ -65,8 +65,6 @@ private:
     /// Retrieve the patch from plugin and perform all necessary casts
     LocalPatchSource* GetLocalPatchSource();
 
-    QList<KDevelop::ITestSuite*> testSuites();
-
     Ui_EditPatch m_editPatch;
 
     QTime m_lastDataTime;
@@ -85,6 +83,8 @@ public slots:
     void documentActivated( KDevelop::IDocument* );
     void patchSelectionChanged( int );
     void customContextMenuRequested(const QPoint& p);
+    void projectTestFinished(KJob* job);
+    void testRunPercent(KJob* job, ulong percent);
 };
 
 #endif // PATCHREVIEWTOOLVIEW_H
