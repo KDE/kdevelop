@@ -414,7 +414,7 @@ void PatchReviewToolView::runTests()
     }
 
     m_editPatch.testProgressBar->show();
-    m_editPatch.testProgressBar->setFormat(i18n("Testing: %1%%"));
+    m_editPatch.testProgressBar->setFormat(i18n("Running tests: %p%"));
 
     ProjectTestJob* job = new ProjectTestJob(project, this);
     connect (job, SIGNAL(finished(KJob*)), SLOT(projectTestFinished(KJob*)));
