@@ -163,6 +163,19 @@ void PatchReviewToolView::fillEditFromPatch() {
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
     else
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
+
+    bool showTests = false;
+    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
+    if (!urls.isEmpty()) {
+        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first())) {
+            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
+                showTests = true;
+            }
+        }
+    }
+
+    m_editPatch.testsButton->setVisible(showTests);
+    m_editPatch.testProgressBar->hide();
 }
 
 void PatchReviewToolView::patchSelectionChanged( int selection ) {
@@ -195,24 +208,6 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
-
-    bool showTests = false;
-    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
-    if (!urls.isEmpty()) {
-        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first())) {
-            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
-                showTests = true;
-            }
-        }
-    }
-
-    if (showTests) {
-        m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
-        connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
-    } else {
-        m_editPatch.testsButton->hide();
-    }
-    m_editPatch.testProgressBar->hide();
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -258,6 +253,9 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
     connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
+
+    m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
+    connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
