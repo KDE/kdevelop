@@ -328,8 +328,9 @@ ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) 
 ProjectDialogProvider::~ProjectDialogProvider()
 {}
 
-bool writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QString& manager )
+bool writeNewProjectFile( const QString& localConfigFile, const QString& name, const QString& manager )
 {
+    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
     if (!cfg->isConfigWritable(true)) {
         kDebug() << "can't write to configfile";
         return false;
@@ -340,6 +341,24 @@ bool writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QSt
     cfg->sync();
     return true;
 }
+
+bool writeProjectSettingsToConfigFile(const KUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
+{
+    if ( !projectFileUrl.isLocalFile() ) {
+        KTemporaryFile tmp;
+        if ( !tmp.open() ) {
+            return false;
+        }
+        if ( !writeNewProjectFile( tmp.fileName(), projectName, projectManager ) ) {
+            return false;
+        }
+        // explicitly close file before uploading it, see also: https://bugs.kde.org/show_bug.cgi?id=254519
+        tmp.close();
+        return KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+    }
+    return writeNewProjectFile( projectFileUrl.toLocalFile(),projectName, projectManager );
+}
+
 
 bool projectFileExists( const KUrl& u )
 {
@@ -370,6 +389,9 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
 
     KUrl projectFileUrl = dlg.projectFileUrl();
     kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
+
+    // controls if existing project file should be saved
+    bool writeProjectConfigToFile = true;
     if( projectFileExists( projectFileUrl ) )
     {
         // check whether config is equal
@@ -405,41 +427,23 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
                 i18n("Override existing project configuration"), yes, no, cancel );
             if ( ret == KMessageBox::No )
             {
-                // no: reuse existing project file
-                return projectFileUrl;
+                writeProjectConfigToFile = false;
             } else if ( ret == KMessageBox::Cancel )
             {
                 return KUrl();
             } // else fall through and write new file
+        } else {
+            writeProjectConfigToFile = false;
         }
     }
 
-    if( projectFileUrl.isLocalFile() )
-    {
-        bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
-                        dlg.projectName(),
-                        dlg.projectManager() );
-        if (!ok)
-            return KUrl();
-    } else
-    {
-        KTemporaryFile tmp;
-        tmp.open();
-        bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
-                        dlg.projectName(),
-                        dlg.projectManager() );
-        tmp.close();
-        if (!ok)
-            return KUrl();
-
-        ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
-        if (!ok) {
+    if (writeProjectConfigToFile) {
+        if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg.projectName(), dlg.projectManager())) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));
             return KUrl();
         }
     }
-
     return projectFileUrl;
 }
 
