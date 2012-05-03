@@ -63,7 +63,7 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
         }
         virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const
         {
-            return viewWidget->actions();
+            return qobject_cast<TestView*>(viewWidget)->contextMenuActions();
         }
     private:
         TestViewPlugin *mplugin;

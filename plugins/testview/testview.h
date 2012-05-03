@@ -22,16 +22,32 @@
 
 #include <QtGui/QTreeView>
 #include <interfaces/itestcontroller.h>
+#include <KAction>
 
 class QSortFilterProxyModel;
 class QStandardItem;
+class TestViewPlugin;
+class QStandardItemModel;
+class KIcon;
+
 namespace KDevelop {
 class ITestSuite;
 }
 
-class TestViewPlugin;
-class QStandardItemModel;
-class KIcon;
+
+class TestViewFilterAction : public KAction {
+    Q_OBJECT
+
+public:
+    explicit TestViewFilterAction( const QString &initialFilter, QObject* parent );
+
+signals:
+    void filterChanged(const QString& filter);
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent );
+    QString m_intialFilter;
+};
 
 class TestView : public QWidget
 {
@@ -50,12 +66,15 @@ public slots:
     QStandardItem* addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);
+    
+    QList<QAction*> contextMenuActions();
 
 private:
     TestViewPlugin* m_plugin;
     QStandardItemModel* m_model;
     QTreeView* m_tree;
     QSortFilterProxyModel* m_filter;
+    QList<QAction*> m_contextMenuActions;
 
     KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
     QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);

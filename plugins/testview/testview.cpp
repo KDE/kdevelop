@@ -27,6 +27,7 @@
 #include <interfaces/itestsuite.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/isession.h>
 
 #include <util/executecompositejob.h>
 
@@ -41,8 +42,9 @@
 #include <KLocalizedString>
 #include <KJob>
 #include <KDebug>
-#include <KFilterProxySearchLine>
 #include <krecursivefilterproxymodel.h>
+#include <KLineEdit>
+#include <KConfigGroup>
 
 #include <QStandardItemModel>
 #include <QStandardItem>
@@ -58,6 +60,36 @@ enum CustomRoles {
     CaseRole
 };
 
+//BEGIN ProjectManagerFilterAction
+
+TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObject* parent )
+    : KAction( parent )
+    , m_intialFilter(initialFilter)
+{
+    setIcon(KIcon("view-filter"));
+    setText(i18n("Filter..."));
+    setToolTip(i18n("Insert wildcard patterns to filter the test view"
+                    " for matching test suites and cases."));
+}
+
+QWidget* TestViewFilterAction::createWidget( QWidget* parent )
+{
+    KLineEdit* edit = new KLineEdit(parent);
+    edit->setClickMessage(i18n("Filter..."));
+    edit->setClearButtonShown(true);
+    connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
+    if (!m_intialFilter.isEmpty()) {
+        edit->setText(m_intialFilter);
+    }
+
+    return edit;
+}
+
+//END ProjectManagerFilterAction
+
+static const char* sessionConfigGroup = "TestView";
+static const char* filterConfigKey = "filter";
+
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)
 , m_plugin(plugin)
@@ -67,13 +99,9 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 {
     setWindowIcon(KIcon("preflight-verifier"));
 
-    KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
-    filterLine->setProxy(m_filter);
-
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
-    layout->addWidget(filterLine);
     layout->addWidget(m_tree);
 
     m_tree->header()->hide();
@@ -89,22 +117,27 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    QAction* action;
-
-    KAction* reloadAction = new KAction( KIcon("view-refresh"), i18n("Reload"), this );
-    connect (reloadAction, SIGNAL(triggered(bool)), SLOT(reloadTests()));
-    addAction(reloadAction);
-
     KAction* showSource = new KAction( KIcon("code-context"), i18n("Show source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
-    addAction(showSource);
+    m_contextMenuActions << showSource;
 
     KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
-    addAction(runSelected);
+    m_contextMenuActions << runSelected;
 
-    action = plugin->actionCollection()->action("run_all_tests");
-    addAction(action);
+    addAction(plugin->actionCollection()->action("run_all_tests"));
+    
+    QString filterText;
+    KConfigGroup config(ICore::self()->activeSession()->config(), sessionConfigGroup);
+    if (config.hasKey(filterConfigKey))
+    {
+        filterText = config.readEntry(filterConfigKey, QString());
+    }
+    
+    TestViewFilterAction* filterAction = new TestViewFilterAction(filterText, this);
+    connect(filterAction, SIGNAL(filterChanged(QString)),
+            m_filter, SLOT(setFilterFixedString(QString)));
+    addAction(filterAction);
 
     IProjectController* pc = ICore::self()->projectController();
     connect (pc, SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(removeProject(KDevelop::IProject*)));
@@ -341,3 +374,9 @@ void TestView::doubleClicked(const QModelIndex& index)
     m_tree->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
     runSelectedTests();
 }
+
+QList< QAction* > TestView::contextMenuActions()
+{
+    return m_contextMenuActions;
+}
+
