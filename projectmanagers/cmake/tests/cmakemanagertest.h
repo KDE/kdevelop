@@ -38,6 +38,7 @@ private slots:
     void testWithBuildDirProject();
     void testIncludePaths();
     void testRelativePaths();
+    void testTargetIncludePaths();
 };
 
 #endif // CMAKEMANAGERTEST_H
