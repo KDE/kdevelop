@@ -675,6 +675,29 @@ QSet<QString> filterFiles(const QStringList& orig)
     return ret;
 }
 
+QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve) {
+    QStringList resolvedPaths;
+    foreach(const QString& pathToResolve, pathsToResolve)
+    {
+        QString dir(pathToResolve);
+        if(!pathToResolve.startsWith("#["))
+        {
+            if(KUrl( pathToResolve ).isRelative())
+            {
+                KUrl path(baseUrl);
+                path.addPath(pathToResolve);
+                dir=path.toLocalFile();
+            }
+
+            KUrl simp(dir); //We use this to simplify dir
+            simp.cleanPath();
+            dir=simp.toLocalFile();
+        }
+        resolvedPaths.append(dir);
+    }
+    return resolvedPaths;
+}
+
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
     Q_ASSERT(isReloading(item->project()));
@@ -774,27 +797,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
         QStringList directories;
         directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
-
-        foreach(const QString& s, data.includeDirectories)
-        {
-            QString dir(s);
-            if(!s.startsWith("#["))
-            {
-                if(KUrl( s ).isRelative())
-                {
-                    KUrl path=folder->url();
-                    path.addPath(s);
-                    dir=path.toLocalFile();
-                }
-
-                KUrl simp(dir); //We use this to simplify dir
-                simp.cleanPath();
-                dir=simp.toLocalFile();
-            }
-
-            if(!directories.contains(dir))
-                directories.append(dir);
-        }
+        directories += resolvePaths(folder->url(), data.includeDirectories);
+        directories.removeDuplicates();
         folder->setIncludeDirectories(directories);
 //             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << folder->includeDirectories();
         folder->setDefinitions(data.definitions);
@@ -853,13 +857,23 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         break;
                 }
             
-            DefinesAttached* a = dynamic_cast<DefinesAttached*>(targetItem);
-            if(a)
-                a->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
-            
-            DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
-            datt->setDescriptor(t.desc);
+            DefinesAttached* defAtt = dynamic_cast<DefinesAttached*>(targetItem);
+            if(defAtt)
+                defAtt->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
 
+            DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
+            if(descAtt)
+                descAtt->setDescriptor(t.desc);
+
+            if(targetProps.contains("INCLUDE_DIRECTORIES")) {
+                IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
+                if(incAtt) {
+                    QStringList targetIncludeDirectories = resolvePaths(folder->url(), targetProps["INCLUDE_DIRECTORIES"]);
+                    targetIncludeDirectories.removeDuplicates();
+                    incAtt->setIncludeDirectories(targetIncludeDirectories);
+                }
+            }
+            
             KUrl::List tfiles;
             foreach( const QString & sFile, t.files)
             {
@@ -929,23 +943,20 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    CMakeFolderItem* folder=0;
+    IncludesAttached* includer=0;
 //     kDebug(9042) << "Querying inc dirs for " << item;
-    while(!folder && item)
+    while(item)
     {
-        folder = dynamic_cast<CMakeFolderItem*>( item );
+        includer = dynamic_cast<IncludesAttached*>( item );
+        if(includer) {
+            QStringList dirs = includer->includeDirectories(item);
+            return resolveSystemDirs(item->project(), dirs);
+        }
         item = item->parent();
-//         kDebug(9042) << "Looking for a folder: " << (folder ? folder->url() : KUrl()) << item;
+//         kDebug(9042) << "Looking for an includer: " << item;
     }
-    if( !folder ) {
-        // Not a CMake folder, so no include-directories to be returned;
-        return KUrl::List();
-    }
-
-//     kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
-    KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
-//     kDebug(9042) << "Include directories!" << l;
-    return l;
+    // No includer found, so no include-directories to be returned;
+    return KUrl::List();
 }
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const

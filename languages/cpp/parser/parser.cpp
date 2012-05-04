@@ -1592,25 +1592,6 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
         parseCvQualify(ast->fun_cv);
         parseExceptionSpecification(ast->exception_spec);
 
-        if (session->token_stream->lookAhead() == Token___attribute__)
-          {
-            advance();
-
-            ADVANCE('(', "(");
-
-            ExpressionAST *expr = 0;
-            parseExpression(expr);
-
-            if (session->token_stream->lookAhead() != ')')
-              {
-                reportError(("')' expected"));
-              }
-            else
-              {
-                advance();
-              }
-          }
-
         // trailing return type support
         if (session->token_stream->lookAhead() == Token_arrow)
           {

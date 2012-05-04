@@ -120,7 +120,7 @@ void CMakePreferences::load()
     m_srcFolder=m_subprojFolder;
     m_srcFolder.cd(CMakeSettings::projectRootRelative());
 
-    m_prefsUi->removeBuildDir->setEnabled(m_prefsUi->buildDirs->count()==0);
+    m_prefsUi->removeBuildDir->setEnabled(m_prefsUi->buildDirs->count()!=0);
 //     QString cmDir=group.readEntry("CMakeDirectory");
 //     m_prefsUi->kcfg_cmakeDir->setUrl(KUrl(cmDir));
 //     kDebug(9032) << "cmakedir" << cmDir;

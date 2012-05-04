@@ -18,6 +18,7 @@
 */
 
 #include "cmakemanagertest.h"
+#include "cmakemodelitems.h"
 #include "cmake-test-paths.h"
 
 #include <icmakemanager.h>
@@ -235,4 +236,47 @@ void CMakeManagerTest::testRelativePaths()
     KUrl incDir(paths.sourceDir, "../inc/");
     incDir.cleanPath();
     QVERIFY(includeDirs.contains( incDir ));
+}
+
+void CMakeManagerTest::testTargetIncludePaths()
+{
+    const TestProjectPaths paths = projectPaths("target_includes");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("target_includes");
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundInTarget = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        ProjectBaseItem* mainContainer = mainCppItem->parent();
+
+        KUrl::List _includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        QSet<KUrl> includeDirs;
+        foreach(KUrl url, _includeDirs) {
+            url.cleanPath(KUrl::SimplifyDirSeparators);
+            url.adjustPath(KUrl::AddTrailingSlash);
+            includeDirs << url;
+        }
+
+        QCOMPARE(includeDirs.size(), _includeDirs.size());
+
+        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+            foundInTarget = true;
+            KUrl targetIncludesDir(paths.sourceDir, "includes/");
+            QVERIFY(includeDirs.contains(targetIncludesDir));
+        }
+    }
+    QVERIFY(foundInTarget);
 }

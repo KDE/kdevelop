@@ -2766,6 +2766,19 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations()[2]->range().start.line, 2);
   }
   {
+    QString a = "#undef __attribute__\n__attribute__((visibility(\"default\")))";
+    QString preprocessed = preprocess(IndexedString(), a, includes);
+    kDebug() << "preprocessed:" << preprocessed;
+    QVERIFY(!preprocessed.contains ("__attribute__"));
+  }
+  {
+    QString a = "#ifdef __attribute__\npassed\n#else\nfailed\n#endif";
+    QString preprocessed = preprocess(IndexedString(), a, includes);
+    kDebug() << "preprocessed: " << preprocessed;
+    QVERIFY(!preprocessed.contains("failed"));
+    QVERIFY(preprocessed.contains("passed"));
+  }
+  {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
     QString preprocessed = preprocess(IndexedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;

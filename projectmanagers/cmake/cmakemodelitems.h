@@ -71,6 +71,17 @@ class KDEVCMAKECOMMON_EXPORT DefinesAttached
         CMakeDefinitions m_defines;
 };
 
+class KDEVCMAKECOMMON_EXPORT IncludesAttached
+{
+    public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~IncludesAttached();
+        void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
+        QStringList includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const;
+    private:
+        QStringList m_includeList;
+};
+
 /**
  * The project model item for CMake folders.
  *
@@ -80,15 +91,12 @@ class KDEVCMAKECOMMON_EXPORT DefinesAttached
 
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
     : public KDevelop::ProjectBuildFolderItem
-    , public DescriptorAttatched, public DefinesAttached
+    , public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeFolderItem( KDevelop::IProject* project, const KUrl& folder, const QString& build, CMakeFolderItem* item);
         // Required, and must be non-inline, for dynamic_cast to work
         virtual ~CMakeFolderItem();
-        
-        void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
-        QStringList includeDirectories() const;
         
         void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }
         KDevelop::ReferencedTopDUContext topDUContext() const { return m_topcontext;}
@@ -108,14 +116,13 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
         QList<ProjectBaseItem*> cleanupTargets(const QList<CMakeTarget>& targets);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
-        QStringList m_includeList;
         CMakeFolderItem* m_formerParent;
         QString m_buildDir;
 };
 
 class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem 
     : public KDevelop::ProjectExecutableTargetItem
-    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached
+    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
@@ -132,7 +139,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
 
 class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
     : public KDevelop::ProjectLibraryTargetItem
-    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached
+    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
