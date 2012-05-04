@@ -5503,7 +5503,7 @@ void TestDUChain::testBug269352()
 void TestDUChain::testRenameClass()
 {
   QByteArray codeBefore(
-    "class A { };"
+    "class A { enum { Foo = 1 }; };"
   );
 
   TopDUContext* top = parse(codeBefore, DumpDUChain);
@@ -5514,7 +5514,7 @@ void TestDUChain::testRenameClass()
   }
 
   QByteArray codeAfter(
-    "class B { };"
+    "class B { enum { Foo = 1 }; };"
   );
 
   parse(codeAfter, DumpDUChain, top);
