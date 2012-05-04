@@ -21,7 +21,7 @@
 namespace KDevelop
 {
 DelegateHolder::DelegateHolder( QObject* parent )
-    : m_delegate(new OutputDelegate( parent ))
+: m_delegate(new OutputDelegate( parent ))
 {
 }
 
@@ -29,7 +29,7 @@ DelegateHolder::~DelegateHolder()
 {
     delete m_delegate;
 }
-    
+
 OutputDelegate* DelegateHolder::delegate() const
 {
     return m_delegate;
