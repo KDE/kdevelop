@@ -24,7 +24,6 @@
 static char const * const _S_token_names[] = {
   "K_DCOP",
   "Q_OBJECT",
-  "__attribute__",
   "__typeof",
   "and",
   "and_eq",
@@ -143,7 +142,6 @@ static char const * const _S_token_names[] = {
 static char const * const _S_token_texts[] = {
   "K_DCOP",
   "Q_OBJECT",
-  "__attribute__",
   "__typeof",
   "&&",
   "&=",

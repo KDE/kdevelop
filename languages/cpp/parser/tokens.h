@@ -30,7 +30,6 @@ enum TOKEN_KIND
 
     Token_K_DCOP = 1000,
     Token_Q_OBJECT,
-    Token___attribute__,
     Token___typeof,
     Token_and,
     Token_and_eq,
