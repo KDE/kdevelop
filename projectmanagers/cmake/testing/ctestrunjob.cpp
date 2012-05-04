@@ -96,7 +96,18 @@ void CTestRunJob::processFinished(int exitCode)
 
     TestResult result;
     result.testCaseResults = m_caseResults;
-    result.suiteResult = exitCode ? TestResult::Failed : TestResult::Passed;
+    if (m_process->exitStatus() == QProcess::CrashExit)
+    {
+        result.suiteResult = TestResult::Error;
+    }
+    else if (exitCode != 0)
+    {
+        result.suiteResult = TestResult::Failed;
+    }
+    else
+    {
+        result.suiteResult = TestResult::Passed;
+    }
 
     ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
     emitResult();
@@ -105,6 +116,11 @@ void CTestRunJob::processFinished(int exitCode)
 void CTestRunJob::processError()
 {
     setErrorText(m_process->errorString());
+    
+    TestResult result;
+    result.suiteResult = TestResult::Error;
+    ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
+    
     emitResult();
 }
 
