@@ -30,7 +30,7 @@
 
 namespace KDevelop
 {
-    
+
 OutputDelegate::OutputDelegate( QObject* parent )
     : QItemDelegate(parent), errorBrush( KColorScheme::View, KColorScheme::NegativeText ),
       warningBrush( KColorScheme::View, KColorScheme::NeutralText ),

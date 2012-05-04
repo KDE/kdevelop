@@ -20,8 +20,8 @@
 
 namespace KDevelop
 {
-DelegateHolder::DelegateHolder( QObject* parent ) 
-    : m_delegate(new OutputDelegate( parent )) 
+DelegateHolder::DelegateHolder( QObject* parent )
+    : m_delegate(new OutputDelegate( parent ))
 {
 }
 

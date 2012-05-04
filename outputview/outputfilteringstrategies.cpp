@@ -76,7 +76,7 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" )
     // PGI (2)
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" );
-    
+
 // A list of filters for possible compiler, linker, and make actions
 QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( i18n("compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
@@ -112,7 +112,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
  1 )
     // match against Entering directory to update current build dir
     << ActionFormat( "cd", "", "make[^:]*: Entering directory `([^']+)'", 1);
-    
+
 
 
 CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir) 
@@ -190,13 +190,13 @@ bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& it
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             else
                 item.columnNo = 0;
-            
+
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
-            
+
             if(txt.contains("error", Qt::CaseInsensitive))
                 item.type = QVariant::fromValue( FilteredItem::ErrorItem );
-            
+
             if(txt.contains("warning", Qt::CaseInsensitive))
                 item.type = QVariant::fromValue( FilteredItem::WarningItem );
 
@@ -251,8 +251,7 @@ const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
     //QRegExp phperror("^.* in (/.*) on line (\\d*).*$");
     << ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 );
 
-    
-    
+
 ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
         kDebug() << "ScriptErrorFilterStrategy was created";
@@ -278,10 +277,10 @@ bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem&
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             else
                 item.columnNo = 0;
-            
+
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
-            
+
             item.type = QVariant::fromValue( FilteredItem::ErrorItem );
 
             // Make the item clickable if it comes with the necessary file & line number information
@@ -301,11 +300,10 @@ const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
     // CppCheck
     << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 );
 
-    
-    
+
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
-        kDebug() << "StaticAnalysisFilterStrategy was created";
+    kDebug() << "StaticAnalysisFilterStrategy was created";
 }
 
 bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -327,10 +325,10 @@ bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredIt
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             else
                 item.columnNo = 0;
-            
+
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
-            
+
             item.type = QVariant::fromValue( FilteredItem::ErrorItem );
 
             // Make the item clickable if it comes with the necessary file & line number information

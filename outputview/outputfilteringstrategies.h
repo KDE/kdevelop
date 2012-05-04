@@ -45,11 +45,11 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 
 public:
     NoFilterStrategy();
-    
+
     virtual bool isErrorInLine(QString const& line, FilteredItem& item);
 
     virtual bool isActionInLine(QString const& line, FilteredItem& item);
-    
+
 };
 
 /**
@@ -62,14 +62,14 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrat
 public:
     CompilerFilterStrategy(KUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
-    
+
     virtual bool isErrorInLine(QString const& line, FilteredItem& item);
 
     virtual bool isActionInLine(QString const& line, FilteredItem& item);
 
 private:
     KUrl urlForFile( const QString& ) const;
-    
+
     QLinkedList<QString> m_currentDirs;
     KUrl m_buildDir;
 
@@ -85,7 +85,7 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterSt
 
 public:
     ScriptErrorFilterStrategy();
-    
+
     virtual bool isErrorInLine(QString const& line, FilteredItem& item);
 
     virtual bool isActionInLine(QString const& line, FilteredItem& item);
@@ -100,7 +100,7 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilte
 
 public:
     StaticAnalysisFilterStrategy();
-    
+
     virtual bool isErrorInLine(QString const& line, FilteredItem& item);
 
     virtual bool isActionInLine(QString const& line, FilteredItem& item);

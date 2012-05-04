@@ -38,7 +38,7 @@
 
 namespace KDevelop
 {
-    
+
 class FilteredItem;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
@@ -49,7 +49,7 @@ public:
 
     explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
     OutputModel( QObject* parent );
-    
+
     enum OutputFilterStrategy
     {
         NoFilter,
@@ -68,7 +68,7 @@ public:
     QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
     int rowCount( const QModelIndex& = QModelIndex() ) const;
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
-    
+
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
 
     /// These are from MakeoutputModel----
@@ -90,7 +90,7 @@ private:
     KUrl m_buildDir;
 
     QQueue<QString> m_lineBuffer;
-    QSharedPointer<IFilterStrategy> m_filter;    
+    QSharedPointer<IFilterStrategy> m_filter;
 };
 
 //Q_DECLARE_METATYPE( OutputModel::OutputItemType )

@@ -26,7 +26,7 @@ class QString;
 
 namespace KDevelop
 {
-    
+
 class FilteredItem;
 
 /**
@@ -38,7 +38,7 @@ public:
 
     IFilterStrategy();
     virtual ~IFilterStrategy();
-    
+
     /**
      * Examine if a given line contains output that is defined as an error (E.g. from a script or from a compiler, or other).
      * @param line the line to examine
@@ -54,7 +54,7 @@ public:
      * @return true if an action is found, false otherwise
      **/
     virtual bool isActionInLine(QString const& line, FilteredItem& item) = 0;
-    
+
 };
 
 

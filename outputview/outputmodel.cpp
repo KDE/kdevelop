@@ -126,10 +126,10 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
         std::set< int >::const_iterator next = m_activateableItems.lower_bound( startrow );
         if( next == m_activateableItems.end() )
             next = m_activateableItems.begin();
-        
+
         return index( *next, 0, QModelIndex() );
     }
-    
+
     for( int row = 0; row < rowCount(); ++row ) 
     {
         int currow = (startrow + row) % rowCount();
@@ -145,22 +145,22 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
     //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
     int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
-    
+
     if(!m_activateableItems.empty())
     {
         kDebug() << "searching previous error";
-        
+
         // Jump to the previous error item
         std::set< int >::const_iterator previous = m_activateableItems.lower_bound( currentIdx.row() );
-        
+
         if( previous == m_activateableItems.begin() )
             previous = m_activateableItems.end();
-        
+
         --previous;
-        
+
         return index( *previous, 0, QModelIndex() );
     }
-    
+
     for ( int row = 0; row < rowCount(); ++row )
     {
         int currow = (startrow - row) % rowCount();
@@ -200,7 +200,7 @@ void OutputModel::appendLines( const QStringList& lines )
 {
     if( lines.isEmpty() )
         return;
-    
+
     m_lineBuffer << lines;
     QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
 }
@@ -227,22 +227,22 @@ void OutputModel::addLineBatch()
     for(int i = 0; i < linesInBatch; ++i) {
         const QString line = m_lineBuffer.dequeue();
         FilteredItem item( line );
-        
+
         bool matched = m_filter->isErrorInLine(line, item);
         if( !matched )
         {
             matched = m_filter->isActionInLine(line, item);
         }
-        
+
         //kDebug() << "adding item:" << item.shortenedText << itemType;
         if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
             m_activateableItems.insert(m_activateableItems.size());
 
         m_filteredItems << item;
     }
-    
+
     endInsertRows();
-    
+
     if (!m_lineBuffer.isEmpty()) {
         QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
     }
