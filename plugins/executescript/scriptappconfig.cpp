@@ -169,7 +169,6 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        //return new ScriptAppJob( KDevelop::ICore::self()->runController(), cfg );
         return new ScriptAppJob( m_plugin, cfg);
         
     }

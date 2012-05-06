@@ -28,7 +28,7 @@
 
 namespace KDevelop {
 
-class ExecuteScriptOutputModel : public OutputModel 
+class ExecuteScriptOutputModel : public OutputModel
 {
     Q_OBJECT
 public:

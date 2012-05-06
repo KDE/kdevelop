@@ -38,7 +38,7 @@ namespace KDevelop
 
 /**
 * This filter strategy is for not applying any filtering at all. Implementation of the
-* interface methods are basically noops 
+* interface methods are basically noops
 **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 {
@@ -54,7 +54,7 @@ public:
 
 /**
  * This filter stategy checks if a given line contains output
- * that is defined as an error (or an action) from a compiler. 
+ * that is defined as an error (or an action) from a compiler.
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
 {

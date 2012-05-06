@@ -247,7 +247,6 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
 
     ExternalScriptOutputModel* model = dynamic_cast<ExternalScriptOutputModel*>(OutputJob::model());
     Q_ASSERT(model);
-    //model->addPending();
 
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
       QStringList lines = model->stdOut();

@@ -7,7 +7,7 @@ macro(OUTPUTVIEW_CREATE_TEST name)
                           ${KDEVPLATFORM_TESTS_LIBRARIES}
                           kdevplatformoutputview
                          )
-endmacro(SVN_CREATE_TEST)
+endmacro(OUTPUTVIEW_CREATE_TEST)
 
 add_definitions( "-DPROJECTS_SOURCE_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/projects\\\"" )
 

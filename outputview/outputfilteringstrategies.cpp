@@ -29,7 +29,7 @@
 namespace KDevelop
 {
 
-/// --- No filter strategy --- 
+/// --- No filter strategy ---
 
 NoFilterStrategy::NoFilterStrategy()
 {
@@ -47,7 +47,7 @@ bool NoFilterStrategy::isErrorInLine(const QString& /*line*/, FilteredItem& /*it
 }
 
 
-/// --- Compiler error filter strategy --- 
+/// --- Compiler error filter strategy ---
 
 // A list of filters for possible compiler, linker, and make errors
 const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
@@ -115,7 +115,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
 
 
 
-CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir) 
+CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir)
     : m_buildDir(buildDir)
 {
     kDebug() << "CompilerFilterStrategy was created with builddir: " << buildDir;
@@ -133,7 +133,7 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
         if( regEx.indexIn( line ) != -1 )
         {
             kDebug() << "found an action" << line << curActFilter.tool << curActFilter.toolGroup << curActFilter.fileGroup;
-            item.type = QVariant::fromValue( FilteredItem::ActionItem ); 
+            item.type = QVariant::fromValue( FilteredItem::ActionItem );
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
                 item.shortenedText = QString( "%1 %2 (%3)").arg( curActFilter.action ).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
@@ -219,7 +219,7 @@ KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
     KUrl currentUrl;
     if( fi.isRelative() )
     {
-        if( m_currentDirs.isEmpty() ) 
+        if( m_currentDirs.isEmpty() )
         {
             currentUrl = m_buildDir;
             currentUrl.addPath( filename );
@@ -233,7 +233,7 @@ KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
         } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentUrl.toLocalFile()).exists() );
 
         return currentUrl;
-    } else 
+    } else
     {
         currentUrl = KUrl( filename );
     }

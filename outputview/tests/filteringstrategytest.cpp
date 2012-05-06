@@ -42,17 +42,17 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make"; 
+    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
 
-    outputline = "linking testCustombuild (g++)"; 
+    outputline = "linking testCustombuild (g++)";
     FilteredItem item4(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item4) == false);
     QVERIFY(testee.isActionInLine(outputline, item4) == false);
 
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory"; 
+    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
     FilteredItem item5(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item5) == false);
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
@@ -86,12 +86,12 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     /// Test with compiler output
     outputline.clear();
     outputline.append(projecturl.path());
-    outputline.append(">make"); 
+    outputline.append(">make");
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
 
-    outputline = "linking testCustombuild (g++)"; 
+    outputline = "linking testCustombuild (g++)";
     FilteredItem item4(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item4) == false);
     QVERIFY(testee.isActionInLine(outputline, item4) == true);
@@ -102,7 +102,7 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
     FilteredItem item5(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item5) == true);
-    QVERIFY(testee.isActionInLine(outputline, item5) == false);    
+    QVERIFY(testee.isActionInLine(outputline, item5) == false);
     QVERIFY(item5.isActivatable == true);
 
     /// Test with script error output;
@@ -126,7 +126,7 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make"; 
+    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
@@ -136,7 +136,7 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QVERIFY(testee.isErrorInLine(outputline, item4) == false);
     QVERIFY(testee.isActionInLine(outputline, item4) == false);
 
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory"; 
+    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
     FilteredItem item5(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item5) == false);
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
@@ -168,17 +168,17 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make"; 
+    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
 
-    outputline = "linking testCustombuild (g++)"; 
+    outputline = "linking testCustombuild (g++)";
     FilteredItem item4(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item4) == false);
     QVERIFY(testee.isActionInLine(outputline, item4) == false);
 
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory"; 
+    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
     FilteredItem item5(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item5) == false);
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
