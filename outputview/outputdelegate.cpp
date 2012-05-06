@@ -32,10 +32,11 @@ namespace KDevelop
 {
 
 OutputDelegate::OutputDelegate( QObject* parent )
-    : QItemDelegate(parent), errorBrush( KColorScheme::View, KColorScheme::NegativeText ),
-      warningBrush( KColorScheme::View, KColorScheme::NeutralText ),
-      informationBrush( KColorScheme::View, KColorScheme::NeutralText ),
-      builtBrush( KColorScheme::View, KColorScheme::PositiveText )
+: QItemDelegate( parent )
+, errorBrush( KColorScheme::View, KColorScheme::NegativeText )
+, warningBrush( KColorScheme::View, KColorScheme::NeutralText )
+, informationBrush( KColorScheme::View, KColorScheme::NeutralText )
+, builtBrush( KColorScheme::View, KColorScheme::PositiveText )
 {
 }
 
@@ -43,21 +44,16 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
 {
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(OutputModel::OutputItemTypeRole);
-    if( status.isValid() )
-    {
+    if( status.isValid() ) {
         FilteredItem::FilteredOutputItemType type = status.value<FilteredItem::FilteredOutputItemType>();
-        if( type == FilteredItem::ErrorItem )
-        {
+        if( type == FilteredItem::ErrorItem ) {
             opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
             opt.font.setBold( true );
-        }else if( type == FilteredItem::WarningItem )
-        {
+        } else if( type == FilteredItem::WarningItem ) {
             opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
-        }else if( type == FilteredItem::InformationItem )
-        {
+        } else if( type == FilteredItem::InformationItem ) {
             opt.palette.setBrush( QPalette::Text, informationBrush.brush( option.palette ) );
-        }else if( type == FilteredItem::ActionItem )
-        {
+        } else if( type == FilteredItem::ActionItem ) {
             opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );
             opt.font.setBold( true );
         }

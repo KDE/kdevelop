@@ -30,7 +30,10 @@ namespace KDevelop
 class FilteredItem;
 
 /**
-@author Morten Danielsen Volden
+* Interface class for filtering output. Filtered output is divided into two catagories: Errors
+* and Actions. Use this interface if you want to write a filter for the outputview.
+*
+* @author Morten Danielsen Volden
 */
 class KDEVPLATFORMOUTPUTVIEW_EXPORT IFilterStrategy
 {

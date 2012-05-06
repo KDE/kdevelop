@@ -33,7 +33,7 @@ namespace KDevelop
 
 NoFilterStrategy::NoFilterStrategy()
 {
-    kDebug() << "NoFilterStrategy was created";
+    // kDebug() << "NoFilterStrategy was created";
 }
 
 bool NoFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -118,7 +118,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
 CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir)
     : m_buildDir(buildDir)
 {
-    kDebug() << "CompilerFilterStrategy was created with builddir: " << buildDir;
+    // kDebug() << "CompilerFilterStrategy was created with builddir: " << buildDir;
 }
 
 CompilerFilterStrategy::~CompilerFilterStrategy()
@@ -127,8 +127,7 @@ CompilerFilterStrategy::~CompilerFilterStrategy()
 
 bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& item )
 {
-    foreach( const ActionFormat& curActFilter, ACTION_FILTERS )
-    {
+    foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
         {
@@ -178,34 +177,37 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
 
 bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
 {
-    foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS )
-    {
+    foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
-        if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) )
-        {
+        if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
             kDebug() << "found an error:" << line;
             item.url = urlForFile( regEx.cap( curErrFilter.fileGroup ) );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            if(curErrFilter.columnGroup>=0)
+            if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
-            else
+            } else {
                 item.columnNo = 0;
+            }
 
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
-            if(txt.contains("error", Qt::CaseInsensitive))
+            if(txt.contains("error", Qt::CaseInsensitive)) {
                 item.type = QVariant::fromValue( FilteredItem::ErrorItem );
+            }
 
-            if(txt.contains("warning", Qt::CaseInsensitive))
+            if(txt.contains("warning", Qt::CaseInsensitive)) {
                 item.type = QVariant::fromValue( FilteredItem::WarningItem );
+            }
 
-            if(txt.contains("note", Qt::CaseInsensitive))
+            if(txt.contains("note", Qt::CaseInsensitive)) {
                 item.type = QVariant::fromValue( FilteredItem::InformationItem );
+            }
 
             // Make the item clickable if it comes with the necessary file & line number information
-            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
+            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
+            }
 
             return true;
         }
@@ -217,10 +219,8 @@ KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
 {
     QFileInfo fi( filename );
     KUrl currentUrl;
-    if( fi.isRelative() )
-    {
-        if( m_currentDirs.isEmpty() )
-        {
+    if( fi.isRelative() ) {
+        if( m_currentDirs.isEmpty() ) {
             currentUrl = m_buildDir;
             currentUrl.addPath( filename );
             return currentUrl;
@@ -233,8 +233,7 @@ KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
         } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentUrl.toLocalFile()).exists() );
 
         return currentUrl;
-    } else
-    {
+    } else {
         currentUrl = KUrl( filename );
     }
     return currentUrl;
@@ -254,7 +253,7 @@ const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
 
 ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
-        kDebug() << "ScriptErrorFilterStrategy was created";
+    //kDebug() << "ScriptErrorFilterStrategy was created";
 }
 
 bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -264,19 +263,18 @@ bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, Filtered
 
 bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
 {
-    foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS )
-    {
-        kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+    foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
             kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
-            if(curErrFilter.columnGroup >= 0)
+            if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
-            else
+            } else {
                 item.columnNo = 0;
+            }
 
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
@@ -303,7 +301,7 @@ const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
-    kDebug() << "StaticAnalysisFilterStrategy was created";
+    //kDebug() << "StaticAnalysisFilterStrategy was created";
 }
 
 bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -313,18 +311,18 @@ bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, Filte
 
 bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
 {
-    foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS )
-    {
+    foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
-            if(curErrFilter.columnGroup >= 0)
+            kDebug() << "found a static code analysis error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+            if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
-            else
+            } else {
                 item.columnNo = 0;
+            }
 
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
@@ -332,8 +330,9 @@ bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredIt
             item.type = QVariant::fromValue( FilteredItem::ErrorItem );
 
             // Make the item clickable if it comes with the necessary file & line number information
-            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
+            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
+            }
 
             return true;
         }

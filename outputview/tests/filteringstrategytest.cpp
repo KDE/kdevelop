@@ -32,11 +32,12 @@ void FilteringStrategyTest::testNoFilterstrategy()
     /// Test CPP check output
     QString outputline("[/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/main.cpp:90]: (error) Memory leak: str");
     FilteredItem item1(outputline);
-    //(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project's include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.
     QVERIFY(testee.isErrorInLine(outputline, item1) == false);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project's include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
+    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
+    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
@@ -78,7 +79,9 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     QVERIFY(testee.isErrorInLine(outputline, item1) == false);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project's include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
+    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
+    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
@@ -120,7 +123,9 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QVERIFY(testee.isErrorInLine(outputline, item1) == true);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project's include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
+    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
+    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
@@ -162,7 +167,9 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
     QVERIFY(item1.url.path() == QString(PROJECTS_SOURCE_DIR"/onefileproject/main.cpp"));
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project's include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
+    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
+    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);

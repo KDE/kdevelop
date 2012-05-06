@@ -37,9 +37,9 @@ namespace KDevelop
 {
 
 /**
-* This filter strategy is for not applying any filtering at all. Implementation of the
-* interface methods are basically noops
-**/
+ * This filter strategy is for not applying any filtering at all. Implementation of the
+ * interface methods are basically noops
+ **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 {
 
@@ -78,8 +78,8 @@ private:
 };
 
 /**
-* This filter stategy filters out errors (no actions) from Python and PHP scripts.
-**/
+ * This filter stategy filters out errors (no actions) from Python and PHP scripts.
+ **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterStrategy
 {
 
@@ -93,8 +93,8 @@ public:
 };
 
 /**
-* This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
-**/
+ * This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
+ **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
 {
 

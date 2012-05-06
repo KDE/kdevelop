@@ -35,7 +35,6 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 public:
     OutputDelegate( QObject* );
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
-protected:
 
 private:
     KStatefulBrush errorBrush;

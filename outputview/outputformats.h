@@ -21,7 +21,6 @@ namespace KDevelop
 class ActionFormat
 {
     public:
-        //static QList<ActionFormat> actionFormats;
         ActionFormat( const QString&, const QString&, const QString& regExp, int file);
         ActionFormat( const QString&, int tool, int file, const QString& regExp);
         QString action;
@@ -34,7 +33,6 @@ class ActionFormat
 class ErrorFormat
 {
     public:
-        //static QList<ErrorFormat> errorFormats;
         ErrorFormat( const QString&, int, int, int, int column=-1 );
         ErrorFormat( const QString&, int, int, int, const QString&, int column=-1 );
         QRegExp expression;

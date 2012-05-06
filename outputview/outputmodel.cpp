@@ -96,7 +96,6 @@ void OutputModel::activate( const QModelIndex& index )
 {
     if( index.model() != this || !isValidIndex(index) )
     {
-        kDebug() << "not my model, returning";
         return;
     }
     kDebug() << "Model activated" << index.row();
@@ -109,8 +108,7 @@ void OutputModel::activate( const QModelIndex& index )
         KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         docCtrl->openDocument( item.url, range );
-    } else 
-    {
+    } else {
         kDebug() << "not an activateable item";
     }
 }
