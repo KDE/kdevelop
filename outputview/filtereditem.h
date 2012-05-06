@@ -34,9 +34,8 @@ namespace KDevelop
  * Holds all metadata of a given compiler output line. E.g. if it is an error or
  * a warning, if it is clickable or not, etc.
  **/
-class KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
+struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 {
-public:
     enum FilteredOutputItemType
     {
         ErrorItem = 1,

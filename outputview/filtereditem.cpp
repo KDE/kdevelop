@@ -27,10 +27,13 @@ namespace KDevelop
 {
 
 FilteredItem::FilteredItem( const QString& line )
-        : originalLine( line ),
-            type( QVariant::fromValue( StandardItem ) ),
-            shortenedText( line ), isActivatable(false), lineNo(-1), columnNo(-1)
-{ 
+: originalLine( line )
+, type( QVariant::fromValue( StandardItem ) )
+, shortenedText( line )
+, isActivatable(false)
+, lineNo(-1)
+, columnNo(-1)
+{
     kDebug() << "created item with type:" << type << type.value<FilteredOutputItemType>();
 }
 
