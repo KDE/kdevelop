@@ -10,7 +10,7 @@ int main( int argc, char **argv )
     fillBuffer( myBuffer, testVector );
     testWithOnlyknown( myBuffer, testVector );
     testWithSomeKnown( myBuffer, testVector);
-	
+
     std::cout << "Done Testing" << std::endl;
     int i;
     if(i > 100)
@@ -21,7 +21,6 @@ int main( int argc, char **argv )
         strcpy(str, input_string); /* What if malloc() fails? */
         if(input_string == "")
         {
-            
         }
     }
 
