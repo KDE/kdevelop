@@ -30,31 +30,32 @@
 namespace KDevelop
 {
 
-/** Holds all metadata of a given compiler output line. E.g. if it is an error or 
- * a warning, if it is clickable or not, etc. 
+/**
+ * Holds all metadata of a given compiler output line. E.g. if it is an error or
+ * a warning, if it is clickable or not, etc.
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 {
-    public:
-        enum FilteredOutputItemType
-        {
-            ErrorItem = 1,
-            WarningItem = 2,
-            ActionItem = 3,
-            CustomItem = 4,
-            StandardItem = 5,
-            InformationItem = 6
-        };
+public:
+    enum FilteredOutputItemType
+    {
+        ErrorItem = 1,
+        WarningItem = 2,
+        ActionItem = 3,
+        CustomItem = 4,
+        StandardItem = 5,
+        InformationItem = 6
+    };
 
-        FilteredItem( const QString& line );
+    FilteredItem( const QString& line );
 
-        QString originalLine;
-        QVariant type;
-        QString shortenedText;
-        bool isActivatable;
-        KUrl url;
-        int lineNo;
-        int columnNo;
+    QString originalLine;
+    QVariant type;
+    QString shortenedText;
+    bool isActivatable;
+    KUrl url;
+    int lineNo;
+    int columnNo;
 };
 
 
