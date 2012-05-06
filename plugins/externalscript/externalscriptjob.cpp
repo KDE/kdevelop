@@ -62,7 +62,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
   ExternalScriptOutputModel* model = new ExternalScriptOutputModel( this );
-  
+
   /// TODO implement some functionality where filtering strategy can be selected via the GUI
   model->setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
   setModel( model, KDevelop::IOutputView::TakeOwnership );
