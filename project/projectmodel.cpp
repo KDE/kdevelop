@@ -119,7 +119,7 @@ public:
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_urlIndex(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
@@ -129,6 +129,7 @@ public:
     Qt::ItemFlags flags;
     ProjectModel* model;
     KUrl m_url;
+    uint m_urlIndex;
     QString iconName;
 };
 
@@ -136,6 +137,7 @@ public:
 ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, ProjectBaseItem *parent )
         : d_ptr(new ProjectBaseItemPrivate)
 {
+    Q_ASSERT(!name.isEmpty() || !parent);
     Q_D(ProjectBaseItem);
     d->project = project;
     d->text = name;
@@ -149,8 +151,8 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
 
-    if (model()) {
-        model()->d->urlLookupTable.remove(indexForUrl(d->m_url), this);
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
     }
 
     if( parent() ) {
@@ -218,29 +220,29 @@ void ProjectBaseItem::removeRows(int row, int count)
     if( model() ) {
         QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
-    QList<ProjectBaseItem*> toRemove;
-#if QT_VERSION >= 0x040700
-    toRemove.reserve(count);
-#endif
+
+    //NOTE: we unset parent, row and model manually to speed up the deletion
     if (row == 0 && count == d->children.size()) {
-        // optimize shutdown for big projects
-        toRemove = d->children;
+        // optimize if we want to delete all
+        foreach(ProjectBaseItem* item, d->children) {
+            item->d_func()->parent = 0;
+            item->d_func()->row = -1;
+            item->setModel( 0 );
+            delete item;
+        }
         d->children.clear();
     } else {
         for (int i = row; i < count; ++i) {
-            toRemove << d->children.takeAt( row );
+            ProjectBaseItem* item = d->children.at(i);
+            item->d_func()->parent = 0;
+            item->d_func()->row = -1;
+            item->setModel( 0 );
+            delete d->children.takeAt( row );
         }
         for(int i = row; i < d->children.size(); ++i) {
             d->children.at(i)->d_func()->row--;
             Q_ASSERT(child(i)->d_func()->row==i);
         }
-    }
-
-    foreach(ProjectBaseItem* item, toRemove) {
-        item->d_func()->parent = 0;
-        item->d_func()->row = -1;
-        item->setModel( 0 );
-        delete item;
     }
 
     if( model() ) {
@@ -294,7 +296,6 @@ QString ProjectBaseItem::text() const
     if( project() && !parent() ) {
         return project()->name();
     } else {
-        Q_ASSERT(!d->text.isEmpty());
         return d->text;
     }
 }
@@ -303,17 +304,18 @@ void ProjectBaseItem::setModel( ProjectModel* model )
 {
     Q_D(ProjectBaseItem);
 
-    const uint urlIndex = indexForUrl(d->m_url);
-
     if (model == d->model) {
         return;
-    } else if (d->model) {
-        d->model->d->urlLookupTable.remove(urlIndex, this);
+    }
+
+    if (d->model && d->m_urlIndex) {
+        d->model->d->urlLookupTable.remove(d->m_urlIndex, this);
     }
 
     d->model = model;
-    if (model) {
-        model->d->urlLookupTable.insert(urlIndex, this);
+
+    if (model && d->m_urlIndex) {
+        model->d->urlLookupTable.insert(d->m_urlIndex, this);
     }
 
     foreach( ProjectBaseItem* item, d->children ) {
@@ -329,6 +331,7 @@ void ProjectBaseItem::setRow( int row )
 
 void ProjectBaseItem::setText( const QString& text )
 {
+    Q_ASSERT(!text.isEmpty() || !parent());
     Q_D(ProjectBaseItem);
     d->text = text;
     if( model() ) {
@@ -434,14 +437,18 @@ QString ProjectBaseItem::baseName() const
 void ProjectBaseItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectBaseItem);
-    const KUrl oldUrl = d->m_url;
+
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    }
+
     d->m_url = url;
+    d->m_urlIndex = indexForUrl(url);
     const QString baseName = url.fileName();
     setText( baseName );
 
-    if (model()) {
-        model()->d->urlLookupTable.remove(indexForUrl(oldUrl), this);
-        model()->d->urlLookupTable.insert(indexForUrl(d->m_url), this);
+    if (model() && d->m_urlIndex) {
+        model()->d->urlLookupTable.insert(d->m_urlIndex, this);
     }
 }
 
@@ -684,15 +691,15 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
     setUrl( file );
     // Need to this manually here as setUrl() is virtual and hence the above
     // only calls the version in ProjectBaseItem and not ours
-    if( project ) {
-        project->addToFileSet( KDevelop::IndexedString(file) );
+    if( project && d_ptr->m_urlIndex ) {
+        project->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 }
 
 ProjectFileItem::~ProjectFileItem()
 {
-    if( project() ) {
-        project()->removeFromFileSet(KDevelop::IndexedString(url()));
+    if( project() && d_ptr->m_urlIndex ) {
+        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 }
 
@@ -738,20 +745,86 @@ QString ProjectFileItem::fileName() const
     return baseName();
 }
 
-///NOTE: this is kind of slow due to KMimeType::findByUrl
-///      maybe we should also introduce an extension-cache
-///      similar to what the language controller is doing
+// Maximum length of a string to still consider it as a file extension which we cache
+// This has to be a slow value, so that we don't fill our file extension cache with crap
+static const int maximumCacheExtensionLength = 3;
+
+bool isNumeric(const QStringRef& str)
+{
+    int len = str.length();
+    if(len == 0)
+        return false;
+    for(int a = 0; a < len; ++a)
+        if(!str.at(a).isNumber())
+            return false;
+    return true;
+}
+
+class IconNameCache
+{
+public:
+    QString iconNameForUrl(const KUrl& url, const QString& fileName)
+    {
+        // find icon name based on file extension, if possible
+        QString extension;
+        int extensionStart = fileName.lastIndexOf(QLatin1Char('.'));
+        if( extensionStart != -1 && fileName.length() - extensionStart - 1 <= maximumCacheExtensionLength ) {
+            QStringRef extRef = fileName.midRef(extensionStart + 1);
+            if( isNumeric(extRef) ) {
+                // don't cache numeric extensions
+                extRef.clear();
+            }
+            if( !extRef.isEmpty() ) {
+                extension = extRef.toString();
+                QMutexLocker lock(&mutex);
+                QHash< QString, QString >::const_iterator it = fileExtensionToIcon.constFind( extension );
+                if( it != fileExtensionToIcon.constEnd() ) {
+                    return *it;
+                }
+            }
+        }
+
+        KMimeType::Ptr mime = KMimeType::findByUrl( url, 0, false, true );
+        QMutexLocker lock(&mutex);
+        QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
+        QString iconName;
+        if ( it == mimeToIcon.constEnd() ) {
+            iconName = mime->iconName();
+            mimeToIcon.insert(mime->name(), iconName);
+        } else {
+            iconName = *it;
+        }
+        if ( !extension.isEmpty() ) {
+            fileExtensionToIcon.insert(extension, iconName);
+        }
+        return iconName;
+    }
+    QMutex mutex;
+    QHash<QString, QString> mimeToIcon;
+    QHash<QString, QString> fileExtensionToIcon;
+};
+
+K_GLOBAL_STATIC(IconNameCache, s_cache);
+
 void ProjectFileItem::setUrl( const KUrl& url )
 {
-    if( project() ) {
-        if(!this->url().isEmpty())
-            project()->removeFromFileSet( KDevelop::IndexedString(this->url()) );
-        project()->addToFileSet( KDevelop::IndexedString(url) );
+    if (url == d_ptr->m_url) {
+        return;
+    }
+
+    if( project() && d_ptr->m_urlIndex ) {
+        // remove from fileset if we are in there
+        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
     }
 
     ProjectBaseItem::setUrl( url );
 
-    d_ptr->iconName = KMimeType::findByUrl(url, 0, false, true)->iconName(url);
+    if( project() && d_ptr->m_urlIndex ) {
+        // add to fileset with new url index
+        project()->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
+    }
+
+    d_ptr->iconName = s_cache->iconNameForUrl( url, d_ptr->text );
 }
 
 int ProjectFileItem::type() const

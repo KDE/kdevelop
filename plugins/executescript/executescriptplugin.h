@@ -28,6 +28,7 @@
 #include <QtCore/QProcess>
 #include "iexecutescriptplugin.h"
 
+class ScriptAppConfigType;
 class KUrl;
 class KJob;
 
@@ -63,6 +64,8 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;
+
+    ScriptAppConfigType* m_configType;
 };
 
 #endif // EXECUTESCRIPTPLUGIN_H

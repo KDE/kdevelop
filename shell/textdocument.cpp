@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <QLabel>
 
-
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
@@ -33,6 +32,7 @@
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
+#include <kdeversion.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -40,14 +40,21 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/configinterface.h>
+#include <ktexteditor/sessionconfiginterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 #include <language/interfaces/editorcontext.h>
+
+#include <project/projectutils.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -55,15 +62,10 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
-#include <interfaces/ilanguagecontroller.h>
-#include <interfaces/icompletionsettings.h>
-
-#include <kdeversion.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <project/projectutils.h>
 
 namespace KDevelop {
+
+const int MAX_DOC_SETTINGS = 20;
 
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
@@ -80,12 +82,15 @@ struct TextDocumentPrivate {
             delete m_addedContextMenu;
             m_addedContextMenu = 0;
         }
+        if (document) {
+            saveSessionConfig();
+            delete document;
+        }
     }
 
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
     QString encoding;
-
 
     void newDocumentStatus(KTextEditor::Document *document)
     {
@@ -197,6 +202,64 @@ struct TextDocumentPrivate {
         m_textDocument->notifyStateChanged();
     }
 
+    inline KConfigGroup katePartSettingsGroup() const
+    {
+        return KGlobal::config()->group("KatePart Settings");
+    }
+
+    inline QString docConfigGroupName() const
+    {
+        return document->url().pathOrUrl();
+    }
+
+    inline KConfigGroup docConfigGroup() const
+    {
+        return katePartSettingsGroup().group(docConfigGroupName());
+    }
+
+    void saveSessionConfig()
+    {
+        if(!document->url().isValid()) {
+            return;
+        }
+        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
+            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
+        {
+            // make sure only MAX_DOC_SETTINGS entries are stored
+            KConfigGroup katePartSettings = katePartSettingsGroup();
+            // ordered list of documents
+            QStringList documents = katePartSettings.readEntry("documents", QStringList());
+            // ensure this document is "new", i.e. at the end of the list
+            documents.removeOne(docConfigGroupName());
+            documents.append(docConfigGroupName());
+            // remove "old" documents + their group
+            while(documents.size() >= MAX_DOC_SETTINGS) {
+                katePartSettings.group(documents.takeFirst()).deleteGroup();
+            }
+            // update order
+            katePartSettings.writeEntry("documents", documents);
+
+            // actually save session config
+            KConfigGroup group = docConfigGroup();
+            sessionConfigIface->writeParameterizedSessionConfig(group,
+                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
+        }
+    }
+
+    void loadSessionConfig()
+    {
+        if (!document || !katePartSettingsGroup().hasGroup(docConfigGroupName())) {
+            return;
+        }
+        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
+            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
+        {
+            sessionConfigIface->readParameterizedSessionConfig(docConfigGroup(),
+                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
+        }
+    }
+
+
 private:
     TextDocument *m_textDocument;
     bool m_loaded;
@@ -245,6 +308,14 @@ TextDocument::~TextDocument()
 
 bool TextDocument::isTextDocument() const
 {
+    if( !d->document )
+    {
+        /// @todo Somehow it can happen that d->document is zero, which makes
+        /// code relying on "isTextDocument() == (bool)textDocument()" crash
+        qWarning() << "Broken text-document: " << url();
+        return false;
+    }
+    
     return true;
 }
 
@@ -275,12 +346,16 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         if (!url().isEmpty() && !DocumentController::isEmptyDocumentUrl(url()))
             d->document->openUrl( url() );
 
+        d->setStatus(d->document, false);
+
         /* It appears, that by default a part will be deleted the the
            first view containing it is deleted.  Since we do want
            to have several views, disable that behaviour.  */
         d->document->setAutoDeletePart(false);
 
         Core::self()->partController()->addPart(d->document, false);
+
+        d->loadSessionConfig();
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));
@@ -290,6 +365,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(documentUrlChanged(KTextEditor::Document*)));
         connect(d->document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)),
                  this, SLOT(documentSaved(KTextEditor::Document*,bool)));
+        connect(d->document, SIGNAL(marksChanged(KTextEditor::Document*)),
+                 this, SLOT(saveSessionConfig()));
 
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)
@@ -372,7 +449,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                 int code = KMessageBox::warningYesNoCancel(
                     Core::self()->uiController()->activeMainWindow(),
                     i18n("The document \"%1\" has unsaved changes. Would you like to save them?", d->document->url().toLocalFile()),
-                    i18n("Close Document"));
+                    i18nc("@title:window", "Close Document"));
                 if (code != KMessageBox::Yes)
                     return false;
             }
@@ -387,7 +464,7 @@ bool TextDocument::save(DocumentSaveMode mode)
                     i18n("The file \"%1\" is modified on disk.\n\nAre "
                         "you sure you want to overwrite it? (External "
                         "changes will be lost.)", d->document->url().toLocalFile()),
-                    i18n("Document Externally Modified"));
+                    i18nc("@title:window", "Document Externally Modified"));
                 if (code != KMessageBox::Yes)
                     return false;
             }
@@ -520,6 +597,7 @@ bool TextDocument::close(DocumentSaveMode mode)
         return false;
 
     if ( d->document ) {
+        d->saveSessionConfig();
         delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
     }
 

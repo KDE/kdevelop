@@ -8,6 +8,8 @@ set(kdevplatformtests_LIB_SRCS
     testcore.cpp
     testproject.cpp
     testfile.cpp
+    testlanguagecontroller.cpp
+    testhelpers.cpp
 )
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
@@ -25,6 +27,8 @@ install( FILES
          testcore.h
          testproject.h
          testfile.h
+         testlanguagecontroller.h
          kdevplatformtestsexport.h
+         testhelpers.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/ 
          COMPONENT Devel )

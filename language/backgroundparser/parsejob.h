@@ -62,7 +62,23 @@ public:
         // The contents in utf-8 format
         QByteArray contents;
     };
-    
+
+    enum SequentialProcessingFlag {
+        IgnoresSequentialProcessing = 0,
+        RequiresSequentialProcessing = 1,
+        RespectsSequentialProcessing = 2,
+        FullSequentialProcessing = 3
+    };
+    Q_DECLARE_FLAGS(SequentialProcessingFlags, SequentialProcessingFlag);
+
+    ///Sets the priority of this parse job. This is just for the purpose of
+    ///reading it later, and does not affect the actual behaviour in any way.
+    void setParsePriority(int priority);
+    ///Get the priority of this parse job.
+    ///Other than priority(), this will give you the "KDevelop-priority" of the job,
+    ///not the QThread one (which is always zero).
+    int parsePriority() const;
+
     /**
      * _No_ mutexes/locks are allowed to be locked when this is called (except for optionally the foreground lock)
      * 
@@ -89,6 +105,18 @@ public:
      */
     void translateDUChainToRevision(TopDUContext* context);
     
+    /**
+     * Query whether this job is needed to be waited for when trying to process a job with a lower priority.
+     **/
+    bool respectsSequentialProcessing() const;
+
+    /**
+     * Query whether this job requires all higher-priority jobs to finish before being processed itself.
+     **/
+    bool requiresSequentialProcessing() const;
+
+    void setSequentialProcessingFlags(SequentialProcessingFlags flags);
+
     /// \returns the indexed url of the document to be parsed.
     Q_SCRIPTABLE KDevelop::IndexedString document() const;
 
@@ -154,6 +182,8 @@ Q_SIGNALS:
 private:
     class ParseJobPrivate* const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ParseJob::SequentialProcessingFlags);
 
 }
 #endif

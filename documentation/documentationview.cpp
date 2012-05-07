@@ -120,7 +120,7 @@ void DocumentationView::browseForward()
     mCurrent++;
     mForward->setEnabled(mCurrent+1!=mHistory.end());
     mBack->setEnabled(true);
-    
+
     updateView();
 }
 
@@ -170,6 +170,13 @@ void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
 
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
+
+    // NOTE: we assume an existing widget was used to navigate somewhere
+    //       but this history entry actually contains the new info for the
+    //       title... this is ugly and should be refactored somehow
+    if (mIdentifiers->completer()->model() == (*mCurrent)->provider()->indexModel()) {
+        mIdentifiers->setText((*mCurrent)->name());
+    }
 }
 
 void DocumentationView::emptyHistory()

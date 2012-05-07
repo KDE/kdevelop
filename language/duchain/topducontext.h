@@ -24,7 +24,6 @@
 
 #include "ducontext.h"
 #include <language/util/setrepository.h>
-#include "indexeditems.h"
 #include <QMetaType>
 
 template< class T >
@@ -189,16 +188,6 @@ public:
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
   virtual bool imports(const DUContext* origin, const CursorInRevision& position) const;
-
-  /**
-   * Returns the trace of imports from this context top the given target.
-   * The positions in the returned trace may be invalid.
-   * This is more efficient then the version below, because the trace doesn't need to be copied
-   * */
-//   void importTrace(const TopDUContext* target, ImportTrace& store) const;
-
-  ///More convenient version of the above
-//   ImportTrace importTrace(const TopDUContext* target) const;
 
   enum {
     Identity = 4

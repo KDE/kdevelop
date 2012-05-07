@@ -73,7 +73,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
-    action = new KAction(i18n("Focus Editor"), this);
+    action = new KAction(i18nc("@action", "Focus Editor"), this);
     action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
     ac->addAction("focus_editor", action);
@@ -263,15 +263,12 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     {
         Container *container = 0;
         
-        if(splitter->count())
+        while(splitter->count() && qobject_cast<QSplitter*>(splitter->widget(0)))
         {
-            // After unsplitting, we might have to remove an old QSplitter here
+            // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
-            if(qobject_cast<QSplitter*>(widget))
-            {
-                widget->setParent(0);
-                delete widget;
-            }
+            widget->setParent(0);
+            delete widget;
         }
         
         if (!splitter->widget(0))
@@ -389,10 +386,9 @@ void MainWindowPrivate::clearArea()
 
 void MainWindowPrivate::cleanCentralWidget()
 {
-    for(int i=0; i<splitterCentralWidget->count(); ++i) {
-        delete splitterCentralWidget->widget(i);
-    }
-    
+    while(splitterCentralWidget->count())
+        delete splitterCentralWidget->widget(0);
+
     setBackgroundVisible(true);
 }
 
@@ -407,8 +403,7 @@ struct ShownToolViewFinder {
     QList<View *> views;
 };
 
-void MainWindowPrivate::
-slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
+void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position pos, bool /*shown*/)
 {
     if (ignoreDockShown)
         return;
@@ -669,7 +664,7 @@ void MainWindowPrivate::activateFirstVisibleView()
         m_mainWindow->activateView(area->views().first());
 }
 
-void MainWindowPrivate::widgetResized(Qt::DockWidgetArea dockArea, int thickness)
+void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thickness*/)
 {
     //TODO: adymo: remove all thickness business
 }

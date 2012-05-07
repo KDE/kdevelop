@@ -70,10 +70,10 @@ ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
-    ScriptAppConfigType* t = new ScriptAppConfigType();
-    t->addLauncher( new ScriptAppLauncher() );
+    m_configType = new ScriptAppConfigType();
+    m_configType->addLauncher( new ScriptAppLauncher() );
     kDebug() << "adding script launch config";
-    core()->runController()->addConfigurationType( t );
+    core()->runController()->addConfigurationType( m_configType );
 }
 
 ExecuteScriptPlugin::~ExecuteScriptPlugin()
@@ -83,6 +83,9 @@ ExecuteScriptPlugin::~ExecuteScriptPlugin()
 
 void ExecuteScriptPlugin::unload()
 {
+    core()->runController()->removeConfigurationType( m_configType );
+    delete m_configType;
+    m_configType = 0;
 }
 
 KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const

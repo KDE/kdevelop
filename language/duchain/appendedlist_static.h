@@ -97,6 +97,7 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
       Q_ASSERT(!shouldDoDUChainReferenceCounting(KDevVarLengthArray<T, 10>::data()));
       bool empty = KDevVarLengthArray<T, 10>::isEmpty();
       Q_ASSERT(empty);
+      Q_UNUSED(empty);
       for(uint a = 0; a < size; ++a)
         this->append(data[a]);
     }

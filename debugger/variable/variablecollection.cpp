@@ -65,7 +65,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true), changed_(false), m_format(Natural)
+    inScope_(true), topLevel_(true), changed_(false), showError_(false), m_format(Natural)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -112,6 +112,18 @@ void Variable::setInScope(bool v)
     }
     reportChange();
 }
+
+void Variable::setShowError (bool v)
+{
+    showError_ = v;
+    reportChange();
+}
+
+bool Variable::showError()
+{
+    return showError_;
+}
+
 
 Variable::~Variable()
 {
@@ -178,6 +190,16 @@ void Variable::formatChanged()
 
 QVariant Variable::data(int column, int role) const
 {
+    if (showError_) {
+        if (role == Qt::FontRole) {
+            QVariant ret = TreeItem::data(column, role);
+            QFont font = ret.value<QFont>();
+            font.setStyle(QFont::StyleItalic);
+            return font;
+        } else if (column == 1 && role == Qt::DisplayRole) {
+            return i18n("Error");
+        }
+    }
     if (column == 1 && role == Qt::ForegroundRole)
     {
         // FIXME: returning hardcoded gray is bad,
@@ -186,7 +208,10 @@ QVariant Variable::data(int column, int role) const
         if(!inScope_) return QColor(128, 128, 128);
         if(changed_) return QColor(255, 0, 0);
     }
-   
+    if (role == Qt::ToolTipRole) {
+        return TreeItem::data(column, Qt::DisplayRole);
+    }
+
     return TreeItem::data(column, role);
 }
 
@@ -204,6 +229,9 @@ Variable* Watches::add(const QString& expression)
         model(), this, expression);
     appendChild(v);
     v->attachMaybe();
+    if (childCount() == 1 && !isExpanded()) {
+        setExpanded(true);
+    }
     return v;
 }
 
@@ -217,6 +245,9 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
         model(), this, convenienceVarible, "$ret");
     appendChild(finishResult_);
     finishResult_->attachMaybe();
+    if (childCount() == 1 && !isExpanded()) {
+        setExpanded(true);
+    }
     return finishResult_;
 }
 

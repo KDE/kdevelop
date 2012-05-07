@@ -66,7 +66,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 {
     Ui::GrepOutputView::setupUi(this);
 
-    setWindowTitle(i18n("Replace output view"));
+    setWindowTitle(i18nc("@title:window", "Replace output view"));
     setWindowIcon(SmallIcon("edit-find"));
     
     m_prev = new QAction(KIcon("go-previous"), i18n("&Previous item"), this);
@@ -174,7 +174,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     
     QString prettyUrl = descriptionOrUrl;
-    if(descriptionOrUrl.startsWith("/"))
+    if(descriptionOrUrl.startsWith('/'))
         prettyUrl = ICore::self()->projectController()->prettyFileName(descriptionOrUrl, KDevelop::IProjectController::FormatPlain);
     
     // appends new model to history

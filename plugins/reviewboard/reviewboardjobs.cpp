@@ -20,6 +20,8 @@
 
 #include "reviewboardjobs.h"
 #include <qjson/parser.h>
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 #include <KLocalizedString>
 #include <KIO/Job>
 #include <KRandom>
@@ -32,8 +34,6 @@
 
 using namespace ReviewBoard;
 
-
-
 QByteArray ReviewBoard::urlToData(const KUrl& url)
 {
     QByteArray ret;
@@ -42,13 +42,12 @@ QByteArray ReviewBoard::urlToData(const KUrl& url)
         Q_ASSERT(f.exists());
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
+        Q_UNUSED(corr);
 
         ret = f.readAll();
 
     } else {
-#if defined(__GNUC__)
-#warning TODO: add downloading the data
-#endif
+//TODO: add downloading the data
     }
     return ret;
 }
@@ -215,40 +214,47 @@ void NewRequest::done()
 }
 
 ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
-    : m_server(server), KJob(parent)
+    : KJob(parent)
+    , m_server(server)
 {
-    QList<QPair<QString,QString> > countParameters;
-
-    countParameters << qMakePair<QString,QString>("counts-only", "1");
-
-    m_countRequest = new HttpPostCall(m_server, "/api/repositories/", countParameters, "", false, this);
-    connect(m_countRequest, SIGNAL(finished(KJob*)), SLOT(gotRepositoryCount(KJob*)));
 }
 
 void ProjectsListRequest::start()
 {
-    m_countRequest->start();
+    requestRepositoryList(0);
 }
 
 QVariantList ProjectsListRequest::repositories() const
 {
-    return m_repositoriesRequest->result().toMap()["repositories"].toList();
+    return m_repositories;
 }
 
-void ProjectsListRequest::gotRepositoryCount(KJob* )
+void ProjectsListRequest::requestRepositoryList(int startIndex)
 {
-    int numberOfRepositories = m_countRequest->result().toMap()["count"].toInt();
     QList<QPair<QString,QString> > repositoriesParameteres;
 
-    repositoriesParameteres << qMakePair<QString,QString>("max-results", QString("%1").arg(numberOfRepositories));
+    // In practice, the web API will return at most 200 repos per call, so just hardcode that value here
+    repositoriesParameteres << qMakePair<QString,QString>("max-results", QLatin1String("200"));
+    repositoriesParameteres << qMakePair<QString,QString>("start", QString("%1").arg(startIndex));
 
-    m_repositoriesRequest = new HttpPostCall(m_server, "/api/repositories/", repositoriesParameteres, "", false, this);
-    connect(m_repositoriesRequest, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
+    HttpPostCall* repositoriesCall = new HttpPostCall(m_server, "/api/repositories/", repositoriesParameteres, "", false, this);
+    connect(repositoriesCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
 
-    m_repositoriesRequest->start();
+    KDevelop::ICore::self()->runController()->registerJob(repositoriesCall);
 }
 
 void ProjectsListRequest::done(KJob* job)
 {
-    emitResult();
+    HttpPostCall* repositoriesCall = qobject_cast<HttpPostCall*>(job);
+    const int totalResults = repositoriesCall->result().toMap()["total_results"].toInt();
+    m_repositories << repositoriesCall->result().toMap()["repositories"].toList();
+
+    if (m_repositories.count() < totalResults)
+    {
+        requestRepositoryList(m_repositories.count());
+    }
+    else
+    {
+        emitResult();
+    }
 }

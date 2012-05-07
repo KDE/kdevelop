@@ -73,6 +73,8 @@ public:
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
+        , parsePriority( 0 )
+        , sequentialProcessingFlags( ParseJob::IgnoresSequentialProcessing )
     {
     }
 
@@ -99,6 +101,9 @@ public:
     QWeakPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
+
+    int parsePriority;
+    ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
 };
 
 ParseJob::ParseJob( const KUrl &url )
@@ -114,6 +119,31 @@ ParseJob::~ParseJob()
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
 
     delete d;
+}
+
+void ParseJob::setParsePriority(int priority)
+{
+    d->parsePriority = priority;
+}
+
+int ParseJob::parsePriority() const
+{
+    return d->parsePriority;
+}
+
+bool ParseJob::requiresSequentialProcessing() const
+{
+    return d->sequentialProcessingFlags & RequiresSequentialProcessing;
+}
+
+bool ParseJob::respectsSequentialProcessing() const
+{
+    return d->sequentialProcessingFlags & RespectsSequentialProcessing;
+}
+
+void ParseJob::setSequentialProcessingFlags(SequentialProcessingFlags flags)
+{
+    d->sequentialProcessingFlags = flags;
 }
 
 IndexedString ParseJob::document() const
@@ -244,8 +274,21 @@ KDevelop::ProblemPointer ParseJob::readContents()
     if (!hadTracker) {
         // We have to load the file from disk
 
+        static const int maximumFileSize = 5 * 1024 * 1024; // 5 MB
+        if (fileInfo.size() > maximumFileSize) {
+            KDevelop::ProblemPointer p(new Problem());
+            p->setSource(KDevelop::ProblemData::Disk);
+            p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
+            p->setExplanation(i18nc("%1: file size, %2: limit file size",
+                                    "The file is %1 and exceeds the limit of %2.",
+                                    KGlobal::locale()->formatByteSize(fileInfo.size()),
+                                    KGlobal::locale()->formatByteSize(maximumFileSize)));
+            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            kWarning( 9007 ) << p->description() << p->explanation();
+            return p;
+        }
         QFile file( localFile );
-        
+
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             KDevelop::ProblemPointer p(new Problem());
@@ -323,8 +366,14 @@ struct MovingRangeTranslator : public DUChainVisitor
 
     void translateRange(RangeInRevision& r)
     {
-        moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
-        moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+        // PHP and python use top contexts that start at (0, 0) end at INT_MAX, so make sure that doesn't overflow
+        // or translate the start of the top context away from (0, 0)
+        if ( r.start.line != 0 || r.start.column != 0 ) {
+            moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
+        }
+        if ( r.end.line != std::numeric_limits<int>::max() || r.end.column != std::numeric_limits<int>::max() ) {
+            moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+        }
     }
 
     KTextEditor::Range range;

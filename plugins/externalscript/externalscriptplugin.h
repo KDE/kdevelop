@@ -42,6 +42,7 @@ public:
 
   virtual ~ExternalScriptPlugin();
   virtual void unload();
+  virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
   static ExternalScriptPlugin* self();
 
@@ -79,12 +80,14 @@ public slots:
 private slots:
   void rowsRemoved( const QModelIndex& parent, int start, int end );
   void rowsInserted( const QModelIndex& parent, int start, int end );
+  void executeScriptFromContextMenu() const;
 
 private:
   /// @param item row in the model for the item to save
   void saveItemForRow( int row );
 
   QStandardItemModel* m_model;
+  KUrl::List m_urls;
   static ExternalScriptPlugin* m_self;
 
   class ExternalScriptViewFactory *m_factory;

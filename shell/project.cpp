@@ -116,7 +116,7 @@ void ProjectProgress::setBuzzy()
     kDebug() << "showing busy prorgess" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
-    emit showMessage(this, i18n("Loading %1", projectName));
+    emit showMessage(this, i18nc("%1: Project name", "Loading %1", projectName));
 }
 
 
@@ -250,8 +250,8 @@ public:
     {
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
-        
-        if(job->errorText().isEmpty()) {
+
+        if(job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
             loading=false;
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
@@ -657,12 +657,22 @@ IPlugin* Project::versionControlPlugin() const
 
 void Project::addToFileSet( const IndexedString& file )
 {
+    if (d->fileSet.contains(file)) {
+        return;
+    }
+
     d->fileSet.insert( file );
+    emit fileAddedToSet( this, file );
 }
 
 void Project::removeFromFileSet( const IndexedString& file )
 {
+    if (!d->fileSet.contains(file)) {
+        return;
+    }
+
     d->fileSet.remove( file );
+    emit fileRemovedFromSet( this, file );
 }
 
 QSet<IndexedString> Project::fileSet() const

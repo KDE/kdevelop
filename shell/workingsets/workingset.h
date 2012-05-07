@@ -64,8 +64,7 @@ public:
 
     ///Loads this working-set directly from the configuration file, and stores it in the given area
     ///Does not ask the user, this should be done beforehand.
-    ///@param clear If this is true, the area will be cleared before
-    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear = true);
+    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex);
 
     bool hasConnectedAreas() const;
 
@@ -90,7 +89,7 @@ private:
     void changed(Sublime::Area* area);
 
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup);
-    void loadToArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup);
+    void loadToArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle);
 
     WorkingSet(const WorkingSet& rhs);
 

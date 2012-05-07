@@ -243,10 +243,11 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
 void GrepDialog::directoryChanged(const QString& dir)
 {
-    setEnableProjectBox(false);
     KUrl currentUrl = dir;
-    if( !currentUrl.isValid() )
+    if( !currentUrl.isValid() ) {
+        setEnableProjectBox(false);
         return;
+    }
     
     bool projectAvailable = true;
     
@@ -286,7 +287,7 @@ void GrepDialog::templateTypeComboActivated(int index)
 void GrepDialog::setEnableProjectBox(bool enable)
 {
     limitToProjectCheck->setEnabled(enable);
-    if (!enable) limitToProjectCheck->setChecked(false);
+    limitToProjectLabel->setEnabled(enable);
 }
 
 void GrepDialog::setPattern(const QString &pattern)
@@ -296,7 +297,7 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
-    if(dir.startsWith("/"))
+    if(dir.startsWith('/'))
     {
         directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
         directoryRequester->completionObject()->setDir( dir );
@@ -331,6 +332,7 @@ QString GrepDialog::excludeString() const
 
 bool GrepDialog::useProjectFilesFlag() const
 {
+    if (!limitToProjectCheck->isEnabled()) return false;
     return limitToProjectCheck->isChecked();
 }
 
@@ -367,7 +369,7 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
         foreach(IProject* project, ICore::self()->projectController()->projects())
             ret << project->folder();
     }else{
-        QStringList semicolonSeparatedFileList = text.split(";");
+        QStringList semicolonSeparatedFileList = text.split(';');
         if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing

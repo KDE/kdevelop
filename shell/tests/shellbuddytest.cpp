@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Martin Heide <martin.heide@gmx.net>                    *
+ *   Copyright 2012 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -33,16 +34,49 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
+#include <sublime/container.h>
+#include <sublime/document.h>
+#include <sublime/urldocument.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+#include <interfaces/ibuddydocumentfinder.h>
+
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
-#include <sublime/container.h>
-#include <sublime/document.h>
-#include <sublime/urldocument.h>
-#include <iostream>
+
+// groups files like foo.l.txt and foo.r.txt such that l is left of r
+class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
+{
+    virtual bool areBuddies(const KUrl& url1, const KUrl& url2)
+    {
+        const QStringList name1 = url1.fileName().split('.');
+        const QStringList name2 = url2.fileName().split('.');
+        if (name1.size() != 3 || name2.size() != 3) {
+            return false;
+        }
+        if (name1.last() != name2.last() || name1.first() != name2.first()) {
+            return false;
+        }
+        if (name1.at(1) == name2.at(1)) {
+            return false;
+        }
+        if (name1.at(1) != "l" && name1.at(1) != "r") {
+            return false;
+        }
+        if (name2.at(1) != "l" && name2.at(1) != "r") {
+            return false;
+        }
+        qDebug() << "found buddies: " << url1 << url2;
+        return true;
+    }
+    virtual bool buddyOrder(const KUrl& url1, const KUrl& /*url2*/)
+    {
+        const QStringList name1 = url1.fileName().split('.');
+        return name1.at(1) == "l";
+    }
+};
 
 void ShellBuddyTest::initTestCase()
 {
@@ -50,27 +84,27 @@ void ShellBuddyTest::initTestCase()
     TestCore::initialize();
     m_documentController = Core::self()->documentController();
     m_uiController = Core::self()->uiControllerInternal();
+
+    m_finder = new TestBuddyFinder;
+    KDevelop::IBuddyDocumentFinder::addFinder("text/plain", m_finder);
 }
 
 void ShellBuddyTest::cleanupTestCase()
 {
+    KDevelop::IBuddyDocumentFinder::removeFinder("text/plain");
+    delete m_finder;
+    m_finder = 0;
     TestCore::shutdown();
 }
 
-void ShellBuddyTest::verifyFilename(Sublime::View *view, const QString& endOfFilename)
-{
-    QVERIFY(view);
-    if(view)
-    {
-        Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
-        QVERIFY(urlDoc);
-        if(urlDoc)
-        {
-            QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename));
-        }
+//NOTE: macro for proper line-numbers in test's output in case the check fails
+#define verifyFilename(view, endOfFilename) \
+    QVERIFY(view); \
+    { \
+        Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document()); \
+        QVERIFY(urlDoc); \
+        QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename)); \
     }
-}
-
 
 void ShellBuddyTest::createFile(const KTempDir& dir, const QString& filename)
 {
@@ -114,19 +148,19 @@ void ShellBuddyTest::testDeclarationDefinitionOrder()
     enableOpenAfterCurrent();
 
     KTempDir dirA;
-    createFile(dirA, "a.cpp");
-    createFile(dirA, "b.cpp");
-    createFile(dirA, "c.cpp");
-    createFile(dirA, "a.h");
-    createFile(dirA, "b.h");
-    createFile(dirA, "c.h");
+    createFile(dirA, "a.r.txt");
+    createFile(dirA, "b.r.txt");
+    createFile(dirA, "c.r.txt");
+    createFile(dirA, "a.l.txt");
+    createFile(dirA, "b.l.txt");
+    createFile(dirA, "c.l.txt");
 
-    m_documentController->openDocument(KUrl(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "b.h"));
-    m_documentController->openDocument(KUrl(dirA.name() + "c.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "b.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "a.h"));
-    m_documentController->openDocument(KUrl(dirA.name() + "c.h"));
+    m_documentController->openDocument(KUrl(dirA.name() + "a.r.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "b.l.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "c.r.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "b.r.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "a.l.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "c.l.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -134,54 +168,18 @@ void ShellBuddyTest::testDeclarationDefinitionOrder()
     //QCOMPARE(m_uiController->documents().count(), 6);
     QCOMPARE(areaIndex->viewCount(), 6);
 
-    verifyFilename(areaIndex->views().value(0), "a.h");
-    verifyFilename(areaIndex->views().value(1), "a.cpp");
-    verifyFilename(areaIndex->views().value(2), "b.h");
-    verifyFilename(areaIndex->views().value(3), "b.cpp");
-    verifyFilename(areaIndex->views().value(4), "c.h");
-    verifyFilename(areaIndex->views().value(5), "c.cpp");
+    qDebug() << dynamic_cast<Sublime::UrlDocument*>(areaIndex->viewAt(0)->document())->url();
+    verifyFilename(areaIndex->views().value(0), "a.l.txt");
+    verifyFilename(areaIndex->views().value(1), "a.r.txt");
+    verifyFilename(areaIndex->views().value(2), "b.l.txt");
+    verifyFilename(areaIndex->views().value(3), "b.r.txt");
+    verifyFilename(areaIndex->views().value(4), "c.l.txt");
+    verifyFilename(areaIndex->views().value(5), "c.r.txt");
 
     for(int i = 0; i < 6; i++)
         m_documentController->openDocuments()[0]->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
-
-
-
-void ShellBuddyTest::testMultiDotFilenames()
-{
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
-    enableBuddies();
-    enableOpenAfterCurrent();
-
-    KTempDir dirA;
-    createFile(dirA, "a.cpp");
-    createFile(dirA, "lots.of.dots.cpp");
-    createFile(dirA, "b.cpp");
-    createFile(dirA, "lots.of.dots.h");
-
-    m_documentController->openDocument(KUrl(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "lots.of.dots.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "b.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "lots.of.dots.h"));
-
-    Sublime::Area *area = m_uiController->activeArea();
-    Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
-    QCOMPARE(m_documentController->openDocuments().count(), 4);
-    //QCOMPARE(m_uiController->documents().count(), 4);
-    QCOMPARE(areaIndex->viewCount(), 4);
-
-    verifyFilename(areaIndex->views().value(0), "a.cpp");
-    verifyFilename(areaIndex->views().value(1), "lots.of.dots.h");
-    verifyFilename(areaIndex->views().value(2), "lots.of.dots.cpp");
-    verifyFilename(areaIndex->views().value(3), "b.cpp");
-
-    for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
-}
-
 
 void ShellBuddyTest::testActivation()
 {
@@ -191,16 +189,16 @@ void ShellBuddyTest::testActivation()
     enableOpenAfterCurrent();
 
     KTempDir dirA;
-    createFile(dirA, "a.h");
-    createFile(dirA, "a.cpp");
-    createFile(dirA, "b.cpp");
+    createFile(dirA, "a.l.txt");
+    createFile(dirA, "a.r.txt");
+    createFile(dirA, "b.r.txt");
 
-    m_documentController->openDocument(KUrl(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(KUrl(dirA.name() + "a.h"));
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.h");
+    m_documentController->openDocument(KUrl(dirA.name() + "a.r.txt"));
+    m_documentController->openDocument(KUrl(dirA.name() + "a.l.txt"));
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.l.txt");
 
-    m_documentController->openDocument(KUrl(dirA.name() + "b.cpp"));
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "b.cpp");
+    m_documentController->openDocument(KUrl(dirA.name() + "b.r.txt"));
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "b.r.txt");
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
     for(int i = 0; i < 3; i++)
@@ -212,40 +210,40 @@ void ShellBuddyTest::testActivation()
 void ShellBuddyTest::testDisableBuddies()
 {
 /*  3. Disactivate buddy option, Activate open next to active tab
-       Open a.cpp a.h
-       Verify order (a.cpp a.h)
-       Verify that a.h is activated
+       Open a.cpp a.l.txt
+       Verify order (a.cpp a.l.txt)
+       Verify that a.l.txt is activated
        Activate a.cpp
        Open b.cpp
-       Verify order (a.cpp b.cpp a.h) */
+       Verify order (a.cpp b.cpp a.l.txt) */
     QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies(false);
     enableOpenAfterCurrent();
 
     KTempDir dirA;
-    createFile(dirA, "a.h");
-    createFile(dirA, "a.cpp");
-    createFile(dirA, "b.cpp");
+    createFile(dirA, "a.l.txt");
+    createFile(dirA, "a.r.txt");
+    createFile(dirA, "b.r.txt");
 
-    m_documentController->openDocument(QString(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QString(dirA.name() + "a.h"));
+    m_documentController->openDocument(QString(dirA.name() + "a.r.txt"));
+    m_documentController->openDocument(QString(dirA.name() + "a.l.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
 
     // Buddies disabled => order of tabs should be the order of file opening
-    verifyFilename(areaIndex->views().value(0), "a.cpp");
-    verifyFilename(areaIndex->views().value(1), "a.h");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.h");
+    verifyFilename(areaIndex->views().value(0), "a.r.txt");
+    verifyFilename(areaIndex->views().value(1), "a.l.txt");
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.l.txt");
 
     //activate a.cpp => new doc should be opened right next to it
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(0));
 
-    m_documentController->openDocument(QString(dirA.name() + "b.cpp"));
-    verifyFilename(areaIndex->views().value(0), "a.cpp");
-    verifyFilename(areaIndex->views().value(1), "b.cpp");
-    verifyFilename(areaIndex->views().value(2), "a.h");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "b.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "b.r.txt"));
+    verifyFilename(areaIndex->views().value(0), "a.r.txt");
+    verifyFilename(areaIndex->views().value(1), "b.r.txt");
+    verifyFilename(areaIndex->views().value(2), "a.l.txt");
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "b.r.txt");
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
     for(int i = 0; i < 3; i++)
@@ -257,40 +255,40 @@ void ShellBuddyTest::testDisableBuddies()
 void ShellBuddyTest::testDisableOpenAfterCurrent()
 {
 /*  5. Enable buddy option, Disable open next to active tab
-       Open foo.h bar.cpp foo.cpp
-       Verify order (foo.h foo.cpp bar.cpp)
+       Open foo.l.txt bar.cpp foo.cpp
+       Verify order (foo.l.txt foo.cpp bar.cpp)
        Verify that foo.cpp is activated
        Open x.cpp => tab must be placed at the end
-       Verify order (foo.h foo.cpp bar.cpp x.cpp)
+       Verify order (foo.l.txt foo.cpp bar.cpp x.cpp)
        Verify that x.cpp is activated*/
     QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent(false);
 
     KTempDir dirA;
-    createFile(dirA, "foo.h");
-    createFile(dirA, "bar.cpp");
-    createFile(dirA, "foo.cpp");
-    createFile(dirA, "x.cpp");
+    createFile(dirA, "foo.l.txt");
+    createFile(dirA, "bar.r.txt");
+    createFile(dirA, "foo.r.txt");
+    createFile(dirA, "x.r.txt");
 
-    m_documentController->openDocument(QString(dirA.name() + "foo.h"));
-    m_documentController->openDocument(QString(dirA.name() + "bar.cpp"));
-    m_documentController->openDocument(QString(dirA.name() + "foo.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.l.txt"));
+    m_documentController->openDocument(QString(dirA.name() + "bar.r.txt"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.r.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
 
-    verifyFilename(areaIndex->views().value(0), "foo.h");
-    verifyFilename(areaIndex->views().value(1), "foo.cpp");
-    verifyFilename(areaIndex->views().value(2), "bar.cpp");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "foo.cpp");
+    verifyFilename(areaIndex->views().value(0), "foo.l.txt");
+    verifyFilename(areaIndex->views().value(1), "foo.r.txt");
+    verifyFilename(areaIndex->views().value(2), "bar.r.txt");
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "foo.r.txt");
 
-    m_documentController->openDocument(QString(dirA.name() + "x.cpp"));
-    verifyFilename(areaIndex->views().value(0), "foo.h");
-    verifyFilename(areaIndex->views().value(1), "foo.cpp");
-    verifyFilename(areaIndex->views().value(2), "bar.cpp");
-    verifyFilename(areaIndex->views().value(3), "x.cpp");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "x.cpp");
+    m_documentController->openDocument(QString(dirA.name() + "x.r.txt"));
+    verifyFilename(areaIndex->views().value(0), "foo.l.txt");
+    verifyFilename(areaIndex->views().value(1), "foo.r.txt");
+    verifyFilename(areaIndex->views().value(2), "bar.r.txt");
+    verifyFilename(areaIndex->views().value(3), "x.r.txt");
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "x.r.txt");
 
     QCOMPARE(m_documentController->openDocuments().count(), 4);
     for(int i = 0; i < 4; i++)
@@ -302,76 +300,40 @@ void ShellBuddyTest::testDisableOpenAfterCurrent()
 void ShellBuddyTest::testDisableAll()
 {
 /*  6. Disable buddy option, Disable open next to active tab
-       Open       foo.cpp bar.h foo.h
-       Activate   bar.h
+       Open       foo.cpp bar.l.txt foo.l.txt
+       Activate   bar.l.txt
        Open       bar.cpp
-       Verify order (foo.cpp bar.h foo.h bar.cpp)
+       Verify order (foo.cpp bar.l.txt foo.l.txt bar.cpp)
        Verify that bar.cpp is activated*/
     QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies(false);
     enableOpenAfterCurrent(false);
 
     KTempDir dirA;
-    createFile(dirA, "foo.h");
-    createFile(dirA, "foo.cpp");
-    createFile(dirA, "bar.h");
-    createFile(dirA, "bar.cpp");
+    createFile(dirA, "foo.l.txt");
+    createFile(dirA, "foo.r.txt");
+    createFile(dirA, "bar.l.txt");
+    createFile(dirA, "bar.r.txt");
 
-    m_documentController->openDocument(QString(dirA.name() + "foo.cpp"));
-    m_documentController->openDocument(QString(dirA.name() + "bar.h"));
-    m_documentController->openDocument(QString(dirA.name() + "foo.h"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.r.txt"));
+    m_documentController->openDocument(QString(dirA.name() + "bar.l.txt"));
+    m_documentController->openDocument(QString(dirA.name() + "foo.l.txt"));
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
 
-    //activate bar.h
+    //activate bar.l.txt
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(1));
 
-    m_documentController->openDocument(QString(dirA.name() + "bar.cpp"));
+    m_documentController->openDocument(QString(dirA.name() + "bar.r.txt"));
 
-    verifyFilename(areaIndex->views().value(0), "foo.cpp");
-    verifyFilename(areaIndex->views().value(1), "bar.h");
-    verifyFilename(areaIndex->views().value(2), "foo.h");
-    verifyFilename(areaIndex->views().value(3), "bar.cpp");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "bar.cpp");
+    verifyFilename(areaIndex->views().value(0), "foo.r.txt");
+    verifyFilename(areaIndex->views().value(1), "bar.l.txt");
+    verifyFilename(areaIndex->views().value(2), "foo.l.txt");
+    verifyFilename(areaIndex->views().value(3), "bar.r.txt");
+    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "bar.r.txt");
 
     QCOMPARE(m_documentController->openDocuments().count(), 4);
     for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
-}
-
-
-void ShellBuddyTest::testMultipleFolders()
-{
-/*  4. Multiple folders:
-       Activate buddy option
-       Open f/a.cpp f/xyz.cpp g/a.h
-       Verify g/a.h is activated
-       Verify order (f/a.cpp f/xyz.cpp g/a.h)*/
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
-    enableBuddies();
-    enableOpenAfterCurrent();
-
-    KTempDir dirA;
-    createFile(dirA, "a.cpp");
-    createFile(dirA, "x.cpp");
-    KTempDir dirB;
-    createFile(dirB, "a.h");  // different folder => not dirA/a.cpp's buddy!
-
-    m_documentController->openDocument(QString(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QString(dirA.name() + "x.cpp"));
-    m_documentController->openDocument(QString(dirB.name() + "a.h"));
-
-    Sublime::Area *area = m_uiController->activeArea();
-    Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
-
-    verifyFilename(areaIndex->views().value(0), "a.cpp");
-    verifyFilename(areaIndex->views().value(1), "x.cpp");
-    verifyFilename(areaIndex->views().value(2), "a.h");
-    verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.h");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 3);
-    for(int i = 0; i < 3; i++)
         m_documentController->openDocuments()[0]->close(IDocument::Discard);
     QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
@@ -388,22 +350,24 @@ void ShellBuddyTest::testsplitViewBuddies()
 
     KTempDir dirA;
 
-    createFile(dirA, "classA.cpp");
-    createFile(dirA, "classA.h");
+    createFile(dirA, "classA.r.txt");
+    createFile(dirA, "classA.l.txt");
+    createFile(dirA, "foo.txt");
 
     Sublime::Area *pCodeArea = m_uiController->activeArea();
     QVERIFY(pCodeArea);
 
-    IDocument *pClassAHeader = m_documentController->openDocument(KUrl(dirA.name() + "classA.h"));
+    IDocument *pClassAHeader = m_documentController->openDocument(KUrl(dirA.name() + "classA.l.txt"));
     QVERIFY(pClassAHeader);
-    pMainWindow->activeView()->setObjectName("classA.h");
+    Sublime::View *pClassAHeaderView = pMainWindow->activeView();
+    pClassAHeaderView->setObjectName("classA.l.txt");
 
     // now, create a splitted view of the active view (pClassAHeader)
-    Sublime::View *pNewView = pMainWindow->activeView()->document()->createView();
-    pNewView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
-    pCodeArea->addView(pNewView, pMainWindow->activeView(), Qt::Vertical);
+    Sublime::View *pClassAHeaderSplittedView = dynamic_cast<Sublime::Document*>(pClassAHeader)->createView();
+    pClassAHeaderSplittedView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
+    pCodeArea->addView(pClassAHeaderSplittedView, pMainWindow->activeView(), Qt::Vertical);
     // and activate it
-    pMainWindow->activateView(pNewView);
+    pMainWindow->activateView(pClassAHeaderSplittedView);
 
     // get the current view's container from the mainwindow
     QWidget *pCentral = pMainWindow->centralWidget();
@@ -414,20 +378,42 @@ void ShellBuddyTest::testsplitViewBuddies()
     QVERIFY(pSplitter);
     QVERIFY(pSplitter->inherits("QSplitter"));
 
-    Sublime::Container *pContainer = pSplitter->findChild<Sublime::Container*>();
-    QVERIFY(pContainer);
+    Sublime::Container *pLeftContainer  = pSplitter->findChildren<Sublime::Container*>().at(1);
+    QVERIFY(pLeftContainer);
+    Sublime::Container *pRightContainer = pSplitter->findChildren<Sublime::Container*>().at(0);
+    QVERIFY(pRightContainer);
 
-    // check that it only contains pNewView
-    QVERIFY(pContainer->count() == 1 && pContainer->hasWidget(pNewView->widget()));
+    // check that it only contains pClassAHeaderSplittedView
+    QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
 
-    // now open the correponding definition file, classA.cpp
-    IDocument *pClassAImplem = m_documentController->openDocument(KUrl(dirA.name() + "classA.cpp"));
+    // now open the correponding definition file, classA.r.txt
+    IDocument *pClassAImplem = m_documentController->openDocument(KUrl(dirA.name() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
-    pMainWindow->activeView()->setObjectName("classA.cpp");
+    pMainWindow->activeView()->setObjectName("classA.r.txt");
 
-    // and check its presence alongside pNewView in pContainer
-    QVERIFY(pContainer->hasWidget(pNewView->widget()));
-    QVERIFY(pContainer->hasWidget(pMainWindow->activeView()->widget()));
+    // and check its presence alongside pClassAHeaderSplittedView in pRightContainer
+    QVERIFY(pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
+    QVERIFY(pRightContainer->hasWidget(pMainWindow->activeView()->widget()));
+
+    // Now reactivate left side ClassAHeaderview
+    pMainWindow->activateView(pClassAHeaderView);
+
+    // open another file
+    IDocument *pLeftSideCpp = m_documentController->openDocument(KUrl(dirA.name() + "foo.txt"));
+    QVERIFY(pLeftSideCpp);
+    pMainWindow->activeView()->setObjectName("foo.txt");
+
+    // and close left side ClassAHeaderview
+    pCodeArea->closeView(pClassAHeaderView);
+
+    // try to open classAImpl (which is already on the right)
+    // but this time it should open on the left
+    bool successfullyReOpened = m_documentController->openDocument(pClassAImplem);
+    QVERIFY(successfullyReOpened);
+    pMainWindow->activeView()->setObjectName("classA.r.txt");
+
+    // and check if it correctly opened on the left side
+    QVERIFY(pLeftContainer->hasWidget(pMainWindow->activeView()->widget()));
 }
 
 

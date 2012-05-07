@@ -357,6 +357,7 @@ public:
     m_cleanup->stopThread();
     delete m_cleanup;
     delete instance;
+    delete notifier;
   }
 
   void clear() {
@@ -491,6 +492,8 @@ public:
       m_environmentInfo.deleteItem(index);
     }
 
+    Q_UNUSED(removed);
+    Q_UNUSED(removed2);
     Q_ASSERT(index || (removed && removed2));
     Q_ASSERT(!findInformation(info->indexedTopContext().index()));
   }
@@ -636,8 +639,6 @@ public:
 
           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
           DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
-          static DUChainBaseData* dataCopy;
-          dataCopy = theData;
 
           Q_ASSERT(theData->m_range == file->d_func()->m_range);
           Q_ASSERT(theData->m_dynamic == false);
@@ -857,6 +858,7 @@ public:
         QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
+        Q_UNUSED(opened);
         f.write((char*)ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
       }
       
@@ -867,6 +869,7 @@ public:
         QFile f(globalItemRepositoryRegistry().path() + "/available_top_context_indices");
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
+        Q_UNUSED(opened);
 
         f.write((char*)m_availableTopContextIndices.data(), m_availableTopContextIndices.size() * sizeof(uint));
       }
@@ -1253,6 +1256,7 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
     ///If this triggers, there has already been another environment-information registered for this top-context.
     ///removeFromEnvironmentManager should have been called before to remove the old environment-information.
     Q_ASSERT(alreadyHave == file.data());
+    Q_UNUSED(alreadyHave);
     return;
   }
 
@@ -1334,7 +1338,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
     }
 
   foreach(const ParsingEnvironmentFilePointer &file, list)
-    if((proxyContext == file->isProxyContext())) {
+    if(proxyContext == file->isProxyContext()) {
       return file->topContext();
     }
 
@@ -1571,6 +1575,10 @@ Definitions* DUChain::definitions()
 
 void DUChain::aboutToQuit()
 {
+  // if core is not shutting down, we can end up in deadlocks or crashes
+  // since language plugins might still try to access static duchain stuff
+  Q_ASSERT(!ICore::self() || ICore::self()->shuttingDown());
+
   QMutexLocker lock(&sdDUChainPrivate->cleanupMutex());
 
   {

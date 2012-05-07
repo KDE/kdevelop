@@ -22,7 +22,7 @@
 
 #include "testproject.h"
 
-#include <QTemporaryFile>
+#include <KTemporaryFile>
 #include <QTime>
 #include <QTest>
 
@@ -32,40 +32,42 @@
 using namespace KDevelop;
 
 struct TestFile::TestFilePrivate {
-    TestFilePrivate(const QString& fileExtension)
-    : file("XXXXXX." + fileExtension)
-    , ready(false)
+    TestFilePrivate()
+    : ready(false)
     {
     }
 
     void updateReady(const IndexedString& _url, ReferencedTopDUContext _topContext)
     {
         Q_ASSERT(_url == url);
+        Q_UNUSED(_url);
         topContext = _topContext;
         ready = true;
     }
 
-    QTemporaryFile file;
+    KTemporaryFile file;
     bool ready;
     ReferencedTopDUContext topContext;
     IndexedString url;
+    TestProject* project;
 };
 
-TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project)
-: d(new TestFilePrivate(fileExtension))
+TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project, const QString& dir)
+: d(new TestFilePrivate())
 {
-    d->file.open();
-    QVERIFY(d->file.isOpen());
-    QVERIFY(d->file.isWritable());
-    d->file.write(contents.toLocal8Bit());
-    d->file.close();
+    d->file.setSuffix('.' + fileExtension);
+    d->file.setPrefix(dir);
+    setFileContents(contents);
 
     QFileInfo info(d->file.fileName());
-    QVERIFY(info.exists());
-    QVERIFY(info.isFile());
+    Q_ASSERT(info.exists());
+    Q_ASSERT(info.isFile());
     d->url = IndexedString(info.absoluteFilePath());
 
-    project->addToFileSet(d->url);
+    d->project = project;
+    if (project) {
+        project->addToFileSet(d->url);
+    }
 }
 
 TestFile::~TestFile()
@@ -74,6 +76,10 @@ TestFile::~TestFile()
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
+    if (d->project) {
+        d->project->removeFromFileSet(d->url);
+    }
+    delete d;
 }
 
 IndexedString TestFile::url() const
@@ -97,10 +103,38 @@ bool TestFile::waitForParsed(int timeout)
     return d->ready;
 }
 
+bool TestFile::isReady() const
+{
+    return d->ready;
+}
+
 ReferencedTopDUContext TestFile::topContext()
 {
     waitForParsed();
     return d->topContext;
+}
+
+void TestFile::setFileContents(const QString& contents)
+{
+    d->file.open();
+    Q_ASSERT(d->file.isOpen());
+    Q_ASSERT(d->file.isWritable());
+    // manually truncate since we cannot give .open()
+    // any arguments in QTemporaryFile...)
+    d->file.resize(0);
+    d->file.write(contents.toLocal8Bit());
+    d->file.close();
+    d->ready = false;
+}
+
+QString TestFile::fileContents() const
+{
+    d->file.open();
+    Q_ASSERT(d->file.isOpen());
+    Q_ASSERT(d->file.isReadable());
+    QString ret = QString::fromLocal8Bit(d->file.readAll());
+    d->file.close();
+    return ret;
 }
 
 #include "testfile.moc"

@@ -93,7 +93,10 @@ class QuickOpenWidgetCreator {
 
 class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
   public:
-    StandardQuickOpenWidgetCreator(QStringList items, QStringList scopes) : m_items(items), m_scopes(scopes) {
+    StandardQuickOpenWidgetCreator(const QStringList& items, const QStringList& scopes)
+      : m_items(items)
+      , m_scopes(scopes)
+    {
     }
 
     virtual QString objectNameForLine() {
@@ -272,6 +275,8 @@ void QuickOpenWidget::showStandardButtons(bool show)
 }
 
 QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
+  m_filterTimer.setSingleShot(true);
+  connect(&m_filterTimer, SIGNAL(timeout()), this, SLOT(applyFilter()));
 
   Q_UNUSED( title );
   o.setupUi( this );
@@ -344,10 +349,28 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   
   updateProviders();
+  updateTimerInterval(true);
+  
 // no need to call this, it's done by updateProviders already
 //   m_model->restart();
 }
 
+void QuickOpenWidget::updateTimerInterval(bool cheapFilterChange)
+{
+  const int MAX_ITEMS = 10000;
+  if ( cheapFilterChange && m_model->rowCount(QModelIndex()) < MAX_ITEMS ) {
+    // cheap change and there are currently just a few items,
+    // so apply filter instantly
+    m_filterTimer.setInterval(0);
+  } else if ( m_model->unfilteredRowCount() < MAX_ITEMS ) {
+    // not a cheap change, but there are generally
+    // just a few items in the list: apply filter instantly
+    m_filterTimer.setInterval(0);
+  } else {
+    // otherwise use a timer to prevent sluggishness while typing
+    m_filterTimer.setInterval(300);
+  }
+}
 
 void QuickOpenWidget::showEvent(QShowEvent* e)
 {
@@ -382,11 +405,18 @@ void QuickOpenWidget::prepareShow()
   o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
+  
+  m_filterTimer.stop();
+  m_filter = QString();
+  
   if (!m_preselectedText.isEmpty())
   {
     o.searchLine->setText(m_preselectedText);
     o.searchLine->selectAll();
   }
+  
+  applyFilter();
+  
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(currentChanged(QItemSelection,QItemSelection)) );
   
@@ -483,11 +513,20 @@ void QuickOpenWidget::updateScrollBarState()
     o.list->verticalScrollBar()->setEnabled(true);
 }
 
-void QuickOpenWidget::textChanged( const QString& str ) {
-  m_model->textChanged( str );
+void QuickOpenWidget::textChanged( const QString& str )
+{
+  // "cheap" when something was just appended to the current filter
+  updateTimerInterval(str.startsWith(m_filter));
+  m_filter = str;
+  m_filterTimer.start();
+}
+
+void QuickOpenWidget::applyFilter()
+{
+  m_model->textChanged( m_filter );
 
   updateScrollBarState();
-  
+
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
   o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
 
@@ -516,13 +555,11 @@ void QuickOpenWidget::accept() {
 }
 
 void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
-  QString filterText = o.searchLine->text();
-  if(  m_model->execute( index, filterText ) )
-    emit ready();
-  else if( filterText != o.searchLine->text() )
-    o.searchLine->setText( filterText );
+  // crash guard: https://bugs.kde.org/show_bug.cgi?id=297178
+  o.list->setCurrentIndex(index);
+  QMetaObject::invokeMethod(this, "accept", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(this, "ready", Qt::QueuedConnection);
 }
-
 
 bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 {
@@ -648,6 +685,10 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_Return:
       case Qt::Key_Enter: {
+        if (m_filterTimer.isActive()) {
+          m_filterTimer.stop();
+          applyFilter();
+        }
         if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
@@ -1007,7 +1048,7 @@ QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
   if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
-    return false;
+    return 0;
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 

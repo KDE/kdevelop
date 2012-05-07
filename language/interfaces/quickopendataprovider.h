@@ -165,6 +165,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
     virtual uint itemCount() const = 0;
 
     /**
+     * Returns the count of *unfiltered* items this provider currently represents
+     */
+    virtual uint unfilteredItemCount() const = 0;
+
+    /**
      * Returns the data-items for a given range.
      * Generally, the items must addressed alphabetically,
      * they will be displayed in the same order in the
@@ -188,6 +193,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
     virtual void enableData( const QStringList& items, const QStringList& scopes );
 };
 
+/**
+ * Try parsing string according to "path_to_file":"line number" template. "line number" may be empty.
+ * @param from Source string
+ * @param path Set to parsed path to file, or left unchanged if @ref from doesn't match the template. May refer to the same object as @ref from
+ * @param lineNumber Set to parsed line number, zero if "line number" is empty or left unchanged if @ref from doesn't match the template.
+ * @return Whether @ref from did match the expected template.
+ * */
+bool KDEVPLATFORMLANGUAGE_EXPORT extractLineNumber(const QString& from, QString& path, uint& lineNumber);
 
 }
 

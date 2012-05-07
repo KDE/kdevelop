@@ -119,6 +119,9 @@ public:
     QSignalMapper* launchAsMapper;
     QMap<int,QPair<QString,QString> > launchAsInfo;
     KDevelop::ProjectBaseItem* contextItem;
+    DebugMode* debugMode;
+    ExecuteMode* executeMode;
+    ProfileMode* profileMode;
     bool hasLaunchConfigType( const QString& typeId )
     {
         return launchConfigurationTypes.contains( typeId );
@@ -299,6 +302,9 @@ RunController::RunController(QObject *parent)
     d->launchChangeMapper = new QSignalMapper( this );
     d->launchAsMapper = 0;
     d->contextItem = 0;
+    d->executeMode = 0;
+    d->debugMode = 0;
+    d->profileMode = 0;
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
@@ -325,15 +331,25 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 
 void RunController::cleanup()
 {
+    delete d->executeMode;
+    d->executeMode = 0;
+    delete d->profileMode;
+    d->profileMode = 0;
+    delete d->debugMode;
+    d->debugMode = 0;
+
     stopAllProcesses();
     d->saveCurrentLaunchAction();
 }
 
 void RunController::initialize()
 {
-    addLaunchMode( new ExecuteMode() );
-    addLaunchMode( new ProfileMode() );
-    addLaunchMode( new DebugMode() );
+    d->executeMode = new ExecuteMode();
+    addLaunchMode( d->executeMode );
+    d->profileMode = new ProfileMode();
+    addLaunchMode( d->profileMode );
+    d->debugMode = new DebugMode;
+    addLaunchMode( d->debugMode );
     d->readLaunchConfigs( Core::self()->activeSession()->config(), 0 );
 
     foreach (IProject* project, Core::self()->projectController()->projects()) {
@@ -399,48 +415,48 @@ void RunController::setupActions()
     action = new KAction (i18n("Configure Launches..."), this);
     ac->addAction("configure_launches", action);
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
-    action->setToolTip(i18n("Open Launch Configuration Dialog"));
-    action->setWhatsThis(i18n("<p>Opens a dialog to setup new launch configurations, or to change the existing ones.</p>"));
+    action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "<p>Opens a dialog to setup new launch configurations, or to change the existing ones.</p>"));
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
     d->runAction = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute Launch' used in the toolbar", "Execute") );
     d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
-    d->runAction->setToolTip(i18n("Execute current Launch"));
+    d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current Launch"));
     d->runAction->setStatusTip(i18n("Execute current Launch"));
-    d->runAction->setWhatsThis(i18n("<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
+    d->runAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
     d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
-    d->dbgAction->setToolTip(i18n("Debug current Launch"));
+    d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current Launch"));
     d->dbgAction->setStatusTip(i18n("Debug current Launch"));
-    d->dbgAction->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
+    d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
     ac->addAction("run_debug", d->dbgAction);
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
 
     d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
-    d->profileAction->setToolTip(i18n("Profile current Launch"));
+    d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current Launch"));
     d->profileAction->setStatusTip(i18n("Profile current Launch"));
-    d->profileAction->setWhatsThis(i18n("<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
+    d->profileAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new KActionMenu( KIcon("process-stop"), i18n("Stop Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop Jobs' used in the toolbar", "Stop"));
     action->setShortcut(Qt::Key_Escape);
-    action->setToolTip(i18n("Stop all currently running jobs"));
-    action->setWhatsThis(i18n("<b>Stop Jobs</b><p>Requests that all running jobs are stopped.</p>"));
+    action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop Jobs</b><p>Requests that all running jobs are stopped.</p>"));
     action->setEnabled(false);
     ac->addAction("run_stop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
 
     d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
-    d->currentTargetAction->setToolTip(i18n("Current Launch Configuration"));
+    d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current Launch Configuration"));
     d->currentTargetAction->setStatusTip(i18n("Current Launch Configuration"));
-    d->currentTargetAction->setWhatsThis(i18n("<p>Select which launch configuration to run when run is invoked.</p>"));
+    d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "<p>Select which launch configuration to run when run is invoked.</p>"));
     ac->addAction("run_default_target", d->currentTargetAction);
 }
 

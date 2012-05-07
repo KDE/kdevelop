@@ -38,7 +38,10 @@ private slots:
     void testSymbolTableValid();
     void testIndexedStrings();
     void testImportStructure();
-    void testImportCache();
+    ///NOTE: these are not "automated"!
+//     void testImportCache();
+
+    void benchCodeModel();
 };
 
 #endif // TEST_DUCHAIN_H

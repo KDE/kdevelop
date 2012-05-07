@@ -36,7 +36,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom ) { Q_UNUSED( dom ); return QList<KDevelop::ProjectFolderItem*>(); }
         KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
 
-        KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const { return 0; }
+        KDevelop::IProjectBuilder* builder() const { return 0; }
         KUrl buildDirectory(KDevelop::ProjectBaseItem*) const { return m_buildDir; }
 
         KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const { qDebug("jojooooooooooojo"); return m_includeDirectories; }

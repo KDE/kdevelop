@@ -73,7 +73,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProj
     // we operate on the path of this url relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
     // by appending a slash to folders we can filter them with "*/"
-    const QString relativePath = "/" + project->relativeUrl( url ).path(
+    const QString relativePath = '/' + project->relativeUrl( url ).path(
         isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
     );
 

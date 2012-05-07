@@ -24,6 +24,7 @@
 #include <interfaces/iproject.h>
 #include <klocalizedstring.h>
 #include <interfaces/icompletionsettings.h>
+#include <QApplication>
 
 using namespace KDevelop;
 
@@ -71,14 +72,27 @@ void ParseProjectJob::updateReady(KDevelop::IndexedString url, KDevelop::Referen
 }
 
 void ParseProjectJob::start() {
+    if (KDevelop::ICore::self()->shuttingDown()) {
+        return;
+    }
+
     kDebug() << "starting project parse job";
     QSet< IndexedString > files = m_project->fileSet();
 
     TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     KDevelop::TopDUContext::VisibleDeclarationsAndContexts : KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
-    
-    foreach(const KDevelop::IndexedString& url, files)
+
+    // prevent UI-lockup by processing events after some files
+    // esp. noticeable when dealing with huge projects
+    const int processAfter = 1000;
+    int processed = 0;
+    foreach(const KDevelop::IndexedString& url, files) {
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, BackgroundParser::WorstPriority, this );
+        if (++processed = processAfter) {
+            QApplication::processEvents();
+            processed = 0;
+        }
+    }
 }
 
 #include "parseprojectjob.moc"

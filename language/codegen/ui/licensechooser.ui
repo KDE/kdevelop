@@ -6,71 +6,95 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>377</width>
+    <height>289</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Choose the license under which to place the new class.</string>
      </property>
-     <property name="text">
-      <string>License type:</string>
-     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>License type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KComboBox" name="licenseComboBox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="saveLicense">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Click here if you want to save this license for future use</string>
+        </property>
+        <property name="text">
+         <string>Save License</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KLineEdit" name="licenseName">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="urlDropsEnabled">
+         <bool>false</bool>
+        </property>
+        <property name="showClearButton" stdset="0">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="KTextEdit" name="licenseTextEdit"/>
+      </item>
+     </layout>
+     <zorder>saveLicense</zorder>
+     <zorder>licenseTextEdit</zorder>
+     <zorder>licenseName</zorder>
+     <zorder>label</zorder>
+     <zorder>licenseComboBox</zorder>
+     <zorder>saveLicense</zorder>
+     <zorder>licenseTextEdit</zorder>
+     <zorder>licenseName</zorder>
+     <zorder>licenseComboBox</zorder>
+     <zorder>label</zorder>
+     <zorder>licenseTextEdit</zorder>
+     <zorder>licenseName</zorder>
+     <zorder>saveLicense</zorder>
+     <zorder>label</zorder>
+     <zorder>licenseComboBox</zorder>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="KComboBox" name="licenseComboBox"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="saveLicense">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="toolTip">
-      <string>Click here if you want to save this license for future use</string>
-     </property>
-     <property name="text">
-      <string>Save License</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="KLineEdit" name="licenseName">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="urlDropsEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="showClearButton" stdset="0">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="KTextEdit" name="licenseTextEdit"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>

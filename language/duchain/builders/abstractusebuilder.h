@@ -90,8 +90,8 @@ protected:
     RangeInRevision newRange = editorFindRange(name, name);
 
     DUChainReadLocker lock(DUChain::lock());
-    QList<DeclarationPointer> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
-    foreach (DeclarationPointer declaration, declarations)
+    QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
+    foreach (Declaration* declaration, declarations)
       if (!declaration->isForwardDeclaration()) {
         declarations.clear();
         declarations.append(declaration);
@@ -100,7 +100,7 @@ protected:
     // If we don't break, there's no non-forward declaration
 
     lock.unlock();
-    newUse( name, newRange, !declarations.isEmpty() ? declarations.first() : 0 );
+    newUse( name, newRange, !declarations.isEmpty() ? DeclarationPointer(declarations.first()) : DeclarationPointer() );
   }
 
   ///@todo Work this over! We must not pass around "Declaration*" values if the duchain is not locked.
@@ -113,7 +113,7 @@ protected:
    */
   void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
-    newUse(node, editorFindRange(node, node), declaration);
+    newUse(node, this->editorFindRange(node, node), declaration);
   }
 
   /**

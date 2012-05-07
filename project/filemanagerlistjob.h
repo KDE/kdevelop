@@ -23,6 +23,13 @@
 #include <KIO/Job>
 #include <QtCore/QQueue>
 
+// uncomment to time imort jobs
+// #define TIME_IMPORT_JOB
+
+#ifdef TIME_IMPORT_JOB
+#include <QElapsedTimer>
+#endif
+
 namespace KDevelop
 {
     class ProjectFolderItem;
@@ -58,6 +65,10 @@ private:
     const bool m_forceRecursion;
     // kill does not delete the job instantaniously
     bool m_aborted;
+
+#ifdef TIME_IMPORT_JOB
+    QElapsedTimer m_timer;
+#endif
 };
 
 }

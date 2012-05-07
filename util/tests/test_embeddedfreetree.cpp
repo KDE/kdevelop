@@ -170,7 +170,7 @@ bool operator==(const std::set<uint> a, const std::set<uint> b) {
                 uint freeCount = 0;
                 for(int a = 0; a < data.size(); ++a) {
                     if(data[a].value) {
-                        Q_ASSERT(last < data[a].value);
+                        QVERIFY(last < data[a].value);
                         last = data[a].value;
                     }else{
                         ++freeCount;
@@ -210,10 +210,10 @@ class TestSet {
     public:
     void add(uint i) {
         if(realSet.find(i) != realSet.end()) {
-            Q_ASSERT(set.contains(i));
+            QVERIFY(set.contains(i));
             return;
         }else{
-            Q_ASSERT(!set.contains(i));
+            QVERIFY(!set.contains(i));
         }
         clock_t start = clock();
         realSet.insert(i);
@@ -224,6 +224,10 @@ class TestSet {
         emb_insertion += clock() - start;
         
         start = clock();
+        ///FIXME: what is the expected outcome?
+        ///       turns out that the below is often
+        ///       *not* true - is this what we want?
+        ///       => add proper Q_VERIFY!
         realSet.find(i) == realSet.end();
         std_contains += clock() - start;
         
@@ -231,15 +235,15 @@ class TestSet {
         set.contains(i);
         emb_contains += clock() - start;
         
-        Q_ASSERT(set.contains(i));
+        QVERIFY(set.contains(i));
         set.verify();
     }
     
     void remove(uint i) {
         if(realSet.find(i) != realSet.end()) {
-            Q_ASSERT(set.contains(i));
+            QVERIFY(set.contains(i));
         }else{
-            Q_ASSERT(!set.contains(i));
+            QVERIFY(!set.contains(i));
             return;
         }
         clock_t start = clock();
@@ -251,7 +255,7 @@ class TestSet {
         std_removal += clock() - start;
         
         
-        Q_ASSERT(!set.contains(i));
+        QVERIFY(!set.contains(i));
     }
     
     uint size() const {
@@ -281,7 +285,7 @@ class TestSet {
     }
     
     void verify() {
-        Q_ASSERT(realSet == set.toSet());
+        QVERIFY(realSet == set.toSet());
         set.verify();
     }
     private:
@@ -462,8 +466,12 @@ class TestEmbeddedFreeTree : public QObject {
                 std::set<uint>::const_iterator it = testSet1.lower_bound(value);
                 int pos = set1.iterator().lowerBound(TestItem(value));
                 //This tests the upperBound functionality
-
-                Q_ASSERT((pos != -1 && it != testSet1.end() && set1.data()[pos].value == *it) || (pos == -1 && it == testSet1.end()));
+                if (pos != -1) {
+                    QVERIFY(it != testSet1.end());
+                    QVERIFY(set1.data()[pos].value == *it);
+                } else {
+                    QVERIFY(it == testSet1.end());
+                }
 
                 if((rand() % 10) == 0) {
                 

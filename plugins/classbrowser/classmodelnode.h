@@ -245,7 +245,7 @@ private:
 class FunctionNode : public IdentifierNode
 {
 public:
-  FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesModelInterface* a_model);
+  FunctionNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
   virtual int getScore() const { return 400; }

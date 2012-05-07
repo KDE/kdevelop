@@ -43,7 +43,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     resize(QSize(700, 500));
     
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
-    KPageWidgetItem* currentPage;
+    KPageWidgetItem* currentPage = 0;
     start.adjustPath(KUrl::AddTrailingSlash);
 
     if( fetch ) {

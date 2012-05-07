@@ -1,3 +1,4 @@
+
 /* This file is part of KDevelop
 Copyright 2006 Adam Treat <treat@kde.org>
 Copyright 2007 Andreas Pakulat <apaku@gmx.de>
@@ -56,6 +57,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -170,12 +173,46 @@ public:
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
-            IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
             const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
             if (info.property("X-KDevelop-Category").toString() != "Project")
                 continue;
-            if( !iface || plugin == project->managerPlugin() )
-                pluginnames << info.pluginName();
+            IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
+            if( manager && manager != project->projectFileManager() )
+            {
+                // current plugin is a manager but does not apply to given project, skip
+                continue;
+            }
+            IProjectBuilder* builder = plugin->extension<KDevelop::IProjectBuilder>();
+            if (builder)
+            {
+                // hide builder plugins that are not required
+                if(!project->buildSystemManager())
+                {
+                    // current plugin is a builder yet the project cannot be build - skip
+                    continue;
+                }
+                if (builder && builder != project->buildSystemManager()->builder())
+                {
+                    const KPluginInfo builderInfo = m_core->pluginController()->pluginInfo(
+                        dynamic_cast<IPlugin*>(project->buildSystemManager()->builder()) );
+                    bool shouldBeHidden = true;
+                    // hide if this plugin does not implement an interface that is required by the builder
+                    // i.e. makebuilder should be shown for cmake projects
+                    const QStringList dependencies = builderInfo.property("X-KDevelop-IRequired").toStringList();
+                    foreach(const QString& interface, info.property("X-KDevelop-Interfaces").toStringList()) {
+                        if (dependencies.contains(interface))
+                        {
+                            shouldBeHidden = false;
+                            break;
+                        }
+                    }
+                    if (shouldBeHidden)
+                    {
+                        continue;
+                    }
+                }
+            }
+            pluginnames << info.pluginName();
         }
 
         return pluginnames;
@@ -291,8 +328,9 @@ ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) 
 ProjectDialogProvider::~ProjectDialogProvider()
 {}
 
-bool writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QString& manager )
+bool writeNewProjectFile( const QString& localConfigFile, const QString& name, const QString& manager )
 {
+    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
     if (!cfg->isConfigWritable(true)) {
         kDebug() << "can't write to configfile";
         return false;
@@ -303,6 +341,24 @@ bool writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QSt
     cfg->sync();
     return true;
 }
+
+bool writeProjectSettingsToConfigFile(const KUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
+{
+    if ( !projectFileUrl.isLocalFile() ) {
+        KTemporaryFile tmp;
+        if ( !tmp.open() ) {
+            return false;
+        }
+        if ( !writeNewProjectFile( tmp.fileName(), projectName, projectManager ) ) {
+            return false;
+        }
+        // explicitly close file before uploading it, see also: https://bugs.kde.org/show_bug.cgi?id=254519
+        tmp.close();
+        return KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+    }
+    return writeNewProjectFile( projectFileUrl.toLocalFile(),projectName, projectManager );
+}
+
 
 bool projectFileExists( const KUrl& u )
 {
@@ -333,6 +389,9 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
 
     KUrl projectFileUrl = dlg.projectFileUrl();
     kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
+
+    // controls if existing project file should be saved
+    bool writeProjectConfigToFile = true;
     if( projectFileExists( projectFileUrl ) )
     {
         // check whether config is equal
@@ -354,55 +413,37 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
         {
             KGuiItem yes = KStandardGuiItem::yes();
             yes.setText(i18n("Override"));
-            yes.setToolTip(i18n("Continue to open the project and use the just provided project configuration."));
+            yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration."));
             yes.setIcon(KIcon());
             KGuiItem no = KStandardGuiItem::no();
             no.setText(i18n("Open Existing File"));
-            no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
+            no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration."));
             no.setIcon(KIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
-            cancel.setToolTip(i18n("Cancel and do not open the project."));
+            cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
                      "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
                 i18n("Override existing project configuration"), yes, no, cancel );
             if ( ret == KMessageBox::No )
             {
-                // no: reuse existing project file
-                return projectFileUrl;
+                writeProjectConfigToFile = false;
             } else if ( ret == KMessageBox::Cancel )
             {
                 return KUrl();
             } // else fall through and write new file
+        } else {
+            writeProjectConfigToFile = false;
         }
     }
 
-    if( projectFileUrl.isLocalFile() )
-    {
-        bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
-                        dlg.projectName(),
-                        dlg.projectManager() );
-        if (!ok)
-            return KUrl();
-    } else
-    {
-        KTemporaryFile tmp;
-        tmp.open();
-        bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
-                        dlg.projectName(),
-                        dlg.projectManager() );
-        tmp.close();
-        if (!ok)
-            return KUrl();
-
-        ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
-        if (!ok) {
+    if (writeProjectConfigToFile) {
+        if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg.projectName(), dlg.projectManager())) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));
             return KUrl();
         }
     }
-
     return projectFileUrl;
 }
 
@@ -453,16 +494,16 @@ void ProjectController::setupActions()
     KAction *action;
 
     d->m_openProject = action = ac->addAction( "project_open" );
-    action->setText(i18n( "Open / Import Project..." ) );
-    action->setToolTip( i18n( "Open / Import Project" ) );
-    action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
+    action->setText(i18nc( "@action", "Open / Import Project..." ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Open / Import Project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
-    action->setText(i18n( "Fetch Project..." ) );
-    action->setToolTip( i18n( "Fetch Project" ) );
-    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
+    action->setText(i18nc( "@action", "Fetch Project..." ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Fetch Project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
@@ -475,9 +516,9 @@ void ProjectController::setupActions()
 
     d->m_closeProject = action = ac->addAction( "project_close" );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeSelectedProjects()) );
-    action->setText( i18n( "Close Project(s)" ) );
+    action->setText( i18nc( "@action", "Close Project(s)" ) );
     action->setIcon( KIcon( "project-development-close" ) );
-    action->setToolTip( i18n( "Closes all currently selected projects" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( "project_open_config" );
@@ -499,9 +540,9 @@ void ProjectController::setupActions()
                             openProject( const KUrl& ) ));
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent" ) );
-    d->m_recentAction->setToolTip( i18n( "Open recent project" ) );
+    d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
     d->m_recentAction->setWhatsThis(
-        i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
+        i18nc( "@info:whatsthis", "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
     KAction* openProjectForFileAction = new KAction( this );

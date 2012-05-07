@@ -336,8 +336,6 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
             if ( doc && doc == ICore::self()->documentController()->activeDocument() && m_highlighters.contains( doc->url() ) && m_highlighters[doc->url()] ) {
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
-                    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc->textDocument() );
-                    Q_ASSERT( moving );
                     const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
 
                     KTextEditor::View * v = doc->textDocument()->activeView();
@@ -645,9 +643,6 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
     KTextEditor::MovingRange* range = rangeForMark( mark );
 
     if( range ) {
-        KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
-        Q_ASSERT( moving );
-
         QString currentText = doc->text( range->toRange() );
         Diff2::Difference* diff = m_differencesForRanges[range];
 
@@ -1432,6 +1427,7 @@ void PatchReviewPlugin::updateReview() {
 
     bool b = ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory );
     Q_ASSERT( b );
+    Q_UNUSED( b );
 }
 
 void PatchReviewPlugin::setPatch( IPatchSource* patch ) {

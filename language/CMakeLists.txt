@@ -2,6 +2,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
 add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
+add_subdirectory(backgroundparser/tests)
 
 set(kdevplatformlanguage_LIB_SRCS
     editor/persistentmovingrangeprivate.cpp
@@ -22,6 +23,11 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/waitforupdate.cpp
     duchain/duchainpointer.cpp
     duchain/ducontext.cpp
+    duchain/indexedducontext.cpp
+    duchain/indexedtopducontext.cpp
+    duchain/localindexedducontext.cpp
+    duchain/indexeddeclaration.cpp
+    duchain/localindexeddeclaration.cpp
     duchain/topducontext.cpp
     duchain/topducontextdynamicdata.cpp
     duchain/functiondefinition.cpp
@@ -238,7 +244,11 @@ install(FILES
     duchain/instantiationinformation.h
     duchain/specializationstore.h
     duchain/persistentsetmap.h
-    duchain/indexeditems.h
+    duchain/indexedducontext.h
+    duchain/indexedtopducontext.h
+    duchain/localindexedducontext.h
+    duchain/indexeddeclaration.h
+    duchain/localindexeddeclaration.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 
@@ -347,4 +357,3 @@ install(FILES
     codegen/licenses/Mozilla\ v1.1
     DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
 )
-

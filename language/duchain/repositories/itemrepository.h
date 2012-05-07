@@ -49,8 +49,10 @@
 
 #ifdef DEBUG_ITEM_REACHABILITY
 #define ENSURE_REACHABLE(bucket) Q_ASSERT(allItemsReachable(bucket));
+#define IF_ENSURE_REACHABLE(x) x
 #else
 #define ENSURE_REACHABLE(bucket)
+#define IF_ENSURE_REACHABLE(x)
 #endif
 
 ///Do not enable this #define, the issue it catches is non-critical and happens on a regular basis
@@ -1351,7 +1353,6 @@ class ItemRepository : public AbstractItemRepository {
 
     short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
-    short unsigned int previousPreviousBucketNumber = 0;
 
     uint useBucket = m_currentBucket;
     bool pickedBucketInChain = false; //Whether a bucket was picked for re-use that already is in the hash chain
@@ -1388,7 +1389,6 @@ class ItemRepository : public AbstractItemRepository {
         //Should happen rarely
         short unsigned int next = bucketPtr->nextBucketForHash(hash);
         if(next) {
-          previousPreviousBucketNumber = previousBucketNumber;
           previousBucketNumber = next;
         } else
           break;
@@ -1692,7 +1692,7 @@ class ItemRepository : public AbstractItemRepository {
       //The item is directly in the m_firstBucketForHash hash
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
       Q_ASSERT(*bucketHashPosition == bucket);
-      unsigned short previous = bucket;
+      IF_ENSURE_REACHABLE(unsigned short previous = bucket;)
       while(!bucketPtr->hasClashingItem(hash, bucketHashSize))
       {
 //         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, bucketHashSize));
@@ -1705,7 +1705,7 @@ class ItemRepository : public AbstractItemRepository {
         ENSURE_REACHABLE(previous);
         ENSURE_REACHABLE(next);
 
-        previous = next;
+        IF_ENSURE_REACHABLE(previous = next;)
 
         if(next) {
           bucketPtr = m_fastBuckets[next];

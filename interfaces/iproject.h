@@ -139,6 +139,10 @@ public:
     */
     virtual bool isReady() const=0;
 
+Q_SIGNALS:
+    void fileAddedToSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
+    void fileRemovedFromSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
+
 public Q_SLOTS:
     /**
      * @brief Get the project folder

@@ -80,7 +80,7 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
     Q_ASSERT( ICore::self() );
     Q_ASSERT( ICore::self()->activeSession() );
 
-    baseDir += "/" + ICore::self()->activeSession()->id().toString();
+    baseDir += '/' + ICore::self()->activeSession()->id().toString();
 
     //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
     for(int a = 0; a < 100; ++a) {
@@ -195,6 +195,7 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   m_lock->unlock();
   bool result = removeDirectory(m_path);
   Q_ASSERT(result);
+  Q_UNUSED(result);
   Q_ASSERT(m_lock);
   //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();

@@ -18,6 +18,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QTextStream>
+#include <QDirIterator>
 
 #include <ktar.h>
 #include <kzip.h>
@@ -116,7 +117,7 @@ void AppWizardPlugin::slotNewProject()
             {
                 file = KMacroExpander::expandMacros(file, m_variables);
                 core()->documentController()->openDocument(file);
-            }                        
+            }
         } else {
             KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
         }
@@ -325,6 +326,15 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
 
     QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name + ".kdev4" );
+
+    // Loop through the new project directory and try to detect the first .kdev4 file.
+    // If one is found this file will be used. So .kdev4 file can be stored in any subdirectory and the
+    // project templates can be more complex.
+    QDirIterator it(QDir::cleanPath( dest.toLocalFile()), QStringList() << "*.kdev4", QDir::NoFilter, QDirIterator::Subdirectories);
+    if(it.hasNext() == true)
+    {
+        projectFileName = it.next();
+    }
 
     kDebug() << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
 

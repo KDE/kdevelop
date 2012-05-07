@@ -91,6 +91,7 @@ private:
 
     int m_currentThread;
     int m_currentFrame;
+    bool m_updateCurrentFrameOnNextFetch;
 
     QList<ThreadItem> m_threads;
     QHash<int, QList<FrameItem> > m_frames;

@@ -150,7 +150,7 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
     if (!info.isFile())
-        return false;
+        return 0;
 
     CvsLogJob* job = new CvsLogJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
@@ -427,7 +427,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
         if (!recursive)
             *job << "-l";
 
-        *job << "-d" << targetDir.toLocalFile();
+        *job << "-d" << targetDir.toLocalFile(KUrl::RemoveTrailingSlash);
 
         *job << module;
 

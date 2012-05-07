@@ -22,11 +22,15 @@
 #ifndef QUICKOPENPLUGIN_H
 #define QUICKOPENPLUGIN_H
 
-#include <interfaces/iplugin.h>
-#include <language/interfaces/iquickopen.h>
 #include <QtCore/QVariant>
+#include <QtCore/QTimer>
 #include <QtGui/QMenu>
+
+#include <interfaces/iplugin.h>
+
+#include <language/interfaces/iquickopen.h>
 #include <language/interfaces/quickopendataprovider.h>
+
 #include "ui_quickopen.h"
 
 class KAction;
@@ -156,6 +160,8 @@ class QuickOpenWidget : public QMenu {
   private slots:
   void currentChanged( const QModelIndex& current, const QModelIndex& previous );
   void currentChanged( const QItemSelection& current, const QItemSelection& previous );
+  
+  void updateTimerInterval( bool cheapFilterChange );
 
   void accept();
   void textChanged( const QString& str );
@@ -163,7 +169,9 @@ class QuickOpenWidget : public QMenu {
   void doubleClicked ( const QModelIndex & index );
 
   void updateScrollBarState();
-  
+
+  void applyFilter();
+
   private:
   virtual void showEvent(QShowEvent *);
   void callRowSelected();
@@ -174,6 +182,8 @@ class QuickOpenWidget : public QMenu {
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
   QString m_preselectedText;
+  QTimer m_filterTimer;
+  QString m_filter;
   public:
   Ui::QuickOpen o;
   
@@ -208,7 +218,7 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
     
-    virtual void setDefaultText(QString text) {
+    virtual void setDefaultText(const QString& text) {
       m_defaultText = text;
       setClickMessage(m_defaultText);
     }

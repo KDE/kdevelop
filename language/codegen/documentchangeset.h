@@ -80,7 +80,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
         bool m_success;
     };
     
-    ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
+    /// Add an individual local change to this change-set.
+    ///@note Multi-line changes are not (yet) supported.
     ChangeResult addChange(const DocumentChange& change);
     ChangeResult addChange(DocumentChangePointer change);
     

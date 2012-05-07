@@ -176,6 +176,10 @@ QModelIndex ClassModel::parent(const QModelIndex& childIndex) const
 
 QModelIndex ClassModel::index(ClassModelNodes::Node* a_node) const
 {
+  if (!a_node) {
+    return QModelIndex();
+  }
+
   // If no parent exists, we have an invalid index (root node or not part of a model).
   if ( a_node->getParent() == 0 )
     return QModelIndex();

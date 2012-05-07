@@ -67,21 +67,22 @@ ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
-    NativeAppConfigType* t = new NativeAppConfigType();
-    t->addLauncher( new NativeAppLauncher() );
+    m_configType = new NativeAppConfigType();
+    m_configType->addLauncher( new NativeAppLauncher() );
     kDebug() << "adding native app launch config";
-    core()->runController()->addConfigurationType( t );
+    core()->runController()->addConfigurationType( m_configType );
 }
 
 ExecutePlugin::~ExecutePlugin()
 {
 }
 
-
 void ExecutePlugin::unload()
 {
+    core()->runController()->removeConfigurationType( m_configType );
+    delete m_configType;
+    m_configType = 0;
 }
-
 
 QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
 {

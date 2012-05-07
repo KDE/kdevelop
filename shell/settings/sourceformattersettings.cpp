@@ -376,8 +376,8 @@ void SourceFormatterSettings::deleteStyle()
     }
     if (!otherLanguageNames.empty() &&
         KMessageBox::warningContinueCancel(this,
-        i18n("The style %1 is also used for the following languages:\n%2.\nAre you sure you want to delete it?")
-        .arg(styleIter.value()->caption()).arg(otherLanguageNames.join("\n")), i18n("Style being deleted")) != KMessageBox::Continue) {
+        i18n("The style %1 is also used for the following languages:\n%2.\nAre you sure you want to delete it?",
+        styleIter.value()->caption(), otherLanguageNames.join("\n")), i18n("Style being deleted")) != KMessageBox::Continue) {
         return;
     }
     styleList->takeItem( styleList->currentRow() );
@@ -475,10 +475,40 @@ void SourceFormatterSettings::updatePreview()
         LanguageSettings& l = languages[ langName ];
         SourceFormatter* fmt = l.selectedFormatter;
         SourceFormatterStyle* style = l.selectedStyle;
-        ISourceFormatter* ifmt = fmt->formatter;
-        KMimeType::Ptr mime = l.mimetypes.first();
-        m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
-        m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+
+        descriptionLabel->setText( style->description() );
+        if( style->description().isEmpty() )
+            descriptionLabel->hide();
+        else
+            descriptionLabel->show();
+
+        if( style->usePreview() )
+        {
+            ISourceFormatter* ifmt = fmt->formatter;
+            KMimeType::Ptr mime = l.mimetypes.first();
+            m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
+
+            //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
+            // see also: https://bugs.kde.org/show_bug.cgi?id=291074
+            KTextEditor::ConfigInterface* iface = qobject_cast<KTextEditor::ConfigInterface*>(m_document);
+            QVariant oldReplaceTabs;
+            if (iface) {
+                oldReplaceTabs = iface->configValue("replace-tabs");
+                iface->setConfigValue("replace-tabs", false);
+            }
+
+            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+
+            if (iface) {
+                iface->setConfigValue("replace-tabs", oldReplaceTabs);
+            }
+
+            previewLabel->show();
+            textEditor->show();
+        }else{
+            previewLabel->hide();
+            textEditor->hide();
+        }
     } else
     {
         m_document->setText( i18n( "No Language selected" ) );

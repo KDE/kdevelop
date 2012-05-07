@@ -94,49 +94,56 @@ bool PartDocument::save(DocumentSaveMode /*mode*/)
     return true;
 }
 
+bool PartDocument::askForCloseFeedback()
+{
+    if (state() == IDocument::Modified) {
+        int code = KMessageBox::warningYesNoCancel(
+            Core::self()->uiController()->activeMainWindow(),
+            i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
+            i18n("Close Document"));
+
+        if (code == KMessageBox::Yes) {
+            if (!save(Default))
+                return false;
+
+        } else if (code == KMessageBox::Cancel) {
+            return false;
+        }
+
+    /// @todo Is this behavior right?
+    } else if (state() == IDocument::DirtyAndModified) {
+        int code = KMessageBox::warningYesNoCancel(
+            Core::self()->uiController()->activeMainWindow(),
+            i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
+                 "Do you want to override the external changes?", url().toLocalFile()),
+            i18n("Close Document"));
+
+        if (code == KMessageBox::Yes) {
+            if (!save(Default))
+                return false;
+
+        } else if (code == KMessageBox::Cancel) {
+            return false;
+        }
+
+    }
+    return true;
+}
+
 bool PartDocument::close(DocumentSaveMode mode)
 {
     if (!(mode & Discard)) {
         if (mode & Silent) {
             if (!save(mode))
                 return false;
-
         } else {
-            if (state() == IDocument::Modified) {
-                int code = KMessageBox::warningYesNoCancel(
-                    Core::self()->uiController()->activeMainWindow(),
-                    i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
-                    i18n("Close Document"));
-
-                if (code == KMessageBox::Yes) {
-                    if (!save(mode))
-                        return false;
-
-                } else if (code == KMessageBox::Cancel) {
-                    return false;
-                }
-
-            } else if (state() == IDocument::DirtyAndModified) {
-                if (!save(mode))
-                    return false;
-            }
+            if( !askForCloseFeedback() )
+                return false;
         }
     }
-
 
     //close all views and then delete ourself
-    ///@todo test this
-    foreach (Sublime::Area *area,
-             Core::self()->uiControllerInternal()->allAreas())
-    {
-        QList<Sublime::View*> areaViews = area->views();
-        foreach (Sublime::View *view, areaViews) {
-            if (views().contains(view)) {
-                area->removeView(view);
-                delete view;
-            }
-        }
-    }
+    closeViews();
 
     foreach (KParts::Part* part, d->partForView)
         part->deleteLater();

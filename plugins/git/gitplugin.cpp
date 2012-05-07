@@ -470,7 +470,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
 void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 {
     QVariantList results;
-    VcsAnnotationLine* annotation;
+    VcsAnnotationLine* annotation = 0;
     QStringList lines = job->output().split('\n');
     
     bool skipNext=false;
@@ -661,6 +661,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     QScopedPointer<DVcsJob> job(gitRevList(repo, args));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
+    Q_UNUSED(ret);
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 
     static QRegExp rx_com("commit \\w{40,40}");
@@ -825,6 +826,7 @@ void GitPlugin::initBranchHash(const QString &repo)
     QScopedPointer<DVcsJob> job(gitRevList(repo, QStringList(root)));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
+    Q_UNUSED(ret);
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //     kDebug() << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
@@ -842,6 +844,7 @@ void GitPlugin::initBranchHash(const QString &repo)
         QScopedPointer<DVcsJob> job(gitRevList(repo, args));
         bool ret = job->exec();
         Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
+        Q_UNUSED(ret);
         QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //         kDebug() << "\n\n\n commits" << commits << "\n\n\n";
         branchesShas.append(commits);

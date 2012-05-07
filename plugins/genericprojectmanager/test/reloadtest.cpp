@@ -20,20 +20,20 @@
 #include "reloadtest.h"
 
 #include <qtest_kde.h>
+#include <KDebug>
+#include <KTempDir>
 
-#include <interfaces/icore.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+
+#include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <KDebug>
-#include <interfaces/isession.h>
-#include <kconfiggroup.h>
 #include <interfaces/iproject.h>
+#include <interfaces/ilanguagecontroller.h>
+
 #include <project/interfaces/iprojectfilemanager.h>
-#include <language/duchain/indexedstring.h>
 #include <project/projectmodel.h>
-#include <interfaces/iuicontroller.h>
-#include <KParts/MainWindow>
+#include <language/backgroundparser/backgroundparser.h>
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
@@ -54,8 +54,13 @@ void ProjectLoadTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore::initialize();
+    KDevelop::ICore::self()->languageController()->backgroundParser()->disableProcessing();
 
     qRegisterMetaType<KDevelop::IProject*>("KDevelop::IProject*");
+
+    foreach(KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
+        KDevelop::ICore::self()->projectController()->closeProject(p);
+    }
 }
 
 void ProjectLoadTest::cleanupTestCase()
@@ -65,82 +70,91 @@ void ProjectLoadTest::cleanupTestCase()
 
 void ProjectLoadTest::init()
 {
-    exec("bash -c \"rm -r testproject*\"");
-
-    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
-    }
     Q_ASSERT(KDevelop::ICore::self()->projectController()->projects().isEmpty());
 }
 
-QPair<QString, KUrl> makeProject()
+struct TestProject
 {
-    QString path;
-    QString projectName;
-    do {
-        projectName = QString("testproject%1").arg(qrand());
-        path = QDir::currentPath().append("/").append(projectName);
-    } while(QFile::exists(path));
-    QDir::current().mkdir(projectName);
+    // temp directory of project
+    KTempDir* dir;
+    // name of the project (random)
+    QString name;
+    // project file (*.kdev4)
+    KUrl file;
+    ~TestProject() {
+        KDevelop::IProject* p = KDevelop::ICore::self()->projectController()->findProjectByName(name);
+        if (p) {
+            KDevelop::ICore::self()->projectController()->closeProject(p);
+        }
+        delete dir;
+    }
+};
+
+TestProject makeProject()
+{
+    TestProject ret;
+    ret.dir = new KTempDir();
+    QFileInfo dir(ret.dir->name().left(ret.dir->name().length() - 1));
+    Q_ASSERT(dir.exists());
+    ret.name = dir.fileName();
 
     QStringList projectFileContents;
     projectFileContents
     << "[Project]"
-    << QString("Name=") + projectName
+    << QString("Name=") + ret.name
     << "Manager=KDevGenericManager";
 
-    KUrl projecturl( path + "/simpleproject.kdev4" );
+    KUrl projecturl( dir.absoluteFilePath() + "/simpleproject.kdev4" );
     QFile projectFile(projecturl.toLocalFile());
     projectFile.open(QIODevice::WriteOnly);
     projectFile.write(projectFileContents.join("\n").toAscii());
     projectFile.close();
+    ret.file = projecturl;
 
-    return qMakePair(path, projecturl);
+    Q_ASSERT(ret.dir->exists());
+    Q_ASSERT(projecturl.upUrl().toLocalFile() == ret.dir->name());
+
+    return ret;
 }
 
 void ProjectLoadTest::addRemoveFiles()
 {
-    const QPair<QString, KUrl> p = makeProject();
+    const TestProject p = makeProject();
 
-    QFile f(p.first+"/sdf");
+    QFile f(p.dir->name()+"/sdf");
     f.open(QIODevice::WriteOnly);
     f.close();
 
-    KDevelop::ICore::self()->projectController()->openProject(p.second);
-    ///FIXME: wait for signal
-    QTest::qWait(500);
-
+    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    Q_ASSERT(project->projectFileUrl() == p.second);
+    QCOMPARE(project->projectFileUrl(), p.file);
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
-        QFile f2(p.first+"/blub"+QString::number(i));
+        QFile f2(p.dir->name()+"/blub"+QString::number(i));
         f2.open(QIODevice::WriteOnly);
         f2.close();
     }
     for (int i=0; i<50; ++i) {
-        QFile f2(p.first+"/blub"+QString::number(i));
+        QFile f2(p.dir->name()+"/blub"+QString::number(i));
+        QVERIFY(f2.exists());
         f2.remove();
     }
     QTest::qWait(500);
 
-    QCOMPARE(project->filesForUrl(QString(p.first+"/blub"+QString::number(50))).count(), 1);
-    KDevelop::ProjectFileItem* file = project->filesForUrl(QString(p.first+"/blub"+QString::number(50))).first();
+    KUrl url(p.dir->name()+"/blub"+QString::number(50));
+    url.cleanPath();
+    QCOMPARE(project->filesForUrl(url).count(), 1);
+    KDevelop::ProjectFileItem* file = project->filesForUrl(url).first();
     project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
-        QFile f2(p.first+"/blub"+QString::number(i));
+        QFile f2(p.dir->name()+"/blub"+QString::number(i));
         f2.remove();
     }
 
     QTest::qWait(2000);
     QCOMPARE(project->fileCount(), 1);
-
-    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
-    }
-    QTest::qWait(500);
-    exec("rm -r "+p.first);
 }
 
 void createFile(const QString& path)
@@ -160,10 +174,10 @@ void _writeRandomStructure(QString path, int files)
     QString name = QString::number(qrand());
     if (qrand() < RAND_MAX / 5) {
         p.mkdir(name);
-        path += "/" + name;
+        path += '/' + name;
 //         kDebug() << "wrote path" << path;
     } else {
-        createFile(path+"/"+name);
+        createFile(path+'/'+name);
 //         kDebug() << "wrote file" << path+"/"+name;
     }
     files--;
@@ -172,12 +186,12 @@ void _writeRandomStructure(QString path, int files)
     }
 }
 
-void fillProject(int /*filesPerDir*/, int /*Dirs*/, const QPair<QString, KUrl> project, bool wait)
+void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wait)
 {
-    QDir(project.first).mkdir("foou");
-    _writeRandomStructure(project.first+"/foou", 50);
-    for(int i=0; i < 100; ++i) {
-        exec("bash -c \"cp -r foou foox"+QString::number(i)+" > /dev/null 2>&1 & \"");
+    for(int i=0; i < dirs; ++i) {
+        const QString name = "foox" + QString::number(i);
+        QDir(project.dir->name()).mkdir(name);
+        _writeRandomStructure(project.dir->name() + name, filesPerDir);
         if (wait) {
             QTest::qWait(100);
         }
@@ -186,43 +200,39 @@ void fillProject(int /*filesPerDir*/, int /*Dirs*/, const QPair<QString, KUrl> p
 
 void ProjectLoadTest::addLotsOfFiles()
 {
-    QPair<QString, KUrl> p = makeProject();
+    TestProject p = makeProject();
 
-    KDevelop::ICore::self()->projectController()->openProject(p.second);
-    QTest::qWait(2000);
-
+    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 1);
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    Q_ASSERT(project->projectFileUrl() == p.second);
+    QCOMPARE(project->projectFileUrl(), p.file);
 
-    fillProject(50, 100, p, true);
+    fillProject(50, 25, p, true);
 
-    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
-    }
-
-    QTest::qWait(500);
-    exec("rm -r "+p.first);
+    QTest::qWait(2000);
 }
 
 void ProjectLoadTest::addMultipleJobs()
 {
-    QPair<QString, KUrl> p1 = makeProject();
+    const TestProject p1 = makeProject();
     fillProject(10, 25, p1, false);
-    QPair<QString, KUrl> p2 = makeProject();
+    const TestProject p2 = makeProject();
     fillProject(10, 25, p2, false);
 
-    KDevelop::ICore::self()->projectController()->openProject(p1.second);
-    KDevelop::ICore::self()->projectController()->openProject(p2.second);
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
+    KDevelop::ICore::self()->projectController()->openProject(p1.file);
+    KDevelop::ICore::self()->projectController()->openProject(p2.file);
 
-    QTest::qWait(2000);
-
-    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
+    const int wait = 25;
+    const int maxWait = 2000;
+    int waited = 0;
+    while(waited < maxWait && spy.count() != 2) {
+        QTest::qWait(wait);
+        waited += wait;
     }
 
-    QTest::qWait(500);
-    exec("rm -r "+p1.first);
-    exec("rm -r "+p2.first);
+    QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 2);
 }
 
 void ProjectLoadTest::raceJob()
@@ -231,19 +241,20 @@ void ProjectLoadTest::raceJob()
     // my idea is that this can be triggered by the following:
     // - list dir foo/bar containing lots of files
     // - remove dir foo while listjob is still running
-    QPair<QString, KUrl> p = makeProject();
-    QDir dir(p.first);
+    TestProject p = makeProject();
+    QDir dir(p.dir->name());
     QVERIFY(dir.mkpath("test/zzzzz"));
     for(int i = 0; i < 1000; ++i) {
-        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
-        createFile(QString(p.first + "/test/%1").arg(i));
+        createFile(QString(p.dir->name() + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.dir->name() + "/test/%1").arg(i));
     }
 
-    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    KDevelop::ICore::self()->projectController()->openProject(p.file);
     QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
 
     QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 1);
     KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->projectAt(0);
+    QCOMPARE(project->projectFileUrl(), p.file);
     KDevelop::ProjectFolderItem* root = project->projectItem();
     QCOMPARE(root->rowCount(), 1);
     KDevelop::ProjectBaseItem* testItem = root->child(0);
@@ -254,21 +265,15 @@ void ProjectLoadTest::raceJob()
     QVERIFY(asdfItem->folder());
 
     // move dir
-    qDebug() << "moving dir";
     dir.rename("test", "test2");
     // move sub dir
     dir.rename("test2/zzzzz", "test2/bla");
 
     QTest::qWait(500);
     QCOMPARE(root->rowCount(), 1);
-    QVERIFY(!root->children().contains(testItem));
     testItem = root->child(0);
     QVERIFY(testItem->folder());
     QCOMPARE(testItem->baseName(), QString("test2"));
-
-    KDevelop::ICore::self()->projectController()->closeProject(project);
-
-    exec("rm -r " + p.first);
 }
 
 void ProjectLoadTest::addDuringImport()
@@ -277,24 +282,24 @@ void ProjectLoadTest::addDuringImport()
     // which requires the project to be associated to the model to function properly
     // to trigger this we create a big project, import it and then call filesForUrl during
     // the import action
-    QPair<QString, KUrl> p = makeProject();
-    QDir dir(p.first);
+    TestProject p = makeProject();
+    QDir dir(p.dir->name());
     QVERIFY(dir.mkpath("test/zzzzz"));
     for(int i = 0; i < 1000; ++i) {
-        createFile(QString(p.first + "/test/zzzzz/%1").arg(i));
-        createFile(QString(p.first + "/test/%1").arg(i));
+        createFile(QString(p.dir->name() + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.dir->name() + "/test/%1").arg(i));
     }
 
     QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
-    KDevelop::ICore::self()->projectController()->openProject(p.second);
+    KDevelop::ICore::self()->projectController()->openProject(p.file);
     // not yet ready
     QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 0);
     // but about to be opened
     QCOMPARE(spy.count(), 1);
     KDevelop::IProject* project = spy.value(0).first().value<KDevelop::IProject*>();
     QVERIFY(project);
-    QCOMPARE(project->folder(), p.second.upUrl());
-    KUrl file(p.second, "test/zzzzz/999");
+    QCOMPARE(project->folder(), p.file.upUrl());
+    KUrl file(p.file, "test/zzzzz/999");
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
     // and this should not crash

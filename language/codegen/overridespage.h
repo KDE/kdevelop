@@ -19,7 +19,7 @@
 #ifndef KDEVELOP_OVERRIDESPAGE_H
 #define KDEVELOP_OVERRIDESPAGE_H
 
-#include <QtGui/QWizardPage>
+#include <QWidget>
 
 #include "language/duchain/declaration.h"
 
@@ -30,21 +30,20 @@ namespace KDevelop {
 
 class ClassGenerator;
 
-class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWizardPage
+class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    OverridesPage(ClassGenerator* generator, QWizard* parent);
+    OverridesPage(ClassGenerator* generator, QWidget* parent);
     virtual ~OverridesPage();
 
     QTreeWidget* overrideTree() const;
 
     QWidget* extraFunctionsContainer() const;
-
-    virtual void initializePage();
-    virtual void cleanupPage();
-    virtual bool validatePage();
+    
+    void updateOverrideTree();
+    void validateOverrideTree();
     /**
      * Default implementation populates the tree with all virtual functions in the base classes.
      * Calls @c addPotentialOverride() on each function, where more filtering can be applied.
@@ -57,7 +56,7 @@ public:
      * @p classItem The parent class from which @p childDeclaration stems from. Should be used as parent for the override item.
      * @p childDeclaration The overridable function.
      */
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
 
 protected:
     ClassGenerator* generator() const;

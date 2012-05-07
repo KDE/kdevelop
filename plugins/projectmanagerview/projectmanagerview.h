@@ -65,6 +65,10 @@ public:
 
     ProjectManagerViewPlugin* plugin() const { return m_plugin; }
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
+
+protected:
+    virtual bool eventFilter(QObject* obj, QEvent* event);
+
 private slots:
     void selectionChanged();
     void locateCurrentDocument();

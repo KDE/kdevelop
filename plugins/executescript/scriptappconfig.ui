@@ -35,7 +35,7 @@
            <bool>false</bool>
           </property>
           <property name="clickMessage">
-           <string>Enter the absolute path to an script file</string>
+           <string>Enter the absolute path to a script file</string>
           </property>
          </widget>
         </item>
@@ -197,28 +197,6 @@
         </property>
        </widget>
       </item>
-      <!--
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>External Terminal:</string>
-        </property>
-        <property name="buddy">
-         <cstring>runInTerminal</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="runInTerminal">
-        <property name="toolTip">
-         <string>When enabled, runs the application in an external terminal.</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      -->
      </layout>
     </widget>
    </item>
@@ -226,9 +204,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
@@ -236,9 +214,9 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
@@ -252,14 +230,17 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>interpreter</tabstop>
   <tabstop>projectTargetRadio</tabstop>
   <tabstop>projectTarget</tabstop>
   <tabstop>executableRadio</tabstop>
   <tabstop>executablePath</tabstop>
+  <tabstop>localHostRadio</tabstop>
+  <tabstop>remoteHostRadio</tabstop>
+  <tabstop>remoteHost</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
-  <tabstop>runInTerminal</tabstop>
  </tabstops>
  <resources/>
  <connections>

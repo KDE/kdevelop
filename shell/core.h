@@ -44,7 +44,10 @@ class DocumentationController;
 class DebugController;
 class WorkingSetController;
 
-class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
+class KDEVPLATFORMSHELL_EXPORT Core: public ICore
+{
+    Q_OBJECT
+
 public:
     enum Setup { Default=0, NoUi=1 };
 
@@ -157,6 +160,10 @@ public:
     virtual bool shuttingDown() const;    
     
     Core::Setup setupFlags() const;
+
+public slots:
+    void shutdown();
+
 protected:
     Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
     KDevelop::CorePrivate *d;

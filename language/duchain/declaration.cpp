@@ -190,6 +190,7 @@ Declaration::~Declaration()
     setAbstractType(AbstractType::Ptr());
   }
   Q_ASSERT(d_func()->isDynamic() == (!topContext->deleting() || !topContext->isOnDisk() || topContext->m_dynamicData->isTemporaryDeclarationIndex(oldOwnIndex)));
+  Q_UNUSED(oldOwnIndex);
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
@@ -223,56 +224,6 @@ const IndexedIdentifier& Declaration::indexedIdentifier( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
   return d_func()->m_identifier;
-}
-
-LocalIndexedDeclaration::LocalIndexedDeclaration(Declaration* decl) {
-  if(!decl)
-    m_declarationIndex = 0;
-  else
-    m_declarationIndex = decl->m_indexInTopContext;
-}
-
-LocalIndexedDeclaration::LocalIndexedDeclaration(uint declarationIndex) : m_declarationIndex(declarationIndex) {
-}
-
-Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const {
-  if(!m_declarationIndex)
-    return 0;
-  return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
-}
-
-bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const {
-  if(m_declarationIndex)
-    return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
-  else
-    return false;
-}
-
-IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex) : m_topContext(topContext), m_declarationIndex(declarationIndex) {
-}
-
-IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
-  if(decl) {
-    m_topContext = decl->topContext()->ownIndex();
-    m_declarationIndex = decl->m_indexInTopContext;
-  }else{
-    m_topContext = 0;
-    m_declarationIndex = 0;
-  }
-}
-
-Declaration* IndexedDeclaration::declaration() const {
-  if(isDummy())
-    return 0;
-//   ENSURE_CHAIN_READ_LOCKED
-  if(!m_topContext || !m_declarationIndex)
-    return 0;
-
-  TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
-  if(!ctx)
-    return 0;
-
-  return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }
 
 void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
@@ -329,7 +280,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
-Declaration* Declaration::specialize(IndexedInstantiationInformation /*specialization*/, const TopDUContext* topContext, int /*upDistance*/)
+Declaration* Declaration::specialize(const IndexedInstantiationInformation& /*specialization*/, const TopDUContext* topContext, int /*upDistance*/)
 {
   if(!topContext)
     return 0;

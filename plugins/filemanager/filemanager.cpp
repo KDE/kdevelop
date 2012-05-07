@@ -158,7 +158,7 @@ void FileManager::createNewFile()
     if (KIO::NetAccess::file_copy(KUrl(tmpFile.fileName()), destUrl))
         KDevelop::ICore::self()->documentController()->openDocument( destUrl );
     else
-        KMessageBox::error(activeMainWindow, i18n("Unable to create file '%1'").arg(fileName));
+        KMessageBox::error(activeMainWindow, i18n("Unable to create file '%1'", fileName));
 }
 
 void FileManager::syncCurrentDocumentDirectory()

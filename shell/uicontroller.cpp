@@ -239,7 +239,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
-    if(!d->areasRestored)
+    if(!d->areasRestored || !activeArea())
         return 0;
 
     QList< Sublime::View* > views = activeArea()->toolViews();
@@ -428,6 +428,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
     if (!area->workingSet().isEmpty()) {
         WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
         Q_ASSERT(set->isConnected(area));
+        Q_UNUSED(set);
     }
 }
 

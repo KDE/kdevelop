@@ -588,8 +588,14 @@ protected:
           DUContext* child = childContexts.at( currentIndex );
           RangeInRevision childRange = child->range();
 
-          //For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
-          if ( (childRange == range && !childRange.isEmpty()) || (child->type() == type && child->localScopeIdentifier() == identifier && !identifier.isEmpty()) )
+          if (child->type() != type) {
+            continue;
+          }
+          // We cannot update a contexts local scope identifier, that will break many other parts, like e.g.
+          // the CodeModel of child contexts or declarations.
+          // For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
+          if ((!identifier.isEmpty() && child->localScopeIdentifier() == identifier)
+              || (identifier.isEmpty() && !childRange.isEmpty() && childRange == range))
           {
             // Match
             ret = child;
@@ -618,6 +624,8 @@ protected:
 
         setInSymbolTable( ret );
       }else{
+        DUChainWriteLocker writeLock( DUChain::lock() );
+        Q_ASSERT(ret->localScopeIdentifier() == identifier);
         if(ret->parentContext())
           ret->setRange( range );
       }

@@ -56,7 +56,7 @@ class ProjectTreeView: public QTreeView
         KDevelop::ProjectFolderItem *currentFolderItem() const;
         KDevelop::ProjectFileItem *currentFileItem() const;
         KDevelop::ProjectTargetItem *currentTargetItem() const;
-        
+
         virtual bool event(QEvent* event);
 
 
@@ -67,6 +67,9 @@ class ProjectTreeView: public QTreeView
         void slotActivated( const QModelIndex &index );
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
+        void saveState();
+        void restoreState(KDevelop::IProject* project = 0);
+        void aboutToShutdown();
 
     protected:
         virtual void keyPressEvent(QKeyEvent *event);

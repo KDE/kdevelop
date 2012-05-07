@@ -334,6 +334,7 @@ void ParsingEnvironmentFile::addModificationRevision(const IndexedString& url, c
     //Test
     Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.index());
     bool result = d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(url, revision);
+    Q_UNUSED( result );
     Q_ASSERT( result );
     d_func_dynamic()->m_allModificationRevisions.addModificationRevision(url, revision);
   }
@@ -345,6 +346,7 @@ void ParsingEnvironmentFile::setModificationRevision( const KDevelop::Modificati
   Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.index());
   bool result = d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(d_func()->m_url, d_func()->m_modificationTime);
   Q_ASSERT( result );
+  Q_UNUSED( result );
   
   #ifdef LEXERCACHE_DEBUG
   if(debugging()) {

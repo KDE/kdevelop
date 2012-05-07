@@ -60,7 +60,7 @@ void LogView::slotJobFinished(KJob* job)
         QString html;
 
         foreach(const DVcsEvent &item, logEntries) {
-            html += "<b>"+i18n("Commit")+":</b> "+item.getCommit()+"<br>";
+            html += "<b>"+i18nc("The term for commit (not action)", "Commit")+":</b> "+item.getCommit()+"<br>";
             html += "<b>"+i18n("Author")+":</b> "+item.getAuthor()+"<br>";
             html += "<b>"+i18n("Date")+":</b> "+item.getDate()+"<br>";
             html += item.getLog()+"<br>";

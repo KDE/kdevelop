@@ -6,145 +6,154 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
-    <height>234</height>
+    <width>448</width>
+    <height>250</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Output file(s)</string>
+      <string>Choose where to save the new class.</string>
      </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QLabel" name="headerLabel1">
-        <property name="text">
-         <string>&amp;Header:</string>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Output file(s)</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>headerUrl</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KUrlRequester" name="headerUrl"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>&amp;Implementation:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>implementationUrl</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="KUrlRequester" name="implementationUrl"/>
-      </item>
-      <item row="0" column="0" colspan="3">
-       <widget class="QCheckBox" name="lowerFilenameCheckBox">
-        <property name="text">
-         <string>Low case file names</string>
-        </property>
-        <property name="checked">
+        <property name="flat">
          <bool>true</bool>
         </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="0">
+          <widget class="QLabel" name="headerLabel1">
+           <property name="text">
+            <string>&amp;Header:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>headerUrl</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="KUrlRequester" name="headerUrl"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&amp;Implementation:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>implementationUrl</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="KUrlRequester" name="implementationUrl"/>
+         </item>
+         <item row="0" column="0" colspan="3">
+          <widget class="QCheckBox" name="lowerFilenameCheckBox">
+           <property name="text">
+            <string>Low case file names</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="title">
-      <string>Location within existing file(s)</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="headerLabel2">
-        <property name="text">
-         <string>&amp;Header:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>headerUrl</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="headerRowLabel">
-        <property name="text">
-         <string>Line</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="KIntNumInput" name="headerLineNumber"/>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="headerColumnLabel">
-        <property name="text">
-         <string>Column</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="KIntNumInput" name="headerColumnNumber"/>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>&amp;Implementation:</string>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="title">
+         <string>Location within existing file(s)</string>
         </property>
-        <property name="buddy">
-         <cstring>implementationUrl</cstring>
+        <property name="flat">
+         <bool>true</bool>
         </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="headerLabel2">
+           <property name="text">
+            <string>&amp;Header:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>headerUrl</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="headerRowLabel">
+           <property name="text">
+            <string>Line</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="KIntNumInput" name="headerLineNumber"/>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLabel" name="headerColumnLabel">
+           <property name="text">
+            <string>Column</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="KIntNumInput" name="headerColumnNumber"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>&amp;Implementation:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>implementationUrl</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Line</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="KIntNumInput" name="implementationLineNumber"/>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Column</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="KIntNumInput" name="implementationColumnNumber"/>
+         </item>
+        </layout>
        </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Line</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="KIntNumInput" name="implementationLineNumber"/>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Column</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="KIntNumInput" name="implementationColumnNumber"/>
       </item>
      </layout>
     </widget>
@@ -166,14 +175,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

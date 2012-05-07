@@ -77,6 +77,7 @@ class NativeAppConfigType : public KDevelop::LaunchConfigurationType
 Q_OBJECT
 public:
     NativeAppConfigType();
+    virtual ~NativeAppConfigType();
 
     QString id() const;
     QString name() const;

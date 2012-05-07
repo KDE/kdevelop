@@ -238,15 +238,15 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsBuildItems ) {
-        KAction* action = new KAction( i18n( "Build" ), this );
+        KAction* action = new KAction( i18nc( "@action", "Build" ), this );
         action->setIcon(KIcon("run-build"));
         connect( action, SIGNAL(triggered()), this, SLOT(buildItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Install" ), this );
+        action = new KAction( i18nc( "@action", "Install" ), this );
         action->setIcon(KIcon("run-install"));
         connect( action, SIGNAL(triggered()), this, SLOT(installItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Clean" ), this );
+        action = new KAction( i18nc( "@action", "Clean" ), this );
         action->setIcon(KIcon("run-clean"));
         connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
@@ -283,25 +283,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
     return menuExt;
-}
-
-
-KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop::ProjectBaseItem* item )
-{
-    if( !item )
-        return 0;
-    IProject* project = item->project();
-    if (!project)
-        return 0;
-
-    ProjectFolderItem* prjitem = project->projectItem();
-    IPlugin* fmgr = project->managerPlugin();
-    IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
-    if( mgr )
-    {
-        return mgr->builder( prjitem );
-    }
-    return 0;
 }
 
 void ProjectManagerViewPlugin::closeProjects()
@@ -464,14 +445,23 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
 
 void ProjectManagerViewPlugin::removeFromContextMenu()
 {
+    removeItems(d->ctxProjectItemList);
+}
+
+void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& items)
+{
+    if (items.isEmpty()) {
+        return;
+    }
+
     //copy the list of selected items and sort it to guarantee parents will come before children
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
-    filteredItems[0] += d->ctxProjectItemList;
+    filteredItems[0] = items;
     qSort(filteredItems[0].begin(), filteredItems[0].end(), ProjectBaseItem::urlLessThan);
 
     KUrl lastFolder;
-    QStringList itemPaths;
 
+    QStringList itemPaths;
     foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
     {
         Q_ASSERT(item->folder() || item->file());
@@ -525,9 +515,18 @@ void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
 
 void ProjectManagerViewPlugin::renameItemFromContextMenu()
 {
-    QWidget* window=ICore::self()->uiController()->activeMainWindow()->window();
+    renameItems(d->ctxProjectItemList);
+}
 
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& items)
+{
+    if (items.isEmpty()) {
+        return;
+    }
+
+    QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
+
+    foreach( KDevelop::ProjectBaseItem* item, items )
     {
         if ((item->type()!=ProjectBaseItem::BuildFolder
                 && item->type()!=ProjectBaseItem::Folder
@@ -547,8 +546,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
 
         if (!name.isEmpty() && name != src) {
             ProjectBaseItem::RenameStatus status = item->rename( name );
-            
-            QWidget* window(QApplication::activeWindow());
+
             switch(status) {
                 case ProjectBaseItem::RenameOk:
                     break;

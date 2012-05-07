@@ -17,65 +17,65 @@
 */
 
 #include "declarationid.h"
+
 #include "ducontext.h"
 #include "topducontext.h"
-#include "../editor/cursorinrevision.h"
 #include "duchain.h"
 #include "declaration.h"
 #include "persistentsymboltable.h"
 #include "instantiationinformation.h"
+
+#include "../editor/cursorinrevision.h"
+
 #include <util/convenientfreelist.h>
 
 namespace KDevelop {
 
-DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, IndexedInstantiationInformation specialization)
-  : m_direct(false), m_specialization(specialization)
+DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId,
+                             const IndexedInstantiationInformation& specialization)
+  : m_direct(false)
+  , m_specialization(specialization)
 {
   indirect.m_identifier = id;
   indirect.m_additionalIdentity = additionalId;
-  
 }
 
-DeclarationId::DeclarationId(const IndexedDeclaration& decl, IndexedInstantiationInformation specialization)
-  : direct(decl), m_direct(true), m_specialization(specialization)
+DeclarationId::DeclarationId(const IndexedDeclaration& decl,
+                             const IndexedInstantiationInformation& specialization)
+  : direct(decl)
+  , m_direct(true)
+  , m_specialization(specialization)
 {
-  
-}
 
-// IndexedQualifiedIdentifier DeclarationId::identifier() const
-// {
-//   return m_identifier;
-// }
-// 
-// uint DeclarationId::additionalIdentity() const
-// {
-//   return m_additionalIdentity;
-// }
+}
 
 bool DeclarationId::isDirect() const
 {
   return m_direct;
 }
 
-void DeclarationId::setSpecialization(IndexedInstantiationInformation spec) {
+void DeclarationId::setSpecialization(const IndexedInstantiationInformation& spec)
+{
   m_specialization = spec;
 }
 
-IndexedInstantiationInformation DeclarationId::specialization() const {
+IndexedInstantiationInformation DeclarationId::specialization() const
+{
   return m_specialization;
 }
 
 KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUContext* top) const
 {
   KDevVarLengthArray<Declaration*> ret;
-  
+
   if(m_direct == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
     if(top) {
       //Do filtering
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter =
+          PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -89,12 +89,12 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
-        
+
           ///@todo think this over once we don't pull in all imported top-context any more
         //Don't trigger loading of top-contexts from here, it will create a lot of problems
         if((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
           continue;
-        
+
         if(!top) {
           Declaration* decl = iDecl.data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -109,7 +109,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     if(decl)
       ret.append(decl);
   }
-  
+
   if(!ret.isEmpty() && m_specialization.index()) {
     KDevVarLengthArray<Declaration*> newRet;
     FOREACH_ARRAY(Declaration* decl, ret) {
@@ -125,14 +125,15 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
 Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instantiateIfRequired) const
 {
   Declaration* ret = 0;
-  
+
   if(m_direct == false) {
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
     if(top) {
       //Do filtering
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter =
+          PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -148,12 +149,12 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
-        
-          ///@todo think this over once we don't pull in all imported top-context any more
+
+        ///@todo think this over once we don't pull in all imported top-context any more
         //Don't trigger loading of top-contexts from here, it will create a lot of problems
         if((!DUChain::self()->isInMemory(iDecl.topContextIndex())))
           continue;
-        
+
         if(!top) {
           Declaration* decl = iDecl.data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -169,8 +170,8 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
     //Find the declaration by m_topContext and m_declaration
     ret = direct.declaration();
   }
-  
-  
+
+
   if(ret)
   {
     if(m_specialization.isValid())
@@ -180,7 +181,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
         topContextForSpecialization = 0; //If we don't want to instantiate new declarations, set the top-context to zero, so specialize(..) will only look-up
       else if(!topContextForSpecialization)
         topContextForSpecialization = ret->topContext();
-      
+
       return ret->specialize(m_specialization, topContextForSpecialization);
     }else{
       return ret;
@@ -189,8 +190,9 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
     return 0;
 }
 
-QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
-  
+QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
+{
+
   if(!m_direct) {
     QualifiedIdentifier baseIdentifier = indirect.m_identifier.identifier();
     if(!m_specialization.index())
@@ -199,11 +201,11 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
   } else {
     Declaration* decl = getDeclaration(0);
     if(decl)
-      return decl->qualifiedIdentifier();    
-    
+      return decl->qualifiedIdentifier();
+
     return QualifiedIdentifier(QString("(unknown direct declaration)"));
   }
-  
+
   return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier.identifier();
 }
 

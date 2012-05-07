@@ -175,10 +175,11 @@ Q_SIGNALS:
     void outputRemoved( int toolviewId, int outputId );
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
-Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Options)
+} // namespace KDevelop
 
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Behaviours)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Options)
+
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 
 #endif

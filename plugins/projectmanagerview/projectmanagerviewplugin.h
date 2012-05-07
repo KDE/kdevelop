@@ -56,11 +56,15 @@ public:
     virtual void unload();
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+
+    void removeItems(const QList<KDevelop::ProjectBaseItem*>& items);
+    void renameItems(const QList< KDevelop::ProjectBaseItem* >& items);
+
 public Q_SLOTS:
     void buildProjectItems();
     void installProjectItems();
     void cleanProjectItems();
- 
+
 protected Q_SLOTS:
     void closeProjects();
     void buildItemsFromContextMenu();
@@ -81,7 +85,6 @@ protected Q_SLOTS:
     void updateActionState( KDevelop::Context* ctx );
     void updateFromBuildSetChange();
 private:
-    static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     void runBuilderJob( KDevelop::BuilderJob::BuildType );
     class ProjectManagerViewPluginPrivate* const d;

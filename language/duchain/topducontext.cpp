@@ -92,35 +92,6 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
   return *this;
 }
 
-IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
-  if(context)
-    m_index = context->ownIndex();
-  else
-    m_index = DummyMask;
-}
-
-bool IndexedTopDUContext::isLoaded() const {
-  if(index())
-    return DUChain::self()->isInMemory(index());
-  else
-    return false;
-}
-
-IndexedString IndexedTopDUContext::url() const {
-  if(index())
-    return DUChain::self()->urlForIndex(index());
-  else
-    return IndexedString();
-}
-
-TopDUContext* IndexedTopDUContext::data() const {
-//   ENSURE_CHAIN_READ_LOCKED
-  if(index())
-    return DUChain::self()->chainForIndex(index());
-  else
-    return 0;
-}
-
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
@@ -536,39 +507,6 @@ bool TopDUContext::DeclarationChecker::operator()(const Declaration* decl) const
   // Success, this declaration is accessible
   return true;
 }
-
-// ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
-// {
-//   ImportTrace ret;
-//   importTrace(target, ret);
-//   return ret;
-// }
-//
-// void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) const
-// {
-//     QMutexLocker lock(&importStructureMutex);
-//
-//     const TopDUContext* current = this;
-//     while(current != target) {
-// //       current->d_func()->needImportStructure();
-//
-//       TopDUContextLocalPrivate::RecursiveImports::const_iterator it = current->m_local->m_recursiveImports.constFind(target);
-//
-//       if(it == current->m_local->m_recursiveImports.constEnd())
-//         return;
-//
-//       const TopDUContext* nextContext = (*it).second;
-//
-//       if(nextContext) {
-//         store.append(ImportTraceItem(current, current->importPosition(nextContext)));
-//
-//         current = nextContext;
-//       }else{
-//         kWarning() << "inconsistent import-structure";
-//         return;
-//       }
-//   }
-// }
 
 const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndices() const
 {

@@ -86,6 +86,7 @@ private slots:
     void changeVariableFormat(int);
     void watchDelete();
     void copyVariableValue();
+    void stopOnChange();
 
 #if 0
 Q_SIGNALS:
@@ -111,6 +112,7 @@ private:
     QMenu *m_formatMenu;
     QAction *m_watchDelete;
     QAction *m_copyVariableValue;
+    QAction *m_stopOnChange;
     QSignalMapper *m_signalMapper;
 };
 

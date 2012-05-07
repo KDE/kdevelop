@@ -144,17 +144,11 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_d
 void KDevelop::TopDUContextDynamicData::clearContextsAndDeclarations() {
   //Due to template specialization it's possible that a declaration is not reachable through the normal context structure.
   //For that reason we have to check here, and delete all remaining declarations.
-  for(int a = 0; a < m_temporaryContexts.size(); ++a)
-    delete m_temporaryContexts[a];
-
-  for(int a = 0; a < m_temporaryDeclarations.size(); ++a)
-    delete m_temporaryDeclarations[a];
-
-  for(int a = 0; a < m_contexts.size(); ++a)
-    delete m_contexts[a];
-
-  for(int a = 0; a < m_declarations.size(); ++a)
-    delete m_declarations[a];
+  qDeleteAll(m_temporaryContexts);
+  qDeleteAll(m_temporaryDeclarations);
+  qDeleteAll(m_contexts);
+  qDeleteAll(m_declarations);
+  //NOTE: not clearing, is called oly from the dtor anyways
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
@@ -257,6 +251,7 @@ void TopDUContextDynamicData::loadData() const {
   QString fileName = baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
   QFile* file = new QFile(fileName);
   bool open = file->open(QIODevice::ReadOnly);
+  Q_UNUSED(open);
   Q_ASSERT(open);
   Q_ASSERT(file->size());
 
@@ -382,6 +377,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
   m_onDisk = false;
 
   bool successfullyRemoved = QFile::remove(filePath());
+  Q_UNUSED(successfullyRemoved);
   Q_ASSERT(successfullyRemoved);
   kDebug() << "deletion ready";
 }

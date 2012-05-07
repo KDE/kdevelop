@@ -252,7 +252,7 @@ static bool nodeNeedsUpdate(uint index) {
 QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  QString ret = "[";
+  QString ret = "["; // krazy:exclude=doublequote_chars
   Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
   bool first = true;
@@ -262,11 +262,11 @@ QString ModificationRevisionSet::toString() const
     first = false;
     
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
-    ret += data->file.str() + ":" + data->revision.toString();
+    ret += data->file.str() + ':' + data->revision.toString();
     ++it;
   }
 
-  ret += "]";
+  ret += ']';
   return ret;
 }
 

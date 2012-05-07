@@ -26,12 +26,11 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <interfaces/ipatchsource.h>
+#include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>
 #include <KDebug>
 #include <QFile>
-#include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -57,13 +56,12 @@ QByteArray urlToData(const KUrl& url)
         Q_ASSERT(f.exists());
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
+        Q_UNUSED(corr);
         
         ret = f.readAll();
         
     } else {
-#if defined(__GNUC__)
-#warning TODO: add downloading the data
-#endif
+//TODO: add downloading the data
     }
     return ret;
 }
@@ -74,7 +72,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
     kDebug() << "exporting patch to pastebin" << source->file();
     
     QByteArray bytearray = "paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
-    bytearray += "&paste_format=dff&paste_expiry_date=1D&paste_email=";
+    bytearray += "&paste_format=diff&paste_expiry_date=1D&paste_email=";
 
     KUrl url("http://pastebin.com/api_public.php");
 
@@ -84,7 +82,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
     connect(tf, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data(KIO::Job*,QByteArray)));
     
     m_result.insert(tf, QByteArray());
-    ICore::self()->runController()->registerJob(tf);
+    KIO::getJobTracker()->registerJob(tf);
 }
 
 void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
@@ -98,7 +96,7 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
             KMessageBox::error(0, *it);
         } else {
             QString htmlLink=QString("<a href='%1'>%1</a>").arg(*it);
-            KMessageBox::information(0, i18nc("The parameter is the link where the patch is stored", "<qt>You can find your patch at:<br/>%1</qt>", htmlLink));
+            KMessageBox::information(0, i18nc("The parameter is the link where the patch is stored", "<qt>You can find your patch at:<br/>%1</qt>", htmlLink), QString(), QString(), KMessageBox::AllowLink | KMessageBox::Notify);
         }
         m_result.erase(it);
     } else {

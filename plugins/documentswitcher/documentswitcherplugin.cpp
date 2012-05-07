@@ -142,7 +142,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
                 // On absolute paths the first letters won't be that useful, so make use of more of the suffix
                 path = path.left( 6 ) + "..." + path.mid( path.length() - 20 );
             }
-            txt = txt + " (" + path + ")";
+            txt = txt + " (" + path + ')';
         }
         model->appendRow( new QStandardItem( v->document()->statusIcon(), txt ) );
     }

@@ -50,6 +50,7 @@ public:
 private Q_SLOTS:
     void importDone();
     void importCanceled();
+    void aboutToShutdown();
 
 private:
     class ImportProjectJobPrivate* const d;

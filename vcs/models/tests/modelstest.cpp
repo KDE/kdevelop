@@ -48,12 +48,17 @@ void ModelsTest::testVcsFileChangesModel()
     QVERIFY(model->rowCount() == 0);
 
     // Pull some files into
-    QString filenames[] = {"foo", "bar", "pew", "trash"};
+    KUrl filenames[] = {
+        KUrl::fromLocalFile("foo"),
+        KUrl::fromLocalFile("bar"),
+        KUrl::fromLocalFile("pew"),
+        KUrl::fromLocalFile("trash")
+    };
     VcsStatusInfo::State states[] = {VcsStatusInfo::ItemAdded, VcsStatusInfo::ItemModified, VcsStatusInfo::ItemDeleted, VcsStatusInfo::ItemUpToDate};
     VcsStatusInfo status;
 
     for(int i = 0; i < 3; i++) {
-        status.setUrl(KUrl(filenames[i]));
+        status.setUrl(filenames[i]);
         status.setState(states[i]);
         model->updateState(status);
         QVERIFY(model->rowCount() == (i+1));
@@ -61,7 +66,7 @@ void ModelsTest::testVcsFileChangesModel()
 
     // Pulling up-to-date file doesn't change anything
     {
-        status.setUrl(KUrl(filenames[3]));
+        status.setUrl(filenames[3]);
         status.setState(states[3]);
         model->updateState(status);
         QVERIFY(model->rowCount() == 3);
@@ -72,13 +77,14 @@ void ModelsTest::testVcsFileChangesModel()
         QStandardItem* item = model->fileItemForUrl(filenames[i]);
         QVERIFY(item);
         VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
-        QVERIFY(info.url().toLocalFile() == filenames[i]);
+        QVERIFY(info.url().isValid());
+        QVERIFY(info.url() == filenames[i]);
         QVERIFY(info.state() == states[i]);
     }
 
     // Pull it all again = nothing changed
     for(int i = 0; i < 3; i++) {
-        status.setUrl(KUrl(filenames[i]));
+        status.setUrl(filenames[i]);
         status.setState(states[i]);
         model->updateState(status);
         QVERIFY(model->rowCount() == 3);
@@ -89,14 +95,14 @@ void ModelsTest::testVcsFileChangesModel()
         QStandardItem* item = model->fileItemForUrl(filenames[i]);
         QVERIFY(item);
         VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
-        QVERIFY(info.url().toLocalFile() == filenames[i]);
+        QVERIFY(info.url() == filenames[i]);
         QVERIFY(info.state() == states[i]);
     }
 
     // Remove one file
     {
         states[1] = VcsStatusInfo::ItemUpToDate;
-        status.setUrl(KUrl(filenames[1]));
+        status.setUrl(filenames[1]);
         status.setState(states[1]);
         model->updateState(status);
         QVERIFY(model->rowCount() == 2);
@@ -108,7 +114,7 @@ void ModelsTest::testVcsFileChangesModel()
             QStandardItem* item = model->fileItemForUrl(filenames[i]);
             QVERIFY(item);
             VcsStatusInfo info = VcsFileChangesModel::statusInfo(item);
-            QVERIFY(info.url().toLocalFile() == filenames[i]);
+            QVERIFY(info.url() == filenames[i]);
             QVERIFY(info.state() == states[i]);
         }
     }
@@ -119,7 +125,7 @@ void ModelsTest::testVcsFileChangesModel()
 
     // Pull it all again
     for(int i = 0; i < 3; i++) {
-        status.setUrl(KUrl(filenames[i]));
+        status.setUrl(filenames[i]);
         status.setState(states[i]);
         model->updateState(status);
     }

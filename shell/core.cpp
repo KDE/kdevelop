@@ -59,6 +59,36 @@
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
 
+#include <csignal>
+
+volatile std::sig_atomic_t handlingSignal = 0;
+
+void shutdownGracefully(int sig)
+{
+    if ( !handlingSignal ) {
+        handlingSignal = 1;
+        qDebug() << "signal " << sig << " received, shutting down gracefully";
+        QCoreApplication::instance()->quit();
+    } else {
+        // re-raise signal with default handler and trigger program termination
+        std::signal(sig, SIG_DFL);
+        std::raise(sig);
+    }
+}
+
+void installSignalHandler()
+{
+#ifdef SIGHUP
+    std::signal(SIGHUP, shutdownGracefully);
+#endif
+#ifdef SIGINT
+    std::signal(SIGINT, shutdownGracefully);
+#endif
+#ifdef SIGTERM
+    std::signal(SIGTERM, shutdownGracefully);
+#endif
+}
+
 namespace KDevelop {
 
 Core *Core::m_self = 0;
@@ -246,7 +276,9 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         documentationController.data()->initialize();
     }
     debugController.data()->initialize();
-    
+
+    installSignalHandler();
+
     return true;
 }
 CorePrivate::~CorePrivate()
@@ -307,11 +339,14 @@ Core::Core(QObject *parent)
     : ICore(parent)
 {
     d = new CorePrivate(this);
+
+    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(shutdown()));
 }
 
 Core::Core(CorePrivate* dd, QObject* parent)
 : ICore(parent), d(dd)
 {
+    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(shutdown()));
 }
 
 Core::~Core()
@@ -319,11 +354,20 @@ Core::~Core()
     kDebug() ;
     //Cleanup already called before mass destruction of GUI
     delete d;
+    m_self = 0;
 }
 
 Core::Setup Core::setupFlags() const
 {
     return d->m_mode;
+}
+
+void Core::shutdown()
+{
+    if (!d->m_shuttingDown) {
+        cleanup();
+        deleteLater();
+    }
 }
 
 bool Core::shuttingDown() const
@@ -334,7 +378,8 @@ bool Core::shuttingDown() const
 void Core::cleanup()
 {
     d->m_shuttingDown = true;
-    
+    emit aboutToShutdown();
+
     if (!d->m_cleanedUp) {
         d->debugController.data()->cleanup();
         d->selectionController.data()->cleanup();
@@ -498,3 +543,5 @@ QString Core::version()
 }
 
 }
+
+#include "core.moc"

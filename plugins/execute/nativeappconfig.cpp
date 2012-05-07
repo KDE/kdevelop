@@ -342,6 +342,12 @@ NativeAppConfigType::NativeAppConfigType()
     factoryList.append( new NativeAppPageFactory() );
 }
 
+NativeAppConfigType::~NativeAppConfigType()
+{
+    qDeleteAll(factoryList);
+    factoryList.clear();
+}
+
 QString NativeAppConfigType::name() const
 {
     return i18n("Native Application");

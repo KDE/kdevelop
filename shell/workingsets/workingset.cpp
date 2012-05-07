@@ -173,34 +173,40 @@ QStringList WorkingSet::fileList() const
     return ret;
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) {
     PushValue<bool> enableLoading(m_loading, true);
 
-    DisableMainWindowUpdatesFromArea updatesDisabler(area);
+    /// We cannot disable the updates here, because (probably) due to a bug in Qt,
+    /// which causes the updates to stay disabled forever after some complex operations
+    /// on the sub-views. This could be reproduced by creating two working-sets with complex
+    /// split-view configurations and switching between them. Re-enabling the updates doesn't help.
+//     DisableMainWindowUpdatesFromArea updatesDisabler(area);
 
     kDebug() << "loading working-set" << m_id << "into area" << area;
-    if(clear) {
-        kDebug() << "clearing area with working-set" << area->workingSet();
-        
-        // We have to close all views, else we may get serious UI
-        // consistency problems when the documents intersect.
-        // Clear the views silently, because the user should be batch-asked
-        // before changing working sets.
-        QSet< QString > files = fileList().toSet();
-        foreach(Sublime::View* view, area->views()) {
-            Sublime::UrlDocument* doc = dynamic_cast<Sublime::UrlDocument*>(view->document());
-            if(!doc || !files.contains(doc->documentSpecifier()))
-                area->closeView(view);
-        }   
-    }
+    
+    QMultiMap<QString, Sublime::View*> recycle;
+    
+    foreach( Sublime::View* view, area->views() )
+        recycle.insert( view->document()->documentSpecifier(), area->removeView(view) );
+    
+    kDebug() << "recycling" << recycle.size() << "old views";
+    
+    Q_ASSERT( area->views().empty() );
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup setGroup = setConfig.group(m_id);
     KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
 
-    loadToArea(area, areaIndex, setGroup, areaGroup);
-
+    loadToArea(area, areaIndex, setGroup, areaGroup, recycle);
+    
+    // Delete views which were not recycled
+    kDebug() << "deleting " << recycle.size() << " old views";
+    qDeleteAll( recycle.values() );
+    
+    area->setActiveView(0);
+    
     //activate view in the working set
+    /// @todo correctly select one out of multiple equal views
     QString activeView = areaGroup.readEntry("Active View", QString());
     foreach (Sublime::View *v, area->views()) {
         if (v->document()->documentSpecifier() == activeView) {
@@ -208,12 +214,25 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             break;
         }
     }
+    
+    if( !area->activeView() && area->views().size() )
+        area->setActiveView( area->views()[0] );
+    
+    if( area->activeView() ) {
+        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+                if(window->area() == area) {
+                    window->activateView( area->activeView() );
+                }
+        }
+    }
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup)
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle)
 {
+    Q_ASSERT( !areaIndex->isSplitted() );
     if (setGroup.hasKey("Orientation")) {
         QStringList subgroups = setGroup.groupList();
+        /// @todo also save and restore the ratio
 
         if (subgroups.contains("0") && subgroups.contains("1")) {
 //             kDebug() << "has zero, split:" << split;
@@ -225,61 +244,51 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 areaIndex->setOrientation(orientation);
             }
 
-            loadToArea(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), KConfigGroup(&areaGroup, "0"));
+            loadToArea(area, areaIndex->first(), KConfigGroup(&setGroup, "0"), KConfigGroup(&areaGroup, "0"), recycle);
 
-            loadToArea(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), KConfigGroup(&areaGroup, "1"));
+            loadToArea(area, areaIndex->second(), KConfigGroup(&setGroup, "1"), KConfigGroup(&areaGroup, "1"), recycle);
+            
+            if( areaIndex->first()->viewCount() == 0 )
+                areaIndex->unsplit(areaIndex->first());
+            else if( areaIndex->second()->viewCount() == 0 )
+                areaIndex->unsplit(areaIndex->second());
         }
     } else {
-        while (areaIndex->isSplitted()) {
-            Q_ASSERT(areaIndex->first());
-            areaIndex->unsplit(areaIndex->second());
-        }
-
-        //Track all documents in this areaIndex by their documentSpecifier
-        QHash<QString, Sublime::View*> viewsBySpec;
-        foreach (Sublime::View* view, areaIndex->views()) {
-            viewsBySpec.insert(view->document()->documentSpecifier(), view);
-        }
+        
         //Load all documents from the workingset into this areaIndex
         int viewCount = setGroup.readEntry("View Count", 0);
+        QMap<int, Sublime::View*> createdViews;
         for (int i = 0; i < viewCount; ++i) {
             QString type = setGroup.readEntry(QString("View %1 Type").arg(i), "");
             QString specifier = setGroup.readEntry(QString("View %1").arg(i), "");
+            Sublime::View* previousView = area->views().empty() ? 0 : area->views().back();
 
-            if (viewsBySpec.contains(specifier)) {
-                kDebug() << "View already exists!";
+            QMultiMap<QString, Sublime::View*>::iterator it = recycle.find( specifier );
+            if( it != recycle.end() )
+            {
+                area->addView( *it, areaIndex, previousView );
+                recycle.erase( it );
                 continue;
             }
-
+            
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
                 Sublime::View* view = document->createView();
-                area->addView(view, areaIndex);
-                viewsBySpec.insert(specifier, view);
+                area->addView(view, areaIndex, previousView);
+                createdViews[i] = view;
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }
         }
-        //Now use the workingset's area config (if present) to reorder the documents and load their state
-        Sublime::View *lastView = 0;
-        viewCount = areaGroup.readEntry("View Count", 0);
+        
+        //Load state
         for (int i = 0; i < viewCount; ++i)
         {
-            QString specifier = areaGroup.readEntry(QString("View %1").arg(i));
-            if (!viewsBySpec.contains(specifier))
-                continue;
-            Sublime::View *view = viewsBySpec[specifier];
-
-            if (lastView)
-                area->addView(area->removeView(view), areaIndex, lastView);
-
             QString state = areaGroup.readEntry(QString("View %1 State").arg(i));
-            if (state.length())
-                view->setState(state);
-
-            lastView = view;
+            if (state.length() && createdViews.contains(i))
+                createdViews[i]->setState(state);
         }
     }
 }

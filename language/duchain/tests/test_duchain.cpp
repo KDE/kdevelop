@@ -30,6 +30,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/codemodel.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -40,7 +41,7 @@
 #include <time.h>
 #include <set>
 #include <algorithm>
-// #include <iterator>
+#include <iterator> // needed for std::insert_iterator on windows
 
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
@@ -559,6 +560,13 @@ void TestDUChain::testImportStructure()
   kDebug() << "total clock cycles needed for import-structure test:" << endClock - startClock;
 }
 
+#if 0
+
+///NOTE: the "unit tests" below are not automated, they - so far - require
+///      human interpretation which is not useful for a unit test!
+///      someone should investigate what the expected output should be
+///      and add proper QCOMPARE/QVERIFY checks accordingly
+
 ///FIXME: this needs to be rewritten in order to remove dependencies on formerly run unit tests
 void TestDUChain::testImportCache()
 {
@@ -594,6 +602,21 @@ void TestDUChain::testImportCache()
   kDebug() << "average total count of imports:" << totalImportCount / analyzedCount;
   kDebug() << "count of reachable nodes:" << reachableNodes.size();
   kDebug() << "naive node-count:" << naiveNodeCount << "sharing compression factor:" << ((float)reachableNodes.size()) / ((float)naiveNodeCount);
+}
+
+#endif
+
+void TestDUChain::benchCodeModel()
+{
+  const IndexedString file("testFile");
+
+  QVERIFY(!QTypeInfo< KDevelop::CodeModelItem >::isStatic);
+
+  int i = 0;
+  QBENCHMARK {
+    CodeModel::self().addItem(file, QualifiedIdentifier("testQID" + QString::number(i++)),
+                              KDevelop::CodeModelItem::Class);
+  }
 }
 
 #include "test_duchain.moc"

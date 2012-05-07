@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <language/codegen/coderepresentation.h>
 #include <interfaces/isourceformatter.h>
 #include "core.h"
 #include <ktexteditor/view.h>
@@ -46,6 +47,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
+#include <ktexteditor/configinterface.h>
 #include "plugincontroller.h"
 #include <interfaces/isession.h>
 
@@ -101,6 +103,13 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 void SourceFormatterController::documentLoaded( IDocument* doc )
 {
+	// NOTE: explicitly check this here to prevent crashes on shutdown
+	//       when this slot gets called (note: delayed connection)
+	//       but the text document was already destroyed
+	//       there have been unit tests that failed due to that...
+	if (!doc->textDocument()) {
+		return;
+	}
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 	adaptEditorIndentationMode( doc, formatterForMimeType(mime) );
 }
@@ -240,7 +249,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			os <<  modeline;
 			foreach(QString s, optionList) {
 				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
-					if(s.startsWith(" "))
+					if(s.startsWith(' '))
 						s=s.mid(1);
 					os << s << ";";
 					kDebug() << "Found unknown option: " << s << endl;
@@ -307,10 +316,15 @@ void SourceFormatterController::beautifySource()
 		if (!original.endsWith('\n')  && output.endsWith('\n'))
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
-		doc->textDocument()->replaceText(view->selectionRange(), output);
+			
+		// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
+		// around a possible tab-replacement incompatibility between kate and kdevelop
+		DynamicCodeRepresentation::Ptr code = DynamicCodeRepresentation::Ptr::dynamicCast( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ) );
+		Q_ASSERT( code );
+		code->replace( view->selectionRange(), original, output );
 	} else {
 		formatDocument(doc, formatter, mime);
-        }
+	}
 }
 
 void SourceFormatterController::beautifyLine()
@@ -333,28 +347,37 @@ void SourceFormatterController::beautifyLine()
 	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
-	const QString post = "\n" + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+	const QString post = '\n' + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 	
 	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
-	tDoc->replaceText(KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), formatted);
+	
+	// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
+	// around a possible tab-replacement incompatibility between kate and kdevelop
+	DynamicCodeRepresentation::Ptr code = DynamicCodeRepresentation::Ptr::dynamicCast( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ) );
+	Q_ASSERT( code );
+	code->replace( KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), line, formatted );
+	
 	// advance cursor one line
 	tDoc->activeView()->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
 }
 
 void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
 {
-	KTextEditor::Document *textDoc = doc->textDocument();
+	// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
+	// around a possible tab-replacement incompatibility between kate and kdevelop
+	CodeRepresentation::Ptr code = KDevelop::createCodeRepresentation( IndexedString( doc->url() ) );
 
 	KTextEditor::Cursor cursor = doc->cursorPosition();
-	QString text = formatter->formatSource(textDoc->text(), doc->url(), mime);
+	QString text = formatter->formatSource(code->text(), doc->url(), mime);
 	text = addModelineForCurrentLang(text, doc->url(), mime);
-	textDoc->setText(text);
+	code->setText(text);
+	
 	doc->setCursorPosition(cursor);
 }
 
 void SourceFormatterController::settingsChanged()
 {
-	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) )
+	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) )
 		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
 			adaptEditorIndentationMode( doc, formatterForUrl(doc->url()) );
 }
@@ -373,7 +396,7 @@ void SourceFormatterController::settingsChanged()
 
 void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
-	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, true ) || !doc->isTextDocument() )
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc->isTextDocument() )
 		return;
 
 	KTextEditor::Document *textDoc = doc->textDocument();

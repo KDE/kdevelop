@@ -54,9 +54,13 @@ public:
     /**
      * Create a temporary file from @p contents with file extension @p extension.
      *
-     * It is added to @p project's fileset.
+     * @param project this file will be added to the project's fileset and gets
+     *                removed from there on destruction
+     * @param dir optional path to a (sub-) directory in which this file should
+     *            be created. The directory must exist.
      */
-    TestFile(const QString& contents, const QString& fileExtenion, KDevelop::TestProject *project);
+    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = 0,
+             const QString& dir = QString());
 
     /**
      * Removes temporary file and cleans up.
@@ -87,9 +91,27 @@ public:
     bool waitForParsed(int timeout = 60000);
 
     /**
+     * Check whether the file has been processed after the last call to @c parse().
+     */
+    bool isReady() const;
+
+    /**
      * Returns the @c TopDUContext for the current file, if it has been successfully parsed.
      */
     KDevelop::ReferencedTopDUContext topContext();
+
+    /**
+     * Change the file contents to @p contents.
+     *
+     * Use this to test behavior of your parsing code over
+     * file changes.
+     */
+    void setFileContents(const QString& contents);
+
+    /**
+     * Read the files contents and return them.
+     */
+    QString fileContents() const;
 
 private:
     struct TestFilePrivate;

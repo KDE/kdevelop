@@ -45,6 +45,8 @@ TestCore::TestCore()
 
 void TestCore::initialize( Core::Setup mode, const QString& session )
 {
+    qRegisterMetaType<KUrl::List>("KUrl::List");
+
     if (!Core::m_self) {
         new TestCore;
     }
@@ -83,8 +85,7 @@ void TestCore::shutdown()
         // before entering cleanup
         // this can fix random crashes under certain conditions
         QTest::qWait(1);
-        self()->cleanup();
-        self()->deleteLater();
+        self()->shutdown();
     }
 }
 

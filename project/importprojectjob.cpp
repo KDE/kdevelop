@@ -66,8 +66,10 @@ ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManage
     d->m_importer = importer;
     d->m_folder = folder;
     d->m_project = folder->project();
-    
+
     setObjectName(i18n("Project Import: %1", d->m_project->name()));
+    connect(ICore::self(), SIGNAL(aboutToShutdown()),
+            this, SLOT(aboutToShutdown()));
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -95,12 +97,17 @@ bool ImportProjectJob::doKill()
 {
     d->m_watcher->cancel();
     d->cancel=true;
-    
+
     setError(1);
     setErrorText(i18n("Project import canceled."));
-    
+
     d->m_watcher->waitForFinished();
     return true;
+}
+
+void ImportProjectJob::aboutToShutdown()
+{
+    kill();
 }
 
 void ImportProjectJob::importCanceled()

@@ -62,7 +62,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     KAction* fullUpdateAction = new KAction(this);
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     fullUpdateAction->setText(i18n("Force Full Update"));
-    fullUpdateAction->setToolTip(i18n("Re-parse all watched documents"));
+    fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
     fullUpdateAction->setIcon(KIcon("view-refresh"));
     connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
@@ -72,32 +72,32 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     showImportsAction->setCheckable(true);
     showImportsAction->setChecked(false);
     showImportsAction->setText(i18n("Show Imports"));
-    showImportsAction->setToolTip(i18n("Display problems in imported files"));
+    showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
     this->model()->setShowImports(false);
     connect(showImportsAction, SIGNAL(triggered(bool)), this->model(), SLOT(setShowImports(bool)));
 
     KActionMenu* scopeMenu = new KActionMenu(this);
     scopeMenu->setDelayed(false);
     scopeMenu->setText(i18n("Scope"));
-    scopeMenu->setToolTip(i18n("Which files to display the problems for"));
+    scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
 
     QActionGroup* scopeActions = new QActionGroup(this);
 
     KAction* currentDocumentAction = new KAction(this);
     currentDocumentAction->setText(i18n("Current Document"));
-    currentDocumentAction->setToolTip(i18n("Display problems in current document"));
+    currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
     KAction* openDocumentsAction = new KAction(this);
     openDocumentsAction->setText(i18n("Open documents"));
-    openDocumentsAction->setToolTip(i18n("Display problems in all open documents"));
+    openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
     KAction* currentProjectAction = new KAction(this);
     currentProjectAction->setText(i18n("Current Project"));
-    currentProjectAction->setToolTip(i18n("Display problems in current project"));
+    currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
 
     KAction* allProjectAction = new KAction(this);
     allProjectAction->setText(i18n("All Projects"));
-    allProjectAction->setToolTip(i18n("Display problems in all projects"));
+    allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
     KAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
     for (int i = 0; i < 4; ++i) {
@@ -122,17 +122,17 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
 
     KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
     severityMenu->setDelayed(false);
-    severityMenu->setToolTip(i18n("Select the lowest level of problem severity to be displayed"));
+    severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
     QActionGroup* severityActions = new QActionGroup(this);
 
     KAction* errorSeverityAction = new KAction(i18n("Error"), this);
-    errorSeverityAction->setToolTip(i18n("Display only errors"));
+    errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
 
     KAction* warningSeverityAction = new KAction(i18n("Warning"), this);
-    warningSeverityAction->setToolTip(i18n("Display errors and warnings"));
+    warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
 
     KAction* hintSeverityAction = new KAction(i18n("Hint"), this);
-    hintSeverityAction->setToolTip(i18n("Display errors, warnings and hints"));
+    hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
 
     KAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
     for (int i = 0; i < 3; ++i) {
@@ -240,7 +240,7 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
                 {
                     actions << action->toKAction();
                     if(!solution->title().isEmpty())
-                        actions.back()->setText(solution->title() + " " + actions.back()->text());
+                        actions.back()->setText(solution->title() + ' ' + actions.back()->text());
                 }
             }
             if(!actions.isEmpty())

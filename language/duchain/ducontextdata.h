@@ -36,6 +36,8 @@
 #include "../languageexport.h"
 #include <util/google/dense_hash_map>
 
+#include "localindexeddeclaration.h"
+
 namespace KDevelop{
 class DUContext;
 

@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
+#include <kpushbutton.h>
 
 #include "session.h"
 #include "core.h"
@@ -99,7 +100,7 @@ static QStringList standardArguments()
         }else */
         if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
         {
-            ret << "-" + arg;
+            ret << '-' + arg;
             if(a+1 < argc)
                 ret << QString::fromLocal8Bit(argv[a+1]);
         }
@@ -296,7 +297,7 @@ public:
     QString ownSessionDirectory() const
     {
         Q_ASSERT(activeSession);
-        return SessionController::sessionDirectory() + "/" + activeSession->id().toString();
+        return SessionController::sessionDirectory() + '/' + activeSession->id().toString();
     }
     
     void clearRecoveryDirectory()
@@ -305,7 +306,7 @@ public:
     }
     
 public slots:
-    void documentSaved( KDevelop::IDocument* document )
+    void documentSavedOrClosed( KDevelop::IDocument* document )
     {
         if(currentRecoveryFiles.contains(document->url()))
         {
@@ -323,9 +324,10 @@ private slots:
     void lateInitialization()
     {
         performRecovery();
-        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)));
-        
+        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
+        connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
     }
+
     void performRecovery()
     {
         kDebug() << "Checking recovery";
@@ -396,7 +398,7 @@ private slots:
                             urlFile.open(QIODevice::ReadOnly);
                             KUrl originalFile(QString::fromUtf8(urlFile.readAll()));
                             
-                            QFile f(recoverySubDir.path() + "/" + QString("/%1_text").arg(num));
+                            QFile f(recoverySubDir.path() + '/' + QString("/%1_text").arg(num));
                             f.open(QIODevice::ReadOnly);
                             QString text = QString::fromUtf8(f.readAll());
                             
@@ -497,7 +499,7 @@ private slots:
                             urlFile.write(document->url().pathOrUrl().toUtf8());
                             urlFile.close();
                             
-                            QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
+                            QString textFilePath = recoveryCurrentDir.path() + '/' + QString("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
@@ -564,8 +566,8 @@ SessionController::SessionController( QObject *parent )
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
     KAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
-    action->setText( i18n("Start New Session") );
-    action->setToolTip( i18n("Start a new KDevelop instance with an empty session") );
+    action->setText( i18nc("@action:inmenu", "Start New Session") );
+    action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
     action->setIcon(KIcon("window-new"));
 
     action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
@@ -625,7 +627,7 @@ void SessionController::initialize( const QString& session )
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* ses = new Session( id );
+        Session* ses = new Session( id, this );
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
@@ -679,7 +681,7 @@ QList< const KDevelop::Session* > SessionController::sessions() const
 Session* SessionController::createSession( const QString& name )
 {
     Session* s;
-    if(name.startsWith("{"))
+    if(name.startsWith('{'))
     {
         s = new Session( QUuid(name) );
     }else{
@@ -774,7 +776,7 @@ QList< SessionInfo > SessionController::availableSessionInfo()
         // TODO: Refactor the code here and in session.cpp so its shared
         SessionInfo si;
         si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
+        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + '/' + s +"/sessionrc" );
 
         QString desc = config->group( "" ).readEntry( "SessionName", "" );
         si.name = desc;
@@ -802,14 +804,14 @@ QString SessionController::sessionDirectory()
 
 QString SessionController::sessionDir()
 {
-    return sessionDirectory() + "/" + activeSession()->id().toString();
+    return sessionDirectory() + '/' + activeSession()->id().toString();
 }
 
 SessionController::LockSessionState SessionController::tryLockSession(QString id)
 {
     LockSessionState ret;
     
-    ret.lockFile = sessionDirectory() + "/" + id + "/lock";
+    ret.lockFile = sessionDirectory() + '/' + id + "/lock";
 
     if(!QFileInfo(ret.lockFile).exists())
     {
@@ -831,21 +833,49 @@ class SessionChooserDialog : public KDialog {
     Q_OBJECT
 public:
     SessionChooserDialog(QTreeView* view, QStandardItemModel* model);
-    
+    bool eventFilter(QObject* object, QEvent* event);
+
 public Q_SLOTS:
     void updateState();
     void doubleClicked(QModelIndex);
+
+private Q_SLOTS:
+    void deleteButtonPressed();
+    void showDeleteButton();
+    void itemEntered(const QModelIndex& index);
+
 private:
+    QTreeView* m_view;
     QStandardItemModel* m_model;
     QTimer m_updateStateTimer;
+
+    QPushButton* m_deleteButton;
+    QTimer m_deleteButtonTimer;
+    int m_deleteCandidateRow;
 };
 
-SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model) : m_model(model) {
+SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model)
+    : m_view(view), m_model(model), m_deleteCandidateRow(-1)
+{
     m_updateStateTimer.setInterval(5000);
     m_updateStateTimer.setSingleShot(false);
     m_updateStateTimer.start();
     connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(updateState()));
     connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+    connect(view, SIGNAL(entered(QModelIndex)), SLOT(itemEntered(QModelIndex)));
+
+    m_deleteButton = new KPushButton(view);
+    m_deleteButton->setIcon(KIcon("edit-delete"));
+    m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
+    m_deleteButton->hide();
+    connect(m_deleteButton, SIGNAL(clicked(bool)), SLOT(deleteButtonPressed()));
+
+    m_deleteButtonTimer.setInterval(500);
+    m_deleteButtonTimer.setSingleShot(true);
+    connect(&m_deleteButtonTimer, SIGNAL(timeout()), SLOT(showDeleteButton()));
+
+    view->setMouseTracking(true);
+    view->installEventFilter(this);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
@@ -865,14 +895,12 @@ void SessionChooserDialog::updateState() {
         if(session == i18n("Create New Session"))
             continue;
         
-        bool running = false;
         QString state;
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
             state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
                          lockState.holderApp, lockState.holderHostname);
-            running = true;
         }
         
         if(m_model->item(row, 2))
@@ -884,6 +912,9 @@ void SessionChooserDialog::updateState() {
 
 QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
 {
+    // The catalog hasn't been loaded yet
+    KGlobal::locale()->insertCatalog("kdevplatform");
+
     QTreeView* view = new QTreeView;
     QStandardItemModel* model = new QStandardItemModel(view);
     SessionChooserDialog dialog(view, model);
@@ -967,9 +998,73 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         }
         return ret;
     }
-    
+
     return QString();
 }
+
+void SessionChooserDialog::itemEntered(const QModelIndex& index)
+{
+    // The last row says "Create new session", we don't want to delete that
+    if(index.row() == m_model->rowCount()-1) {
+        m_deleteButton->hide();
+        m_deleteButtonTimer.stop();
+        return;
+    }
+
+    // align the delete-button to stay on the right border of the item
+    // we need the right most column's index
+    QModelIndex in = m_model->index( index.row(), 2 );
+    const QRect rect = m_view->visualRect(in);
+    const int x = rect.right() - m_deleteButton->size().width();
+    //FIXME: Figure out why visualRect is giving wrong coordinates. Ideally the code should be
+    //       y = rect.top()
+    const int y = rect.bottom() + rect.height()/2 + 3;
+    m_deleteButton->setGeometry( x, y, rect.height(), rect.height() );
+
+    m_deleteCandidateRow = index.row();
+    m_deleteButtonTimer.start();
+}
+
+void SessionChooserDialog::showDeleteButton()
+{
+    m_deleteButton->show();
+}
+
+bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
+{
+    if(object == m_view && event->type() == QEvent::Leave ) {
+        m_deleteButtonTimer.stop();
+        m_deleteButton->hide();
+    }
+
+    return false;
+}
+
+
+void SessionChooserDialog::deleteButtonPressed()
+{
+    if(m_deleteCandidateRow == -1)
+        return;
+
+    const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
+    const QString caption = i18nc("@title", "Delete Session");
+    const KGuiItem deleteItem(i18nc("@action:button", "Delete"), KIcon("edit-delete"));
+    const KGuiItem cancelItem(i18nc("@action:button", "Cancel"), KIcon("dialog-cancel"));
+
+    if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
+        QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
+        QStandardItem *item = m_model->itemFromIndex(index);
+        const QString uuid = item->text();
+
+        //FIXME: What about running sessions?
+        KDevelop::Session session( uuid );
+        session.deleteFromDisk();
+
+        m_model->removeRows( m_deleteCandidateRow, 1 );
+        m_deleteCandidateRow = -1;
+    }
+}
+
 
 QString SessionController::sessionName()
 {

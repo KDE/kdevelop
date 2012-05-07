@@ -30,6 +30,8 @@ class Part;
 
 namespace KDevelop {
 
+class ILanguageSupport;
+
 class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
     Q_OBJECT
 public:
@@ -56,7 +58,14 @@ public:
 
     QList<ILanguage*> languagesForMimetype(const QString& mime);
     QList<QString> mimetypesForLanguageName(const QString& languageName);
-    
+
+protected:
+    /**
+     * functions for unit tests
+     * @see TestLanguageController
+     */
+    void addLanguageSupport(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
+
 private:
 
     struct LanguageControllerPrivate *d;

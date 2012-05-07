@@ -110,4 +110,6 @@ inline uint qHash(const KDevelop::RangeInRevision& range) {
 
 } // namespace KDevelop
 
+Q_DECLARE_TYPEINFO(KDevelop::RangeInRevision, Q_MOVABLE_TYPE);
+
 #endif

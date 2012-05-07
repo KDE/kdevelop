@@ -22,7 +22,6 @@
 #include <QtCore/QSet>
 #include <KDE/KUrl>
 #include "../languageexport.h"
-#include <language/duchain/indexeditems.h>
 #include <KDE/KLineEdit>
 
 class QStringList;
@@ -33,21 +32,28 @@ namespace KDevelop
 class QuickOpenDataProviderBase;
 class IndexedString;
 
-class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public KLineEdit {
-Q_OBJECT
+class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public KLineEdit
+{
+    Q_OBJECT
 public:
-        ///Returns a non-zero declaration if it has been explicitly selected and executed through the quickopen line
-//         IndexedDeclaration selectedDeclaration() = 0;
-        ///Returns a non-empty string if the file has been explicitly selected and executed through the quickopen line
-//         IndexedString selectedFile() = 0;
-    virtual void setDefaultText(QString text) = 0;
-    Q_SIGNALS:
-        void itemSelected();
+    /**
+     * Returns a non-zero declaration if it has been explicitly selected
+     * and executed through the quickopen line
+     * \code IndexedDeclaration selectedDeclaration() = 0; \endcode
+     *
+     * Returns a non-empty string if the file has been explicitly selected
+     * and executed through the quickopen line
+     * \code IndexedString selectedFile() = 0; \endcode
+     */
+    virtual void setDefaultText(const QString& text) = 0;
+
+Q_SIGNALS:
+    void itemSelected();
 };
 
 /**
  * Interface to quickopen
-*/
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpen
 {
 public:
@@ -58,7 +64,7 @@ public:
      * Default types are: Files, Functions, Classes
      * There might be other quick open providers with custom items.
      * Note, the item name has to be translated, for example i18n("Files") should be passed.
-     * */
+     */
     virtual void showQuickOpen( const QStringList &types ) = 0;
 
     /**
@@ -68,28 +74,31 @@ public:
      * @param scope Different scopes supported by this data-provider, Examples: "Project", "Imports", etc.
      * @param type Types of the provided data, Examples: "Files", "Functions", "Classes", etc.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
-     * */
-    virtual void registerProvider( const QStringList& scopes, const QStringList& type, QuickOpenDataProviderBase* provider ) = 0;
+     */
+    virtual void registerProvider( const QStringList& scopes, const QStringList& type,
+                                   QuickOpenDataProviderBase* provider ) = 0;
 
     /**
      * Remove provider.
      * @param provider The provider to remove
      * @return Whether a provider was removed. If false, the provider was not attached.
-     * */
+     */
     virtual bool removeProvider( QuickOpenDataProviderBase* provider ) = 0;
 
     /**
      * Queries a set of files merged from all active data-providers that implement QuickOpenFileSetInterface.
-     * This should not be queried by data-providers that implement QuickOpenFileSetInterface during their initialization(set() and enableData())
-    * */
+     * This should not be queried by data-providers that implement QuickOpenFileSetInterface during their
+     * initialization(set() and enableData())
+     */
     virtual QSet<KDevelop::IndexedString> fileSet() const = 0;
-    
+
     enum QuickOpenType {
         Standard,
         Outline
     };
-    
-    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& types, QuickOpenType type = Standard) = 0;
+
+    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& types,
+                                                QuickOpenType type = Standard) = 0;
 };
 
 }

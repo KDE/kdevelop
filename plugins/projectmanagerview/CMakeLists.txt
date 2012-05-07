@@ -6,6 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9511 )
 set(kdevprojectmanagerview_PLUGIN_SRCS
     projectmanagerviewplugin.cpp
     projectmanagerview.cpp
+    projectmodelsaver.cpp
     projecttreeview.cpp
     projectbuildsetwidget.cpp
     builditembuilderjob.cpp

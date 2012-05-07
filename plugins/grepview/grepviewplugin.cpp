@@ -179,7 +179,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     } else {
         KUrl currentUrl;
         KDevelop::IDocument *document = core()->documentController()->activeDocument();
-        dlg->setEnableProjectBox(false);
+        bool enableProjectBox = false;
         if( document )
         {
             currentUrl = document->url();
@@ -189,13 +189,14 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
             KDevelop::IProject *proj = core()->projectController()->findProjectForUrl( currentUrl );
             if( proj && proj->folder().isLocalFile() )
             {
-                dlg->setEnableProjectBox(! proj->files().isEmpty() );
+                enableProjectBox = !proj->files().isEmpty();
                 if (!m_directory.startsWith(proj->folder().toLocalFile()))
                 {
                     dlg->setDirectory( proj->folder().toLocalFile() );
                 }
             }
         }
+        dlg->setEnableProjectBox(enableProjectBox);
     }
 
     if(showOptions)

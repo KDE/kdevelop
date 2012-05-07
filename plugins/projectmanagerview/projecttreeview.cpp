@@ -44,16 +44,20 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iselectioncontroller.h>
+#include <interfaces/isession.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
 #include "projectmanagerviewplugin.h"
+#include "projectmodelsaver.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/util/navigationtooltip.h>
 #include <project/projectutils.h>
 
 using namespace KDevelop;
+
+static const char* settingsConfigGroup = "ProjectTreeView";
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
         : QTreeView( parent ), m_ctxProject( 0 )
@@ -74,6 +78,15 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
 
     connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
     connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
+
+    connect( ICore::self(), SIGNAL(aboutToShutdown()),
+             this, SLOT(aboutToShutdown()));
+    connect( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+             this, SLOT(restoreState(KDevelop::IProject*)) );
+    connect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+             this, SLOT(saveState()) );
+
+    restoreState();
 }
 
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
@@ -310,6 +323,34 @@ void ProjectTreeView::openProjectConfig()
         IProjectController* ip = ICore::self()->projectController();
         ip->configureProject( m_ctxProject );
     }
+}
+
+void ProjectTreeView::saveState()
+{
+    KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
+
+    ProjectModelSaver saver;
+    saver.setView( this );
+    saver.saveState( configGroup );
+}
+
+void ProjectTreeView::restoreState(IProject* project)
+{
+    KConfigGroup configGroup( ICore::self()->activeSession()->config(), settingsConfigGroup );
+
+    // Saver will delete itself when it is complete.
+    ProjectModelSaver *saver = new ProjectModelSaver;
+    saver->setProject( project );
+    saver->setView( this );
+    saver->restoreState( configGroup );
+}
+
+void ProjectTreeView::aboutToShutdown()
+{
+    // save all projects, not just the last one that is closed
+    disconnect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+                this, SLOT(saveState()) );
+    saveState();
 }
 
 bool ProjectTreeView::event(QEvent* event)

@@ -66,7 +66,9 @@ public:
     void setValue(const QString &v);
     QString value() const;
     void setTopLevel(bool v);
-    
+    void setShowError(bool v);
+    bool showError();
+
     using TreeItem::setHasMore;
     using TreeItem::setHasMoreInitial;
     using TreeItem::appendChild;
@@ -112,6 +114,7 @@ private:
     bool inScope_;
     bool topLevel_;
     bool changed_;
+    bool showError_;
 
     format_t m_format;
 };

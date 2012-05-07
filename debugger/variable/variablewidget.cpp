@@ -251,6 +251,9 @@ void VariableTree::setupActions()
     m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_copyVariableValue->setShortcut(QKeySequence::Copy);
     connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
+
+    m_stopOnChange = new QAction(i18n("&Stop on change"), this);
+    connect(m_stopOnChange, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
 }
 
 Variable* VariableTree::selectedVariable() const
@@ -284,6 +287,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     contextMenu.addSeparator();
     contextMenu.addAction(m_copyVariableValue);
+    contextMenu.addAction(m_stopOnChange);
 
     contextMenu.exec(event->globalPos());
 }
@@ -297,7 +301,7 @@ void VariableTree::changeVariableFormat(int format)
 void VariableTree::watchDelete()
 {
     if (!selectedVariable()) return;
-    Q_ASSERT(dynamic_cast<Watches*>(selectedVariable()->parent()));
+    if (!dynamic_cast<Watches*>(selectedVariable()->parent())) return;
     selectedVariable()->die();
 }
 
@@ -305,6 +309,15 @@ void VariableTree::copyVariableValue()
 {
     if (!selectedVariable()) return;
     QApplication::clipboard()->setText(selectedVariable()->value());
+}
+
+void VariableTree::stopOnChange()
+{
+    if (!selectedVariable()) return;
+    IDebugSession *session = ICore::self()->debugController()->currentSession();
+    if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
+        session->variableController()->addWatchpoint(selectedVariable());
+    }
 }
 
 #if 0

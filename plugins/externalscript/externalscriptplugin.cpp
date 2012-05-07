@@ -29,18 +29,27 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/isession.h>
 
 #include <outputview/outputjob.h>
 #include <outputview/outputmodel.h>
 
+#include <project/projectmodel.h>
+
+#include <language/interfaces/editorcontext.h>
+
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KAction>
+#include <KProcess>
 
 #include <QStandardItemModel>
-#include <KAction>
-#include <interfaces/isession.h>
 #include <QDBusConnection>
-#include <KProcess>
+#include <QMenu>
+
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -94,6 +103,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setErrorMode( static_cast<ExternalScriptItem::ErrorMode>( script.readEntry( "errorMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
+      item->setShowOutput( script.readEntry( "showOutput", true ) );
       m_model->appendRow( item );
     }
   }
@@ -141,6 +151,58 @@ ExternalScriptPlugin* ExternalScriptPlugin::self()
 ExternalScriptPlugin::~ExternalScriptPlugin()
 {
   m_self = 0;
+}
+
+KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDevelop::Context* context )
+{
+  m_urls.clear();
+
+  if ( context->type() == KDevelop::Context::FileContext ) {
+    KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
+    m_urls = filectx->urls();
+  } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
+    KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
+      if ( item->file() ) {
+        m_urls << item->file()->url();
+      }
+    }
+  } else if ( context->type() == KDevelop::Context::EditorContext ) {
+      KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+      m_urls << econtext->url();
+  }
+
+  if ( !m_urls.isEmpty() ) {
+    KDevelop::ContextMenuExtension ext;
+    QMenu* menu = new QMenu();
+    menu->setTitle( i18n("External Scripts") );
+
+    for ( int row = 0; row < m_model->rowCount(); ++row ) {
+      ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
+      Q_ASSERT( item );
+
+      if (context->type() != KDevelop::Context::EditorContext) {
+        // filter scripts that depend on an opened document
+        // if the context menu was not requested inside the editor
+        if (item->performParameterReplacement() && item->command().contains("%s")) {
+          continue;
+        } else if (item->inputMode() == ExternalScriptItem::InputSelectionOrNone) {
+          continue;
+        }
+      }
+
+      KAction* scriptAction = new KAction( item->text(), this );
+      scriptAction->setData( QVariant::fromValue<ExternalScriptItem*>( item ));
+      connect( scriptAction, SIGNAL( triggered() ), SLOT( executeScriptFromContextMenu() ) );
+      menu->addAction( scriptAction );
+    }
+
+    ext.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+
+    return ext;
+  }
+
+  return KDevelop::IPlugin::contextMenuExtension( context );
 }
 
 void ExternalScriptPlugin::unload()
@@ -214,6 +276,20 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
   execute( item );
 }
 
+void ExternalScriptPlugin::executeScriptFromContextMenu() const
+{
+  KAction* action = dynamic_cast<KAction*>( sender() );
+  Q_ASSERT( action );
+
+  ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
+  Q_ASSERT( item );
+
+  foreach( const KUrl& url, m_urls) {
+    KDevelop::ICore::self()->documentController()->openDocument( url );
+    execute( item );
+  }
+}
+
 void ExternalScriptPlugin::rowsInserted( const QModelIndex& /*parent*/, int start, int end )
 {
   for ( int i = start; i <= end; ++i ) {
@@ -256,6 +332,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   config.writeEntry( "errorMode", (uint) item->errorMode() );
   config.writeEntry( "saveMode", (uint) item->saveMode() );
   config.writeEntry( "shortcuts", item->action()->shortcut().toString() );
+  config.writeEntry( "showOutput", item->showOutput() );
   config.sync();
 }
 

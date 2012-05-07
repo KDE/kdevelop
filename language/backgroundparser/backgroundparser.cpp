@@ -113,9 +113,20 @@ public:
         // by the user.
         QList<ParseJob*> jobs;
 
+        // Before starting a new job, first wait for all higher-priority ones to finish.
+        // That way, parse job priorities can be used for dependency handling.
+        int bestRunningPriority = BackgroundParser::WorstPriority;
+        foreach (const ParseJob* job, m_parseJobs) {
+            if (job->respectsSequentialProcessing() && job->parsePriority() < bestRunningPriority) {
+                bestRunningPriority = job->parsePriority();
+            }
+        }
+
+        bool done = false;
         for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
+
             if(it1.key() > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
@@ -134,19 +145,36 @@ public:
                     continue;
                 }
 
-                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 Q_ASSERT(m_documents.contains(*it));
                 const DocumentParsePlan& parsePlan = m_documents[*it];
-                ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady());
+                // If the current job requires sequential processing, but not all jobs with a better priority have been
+                // completed yet, it will not be created now.
+                if (    parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
+                     && parsePlan.priority() > bestRunningPriority )
+                {
+                    ++it;
+                    continue;
+                }
+
+                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = job; //This parse-job is allocated into the reserved thread
 
-                if(job)
+                if(job) {
+                    job->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
                     jobs.append(job);
+                    // update the currently best processed priority, if the created job respects sequential processing
+                    if (   parsePlan.sequentialProcessingFlags() & ParseJob::RespectsSequentialProcessing
+                        && parsePlan.priority() < bestRunningPriority)
+                    {
+                        bestRunningPriority = parsePlan.priority();
+                    }
+                }
 
                 // Remove all mentions of this document.
-                foreach(DocumentParseTarget target, parsePlan.targets) {
+                foreach(const DocumentParseTarget& target, parsePlan.targets) {
                     if (target.priority != it1.key()) {
                         m_documentsForPriority[target.priority].remove(*it);
                     }
@@ -154,16 +182,18 @@ public:
                 m_documents.remove(*it);
                 it = it1.value().erase(it);
                 --m_maxParseJobs; //We have added one when putting the document into m_documents
-                
+
                 if(!m_documents.isEmpty())
                 {
                     // Only try creating one parse-job at a time, else we might iterate through thousands of files
                     // without finding a language-support, and block the UI for a long time.
                     // If there are more documents to parse, instantly re-try.
                     QMetaObject::invokeMethod(m_parser, "parseDocuments", Qt::QueuedConnection);
+                    done = true;
                     break;
                 }
             }
+            if ( done ) break;
         }
 
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
@@ -181,7 +211,7 @@ public:
         }
     }
 
-    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QWeakPointer<QObject> > notifyWhenReady)
+    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
@@ -198,6 +228,7 @@ public:
                 continue; // Language part did not produce a valid ParseJob.
             }
 
+            job->setParsePriority(priority);
             job->setMinimumFeatures(features);
             job->setNotifyWhenReady(notifyWhenReady);
 
@@ -291,13 +322,14 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QTimer m_timer;
     int m_delay;
     int m_threads;
-    
+
     bool m_shuttingDown;
     
     struct DocumentParseTarget {
         QWeakPointer<QObject> notifyWhenReady;
         int priority;
         TopDUContext::Features features;
+        ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
         bool operator==(const DocumentParseTarget& rhs) const {
             return notifyWhenReady == rhs.notifyWhenReady && priority == rhs.priority && features == rhs.features;
         }
@@ -306,20 +338,32 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     struct DocumentParsePlan {
         QList<DocumentParseTarget> targets;
 
+        ParseJob::SequentialProcessingFlags sequentialProcessingFlags() const {
+            //Pick the strictest possible flags
+            ParseJob::SequentialProcessingFlags ret = ParseJob::IgnoresSequentialProcessing;
+            foreach(const DocumentParseTarget &target, targets) {
+                ret |= target.sequentialProcessingFlags;
+            }
+            return ret;
+        }
+
         int priority() const {
             //Pick the best priority
             int ret = BackgroundParser::WorstPriority;
-            foreach(const DocumentParseTarget &target, targets)
-                if(target.priority < ret)
+            foreach(const DocumentParseTarget &target, targets) {
+                if(target.priority < ret) {
                     ret = target.priority;
+                }
+            }
             return ret;
         }
 
         TopDUContext::Features features() const {
             //Pick the best features
             TopDUContext::Features ret = (TopDUContext::Features)0;
-            foreach(const DocumentParseTarget &target, targets)
+            foreach(const DocumentParseTarget &target, targets) {
                 ret = (TopDUContext::Features) (ret | target.features);
+            }
             return ret;
         }
 
@@ -334,7 +378,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         }
     };
     // A list of documents that are planned to be parsed, and their priority
-    QMap<KUrl, DocumentParsePlan > m_documents;
+    QHash<KUrl, DocumentParsePlan > m_documents;
     // The documents ordered by priority
     QMap<int, QSet<KUrl> > m_documentsForPriority;
     // Currently running parse jobs
@@ -353,7 +397,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     int m_maxParseJobs;
     int m_doneParseJobs;
-    QMap<KDevelop::ParseJob*, float> m_jobProgress;
+    QHash<KDevelop::ParseJob*, float> m_jobProgress;
     int m_neededPriority; //The minimum priority needed for processed jobs
 };
 
@@ -366,12 +410,19 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-    bool connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)), this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
+    bool connected = QObject::connect(ICore::self()->projectController(),
+                                      SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
+                                      this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(),
+                                 SIGNAL(projectOpened(KDevelop::IProject*)),
+                                 this, SLOT(projectOpened(KDevelop::IProject*)));
     Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(), SIGNAL(projectOpeningAborted(KDevelop::IProject*)), this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
+    connected = QObject::connect(ICore::self()->projectController(),
+                                 SIGNAL(projectOpeningAborted(KDevelop::IProject*)),
+                                 this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
     Q_ASSERT(connected);
+    Q_UNUSED(connected);
 }
 
 void BackgroundParser::aboutToQuit()
@@ -416,10 +467,8 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
-    QWeakPointer<QObject> p(notifyWhenReady);
-
     QMutexLocker lock(&d->m_mutex);
-    for(QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
+    for(QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
 
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
@@ -443,7 +492,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     }
 }
 
-void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady)
+void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags)
 {
 //     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
     KUrl cleanedUrl = url;
@@ -455,9 +504,10 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         BackgroundParserPrivate::DocumentParseTarget target;
         target.priority = priority;
         target.features = features;
+        target.sequentialProcessingFlags = flags;
         target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
 
-        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
+        QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
@@ -492,9 +542,11 @@ void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
         
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
         
-        foreach(BackgroundParserPrivate::DocumentParseTarget target, d->m_documents[url].targets)
-            if(target.notifyWhenReady.data() == notifyWhenReady)
+        foreach(const BackgroundParserPrivate::DocumentParseTarget& target, d->m_documents[url].targets) {
+            if(target.notifyWhenReady.data() == notifyWhenReady) {
                 d->m_documents[url].targets.removeAll(target);
+            }
+        }
 
         if(d->m_documents[url].targets.isEmpty()) {
             d->m_documents.remove(url);
@@ -553,6 +605,11 @@ void BackgroundParser::enableProcessing()
     setNeededPriority(WorstPriority);
 }
 
+int BackgroundParser::priorityForDocument(const KUrl& url) const {
+    QMutexLocker lock(&d->m_mutex);
+    return d->m_documents[url].priority();
+}
+
 bool BackgroundParser::isQueued(KUrl url) const {
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents.contains(url);
@@ -595,7 +652,7 @@ void BackgroundParser::updateProgressBar()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for(QMap<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it)
+        for(QHash<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it)
             additionalProgress += *it;
 
         emit showProgress(this, 0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
@@ -738,6 +795,9 @@ void BackgroundParser::projectOpeningAborted(IProject* project)
 }
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParseTarget, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParsePlan, Q_MOVABLE_TYPE);
 
 #include "backgroundparser.moc"
 

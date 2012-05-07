@@ -67,6 +67,7 @@ class ScriptAppConfigType : public KDevelop::LaunchConfigurationType
 {
 public:
     ScriptAppConfigType();
+    virtual ~ScriptAppConfigType();
 
     QString id() const;
     QString name() const;

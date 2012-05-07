@@ -420,19 +420,16 @@ void Area::setWorkingSet(QString name)
 
 bool Area::closeView(View* view, bool silent)
 {
-    static QSet<View*> alreadyClosingViews;
-    
-    if(alreadyClosingViews.contains(view))
-        return false; // The view is already being closed, so ignore the closeView request
-
     QWeakPointer<Document> doc = view->document();
 
     // We don't just delete the view, because if silent is false, we might need to ask the user.
-    if(doc)
+    if(doc && !silent)
     {
+        // Do some counting to check whether we need to ask the user for feedback
         kDebug() << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
         int viewsInCurrentArea = 0; // Number of views for the same document in the current area
         int viewsInOtherAreas = 0; // Number of views for the same document in other areas
+        int viewsInOtherWorkingSets = 0; // Number of views for the same document in areas with different working-set
 
         foreach(View* otherView, doc.data()->views())
         {
@@ -441,14 +438,16 @@ bool Area::closeView(View* view, bool silent)
                 viewsInCurrentArea += 1;
             if(!area || (area != this))
                 viewsInOtherAreas += 1;
+            if(area && area != this && area->workingSet() != workingSet())
+                viewsInOtherWorkingSets += 1;
         }
 
-        if(viewsInCurrentArea == 1 && viewsInOtherAreas == 0)
+        if(viewsInCurrentArea == 1 && (viewsInOtherAreas == 0 || viewsInOtherWorkingSets == 0))
         {
-            alreadyClosingViews = doc.data()->views().toSet();
-            bool ret = doc.data()->closeDocument(silent);
-            alreadyClosingViews.clear();
-            return ret;
+            // Time to ask the user for feedback, because the document will be completely closed
+            // due to working-set synchronization
+            if( !doc.data()->askForCloseFeedback() )
+                return false;
         }
     }
 

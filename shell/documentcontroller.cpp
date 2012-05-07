@@ -301,7 +301,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18n("Could Not Find Editor"));
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18nc("@title:window", "Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
@@ -415,15 +415,6 @@ struct DocumentControllerPrivate {
                                 foreach (Sublime::View *pView, pActiveViewIndex->views()) {
                                     if(sublimeDocBuddy->views().contains(pView)) {
                                         buddyView = pView;
-                                        break;
-                                    }
-                                }
-                            }
-                            // if we did not find it, then search in the whole area
-                            if(!buddyView) {
-                                foreach (Sublime::View *view, sublimeDocBuddy->views()) {
-                                    if (area->views().contains(view)) {
-                                        buddyView = view;
                                         break;
                                     }
                                 }
@@ -591,9 +582,8 @@ void DocumentController::cleanup()
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.
-    foreach (Sublime::MainWindow* mw, Core::self()->uiControllerInternal()->mainWindows())
-        foreach (IDocument* doc, documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw)))
-            doc->close(IDocument::Discard);
+    foreach (IDocument* doc, openDocuments())
+        doc->close(IDocument::Discard);
 }
 
 DocumentController::~DocumentController()
@@ -772,10 +762,7 @@ IDocument * DocumentController::documentForUrl( const KUrl & dirtyUrl ) const
     //Fix urls that might not be absolute
     KUrl url(dirtyUrl);
     url.cleanPath();
-    if ( d->documents.contains( url ) )
-        return d->documents.value( url );
-
-    return 0;
+    return d->documents.value( url, 0 );
 }
 
 QList<IDocument*> DocumentController::openDocuments() const
@@ -839,9 +826,10 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
     return true;
 }
 
-QList< IDocument * > KDevelop::DocumentController::documentsInWindow(MainWindow * mw) const
+QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(MainWindow * mw) const
 {
     // Gather a list of all documents which do have a view in the given main window
+    // Does not find documents which are open in inactive areas
     QList<IDocument*> list;
     foreach (IDocument* doc, openDocuments()) {
         if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
@@ -897,7 +885,7 @@ bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDeve
 void DocumentController::reloadAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
@@ -911,7 +899,7 @@ void DocumentController::reloadAllDocuments()
 void DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = documentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
