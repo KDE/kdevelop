@@ -32,6 +32,8 @@ class GdbTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
     void init();
 
     void testStdOut();
@@ -78,9 +80,14 @@ private Q_SLOTS:
     void testRemoteDebugInsertBreakpoint();
     void testRemoteDebugInsertBreakpointPickupOnlyOnce();
     void testBreakpointWithSpaceInPath();
+    void testBreakpointDisabledOnStart();
+    void testCatchpoint();
 
 private:
-    void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
+    void waitForState(GDBDebugger::DebugSession *session,
+                      KDevelop::IDebugSession::DebuggerState state,
+                      const char *file, int line,
+                      bool expectFail = false);
 };
 
 }

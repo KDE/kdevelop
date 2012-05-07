@@ -46,6 +46,41 @@ void TokenStream::splitRightShift(uint index)
   insert(index+1, next_token);
 }
 
+KDevelop::IndexedString TokenStream::symbol(const Token& t) const
+{
+  if(t.size == 1)
+    return KDevelop::IndexedString::fromIndex(session->contents()[t.position]);
+  else
+    return KDevelop::IndexedString();
+}
+
+uint TokenStream::symbolIndex(const Token& t) const
+{
+  return session->contents()[t.position];
+}
+
+QByteArray TokenStream::symbolByteArray(const Token& t) const
+{
+  if (t.size == 0) // esp. for EOF
+    return QByteArray();
+
+  return stringFromContents(session->contentsVector(), t.position, t.size);
+}
+
+QString TokenStream::symbolString(const Token& t) const
+{
+  return QString::fromUtf8(symbolByteArray(t));
+}
+
+uint TokenStream::symbolLength(const Token& t) const
+{
+  uint ret = 0;
+  for(uint a = t.position; a < t.position+t.size; ++a) {
+    ret += KDevelop::IndexedString::lengthFromIndex(session->contents()[a]);
+  }
+  return ret;
+}
+
 QString Lexer::SpecialCursor::toString() const
 {
   return KDevelop::IndexedString::fromIndex(*current).str();
@@ -118,40 +153,6 @@ void Lexer::skipComment()
   return;
 }
 
-KDevelop::IndexedString Token::symbol() const {
-  if(size == 1)
-    return KDevelop::IndexedString::fromIndex(session->contents()[position]);
-  else
-    return KDevelop::IndexedString();
-}
-
-uint Token::symbolIndex() const
-{
-  return session->contents()[position];
-}
-
-QByteArray Token::symbolByteArray() const {
-  if (size == 0) // esp. for EOF
-    return QByteArray();
-
-  return stringFromContents(session->contentsVector(), position, size);
-}
-
-QString Token::symbolString() const {
-  if (size == 0) // esp. for EOF
-    return QString();
-
-  return QString::fromUtf8(stringFromContents(session->contentsVector(), position, size));
-}
-
-uint Token::symbolLength() const {
-  uint ret = 0;
-  for(uint a = position; a < position+size; ++a) {
-    ret += KDevelop::IndexedString::lengthFromIndex(session->contents()[a]);
-  }
-  return ret;
-}
-
 const uint index_size = 200;
 
 KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > createIndicesForTokens() {
@@ -161,7 +162,6 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   #define ADD_TOKEN2(string, tok) ret[KDevelop::IndexedString(#string).index() % index_size].append(qMakePair(KDevelop::IndexedString(#string).index(), Token_ ## tok));
   ADD_TOKEN(K_DCOP);
   ADD_TOKEN(Q_OBJECT);
-  ADD_TOKEN(__attribute__);
   ADD_TOKEN(__typeof);
   ADD_TOKEN2(__typeof__, __typeof);
   ADD_TOKEN2(typeof, __typeof);
@@ -200,6 +200,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(extern);
   ADD_TOKEN(false);
   ADD_TOKEN(float);
+  ADD_TOKEN(final);
   ADD_TOKEN(for);
   ADD_TOKEN(friend);
   ADD_TOKEN(goto);
@@ -212,12 +213,14 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(mutable);
   ADD_TOKEN(namespace);
   ADD_TOKEN(new);
+  ADD_TOKEN(noexcept);
   ADD_TOKEN(not);
   ADD_TOKEN(not_eq);
   ADD_TOKEN(nullptr);
   ADD_TOKEN(operator);
   ADD_TOKEN(or);
   ADD_TOKEN(or_eq);
+  ADD_TOKEN(override);
   ADD_TOKEN(private);
   ADD_TOKEN(protected);
   ADD_TOKEN(public);
@@ -288,7 +291,6 @@ void Lexer::tokenize(ParseSession* _session)
   {
   Token eof;
   eof.kind = Token_EOF;
-  eof.session = session;
   eof.position = 0;
   eof.size = 0;
   stream->append(eof);
@@ -307,7 +309,6 @@ void Lexer::tokenize(ParseSession* _session)
 
     {
     Token token;
-    token.session = session;
     token.position = cursor.offsetIn( session->contents() );
     token.size = 0;
     stream->append(token);
@@ -365,7 +366,6 @@ void Lexer::tokenize(ParseSession* _session)
   {
   Token eof;
   eof.kind = Token_EOF;
-  eof.session = session;
   eof.position = cursor.offsetIn( session->contents() );
   eof.size = 0;
   stream->append(eof);
@@ -893,7 +893,6 @@ void Lexer::scan_divide()
           (*session->token_stream)[index++].kind = Token_comment;
           (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
           (*session->token_stream)[index-1].position = commentBegin.offsetIn( session->contents() );
-          (*session->token_stream)[index-1].session = session;
         }else{
           //Merge with previous comment
           (*session->token_stream)[index-1].size = cursor.offsetIn(session->contents()) - (*session->token_stream)[index-1].position;

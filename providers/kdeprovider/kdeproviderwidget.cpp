@@ -20,7 +20,7 @@
 
 #include "kdeproviderwidget.h"
 #include <QVBoxLayout>
-#include <QComboBox>
+#include <QListView>
 #include <KIcon>
 #include <KPushButton>
 #include <KConfigDialog>
@@ -33,31 +33,41 @@
 #include "kdeprojectsmodel.h"
 #include "kdeprojectsreader.h"
 #include <QSortFilterProxyModel>
+#include <KFilterProxySearchLine>
 
 using namespace KDevelop;
 
 KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     : IProjectProviderWidget(parent)
 {
-    setLayout(new QHBoxLayout(this));
-    m_projects = new QComboBox(this);
+    setLayout(new QVBoxLayout());
+    m_projects = new QListView(this);
+    QHBoxLayout* topLayout = new QHBoxLayout(this);
+    KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
     KDEProjectsModel* model = new KDEProjectsModel(this);
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
     connect(reader, SIGNAL(downloadDone()), reader, SLOT(deleteLater()));
-    connect(m_projects, SIGNAL(currentIndexChanged(QString)), this, SIGNAL(changed(QString)));
-    
-    layout()->addWidget(m_projects);
+    connect(m_projects, SIGNAL(clicked(QModelIndex)), this, SLOT(projectIndexChanged(QModelIndex)));
+
+    topLayout->addWidget(filterLine);
+
     
     QPushButton* settings=new QPushButton(KIcon("configure"), i18n("Settings"), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(settings, SIGNAL(clicked()), SLOT(showSettings()));
+
+    topLayout->addWidget(settings);
     
-    layout()->addWidget(settings);
+    layout()->addItem(topLayout);
+    layout()->addWidget(m_projects);
     
     m_dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
     m_dialog->setFaceType(KPageDialog::Auto);
     QWidget* page = new QWidget(m_dialog);
-    Ui::KDEConfig().setupUi(page);
+
+    Ui::KDEConfig configUi;
+    configUi.setupUi(page);
+    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
     
     m_dialog->addPage(page, i18n("General") );
     connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
@@ -68,6 +78,8 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     proxyModel->sort(0);
     proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     m_projects->setModel(proxyModel);
+    m_projects->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    filterLine->setProxy(proxyModel);
 }
 
 VcsLocation extractLocation(const QVariantMap& urls)
@@ -78,16 +90,13 @@ VcsLocation extractLocation(const QVariantMap& urls)
 
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
 {
-    int pos = m_projects->currentIndex();
-    if(pos<0)
+    QModelIndex pos = m_projects->currentIndex();
+    if(!pos.isValid())
         return 0;
-    
-    QModelIndex idx = m_projects->model()->index(pos, 0);
-    Q_ASSERT(idx.isValid());
     
     IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(idx.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
+    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
     
     return ret;
 }
@@ -98,4 +107,13 @@ void KDEProviderWidget::showSettings()
         return;
     
     m_dialog->show();
+}
+
+void KDEProviderWidget::projectIndexChanged(const QModelIndex& currentIndex)
+{
+    if (currentIndex.isValid()) {
+        QString currentProjectName = currentIndex.data(Qt::DisplayRole).toString();
+
+        emit changed(currentProjectName);
+    }
 }

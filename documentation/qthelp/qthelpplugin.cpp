@@ -57,9 +57,9 @@ QtHelpPlugin::~QtHelpPlugin()
 
 void QtHelpPlugin::readConfig()
 {
-    QStringList iconList, nameList, pathList;
+    QStringList iconList, nameList, pathList, ghnsList;
     bool loadQtDoc;
-    qtHelpReadConfig(iconList, nameList, pathList, loadQtDoc);
+    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
 
     loadQtHelpProvider(pathList, nameList, iconList);
     loadQtDocumentation(loadQtDoc);

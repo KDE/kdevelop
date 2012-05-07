@@ -34,20 +34,16 @@
 
 #include "outputfilters.h"
 
-class FilteredItem
+FilteredItem::FilteredItem(const QString& line)
+: originalLine( line )
+, type( QVariant::fromValue( MakeOutputModel::StandardItem ) )
+, shortenedText( line )
+, isActivatable(false)
+, lineNo(-1)
+, columnNo(-1)
 {
-    public:
-        FilteredItem( const QString& line )
-            : originalLine( line ), 
-              type( QVariant::fromValue( MakeOutputModel::StandardItem ) ),
-              shortenedText( line ), isActivatable(false), lineNo(-1), columnNo(-1) { kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>(); }
-        QString originalLine;
-        QVariant type;
-        QString shortenedText;
-        bool isActivatable;
-        KUrl url;
-        int lineNo, columnNo;
-};
+    kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>();
+}
 
 const int MakeOutputModel::MakeItemTypeRole = Qt::UserRole + 1;
 
@@ -206,10 +202,26 @@ void MakeOutputModel::addLines( const QStringList& lines )
 {
     if( lines.isEmpty() )
         return;
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + lines.count() - 1 );
-    foreach( const QString& line, lines )
-    {
 
+    lineBuffer << lines;
+    QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+}
+
+void MakeOutputModel::addLineBatch()
+{
+    // only add this many lines in one batch, then return to the event loop
+    // this prevents overly long UI lockup and is simple enough to implement
+    const int maxLines = 50;
+    const int linesInBatch = qMin(lineBuffer.count(), maxLines);
+
+    // If there is nothing to insert we are done.
+    if ( linesInBatch == 0 )
+            return;
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
+
+    for(int i = 0; i < linesInBatch; ++i) {
+        const QString line = lineBuffer.dequeue();
         FilteredItem item( line );
         bool matched = false;
         
@@ -309,6 +321,10 @@ void MakeOutputModel::addLines( const QStringList& lines )
         items << item;
     }
     endInsertRows();
+
+    if (!lineBuffer.isEmpty()) {
+        QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+    }
 }
 
 void MakeOutputModel::addLine( const QString& l )

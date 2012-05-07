@@ -922,7 +922,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
     TopDUContext* m_top;
 };
 
-Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
+Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(const Cpp::InstantiationInformation& base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
     if(name->template_arguments || base.isValid()) 
     {
       //Append a scope part
@@ -978,7 +978,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   uint oldEndToken = node->end_token;
   node->end_token = node->id + 1;
 
-  Identifier id(editor()->parseSession()->token_stream->token(node->id).symbol());
+  Identifier id(editor()->parseSession()->token_stream->symbol(node->id));
   Declaration* decl = openNormalDeclaration(0, node, id);
 
   node->end_token = oldEndToken;
@@ -1132,32 +1132,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
               }
             }
           }
-
-          //Update instantiations in case of template forward-declarations
-//           SpecialTemplateDeclaration<ForwardDeclaration>* templateForward = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>* > (decl);
-//           SpecialTemplateDeclaration<Declaration>* currentTemplate = dynamic_cast<SpecialTemplateDeclaration<Declaration>* >  (currentDeclaration());
-//
-//           if( templateForward && currentTemplate )
-//           {
-//             //Change the types of all the forward-template instantiations
-//             TemplateDeclaration::InstantiationsHash instantiations = templateForward->instantiations();
-//
-//             for( TemplateDeclaration::InstantiationsHash::iterator it = instantiations.begin(); it != instantiations.end(); ++it )
-//             {
-//               Declaration* realInstance = currentTemplate->instantiate(it.key().args, ImportTrace());
-//               Declaration* forwardInstance = dynamic_cast<Declaration*>(*it);
-//               //Now change the type of forwardInstance so it matches the type of realInstance
-//               CppClassType::Ptr realClass = realInstance->type<CppClassType>();
-//               CppClassType::Ptr forwardClass = forwardInstance->type<CppClassType>();
-//
-//               if( realClass && forwardClass ) {
-//                 //Copy the class from real into the forward-declaration's instance
-//                 copyCppClass(realClass.data(), forwardClass.data());
-//               } else {
-//                 kDebug(9007) << "Bad types involved in formward-declaration";
-//               }
-//             }
-//           }//templateForward && currentTemplate
         }
       }
     }//foreach
@@ -1201,7 +1175,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
         instance.access = KDevelop::Declaration::Private;
 
       if( node->access_specifier ) {
-        int tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
+        quint16 tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
 
         switch( tk ) {
           case Token_private:
@@ -1309,6 +1283,17 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
   }
 }
 
+void DeclarationBuilder::visitAliasDeclaration(AliasDeclarationAST* node)
+{
+  DeclarationBuilderBase::visitAliasDeclaration(node);
+
+  if( compilingContexts() ) {
+    PushValue<bool> setTypeDef(m_inTypedef, true);
+    openDeclaration<Declaration>(node->name, node->name);
+    closeDeclaration();
+  }
+}
+
 void DeclarationBuilder::visitTypeId(TypeIdAST * typeId)
 {
   //TypeIdAST contains a declarator, but that one does not declare anything
@@ -1332,7 +1317,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
   if( compilingContexts() ) {
     RangeInRevision range = editor()->findRange(node->namespace_name);
     DUChainWriteLocker lock(DUChain::lock());
-    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()), false, false, &range);
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->symbol(node->namespace_name)), false, false, &range);
     {
       QualifiedIdentifier id;
       identifierForNode(node->alias_name, id);

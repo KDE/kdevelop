@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -24,41 +24,48 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/view.h>
 
+#include <ktexteditor/view.h>
+#include <KUrl>
+#include "adaptsignatureaction.h"
 
 namespace KDevelop {
 class ParseJob;
 }
-namespace Cpp {
-typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
-struct Signature
-{
-  QList<ParameterItem> parameters;
-  QList<QString> defaultParams;
-  KDevelop::IndexedType returnType;
-  bool isConst;
-};
 
-class AdaptDefinitionSignatureAssistant : public KDevelop::IAssistant {
+using namespace KDevelop;
+namespace Cpp {
+
+class AdaptDefinitionSignatureAssistant : public IAssistant {
   Q_OBJECT
   public:
-    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted);
+    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, const KTextEditor::Range& inserted);
+
     bool isUseful();
-    
+
   private:
-    KDevelop::Identifier m_declarationName;
-    
-    bool m_editingDefinition; //If this is true, the user is editing on the definition side, and the declaration should be updated
-    
-    KDevelop::DeclarationId m_definitionId;
-    KDevelop::ReferencedTopDUContext m_definitionContext;
-    Signature m_oldSignature; //old signature of the _other_side
-    KDevelop::IndexedString m_document;
-    KDevelop::SimpleRange m_invocationRange;
-    
-    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleRange position) const;
-    KTextEditor::View *m_view;
+    DUContext* findFunctionContext(const KUrl& url, const SimpleRange& position) const;
+
+    ///Compare @param newSignature to m_oldSignature and put differences in oldPositions
+    ///@returns whether or not there are any differences
+    bool getSignatureChanges(const Signature &newSignature, QList<int> &oldPositions) const;
+    ///Set default params in @param newSignature based on m_oldSignature's defaults and @param oldPositions
+    void setDefaultParams(Signature &newSignature, const QList<int> &oldPositions) const;
+    ///@returns RenameActions for each parameter in newSignature that has been renamed
+    QList<RenameAction*> getRenameActions(const Signature &newSignature, const QList<int> &oldPositions) const;
+
+    // If this is true, the user is editing on the definition side,
+    // and the declaration should be updated
+    bool m_editingDefinition;
+    Identifier m_declarationName;
+    DeclarationId m_otherSideId;
+    ReferencedTopDUContext m_otherSideTopContext;
+    DUContextPointer m_otherSideContext;
+    //old signature of the _other_side
+    Signature m_oldSignature;
+    KUrl m_document;
+    QWeakPointer<KTextEditor::View> m_view;
+
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
 };

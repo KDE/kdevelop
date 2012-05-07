@@ -65,6 +65,12 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
     connect(ui->kcfg_gdbPath, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
     connect(ui->kcfg_runGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
     connect(ui->kcfg_runShellScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_startWith, SIGNAL(currentIndexChanged(int)), this, SIGNAL(changed()));
+
+    //Setup data info for combobox
+    ui->kcfg_startWith->setItemData(0, "ApplicationOutput" );
+    ui->kcfg_startWith->setItemData(1, "GdbConsole" );
+    ui->kcfg_startWith->setItemData(2, "FrameStack" );
 }
 
 KIcon GdbConfigPage::icon() const
@@ -82,6 +88,7 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IP
     ui->kcfg_runGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() ) );
     ui->kcfg_displayStaticMembers->setChecked( cfg.readEntry(GDBDebugger::staticMembersEntry, false) );
     ui->kcfg_asmDemangle->setChecked( cfg.readEntry( GDBDebugger::demangleNamesEntry, true) );
+    ui->kcfg_startWith->setCurrentIndex( ui->kcfg_startWith->findData( cfg.readEntry( GDBDebugger::startWithEntry, "ApplicationOutput" ) ) );
     //TODO: add ui for this
     //ui->kcfg_allowForceBP->setChecked( cfg.readEtnry( GDBDebugger::allowForcedBPEntry, true ) );
     //ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
@@ -97,6 +104,7 @@ void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* )
     cfg.writeEntry(GDBDebugger::remoteGdbRunEntry, ui->kcfg_runGdbScript->url() );
     cfg.writeEntry(GDBDebugger::staticMembersEntry, ui->kcfg_displayStaticMembers->isChecked() );
     cfg.writeEntry(GDBDebugger::demangleNamesEntry, ui->kcfg_asmDemangle->isChecked() );
+    cfg.writeEntry(GDBDebugger::startWithEntry, ui->kcfg_startWith->itemData( ui->kcfg_startWith->currentIndex() ).toString() );
     //cfg.writeEntry(GDBDebugger::separateTerminalEntry, ui->kcfg_dbgTerminal->isChecked() );
 }
 

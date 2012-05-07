@@ -21,6 +21,7 @@
 
 #include "cmakemodelitems.h"
 #include <QString>
+#include <QThread>
 #include <kdebug.h>
 
 #include <language/duchain/duchain.h>
@@ -34,19 +35,35 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folde
     Q_ASSERT(folder.path().endsWith("/"));
 }
 
-QStringList CMakeFolderItem::includeDirectories() const
+static KDevelop::ProjectBaseItem* getRealCMakeParent(KDevelop::ProjectBaseItem* baseItem)
 {
-    QStringList urls(m_includeList);
-
-    CMakeFolderItem *folder = formerParent();
-    if(folder)
-    {
-        urls += folder->includeDirectories();
+    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( baseItem );
+    if(folder) {
+        return folder->formerParent();
     }
-    return urls;
+    return baseItem->parent();
 }
 
-CMakeDefinitions CMakeFolderItem::definitions() const
+QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const
+{
+    if (!placeInHierarchy) return m_includeList;
+
+    placeInHierarchy = getRealCMakeParent(placeInHierarchy);
+    while(placeInHierarchy)
+    {
+        IncludesAttached* includer = dynamic_cast<IncludesAttached*>( placeInHierarchy );
+        if(includer) {
+            QStringList includes(m_includeList);
+            includes += includer->includeDirectories(placeInHierarchy);
+            return includes;
+        }
+
+        placeInHierarchy = getRealCMakeParent(placeInHierarchy);
+    }
+    return m_includeList;
+}
+
+CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) const
 {
     CMakeDefinitions result = m_defines;
 
@@ -60,9 +77,8 @@ CMakeDefinitions CMakeFolderItem::definitions() const
     // was added before or after the add_subdirectory for this cmakelists.txt. And last but not least
     // CMake actually adds all defines as-is, even if two add_definitions are adding the same define
     // with the same or different values. Our code will only take the 'last' value.
-    CMakeFolderItem* parentFolder = formerParent();
     if( parentFolder ) {
-        QHash<QString,QString> parentDefs = parentFolder->definitions();
+        QHash<QString,QString> parentDefs = parentFolder->definitions(parentFolder->formerParent());
         for( QHash<QString,QString>::const_iterator it = parentDefs.constBegin(); it != parentDefs.constEnd(); it++ ) {
             if( !result.contains( it.key() ) ) {
                 result[it.key()] = it.value();
@@ -71,6 +87,13 @@ CMakeDefinitions CMakeFolderItem::definitions() const
     }
     return result;
 }
+
+void DefinesAttached::defineVariables(const QStringList& vars)
+{
+    foreach(const QString& v, vars)
+        m_defines.insert(v, QString());
+}
+
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
@@ -124,23 +147,27 @@ bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
     return false;
 }
 
-void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectFolderItem*> folders = folderList();
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
         CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
         if(cmfolder && cmfolder->formerParent()==this && !textInList<Subdirectory>(subs, folder))
-            delete folder;
+            ret += folder;
     }
+    return ret;
 }
 
-void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
+QList<KDevelop::ProjectBaseItem*> CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
 {
+    QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectTargetItem*> targetl = targetList();
     foreach(KDevelop::ProjectTargetItem* target, targetl) {
         if(!textInList<CMakeTarget>(targets, target))
-            delete target;
+            ret += target;
     }
+    return ret;
 }
 
 CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl& basepath)
@@ -153,3 +180,22 @@ CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project
 CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl&)
     : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName)
 {}
+
+CMakeFolderItem::~CMakeFolderItem() {
+}
+
+DescriptorAttatched::~DescriptorAttatched() {
+}
+
+DUChainAttatched::~DUChainAttatched() {
+}
+
+DefinesAttached::~DefinesAttached() {
+}
+
+IncludesAttached::~IncludesAttached() {
+}
+
+KUrl CMakeExecutableTargetItem::installedUrl() const {
+    return KUrl();
+}

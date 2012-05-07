@@ -700,7 +700,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source, int maxDepth ) {
-
   --maxDepth;
   if(maxDepth < 0)
     return PathResolutionResult(false);
@@ -716,7 +715,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   QString fullOutput;
   executeCommand(source.getCommand( file, workingDirectory, makeParameters ), workingDirectory, fullOutput);
-  PathResolutionResult res;
 
   QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
   QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.

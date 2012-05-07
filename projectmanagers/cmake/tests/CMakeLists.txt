@@ -4,9 +4,7 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
 )
 
-add_definitions( "-DCMAKE_TESTS_PROJECTS_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/manual\\\"" )
-add_definitions( "-DCMAKE_INSTALLED_MODULES=\\\"${DATA_INSTALL_DIR}/cmake/modules\\\"" )
-add_definitions( "-DTEST_PREFIX_PATH=\\\"${CMAKE_PREFIX_PATH}\\;${CMAKE_INSTALL_PREFIX}\\\"" )
+configure_file("paths.h.cmake" "cmake-test-paths.h" ESCAPE_QUOTES)
 
 set(CMAKE_TEST_LIBRARIES 
     ${QT_QTTEST_LIBRARY}
@@ -46,4 +44,4 @@ kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
 target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 kde4_add_unit_test( cmakemanagertest cmakemanagertest.cpp )
-target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})

@@ -39,28 +39,20 @@ typedef void (Lexer::*scan_fun_ptr)();
 class KDEVCPPPARSER_EXPORT Token
 {
 public:
-  ///kind of the token @see TOKEN_KIND enum reference.
-  int kind;
   ///position in the preprocessed buffer
   uint position;
   ///size of the token in the preprocessed buffer. Do not confuse this with symbolLength.
   uint size;
-  ///pointer to the parse session.
-  const ParseSession* session;
+  ///kind of the token @see TOKEN_KIND enum reference.
+  quint16 kind;
 
-  //Symbol associated to the token. This only works if this is a simple symbol
-  //only consisting of one identifier(not comments), does not work for operators like "->" or numbers like "50"
-  KDevelop::IndexedString symbol() const;
-  //The index of the symbol associated to the token.
-  //The notes from @c symbol() apply as well.
-  uint symbolIndex() const;
-
-  //This always works, but is expensive
-  QString symbolString() const;
-  QByteArray symbolByteArray() const;
-
-  uint symbolLength() const;
+  inline bool operator==(const Token& o) const
+  {
+    return o.position == position && o.size == size && o.kind == kind;
+  }
 };
+
+Q_DECLARE_TYPEINFO(Token, Q_PRIMITIVE_TYPE);
 
 /**Stream of tokens found by lexer.
 Internally works like an array of @ref Token continuosly allocated.
@@ -74,7 +66,7 @@ TODO: reuse some pool / container class for the token array
 NOTE: token_count is actually the *size* of the token pool
       the last actually used token is lastToken
 */
-class TokenStream : public QVector<Token>
+class KDEVCPPPARSER_EXPORT TokenStream : public QVector<Token>
 {
 private:
   TokenStream(const TokenStream &);
@@ -82,8 +74,9 @@ private:
 
 public:
   /**Creates a token stream with the default reserved size of 1024 tokens.*/
-  inline TokenStream(uint size = 1024)
-    : index(0)
+  inline TokenStream(ParseSession* _session, uint size = 1024)
+    : session(_session)
+    , index(0)
   {
     reserve(size);
   }
@@ -107,16 +100,61 @@ public:
   { return index++; }
 
   /**@return the kind of the next (LA) token in the stream.*/
-  inline int lookAhead(uint i = 0) const
+  inline quint16 lookAhead(uint i = 0) const
   { return at(index + i).kind; }
 
   /**@return the kind of the current token in the stream.*/
-  inline int kind(uint i) const
+  inline quint16 kind(uint i) const
   { return at(i).kind; }
 
   /**@return the position of the current token in the c++ source buffer.*/
   inline uint position(uint i) const
   { return at(i).position; }
+
+  /**
+   * @return The symbol associated to the token.
+   *
+   * @note This only works if this is a simple symbol, i.e.
+   * only consisting of one identifier (not comments).
+   * does not work for operators like "->" or numbers like "50"
+   */
+  KDevelop::IndexedString symbol(const Token& t) const;
+  inline KDevelop::IndexedString symbol(uint i) const
+  { return symbol(token(i)); }
+
+  /**
+   * @return The index of the symbol associated to the token.
+   *
+   * @note The notes from @c symbol() apply as well.
+   */
+  uint symbolIndex(const Token& t) const;
+  inline uint symbolIndex(uint i) const
+  { return symbolIndex(token(i)); }
+
+  /**
+   * @return The string representation of the token.
+   *
+   * @note This always works but is expensive
+   */
+  QString symbolString(const Token& t) const;
+  inline QString symbolString(uint i) const
+  { return symbolString(token(i)); }
+
+  /**
+   * @return The bytearray representation of the token.
+   *
+   * @note This always works but is expensive
+   */
+  QByteArray symbolByteArray(const Token& t) const;
+  inline QByteArray symbolByteArray(uint i) const
+  { return symbolByteArray(token(i)); }
+
+  /**
+   * @return The length of this tokens text representation
+   */
+  uint symbolLength(const Token& t) const;
+  inline uint symbolLength(uint i) const
+  { return symbolLength(token(i)); }
 
   /**
    * Split the right shift token at @p index into two distinct right angle brackets.
@@ -127,6 +165,7 @@ public:
   void splitRightShift(uint index);
 
 private:
+  ParseSession* session;
   uint index;
 };
 

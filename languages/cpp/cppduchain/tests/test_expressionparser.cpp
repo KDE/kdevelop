@@ -17,6 +17,7 @@
 */
 
 #include "test_expressionparser.h"
+#include "testhelper.h"
 
 #include <QtTest/QtTest>
 
@@ -47,6 +48,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 
 #include <typeinfo>
 
@@ -76,62 +78,6 @@ char* debugString( const QString& str ) {
   QByteArray b = str.toAscii();
   strcpy( ret, b.data() );
   return ret;
-}
-
-namespace QTest {
-  template<>
-  char* toString(const Cursor& cursor)
-  {
-    QByteArray ba = "Cursor(";
-    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
-    ba += ')';
-    return qstrdup(ba.data());
-  }
-  template<>
-  char* toString(const QualifiedIdentifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  template<>
-  char* toString(const Identifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  /*template<>
-  char* toString(QualifiedIdentifier::MatchTypes t)
-  {
-    QString ret;
-    switch (t) {
-      case QualifiedIdentifier::NoMatch:
-        ret = "No Match";
-        break;
-      case QualifiedIdentifier::Contains:
-        ret = "Contains";
-        break;
-      case QualifiedIdentifier::ContainedBy:
-        ret = "Contained By";
-        break;
-      case QualifiedIdentifier::ExactMatch:
-        ret = "Exact Match";
-        break;
-    }
-    QByteArray arr = ret.toString().toLatin1();
-    return qstrdup(arr.data());
-  }*/
-  template<>
-  char* toString(const Declaration& def)
-  {
-    QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
-    return qstrdup(s.toLatin1().constData());
-  }
-  template<>
-  char* toString(const TypePtr<AbstractType>& type)
-  {
-    QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
-    return qstrdup(s.toLatin1().constData());
-  }
 }
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
@@ -481,6 +427,30 @@ void TestExpressionParser::testSmartPointer() {
   release(top);
 }
 
+void TestExpressionParser::testAutoTemplate()
+{
+  QByteArray code = "struct C { float m(); }; C c; template<class T> auto foo(T n) -> decltype(n.m()); template<class T> auto foo2(T n) -> decltype(n);";
+  LockedTopDUContext top = parse(code);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QCOMPARE(top->localDeclarations().size(), 4);
+  FunctionType::Ptr fType = top->localDeclarations()[2]->abstractType().cast<FunctionType>();
+  QVERIFY(fType);
+  QVERIFY(fType->returnType());
+  DelayedType::Ptr ret = fType->returnType().cast<DelayedType>();
+  QVERIFY(ret);
+  QVERIFY(ret->kind() == DelayedType::Delayed);
+  Cpp::ExpressionParser parser;
+
+  ExpressionEvaluationResult res = parser.evaluateExpression("foo(c)", DUContextPointer(top));
+  QVERIFY(res.isValid());
+  QCOMPARE(res.type.abstractType()->toString(), QString("float"));
+
+  res = parser.evaluateExpression("foo2(c)", DUContextPointer(top));
+  QVERIFY(res.isValid());
+  QCOMPARE(res.type.abstractType()->toString(), QString("C"));
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -506,6 +476,20 @@ void TestExpressionParser::testSimpleExpression() {
 
   Cpp::ExpressionParser parser;
   Cpp::ExpressionEvaluationResult result;
+
+  result = parser.evaluateType( "decltype(1+2)", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int"));
+  QVERIFY(!result.isInstance);
+  lock.unlock();
+  
+  result = parser.evaluateType( "decltype(c)()", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont"));
+  QVERIFY(!result.isInstance);
+  lock.unlock();
 
   result = parser.evaluateType( "const Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
@@ -1170,6 +1154,110 @@ void TestExpressionParser::testConstness()
   QVERIFY(TypeUtils::isConstant(result.type.abstractType()));
 }
 
+void TestExpressionParser::testConstnessOverload()
+{
+  QByteArray method("struct A { const A& foo() const; A foo(); };\n"
+                    "const A constA; A nonConstA;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  Declaration* constA = top->localDeclarations().at(1);
+  QVERIFY(TypeUtils::isConstant(constA->abstractType()));
+
+  Declaration* nonConstA = top->localDeclarations().at(2);
+  QVERIFY(!TypeUtils::isConstant(nonConstA->abstractType()));
+
+  Cpp::ExpressionParser parser(false, true, true);
+
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("constA.foo()", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be the const& version
+  AbstractType::Ptr type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(type.cast<ReferenceType>());
+  QVERIFY(TypeUtils::isConstant(type.cast<ReferenceType>()->baseType()));
+  QVERIFY(type.cast<ReferenceType>()->baseType().cast<StructureType>());
+
+  result = parser.evaluateExpression("nonConstA.foo()", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be plain a
+  type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(!TypeUtils::isReferenceType(type));
+  QVERIFY(type.cast<StructureType>());
+}
+
+void TestExpressionParser::testConstnessOverloadSubscript()
+{
+  QByteArray method("struct A { const A& operator[](int i) const; A operator[](int i); };\n"
+                    "const A constA; A nonConstA;");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  Declaration* constA = top->localDeclarations().at(1);
+  QVERIFY(TypeUtils::isConstant(constA->abstractType()));
+
+  Declaration* nonConstA = top->localDeclarations().at(2);
+  QVERIFY(!TypeUtils::isConstant(nonConstA->abstractType()));
+
+  Cpp::ExpressionParser parser(false, true, true);
+
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("constA[0]", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be the const& version
+  AbstractType::Ptr type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(type.cast<ReferenceType>());
+  QVERIFY(TypeUtils::isConstant(type.cast<ReferenceType>()->baseType()));
+  QVERIFY(type.cast<ReferenceType>()->baseType().cast<StructureType>());
+
+  result = parser.evaluateExpression("nonConstA[0]", DUContextPointer(top));
+  QVERIFY(result.isValid());
+  QVERIFY(result.type);
+  // should be plain a
+  type = result.type.abstractType();
+  QVERIFY(!TypeUtils::isConstant(type));
+  QVERIFY(!TypeUtils::isReferenceType(type));
+  QVERIFY(type.cast<StructureType>());
+}
+
+void TestExpressionParser::testReference()
+{
+  QByteArray method("");
+
+  KDevelop::DUContextPointer testContext(parse(method, DumpNone));
+  DUChainWriteLocker lock;
+  Cpp::ExpressionParser parser(false, true, true);
+  Cpp::ExpressionEvaluationResult result;
+
+  result = parser.evaluateType( "int&", testContext);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int&"));
+  QVERIFY(!result.isInstance);
+  QVERIFY(result.type.type<ReferenceType>());
+  QVERIFY(!result.type.type<ReferenceType>()->isRValue());
+
+  result = parser.evaluateType( "int&&", testContext);
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("int&&"));
+  QVERIFY(!result.isInstance);
+  QVERIFY(result.type.type<ReferenceType>());
+  QVERIFY(result.type.type<ReferenceType>()->isRValue());
+
+}
+
+
 void TestExpressionParser::testCharacterTypes_data()
 {
   QTest::addColumn<QString>("code");
@@ -1229,7 +1317,7 @@ void TestExpressionParser::release(DUContext* top)
   //delete top;
 }
 
-DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
+TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;

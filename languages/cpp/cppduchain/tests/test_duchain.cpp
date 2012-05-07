@@ -19,48 +19,49 @@
 
 #include "test_duchain.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
+#include <QWidget>
+
+#include "declarationbuilder.h"
+#include "usebuilder.h"
+#include "cpptypes.h"
+#include "templateparameterdeclaration.h"
+#include "cppeditorintegrator.h"
+#include "dumptypes.h"
+#include "environmentmanager.h"
+#include "typeutils.h"
+#include "templatedeclaration.h"
+#include "tokens.h"
+#include "qtfunctiondeclaration.h"
+#include "sourcemanipulation.h"
+
+#include "rpp/chartools.h"
+#include "rpp/pp-engine.h"
+#include "rpp/preprocessor.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/functiondefinition.h>
-#include "declarationbuilder.h"
-#include "usebuilder.h"
 #include <language/duchain/declarationid.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/dumpdotgraph.h>
 #include <language/duchain/dumpchain.h>
-#include "cpptypes.h"
-#include "templateparameterdeclaration.h"
-#include "cppeditorintegrator.h"
-#include "dumptypes.h"
-#include "environmentmanager.h"
-
-#include <language/editor/documentrange.h>
-
-#include "typeutils.h"
-#include "templatedeclaration.h"
-#include "rpp/chartools.h"
-#include "rpp/pp-engine.h"
-#include "rpp/preprocessor.h"
-
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
-#include <language/codegen/coderepresentation.h>
+#include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <language/duchain/duchainutils.h>
 
-#include "tokens.h"
+#include <language/codegen/coderepresentation.h>
+#include <language/editor/documentrange.h>
 
 #include <typeinfo>
-#include <language/duchain/duchainutils.h>
-#include <qtfunctiondeclaration.h>
-#include <qwidget.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <sourcemanipulation.h>
+
+#include <tests/testhelpers.h>
 
 using namespace KTextEditor;
 using namespace TypeUtils;
@@ -69,72 +70,6 @@ using namespace Cpp;
 using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
-
-namespace QTest {
-  template<>
-  char* toString(const Cursor& cursor)
-  {
-    QByteArray ba = "Cursor(";
-    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
-    ba += ')';
-    return qstrdup(ba.data());
-  }
-  template<>
-  char *toString(const RangeInRevision &range)
-  {
-      QByteArray ba = "[ (";
-      ba += QByteArray::number(range.start.line) + ", " + QByteArray::number(range.start.column);
-      ba += ") -> (";
-      ba += QByteArray::number(range.end.line) + ", " + QByteArray::number(range.end.column);
-      ba += ") ]";
-      return qstrdup(ba.data());
-  }
-  template<>
-  char* toString(const QualifiedIdentifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  template<>
-  char* toString(const Identifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  /*template<>
-  char* toString(QualifiedIdentifier::MatchTypes t)
-  {
-    QString ret;
-    switch (t) {
-      case QualifiedIdentifier::NoMatch:
-        ret = "No Match";
-        break;
-      case QualifiedIdentifier::Contains:
-        ret = "Contains";
-        break;
-      case QualifiedIdentifier::ContainedBy:
-        ret = "Contained By";
-        break;
-      case QualifiedIdentifier::ExactMatch:
-        ret = "Exact Match";
-        break;
-    }
-    QByteArray arr = ret.toString().toLatin1();
-    return qstrdup(arr.data());
-  }*/
-  template<>
-  char* toString(const Declaration& def)
-  {
-    QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
-    return qstrdup(s.toLatin1().constData());
-  }
-  template<>
-  char* toString(const TypePtr<AbstractType>& type)
-  {
-    QString s = QString("Type: %1 (%2 %3)").arg(type ? type->toString() : QString("<null>")).arg(typeid(*type).name()).arg((size_t)type.unsafeData());
-    return qstrdup(s.toLatin1().constData());
-  }
-}
 
 Declaration* getDeclaration( AbstractType::Ptr base, TopDUContext* top ) {
   if( !base ) return 0;
@@ -5295,11 +5230,12 @@ void TestDUChain::testAutoTypeIntegral_data()
   QTest::addColumn<QString>("code");
   QTest::addColumn<uint>("datatype");
   QTest::addColumn<bool>("constness");
+  QTest::addColumn<QString>("string");
 
-  QTest::newRow("int") << "auto x = 1;" << (uint) IntegralType::TypeInt << false;
-  QTest::newRow("double") << "auto x = 1.0;" << (uint) IntegralType::TypeDouble << false;
-  QTest::newRow("bool") << "auto x = false;" << (uint) IntegralType::TypeBoolean << false;
-  QTest::newRow("const-int-var") << "int a = 1; const auto x = a;" << (uint) IntegralType::TypeInt << true;
+  QTest::newRow("int") << "auto x = 1;" << (uint) IntegralType::TypeInt << false << "int";
+  QTest::newRow("double") << "auto x = 1.0;" << (uint) IntegralType::TypeDouble << false << "double";
+  QTest::newRow("bool") << "auto x = false;" << (uint) IntegralType::TypeBoolean << false << "bool";
+  QTest::newRow("const-int-var") << "int a = 1; const auto x = a;" << (uint) IntegralType::TypeInt << true << "const int";
 }
 
 void TestDUChain::testAutoTypeIntegral()
@@ -5307,6 +5243,7 @@ void TestDUChain::testAutoTypeIntegral()
   QFETCH(QString, code);
   QFETCH(uint, datatype);
   QFETCH(bool, constness);
+  QFETCH(QString, string);
 
   LockedTopDUContext top = parse(code.toLocal8Bit(), DumpAll);
   QVERIFY(top);
@@ -5319,8 +5256,8 @@ void TestDUChain::testAutoTypeIntegral()
   IntegralType::Ptr type = dec->abstractType().cast<IntegralType>();
   QVERIFY(type);
   QCOMPARE(type->dataType(), datatype);
-
   QCOMPARE((bool) (type->modifiers() & AbstractType::ConstModifier), constness);
+  QCOMPARE(type->toString(), string);
 }
 
 void TestDUChain::testAutoTypes()
@@ -5544,6 +5481,50 @@ void TestDUChain::testInitListRegressions()
     QVERIFY(top);
     QVERIFY(top->problems().isEmpty());
   }
+}
+void TestDUChain::testBug269352()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=269352
+  QByteArray code(
+    "template <typename> class A;\n"
+    "template <typename, typename> struct B;\n"
+    "template <typename T1, typename T2>\n"
+    "struct B<T1, T2> : B<A<T1>, T2> {};\n"
+    // crucial: same typename like class above above
+    "template <typename A> struct B<A, true> {};\n"
+  );
+
+  LockedTopDUContext top = parse(code, DumpNone);
+  QVERIFY(top);
+  QVERIFY(top->problems().isEmpty());
+  // do not hang
+}
+
+void TestDUChain::testRenameClass()
+{
+  QByteArray codeBefore(
+    "class A { enum { Foo = 1 }; };"
+  );
+
+  TopDUContext* top = parse(codeBefore, DumpDUChain);
+  {
+    DUChainReadLocker lock;
+    QVERIFY(top);
+    QVERIFY(top->problems().isEmpty());
+  }
+
+  QByteArray codeAfter(
+    "class B { enum { Foo = 1 }; };"
+  );
+
+  parse(codeAfter, DumpDUChain, top);
+  DUChainReadLocker lock;
+  QVERIFY(top);
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->localDeclarations().size(), 1);
+  QCOMPARE(top->localDeclarations().first()->identifier().toString(), QString("B"));
+  QCOMPARE(top->childContexts().size(), 1);
+  QCOMPARE(top->childContexts().first()->localScopeIdentifier().toString(), QString("B"));
 }
 
 #include "test_duchain.moc"

@@ -151,7 +151,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
         QString arrayAppendix;
         ArrayType::Ptr arrayType;
-        while (arrayType = type.cast<ArrayType>()) {
+        while ((arrayType = type.cast<ArrayType>())) {
           type = arrayType->elementType();
           //note: we have to prepend since we iterate from outside, i.e. from right to left.
           if (arrayType->dimension()) {

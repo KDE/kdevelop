@@ -140,6 +140,16 @@ void TestParser::testTemplateArguments()
   QVERIFY(control.problems().isEmpty());
 }
 
+void TestParser::testTemplatedDTor()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=253618
+  QByteArray templatetest("template <typename T> struct A{ ~A<T>(); };");
+  TranslationUnitAST* ast = parse(templatetest);
+  QVERIFY(ast != 0);
+  QVERIFY(ast->declarations != 0);
+  QVERIFY(control.problems().isEmpty());
+}
+
 void TestParser::testManyComparisons()
 {
   //Should not crash
@@ -469,7 +479,30 @@ void TestParser::testPreprocessor() {
   QCOMPARE(preprocess("#define MM(x) NN\n#define OO(NN) MM(NN)\nOO(2)\n").trimmed(), QString("NN"));
   QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OO)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("2 2 2"));
   QCOMPARE(preprocess("#define OOO(x) x x x\n#define OOOO(x) O##x(2)\nOOOO(OOO)\n").replace(QRegExp("[\n\t ]+"), ""), QString("OOOO(2)"));
-  
+
+  QCOMPARE(preprocess("#if 1\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1u\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1l\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1lu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1ul\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1ll\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1llu\n #define N 10\n#else\n#define N 20\n#endif\nN\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if ~0ull == 0u + ~0u\n 10\n #endif\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if 1Ul\n 10\n #endif\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1Lu\n 10\n #endif\n").trimmed(), QString("10"));
+  QCOMPARE(preprocess("#if 1LlU\n 10\n #endif\n").trimmed(), QString("10"));
+
+  QCOMPARE(preprocess("#if 1_u\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1u_\n #endif\n").trimmed(), QString("*ERROR*"));
+
+  QCOMPARE(preprocess("#if 1uu\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1lll\n #endif\n").trimmed(), QString("*ERROR*"));
+  QCOMPARE(preprocess("#if 1lul\n #endif\n").trimmed(), QString("*ERROR*"));
+
+  QCOMPARE(preprocess("#if (2147483647L + 10L) > 0\n 10\n #endif\n").trimmed(), QString("10"));
+
   QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
   
   QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
@@ -703,6 +736,44 @@ void TestParser::testQProperty()
   QCOMPARE(propAst->final, isFinal);
 }
 
+void TestParser::testDesignatedInitializers()
+{
+  TranslationUnitAST* ast;
+  InitializerListAST* listAst;
+  //DumpTree dumper;
+
+  ast = parse("\nA a = {"
+              "\n  .b = {"
+              "\n    .a = 10,"
+              "\n  },"
+              "\n  .x = 10,"
+              "\n  .y = SOME_CONST,"
+              "\n  .z = 10,"
+              "\n};");
+
+  QVERIFY(ast != 0);
+  QVERIFY(control.problems().isEmpty());
+  QCOMPARE(ast->declarations->count(), 1);
+  QVERIFY(hasKind(ast, AST::Kind_InitializerList));
+  listAst = static_cast<InitializerListAST*>(getAST(ast, AST::Kind_InitializerList));
+  QVERIFY(hasKind(listAst, AST::Kind_ClassMemberAccess));
+  //dumper.dump(ast, lastSession->token_stream);
+
+  ast = parse("\nint ia[10][5] = {"
+              "\n  [1] = 10,"
+              "\n  [2][B] = SOME_CONST,"
+              "\n};");
+
+  QVERIFY(ast != 0);
+  QVERIFY(control.problems().isEmpty());
+  QCOMPARE(ast->declarations->count(), 1);
+  QVERIFY(hasKind(ast, AST::Kind_InitializerList));
+  listAst = static_cast<InitializerListAST*>(getAST(ast, AST::Kind_InitializerList));
+  QVERIFY(hasKind(listAst, AST::Kind_SubscriptExpression));
+  //dumper.dump(ast, lastSession->token_stream);
+
+}
+
 void TestParser::testCommentAfterFunctionCall() {
   //this is ambigous
   TranslationUnitAST* ast = parse("void TestParser::setView() {\n"
@@ -860,11 +931,11 @@ void TestParser::testMultiByteCStrings()
   QVERIFY(control.problems().isEmpty());
   AST* str = getAST(ast, AST::Kind_StringLiteral);
   QVERIFY(str);
-  QCOMPARE(stringForNode(str), QString::fromUtf8("\"ä\""));
+  QCOMPARE(lastSession->stringForNode(str, true), QString::fromUtf8("\"ä\""));
   Token token = lastSession->token_stream->token(str->start_token);
   QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
   QCOMPARE(token.size, 3u);
-  QCOMPARE(token.symbolLength(), 3u);
+  QCOMPARE(lastSession->token_stream->symbolLength(token), 3u);
   Token endToken = lastSession->token_stream->token(str->end_token);
   rpp::Anchor pos = lastSession->positionAt(endToken.position);
   // should end just before the semicolon
@@ -885,6 +956,20 @@ void TestParser::testMultiByteComments()
   // should start just after the comment
   QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
   QVERIFY(pos == KDevelop::CursorInRevision(0, 17));
+}
+
+void TestParser::testTernaryEmptyExpression()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=292357
+  // mostly GCC compatibility
+  //                 0         1         2         3          4
+  //                 01234567890123456789012345678901234567890123456789
+  QByteArray code = "int a = false ?: 0;";
+  TranslationUnitAST* ast = parse(code);
+  dumper.dump(ast, lastSession->token_stream);
+  QCOMPARE(control.problems().count(), 1);
+  QCOMPARE(control.problems().first()->severity(), KDevelop::ProblemData::Warning);
+  QVERIFY(ast);
 }
 
 TranslationUnitAST* TestParser::parse(const QByteArray& unit)
@@ -948,15 +1033,6 @@ AST* TestParser::getAST(AST* ast, AST::NODE_KIND kind, int num)
   HasKindVisitor visitor(kind, num);
   visitor.visit(ast);
   return visitor.ast;
-}
-
-QString TestParser::stringForNode(AST* node) const
-{
-  QString ret;
-  for(int i = node->start_token; i < node->end_token; ++i) {
-    ret += lastSession->token_stream->token(i).symbolString();
-  }
-  return ret;
 }
 
 #include "test_parser.moc"

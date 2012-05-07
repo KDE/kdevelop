@@ -23,44 +23,47 @@
 
 #include "cppparsejob.h"
 
+#include "cpplanguagesupport.h"
+#include "cpphighlighting.h"
+#include "includepathcomputer.h"
+
+#include "parser/parser.h"
+#include "parser/control.h"
+#include "parser/dumptree.h"
+#include "parser/memorypool.h"
+
+#include <unistd.h>
+
 #include <QFile>
 #include <QByteArray>
 #include <QReadWriteLock>
 #include <QReadLocker>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 
-#include <threadweaver/Thread.h>
+#include <ThreadWeaver/Thread>
 
-#include <interfaces/ilanguage.h>
-#include <language/interfaces/iastcontainer.h>
+#include "cppduchain/cpppreprocessenvironment.h"
+#include "cppduchain/cppeditorintegrator.h"
+#include "cppduchain/declarationbuilder.h"
+#include "cppduchain/usebuilder.h"
+#include "preprocessjob.h"
+#include "environmentmanager.h"
 
-#include "cpplanguagesupport.h"
-#include "cpphighlighting.h"
-
-// #include "parser/binder.h"
-#include "parser/parser.h"
-#include "parser/control.h"
-#include "parser/dumptree.h"
-#include "parser/memorypool.h"
+#include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/dumpdotgraph.h>
 #include <language/duchain/dumpchain.h>
+#include <language/interfaces/iastcontainer.h>
+
 #include <language/backgroundparser/parsejob.h>
 #include <language/backgroundparser/urlparselock.h>
-#include "cppeditorintegrator.h"
-#include "declarationbuilder.h"
-#include "usebuilder.h"
-#include <language/duchain/topducontext.h>
-#include "preprocessjob.h"
-#include "environmentmanager.h"
-#include <unistd.h>
-#include <qwaitcondition.h>
-#include <language/duchain/duchainutils.h>
-#include "includepathcomputer.h"
+
+#include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <cpppreprocessenvironment.h>
 #include <language/checks/dataaccessrepository.h>
@@ -424,7 +427,7 @@ void CPPInternalParseJob::highlightIfNeeded()
 void CPPInternalParseJob::run()
 {
     //Happens during shutdown
-    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
+    if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
     
     //If we have a parent, the parse-mutex is already locked

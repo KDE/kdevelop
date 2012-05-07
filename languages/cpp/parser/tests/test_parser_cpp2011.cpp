@@ -94,6 +94,7 @@ void TestParser::testVariadicTemplates_data()
                                                  "template<typename _Res, typename... _ArgTypes> struct is_function<_Res(_ArgTypes...) const> { };\n";
   QTest::newRow("pack-expansion-funcptr") << "template<typename ... Args> void foo(Args... args) { typedef int (*t5)(Args...); }\n";
   QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
+  QTest::newRow("template-template-param") << "template<template <typename> class... Magic> struct foo{};\n";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
   ///TODO: capture-list?
@@ -393,6 +394,7 @@ void TestParser::testInitList_data()
 
   // exmaples taken from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2672.htm
   QTest::newRow("assign") << "int a = {1};";
+  QTest::newRow("assign-extended") << "void f() { std::vector lst; lst = {1,2,3}; }";
   QTest::newRow("ctor") << "std::complex<double> z{1,2};";
   QTest::newRow("new") << "auto i = new std::vector<std::string>{\"once\", \"upon\", \"a\", \"time\"};"; // 4 string elements
   QTest::newRow("func-arg") << "void foo() { f( {\"Nicholas\",\"Annemarie\"} ); }"; // pass list of two elements
@@ -432,9 +434,9 @@ void TestParser::testInitListFalsePositives()
   FunctionDefinitionAST* funcDef = static_cast<FunctionDefinitionAST*>(ast->declarations->at(0)->element);
   QVERIFY(!funcDef->constructor_initializers);
   QVERIFY(funcDef->type_specifier);
-  QCOMPARE(stringForNode(funcDef->type_specifier).trimmed(), QString("void"));
+  QCOMPARE(lastSession->stringForNode(funcDef->type_specifier, true).trimmed(), QString("void"));
   QVERIFY(funcDef->function_body);
-  QCOMPARE(stringForNode(funcDef->function_body).trimmed(), QString("{}"));
+  QCOMPARE(lastSession->stringForNode(funcDef->function_body, true).trimmed(), QString("{}"));
   // ;
   QVERIFY(!ast->declarations->at(1)->element);
   }
@@ -481,4 +483,80 @@ void TestParser::testInitListFalsePositives()
   dump(ast);
   QVERIFY(control.problems().isEmpty());
   }
+}
+
+void TestParser::memberVirtSpec()
+{
+  QFETCH(QString, data);
+  TranslationUnitAST* ast = parse( data.toLocal8Bit() );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::memberVirtSpec_data()
+{
+  QTest::addColumn<QString>("data");
+  QTest::newRow("override") <<
+    QString("struct A {\n"
+    "  virtual void f();\n"
+    "};\n"
+    "\n"
+    "struct B : A {\n"
+    "  void f() override;\n" // actual override token
+    "};\n"
+    "void foo() {\n"
+    "  int override = 0;\n" // identifier with special meaning
+    "}\n");
+  QTest::newRow("final") <<
+    QString("struct A {\n"
+    "  virtual void f() final;\n"
+    "};\n"
+    "void foo() {\n"
+    "  int final = 0;\n" // identifier with special meaning
+    "}\n");
+  QTest::newRow("new") <<
+    QString("struct A {\n"
+    "  virtual void f(int);\n"
+    "};\n"
+    "\n"
+    "struct B : A {\n"
+    "  void f() new;\n"
+    "};\n");
+}
+
+void TestParser::classVirtSpec()
+{
+  QFETCH(QString, data);
+  TranslationUnitAST* ast = parse( data.toLocal8Bit() );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::classVirtSpec_data()
+{
+  QTest::addColumn<QString>("data");
+  QTest::newRow("final") <<
+    QString("struct A final {};\n");
+  QTest::newRow("explicit") <<
+    QString("struct A explicit {};\n");
+}
+
+void TestParser::testUsingAlias()
+{
+  TranslationUnitAST* ast = parse( "using foo = bar; ");
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testNoexcept()
+{
+  TranslationUnitAST* ast = parse( "void f1() noexcept;\n"
+                                   "void f2() noexcept(false);\n"
+                                   "class a { void m1() noexcept; void m2() noexcept(true); };" );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
 }

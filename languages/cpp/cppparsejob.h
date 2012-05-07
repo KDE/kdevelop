@@ -26,15 +26,16 @@
 #include <language/backgroundparser/parsejob.h>
 
 #include <QStringList>
+#include <QWaitCondition>
 
-#include <ksharedptr.h>
-#include <ktexteditor/range.h>
+#include <KSharedPtr>
+#include <KTextEditor/Range>
 
-#include <language/duchain/duchainpointer.h>
-#include <contextbuilder.h>
-#include <qwaitcondition.h>
 #include "includepathcomputer.h"
-#include <parsesession.h>
+
+#include "parser/parsesession.h"
+
+#include "cppduchain/contextbuilder.h"
 
 class PreprocessJob;
 class CppLanguageSupport;

@@ -61,8 +61,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
 
-Q_DECLARE_METATYPE(ProjectBaseItem*)
-
 using namespace KDevelop;
 
 // #define WARN_BEFORE_REFACTORING
@@ -171,7 +169,7 @@ void SimpleRefactoring::executeNewClassAction() {
 
 void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
-  ///TODO: refactor and put this also into the CppNewClassWizard
+  ///TODO: refactor and put this also into the CppNewClassAssistant
   KUrl u;
   
   //Pick a folder to guess Possible URL for new class
@@ -186,10 +184,10 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   else
     u = folderFromSelection();
 
-  //Run wizard
+  //Run assistant
   CppNewClass newClassGenerator(item);
-  CppNewClassWizard newClassWizard(qApp->activeWindow(), &newClassGenerator, u);
-  newClassWizard.exec();
+  CppNewClassAssistant newClassAssistant(qApp->activeWindow(), &newClassGenerator, u);
+  newClassAssistant.exec();
 }
 
 void SimpleRefactoring::executeMoveIntoSourceAction() {
@@ -511,6 +509,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
   changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
+  changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
   result = changes.applyAllChanges();
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));

@@ -40,6 +40,7 @@ private slots:
   void testTokenTable();
   void testParser();
   void testTemplateArguments();
+  void testTemplatedDTor();
   void testManyComparisons();
   void testParserFail();
   void testPartialParseFail();
@@ -86,6 +87,11 @@ private slots:
 
   void testMultiByteCStrings();
   void testMultiByteComments();
+  //BEGIN C99 support
+  void testDesignatedInitializers();
+  //END C99 support
+
+  void testTernaryEmptyExpression();
 
   //BEGIN C++2011 support
   void testRangeBasedFor();
@@ -118,6 +124,12 @@ private slots:
   void testInitList_data();
   void testInitList();
   void testInitListFalsePositives();
+  void memberVirtSpec();
+  void memberVirtSpec_data();
+  void classVirtSpec();
+  void classVirtSpec_data();
+  void testUsingAlias();
+  void testNoexcept();
   //END C++2011 Support
 
 protected:
@@ -125,10 +137,6 @@ protected:
    * dump @p node and print problems of @c control
    */
   void dump(AST* node);
-  /**
-   * Retrieve string representation of @p node.
-   */
-  QString stringForNode(AST* node) const;
 
   bool hasKind(AST*, AST::NODE_KIND);
   AST* getAST(AST*, AST::NODE_KIND, int num = 0);

@@ -114,7 +114,8 @@ char const * const names[] = {
   "LambdaCapture",
   "LambdaDeclarator",
   "InitializerList",
-  "BracedInitList"
+  "BracedInitList",
+  "AliasDeclaration"
 };
 
 DumpTree::DumpTree()
@@ -144,9 +145,9 @@ void DumpTree::visit(AST *node)
 
   QString nodeText;
   if( m_tokenStream ) {
-    for( std::size_t a = node->start_token; a < node->end_token; a++ ) {
-      const Token& tok( m_tokenStream->token((int) a) );
-      nodeText += tok.symbolString() + ' ';
+    ///TODO: reuse parsesession->stringForNode
+    for( uint a = node->start_token; a < node->end_token; a++ ) {
+      nodeText += m_tokenStream->symbolString(a) + ' ';
     }
   }
 

@@ -44,23 +44,6 @@ NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* vi
   m_stopSearch = false;
 }
 
-QString decode(ParseSession* session, AST* ast, bool without_spaces)
-{
-  QString ret;
-  if( without_spaces ) {
-    //Decode operator-names without spaces for now, since we rely on it in other places.
-    ///@todo change this, here and in all the places that rely on it. Operators should then by written like "operator [ ]"(space between each token)
-    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      ret += session->token_stream->token(a).symbolString();
-    }
-  } else {
-    for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      ret += session->token_stream->token(a).symbolString() + " ";
-    }
-  }
-  return ret;
-}
-
 void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 {
   if(m_stopSearch)
@@ -68,7 +51,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   IndexedString tmp_name;
 
   if (node->id)
-    tmp_name = m_session->token_stream->token(node->id).symbol();
+    tmp_name = m_session->token_stream->symbol(node->id);
   if (node->tilde)
     tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
   if (OperatorFunctionIdAST *op_id = node->operator_id) {
@@ -80,7 +63,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmpString += QLatin1String("operator");
 
     if (op_id->op && op_id->op->op)
-      tmpString +=  decode(m_session, op_id->op, true);
+      tmpString +=  m_session->stringForNode(op_id->op, true);
     else
       tmpString += QLatin1String("{...cast...}");
 
@@ -94,7 +77,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->template_arguments) {
     visitNodes(this, node->template_arguments);
   } else if(node->end_token == node->start_token + 3 && node->id == node->start_token
-            && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<'))
+            && m_session->token_stream->kind(node->id+1) == '<')
   {
     ///@todo Represent this nicer in the AST
     ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
@@ -143,7 +126,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
       }
       
       if( m_debug )
-        kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
+        kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << m_session->stringForNode(node) << ", searched in " << m_find.describeLastContext();
     }
   }
 
@@ -201,7 +184,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
       opened = true;
         
     }else if( m_debug ) {
-      kDebug(9007) << "Failed to resolve template-argument " << decode(m_session, node->expression);
+      kDebug(9007) << "Failed to resolve template-argument " << m_session->stringForNode(node->expression);
     }
     
     if(ownVisitor) {
@@ -234,7 +217,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
   }else{
     LOCKDUCHAIN;
     m_find.openQualifiedIdentifier(false);
-    m_find.openIdentifier(Identifier(decode(m_session, node)));
+    m_find.openIdentifier(Identifier(m_session->stringForNode(node)));
     m_find.closeIdentifier(false);
     opened = true;
   }

@@ -39,6 +39,7 @@
 #include "expressionparser.h"
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainregister.h>
+#include <util/pushvalue.h>
 #include <name_compiler.h>
 #include <parsesession.h>
 #include <rpp/chartools.h>
@@ -111,6 +112,7 @@ AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::
     ReferenceType::Ptr newRet( new ReferenceType() );
     newRet->setModifiers(modifiers);
     newRet->setBaseType( ret );
+    newRet->setIsRValue(id.isRValue());
     ret = newRet.cast<AbstractType>();
   }
 
@@ -242,13 +244,20 @@ namespace Cpp {
 //   return true;
 // }
 
-TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m_instantiatedFrom(0) {
+TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/)
+: m_instantiatedFrom(0)
+, m_instantiationDepth(0)
+{
 }
 
-TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0) {
+TemplateDeclaration::TemplateDeclaration()
+: m_instantiatedFrom(0)
+, m_instantiationDepth(0)
+{
 }
 
-Declaration* TemplateDeclaration::specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+Declaration* TemplateDeclaration::specialize(const IndexedInstantiationInformation& specialization,
+                                             const TopDUContext* topContext, int upDistance) {
   if(!specialization.isValid())
     return dynamic_cast<Declaration*>(this);
   else {
@@ -725,7 +734,7 @@ void TemplateDeclaration::deleteAllInstantiations()
 // #define ifDebugMatching(x) x
 #define ifDebugMatching(x)
 
-QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(Cpp::InstantiationInformation info, const TopDUContext* source) {
+QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(const Cpp::InstantiationInformation& info, const TopDUContext* source) {
   Q_ASSERT(source);
   ///@todo match higher scopes
   InstantiationInformation specializedWith(this->specializedWith().information());
@@ -806,7 +815,7 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
     //Use the information from the specialization-information to build the template-identifiers
     for(uint a = 0; a < instantiationSpecializedWith.templateParametersSize(); ++a) {
       if(instantiationSpecializedWith.templateParameters()[a] != info.templateParameters()[a]) {
-        ifDebugMatching( kDebug() << "mismatch in final parameters at" << a << instantiationSpecializedWith.templateParameters()[a].type()->toString() << info.templateParameters()[a].type()->toString(); )
+        ifDebugMatching( kDebug() << "mismatch in final parameters at" << a << instantiationSpecializedWith.templateParameters()[a].abstractType()->toString() << info.templateParameters()[a].abstractType()->toString(); )
         return qMakePair(0u, (TemplateDeclaration*)0);
       }
     }
@@ -818,7 +827,6 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
 Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _templateArguments, const TopDUContext* source, bool forceLocal )
 {
   InstantiationInformation templateArguments(_templateArguments);
-  
 /*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
     Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
   }*/
@@ -851,6 +859,12 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   if(!source)
     return 0;
   
+  if (m_instantiationDepth > 5) {
+      kWarning() << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
+      return 0;
+  }
+  PushValue<int> depthCounter(m_instantiationDepth, m_instantiationDepth + 1);
+
   DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
   if(!surroundingContext) {
     kDebug() << "Declaration has no context:" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString() << dynamic_cast<Declaration*>(this)->toString();

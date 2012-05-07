@@ -90,13 +90,24 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
       }
     };
 
+    enum Constness {
+      // only const methods are viable
+      Const,
+      // both, const and non-const methods are viable,
+      // but non-const methods are preferred
+      NonConst,
+      // both const and non-const methods are viable
+      Unknown
+    };
+
     /**
      * @param container The container in which to search for the functions. If it is a class, base-classes will be respected too.
      * @param topContext The top-context of the file where where code-completion/parsing is started from. Needed to resolve forward-declarations.
+     * @param constness If set, constness of class methods is taken into account
      * @param forceIsInstance If this is true, every class given to this overload-resolver as an object the function-call is applied on is considered
-     *                                        an instance of that object, rather then the type itself. This means that "operator()" will be used instead of a constructor.
+     *                        an instance of that object, rather then the type itself. This means that "operator()" will be used instead of a constructor.
      * */
-    OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance = false );
+    OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, Constness constness = Unknown, bool forceIsInstance = false );
 
     /**
      * Resolve one function with the given name that matches the given parameters.
@@ -202,6 +213,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     TopDUContextPointer m_topContext;
     uint m_worstConversionRank;
     bool m_forceIsInstance;
+    Constness m_constness;
 };
 
 }

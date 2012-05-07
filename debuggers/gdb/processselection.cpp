@@ -45,6 +45,19 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     m_processList->filterLineEdit()->setFocus();
     //m_processList->setPidFilter(qApp->pid());
     button(Ok)->setEnabled(false);
+
+    KConfigGroup config = KGlobal::config()->group("GdbProcessSelectionDialog");
+    m_processList->filterLineEdit()->setText(config.readEntry("filterText", QString()));
+    m_processList->loadSettings(config);
+    restoreGeometry(config.readEntry("dialogGeometry", QByteArray()));
+}
+
+ProcessSelectionDialog::~ProcessSelectionDialog()
+{
+    KConfigGroup config = KGlobal::config()->group("GdbProcessSelectionDialog");
+    config.writeEntry("filterText", m_processList->filterLineEdit()->text());
+    m_processList->saveSettings(config);
+    config.writeEntry("dialogGeometry", saveGeometry());
 }
 
 long int ProcessSelectionDialog::pidSelected()

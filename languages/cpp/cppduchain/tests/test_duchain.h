@@ -190,6 +190,8 @@ private slots:
   void testNestedNamespace();
   
   void testDeclarationHasUses();
+  void testBug269352();
+  void testRenameClass();
 
   //BEGIN C++2011
   void testRangeBasedFor();
@@ -200,11 +202,20 @@ private slots:
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
+  void testDecltypeUses();
   void testTrailingReturnType();
   void testConstexpr();
   void testInitListRegressions();
   void testBug284536();
   void testBug285004();
+  void testLambda();
+  void testLambdaReturn();
+  void testLambdaCapture();
+  void testTemplateSpecializeArray();
+  void testTemplateSpecializeRValue();
+  void testAliasDeclaration();
+  void testAuto();
+  void testNoexcept();
   //END C++2011
 
 private:

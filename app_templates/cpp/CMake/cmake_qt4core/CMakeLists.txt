@@ -8,3 +8,5 @@ set(%{APPNAME}_SRCS %{APPNAME}.cpp main.cpp)
 qt4_automoc(${%{APPNAME}_SRCS})
 add_executable(%{APPNAME} ${%{APPNAME}_SRCS})
 target_link_libraries(%{APPNAME} ${QT_QTCORE_LIBRARY})
+
+install(TARGETS %{APPNAME} RUNTIME DESTINATION bin)

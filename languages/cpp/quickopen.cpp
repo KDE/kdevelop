@@ -78,8 +78,12 @@ QString IncludeFileData::text() const
 }
 
 bool IncludeFileData::execute( QString& filterText ) {
+  QString path = QString(filterText);   // default to filterText in case extracting number fails
+  uint lineNumber;
+  bool hasLineNumber = extractLineNumber(filterText, path, lineNumber);
   if( m_item.isDirectory ) {
     //Change the filter-text to match the sub-directory
+    // Line number not expected for directory
     KUrl u( filterText );
 //     kDebug() << "filter-text:" << u;
     QString addName = m_item.name;
@@ -87,13 +91,16 @@ bool IncludeFileData::execute( QString& filterText ) {
       addName = addName.split('/').last();
     u.setFileName( addName );                                   
 //     kDebug() << "with added:" << u;
-    filterText = u.toLocalFile( KUrl::AddTrailingSlash ); 
+    filterText = u.toLocalFile( KUrl::AddTrailingSlash );
 //     kDebug() << "new:" << filterText;
     return false;
   } else {
     KUrl u = m_item.url();
     
-    ICore::self()->documentController()->openDocument( u );
+    IDocument* doc = ICore::self()->documentController()->openDocument( u );
+    if (hasLineNumber) {
+      doc->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
+    }
 
     return true;
   }
@@ -149,48 +156,6 @@ QWidget* IncludeFileData::expandingWidget() const {
   
   QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
 
-  if( m_includedFrom && m_item.pathNumber != -1 )
-  {
-    //Find the trace from m_includedFrom to the this file
-    KUrl u = m_item.url();
-
-    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
-
-    foreach( TopDUContext* t, allChains )
-    {
-      if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
-      {
-/*        KDevelop::ImportTrace inclusion = m_includedFrom.data()->importTrace(t);
-
-        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
-          inclusionPath.clear();
-          FOREACH_ARRAY(const KDevelop::ImportTraceItem& s, inclusion)
-            inclusionPath << KUrl(s.ctx->url().str());
-        }*/
-      }
-    }
-  }else if( m_item.pathNumber == -1 && m_includedFrom )
-  {
-    //Find the trace from this file to m_includedFrom
-    KUrl u = m_item.url();
-
-    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
-
-    foreach( TopDUContext* t, allChains )
-    {
-      if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
-      {
-/*        KDevelop::ImportTrace inclusion = t->importTrace(m_includedFrom.data());
-
-        if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
-          inclusionPath.clear();
-          FOREACH_ARRAY(const KDevelop::ImportTraceItem& s, inclusion)
-            inclusionPath << KUrl(s.ctx->url().str());
-        }*/
-      }
-    }
-  }
-
   if( m_item.pathNumber == -1 ) {
     htmlPrefix = i18n("This file imports the current open document<br/>");
   } else {
@@ -213,39 +178,7 @@ QString IncludeFileData::htmlDescription() const
   if( m_item.isDirectory ) {
     return QString( i18n("Directory %1", path.pathOrUrl()) );
   } else {
-    if(m_includedFrom) {
-      DUChainReadLocker lock( DUChain::lock() );
-      if(!m_includedFrom)
-        return QString();
-
-      KUrl u = m_item.url();
-
-      QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
-
-      foreach( TopDUContext* t, allChains )
-      {
-        if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
-        {
-/*          QString ret = i18n("Included through") + " ";
-          KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
-          if(!inclusion.isEmpty()) {
-            for(int a = 0; a < inclusion.size(); ++a) {
-              if(a >= 1)
-                ret += ", ";
-              if(a > 2) {
-                ret += "...";
-                return ret;
-              }else{
-                ret += KUrl(inclusion[a].ctx->url().str()).fileName();
-              }
-            }
-            return ret;
-          }*/
-        }
-      }
-    }else{
-      return i18n( "In %1th include path", m_item.pathNumber );
-    }
+    return i18n( "In %1th include path", m_item.pathNumber );
   }
 
   return " ";
@@ -295,6 +228,8 @@ QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixP
 void IncludeFileDataProvider::setFilterText( const QString& _text )
 {
   QString text(_text);
+  uint lineNumber;
+  extractLineNumber(text, text, lineNumber);
     ///If the text contains '/', list items under the given prefix additionally
 
   if( text.contains( '/' ) )
@@ -415,6 +350,11 @@ void IncludeFileDataProvider::reset()
 uint IncludeFileDataProvider::itemCount() const
 {
   return filteredItems().count();
+}
+
+uint IncludeFileDataProvider::unfilteredItemCount() const
+{
+  return items().count();
 }
 
 QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end ) const

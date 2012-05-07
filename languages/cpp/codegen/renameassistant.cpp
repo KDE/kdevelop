@@ -17,6 +17,7 @@
 */
 
 #include "renameassistant.h"
+#include "renameaction.h"
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -27,56 +28,9 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 using namespace KDevelop;
 using namespace Cpp;
-
-typedef QMap<IndexedString, QList <RangeInRevision> > UsesList;
-
-class RenameAction : public KDevelop::IAssistantAction {
-public:
-  RenameAction(Identifier oldDeclarationName, QString newDeclarationName, UsesList oldDeclarationUses)
-  : m_oldDeclarationName(oldDeclarationName),
-    m_newDeclarationName(newDeclarationName),
-    m_oldDeclarationUses(oldDeclarationUses)
-  { }
-
-  virtual QString description() const {
-    return i18n("Rename \"%1\" to \"%2\"", m_oldDeclarationName.toString(), m_newDeclarationName);
-  }
-
-  virtual void execute() {
-    UsesList::iterator it;
-    DocumentChangeSet changes;
-
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    for (it = m_oldDeclarationUses.begin(); it != m_oldDeclarationUses.end(); ++it) {
-      TopDUContext* topContext = DUChainUtils::standardContextForUrl(it.key().toUrl());
-      if (!topContext) {
-        //This would be abnormal
-        kDebug() << "while renaming" << it.key().str() << "didn't produce a context";
-        continue;
-      }
-
-      foreach (RangeInRevision range, it.value()) {
-        DocumentChange useRename
-            (it.key(), topContext->transformFromLocalRevision(range), m_oldDeclarationName.toString(), m_newDeclarationName);
-        changes.addChange( useRename );
-        changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
-      }
-    }
-    lock.unlock();
-
-    DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
-    if(!result)
-      KMessageBox::error(0, i18n("Failed to apply changes: %1", result.m_failureReason));
-  }
-private:
-  Identifier m_oldDeclarationName;
-  QString m_newDeclarationName;
-  UsesList m_oldDeclarationUses;
-};
 
 RenameAssistant::RenameAssistant(KTextEditor::View *view) :
 m_documentUrl(IndexedString(view->document()->url())),

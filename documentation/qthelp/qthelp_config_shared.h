@@ -26,11 +26,13 @@
 void qtHelpReadConfig(QStringList& iconList,
                       QStringList& nameList,
                       QStringList& pathList,
+                      QStringList& ghnsList,
                       bool& loadQtDoc);
 
 void qtHelpWriteConfig(const QStringList& iconList,
                        const QStringList& nameList,
                        const QStringList& pathList,
+                       const QStringList& ghnsList,
                        const bool loadQtDoc);
 
 #endif // QTHELP_CONFIG_SHARED_H

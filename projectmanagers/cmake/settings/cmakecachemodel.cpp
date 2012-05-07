@@ -38,7 +38,19 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     labels.append(i18n("Advanced"));
     setHorizontalHeaderLabels(labels);
     
-    QFile file(path.toLocalFile());
+    read();
+}
+
+void CMakeCacheModel::reset()
+{
+    clear();
+    m_internal.clear();
+    read();
+}
+
+void CMakeCacheModel::read()
+{
+    QFile file(m_filePath.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         kDebug(9032) << "error. Could not find the file";
@@ -48,6 +60,7 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     int currentIdx=0;
     QStringList currentComment;
     QTextStream in(&file);
+    QHash<QString, int> variablePos;
     while (!in.atEnd())
     {
         QString line = in.readLine().trimmed();
@@ -76,9 +89,9 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                     m_internal.insert(name);
                 } else if(flag=="ADVANCED")
                 {
-                    if(m_variablePos.contains(name))
+                    if(variablePos.contains(name))
                     {
-                        int pos=m_variablePos[name];
+                        int pos=variablePos[name];
                         QStandardItem *p = item(pos, 4);
                         if(!p)
                         {
@@ -101,7 +114,7 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                     lineItems[0]->setText(lineItems[0]->text()+'-'+flag);
                 }
                 insertRow(currentIdx, lineItems);
-                m_variablePos[name]=currentIdx;
+                variablePos[name]=currentIdx;
                 currentIdx++;
                 currentComment.clear();
             }
@@ -206,6 +219,7 @@ bool CMakeCacheModel::isAdvanced(int i) const
         p=item(i, 1);
         isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
     }
+    
     if(!isAdv)
     {
         m_internal.contains(item(i,0)->text());

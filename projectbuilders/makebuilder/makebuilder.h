@@ -22,23 +22,18 @@
 #define MAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include "imakebuilder.h"
+
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QVariant>
+
+#include "imakebuilder.h"
 #include "makejob.h"
 
-class QStringList;
-class MakeOutputModel;
-class KDialog;
-class QString;
-class QStandardItem;
-class KUrl;
 class MakeOutputDelegate;
 
 namespace KDevelop {
 class ProjectBaseItem;
-class CommandExecutor;
 }
 
 /**
@@ -75,7 +70,10 @@ public:
     virtual KJob* install(KDevelop::ProjectBaseItem *dom);
 
     virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
-    KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QString& = QString() );
+    virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,
+                                     const MakeVariables& variables = MakeVariables() );
+    KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
+                   const MakeVariables& variables = MakeVariables() );
 
     MakeOutputDelegate* delegate() const;
 

@@ -80,7 +80,7 @@ public:
     virtual ~CMakeManager();
     virtual Features features() const { return Features(Folders | Targets | Files ); }
 //     virtual KDevelop::IProject* project() const;
-    virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
+    virtual KDevelop::IProjectBuilder* builder() const;
     virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
@@ -116,7 +116,12 @@ public:
     virtual KDevelop::ILanguage *language();
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
-
+    
+    void deleteItemLater(KDevelop::ProjectBaseItem* item);
+    void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
+public slots:
+    void cleanupItems();
+    
 signals:
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
@@ -131,6 +136,7 @@ private slots:
     void deletedWatched(const QString& directory);
 
 private:
+    void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
@@ -145,7 +151,7 @@ private:
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
     
-    static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
+    void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
     void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
@@ -159,6 +165,7 @@ private:
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
     QSet<QString> m_toDelete;
     QHash<KUrl, KUrl> m_renamed;
+    QList<KDevelop::ProjectBaseItem*> m_cleanupItems;
 };
 
 #endif

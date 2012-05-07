@@ -89,11 +89,10 @@ Q_SIGNALS:
     void showErrorMessage(const QString&, int);
     //END IStatus
 
-    void raiseOutputViews();
-    void raiseVariableViews();
-
     void addWatchVariable(const QString& variable);
     void evaluateExpression(const QString& variable);
+
+    void raiseGdbConsoleViews();
 
     void reset();
 
@@ -154,7 +153,6 @@ private:
     DebuggerToolFactory< DisassembleWidget >* disassemblefactory;
     DebuggerToolFactory< GDBOutputWidget >* gdbfactory;
     //DebuggerToolFactory< ViewerWidget >* viewerfactory;
-    
 };
 
 }

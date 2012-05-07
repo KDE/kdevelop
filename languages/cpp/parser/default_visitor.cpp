@@ -145,6 +145,7 @@ void DefaultVisitor::visitEnumerator(EnumeratorAST *node)
 
 void DefaultVisitor::visitExceptionSpecification(ExceptionSpecificationAST *node)
 {
+  visit(node->noexcept_expression);
   visitNodes(this, node->type_ids);
 }
 
@@ -531,9 +532,9 @@ void DefaultVisitor::visitLambdaExpression(LambdaExpressionAST* node)
   visit(node->compound);
 }
 
-void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* /*node*/)
+void DefaultVisitor::visitLambdaCapture(LambdaCaptureAST* node)
 {
-  // nothing to do
+  visit(node->identifier);
 }
 
 void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)
@@ -541,4 +542,10 @@ void DefaultVisitor::visitLambdaDeclarator(LambdaDeclaratorAST* node)
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
   visit(node->trailing_return_type);
+}
+
+void DefaultVisitor::visitAliasDeclaration(AliasDeclarationAST* node)
+{
+  visit(node->name);
+  visit(node->type_id);
 }

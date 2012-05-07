@@ -22,7 +22,7 @@
 #define QTHELPCONFIG_H
 
 #include <KCModule>
-
+#include <knewstuff3/entry.h>
 namespace Ui
 {
     class QtHelpConfigUI;
@@ -48,8 +48,10 @@ public:
       void down();
       void modify();
       void selectionChanged();
+      void knsUpdate(KNS3::Entry::List list);
     private:
       bool checkQtHelpFile(bool modify);
+      bool checkNamespace(const QString &filename, int modifiedIndex);
       Ui::QtHelpConfigUI* m_configWidget;
 };
 

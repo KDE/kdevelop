@@ -86,7 +86,8 @@ namespace Cpp {
        * @param source the top-context from which ones perspective the instantiation should happen. If @p topContext is zero, only existing specializations are returned
        * @param forceLocal if this is true, it is this exact declaration that is instantiated. Else, this declaration is instantiated again.
        * */
-      KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool forceLocal = false );
+      KDevelop::Declaration* instantiate(const InstantiationInformation& templateArguments,
+                                         const KDevelop::TopDUContext* source, bool forceLocal = false );
 
       ///Returns true if this class is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
@@ -109,7 +110,8 @@ namespace Cpp {
       
       DeclarationId id(bool forceDirect) const;
       
-      Declaration* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance);
+      Declaration* specialize(const IndexedInstantiationInformation& specialization,
+                              const TopDUContext* topContext, int upDistance);
     
       //Duchain must be write-locked
       void deleteAllInstantiations();
@@ -124,16 +126,17 @@ namespace Cpp {
       virtual uint specializationsSize() const = 0;
       
       ///These are internal, do not use them. They have to be public so they are visible from SpecialTemplateDeclaration.
-      virtual void setSpecializedFromInternal(IndexedDeclaration decl) = 0;
-      virtual void addSpecializationInternal(IndexedDeclaration decl) = 0;
-      virtual void removeSpecializationInternal(IndexedDeclaration decl) = 0;
+      virtual void setSpecializedFromInternal(const IndexedDeclaration& decl) = 0;
+      virtual void addSpecializationInternal(const IndexedDeclaration& decl) = 0;
+      virtual void removeSpecializationInternal(const IndexedDeclaration& decl) = 0;
       
-      virtual void setSpecializedWith(IndexedInstantiationInformation info) = 0;
+      virtual void setSpecializedWith(const IndexedInstantiationInformation& info) = 0;
       virtual IndexedInstantiationInformation specializedWith() const = 0;
       
     protected:
       //Matches the given instantiation-information to this declarations local specialization information
-      QPair<unsigned int, TemplateDeclaration*> matchTemplateParameters(InstantiationInformation info, const TopDUContext* source);
+      QPair<unsigned int, TemplateDeclaration*> matchTemplateParameters(const InstantiationInformation& info,
+                                                                        const TopDUContext* source);
       
       virtual TemplateDeclarationData* dynamicTemplateData() = 0;
       virtual const TemplateDeclarationData* templateData() const = 0;
@@ -147,6 +150,8 @@ namespace Cpp {
       typedef QHash<IndexedInstantiationInformation, IndexedInstantiationInformation> DefaultParameterInstantiationHash;
       DefaultParameterInstantiationHash m_defaultParameterInstantiations;
       InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
+      // recursion counter
+      int m_instantiationDepth;
   };
   
   
@@ -260,7 +265,8 @@ namespace Cpp {
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
-    virtual Declaration* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+    virtual Declaration* specialize(const IndexedInstantiationInformation& specialization,
+                                    const TopDUContext* topContext, int upDistance) {
       return TemplateDeclaration::specialize(specialization, topContext, upDistance);
     }
     
@@ -283,18 +289,18 @@ namespace Cpp {
     };
     
     private:
-    virtual void setSpecializedFromInternal(IndexedDeclaration decl) {
+    virtual void setSpecializedFromInternal(const IndexedDeclaration& decl) {
       static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializedFrom = decl;
     }
-    virtual void addSpecializationInternal(IndexedDeclaration decl) {
+    virtual void addSpecializationInternal(const IndexedDeclaration& decl) {
       static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializationsList().append(decl);
     }
-    virtual void removeSpecializationInternal(IndexedDeclaration decl) {
+    virtual void removeSpecializationInternal(const IndexedDeclaration& decl) {
       bool result = static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializationsList().removeOne(decl);
       Q_ASSERT(result);
       Q_UNUSED(result);
     }
-    virtual void setSpecializedWith(IndexedInstantiationInformation info) {
+    virtual void setSpecializedWith(const IndexedInstantiationInformation& info) {
       static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializedWith = info;
     }
       

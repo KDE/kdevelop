@@ -50,8 +50,9 @@ void CodeGenerator::outputToken(uint tokenPosition)
 {
   if (tokenPosition) {
     const Token& t = m_session->token_stream->token(tokenPosition);
-    m_output << t.symbolString();/*
-    if (t.kind == Token_identifier || t.kind == Token_string_literal || t.kind == Token_number_literal || t.kind == Token_char_literal)
+    m_output << m_session->token_stream->symbolString(t);
+
+    /* if (t.kind == Token_identifier || t.kind == Token_string_literal || t.kind == Token_number_literal || t.kind == Token_char_literal)
       m_output << t.symbolString().str();
     else
       m_output << token_text( t.kind );*/
@@ -321,15 +322,32 @@ void CodeGenerator::visitEnumerator(EnumeratorAST* node)
 
 void CodeGenerator::visitExceptionSpecification(ExceptionSpecificationAST* node)
 {
-  printToken(Token_throw);
+  if (node->no_except)
+    {
+      printToken(Token_noexcept);
 
-  m_output << "(";
+      if (node->noexcept_expression)
+        {
+          m_output << "(";
 
-  print(node->ellipsis);
+          DefaultVisitor::visitExceptionSpecification(node);
 
-  DefaultVisitor::visitExceptionSpecification(node);
+          m_output << ")";
+        }
+    }
 
-  m_output << ")";
+  else
+    {
+      printToken(Token_throw);
+
+      m_output << "(";
+
+      print(node->ellipsis);
+
+      DefaultVisitor::visitExceptionSpecification(node);
+
+      m_output << ")";
+    }
 }
 
 void CodeGenerator::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)

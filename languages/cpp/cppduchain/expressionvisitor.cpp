@@ -110,8 +110,8 @@ bool isNumber( const IndexedString& str ) {
   return str == _0 || str == _1 || str == _2 || str == _3 || str == _4 || str == _5 || str == _6 || str == _7 || str == _8 || str == _9;
 }
 
-QHash<int, QString> initOperatorNames() {
-  QHash<int, QString> ret;
+QHash<quint16, QString> initOperatorNames() {
+  QHash<quint16, QString> ret;
   ret['+'] = "+";
   ret['-'] = "-";
   ret['*'] = "*";
@@ -140,11 +140,11 @@ QHash<int, QString> initOperatorNames() {
   return ret;
 }
 
-QHash<int, QString> operatorNames = initOperatorNames();
+QHash<quint16, QString> operatorNames = initOperatorNames();
 //BUG use the much more complete list from tokens.cpp
-QString operatorNameFromTokenKind( int tokenKind )
+QString operatorNameFromTokenKind( quint16 tokenKind )
 {
-  QHash<int, QString>::const_iterator it = operatorNames.constFind(tokenKind);
+  QHash<quint16, QString>::const_iterator it = operatorNames.constFind(tokenKind);
   if( it == operatorNames.constEnd() )
     return QString();
   else
@@ -571,7 +571,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
+        // by default ignore constness (see below)
         m_lastType = m_lastDeclarations.first()->abstractType();
+        // if possible, pick the const-fitting method though
+        foreach(const DeclarationPointer& p, m_lastDeclarations) {
+          if (p->abstractType() && isConstant(p->abstractType()) == isConst) {
+            m_lastType = p->abstractType();
+            break;
+          }
+        }
         if (m_propagateConstness && isConst && m_lastType && !isConstant(m_lastType)) {
           m_lastType->setModifiers(m_lastType->modifiers() | AbstractType::ConstModifier);
         }
@@ -615,9 +623,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       if( isNumber(startNumber) )
       {
-        QString num;
-        for( size_t a = node->start_token; a < node->end_token; a++ )
-          num += tokenFromIndex(a).symbolString();
+        QString num = m_session->stringForNode(node, true);
 
         LOCKDUCHAIN;
         if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
@@ -677,9 +683,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       LOCKDUCHAIN;
       ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
       if ( token.size == 3 ) {
-        charType->setValue<char>( token.symbolByteArray().at(1) );
+        charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
       } else {
-        QByteArray symbol = token.symbolByteArray();
+        QByteArray symbol = m_session->token_stream->symbolByteArray(token);
         if (symbol.startsWith('L')) {
           charType->setDataType(IntegralType::TypeWchar_t);
           symbol.right(symbol.size() - 1);
@@ -703,12 +709,12 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       m_lastType = AbstractType::Ptr(charType);
       m_lastInstance = Instance( true );
-    } else if(token.symbol() == True || token.symbol() == False) {
+    } else if(token.kind == Token_true || token.kind == Token_false) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
       m_lastInstance = Instance( true );
-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.symbol() == True );
+      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.kind == Token_true );
     }
 
     //Respect "this" token
@@ -817,23 +823,22 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       expressionType( node, m_lastType, m_lastInstance );
   }
 
-  /** A postfix-expression is a primary expression together with a chain of sub-expressions that are applied from left to right
-   *
-   * have test */
+  /** A postfix-expression is a primary expression (or type-specifier)
+   * together with a chain of sub-expressions that are applied from left to right
+   */
 
   void ExpressionVisitor::visitPostfixExpression(PostfixExpressionAST* node)
   {
     clearLast();
-    if( node->type_specifier ) {
-      problem( node, "unexpected type-specifier" );
-      return;
-    }
-    if( !node->expression ) {
-      problem( node, "primary expression missing" );
-      return;
-    }
-    //First evaluate the primary expression, and then pass the result from sub-expression to sub-expression through m_lastType
-    visit( node->expression );
+    
+    //First evaluate the primary expression, or the type-specifier,
+    //and then pass the result from sub-expression to sub-expression through m_lastType
+    
+    if( node->type_specifier )
+      visit( node->type_specifier );
+
+    if( node->expression )
+      visit( node->expression );
 
     if( !node->sub_expressions )
       return;
@@ -853,7 +858,7 @@ struct ConstantUnaryExpressionEvaluator {
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantUnaryExpressionEvaluator( int tokenKind, ConstantIntegralType* left ) {
+  ConstantUnaryExpressionEvaluator( quint16 tokenKind, ConstantIntegralType* left ) {
     endValue = 0;
     type = left->dataType();
     modifier = left->modifiers();
@@ -873,7 +878,7 @@ struct ConstantUnaryExpressionEvaluator {
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+  void evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
     switch( tokenKind ) {
       case '~':
         endValue = ~left->value<Type>();
@@ -893,13 +898,13 @@ struct ConstantUnaryExpressionEvaluator {
 };
 
 template<>
-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
 
 template<>
-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
@@ -912,9 +917,7 @@ QString toString(AbstractType::Ptr t) {
 
 void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   DelayedType::Ptr type(new DelayedType());
-  QString id;
-  for( size_t s = node->start_token; s < node->end_token; ++s )
-    id += m_session->token_stream->token(s).symbolString();
+  QString id = m_session->stringForNode(node, true);
 
   //We have  to prevent automatic parsing and splitting by QualifiedIdentifier and Identifier
   Identifier idd;
@@ -1044,7 +1047,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return;
     }
 
-    int tokenKind = tokenFromIndex(node->op).kind;
+    quint16 tokenKind = tokenFromIndex(node->op).kind;
 
     if(rightType && leftType && rightInstance && leftInstance) {
       LOCKDUCHAIN;
@@ -1218,6 +1221,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldInstance
         );
 
@@ -1376,29 +1380,23 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       p->setClassType( m_lastType );
       m_lastType = p.cast<AbstractType>();
     } else {
+      int op = m_session->token_stream->kind(node->op);
 
-    static const IndexedString ref("&");
-    static const IndexedString rvalueRef("&&");
-    static const IndexedString ptr("*");
+      if(op == '*') {
+        PointerType::Ptr p( new PointerType() );
+        p->setBaseType( m_lastType );
+        p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
 
-    IndexedString op = m_session->token_stream->token(node->op).symbol();
+        m_lastType = p.cast<AbstractType>();
+      } else {
+        ReferenceType::Ptr p( new ReferenceType() );
+        p->setBaseType( m_lastType );
+        p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+        if (op == Token_and)
+          p->setIsRValue(true);
 
-    if(op == ptr) {
-
-      PointerType::Ptr p( new PointerType() );
-      p->setBaseType( m_lastType );
-      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-
-      m_lastType = p.cast<AbstractType>();
-    }else{
-      ReferenceType::Ptr p( new ReferenceType() );
-      p->setBaseType( m_lastType );
-      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-      if (op == rvalueRef)
-        p->setIsRValue(true);
-
-      m_lastType = p.cast<AbstractType>();
-    }
+        m_lastType = p.cast<AbstractType>();
+      }
     }
     m_lastInstance = Instance(false);
   }
@@ -1491,6 +1489,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldInstance
         );
 
@@ -1926,6 +1925,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       DUContextPointer(const_cast<DUContext*>(m_currentContext)),
       TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
     );
+    helper.setConstness(TypeUtils::isConstant(oldLastType) ? OverloadResolver::Const : OverloadResolver::NonConst);
 
     MissingDeclarationType::Ptr missing;
     
@@ -2116,7 +2116,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       sig = sig.mid(1, sig.length()-2);
     }
 
-    Identifier id(tokenFromIndex(node->name->id).symbol());
+    Identifier id(m_session->token_stream->symbol(node->name->id));
 
     if(!id.isEmpty()) {
       foreach(Declaration* decl, container->findDeclarations(id, CursorInRevision::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
@@ -2183,6 +2183,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       DUContextPointer(const_cast<DUContext*>(m_currentContext)),
       TopDUContextPointer(const_cast<TopDUContext*>(topContext()))
     );
+    helper.setConstness(isConstant(masterType) ? OverloadResolver::Const : OverloadResolver::NonConst);
     helper.setFunctionNameForADL( QualifiedIdentifier("operator[]") );
     helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ) );
 
@@ -2380,6 +2381,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver(
           DUContextPointer(const_cast<DUContext*>(m_currentContext)),
           TopDUContextPointer(const_cast<TopDUContext*>(topContext())),
+          OverloadResolver::NonConst,
           oldLastInstance
         );
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
@@ -2402,6 +2404,29 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         res.isInstance = m_lastInstance;
         missingDeclType->assigned = res;
     }
+  }
+
+  void ExpressionVisitor::visitLambdaExpression(LambdaExpressionAST *node)
+  {
+    DefaultVisitor::visitLambdaExpression(node);
+    FunctionType* type = new FunctionType;
+    if (node->declarator && node->declarator->parameter_declaration_clause) {
+      if (buildParametersFromDeclaration(node->declarator->parameter_declaration_clause)) {
+        foreach(const OverloadResolver::Parameter& param, m_parameters) {
+          type->addArgument(param.type);
+        }
+      }
+    }
+    if (node->declarator && node->declarator->trailing_return_type) {
+      visit(node->declarator->trailing_return_type);
+      type->setReturnType(m_lastType);
+    }
+    if (!type->returnType()) {
+      ///TODO: if body consists of only a single return statement, use that type as return type
+      type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    }
+    m_lastType = AbstractType::Ptr( type );
+    m_lastInstance = Instance(true);
   }
 
   void ExpressionVisitor::visit(AST* node)

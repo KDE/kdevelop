@@ -29,7 +29,8 @@ kde4_add_ui_files(kdevqthelp_config_SRCS qthelpconfig.ui)
 
 kde4_add_plugin( kdevqthelp_config ${kdevqthelp_config_SRCS} )
 
-target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} ${QT_QTHELP_LIBRARY} )
+target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} ${QT_QTHELP_LIBRARY} ${KDE4_KNEWSTUFF3_LIBS})
 
 install( TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

@@ -98,7 +98,7 @@ private:
   /**Convenience method to report problems. Constructs the problem
   using the information about the current line and column in the buffer
   that is being parsed. Then stores the problem in the control object.*/
-  void reportError(const QString& msg);
+  void reportError(const QString& msg, KDevelop::ProblemData::Severity severity = KDevelop::ProblemData::Error);
   /**Reports a syntax error about unexpected token. The token
   reported is LA (look-ahead) from the stream.*/
   void syntaxError();
@@ -159,6 +159,7 @@ public:
   bool parseInitDeclarator(InitDeclaratorAST *&node);
   bool parseInitDeclaratorList(const ListNode<InitDeclaratorAST*> *&node);
   bool parseInitializer(InitializerAST *&node);
+  bool parseDesignatedInitializer(InitializerClauseAST *&node);
   bool parseInitializerClause(InitializerClauseAST *&node);
   bool parseInitializerList(InitializerListAST *&node);
   bool parseJumpStatement(StatementAST *&node);
@@ -234,6 +235,8 @@ public:
   bool parseLambdaExpression(ExpressionAST *&node);
   bool parseLambdaCapture(LambdaCaptureAST *&node);
   bool parseLambdaDeclarator(LambdaDeclaratorAST *&node);
+  bool parseMemberVirtSpecifier(const ListNode<uint> *&node);
+  bool parseClassVirtSpecifier(const ListNode<uint> *&node);
 
   bool skipUntil(int token);
   bool skipUntilDeclaration();

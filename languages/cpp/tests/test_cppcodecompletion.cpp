@@ -1309,6 +1309,58 @@ void TestCppCodeCompletion::testConstVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[4], "").names.toSet(), QSet<QString>() << "e" << "test" << "main" << "this");
 }
 
+void TestCppCodeCompletion::testConstOverloadVisibility()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=267877
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("struct test { test foo(); const test& foo() const; void bar() const; void asdf(); };\n"
+                    "int main() { const test testConst; test testNonConst; }");
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts().first()->localDeclarations().size(), 4);
+
+  CompletionItemTester tester = CompletionItemTester(top->childContexts()[2], "testConst.");
+  QCOMPARE(tester.names.size(), 2);
+  // non-const foo() should be hidden by overloaded const version
+  QVERIFY(!tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(0)
+  ));
+  // const& foo() const
+  QVERIFY(tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(1)
+  ));
+  // bar is always shown (not overloaded and const)
+  QVERIFY(tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(2)
+  ));
+  // foo is hidden since it's non-const
+  QVERIFY(!tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(3)
+  ));
+
+  tester = CompletionItemTester(top->childContexts()[2], "testNonConst.");
+  QCOMPARE(tester.names.size(), 3);
+  // non-const foo()
+  QVERIFY(tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(0)
+  ));
+  // const& foo() const hidden by overloaded non-const foo
+  QVERIFY(!tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(1)
+  ));
+  // bar is always shown (not overloaded and const)
+  QVERIFY(tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(2)
+  ));
+  // foo is shown here as well
+  QVERIFY(tester.containsDeclaration(
+    top->childContexts().first()->localDeclarations().at(3)
+  ));
+}
+
 void TestCppCodeCompletion::testFriendVisibility() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("class A { class PrivateClass {}; friend class B; }; class B{};");
@@ -2712,6 +2764,19 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations()[0]->range().start.line, 1);
     QCOMPARE(top->localDeclarations()[1]->range().start.line, 2);
     QCOMPARE(top->localDeclarations()[2]->range().start.line, 2);
+  }
+  {
+    QString a = "#undef __attribute__\n__attribute__((visibility(\"default\")))";
+    QString preprocessed = preprocess(IndexedString(), a, includes);
+    kDebug() << "preprocessed:" << preprocessed;
+    QVERIFY(!preprocessed.contains ("__attribute__"));
+  }
+  {
+    QString a = "#ifdef __attribute__\npassed\n#else\nfailed\n#endif";
+    QString preprocessed = preprocess(IndexedString(), a, includes);
+    kDebug() << "preprocessed: " << preprocessed;
+    QVERIFY(!preprocessed.contains("failed"));
+    QVERIFY(preprocessed.contains("passed"));
   }
   {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";

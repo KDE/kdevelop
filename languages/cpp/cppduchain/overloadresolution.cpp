@@ -39,7 +39,12 @@ const bool allowADL = true;
 // uncomment to get debugging info on ADL - very expensive on parsing
 // #define DEBUG_ADL
 
-OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance ) : m_context( context ), m_topContext( topContext ), m_worstConversionRank( NoMatch ), m_forceIsInstance( forceIsInstance )
+OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, Constness constness, bool forceIsInstance )
+: m_context( context )
+, m_topContext( topContext )
+, m_worstConversionRank( NoMatch )
+, m_forceIsInstance( forceIsInstance )
+, m_constness(constness)
 {
 
 }
@@ -196,7 +201,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     if ( !decl )
       continue;
 
-    ViableFunction viable( m_topContext.data(), decl, noUserDefinedConversion );
+    ViableFunction viable( m_topContext.data(), decl, m_constness, noUserDefinedConversion );
     viable.matchParameters( params );
 
     if ( viable.isBetter( bestViableFunction ) )
@@ -237,7 +242,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     if ( !decl )
       continue;
     
-    ViableFunction viable( m_topContext.data(), decl );
+    ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
     viableFunctions << viable;
@@ -272,7 +277,7 @@ ViableFunction OverloadResolver::resolveListViable( const ParameterList& params,
     if ( !decl )
       continue;
     
-    ViableFunction viable( m_topContext.data(), decl );
+    ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
     if ( viable.isBetter( bestViableFunction ) )
@@ -405,6 +410,12 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   if ( argumentPointer && parameterPointer && (( argumentPointer->modifiers() & AbstractType::ConstModifier ) == ( parameterPointer->modifiers() & AbstractType::ConstModifier ) ) )
     return incrementIfSuccessful( matchParameterTypes( argumentPointer->baseType(), parameterPointer->baseType(), instantiatedTypes, keepValue ) );
 
+  ///In case of arrays on both sides, match the target-types
+    ArrayType::Ptr argumentArray = argumentType.cast<ArrayType>();
+    ArrayType::Ptr parameterArray = parameterType.cast<ArrayType>();
+    if ( argumentArray && parameterArray && (( argumentArray->modifiers() & AbstractType::ConstModifier ) == ( parameterArray->modifiers() & AbstractType::ConstModifier ) ) ) {
+      return incrementIfSuccessful( matchParameterTypes( argumentArray->elementType(), parameterArray->elementType(), instantiatedTypes, keepValue ) );
+    }
 
   if ( CppTemplateParameterType::Ptr templateParam = parameterType.cast<CppTemplateParameterType>() )
   {

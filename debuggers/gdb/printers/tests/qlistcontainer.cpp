@@ -50,6 +50,10 @@ void doStuff()
     Container<QPair<int, int> > pairList;
     pairList << QPair<int, int>(1, 2) << qMakePair(2, 3);
     pairList << qMakePair(4, 5);
+
+    // don't leave context
+    int i = 0;
+    Q_UNUSED(i);
 }
 
 int main()

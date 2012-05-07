@@ -98,6 +98,7 @@ protected:
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
   virtual void visitForRangeDeclaration(ForRangeDeclarationAst *node);
+  virtual void visitAliasDeclaration(AliasDeclarationAST* );
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
@@ -147,7 +148,9 @@ private:
   }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
-  Cpp::InstantiationInformation createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext);
+  Cpp::InstantiationInformation createSpecializationInformation(const Cpp::InstantiationInformation& base,
+                                                                UnqualifiedNameAST* name,
+                                                                KDevelop::DUContext* templateContext);
   Cpp::IndexedInstantiationInformation createSpecializationInformation(NameAST* name, DUContext* templateContext);
 
   void parseComments(const ListNode<uint> *comments);

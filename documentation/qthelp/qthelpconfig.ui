@@ -103,6 +103,11 @@
             <string>IconName</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>Ghns</string>
+           </property>
+          </column>
          </widget>
         </item>
         <item>

@@ -117,6 +117,7 @@ protected:
   virtual void visitLambdaDeclarator(LambdaDeclaratorAST *) {}
   virtual void visitInitializerList(InitializerListAST *) {}
   virtual void visitBracedInitList(BracedInitListAST *) {}
+  virtual void visitAliasDeclaration(AliasDeclarationAST *) {}
 
 private:
   typedef void (Visitor::*visitor_fun_ptr)(AST *);

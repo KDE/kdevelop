@@ -21,8 +21,12 @@ target_link_libraries(kde4app ${KDE4_KDEUI_LIBS} )
 
 install(TARGETS kde4app ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
+kde4_add_unit_test(test kde4app.cpp)
+
 ########### install files ###############
 
 install( PROGRAMS kde4app.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES kde4app.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES kde4appui.rc  DESTINATION  ${DATA_INSTALL_DIR}/kde4app )
+
+add_subdirectory(tests)

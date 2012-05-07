@@ -54,6 +54,7 @@ private slots:
   void initTestCase();
   void testIntegralType();
   void testSimpleExpression();
+  void testAutoTemplate();
   void testTypeConversion();
   void testTypeConversion2();
   void testTypeConversionWithTypedefs();
@@ -72,6 +73,9 @@ private slots:
   void testDynamicArray();
   void testTypeID();
   void testConstness();
+  void testConstnessOverload();
+  void testConstnessOverloadSubscript();
+  void testReference();
 
   void testCharacterTypes_data();
   void testCharacterTypes();
@@ -87,7 +91,7 @@ public:
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  KDevelop::DUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType));
 
   void release(KDevelop::DUContext* top);
 

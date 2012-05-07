@@ -23,16 +23,37 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-bool operator==(const Token& t1, const Token& t2)
+static ParseSession* lastSession = 0;
+static ParseSession* lastGeneratedSession = 0;
+
+struct ComparableToken
 {
-  return t1.kind == t2.kind && t1.symbolString() == t2.symbolString();
-}
+  ComparableToken(const Token& token, ParseSession* session)
+  : m_token(token)
+  , m_session(session)
+  {
+  }
+  inline QString toString() const
+  {
+    return m_session->token_stream->symbolString(m_token);
+  }
+  inline bool operator==(const ComparableToken& o) const
+  {
+    return o.m_token.kind == m_token.kind && toString() == o.toString();
+  }
+  Token m_token;
+  ParseSession* m_session;
+};
 
 namespace QTest {
   template<>
-  char* toString(const Token& t)
+  char* toString(const ComparableToken& t)
   {
-    return qstrdup(QString("%1 [ %2 ]").arg(token_name(t.kind)).arg(t.symbolString()).toUtf8());
+    return qstrdup(
+      QString("%1 [%2, %3]")
+        .arg(t.toString())
+        .arg(token_name(t.m_token.kind))
+        .arg(t.m_token.position).toUtf8().constData());
   }
 }
 
@@ -222,9 +243,6 @@ private slots:
   }
 
 private:
-  ParseSession* lastSession;
-  ParseSession* lastGeneratedSession;
-
   TranslationUnitAST* parseOriginal(const QByteArray& unit)
   {
     Parser parser(&control);
@@ -251,7 +269,7 @@ private:
       const Token& t1 = lastSession->token_stream->token( cursor );
       const Token& t2 = lastGeneratedSession->token_stream->token( cursor );
 
-      QCOMPARE(t1, t2);
+      QCOMPARE(ComparableToken(t1, lastSession), ComparableToken(t2, lastGeneratedSession));
       if (t1.kind == Token_EOF)
         break;
 

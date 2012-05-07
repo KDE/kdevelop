@@ -38,6 +38,8 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
   
     //Add some whitespace so we always have some comment clearing done, in every line
     QString allText = "         \n";
+    // we've added a line, hence increase our limit as well
+    checkLines += 1;
     for(int a = 0; a < checkLines; ++a)
       allText += m_codeRepresentation->line(a) + "         \n";
     allText = KDevelop::clearComments(allText, '$');
@@ -71,13 +73,14 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
   if(chosen == -1 && lastDefine != -1) {
     chosen = lastDefine + 1;
   }
-
   if (chosen == -1 && lastComment != -1) {
     chosen = lastComment + 1;
   }
 
   if(chosen != -1) {
     // if chosen == 0 we can only add at the start of the document
+    // NOTE: chosen must be reduced by one since we add one line
+    // at the beginning, see above (allText = ...)
     return qMax(0, chosen - 1);
   } else
     return lineNumber;

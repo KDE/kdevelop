@@ -63,6 +63,7 @@ static QString staticMembersEntry = "Display Static Members";
 static QString demangleNamesEntry = "Display Demangle Names";
 //static QString separateTerminalEntry = "Separate Terminal For Application IO";
 static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
+static QString startWithEntry = "Start With";
 
 class DebugSession : public KDevelop::IDebugSession
 {
@@ -80,8 +81,6 @@ Q_SIGNALS:
     void applicationStandardErrorLines(const QStringList& lines);
     void showMessage(const QString& message, int timeout);
     void reset();
-    void raiseOutputViews();
-    void raiseVariableViews();
     void programStopped(const GDBMI::ResultRecord& mi_record);
 
 public Q_SLOTS:
@@ -110,6 +109,9 @@ public Q_SLOTS:
      * Attach to currently running process with the given \a pid.
      */
     void attachToProcess(int pid);
+
+Q_SIGNALS:
+    void raiseGdbConsoleViews();
 
 private Q_SLOTS:
     void slotDebuggerAbnormalExit();

@@ -287,21 +287,46 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
     if(!type->containerContext.data() && searchFrom->type() == DUContext::Other && (type->assigned.type.abstractType() || type->isFunction))
     {
       //Action to just copy in the type
-      if(!type->assigned.type.type<KDevelop::DelayedType>() && !type->isFunction && !type->convertedTo.isValid())
+      if(!type->assigned.type.type<KDevelop::DelayedType>() && !type->isFunction && !type->convertedTo.isValid()) {
         addAction(KDevelop::IAssistantAction::Ptr(new CreateLocalDeclarationAction(problem)));
+      }
       
       Declaration* localClass = Cpp::localClassFromCodeContext(searchFrom);
       
       //Action to create a declaration within the local class
       if(localClass && localClass->internalContext()) {
-        addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Public)));
         addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Private)));
+        addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
+        addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Public)));
       }
+      return;
     }
     if(type->containerContext.data() && (type->convertedTo.isValid() || type->assigned.isValid() || type->isFunction)) {
       KUrl url = type->containerContext.data()->url().toUrl();
-      if(KDevelop::ICore::self()->projectController()->findProjectForUrl(url) || KDevelop::ICore::self()->documentController()->documentForUrl(url))
-        addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem)));
+      if(KDevelop::ICore::self()->projectController()->findProjectForUrl(url) || KDevelop::ICore::self()->documentController()->documentForUrl(url)) {
+        DUContext* container = problem->type->containerContext.data();
+        Declaration* searchFromClass = Cpp::localClassFromCodeContext(searchFrom);
+
+        if (searchFromClass){
+          if (searchFromClass->internalContext() == container){
+            //we are in the same class, so we can provide private, protected and public
+            addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Private)));
+            addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
+          } else if (Declaration* containerClass = Cpp::localClassFromCodeContext(problem->type->containerContext.data())) {
+            //if we are in a subclass, we can provide the protected option
+            CppClassType::Ptr searchFromClassType = CppClassType::Ptr::dynamicCast(searchFromClass->abstractType());
+            CppClassType::Ptr containerClassType = CppClassType::Ptr::dynamicCast(containerClass->abstractType());
+
+            int levelCount;
+            if (TypeUtils::isPublicBaseClass(searchFromClassType, containerClassType, container->topContext(), &levelCount )){
+              addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
+            }
+          }
+        }
+
+        //public is always possible
+        addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Public)));
+      }
     }
   }
   

@@ -20,38 +20,19 @@
 */
 
 #include "makebuilder.h"
-#include "makeoutputmodel.h"
-#include <config.h>
-
-#include <QtCore/QStringList>
 
 #include <project/projectmodel.h>
 
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <util/commandexecutor.h>
-#include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <outputview/ioutputview.h>
-#include <QtDesigner/QExtensionFactory>
-#include <QtCore/QProcess>
-#include <QtGui/QAction>
-#include <QtGui/QKeySequence>
-
-#include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kactioncollection.h>
-#include <ksharedconfig.h>
-
-#include <util/environmentgrouplist.h>
-
-#include "makeoutputdelegate.h"
-#include "makejob.h"
 #include <interfaces/iruncontroller.h>
+
+#include <KPluginFactory>
+#include <KAboutData>
+#include <KDebug>
+
+#include "makeoutputmodel.h"
+#include "makeoutputdelegate.h"
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
@@ -76,12 +57,12 @@ KJob* MakeBuilder::build( KDevelop::ProjectBaseItem *dom )
 
 KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 {
-    return runMake( dom, MakeJob::CleanCommand, "clean" );
+    return runMake( dom, MakeJob::CleanCommand, QStringList("clean") );
 }
 
 KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 {
-    return runMake( dom, MakeJob::InstallCommand, "install" );
+    return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
 }
 
 void MakeBuilder::jobFinished(KJob* job)
@@ -90,12 +71,12 @@ void MakeBuilder::jobFinished(KJob* job)
 
     if( !mj )
         return;
-    
-    if (mj->error()) 
+
+    if (mj->error())
     {
         emit failed( mj->item() );
 
-    } else 
+    } else
     {
         switch( mj->commandType() )
         {
@@ -109,7 +90,9 @@ void MakeBuilder::jobFinished(KJob* job)
                 emit cleaned( mj->item() );
                 break;
             case MakeJob::CustomTargetCommand:
-                emit makeTargetBuilt( mj->item(), mj->customTarget() );
+                foreach( const QString& target, mj->customTargets() ) {
+                    emit makeTargetBuilt( mj->item(), target );
+                }
                 break;
         }
     }
@@ -118,12 +101,22 @@ void MakeBuilder::jobFinished(KJob* job)
 KJob* MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
                                     const QString& targetname )
 {
-    return runMake( item, MakeJob::CustomTargetCommand, targetname );
+    return executeMakeTargets( item, QStringList(targetname) );
 }
 
-KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandType c,  const QString& overrideTarget )
+KJob* MakeBuilder::executeMakeTargets(KDevelop::ProjectBaseItem* item,
+                                    const QStringList& targetnames,
+                                    const MakeVariables& variables )
 {
-    ///Running the same builder twice may result in serious problems, so kill jobs already running on the same project
+    return runMake( item, MakeJob::CustomTargetCommand, targetnames, variables );
+}
+
+KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandType c,
+                            const QStringList& overrideTargets,
+                            const MakeVariables& variables )
+{
+    ///Running the same builder twice may result in serious problems,
+    ///so kill jobs already running on the same project
     foreach(KJob* job, KDevelop::ICore::self()->runController()->currentJobs())
     {
         MakeJob* makeJob = dynamic_cast<MakeJob*>(job);
@@ -132,8 +125,8 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
             job->kill(KJob::EmitResult);
         }
     }
-    
-    MakeJob* job = new MakeJob(this, item, c, overrideTarget);
+
+    MakeJob* job = new MakeJob(this, item, c, overrideTargets, variables);
     job->setItem(item);
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));

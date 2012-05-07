@@ -197,7 +197,7 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -213,7 +213,7 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -229,7 +229,7 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   session = _session;
 
   if (!session->token_stream)
-    session->token_stream = new TokenStream;
+    session->token_stream = new TokenStream(session);
 
   lexer.tokenize(session);
   advance(); // skip the first token
@@ -280,7 +280,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 
   uint start = session->token_stream->cursor();
 
-  const uint tokenIndex = session->token_stream->token(session->token_stream->cursor()).symbolIndex();
+  const uint tokenIndex = session->token_stream->symbolIndex(session->token_stream->cursor());
   static const KDevelop::IndexedString declSpecString("__declspec");
   if (declSpecString.index() != tokenIndex)
     return false;
@@ -371,7 +371,7 @@ void Parser::reportPendingErrors()
   holdErrors(hold);
 }
 
-void Parser::reportError(const QString& msg)
+void Parser::reportError(const QString& msg, KDevelop::ProblemData::Severity severity)
 {
   if (!_M_hold_errors && _M_problem_count < _M_max_problem_count)
     {
@@ -386,6 +386,7 @@ void Parser::reportError(const QString& msg)
       p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(position.castToSimpleCursor(), 0)));
       p->setDescription(msg);
       p->setSource(KDevelop::ProblemData::Parser);
+      p->setSeverity(severity);
 
       control->reportProblem(p);
     }
@@ -922,18 +923,38 @@ bool Parser::parseUsing(DeclarationAST *&node)
   if (session->token_stream->lookAhead() == Token_namespace)
     return parseUsingDirective(node);
 
-  UsingAST *ast = CreateNode<UsingAST>(session->mempool);
+  uint type_name = 0;
+  NameAST* name = 0;
 
   if (session->token_stream->lookAhead() == Token_typename)
     {
-      ast->type_name = session->token_stream->cursor();
+      type_name = session->token_stream->cursor();
       advance();
     }
 
-  if (!parseName(ast->name))
+  if (!parseName(name))
     return false;
 
-  ADVANCE(';', ";");
+  DeclarationAST* ast = 0;
+
+  if (type_name || session->token_stream->lookAhead() == ';') {
+    ADVANCE(';', ";");
+    UsingAST *usingAst = CreateNode<UsingAST>(session->mempool);
+    usingAst->type_name = type_name;
+    usingAst->name = name;
+    ast = usingAst;
+  } else {
+    ADVANCE('=', "=");
+    TypeIdAST* type_id = 0;
+    if (!parseTypeId(type_id)) {
+      return false;
+    }
+    ADVANCE(';', ";");
+    AliasDeclarationAST *aliasAST = CreateNode<AliasDeclarationAST>(session->mempool);
+    aliasAST->name = name;
+    aliasAST->type_id = type_id;
+    ast = aliasAST;
+  }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -1571,30 +1592,13 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
         parseCvQualify(ast->fun_cv);
         parseExceptionSpecification(ast->exception_spec);
 
-        if (session->token_stream->lookAhead() == Token___attribute__)
-          {
-            advance();
-
-            ADVANCE('(', "(");
-
-            ExpressionAST *expr = 0;
-            parseExpression(expr);
-
-            if (session->token_stream->lookAhead() != ')')
-              {
-                reportError(("')' expected"));
-              }
-            else
-              {
-                advance();
-              }
-          }
-
         // trailing return type support
         if (session->token_stream->lookAhead() == Token_arrow)
           {
             parseTrailingReturnType(ast->trailing_return_type);
           }
+
+        parseMemberVirtSpecifier(ast->virt_specifiers);
       }
 
     if (skipParen)
@@ -1896,11 +1900,14 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
 
         ADVANCE('>', ">");
 
-        // TODO: can a template-template parameter be variadic?
-
         // TODO add to AST
         if (session->token_stream->lookAhead() == Token_class)
           advance();
+
+        if (session->token_stream->lookAhead() == Token_ellipsis) {
+          advance();
+          ast->isVariadic = true;
+        }
 
         // parse optional name
         if (parseName(ast->name, AcceptTemplate))
@@ -2162,6 +2169,9 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
   NameAST *name = 0;
   parseName(name, AcceptTemplate);
 
+  const ListNode<uint> *virt_specifiers = 0;
+  parseClassVirtSpecifier(virt_specifiers);
+
   BaseClauseAST *bases = 0;
   if (session->token_stream->lookAhead() == ':')
     {
@@ -2411,33 +2421,61 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST *&node)
 {
   uint start = session->token_stream->cursor();
 
-  CHECK(Token_throw);
-  ADVANCE('(', "(");
-
-  ExceptionSpecificationAST *ast
-    = CreateNode<ExceptionSpecificationAST>(session->mempool);
-
-  if (session->token_stream->lookAhead() == Token_ellipsis)
+  if (session->token_stream->lookAhead() == Token_throw)
     {
-      ast->ellipsis = session->token_stream->cursor();
       advance();
+
+      ADVANCE('(', "(");
+
+      ExceptionSpecificationAST *ast
+        = CreateNode<ExceptionSpecificationAST>(session->mempool);
+
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          ast->ellipsis = session->token_stream->cursor();
+          advance();
+        }
+
+      parseTypeIdList(ast->type_ids);
+
+      if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          ast->ellipsis = session->token_stream->cursor();
+          advance();
+        }
+
+
+      ADVANCE(')', ")");
+
+      UPDATE_POS(ast, start, _M_last_valid_token+1);
+      node = ast;
+
+      return true;
+
     }
 
-  parseTypeIdList(ast->type_ids);
-
-  if (!ast->ellipsis && session->token_stream->lookAhead() == Token_ellipsis)
+  else if (session->token_stream->lookAhead() == Token_noexcept)
     {
-      ast->ellipsis = session->token_stream->cursor();
+      ExceptionSpecificationAST *ast
+        = CreateNode<ExceptionSpecificationAST>(session->mempool);
+
+      ast->no_except = session->token_stream->cursor();
       advance();
+
+      if (session->token_stream->lookAhead() == '(')
+        {
+          advance();
+          parseExpression(ast->noexcept_expression);
+          CHECK(')');
+        }
+
+      UPDATE_POS (ast, start, _M_last_valid_token+1);
+      node = ast;
+
+      return true;
     }
 
-
-  ADVANCE(')', ")");
-
-  UPDATE_POS(ast, start, _M_last_valid_token+1);
-  node = ast;
-
-  return true;
+  return false;
 }
 
 bool Parser::parseEnumerator(EnumeratorAST *&node)
@@ -2717,13 +2755,6 @@ bool Parser::parseBracedInitList(ExpressionAST*& node)
   InitializerListAST *list = 0;
   parseInitializerList(list);
 
-  if (list && session->token_stream->lookAhead() == ',') {
-    // see https://bugs.kde.org/show_bug.cgi?id=233328
-    // and grammar spec on braced-init-list
-    // init lists may have a trailing comma
-    advance();
-  }
-
   CHECK('}');
 
   BracedInitListAST *ast = CreateNode<BracedInitListAST>(session->mempool);
@@ -2743,10 +2774,20 @@ bool Parser::parseInitializerList(InitializerListAST *&node)
   do
     {
       if (clauses)
-        advance(); // skip ',' separator between clauses
+        {
+          advance(); // skip ',' separator between clauses
+
+          if (session->token_stream->lookAhead() == '}')
+            {
+              // see https://bugs.kde.org/show_bug.cgi?id=233328
+              // and grammar spec on braced-init-list
+              // init lists may have a trailing comma
+              break;
+            }
+        }
 
       InitializerClauseAST *init_clause = 0;
-      if (!parseInitializerClause(init_clause))
+      if (!parseInitializerClause(init_clause) && !parseDesignatedInitializer(init_clause))
         {
           return false;
         }
@@ -2765,6 +2806,94 @@ bool Parser::parseInitializerList(InitializerListAST *&node)
   UPDATE_POS(list, start, _M_last_valid_token+1);
   node = list;
 
+  return true;
+}
+
+/**
+ * Parse C99 designated initializers, e.g:
+ * struct foo_t foo = {
+ *   .has_cake = true,
+ *   .nb_candles = 12,
+ * };
+ *
+ * int bar[10] = {
+ *   [1] = 15,
+ *   [9] = 25,
+ * };
+ */
+bool Parser::parseDesignatedInitializer(InitializerClauseAST *&ast)
+{
+  uint start = session->token_stream->cursor();
+  uint memberOp = session->token_stream->cursor();
+
+  NameAST *member = 0;
+  ExpressionAST *index = 0;
+  const ListNode<ExpressionAST*> *indexes = 0;
+  if (session->token_stream->lookAhead() == '.')
+    {
+    // Designated member
+    advance();
+    if (!parseName(member, Parser::DontAcceptTemplate))
+      {
+        rewind(start);
+        return false;
+      }
+    }
+  else
+    {
+    do
+      {
+        // Designated array index
+        if (session->token_stream->lookAhead() != '[' || !parsePostfixExpressionInternal(index))
+          {
+            rewind(start);
+            return false;
+          }
+
+        indexes = snoc(indexes, index, session->mempool);
+      } while (session->token_stream->lookAhead() == '[');
+    }
+
+  uint cm_end = session->token_stream->cursor();
+
+  uint asop = session->token_stream->cursor();
+  if (session->token_stream->lookAhead() != '=')
+    {
+      rewind(start);
+      return false;
+    }
+  advance();
+
+  ExpressionAST *rightExpr = 0;
+  if (!parseConditionalExpression(rightExpr) && !parseBracedInitList(rightExpr))
+    {
+      rewind(start);
+      return false;
+    }
+
+  BinaryExpressionAST *binaryExpr = CreateNode<BinaryExpressionAST>(session->mempool);
+  binaryExpr->op = asop;
+  binaryExpr->right_expression = rightExpr;
+
+  if (member) {
+    ClassMemberAccessAST *memberAst = CreateNode<ClassMemberAccessAST>(session->mempool);
+    memberAst->op = memberOp;
+    memberAst->name = member;
+    UPDATE_POS(memberAst, start, cm_end);
+    binaryExpr->left_expression = memberAst;
+  } else {
+    PostfixExpressionAST *sub = CreateNode<PostfixExpressionAST>(session->mempool);
+    sub->sub_expressions = indexes;
+    UPDATE_POS(sub, start, cm_end);
+    binaryExpr->left_expression = sub;
+  }
+
+  UPDATE_POS(binaryExpr, start, _M_last_valid_token+1);
+
+  ast = CreateNode<InitializerClauseAST>(session->mempool);
+  ast->expression = binaryExpr;
+
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
   return true;
 }
 
@@ -2825,7 +2954,10 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   bool ellipsis = false;
   OperatorFunctionIdAST *operator_id = 0;
 
-  if (session->token_stream->lookAhead() == Token_identifier)
+  if (session->token_stream->lookAhead() == Token_identifier
+       // identifier with special meaning
+      || session->token_stream->lookAhead() == Token_override
+      || session->token_stream->lookAhead() == Token_final)
     {
       id = session->token_stream->cursor();
       advance();
@@ -2860,7 +2992,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   ast->ellipsis = ellipsis;
   ast->operator_id = operator_id;
 
-  if (parseTemplateId && !tilde)
+  if (parseTemplateId)
     {
       uint index = session->token_stream->cursor();
 
@@ -3276,6 +3408,7 @@ bool Parser::parseRangeBasedFor(ForRangeDeclarationAst *&node)
   parseCvQualify(cv);
 
   TypeSpecifierAST *spec = 0;
+
   // auto support: right now it is part of the storage spec, put it back
   if (storageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
     rewind(storageSpec->toBack()->element);
@@ -4356,6 +4489,13 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
   const ListNode<ExpressionAST*> *sub_expressions = 0;
 
+  if (typeSpec && expr)
+  {
+    // If we have a type-specifier, make the expression a sub-expression
+    sub_expressions = snoc(sub_expressions, expr, session->mempool);
+    expr = 0;
+  }
+  
   ExpressionAST *sub_expression = 0;
   while (parsePostfixExpressionInternal(sub_expression))
     {
@@ -4443,6 +4583,30 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
 
         if (!parseUnaryExpression(ast->expression))
           return false;
+
+        UPDATE_POS(ast, start, _M_last_valid_token+1);
+        node = ast;
+        return true;
+      }
+
+    case Token_noexcept: // same as generic case, but parentheses are not optional
+      {
+        uint op = session->token_stream->cursor();
+        advance();
+
+        if (session->token_stream->lookAhead() != '(')
+          {
+            tokenRequiredError ('(');
+            return false;
+          }
+
+        ExpressionAST *expr = 0;
+        if (!parseUnaryExpression(expr))
+          return false;
+
+        UnaryExpressionAST *ast = CreateNode<UnaryExpressionAST>(session->mempool);
+        ast->op = op;
+        ast->expression = expr;
 
         UPDATE_POS(ast, start, _M_last_valid_token+1);
         node = ast;
@@ -4983,8 +5147,12 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
       advance();
 
       ExpressionAST *leftExpr = 0;
-      if (!parseExpression(leftExpr))
-        return false;
+      if (!parseExpression(leftExpr)) {
+        //NOTE: allow ommitting operand, for compatibility with gcc, see also:
+        // http://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_4.html#SEC70
+        // https://bugs.kde.org/show_bug.cgi?id=292357
+        reportError("ISO C++ does not allow ?: with omitted middle operand", KDevelop::ProblemData::Warning);
+      }
 
       CHECK(':');
 
@@ -5006,6 +5174,10 @@ bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
   return true;
 }
 
+//note: this does not really follow the grammar,
+//      esp. the braced-init-list support might need to be
+//      reworked, since the grammar says:
+//      logical-or-expression assignment-operator initializer-clause
 bool Parser::parseAssignmentExpression(ExpressionAST *&node)
 {
   uint start = session->token_stream->cursor();
@@ -5027,7 +5199,8 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
 
       ExpressionAST *rightExpr = 0;
       if (!parseConditionalExpression(rightExpr) &&
-          !parseSignalSlotExpression(rightExpr))
+          !parseSignalSlotExpression(rightExpr) &&
+          !parseBracedInitList(rightExpr))
         return false;
 
       BinaryExpressionAST *ast = CreateNode<BinaryExpressionAST>(session->mempool);
@@ -5140,8 +5313,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     static KDevelop::IndexedString finalStr("FINAL");
 
     while(session->token_stream->lookAhead() != ')') {
-      const Token token = session->token_stream->token(session->token_stream->cursor());
-      const KDevelop::IndexedString propertyField = token.symbol();
+      const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());
       if(propertyField == readStr) {
         advance(); // skip READ
         if(!parseName(ast->getter))
@@ -5375,8 +5547,10 @@ bool Parser::parseLambdaCapture(LambdaCaptureAST*& node)
       advance();
     }
 
-  ADVANCE(Token_identifier, "identifier");
-  ast->identifier = session->token_stream->cursor();
+  if (!parseName(ast->identifier)) {
+    rewind(start);
+    return false;
+  }
 
   if (session->token_stream->lookAhead() == Token_ellipsis)
     {
@@ -5424,6 +5598,36 @@ bool Parser::parseLambdaDeclarator(LambdaDeclaratorAST*& node)
   return true;
 }
 
+bool Parser::parseMemberVirtSpecifier(const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_override || tk == Token_final || tk == Token_new))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
+}
+
+bool Parser::parseClassVirtSpecifier(const ListNode< uint >*& node)
+{
+  uint start = session->token_stream->cursor();
+
+  int tk;
+  while (0 != (tk = session->token_stream->lookAhead())
+         && (tk == Token_final || tk == Token_explicit))
+    {
+      node = snoc(node, session->token_stream->cursor(), session->mempool);
+      advance();
+    }
+
+  return start != session->token_stream->cursor();
+}
+
 bool Parser::holdErrors(bool hold)
 {
   bool current = _M_hold_errors;
@@ -5437,9 +5641,5 @@ QString Parser::stringForNode(AST* node) const
     return "<invalid node>";
   }
 
-  QString str;
-  for(int i = node->start_token; i < node->end_token; ++i) {
-    str += session->token_stream->token(i).symbolString();
-  }
-  return str;
+  return session->stringForNode(node);
 }

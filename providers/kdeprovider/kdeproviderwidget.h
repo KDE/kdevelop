@@ -23,8 +23,10 @@
 
 #include <interfaces/iprojectprovider.h>
 
+class QModelIndex;
 class KConfigDialog;
-class QComboBox;
+class KFilterProxySearchLine;
+class QListView;
 class KDEProviderWidget : public KDevelop::IProjectProviderWidget
 {
     Q_OBJECT
@@ -35,9 +37,10 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         
     private slots:
         void showSettings();
+        void projectIndexChanged(const QModelIndex& currentIndex);
         
     private:
-        QComboBox* m_projects;
+        QListView* m_projects;
         KConfigDialog* m_dialog;
 };
 

@@ -35,7 +35,7 @@ struct ConstantBinaryExpressionEvaluator {
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantBinaryExpressionEvaluator( uint _type, uint _modifier, int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  ConstantBinaryExpressionEvaluator( uint _type, uint _modifier, quint16 tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
     endValue = 0;
 
     type = _type;
@@ -93,7 +93,7 @@ struct ConstantBinaryExpressionEvaluator {
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  void evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
     switch( tokenKind ) {
       case '%':
         if(right->ConstantIntegralType::value<Type>())
@@ -136,14 +136,14 @@ struct ConstantBinaryExpressionEvaluator {
 };
 
 template<>
-void ConstantBinaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+void ConstantBinaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
   Q_UNUSED(right);
 }
 
 template<>
-void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
   Q_UNUSED(right);
@@ -151,7 +151,7 @@ void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenK
 
 
 
-AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType::Ptr right, int tokenKind) {
+AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType::Ptr right, quint16 tokenKind) {
 
   if(!left || !right)
     return AbstractType::Ptr();

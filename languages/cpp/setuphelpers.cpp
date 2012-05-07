@@ -31,12 +31,13 @@
 using namespace KDevelop;
 
 namespace CppTools {
-QStringList gccSetupStandardIncludePaths();
-const QVector<rpp::pp_macro*>& gccStandardMacros();
 
 #ifdef _MSC_VER
 QStringList msvcSetupStandardIncludePaths();
 const QVector<rpp::pp_macro*>& msvcStandardMacros();
+#else
+QStringList gccSetupStandardIncludePaths();
+const QVector<rpp::pp_macro*>& gccStandardMacros();
 #endif
 
 QStringList setupStandardIncludePaths()
@@ -93,6 +94,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       //If we wouldn't need this, macros could be more transparent.
       rpp::pp_macro m("__attribute__");
       m.function_like = true;
+      m.fixed = true;
       m.formalsList().append(IndexedString("param"));
       insertMacro( macros, m );
     }

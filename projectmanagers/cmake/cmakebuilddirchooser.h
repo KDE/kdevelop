@@ -47,7 +47,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         Q_DECLARE_FLAGS( StatusTypes, StatusType )
 
         explicit CMakeBuildDirChooser(QWidget* parent = 0);
-        ~CMakeBuildDirChooser() {}
+        ~CMakeBuildDirChooser();
 
         KUrl cmakeBinary() const;
         KUrl installPrefix() const;
@@ -69,6 +69,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
     private:
         QStringList m_alreadyUsed;
         static QString buildDirProject(const KUrl& buildDir);
+        QStringList extraArgumentsHistory() const;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
         KUrl m_srcFolder;

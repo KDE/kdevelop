@@ -217,6 +217,7 @@ public:
       Kind_LambdaDeclarator,                    // 85
       Kind_InitializerList,                     // 86
       Kind_BracedInitList,                      // 87
+      Kind_AliasDeclaration,                    // 88
       NODE_KIND_COUNT
     };
 
@@ -381,6 +382,7 @@ public:
   NameAST *name;
   BaseClauseAST *base_clause;
   const ListNode<DeclarationAST*> *member_specs;
+  const ListNode<uint> *virt_specifiers;
 };
 
 class CompoundStatementAST : public StatementAST
@@ -467,6 +469,7 @@ public:
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
   TrailingReturnTypeAST* trailing_return_type;
+  const ListNode<uint> *virt_specifiers;
   bool isVariadic;
 };
 
@@ -537,6 +540,12 @@ public:
   // the exception spec is variadic (pack expansion)
   uint ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
+
+  // noexcept token
+  uint no_except;
+  // if set, this is actually a noexcept(...) expression
+  // and the ast node below points to the ...
+  ExpressionAST *noexcept_expression;
 };
 
 class ExpressionOrDeclarationStatementAST : public StatementAST
@@ -740,7 +749,7 @@ public:
 
   DECLARE_AST_NODE(LambdaCapture)
 
-  uint identifier;
+  NameAST* identifier;
 
   bool isThis : 1;
   bool isRef : 1;
@@ -929,6 +938,8 @@ public:
 
   DECLARE_AST_NODE(PostfixExpression)
 
+  // Eventually the type-specifier of a constructed type, eg. "MyClass(expression)"
+  // If this is nonzero, then expression is most probably zero.
   TypeSpecifierAST *type_specifier;
   ExpressionAST *expression;
   const ListNode<ExpressionAST*> *sub_expressions;
@@ -1256,6 +1267,16 @@ public:
   DECLARE_AST_NODE(UsingDirective)
 
   NameAST *name;
+};
+
+class AliasDeclarationAST : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(AliasDeclaration)
+
+  NameAST *name;
+  TypeIdAST *type_id;
 };
 
 class WhileStatementAST : public StatementAST

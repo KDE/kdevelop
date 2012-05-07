@@ -19,6 +19,7 @@
  */
 
 #include "cmakeloadprojecttest.h"
+#include "cmake-test-paths.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -68,15 +69,20 @@ void CMakeLoadProjectTest::testSmallQt4Project()
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
     CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
-    
-    QCOMPARE(v.targets().count(), 3);
+    QCOMPARE(v.targets().count(), 4);
     QCOMPARE(v.projectName(), QString("kde4app"));
-    QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
-    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
+    QCOMPARE(v.targets().at( 0 ).name, QString("buildtests") );
+    QCOMPARE(v.targets().at( 1 ).name, QString("kde4app") );
+    QCOMPARE(v.targets().at( 1 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
+    QCOMPARE(v.targets().at( 2 ).name, QString("test") );
+    
+    QCOMPARE(v.targets().at( 2 ).files, QStringList() << "kde4app.cpp");
+    QCOMPARE(v.targets().at( 3 ).name, QString("uninstall") );
+    
 }
 
 CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
@@ -95,7 +101,7 @@ CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir
     QStringList modulesPath = data.vm["CMAKE_MODULE_PATH"];
     foreach(const QString& script, initials.second)
     {
-        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &data, sourcedir);
+        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &data, sourcedir, QMap<QString,QString>());
     }
     
     data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));

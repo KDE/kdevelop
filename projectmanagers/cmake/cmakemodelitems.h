@@ -35,23 +35,51 @@ namespace KDevelop {
     class TopDUContext;
     class Declaration;
 }
+class CMakeFolderItem;
 
-class DescriptorAttatched
+class KDEVCMAKECOMMON_EXPORT DescriptorAttatched
 {
     public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DescriptorAttatched();
         void setDescriptor(const CMakeFunctionDesc & desc) { m_desc=desc; }
         CMakeFunctionDesc descriptor() const { return m_desc; }
     private:
         CMakeFunctionDesc m_desc;
 };
 
-class DUChainAttatched
+class KDEVCMAKECOMMON_EXPORT DUChainAttatched
 {
     public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DUChainAttatched();
         DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
         KDevelop::IndexedDeclaration declaration() const { return decl; }
     private:
         KDevelop::IndexedDeclaration decl;
+};
+
+class KDEVCMAKECOMMON_EXPORT DefinesAttached
+{
+    public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~DefinesAttached();
+        CMakeDefinitions definitions(CMakeFolderItem* parent) const;
+        void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
+        void defineVariables(const QStringList& vars);
+    private:
+        CMakeDefinitions m_defines;
+};
+
+class KDEVCMAKECOMMON_EXPORT IncludesAttached
+{
+    public:
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~IncludesAttached();
+        void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
+        QStringList includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const;
+    private:
+        QStringList m_includeList;
 };
 
 /**
@@ -61,15 +89,14 @@ class DUChainAttatched
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
+class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
+    : public KDevelop::ProjectBuildFolderItem
+    , public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeFolderItem( KDevelop::IProject* project, const KUrl& folder, const QString& build, CMakeFolderItem* item);
-        
-        void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
-        QStringList includeDirectories() const;
-        CMakeDefinitions definitions() const;
-        void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
+        // Required, and must be non-inline, for dynamic_cast to work
+        virtual ~CMakeFolderItem();
         
         void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }
         KDevelop::ReferencedTopDUContext topDUContext() const { return m_topcontext;}
@@ -83,22 +110,19 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         QString buildDir() const { return m_buildDir; }
         void setBuildDir(const QString& bd) { m_buildDir = bd; }
         
-        void clear();
-
         KDevelop::ProjectTargetItem* targetNamed(Target::Type type, const QString& targetName) const;
         KDevelop::ProjectFolderItem* folderNamed(const QString& name) const;
-        void cleanupBuildFolders(const QList< Subdirectory >& subs);
-        void cleanupTargets(const QList<CMakeTarget>& targets);
+        QList<ProjectBaseItem*> cleanupBuildFolders(const QList<Subdirectory>& subs);
+        QList<ProjectBaseItem*> cleanupTargets(const QList<CMakeTarget>& targets);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
-        QStringList m_includeList;
-        CMakeDefinitions m_defines;
         CMakeFolderItem* m_formerParent;
         QString m_buildDir;
 };
 
 class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem 
-    : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched, public DescriptorAttatched
+    : public KDevelop::ProjectExecutableTargetItem
+    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
@@ -106,7 +130,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
                                   const QString& _outputName, const KUrl& basepath);
         
         virtual KUrl builtUrl() const;
-        virtual KUrl installedUrl() const { return KUrl(); }
+        virtual KUrl installedUrl() const;
         
     private:
         QString outputName;
@@ -114,7 +138,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
 };
 
 class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
-    : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched, public DescriptorAttatched
+    : public KDevelop::ProjectLibraryTargetItem
+    , public DUChainAttatched, public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,

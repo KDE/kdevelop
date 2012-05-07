@@ -1318,11 +1318,15 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
       return items;
     ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
 
-    foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
+    foreach( const DeclarationDepthPair& decl,
+            Cpp::hideOverloadedDeclarations(
+              ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ),
+              typeIsConst ) )
+    {
       //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
       ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
 
-      if(classMember && !filterDeclaration(classMember, ctx, typeIsConst))
+      if(classMember && !filterDeclaration(classMember, ctx))
         continue;
       else if(!filterDeclaration(decl.first, ctx))
         continue;
@@ -1379,7 +1383,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::returnAccessCompletionIt
 QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItems()
 {
   QList<CompletionTreeItemPointer> items;
+
   IndexedType switchExprType = switchExpressionType(m_duContext);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
+
   if (switchExprType.abstractType())
     items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
   return items;
@@ -1672,12 +1680,12 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
         hadNamespaceDeclarations.insert(id);
       }
 
-      if(filterDeclaration(decl.first, 0, true, typeIsConst)) {
+      if(filterDeclaration(decl.first, 0, true)) {
         decls << decl;
       }
     }
     
-  decls = Cpp::hideOverloadedDeclarations(decls);
+  decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
   foreach( const DeclarationDepthPair& decl, decls )
     items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second ) );
@@ -1727,7 +1735,7 @@ void CodeCompletionContext::addImplementationHelpers()
 {
   QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
   if(!helpers.isEmpty()) {
-    eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
+    eventuallyAddGroup(i18nc("@action", "Implement Function"), 0, helpers);
   }
 }
 
@@ -1864,19 +1872,40 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   return ret;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context) {
+QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context)
+{
   QList<CompletionTreeItemPointer> ret;
 
   foreach(Declaration* decl, context->localDeclarations()) {
-    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (decl->range().isEmpty() || decl->isDefinition() || FunctionDefinition::definition(decl)) {
+      continue;
+    }
+    if (!decl->qualifiedIdentifier().toString().startsWith(minimumScope.toString())) {
+      continue;
+    }
     AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
-    if(funDecl  && !decl->range().isEmpty() && (!classFun || (!classFun->isAbstract() && !classFun->isSignal())) && !decl->isDefinition() && !FunctionDefinition::definition(decl) && decl->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
-      ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(decl), KSharedPtr<CodeCompletionContext>(this)));
+    if (!funDecl) {
+      continue;
+    }
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if (classFun && (classFun->isAbstract() || classFun->isSignal())) {
+      continue;
+    }
+    ret << KDevelop::CompletionTreeItemPointer(
+      new ImplementationHelperItem( ImplementationHelperItem::CreateDefinition,
+                                    DeclarationPointer(decl),
+                                    KSharedPtr<CodeCompletionContext>(this)));
   }
 
-  foreach(DUContext* child, context->childContexts())
-    if(child->type() == DUContext::Namespace || child->type() == DUContext::Class || child->type() == DUContext::Helper)
+  foreach(DUContext* child, context->childContexts()) {
+    if(child->type() == DUContext::Namespace
+        || child->type() == DUContext::Class
+        || child->type() == DUContext::Helper)
+    {
       ret += getImplementationHelpersInternal(minimumScope, child);
+    }
+  }
+
   return ret;
 }
 
@@ -1944,7 +1973,7 @@ static inline int getIntegralReturnType(const AbstractType::Ptr& type)
   return intType->dataType();
 }
 
-bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic, bool typeIsConst) {
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
   if(!decl)
     return true;
 
@@ -1998,7 +2027,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(dynamic && decl->context()->type() == DUContext::Class) {
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
-      return filterDeclaration(classMember, declarationContext, typeIsConst);
+      return filterDeclaration(classMember, declarationContext);
   }
 
   // https://bugs.kde.org/show_bug.cgi?id=206376
@@ -2017,10 +2046,8 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   return true;
 }
 
-bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext, bool typeIsConst) {
+bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) {
   if(m_doAccessFiltering && decl) {
-    if (typeIsConst && decl->type<FunctionType>() && !(decl->abstractType()->modifiers() & AbstractType::ConstModifier))
-      return false;
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
   }

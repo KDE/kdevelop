@@ -122,7 +122,7 @@ public slots:
     ///UI:
     void switchDefinitionDeclaration();
 
-    void newClassWizard();
+    void newClassAssistant();
 
 private:
 
@@ -154,7 +154,7 @@ private:
     
     Cpp::StaticCodeAssistant * m_assistant;
 
-    static const QStringList s_mimeTypes;
+    const QStringList m_mimeTypes;
 };
 
 #endif

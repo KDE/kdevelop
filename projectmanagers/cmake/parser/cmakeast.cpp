@@ -1308,7 +1308,7 @@ bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindLibraryAst::FindLibraryAst()
-    : m_noDefaultPath(false)
+    : m_noDefaultPath(false), m_cmakeFindRootPath(false)
 {
 }
 
@@ -1344,6 +1344,8 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_noCmakeEnvironmentPath = true;
         else if(it->value=="NO_CMAKE_PATH")
             m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_FIND_ROOT_PATH")
+            m_cmakeFindRootPath = true;
         else if(it->value=="DOC") {
             ++it;
             if(it==itEnd)
@@ -1460,6 +1462,10 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_CMAKE_ENVIRONMENT_PATH")
             m_noCmakeEnvironmentPath = true;
         else if(it->value=="NO_CMAKE_PATH")
+            m_noCmakePath = true;
+        else if(it->value=="NO_CMAKE_SYSTEM_PATH")
+            m_noCmakeSystemPath = true;
+        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
             m_noSystemEnvironmentPath = true;
         else if(it->value=="DOC") {
             ++it;
@@ -1495,7 +1501,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 FindProgramAst::FindProgramAst()
 {
         m_noDefaultPath = m_noCmakeEnvironmentPath = m_noCmakePath =
-        m_noSystemEnvironmentPath = false;
+        m_noSystemEnvironmentPath = m_noCMakeFindRootPath = false;
 }
 
 FindProgramAst::~FindProgramAst()
@@ -1529,8 +1535,8 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_noCmakePath=true;
         else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
             m_noSystemEnvironmentPath = true;
-        else if(it->value=="NO_SYSTEM_ENVIRONMENT_PATH")
-            m_noSystemEnvironmentPath = true;
+        else if(it->value=="NO_CMAKE_FIND_ROOT_PATH")
+            m_noCMakeFindRootPath = true;
         else if(it->value=="DOC") {
             ++it;
             if(it==itEnd)
@@ -1586,11 +1592,11 @@ ForeachAst::~ForeachAst()
 
 bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="foreach" || func.arguments.count()<2)
+    if(func.name.toLower()!="foreach" || func.arguments.count()<1)
         return false;
     addOutputArgument(func.arguments.first());
     m_loopVar=func.arguments.first().value;
-    if(func.arguments[1].value=="RANGE") {
+    if(func.arguments.count()>1 && func.arguments[1].value=="RANGE") {
         bool correctStart = true, correctStop = true, correctRange = true;
         m_type=Range;
         if(func.arguments.count()<3)
@@ -1609,23 +1615,22 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_ranges.step = func.arguments[4].value.toInt(&correctRange);
         if(!correctStart || !correctStop || !correctRange)
             return false;
-    } else if(func.arguments[1].value=="IN") {
-        if(func.arguments[2].value=="LISTS") {
-            m_type = InLists;
-        } else if(func.arguments[2].value=="ITEMS") {
-            m_type = InItems;
-        } else
-            return false;
-        
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+4, itEnd=func.arguments.constEnd();
-        for(; it!=itEnd; ++it) {
-            m_arguments += it->value;
-        }
     } else {
-        m_type=InItems;
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
-        for(; it!=itEnd; ++it)
-        {
+        int incr;
+        if(func.arguments.count()>1 && func.arguments[1].value=="IN") {
+            if(func.arguments[2].value=="LISTS") {
+                m_type = InLists;
+            } else if(func.arguments[2].value=="ITEMS") {
+                m_type = InItems;
+            } else
+                return false;
+            incr=4;
+        } else {
+            m_type=InItems;
+            incr=1;
+        }
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+incr, itEnd=func.arguments.constEnd();
+        for(; it!=itEnd; ++it) {
             m_arguments += it->value;
         }
     }
@@ -1872,7 +1877,7 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         i++;
     }
 
-    if(func.arguments[i].value=="SYSTEM") {
+    if(i<func.arguments.size() && func.arguments[i].value=="SYSTEM") {
         m_isSystem = true;
         i++;
     }
@@ -2462,7 +2467,7 @@ OptionAst::~OptionAst()
 
 bool OptionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="option" || (func.arguments.count()<2 && func.arguments.count()>3))
+    if(func.name.toLower()!="option" || func.arguments.count()<2 || func.arguments.count()>3)
         return false;
     m_variableName = func.arguments[0].value;
     m_description = func.arguments[1].value;
@@ -2940,14 +2945,16 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="REPLACE")
     {
+        if(func.arguments.count()<4)
+            return false;
+        
         m_type=Replace;
         m_regex = func.arguments[1].value;
         m_replace=func.arguments[2].value;
         m_outputVariable = func.arguments[3].value;
         addOutputArgument(func.arguments[3]);
         
-        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4;
-        QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
+        QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+4, itEnd=func.arguments.end();
         for(; it!=itEnd; ++it)
         {
             m_input += it->value;

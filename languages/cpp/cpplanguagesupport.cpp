@@ -160,13 +160,12 @@ static QStringList mimeTypesList()
     QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
 }
-const QStringList CppLanguageSupport::s_mimeTypes = mimeTypesList();
-
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport(),
-      m_standardMacros(0)
+      m_standardMacros(0),
+      m_mimeTypes(mimeTypesList())
 {
     m_self = this;
 
@@ -202,7 +201,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_assistant = new Cpp::StaticCodeAssistant;
 
-    foreach(QString mimeType, s_mimeTypes){
+    foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);
     }
 }
@@ -218,7 +217,7 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 
     KAction* newClassAction = actions.addAction("code_new_class");
     newClassAction->setText( i18n("Create &New Class") );
-    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
+    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassAssistant()));
     
 //    KAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
@@ -409,7 +408,7 @@ CppLanguageSupport::~CppLanguageSupport()
 #endif
     delete m_assistant;
 
-    foreach(QString mimeType, s_mimeTypes){
+    foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::removeFinder(mimeType);
     }
 }
@@ -744,7 +743,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
-void CppLanguageSupport::newClassWizard()
+void CppLanguageSupport::newClassAssistant()
 {
   //TODO: Should give some hint on where it should be added
   SimpleRefactoring::self().createNewClass(0);
