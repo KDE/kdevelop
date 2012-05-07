@@ -26,24 +26,53 @@ QTEST_KDEMAIN(KDevelop::FilteringStrategyTest, NoGUI)
 namespace KDevelop
 {
 
+QString buildCppCheckErrorLine()
+{
+    /// Use existing directory with one file
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+
+    /// Test CPP check output
+    QString outputline("[");
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp:26]: (error) Memory leak: str");
+    return outputline;
+}
+
+QString buildCppCheckInformationLine()
+{
+    return QString("(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
+    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
+    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.");
+}
+
+QString buildPythonErrorLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline("File \"");
+    outputline.append(projecturl.path());
+    outputline.append("pythonExample.py\", line 10");
+    return outputline;
+}
+
+
 void FilteringStrategyTest::testNoFilterstrategy()
 {
     NoFilterStrategy testee;
     /// Test CPP check output
-    QString outputline("[/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/main.cpp:90]: (error) Memory leak: str");
+    QString outputline = buildCppCheckErrorLine();
     FilteredItem item1(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item1) == false);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
-    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
-    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = buildCppCheckInformationLine();
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    outputline.append(projecturl.path());
+    outputline.append(">make");
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
@@ -59,6 +88,10 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
 
     /// Test with script error output;
+    outputline = buildPythonErrorLine();
+    FilteredItem item6(outputline);
+    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
+    QVERIFY(testee.isActionInLine(outputline, item6) == false);
 
 }
 
@@ -66,22 +99,17 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
 {
     /// Use existing directory with one file
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-
     CompilerFilterStrategy testee(projecturl);
 
     /// Test CPP check output
-    QString outputline("[");
-    outputline.append(projecturl.path());
-    outputline.append("main.cpp:26]: (error) Memory leak: str");
+    QString outputline = buildCppCheckErrorLine();
 
     FilteredItem item1(outputline);
 
     QVERIFY(testee.isErrorInLine(outputline, item1) == false);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
-    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
-    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = buildCppCheckInformationLine();
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
@@ -109,6 +137,10 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     QVERIFY(item5.isActivatable == true);
 
     /// Test with script error output;
+    outputline = buildPythonErrorLine();
+    FilteredItem item6(outputline);
+    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
+    QVERIFY(testee.isActionInLine(outputline, item6) == false);
 
 }
 
@@ -117,21 +149,22 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     ScriptErrorFilterStrategy testee;
 
     /// Test CPP check output
-    QString outputline("[/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/main.cpp:90]: (error) Memory leak: str");
+    QString outputline = buildCppCheckErrorLine();
     FilteredItem item1(outputline);
 
     QVERIFY(testee.isErrorInLine(outputline, item1) == true);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
-    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
-    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = buildCppCheckInformationLine();
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
+    outputline.clear();
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    outputline.append(projecturl.path());
+    outputline.append(">make");
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
@@ -147,35 +180,34 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
 
     /// Test with script error output;
+    outputline = buildPythonErrorLine();
+    FilteredItem item6(outputline);
+    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
+    QVERIFY(testee.isActionInLine(outputline, item6) == false);
 
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
 {
-    /// Use existing directory with one file
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-
     StaticAnalysisFilterStrategy testee;
 
     /// Test CPP check output
-    QString outputline("[");
-    outputline.append(projecturl.path());
-    outputline.append("main.cpp:26]: (error) Memory leak: str");
+    QString outputline = buildCppCheckErrorLine();
     FilteredItem item1(outputline);
 
     QVERIFY(testee.isErrorInLine(outputline, item1) == true);
     QVERIFY(testee.isActionInLine(outputline, item1) == false);
     QVERIFY(item1.url.path() == QString(PROJECTS_SOURCE_DIR"/onefileproject/main.cpp"));
 
-    outputline = "(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
-    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
-    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.";
+    outputline = buildCppCheckInformationLine();
     FilteredItem item2(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item2) == false);
     QVERIFY(testee.isActionInLine(outputline, item2) == false);
 
     /// Test with compiler output
-    outputline = "/home/mvo/mortenv_mvo-desktop_4097/mortenv_mvo-desktop_4097/fifthCustomBuild/>make";
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    outputline.append(projecturl.path());
+    outputline.append(">make");
     FilteredItem item3(outputline);
     QVERIFY(testee.isErrorInLine(outputline, item3) == false);
     QVERIFY(testee.isActionInLine(outputline, item3) == false);
@@ -190,6 +222,11 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QVERIFY(testee.isErrorInLine(outputline, item5) == false);
     QVERIFY(testee.isActionInLine(outputline, item5) == false);
 
+    /// Test with script error output;
+    outputline = buildPythonErrorLine();
+    FilteredItem item6(outputline);
+    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
+    QVERIFY(testee.isActionInLine(outputline, item6) == false);
 }
 
 

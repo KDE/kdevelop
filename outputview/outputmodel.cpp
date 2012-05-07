@@ -231,7 +231,6 @@ void OutputModel::addLineBatch()
         {
             matched = m_filter->isActionInLine(line, item);
         }
-
         //kDebug() << "adding item:" << item.shortenedText << itemType;
         if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
             m_activateableItems.insert(m_activateableItems.size());

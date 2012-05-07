@@ -49,7 +49,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
     FilteredItem( const QString& line );
 
     QString originalLine;
-    QVariant type;
+    FilteredOutputItemType type;
     QString shortenedText;
     bool isActivatable;
     KUrl url;

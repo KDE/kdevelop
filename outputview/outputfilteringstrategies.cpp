@@ -132,7 +132,7 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
         if( regEx.indexIn( line ) != -1 )
         {
             kDebug() << "found an action" << line << curActFilter.tool << curActFilter.toolGroup << curActFilter.fileGroup;
-            item.type = QVariant::fromValue( FilteredItem::ActionItem );
+            item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
                 item.shortenedText = QString( "%1 %2 (%3)").arg( curActFilter.action ).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
@@ -193,15 +193,15 @@ bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& it
             QString txt = regEx.cap(curErrFilter.textGroup);
 
             if(txt.contains("error", Qt::CaseInsensitive)) {
-                item.type = QVariant::fromValue( FilteredItem::ErrorItem );
+                item.type = FilteredItem::ErrorItem;
             }
 
             if(txt.contains("warning", Qt::CaseInsensitive)) {
-                item.type = QVariant::fromValue( FilteredItem::WarningItem );
+                item.type = FilteredItem::WarningItem;
             }
 
             if(txt.contains("note", Qt::CaseInsensitive)) {
-                item.type = QVariant::fromValue( FilteredItem::InformationItem );
+                item.type = FilteredItem::InformationItem;
             }
 
             // Make the item clickable if it comes with the necessary file & line number information
@@ -279,7 +279,7 @@ bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem&
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
-            item.type = QVariant::fromValue( FilteredItem::ErrorItem );
+            item.type = FilteredItem::ErrorItem;
 
             // Make the item clickable if it comes with the necessary file & line number information
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
@@ -327,7 +327,7 @@ bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredIt
             //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
-            item.type = QVariant::fromValue( FilteredItem::ErrorItem );
+            item.type = FilteredItem::ErrorItem;
 
             // Make the item clickable if it comes with the necessary file & line number information
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
