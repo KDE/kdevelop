@@ -704,7 +704,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
-    m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
+    {
+        QMutexLocker locker(&m_dirWatchersMutex);
+        m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
+    }
     
     KUrl cmakeListsPath(item->url());
     cmakeListsPath.addPath("CMakeLists.txt");
@@ -1274,7 +1277,10 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
                 ProjectFolderItem* it = new ProjectFolderItem( item->project(), fileurl, 0 );
                 reloadFiles(it);
-                m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
+                {
+                    QMutexLocker locker(&m_dirWatchersMutex);
+                    m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
+                }
                 newItems += it;
             }
         }
@@ -1711,6 +1717,8 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
 void CMakeManager::projectClosing(IProject* p)
 {
     m_projectsData.remove(p); 
+    
+    QMutexLocker locker(&m_dirWatchersMutex);
     m_watchers.remove(p);
 }
 
