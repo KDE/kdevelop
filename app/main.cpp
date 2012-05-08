@@ -145,7 +145,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Luc Willems"), ki18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
     aboutData.addCredit( ki18n("Marcel Turino"), ki18n( "Documentation index view" ), "M.Turino@gmx.de" );
     aboutData.addCredit( ki18n("Yann Hodique"), ki18n( "Patches" ), "Yann.Hodique@lifl.fr" );
-    aboutData.addCredit( ki18n("Tobias Gl\303\244\303\237er") , ki18n( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
+    aboutData.addCredit( ki18n("Tobias Gläßer") , ki18n( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
     aboutData.addCredit( ki18n("Andreas Koepfle") , ki18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
     aboutData.addCredit( ki18n("Sascha Cunz") , ki18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
     aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
@@ -194,7 +194,7 @@ int main( int argc, char *argv[] )
                        "Example: kdevelop --debug gdb myapp --foo bar"));
 
     options.add("pid");
-           
+
     options.add("+files", ki18n( "Files to load" ));
 
     options.add(":", ki18n("Deprecated options:"));
@@ -230,7 +230,7 @@ int main( int argc, char *argv[] )
 
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
-    
+
     if(args->isSet("ps"))
     {
         bool onlyRunning = args->isSet("pid");
@@ -289,7 +289,7 @@ int main( int argc, char *argv[] )
 
     forever {
         KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession(sessionId);
-        
+
         if(args->isSet("pid"))
         {
             if(state.success)
@@ -304,7 +304,7 @@ int main( int argc, char *argv[] )
                 return 0;
             }
         }
-        
+
         if(!state) {
             QDBusInterface interface(QString("org.kdevelop.kdevelop-%1").arg(state.holderPid),
                                      "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
