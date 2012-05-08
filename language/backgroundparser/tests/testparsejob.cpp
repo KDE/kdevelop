@@ -36,3 +36,16 @@ void TestParseJob::run()
         QTest::qWait(duration_ms);
     }
 }
+
+ControlFlowGraph* TestParseJob::controlFlowGraph()
+{
+    return 0;
+}
+
+DataAccessRepository* TestParseJob::dataAccessInformation()
+{
+    return 0;
+}
+
+
+

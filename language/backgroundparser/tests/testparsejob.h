@@ -32,6 +32,8 @@ Q_OBJECT
 public:
     TestParseJob(const KUrl& url);
     virtual void run();
+    virtual ControlFlowGraph* controlFlowGraph();
+    virtual DataAccessRepository* dataAccessInformation();
 
     int duration_ms;
 };
