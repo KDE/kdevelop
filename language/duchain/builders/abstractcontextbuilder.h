@@ -595,7 +595,7 @@ protected:
           // the CodeModel of child contexts or declarations.
           // For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
           if ((!identifier.isEmpty() && child->localScopeIdentifier() == identifier)
-              || (identifier.isEmpty() && !childRange.isEmpty() && childRange == range))
+              || (identifier.isEmpty() && child->localScopeIdentifier().isEmpty() && !childRange.isEmpty() && childRange == range))
           {
             // Match
             ret = child;
