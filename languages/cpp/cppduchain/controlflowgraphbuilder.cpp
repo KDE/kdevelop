@@ -244,7 +244,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
       break;
     case Token_goto: {
 //       qDebug() << "goto!";
-      IndexedString tag = m_session->token_stream->token(node->identifier).symbol();
+      IndexedString tag = m_session->token_stream->symbol(node->identifier);
       QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.find(tag);
       if(tagIt!=m_taggedNodes.constEnd())
         m_currentNode->setNext(*tagIt);
@@ -315,7 +315,7 @@ void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
     nextNode->setStartCursor(cursorForToken(node->start_token));
     if(!m_currentNode->next()) m_currentNode->setNext(nextNode);
     
-    IndexedString tag = m_session->token_stream->token(node->label).symbol();
+    IndexedString tag = m_session->token_stream->symbol(node->label);
     m_taggedNodes.insert(tag, nextNode);
     QList< ControlFlowNode* > pendingNodes = m_pendingGotoNodes.take(tag);
     foreach(ControlFlowNode* pending, pendingNodes)

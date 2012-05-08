@@ -58,7 +58,7 @@ QString UseDecoratorVisitor::nodeToString(AST* node)
   if(!node) { return "<null>";}
   
   for(uint i=node->start_token; i<node->end_token; i++) {
-    ret += ' '+m_session->token_stream->token(i).symbolString();
+    ret += ' '+m_session->token_stream->symbolString(i);
   }
   return ret;
 }
