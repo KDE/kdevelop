@@ -37,33 +37,56 @@
 
 namespace KDevelop
 {
-    
-const int OutputModel::OutputItemTypeRole = Qt::UserRole + 1;
+
+OutputModelPrivate::OutputModelPrivate()
+: m_filter( new NoFilterStrategy )
+{
+}
+
+OutputModelPrivate::OutputModelPrivate(const KUrl& builddir)
+: m_buildDir( builddir )
+, m_filter( new NoFilterStrategy )
+{
+}
+
+bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
+{
+    return ( idx.isValid() && idx.row() >= 0 && idx.row() < currentRowCount && idx.column() == 0 );
+}
+
+
+OutputModelPrivate::~OutputModelPrivate()
+{
+}
 
 OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
-    : QAbstractListModel(parent)
-    , m_buildDir( builddir )
-    , m_filter( new NoFilterStrategy )
+: QAbstractListModel(parent)
+, d( new OutputModelPrivate( builddir ) )
 {
 }
 
 OutputModel::OutputModel( QObject* parent )
     : QAbstractListModel(parent)
-    , m_filter( new NoFilterStrategy )
+, d( new OutputModelPrivate )
 {
+}
+
+OutputModel::~OutputModel()
+{
+    delete d;
 }
 
 QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 {
-    if( isValidIndex(idx) )
+    if( d->isValidIndex(idx, rowCount()) )
     {
         switch( role )
         {
             case Qt::DisplayRole:
-                return m_filteredItems.at( idx.row() ).shortenedText;
+                return d->m_filteredItems.at( idx.row() ).shortenedText;
                 break;
             case OutputModel::OutputItemTypeRole:
-                return m_filteredItems.at( idx.row() ).type;
+                return d->m_filteredItems.at( idx.row() ).type;
                 break;
             case Qt::FontRole:
                 return KGlobalSettings::fixedFont();
@@ -78,7 +101,7 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 int OutputModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() )
-        return m_filteredItems.count();
+        return d->m_filteredItems.count();
     return 0;
 }
 
@@ -87,21 +110,16 @@ QVariant OutputModel::headerData( int, Qt::Orientation, int ) const
     return QVariant();
 }
 
-bool OutputModel::isValidIndex( const QModelIndex& idx ) const
-{
-    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
-}
-
 void OutputModel::activate( const QModelIndex& index )
 {
-    if( index.model() != this || !isValidIndex(index) )
+    if( index.model() != this || !d->isValidIndex(index, rowCount()) )
     {
         return;
     }
     kDebug() << "Model activated" << index.row();
 
 
-    FilteredItem item = m_filteredItems.at( index.row() );
+    FilteredItem item = d->m_filteredItems.at( index.row() );
     if( item.isActivatable )
     {
         kDebug() << "activating:" << item.lineNo << item.url;
@@ -115,15 +133,15 @@ void OutputModel::activate( const QModelIndex& index )
 
 QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
-    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
+    int startrow = d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() + 1 : 0;
 
-    if( !m_activateableItems.empty() )
+    if( !d->m_activateableItems.empty() )
     {
         kDebug() << "searching next error";
         // Jump to the next error item
-        std::set< int >::const_iterator next = m_activateableItems.lower_bound( startrow );
-        if( next == m_activateableItems.end() )
-            next = m_activateableItems.begin();
+        std::set< int >::const_iterator next = d->m_activateableItems.lower_bound( startrow );
+        if( next == d->m_activateableItems.end() )
+            next = d->m_activateableItems.begin();
 
         return index( *next, 0, QModelIndex() );
     }
@@ -131,7 +149,7 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
     for( int row = 0; row < rowCount(); ++row ) 
     {
         int currow = (startrow + row) % rowCount();
-        if( m_filteredItems.at( currow ).isActivatable )
+        if( d->m_filteredItems.at( currow ).isActivatable )
         {
             return index( currow, 0, QModelIndex() );
         }
@@ -142,17 +160,17 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
     //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
-    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
+    int startrow = rowCount() + (d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() : rowCount()) - 1;
 
-    if(!m_activateableItems.empty())
+    if(!d->m_activateableItems.empty())
     {
         kDebug() << "searching previous error";
 
         // Jump to the previous error item
-        std::set< int >::const_iterator previous = m_activateableItems.lower_bound( currentIdx.row() );
+        std::set< int >::const_iterator previous = d->m_activateableItems.lower_bound( currentIdx.row() );
 
-        if( previous == m_activateableItems.begin() )
-            previous = m_activateableItems.end();
+        if( previous == d->m_activateableItems.begin() )
+            previous = d->m_activateableItems.end();
 
         --previous;
 
@@ -162,7 +180,7 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
     for ( int row = 0; row < rowCount(); ++row )
     {
         int currow = (startrow - row) % rowCount();
-        if( m_filteredItems.at( currow ).isActivatable )
+        if( d->m_filteredItems.at( currow ).isActivatable )
         {
             return index( currow, 0, QModelIndex() );
         }
@@ -176,20 +194,20 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
     switch( currentStrategy )
     {
         case NoFilter:
-            m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
             break;
         case CompilerFilter:
-            m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy( m_buildDir ) );
+            d->m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy( d->m_buildDir ) );
             break;
         case ScriptErrorFilter:
-            m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
+            d->m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
             break;
         case StaticAnalysisFilter:
-            m_filter = QSharedPointer<IFilterStrategy>( new StaticAnalysisFilterStrategy );
+            d->m_filter = QSharedPointer<IFilterStrategy>( new StaticAnalysisFilterStrategy );
             break;
         default:
             // assert(false);
-            m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
             break;
     }
 }
@@ -199,7 +217,7 @@ void OutputModel::appendLines( const QStringList& lines )
     if( lines.isEmpty() )
         return;
 
-    m_lineBuffer << lines;
+    d->m_lineBuffer << lines;
     QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
 }
 
@@ -214,7 +232,7 @@ void OutputModel::addLineBatch()
      // only add this many lines in one batch, then return to the event loop
     // this prevents overly long UI lockup and is simple enough to implement
     const int maxLines = 50;
-    const int linesInBatch = qMin(m_lineBuffer.count(), maxLines);
+    const int linesInBatch = qMin(d->m_lineBuffer.count(), maxLines);
 
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
@@ -223,24 +241,23 @@ void OutputModel::addLineBatch()
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {
-        const QString line = m_lineBuffer.dequeue();
+        const QString line = d->m_lineBuffer.dequeue();
         FilteredItem item( line );
 
-        bool matched = m_filter->isErrorInLine(line, item);
+        bool matched = d->m_filter->isErrorInLine(line, item);
         if( !matched )
         {
-            matched = m_filter->isActionInLine(line, item);
+            matched = d->m_filter->isActionInLine(line, item);
         }
-        //kDebug() << "adding item:" << item.shortenedText << itemType;
         if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
-            m_activateableItems.insert(m_activateableItems.size());
+            d->m_activateableItems.insert(d->m_activateableItems.size());
 
-        m_filteredItems << item;
+        d->m_filteredItems << item;
     }
 
     endInsertRows();
 
-    if (!m_lineBuffer.isEmpty()) {
+    if (!d->m_lineBuffer.isEmpty()) {
         QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
     }
 }

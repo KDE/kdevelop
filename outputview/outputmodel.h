@@ -41,14 +41,29 @@ namespace KDevelop
 
 class FilteredItem;
 
+struct OutputModelPrivate
+{
+    OutputModelPrivate();
+    OutputModelPrivate( const KUrl& builddir );
+    ~OutputModelPrivate();
+    bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
+    QList<FilteredItem> m_filteredItems;
+    // We use std::set because that is ordered
+    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next 
+    KUrl m_buildDir;
+
+    QQueue<QString> m_lineBuffer;
+    QSharedPointer<IFilterStrategy> m_filter;
+};
+
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
 public:
-    static const int OutputItemTypeRole;
 
-    explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
-    OutputModel( QObject* parent );
+    enum CustomRoles {
+        OutputItemTypeRole = Qt::UserRole + 1
+    };
 
     enum OutputFilterStrategy
     {
@@ -58,6 +73,9 @@ public:
         StaticAnalysisFilter
     };
 
+    explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
+    OutputModel( QObject* parent );
+    virtual ~OutputModel();
 
     /// IOutputViewModel interfaces
     void activate( const QModelIndex& index );
@@ -71,9 +89,6 @@ public:
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
 
-    /// These are from MakeoutputModel----
-    //void addLines( const QStringList& );
-    //void addLine( const QString& );
 public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
@@ -83,14 +98,7 @@ private slots:
     void addLineBatch();
 
 private:
-    bool isValidIndex( const QModelIndex& ) const;
-    QList<FilteredItem> m_filteredItems;
-    // We use std::set because that is ordered
-    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next 
-    KUrl m_buildDir;
-
-    QQueue<QString> m_lineBuffer;
-    QSharedPointer<IFilterStrategy> m_filter;
+    OutputModelPrivate* const d;
 };
 
 //Q_DECLARE_METATYPE( OutputModel::OutputItemType )

@@ -33,7 +33,6 @@ namespace KDevelop
 
 NoFilterStrategy::NoFilterStrategy()
 {
-    // kDebug() << "NoFilterStrategy was created";
 }
 
 bool NoFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -114,15 +113,43 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( "cd", "", "make[^:]*: Entering directory `([^']+)'", 1);
 
 
+CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const KUrl& buildDir)
+: m_buildDir(buildDir)
+{
+}
+
+KUrl CompilerFilterStrategyPrivate::urlForFile(const QString& filename) const
+{
+    QFileInfo fi( filename );
+    KUrl currentUrl;
+    if( fi.isRelative() ) {
+        if( m_currentDirs.isEmpty() ) {
+            currentUrl = m_buildDir;
+            currentUrl.addPath( filename );
+            return currentUrl;
+        }
+
+        QLinkedList<QString>::const_iterator it = m_currentDirs.constEnd() - 1;
+        do {
+            currentUrl = KUrl( *it );
+            currentUrl.addPath( filename );
+        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentUrl.toLocalFile()).exists() );
+
+        return currentUrl;
+    } else {
+        currentUrl = KUrl( filename );
+    }
+    return currentUrl;
+}
 
 CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir)
-    : m_buildDir(buildDir)
+: d(new CompilerFilterStrategyPrivate( buildDir ))
 {
-    // kDebug() << "CompilerFilterStrategy was created with builddir: " << buildDir;
 }
 
 CompilerFilterStrategy::~CompilerFilterStrategy()
 {
+    delete d;
 }
 
 bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& item )
@@ -139,8 +166,8 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
             }
             if( curActFilter.action == "cd" )
             {
-                QLinkedList<QString>::iterator pos = m_currentDirs.insert( m_currentDirs.end(), regEx.cap( curActFilter.fileGroup ) );
-                m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , pos );
+                QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), regEx.cap( curActFilter.fileGroup ) );
+                d->m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , pos );
             }
 
             // Special case for cmake: we parse the "Compiling <objectfile>" expression
@@ -149,23 +176,23 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
             // compiler errors.
             if ( curActFilter.action == i18n("compiling") && curActFilter.tool == "cmake")
             {
-                KUrl url = m_buildDir;
+                KUrl url = d->m_buildDir;
                 url.addPath(regEx.cap( curActFilter.fileGroup ));
                 QString dirName = url.toLocalFile();
                 // Use map to check for duplicates, to avoid O(n^2) behaviour
-                PositionMap::iterator it = m_positionInCurrentDirs.find(dirName);
+                CompilerFilterStrategyPrivate::PositionMap::iterator it = d->m_positionInCurrentDirs.find(dirName);
                 // Encountered new build directory?
-                if (it == m_positionInCurrentDirs.end())
+                if (it == d->m_positionInCurrentDirs.end())
                 {
-                    QLinkedList<QString>::iterator pos = m_currentDirs.insert( m_currentDirs.end(), dirName );
-                    m_positionInCurrentDirs.insert( dirName, pos );
+                    QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), dirName );
+                    d->m_positionInCurrentDirs.insert( dirName, pos );
                 }
                 else
                 {
                     // Build dir already in currentDirs, but move it to back of currentDirs list
                     // (this gives us most-recently-used semantics in urlForFile)
-                    m_currentDirs.erase(it.value());
-                    QLinkedList<QString>::iterator pos = m_currentDirs.insert( m_currentDirs.end(), dirName );
+                    d->m_currentDirs.erase(it.value());
+                    QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), dirName );
                     it.value() = pos;
                 }
             }
@@ -181,7 +208,7 @@ bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& it
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
             kDebug() << "found an error:" << line;
-            item.url = urlForFile( regEx.cap( curErrFilter.fileGroup ) );
+            item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
@@ -215,29 +242,6 @@ bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& it
     return false;
 }
 
-KUrl CompilerFilterStrategy::urlForFile(const QString& filename) const
-{
-    QFileInfo fi( filename );
-    KUrl currentUrl;
-    if( fi.isRelative() ) {
-        if( m_currentDirs.isEmpty() ) {
-            currentUrl = m_buildDir;
-            currentUrl.addPath( filename );
-            return currentUrl;
-        }
-
-        QLinkedList<QString>::const_iterator it = m_currentDirs.constEnd() - 1;
-        do {
-            currentUrl = KUrl( *it );
-            currentUrl.addPath( filename );
-        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentUrl.toLocalFile()).exists() );
-
-        return currentUrl;
-    } else {
-        currentUrl = KUrl( filename );
-    }
-    return currentUrl;
-}
 
 /// --- Script error filter strategy ---
 
@@ -253,7 +257,6 @@ const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
 
 ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
-    //kDebug() << "ScriptErrorFilterStrategy was created";
 }
 
 bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
@@ -301,7 +304,6 @@ const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
-    //kDebug() << "StaticAnalysisFilterStrategy was created";
 }
 
 bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)

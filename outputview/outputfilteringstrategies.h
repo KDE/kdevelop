@@ -52,6 +52,22 @@ public:
 
 };
 
+
+/**
+ * Implementation of CompilerFilterStrategy.
+ **/
+struct CompilerFilterStrategyPrivate
+{
+    CompilerFilterStrategyPrivate(const KUrl& buildDir);
+    KUrl urlForFile( const QString& ) const;
+
+    QLinkedList<QString> m_currentDirs;
+    KUrl m_buildDir;
+
+    typedef QMap<QString, QLinkedList<QString>::iterator> PositionMap;
+    PositionMap m_positionInCurrentDirs;
+};
+
 /**
  * This filter stategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler.
@@ -68,13 +84,7 @@ public:
     virtual bool isActionInLine(QString const& line, FilteredItem& item);
 
 private:
-    KUrl urlForFile( const QString& ) const;
-
-    QLinkedList<QString> m_currentDirs;
-    KUrl m_buildDir;
-
-    typedef QMap<QString, QLinkedList<QString>::iterator> PositionMap;
-    PositionMap m_positionInCurrentDirs;
+    CompilerFilterStrategyPrivate* const d;
 };
 
 /**
