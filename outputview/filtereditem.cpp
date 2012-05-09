@@ -34,7 +34,6 @@ FilteredItem::FilteredItem( const QString& line )
 , lineNo(-1)
 , columnNo(-1)
 {
-    kDebug() << "created item with type:" << type;
 }
 
 } // namespace KDevelop

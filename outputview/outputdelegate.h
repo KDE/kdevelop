@@ -30,17 +30,25 @@
 namespace KDevelop
 {
 
-class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
+struct OutputDelegatePrivate
 {
-public:
-    OutputDelegate( QObject* );
-    void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
+    OutputDelegatePrivate();
 
-private:
     KStatefulBrush errorBrush;
     KStatefulBrush warningBrush;
     KStatefulBrush informationBrush;
     KStatefulBrush builtBrush;
+};
+
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
+{
+public:
+    OutputDelegate( QObject* );
+    virtual ~OutputDelegate();
+    void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
+
+private:
+    OutputDelegatePrivate* const d;
 };
 
 }

@@ -86,7 +86,8 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
                 return d->m_filteredItems.at( idx.row() ).shortenedText;
                 break;
             case OutputModel::OutputItemTypeRole:
-                return d->m_filteredItems.at( idx.row() ).type;
+                /// TODO need to convert to QVariant here
+                return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
                 break;
             case Qt::FontRole:
                 return KGlobalSettings::fixedFont();
@@ -190,7 +191,7 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
-    kDebug() << "set filtering strategy was called";
+    //kDebug() << "set filtering strategy was called";
     switch( currentStrategy )
     {
         case NoFilter:

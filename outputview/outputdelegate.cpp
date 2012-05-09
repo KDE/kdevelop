@@ -31,13 +31,24 @@
 namespace KDevelop
 {
 
-OutputDelegate::OutputDelegate( QObject* parent )
-: QItemDelegate( parent )
-, errorBrush( KColorScheme::View, KColorScheme::NegativeText )
+OutputDelegatePrivate::OutputDelegatePrivate()
+: errorBrush( KColorScheme::View, KColorScheme::NegativeText )
 , warningBrush( KColorScheme::View, KColorScheme::NeutralText )
 , informationBrush( KColorScheme::View, KColorScheme::NeutralText )
 , builtBrush( KColorScheme::View, KColorScheme::PositiveText )
 {
+}
+
+
+OutputDelegate::OutputDelegate( QObject* parent )
+: QItemDelegate( parent )
+, d(new OutputDelegatePrivate)
+{
+}
+
+OutputDelegate::~OutputDelegate()
+{
+    delete d;
 }
 
 void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -45,16 +56,16 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(OutputModel::OutputItemTypeRole);
     if( status.isValid() ) {
-        FilteredItem::FilteredOutputItemType type = status.value<FilteredItem::FilteredOutputItemType>();
+        FilteredItem::FilteredOutputItemType type = static_cast<FilteredItem::FilteredOutputItemType>(status.toInt());
         if( type == FilteredItem::ErrorItem ) {
-            opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
+            opt.palette.setBrush( QPalette::Text, d->errorBrush.brush( option.palette ) );
             opt.font.setBold( true );
         } else if( type == FilteredItem::WarningItem ) {
-            opt.palette.setBrush( QPalette::Text, warningBrush.brush( option.palette ) );
+            opt.palette.setBrush( QPalette::Text, d->warningBrush.brush( option.palette ) );
         } else if( type == FilteredItem::InformationItem ) {
-            opt.palette.setBrush( QPalette::Text, informationBrush.brush( option.palette ) );
+            opt.palette.setBrush( QPalette::Text, d->informationBrush.brush( option.palette ) );
         } else if( type == FilteredItem::ActionItem ) {
-            opt.palette.setBrush( QPalette::Text, builtBrush.brush( option.palette ) );
+            opt.palette.setBrush( QPalette::Text, d->builtBrush.brush( option.palette ) );
             opt.font.setBold( true );
         }
     }
