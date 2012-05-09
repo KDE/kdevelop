@@ -73,7 +73,7 @@ public:
 
   ///Create a mapping between an AST node and its parent.
   void mapAstParent(AST *node, AST *parent);
-  
+
   ///Create a mapping between an AST node and its parent.
   void mapCallAstToType(AST *node, KDevelop::FunctionType::Ptr type);
 
@@ -89,7 +89,7 @@ public:
   AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
 
   AST * astNodeFromUse(const SimpleUse &use) const;
-  
+
   KDevelop::FunctionType::Ptr typeFromCallAst(AST* ast) const;
 
   /**

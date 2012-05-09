@@ -93,7 +93,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
 {
   m_modifications.clear();
   m_ctlflowGraph.clear();
-  
+
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 

@@ -975,6 +975,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
     }
+
     visit(node->right_expression);
 
     Instance rightInstance = m_lastInstance;
@@ -1081,7 +1082,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
             lock.unlock();
             newUse( node, node->op, node->op+1, viable.declaration() );
-            
+
             session()->mapCallAstToType(node, function);
           }else{
             //Do not complain here, because we do not check for builtin operators
@@ -1712,10 +1713,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               m_lastInstance = Instance(true);
 
               lock.unlock();
-              
+
               newUse( node, node->op, node->op+1, viable.declaration() );
               session()->mapCallAstToType(node, function);
-
             }else{
               problem(node, QString("Found no viable function"));
             }
@@ -2390,7 +2390,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if (chosenFunction) {
         uint token = node->initializer_id->end_token;
         newUse( node , token, token+1, chosenFunction );
-        
+
         session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }

@@ -175,7 +175,7 @@ public:
      * The whole sense of this thing is to allow updating an earlier created use in a later AST, like necessary because of overload-resolution.
      * Must be called when the du-chain is not locked.
      * */
-    void newUse( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl) {
+    void newUse( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
       if( !m_ignore_uses ) {
         flushUse();
         m_currentUse.isValid = true;

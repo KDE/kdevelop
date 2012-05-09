@@ -51,7 +51,6 @@ public:
 
   //Move to slots again once it should be tested
   void testFileParse();
-  void testLocalNamespaceAlias();
 
 private slots:
   void initTestCase();
@@ -73,7 +72,7 @@ private slots:
   void testDeclareNamespace2();
   void testGlobalNamespaceAlias();
   void testGlobalNamespaceAliasCycle();
-  
+  void testLocalNamespaceAlias();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
   void testUsingDeclarationInTemplate();

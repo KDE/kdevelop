@@ -130,8 +130,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 
     virtual void usingDeclaration(AST* node,
                                   size_t start_token, size_t end_token,
-                                  const KDevelop::DeclarationPointer& decl)
-    {
+                                  const KDevelop::DeclarationPointer& decl) {
       RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
       m_builder->newUse(node, range, decl);
 
@@ -156,7 +155,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 /*      else
         kDebug(9007) << "problem";*/
     }
-    
+
     UseBuilder* m_builder;
     std::size_t m_lastEndToken; //Assume everything is processed from left to right
     bool m_dumpProblems;

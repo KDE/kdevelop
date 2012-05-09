@@ -122,7 +122,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
           createUse = !m_foundSomething || !Cpp::isTemplateDependent(m_foundSomething.data());
         }
         if(createUse)
-          m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer() );
+          m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
       }
       
       if( m_debug )

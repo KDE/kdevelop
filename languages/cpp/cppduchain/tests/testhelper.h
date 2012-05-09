@@ -70,11 +70,12 @@ public:
 protected:
   KDevelop::DataAccessRepository m_modifications;
   KDevelop::ControlFlowGraph m_ctlflowGraph;
-  
+
 private:
   // Parser
   Control control;
   DumpChain cppDumper;
+
 };
 
 }
