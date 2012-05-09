@@ -28,13 +28,11 @@ private slots:
     void cleanupTestCase();
     void init();
 
-//     void testParseOrdering_simple();
-//     void testParseOrdering_lockup();
-//     void testParseOrdering_foregroundThread();
-//     void testParseOrdering_noSequentialProcessing();
-// 
-//     void benchmark();
-    
+//     void testSetFilteringStrategy();
+//     void benchmarkAddlinesNofilter();
+//     void benchmarkAddlinesCompilerfilter();
+//     void benchmarkAddlinesScriptErrorfilter();
+//     void benchmarkAddlinesStaticAnalysisfilter();
 };
 
 #endif // OUTPUTVIEWTEST_H
