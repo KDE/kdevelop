@@ -238,7 +238,6 @@ void OutputModel::addLineBatch()
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
             return;
-    kDebug() << "addLineBatch called with " << linesInBatch << "lines";
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {

@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "filteringstrategytest.h"
+#include "testlinebuilderfunctions.h"
+
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
 
@@ -25,208 +27,127 @@ QTEST_KDEMAIN(KDevelop::FilteringStrategyTest, NoGUI)
 
 namespace KDevelop
 {
-
-QString buildCppCheckErrorLine()
+void FilteringStrategyTest::testNoFilterstrategy_data()
 {
-    /// Use existing directory with one file
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<bool>("expected");
 
-    /// Test CPP check output
-    QString outputline("[");
-    outputline.append(projecturl.path());
-    outputline.append("main.cpp:26]: (error) Memory leak: str");
-    return outputline;
+    QTest::newRow("cppcheck-info-line")
+    << buildCppCheckInformationLine() << false;
+    QTest::newRow("cppcheck-error-line")
+    << buildCppCheckErrorLine() << false;
+    QTest::newRow("compiler-line")
+    << buildCompilerLine() << false;
+    QTest::newRow("compiler-error-line")
+    << buildCompilerErrorLine() << false;
+    QTest::newRow("compiler-action-line")
+    << buildCompilerActionLine() << false;
+    QTest::newRow("python-error-line")
+    << buildPythonErrorLine() << false;
 }
-
-QString buildCppCheckInformationLine()
-{
-    return QString("(information) Cppcheck cannot find all the include files. Cpppcheck can check the code without the include\
-    files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
-    include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.");
-}
-
-QString buildPythonErrorLine()
-{
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-    QString outputline("File \"");
-    outputline.append(projecturl.path());
-    outputline.append("pythonExample.py\", line 10");
-    return outputline;
-}
-
 
 void FilteringStrategyTest::testNoFilterstrategy()
 {
+    QFETCH(QString, line);
+    QFETCH(bool, expected);
     NoFilterStrategy testee;
-    /// Test CPP check output
-    QString outputline = buildCppCheckErrorLine();
-    FilteredItem item1(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item1) == false);
-    QVERIFY(testee.isActionInLine(outputline, item1) == false);
+    FilteredItem item1(line);
+    QVERIFY(testee.isErrorInLine(line, item1) == expected);
+    QVERIFY(testee.isActionInLine(line, item1) == expected);
+}
 
-    outputline = buildCppCheckInformationLine();
-    FilteredItem item2(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item2) == false);
-    QVERIFY(testee.isActionInLine(outputline, item2) == false);
+void FilteringStrategyTest::testCompilerFilterstrategy_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<bool>("expectedError");
+    QTest::addColumn<bool>("expectedAction");
 
-    /// Test with compiler output
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-    outputline.append(projecturl.path());
-    outputline.append(">make");
-    FilteredItem item3(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item3) == false);
-    QVERIFY(testee.isActionInLine(outputline, item3) == false);
-
-    outputline = "linking testCustombuild (g++)";
-    FilteredItem item4(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item4) == false);
-    QVERIFY(testee.isActionInLine(outputline, item4) == false);
-
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
-    FilteredItem item5(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item5) == false);
-    QVERIFY(testee.isActionInLine(outputline, item5) == false);
-
-    /// Test with script error output;
-    outputline = buildPythonErrorLine();
-    FilteredItem item6(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
-    QVERIFY(testee.isActionInLine(outputline, item6) == false);
-
+    QTest::newRow("cppcheck-info-line")
+    << buildCppCheckInformationLine() << false << false;
+    QTest::newRow("cppcheck-error-line")
+    << buildCppCheckErrorLine() << false << false;
+    QTest::newRow("compiler-line")
+    << buildCompilerLine() << false << false;
+    QTest::newRow("compiler-error-line")
+    << buildCompilerErrorLine() << true << false;
+    QTest::newRow("compiler-action-line")
+    << "linking testCustombuild (g++)" << false << true;
+    QTest::newRow("python-error-line")
+    << buildPythonErrorLine() << false << false;
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy()
 {
-    /// Use existing directory with one file
+    QFETCH(QString, line);
+    QFETCH(bool, expectedError);
+    QFETCH(bool, expectedAction);
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
+    FilteredItem item1(line);
+    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
+    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
+}
 
-    /// Test CPP check output
-    QString outputline = buildCppCheckErrorLine();
+void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<bool>("expectedError");
+    QTest::addColumn<bool>("expectedAction");
 
-    FilteredItem item1(outputline);
-
-    QVERIFY(testee.isErrorInLine(outputline, item1) == false);
-    QVERIFY(testee.isActionInLine(outputline, item1) == false);
-
-    outputline = buildCppCheckInformationLine();
-    FilteredItem item2(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item2) == false);
-    QVERIFY(testee.isActionInLine(outputline, item2) == false);
-
-    /// Test with compiler output
-    outputline.clear();
-    outputline.append(projecturl.path());
-    outputline.append(">make");
-    FilteredItem item3(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item3) == false);
-    QVERIFY(testee.isActionInLine(outputline, item3) == false);
-
-    outputline = "linking testCustombuild (g++)";
-    FilteredItem item4(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item4) == false);
-    QVERIFY(testee.isActionInLine(outputline, item4) == true);
-    QVERIFY(item4.isActivatable == false);
-
-    outputline.clear();
-    outputline.append(projecturl.path());
-    outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
-    FilteredItem item5(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item5) == true);
-    QVERIFY(testee.isActionInLine(outputline, item5) == false);
-    QVERIFY(item5.isActivatable == true);
-
-    /// Test with script error output;
-    outputline = buildPythonErrorLine();
-    FilteredItem item6(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
-    QVERIFY(testee.isActionInLine(outputline, item6) == false);
-
+    QTest::newRow("cppcheck-info-line")
+    << buildCppCheckInformationLine() << false << false;
+    QTest::newRow("cppcheck-error-line")
+    << buildCppCheckErrorLine() << true << false;
+    QTest::newRow("compiler-line")
+    << buildCompilerLine() << false << false;
+    QTest::newRow("compiler-error-line")
+    << buildCompilerErrorLine() << true << false;
+    QTest::newRow("compiler-action-line")
+    << "linking testCustombuild (g++)" << false << false;
+    QTest::newRow("python-error-line")
+    << buildPythonErrorLine() << false << false;
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy()
 {
+    QFETCH(QString, line);
+    QFETCH(bool, expectedError);
+    QFETCH(bool, expectedAction);
     ScriptErrorFilterStrategy testee;
+    FilteredItem item1(line);
+    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
+    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
+}
 
-    /// Test CPP check output
-    QString outputline = buildCppCheckErrorLine();
-    FilteredItem item1(outputline);
+void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<bool>("expectedError");
+    QTest::addColumn<bool>("expectedAction");
 
-    QVERIFY(testee.isErrorInLine(outputline, item1) == true);
-    QVERIFY(testee.isActionInLine(outputline, item1) == false);
-
-    outputline = buildCppCheckInformationLine();
-    FilteredItem item2(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item2) == false);
-    QVERIFY(testee.isActionInLine(outputline, item2) == false);
-
-    /// Test with compiler output
-    outputline.clear();
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-    outputline.append(projecturl.path());
-    outputline.append(">make");
-    FilteredItem item3(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item3) == false);
-    QVERIFY(testee.isActionInLine(outputline, item3) == false);
-
-    outputline = "linking testCustombuild (g++)"; 
-    FilteredItem item4(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item4) == false);
-    QVERIFY(testee.isActionInLine(outputline, item4) == false);
-
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
-    FilteredItem item5(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item5) == false);
-    QVERIFY(testee.isActionInLine(outputline, item5) == false);
-
-    /// Test with script error output;
-    outputline = buildPythonErrorLine();
-    FilteredItem item6(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
-    QVERIFY(testee.isActionInLine(outputline, item6) == false);
-
+    QTest::newRow("cppcheck-info-line")
+    << buildCppCheckInformationLine() << false << false;
+    QTest::newRow("cppcheck-error-line")
+    << buildCppCheckErrorLine() << true << false;
+    QTest::newRow("compiler-line")
+    << buildCompilerLine() << false << false;
+    QTest::newRow("compiler-error-line")
+    << buildCompilerErrorLine() << false << false;
+    QTest::newRow("compiler-action-line")
+    << "linking testCustombuild (g++)" << false << false;
+    QTest::newRow("python-error-line")
+    << buildPythonErrorLine() << false << false;
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
 {
+    QFETCH(QString, line);
+    QFETCH(bool, expectedError);
+    QFETCH(bool, expectedAction);
     StaticAnalysisFilterStrategy testee;
-
-    /// Test CPP check output
-    QString outputline = buildCppCheckErrorLine();
-    FilteredItem item1(outputline);
-
-    QVERIFY(testee.isErrorInLine(outputline, item1) == true);
-    QVERIFY(testee.isActionInLine(outputline, item1) == false);
-    QVERIFY(item1.url.path() == QString(PROJECTS_SOURCE_DIR"/onefileproject/main.cpp"));
-
-    outputline = buildCppCheckInformationLine();
-    FilteredItem item2(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item2) == false);
-    QVERIFY(testee.isActionInLine(outputline, item2) == false);
-
-    /// Test with compiler output
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
-    outputline.append(projecturl.path());
-    outputline.append(">make");
-    FilteredItem item3(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item3) == false);
-    QVERIFY(testee.isActionInLine(outputline, item3) == false);
-
-    outputline = "linking testCustombuild (g++)";
-    FilteredItem item4(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item4) == false);
-    QVERIFY(testee.isActionInLine(outputline, item4) == false);
-
-    outputline = "main.cpp:2:23: fatal error: someClass.h: No such file or directory";
-    FilteredItem item5(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item5) == false);
-    QVERIFY(testee.isActionInLine(outputline, item5) == false);
-
-    /// Test with script error output;
-    outputline = buildPythonErrorLine();
-    FilteredItem item6(outputline);
-    QVERIFY(testee.isErrorInLine(outputline, item6) == false);
-    QVERIFY(testee.isActionInLine(outputline, item6) == false);
+    FilteredItem item1(line);
+    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
+    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
 }
 
 

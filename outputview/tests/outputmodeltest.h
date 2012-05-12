@@ -15,28 +15,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef FILTERINGSTRATEGYTEST_H
-#define FILTERINGSTRATEGYTEST_H
+#ifndef OUTPUTVIEWTEST_H
+#define OUTPUTVIEWTEST_H
 
-#include <QtTest/QtTest>
+#include <QObject>
 
 namespace KDevelop
 {
+class OutputModel;
 
-class FilteringStrategyTest : public QObject
+class OutputModelTest : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
+public:
+    explicit OutputModelTest(QObject* parent = 0);
+
 private slots:
-    void testNoFilterstrategy_data();
-    void testNoFilterstrategy();
-    void testCompilerFilterstrategy_data();
-    void testCompilerFilterstrategy();
-    void testScriptErrorFilterstrategy_data();
-    void testScriptErrorFilterstrategy();
-    void testStaticAnalysisFilterStrategy_data();
-    void testStaticAnalysisFilterStrategy();
+    void testSetFilteringStrategy();
+    void benchmarkAddlinesNofilter();
+    void benchmarkAddlinesCompilerfilter();
+    void benchmarkAddlinesScriptErrorfilter();
+    void benchmarkAddlinesStaticAnalysisfilter();
+private:
+    void do_currentBench(KDevelop::OutputModel& testee);
 };
 
 }
-
-#endif // FILTERINGSTRATEGYTEST_H
+#endif // OUTPUTVIEWTEST_H

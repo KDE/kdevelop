@@ -11,6 +11,6 @@ endmacro(OUTPUTVIEW_CREATE_TEST)
 
 add_definitions( "-DPROJECTS_SOURCE_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/projects\\\"" )
 
-outputview_create_test(outputviewtest outputviewtest.cpp)
+outputview_create_test(outputmodeltest outputmodeltest.cpp)
 outputview_create_test(filteringstrategytest filteringstrategytest.cpp)
 

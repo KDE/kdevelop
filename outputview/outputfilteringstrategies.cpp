@@ -158,7 +158,7 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
         {
-            kDebug() << "found an action" << line << curActFilter.tool << curActFilter.toolGroup << curActFilter.fileGroup;
+            //kDebug() << "found an action" << line << curActFilter.tool << curActFilter.toolGroup << curActFilter.fileGroup;
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
@@ -207,7 +207,7 @@ bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& it
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
-            kDebug() << "found an error:" << line;
+            //kDebug() << "found an error:" << line;
             item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
@@ -272,7 +272,7 @@ bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem&
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+            //kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             } else {
@@ -319,7 +319,7 @@ bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredIt
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            kDebug() << "found a static code analysis error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
+            //kDebug() << "found a static code analysis error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             } else {
