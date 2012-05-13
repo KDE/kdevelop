@@ -183,6 +183,7 @@ int main( int argc, char *argv[] )
            .add("open-session <session>", ki18n("Open KDevelop with the given session.\n"
                                            "You can pass either hash or the name of the session." ));
     options.add("ps").add("pick-session", ki18n("Shows all available sessions and lets you select one to open." ));
+    options.add("pss").add("pick-session-shell", ki18n("List all available sessions on shell and lets you select one to open." ));
     options.add("l")
            .add("list-sessions", ki18n( "List available sessions and quit." ));
     options.add("p")
@@ -230,6 +231,40 @@ int main( int argc, char *argv[] )
 
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
+    
+    if(args->isSet("pss"))
+    {
+        QTextStream qerr(stderr);
+        QList<KDevelop::SessionInfo> candidates;
+        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+            if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
+                (!args->isSet("pid") || !KDevelop::SessionController::tryLockSession(si.uuid.toString())))
+                candidates << si;
+        
+        if(candidates.size() == 0)
+        {
+            qerr << "no session available" << endl;
+            return 1;
+        }
+        
+        if(candidates.size() == 1 && args->isSet("pid"))
+        {
+            session = candidates[0].uuid.toString();
+        }else{
+            for(int i = 0; i < candidates.size(); ++i)
+                qerr << "[" << i << "]: " << candidates[i].description << endl;
+            
+            int chosen;
+            std::cin >> chosen;
+            if(chosen >= 0 && chosen < candidates.size())
+            {
+                session = candidates[chosen].uuid.toString();
+            }else{
+                qerr << "bad pick" << endl;
+                return 1;
+            }
+        }
+    }
     
     if(args->isSet("ps"))
     {
