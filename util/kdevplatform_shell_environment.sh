@@ -18,7 +18,10 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-source ~/.bashrc
+if [ -e ~/.bashrc ]; then
+    # Since this runs as a replacement for the init-file, we need to chain in the 'real' bash-rc
+    source ~/.bashrc
+fi
 
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
