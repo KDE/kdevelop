@@ -69,7 +69,7 @@ public:
             Q_ASSERT(interface);
 
             interface->showShellInDir( QString() );
-            interface->sendInput( "kdevelop_attach -s " + KDevelop::ICore::self()->activeSession()->id().toString() + '\n' );
+            interface->sendInput( "kdevelop! -s " + KDevelop::ICore::self()->activeSession()->id().toString() + '\n' );
             
         }else
         {
