@@ -86,7 +86,6 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
                 return d->m_filteredItems.at( idx.row() ).shortenedText;
                 break;
             case OutputModel::OutputItemTypeRole:
-                /// TODO need to convert to QVariant here
                 return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
                 break;
             case Qt::FontRole:
@@ -238,6 +237,7 @@ void OutputModel::addLineBatch()
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
             return;
+    kDebug() << "addLineBatch called with " << linesInBatch << "lines";
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {
