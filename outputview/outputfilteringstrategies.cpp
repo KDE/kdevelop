@@ -35,12 +35,12 @@ NoFilterStrategy::NoFilterStrategy()
 {
 }
 
-bool NoFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
+bool NoFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
 {
     return false;
 }
 
-bool NoFilterStrategy::isErrorInLine(const QString& /*line*/, FilteredItem& /*item*/ )
+bool NoFilterStrategy::errorInLine(const QString& /*line*/, FilteredItem& /*item*/ )
 {
     return false;
 }
@@ -152,7 +152,7 @@ CompilerFilterStrategy::~CompilerFilterStrategy()
     delete d;
 }
 
-bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& item )
+bool CompilerFilterStrategy::actionInLine(const QString& line, FilteredItem& item )
 {
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
@@ -202,7 +202,7 @@ bool CompilerFilterStrategy::isActionInLine(const QString& line, FilteredItem& i
     return false;
 }
 
-bool CompilerFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
+bool CompilerFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
 {
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
@@ -259,12 +259,12 @@ ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
 }
 
-bool ScriptErrorFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
+bool ScriptErrorFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
 {
     return false;
 }
 
-bool ScriptErrorFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
+bool ScriptErrorFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
 {
     foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
@@ -306,12 +306,12 @@ StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
 }
 
-bool StaticAnalysisFilterStrategy::isActionInLine(const QString& /*line*/, FilteredItem& /*item */)
+bool StaticAnalysisFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
 {
     return false;
 }
 
-bool StaticAnalysisFilterStrategy::isErrorInLine(const QString& line, FilteredItem& item )
+bool StaticAnalysisFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
 {
     foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;

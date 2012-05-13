@@ -237,17 +237,17 @@ void OutputModel::addLineBatch()
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
             return;
-    kDebug() << "addLineBatch called with " << linesInBatch << "lines";
+    //kDebug() << "addLineBatch called with " << linesInBatch << "lines";
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {
         const QString line = d->m_lineBuffer.dequeue();
         FilteredItem item( line );
 
-        bool matched = d->m_filter->isErrorInLine(line, item);
+        bool matched = d->m_filter->errorInLine(line, item);
         if( !matched )
         {
-            matched = d->m_filter->isActionInLine(line, item);
+            matched = d->m_filter->actionInLine(line, item);
         }
         if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
             d->m_activateableItems.insert(d->m_activateableItems.size());

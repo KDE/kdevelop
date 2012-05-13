@@ -48,7 +48,7 @@ public:
      * @param item Where all the metadata about the current line is put after the given filter is applied
      * @return true if an error is found, false otherwise
      **/
-    virtual bool isErrorInLine(QString const& line, FilteredItem& item) = 0;
+    virtual bool errorInLine(QString const& line, FilteredItem& item) = 0;
 
     /**
      * Examine if a given line contains output that is defined as an action (E.g. from a script or from a compiler, or other).
@@ -56,7 +56,7 @@ public:
      * @param item Where all the metadata about the current line is put after the given filter is applied
      * @return true if an action is found, false otherwise
      **/
-    virtual bool isActionInLine(QString const& line, FilteredItem& item) = 0;
+    virtual bool actionInLine(QString const& line, FilteredItem& item) = 0;
 
 };
 

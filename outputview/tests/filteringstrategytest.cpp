@@ -52,8 +52,8 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QFETCH(bool, expected);
     NoFilterStrategy testee;
     FilteredItem item1(line);
-    QVERIFY(testee.isErrorInLine(line, item1) == expected);
-    QVERIFY(testee.isActionInLine(line, item1) == expected);
+    QVERIFY(testee.errorInLine(line, item1) == expected);
+    QVERIFY(testee.actionInLine(line, item1) == expected);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy_data()
@@ -84,8 +84,8 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1(line);
-    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
-    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
+    QVERIFY(testee.errorInLine(line, item1) == expectedError);
+    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
@@ -115,8 +115,8 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QFETCH(bool, expectedAction);
     ScriptErrorFilterStrategy testee;
     FilteredItem item1(line);
-    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
-    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
+    QVERIFY(testee.errorInLine(line, item1) == expectedError);
+    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
@@ -146,8 +146,8 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QFETCH(bool, expectedAction);
     StaticAnalysisFilterStrategy testee;
     FilteredItem item1(line);
-    QVERIFY(testee.isErrorInLine(line, item1) == expectedError);
-    QVERIFY(testee.isActionInLine(line, item1) == expectedAction);
+    QVERIFY(testee.errorInLine(line, item1) == expectedError);
+    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
 }
 
 
