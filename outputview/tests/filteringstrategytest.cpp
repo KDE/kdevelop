@@ -51,9 +51,10 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QFETCH(QString, line);
     QFETCH(bool, expected);
     NoFilterStrategy testee;
-    FilteredItem item1(line);
-    QVERIFY(testee.errorInLine(line, item1) == expected);
-    QVERIFY(testee.actionInLine(line, item1) == expected);
+    FilteredItem item1 = testee.errorInLine(line);
+    QVERIFY(item1.isValid() == expected);
+    item1 = testee.actionInLine(line);
+    QVERIFY(item1.isValid() == expected);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy_data()
@@ -83,9 +84,10 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     QFETCH(bool, expectedAction);
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
-    FilteredItem item1(line);
-    QVERIFY(testee.errorInLine(line, item1) == expectedError);
-    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
+    FilteredItem item1 = testee.errorInLine(line);
+    QVERIFY(item1.isValid() == expectedError);
+    item1 = testee.actionInLine(line);
+    QVERIFY(item1.isValid() == expectedAction);
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
@@ -114,9 +116,10 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QFETCH(bool, expectedError);
     QFETCH(bool, expectedAction);
     ScriptErrorFilterStrategy testee;
-    FilteredItem item1(line);
-    QVERIFY(testee.errorInLine(line, item1) == expectedError);
-    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
+    FilteredItem item1 = testee.errorInLine(line);
+    QVERIFY(item1.isValid() == expectedError);
+    item1 = testee.actionInLine(line);
+    QVERIFY(item1.isValid() == expectedAction);
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
@@ -145,9 +148,10 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QFETCH(bool, expectedError);
     QFETCH(bool, expectedAction);
     StaticAnalysisFilterStrategy testee;
-    FilteredItem item1(line);
-    QVERIFY(testee.errorInLine(line, item1) == expectedError);
-    QVERIFY(testee.actionInLine(line, item1) == expectedAction);
+    FilteredItem item1 = testee.errorInLine(line);
+    QVERIFY(item1.isValid() == expectedError);
+    item1 = testee.actionInLine(line);
+    QVERIFY(item1.isValid() == expectedAction);
 }
 
 

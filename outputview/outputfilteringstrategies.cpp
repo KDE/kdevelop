@@ -35,14 +35,14 @@ NoFilterStrategy::NoFilterStrategy()
 {
 }
 
-bool NoFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
+FilteredItem NoFilterStrategy::actionInLine(const QString& line)
 {
-    return false;
+    return FilteredItem(line);
 }
 
-bool NoFilterStrategy::errorInLine(const QString& /*line*/, FilteredItem& /*item*/ )
+FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 {
-    return false;
+    return FilteredItem(line);
 }
 
 
@@ -152,8 +152,9 @@ CompilerFilterStrategy::~CompilerFilterStrategy()
     delete d;
 }
 
-bool CompilerFilterStrategy::actionInLine(const QString& line, FilteredItem& item )
+FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
+    FilteredItem item(line);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -196,14 +197,15 @@ bool CompilerFilterStrategy::actionInLine(const QString& line, FilteredItem& ite
                     it.value() = pos;
                 }
             }
-            return true;
+            //return item;
         }
     }
-    return false;
+    return item;
 }
 
-bool CompilerFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
+FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
@@ -236,10 +238,10 @@ bool CompilerFilterStrategy::errorInLine(const QString& line, FilteredItem& item
                 item.isActivatable = true;
             }
 
-            return true;
+            //return item;
         }
     }
-    return false;
+    return item;
 }
 
 
@@ -259,13 +261,14 @@ ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
 }
 
-bool ScriptErrorFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
+FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 {
-    return false;
+    return FilteredItem(line);
 }
 
-bool ScriptErrorFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
+FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -288,10 +291,10 @@ bool ScriptErrorFilterStrategy::errorInLine(const QString& line, FilteredItem& i
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
                 item.isActivatable = true;
 
-            return true;
+            //return item;
         }
     }
-    return false;
+    return item;
 }
 
 /// --- Static Analysis filter strategy ---
@@ -306,13 +309,14 @@ StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
 }
 
-bool StaticAnalysisFilterStrategy::actionInLine(const QString& /*line*/, FilteredItem& /*item */)
+FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 {
-    return false;
+    return FilteredItem(line);
 }
 
-bool StaticAnalysisFilterStrategy::errorInLine(const QString& line, FilteredItem& item )
+FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -336,10 +340,10 @@ bool StaticAnalysisFilterStrategy::errorInLine(const QString& line, FilteredItem
                 item.isActivatable = true;
             }
 
-            return true;
+            //return item;
         }
     }
-    return false;
+    return item;
 }
 
 

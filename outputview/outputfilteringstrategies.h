@@ -46,9 +46,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 public:
     NoFilterStrategy();
 
-    virtual bool errorInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem errorInLine(QString const& line);
 
-    virtual bool actionInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem actionInLine(QString const& line);
 
 };
 
@@ -79,9 +79,9 @@ public:
     CompilerFilterStrategy(KUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
 
-    virtual bool errorInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem errorInLine(QString const& line);
 
-    virtual bool actionInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem actionInLine(QString const& line);
 
 private:
     CompilerFilterStrategyPrivate* const d;
@@ -96,9 +96,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterSt
 public:
     ScriptErrorFilterStrategy();
 
-    virtual bool errorInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem errorInLine(QString const& line);
 
-    virtual bool actionInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem actionInLine(QString const& line);
 
 };
 
@@ -111,9 +111,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilte
 public:
     StaticAnalysisFilterStrategy();
 
-    virtual bool errorInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem errorInLine(QString const& line);
 
-    virtual bool actionInLine(QString const& line, FilteredItem& item);
+    virtual FilteredItem actionInLine(QString const& line);
 
 };
 

@@ -48,6 +48,8 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 
     FilteredItem( const QString& line );
 
+    bool isValid() const;
+
     QString originalLine;
     FilteredOutputItemType type;
     QString shortenedText;

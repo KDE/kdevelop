@@ -242,12 +242,10 @@ void OutputModel::addLineBatch()
 
     for(int i = 0; i < linesInBatch; ++i) {
         const QString line = d->m_lineBuffer.dequeue();
-        FilteredItem item( line );
-
-        bool matched = d->m_filter->errorInLine(line, item);
-        if( !matched )
+        FilteredItem item = d->m_filter->errorInLine(line);
+        if( !item.isValid())
         {
-            matched = d->m_filter->actionInLine(line, item);
+            item = d->m_filter->actionInLine(line);
         }
         if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
             d->m_activateableItems.insert(d->m_activateableItems.size());

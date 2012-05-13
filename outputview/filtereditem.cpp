@@ -36,5 +36,11 @@ FilteredItem::FilteredItem( const QString& line )
 {
 }
 
+bool FilteredItem::isValid() const
+{
+    return lineNo != -1;
+}
+
+
 } // namespace KDevelop
 
