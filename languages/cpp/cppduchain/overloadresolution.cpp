@@ -338,6 +338,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     if ( !( *it ) )
     {
       allInstantiated = false;
+      break;
     }
 
   if ( allInstantiated )

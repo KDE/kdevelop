@@ -97,7 +97,7 @@ protected:
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
-  virtual void visitForRangeDeclaration(ForRangeDeclarationAst *node);
+  virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
   virtual void visitAliasDeclaration(AliasDeclarationAST* );
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);

@@ -83,6 +83,8 @@ private slots:
   void testSearchAcrossNamespace2();
   void testSearchAcrossNamespace3();
   void testADL();
+  void testADLConstness();
+  void testADLConstness2();
   void testADLClassType();
   void testADLFunctionType();
   void testADLFunctionByName();
@@ -195,6 +197,7 @@ private slots:
   //BEGIN C++2011
   void testRangeBasedFor();
   void testRangeBasedForClass();
+  void testRangeBasedForClass2();
   void testRValueReference();
   void testDefaultDelete();
   void testDelete_Bug278781();
