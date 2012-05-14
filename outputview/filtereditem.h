@@ -54,6 +54,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
     FilteredOutputItemType type;
     QString shortenedText;
     bool isActivatable;
+    bool isValidItem;
     KUrl url;
     int lineNo;
     int columnNo;

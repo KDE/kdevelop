@@ -197,7 +197,8 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
                     it.value() = pos;
                 }
             }
-            //return item;
+            item.isValidItem = true;
+            break;
         }
     }
     return item;
@@ -237,8 +238,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
             }
-
-            //return item;
+            item.isValidItem = true;
+            break;
         }
     }
     return item;
@@ -291,7 +292,8 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
                 item.isActivatable = true;
 
-            //return item;
+            item.isValidItem = true;
+            break;
         }
     }
     return item;
@@ -339,8 +341,8 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
             }
-
-            //return item;
+            item.isValidItem = true;
+            break;
         }
     }
     return item;

@@ -31,6 +31,7 @@ FilteredItem::FilteredItem( const QString& line )
 , type( StandardItem )
 , shortenedText( line )
 , isActivatable(false)
+, isValidItem(false)
 , lineNo(-1)
 , columnNo(-1)
 {
@@ -38,7 +39,7 @@ FilteredItem::FilteredItem( const QString& line )
 
 bool FilteredItem::isValid() const
 {
-    return lineNo != -1;
+    return isValidItem;
 }
 
 

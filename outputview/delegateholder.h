@@ -27,6 +27,10 @@ namespace KDevelop
 
 class OutputDelegate;
 
+/**
+ * This class holds the outputview delegate because the delegate outlives the job that 'sets' it.
+ * Inherit from this class if your plugin needs to hold the outputview delegate.
+ */
 class KDEVPLATFORMOUTPUTVIEW_EXPORT DelegateHolder
 {
 public:

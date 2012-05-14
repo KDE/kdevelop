@@ -247,7 +247,7 @@ void OutputModel::addLineBatch()
         {
             item = d->m_filter->actionInLine(line);
         }
-        if( item.type == QVariant::fromValue( FilteredItem::ErrorItem) )
+        if( item.type == FilteredItem::ErrorItem )
             d->m_activateableItems.insert(d->m_activateableItems.size());
 
         d->m_filteredItems << item;
