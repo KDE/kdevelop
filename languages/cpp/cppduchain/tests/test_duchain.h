@@ -83,6 +83,8 @@ private slots:
   void testSearchAcrossNamespace2();
   void testSearchAcrossNamespace3();
   void testADL();
+  void testADLConstness();
+  void testADLConstness2();
   void testADLClassType();
   void testADLFunctionType();
   void testADLFunctionByName();

@@ -1853,6 +1853,111 @@ void TestDUChain::testADL()
   }
 }
 
+void TestDUChain::testADLConstness()
+{
+  // make sure a const-argument takes the const-overload while a non-const
+  // argument takes the non-const overload
+  // important e.g. for range-based for loops
+  QByteArray code( "void foo(int&);\n"
+                   "void foo(const int&);\n"
+                   "void bar(const int&);\n"
+                   "void bar(int&);\n"
+                   "int test() {\n"
+                   "  int i = 0; foo(i); bar(i);\n" // call to non-const
+                   "  const int j = 0; foo(j); bar(j);\n" // call to const
+                   "}\n");
+
+  LockedTopDUContext top( parse(code, DumpNone) );
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().count(), 5);
+
+  // foo: non-const version
+  Declaration* dec = top->localDeclarations().at(0);
+  FunctionType::Ptr func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 5);
+
+  // foo: const version
+  dec = top->localDeclarations().at(1);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 6);
+
+  // bar: const version
+  dec = top->localDeclarations().at(2);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 6);
+
+  // bar: non-const version
+  dec = top->localDeclarations().at(3);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 5);
+}
+
+void TestDUChain::testADLConstness2()
+{
+  // make sure a const-argument takes the const-overload while a non-const
+  // argument takes the non-const overload
+  // important e.g. for range-based for loops
+  QByteArray code( "struct l {};\n"
+                   "void foo(l&);\n"
+                   "void foo(const l&);\n"
+                   "void bar(const l&);\n"
+                   "void bar(l&);\n"
+                   "int test() {\n"
+                   "  l i = 0; foo(i); bar(i);\n" // call to non-const
+                   "  const l j = 0; foo(j); bar(j);\n" // call to const
+                   "}\n");
+
+  LockedTopDUContext top( parse(code, DumpNone) );
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().count(), 6);
+
+  // foo: non-const version
+  Declaration* dec = top->localDeclarations().at(1);
+  FunctionType::Ptr func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 6);
+
+  // foo: const version
+  dec = top->localDeclarations().at(2);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 7);
+
+  // bar: const version
+  dec = top->localDeclarations().at(3);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 7);
+
+  // bar: non-const version
+  dec = top->localDeclarations().at(4);
+  func = dec->type<FunctionType>();
+  QVERIFY(func);
+  QCOMPARE(dec->uses().count(), 1);
+  QCOMPARE(dec->uses().begin()->count(), 1);
+  QCOMPARE(dec->uses().begin()->at(0).start.line, 6);
+}
+
 void TestDUChain::testADLClassType()
 {
   {
