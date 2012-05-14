@@ -842,8 +842,7 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
     // in range-based for we first visit the expression
     // since it might define the type for cases like
     // for(auto i : foo)
-    visit(node->expression);
-    visit(node->range_declaration);
+    handleRangeBasedFor(node->expression, node->range_declaration);
     Q_ASSERT(!node->init_statement);
     Q_ASSERT(!node->condition);
   } else {
@@ -865,6 +864,12 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();
+}
+
+void ContextBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
+{
+  visit(container);
+  visit(iterator);
 }
 
 void ContextBuilder::createTypeForInitializer(InitializerAST* /*node*/) {

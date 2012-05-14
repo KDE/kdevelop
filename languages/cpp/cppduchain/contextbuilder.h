@@ -189,6 +189,7 @@ protected:
   virtual void visitUsing(UsingAST*);
   virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
   virtual void visitForStatement(ForStatementAST*);
+  virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
   virtual void visitIfStatement(IfStatementAST*);
   virtual void visitSwitchStatement(SwitchStatementAST*);
   virtual void visitDoStatement(DoStatementAST*);
