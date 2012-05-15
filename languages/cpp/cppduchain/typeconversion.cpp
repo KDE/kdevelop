@@ -139,7 +139,15 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
   
   AbstractType::Ptr to = unAliasedType(_to.abstractType());
   AbstractType::Ptr from = unAliasedType(_from.abstractType());
-  
+  // we need the 'real' types for the below checks to work properly, esp.
+  // in regard to constness
+  // TODO: is this maybe something that should *always* be done in removeConstants?
+  AbstractType::Ptr nonConstFrom = removeConstants(from, m_topContext);
+  if (nonConstFrom != from) {
+    from = nonConstFrom;
+    from->setModifiers(from->modifiers() | AbstractType::ConstModifier);
+  }
+
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
     goto ready;
@@ -164,6 +172,10 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
         //Either identity-conversion:
         if( identityConversion( realFrom, realTo ) ) {
           conv = ExactMatch + 2*ConversionRankOffset;
+          // see c++ draft 13.3.3.2 - prefer equal cv-qualifications
+          if ( isConstant(realFrom) == isConstant(realTo) ) {
+            conv += 1;
+          }
           goto ready;
         }
         //Or realType(toReference) is a public base-class of realType(fromReference)

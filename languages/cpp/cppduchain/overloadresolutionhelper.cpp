@@ -185,7 +185,6 @@ ViableFunction OverloadResolutionHelper::resolve(bool forceInstance)
   // also retrieve names by ADL if partial argument list (only used by code completion)
   // and even in strict mode if normal lookup failed
   if (!ret.isViable()) {
-    
     QList<Declaration*> adlDecls = resolv.computeADLCandidates( m_knownParameters, m_identifierForADL );
     if (!adlDecls.empty()) {
       QList< DeclarationWithArgument > adlDeclsWithArguments;

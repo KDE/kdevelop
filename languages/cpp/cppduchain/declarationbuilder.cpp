@@ -269,14 +269,33 @@ void DeclarationBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node
   m_pendingPropertyDeclarations.insert(currentContext(), qMakePair(decl, node));
 }
 
-void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
+void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
 {
-  AbstractType::Ptr listType = lastType();
+  ContextBuilder::handleRangeBasedFor(container, iterator);
 
-  DefaultVisitor::visitForRangeDeclaration(node);
+  if (!container || !iterator) {
+    return;
+  }
 
-  if (lastTypeWasAuto() && listType && m_lastDeclaration) {
+  if (lastTypeWasAuto() && m_lastDeclaration) {
     // auto support for range-based for
+    AbstractType::Ptr listType;
+
+    {
+      DUChainReadLocker lock;
+      container->ducontext = currentContext();
+      Cpp::ExpressionParser parser;
+      Cpp::ExpressionEvaluationResult res = parser.evaluateType( container, editor()->parseSession() );
+      listType = res.type.abstractType();
+    }
+
+    if (!listType) {
+      // invalid type
+      DUChainWriteLocker lock;
+      m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
+      return;
+    }
+
     AbstractType::Ptr realListType = TypeUtils::realType(listType);
     // step 1: find type of elements in list
     AbstractType::Ptr elementType;
@@ -287,11 +306,24 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
       // case b: look for begin(listType) function using ADL
       DUChainReadLocker lock;
       OverloadResolutionHelper helper = OverloadResolutionHelper( DUContextPointer(currentContext()), TopDUContextPointer(topContext()) );
+      helper.setKnownParameters(OverloadResolver::ParameterList(listType, false));
+      // first try begin in current context
       static const QualifiedIdentifier begin("begin");
       helper.setFunctionNameForADL(begin);
-      helper.setKnownParameters(OverloadResolver::ParameterList(listType, false));
-      helper.setFunctions( currentContext()->findDeclarations(begin, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions) );
+      helper.setFunctions( currentContext()->findDeclarations(begin, CursorInRevision::invalid(),
+                                                              AbstractType::Ptr(), 0,
+                                                              DUContext::OnlyFunctions) );
       ViableFunction func = helper.resolve();
+      if (!func.isValid()) {
+        // not valid, fall-back to std, it's an associated namespace,
+        // see also: spec, 6.5.4
+        static const QualifiedIdentifier stdBegin("::std::begin");
+        helper.setFunctionNameForADL(stdBegin);
+        helper.setFunctions( currentContext()->findDeclarations(stdBegin, CursorInRevision::invalid(),
+                                                                AbstractType::Ptr(), 0,
+                                                                DUContext::OnlyFunctions) );
+        func = helper.resolve();
+      }
       if (func.isValid()) {
         AbstractType::Ptr type = func.declaration()->type<FunctionType>()->returnType();
         // see spec: for-range-declaration = *__begin;
@@ -300,8 +332,8 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
     }
 
     // step 2: set last type, but keep const&
+    DUChainWriteLocker lock;
     if (elementType) {
-      DUChainWriteLocker lock;
       AbstractType::Ptr type = m_lastDeclaration->abstractType();
       elementType->setModifiers(type->modifiers());
       if (ReferenceType::Ptr ref = type.cast<ReferenceType>()) {
@@ -310,6 +342,9 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
         type = elementType;
       }
       m_lastDeclaration->setAbstractType(type);
+    } else {
+      // invalid type
+      m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
     }
   }
 }
