@@ -88,7 +88,7 @@ void ProjectTestJob::gotResult(ITestSuite* suite, const TestResult& result)
                 break;
                 
             case TestResult::Failed:
-                m_result.passed++;
+                m_result.failed++;
                 break;
                 
             case TestResult::Error:
