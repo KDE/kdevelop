@@ -273,6 +273,10 @@ void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeD
 {
   ContextBuilder::handleRangeBasedFor(container, iterator);
 
+  if (!container || !iterator) {
+    return;
+  }
+
   if (lastTypeWasAuto() && m_lastDeclaration) {
     // auto support for range-based for
     AbstractType::Ptr listType;
