@@ -154,6 +154,87 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QVERIFY(item1.isValid() == expectedAction);
 }
 
+void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<QString>("expectedLastDir");
+    QString basepath( PROJECTS_SOURCE_DIR"/onefileproject/" );
+
+
+    QTest::newRow("cmake-line1")
+    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "path/to/one" );
+    QTest::newRow("cmake-line2")
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two");
+    QTest::newRow("cmake-line3")
+    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "path/to/three");
+    QTest::newRow("cmake-line4")
+    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "path/to/four");
+    QTest::newRow("cmake-line5")
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two");
+    QTest::newRow("cd-line6")
+    << QString("make[4]: Entering directory '" + basepath + "path/to/one/'") << QString( basepath + "path/to/one/");
+}
+
+void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
+{
+    QFETCH(QString, line);
+    QFETCH(QString, expectedLastDir);
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    static CompilerFilterStrategy testee(projecturl);
+    FilteredItem item1 = testee.actionInLine(line);
+    QCOMPARE(testee.d->m_currentDirs.last(), expectedLastDir);
+}
+
+void FilteringStrategyTest::benchMarkCompilerFilterAction()
+{
+    QString projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QStringList outputlines;
+    const int numLines(10000);
+    int j(0), k(0), l(0), m(0);
+    do {
+        ++j; ++k; ++l;
+        QString tmp;
+        if(m % 2 == 0) {
+            tmp = QString( "[ 26%] Building CXX object /this/is/the/path/to/the/files/%1/%2/%3/CMakeFiles/file.o").arg( j ).arg( k ).arg( l );
+        } else {
+            tmp = QString( "make[4]: Entering directory '" + projecturl + "/this/is/the/path/to/the/files/%1/%2/%3/").arg( j ).arg( k ).arg( l );
+        }
+        outputlines << tmp;
+        if(j % 6 == 0) {
+            j = 0; ++m;
+        }
+        if(k % 9 == 0) {
+            k = 0; ++m;
+        }
+        if(l % 13 == 0) {
+            l = 0; ++m;
+        }
+    }
+    while(outputlines.size() < numLines ); // gives us numLines (-ish)
+
+    QElapsedTimer totalTime;
+    totalTime.start();
+
+    static CompilerFilterStrategy testee(projecturl);
+    FilteredItem item1("dummyline");
+    QBENCHMARK {
+        for(int i = 0; i < outputlines.size(); ++i) {
+            item1 = testee.actionInLine(outputlines.at(i));
+        }
+    }
+
+    const qint64 elapsed = totalTime.elapsed();
+
+    qDebug() << "ms elapsed to add directories: " << elapsed;
+    qDebug() << "total number of directories: " << outputlines.count();
+    const double avgDirectoryInsertion = double(elapsed) / outputlines.count();
+    qDebug() << "average ms spend pr. dir: " << avgDirectoryInsertion;
+
+    QVERIFY(avgDirectoryInsertion < 2);
+}
+
+
+
 
 }
 

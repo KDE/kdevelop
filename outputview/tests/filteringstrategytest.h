@@ -31,10 +31,13 @@ private slots:
     void testNoFilterstrategy();
     void testCompilerFilterstrategy_data();
     void testCompilerFilterstrategy();
+    void testCompilerFilterstrategyUrlFromAction_data();
+    void testCompilerFilterstrategyUrlFromAction();
     void testScriptErrorFilterstrategy_data();
     void testScriptErrorFilterstrategy();
     void testStaticAnalysisFilterStrategy_data();
     void testStaticAnalysisFilterStrategy();
+    void benchMarkCompilerFilterAction();
 };
 
 }

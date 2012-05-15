@@ -31,7 +31,7 @@
 
 #include <KUrl>
 
-#include <QLinkedList>
+#include <QVector>
 
 namespace KDevelop
 {
@@ -61,10 +61,10 @@ struct CompilerFilterStrategyPrivate
     CompilerFilterStrategyPrivate(const KUrl& buildDir);
     KUrl urlForFile( const QString& ) const;
 
-    QLinkedList<QString> m_currentDirs;
+    QVector<QString> m_currentDirs;
     KUrl m_buildDir;
 
-    typedef QMap<QString, QLinkedList<QString>::iterator> PositionMap;
+    typedef QMap<QString, int> PositionMap;
     PositionMap m_positionInCurrentDirs;
 };
 
@@ -74,7 +74,7 @@ struct CompilerFilterStrategyPrivate
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
 {
-
+    friend class FilteringStrategyTest;
 public:
     CompilerFilterStrategy(KUrl const& buildDir);
     virtual ~CompilerFilterStrategy();

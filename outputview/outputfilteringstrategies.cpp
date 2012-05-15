@@ -25,6 +25,8 @@
 
 #include <QFileInfo>
 
+#include <algorithm>
+
 
 namespace KDevelop
 {
@@ -101,16 +103,14 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
                      "linking"), -1, 1, "^Linking (.*)" )
     << ActionFormat( i18n("installing"), -1, 1, "-- Installing (.*)" )
     //libtool install
-    << ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)",
- 1 )
+    << ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
     << ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
                      "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 )
     //dcop
     << ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
-    << ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)",
- 1 )
+    << ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
     // match against Entering directory to update current build dir
-    << ActionFormat( "cd", "", "make[^:]*: Entering directory `([^']+)'", 1);
+    << ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory '(.+)'", 1);
 
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const KUrl& buildDir)
@@ -129,7 +129,7 @@ KUrl CompilerFilterStrategyPrivate::urlForFile(const QString& filename) const
             return currentUrl;
         }
 
-        QLinkedList<QString>::const_iterator it = m_currentDirs.constEnd() - 1;
+        QVector<QString>::const_iterator it = m_currentDirs.constEnd() - 1;
         do {
             currentUrl = KUrl( *it );
             currentUrl.addPath( filename );
@@ -167,8 +167,8 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             }
             if( curActFilter.action == "cd" )
             {
-                QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), regEx.cap( curActFilter.fileGroup ) );
-                d->m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , pos );
+                d->m_currentDirs.push_back( regEx.cap( curActFilter.fileGroup ) );
+                d->m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , d->m_currentDirs.size() - 1 );
             }
 
             // Special case for cmake: we parse the "Compiling <objectfile>" expression
@@ -185,16 +185,15 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
                 // Encountered new build directory?
                 if (it == d->m_positionInCurrentDirs.end())
                 {
-                    QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), dirName );
-                    d->m_positionInCurrentDirs.insert( dirName, pos );
+                    d->m_currentDirs.push_back( dirName );
+                    d->m_positionInCurrentDirs.insert( dirName, d->m_currentDirs.size() - 1 );
                 }
                 else
                 {
                     // Build dir already in currentDirs, but move it to back of currentDirs list
                     // (this gives us most-recently-used semantics in urlForFile)
-                    d->m_currentDirs.erase(it.value());
-                    QLinkedList<QString>::iterator pos = d->m_currentDirs.insert( d->m_currentDirs.end(), dirName );
-                    it.value() = pos;
+                    std::rotate(d->m_currentDirs.begin() + it.value(), d->m_currentDirs.begin() + it.value() + 1, d->m_currentDirs.end() );
+                    it.value() = d->m_currentDirs.size() - 1;
                 }
             }
             item.isValidItem = true;
