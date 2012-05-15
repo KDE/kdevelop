@@ -39,6 +39,16 @@ class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
 {
 
 public:
+    
+    /**
+     * Specifies how much output a test job should produce
+     **/
+    enum TestJobVerbosity
+    { 
+        Silent, ///< No toolview is raised by the job
+        Verbose ///< The job raises an output toolview
+    };
+
     /**
      * Destructor
      **/
@@ -71,21 +81,21 @@ public:
      * Starting the job is up to the caller, usually by registering it with
      * the run controller.
      **/
-    virtual KJob* launchAllCases() = 0;
+    virtual KJob* launchAllCases(TestJobVerbosity verbosity) = 0;
 
     /**
      * @param testCases list of test cases to run
      * @returns a KJob that will run the specified @p testCases.
      * @sa launchAllCases()
      **/
-    virtual KJob* launchCases(const QStringList& testCases) = 0;
+    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity) = 0;
 
     /**
      * @param testCase the test case to run
      * @returns a KJob that will run only @p testCase.
      * @sa launchAllCases()
      **/
-    virtual KJob* launchCase(const QString& testCase) = 0;
+    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity) = 0;
 
     /**
      * The location in source code where the test suite is declared.

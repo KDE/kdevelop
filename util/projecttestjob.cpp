@@ -70,7 +70,7 @@ bool ProjectTestJob::doKill()
 void ProjectTestJob::runNext()
 {
     m_currentSuite = m_suites.takeFirst();
-    m_currentJob = m_currentSuite->launchAllCases();
+    m_currentJob = m_currentSuite->launchAllCases(ITestSuite::Silent);
     m_currentJob->start();
 }
 

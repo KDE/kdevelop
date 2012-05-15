@@ -102,7 +102,7 @@ void TestViewPlugin::runAllTests()
         QList<KJob*> jobs;
         foreach (ITestSuite* suite, tc->testSuitesForProject(project))
         {
-            if (KJob* job = suite->launchAllCases())
+            if (KJob* job = suite->launchAllCases(ITestSuite::Silent))
             {
                 jobs << job;
             }

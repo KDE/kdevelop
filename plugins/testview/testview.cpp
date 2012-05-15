@@ -244,7 +244,15 @@ void TestView::runSelectedTests()
 
     QList<KJob*> jobs;
     ITestController* tc = ICore::self()->testController();
-
+    
+    /* 
+     * NOTE: If a test suite or a single test case was selected, 
+     * the job is launched in Verbose mode with raised output window. 
+     * If a project is selected, it is launched silently. 
+     * 
+     * This is the somewhat-intuitive approach. Maybe a configuration should be offered. 
+     */
+    
     foreach (const QModelIndex& idx, indexes)
     {
         QModelIndex index = m_filter->mapToSource(idx);
@@ -259,7 +267,7 @@ void TestView::runSelectedTests()
             IProject* project = ICore::self()->projectController()->findProjectByName(item->data(ProjectRole).toString());
             foreach (ITestSuite* suite, tc->testSuitesForProject(project))
             {
-                jobs << suite->launchAllCases();
+                jobs << suite->launchAllCases(ITestSuite::Silent);
             }
         }
         else if (item->parent()->parent() == 0)
@@ -267,7 +275,7 @@ void TestView::runSelectedTests()
             // A suite was selected
             IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->data(ProjectRole).toString());
             ITestSuite* suite =  tc->findTestSuite(project, item->data(SuiteRole).toString());
-            jobs << suite->launchAllCases();
+            jobs << suite->launchAllCases(ITestSuite::Verbose);
         }
         else
         {
@@ -275,7 +283,7 @@ void TestView::runSelectedTests()
             IProject* project = ICore::self()->projectController()->findProjectByName(item->parent()->parent()->data(ProjectRole).toString());
             ITestSuite* suite =  tc->findTestSuite(project, item->parent()->data(SuiteRole).toString());
             const QString testCase = item->data(CaseRole).toString();
-            jobs << suite->launchCase(testCase);
+            jobs << suite->launchCase(testCase, ITestSuite::Verbose);
         }
     }
 
