@@ -18,7 +18,10 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-source ~/.bashrc
+if [ -e ~/.bashrc ]; then
+    # Since this runs as a replacement for the init-file, we need to chain in the 'real' bash-rc
+    source ~/.bashrc
+fi
 
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
@@ -515,10 +518,6 @@ DBUS_SOCKET_TRANSFORMER=$KDEV_BASEDIR/kdev_dbus_socket_transformer
 # This configures the shell to kill background jobs when it is terminated
 shopt -s huponexit
 
-# TODO: This random number can lead to conflicts, but since only ssh notices these conflicts
-#       during forwarding, it is very hard to deal with them.
-export DBUS_FORWARDING_TCP_TARGET_PORT=$((5000+($RANDOM%50000)))
-
 export DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH=/tmp/dbus-forwarded-$USER-$APPLICATION_HOST
 
 export DBUS_FORWARDING_TCP_LOCAL_PORT=9000
@@ -622,7 +621,8 @@ function keepForwardingDBusFromTCPSocket {
 
 function ssh! {
     keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
-    
+    DBUS_FORWARDING_TCP_TARGET_PORT=$((5000+($RANDOM%50000)))
+
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
          " APPLICATION=$APPLICATION \
            KDEV_BASEDIR=$KDEV_BASEDIR \

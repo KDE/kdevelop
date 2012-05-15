@@ -137,6 +137,8 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
 
 void QuickOpenModel::textChanged( const QString& str )
 {
+  if( m_filterText == str )
+      return;
   m_filterText = str;
   foreach( const ProviderEntry& provider, m_providers )
     if( provider.enabled )

@@ -30,6 +30,7 @@
 #include <assert.h>
 #include <sstream>
 #include <unistd.h>
+#include <string.h>
 
 #ifndef HAVE_MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0

@@ -88,7 +88,8 @@ void ParseProjectJob::start() {
     int processed = 0;
     foreach(const KDevelop::IndexedString& url, files) {
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, BackgroundParser::WorstPriority, this );
-        if (++processed = processAfter) {
+        ++processed;
+        if (processed == processAfter) {
             QApplication::processEvents();
             processed = 0;
         }
