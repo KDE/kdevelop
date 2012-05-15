@@ -37,7 +37,7 @@ class CTestRunJob : public KDevelop::OutputJob
 {
     Q_OBJECT
 public:
-    CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent = 0);
+    CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJobVerbosity verbosity, QObject* parent = 0);
     virtual void start();
 
 protected:

@@ -35,9 +35,9 @@ public:
     CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& args = QStringList());
     virtual ~CTestSuite();
     
-    virtual KJob* launchCase(const QString& testCase);
-    virtual KJob* launchCases(const QStringList& testCases);
-    virtual KJob* launchAllCases();
+    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
+    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity);
+    virtual KJob* launchAllCases(TestJobVerbosity verbosity);
     
     virtual KUrl executable() const;
     virtual QStringList cases() const;

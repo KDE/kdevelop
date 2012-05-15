@@ -34,8 +34,8 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, QObject* parent)
-: OutputJob(parent)
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
+: OutputJob(parent, verbosity)
 , m_suite(suite)
 , m_cases(cases)
 , m_process(0)

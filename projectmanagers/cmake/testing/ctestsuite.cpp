@@ -103,21 +103,22 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     }
 }
 
-KJob* CTestSuite::launchCase(const QString& testCase)
+KJob* CTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbosity)
 {
-    return launchCases(QStringList() << testCase);
+    return launchCases(QStringList() << testCase, verbosity);
 }
 
-KJob* CTestSuite::launchCases(const QStringList& testCases)
+KJob* CTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobVerbosity verbosity)
 {
     kDebug() << "Launching test run" << m_name << "with cases" << testCases;
     
-    return new CTestRunJob(this, testCases);
+    OutputJob::OutputJobVerbosity outputVerbosity = (verbosity == Verbose) ? OutputJob::Verbose : OutputJob::Silent;
+    return new CTestRunJob(this, testCases, outputVerbosity);
 }
 
-KJob* CTestSuite::launchAllCases()
+KJob* CTestSuite::launchAllCases(TestJobVerbosity verbosity)
 {
-    return launchCases(cases());
+    return launchCases(cases(), verbosity);
 }
 
 KUrl CTestSuite::executable() const
