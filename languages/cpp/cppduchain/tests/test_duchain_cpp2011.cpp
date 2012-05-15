@@ -35,6 +35,7 @@
 
 #include "typeutils.h"
 #include "templatedeclaration.h"
+#include "cppduchain.h""
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -779,6 +780,7 @@ void TestDUChain::testTemplateSpecializeRValue()
   QVERIFY(specParam.cast<ReferenceType>());
   QVERIFY(specParam.cast<ReferenceType>()->isRValue());
   QCOMPARE(specParam->toString(), QString("T&&"));
+  QCOMPARE(Cpp::simplifiedTypeString(specParam, top), QString("T&&"));
 
   QCOMPARE(top->childContexts().last()->localDeclarations().size(), 2);
   QCOMPARE(top->childContexts().last()->localDeclarations().at(0)->abstractType()->toString(),

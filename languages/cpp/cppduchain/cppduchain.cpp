@@ -734,9 +734,11 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 {
 
   bool isReference = false;
+  bool isRValue = false;
   if(ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
     isReference = true;
     type = refType->baseType();
+    isRValue = refType->isRValue();
   }
 
   type = shortenTypeForViewing(type);
@@ -754,6 +756,8 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 
   if(isReference)
     identifier.setIsReference(true);
+  if(isRValue)
+    identifier.setIsRValue(true);
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
