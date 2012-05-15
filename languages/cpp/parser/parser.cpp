@@ -2641,16 +2641,24 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
       return false;
     }
 
-  ADVANCE('(', "(");
   ExpressionAST *expr = 0;
-  parseExpressionList(expr);
   bool expressionIsVariadic = false;
-  if (session->token_stream->lookAhead() == Token_ellipsis)
+
+  if (session->token_stream->lookAhead() == '(')
     {
       advance();
-      expressionIsVariadic = true;
+      parseExpressionList(expr);
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          advance();
+          expressionIsVariadic = true;
+        }
+      ADVANCE(')', ")");
     }
-  ADVANCE(')', ")");
+  else
+    {
+      parseBracedInitList(expr);
+    }
 
   bool initializerIsVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis)
