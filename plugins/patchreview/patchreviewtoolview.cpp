@@ -456,7 +456,7 @@ void PatchReviewToolView::projectTestFinished(KJob* job)
     }
     else
     {
-        format = i18n("Test results: %1 passed, %3 failed, %3 errors", result.passed, result.failed, result.error);
+        format = i18n("Test results: %1 passed, %2 failed, %3 errors", result.passed, result.failed, result.error);
     }
     m_editPatch.testProgressBar->setFormat(format);
 
