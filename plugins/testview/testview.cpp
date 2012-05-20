@@ -361,7 +361,8 @@ void TestView::addTestSuite(ITestSuite* suite)
 
 void TestView::removeTestSuite(ITestSuite* suite)
 {
-    delete itemForSuite(suite);
+    QStandardItem* item = itemForSuite(suite);
+    item->parent()->removeRow(item->row());
 }
 
 QStandardItem* TestView::addProject(IProject* project)
