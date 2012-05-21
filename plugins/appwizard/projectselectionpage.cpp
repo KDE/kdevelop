@@ -25,6 +25,7 @@
 #include "projecttemplatesmodel.h"
 #include "appwizardplugin.h"
 #include <KColorScheme>
+#include <KFileDialog>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
@@ -273,5 +274,24 @@ bool ProjectSelectionPage::shouldContinue()
     }
     return true;
 }
+
+void ProjectSelectionPage::loadFileClicked()
+{
+    QString filter = "application/x-bzip-compressed-tar";
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog://kdevapptemplate"), filter, this);
+    
+    if (!fileName.isEmpty())
+    {
+        QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
+        QFile::copy(fileName, saveLocation);
+        m_templatesModel->refresh();
+    }
+}
+
+void ProjectSelectionPage::getMoreClicked()
+{
+    // TODO: Not implemented yet
+}
+
 
 #include "projectselectionpage.moc"
