@@ -26,6 +26,7 @@
 #include "appwizardplugin.h"
 #include <KColorScheme>
 #include <KFileDialog>
+#include <KNS3/DownloadDialog>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
@@ -307,7 +308,10 @@ void ProjectSelectionPage::loadFileClicked()
 
 void ProjectSelectionPage::getMoreClicked()
 {
-    // TODO: Not implemented yet
+    KNS3::DownloadDialog dialog("kdevappwizard.knsrc", this);
+    dialog.exec();
+    
+    m_templatesModel->refresh();
 }
 
 

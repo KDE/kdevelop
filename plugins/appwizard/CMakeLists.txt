@@ -24,6 +24,7 @@ target_link_libraries(kdevappwizard
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
+    ${KDE4_KNEWSTUFF3_LIBS}
     kdevplatforminterfaces kdevplatformvcs)
 
 install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
