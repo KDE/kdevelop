@@ -55,6 +55,11 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT(templateFamilyChanged(QModelIndex,QModelIndex)) );
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
+    
+    connect( ui->getMoreTemplatesButton, SIGNAL(clicked(bool)), 
+             this, SLOT(getMoreClicked()));
+    connect( ui->loadTemplateButton, SIGNAL(clicked(bool)),
+             this, SLOT(loadFileClicked()));
 }
 
 
@@ -283,8 +288,20 @@ void ProjectSelectionPage::loadFileClicked()
     if (!fileName.isEmpty())
     {
         QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
-        QFile::copy(fileName, saveLocation);
+        QString destination = saveLocation + QFileInfo(fileName).fileName();
+        kDebug() << "Copying" << fileName << "to" << saveLocation;
+        QFile::copy(fileName, destination);
+        
         m_templatesModel->refresh();
+        
+        QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
+        if (indexes.size() > 2)
+        {
+            QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect;
+            ui->templateView->selectionModel()->setCurrentIndex(indexes.at(0), flags);
+            ui->templatesIconView->selectionModel()->setCurrentIndex(indexes.at(1), flags);
+            ui->templateType->setCurrentIndex(indexes.at(2).row());
+        }
     }
 }
 

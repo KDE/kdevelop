@@ -20,6 +20,7 @@ public:
     ProjectTemplatesModel(AppWizardPlugin *parent);
 
     void refresh();
+    QModelIndexList templateIndexes(const QString& fileName);
 
     AppWizardPlugin* plugin() { return m_plugin; }
 

@@ -138,3 +138,46 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
     }
 }
 
+QModelIndexList ProjectTemplatesModel::templateIndexes(const QString& fileName)
+{
+    QFileInfo info(fileName);
+    QString description = m_plugin->componentData().dirs()->findResource("apptemplate_descriptions", info.baseName() + ".kdevtemplate");
+    
+    QModelIndexList indexes;
+    
+    if (!description.isEmpty())
+    {
+        KConfig templateConfig(description);
+        KConfigGroup general(&templateConfig, "General");
+        QStringList categories = general.readEntry("Category").split('/');
+        
+        kDebug() << categories;
+        kDebug() << m_templateItems.keys();
+        
+        QStringList levels;
+        foreach (const QString& category, categories)
+        {
+            levels << category;
+            indexes << m_templateItems[levels.join(QString('/'))]->index();
+        }
+        
+        if (!indexes.isEmpty())
+        {
+            QString name = general.readEntry("Name");
+            QStandardItem* categoryItem = m_templateItems[levels.join(QString('/'))];
+            for (int i = 0; i < categoryItem->rowCount(); ++i)
+            {
+                QStandardItem* templateItem = categoryItem->child(i);
+                if (templateItem->text() == name)
+                {
+                    indexes << templateItem->index();
+                    break;
+                }
+            }
+        }
+    }
+    
+    return indexes;
+}
+
+
