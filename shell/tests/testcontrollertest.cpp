@@ -14,8 +14,12 @@
 using namespace KDevelop;
 
 const char* TestSuiteName = "TestTestSuite";
+const char* TestSuiteNameTwo = "TestTestSuiteTwo";
 const char* TestCaseNameOne = "TestTestCaseOne";
 const char* TestCaseNameTwo = "TestTestCaseTwo";
+
+Q_DECLARE_METATYPE(KDevelop::TestResult);
+Q_DECLARE_METATYPE(KDevelop::ITestSuite*);
 
 class FakeTestSuite : public KDevelop::ITestSuite
 {
@@ -71,6 +75,18 @@ KJob* FakeTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJ
     return 0;
 }
 
+void TestControllerTest::emitTestResult(ITestSuite* suite, TestResult::TestCaseResult caseResult)
+{
+    TestResult result;
+    result.suiteResult = caseResult;
+    foreach (const QString& testCase, suite->cases())
+    {
+        result.testCaseResults.insert(testCase, caseResult);
+    }
+    
+    m_testController->notifyTestRunFinished(suite, result);
+}
+
 void TestControllerTest::initTestCase()
 {
     AutoTestShell::init();
@@ -78,6 +94,9 @@ void TestControllerTest::initTestCase()
     
     m_testController = Core::self()->testControllerInternal();
     m_project = new TestProject(this);
+    
+    qRegisterMetaType<KDevelop::ITestSuite*>("KDevelop::ITestSuite*");
+    qRegisterMetaType<KDevelop::TestResult>("KDevelop::TestResult");
 }
 
 void TestControllerTest::cleanupTestCase()
@@ -153,6 +172,53 @@ void TestControllerTest::findByProject()
     delete suiteTwo;
     
     delete otherProject;
+}
+
+void TestControllerTest::testResults()
+{
+    ITestSuite* suite = new FakeTestSuite(TestSuiteName, m_project);
+    m_testController->addTestSuite(suite);
+    
+    QSignalSpy spy(m_testController, SIGNAL(testRunFinished(KDevelop::ITestSuite*,KDevelop::TestResult)));
+    QVERIFY(spy.isValid());
+    
+    QList<TestResult::TestCaseResult> results;
+    results << TestResult::Passed << TestResult::Failed << TestResult::Error << TestResult::Skipped << TestResult::NotRun;
+    
+    foreach (TestResult::TestCaseResult result, results)
+    {
+        emitTestResult(suite, result);
+        QCOMPARE(spy.size(), 1);
+    
+        QVariantList arguments = spy.takeFirst();
+        QCOMPARE(arguments.size(), 2);
+        
+        QVERIFY(arguments.first().canConvert<ITestSuite*>());
+        QCOMPARE(arguments.first().value<ITestSuite*>(), suite);
+    
+        QVERIFY(arguments.at(1).canConvert<TestResult>());
+        QCOMPARE(arguments.at(1).value<TestResult>().suiteResult, result);
+        
+        foreach (const QString& testCase, suite->cases())
+        {
+            QCOMPARE(arguments.at(1).value<TestResult>().testCaseResults[testCase], result);
+        }
+    }
+    
+    QCOMPARE(spy.size(), 0);
+    
+    ITestSuite* suiteTwo = new FakeTestSuite(TestSuiteNameTwo, m_project);
+    m_testController->addTestSuite(suiteTwo);
+    
+    // Verify that only one signal gets emitted even with more suites present
+    emitTestResult(suiteTwo, TestResult::Passed);
+    
+    QCOMPARE(spy.size(), 1);
+    
+    m_testController->removeTestSuite(suite);
+    m_testController->removeTestSuite(suiteTwo);
+    delete suite;
+    delete suiteTwo;
 }
 
 

@@ -2,10 +2,11 @@
 #define KDEVELOP_TESTCONTROLLERTEST_H
 
 #include <QObject>
-
+#include <itestcontroller.h>
 
 namespace KDevelop {
 
+class ITestSuite;
 class IProject;
 class TestController;
 
@@ -21,10 +22,13 @@ private slots:
     void replaceSuite();
     
     void findByProject();
+    void testResults();
     
     void cleanupTestCase();
     
 private:
+    void emitTestResult(ITestSuite* suite, TestResult::TestCaseResult caseResult);
+    
     TestController* m_testController;
     IProject* m_project;
 };
