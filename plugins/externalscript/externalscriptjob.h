@@ -68,6 +68,7 @@ private:
   ExternalScriptItem::OutputMode m_outputMode;
   ExternalScriptItem::InputMode m_inputMode;
   ExternalScriptItem::ErrorMode m_errorMode;
+  ExternalScriptItem::FilterMode m_filterMode;
   KTextEditor::Document* m_document;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;

@@ -52,7 +52,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
     m_plugin( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
     m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
-    m_errorMode( item->errorMode() ),
+    m_errorMode( item->errorMode() ), m_filterMode( item->filterMode() ),
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
@@ -64,7 +64,14 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   ExternalScriptOutputModel* model = new ExternalScriptOutputModel( this );
 
   /// TODO implement some functionality where filtering strategy can be selected via the GUI
-  model->setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
+  if(m_filterMode == ExternalScriptItem::CompilerFilter)
+    model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
+  else if(m_filterMode == ExternalScriptItem::ScriptErrorFilter)
+    model->setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
+  else if(m_filterMode == ExternalScriptItem::StaticAnalysisFilter)
+    model->setFilteringStrategy(KDevelop::OutputModel::StaticAnalysisFilter);
+  else
+    model->setFilteringStrategy(KDevelop::OutputModel::NoFilter);
   setModel( model, KDevelop::IOutputView::TakeOwnership );
   setDelegate( m_plugin->delegate() );
 

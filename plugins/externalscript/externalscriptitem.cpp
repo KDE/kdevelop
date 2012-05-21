@@ -96,6 +96,16 @@ void ExternalScriptItem::setInputMode( ExternalScriptItem::InputMode mode )
   m_inputMode = mode;
 }
 
+ExternalScriptItem::FilterMode ExternalScriptItem::filterMode() const
+{
+  return m_filterMode;
+}
+
+void ExternalScriptItem::setFilterMode( ExternalScriptItem::FilterMode mode )
+{
+  m_filterMode = mode;
+}
+
 KAction* ExternalScriptItem::action()
 {
   ///TODO: this is quite ugly, or is it? if someone knows how to do it better, please refactor
