@@ -173,10 +173,7 @@ void EditExternalScript::save()
 
   m_item->setShowOutput( showOutputBox->isChecked() );
 
-  ExternalScriptItem::FilterMode filterMode = static_cast<ExternalScriptItem::FilterMode>(
-    outputFilterCombo->currentIndex()
-  );
-  m_item->setFilterMode( filterMode );
+  m_item->setFilterMode( outputFilterCombo->currentIndex() );
   m_item->action()->setShortcut( shortcutWidget->shortcut() );
 }
 

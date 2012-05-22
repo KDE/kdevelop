@@ -96,12 +96,12 @@ void ExternalScriptItem::setInputMode( ExternalScriptItem::InputMode mode )
   m_inputMode = mode;
 }
 
-ExternalScriptItem::FilterMode ExternalScriptItem::filterMode() const
+int ExternalScriptItem::filterMode() const
 {
   return m_filterMode;
 }
 
-void ExternalScriptItem::setFilterMode( ExternalScriptItem::FilterMode mode )
+void ExternalScriptItem::setFilterMode( int mode )
 {
   m_filterMode = mode;
 }

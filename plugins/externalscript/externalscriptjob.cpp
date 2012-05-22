@@ -63,15 +63,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
   ExternalScriptOutputModel* model = new ExternalScriptOutputModel( this );
 
-  /// TODO implement some functionality where filtering strategy can be selected via the GUI
-  if(m_filterMode == ExternalScriptItem::CompilerFilter)
-    model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
-  else if(m_filterMode == ExternalScriptItem::ScriptErrorFilter)
-    model->setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
-  else if(m_filterMode == ExternalScriptItem::StaticAnalysisFilter)
-    model->setFilteringStrategy(KDevelop::OutputModel::StaticAnalysisFilter);
-  else
-    model->setFilteringStrategy(KDevelop::OutputModel::NoFilter);
+  model->setFilteringStrategy(static_cast<KDevelop::OutputModel::OutputFilterStrategy>(m_filterMode));
   setModel( model, KDevelop::IOutputView::TakeOwnership );
   setDelegate( m_plugin->delegate() );
 

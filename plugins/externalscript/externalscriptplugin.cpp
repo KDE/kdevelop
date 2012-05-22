@@ -103,6 +103,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setOutputMode( static_cast<ExternalScriptItem::OutputMode>( script.readEntry( "outputMode", 0u ) ) );
       item->setErrorMode( static_cast<ExternalScriptItem::ErrorMode>( script.readEntry( "errorMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
+      item->setFilterMode( script.readEntry( "filterMode", 0u ));
       item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
       item->setShowOutput( script.readEntry( "showOutput", true ) );
       m_model->appendRow( item );
@@ -334,6 +335,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   config.writeEntry( "saveMode", (uint) item->saveMode() );
   config.writeEntry( "shortcuts", item->action()->shortcut().toString() );
   config.writeEntry( "showOutput", item->showOutput() );
+  config.writeEntry( "filterMode", item->filterMode());
   config.sync();
 }
 
