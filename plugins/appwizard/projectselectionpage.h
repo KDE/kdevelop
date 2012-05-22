@@ -44,10 +44,10 @@ private slots:
     void nameChanged();
     void typeChanged(const QModelIndex& idx);
     void templateChanged(int);
-    
+
     void getMoreClicked();
     void loadFileClicked();
-    
+
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);

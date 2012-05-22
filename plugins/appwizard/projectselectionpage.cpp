@@ -56,8 +56,8 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT(templateFamilyChanged(QModelIndex,QModelIndex)) );
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
-    
-    connect( ui->getMoreTemplatesButton, SIGNAL(clicked(bool)), 
+
+    connect( ui->getMoreTemplatesButton, SIGNAL(clicked(bool)),
              this, SLOT(getMoreClicked()));
     connect( ui->loadTemplateButton, SIGNAL(clicked(bool)),
              this, SLOT(loadFileClicked()));
@@ -285,16 +285,16 @@ void ProjectSelectionPage::loadFileClicked()
 {
     QString filter = "application/x-bzip-compressed-tar";
     QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog://kdevapptemplate"), filter, this);
-    
+
     if (!fileName.isEmpty())
     {
         QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
         QString destination = saveLocation + QFileInfo(fileName).fileName();
         kDebug() << "Copying" << fileName << "to" << saveLocation;
         QFile::copy(fileName, destination);
-        
+
         m_templatesModel->refresh();
-        
+
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)
         {
@@ -310,7 +310,7 @@ void ProjectSelectionPage::getMoreClicked()
 {
     KNS3::DownloadDialog dialog("kdevappwizard.knsrc", this);
     dialog.exec();
-    
+
     m_templatesModel->refresh();
 }
 
