@@ -107,7 +107,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   );
   showOutputBox->setToolTip( tooltip );
   tooltip = i18n(
-    "<p>Defines what type of filtering should be applied to the output.</p>"
+    "<p>Defines what type of filtering should be applied to the output. E.g. to indicate errors by red text.</p>"
   );
   outputFilterLabel->setToolTip( tooltip );
   outputFilterCombo->setToolTip( tooltip );

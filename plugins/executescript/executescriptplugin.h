@@ -54,6 +54,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     //static QString useTerminalEntry;
     static QString userIdToRunEntry;
     static QString projectTargetEntry;
+    static QString outputFilteringEntry;
     
     virtual void unload();
     
@@ -65,6 +66,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;
+    int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const;
 
     ScriptAppConfigType* m_configType;
 };

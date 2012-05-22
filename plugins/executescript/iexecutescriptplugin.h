@@ -52,6 +52,7 @@ public:
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;
     //virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString scriptAppConfigTypeId() const = 0;
+    virtual int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const = 0;
 };
 
 Q_DECLARE_INTERFACE( IExecuteScriptPlugin, "org.kdevelop.IExecuteScriptPlugin" )

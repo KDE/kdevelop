@@ -106,6 +106,8 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
+    KDevelop::OutputModel::OutputFilterStrategy currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
+
     proc = new KProcess( this );
     
     lineMaker = new KDevelop::ProcessLineMaker( proc, this );
@@ -113,7 +115,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::ExecuteScriptOutputModel( this ), KDevelop::IOutputView::TakeOwnership );
-    model()->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
+    model()->setFilteringStrategy(currentFilterMode);
     setDelegate( plugin->delegate() );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
