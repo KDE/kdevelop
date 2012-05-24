@@ -151,9 +151,6 @@ QModelIndexList ProjectTemplatesModel::templateIndexes(const QString& fileName)
         KConfigGroup general(&templateConfig, "General");
         QStringList categories = general.readEntry("Category").split('/');
 
-        kDebug() << categories;
-        kDebug() << m_templateItems.keys();
-
         QStringList levels;
         foreach (const QString& category, categories)
         {
