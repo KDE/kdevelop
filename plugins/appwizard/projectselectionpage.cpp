@@ -27,6 +27,8 @@
 #include <KColorScheme>
 #include <KFileDialog>
 #include <KNS3/DownloadDialog>
+#include <KTar>
+#include <KZip>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
@@ -283,15 +285,52 @@ bool ProjectSelectionPage::shouldContinue()
 
 void ProjectSelectionPage::loadFileClicked()
 {
-    QString filter = "application/x-bzip-compressed-tar application/x-desktop";
+    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
     QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevapptemplate"), filter, this);
 
     if (!fileName.isEmpty())
     {
         QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
-        QString destination = saveLocation + QFileInfo(fileName).fileName();
-        kDebug() << "Copying" << fileName << "to" << saveLocation;
-        QFile::copy(fileName, destination);
+        QFileInfo info(fileName);
+        QString destination = saveLocation + info.baseName();
+        
+        KMimeType::Ptr mimeType = KMimeType::findByUrl(KUrl(fileName));
+        
+        kDebug() << "Loaded file" << fileName << "with type" << mimeType->name();
+        
+        if (mimeType->name() == "application/x-desktop")
+        {
+            kDebug() << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
+#ifdef Q_WS_WIN
+            destination += ".zip";
+            KZip archive(destination);
+#else
+            destination += ".tar.bz2";
+            KTar archive(destination, "application/x-bzip");
+#endif //Q_WS_WIN
+            
+            archive.open(QIODevice::WriteOnly);
+            
+            QDir dir(info.absoluteDir());
+            QDir::Filters filter = QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot;
+            foreach (const QFileInfo& entry, dir.entryInfoList(filter))
+            {
+                if (entry.isFile())
+                {
+                    archive.addLocalFile(entry.absoluteFilePath(), entry.fileName());
+                }
+                else if (entry.isDir())
+                {
+                    archive.addLocalDirectory(entry.absoluteFilePath(), entry.fileName());
+                }
+            }
+            archive.close();
+        }
+        else
+        {   
+            kDebug() << "Copying" << fileName << "to" << saveLocation;
+            QFile::copy(fileName, destination);
+        }
 
         m_templatesModel->refresh();
 
