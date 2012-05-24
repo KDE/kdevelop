@@ -293,11 +293,10 @@ void ProjectSelectionPage::loadFileClicked()
         QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
         QFileInfo info(fileName);
         QString destination = saveLocation + info.baseName();
-        
+
         KMimeType::Ptr mimeType = KMimeType::findByUrl(KUrl(fileName));
-        
         kDebug() << "Loaded file" << fileName << "with type" << mimeType->name();
-        
+
         if (mimeType->name() == "application/x-desktop")
         {
             kDebug() << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
@@ -308,9 +307,9 @@ void ProjectSelectionPage::loadFileClicked()
             destination += ".tar.bz2";
             KTar archive(destination, "application/x-bzip");
 #endif //Q_WS_WIN
-            
+
             archive.open(QIODevice::WriteOnly);
-            
+
             QDir dir(info.absoluteDir());
             QDir::Filters filter = QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot;
             foreach (const QFileInfo& entry, dir.entryInfoList(filter))
@@ -327,7 +326,7 @@ void ProjectSelectionPage::loadFileClicked()
             archive.close();
         }
         else
-        {   
+        {
             kDebug() << "Copying" << fileName << "to" << saveLocation;
             QFile::copy(fileName, destination);
         }
