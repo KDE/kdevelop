@@ -284,7 +284,7 @@ bool ProjectSelectionPage::shouldContinue()
 void ProjectSelectionPage::loadFileClicked()
 {
     QString filter = "application/x-bzip-compressed-tar";
-    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog://kdevapptemplate"), filter, this);
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevapptemplate"), filter, this);
 
     if (!fileName.isEmpty())
     {
