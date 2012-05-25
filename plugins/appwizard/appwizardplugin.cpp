@@ -468,4 +468,39 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
+QAbstractItemModel* AppWizardPlugin::templatesModel()
+{
+    return m_templatesModel;
+}
+
+QString AppWizardPlugin::knsConfigurationFile()
+{
+    return "kdevappwizard.knsrc";
+}
+
+QStringList AppWizardPlugin::supportedMimeTypes()
+{
+    QStringList types;
+    types << "application/x-desktop";
+    types << "application/x-bzip-compressed-tar";
+    types << "application/zip";
+    return types;
+}
+
+QIcon AppWizardPlugin::icon()
+{
+    return KIcon("project-development-new-template");
+}
+
+QString AppWizardPlugin::name()
+{
+    return i18n("Project templates");
+}
+
+void AppWizardPlugin::loadTemplate (const QString& fileName)
+{
+    m_templatesModel->loadTemplateFile(fileName);
+}
+
+
 #include "appwizardplugin.moc"

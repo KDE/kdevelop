@@ -23,6 +23,7 @@
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 
+class QIcon;
 class QAbstractItemModel;
 class QStringList;
 
@@ -35,9 +36,13 @@ class KDEVPLATFORMINTERFACES_EXPORT ITemplateProvider
 public:
     virtual ~ITemplateProvider();
     
+    virtual QString name() = 0;
+    virtual QIcon icon() = 0;
+    
     virtual QAbstractItemModel* templatesModel() = 0;
     virtual QString knsConfigurationFile() = 0;
     virtual QStringList supportedMimeTypes() = 0;
+    virtual void loadTemplate(const QString& fileName) = 0;
 };
 
 }

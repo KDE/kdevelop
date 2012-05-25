@@ -13,6 +13,7 @@
 #define _APPWIZARDPLUGIN_H_
 
 #include <interfaces/iplugin.h>
+#include <interfaces/itemplateprovider.h>
 
 #include <QHash>
 #include <QVariant>
@@ -23,12 +24,21 @@ class KArchiveDirectory;
 class KTempDir;
 class KUrl;
 
-class AppWizardPlugin: public KDevelop::IPlugin {
+class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvider {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::ITemplateProvider)
+    
 public:
     AppWizardPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~AppWizardPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    
+    virtual QAbstractItemModel* templatesModel();
+    virtual QString knsConfigurationFile();
+    virtual QStringList supportedMimeTypes();
+    virtual QString name();
+    virtual QIcon icon();
+    virtual void loadTemplate (const QString& fileName);
 
 private slots:
     void slotNewProject();

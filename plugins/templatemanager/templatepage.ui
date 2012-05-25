@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TemplatePage</class>
+ <widget class="QWidget" name="TemplatePage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTreeView" name="treeView"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="KPushButton" name="loadButton">
+       <property name="text">
+        <string>Load Template</string>
+       </property>
+       <property name="icon">
+        <iconset theme="application-x-archive"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="getNewButton">
+       <property name="text">
+        <string>Get More Templates</string>
+       </property>
+       <property name="icon">
+        <iconset theme="get-hot-new-stuff"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="shareButton">
+       <property name="text">
+        <string>Share Templates</string>
+       </property>
+       <property name="icon">
+        <iconset theme="get-hot-new-stuff"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Icon=project-development-new-template
+Type=Service
+ServiceTypes=KCModule
+X-KDE-ModuleType=Library
+X-KDE-Library=kdevtemplatemanager_config
+X-KDE-FactoryName=kdevtemplatemanager_config
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=kdevplatform
+X-KDE-CfgDlgHierarchy=CODEGEN
+X-KDE-Weight=150
+Name=Template Configuration

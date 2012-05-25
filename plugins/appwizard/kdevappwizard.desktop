@@ -109,6 +109,7 @@ X-KDE-PluginInfo-Author=Alexander Dymo
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Core
+X-KDevelop-Interfaces=org.kdevelop.ITemplateProvider
 X-KDevelop-Category=Global
 X-KDevelop-Version=14
 X-KDevelop-Mode=GUI
