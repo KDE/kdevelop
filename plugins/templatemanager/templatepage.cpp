@@ -12,8 +12,13 @@ m_provider(provider)
     ui->setupUi(this);
     
     ui->getNewButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
+    connect (ui->getNewButton, SIGNAL(clicked(bool)), this, SLOT(getMoreTemplates()));
+    
     ui->shareButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
+    connect (ui->shareButton, SIGNAL(clicked(bool)), this, SLOT(shareTemplates()));
+    
     ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
+    connect (ui->loadButton, SIGNAL(clicked(bool)), SLOT(loadFromFile()));
     
     ui->treeView->setModel(provider->templatesModel());
 }
