@@ -30,22 +30,83 @@ namespace KDevelop
 {
 class TemplatesModelPrivate;
 
+/**
+ * @brief A convenience class for loading templates using .kdevtemplate files
+ * 
+ * It loads template archives, extracts and stores their description files, and 
+ * displays them as a three-level tree structure. 
+ * 
+ * The locations for loading and storing files are determined from the componentData()
+ * using resource types set by setDescriptionResourceType() and setTemplateResourceType(). 
+ * 
+ * @sa ITemplateProvider::templatesModel()
+ **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new templates model
+     * 
+     * @param componentData the component data used for determining resource locations
+     * @param parent parent object, defaults to 0.
+     **/
     explicit TemplatesModel(const KComponentData& componentData, QObject* parent = 0);
+    
+    /**
+     * Destructor
+     *
+     **/
     virtual ~TemplatesModel();
     
+    /**
+     * Reloads all found templates
+     **/
     virtual void refresh();
+    
+    /**
+     * Finds the model index of the template file @p fileName.
+     * 
+     * For convenience, this function returns the found template index, as well as all of its ancestors. 
+     * The indexes are ordered from the top-level ancestor to the actual index of the template. 
+     * This is useful for managing selection when multiple views display different level of the model.
+     * 
+     * @param fileName the template file name
+     **/
     QModelIndexList templateIndexes(const QString& fileName);
     
+    /**
+     * Sets the resource type for template descriptions to @p type
+     * 
+     * @param type the new resource type for template descriptions
+     * @sa descriptionResourceType(), KStandardDirs
+     **/
     void setDescriptionResourceType(const QByteArray& type);
+    
+    /**
+     * Returns the current resource type for template descriptions
+     *
+     * @sa setDescriptionResourceType()
+     **/
     QByteArray descriptionResourceType() const;
     
+    /**
+     * Sets the resource type for template archives to @p type
+     * 
+     * @param type the new resource type for template archives
+     * @sa templateResourceType(), KStandardDirs
+     **/
     void setTemplateResourceType(const QByteArray& type);
+    /**
+     * Returns the current resource type for template archives
+     *
+     * @sa setTemplateResourceType()
+     **/
     QByteArray templateResourceType() const;
     
+    /**
+     * @return the component data used by this model. 
+     **/
     KComponentData componentData();
         
 protected:
