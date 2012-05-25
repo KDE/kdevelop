@@ -116,6 +116,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/komparesupport.cpp
     codegen/overridespage.cpp
     codegen/utilities.cpp
+    codegen/templatesmodel.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -313,6 +314,7 @@ install(FILES
     codegen/documentchangeset.h
     codegen/coderepresentation.h
     codegen/utilities.h
+    codegen/templatesmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

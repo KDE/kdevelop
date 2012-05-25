@@ -23,7 +23,6 @@
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
-#include "appwizardplugin.h"
 #include <KColorScheme>
 #include <KFileDialog>
 #include <KNS3/DownloadDialog>
@@ -110,7 +109,7 @@ void ProjectSelectionPage::templateChanged(int current)
 
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
-    KStandardDirs* dirs = m_templatesModel->plugin()->componentData().dirs();
+    KStandardDirs* dirs = KDevelop::ICore::self()->componentData().dirs();
     QString picPath = dirs->findResource("apptemplate_previews", current.data( Qt::UserRole+2 ).toString() );
     if( picPath.isEmpty() ) 
     {
@@ -290,7 +289,7 @@ void ProjectSelectionPage::loadFileClicked()
 
     if (!fileName.isEmpty())
     {
-        QString saveLocation = m_templatesModel->plugin()->componentData().dirs()->saveLocation("apptemplates");
+        QString saveLocation = KDevelop::ICore::self()->componentData().dirs()->saveLocation("apptemplates");
         QFileInfo info(fileName);
         QString destination = saveLocation + info.baseName();
 
