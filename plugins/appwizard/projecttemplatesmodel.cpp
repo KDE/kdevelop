@@ -30,7 +30,7 @@
 #include <KMimeType>
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
-    :KDevelop::TemplatesModel(parent)
+    :KDevelop::TemplatesModel(parent->componentData(), parent)
 {
     setDescriptionResourceType("apptemplate_descriptions");
     setTemplateResourceType("apptemplates");

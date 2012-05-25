@@ -25,6 +25,7 @@
 
 #include "../languageexport.h"
 
+class KComponentData;
 namespace KDevelop
 {
 class TemplatesModelPrivate;
@@ -33,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    explicit TemplatesModel(QObject* parent = 0);
+    explicit TemplatesModel(const KComponentData& componentData, QObject* parent = 0);
     virtual ~TemplatesModel();
     
     virtual void refresh();

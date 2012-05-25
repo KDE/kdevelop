@@ -19,7 +19,6 @@
 */
 
 #include "templatesmodel.h"
-#include "interfaces/icore.h"
 
 #include <KTar>
 #include <KZip>
@@ -36,12 +35,22 @@ using namespace KDevelop;
 class KDevelop::TemplatesModelPrivate
 {    
 public:
+    TemplatesModelPrivate(const KComponentData& componentData);
+    
     QByteArray descriptionResourceType;
     QByteArray templateResourceType;
     QMap<QString, QStandardItem*> templateItems;
+    KComponentData componentData;
 };
 
-TemplatesModel::TemplatesModel (QObject* parent) : QStandardItemModel(parent), d(new TemplatesModelPrivate)
+TemplatesModelPrivate::TemplatesModelPrivate(const KComponentData& componentData) : componentData(componentData)
+{
+
+}
+
+
+TemplatesModel::TemplatesModel(const KComponentData& componentData, QObject* parent) : QStandardItemModel(parent), 
+d(new TemplatesModelPrivate(componentData))
 {
 
 }
@@ -55,7 +64,7 @@ TemplatesModel::~TemplatesModel()
 bool TemplatesModel::templateExists( const QString& descname )
 {
     QFileInfo fi(descname);
-    foreach( const QString& templatename, ICore::self()->componentData().dirs()->findAllResources(d->templateResourceType) )
+    foreach( const QString& templatename, d->componentData.dirs()->findAllResources(d->templateResourceType) )
     {
         if( QFileInfo(templatename).baseName() == fi.baseName() ) {
             return true;
@@ -71,7 +80,7 @@ void TemplatesModel::refresh()
     d->templateItems[""] = invisibleRootItem();
     extractTemplateDescriptions();
 
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
+    KStandardDirs *dirs = d->componentData.dirs();
     const QStringList templateDescriptions = dirs->findAllResources(d->descriptionResourceType);
     foreach (const QString &templateDescription, templateDescriptions)
     {
@@ -125,9 +134,10 @@ QStandardItem *TemplatesModel::createItem(const QString& name, const QString& ca
 
 void TemplatesModel::extractTemplateDescriptions()
 {
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
+    KStandardDirs *dirs = d->componentData.dirs();
     QStringList templateArchives = dirs->findAllResources(d->templateResourceType);
 
+    kDebug() << d->descriptionResourceType;
     QString localDescriptionsDir = dirs->saveLocation(d->descriptionResourceType);
 
     foreach (const QString &archName, templateArchives)
@@ -167,7 +177,7 @@ void TemplatesModel::extractTemplateDescriptions()
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName)
 {
     QFileInfo info(fileName);
-    QString description = ICore::self()->componentData().dirs()->findResource(d->descriptionResourceType, info.baseName() + ".kdevtemplate");
+    QString description = d->componentData.dirs()->findResource(d->descriptionResourceType, info.baseName() + ".kdevtemplate");
 
     QModelIndexList indexes;
 
