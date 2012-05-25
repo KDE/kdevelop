@@ -61,9 +61,9 @@ TemplatesModel::~TemplatesModel()
 }
 
 
-bool TemplatesModel::templateExists( const QString& descname )
+bool TemplatesModel::templateExists( const QString& descriptionName )
 {
-    QFileInfo fi(descname);
+    QFileInfo fi(descriptionName);
     foreach( const QString& templatename, d->componentData.dirs()->findAllResources(d->templateResourceType) )
     {
         if( QFileInfo(templatename).baseName() == fi.baseName() ) {

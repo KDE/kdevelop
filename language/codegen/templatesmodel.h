@@ -110,8 +110,27 @@ public:
     KComponentData componentData();
         
 protected:
+    /**
+     * Extracts .kdevtemplate files from all available template archives and saves them to a location
+     * determined by descriptionResourceType(). 
+     **/
     void extractTemplateDescriptions();
-    bool templateExists(const QString&);
+    
+    /**
+     * Checks whether the template @descriptionName exists. 
+     *
+     * @param descriptionName the name of the stored template description (.kdevtemplate) file
+     * @return true if a matching template file exists, false otherwise
+     **/
+    bool templateExists(const QString& descriptionName);
+    
+    /**
+     * Creates a model item for the template @p name in category @p category
+     *
+     * @param name the name of the new template
+     * @param category the category of the new template
+     * @return the created item
+     **/
     QStandardItem *createItem(const QString &name, const QString &category);
     
 private:
