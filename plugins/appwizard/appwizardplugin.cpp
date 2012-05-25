@@ -79,6 +79,7 @@ K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki1
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile("kdevappwizard.rc");
 
     m_newFromTemplate = actionCollection()->addAction("project_new");
