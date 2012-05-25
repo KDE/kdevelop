@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 
 #include "appwizardplugin.h"
-#include <interfaces/icore.h>
 #include <KIcon>
 #include <KMimeType>
 
@@ -44,7 +43,7 @@ void ProjectTemplatesModel::refresh()
 
 QString ProjectTemplatesModel::loadTemplateFile (const QString& fileName)
 {
-    QString saveLocation = KDevelop::ICore::self()->componentData().dirs()->saveLocation("apptemplates");
+    QString saveLocation = componentData().dirs()->saveLocation("apptemplates");
     QFileInfo info(fileName);
     QString destination = saveLocation + info.baseName();
 

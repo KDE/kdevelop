@@ -233,6 +233,7 @@ void TemplatesModel::setTemplateResourceType (const QByteArray& type)
     d->templateResourceType = type;
 }
 
-
-
-
+KComponentData TemplatesModel::componentData()
+{
+    return d->componentData;
+}

@@ -45,6 +45,8 @@ public:
     
     void setTemplateResourceType(const QByteArray& type);
     QByteArray templateResourceType() const;
+    
+    KComponentData componentData();
         
 protected:
     void extractTemplateDescriptions();
