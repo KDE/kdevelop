@@ -471,6 +471,7 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
 
 QAbstractItemModel* AppWizardPlugin::templatesModel()
 {
+    m_templatesModel->refresh();
     return m_templatesModel;
 }
 
