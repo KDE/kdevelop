@@ -24,8 +24,6 @@ TemplateConfig::TemplateConfig (QWidget* parent, const QVariantList& args) : KCM
             ui->ktabwidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
         }
     }
-    
-    ui->ktabwidget->addTab(new QWidget(this), "TabTab");
 }
 
 TemplateConfig::~TemplateConfig()
