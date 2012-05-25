@@ -496,7 +496,7 @@ QIcon AppWizardPlugin::icon()
 
 QString AppWizardPlugin::name()
 {
-    return i18n("Project templates");
+    return i18n("Project Templates");
 }
 
 void AppWizardPlugin::loadTemplate (const QString& fileName)
