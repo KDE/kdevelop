@@ -97,6 +97,14 @@ public:
      * @param fileName the name of the file to load.
      **/
     virtual void loadTemplate(const QString& fileName) = 0;
+    
+    /**
+     * Reloads all template data.
+     * 
+     * This is usually called after loading or updating new templates.
+     * 
+     **/
+    virtual void reload() = 0;
 };
 
 }

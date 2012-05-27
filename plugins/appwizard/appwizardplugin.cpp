@@ -504,5 +504,10 @@ void AppWizardPlugin::loadTemplate (const QString& fileName)
     m_templatesModel->loadTemplateFile(fileName);
 }
 
+void AppWizardPlugin::reload()
+{
+    m_templatesModel->refresh();
+}
+
 
 #include "appwizardplugin.moc"

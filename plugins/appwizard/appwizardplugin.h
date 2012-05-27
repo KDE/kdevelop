@@ -39,6 +39,7 @@ public:
     virtual QString name();
     virtual QIcon icon();
     virtual void loadTemplate (const QString& fileName);
+    virtual void reload();
 
 private slots:
     void slotNewProject();

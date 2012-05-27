@@ -36,12 +36,19 @@ void TemplatePage::loadFromFile()
     {
         m_provider->loadTemplate(filename);
     }
+    
+    m_provider->reload();
 }
 
 void TemplatePage::getMoreTemplates()
 {
     KNS3::DownloadDialog dialog(m_provider->knsConfigurationFile(), this);
     dialog.exec();
+    
+    if (!dialog.changedEntries().isEmpty())
+    {
+        m_provider->reload();
+    }
 }
 
 void TemplatePage::shareTemplates()
