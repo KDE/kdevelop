@@ -37,27 +37,27 @@ macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
 #macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
 #                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
 #                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
-if(CMAKE_COMPILER_IS_GNUCXX)
-  # TODO: Remove when LTS for g++ < 4.3 has ended.
-  #       See also: languages/cpp/parser/parser.h
-  macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
-  if (GCC_IS_NEWER_THAN_4_3)
-    message(STATUS "Enabling c++0x support for unordered map")
-    add_definitions( -std=c++0x ) # For unordered_map
-  else(GCC_IS_NEWER_THAN_4_3)
-    add_definitions( -DGXX_LT_4_3 )
-  endif (GCC_IS_NEWER_THAN_4_3)
-endif(CMAKE_COMPILER_IS_GNUCXX)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  # TODO: version check?
-  add_definitions( -std=c++0x )
-endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+# TODO: Remove when LTS for g++ < 4.3 has ended.
+#       See also: languages/cpp/parser/parser.h in KDevelop
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    include(CheckIncludeFileCXX)
+    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
+
+    if(HAVE_UNORDERED_MAP)
+        message(STATUS "Enabling c++0x support for unordered map")
+        add_definitions( -std=c++0x )
+    else(HAVE_UNORDERED_MAP)
+        check_include_file_cxx(ext/hash_map HAVE_EXT_HASH_MAP)
+    endif(HAVE_UNORDERED_MAP)
+endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 
