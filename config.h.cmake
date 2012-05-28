@@ -8,4 +8,10 @@
 /* Valgrind presence */
 #cmakedefine HAVE_VALGRIND_H 1
 
+/* Whether <unordered_map> exists */
+#cmakedefine HAVE_UNORDERED_MAP 1
+
+/* Whether <ext/hash_map> exists */
+#cmakedefine HAVE_EXT_HASH_MAP 1
+
 #endif //  KDEVELOP_CONFIG_H
