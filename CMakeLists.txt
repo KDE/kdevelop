@@ -46,7 +46,9 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_N
 #       See also: languages/cpp/parser/parser.h in KDevelop
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     include(CheckIncludeFileCXX)
+    set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
     check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
+    set(CMAKE_REQUIRED_FLAGS "")
 
     if(HAVE_UNORDERED_MAP)
         message(STATUS "Enabling c++0x support for unordered map")
