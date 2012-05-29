@@ -12,6 +12,11 @@
 
 #include "appwizardpagewidget.h"
 
+namespace KDevelop
+{
+class MultiLevelListView;
+}
+
 namespace Ui {
 class ProjectSelectionPage;
 }
@@ -38,7 +43,6 @@ signals:
     void invalid();
 private slots:
     void itemChanged( const QModelIndex& current );
-    void templateFamilyChanged(const QModelIndex&, const QModelIndex&);
     void urlEdited();
     void validateData();
     void nameChanged();
@@ -54,6 +58,7 @@ private:
     inline QStandardItem* getCurrentItem() const;
 
     Ui::ProjectSelectionPage *ui;
+    KDevelop::MultiLevelListView* m_listView;
     ProjectTemplatesModel *m_templatesModel;
 };
 

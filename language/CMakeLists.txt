@@ -117,6 +117,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/overridespage.cpp
     codegen/utilities.cpp
     codegen/templatesmodel.cpp
+    codegen/multilevellistview.cpp
     
     util/setrepository.cpp
     util/includeitem.cpp
@@ -315,6 +316,7 @@ install(FILES
     codegen/coderepresentation.h
     codegen/utilities.h
     codegen/templatesmodel.h
+    codegen/multilevellistview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

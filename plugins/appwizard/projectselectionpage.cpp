@@ -23,6 +23,7 @@
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
+#include <language/codegen/multilevellistview.h>
 #include <KColorScheme>
 #include <KFileDialog>
 #include <KNS3/DownloadDialog>
@@ -37,8 +38,6 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     setContentsMargins(0,0,0,0);
     ui->descriptionContent->setBackgroundRole(QPalette::Base);
     ui->descriptionContent->setForegroundRole(QPalette::Text);
-    ui->templateView->setModel(templatesModel);
-    ui->templateView->setFocus();
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
@@ -52,9 +51,12 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
              this, SLOT(nameChanged()) );
     
+    m_listView = new KDevelop::MultiLevelListView(2);
+    m_listView->setModel(templatesModel);
+    m_listView->setContentsMargins(0, 0, 0, 0);
+    connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
+    ui->gridLayout->addWidget(m_listView, 0, 0, 1, 2);
     
-    connect( ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(templateFamilyChanged(QModelIndex,QModelIndex)) );
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
 
@@ -75,17 +77,6 @@ void ProjectSelectionPage::nameChanged()
 ProjectSelectionPage::~ProjectSelectionPage()
 {
     delete ui;
-}
-
-void ProjectSelectionPage::templateFamilyChanged(const QModelIndex& current, const QModelIndex& )
-{
-    ui->templatesIconView->setModel(m_templatesModel);
-    ui->templatesIconView->setRootIndex(current);
-
-    connect( ui->templatesIconView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(typeChanged(QModelIndex)) );
-
-    ui->templatesIconView->setCurrentIndex(m_templatesModel->index(0,0, current));
 }
 
 void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
@@ -254,9 +245,7 @@ QString ProjectSelectionPage::pathUp(const QString& aPath)
 
 QStandardItem* ProjectSelectionPage::getCurrentItem() const
 {
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
-    if ( item && item->hasChildren() )
-        item = m_templatesModel->itemFromIndex( ui->templatesIconView->currentIndex() );
+    QStandardItem* item = m_templatesModel->itemFromIndex( m_listView->currentIndex() );
     if ( item && item->hasChildren() )
     {
         const int currect = ui->templateType->currentIndex();
@@ -294,8 +283,7 @@ void ProjectSelectionPage::loadFileClicked()
         if (indexes.size() > 2)
         {
             QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect;
-            ui->templateView->selectionModel()->setCurrentIndex(indexes.at(0), flags);
-            ui->templatesIconView->selectionModel()->setCurrentIndex(indexes.at(1), flags);
+            m_listView->setCurrentIndex(indexes.at(1));
             ui->templateType->setCurrentIndex(indexes.at(2).row());
         }
     }
