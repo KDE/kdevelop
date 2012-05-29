@@ -26,20 +26,14 @@
 namespace KDevelop
 {
 
-FilteredItem::FilteredItem( const QString& line )
+FilteredItem::FilteredItem( const QString& line, FilteredOutputItemType type )
 : originalLine( line )
-, type( StandardItem )
+, type( type )
 , shortenedText( line )
 , isActivatable(false)
-, isValidItem(false)
 , lineNo(-1)
 , columnNo(-1)
 {
-}
-
-bool FilteredItem::isValid() const
-{
-    return isValidItem;
 }
 
 

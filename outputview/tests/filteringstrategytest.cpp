@@ -20,6 +20,7 @@
 
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
+#include <language/interfaces/quickopenfilter.h>
 
 #include <qtest_kde.h>
 
@@ -30,128 +31,128 @@ namespace KDevelop
 void FilteringStrategyTest::testNoFilterstrategy_data()
 {
     QTest::addColumn<QString>("line");
-    QTest::addColumn<bool>("expected");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expected");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << false;
+    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << false;
+    << buildCppCheckErrorLine() << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << false;
+    << buildCompilerLine() << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << false;
+    << buildCompilerErrorLine() << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-action-line")
-    << buildCompilerActionLine() << false;
+    << buildCompilerActionLine() << FilteredItem::NotAValidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << false;
+    << buildPythonErrorLine() << FilteredItem::NotAValidItem;
 }
 
 void FilteringStrategyTest::testNoFilterstrategy()
 {
     QFETCH(QString, line);
-    QFETCH(bool, expected);
+    QFETCH(FilteredItem::FilteredOutputItemType, expected);
     NoFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.isValid() == expected);
+    QVERIFY(item1.type == expected);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.isValid() == expected);
+    QVERIFY(item1.type == expected);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy_data()
 {
     QTest::addColumn<QString>("line");
-    QTest::addColumn<bool>("expectedError");
-    QTest::addColumn<bool>("expectedAction");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << false << false;
+    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << false << false;
+    << buildCppCheckErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << false << false;
+    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << true << false;
+    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << false << true;
+    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::ActionItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << false << false;
+    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy()
 {
     QFETCH(QString, line);
-    QFETCH(bool, expectedError);
-    QFETCH(bool, expectedAction);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.isValid() == expectedError);
+    QVERIFY(item1.type == expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.isValid() == expectedAction);
+    QVERIFY(item1.type == expectedAction);
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
 {
     QTest::addColumn<QString>("line");
-    QTest::addColumn<bool>("expectedError");
-    QTest::addColumn<bool>("expectedAction");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << false << false;
+    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << true << false;
+    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << false << false;
+    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << true << false;
+    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << false << false;
+    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << false << false;
+    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy()
 {
     QFETCH(QString, line);
-    QFETCH(bool, expectedError);
-    QFETCH(bool, expectedAction);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
     ScriptErrorFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.isValid() == expectedError);
+    QVERIFY(item1.type == expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.isValid() == expectedAction);
+    QVERIFY(item1.type == expectedAction);
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
-    QTest::addColumn<bool>("expectedError");
-    QTest::addColumn<bool>("expectedAction");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << false << false;
+    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << true << false;
+    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << false << false;
+    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << false << false;
+    << buildCompilerErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << false << false;
+    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << false << false;
+    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
 {
     QFETCH(QString, line);
-    QFETCH(bool, expectedError);
-    QFETCH(bool, expectedAction);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
     StaticAnalysisFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.isValid() == expectedError);
+    QVERIFY(item1.type == expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.isValid() == expectedAction);
+    QVERIFY(item1.type == expectedAction);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
@@ -182,7 +183,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     static CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
-    QCOMPARE(testee.d->m_currentDirs.last(), expectedLastDir);
+    QCOMPARE(testee.getCurrentDirs().last(), expectedLastDir);
 }
 
 void FilteringStrategyTest::benchMarkCompilerFilterAction()
@@ -216,7 +217,7 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     totalTime.start();
 
     static CompilerFilterStrategy testee(projecturl);
-    FilteredItem item1("dummyline");
+    FilteredItem item1("dummyline", FilteredItem::NotAValidItem);
     QBENCHMARK {
         for(int i = 0; i < outputlines.size(); ++i) {
             item1 = testee.actionInLine(outputlines.at(i));

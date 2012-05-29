@@ -39,16 +39,29 @@ NoFilterStrategy::NoFilterStrategy()
 
 FilteredItem NoFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem(line);
+    return FilteredItem( line, FilteredItem::NotAValidItem );
 }
 
 FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 {
-    return FilteredItem(line);
+    return FilteredItem( line, FilteredItem::NotAValidItem );
 }
 
 
 /// --- Compiler error filter strategy ---
+
+/// Impl. of CompilerFilterStrategy.
+struct CompilerFilterStrategyPrivate
+{
+    CompilerFilterStrategyPrivate(const KUrl& buildDir);
+    KUrl urlForFile( const QString& ) const;
+
+    QVector<QString> m_currentDirs;
+    KUrl m_buildDir;
+
+    typedef QMap<QString, int> PositionMap;
+    PositionMap m_positionInCurrentDirs;
+};
 
 // A list of filters for possible compiler, linker, and make errors
 const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
@@ -152,9 +165,14 @@ CompilerFilterStrategy::~CompilerFilterStrategy()
     delete d;
 }
 
+QVector< QString > CompilerFilterStrategy::getCurrentDirs()
+{
+    return d->m_currentDirs;
+}
+
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
-    FilteredItem item(line);
+    FilteredItem item(line, FilteredItem::NotAValidItem);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -196,7 +214,6 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
                     it.value() = d->m_currentDirs.size() - 1;
                 }
             }
-            item.isValidItem = true;
             break;
         }
     }
@@ -205,7 +222,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line);
+    FilteredItem item(line, FilteredItem::NotAValidItem);
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
@@ -237,7 +254,6 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
             }
-            item.isValidItem = true;
             break;
         }
     }
@@ -263,12 +279,12 @@ ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 
 FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem(line);
+    return FilteredItem(line, FilteredItem::NotAValidItem);
 }
 
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line);
+    FilteredItem item(line, FilteredItem::NotAValidItem);
     foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -291,7 +307,6 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
                 item.isActivatable = true;
 
-            item.isValidItem = true;
             break;
         }
     }
@@ -312,12 +327,12 @@ StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 
 FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem(line);
+    return FilteredItem(line, FilteredItem::NotAValidItem);
 }
 
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line);
+    FilteredItem item(line, FilteredItem::NotAValidItem);
     foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -340,7 +355,6 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
             }
-            item.isValidItem = true;
             break;
         }
     }

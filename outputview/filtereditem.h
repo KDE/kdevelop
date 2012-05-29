@@ -43,21 +43,20 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
         ActionItem = 3,
         CustomItem = 4,
         StandardItem = 5,
-        InformationItem = 6
+        InformationItem = 6,
+        NotAValidItem = 999
     };
 
-    FilteredItem( const QString& line );
-
-    bool isValid() const;
+    FilteredItem( const QString& line, FilteredOutputItemType type );
 
     QString originalLine;
     FilteredOutputItemType type;
     QString shortenedText;
     bool isActivatable;
-    bool isValidItem;
     KUrl url;
     int lineNo;
     int columnNo;
+
 };
 
 

@@ -36,6 +36,8 @@
 namespace KDevelop
 {
 
+struct CompilerFilterStrategyPrivate;
+
 /**
  * This filter strategy is for not applying any filtering at all. Implementation of the
  * interface methods are basically noops
@@ -52,29 +54,13 @@ public:
 
 };
 
-
-/**
- * Implementation of CompilerFilterStrategy.
- **/
-struct CompilerFilterStrategyPrivate
-{
-    CompilerFilterStrategyPrivate(const KUrl& buildDir);
-    KUrl urlForFile( const QString& ) const;
-
-    QVector<QString> m_currentDirs;
-    KUrl m_buildDir;
-
-    typedef QMap<QString, int> PositionMap;
-    PositionMap m_positionInCurrentDirs;
-};
-
 /**
  * This filter stategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler.
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
 {
-    friend class FilteringStrategyTest;
+
 public:
     CompilerFilterStrategy(KUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
@@ -82,6 +68,8 @@ public:
     virtual FilteredItem errorInLine(QString const& line);
 
     virtual FilteredItem actionInLine(QString const& line);
+
+    QVector<QString> getCurrentDirs();
 
 private:
     CompilerFilterStrategyPrivate* const d;

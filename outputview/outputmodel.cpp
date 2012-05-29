@@ -237,18 +237,18 @@ void OutputModel::addLineBatch()
     // If there is nothing to insert we are done.
     if ( linesInBatch == 0 )
             return;
-    //kDebug() << "addLineBatch called with " << linesInBatch << "lines";
+
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
 
     for(int i = 0; i < linesInBatch; ++i) {
         const QString line = d->m_lineBuffer.dequeue();
         FilteredItem item = d->m_filter->errorInLine(line);
-        if( !item.isValid())
-        {
+        if( item.type == FilteredItem::NotAValidItem ) {
             item = d->m_filter->actionInLine(line);
         }
-        if( item.type == FilteredItem::ErrorItem )
+        if( item.type == FilteredItem::ErrorItem ) {
             d->m_activateableItems.insert(d->m_activateableItems.size());
+        }
 
         d->m_filteredItems << item;
     }
