@@ -2882,6 +2882,16 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("boHallo"));
   }
+  {//Test __builtin_offsetof
+    TopDUContext* top = parse(QByteArray("typedef struct a { int i; } t_a; int o = __builtin_offsetof(t_a, i);"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+  }
+  {//Test __builtin_offsetof with a struct type (make sure spaces are handled correctly by the macro)
+    TopDUContext* top = parse(QByteArray("struct a { int i; }; int o = __builtin_offsetof(struct a, i);"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+  }
 }
 
 void TestCppCodeCompletion::testArgumentList()

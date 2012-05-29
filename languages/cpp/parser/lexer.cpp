@@ -206,6 +206,8 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(goto);
   ADD_TOKEN(if);
   ADD_TOKEN(inline);
+  ADD_TOKEN2(__inline__, inline);
+  ADD_TOKEN2(__inline, inline);
   ADD_TOKEN(int);
   ADD_TOKEN(k_dcop);
   ADD_TOKEN(k_dcop_signals);
@@ -230,6 +232,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(short);
   ADD_TOKEN(__qt_signals__);
   ADD_TOKEN(signed);
+  ADD_TOKEN2(__signed__, signed);
   ADD_TOKEN(sizeof);
   ADD_TOKEN(__qt_slots__);
   ADD_TOKEN(static);
@@ -250,6 +253,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(typename);
   ADD_TOKEN(union);
   ADD_TOKEN(unsigned);
+  ADD_TOKEN2(__unsigned__, unsigned);
   ADD_TOKEN(using);
   ADD_TOKEN(virtual);
   ADD_TOKEN(void);
