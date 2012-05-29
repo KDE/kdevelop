@@ -33,7 +33,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MultiLevelListView (int levels = 3, QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit MultiLevelListView (int levels = 2, QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~MultiLevelListView();
     
     void setModel(QAbstractItemModel* model);
@@ -47,6 +47,9 @@ signals:
 public slots:
     void setRootIndex(const QModelIndex& index);
     void setCurrentIndex(const QModelIndex& index);
+    
+private slots:
+    void currentChanged(int i);
     
 private:
     class MultiLevelListViewPrivate* const d;

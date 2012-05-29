@@ -56,6 +56,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
     ui->gridLayout->addWidget(m_listView, 0, 0, 1, 2);
+    typeChanged(m_listView->currentIndex());
     
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );

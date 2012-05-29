@@ -20,6 +20,7 @@
 #include "multilevellistview.h"
 #include <QHBoxLayout>
 #include <QListView>
+#include <QSignalMapper>
 
 using namespace KDevelop;
 
@@ -27,38 +28,39 @@ class KDevelop::MultiLevelListViewPrivate
 {
 public:
     MultiLevelListViewPrivate(int levels);
+    ~MultiLevelListViewPrivate();
     
     int levels;
     QList<QListView*> listViews;
+    QSignalMapper* mapper;
 };
 
 MultiLevelListViewPrivate::MultiLevelListViewPrivate (int levels) : levels(levels)
 {
-    
+    mapper = new QSignalMapper;
+}
+
+MultiLevelListViewPrivate::~MultiLevelListViewPrivate()
+{
+    delete mapper;
 }
 
 MultiLevelListView::MultiLevelListView (int levels, QWidget* parent, Qt::WindowFlags f) : QWidget(parent, f),
 d(new MultiLevelListViewPrivate(levels))
 {
     Q_ASSERT(levels > 1);
-    QHBoxLayout* layout = new QHBoxLayout();
     
-    // Create the list views
-    QListView* lastView = 0;
-    for (int i = 0; i < levels; ++i)
+    connect (d->mapper, SIGNAL(mapped(int)), SLOT(currentChanged(int)));
+
+    QHBoxLayout* layout = new QHBoxLayout();
+    for (int i = 0; i < d->levels; ++i)
     {
         QListView* view = new QListView(this);
-        if (lastView)
-        {
-            connect (lastView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), view, SLOT(setRootIndex(QModelIndex)));
-        }
+        view->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(view);
         d->listViews << view;
-        lastView = view;
     }
-    
-    connect (lastView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)));
-    
+    layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 }
 
@@ -69,15 +71,26 @@ MultiLevelListView::~MultiLevelListView()
 
 void MultiLevelListView::setModel (QAbstractItemModel* model)
 {
-    foreach (QListView* view, d->listViews)
+    QListView* lastView = 0;
+    for (int i = 0; i < d->levels; ++i)
     {
+        QListView* view = d->listViews[i];
         view->setModel(model);
+        if (i == d->levels - 1)
+        {
+            connect (view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)));
+        }
+        else
+        {
+            d->mapper->setMapping(view->selectionModel(), i);
+            connect (view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), d->mapper, SLOT(map()));
+        }
+        lastView = view;
     }
-    foreach (QListView* view, d->listViews)
-    {
-        view->setCurrentIndex(view->rootIndex().child(0,0));
-        view->setModel(model);
-    }
+    
+    connect (lastView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)));
+        
+    d->listViews.first()->setCurrentIndex(model->index(0,0));
 }
 
 QListView* MultiLevelListView::viewForLevel (int level)
@@ -120,3 +133,10 @@ void MultiLevelListView::setRootIndex (const QModelIndex& index)
     d->listViews.first()->setRootIndex(index);
 }
 
+void MultiLevelListView::currentChanged (int i)
+{
+    Q_ASSERT(i < d->levels - 1);
+    QModelIndex index = d->listViews[i]->currentIndex();
+    d->listViews[i+1]->setRootIndex(index);
+    d->listViews[i+1]->setCurrentIndex(index.child(0, 0));
+}
