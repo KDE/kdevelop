@@ -59,7 +59,7 @@
 #include <language/interfaces/editorcontext.h>
 
 #include <config-kdevplatform.h>
-#if HAVE_KOMPARE
+#ifdef HAVE_KOMPARE
 #include <interfaces/ipatchdocument.h>
 #endif
 #include <interfaces/ipatchsource.h>

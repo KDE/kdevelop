@@ -33,7 +33,11 @@ class IndexedString;
 class KompareWidgets
 {
   public:
-    static const bool enabled = HAVE_KOMPARE;
+#ifdef HAVE_KOMPARE
+    static const bool enabled = true;
+#else
+    static const bool enabled = false;
+#endif
 
     KompareWidgets();
     ~KompareWidgets();

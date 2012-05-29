@@ -20,7 +20,7 @@
 #include "komparesupport.h"
 #include <config-kdevplatform.h>
 
-#if HAVE_KOMPARE
+#ifdef HAVE_KOMPARE
 
 #include <stddef.h>
 #include <cstddef>

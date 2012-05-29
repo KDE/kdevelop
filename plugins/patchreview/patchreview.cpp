@@ -1219,7 +1219,7 @@ void PatchReviewPlugin::clearPatch( QObject* _patch ) {
 }
 
 #if 0
-#if HAVE_KOMPARE
+#ifdef HAVE_KOMPARE
 void showDiff( const KDevelop::VcsDiff& d ) {
     ICore::self()->uiController()->switchToArea( "review", KDevelop::IUiController::ThisWindow );
     foreach( const VcsLocation& l, d.leftTexts().keys() )
