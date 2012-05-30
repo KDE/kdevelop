@@ -243,7 +243,7 @@ void OutputModel::addLineBatch()
     for(int i = 0; i < linesInBatch; ++i) {
         const QString line = d->m_lineBuffer.dequeue();
         FilteredItem item = d->m_filter->errorInLine(line);
-        if( item.type == FilteredItem::NotAValidItem ) {
+        if( item.type == FilteredItem::InvalidItem ) {
             item = d->m_filter->actionInLine(line);
         }
         if( item.type == FilteredItem::ErrorItem ) {

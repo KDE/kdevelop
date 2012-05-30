@@ -34,17 +34,17 @@ void FilteringStrategyTest::testNoFilterstrategy_data()
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expected");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::NotAValidItem;
+    << buildCppCheckErrorLine() << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::NotAValidItem;
+    << buildCompilerLine() << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::NotAValidItem;
+    << buildCompilerErrorLine() << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
-    << buildCompilerActionLine() << FilteredItem::NotAValidItem;
+    << buildCompilerActionLine() << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::NotAValidItem;
+    << buildPythonErrorLine() << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testNoFilterstrategy()
@@ -65,17 +65,17 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCppCheckErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
+    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::ActionItem;
+    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy()
@@ -98,17 +98,17 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
+    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
+    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy()
@@ -130,17 +130,17 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::NotAValidItem;
+    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildCompilerErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::NotAValidItem << FilteredItem::NotAValidItem;
+    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
@@ -217,7 +217,7 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     totalTime.start();
 
     static CompilerFilterStrategy testee(projecturl);
-    FilteredItem item1("dummyline", FilteredItem::NotAValidItem);
+    FilteredItem item1("dummyline", FilteredItem::InvalidItem);
     QBENCHMARK {
         for(int i = 0; i < outputlines.size(); ++i) {
             item1 = testee.actionInLine(outputlines.at(i));

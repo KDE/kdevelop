@@ -31,21 +31,23 @@ namespace KDevelop
 {
 
 /**
- * Holds all metadata of a given compiler output line. E.g. if it is an error or
+ * Holds all metadata of a given compiler/script/whatever output line. E.g. if it is an error or
  * a warning, if it is clickable or not, etc.
  **/
 struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 {
     enum FilteredOutputItemType
     {
+        InvalidItem = 0,
         ErrorItem = 1,
         WarningItem = 2,
         ActionItem = 3,
         CustomItem = 4,
         StandardItem = 5,
-        InformationItem = 6,
-        NotAValidItem = 999
+        InformationItem = 6
     };
+
+    explicit FilteredItem( const QString& line );
 
     FilteredItem( const QString& line, FilteredOutputItemType type );
 

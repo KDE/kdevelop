@@ -39,12 +39,12 @@ NoFilterStrategy::NoFilterStrategy()
 
 FilteredItem NoFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem( line, FilteredItem::NotAValidItem );
+    return FilteredItem( line );
 }
 
 FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 {
-    return FilteredItem( line, FilteredItem::NotAValidItem );
+    return FilteredItem( line );
 }
 
 
@@ -172,7 +172,7 @@ QVector< QString > CompilerFilterStrategy::getCurrentDirs()
 
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
-    FilteredItem item(line, FilteredItem::NotAValidItem);
+    FilteredItem item(line);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -222,7 +222,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line, FilteredItem::NotAValidItem);
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
@@ -279,12 +279,12 @@ ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 
 FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem(line, FilteredItem::NotAValidItem);
+    return FilteredItem(line);
 }
 
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line, FilteredItem::NotAValidItem);
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
@@ -327,12 +327,12 @@ StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 
 FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 {
-    return FilteredItem(line, FilteredItem::NotAValidItem);
+    return FilteredItem(line);
 }
 
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line, FilteredItem::NotAValidItem);
+    FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 )
