@@ -750,12 +750,16 @@ void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
 }
 
 QSize AreaTabWidget::sizeHint() const {
+    QMenuBar* menuBar = qobject_cast<QMenuBar*>(parent());
+    if ( !menuBar ) {
+        return QWidget::sizeHint();
+    }
     //Resize to hold the whole length up to the menu
     static bool zeroSizeHint = false;
     if ( zeroSizeHint )
         return QSize();
     zeroSizeHint = true;
-    int available = bar()->parentWidget()->width() - bar()->sizeHint().width() - 10;
+    int available = menuBar->parentWidget()->width() - menuBar->sizeHint().width() - 10;
     zeroSizeHint = false;
     QSize orig = tabBar->sizeHint();
     int addFade = available - orig.width();
@@ -774,7 +778,7 @@ QSize AreaTabWidget::sizeHint() const {
     return orig;
 }
 
-AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ), areaSideWidget(0) {
+AreaTabWidget::AreaTabWidget ( QWidget* parent ) : QWidget ( parent ), areaSideWidget(0) {
     m_layout = new QHBoxLayout ( this );
     m_layout->setAlignment ( Qt::AlignRight );
     tabBar = new AreaTabBar ( this );
@@ -819,6 +823,7 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     setExpanding ( false );
     setLayoutDirection ( Qt::RightToLeft );
     setDrawBase ( false );
+    setUsesScrollButtons ( false );
     setFocusPolicy( Qt::NoFocus );
     QPalette pal = palette();
 }

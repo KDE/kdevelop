@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kmenubar.h>
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
@@ -212,11 +213,27 @@ UiController::UiController(Core *core)
     connect( QApplication::instance(),
              SIGNAL(focusChanged(QWidget*,QWidget*)),
             this, SLOT(widgetChanged(QWidget*,QWidget*)) );
+
+    setupActions();
 }
 
 UiController::~UiController()
 {
     delete d;
+}
+
+void UiController::setupActions()
+{
+    if (d->defaultMainWindow->menuBar()->isNativeMenuBar()) {
+        KActionCollection* ac = d->defaultMainWindow->actionCollection();
+
+        // When running on an appmenu-enabled system, one cannot add widgets in the
+        // menubar corner. In this case, move area switcher to main toolbar.
+        KAction* switcherAction = new KAction(this);
+        switcherAction->setText(i18n("Area Switcher")); // For the toolbar edit dialog
+        switcherAction->setDefaultWidget(d->defaultMainWindow->areaSwitcher());
+        ac->addAction("area_switcher", switcherAction);
+    }
 }
 
 void UiController::mainWindowDeleted(MainWindow* mw)
