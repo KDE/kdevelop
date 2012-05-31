@@ -28,7 +28,7 @@
 
 #include "sublimedefs.h"
 
-#define IDEAL_LAYOUT_MARGIN  2
+#define IDEAL_LAYOUT_MARGIN  0
 #define IDEAL_LAYOUT_SPACING 2
 
 class KAction;
