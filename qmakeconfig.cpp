@@ -20,9 +20,11 @@
 
 #include <QMutex>
 #include <QDebug>
+#include <QFileInfo>
 
 #include <KConfigGroup>
 #include <KStandardDirs>
+#include <KDebug>
 
 #include <interfaces/iproject.h>
 
@@ -63,6 +65,11 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), CONFIG_GROUP);
         exe = group.readEntry(QMAKE_BINARY, KUrl() ).toLocalFile();
+        QFileInfo info(exe);
+        if (!info.exists() || !info.isExecutable()) {
+            kWarning() << "bad QMake configured for project " << project->folder() << ":" << exe;
+            exe.clear();
+        }
     }
     if (exe.isEmpty()) {
         exe = KStandardDirs::findExe("qmake");
@@ -70,5 +77,6 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     if (exe.isEmpty()) {
         exe = KStandardDirs::findExe("qmake-qt4");
     }
+    Q_ASSERT(!exe.isEmpty());
     return exe;
 }

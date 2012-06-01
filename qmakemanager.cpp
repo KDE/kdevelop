@@ -470,6 +470,7 @@ QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) co
 
 QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
 {
+    Q_ASSERT(!mkspecdir.isEmpty());
     QFileInfo fi( mkspecdir+"/default/qmake.conf" );
     if( !fi.exists() )
         return QString();
@@ -499,7 +500,9 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
         //To be implemented when there's an API to fetch Env from Project
         //p.setEnv();
         p << QMakeConfig::qmakeBinary( project ) << "-query" << var;
-        p.execute();
+        int execed = p.execute();
+        Q_ASSERT(!execed);
+        Q_UNUSED(execed);
         QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
         if( result != "**Unknown**")
             hash[var] = result;
