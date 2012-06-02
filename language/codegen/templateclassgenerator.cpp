@@ -37,7 +37,7 @@ using namespace KDevelop;
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
-    QString templateName;
+    QString templateDescription;
     KArchive* archive;
     
     void loadTemplate();
@@ -45,30 +45,51 @@ public:
 
 void TemplateClassGeneratorPrivate::loadTemplate()
 {    
-    QString fileName = ICore::self()->componentData().dirs()->findResource("kdevfiletemplates", templateName);
-    QFileInfo info(fileName);
+    QString archiveFileName;
+    
+    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("kdevfiletemplates"))
+    {
+        if (QFileInfo(file).baseName() == QFileInfo(templateDescription).baseName())
+        {
+            archiveFileName = file;
+            break;
+        }
+    }
+    
+    if (archiveFileName.isEmpty())
+    {
+        kDebug() << "Could not find a template archive for description" << templateDescription;
+        return;
+    }
+    
+    QFileInfo info(archiveFileName);
     
     if (info.suffix() == ".zip")
     {
-        archive = new KZip(fileName);
+        archive = new KZip(archiveFileName);
     }
     else
     {
-        archive = new KTar(fileName);
+        archive = new KTar(archiveFileName);
     }
 }
 
-TemplateClassGenerator::TemplateClassGenerator(const QString& templateName) : ClassGenerator(),
+TemplateClassGenerator::TemplateClassGenerator() : ClassGenerator(),
 d(new TemplateClassGeneratorPrivate)
 {
-    d->templateName = templateName;
-    d->loadTemplate();
+    d->archive = 0;
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
 {
     delete d->archive;
     delete d;
+}
+
+void TemplateClassGenerator::setTemplateDescription (const QString& templateDescription)
+{
+    d->templateDescription = templateDescription;
+    d->loadTemplate();
 }
 
 DocumentChangeSet TemplateClassGenerator::generate()
@@ -85,25 +106,9 @@ DocumentChangeSet TemplateClassGenerator::generate()
     
     // TODO: Add variables to context
     
-    QString desktopFile = ICore::self()->componentData().dirs()->findResource("kdevfiletemplate_descriptions", d->templateName);
-    
-    if (desktopFile.isEmpty())
-    {
-        kDebug() << "Chosen template does not contain a .desktop file";
-        return changes;
-    }
-    
-    
-    KConfig templateConfig(desktopFile);
-    
-    KConfigGroup general(&templateConfig, "General");
-    QString name = general.readEntry("Name");
-    QString category = general.readEntry("Category");
-    QString icon = general.readEntry("Icon");
-    QString comment = general.readEntry("Comment");
-    
     const KArchiveDirectory* dir = d->archive->directory();
     
+    KConfig templateConfig(d->templateDescription);
     foreach (const QString& groupName, templateConfig.groupList())
     {
         if (groupName == "General")
@@ -131,6 +136,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
         }
         
         outputFile.write(fileTemplate->render(&context).toUtf8());
+        outputFile.close();
     }
     
     return DocumentChangeSet();
@@ -140,6 +146,24 @@ QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& base
 {
     QMap<QString, KUrl> map;
     
-    // TODO: Lookup files from the template archive
+    Grantlee::Engine engine;
+    Grantlee::Context context;
+  
+    KConfig templateConfig(d->templateDescription);
+    foreach (const QString& groupName, templateConfig.groupList())
+    {
+        if (groupName == "General")
+        {
+            continue;
+        }
+        
+        KConfigGroup cg(&templateConfig, groupName);
+        
+        Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
+        QString outputName = nameTemplate->render(&context);
+        
+        map.insert(cg.readEntry("Name"), outputName);
+    }
+    
     return map;
 }

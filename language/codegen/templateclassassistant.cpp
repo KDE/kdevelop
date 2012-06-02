@@ -19,7 +19,12 @@
 
 #include "templateclassassistant.h"
 #include "templatesmodel.h"
+#include "templateclassgenerator.h"
+#include <interfaces/icreateclasshelper.h>
+#include <interfaces/ilanguagesupport.h>
 #include "interfaces/icore.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
 
 #include "ui_templateselection.h"
 
@@ -43,6 +48,7 @@ class KDevelop::TemplateClassAssistantPrivate
 {
 public:
     KPageWidgetItem* templateSelectionPage;
+    ICreateClassHelper* helper;
 };
 
 TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f)
@@ -98,7 +104,7 @@ void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
     }
     else
     {
-        d->selectedTemplate = d->model->data(index, TemplatesModel::TemplateFileRole).toString();
+        d->selectedTemplate = d->model->data(index, TemplatesModel::DescriptionFileRole).toString();
         d->assistant->setValid(d->assistant->currentPage(), true);
     }
 }
@@ -149,7 +155,54 @@ void TemplateClassAssistant::setup()
     setCurrentPage(d->templateSelectionPage);
 }
 
+void TemplateClassAssistant::next()
+{
+    if (currentPage() == d->templateSelectionPage)
+    {
+        QString description = currentPage()->widget()->property("currentTemplate").toString();
+        
+        KConfig config(description);
+        KConfigGroup group(&config, "General");
+        QString languageName = group.readEntry("Category").split('/').first();
+        
+        ILanguage* language = ICore::self()->languageController()->language(languageName);
+        
+        if (!language)
+        {
+            return;
+        }
+        
+        d->helper = language->languageSupport()->createClassHelper(this);
+        
+        if (!d->helper)
+        {
+            return;
+        }
+        
+        ClassGenerator* generator = d->helper->generator();
+        if (TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator))
+        {
+            templateGenerator->setTemplateDescription(description);
+        }
+        
+        setGenerator(generator);
+    }
+    KDevelop::CreateClassAssistant::next();
+}
+
+
 TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()
 {
     return new TemplateSelectionPage(this);
 }
+
+ClassIdentifierPage* TemplateClassAssistant::newIdentifierPage()
+{
+    return d->helper->identifierPage();
+}
+
+OverridesPage* TemplateClassAssistant::newOverridesPage()
+{
+    return d->helper->overridesPage();
+}
+

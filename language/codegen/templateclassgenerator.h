@@ -28,8 +28,10 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator : public ClassGenerator
 {
 public:
-    TemplateClassGenerator(const QString& templateName);
+    TemplateClassGenerator();
     ~TemplateClassGenerator();
+    
+    void setTemplateDescription(const QString& templateDescription);
     
     virtual DocumentChangeSet generate();
     virtual QMap< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);

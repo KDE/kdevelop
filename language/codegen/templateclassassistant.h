@@ -41,7 +41,7 @@ public:
 private:
     class TemplateSelectionPagePrivate* const d;
     
-public slots:
+private slots:
     void currentTemplateChanged (const QModelIndex& index);
     void currentLanguageChanged (const QModelIndex& index);
     void getMoreClicked ();
@@ -58,6 +58,10 @@ public:
     virtual void setup();
     
     virtual TemplateSelectionPage* newTemplateSelectionPage();
+    virtual ClassIdentifierPage* newIdentifierPage();
+    virtual OverridesPage* newOverridesPage();
+    
+    virtual void next();
     
 private:
     class TemplateClassAssistantPrivate* const d;
