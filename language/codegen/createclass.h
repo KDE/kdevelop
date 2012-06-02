@@ -179,6 +179,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     QList<DeclarationPointer> directInheritanceList() const;
 
     /**
+     * Should return the suggested urls of all files for the gives class-name
+     * 
+     * The default implementation calls headerUrlFromBase() and implementationUrlFromBase()
+     *
+     * @param baseUrl The base url, where the files should be located
+     * @param toLowor Whether filenames should be all lowercase, defaults to true.
+     **/
+    virtual QMap<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
+    
+    /**
      *Should return the suggested url of the header file for the given class-name
      */
     virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
@@ -190,6 +200,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
 
     /**
+     * Set the URL where the file of type @p fileType will be implemented
+     **/
+    void setFileUrl(const QString& fileType, const KUrl url);
+    
+    /**
      * Set the URL where the header will be implemented
      */
     void setHeaderUrl(const KUrl& header);
@@ -199,6 +214,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     void setImplementationUrl(const KUrl& implementation);
 
+    /**
+     * Set the position where the contents of @p fileType are to be inserted
+     **/
+    void setFilePosition(const QString& fileType, const SimpleCursor& position);
+    
     /**
      * Set the position where the header is to be inserted
      */

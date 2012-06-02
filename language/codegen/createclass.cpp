@@ -206,16 +206,19 @@ struct ClassGeneratorPrivate
     QString name; ///< The name for the class to be generated (does not include namespace if relevant)
     QString license;
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
-    SimpleCursor headerPosition;
-    SimpleCursor implementationPosition;
 
-    KUrl headerUrl;
-    KUrl implementationUrl;
+    QMap<QString, KUrl> fileUrls;
+    QMap<QString, SimpleCursor> filePositions;
+    
+    QString headerFileType;
+    QString implementationFileType;
 };
 
 ClassGenerator::ClassGenerator()
 : d(new ClassGeneratorPrivate)
 {
+    d->headerFileType = i18n("Header");
+    d->implementationFileType = i18n("Implementation");
 }
 
 ClassGenerator::~ClassGenerator()
@@ -304,6 +307,14 @@ void ClassGenerator::clearDeclarations()
     m_declarations.clear();
 }
 
+QMap< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+{
+    QMap<QString, KUrl> map;
+    map.insert(d->headerFileType, headerUrlFromBase(baseUrl, toLower));
+    map.insert(d->implementationFileType, implementationUrlFromBase(baseUrl, toLower));
+    return map;
+}
+
 KUrl ClassGenerator::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
@@ -320,46 +331,57 @@ KUrl ClassGenerator::implementationUrlFromBase(const KUrl& baseUrl, bool toLower
     return KUrl();
 }
 
+void ClassGenerator::setFilePosition (const QString& fileType, const SimpleCursor& position)
+{
+    d->filePositions[fileType] = position;
+}
+
+
 void ClassGenerator::setHeaderPosition(const SimpleCursor& position)
 {
-    d->headerPosition = position;
+    setFilePosition(d->headerFileType, position);
 }
 
 void ClassGenerator::setImplementationPosition(const SimpleCursor& position)
 {
-    d->implementationPosition = position;
+    setFilePosition(d->implementationFileType, position);
+}
+
+void ClassGenerator::setFileUrl (const QString& fileType, const KUrl url)
+{
+    d->fileUrls[fileType] = url;
 }
 
 void ClassGenerator::setHeaderUrl(const KUrl& header)
 {
-    d->headerUrl = header;
     kDebug() << "Header for the generated class: " << header;
+    setFileUrl(d->headerFileType, header);
 }
 
 void ClassGenerator::setImplementationUrl(const KUrl& implementation)
 {
-    d->implementationUrl = implementation;
     kDebug() << "Implementation for the generated class: " << implementation;
+    setFileUrl(d->implementationFileType, implementation);
 }
 
 SimpleCursor ClassGenerator::headerPosition()
 {
-    return d->headerPosition;
+    return d->filePositions[d->headerFileType];
 }
 
 SimpleCursor ClassGenerator::implementationPosition()
 {
-    return d->implementationPosition;
+    return d->filePositions[d->implementationFileType];
 }
 
 KUrl ClassGenerator::headerUrl()
 {
-    return d->headerUrl;
+    return d->fileUrls[d->headerFileType];
 }
 
 KUrl ClassGenerator::implementationUrl()
 {
-    return d->implementationUrl;
+    return d->fileUrls[d->implementationFileType];
 }
 
 /// Specify license for this class
