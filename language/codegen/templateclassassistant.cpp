@@ -48,6 +48,7 @@ class KDevelop::TemplateClassAssistantPrivate
 {
 public:
     KPageWidgetItem* templateSelectionPage;
+    KPageWidgetItem* dummyPage;
     ICreateClassHelper* helper;
 };
 
@@ -138,7 +139,7 @@ TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& bas
 : CreateClassAssistant (parent, baseUrl)
 , d(new TemplateClassAssistantPrivate)
 {
-    
+    setup();
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
@@ -148,9 +149,21 @@ TemplateClassAssistant::~TemplateClassAssistant()
 
 void TemplateClassAssistant::setup()
 {
+    setWindowTitle(i18n("Create New Class in %1", baseUrl().prettyUrl()));
+
     TemplateSelectionPage* page = newTemplateSelectionPage();
     d->templateSelectionPage = addPage(page, i18n("Language and Template"));
-    CreateClassAssistant::setup();
+    
+    /*
+     * All assistant pages except the first one require the helper to already be set.
+     * However, we can only choose the helper aften the language is selected,
+     * so other pages cannot be loaded here yet. 
+     * 
+     * OTOH, having only one page disables the "next" button and enables the "finish" button.
+     * This is not wanted, so we create a dummy page and delete it when "next" is clicked
+     */
+    QWidget* dummy = new QWidget(this);
+    d->dummyPage = addPage(dummy, QLatin1String("Dummy Page"));
     
     setCurrentPage(d->templateSelectionPage);
 }
@@ -159,16 +172,23 @@ void TemplateClassAssistant::next()
 {
     if (currentPage() == d->templateSelectionPage)
     {
-        QString description = currentPage()->widget()->property("currentTemplate").toString();
+        kDebug() << "Current page is template selection";
+        QString description = currentPage()->widget()->property("selectedTemplate").toString();
+        
+        kDebug() << "Chosen template is" << description;
         
         KConfig config(description);
         KConfigGroup group(&config, "General");
+        
+        kDebug() << "Template name is" << group.readEntry("Name");
+        
         QString languageName = group.readEntry("Category").split('/').first();
         
         ILanguage* language = ICore::self()->languageController()->language(languageName);
         
         if (!language)
         {
+            kDebug() << "No language named" << languageName;
             return;
         }
         
@@ -176,20 +196,31 @@ void TemplateClassAssistant::next()
         
         if (!d->helper)
         {
+            kDebug() << "No class creation helper for language" << languageName;
             return;
         }
         
         ClassGenerator* generator = d->helper->generator();
-        if (TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator))
+        if (!generator)
         {
-            templateGenerator->setTemplateDescription(description);
+            kDebug() << "No generator for language" << languageName;
+            return;
         }
         
+        if (TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator))
+        {
+            kDebug() << "Class generator uses templates";
+            templateGenerator->setTemplateDescription(description);
+        }
         setGenerator(generator);
+                
+        removePage(d->dummyPage);
+        KDevelop::CreateClassAssistant::setup();
+        
+        return;
     }
     KDevelop::CreateClassAssistant::next();
 }
-
 
 TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()
 {

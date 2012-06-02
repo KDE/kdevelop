@@ -20,7 +20,7 @@
 #ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
 #define KDEVELOP_TEMPLATECLASSASSISTANT_H
 
-#include <codegen/createclass.h>
+#include "createclass.h"
 
 namespace KDevelop
 {

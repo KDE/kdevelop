@@ -26,7 +26,6 @@
 #include <KComponentData>
 #include <KStandardDirs>
 #include <KTar>
-#include <KMacroExpanderBase>
 
 #include <grantlee/engine.h>
 
@@ -39,6 +38,7 @@ class KDevelop::TemplateClassGeneratorPrivate
 public:
     QString templateDescription;
     KArchive* archive;
+    KUrl baseUrl;
     
     void loadTemplate();
 };
@@ -47,8 +47,9 @@ void TemplateClassGeneratorPrivate::loadTemplate()
 {    
     QString archiveFileName;
     
-    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("kdevfiletemplates"))
+    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("filetemplates"))
     {
+        kDebug() << "Found template archive" << file;
         if (QFileInfo(file).baseName() == QFileInfo(templateDescription).baseName())
         {
             archiveFileName = file;
@@ -74,10 +75,11 @@ void TemplateClassGeneratorPrivate::loadTemplate()
     }
 }
 
-TemplateClassGenerator::TemplateClassGenerator() : ClassGenerator(),
+TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl) : ClassGenerator(),
 d(new TemplateClassGeneratorPrivate)
 {
     d->archive = 0;
+    d->baseUrl = baseUrl;
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
@@ -94,19 +96,23 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
 
 DocumentChangeSet TemplateClassGenerator::generate()
 {
-    QHash<QString, QString> variables;
+    QVariantHash variables;
     
-    variables["class_name"] = name();
+    variables["name"] = name();
     variables["identifier"] = identifier();
+    variables["license"] = license();
     
     DocumentChangeSet changes;
     
     Grantlee::Engine engine;
-    Grantlee::Context context;
+    Grantlee::Context context(variables);
     
-    // TODO: Add variables to context
+    // TODO: Add more variables to context
     
+    d->archive->open(QIODevice::ReadOnly);
     const KArchiveDirectory* dir = d->archive->directory();
+    
+    kDebug() << "Opened archive with contents:" << dir->entries();
     
     KConfig templateConfig(d->templateDescription);
     foreach (const QString& groupName, templateConfig.groupList())
@@ -117,29 +123,35 @@ DocumentChangeSet TemplateClassGenerator::generate()
         }
         
         KConfigGroup cg(&templateConfig, groupName);
-        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(dir->entry(cg.readEntry("File")));
+        const KArchiveEntry* entry = dir->entry(cg.readEntry("File"));
+        if (!entry)
+        {
+            kDebug() << "Entry" << cg.readEntry("File") << "is mentioned in group" << cg.name() << "but is not present in the archive";
+            continue;
+        }
+        
+        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
         if (!file)
         {
-            kDebug() << "File" << cg.readEntry("File") << "is mentioned in the description, but not present in the archive";
+            kDebug() << "Entry" << cg.readEntry("File") << "is not a file";
             continue;
         }
         
         Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
         QString outputName = nameTemplate->render(&context);
         
+        KUrl url(d->baseUrl);
+        url.addPath(outputName);
+        IndexedString document(url);
+        SimpleRange range(SimpleCursor(0, 0), 0);
+        
         Grantlee::Template fileTemplate = engine.newTemplate(file->data(), outputName);
-        
-        QFile outputFile(outputName);
-        if (!outputFile.open(QIODevice::WriteOnly))
-        {
-            continue;
-        }
-        
-        outputFile.write(fileTemplate->render(&context).toUtf8());
-        outputFile.close();
+
+        DocumentChange change(document, range, QString(), fileTemplate->render(&context));
+        changes.addChange(change);
     }
-    
-    return DocumentChangeSet();
+
+    return changes;
 }
 
 QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
@@ -160,9 +172,15 @@ QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& base
         KConfigGroup cg(&templateConfig, groupName);
         
         Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
-        QString outputName = nameTemplate->render(&context);
         
-        map.insert(cg.readEntry("Name"), outputName);
+        KUrl url(baseUrl);
+        url.addPath(nameTemplate->render(&context));
+        QString fileName = cg.readEntry("Name");
+        if (toLower)
+        {
+            fileName = fileName.toLower();
+        }
+        map.insert(fileName, url);
     }
     
     return map;

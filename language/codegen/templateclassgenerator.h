@@ -28,7 +28,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator : public ClassGenerator
 {
 public:
-    TemplateClassGenerator();
+    TemplateClassGenerator(const KUrl& baseUrl);
     ~TemplateClassGenerator();
     
     void setTemplateDescription(const QString& templateDescription);

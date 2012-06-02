@@ -49,6 +49,8 @@ namespace KDevelop {
 
 struct CreateClassAssistantPrivate
 {
+    CreateClassAssistantPrivate();
+    
     KUrl baseUrl;
     ClassGenerator * generator;
     ClassIdentifierPage* classIdentifierPageWidget;
@@ -60,6 +62,16 @@ struct CreateClassAssistantPrivate
     KPageWidgetItem* licensePage;
     KPageWidgetItem* outputPage;
 };
+
+CreateClassAssistantPrivate::CreateClassAssistantPrivate()
+: classIdentifierPage(0)
+, overridesPage(0)
+, licensePage(0)
+, outputPage(0)
+{
+
+}
+
 
 CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl)
 : KAssistantDialog(parent)
@@ -87,19 +99,35 @@ void CreateClassAssistant::setup()
 {
     setWindowTitle(i18n("Create New Class in %1", d->baseUrl.prettyUrl()));
 
+    if (d->classIdentifierPage)
+    {
+        removePage(d->classIdentifierPage);
+    }
     d->classIdentifierPageWidget = newIdentifierPage();
     connect(d->classIdentifierPageWidget, SIGNAL(isValid(bool)), this, SLOT(checkClassIdentifierPage(bool)));
     d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
     d->classIdentifierPage->setIcon(KIcon("classnew"));
 
+    if (d->overridesPage)
+    {
+        removePage(d->overridesPage);
+    }
     d->overridesPageWidget = newOverridesPage();
     d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
     d->overridesPage->setIcon(KIcon("code-class"));
 
+    if (d->licensePage)
+    {
+        removePage(d->licensePage);
+    }
     d->licensePageWidget = new LicensePage(this);
     d->licensePage = addPage(d->licensePageWidget, i18n("License"));
     d->licensePage->setIcon(KIcon("text-x-copying"));
 
+    if (d->outputPage)
+    {
+        removePage(d->licensePage);
+    }
     d->outputPageWidget = new OutputPage(this);
     connect(d->outputPageWidget, SIGNAL(isValid(bool)), this, SLOT(checkOutputPage(bool)));
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
