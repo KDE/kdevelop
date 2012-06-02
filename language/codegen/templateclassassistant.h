@@ -25,19 +25,24 @@
 namespace KDevelop
 {
     
+    class TemplateClassAssistant;
+    
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateSelectionPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString selectedTemplate READ selectedTemplate)
     
 public:
-    explicit TemplateSelectionPage (QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
     virtual ~TemplateSelectionPage();
     
     QString selectedTemplate() const;
     
 private:
     class TemplateSelectionPagePrivate* const d;
+    
+public slots:
+    void currentTemplateChanged (QModelIndex index);
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant

@@ -45,6 +45,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
+    enum
+    {
+        TemplateFileRole = Qt::UserRole + 2
+    };
+    
     /**
      * Creates a new templates model
      * 

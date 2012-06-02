@@ -18,14 +18,23 @@
 */
 
 #include "templateclassassistant.h"
+#include "templatesmodel.h"
+#include "interfaces/icore.h"
+
+#include "ui_templateselection.h"
+
 #include <KLocalizedString>
+#include <KComponentData>
 
 using namespace KDevelop;
 
 class KDevelop::TemplateSelectionPagePrivate
 {
 public:
+    Ui::TemplateSelection* ui;
     QString selectedTemplate;
+    TemplateClassAssistant* assistant;
+    TemplatesModel* model;
 };
 
 class KDevelop::TemplateClassAssistantPrivate
@@ -34,15 +43,32 @@ public:
     KPageWidgetItem* templateSelectionPage;
 };
 
-TemplateSelectionPage::TemplateSelectionPage (QWidget* parent, Qt::WindowFlags f)
+TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f)
 : QWidget (parent, f)
 , d(new TemplateSelectionPagePrivate)
 {
-
+    d->assistant = parent;
+    
+    d->ui = new Ui::TemplateSelection;
+    d->ui->setupUi(this);
+    
+    d->model = new TemplatesModel(ICore::self()->componentData());
+    d->model->setTemplateResourceType("filetemplates");
+    d->model->setDescriptionResourceType("filetemplate_descriptions");
+    
+    d->ui->languageView->setModel(d->model);
+    d->ui->templateView->setModel(d->model);
+    
+    connect (d->ui->languageView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
+        d->ui->templateView, SLOT(setRootIndex(QModelIndex)));
+    
+    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
+        this, SLOT(currentTemplateChanged(QModelIndex)));
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()
 {
+    delete d->ui;
     delete d;
 }
 
@@ -50,6 +76,21 @@ QString TemplateSelectionPage::selectedTemplate() const
 {
     return d->selectedTemplate;
 }
+
+void TemplateSelectionPage::currentTemplateChanged (QModelIndex index)
+{
+    if (d->model->index(0, 0, index).isValid())
+    {
+        // This index has a child, so it is not a template
+        d->assistant->setValid(d->assistant->currentPage(), false);
+    }
+    else
+    {
+        d->selectedTemplate = d->model->data(index, TemplatesModel::TemplateFileRole).toString();
+        d->assistant->setValid(d->assistant->currentPage(), true);
+    }
+}
+
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
 : CreateClassAssistant (parent, baseUrl)
