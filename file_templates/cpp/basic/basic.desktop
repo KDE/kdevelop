@@ -6,9 +6,9 @@ Category=C++
 [Header File]
 Name=Header
 File=class.h
-OutputFile=%{class_name}.h
+OutputFile={{ name }}.h
 
 [Implementation File]
 Name=Implementation
 File=class.cpp
-OutputFile=%{class_name}.cpp
+OutputFile={{ name }}.cpp
