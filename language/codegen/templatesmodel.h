@@ -47,7 +47,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
 public:
     enum
     {
-        TemplateFileRole = Qt::UserRole + 2
+        DescriptionFileRole = Qt::UserRole + 1,
+        IconNameRole = Qt::UserRole + 2,
+        CommentRole = Qt::UserRole + 3
     };
     
     /**

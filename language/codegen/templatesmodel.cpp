@@ -96,9 +96,9 @@ void TemplatesModel::refresh()
             QString comment = general.readEntry("Comment");
     
             QStandardItem *templateItem = createItem(name, category);
-            templateItem->setData(templateDescription);
-            templateItem->setData(icon, Qt::UserRole+2);
-            templateItem->setData(comment, Qt::UserRole+3);
+            templateItem->setData(templateDescription, DescriptionFileRole);
+            templateItem->setData(icon, IconNameRole);
+            templateItem->setData(comment, CommentRole);
         } else {
             // Template file doesn't exist anymore, so remove the description
             // saves us the extra lookups for templateExists on the next run
