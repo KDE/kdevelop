@@ -161,9 +161,15 @@ void TemplatesModel::extractTemplateDescriptions()
             QFileInfo templateInfo(archName);
             const KArchiveEntry *templateEntry =
                 templateArchive->directory()->entry(templateInfo.baseName() + ".kdevtemplate");
+                
+            if (!templateEntry)
+            {
+                templateEntry = templateArchive->directory()->entry(templateInfo.baseName() + ".desktop");
+            }
+                
             if (!templateEntry || !templateEntry->isFile())
             {
-                kDebug() << "template" << archName << "does not contain .kdevtemplate file";
+                kDebug() << "template" << archName << "does not contain .kdevtemplate or .desktop file";
                 continue;
             }
             const KArchiveFile *templateFile = (KArchiveFile*)templateEntry;
