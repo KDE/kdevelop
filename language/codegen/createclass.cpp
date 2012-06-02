@@ -70,6 +70,14 @@ CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * gen
     d->generator = generator;
 }
 
+CreateClassAssistant::CreateClassAssistant (QWidget* parent, const KUrl& baseUrl)
+: KAssistantDialog (parent)
+, d(new CreateClassAssistantPrivate)
+{
+    d->baseUrl = baseUrl;
+    d->generator = 0;
+}
+
 CreateClassAssistant::~CreateClassAssistant()
 {
     delete d;
@@ -190,6 +198,12 @@ ClassGenerator * CreateClassAssistant::generator()
 {
     return d->generator;
 }
+
+void CreateClassAssistant::setGenerator (ClassGenerator* generator)
+{
+    d->generator = generator;
+}
+
 
 ClassIdentifierPage* CreateClassAssistant::newIdentifierPage()
 {

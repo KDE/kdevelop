@@ -289,6 +289,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CreateClassAssistant : public KAssistantDialog
 
 public:
     CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl = KUrl());
+    CreateClassAssistant(QWidget* parent, const KUrl& baseUrl = KUrl());
     virtual ~CreateClassAssistant();
     /**
      * Creates the generic parts of the new class assistant.
@@ -299,6 +300,8 @@ public:
      * \return The generator that this assistant will use
      */
     virtual ClassGenerator * generator();
+    
+    void setGenerator(ClassGenerator* generator);
 
     virtual ClassIdentifierPage* newIdentifierPage();
 
