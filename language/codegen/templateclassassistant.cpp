@@ -25,6 +25,8 @@
 
 #include <KLocalizedString>
 #include <KComponentData>
+#include <KNS3/DownloadDialog>
+#include <KFileDialog>
 
 using namespace KDevelop;
 
@@ -55,15 +57,19 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     d->model = new TemplatesModel(ICore::self()->componentData());
     d->model->setTemplateResourceType("filetemplates");
     d->model->setDescriptionResourceType("filetemplate_descriptions");
+    d->model->refresh();
     
     d->ui->languageView->setModel(d->model);
     d->ui->templateView->setModel(d->model);
     
     connect (d->ui->languageView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
-        d->ui->templateView, SLOT(setRootIndex(QModelIndex)));
+        this, SLOT(currentLanguageChanged(QModelIndex)));
     
     connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
         this, SLOT(currentTemplateChanged(QModelIndex)));
+    
+    connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
+    connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()
@@ -77,11 +83,17 @@ QString TemplateSelectionPage::selectedTemplate() const
     return d->selectedTemplate;
 }
 
-void TemplateSelectionPage::currentTemplateChanged (QModelIndex index)
+void TemplateSelectionPage::currentLanguageChanged (const QModelIndex& index)
 {
-    if (d->model->index(0, 0, index).isValid())
+    d->ui->templateView->setRootIndex(index);
+    d->ui->templateView->setCurrentIndex(d->model->index(0, 0, index));
+}
+
+void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
+{
+    if (!index.isValid() || d->model->index(0, 0, index).isValid())
     {
-        // This index has a child, so it is not a template
+        // This index is invalid or has a child, so it is not a template
         d->assistant->setValid(d->assistant->currentPage(), false);
     }
     else
@@ -91,6 +103,30 @@ void TemplateSelectionPage::currentTemplateChanged (QModelIndex index)
     }
 }
 
+void TemplateSelectionPage::getMoreClicked()
+{
+    // TODO: Install .knsrc file
+    KNS3::DownloadDialog dialog("kdevclassassistant.knsrc");
+    dialog.exec();
+    d->model->refresh();
+}
+
+void TemplateSelectionPage::loadFileClicked()
+{
+    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevclasstemplate"), filter, this);
+
+    if (!fileName.isEmpty())
+    {
+        QString destination = d->model->loadTemplateFile(fileName);
+        QModelIndexList indexes = d->model->templateIndexes(destination);
+        if (indexes.size() > 1)
+        {
+            d->ui->languageView->setCurrentIndex(indexes.first());
+            d->ui->templateView->setCurrentIndex(indexes.last());
+        }
+    }
+}
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
 : CreateClassAssistant (parent, baseUrl)

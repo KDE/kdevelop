@@ -146,6 +146,7 @@ target_link_libraries(kdevplatformlanguage
         ${KDE4_KPARTS_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES}
+        ${KDE4_KNEWSTUFF3_LIBS}
         kdevplatforminterfaces
         kdevplatformutil
         ${Grantlee_CORE_LIBRARIES})
@@ -355,4 +356,9 @@ install(FILES
     codegen/licenses/MIT\ X11
     codegen/licenses/Mozilla\ v1.1
     DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
+)
+
+install(FILES
+    codegen/kdevclassassistant.knsrc
+    DESTINATION ${CONFIG_INSTALL_DIR}
 )

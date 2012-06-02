@@ -42,7 +42,10 @@ private:
     class TemplateSelectionPagePrivate* const d;
     
 public slots:
-    void currentTemplateChanged (QModelIndex index);
+    void currentTemplateChanged (const QModelIndex& index);
+    void currentLanguageChanged (const QModelIndex& index);
+    void getMoreClicked ();
+    void loadFileClicked ();
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant

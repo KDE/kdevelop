@@ -18,22 +18,26 @@
     <widget class="QListView" name="languageView"/>
    </item>
    <item row="1" column="0">
-    <widget class="KPushButton" name="kpushbutton">
+    <widget class="KPushButton" name="getMoreButton">
      <property name="text">
       <string>Get More Templates</string>
      </property>
      <property name="icon">
-      <iconset theme="get-hot-new-stuff"/>
+      <iconset theme="get-hot-new-stuff">
+       <normaloff/>
+      </iconset>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="KPushButton" name="kpushbutton_2">
+    <widget class="KPushButton" name="loadFileButton">
      <property name="text">
       <string>Load Template From File</string>
      </property>
      <property name="icon">
-      <iconset theme="application-x-archive"/>
+      <iconset theme="application-x-archive">
+       <normaloff/>
+      </iconset>
      </property>
     </widget>
    </item>
