@@ -4,6 +4,7 @@
   <Menu name="code">
     <Text context="@title:menu">Code</Text>
     <Action name="document_declaration" />
+    <Action name="class_from_template" />
   </Menu>
 </MenuBar>
 </kpartgui>

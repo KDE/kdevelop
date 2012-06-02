@@ -32,15 +32,19 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/TemplateInterface>
+#include <QApplication>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/context.h>
 
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/codegen/templateclassassistant.h>
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -72,6 +76,13 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
                                 "parameter of a function."
                                 "</p>" ) );
     action->setIcon( KIcon( "documentinfo" ) );
+    
+    action = actionCollection()->addAction( "class_from_template" );
+    action->setText( i18n( "Create Class from &Template" ) );
+    action->setShortcut( i18n( "Alt+Shift+t" ) );
+    connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
+    action->setIcon( KIcon( "code-class" ) );
+    action->setToolTip( i18n( "Create a new class from a template" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
@@ -149,6 +160,36 @@ void CodeUtilsPlugin::documentDeclaration()
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 
+void CodeUtilsPlugin::createClass()
+{
+    KUrl url;
+    if (QAction* action = qobject_cast<QAction*>(sender()))
+    {
+        url = action->data().toUrl();
+    }
+    TemplateClassAssistant assistant(QApplication::activeWindow(), url);
+    assistant.exec();
+}
+
 CodeUtilsPlugin::~CodeUtilsPlugin()
 {
+}
+
+ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
+{
+    ContextMenuExtension ext;
+    
+    if (context->hasType(Context::ProjectItemContext))
+    {
+        if (ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context))
+        {
+            if (projectContext->items().size() == 1)
+            {
+                QAction* action = actionCollection()->action("class_from_template");
+                action->setData(QVariant(projectContext->items().first()->url()));
+                ext.addAction(ContextMenuExtension::FileGroup, action);
+            }
+        }
+    }
+    return ext;
 }
