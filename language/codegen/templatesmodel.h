@@ -69,6 +69,8 @@ public:
      **/
     virtual void refresh();
     
+    QString loadTemplateFile(const QString& fileName);
+    
     /**
      * Finds the model index of the template file @p fileName.
      * 

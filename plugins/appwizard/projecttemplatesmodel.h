@@ -21,8 +21,6 @@ class ProjectTemplatesModel: public KDevelop::TemplatesModel {
 public:
     ProjectTemplatesModel(AppWizardPlugin *parent);
     virtual void refresh();
-    QString loadTemplateFile(const QString& fileName);
-    
 };
 
 #endif
