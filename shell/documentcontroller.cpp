@@ -60,7 +60,7 @@ Boston, MA 02110-1301, USA.
 
 #include <config-kdevplatform.h>
 
-#if HAVE_KOMPARE
+#ifdef HAVE_KOMPARE
     #include "patchdocument.h"
 #endif
 
@@ -565,7 +565,7 @@ DocumentController::DocumentController( QObject *parent )
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
-#if HAVE_KOMPARE    
+#ifdef HAVE_KOMPARE
     registerDocumentForMimetype("text/x-patch", new PatchDocumentFactory);
 #endif
 }

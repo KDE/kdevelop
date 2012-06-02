@@ -113,6 +113,11 @@ void MainWindow::setupAreaSelector() {
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
 }
 
+QWidget* MainWindow::areaSwitcher() const
+{
+    return d->areaSwitcher;
+}
+
 MainWindow::~MainWindow()
 {
     kDebug() << "destroying mainwindow";

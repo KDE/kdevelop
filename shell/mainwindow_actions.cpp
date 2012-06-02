@@ -142,7 +142,7 @@ void MainWindowPrivate::fileNew()
 
 void MainWindowPrivate::viewAddNewToolView()
 {
-    Core::self()->uiControllerInternal()->addNewToolView(m_mainWindow);
+    Core::self()->uiControllerInternal()->selectNewToolViewToAdd(m_mainWindow);
 }
 
 void MainWindowPrivate::quitAll()

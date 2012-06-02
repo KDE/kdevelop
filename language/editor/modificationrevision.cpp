@@ -16,6 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "config-kdevplatform.h"
 #include "modificationrevision.h"
 
 #include <QString>
@@ -23,13 +24,7 @@
 
 #include <ktexteditor/document.h>
 
-#if defined(Q_CC_MSVC)
-#include <hash_map>
-using namespace stdext;
-#elif defined GXX_LT_4_3
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-#else // C++0X
+#if defined(HAVE_UNORDERED_MAP) // C++0X
 // TODO: Replace hash_map with unordered map when support for G++ < 4.3 has 
 //       ended. This class was added as a temporary workaround, to get rid of
 //       hash_map related warnings for g++ >= 4.3.
@@ -39,6 +34,12 @@ template<class _Key, class _Tp,
        class _Pred = std::equal_to<_Key>,
        class _Alloc = std::allocator<std::pair<const _Key, _Tp> > >
 class  hash_map : public std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> { };
+#elif defined(HAVE_EXT_HASH_MAP)
+#include <ext/hash_map>
+using namespace __gnu_cxx;
+#elif defined(Q_CC_MSVC)
+#include <hash_map>
+using namespace stdext;
 #endif
 
 

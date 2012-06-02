@@ -109,15 +109,11 @@ class AreaTabBar : public QTabBar {
 
 class AreaTabWidget : public QWidget {
     public:
-    AreaTabWidget(QMenuBar* parent) ;
+    AreaTabWidget(QWidget* parent = 0) ;
     
     virtual QSize sizeHint() const ;
     
     virtual void paintEvent(QPaintEvent *ev);
-    
-    QMenuBar* bar() const {
-        return static_cast<QMenuBar*>(parent());
-    }
     
     ///The widget is owned by this tab-widget
     void setTabSideWidget(QWidget* widget) {

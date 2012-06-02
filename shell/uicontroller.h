@@ -27,6 +27,8 @@
 #include <ksharedconfig.h>
 #include <interfaces/iassistant.h>
 
+class QListWidgetItem;
+
 namespace Sublime {
     class AreaIndex;
     class ToolDocument;
@@ -67,7 +69,7 @@ public:
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags);
     virtual void raiseToolView(QWidget* toolViewWidget);
 
-    void addNewToolView(MainWindow *mw);
+    void selectNewToolViewToAdd(MainWindow *mw);
 
     void initialize();
     void cleanup();
@@ -99,6 +101,8 @@ public:
     /// @see activeArea()
     void addToolViewToDockArea(const QString& name, IToolViewFactory* factory, Qt::DockWidgetArea area);
 
+    bool toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area);
+
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
@@ -106,6 +110,7 @@ private:
     Sublime::View* addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area);
+    void setupActions();
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
@@ -113,6 +118,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void assistantHide();
     void assistantActionsChanged();
+    void addNewToolView(MainWindow* mw, QListWidgetItem* item);
 
 private:
     class UiControllerPrivate* const d;
