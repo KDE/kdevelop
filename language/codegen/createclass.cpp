@@ -215,6 +215,11 @@ OverridesPage* CreateClassAssistant::newOverridesPage()
     return new OverridesPage(generator(), this);
 }
 
+KUrl CreateClassAssistant::baseUrl()
+{
+    return d->baseUrl;
+}
+
 struct ClassGeneratorPrivate
 {
     QString name; ///< The name for the class to be generated (does not include namespace if relevant)

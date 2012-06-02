@@ -306,6 +306,12 @@ public:
     virtual ClassIdentifierPage* newIdentifierPage();
 
     virtual OverridesPage* newOverridesPage();
+    
+    /**
+     * Returns the base url from which the assistant was called
+     **/
+    KUrl baseUrl();
+
 
 public Q_SLOTS:
     /**
