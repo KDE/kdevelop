@@ -1,6 +1,7 @@
 /*
  * KDevelop C++ Language Support
- *
+ * 
+ * Copyright 2008 Hamish Rodda <rodda@kde.org>
  * Copyright 2012 Miha Čančula <miha@noughmad.eu>
  *
  * This program is free software; you can redistribute it and/or modify
