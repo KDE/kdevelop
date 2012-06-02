@@ -90,6 +90,7 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KUrl &url );
     //KDevelop::AstRepresentationPtr  generateAst(const KDevelop::TopDUContext & topContext);
+    KDevelop::ICreateClassHelper* createClassHelper (KDevelop::TemplateClassAssistant* assistant) const;
     
     static CppLanguageSupport* self();
 

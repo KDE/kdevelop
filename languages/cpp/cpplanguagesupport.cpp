@@ -92,6 +92,7 @@
 #include "quickopen.h"
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
+#include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
 
@@ -426,6 +427,12 @@ KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }
+
+ICreateClassHelper* CppLanguageSupport::createClassHelper (TemplateClassAssistant* assistant) const
+{
+    return new CppClassHelper(assistant);
+}
+
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
 {

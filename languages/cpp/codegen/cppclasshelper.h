@@ -24,7 +24,9 @@
 
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/codegen/templateclassgenerator.h>
-#include <cpptypes.h>
+#include <language/codegen/templateclassassistant.h>
+
+#include "cpptypes.h"
 
 namespace KDevelop
 {

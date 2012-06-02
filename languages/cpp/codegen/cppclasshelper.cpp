@@ -21,16 +21,23 @@
 
 #include "cppclasshelper.h"
 #include "cppnewclass.h"
-#include <codecompletion/missingincludeitem.h>
 
+#include <codecompletion/missingincludeitem.h>
 #include <language/codegen/templateclassassistant.h>
 #include <language/codegen/coderepresentation.h>
+#include <language/codegen/documentchangeset.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+
 #include <KLocalizedString>
 #include <QMessageBox>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QListWidget>
 
 using namespace KDevelop;
 
@@ -57,11 +64,13 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
             return new CppTemplateNewClass(items.first());
         }
     }
+    
+    return 0;
 }
 
 KDevelop::OverridesPage* CppClassHelper::overridesPage()
 {
-    return new CppOverridesPage(m_assistant);
+    return new CppOverridesPage(m_assistant->generator(), m_assistant);
 }
 
 KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
