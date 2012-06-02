@@ -34,6 +34,8 @@ class SimpleCursor;
 class SimpleRange;
 class ICodeHighlighting;
 class DocumentChangeTracker;
+class TemplateClassAssistant;
+class ICreateClassHelper;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
@@ -71,6 +73,11 @@ public:
      * Should return a document change-tracker for this language that tracks the changes in the given document 
      * */
     virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
+    
+    /**
+     * Should return a class creating helper for this language, or zero
+     * */
+    virtual ICreateClassHelper* createClassHelper(TemplateClassAssistant* assistant) const;
     
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.

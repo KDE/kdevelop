@@ -54,6 +54,11 @@ ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
     return 0;
 }
 
+ICreateClassHelper* ILanguageSupport::createClassHelper(TemplateClassAssistant* assistant) const {
+    return 0;
+}
+
+
 ILanguage* ILanguageSupport::language() {
     return ICore::self()->languageController()->language(name());
 }
