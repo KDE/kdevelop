@@ -85,21 +85,44 @@ DocumentChangeSet TemplateClassGenerator::generate()
     
     // TODO: Add variables to context
     
-    const KArchiveDirectory* dir = d->archive->directory();
-    foreach (const QString& entryName, dir->entries())
+    QString desktopFile = ICore::self()->componentData().dirs()->findResource("kdevfiletemplate_descriptions", d->templateName);
+    
+    if (desktopFile.isEmpty())
     {
-        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(dir->entry(entryName));
-        if (!file || file->name() == d->templateName + ".desktop")
+        kDebug() << "Chosen template does not contain a .desktop file";
+        return changes;
+    }
+    
+    
+    KConfig templateConfig(desktopFile);
+    
+    KConfigGroup general(&templateConfig, "General");
+    QString name = general.readEntry("Name");
+    QString category = general.readEntry("Category");
+    QString icon = general.readEntry("Icon");
+    QString comment = general.readEntry("Comment");
+    
+    const KArchiveDirectory* dir = d->archive->directory();
+    
+    foreach (const QString& groupName, templateConfig.groupList())
+    {
+        if (groupName == "General")
         {
             continue;
         }
         
-        QString outputName = KMacroExpander::expandMacros(file->name(), variables);
+        KConfigGroup cg(&templateConfig, groupName);
+        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(dir->entry(cg.readEntry("File")));
+        if (!file)
+        {
+            kDebug() << "File" << cg.readEntry("File") << "is mentioned in the description, but not present in the archive";
+            continue;
+        }
         
-        Grantlee::Template t = engine.newTemplate(file->data(), outputName);
+        Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
+        QString outputName = nameTemplate->render(&context);
         
-        // TODO: Map from outputName to the file type
-        // Preferably using the .desktop file
+        Grantlee::Template fileTemplate = engine.newTemplate(file->data(), outputName);
         
         QFile outputFile(outputName);
         if (!outputFile.open(QIODevice::WriteOnly))
@@ -107,7 +130,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
             continue;
         }
         
-        outputFile.write(t->render(&context).toUtf8());
+        outputFile.write(fileTemplate->render(&context).toUtf8());
     }
     
     return DocumentChangeSet();
