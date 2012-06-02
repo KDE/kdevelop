@@ -118,6 +118,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/utilities.cpp
     codegen/templatesmodel.cpp
     codegen/multilevellistview.cpp
+    codegen/templateclassgenerator.cpp
     
     util/setrepository.cpp
     util/includeitem.cpp
@@ -144,7 +145,8 @@ target_link_libraries(kdevplatformlanguage
         ${KDE4_KTEXTEDITOR_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES}
         kdevplatforminterfaces
-        kdevplatformutil)
+        kdevplatformutil
+        ${Grantlee_CORE_LIBRARIES})
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
 target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
         kdevplatforminterfaces)
@@ -317,6 +319,7 @@ install(FILES
     codegen/utilities.h
     codegen/templatesmodel.h
     codegen/multilevellistview.h
+    codegen/templateclassgenerator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
