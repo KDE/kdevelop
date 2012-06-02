@@ -97,6 +97,7 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/iquickopen.cpp
     interfaces/editorcontext.cpp
     interfaces/codecontext.cpp
+    interfaces/icreateclasshelper.cpp
 
     codecompletion/codecompletion.cpp
     codecompletion/codecompletionworker.cpp
@@ -173,6 +174,7 @@ install(FILES
     interfaces/codecontext.h
     interfaces/editorcontext.h
     interfaces/iastcontainer.h
+    interfaces/icreateclasshelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
