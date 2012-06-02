@@ -56,17 +56,19 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
 {
     KUrl url = m_assistant->baseUrl();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    ProjectBaseItem* item;
+        
     if (project)
     {
         QList<ProjectBaseItem*> items = project->itemsForUrl(url);
         
         if (!items.isEmpty())
         {
-            return new CppTemplateNewClass(items.first());
+            item = items.first();
         }
     }
     
-    return 0;
+    return new CppTemplateNewClass(item);
 }
 
 KDevelop::OverridesPage* CppClassHelper::overridesPage()
@@ -80,7 +82,7 @@ KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
 }
 
 CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
-: TemplateClassGenerator ()
+: TemplateClassGenerator (parentItem->url())
 , m_type(DefaultType)
 , m_objectType(new CppClassType)
 , m_parentItem(parentItem)
