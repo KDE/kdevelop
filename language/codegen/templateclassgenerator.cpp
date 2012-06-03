@@ -141,12 +141,51 @@ QSharedPointer< Grantlee::OutputStream > NoEscapeStream::clone (QTextStream* str
     return clonedStream;
 }
 
+class KDevelop::ArchiveTemplateLoaderPrivate
+{
+public:
+    const KArchiveDirectory* directory;
+};
+
+ArchiveTemplateLoader::ArchiveTemplateLoader (const KArchiveDirectory* directory) : d(new ArchiveTemplateLoaderPrivate)
+{
+    d->directory = directory;
+}
+
+ArchiveTemplateLoader::~ArchiveTemplateLoader()
+{
+
+}
+
+bool ArchiveTemplateLoader::canLoadTemplate (const QString& name) const
+{
+    bool can = d->directory->entry(name) && d->directory->entry(name)->isFile();
+    kDebug() << "Can load" << name << "?" << can;
+    return can;
+}
+
+Grantlee::Template ArchiveTemplateLoader::loadByName (const QString& name, const Grantlee::Engine* engine) const
+{
+    const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(d->directory->entry(name));
+    Q_ASSERT(file);
+    
+    kDebug() << "Loading file" << name;
+    return engine->newTemplate(file->data(), file->name());
+}
+
+QPair< QString, QString > ArchiveTemplateLoader::getMediaUri (const QString& fileName) const
+{
+    Q_UNUSED(fileName);
+    return QPair<QString, QString>();
+}
+
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
     QString templateDescription;
     KArchive* archive;
     KUrl baseUrl;
+    ArchiveTemplateLoader* loader;
     
     void loadTemplate();
     QString render(Grantlee::Template t, Grantlee::Context& c);
@@ -265,7 +304,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
     QVariantHash variables = templateVariables();
     
     DocumentChangeSet changes;
-    
+        
     Grantlee::Engine engine;
     engine.setSmartTrimEnabled(true);
     
@@ -275,6 +314,9 @@ DocumentChangeSet TemplateClassGenerator::generate()
     
     d->archive->open(QIODevice::ReadOnly);
     const KArchiveDirectory* dir = d->archive->directory();
+    
+    d->loader = new ArchiveTemplateLoader(dir);
+    engine.addTemplateLoader(Grantlee::AbstractTemplateLoader::Ptr(d->loader));
     
     kDebug() << "Opened archive with contents:" << dir->entries();
     
