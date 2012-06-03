@@ -159,6 +159,24 @@ void TemplatesModel::extractTemplateDescriptions()
             QFileInfo templateInfo(archName);
             const KArchiveEntry *templateEntry =
                 templateArchive->directory()->entry(templateInfo.baseName() + ".kdevtemplate");
+                
+            if (!templateEntry || !templateEntry->isFile())
+            {
+                /*
+                 * First, if the .kdevtemplate file is not found by name, 
+                 * we check all the files in the archive for any .kdevtemplate file
+                 * 
+                 * This is needed because kde-files.org renames downloaded files
+                 */
+                foreach (const QString& entryName, templateArchive->directory()->entries())
+                {
+                    if (entryName.endsWith(".kdevtemplate"))
+                    {
+                        templateEntry = templateArchive->directory()->entry(entryName);
+                        break;
+                    }
+                }
+            }
             if (!templateEntry || !templateEntry->isFile())
             {
                 kDebug() << "template" << archName << "does not contain .kdevtemplate file";
@@ -168,6 +186,13 @@ void TemplatesModel::extractTemplateDescriptions()
 
             kDebug() << "copy template description to" << localDescriptionsDir;
             templateFile->copyTo(localDescriptionsDir);
+            
+            /*
+             * Rename the extracted description 
+             * so that its basename matches the basename of the template archive
+             */
+            QFile descriptionFile(localDescriptionsDir + templateEntry->name());
+            descriptionFile.rename(localDescriptionsDir + templateInfo.baseName() + ".kdevtemplate");
         }
         else
             kDebug() << "could not open template" << archName;
