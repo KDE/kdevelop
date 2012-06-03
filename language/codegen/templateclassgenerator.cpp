@@ -45,6 +45,10 @@
 using namespace KDevelop;
 
 GRANTLEE_BEGIN_LOOKUP(DeclarationPointer)
+    if (!object.data())
+    {
+        return QVariant();
+    }
     if ( property == "identifier" )
         return object->identifier().toString();
     else if ( property == "toString" )
@@ -221,8 +225,11 @@ QVariantHash TemplateClassGenerator::templateVariables()
     variables["license"] = license();
     
     variables["inheritance_list"] = QVariant::fromValue(inheritanceList());
+    variables["is_inherited"] = !directInheritanceList().isEmpty();
     variables["direct_inheritance_list"] = QVariant::fromValue(directInheritanceList());
     variables["declarations"] = QVariant::fromValue(declarations());
+    
+    kDebug() << "Inheritance sizes:" << directInheritanceList().size() << inheritanceList().size();
     
     QList<DeclarationPointer> methods;
     QList<DeclarationPointer> properties;
