@@ -224,10 +224,13 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
-    if( templateArchive.isEmpty() )
+    QString templateArchive;
+    foreach (const QString& archive, componentData().dirs()->findAllResources("apptempates"))
     {
-        templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+        if (QFileInfo(archive).baseName() == templateName)
+        {
+            templateArchive = archive;
+        }
     }
 
     kDebug() << "Using archive:" << templateArchive;
@@ -393,7 +396,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            QString newdest = dest + '/' + file->name();
+            QString newdest = dest + '/' + KMacroExpander::expandMacros(file->name(), m_variables);
             if( !QFileInfo( newdest ).exists() )
             {
                 QDir::root().mkdir( newdest  );
