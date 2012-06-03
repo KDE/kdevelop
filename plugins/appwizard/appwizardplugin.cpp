@@ -393,7 +393,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            QString newdest = dest + '/' + file->name();
+            QString newdest = dest + '/' + KMacroExpander::expandMacros(file->name(), m_variables);
             if( !QFileInfo( newdest ).exists() )
             {
                 QDir::root().mkdir( newdest  );
