@@ -27,6 +27,7 @@
 #include <language/codegen/templateclassassistant.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -94,6 +95,88 @@ CppTemplateNewClass::~CppTemplateNewClass()
 {
 
 }
+
+QVariantHash CppTemplateNewClass::templateVariables()
+{
+    QVariantHash variables = KDevelop::TemplateClassGenerator::templateVariables();
+    
+    QList<DeclarationPointer> privateFunctions;
+    QList<DeclarationPointer> protectedFunctions;
+    QList<DeclarationPointer> publicFunctions;
+    
+    QList<DeclarationPointer> privateMembers;
+    QList<DeclarationPointer> protectedMembers;
+    QList<DeclarationPointer> publicMembers;
+    
+    QList<DeclarationPointer> slotDeclarations;
+    QList<DeclarationPointer> signalDeclarations;
+    
+    DUChainReadLocker lock(DUChain::lock());
+    foreach (DeclarationPointer ptr, declarations())
+    {
+        ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(ptr.data());
+        if (!member)
+        {
+            continue;
+        }
+        
+        if (member->isFunctionDeclaration())
+        {
+            ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(member);
+        
+            if (function->isSlot())
+            {
+                slotDeclarations << ptr;
+            }
+            else if (function->isSignal())
+            {
+                signalDeclarations << ptr;
+            }
+            else if (function->accessPolicy() == Declaration::Private)
+            {
+                privateFunctions << ptr;
+            }
+            else if (function->accessPolicy() == Declaration::Protected)
+            {
+                protectedFunctions << ptr;
+            }
+            else if (function->accessPolicy() == Declaration::Public)
+            {
+                publicFunctions << ptr;
+            }
+        }
+        else
+        {
+            switch (member->accessPolicy())
+            {
+                case Declaration::Private:
+                case Declaration::DefaultAccess:  // In C++, class members are private by default
+                    privateMembers << ptr;
+                    break;
+                    
+                case Declaration::Protected:
+                    protectedMembers << ptr;
+                    break;
+                    
+                case Declaration::Public:
+                    publicMembers << ptr;
+            }
+        }
+    }
+    
+    variables["private_functions"] = QVariant::fromValue(privateFunctions);
+    variables["protected_functions"] = QVariant::fromValue(protectedFunctions);
+    variables["public_functions"] = QVariant::fromValue(publicFunctions);
+    
+    variables["slots"] = QVariant::fromValue(slotDeclarations);
+    variables["signals"] = QVariant::fromValue(signalDeclarations);
+    
+    variables["private_members"] = QVariant::fromValue(privateMembers);
+    variables["protected_members"] = QVariant::fromValue(protectedMembers);
+    variables["public_members"] = QVariant::fromValue(publicMembers);
+    return variables;
+}
+
 
 KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
 {

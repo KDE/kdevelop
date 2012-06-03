@@ -63,6 +63,7 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
     virtual ~CppTemplateNewClass();
     
     virtual KDevelop::DocumentChangeSet generate();
+    virtual QVariantHash templateVariables();
 
     virtual QList<KDevelop::DeclarationPointer> addBaseClass(const QString &);
     virtual void clearInheritance();
