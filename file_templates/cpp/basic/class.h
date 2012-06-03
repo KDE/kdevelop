@@ -6,7 +6,7 @@
 #ifndef {{ name|upper }}_H
 #define {{ name|upper }}_H
 
-class {{ name }}
+class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %} public {{ super.identifier }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
 {
 public:
     {% for declaration in declarations %}
