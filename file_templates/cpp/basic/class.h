@@ -1,15 +1,17 @@
 /*
+
  {{ license }}
  */
 
-#ifndef {{ name }}_H
-#define {{ name }}_H
+#ifndef {{ name|upper }}_H
+#define {{ name|upper }}_H
 
 class {{ name }}
 {
 public:
-    {{ name }}();
-    virtual ~{{ name }}();
+    {% for declaration in declarations %}
+        {% if declaration.is_static %}static{% endif %}{% if declaration.is_virtual %}virtual{% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}({% for argument in declaration.internal_declarations %}{{ argument.type }} {{ argument.identifier }}{% if not forloop.last %}, {% endif %}{% endfor %});
+    {% endfor %}
 };
 
-#endif // {{ name }}_H
+#endif // {{ name|upper }}_H
