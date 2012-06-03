@@ -221,8 +221,11 @@ void TemplatesModel::extractTemplateDescriptions()
              * Rename the extracted description 
              * so that its basename matches the basename of the template archive
              */
-            QFile descriptionFile(localDescriptionsDir + templateEntry->name());
-            descriptionFile.rename(localDescriptionsDir + templateInfo.baseName() + ".kdevtemplate");
+            QFileInfo descriptionInfo(localDescriptionsDir + templateEntry->name());
+            QFile::rename(
+                descriptionInfo.absoluteFilePath(), 
+                localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix()
+            );
         }
         else
             kDebug() << "could not open template" << archName;
