@@ -35,6 +35,7 @@ public:
     
     virtual DocumentChangeSet generate();
     virtual QMap< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
+    virtual QVariantHash templateVariables();
     
 private:
     class TemplateClassGeneratorPrivate* const d;

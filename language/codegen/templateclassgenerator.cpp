@@ -18,8 +18,18 @@
 */
 
 #include "templateclassgenerator.h"
+
 #include "interfaces/icore.h"
 #include "language/codegen/documentchangeset.h"
+#include "duchain/duchainlock.h"
+#include "duchain/duchain.h"
+#include "duchain/declaration.h"
+#include "duchain/functiondeclaration.h"
+#include "duchain/classfunctiondeclaration.h"
+#include "duchain/types/functiontype.h"
+#include "duchain/types/integraltype.h"
+#include "duchain/types/referencetype.h"
+#include "duchain/types/pointertype.h"
 
 #include <KArchive>
 #include <KZip>
@@ -28,10 +38,104 @@
 #include <KTar>
 
 #include <grantlee/engine.h>
+#include <grantlee/metatype.h>
 
 #include <QFileInfo>
 
 using namespace KDevelop;
+
+GRANTLEE_BEGIN_LOOKUP(DeclarationPointer)
+    if ( property == "identifier" )
+        return object->identifier().toString();
+    else if ( property == "toString" )
+        return object->toString();
+    else if ( property == "type" )
+    {
+        AbstractType::Ptr type = object->abstractType();
+        FunctionType::Ptr functionType = type.cast<FunctionType>();
+        if (functionType)
+        {
+            type = functionType->returnType();
+        }
+        return type ? type->toString() : QString();
+    }
+    else if ( property == "internal_declarations" )
+    {
+        QList<DeclarationPointer> list;
+        foreach (Declaration* declaration, object->internalContext()->localDeclarations())
+        {
+            list << DeclarationPointer(declaration);
+        }
+        return QVariant::fromValue(list);
+    }
+    else if ( property == "default_return_value" )
+    {
+        FunctionType::Ptr functionType = object->abstractType().cast<FunctionType>();
+        if (functionType)
+        {
+            AbstractType::Ptr type = functionType->returnType();
+            if (IntegralType::Ptr integralType = type.cast<IntegralType>())
+            {
+                return QVariant(integralType->toString() + "()");
+            }
+            else if (ReferenceType::Ptr refType = type.cast<ReferenceType>())
+            {
+                return QVariant(refType->baseType()->toString() + "()");
+            }
+            else if (PointerType::Ptr pointerType = type.cast<PointerType>())
+            {
+                return QString("0");
+            }
+        }
+    }
+    else if ( property == "is_virtual" )
+    {
+        if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(object.data()))
+        {
+            return function->isVirtual();
+        }
+        return false;
+    }
+    else if ( property == "is_static" )
+    {
+        if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(object.data()))
+        {
+            return function->isStatic();
+        }
+        return false;
+    }
+GRANTLEE_END_LOOKUP
+
+class NoEscapeStream : public Grantlee::OutputStream
+{
+public:
+    NoEscapeStream();
+    explicit NoEscapeStream (QTextStream* stream);
+    
+    virtual QString escape (const QString& input) const;
+    virtual QSharedPointer< OutputStream > clone (QTextStream* stream) const;
+};
+
+NoEscapeStream::NoEscapeStream() : OutputStream()
+{
+
+}
+
+NoEscapeStream::NoEscapeStream (QTextStream* stream) : OutputStream (stream)
+{
+
+}
+
+QString NoEscapeStream::escape (const QString& input) const
+{
+    return input;
+}
+
+QSharedPointer< Grantlee::OutputStream > NoEscapeStream::clone (QTextStream* stream) const
+{
+    QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
+    return clonedStream;
+}
 
 class KDevelop::TemplateClassGeneratorPrivate
 {
@@ -41,6 +145,7 @@ public:
     KUrl baseUrl;
     
     void loadTemplate();
+    QString render(Grantlee::Template t, Grantlee::Context& c);
 };
 
 void TemplateClassGeneratorPrivate::loadTemplate()
@@ -75,11 +180,24 @@ void TemplateClassGeneratorPrivate::loadTemplate()
     }
 }
 
+QString TemplateClassGeneratorPrivate::render (Grantlee::Template t, Grantlee::Context& c)
+{
+    QString ret;
+    QTextStream textStream(&ret);
+    NoEscapeStream stream(&textStream);
+    
+    t->render(&stream, &c);
+    return ret;
+}
+
+
 TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl) : ClassGenerator(),
 d(new TemplateClassGeneratorPrivate)
 {
     d->archive = 0;
     d->baseUrl = baseUrl;
+    
+    Grantlee::registerMetaType<DeclarationPointer>();
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
@@ -94,7 +212,7 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
     d->loadTemplate();
 }
 
-DocumentChangeSet TemplateClassGenerator::generate()
+QVariantHash TemplateClassGenerator::templateVariables()
 {
     QVariantHash variables;
     
@@ -102,9 +220,48 @@ DocumentChangeSet TemplateClassGenerator::generate()
     variables["identifier"] = identifier();
     variables["license"] = license();
     
+    variables["inheritance_list"] = QVariant::fromValue(inheritanceList());
+    variables["direct_inheritance_list"] = QVariant::fromValue(directInheritanceList());
+    variables["declarations"] = QVariant::fromValue(declarations());
+    
+    QList<DeclarationPointer> methods;
+    QList<DeclarationPointer> properties;
+    
+    DUChainReadLocker lock(DUChain::lock());
+    foreach (const DeclarationPointer& pointer, declarations())
+    {
+        Declaration* decl = pointer.data();
+        if (!decl)
+        {
+            continue;
+        }
+        
+        if (decl->isFunctionDeclaration())
+        {
+            methods << pointer;
+        }
+        else
+        {
+            properties << pointer;
+        }
+    }
+    
+    variables["method_declarations"] = QVariant::fromValue(methods);
+    variables["property_declarations"] = QVariant::fromValue(properties);
+    
+    return variables;
+}
+
+
+DocumentChangeSet TemplateClassGenerator::generate()
+{
+    QVariantHash variables = templateVariables();
+    
     DocumentChangeSet changes;
     
     Grantlee::Engine engine;
+    engine.setSmartTrimEnabled(true);
+    
     Grantlee::Context context(variables);
     
     // TODO: Add more variables to context
@@ -113,6 +270,8 @@ DocumentChangeSet TemplateClassGenerator::generate()
     const KArchiveDirectory* dir = d->archive->directory();
     
     kDebug() << "Opened archive with contents:" << dir->entries();
+    
+    DUChainReadLocker lock(DUChain::lock());
     
     KConfig templateConfig(d->templateDescription);
     foreach (const QString& groupName, templateConfig.groupList())
@@ -138,7 +297,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
         }
         
         Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
-        QString outputName = nameTemplate->render(&context);
+        QString outputName = d->render(nameTemplate, context);
         
         KUrl url(d->baseUrl);
         url.addPath(outputName);
@@ -147,7 +306,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
         
         Grantlee::Template fileTemplate = engine.newTemplate(file->data(), outputName);
 
-        DocumentChange change(document, range, QString(), fileTemplate->render(&context));
+        DocumentChange change(document, range, QString(), d->render(fileTemplate, context));
         changes.addChange(change);
     }
 
