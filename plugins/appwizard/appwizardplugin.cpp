@@ -225,7 +225,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
     QString templateArchive;
-    foreach (const QString& archive, componentData().dirs()->findAllResources("apptempates"))
+    foreach (const QString& archive, componentData().dirs()->findAllResources("apptemplates"))
     {
         if (QFileInfo(archive).baseName() == templateName)
         {
