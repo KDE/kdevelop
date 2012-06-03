@@ -82,7 +82,7 @@ KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
 }
 
 CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
-: TemplateClassGenerator (parentItem->url())
+: TemplateClassGenerator (parentItem ? parentItem->url() : KUrl())
 , m_type(DefaultType)
 , m_objectType(new CppClassType)
 , m_parentItem(parentItem)
