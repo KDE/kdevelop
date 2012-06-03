@@ -224,10 +224,13 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
-    if( templateArchive.isEmpty() )
+    QString templateArchive;
+    foreach (const QString& archive, componentData().dirs()->findAllResources("apptempates"))
     {
-        templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+        if (QFileInfo(archive).baseName() == templateName)
+        {
+            templateArchive = archive;
+        }
     }
 
     kDebug() << "Using archive:" << templateArchive;
