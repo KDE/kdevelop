@@ -10,7 +10,7 @@ class {{ name }}
 {
 public:
     {% for declaration in declarations %}
-        {% if declaration.is_static %}static{% endif %}{% if declaration.is_virtual %}virtual{% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}({% for argument in declaration.internal_declarations %}{{ argument.type }} {{ argument.identifier }}{% if not forloop.last %}, {% endif %}{% endfor %});
+        {% if declaration.is_static %}static {% endif %}{% if declaration.is_virtual %}virtual {% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}({% for argument in declaration.internal_declarations %}{{ argument.type }} {{ argument.identifier }}{% if not forloop.last %}, {% endif %}{% endfor %});
     {% endfor %}
 };
 
