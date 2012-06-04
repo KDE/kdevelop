@@ -165,7 +165,7 @@ void CodeUtilsPlugin::createClass()
     KUrl url;
     if (QAction* action = qobject_cast<QAction*>(sender()))
     {
-        url = action->data().toUrl();
+        url = action->data().value<KUrl>();
     }
     TemplateClassAssistant assistant(QApplication::activeWindow(), url);
     assistant.exec();
