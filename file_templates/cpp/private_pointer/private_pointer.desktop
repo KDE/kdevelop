@@ -1,0 +1,19 @@
+[General]
+Name=Private Pointer
+Comment=C++ Class with a private D-pointer
+Category=C++
+
+[Header File]
+Name=Public Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Private Header File]
+Name=Private Header
+File=class_p.h
+OutputFile={{ name }}_p.h
+
+[Implementation File]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
