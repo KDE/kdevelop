@@ -108,6 +108,22 @@ GRANTLEE_BEGIN_LOOKUP(DeclarationPointer)
         }
         return false;
     }
+    else if ( property == "is_constructor" )
+    {
+        if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(object.data()))
+        {
+            return function->isConstructor();
+        }
+        return false;
+    }
+    else if ( property == "is_destructor" )
+    {
+        if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(object.data()))
+        {
+            return function->isDestructor();
+        }
+        return false;
+    }
 GRANTLEE_END_LOOKUP
 
 class NoEscapeStream : public Grantlee::OutputStream
