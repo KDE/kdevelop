@@ -20,6 +20,7 @@
 
 #include <QDirIterator>
 #include <QFile>
+#include <QSignalMapper>
 
 #include <KListWidget>
 #include <KLineEdit>
@@ -44,6 +45,8 @@
 #include <kcomponentdata.h>
 #include <kconfig.h>
 #include <KSharedConfig>
+#include <kurlrequester.h>
+#include <knuminput.h>
 
 namespace KDevelop {
 
@@ -806,6 +809,10 @@ struct OutputPagePrivate
 
     Ui::OutputLocationDialog* output;
     CreateClassAssistant* parent;
+    QSignalMapper urlChangedMapper;
+    QMap<QString, KUrlRequester*> outputFiles;
+    QMap<QString, KIntNumInput*> outputLines;
+    QMap<QString, KIntNumInput*> outputColumns;
 
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
@@ -825,15 +832,41 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
-    d->output->headerUrl->setMode( KFile::File | KFile::LocalOnly );
-    d->output->headerUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
-    d->output->implementationUrl->setMode( KFile::File | KFile::LocalOnly );
-    d->output->implementationUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
-
-
+    
+    QMap<QString, KUrl> urls = parent->generator()->fileUrlsFromBase(parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
+    for (QMap<QString, KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        QLabel* label = new QLabel(it.key(), this);
+        KUrlRequester* requester = new KUrlRequester(it.value(), this);
+        requester->setMode( KFile::File | KFile::LocalOnly );
+        requester->fileDialog()->setOperationMode( KFileDialog::Saving );
+        
+        d->urlChangedMapper.setMapping(requester, it.key());
+        connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
+        
+        d->output->urlFormLayout->addRow(label, requester);
+        d->outputFiles.insert(it.key(), requester);
+        
+        label = new QLabel(it.key(), this);
+        QHBoxLayout* layout = new QHBoxLayout(this);
+        
+        KIntNumInput* line = new KIntNumInput(this);
+        line->setPrefix(i18n("Line: "));
+        line->setValue(0);
+        layout->addWidget(line);
+       
+        KIntNumInput* column = new KIntNumInput(this);
+        column->setPrefix(i18n("Column: "));
+        column->setValue(0);
+        layout->addWidget(column);
+        
+        d->output->positionFormLayout->addRow(label, layout);
+        d->outputLines.insert(it.key(), line);
+        d->outputColumns.insert(it.key(), column);
+    }
+    
+    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
-    connect(d->output->headerUrl, SIGNAL(textChanged(QString)), this, SLOT(updateHeaderRanges(QString)));
-    connect(d->output->implementationUrl, SIGNAL(textChanged(QString)), this, SLOT(updateImplementationRanges(QString)));
 }
 
 void OutputPage::initializePage()
@@ -847,9 +880,17 @@ void OutputPage::initializePage()
     updateFileNames();
 }
 
-void OutputPage::updateFileNames() {
-    d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
-    d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
+void OutputPage::updateFileNames()
+{
+    QMap<QString, KUrl> urls = d->parent->generator()->fileUrlsFromBase(d->parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
+    
+    for (QMap<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
+    {
+        if (urls.contains(it.key()))
+        {
+            it.value()->setUrl(urls[it.key()]);
+        }
+    }
 
     //Save the setting for next time
     KSharedConfigPtr config = KGlobal::config();
@@ -859,33 +900,41 @@ void OutputPage::updateFileNames() {
     emit isValid(isComplete());
 }
 
-void OutputPage::updateHeaderRanges(const QString& url)
+void OutputPage::updateFileRange (const QString& field)
 {
+    if (!d->outputFiles.contains(field))
+    {
+        return;
+    }
+    
+    QString url = d->outputFiles[field]->url().toLocalFile();
     QFileInfo info(url);
-    d->updateRanges(d->output->headerLineNumber, d->output->headerColumnNumber, info.exists() && !info.isDir());
-
-    emit isValid(isComplete());
-}
-
-void OutputPage::updateImplementationRanges(const QString& url)
-{
-    QFileInfo info(url);
-    d->updateRanges(d->output->implementationLineNumber, d->output->implementationColumnNumber, info.exists() && !info.isDir());
-
+    
+    d->updateRanges(d->outputLines[field], d->outputColumns[field], info.exists() && !info.isDir());
+    
     emit isValid(isComplete());
 }
 
 bool OutputPage::isComplete() const
 {
-    return !d->output->headerUrl->url().url().isEmpty() && !d->output->implementationUrl->url().url().isEmpty();
+    foreach (KUrlRequester* requester, d->outputFiles)
+    {
+        if (!requester->url().isValid());
+        return false;
+    }
+    return true;
 }
 
 bool OutputPage::validatePage()
 {
-    d->parent->generator()->setHeaderUrl(d->output->headerUrl->text());
-    d->parent->generator()->setImplementationUrl(d->output->implementationUrl->text());
-    d->parent->generator()->setHeaderPosition(SimpleCursor(d->output->headerLineNumber->value(), d->output->headerColumnNumber->value()));
-    d->parent->generator()->setImplementationPosition(SimpleCursor(d->output->implementationLineNumber->value(), d->output->implementationColumnNumber->value()));
+    for (QMap<QString,KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
+    {
+        d->parent->generator()->setFileUrl(it.key(), it.value()->url());
+        
+        int line = d->outputLines[it.key()]->value();
+        int column = d->outputColumns[it.key()]->value();
+        d->parent->generator()->setFilePosition(it.key(), SimpleCursor(line, column));
+    }
     return true;
 }
 

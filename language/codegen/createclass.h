@@ -363,14 +363,10 @@ private Q_SLOTS:
     /**
      * This implementation simply enables the position widgets on a file that exists.
      * Derived classes should overload to set the ranges where class generation should be allowed
+     * 
+     * @param field the name of the file to be generated (Header, Implementation, etc)
      */
-    virtual void updateHeaderRanges(const QString&);
-
-    /**
-     * This implementation simply enables the position widgets on a file that exists.
-     * Derived classes should overload to set the ranges where class generation should be allowed
-     */
-    virtual void updateImplementationRanges(const QString&);
+    virtual void updateFileRange (const QString& field);
 };
 }
 

@@ -367,7 +367,8 @@ QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& base
     QMap<QString, KUrl> map;
     
     Grantlee::Engine engine;
-    Grantlee::Context context;
+    
+    Grantlee::Context context(templateVariables());
   
     KConfig templateConfig(d->templateDescription);
     foreach (const QString& groupName, templateConfig.groupList())
@@ -378,16 +379,22 @@ QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& base
         }
         
         KConfigGroup cg(&templateConfig, groupName);
+        if (!cg.hasKey("OutputFile"))
+        {
+            continue;
+        }
         
         Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
         
         KUrl url(baseUrl);
-        url.addPath(nameTemplate->render(&context));
-        QString fileName = cg.readEntry("Name");
+        QString outputName = nameTemplate->render(&context);
         if (toLower)
         {
-            fileName = fileName.toLower();
+            outputName = outputName.toLower();
         }
+        url.addPath(nameTemplate->render(&context));
+
+        QString fileName = cg.readEntry("Name");
         map.insert(fileName, url);
     }
     
