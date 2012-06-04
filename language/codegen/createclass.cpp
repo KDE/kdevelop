@@ -921,8 +921,10 @@ bool OutputPage::isComplete() const
 {
     foreach (KUrlRequester* requester, d->outputFiles)
     {
-        if (!requester->url().isValid());
-        return false;
+        if (!requester->url().isValid())
+        {
+            return false;
+        }
     }
     return true;
 }
