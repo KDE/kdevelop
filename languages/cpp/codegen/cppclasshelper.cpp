@@ -57,7 +57,7 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
 {
     KUrl url = m_assistant->baseUrl();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    ProjectBaseItem* item;
+    ProjectBaseItem* item = 0;
         
     if (project)
     {
