@@ -853,11 +853,13 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
         KIntNumInput* line = new KIntNumInput(this);
         line->setPrefix(i18n("Line: "));
         line->setValue(0);
+        line->setMinimum(0);
         layout->addWidget(line);
        
         KIntNumInput* column = new KIntNumInput(this);
         column->setPrefix(i18n("Column: "));
         column->setValue(0);
+        column->setMinimum(0);
         layout->addWidget(column);
         
         d->output->positionFormLayout->addRow(label, layout);
