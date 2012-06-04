@@ -185,8 +185,10 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
         {
             if (projectContext->items().size() == 1)
             {
-                QAction* action = actionCollection()->action("class_from_template");
-                action->setData(QVariant(projectContext->items().first()->url()));
+                KAction* action = new KAction(KIcon("code-class"), i18n("Create Class from &Template"), actionCollection() );
+                action->setData(projectContext->items().first()->url());
+                
+                connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
                 ext.addAction(ContextMenuExtension::FileGroup, action);
             }
         }
