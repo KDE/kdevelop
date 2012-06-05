@@ -77,6 +77,8 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
+    
+    d->ui->languageView->setCurrentIndex(d->model->index(0, 0));
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()
