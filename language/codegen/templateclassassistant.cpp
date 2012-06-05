@@ -201,6 +201,7 @@ void TemplateClassAssistant::setup()
 
     TemplateSelectionPage* page = newTemplateSelectionPage();
     d->templateSelectionPage = addPage(page, i18n("Language and Template"));
+    connect (this, SIGNAL(accepted()), page, SLOT(saveConfig()));
     
     /*
      * All assistant pages except the first one require the helper to already be set.
