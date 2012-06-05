@@ -25,6 +25,8 @@
 #include "interfaces/icore.h"
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include "ui_templateselection.h"
 
@@ -34,6 +36,9 @@
 #include <KFileDialog>
 
 using namespace KDevelop;
+
+const char* LastUsedTemplateEntry = "LastUsedTemplate";
+const char* ClassTemplatesGroup = "ClassTemplates";
 
 class KDevelop::TemplateSelectionPagePrivate
 {
@@ -78,7 +83,37 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
     
-    d->ui->languageView->setCurrentIndex(d->model->index(0, 0));
+    QModelIndex languageIndex = d->model->index(0, 0);
+    QModelIndex templateIndex = d->model->index(0, 0, languageIndex);
+    
+    while (templateIndex.child(0, 0).isValid())
+    {
+        templateIndex = templateIndex.child(0, 0);
+    }
+    
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl());
+    if (project)
+    {
+        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
+        QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
+        
+        QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate);
+        
+        if (!indexes.isEmpty())
+        {
+            templateIndex = indexes.first();
+            QStandardItem* item = d->model->itemFromIndex(templateIndex);
+            
+            while (item->parent() && item->parent() != d->model->invisibleRootItem())
+            {
+                item = item->parent();
+            }
+            languageIndex = item->index();
+        }
+    }
+    
+    d->ui->languageView->setCurrentIndex(languageIndex);
+    d->ui->templateView->setCurrentIndex(templateIndex);
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()
@@ -134,6 +169,17 @@ void TemplateSelectionPage::loadFileClicked()
             d->ui->languageView->setCurrentIndex(indexes.first());
             d->ui->templateView->setCurrentIndex(indexes.last());
         }
+    }
+}
+
+void TemplateSelectionPage::saveConfig()
+{
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl());
+    if (project)
+    {
+        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
+        group.writeEntry(LastUsedTemplateEntry, selectedTemplate());
+        group.sync();
     }
 }
 

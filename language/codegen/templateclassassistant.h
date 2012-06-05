@@ -46,6 +46,8 @@ private slots:
     void currentLanguageChanged (const QModelIndex& index);
     void getMoreClicked ();
     void loadFileClicked ();
+    
+    void saveConfig();
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
