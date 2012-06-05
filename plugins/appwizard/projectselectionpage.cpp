@@ -26,7 +26,7 @@
 #include <language/codegen/multilevellistview.h>
 #include <KColorScheme>
 #include <KFileDialog>
-#include <KNS3/DownloadDialog>
+#include <KNS3/KNewStuffButton>
 #include <KTar>
 #include <KZip>
 
@@ -55,18 +55,23 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->setModel(templatesModel);
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
-    ui->gridLayout->addWidget(m_listView, 0, 0, 1, 2);
+    ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
     typeChanged(m_listView->currentIndex());
     
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
-
-    connect( ui->getMoreTemplatesButton, SIGNAL(clicked(bool)),
-             this, SLOT(getMoreClicked()));
-    connect( ui->loadTemplateButton, SIGNAL(clicked(bool)),
-             this, SLOT(loadFileClicked()));
+    
+    KNS3::Button* knsButton = new KNS3::Button(i18n("Get More Templates"), "kdevappwizard.knsrc", m_listView);
+    connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), 
+             this, SLOT(templatesDownloaded(KNS3::Entry::List)));
+    m_listView->addWidget(0, knsButton);
+    
+    KPushButton* loadButton = new KPushButton(m_listView);
+    loadButton->setText(i18n("Load Template from File"));
+    loadButton->setIcon(KIcon("application-x-archive"));
+    connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
+    m_listView->addWidget(0, loadButton);
 }
-
 
 void ProjectSelectionPage::nameChanged()
 {
@@ -283,20 +288,43 @@ void ProjectSelectionPage::loadFileClicked()
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)
         {
-            QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect;
             m_listView->setCurrentIndex(indexes.at(1));
             ui->templateType->setCurrentIndex(indexes.at(2).row());
         }
     }
 }
 
-void ProjectSelectionPage::getMoreClicked()
+void ProjectSelectionPage::templatesDownloaded (const KNS3::Entry::List& entries)
 {
-    KNS3::DownloadDialog dialog("kdevappwizard.knsrc", this);
-    dialog.exec();
-
     m_templatesModel->refresh();
+    bool updated = false;
+    
+    foreach (const KNS3::Entry& entry, entries)
+    {
+        if (!entry.installedFiles().isEmpty())
+        {
+            updated = true;
+            setCurrentTemplate(entry.installedFiles().first());
+        }
+    }
+    
+    if (!updated)
+    {
+        m_listView->setCurrentIndex(m_templatesModel->index(0, 0));
+    }
 }
 
+void ProjectSelectionPage::setCurrentTemplate (const QString& fileName)
+{
+    QModelIndexList indexes = m_templatesModel->templateIndexes(fileName);
+    if (indexes.size() > 1)
+    {
+        m_listView->setCurrentIndex(indexes.at(1));
+    }
+    if (indexes.size() > 2)
+    {
+        ui->templateType->setCurrentIndex(indexes.at(2).row());
+    }
+}
 
 #include "projectselectionpage.moc"

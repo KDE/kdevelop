@@ -41,6 +41,8 @@ public:
     
     QModelIndex currentIndex();
     
+    void addWidget(int level, QWidget* widget);
+    
 signals:
     void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);
     

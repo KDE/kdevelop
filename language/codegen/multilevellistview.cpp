@@ -32,6 +32,7 @@ public:
     
     int levels;
     QList<QListView*> listViews;
+    QList<QVBoxLayout*> layouts;
     QSignalMapper* mapper;
 };
 
@@ -55,9 +56,14 @@ d(new MultiLevelListViewPrivate(levels))
     QHBoxLayout* layout = new QHBoxLayout();
     for (int i = 0; i < d->levels; ++i)
     {
+        QVBoxLayout* levelLayout = new QVBoxLayout();
+        
         QListView* view = new QListView(this);
         view->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(view);
+        levelLayout->addWidget(view);
+        layout->addItem(levelLayout);
+        
+        d->layouts << levelLayout;
         d->listViews << view;
     }
     layout->setContentsMargins(0, 0, 0, 0);
@@ -108,6 +114,12 @@ QModelIndex MultiLevelListView::currentIndex()
         index = d->listViews[level]->currentIndex();
     }
     return d->listViews.last()->currentIndex();
+}
+
+void MultiLevelListView::addWidget (int level, QWidget* widget)
+{
+    Q_ASSERT(level < d->levels);
+    d->layouts[level]->addWidget(widget);
 }
 
 void MultiLevelListView::setCurrentIndex (const QModelIndex& index)

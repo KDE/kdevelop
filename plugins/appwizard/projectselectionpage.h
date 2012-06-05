@@ -11,6 +11,7 @@
 #define _PROJECTSELECTIONPAGE_H_
 
 #include "appwizardpagewidget.h"
+#include <knewstuff3/entry.h>
 
 namespace KDevelop
 {
@@ -49,13 +50,15 @@ private slots:
     void typeChanged(const QModelIndex& idx);
     void templateChanged(int);
 
-    void getMoreClicked();
     void loadFileClicked();
+    void templatesDownloaded (const KNS3::Entry::List& entries);
+
 
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);
     inline QStandardItem* getCurrentItem() const;
+    void setCurrentTemplate(const QString& fileName);
 
     Ui::ProjectSelectionPage *ui;
     KDevelop::MultiLevelListView* m_listView;

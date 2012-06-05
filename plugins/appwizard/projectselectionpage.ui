@@ -11,19 +11,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="KPushButton" name="loadTemplateButton">
-     <property name="text">
-      <string>Load Template From File</string>
-     </property>
-     <property name="icon">
-      <iconset theme="application-x-archive">
-       <normaloff/>
-      </iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
+   <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="propertiesBox">
      <property name="enabled">
       <bool>false</bool>
@@ -68,7 +56,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="2" rowspan="3">
+   <item row="0" column="1" rowspan="2">
     <widget class="QFrame" name="descriptionFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -151,39 +139,9 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="KPushButton" name="getMoreTemplatesButton">
-     <property name="text">
-      <string>Get More Templates</string>
-     </property>
-     <property name="icon">
-      <iconset theme="get-hot-new-stuff">
-       <normaloff/>
-      </iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" rowspan="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
