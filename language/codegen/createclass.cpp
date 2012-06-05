@@ -357,9 +357,14 @@ void ClassGenerator::clearDeclarations()
     m_declarations.clear();
 }
 
-QMap< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+QStringList ClassGenerator::fileLabels()
 {
-    QMap<QString, KUrl> map;
+    return QStringList() << d->headerFileType << d->implementationFileType;
+}
+
+QHash< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+{
+    QHash<QString, KUrl> map;
     map.insert(d->headerFileType, headerUrlFromBase(baseUrl, toLower));
     map.insert(d->implementationFileType, implementationUrlFromBase(baseUrl, toLower));
     return map;
@@ -810,9 +815,10 @@ struct OutputPagePrivate
     Ui::OutputLocationDialog* output;
     CreateClassAssistant* parent;
     QSignalMapper urlChangedMapper;
-    QMap<QString, KUrlRequester*> outputFiles;
-    QMap<QString, KIntNumInput*> outputLines;
-    QMap<QString, KIntNumInput*> outputColumns;
+    
+    QHash<QString, KUrlRequester*> outputFiles;
+    QHash<QString, KIntNumInput*> outputLines;
+    QHash<QString, KIntNumInput*> outputColumns;
 
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
@@ -833,21 +839,20 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
     
-    QMap<QString, KUrl> urls = parent->generator()->fileUrlsFromBase(parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
-    for (QMap<QString, KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    foreach (const QString& text, d->parent->generator()->fileLabels())
     {
-        QLabel* label = new QLabel(it.key(), this);
-        KUrlRequester* requester = new KUrlRequester(it.value(), this);
+        QLabel* label = new QLabel(text, this);
+        KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
         requester->fileDialog()->setOperationMode( KFileDialog::Saving );
         
-        d->urlChangedMapper.setMapping(requester, it.key());
+        d->urlChangedMapper.setMapping(requester, text);
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
         
         d->output->urlFormLayout->addRow(label, requester);
-        d->outputFiles.insert(it.key(), requester);
+        d->outputFiles.insert(text, requester);
         
-        label = new QLabel(it.key(), this);
+        label = new QLabel(text, this);
         QHBoxLayout* layout = new QHBoxLayout(this);
         
         KIntNumInput* line = new KIntNumInput(this);
@@ -863,8 +868,8 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
         layout->addWidget(column);
         
         d->output->positionFormLayout->addRow(label, layout);
-        d->outputLines.insert(it.key(), line);
-        d->outputColumns.insert(it.key(), column);
+        d->outputLines.insert(text, line);
+        d->outputColumns.insert(text, column);
     }
     
     connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
@@ -884,9 +889,9 @@ void OutputPage::initializePage()
 
 void OutputPage::updateFileNames()
 {
-    QMap<QString, KUrl> urls = d->parent->generator()->fileUrlsFromBase(d->parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
+    QHash<QString, KUrl> urls = d->parent->generator()->fileUrlsFromBase(d->parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
     
-    for (QMap<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
+    for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         if (urls.contains(it.key()))
         {
@@ -931,7 +936,7 @@ bool OutputPage::isComplete() const
 
 bool OutputPage::validatePage()
 {
-    for (QMap<QString,KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
+    for (QHash<QString,KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         d->parent->generator()->setFileUrl(it.key(), it.value()->url());
         

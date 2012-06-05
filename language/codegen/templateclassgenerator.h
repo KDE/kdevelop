@@ -38,7 +38,8 @@ public:
     void setTemplateDescription(const QString& templateDescription);
     
     virtual DocumentChangeSet generate();
-    virtual QMap< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
+    virtual QStringList fileLabels();
+    virtual QHash< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
     virtual QVariantHash templateVariables();
     
 private:

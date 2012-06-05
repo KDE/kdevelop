@@ -179,14 +179,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     QList<DeclarationPointer> directInheritanceList() const;
 
     /**
+     * Should return user-readable labels for all files for the gives class-name
+     * 
+     * The default implementation returns "Header" and "Implementation"
+     **/
+    virtual QStringList fileLabels();
+    
+    /**
      * Should return the suggested urls of all files for the gives class-name
+     * The keys should match labels returned by fileLabels()
      * 
      * The default implementation calls headerUrlFromBase() and implementationUrlFromBase()
      *
      * @param baseUrl The base url, where the files should be located
      * @param toLowor Whether filenames should be all lowercase, defaults to true.
      **/
-    virtual QMap<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual QHash<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
     
     /**
      *Should return the suggested url of the header file for the given class-name

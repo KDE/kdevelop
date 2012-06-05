@@ -378,9 +378,30 @@ DocumentChangeSet TemplateClassGenerator::generate()
     return changes;
 }
 
-QMap< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+QStringList TemplateClassGenerator::fileLabels()
 {
-    QMap<QString, KUrl> map;
+    QStringList labels;
+    
+    KConfig templateConfig(d->templateDescription);
+    KConfigGroup group(&templateConfig, "General");
+    
+    QStringList files = group.readEntry("Files", QStringList());
+    kDebug() << "Files in template" << files;
+    foreach (const QString& fileGroup, files)
+    {   
+        KConfigGroup cg(&templateConfig, fileGroup);
+        if (cg.hasKey("OutputFile"))
+        {
+            labels << cg.readEntry("Name");
+        }
+    }
+    
+    return labels;
+}
+
+QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+{
+    QHash<QString, KUrl> map;
     
     Grantlee::Engine engine;
     
