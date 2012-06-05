@@ -67,7 +67,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->addWidget(0, knsButton);
     
     KPushButton* loadButton = new KPushButton(m_listView);
-    loadButton->setText(i18n("Load Template from File"));
+    loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(KIcon("application-x-archive"));
     connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
     m_listView->addWidget(0, loadButton);
