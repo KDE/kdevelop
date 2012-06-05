@@ -31,8 +31,7 @@
 {% for declaration in public_functions %}
 {% with declaration.internal_declarations as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}
-{% if declaration.is_constructor %}: d(new {{ name }}Private(this)){% endif %}
+{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}{% if declaration.is_constructor %}: d(new {{ name }}Private(this)){% endif %}
 {
     {% if declaration.is_destructor %}
     delete d;
@@ -47,8 +46,7 @@
 {% for declaration in protected_functions %}
 {% with declaration.internal_declarations as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}
-{% if declaration.is_constructor %}: d(new {{ name }}Private(this)){% endif %}
+{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}{% if declaration.is_constructor %} : d(new {{ name }}Private(this)){% endif %}
 {
     {% if declaration.is_destructor %}
     delete d;

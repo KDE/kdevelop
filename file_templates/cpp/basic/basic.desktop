@@ -2,13 +2,14 @@
 Name=Basic
 Comment=Basic C++ Class
 Category=C++
+Files=Header,Implementation
 
-[Header File]
+[Header]
 Name=Header
 File=class.h
 OutputFile={{ name }}.h
 
-[Implementation File]
+[Implementation]
 Name=Implementation
 File=class.cpp
 OutputFile={{ name }}.cpp
