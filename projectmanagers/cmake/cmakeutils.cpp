@@ -104,7 +104,9 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
         cmakeGrp.sync();
 
         return true;
-    } else if( !QFileInfo( builddir.toLocalFile() + "/CMakeCache.txt" ).exists() )
+    } else if( !QFileInfo( builddir.toLocalFile() + "/CMakeCache.txt" ).exists() ||
+               !QFileInfo( builddir.toLocalFile() + "/Makefile" ).exists()
+    )
     {
         // User entered information already, but cmake hasn't actually been run yet.
         return true;
