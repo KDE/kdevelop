@@ -115,8 +115,15 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         }
         QDir dir(path);
         
-        m_paths=dir.entryList(QStringList() << tocomplete.mid(lastdir+1)+'*',
-                                          QDir::AllEntries | QDir::NoDotAndDotDot);
+        QFileInfoList paths=dir.entryInfoList(QStringList() << tocomplete.mid(lastdir+1)+'*',
+                                              QDir::AllEntries | QDir::NoDotAndDotDot);
+        m_paths.clear();
+        foreach(const QFileInfo& f, paths) {
+            QString currentPath = f.fileName();
+            if(f.isDir())
+                currentPath+='/';
+            m_paths += currentPath;
+        }
         
         numRows += m_paths.count();
     } else
