@@ -284,6 +284,24 @@ QVariantHash TemplateClassGenerator::templateVariables()
     variables["direct_inheritance_list"] = QVariant::fromValue(directInheritanceList());
     variables["declarations"] = QVariant::fromValue(declarations());
     
+    QList<DeclarationPointer> functions;
+    QList<DeclarationPointer> members;
+    
+    foreach (const DeclarationPointer& pointer, declarations())
+    {
+        if (pointer->isFunctionDeclaration())
+        {
+            functions << pointer;
+        }
+        else
+        {
+            members << pointer;
+        }
+    }
+    
+    variables["functions"] = QVariant::fromValue(functions);
+    variables["members"] = QVariant::fromValue(members);
+    
     kDebug() << "Inheritance sizes:" << directInheritanceList().size() << inheritanceList().size();
     
     QList<DeclarationPointer> methods;
