@@ -15,7 +15,11 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QTreeView" name="treeView"/>
+    <widget class="QTreeView" name="treeView">
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -25,7 +29,9 @@
         <string>Load Template</string>
        </property>
        <property name="icon">
-        <iconset theme="application-x-archive"/>
+        <iconset theme="application-x-archive">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -35,7 +41,9 @@
         <string>Get More Templates</string>
        </property>
        <property name="icon">
-        <iconset theme="get-hot-new-stuff"/>
+        <iconset theme="get-hot-new-stuff">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -45,7 +53,9 @@
         <string>Share Templates</string>
        </property>
        <property name="icon">
-        <iconset theme="get-hot-new-stuff"/>
+        <iconset theme="get-hot-new-stuff">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
