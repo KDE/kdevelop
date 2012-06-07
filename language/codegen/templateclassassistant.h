@@ -50,6 +50,22 @@ private slots:
     void saveConfig();
 };
 
+class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariantHash options READ options)
+    
+public:
+    explicit TemplateOptionsPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
+    virtual ~TemplateOptionsPage();
+    
+    void loadXML(const QByteArray& contents);
+    QVariantHash options() const;
+    
+private:
+    class TemplateOptionsPagePrivate* const d;
+};
+
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
 {
     Q_OBJECT

@@ -20,6 +20,7 @@
 #include "templateclassassistant.h"
 #include "templatesmodel.h"
 #include "templateclassgenerator.h"
+
 #include <interfaces/icreateclasshelper.h>
 #include <interfaces/ilanguagesupport.h>
 #include "interfaces/icore.h"
@@ -30,10 +31,19 @@
 
 #include "ui_templateselection.h"
 
+#include <KNS3/DownloadDialog>
 #include <KLocalizedString>
 #include <KComponentData>
-#include <KNS3/DownloadDialog>
 #include <KFileDialog>
+#include <KLineEdit>
+#include <KIntNumInput>
+
+#include <QDomElement>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QFormLayout>
+#include <QLabel>
+#include <QCheckBox>
 
 using namespace KDevelop;
 
@@ -149,7 +159,6 @@ void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
 
 void TemplateSelectionPage::getMoreClicked()
 {
-    // TODO: Install .knsrc file
     KNS3::DownloadDialog dialog("kdevclassassistant.knsrc");
     dialog.exec();
     d->model->refresh();
@@ -181,6 +190,182 @@ void TemplateSelectionPage::saveConfig()
         group.writeEntry(LastUsedTemplateEntry, selectedTemplate());
         group.sync();
     }
+}
+
+struct ConfigEntry
+{
+    QString name;
+    QString label;
+    QVariant value;
+    QString context;
+    
+    QString maxValue;
+    QString minValue;
+    QString type;
+};
+
+class KDevelop::TemplateOptionsPagePrivate
+{
+public:
+    TemplateClassAssistant* assistant;
+    QList<ConfigEntry> entries;
+    QHash<QString, QWidget*> controls;
+    QHash<QString, QByteArray> typeProperties;
+    
+    ConfigEntry readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout);
+};
+
+ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout)
+{
+    ConfigEntry entry;
+    
+    for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+    {
+        entry.name = e.attribute("name");
+        entry.type = e.attribute("type", "String");
+        
+        QString tag = e.tagName();
+        
+        if (tag == "label")
+        {
+            entry.label = e.text();
+        }
+        else if (tag == "tooltip")
+        {
+            entry.label = e.text();
+        }
+        else if (tag == "whatsthis")
+        {
+            entry.label = e.text();
+        }
+        else if ( tag == "min" ) 
+        {
+            entry.minValue = e.text();
+        }
+        else if ( tag == "max" )
+        {
+            entry.maxValue = e.text();
+        }
+        else if ( tag == "default" )
+        {
+            entry.value = e.text();
+        }
+    }
+    
+    QLabel* label = new QLabel(entry.label, parent);
+    QWidget* control = 0;
+    const QString type = entry.type;
+    if (type == "String")
+    {
+        control = new KLineEdit(entry.value.toString(), parent);
+    }
+    else if (type == "Int")
+    {
+        KIntNumInput* input = new KIntNumInput(entry.value.toInt(), parent);
+        if (!entry.minValue.isEmpty())
+        {
+            input->setMinimum(entry.minValue.toInt());
+        }
+        if (!entry.maxValue.isEmpty())
+        {
+            input->setMaximum(entry.maxValue.toInt());
+        }
+        control = input;
+    }
+    else if (type == "Bool")
+    {
+        bool checked = (QString::compare(entry.value.toString(), "true", Qt::CaseInsensitive) == 0);
+        QCheckBox* checkBox = new QCheckBox(entry.label, parent);
+        checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+    }
+    else
+    {
+        kDebug() << "Unrecognized option type" << entry.type;
+    }
+    
+    if (control)
+    {
+        layout->addRow(label, control);
+        entries << entry;
+    }
+    
+    return entry;
+}
+
+TemplateOptionsPage::TemplateOptionsPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
+: QWidget(parent, f)
+, d(new TemplateOptionsPagePrivate)
+{
+    d->assistant = parent;
+    
+    d->typeProperties.insert("String", "text");
+    d->typeProperties.insert("Int", "value");
+    d->typeProperties.insert("Bool", "checked");
+}
+
+TemplateOptionsPage::~TemplateOptionsPage()
+{
+    delete d;
+}
+
+void TemplateOptionsPage::loadXML(const QByteArray& contents)
+{
+    /*
+     * Copied from kconfig_compiler.kcfg 
+     */
+    
+    QLayout* layout = new QVBoxLayout();
+    
+    QDomDocument doc;
+    QString errorMsg;
+    int errorRow;
+    int errorCol;
+    if ( !doc.setContent( contents, &errorMsg, &errorRow, &errorCol ) ) {
+        kDebug() << "Unable to load document.";
+        kDebug() << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+        return;
+    }
+    
+    QDomElement cfgElement = doc.documentElement();
+    if ( cfgElement.isNull() ) {
+        kDebug() << "No document in kcfg file";
+        return;
+    }
+    
+    QDomNodeList groups = cfgElement.elementsByTagName("group");
+    for (int i = 0; i < groups.size(); ++i)
+    {
+        QDomElement group = groups.at(i).toElement();
+        
+        QGroupBox* box = new QGroupBox(this);
+        box->setTitle(group.attribute("name"));
+        
+        QFormLayout* formLayout = new QFormLayout;
+        box->setLayout(formLayout);
+        
+        QDomNodeList entries = cfgElement.elementsByTagName("group");
+        for (int j = 0; j < entries.size(); ++j)
+        {
+            QDomElement entry = entries.at(j).toElement();
+            ConfigEntry cfgEntry = d->readEntry(entry, box, formLayout);
+        }
+        
+        box->setFlat(true);
+        layout->addWidget(box);
+    }
+    setLayout(layout);
+}
+
+QVariantHash TemplateOptionsPage::options() const
+{
+    QVariantHash values;
+    
+    foreach (const ConfigEntry& entry, d->entries)
+    {
+        values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type]));
+    }
+    
+    return values;
 }
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
