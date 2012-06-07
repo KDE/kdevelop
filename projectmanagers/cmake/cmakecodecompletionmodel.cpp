@@ -35,6 +35,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include "astfactory.h"
+#include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"
 
@@ -151,9 +152,10 @@ CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) cons
 {
     if(m_inside)
     {
-        if(row<m_declarations.count())
-            return Variable;
-        else
+        if(row<m_declarations.count()) {
+            KDevelop::DUChainReadLocker lock;
+            return m_declarations[row].declaration()->type<TargetType>().isNull() ? Variable : Target;
+        } else
             return Path;
     }
     else
@@ -173,19 +175,20 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
 
     if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Name)
     {
-        if(type==Command)
-            return s_commands[index.row()-m_declarations.size()];
-        else if(type==Path)
-            return m_paths[index.row()-m_declarations.size()];
-        else if(type==Variable || type==Macro)
-        {
-            int pos = index.row();
-            DUChainReadLocker lock(DUChain::lock());
-            Declaration* dec=m_declarations[pos].data();
-            if(dec)
-                return dec->identifier().toString();
-            else
-                return i18n("INVALID");
+        int pos = index.row();
+        switch(type) {
+            case Command:
+                return s_commands[pos-m_declarations.size()];
+            case Path:
+                return m_paths[pos-m_declarations.size()];
+            case Target:
+            case Variable:
+            case Macro: {
+                DUChainReadLocker lock(DUChain::lock());
+                Declaration* dec=m_declarations[pos].data();
+                
+                return dec ? dec->identifier().toString() : i18n("INVALID");
+            }
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Prefix)
@@ -196,6 +199,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Variable:  return i18n("Variable");
             case Macro:     return i18n("Macro");
             case Path:      return i18n("Path");
+            case Target:      return i18n("Target");
         }
     }
     else if(role==Qt::DecorationRole && index.column()==CodeCompletionModel::Icon)
@@ -205,6 +209,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Command:   return KIcon("code-block");
             case Variable:  return KIcon("code-variable");
             case Macro:     return KIcon("code-function");
+            case Target:    return KIcon("system-run");
             case Path: {
                 QString url = m_paths[index.row()-m_declarations.size()];
                 return KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url));
@@ -217,6 +222,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Variable:
             case Command:
             case Path:
+            case Target:
                 break;
             case Macro:
             {
@@ -275,6 +281,9 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
             
             document->replaceText(r, code);
         }   break;
+        case Target:
+            document->replaceText(word, data(index(row, Name, QModelIndex())).toString());
+            break;
     }
 }
 

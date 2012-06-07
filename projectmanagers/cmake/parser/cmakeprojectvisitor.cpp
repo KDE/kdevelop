@@ -22,6 +22,7 @@
 #include "cmakeast.h"
 #include "cmakecondition.h"
 #include "astfactory.h"
+#include "cmakeduchaintypes.h"
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
@@ -409,6 +410,8 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         DUChainWriteLocker lock(DUChain::lock());
         d= new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
         d->setIdentifier( Identifier(id) );
+        AbstractType::Ptr targetType(new TargetType);
+        d->setAbstractType(targetType);
     }
     
     Target target;
