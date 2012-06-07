@@ -1,0 +1,20 @@
+[General]
+Name=Widget with a UI File
+Comment=QWidget subclass with a separate Designer file
+Category=C++/Qt
+Files=Header,Implementation,UI
+
+[Header]
+Name=Public Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
+
+[UI]
+Name=User Interface
+File=class.ui
+OutputFile={{ name }}.ui
