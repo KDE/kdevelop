@@ -27,7 +27,7 @@ protected:
     {% endfor %}
     
 private:
-    class {{ name }}Private* const d;
+    class {{ private_class_name }}* const {{ private_member_name }};
 };
 
 #endif // {{ name|upper }}_H

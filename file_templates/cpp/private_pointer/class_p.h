@@ -3,14 +3,14 @@
  {{ license }}
  */
 
-#ifndef {{ name|upper }}_PRIVATE_H
-#define {{ name|upper }}_PRIVATE_H
+#ifndef {{ private_class_name|upper }}_H
+#define {{ private_class_name|upper }}_H
 
-class {{ name }}Private
+class {{ private_class_name }}
 {
 public:
-    {{ name }}Private({{ name }}* q);
-    virtual ~{{ name }}Private();
+    {{ private_class_name }}({{ name }}* q);
+    virtual ~{{ private_class_name }}();
     
     {% for declaration in private_functions %}
         {% include "declaration.txt" %}
@@ -24,4 +24,4 @@ private:
     class {{ name }}* const q;
 };
 
-#endif // {{ name|upper }}_PRIVATE_H
+#endif // {{ private_class_name|upper}}_H
