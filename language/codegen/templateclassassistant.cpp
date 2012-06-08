@@ -64,6 +64,7 @@ class KDevelop::TemplateClassAssistantPrivate
 public:
     KPageWidgetItem* templateSelectionPage;
     KPageWidgetItem* dummyPage;
+    KPageWidgetItem* templateOptionsPage;
     ICreateClassHelper* helper;
 };
 
@@ -219,11 +220,11 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
 {
     ConfigEntry entry;
     
+    entry.name = element.attribute("name");
+    entry.type = element.attribute("type", "String");
+    
     for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
     {
-        entry.name = e.attribute("name");
-        entry.type = e.attribute("type", "String");
-        
         QString tag = e.tagName();
         
         if (tag == "label")
@@ -248,9 +249,12 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
         }
         else if ( tag == "default" )
         {
-            entry.value = e.text();
+            TemplateClassGenerator* gen = dynamic_cast<TemplateClassGenerator*>(assistant->generator());
+            entry.value = gen->renderString(e.text());
         }
     }
+    
+    kDebug() << "Read entry" << entry.name << "with default value" << entry.value;
     
     QLabel* label = new QLabel(entry.label, parent);
     QWidget* control = 0;
@@ -287,6 +291,7 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
     {
         layout->addRow(label, control);
         entries << entry;
+        controls.insert(entry.name, control);
     }
     
     return entry;
@@ -341,29 +346,33 @@ void TemplateOptionsPage::loadXML(const QByteArray& contents)
         box->setTitle(group.attribute("name"));
         
         QFormLayout* formLayout = new QFormLayout;
-        box->setLayout(formLayout);
         
-        QDomNodeList entries = cfgElement.elementsByTagName("group");
+        QDomNodeList entries = group.elementsByTagName("entry");
         for (int j = 0; j < entries.size(); ++j)
         {
             QDomElement entry = entries.at(j).toElement();
             ConfigEntry cfgEntry = d->readEntry(entry, box, formLayout);
         }
         
-        box->setFlat(true);
+        box->setLayout(formLayout);
         layout->addWidget(box);
     }
     setLayout(layout);
 }
 
-QVariantHash TemplateOptionsPage::options() const
+QVariantHash TemplateOptionsPage::templateOptions() const
 {
     QVariantHash values;
     
     foreach (const ConfigEntry& entry, d->entries)
     {
+        Q_ASSERT(d->controls.contains(entry.name));
+        Q_ASSERT(d->typeProperties.contains(entry.type));
+        
         values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type]));
     }
+    
+    kDebug() << values.size() << d->entries.size();
     
     return values;
 }
@@ -372,6 +381,7 @@ TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& bas
 : CreateClassAssistant (parent, baseUrl)
 , d(new TemplateClassAssistantPrivate)
 {
+    d->templateOptionsPage = 0;
     setup();
 }
 
@@ -441,19 +451,59 @@ void TemplateClassAssistant::next()
             return;
         }
         
-        if (TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator))
+        
+        setGenerator(generator);
+        
+        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator);
+        if (templateGenerator)
         {
             kDebug() << "Class generator uses templates";
             templateGenerator->setTemplateDescription(description);
         }
-        setGenerator(generator);
-                
+        
         removePage(d->dummyPage);
         KDevelop::CreateClassAssistant::setup();
         
+        if (templateGenerator && templateGenerator->hasCustomOptions())
+        {
+            kDebug() << "Class generator has custom options";
+            TemplateOptionsPage* options = new TemplateOptionsPage(this);
+            d->templateOptionsPage = addPage(options, i18n("Template Options"));
+            connect (this, SIGNAL(accepted()), this, SLOT(updateTemplateOptions()));
+        }
+        
         return;
     }
+    
     KDevelop::CreateClassAssistant::next();
+    
+    if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
+    {
+        TemplateOptionsPage* options = qobject_cast<TemplateOptionsPage*>(d->templateOptionsPage->widget());
+        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
+
+        options->loadXML(templateGenerator->customOptions());
+    }
+}
+
+void TemplateClassAssistant::accept()
+{
+    if (d->templateOptionsPage)
+    {
+        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
+        Q_ASSERT(templateGenerator);
+        
+        kDebug() << d->templateOptionsPage->widget()->property("templateOptions");
+        kDebug() << d->templateOptionsPage->widget()->property("templateOptions").toHash();
+        templateGenerator->addVariables(d->templateOptionsPage->widget()->property("templateOptions").toHash());
+    }
+    CreateClassAssistant::accept();
+}
+
+
+void TemplateClassAssistant::updateTemplateOptions()
+{
+    
 }
 
 TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()
@@ -470,4 +520,3 @@ OverridesPage* TemplateClassAssistant::newOverridesPage()
 {
     return d->helper->overridesPage();
 }
-

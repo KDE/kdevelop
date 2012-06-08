@@ -53,14 +53,14 @@ private slots:
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantHash options READ options)
+    Q_PROPERTY(QVariantHash templateOptions READ templateOptions)
     
 public:
     explicit TemplateOptionsPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
     virtual ~TemplateOptionsPage();
     
     void loadXML(const QByteArray& contents);
-    QVariantHash options() const;
+    QVariantHash templateOptions() const;
     
 private:
     class TemplateOptionsPagePrivate* const d;
@@ -80,6 +80,10 @@ public:
     virtual OverridesPage* newOverridesPage();
     
     virtual void next();
+    virtual void accept();
+    
+private Q_SLOTS:
+    void updateTemplateOptions();
     
 private:
     class TemplateClassAssistantPrivate* const d;

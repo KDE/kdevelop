@@ -205,6 +205,8 @@ void CreateClassAssistant::next()
         valid = validateOverridesPage();
     } else if (currentPage() == d->licensePage) {
         valid = validateLicensePage();
+    } else if (currentPage() == d->outputPage) {
+        valid = validateOutputPage();
     }
 
     if (valid) {

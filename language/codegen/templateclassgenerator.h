@@ -42,6 +42,14 @@ public:
     virtual QHash< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
     virtual QVariantHash templateVariables();
     
+    bool hasCustomOptions();
+    QByteArray customOptions();
+    
+    void addVariables(const QVariantHash& variables);
+    
+    // TODO: Might want to make this a generic utility
+    QString renderString(const QString& text);
+    
 private:
     class TemplateClassGeneratorPrivate* const d;
 };

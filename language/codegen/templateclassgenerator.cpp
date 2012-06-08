@@ -202,6 +202,7 @@ public:
     KArchive* archive;
     KUrl baseUrl;
     ArchiveTemplateLoader* loader;
+    QVariantHash variables;
     
     void loadTemplate();
     QString render(Grantlee::Template t, Grantlee::Context& c);
@@ -237,6 +238,8 @@ void TemplateClassGeneratorPrivate::loadTemplate()
     {
         archive = new KTar(archiveFileName);
     }
+    
+    archive->open(QIODevice::ReadOnly);
 }
 
 QString TemplateClassGeneratorPrivate::render (Grantlee::Template t, Grantlee::Context& c)
@@ -273,7 +276,7 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
 
 QVariantHash TemplateClassGenerator::templateVariables()
 {
-    QVariantHash variables;
+    QVariantHash variables = d->variables;
     
     variables["name"] = name();
     variables["identifier"] = identifier();
@@ -335,6 +338,7 @@ QVariantHash TemplateClassGenerator::templateVariables()
 
 DocumentChangeSet TemplateClassGenerator::generate()
 {
+    Q_ASSERT(d->archive);
     QVariantHash variables = templateVariables();
     
     DocumentChangeSet changes;
@@ -346,7 +350,6 @@ DocumentChangeSet TemplateClassGenerator::generate()
     
     // TODO: Add more variables to context
     
-    d->archive->open(QIODevice::ReadOnly);
     const KArchiveDirectory* dir = d->archive->directory();
     
     d->loader = new ArchiveTemplateLoader(dir);
@@ -365,7 +368,14 @@ DocumentChangeSet TemplateClassGenerator::generate()
         }
         
         KConfigGroup cg(&templateConfig, groupName);
-        const KArchiveEntry* entry = dir->entry(cg.readEntry("File"));
+        QString fileName = cg.readEntry("File");
+        
+        if (fileName.isEmpty())
+        {
+            continue;
+        }
+        
+        const KArchiveEntry* entry = dir->entry(fileName);
         if (!entry)
         {
             kDebug() << "Entry" << cg.readEntry("File") << "is mentioned in group" << cg.name() << "but is not present in the archive";
@@ -375,7 +385,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
         const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
         if (!file)
         {
-            kDebug() << "Entry" << cg.readEntry("File") << "is not a file";
+            kDebug() << "Entry" << entry->name() << "is not a file";
             continue;
         }
         
@@ -398,6 +408,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
 
 QStringList TemplateClassGenerator::fileLabels()
 {
+    Q_ASSERT(!d->templateDescription.isEmpty());
     QStringList labels;
     
     KConfig templateConfig(d->templateDescription);
@@ -426,14 +437,13 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
     Grantlee::Context context(templateVariables());
   
     KConfig templateConfig(d->templateDescription);
-    foreach (const QString& groupName, templateConfig.groupList())
-    {
-        if (groupName == "General")
-        {
-            continue;
-        }
-        
-        KConfigGroup cg(&templateConfig, groupName);
+    KConfigGroup group(&templateConfig, "General");
+    QStringList files = group.readEntry("Files", QStringList());
+    kDebug() << "Files in template" << files;
+    
+    foreach (const QString& fileGroup, files)
+    {   
+        KConfigGroup cg(&templateConfig, fileGroup);
         if (!cg.hasKey("OutputFile"))
         {
             continue;
@@ -447,11 +457,57 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
         {
             outputName = outputName.toLower();
         }
-        url.addPath(nameTemplate->render(&context));
+        url.addPath(outputName);
 
         QString fileName = cg.readEntry("Name");
         map.insert(fileName, url);
     }
     
     return map;
+}
+
+bool TemplateClassGenerator::hasCustomOptions()
+{
+    KConfig templateConfig(d->templateDescription);
+    KConfigGroup cg(&templateConfig, "General");
+    bool hasOptions = d->archive->directory()->entries().contains(cg.readEntry("OptionsFile", "options.kcfg"));
+    
+    kDebug() << cg.readEntry("OptionsFile", "options.kcfg") << hasOptions;
+    return hasOptions;
+}
+
+QByteArray TemplateClassGenerator::customOptions()
+{
+    KConfig templateConfig(d->templateDescription);
+    KConfigGroup cg(&templateConfig, "General");
+    const KArchiveEntry* entry = d->archive->directory()->entry(cg.readEntry("OptionsFile", "options.kcfg"));
+    
+    if (entry->isFile())
+    {
+        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
+        return file->data();
+    }
+    
+    return QByteArray();
+}
+
+void TemplateClassGenerator::addVariables(const QVariantHash& variables)
+{
+    for (QVariantHash::const_iterator it = variables.constBegin(); it != variables.constEnd(); ++it)
+    {
+        d->variables.insert(it.key(), it.value());
+    }
+}
+
+QString TemplateClassGenerator::renderString(const QString& text)
+{
+    Grantlee::Engine engine;
+    
+    QVariantHash variables = templateVariables();
+    kDebug() << variables;
+    
+    Grantlee::Context context(variables);
+    
+    Grantlee::Template t = engine.newTemplate(text, QString());
+    return t->render(&context);
 }
