@@ -38,7 +38,9 @@ using namespace KDevelop;
 void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
 {
     QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    KUrl currentDir = folder->project()->buildSystemManager()->buildDirectory(folder);
+    KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
+    KUrl currentSourceDir = folder->url();
+    
     foreach (const Test& test, testSuites)
     {
         QString exe = test.executable;
@@ -46,8 +48,20 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
         KUrl exeUrl = KUrl(exe);
         if (exeUrl.isRelative())
         {
-            exeUrl = currentDir;
+            exeUrl = currentBinDir;
             exeUrl.addPath(test.executable);
+        }
+        
+        QStringList files;
+        foreach (const QString& file, test.files)
+        {
+            KUrl fileUrl(file);
+            if (fileUrl.isRelative())
+            {
+                fileUrl = currentSourceDir;
+                fileUrl.addPath(file);
+            }
+            files << fileUrl.toLocalFile();
         }
         
         
@@ -57,7 +71,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
             (*it).replace("#[bin_dir]", binDir);
         }
         
-        CTestSuite* suite = new CTestSuite(test.name, exeUrl, test.files, folder->project(), args);
+        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

@@ -94,6 +94,9 @@ void CTestFindJob::processFinished()
     }
 
     m_pendingFiles = m_suite->sourceFiles();
+    
+    kDebug() << "Source files to update:" << m_pendingFiles;
+    
     if (m_pendingFiles.isEmpty())
     {
         KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
