@@ -121,6 +121,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/multilevellistview.cpp
     codegen/templateclassgenerator.cpp
     codegen/templateclassassistant.cpp
+    codegen/codedescription.cpp
     
     util/setrepository.cpp
     util/includeitem.cpp
@@ -326,6 +327,7 @@ install(FILES
     codegen/multilevellistview.h
     codegen/templateclassgenerator.h
     codegen/templateclassassistant.h
+    codegen/codedescription.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
