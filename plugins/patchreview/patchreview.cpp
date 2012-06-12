@@ -273,7 +273,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
-    connect( m_editPatch.filesList, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( fileDoubleClicked( QModelIndex ) ) );
+    connect( m_editPatch.filesList, SIGNAL( activated ( QModelIndex ) ), this, SLOT( fileDoubleClicked( QModelIndex ) ) );
 
     connect( m_editPatch.cancelReview, SIGNAL( clicked( bool ) ), m_plugin, SLOT( cancelReview() ) );
     connect( m_editPatch.finishReview, SIGNAL( clicked( bool ) ), this, SLOT( finishReview() ) );
