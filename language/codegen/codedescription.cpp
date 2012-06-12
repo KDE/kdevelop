@@ -158,7 +158,24 @@ ClassDescription ClassDescriptionModel::description() const
 
 QModelIndex ClassDescriptionModel::index(int row, int column, const QModelIndex& parent) const
 {
-    return createIndex(row, column);
+    if (!parent.isValid())
+    {
+        return createIndex(row, column, TopLevelRowCount);
+    }
+    else
+    {
+        return createIndex(row, column, parent.row());
+    }
+}
+
+QModelIndex ClassDescriptionModel::parent(const QModelIndex& child) const
+{
+    if (child.internalId() == TopLevelRowCount)
+    {
+        return QModelIndex();
+    }
+    
+    return index(child.internalId(), 0);
 }
 
 int ClassDescriptionModel::columnCount(const QModelIndex& parent) const
@@ -408,7 +425,6 @@ void ClassDescriptionModel::moveRow(int source, int destination, const QModelInd
         endInsertRows();
     }
 }
-
 
 
 

@@ -21,7 +21,9 @@
 #define KDEVELOP_TEMPLATECLASSASSISTANT_H
 
 #include "createclass.h"
+#include "codedescription.h"
 
+class QItemSelection;
 namespace KDevelop
 {
     
@@ -66,6 +68,34 @@ private:
     class TemplateOptionsPagePrivate* const d;
 };
 
+class ClassMembersPage : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(ClassDescription description READ description WRITE setDescription)
+    
+public:
+    explicit ClassMembersPage (TemplateClassAssistant* parent);
+    virtual ~ClassMembersPage();
+    
+    ClassDescription description() const;
+    void setDescription(const ClassDescription& description);
+    
+    void moveRowTo(int destination, bool relative);
+    
+private:
+    int rows();
+    
+private Q_SLOTS:
+    void moveTop();
+    void moveUp();
+    void moveDown();
+    void moveBottom();
+    void currentSelectionChanged(const QItemSelection& current);
+    
+private:
+    class ClassMembersPagePrivate* const d;
+};
+
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
 {
     Q_OBJECT
@@ -78,6 +108,7 @@ public:
     virtual TemplateSelectionPage* newTemplateSelectionPage();
     virtual ClassIdentifierPage* newIdentifierPage();
     virtual OverridesPage* newOverridesPage();
+    virtual ClassMembersPage* newMembersPage();
     
     virtual void next();
     virtual void accept();

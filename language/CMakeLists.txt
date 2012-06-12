@@ -138,6 +138,7 @@ set( kdevplatformlanguage_LIB_UI
     codegen/ui/licensechooser.ui
     codegen/ui/outputlocation.ui
     codegen/ui/templateselection.ui
+    codegen/ui/classmembers.ui
 )
 
 kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} )

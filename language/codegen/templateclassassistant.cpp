@@ -30,6 +30,7 @@
 #include <interfaces/iprojectcontroller.h>
 
 #include "ui_templateselection.h"
+#include "ui_classmembers.h"
 
 #include <KNS3/DownloadDialog>
 #include <KLocalizedString>
@@ -377,6 +378,107 @@ QVariantHash TemplateOptionsPage::templateOptions() const
     return values;
 }
 
+class KDevelop::ClassMembersPagePrivate
+{
+public:
+    TemplateClassAssistant* parent;
+    ClassDescriptionModel* model;
+    Ui::ClassMembersPage* ui;
+};
+
+ClassMembersPage::ClassMembersPage(TemplateClassAssistant* parent)
+: QWidget(parent)
+, d(new ClassMembersPagePrivate)
+{
+    d->ui = new Ui::ClassMembersPage;
+    d->ui->setupUi(this);
+}
+
+ClassMembersPage::~ClassMembersPage()
+{
+
+}
+
+void ClassMembersPage::setDescription(const ClassDescription& description)
+{
+    d->model = new ClassDescriptionModel(description);
+    d->ui->itemView->setModel(d->model);
+    
+    connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(currentSelectionChanged(QItemSelection)));
+    
+    currentSelectionChanged(QItemSelection());
+}
+
+ClassDescription ClassMembersPage::description() const
+{
+    return ClassDescription();
+}
+
+void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
+{
+    bool up = false;
+    bool down = false;
+    
+    if (!current.indexes().isEmpty())
+    {
+        up = current.indexes().first().row() > 0;
+        down = current.indexes().first().row() < rows()-1;
+    }
+    
+    d->ui->topButton->setEnabled(up);
+    d->ui->upButton->setEnabled(up);
+    d->ui->downButton->setEnabled(down);
+    d->ui->bottomButton->setEnabled(down);
+}
+
+int ClassMembersPage::rows()
+{
+    return d->model->rowCount(d->ui->itemView->rootIndex());
+}
+
+
+void ClassMembersPage::moveRowTo(int destination, bool relative)
+{
+    Q_ASSERT(d->model);
+    Q_ASSERT(d->ui->itemView->selectionModel());
+    QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
+    
+    if (indexes.isEmpty())
+    {
+        return;
+    }
+    
+    int source = indexes.first().row();
+    
+    if (relative)
+    {
+        destination = source + destination;
+    }
+    
+    d->model->moveRow(source, destination, d->ui->itemView->rootIndex());
+}
+
+void ClassMembersPage::moveTop()
+{
+    moveRowTo(0, false);
+}
+
+void ClassMembersPage::moveBottom()
+{
+    moveRowTo(d->model->rowCount(d->ui->itemView->rootIndex())-1, false);
+}
+
+void ClassMembersPage::moveUp()
+{
+    moveRowTo(-1, true);
+}
+
+void ClassMembersPage::moveDown()
+{
+    moveRowTo(1, true);
+}
+
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
 : CreateClassAssistant (parent, baseUrl)
 , d(new TemplateClassAssistantPrivate)
@@ -520,3 +622,9 @@ OverridesPage* TemplateClassAssistant::newOverridesPage()
 {
     return d->helper->overridesPage();
 }
+
+ClassMembersPage* TemplateClassAssistant::newMembersPage()
+{
+    return new ClassMembersPage(this);
+}
+
