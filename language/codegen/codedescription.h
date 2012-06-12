@@ -21,12 +21,13 @@
 #define KDEVELOP_CODEDESCRIPTION_H
 
 #include "../languageexport.h"
-#include <duchain/duchainpointer.h>
+#include <language/duchain/duchainpointer.h>
 
 #include <grantlee/metatype.h>
 
 #include <QString>
 #include <QList>
+#include <QAbstractItemModel>
 
 namespace KDevelop {
 
@@ -77,6 +78,40 @@ namespace KDevelop {
         InheritanceDescriptionList baseClasses;
         VariableDescriptionList members;
         FunctionDescriptionList methods;
+    };
+    
+    class ClassDescriptionModel : public QAbstractItemModel
+    {
+        Q_OBJECT
+        Q_PROPERTY(ClassDescription description READ description WRITE setDescription)
+        
+    public:
+        enum TopLevelRow
+        {
+            ClassNameRow = 0,
+            InheritanceRow,
+            MembersRow,
+            FunctionsRow,
+            TopLevelRowCount
+        };
+        
+        explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
+        virtual ~ClassDescriptionModel();
+        
+        virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+        
+        ClassDescription description() const;
+        void setDescription(const ClassDescription& description);
+        
+        virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+        
+        void moveRow(int source, int destination, const QModelIndex& parent);
+        
+    private:
+        class ClassDescriptionModelPrivate* const d;
     };
 }
 
