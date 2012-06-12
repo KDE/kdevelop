@@ -17,11 +17,13 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_CODEMODEL_H
-#define KDEVELOP_CODEMODEL_H
+#ifndef KDEVELOP_CODEDESCRIPTION_H
+#define KDEVELOP_CODEDESCRIPTION_H
 
 #include "../languageexport.h"
 #include <duchain/duchainpointer.h>
+
+#include <grantlee/metatype.h>
 
 #include <QString>
 #include <QList>
@@ -49,9 +51,22 @@ namespace KDevelop {
         QString name;
         QList<VariableDescription> arguments;
         QList<VariableDescription> returnArguments;
+        
+        bool isConstructor;
+        bool isDestructor;
+        bool isVirtual;
+        bool isStatic;
     };
     
     typedef QList<FunctionDescription> FunctionDescriptionList;
+    
+    struct InheritanceDescription
+    {
+        QString inheritanceMode;
+        QString baseType;
+    };
+    
+    typedef QList<InheritanceDescription> InheritanceDescriptionList;
     
     struct ClassDescription
     {
@@ -59,11 +74,26 @@ namespace KDevelop {
         ClassDescription(const QString& name);
         
         QString name;
-        QList<QString> baseClasses;
+        InheritanceDescriptionList baseClasses;
         VariableDescriptionList members;
         FunctionDescriptionList methods;
     };
-
 }
 
-#endif // KDEVELOP_CODEMODEL_H
+Q_DECLARE_METATYPE(KDevelop::VariableDescription)
+Q_DECLARE_METATYPE(KDevelop::VariableDescriptionList)
+Q_DECLARE_METATYPE(KDevelop::FunctionDescription)
+Q_DECLARE_METATYPE(KDevelop::FunctionDescriptionList)
+Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
+Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
+Q_DECLARE_METATYPE(KDevelop::ClassDescription)
+    
+namespace Grantlee
+{
+    template<> QVariant TypeAccessor<KDevelop::VariableDescription&>::lookUp(const KDevelop::VariableDescription& object, const QString& property);
+    template<> QVariant TypeAccessor<KDevelop::FunctionDescription&>::lookUp(const KDevelop::FunctionDescription& object, const QString& property);
+    template<> QVariant TypeAccessor<KDevelop::InheritanceDescription&>::lookUp(const KDevelop::InheritanceDescription& object, const QString& property);
+    template<> QVariant TypeAccessor<KDevelop::ClassDescription&>::lookUp(const KDevelop::ClassDescription& object, const QString& property);
+}
+
+#endif // KDEVELOP_CODEDESCRIPTION_H
