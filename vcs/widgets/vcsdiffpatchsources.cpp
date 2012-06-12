@@ -82,12 +82,31 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
     
     layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit.data());
+    connect(this, SIGNAL(reviewCancelled(QString)), SLOT(addMessageToHistory(QString)));
+    connect(this, SIGNAL(reviewFinished(QString,QList<KUrl>)), SLOT(addMessageToHistory(QString)));
 }
 
 QStringList VCSCommitDiffPatchSource::oldMessages() const
 {
     KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
     return vcsGroup.readEntry("OldCommitMessages", QStringList());
+}
+
+void VCSCommitDiffPatchSource::addMessageToHistory(const QString& message)
+{
+    if(ICore::self()->shuttingDown())
+        return;
+    
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    
+    const int maxMessages = 10;
+    QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
+    
+    oldMessages.removeAll(message);
+    oldMessages.push_front(message);
+    oldMessages = oldMessages.mid(0, maxMessages);
+    
+    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
 }
 
 void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
