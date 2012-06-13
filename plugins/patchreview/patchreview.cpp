@@ -496,13 +496,7 @@ void PatchReviewPlugin::updateReview() {
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
         //Open all relates files
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
-            KUrl absoluteUrl = m_patch->baseDir();
-            KUrl url( m_modelList->modelAt( a )->destination() );
-
-            if( url.isRelative() )
-                absoluteUrl.addPath( url.path() );
-            else
-                absoluteUrl = url;
+            KUrl absoluteUrl( m_patch->baseDir(),  m_modelList->modelAt( a )->destination() );
 
             if( QFileInfo( absoluteUrl.path() ).exists() && absoluteUrl.path() != "/dev/null" )
             {
