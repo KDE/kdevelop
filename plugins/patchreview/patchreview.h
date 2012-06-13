@@ -70,8 +70,6 @@ public :
 
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
-    KUrl diffFile();
-
     void setPatch( KDevelop::IPatchSource* patch );
 
     void registerPatch( KDevelop::IPatchSource::Ptr patch );

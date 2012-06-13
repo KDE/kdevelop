@@ -67,10 +67,6 @@ const int maximumFilesToOpenDirectly = 15;
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
-KUrl PatchReviewPlugin::diffFile() {
-    return m_patch->file();
-}
-
 void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
     try {
         if ( !m_modelList.get() )
