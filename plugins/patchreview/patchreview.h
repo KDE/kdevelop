@@ -22,81 +22,29 @@
 #include "localpatchsource.h"
 #include "ui_patchreview.h"
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/movingrangefeedback.h>
 #include "libdiff2/diffmodel.h"
 
+class PatchHighlighter;
+namespace KDevelop {
+class IDocument;
+}
+
 class PatchReviewToolViewFactory;
-class PatchReviewPlugin;
 
 namespace KParts
 {
 class Part;
 }
 
-class QDialog;
-
 namespace Diff2
 {
 class KompareModelList;
 class DiffModel;
-class DiffModel;
-}
-namespace KTextEditor
-{
-class Document;
-class Range;
-class MovingRange;
-class Mark;
 }
 namespace Kompare
 {
 class Info;
 }
-namespace KDevelop
-{
-class IDocument;
-class VcsFileChangesModel;
-}
-
-///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class PatchHighlighter : public QObject
-{
-    Q_OBJECT
-public:
-    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
-    ~PatchHighlighter();
-    KDevelop::IDocument* doc();
-    QList< KTextEditor::MovingRange* > ranges() const {
-        return m_differencesForRanges.keys();
-    }
-private slots:
-    void documentDestroyed();
-    void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
-private:
-
-    void addLineMarker( KTextEditor::MovingRange* arg1, Diff2::Difference* arg2 );
-    void removeLineMarker( KTextEditor::MovingRange* range );
-    QStringList splitAndAddNewlines( const QString& text ) const;
-    void performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber );
-
-    KTextEditor::MovingRange* rangeForMark( KTextEditor::Mark mark );
-
-    void clear();
-    QSet< KTextEditor::MovingRange* > m_ranges;
-    QMap< KTextEditor::MovingRange*, Diff2::Difference* > m_differencesForRanges;
-    KDevelop::IDocument* m_doc;
-    PatchReviewPlugin* m_plugin;
-    Diff2::DiffModel* m_model;
-    bool m_applying;
-public slots:
-    void markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & );
-    void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair( -1, -1 ) );
-    bool isRemoval( Diff2::Difference* );
-    bool isInsertion( Diff2::Difference* );
-    void markClicked( KTextEditor::Document*, KTextEditor::Mark, bool& );
-    void textInserted( KTextEditor::Document*, KTextEditor::Range );
-    void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
-};
 
 class DiffSettings;
 class PatchReviewPlugin;
