@@ -16,31 +16,11 @@
 #include <kdebug.h>
 #include <kprocess.h>
 #include <KIcon>
+#include <kshell.h>
 
 QIcon LocalPatchSource::icon() const
 {
     return KIcon("text-x-patch");
-}
-
-QStringList splitArgs( const QString& str ) {
-    QStringList ret;
-    QString current = str;
-    int pos = 0;
-    while ( ( pos = current.indexOf( ' ', pos ) ) != -1 ) {
-        if ( current[ 0 ] == '"' ) {
-            int end = current.indexOf( '"' );
-            if ( end > pos )
-                pos = end;
-        }
-        QString s = current.left( pos );
-        if ( s.length() > 0 )
-            ret << s;
-        current = current.mid( pos + 1 );
-        pos = 0;
-    }
-    if ( current.length() )
-        ret << current;
-    return ret;
 }
 
 void LocalPatchSource::update() {
@@ -57,7 +37,7 @@ void LocalPatchSource::update() {
             proc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
             proc.setStandardOutputFile( filename );
             ///Try to apply, if it works, the patch is not applied
-            proc << splitArgs( m_command );
+            proc << KShell::splitArgs( m_command );
 
             kDebug() << "calling " << m_command;
 
