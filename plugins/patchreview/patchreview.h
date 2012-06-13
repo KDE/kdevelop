@@ -31,11 +31,6 @@ class IDocument;
 
 class PatchReviewToolViewFactory;
 
-namespace KParts
-{
-class Part;
-}
-
 namespace Diff2
 {
 class KompareModelList;
@@ -48,62 +43,6 @@ class Info;
 
 class DiffSettings;
 class PatchReviewPlugin;
-
-class PatchReviewToolView : public QWidget
-{
-    Q_OBJECT
-public:
-    PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin );
-    ~PatchReviewToolView();
-
-signals:
-    void dialogClosed( PatchReviewToolView* );
-    void  stateChanged( PatchReviewToolView* );
-private slots:
-
-    void fileDoubleClicked( const QModelIndex& i );
-
-    void nextHunk();
-    void prevHunk();
-
-    void patchChanged();
-
-    void updatePatchFromEdit();
-
-    void slotEditCommandChanged();
-
-    void slotEditFileNameChanged();
-    void slotAppliedChanged( int newState );
-
-    void finishReview();
-
-private:
-    void kompareModelChanged();
-
-    void showEditDialog();
-    ///Fills the editor views from m_editingPatch
-    void fillEditFromPatch();
-    /// Retrieve the patch from plugin and perform all necessary casts
-    LocalPatchSource* GetLocalPatchSource();
-
-    Ui_EditPatch m_editPatch;
-
-    QTime m_lastDataTime;
-    QString m_lastTerminalData;
-
-    QPointer< KParts::Part > m_konsolePart;
-
-    bool m_reversed;
-
-    PatchReviewPlugin* m_plugin;
-
-    QPointer< QWidget > m_customWidget;
-
-    class PatchFilesModel* m_fileModel;
-public slots:
-    void documentActivated( KDevelop::IDocument* );
-    void patchSelectionChanged( int );
-};
 
 class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview
 {
