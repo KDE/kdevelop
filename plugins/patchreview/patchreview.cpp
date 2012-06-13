@@ -225,7 +225,6 @@ void PatchReviewPlugin::updateKompareModel() {
 
     kDebug() << "updating model";
     try {
-        Q_ASSERT( m_patch );
         removeHighlighting();
         m_modelList.reset( 0 );
         delete m_diffSettings;
