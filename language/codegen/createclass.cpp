@@ -38,6 +38,7 @@
 #include "duchain/types/structuretype.h"
 
 #include "codegen/documentchangeset.h"
+#include "codegen/codedescription.h"
 
 #include "overridespage.h"
 #include <kfiledialog.h>
@@ -197,7 +198,7 @@ bool CreateClassAssistant::validateOutputPage()
 
 void CreateClassAssistant::next()
 {
-    bool valid = false;
+    bool valid = true;
 
     if (currentPage() == d->classIdentifierPage) {
         valid = validateClassIdentifierPage();
@@ -264,6 +265,7 @@ struct ClassGeneratorPrivate
     
     QString headerFileType;
     QString implementationFileType;
+    ClassDescription description;
 };
 
 ClassGenerator::ClassGenerator()
@@ -452,6 +454,16 @@ void ClassGenerator::setLicense(const QString& license)
 QString ClassGenerator::license() const
 {
     return d->license;
+}
+
+void ClassGenerator::setDescription(const ClassDescription& description)
+{
+    d->description = description;
+}
+
+ClassDescription ClassGenerator::description()
+{
+    return d->description;
 }
 
 void ClassGenerator::fetchSuperClasses(const DeclarationPointer& derivedClass)

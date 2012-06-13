@@ -91,6 +91,8 @@ private Q_SLOTS:
     void moveDown();
     void moveBottom();
     void currentSelectionChanged(const QItemSelection& current);
+    void addItem();
+    void removeItem();
     
 private:
     class ClassMembersPagePrivate* const d;

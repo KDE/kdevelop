@@ -34,7 +34,7 @@ VariableDescription::VariableDescription()
 
 }
 
-VariableDescription::VariableDescription(const QString& name, const QString& type)
+VariableDescription::VariableDescription(const QString& type, const QString& name)
 : name(name)
 , type(type)
 {
@@ -139,6 +139,14 @@ ClassDescriptionModel::ClassDescriptionModel(const ClassDescription& description
     setDescription(description);
 }
 
+ClassDescriptionModel::ClassDescriptionModel(QObject* parent)
+: QAbstractItemModel(parent)
+, d(new ClassDescriptionModelPrivate)
+{
+
+}
+
+
 ClassDescriptionModel::~ClassDescriptionModel()
 {
 
@@ -178,7 +186,12 @@ QModelIndex ClassDescriptionModel::parent(const QModelIndex& child) const
     return index(child.internalId(), 0);
 }
 
-int ClassDescriptionModel::columnCount(const QModelIndex& parent) const
+bool ClassDescriptionModel::hasChildren(const QModelIndex& parent) const
+{
+    return !parent.isValid() || !parent.parent().isValid();
+}
+
+int ClassDescriptionModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
     {
@@ -208,7 +221,7 @@ int ClassDescriptionModel::columnCount(const QModelIndex& parent) const
     return 0;
 }
 
-int ClassDescriptionModel::rowCount(const QModelIndex& parent) const
+int ClassDescriptionModel::columnCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
     {
@@ -229,7 +242,7 @@ int ClassDescriptionModel::rowCount(const QModelIndex& parent) const
             return 2; // inheritance type + base class name
             
         case MembersRow:
-            return 1; // type + name`
+            return 2; // type + name`
             
         case FunctionsRow:
             return 3; // type, name, arguments
@@ -300,12 +313,24 @@ QVariant ClassDescriptionModel::data(const QModelIndex& index, int role) const
                     {
                         args << QString("%1 %2").arg(var.type).arg(var.name);
                     }
+                    return QString('(' + args.join(", ") + ')');
                 }
             }
         }
     }
     
     return QVariant();
+}
+
+Qt::ItemFlags ClassDescriptionModel::flags(const QModelIndex& index) const
+{
+    Qt::ItemFlags flags = QAbstractItemModel::flags(index);    
+    if (index.parent().isValid())
+    {
+        flags |= Qt::ItemIsEditable;
+    }
+    
+    return flags;
 }
 
 bool ClassDescriptionModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -342,6 +367,7 @@ bool ClassDescriptionModel::setData(const QModelIndex& index, const QVariant& va
             {
                 cd.baseClasses[r].baseType = value.toString();
             }
+            break;
             
         case MembersRow:
             if (c == 0)
@@ -352,6 +378,7 @@ bool ClassDescriptionModel::setData(const QModelIndex& index, const QVariant& va
             {
                 cd.members[r].name = value.toString();
             }
+            break;
             
         case FunctionsRow:
         {
@@ -385,6 +412,7 @@ bool ClassDescriptionModel::setData(const QModelIndex& index, const QVariant& va
                 }
             }
         }
+        break;
     }
     
     return true;
@@ -426,7 +454,65 @@ void ClassDescriptionModel::moveRow(int source, int destination, const QModelInd
     }
 }
 
+bool ClassDescriptionModel::insertRows(int row, int count, const QModelIndex& parent)
+{
+    if (!parent.isValid() || parent.parent().isValid())
+    {
+        // Only first-level indexes can have parents
+        return false;
+    }
+    
+    beginInsertRows(parent, row, row+count-1);
+    for (int i = row; i < row+count; ++i)
+    switch (parent.row())
+    {
+        case MembersRow:
+            d->description.members.insert(i, VariableDescription());
+            break;
+            
+        case FunctionsRow:
+            d->description.methods.insert(i, FunctionDescription());
+            break;
+            
+        case InheritanceRow:
+            d->description.baseClasses.insert(i, InheritanceDescription());
+            break;
+    }
+    
+    endInsertRows();
+    
+    return true;
+}
 
+bool ClassDescriptionModel::removeRows(int row, int count, const QModelIndex& parent)
+{
+
+    if (!parent.isValid() || parent.parent().isValid())
+    {
+        // Only first-level indexes can have parents
+        return false;
+    }
+    
+    beginRemoveRows(parent, row, row+count-1);
+    for (int i = row; i < row+count; ++i)
+    switch (parent.row())
+    {
+        case MembersRow:
+            d->description.members.takeAt(i);
+            break;
+            
+        case FunctionsRow:
+            d->description.methods.takeAt(i);
+            break;
+            
+        case InheritanceRow:
+            d->description.baseClasses.takeAt(i);
+            break;
+    }
+    
+    endRemoveRows();
+    
+    return true;}
 
 
 

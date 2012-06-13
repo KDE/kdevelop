@@ -34,7 +34,7 @@ namespace KDevelop {
     struct VariableDescription
     {
         VariableDescription();
-        VariableDescription(const QString& name, const QString& type);
+        VariableDescription(const QString& type, const QString& name);
         VariableDescription(const DeclarationPointer& declaration);
         
         QString name;
@@ -96,6 +96,7 @@ namespace KDevelop {
         };
         
         explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
+        explicit ClassDescriptionModel(QObject* parent = 0);
         virtual ~ClassDescriptionModel();
         
         virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
@@ -103,12 +104,16 @@ namespace KDevelop {
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+        virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+        virtual Qt::ItemFlags flags(const QModelIndex& index) const;        
         
         ClassDescription description() const;
         void setDescription(const ClassDescription& description);
         
         virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
         
+        virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+        virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
         void moveRow(int source, int destination, const QModelIndex& parent);
         
     private:

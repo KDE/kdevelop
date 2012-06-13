@@ -38,6 +38,7 @@
 #include <KFileDialog>
 #include <KLineEdit>
 #include <KIntNumInput>
+#include <KMessageBox>
 
 #include <QDomElement>
 #include <QGroupBox>
@@ -66,6 +67,7 @@ public:
     KPageWidgetItem* templateSelectionPage;
     KPageWidgetItem* dummyPage;
     KPageWidgetItem* templateOptionsPage;
+    KPageWidgetItem* membersPage;
     ICreateClassHelper* helper;
 };
 
@@ -390,8 +392,18 @@ ClassMembersPage::ClassMembersPage(TemplateClassAssistant* parent)
 : QWidget(parent)
 , d(new ClassMembersPagePrivate)
 {
+    d->model = 0;
+
     d->ui = new Ui::ClassMembersPage;
     d->ui->setupUi(this);
+    
+    connect (d->ui->topButton, SIGNAL(clicked(bool)), SLOT(moveTop()));
+    connect (d->ui->upButton, SIGNAL(clicked(bool)), SLOT(moveUp()));
+    connect (d->ui->downButton, SIGNAL(clicked(bool)), SLOT(moveDown()));
+    connect (d->ui->bottomButton, SIGNAL(clicked(bool)), SLOT(moveBottom()));
+    
+    connect (d->ui->addItemButton, SIGNAL(clicked(bool)), SLOT(addItem()));
+    connect (d->ui->removeItemButton, SIGNAL(clicked(bool)), SLOT(removeItem()));
 }
 
 ClassMembersPage::~ClassMembersPage()
@@ -401,8 +413,10 @@ ClassMembersPage::~ClassMembersPage()
 
 void ClassMembersPage::setDescription(const ClassDescription& description)
 {
-    d->model = new ClassDescriptionModel(description);
+    KMessageBox::information(this, "Setting description and model");
+    d->model = new ClassDescriptionModel(description, this);
     d->ui->itemView->setModel(d->model);
+    d->ui->itemView->setRootIndex(d->model->index(ClassDescriptionModel::MembersRow, 0));
     
     connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(currentSelectionChanged(QItemSelection)));
@@ -412,24 +426,29 @@ void ClassMembersPage::setDescription(const ClassDescription& description)
 
 ClassDescription ClassMembersPage::description() const
 {
-    return ClassDescription();
+    Q_ASSERT(d->model);
+    return d->model->description();
 }
 
 void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
 {
     bool up = false;
     bool down = false;
+    bool remove = false;
     
     if (!current.indexes().isEmpty())
     {
         up = current.indexes().first().row() > 0;
         down = current.indexes().first().row() < rows()-1;
+        remove = true;
     }
     
     d->ui->topButton->setEnabled(up);
     d->ui->upButton->setEnabled(up);
     d->ui->downButton->setEnabled(down);
     d->ui->bottomButton->setEnabled(down);
+    
+    d->ui->removeItemButton->setEnabled(remove);
 }
 
 int ClassMembersPage::rows()
@@ -457,6 +476,7 @@ void ClassMembersPage::moveRowTo(int destination, bool relative)
     }
     
     d->model->moveRow(source, destination, d->ui->itemView->rootIndex());
+    d->ui->itemView->setCurrentIndex(d->model->index(destination, 0, d->ui->itemView->rootIndex()));
 }
 
 void ClassMembersPage::moveTop()
@@ -478,6 +498,26 @@ void ClassMembersPage::moveDown()
 {
     moveRowTo(1, true);
 }
+
+void ClassMembersPage::addItem()
+{
+    Q_ASSERT(d->model);
+    d->model->insertRow(0, d->ui->itemView->rootIndex());
+}
+
+void ClassMembersPage::removeItem()
+{
+    Q_ASSERT(d->model);
+    QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
+    if (indexes.isEmpty())
+    {
+        return;
+    }
+
+    d->model->removeRow(indexes.first().row(), d->ui->itemView->rootIndex());
+}
+
+
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
 : CreateClassAssistant (parent, baseUrl)
@@ -566,6 +606,9 @@ void TemplateClassAssistant::next()
         removePage(d->dummyPage);
         KDevelop::CreateClassAssistant::setup();
         
+        ClassMembersPage* membersPage = new ClassMembersPage(this);
+        d->membersPage = addPage(membersPage, i18n("Data Members"));
+        
         if (templateGenerator && templateGenerator->hasCustomOptions())
         {
             kDebug() << "Class generator has custom options";
@@ -578,6 +621,18 @@ void TemplateClassAssistant::next()
     }
     
     KDevelop::CreateClassAssistant::next();
+
+    if (currentPage() == d->membersPage)
+    {
+        ClassDescription desc(generator()->name());
+        foreach (DeclarationPointer declaration, generator()->declarations())
+        {
+            desc.methods << FunctionDescription(declaration);
+        }
+        desc.members << VariableDescription("Sample type", "Sample name");
+        
+        qobject_cast<ClassMembersPage*>(d->membersPage->widget())->setDescription(desc);
+    }
     
     if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
@@ -599,6 +654,10 @@ void TemplateClassAssistant::accept()
         kDebug() << d->templateOptionsPage->widget()->property("templateOptions").toHash();
         templateGenerator->addVariables(d->templateOptionsPage->widget()->property("templateOptions").toHash());
     }
+    
+    ClassDescription desc = d->membersPage->widget()->property("description").value<ClassDescription>();
+    generator()->setDescription(desc);
+    
     CreateClassAssistant::accept();
 }
 

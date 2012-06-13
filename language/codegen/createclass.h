@@ -33,6 +33,8 @@ class KTextEdit;
 
 namespace KDevelop {
 
+struct ClassDescription;
+
 class OverridesPage;
 class IndexedDeclaration;
 class Context;
@@ -259,6 +261,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * \return The class to be generated as a Type
      */
     virtual StructureType::Ptr objectType() const = 0;
+    
+    virtual void setDescription(const ClassDescription& description);
+    
+    virtual ClassDescription description();
 
   protected:
 
