@@ -85,7 +85,7 @@ public :
 Q_SIGNALS:
     void patchChanged();
 
-    public Q_SLOTS :
+public Q_SLOTS :
     //Does parts of the review-starting that are problematic to do directly in startReview, as they may open dialogs etc.
     void updateReview();
 
@@ -97,11 +97,12 @@ Q_SIGNALS:
     void showPatch();
     void forceUpdate();
 
-    private Q_SLOTS :
+private Q_SLOTS :
     void documentClosed( KDevelop::IDocument* );
     void textDocumentCreated( KDevelop::IDocument* );
     void documentSaved( KDevelop::IDocument* );
     void exporterSelected( QAction* action );
+    void closeReview();
 
 private:
     // Switches to the review area,

@@ -376,16 +376,15 @@ void showDiff( const KDevelop::VcsDiff& d ) {
 #endif
 #endif
 
-void PatchReviewPlugin::cancelReview() {
+void PatchReviewPlugin::closeReview()
+{
     if( m_patch ) {
         removeHighlighting();
         m_modelList.reset( 0 );
-        m_patch->cancelReview();
 
         emit patchChanged();
 
         if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
-            delete m_patch;
             // make sure "show" button still openes the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
         }
@@ -398,26 +397,16 @@ void PatchReviewPlugin::cancelReview() {
     }
 }
 
-void PatchReviewPlugin::finishReview( QList<KUrl> selection ) {
+void PatchReviewPlugin::cancelReview() {
     if( m_patch ) {
-        if( !m_patch->finishReview( selection ) )
-            return;
-        removeHighlighting();
-        m_modelList.reset( 0 );
+        m_patch->cancelReview();
+        closeReview();
+    }
+}
 
-        emit patchChanged();
-
-        if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
-            delete m_patch;
-            // make sure "show" button still openes the file dialog to open a custom patch file
-            setPatch( new LocalPatchSource );
-        }
-
-        Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-        if( w->area()->objectName() == "review" ) {
-            if( setUniqueEmptyWorkingSet() )
-                ICore::self()->uiController()->switchToArea( "code", KDevelop::IUiController::ThisWindow );
-        }
+void PatchReviewPlugin::finishReview( QList<KUrl> selection ) {
+    if( m_patch && m_patch->finishReview( selection ) ) {
+        closeReview();
     }
 }
 
