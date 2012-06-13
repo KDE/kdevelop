@@ -78,7 +78,7 @@ void LocalPatchSource::update() {
 }
 
 LocalPatchSource::~LocalPatchSource() {
-    if ( !m_filename.isEmpty() ) {
+    if ( !m_command.isEmpty() && !m_filename.isEmpty() ) {
         QFile::remove( m_filename.toLocalFile() );
     }
 }
