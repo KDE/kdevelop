@@ -15,6 +15,12 @@
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <kprocess.h>
+#include <KIcon>
+
+QIcon LocalPatchSource::icon() const
+{
+    return KIcon("text-x-patch");
+}
 
 QStringList splitArgs( const QString& str ) {
     QStringList ret;

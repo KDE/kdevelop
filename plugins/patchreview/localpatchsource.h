@@ -42,6 +42,7 @@ public:
     }
 
     virtual void update();
+    virtual QIcon icon() const;
 
     KUrl m_filename;
     KUrl m_baseDir;
