@@ -90,9 +90,9 @@ void PatchReviewToolView::updatePatchFromEdit() {
     if( !lpatch )
         return;
 
-    lpatch->m_command = m_editPatch.command->text();
-    lpatch->m_filename = m_editPatch.filename->url();
-    lpatch->m_baseDir = m_editPatch.baseDir->url();
+    lpatch->setCommand(m_editPatch.command->text());
+    lpatch->setFilename(m_editPatch.filename->url());
+    lpatch->setBaseDir(m_editPatch.baseDir->url());
     lpatch->setAlreadyApplied( m_editPatch.applied->checkState() == Qt::Checked );
 
     m_plugin->notifyPatchChanged();
@@ -147,12 +147,12 @@ void PatchReviewToolView::fillEditFromPatch() {
     if( !lpatch )
         return;
 
-    m_editPatch.command->setText( lpatch->m_command );
-    m_editPatch.filename->setUrl( lpatch->m_filename );
-    m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
+    m_editPatch.command->setText( lpatch->command());
+    m_editPatch.filename->setUrl( lpatch->file() );
+    m_editPatch.baseDir->setUrl( lpatch->baseDir() );
     m_editPatch.applied->setCheckState( lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked );
 
-    if ( lpatch->m_command.isEmpty() )
+    if ( lpatch->command().isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
     else
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
