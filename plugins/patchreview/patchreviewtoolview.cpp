@@ -55,7 +55,8 @@ public slots:
 private:
     void setFileInfo( QStandardItem *item, unsigned int hunksNum ) {
         QString newText = i18ncp( "%1: number of changed hunks, %2: file name",
-            "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum, item->text() );
+            "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum,
+            item->data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url().pathOrUrl() );
         item->setText( newText );
     }
 };
