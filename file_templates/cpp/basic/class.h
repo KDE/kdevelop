@@ -1,6 +1,7 @@
+{% load kdev_filters %}
 /*
 
- {{ license }}
+ {{ license|lines_prepend:" * " }}
  */
 
 #ifndef {{ name|upper }}_H
