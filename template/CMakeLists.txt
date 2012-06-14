@@ -6,4 +6,5 @@ set (
     RUNTIME DESTINATION "${BIN_INSTALL_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
 )
 
+include (${Grantlee_USE_FILE})
 add_subdirectory(filters)
