@@ -257,7 +257,8 @@ void PatchReviewToolView::finishReview() {
     m_plugin->finishReview( selectedUrls );
 }
 
-void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
+void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx ) {
+    QModelIndex i = idx.sibling(idx.row(), 0);
     KUrl file = m_fileModel->statusInfo( i ).url();
 
     kDebug() << "opening" << file.toLocalFile();
