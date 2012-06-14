@@ -245,7 +245,7 @@ struct DocumentControllerPrivate {
             else
             {
                 //make sure the URL exists
-                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ) )
                 {
                     kDebug() << "cannot find URL:" << url.url();
                     return 0;
