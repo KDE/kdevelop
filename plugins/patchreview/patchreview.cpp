@@ -56,6 +56,7 @@
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <shell/core.h>
 #include <ktexteditor/modificationinterface.h>
+#include <KIO/NetAccess>
 
 using namespace KDevelop;
 
@@ -232,10 +233,18 @@ void PatchReviewPlugin::updateKompareModel() {
             if( patchDoc )
                 patchDoc->reload();
         }
+        QString patchFile;
+        if(m_patch->file().isLocalFile())
+          patchFile = m_patch->file().toLocalFile();
+        else {
+          bool ret = KIO::NetAccess::download(m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow());
+          if(!ret)
+            kWarning() << "Problem while downloading: " << m_patch->file();
+        }
 
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
-        m_kompareInfo->localDestination = m_patch->file().toLocalFile();
+        m_kompareInfo->localDestination = patchFile;
         m_kompareInfo->localSource = m_patch->baseDir().toLocalFile();
         m_kompareInfo->depth = m_patch->depth();
         m_kompareInfo->applied = m_patch->isAlreadyApplied();
