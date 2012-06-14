@@ -38,7 +38,6 @@
 #include <KFileDialog>
 #include <KLineEdit>
 #include <KIntNumInput>
-#include <KMessageBox>
 
 #include <QDomElement>
 #include <QGroupBox>
@@ -413,7 +412,6 @@ ClassMembersPage::~ClassMembersPage()
 
 void ClassMembersPage::setDescription(const ClassDescription& description)
 {
-    KMessageBox::information(this, "Setting description and model");
     d->model = new ClassDescriptionModel(description, this);
     d->ui->itemView->setModel(d->model);
     d->ui->itemView->setRootIndex(d->model->index(ClassDescriptionModel::MembersRow, 0));
@@ -629,9 +627,7 @@ void TemplateClassAssistant::next()
         {
             desc.methods << FunctionDescription(declaration);
         }
-        desc.members << VariableDescription("Sample type", "Sample name");
-        
-        qobject_cast<ClassMembersPage*>(d->membersPage->widget())->setDescription(desc);
+        d->membersPage->widget()->setProperty("description", QVariant::fromValue(desc));
     }
     
     if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))

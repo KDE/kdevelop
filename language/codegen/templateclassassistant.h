@@ -71,7 +71,7 @@ private:
 class ClassMembersPage : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(ClassDescription description READ description WRITE setDescription)
+    Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
     
 public:
     explicit ClassMembersPage (TemplateClassAssistant* parent);
