@@ -135,7 +135,7 @@ void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)
         
         QFile implFile(m_directory+'/'+m_filename+"impl.h");
         if(!implFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qDebug() << "error. can't write the impl: " << m_writeImpl+".h";
+            qDebug() << "error. can't write the impl: " << m_writeImpl << ".h";
             qApp->quit();
         }
         
