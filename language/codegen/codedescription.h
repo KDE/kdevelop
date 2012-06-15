@@ -29,6 +29,9 @@
 #include <QList>
 #include <QAbstractItemModel>
 
+#define GRANTLEE_LOOKUP_PROPERTY(name)      \
+if (property == #name) return QVariant::fromValue(object.name);
+
 namespace KDevelop {
 
     struct VariableDescription
@@ -83,7 +86,7 @@ namespace KDevelop {
     class ClassDescriptionModel : public QAbstractItemModel
     {
         Q_OBJECT
-        Q_PROPERTY(ClassDescription description READ description WRITE setDescription)
+        Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
         
     public:
         enum TopLevelRow
@@ -129,12 +132,31 @@ Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
     
-namespace Grantlee
-{
-    template<> QVariant TypeAccessor<KDevelop::VariableDescription&>::lookUp(const KDevelop::VariableDescription& object, const QString& property);
-    template<> QVariant TypeAccessor<KDevelop::FunctionDescription&>::lookUp(const KDevelop::FunctionDescription& object, const QString& property);
-    template<> QVariant TypeAccessor<KDevelop::InheritanceDescription&>::lookUp(const KDevelop::InheritanceDescription& object, const QString& property);
-    template<> QVariant TypeAccessor<KDevelop::ClassDescription&>::lookUp(const KDevelop::ClassDescription& object, const QString& property);
-}
+GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
+    GRANTLEE_LOOKUP_PROPERTY(name)
+    GRANTLEE_LOOKUP_PROPERTY(type)
+GRANTLEE_END_LOOKUP
+
+GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
+    GRANTLEE_LOOKUP_PROPERTY(name)
+    GRANTLEE_LOOKUP_PROPERTY(arguments)
+    GRANTLEE_LOOKUP_PROPERTY(returnArguments)
+    GRANTLEE_LOOKUP_PROPERTY(isConstructor)
+    GRANTLEE_LOOKUP_PROPERTY(isDestructor)
+    GRANTLEE_LOOKUP_PROPERTY(isVirtual)
+    GRANTLEE_LOOKUP_PROPERTY(isStatic)
+GRANTLEE_END_LOOKUP
+
+GRANTLEE_BEGIN_LOOKUP(KDevelop::InheritanceDescription)
+    GRANTLEE_LOOKUP_PROPERTY(inheritanceMode)
+    GRANTLEE_LOOKUP_PROPERTY(baseType)
+GRANTLEE_END_LOOKUP
+
+GRANTLEE_BEGIN_LOOKUP(KDevelop::ClassDescription)
+    GRANTLEE_LOOKUP_PROPERTY(name)
+    GRANTLEE_LOOKUP_PROPERTY(baseClasses)
+    GRANTLEE_LOOKUP_PROPERTY(members)
+    GRANTLEE_LOOKUP_PROPERTY(methods)
+GRANTLEE_END_LOOKUP
 
 #endif // KDEVELOP_CODEDESCRIPTION_H

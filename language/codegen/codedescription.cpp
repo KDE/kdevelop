@@ -24,9 +24,6 @@
 #include <duchain/types/functiontype.h>
 #include <KLocalizedString>
 
-#define GRANTLEE_LOOKUP_PROPERTY(name)      \
-if (property == #name) return QVariant::fromValue(object.name);
-
 using namespace KDevelop;
 
 VariableDescription::VariableDescription()
@@ -98,33 +95,6 @@ ClassDescription::ClassDescription(const QString& name)
 {
 
 }
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(type)
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(arguments)
-    GRANTLEE_LOOKUP_PROPERTY(returnArguments)
-    GRANTLEE_LOOKUP_PROPERTY(isConstructor)
-    GRANTLEE_LOOKUP_PROPERTY(isDestructor)
-    GRANTLEE_LOOKUP_PROPERTY(isVirtual)
-    GRANTLEE_LOOKUP_PROPERTY(isStatic)
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::InheritanceDescription)
-    GRANTLEE_LOOKUP_PROPERTY(inheritanceMode)
-    GRANTLEE_LOOKUP_PROPERTY(baseType)
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::ClassDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(baseClasses)
-    GRANTLEE_LOOKUP_PROPERTY(members)
-    GRANTLEE_LOOKUP_PROPERTY(methods)
-GRANTLEE_END_LOOKUP
 
 class KDevelop::ClassDescriptionModelPrivate
 {

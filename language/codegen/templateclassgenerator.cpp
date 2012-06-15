@@ -21,6 +21,7 @@
 
 #include "interfaces/icore.h"
 #include "language/codegen/documentchangeset.h"
+#include "codedescription.h"
 #include "duchain/duchainlock.h"
 #include "duchain/duchain.h"
 #include "duchain/declaration.h"
@@ -260,6 +261,8 @@ d(new TemplateClassGeneratorPrivate)
     d->baseUrl = baseUrl;
     
     Grantlee::registerMetaType<DeclarationPointer>();
+    Grantlee::registerMetaType<VariableDescription>();
+    Grantlee::registerMetaType<FunctionDescription>();
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
@@ -286,6 +289,12 @@ QVariantHash TemplateClassGenerator::templateVariables()
     variables["is_inherited"] = !directInheritanceList().isEmpty();
     variables["direct_inheritance_list"] = QVariant::fromValue(directInheritanceList());
     variables["declarations"] = QVariant::fromValue(declarations());
+    
+    ClassDescription desc = description();
+    variables["properties"] = QVariant::fromValue(desc.members);
+    variables["methods"] = QVariant::fromValue(desc.methods);
+    
+    kDebug() << "Class description:" << desc.members.size() << desc.methods.size();
     
     QList<DeclarationPointer> functions;
     QList<DeclarationPointer> members;
