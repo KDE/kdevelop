@@ -29,7 +29,7 @@ set(patchreview_PART_SRCS
 )
 
 set (patchreview_UI
-       patchreview.ui)
+    patchreview.ui)
 
 kde4_add_ui_files(patchreview_PART_SRCS ${patchreview_UI} )
 
