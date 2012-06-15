@@ -1,0 +1,16 @@
+[General]
+Name=Qt Object
+Comment=QObject subclass with properties and private member
+Category=C++/Qt
+Files=Header,Implementation
+
+[Header]
+Name=Public Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
+
