@@ -19,10 +19,18 @@
 
 #include "kdevfilters.h"
 
+#include <KDebug>
+
 using namespace KDevelop;
 
-QStringList words(const QString& string)
+QString getSafeString(const QVariant& variant)
 {
+    return variant.value<Grantlee::SafeString>().get();
+}
+
+QStringList words(const QVariant& input)
+{
+    QString string = getSafeString(input);
     if (string == string.toLower() && !string.contains('_'))
     {
         return QStringList(string);
@@ -51,7 +59,7 @@ QStringList words(const QString& string)
 QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
     QString ret;
-    foreach (const QString& word, words(input.toString()))
+    foreach (const QString& word, words(input))
     {
         QString w = word;
         w[0] = w[0].toUpper();
@@ -63,7 +71,7 @@ QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& argume
 QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
     QString ret;
-    foreach (const QString& word, words(input.toString()))
+    foreach (const QString& word, words(input))
     {
         QString w = word;
         w[0] = w[0].toUpper();
@@ -78,28 +86,36 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& a
 
 QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
-    QString ret = words(input.toString()).join("_");
+    QString ret = words(input).join("_");
     return Grantlee::SafeString(ret);
 }
+
+QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+{
+    QString in = getSafeString(input);
+    if (!in.isEmpty())
+    {
+        in[0] = in[0].toUpper();
+    }
+    return Grantlee::SafeString(in);
+}
+
 
 QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
     QStringList retLines;
-    QString start = argument.toString();
-    foreach (const QString& line, input.toString().split('\n', QString::KeepEmptyParts))
+    QString start = getSafeString(argument);
+    foreach (const QString& line, getSafeString(input).split('\n', QString::KeepEmptyParts))
     {
         retLines << start + line;
     }
-    return retLines.join(QString('\n'));
+    return Grantlee::SafeString(retLines.join(QString('\n')));
 }
 
 
 KDevFilters::KDevFilters(QObject* parent): QObject(parent)
 {
-    m_filters.insert("camel_case", new CamelCaseFilter());
-    m_filters.insert("camel_case_lower", new LowerCamelCaseFilter());
-    m_filters.insert("underscores", new UnderscoreFilter());
-    m_filters.insert("lines_prepend", new SplitLinesFilter());
+    
 }
 
 KDevFilters::~KDevFilters()
@@ -107,12 +123,18 @@ KDevFilters::~KDevFilters()
 
 }
 
-QHash< QString, Grantlee::AbstractNodeFactory* > KDevFilters::nodeFactories(const QString& name)
-{
-    return m_nodeFactories;
+QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
+{    
+    Q_UNUSED(name);
+    QHash< QString, Grantlee::Filter* > filters;
+    
+    filters["camel_case"] = new CamelCaseFilter();
+    filters["camel_case_lower"] = new LowerCamelCaseFilter();
+    filters["underscores"] = new UnderscoreFilter();
+    filters["lines_prepend"] = new SplitLinesFilter();
+    filters["upper_first"] = new UpperFirstFilter();
+    
+    return filters;
 }
 
-QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
-{
-    return m_filters;
-}
+Q_EXPORT_PLUGIN2( kdev_filters, KDevelop::KDevFilters )

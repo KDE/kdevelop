@@ -20,29 +20,41 @@
 #ifndef KDEVELOP_KDEVFILTERS_H
 #define KDEVELOP_KDEVFILTERS_H
 
-#include <QObject>
 #include <grantlee/taglibraryinterface.h>
 #include <grantlee/filter.h>
+
+#include <QObject>
+#include <QtPlugin>
 
 namespace KDevelop {
     
 class CamelCaseFilter : public Grantlee::Filter
 {
+public:
     virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
 };
 
 class LowerCamelCaseFilter : public Grantlee::Filter
 {
+public:
     virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
 };
 
 class UnderscoreFilter : public Grantlee::Filter
 {
+public:
+    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+};
+
+class UpperFirstFilter : public Grantlee::Filter
+{
+public:
     virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
 };
 
 class SplitLinesFilter : public Grantlee::Filter
 {
+public:
     virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
 };
 
@@ -55,12 +67,8 @@ public:
     explicit KDevFilters(QObject* parent = 0);
     virtual ~KDevFilters();
     
-    virtual QHash< QString, Grantlee::AbstractNodeFactory* > nodeFactories(const QString& name = QString());
     virtual QHash< QString, Grantlee::Filter* > filters(const QString& name = QString());
     
-private:
-    QHash< QString, Grantlee::AbstractNodeFactory* > m_nodeFactories;
-    QHash< QString, Grantlee::Filter* > m_filters;
 };
 
 }

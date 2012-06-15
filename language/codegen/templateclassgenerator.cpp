@@ -345,6 +345,15 @@ DocumentChangeSet TemplateClassGenerator::generate()
         
     Grantlee::Engine engine;
     engine.setSmartTrimEnabled(true);
+
+    Grantlee::FileSystemTemplateLoader* loader = new Grantlee::FileSystemTemplateLoader;
+    loader->setTemplateDirs(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
+    engine.addTemplateLoader(Grantlee::AbstractTemplateLoader::Ptr(loader));
+    
+    foreach (const QString& path, ICore::self()->componentData().dirs()->resourceDirs("lib"))
+    {
+        engine.addPluginPath(path);
+    }
     
     Grantlee::Context context(variables);
     
@@ -354,6 +363,8 @@ DocumentChangeSet TemplateClassGenerator::generate()
     
     d->loader = new ArchiveTemplateLoader(dir);
     engine.addTemplateLoader(Grantlee::AbstractTemplateLoader::Ptr(d->loader));
+    
+    
     
     kDebug() << "Opened archive with contents:" << dir->entries();
     
