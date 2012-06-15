@@ -1,1 +1,0 @@
-({% for argument in arguments %}{{ argument.type }} {{ argument.identifier }}{% if not forloop.last %}, {% endif %}{% endfor %})
