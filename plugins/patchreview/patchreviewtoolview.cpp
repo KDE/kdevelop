@@ -20,7 +20,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
-#include <kdevplatform/interfaces/iplugincontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <KLineEdit>
 #include <QMenu>
 

@@ -26,8 +26,8 @@
 #include <KTextEditor/View>
 #include <KMessageBox>
 #include <ktexteditor/movinginterface.h>
-#include <kdevplatform/interfaces/icore.h>
-#include <kdevplatform/interfaces/iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 #include <QTextCharFormat>
 #include <QWidget>
 #include <QTextDocument>
