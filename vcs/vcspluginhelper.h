@@ -61,7 +61,6 @@ public Q_SLOTS:
     void diffForRevGlobal();
     void update();
     void diffJobFinished(KJob* job);
-    void commitReviewed(QString);
     
     void revertDone(KJob* job);
     void delayedModificationWarningOn();

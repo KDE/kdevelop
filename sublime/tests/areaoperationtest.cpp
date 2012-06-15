@@ -270,7 +270,7 @@ void AreaOperationTest::checkArea2(MainWindow *mw)
     area->walkViews(c, area->rootIndex());
     QCOMPARE(widgetCount, c.count);
 
-    //check that we have 7 splitters: 2 vertical and 1 horizontal, rest is not splitted
+    //check that we have 7 splitters: 2 vertical and 1 horizontal, rest is not split
     QList<QSplitter*> splitters = splitter->findChildren<QSplitter*>();
     splitters.append(qobject_cast<QSplitter*>(splitter));
     QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
@@ -595,7 +595,7 @@ void AreaOperationTest::splitViewActiveTabsTest()
     // check if the container's current widget was updated to the active view's
     QCOMPARE(pContainer->currentWidget(), mw.activeView()->widget());
 
-    // now, create a splitted view of the active view (m_pView121)
+    // now, create a split view of the active view (m_pView121)
     Sublime::View *pNewView = mw.activeView()->document()->createView();
     pNewView->setObjectName("splitOf" + mw.activeView()->objectName());
     m_area1->addView(pNewView, mw.activeView(), Qt::Vertical);

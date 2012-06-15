@@ -116,6 +116,7 @@ public:
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
 public slots:
+    void addMessageToHistory(const QString& message);
     void oldMessageChanged(QString);
 };
 

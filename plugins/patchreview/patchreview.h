@@ -22,140 +22,27 @@
 #include "localpatchsource.h"
 #include "ui_patchreview.h"
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/movingrangefeedback.h>
 #include "libdiff2/diffmodel.h"
 
-class PatchReviewToolViewFactory;
-class PatchReviewPlugin;
-
-namespace KParts
-{
-class Part;
+class PatchHighlighter;
+namespace KDevelop {
+class IDocument;
 }
 
-class QDialog;
+class PatchReviewToolViewFactory;
 
 namespace Diff2
 {
 class KompareModelList;
 class DiffModel;
-class DiffModel;
-}
-namespace KTextEditor
-{
-class Document;
-class Range;
-class MovingRange;
-class Mark;
 }
 namespace Kompare
 {
 class Info;
 }
-namespace KDevelop
-{
-class IDocument;
-class VcsFileChangesModel;
-}
-
-///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class PatchHighlighter : public QObject
-{
-    Q_OBJECT
-public:
-    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
-    ~PatchHighlighter();
-    KDevelop::IDocument* doc();
-    QList< KTextEditor::MovingRange* > ranges() const {
-        return m_differencesForRanges.keys();
-    }
-private slots:
-    void documentDestroyed();
-    void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
-private:
-
-    void addLineMarker( KTextEditor::MovingRange* arg1, Diff2::Difference* arg2 );
-    void removeLineMarker( KTextEditor::MovingRange* range );
-    QStringList splitAndAddNewlines( const QString& text ) const;
-    void performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber );
-
-    KTextEditor::MovingRange* rangeForMark( KTextEditor::Mark mark );
-
-    void clear();
-    QSet< KTextEditor::MovingRange* > m_ranges;
-    QMap< KTextEditor::MovingRange*, Diff2::Difference* > m_differencesForRanges;
-    KDevelop::IDocument* m_doc;
-    PatchReviewPlugin* m_plugin;
-    Diff2::DiffModel* m_model;
-    bool m_applying;
-public slots:
-    void markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & );
-    void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair( -1, -1 ) );
-    bool isRemoval( Diff2::Difference* );
-    bool isInsertion( Diff2::Difference* );
-    void markClicked( KTextEditor::Document*, KTextEditor::Mark, bool& );
-    void textInserted( KTextEditor::Document*, KTextEditor::Range );
-    void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
-};
 
 class DiffSettings;
 class PatchReviewPlugin;
-
-class PatchReviewToolView : public QWidget
-{
-    Q_OBJECT
-public:
-    PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin );
-    ~PatchReviewToolView();
-
-signals:
-    void dialogClosed( PatchReviewToolView* );
-    void  stateChanged( PatchReviewToolView* );
-private slots:
-
-    void fileDoubleClicked( const QModelIndex& i );
-
-    void nextHunk();
-    void prevHunk();
-
-    void patchChanged();
-
-    void updatePatchFromEdit();
-
-    void slotEditCommandChanged();
-
-    void slotEditFileNameChanged();
-    void slotAppliedChanged( int newState );
-
-    void finishReview();
-
-private:
-    void kompareModelChanged();
-
-    void showEditDialog();
-    ///Fills the editor views from m_editingPatch
-    void fillEditFromPatch();
-    /// Retrieve the patch from plugin and perform all necessary casts
-    LocalPatchSource* GetLocalPatchSource();
-
-    Ui_EditPatch m_editPatch;
-
-    QTime m_lastDataTime;
-    QString m_lastTerminalData;
-
-    QPointer< KParts::Part > m_konsolePart;
-
-    bool m_reversed;
-
-    PatchReviewPlugin* m_plugin;
-
-    QPointer< QWidget > m_customWidget;
-
-    class PatchFilesModel* m_fileModel;
-public slots:
-    void documentActivated( KDevelop::IDocument* );
-    void patchSelectionChanged( int );
-};
 
 class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview
 {
@@ -183,8 +70,6 @@ public :
 
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
-    KUrl diffFile();
-
     void setPatch( KDevelop::IPatchSource* patch );
 
     void registerPatch( KDevelop::IPatchSource::Ptr patch );
@@ -198,7 +83,7 @@ public :
 Q_SIGNALS:
     void patchChanged();
 
-    public Q_SLOTS :
+public Q_SLOTS :
     //Does parts of the review-starting that are problematic to do directly in startReview, as they may open dialogs etc.
     void updateReview();
 
@@ -210,11 +95,12 @@ Q_SIGNALS:
     void showPatch();
     void forceUpdate();
 
-    private Q_SLOTS :
+private Q_SLOTS :
     void documentClosed( KDevelop::IDocument* );
     void textDocumentCreated( KDevelop::IDocument* );
     void documentSaved( KDevelop::IDocument* );
     void exporterSelected( QAction* action );
+    void closeReview();
 
 private:
     // Switches to the review area,

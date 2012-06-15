@@ -461,45 +461,8 @@ void VcsPluginHelper::commit()
         VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
         commitDialog->setCommitCandidates(patchSource->infos());
         commitDialog->exec();
-    } else {
-        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(commitReviewed(QString)));
-        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewed(QString)));
     }
 }
-
-void VcsPluginHelper::commitReviewed(QString message)
-{
-    addOldCommitMessage(message);
-}
-
-QStringList retrieveOldCommitMessages()
-{
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
-    return vcsGroup.readEntry("OldCommitMessages", QStringList());
-}
-
-namespace {
-    int maxMessages = 10;
-}
-
-void addOldCommitMessage(QString message)
-{
-    if(ICore::self()->shuttingDown())
-        return;
-    
-    QStringList oldMessages = retrieveOldCommitMessages();
-    
-    if(oldMessages.contains(message))
-        oldMessages.removeAll(message);
-    
-    oldMessages.push_front(message);
-    while(oldMessages.size() > maxMessages)
-        oldMessages.pop_back();
-    
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
-    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
-}
-
 }
 
 

@@ -451,10 +451,10 @@ void NativeAppConfigType::suggestionTriggered()
         KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, pitem->text());
         KConfigGroup cfg = config->config();
         
-        QStringList splittedPath = model->pathFromIndex(pitem->index());
-//         QString path = KDevelop::joinWithEscaping(splittedPath,'/','\\');
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, splittedPath );
-        cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariantList() << splittedPath ) );
+        QStringList splitPath = model->pathFromIndex(pitem->index());
+//         QString path = KDevelop::joinWithEscaping(splitPath,'/','\\');
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, splitPath );
+        cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariantList() << splitPath ) );
         cfg.writeEntry( ExecutePlugin::dependencyActionEntry, "Build" );
         cfg.sync();
         
