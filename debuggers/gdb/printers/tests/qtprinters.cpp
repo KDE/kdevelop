@@ -377,6 +377,15 @@ void QtPrintersTest::testQChar()
     QVERIFY(gdb.execute("print c").contains("\"k\""));
 }
 
+void QtPrintersTest::testQUuid()
+{
+    GdbProcess gdb("quuid");
+    gdb.execute("break quuid.cpp:4");
+    gdb.execute("run");
+    QByteArray data = gdb.execute("print id");
+    qDebug() << data;
+    QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
+}
 
 }
 QTEST_MAIN(GDBDebugger::QtPrintersTest)

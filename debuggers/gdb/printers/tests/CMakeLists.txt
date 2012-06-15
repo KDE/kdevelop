@@ -48,6 +48,9 @@ target_link_libraries(qsetstring ${QT_QTCORE_LIBRARY})
 add_executable(qchar qchar.cpp)
 target_link_libraries(qchar ${QT_QTCORE_LIBRARY})
 
+add_executable(quuid quuid.cpp)
+target_link_libraries(quuid ${QT_QTCORE_LIBRARY})
+
 kde4_add_unit_test(qtprinters qtprinters.cpp)
 target_link_libraries(qtprinters
     ${QT_QTCORE_LIBRARY}
