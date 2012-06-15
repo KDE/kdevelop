@@ -257,7 +257,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         Q_ASSERT(splitter);
     }
 
-    if (index->isSplitted()) //this is a visible splitter
+    if (index->isSplit()) //this is a visible splitter
         splitter->setOrientation(index->orientation());
     else
     {
@@ -442,7 +442,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         for(Sublime::AreaIndex* current = index; current; current = current->parent())
         {
         QSplitter *splitter = m_indexSplitters[current];
-        if (current->isSplitted() && splitter)
+        if (current->isSplit() && splitter)
         {
             // Also update the orientation
             splitter->setOrientation(current->orientation());
@@ -860,7 +860,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
     
     AreaIndex* putToIndex = area->rootIndex();
     QSplitter* splitter = m_indexSplitters[putToIndex];
-    while(putToIndex->isSplitted()) {
+    while(putToIndex->isSplit()) {
         putToIndex = putToIndex->first();
         splitter = m_indexSplitters[putToIndex];
     }

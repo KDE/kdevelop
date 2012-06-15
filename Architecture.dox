@@ -349,7 +349,7 @@ way to open files in KDevelop until DocumentController is ported.
 
 - UI provides support for "areas" (alike Eclipse's perspectives)
 - The basic set of areas is:
-  - code editing area with splitted editor windows \n
+  - code editing area with split editor windows \n
     (with kate/konqueror-like splitting)
   - debugging area \n
     (Xcode-like debugger window with only one editor view by default but with possiblility to show more)

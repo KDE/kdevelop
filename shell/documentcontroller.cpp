@@ -1096,7 +1096,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             foreach(QStringList group, groups)
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
         }else{
-            while(index->isSplitted())
+            while(index->isSplit())
                 index = index->first();
             // Simply open the document into the area index
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
@@ -1139,13 +1139,13 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     
     Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == "/" ? Qt::Horizontal : Qt::Vertical;
     
-    if(!index->isSplitted())
+    if(!index->isSplit())
     {
         kDebug() << "splitting " << index << "orientation" << orientation << "to second" << activeViewToSecondChild;
         index->split(orientation, activeViewToSecondChild);
     }else{
         index->setOrientation(orientation);
-        kDebug() << "WARNING: Area is already splitted (shouldn't be)" << urlsWithSeparators;
+        kDebug() << "WARNING: Area is already split (shouldn't be)" << urlsWithSeparators;
     }
     
     openDocumentsWithSplitSeparators( index->first(), urlsWithSeparators.mid(0, pickSeparator) , isFirstView );
@@ -1154,12 +1154,12 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     
     // Clean up the child-indices, because document-loading may fail
     
-    if(!index->first()->viewCount() && !index->first()->isSplitted())
+    if(!index->first()->viewCount() && !index->first()->isSplit())
     {
         kDebug() << "unsplitting first";
         index->unsplit(index->first());
     }
-    else if(!index->second()->viewCount() && !index->second()->isSplitted())
+    else if(!index->second()->viewCount() && !index->second()->isSplit())
     {
         kDebug() << "unsplitting second";
         index->unsplit(index->second());

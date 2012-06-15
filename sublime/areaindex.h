@@ -31,20 +31,20 @@ namespace Sublime {
 class View;
 
 /**
-@short Index denotes the position of the view in the splitted area.
+@short Index denotes the position of the view in the split area.
 
-B-Tree alike structure is used to represent an area with splitted
+B-Tree alike structure is used to represent an area with split
 views. Area has a root index which can either contain one view or contain
 two child nodes (@p first and @p second). In the later case area
-is considered to be splitted into two parts. Each of those parts can
-in turn contain a view or be splitted (with first/second children).
+is considered to be split into two parts. Each of those parts can
+in turn contain a view or be split (with first/second children).
 
-When a view at given index is splitted, then its index becomes an index of the splitter
+When a view at given index is split, then its index becomes an index of the splitter
 and the original view goes into the @p first part of the splitter. The new view goes as
 @p second part.
 
-For example, consider an area which was splitted once horizontally
-and then the second part of it was splitted vertically:
+For example, consider an area which was split once horizontally
+and then the second part of it was split vertically:
 @code
  1. initial state: one view in the area
  |----------------|
@@ -56,7 +56,7 @@ and then the second part of it was splitted vertically:
  Indices:
     root_index (view 1)
 
- 2. the view is splitted horizontally
+ 2. the view is split horizontally
  |----------------|
  |       |        |
  |   1   |   2    |
@@ -70,7 +70,7 @@ and then the second part of it was splitted vertically:
      |              |
    view 1         view 2
 
- 3. the second view is splitted vertically
+ 3. the second view is split vertically
  |----------------|
  |       |   2    |
  |   1   |--------|
@@ -115,15 +115,15 @@ public:
     AreaIndex *first() const;
     /**@return the second child index if there're any.*/
     AreaIndex *second() const;
-    /**@return true if the index is splitted.*/
-    bool isSplitted() const;
+    /**@return true if the index is split.*/
+    bool isSplit() const;
     /**@return the orientation of the splitter for this index.*/
     Qt::Orientation orientation() const;
     /**Set the orientation of the splitter for this index.*/
     void setOrientation(Qt::Orientation orientation) const;
 
     /**Adds view to the list of views in this position.
-    Does nothing if the view is already splitted.
+    Does nothing if the view is already split.
     @param after if not 0, new view will be placed after this one.
     @param view the view to be added.*/
     void add(View *view, View *after = 0);
@@ -132,13 +132,13 @@ public:
     void remove(View *view);
     /**Splits the view in this position by given @p orientation
     and adds the @p newView into the splitter.
-    Does nothing if the view is already splitted.
+    Does nothing if the view is already split.
     @p newView will be in the <b>second</b> child index.*/
     void split(View *newView, Qt::Orientation orientation);
     /**Splits the view in this position by given @p orientation.
      * @p moveViewsToSecondChild Normally, the existing views in this index are moved to the first sub-index.
      *                           If this is true, the views are moved to the _second_ sub-index instead.
-     * Does nothing if the view is already splitted.*/
+     * Does nothing if the view is already split.*/
     void split(Qt::Orientation orientation, bool moveViewsToSecondChild = false);
     /**Unsplits the index removing the given @p childToRemove and moving the contents
     of another child to this index.*/
