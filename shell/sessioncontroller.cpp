@@ -61,6 +61,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
+#include <QLayout>
 #include <QDBusConnection>
 
 
@@ -947,9 +948,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
             continue;
         }
 
-        bool running = false;
-        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
-            running = true;
+        bool running = KDevelop::SessionController::tryLockSession(si.uuid.toString());
         
         if(onlyRunning && !running)
             continue;
@@ -959,10 +958,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         
         model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
         model->setItem(row, 1, new QStandardItem(si.description));
-        
-        QString state;
-        
-        model->setItem(row, 2, new QStandardItem(""));
+        model->setItem(row, 2, new QStandardItem);
         
         if(defaultRow == row && running)
             ++defaultRow;
