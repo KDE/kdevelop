@@ -900,7 +900,7 @@ void SessionChooserDialog::updateState() {
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
-            tooltip = i18n("Active session.\npid %1, app %2, host %3]", lockState.holderPid, lockState.holderApp, lockState.holderHostname);
+            tooltip = i18n("Active session.\npid %1, app %2, host %3", lockState.holderPid, lockState.holderApp, lockState.holderHostname);
             state = i18n("Running");
         }
         
