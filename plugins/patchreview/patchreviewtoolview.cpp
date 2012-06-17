@@ -192,6 +192,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setModel( m_fileModel );
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
+    m_editPatch.filesList->setSelectionMode(QAbstractItemView::NoSelection);
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_editPatch.filesList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customContextMenuRequested(QPoint)));
 

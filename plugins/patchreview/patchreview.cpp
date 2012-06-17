@@ -95,9 +95,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
                         for ( QList<KTextEditor::MovingRange*>::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
-                            int line;
-
-                            line = ( *it )->start().line();
+                            int line = ( *it )->start().line();
 
                             if ( forwards ) {
                                 if ( line > c.line() && ( bestLine == -1 || line < bestLine ) )
