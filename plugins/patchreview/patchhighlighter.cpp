@@ -431,7 +431,6 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
 //     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
     connect( kdoc->textDocument(), SIGNAL( textInserted( KTextEditor::Document*, KTextEditor::Range ) ), this, SLOT( textInserted( KTextEditor::Document*, KTextEditor::Range ) ) );
-    connect( kdoc->textDocument(), SIGNAL( textChanged( KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range ) ), this, SLOT( textChanged( KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range ) ) );
     connect( kdoc->textDocument(), SIGNAL( textRemoved( KTextEditor::Document*, KTextEditor::Range, QString ) ), this, SLOT( textRemoved( KTextEditor::Document*, KTextEditor::Range, QString ) ) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
 
