@@ -557,6 +557,21 @@ class QCharPrinter:
     def display_hint (self):
         return 'string'
 
+class QUuidPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "QUuid({%x-%x-%x-%x%x-%x%x%x%x%x%x})" % (self.val['data1'], self.val['data2'], self.val['data3'],
+                                            self.val['data4'][0], self.val['data4'][1],
+                                            self.val['data4'][2], self.val['data4'][3],
+                                            self.val['data4'][4], self.val['data4'][5],
+                                            self.val['data4'][6], self.val['data4'][7])
+
+    def display_hint (self):
+        return 'string'
+
 def register_qt4_printers (obj):
     if obj == None:
         obj = gdb
@@ -610,6 +625,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
+    pretty_printers_dict[re.compile('^QUuid')] = lambda val: QUuidPrinter(val)
 
 
 pretty_printers_dict = {}

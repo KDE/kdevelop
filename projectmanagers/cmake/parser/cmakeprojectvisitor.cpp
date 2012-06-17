@@ -22,6 +22,7 @@
 #include "cmakeast.h"
 #include "cmakecondition.h"
 #include "astfactory.h"
+#include "cmakeduchaintypes.h"
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
@@ -409,6 +410,8 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         DUChainWriteLocker lock(DUChain::lock());
         d= new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
         d->setIdentifier( Identifier(id) );
+        AbstractType::Ptr targetType(new TargetType);
+        d->setAbstractType(targetType);
     }
     
     Target target;
@@ -1037,11 +1040,10 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     QString id=def.arguments.first().value.toLower();
     
     Identifier identifier(id);
-    DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
-    int idx;
+    DUChainReadLocker lock;
+    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     
     //Only consider declarations in a CMake file
     IndexedString cmakeName("cmake");
@@ -1051,7 +1053,10 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         else
             it = decls.erase(it);
     }
+    lock.unlock();
     
+    DUChainWriteLocker wlock;
+    int idx;
     if(!decls.isEmpty())
     {
         idx=m_topctx->indexForUsedDeclaration(decls.first());
@@ -1136,11 +1141,13 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         else
         {
             {
-                DUChainWriteLocker lock(DUChain::lock());
+                DUChainReadLocker lock;
                 QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name().toLower()));
+                lock.unlock();
 
                 if(!decls.isEmpty())
                 {
+                    DUChainWriteLocker lock;
                     int idx=m_topctx->indexForUsedDeclaration(decls.first());
                     m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
                 }
@@ -1216,12 +1223,14 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
     //We define the uses for the used variable without ${}
     foreach(int use, args)
     {
-        DUChainWriteLocker lock(DUChain::lock());
         QString var=names[use];
+        DUChainReadLocker lock;
         QList<Declaration*> decls=topctx->findDeclarations(Identifier(var));
+        lock.unlock();
 
         if(!decls.isEmpty() && func.arguments.count() > use)
         {
+            DUChainWriteLocker lock;
             CMakeFunctionArgument arg=func.arguments[use];
             int idx=topctx->indexForUsedDeclaration(decls.first());
             topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
@@ -2239,21 +2248,26 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 {
     if(!m_topctx)
         return;
-    DUChainWriteLocker lock(DUChain::lock());
+    
     foreach(const CMakeFunctionArgument &arg, ast->outputArguments())
     {
         if(!arg.isCorrect())
             continue;
         Identifier id(arg.value);
         
+        DUChainReadLocker lock;
         QList<Declaration*> decls=m_topctx->findDeclarations(id);
+        lock.unlock();
+        
         if(decls.isEmpty())
         {
+            DUChainWriteLocker lock;
             Declaration *d = new Declaration(arg.range(), m_topctx);
             d->setIdentifier(id);
         }
         else
         {
+            DUChainWriteLocker lock;
             int idx=m_topctx->indexForUsedDeclaration(decls.first());
             m_topctx->createUse(idx, arg.range(), 0);
         }
@@ -2264,7 +2278,6 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 {
     if(!m_topctx)
         return;
-    DUChainWriteLocker lock(DUChain::lock());
     foreach(const CMakeFunctionArgument &arg, desc.arguments)
     {
         if(!arg.isCorrect() || !arg.value.contains('$'))
@@ -2275,10 +2288,14 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         for(it=var.constBegin(); it!=itEnd; ++it)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
+            
+            DUChainReadLocker lock(DUChain::lock());
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
+            lock.unlock();
             
             if(!decls.isEmpty())
             {
+                DUChainWriteLocker lock(DUChain::lock());
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());
                 m_topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column+it->first, arg.line-1, arg.column+it->second-1), 0);
             }

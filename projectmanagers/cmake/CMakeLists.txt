@@ -25,6 +25,7 @@ set( cmakecommon_SRCS
   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
+  parser/cmakeduchaintypes.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
   cmakemodelitems.cpp
