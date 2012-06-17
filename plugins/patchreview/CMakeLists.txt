@@ -7,6 +7,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
 
 set(patchreview_PART_SRCS
     patchreview.cpp
+    patchhighlighter.cpp
+    patchreviewtoolview.cpp
     localpatchsource.cpp
     standardpatchexport.cpp
     settings/diffsettings.cpp
@@ -27,7 +29,7 @@ set(patchreview_PART_SRCS
 )
 
 set (patchreview_UI
-       patchreview.ui)
+    patchreview.ui)
 
 kde4_add_ui_files(patchreview_PART_SRCS ${patchreview_UI} )
 

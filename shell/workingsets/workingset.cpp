@@ -72,7 +72,7 @@ WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
 
 void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup setGroup, KConfigGroup areaGroup )
 {
-    if (area->isSplitted()) {
+    if (area->isSplit()) {
         setGroup.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
         if (area->first()) {
@@ -229,7 +229,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle)
 {
-    Q_ASSERT( !areaIndex->isSplitted() );
+    Q_ASSERT( !areaIndex->isSplit() );
     if (setGroup.hasKey("Orientation")) {
         QStringList subgroups = setGroup.groupList();
         /// @todo also save and restore the ratio
@@ -238,7 +238,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 //             kDebug() << "has zero, split:" << split;
 
             Qt::Orientation orientation = setGroup.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
-            if(!areaIndex->isSplitted()){
+            if(!areaIndex->isSplit()){
                 areaIndex->split(orientation);
             }else{
                 areaIndex->setOrientation(orientation);

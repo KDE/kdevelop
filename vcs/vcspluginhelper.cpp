@@ -383,6 +383,9 @@ void VcsPluginHelper::annotation()
             connect(doc->textDocument()->activeView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
+            connect(doc->textDocument()->activeView(),
+                    SIGNAL(annotationBorderVisibilityChanged(KTextEditor::View*, bool)),
+                    SLOT(annotationVisibilityChange(KTextEditor::View*,QMenu*,int)));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -425,14 +428,21 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     VcsAnnotationModel* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
     Q_ASSERT(model);
 
-    VcsRevision rev = model->revisionForLine(line);
-    d->diffForRevAction->setData(QVariant::fromValue(rev));
-    d->diffForRevGlobalAction->setData(QVariant::fromValue(rev));
-    menu->addSeparator();
-    menu->addAction(d->diffForRevAction);
-    menu->addAction(d->diffForRevGlobalAction);
-    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision History..."), new HistoryFunction(this, rev), menu));
+    if(menu->actions().count()<3) {
+        VcsRevision rev = model->revisionForLine(line);
+        d->diffForRevAction->setData(QVariant::fromValue(rev));
+        d->diffForRevGlobalAction->setData(QVariant::fromValue(rev));
+        menu->addSeparator();
+        menu->addAction(d->diffForRevAction);
+        menu->addAction(d->diffForRevGlobalAction);
+        menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision History..."), new HistoryFunction(this, rev), menu));
+    }
+}
+
+void VcsPluginHelper::annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible)
+{
+    
 }
 
 void VcsPluginHelper::update()
@@ -461,45 +471,8 @@ void VcsPluginHelper::commit()
         VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
         commitDialog->setCommitCandidates(patchSource->infos());
         commitDialog->exec();
-    } else {
-        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(commitReviewed(QString)));
-        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewed(QString)));
     }
 }
-
-void VcsPluginHelper::commitReviewed(QString message)
-{
-    addOldCommitMessage(message);
-}
-
-QStringList retrieveOldCommitMessages()
-{
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
-    return vcsGroup.readEntry("OldCommitMessages", QStringList());
-}
-
-namespace {
-    int maxMessages = 10;
-}
-
-void addOldCommitMessage(QString message)
-{
-    if(ICore::self()->shuttingDown())
-        return;
-    
-    QStringList oldMessages = retrieveOldCommitMessages();
-    
-    if(oldMessages.contains(message))
-        oldMessages.removeAll(message);
-    
-    oldMessages.push_front(message);
-    while(oldMessages.size() > maxMessages)
-        oldMessages.pop_back();
-    
-    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
-    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
-}
-
 }
 
 

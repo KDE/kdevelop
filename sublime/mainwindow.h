@@ -151,6 +151,8 @@ public: // FIXME?
       *The returned button is owned by the caller, and deleted at will. */
     virtual QWidget* customButtonForAreaSwitcher ( Area* area );
 
+    QWidget* areaSwitcher() const;
+
 private:
     
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))

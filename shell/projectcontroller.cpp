@@ -530,6 +530,7 @@ void ProjectController::setupActions()
     action = ac->addAction( "commit_current_project" );
     connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
     action->setText( i18n( "Commit Current Project..." ) );
+    action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
 
     KSharedConfig * config = KGlobal::config().data();

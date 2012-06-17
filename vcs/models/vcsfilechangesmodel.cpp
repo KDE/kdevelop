@@ -1,7 +1,7 @@
 /*  This file is part of KDevelop
     Copyright 2010 Aleix Pol <aleixpol@kde.org>
 
-    Splitted into separate class
+    Split into separate class
     Copyright 2011 Andrey Batyiev <batyiev@gmail.com>
 
     This library is free software; you can redistribute it and/or

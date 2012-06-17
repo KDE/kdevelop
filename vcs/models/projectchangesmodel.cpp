@@ -206,7 +206,8 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
 		<< KDevelop::VcsJob::Pull
 		<< KDevelop::VcsJob::Commit
 		<< KDevelop::VcsJob::Move
-		<< KDevelop::VcsJob::Copy
+        << KDevelop::VcsJob::Copy
+        << KDevelop::VcsJob::Revert
 		;
     
     VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);

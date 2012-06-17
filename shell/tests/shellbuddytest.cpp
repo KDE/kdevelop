@@ -362,12 +362,12 @@ void ShellBuddyTest::testsplitViewBuddies()
     Sublime::View *pClassAHeaderView = pMainWindow->activeView();
     pClassAHeaderView->setObjectName("classA.l.txt");
 
-    // now, create a splitted view of the active view (pClassAHeader)
-    Sublime::View *pClassAHeaderSplittedView = dynamic_cast<Sublime::Document*>(pClassAHeader)->createView();
-    pClassAHeaderSplittedView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
-    pCodeArea->addView(pClassAHeaderSplittedView, pMainWindow->activeView(), Qt::Vertical);
+    // now, create a split view of the active view (pClassAHeader)
+    Sublime::View *pClassAHeaderSplitView = dynamic_cast<Sublime::Document*>(pClassAHeader)->createView();
+    pClassAHeaderSplitView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
+    pCodeArea->addView(pClassAHeaderSplitView, pMainWindow->activeView(), Qt::Vertical);
     // and activate it
-    pMainWindow->activateView(pClassAHeaderSplittedView);
+    pMainWindow->activateView(pClassAHeaderSplitView);
 
     // get the current view's container from the mainwindow
     QWidget *pCentral = pMainWindow->centralWidget();
@@ -383,16 +383,16 @@ void ShellBuddyTest::testsplitViewBuddies()
     Sublime::Container *pRightContainer = pSplitter->findChildren<Sublime::Container*>().at(0);
     QVERIFY(pRightContainer);
 
-    // check that it only contains pClassAHeaderSplittedView
-    QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
+    // check that it only contains pClassAHeaderSplitView
+    QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplitView->widget()));
 
     // now open the correponding definition file, classA.r.txt
     IDocument *pClassAImplem = m_documentController->openDocument(KUrl(dirA.name() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName("classA.r.txt");
 
-    // and check its presence alongside pClassAHeaderSplittedView in pRightContainer
-    QVERIFY(pRightContainer->hasWidget(pClassAHeaderSplittedView->widget()));
+    // and check its presence alongside pClassAHeaderSplitView in pRightContainer
+    QVERIFY(pRightContainer->hasWidget(pClassAHeaderSplitView->widget()));
     QVERIFY(pRightContainer->hasWidget(pMainWindow->activeView()->widget()));
 
     // Now reactivate left side ClassAHeaderview
