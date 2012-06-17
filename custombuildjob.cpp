@@ -24,7 +24,6 @@
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KShell>
-#include <KDebug>
 
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
@@ -156,7 +155,6 @@ KDevelop::OutputModel* CustomBuildJob::model()
 
 void CustomBuildJob::procFinished()
 {
-    kDebug(9507) << "In procFinished";
     model()->appendLine( i18n( "*** Finished ***" ) );
     emitResult();
 }
