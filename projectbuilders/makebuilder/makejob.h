@@ -31,6 +31,7 @@
 #include "imakebuilder.h"
 
 namespace KDevelop {
+class OutputModel;
 class ProjectBaseItem;
 class ProcessLineMaker;
 }
@@ -38,7 +39,6 @@ class ProcessLineMaker;
 class KUrl;
 class KProcess;
 class MakeBuilder;
-class MakeOutputModel;
 
 class MakeJob: public KDevelop::OutputJob
 {
@@ -73,7 +73,7 @@ public:
     CommandType commandType();
     QStringList customTargets() const;
 
-    MakeOutputModel* model() const;
+    KDevelop::OutputModel* model() const;
 
     void setItem( KDevelop::ProjectBaseItem* item );
 

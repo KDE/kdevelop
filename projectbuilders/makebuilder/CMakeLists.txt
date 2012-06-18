@@ -7,9 +7,6 @@ add_subdirectory(tests)
 
 set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
-    makeoutputmodel.cpp
-    outputfilters.cpp
-    makeoutputdelegate.cpp
     makejob.cpp
 )
 

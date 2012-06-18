@@ -35,12 +35,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
+#include <outputview/outputdelegate.h>
+#include <outputview/outputmodel.h>
 
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-#include "makeoutputdelegate.h"
-#include "makeoutputmodel.h"
+//#include "makeoutputdelegate.h"
+//#include "makeoutputmodel.h"
 #include "makebuilder.h"
 
 using namespace KDevelop;
@@ -124,12 +126,13 @@ void MakeJob::start()
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
-    setModel(new MakeOutputModel(buildDir), IOutputView::TakeOwnership);
+    setModel(new KDevelop::OutputModel(buildDir), IOutputView::TakeOwnership);
+    model()->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
     setDelegate(m_builder->delegate());
 
     startOutput();
 
-    model()->addLine( buildDir.toLocalFile() + "> " + cmd.join(" ") );
+    model()->appendLine( buildDir.toLocalFile() + "> " + cmd.join(" ") );
 
     QString command = cmd.first();
     cmd.pop_front();
@@ -148,6 +151,7 @@ void MakeJob::start()
     m_process->setWorkingDirectory( buildDir.toLocalFile() );
     m_process->setProgram( command, cmd );
     kDebug(9037) << "Starting build:" << command << cmd << "Build directory" << buildDir;
+    kDebug(9037) << "Time at start of build is now: " << QDateTime::currentDateTime();
     m_process->start();
 }
 
@@ -298,7 +302,7 @@ QStringList MakeJob::environmentVars() const
 
 void MakeJob::addStandardOutput( const QStringList& lines )
 {
-    model()->addLines( lines );
+    model()->appendLines( lines );
 }
 
 void MakeJob::procError( QProcess::ProcessError err )
@@ -316,7 +320,7 @@ void MakeJob::procError( QProcess::ProcessError err )
     if (!m_killed) {
         setError(FailedError);
         setErrorText(i18n("Job failed"));
-        model()->addLine( i18n("*** Failed ***") );
+        model()->appendLine( i18n("*** Failed ***") );
 
     }
     emitResult();
@@ -325,10 +329,11 @@ void MakeJob::procError( QProcess::ProcessError err )
 void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 {
     Q_UNUSED(code)
+    kDebug(9037) << "Time at end of build is now: " << QDateTime::currentDateTime();
     m_lineMaker->flushBuffers();
     if( code==0 && status == QProcess::NormalExit )
     {
-        model()->addLine( i18n("*** Finished ***") );
+        model()->appendLine( i18n("*** Finished ***") );
         emitResult();
     }
     else
@@ -339,16 +344,16 @@ void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 
 bool MakeJob::doKill()
 {
-    model()->addLine( i18n("*** Aborted ***") );
+    model()->appendLine( i18n("*** Aborted ***") );
     m_killed = true;
     m_process->kill();
     m_process->waitForFinished();
     return true;
 }
 
-MakeOutputModel* MakeJob::model() const
+KDevelop::OutputModel* MakeJob::model() const
 {
-    return dynamic_cast<MakeOutputModel*>( OutputJob::model() );
+    return dynamic_cast<KDevelop::OutputModel*>( OutputJob::model() );
 }
 
 void MakeJob::setItem( ProjectBaseItem* item )
