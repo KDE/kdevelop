@@ -17,7 +17,6 @@ target_link_libraries(kdevcodeutils
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${Grantlee_CORE_LIBRARIES}
 )
 
 
