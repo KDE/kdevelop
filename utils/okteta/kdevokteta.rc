@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="okteta" version="1">
+<gui name="okteta" version="2">
 <MenuBar>
   <Menu name="file">
     <Action name="file_save" group="save_merge" /> <!-- TODO: why isn't this offered by the host? -->
@@ -35,34 +35,45 @@
     <Separator group="edit_find_merge" />
     <Action name="goto_offset" group="edit_find_merge" />
   </Menu>
-  <Menu name="view"><text>View</text>
-    <Action name="view_zoom_in" group="view_operations" />
-    <Action name="view_zoom_out" group="view_operations" />
-    <Separator group="view_operations" />
-    <Action name="view_showsnonprinting" group="view_operations" />
-    <Action name="view_lineoffset" group="view_operations" />
-    <Action name="togglecolumns" group="view_operations" />
-    <Separator group="view_operations" />
-    <Action name="view_valuecoding" group="view_operations" />
-    <Action name="view_charencoding" group="view_operations" />
-    <Separator group="view_operations" />
-    <Action name="view_bytesperline" group="view_operations" />
-    <Action name="view_bytespergroup" group="view_operations" />
-    <Action name="resizestyle" group="view_operations" />
-    <Action name="viewmode" group="view_operations" />
+
+  <Menu name="editor">
+
+    <Menu name="view"><text>View</text>
+      <Action name="view_zoom_in" group="view_operations" />
+      <Action name="view_zoom_out" group="view_operations" />
+      <Separator group="view_operations" />
+      <Action name="view_showsnonprinting" group="view_operations" />
+      <Action name="view_lineoffset" group="view_operations" />
+      <Action name="togglecolumns" group="view_operations" />
+      <Separator group="view_operations" />
+      <Action name="view_valuecoding" group="view_operations" />
+      <Action name="view_charencoding" group="view_operations" />
+      <Separator group="view_operations" />
+      <Action name="view_bytesperline" group="view_operations" />
+      <Action name="view_bytespergroup" group="view_operations" />
+      <Action name="resizestyle" group="view_operations" />
+      <Action name="viewmode" group="view_operations" />
+      <Separator/>
+      <Action name="view_profile" />
+    </Menu>
+    <Menu name="bookmarks"><text>Bookmarks</text>
+      <Action name="bookmark_add" />
+      <Action name="bookmark_edit" />
+      <Separator/>
+      <Action name="bookmark_replace" />
+      <Action name="bookmark_remove" />
+      <Action name="bookmark_remove_all" />
+      <Separator/>
+      <Action name="bookmark_previous" />
+      <Action name="bookmark_next" />
+      <Separator/>
+      <ActionList name="bookmark_list" />
+    </Menu>
+
   </Menu>
-  <Menu name="bookmarks"><text>Bookmarks</text>
-    <Action name="bookmark_add" />
-    <Action name="bookmark_edit" />
-    <Separator/>
-    <Action name="bookmark_replace" />
-    <Action name="bookmark_remove" />
-    <Action name="bookmark_remove_all" />
-    <Separator/>
-    <Action name="bookmark_previous" />
-    <Action name="bookmark_next" />
-    <Separator/>
-    <ActionList name="bookmark_list" />
+
+  <Menu name="settings">
+    <Action name="settings_viewprofiles_manage" group="configure_merge" />
   </Menu>
 </MenuBar>
 

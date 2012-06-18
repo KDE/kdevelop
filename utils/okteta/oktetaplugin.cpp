@@ -45,6 +45,10 @@
 #include <bookmarkstoolfactory.h>
 #include <structurestoolviewfactory.h>
 #include <structurestoolfactory.h>
+// Okteta Kasten
+#if KASTEN_VERSION == 2
+#include <bytearrayviewprofilemanager.h>
+#endif
 // KDev
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
@@ -77,15 +81,20 @@ void addTool( IUiController* uiController,
 
 
 OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
-  : IPlugin( OktetaPluginFactory::componentData(), parent ),
-    mDocumentFactory( new OktetaDocumentFactory(this) )
+  : IPlugin( OktetaPluginFactory::componentData(), parent )
+  , mDocumentFactory( new OktetaDocumentFactory(this) )
+#if KASTEN_VERSION == 2
+  , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
+#endif
 {
     Q_UNUSED(args)
 
+#if KASTEN_VERSION == 0 || KASTEN_VERSION == 1
     KLocale* globalLocale = KGlobal::locale();
     globalLocale->insertCatalog( QString::fromLatin1("liboktetacore") );
     globalLocale->insertCatalog( QString::fromLatin1("libkasten") );
     globalLocale->insertCatalog( QString::fromLatin1("liboktetakasten") );
+#endif
 
     IUiController* uiController = core()->uiController();
     addTool( uiController, new Kasten::ChecksumToolViewFactory(), new Kasten::ChecksumToolFactory() );

@@ -25,7 +25,11 @@
 // plugin
 #include "kastentoolviewwidget.h"
 // Kasten
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+#include <Kasten2/AbstractToolViewFactory>
+#include <Kasten2/AbstractToolFactory>
+#include <Kasten2/AbstractToolView>
+#elif KASTEN_VERSION == 1
 #include <Kasten1/AbstractToolViewFactory>
 #include <Kasten1/AbstractToolFactory>
 #include <Kasten1/AbstractToolView>

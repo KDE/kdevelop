@@ -27,7 +27,10 @@
 // Okteta Kasten
 #include <bytearrayview.h>
 // Kasten
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+#include <Kasten2/AbstractToolView>
+#include <Kasten2/AbstractTool>
+#elif KASTEN_VERSION == 1
 #include <Kasten1/AbstractToolView>
 #include <Kasten1/AbstractTool>
 #else

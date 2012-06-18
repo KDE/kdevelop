@@ -33,9 +33,15 @@
 namespace KDevelop
 {
 
+#if KASTEN_VERSION == 2
+OktetaView::OktetaView( OktetaDocument* document, Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer )
+  : Sublime::View( document, View::TakeOwnership ),
+    mByteArrayView( new Kasten::ByteArrayView( document->byteArrayDocument(), viewProfileSynchronizer ) )
+#else
 OktetaView::OktetaView( OktetaDocument* document )
   : Sublime::View( document, View::TakeOwnership ),
     mByteArrayView( new Kasten::ByteArrayView( document->byteArrayDocument() ) )
+#endif
 {
 }
 
