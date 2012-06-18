@@ -55,10 +55,10 @@ class OktetaWidget : public QWidget, public KXMLGUIClient
         void editSignals();
         void editTabOrder();
 #endif
-  protected:
-    void setupActions();
+  private:
+    void setupActions(OktetaPlugin* plugin);
 
-  protected:
+  private:
     Kasten::ByteArrayView* mByteArrayView;
     // TODO: move this to the plugin, per mainwindow
     QList<Kasten::AbstractXmlGuiController*> mControllers;

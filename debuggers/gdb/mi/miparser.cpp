@@ -27,18 +27,18 @@ using namespace GDBMI;
 
 #define MATCH(tok) \
   do { \
-      if (lex->lookAhead(0) != (tok)) \
+      if (m_lex->lookAhead(0) != (tok)) \
           return false; \
   } while (0)
 
 #define ADVANCE(tok) \
   do { \
       MATCH(tok); \
-      lex->nextToken(); \
+      m_lex->nextToken(); \
   } while (0)
 
 MIParser::MIParser()
-    : lex(0)
+    : m_lex(0)
 {
 }
 
@@ -48,17 +48,17 @@ MIParser::~MIParser()
 
 Record *MIParser::parse(FileSymbol *file)
 {
-    lex = 0;
+    m_lex = 0;
 
     Record *record = 0;
 
-    TokenStream *tokenStream = lexer.tokenize(file);
+    TokenStream *tokenStream = m_lexer.tokenize(file);
     if (!tokenStream)
         return 0;
 
-    lex = file->tokenStream = tokenStream;
+    m_lex = file->tokenStream = tokenStream;
 
-    switch (lex->lookAhead()) {
+    switch (m_lex->lookAhead()) {
         case '~':
         case '@':
         case '&':
@@ -89,9 +89,9 @@ bool MIParser::parsePrompt(Record *&record)
 {
     ADVANCE('(');
     MATCH(Token_identifier);
-    if (lex->currentTokenText() != "gdb")
+    if (m_lex->currentTokenText() != "gdb")
         return false;
-    lex->nextToken();
+    m_lex->nextToken();
     ADVANCE(')');
 
     record = new PromptRecord;
@@ -102,12 +102,12 @@ bool MIParser::parseStreamRecord(Record *&record)
 {
     std::auto_ptr<StreamRecord> stream(new StreamRecord);
 
-    switch (lex->lookAhead()) {
+    switch (m_lex->lookAhead()) {
         case '~':
         case '@':
         case '&': {
-            stream->reason = lex->lookAhead();
-            lex->nextToken();
+            stream->reason = m_lex->lookAhead();
+            m_lex->nextToken();
             MATCH(Token_string_literal);
             stream->message = parseStringLiteral();
             record = stream.release();
@@ -123,14 +123,14 @@ bool MIParser::parseStreamRecord(Record *&record)
 
 bool MIParser::parseResultRecord(Record *&record)
 {
-    char c = lex->lookAhead();
+    char c = m_lex->lookAhead();
     if (c != '^' && c != '*' && c != '=' && c != '+')
         return false;
-    lex->nextToken();
+    m_lex->nextToken();
 
     MATCH(Token_identifier);
-    QString reason = lex->currentTokenText();
-    lex->nextToken();
+    QString reason = m_lex->currentTokenText();
+    m_lex->nextToken();
 
     std::auto_ptr<ResultRecord> res(new ResultRecord);
     res->reason = reason;
@@ -145,12 +145,12 @@ bool MIParser::parseResultRecord(Record *&record)
         res->subkind = ResultRecord::GeneralNotification;        
     }
                 
-    if (lex->lookAhead() != ',') {
+    if (m_lex->lookAhead() != ',') {
         record = res.release();
         return true;
     }
 
-    lex->nextToken();
+    m_lex->nextToken();
     
     if (!parseCSV(*res))
         return false;
@@ -162,16 +162,16 @@ bool MIParser::parseResultRecord(Record *&record)
 bool MIParser::parseResult(Result *&result)
 {
     MATCH(Token_identifier);
-    QString variable = lex->currentTokenText();
-    lex->nextToken();
+    QString variable = m_lex->currentTokenText();
+    m_lex->nextToken();
 
     std::auto_ptr<Result> res(new Result);
     res->variable = variable;
 
-    if (lex->lookAhead() != '=')
+    if (m_lex->lookAhead() != '=')
         return true;
 
-    lex->nextToken();
+    m_lex->nextToken();
 
     Value *value = 0;
     if (!parseValue(value))
@@ -187,7 +187,7 @@ bool MIParser::parseValue(Value *&value)
 {
     value = 0;
 
-    switch (lex->lookAhead()) {
+    switch (m_lex->lookAhead()) {
         case Token_string_literal: {
             value = new StringLiteralValue(parseStringLiteral());
         }
@@ -226,7 +226,7 @@ bool MIParser::parseList(Value *&value)
     // Note: can't use parseCSV here because of nested
     // "is this Value or Result" guessing. Too lazy to factor
     // that out too using function pointers.
-    int tok = lex->lookAhead();
+    int tok = m_lex->lookAhead();
     while (tok && tok != ']') {
         Result *result = 0;
         Value *val = 0;
@@ -247,10 +247,10 @@ bool MIParser::parseList(Value *&value)
         }
         lst->results.append(result);
 
-        if (lex->lookAhead() == ',')
-            lex->nextToken();
+        if (m_lex->lookAhead() == ',')
+            m_lex->nextToken();
 
-        tok = lex->lookAhead();
+        tok = m_lex->lookAhead();
     }
     ADVANCE(']');
 
@@ -278,7 +278,7 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
    if (start)
         ADVANCE(start);
 
-    int tok = lex->lookAhead();
+    int tok = m_lex->lookAhead();
     while (tok) {
         if (end && tok == end)
             break;
@@ -290,10 +290,10 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
         value.results.append(result);
         value.results_by_name.insert(result->variable, result);      
 
-        if (lex->lookAhead() == ',')
-            lex->nextToken();
+        if (m_lex->lookAhead() == ',')
+            m_lex->nextToken();
 
-        tok = lex->lookAhead();
+        tok = m_lex->lookAhead();
     }
 
     if (end)
@@ -305,7 +305,7 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
                         
 QString MIParser::parseStringLiteral()
 {
-    QByteArray messageByteArray = lex->currentTokenText();
+    QByteArray messageByteArray = m_lex->currentTokenText();
     QString message = QString::fromUtf8(messageByteArray.constData());
 
     int length = message.length();
@@ -353,7 +353,7 @@ QString MIParser::parseStringLiteral()
         }        
     }
 
-    lex->nextToken();
+    m_lex->nextToken();
     return message2;
 }
 
