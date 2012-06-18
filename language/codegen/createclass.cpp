@@ -54,7 +54,7 @@ namespace KDevelop {
 struct CreateClassAssistantPrivate
 {
     CreateClassAssistantPrivate();
-    
+
     KUrl baseUrl;
     ClassGenerator * generator;
     ClassIdentifierPage* classIdentifierPageWidget;
@@ -262,7 +262,7 @@ struct ClassGeneratorPrivate
 
     QMap<QString, KUrl> fileUrls;
     QMap<QString, SimpleCursor> filePositions;
-    
+
     QString headerFileType;
     QString implementationFileType;
     ClassDescription description;
@@ -829,7 +829,7 @@ struct OutputPagePrivate
     Ui::OutputLocationDialog* output;
     CreateClassAssistant* parent;
     QSignalMapper urlChangedMapper;
-    
+
     QHash<QString, KUrlRequester*> outputFiles;
     QHash<QString, KIntNumInput*> outputLines;
     QHash<QString, KIntNumInput*> outputColumns;
@@ -852,40 +852,40 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
-    
+
     foreach (const QString& text, d->parent->generator()->fileLabels())
     {
         QLabel* label = new QLabel(text, this);
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
         requester->fileDialog()->setOperationMode( KFileDialog::Saving );
-        
+
         d->urlChangedMapper.setMapping(requester, text);
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
-        
+
         d->output->urlFormLayout->addRow(label, requester);
         d->outputFiles.insert(text, requester);
-        
+
         label = new QLabel(text, this);
         QHBoxLayout* layout = new QHBoxLayout(this);
-        
+
         KIntNumInput* line = new KIntNumInput(this);
         line->setPrefix(i18n("Line: "));
         line->setValue(0);
         line->setMinimum(0);
         layout->addWidget(line);
-       
+
         KIntNumInput* column = new KIntNumInput(this);
         column->setPrefix(i18n("Column: "));
         column->setValue(0);
         column->setMinimum(0);
         layout->addWidget(column);
-        
+
         d->output->positionFormLayout->addRow(label, layout);
         d->outputLines.insert(text, line);
         d->outputColumns.insert(text, column);
     }
-    
+
     connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
 }
@@ -904,7 +904,7 @@ void OutputPage::initializePage()
 void OutputPage::updateFileNames()
 {
     QHash<QString, KUrl> urls = d->parent->generator()->fileUrlsFromBase(d->parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
-    
+
     for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         if (urls.contains(it.key()))
@@ -927,12 +927,12 @@ void OutputPage::updateFileRange (const QString& field)
     {
         return;
     }
-    
+
     QString url = d->outputFiles[field]->url().toLocalFile();
     QFileInfo info(url);
-    
+
     d->updateRanges(d->outputLines[field], d->outputColumns[field], info.exists() && !info.isDir());
-    
+
     emit isValid(isComplete());
 }
 
@@ -953,7 +953,7 @@ bool OutputPage::validatePage()
     for (QHash<QString,KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         d->parent->generator()->setFileUrl(it.key(), it.value()->url());
-        
+
         int line = d->outputLines[it.key()]->value();
         int column = d->outputColumns[it.key()]->value();
         d->parent->generator()->setFilePosition(it.key(), SimpleCursor(line, column));

@@ -30,18 +30,17 @@ class OverridesPage;
 
 /**
  * @brief A language-specific helper interface for creating new classes
- * 
+ *
  * This interface contains method that the "create class" dialog cannot determine
- * by itself and which cannot be specified in a template. 
- * 
+ * by itself and which cannot be specified in a template.
+ *
  * They are mostly taken from CreateClassAssistant
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT ICreateClassHelper
 {
-
 public:
     virtual ~ICreateClassHelper();
-    
+
     virtual ClassIdentifierPage* identifierPage() = 0;
     virtual OverridesPage* overridesPage() = 0;
     virtual ClassGenerator* generator() = 0;

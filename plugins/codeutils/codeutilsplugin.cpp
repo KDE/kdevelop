@@ -58,7 +58,7 @@ int debugArea() { static int s_area = KDebug::registerArea("kdevcodeutils"); ret
 
 #define debug() kDebug(debugArea())
 
-CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& ) 
+CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( CodeUtilsPluginFactory::componentData(), parent )
 {
     setXMLFile( "kdevcodeutils.rc" );
@@ -76,7 +76,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
                                 "parameter of a function."
                                 "</p>" ) );
     action->setIcon( KIcon( "documentinfo" ) );
-    
+
     action = actionCollection()->addAction( "class_from_template" );
     action->setText( i18n( "Create Class from &Template" ) );
     action->setShortcut( i18n( "Alt+Shift+t" ) );
@@ -178,7 +178,7 @@ CodeUtilsPlugin::~CodeUtilsPlugin()
 ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
 {
     ContextMenuExtension ext;
-    
+
     if (context->hasType(Context::ProjectItemContext))
     {
         if (ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context))
@@ -187,7 +187,7 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
             {
                 KAction* action = new KAction(KIcon("code-class"), i18n("Create Class from &Template"), actionCollection() );
                 action->setData(projectContext->items().first()->url());
-                
+
                 connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
                 ext.addAction(ContextMenuExtension::FileGroup, action);
             }

@@ -34,94 +34,95 @@ if (property == #name) return QVariant::fromValue(object.name);
 
 namespace KDevelop {
 
-    struct VariableDescription
+struct VariableDescription
+{
+    VariableDescription();
+    VariableDescription(const QString& type, const QString& name);
+    VariableDescription(const DeclarationPointer& declaration);
+
+    QString name;
+    QString type;
+};
+
+typedef QList<VariableDescription> VariableDescriptionList;
+
+struct FunctionDescription
+{
+    FunctionDescription();
+    FunctionDescription(const QString& name, const VariableDescriptionList& arguments, const VariableDescriptionList& returnArguments);
+    FunctionDescription(const DeclarationPointer& declaration);
+
+    QString name;
+    QList<VariableDescription> arguments;
+    QList<VariableDescription> returnArguments;
+
+    bool isConstructor;
+    bool isDestructor;
+    bool isVirtual;
+    bool isStatic;
+};
+
+typedef QList<FunctionDescription> FunctionDescriptionList;
+
+struct InheritanceDescription
+{
+    QString inheritanceMode;
+    QString baseType;
+};
+
+typedef QList<InheritanceDescription> InheritanceDescriptionList;
+
+struct ClassDescription
+{
+    ClassDescription();
+    ClassDescription(const QString& name);
+
+    QString name;
+    InheritanceDescriptionList baseClasses;
+    VariableDescriptionList members;
+    FunctionDescriptionList methods;
+};
+
+class ClassDescriptionModel : public QAbstractItemModel
+{
+    Q_OBJECT
+    Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
+
+public:
+    enum TopLevelRow
     {
-        VariableDescription();
-        VariableDescription(const QString& type, const QString& name);
-        VariableDescription(const DeclarationPointer& declaration);
-        
-        QString name;
-        QString type;
+        ClassNameRow = 0,
+        InheritanceRow,
+        MembersRow,
+        FunctionsRow,
+        TopLevelRowCount
     };
-    
-    typedef QList<VariableDescription> VariableDescriptionList;
-    
-    struct FunctionDescription
-    {
-        FunctionDescription();
-        FunctionDescription(const QString& name, const VariableDescriptionList& arguments, const VariableDescriptionList& returnArguments);
-        FunctionDescription(const DeclarationPointer& declaration);
-        
-        QString name;
-        QList<VariableDescription> arguments;
-        QList<VariableDescription> returnArguments;
-        
-        bool isConstructor;
-        bool isDestructor;
-        bool isVirtual;
-        bool isStatic;
-    };
-    
-    typedef QList<FunctionDescription> FunctionDescriptionList;
-    
-    struct InheritanceDescription
-    {
-        QString inheritanceMode;
-        QString baseType;
-    };
-    
-    typedef QList<InheritanceDescription> InheritanceDescriptionList;
-    
-    struct ClassDescription
-    {
-        ClassDescription();
-        ClassDescription(const QString& name);
-        
-        QString name;
-        InheritanceDescriptionList baseClasses;
-        VariableDescriptionList members;
-        FunctionDescriptionList methods;
-    };
-    
-    class ClassDescriptionModel : public QAbstractItemModel
-    {
-        Q_OBJECT
-        Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
-        
-    public:
-        enum TopLevelRow
-        {
-            ClassNameRow = 0,
-            InheritanceRow,
-            MembersRow,
-            FunctionsRow,
-            TopLevelRowCount
-        };
-        
-        explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
-        explicit ClassDescriptionModel(QObject* parent = 0);
-        virtual ~ClassDescriptionModel();
-        
-        virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-        virtual QModelIndex parent(const QModelIndex& child) const;
-        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
-        virtual Qt::ItemFlags flags(const QModelIndex& index) const;        
-        
-        ClassDescription description() const;
-        void setDescription(const ClassDescription& description);
-        
-        virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-        
-        virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
-        virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
-        void moveRow(int source, int destination, const QModelIndex& parent);
-        
-    private:
-        class ClassDescriptionModelPrivate* const d;
-    };
+
+    explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
+    explicit ClassDescriptionModel(QObject* parent = 0);
+    virtual ~ClassDescriptionModel();
+
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex& child) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+
+    ClassDescription description() const;
+    void setDescription(const ClassDescription& description);
+
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+
+    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    void moveRow(int source, int destination, const QModelIndex& parent);
+
+private:
+    class ClassDescriptionModelPrivate* const d;
+};
+
 }
 
 Q_DECLARE_METATYPE(KDevelop::VariableDescription)
@@ -131,7 +132,7 @@ Q_DECLARE_METATYPE(KDevelop::FunctionDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
-    
+
 GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
     GRANTLEE_LOOKUP_PROPERTY(type)

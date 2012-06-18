@@ -28,17 +28,18 @@
 class KComponentData;
 namespace KDevelop
 {
+
 class TemplatesModelPrivate;
 
 /**
  * @brief A convenience class for loading templates using .kdevtemplate files
- * 
- * It loads template archives, extracts and stores their description files, and 
- * displays them as a three-level tree structure. 
- * 
+ *
+ * It loads template archives, extracts and stores their description files, and
+ * displays them as a three-level tree structure.
+ *
  * The locations for loading and storing files are determined from the componentData()
- * using resource types set by setDescriptionResourceType() and setTemplateResourceType(). 
- * 
+ * using resource types set by setDescriptionResourceType() and setTemplateResourceType().
+ *
  * @sa ITemplateProvider::templatesModel()
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
@@ -51,57 +52,57 @@ public:
         IconNameRole = Qt::UserRole + 2,
         CommentRole = Qt::UserRole + 3
     };
-    
+
     /**
      * Creates a new templates model
-     * 
+     *
      * @param componentData the component data used for determining resource locations
      * @param parent parent object, defaults to 0.
      **/
     explicit TemplatesModel(const KComponentData& componentData, QObject* parent = 0);
-    
+
     /**
      * Destructor
      *
      **/
     virtual ~TemplatesModel();
-    
+
     /**
      * Reloads all found templates
      **/
     virtual void refresh();
-    
+
     QString loadTemplateFile(const QString& fileName);
-    
+
     /**
      * Finds the model index of the template file @p fileName.
-     * 
-     * For convenience, this function returns the found template index, as well as all of its ancestors. 
-     * The indexes are ordered from the top-level ancestor to the actual index of the template. 
+     *
+     * For convenience, this function returns the found template index, as well as all of its ancestors.
+     * The indexes are ordered from the top-level ancestor to the actual index of the template.
      * This is useful for managing selection when multiple views display different level of the model.
-     * 
+     *
      * @param fileName the template file name
      **/
     QModelIndexList templateIndexes(const QString& fileName);
-    
+
     /**
      * Sets the resource type for template descriptions to @p type
-     * 
+     *
      * @param type the new resource type for template descriptions
      * @sa descriptionResourceType(), KStandardDirs
      **/
     void setDescriptionResourceType(const QByteArray& type);
-    
+
     /**
      * Returns the current resource type for template descriptions
      *
      * @sa setDescriptionResourceType()
      **/
     QByteArray descriptionResourceType() const;
-    
+
     /**
      * Sets the resource type for template archives to @p type
-     * 
+     *
      * @param type the new resource type for template archives
      * @sa templateResourceType(), KStandardDirs
      **/
@@ -112,27 +113,27 @@ public:
      * @sa setTemplateResourceType()
      **/
     QByteArray templateResourceType() const;
-    
+
     /**
-     * @return the component data used by this model. 
+     * @return the component data used by this model.
      **/
     KComponentData componentData();
-        
+
 protected:
     /**
      * Extracts .kdevtemplate files from all available template archives and saves them to a location
-     * determined by descriptionResourceType(). 
+     * determined by descriptionResourceType().
      **/
     void extractTemplateDescriptions();
-    
+
     /**
-     * Checks whether the template @descriptionName exists. 
+     * Checks whether the template @descriptionName exists.
      *
      * @param descriptionName the name of the stored template description (.kdevtemplate) file
      * @return true if a matching template file exists, false otherwise
      **/
     bool templateExists(const QString& descriptionName);
-    
+
     /**
      * Creates a model item for the template @p name in category @p category
      *
@@ -141,7 +142,7 @@ protected:
      * @return the created item
      **/
     QStandardItem *createItem(const QString &name, const QString &category);
-    
+
 private:
     TemplatesModelPrivate* const d;
 };

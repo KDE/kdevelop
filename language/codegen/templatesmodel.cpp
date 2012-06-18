@@ -35,24 +35,26 @@
 using namespace KDevelop;
 
 class KDevelop::TemplatesModelPrivate
-{    
+{
 public:
     TemplatesModelPrivate(const KComponentData& componentData);
-    
+
     QByteArray descriptionResourceType;
     QByteArray templateResourceType;
     QMap<QString, QStandardItem*> templateItems;
     KComponentData componentData;
 };
 
-TemplatesModelPrivate::TemplatesModelPrivate(const KComponentData& componentData) : componentData(componentData)
+TemplatesModelPrivate::TemplatesModelPrivate(const KComponentData& componentData)
+: componentData(componentData)
 {
 
 }
 
 
-TemplatesModel::TemplatesModel(const KComponentData& componentData, QObject* parent) : QStandardItemModel(parent), 
-d(new TemplatesModelPrivate(componentData))
+TemplatesModel::TemplatesModel(const KComponentData& componentData, QObject* parent)
+: QStandardItemModel(parent)
+, d(new TemplatesModelPrivate(componentData))
 {
 
 }
@@ -87,14 +89,13 @@ void TemplatesModel::refresh()
     foreach (const QString &templateDescription, templateDescriptions)
     {
         if( templateExists( templateDescription ) ) {
-
             KConfig templateConfig(templateDescription);
             KConfigGroup general(&templateConfig, "General");
             QString name = general.readEntry("Name");
             QString category = general.readEntry("Category");
             QString icon = general.readEntry("Icon");
             QString comment = general.readEntry("Comment");
-    
+
             QStandardItem *templateItem = createItem(name, category);
             templateItem->setData(templateDescription, DescriptionFileRole);
             templateItem->setData(icon, IconNameRole);
@@ -116,16 +117,15 @@ QStandardItem *TemplatesModel::createItem(const QString& name, const QString& ca
     foreach (const QString& entry, path)
     {
         currentPath << entry;
-        if (!d->templateItems.contains(currentPath.join("/")))
-        {
+        if (!d->templateItems.contains(currentPath.join("/"))) {
             QStandardItem *item = new QStandardItem(entry);
             item->setEditable(false);
             parent->appendRow(item);
             d->templateItems[currentPath.join("/")] = item;
             parent = item;
-        }
-        else
+        } else {
             parent = d->templateItems[currentPath.join("/")];
+        }
     }
 
     QStandardItem *templateItem = new QStandardItem(name);
@@ -145,7 +145,7 @@ void TemplatesModel::extractTemplateDescriptions()
     foreach (const QString &archName, templateArchives)
     {
         kDebug() << "processing template" << archName;
-        
+
         KArchive* templateArchive;
         if (QFileInfo(archName).completeSuffix() == "zip")
         {
@@ -155,30 +155,30 @@ void TemplatesModel::extractTemplateDescriptions()
         {
             templateArchive = new KTar(archName);
         }
-        
+
         if (templateArchive->open(QIODevice::ReadOnly))
         {
             /*
              * This class looks for template description files in the following order
-             * 
+             *
              * - "basename.kdevtemplate"
              * - "*.kdevtemplate"
              * - "basename.desktop"
              * - "*.desktop"
-             * 
+             *
              * This is done because application templates can contain .desktop files used by the application
-             * so the kdevtemplate suffix must have priority. 
+             * so the kdevtemplate suffix must have priority.
              */
             QFileInfo templateInfo(archName);
             const KArchiveEntry *templateEntry =
                 templateArchive->directory()->entry(templateInfo.baseName() + ".kdevtemplate");
-                
+
             if (!templateEntry || !templateEntry->isFile())
             {
                 /*
-                 * First, if the .kdevtemplate file is not found by name, 
+                 * First, if the .kdevtemplate file is not found by name,
                  * we check all the files in the archive for any .kdevtemplate file
-                 * 
+                 *
                  * This is needed because kde-files.org renames downloaded files
                  */
                 foreach (const QString& entryName, templateArchive->directory()->entries())
@@ -190,12 +190,12 @@ void TemplatesModel::extractTemplateDescriptions()
                     }
                 }
             }
-                
+
             if (!templateEntry || !templateEntry->isFile())
             {
                 templateEntry = templateArchive->directory()->entry(templateInfo.baseName() + ".desktop");
             }
-                
+
             if (!templateEntry || !templateEntry->isFile())
             {
                 foreach (const QString& entryName, templateArchive->directory()->entries())
@@ -216,14 +216,14 @@ void TemplatesModel::extractTemplateDescriptions()
 
             kDebug() << "copy template description to" << localDescriptionsDir;
             templateFile->copyTo(localDescriptionsDir);
-            
+
             /*
-             * Rename the extracted description 
+             * Rename the extracted description
              * so that its basename matches the basename of the template archive
              */
             QFileInfo descriptionInfo(localDescriptionsDir + templateEntry->name());
             QFile::rename(
-                descriptionInfo.absoluteFilePath(), 
+                descriptionInfo.absoluteFilePath(),
                 localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix()
             );
         }
@@ -340,7 +340,7 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     }
 
     refresh();
-    
+
     return destination;
 }
 

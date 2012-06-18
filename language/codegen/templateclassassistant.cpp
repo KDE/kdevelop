@@ -75,48 +75,48 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
 , d(new TemplateSelectionPagePrivate)
 {
     d->assistant = parent;
-    
+
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
-    
+
     d->model = new TemplatesModel(ICore::self()->componentData());
     d->model->setTemplateResourceType("filetemplates");
     d->model->setDescriptionResourceType("filetemplate_descriptions");
     d->model->refresh();
-    
+
     d->ui->languageView->setModel(d->model);
     d->ui->templateView->setModel(d->model);
-    
-    connect (d->ui->languageView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
+
+    connect (d->ui->languageView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
         this, SLOT(currentLanguageChanged(QModelIndex)));
-    
-    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), 
+
+    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
         this, SLOT(currentTemplateChanged(QModelIndex)));
-    
+
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
-    
+
     QModelIndex languageIndex = d->model->index(0, 0);
     QModelIndex templateIndex = d->model->index(0, 0, languageIndex);
-    
+
     while (templateIndex.child(0, 0).isValid())
     {
         templateIndex = templateIndex.child(0, 0);
     }
-    
+
     IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl());
     if (project)
     {
         KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
         QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
-        
+
         QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate);
-        
+
         if (!indexes.isEmpty())
         {
             templateIndex = indexes.first();
             QStandardItem* item = d->model->itemFromIndex(templateIndex);
-            
+
             while (item->parent() && item->parent() != d->model->invisibleRootItem())
             {
                 item = item->parent();
@@ -124,7 +124,7 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
             languageIndex = item->index();
         }
     }
-    
+
     d->ui->languageView->setCurrentIndex(languageIndex);
     d->ui->templateView->setCurrentIndex(templateIndex);
 }
@@ -201,7 +201,7 @@ struct ConfigEntry
     QString label;
     QVariant value;
     QString context;
-    
+
     QString maxValue;
     QString minValue;
     QString type;
@@ -214,21 +214,21 @@ public:
     QList<ConfigEntry> entries;
     QHash<QString, QWidget*> controls;
     QHash<QString, QByteArray> typeProperties;
-    
+
     ConfigEntry readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout);
 };
 
 ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout)
 {
     ConfigEntry entry;
-    
+
     entry.name = element.attribute("name");
     entry.type = element.attribute("type", "String");
-    
+
     for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
     {
         QString tag = e.tagName();
-        
+
         if (tag == "label")
         {
             entry.label = e.text();
@@ -241,7 +241,7 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
         {
             entry.label = e.text();
         }
-        else if ( tag == "min" ) 
+        else if ( tag == "min" )
         {
             entry.minValue = e.text();
         }
@@ -255,9 +255,9 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
             entry.value = gen->renderString(e.text());
         }
     }
-    
+
     kDebug() << "Read entry" << entry.name << "with default value" << entry.value;
-    
+
     QLabel* label = new QLabel(entry.label, parent);
     QWidget* control = 0;
     const QString type = entry.type;
@@ -288,14 +288,14 @@ ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QW
     {
         kDebug() << "Unrecognized option type" << entry.type;
     }
-    
+
     if (control)
     {
         layout->addRow(label, control);
         entries << entry;
         controls.insert(entry.name, control);
     }
-    
+
     return entry;
 }
 
@@ -304,7 +304,7 @@ TemplateOptionsPage::TemplateOptionsPage(TemplateClassAssistant* parent, Qt::Win
 , d(new TemplateOptionsPagePrivate)
 {
     d->assistant = parent;
-    
+
     d->typeProperties.insert("String", "text");
     d->typeProperties.insert("Int", "value");
     d->typeProperties.insert("Bool", "checked");
@@ -318,11 +318,11 @@ TemplateOptionsPage::~TemplateOptionsPage()
 void TemplateOptionsPage::loadXML(const QByteArray& contents)
 {
     /*
-     * Copied from kconfig_compiler.kcfg 
+     * Copied from kconfig_compiler.kcfg
      */
-    
+
     QLayout* layout = new QVBoxLayout();
-    
+
     QDomDocument doc;
     QString errorMsg;
     int errorRow;
@@ -332,30 +332,30 @@ void TemplateOptionsPage::loadXML(const QByteArray& contents)
         kDebug() << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
         return;
     }
-    
+
     QDomElement cfgElement = doc.documentElement();
     if ( cfgElement.isNull() ) {
         kDebug() << "No document in kcfg file";
         return;
     }
-    
+
     QDomNodeList groups = cfgElement.elementsByTagName("group");
     for (int i = 0; i < groups.size(); ++i)
     {
         QDomElement group = groups.at(i).toElement();
-        
+
         QGroupBox* box = new QGroupBox(this);
         box->setTitle(group.attribute("name"));
-        
+
         QFormLayout* formLayout = new QFormLayout;
-        
+
         QDomNodeList entries = group.elementsByTagName("entry");
         for (int j = 0; j < entries.size(); ++j)
         {
             QDomElement entry = entries.at(j).toElement();
             ConfigEntry cfgEntry = d->readEntry(entry, box, formLayout);
         }
-        
+
         box->setLayout(formLayout);
         layout->addWidget(box);
     }
@@ -365,17 +365,17 @@ void TemplateOptionsPage::loadXML(const QByteArray& contents)
 QVariantHash TemplateOptionsPage::templateOptions() const
 {
     QVariantHash values;
-    
+
     foreach (const ConfigEntry& entry, d->entries)
     {
         Q_ASSERT(d->controls.contains(entry.name));
         Q_ASSERT(d->typeProperties.contains(entry.type));
-        
+
         values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type]));
     }
-    
+
     kDebug() << values.size() << d->entries.size();
-    
+
     return values;
 }
 
@@ -395,12 +395,12 @@ ClassMembersPage::ClassMembersPage(TemplateClassAssistant* parent)
 
     d->ui = new Ui::ClassMembersPage;
     d->ui->setupUi(this);
-    
+
     connect (d->ui->topButton, SIGNAL(clicked(bool)), SLOT(moveTop()));
     connect (d->ui->upButton, SIGNAL(clicked(bool)), SLOT(moveUp()));
     connect (d->ui->downButton, SIGNAL(clicked(bool)), SLOT(moveDown()));
     connect (d->ui->bottomButton, SIGNAL(clicked(bool)), SLOT(moveBottom()));
-    
+
     connect (d->ui->addItemButton, SIGNAL(clicked(bool)), SLOT(addItem()));
     connect (d->ui->removeItemButton, SIGNAL(clicked(bool)), SLOT(removeItem()));
 }
@@ -415,10 +415,10 @@ void ClassMembersPage::setDescription(const ClassDescription& description)
     d->model = new ClassDescriptionModel(description, this);
     d->ui->itemView->setModel(d->model);
     d->ui->itemView->setRootIndex(d->model->index(ClassDescriptionModel::MembersRow, 0));
-    
+
     connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(currentSelectionChanged(QItemSelection)));
-    
+
     currentSelectionChanged(QItemSelection());
 }
 
@@ -433,19 +433,19 @@ void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
     bool up = false;
     bool down = false;
     bool remove = false;
-    
+
     if (!current.indexes().isEmpty())
     {
         up = current.indexes().first().row() > 0;
         down = current.indexes().first().row() < rows()-1;
         remove = true;
     }
-    
+
     d->ui->topButton->setEnabled(up);
     d->ui->upButton->setEnabled(up);
     d->ui->downButton->setEnabled(down);
     d->ui->bottomButton->setEnabled(down);
-    
+
     d->ui->removeItemButton->setEnabled(remove);
 }
 
@@ -460,19 +460,19 @@ void ClassMembersPage::moveRowTo(int destination, bool relative)
     Q_ASSERT(d->model);
     Q_ASSERT(d->ui->itemView->selectionModel());
     QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
-    
+
     if (indexes.isEmpty())
     {
         return;
     }
-    
+
     int source = indexes.first().row();
-    
+
     if (relative)
     {
         destination = source + destination;
     }
-    
+
     d->model->moveRow(source, destination, d->ui->itemView->rootIndex());
     d->ui->itemView->setCurrentIndex(d->model->index(destination, 0, d->ui->itemView->rootIndex()));
 }
@@ -537,18 +537,18 @@ void TemplateClassAssistant::setup()
     TemplateSelectionPage* page = newTemplateSelectionPage();
     d->templateSelectionPage = addPage(page, i18n("Language and Template"));
     connect (this, SIGNAL(accepted()), page, SLOT(saveConfig()));
-    
+
     /*
      * All assistant pages except the first one require the helper to already be set.
      * However, we can only choose the helper aften the language is selected,
-     * so other pages cannot be loaded here yet. 
-     * 
+     * so other pages cannot be loaded here yet.
+     *
      * OTOH, having only one page disables the "next" button and enables the "finish" button.
      * This is not wanted, so we create a dummy page and delete it when "next" is clicked
      */
     QWidget* dummy = new QWidget(this);
     d->dummyPage = addPage(dummy, QLatin1String("Dummy Page"));
-    
+
     setCurrentPage(d->templateSelectionPage);
 }
 
@@ -558,55 +558,55 @@ void TemplateClassAssistant::next()
     {
         kDebug() << "Current page is template selection";
         QString description = currentPage()->widget()->property("selectedTemplate").toString();
-        
+
         kDebug() << "Chosen template is" << description;
-        
+
         KConfig config(description);
         KConfigGroup group(&config, "General");
-        
+
         kDebug() << "Template name is" << group.readEntry("Name");
-        
+
         QString languageName = group.readEntry("Category").split('/').first();
-        
+
         ILanguage* language = ICore::self()->languageController()->language(languageName);
-        
+
         if (!language)
         {
             kDebug() << "No language named" << languageName;
             return;
         }
-        
+
         d->helper = language->languageSupport()->createClassHelper(this);
-        
+
         if (!d->helper)
         {
             kDebug() << "No class creation helper for language" << languageName;
             return;
         }
-        
+
         ClassGenerator* generator = d->helper->generator();
         if (!generator)
         {
             kDebug() << "No generator for language" << languageName;
             return;
         }
-        
-        
+
+
         setGenerator(generator);
-        
+
         TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator);
         if (templateGenerator)
         {
             kDebug() << "Class generator uses templates";
             templateGenerator->setTemplateDescription(description);
         }
-        
+
         removePage(d->dummyPage);
         KDevelop::CreateClassAssistant::setup();
-        
+
         ClassMembersPage* membersPage = new ClassMembersPage(this);
         d->membersPage = addPage(membersPage, i18n("Data Members"));
-        
+
         if (templateGenerator && templateGenerator->hasCustomOptions())
         {
             kDebug() << "Class generator has custom options";
@@ -614,10 +614,10 @@ void TemplateClassAssistant::next()
             d->templateOptionsPage = addPage(options, i18n("Template Options"));
             connect (this, SIGNAL(accepted()), this, SLOT(updateTemplateOptions()));
         }
-        
+
         return;
     }
-    
+
     KDevelop::CreateClassAssistant::next();
 
     if (currentPage() == d->membersPage)
@@ -629,7 +629,7 @@ void TemplateClassAssistant::next()
         }
         d->membersPage->widget()->setProperty("description", QVariant::fromValue(desc));
     }
-    
+
     if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
         TemplateOptionsPage* options = qobject_cast<TemplateOptionsPage*>(d->templateOptionsPage->widget());
@@ -645,22 +645,22 @@ void TemplateClassAssistant::accept()
     {
         TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
         Q_ASSERT(templateGenerator);
-        
+
         kDebug() << d->templateOptionsPage->widget()->property("templateOptions");
         kDebug() << d->templateOptionsPage->widget()->property("templateOptions").toHash();
         templateGenerator->addVariables(d->templateOptionsPage->widget()->property("templateOptions").toHash());
     }
-    
+
     ClassDescription desc = d->membersPage->widget()->property("description").value<ClassDescription>();
     generator()->setDescription(desc);
-    
+
     CreateClassAssistant::accept();
 }
 
 
 void TemplateClassAssistant::updateTemplateOptions()
 {
-    
+
 }
 
 TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()

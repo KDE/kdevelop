@@ -182,22 +182,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 
     /**
      * Should return user-readable labels for all files for the gives class-name
-     * 
+     *
      * The default implementation returns "Header" and "Implementation"
      **/
     virtual QStringList fileLabels();
-    
+
     /**
      * Should return the suggested urls of all files for the gives class-name
      * The keys should match labels returned by fileLabels()
-     * 
+     *
      * The default implementation calls headerUrlFromBase() and implementationUrlFromBase()
      *
      * @param baseUrl The base url, where the files should be located
      * @param toLowor Whether filenames should be all lowercase, defaults to true.
      **/
     virtual QHash<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
-    
+
     /**
      *Should return the suggested url of the header file for the given class-name
      */
@@ -213,7 +213,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * Set the URL where the file of type @p fileType will be implemented
      **/
     void setFileUrl(const QString& fileType, const KUrl url);
-    
+
     /**
      * Set the URL where the header will be implemented
      */
@@ -228,7 +228,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * Set the position where the contents of @p fileType are to be inserted
      **/
     void setFilePosition(const QString& fileType, const SimpleCursor& position);
-    
+
     /**
      * Set the position where the header is to be inserted
      */
@@ -261,9 +261,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * \return The class to be generated as a Type
      */
     virtual StructureType::Ptr objectType() const = 0;
-    
+
     virtual void setDescription(const ClassDescription& description);
-    
+
     virtual ClassDescription description();
 
   protected:
@@ -314,13 +314,13 @@ public:
      * \return The generator that this assistant will use
      */
     virtual ClassGenerator * generator();
-    
+
     void setGenerator(ClassGenerator* generator);
 
     virtual ClassIdentifierPage* newIdentifierPage();
 
     virtual OverridesPage* newOverridesPage();
-    
+
     /**
      * Returns the base url from which the assistant was called
      **/
@@ -377,7 +377,7 @@ private Q_SLOTS:
     /**
      * This implementation simply enables the position widgets on a file that exists.
      * Derived classes should overload to set the ranges where class generation should be allowed
-     * 
+     *
      * @param field the name of the file to be generated (Header, Implementation, etc)
      */
     virtual void updateFileRange (const QString& field);
