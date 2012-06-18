@@ -33,6 +33,7 @@
 #include <sublime/mainwindow.h>
 
 #include <kdeclarative.h>
+#include <KDebug>
 #include <qdeclarative.h>
 
 using namespace KDevelop;
@@ -76,9 +77,10 @@ void trySetupWelcomePageView()
 
     // make sure plasma component is available
     QDeclarativeComponent component(v->engine());
-    component.setData("import org.kde.plasma.components 0.1\nText { text: \"Hello world!\" }", QUrl());
+    component.setData("import org.kde.plasma.components 0.1\nimport QtQuick 1.0\nText { text: \"Hello world!\" }", QUrl());
 
     if (component.isError()) {
+        kWarning() << "Welcome Page not supported. errors: " << component.errors();
         delete v;
     } else {
         Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(v);

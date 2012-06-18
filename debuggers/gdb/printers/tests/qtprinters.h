@@ -44,6 +44,7 @@ private Q_SLOTS:
     void testQSetInt();
     void testQSetString();
     void testQChar();
+    void testQUuid();
 };
 
 }
