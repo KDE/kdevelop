@@ -24,7 +24,11 @@
 #define OKTETAGLOBAL_H
 
 // Adaptions for the different version of Kasten and Okteta
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+namespace Kasten2 {}
+namespace Kasten = Kasten2;
+#define KASTEN_NAMESPACE Kasten2
+#elif KASTEN_VERSION == 1
 namespace Kasten1 {}
 namespace Kasten = Kasten1;
 #define KASTEN_NAMESPACE Kasten1

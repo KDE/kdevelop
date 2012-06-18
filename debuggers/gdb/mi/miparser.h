@@ -74,8 +74,8 @@ protected: // rules
 
 
 private:
-    MILexer lexer;
-    TokenStream *lex;
+    MILexer m_lexer;
+    TokenStream *m_lex;
 };
 
 #endif

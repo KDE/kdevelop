@@ -1,4 +1,4 @@
-# - Find Kasten libraries, v0 or v1
+# - Find Kasten libraries, v0, v1 or v2
 #
 # This module defines
 #  LIBKASTEN_FOUND - whether the libkasten libraries were found
@@ -12,44 +12,45 @@ if( LIBKASTEN_INCLUDE_DIR AND LIBKASTEN_LIBRARIES AND LIBKASTEN_VERSION )
     set( Kasten_FIND_QUIETLY TRUE )
 endif( LIBKASTEN_INCLUDE_DIR AND LIBKASTEN_LIBRARIES AND LIBKASTEN_VERSION )
 
-if( LIBKASTEN_FIND_VERSION EQUAL 1 )
-    find_library( KASTEN1_CORE_LIB
+if( LIBKASTEN_FIND_VERSION EQUAL 1 OR LIBKASTEN_FIND_VERSION EQUAL 2)
+    set( KV ${LIBKASTEN_FIND_VERSION} )
+    find_library( KASTEN1OR2_CORE_LIB
         NAMES
-        kasten1core
+        kasten${KV}core
         HINTS
         ${LIB_INSTALL_DIR}
         ${KDE4_LIB_DIR}
     )
 
-    find_library( KASTEN1_GUI_LIB
+    find_library( KASTEN1OR2_GUI_LIB
         NAMES
-        kasten1gui
+        kasten${KV}gui
         HINTS
         ${LIB_INSTALL_DIR}
         ${KDE4_LIB_DIR}
     )
 
-    find_library( KASTEN1_CONTROLLERS_LIB
+    find_library( KASTEN1OR2_CONTROLLERS_LIB
         NAMES
-        kasten1controllers
+        kasten${KV}controllers
         HINTS
         ${LIB_INSTALL_DIR}
         ${KDE4_LIB_DIR}
     )
 
-    find_path( KASTEN1_NORMAL_INCLUDE_DIR
+    find_path( KASTEN1OR2_NORMAL_INCLUDE_DIR
         NAMES
         abstractmodel.h
         PATH_SUFFIXES
-        kasten1
+        kasten${KV}
         HINTS
         ${INCLUDE_INSTALL_DIR}
         ${KDE4_INCLUDE_DIR}
     )
 
-    find_path( KASTEN1_CAMELCASE_INCLUDE_DIR
+    find_path( KASTEN1OR2_CAMELCASE_INCLUDE_DIR
         NAMES
-        Kasten1/AbstractModel
+        Kasten${KV}/AbstractModel
         PATH_SUFFIXES
         KDE
         HINTS
@@ -58,25 +59,25 @@ if( LIBKASTEN_FIND_VERSION EQUAL 1 )
     )
 
 
-    if( KASTEN1_NORMAL_INCLUDE_DIR AND KASTEN1_CAMELCASE_INCLUDE_DIR AND
-        KASTEN1_CORE_LIB AND KASTEN1_GUI_LIB AND KASTEN1_CONTROLLERS_LIB )
+    if( KASTEN1OR2_NORMAL_INCLUDE_DIR AND KASTEN1OR2_CAMELCASE_INCLUDE_DIR AND
+        KASTEN1OR2_CORE_LIB AND KASTEN1OR2_GUI_LIB AND KASTEN1OR2_CONTROLLERS_LIB )
         set( LIBKASTEN_FOUND TRUE )
-    endif( KASTEN1_NORMAL_INCLUDE_DIR AND KASTEN1_CAMELCASE_INCLUDE_DIR AND
-        KASTEN1_CORE_LIB AND KASTEN1_GUI_LIB AND KASTEN1_CONTROLLERS_LIB )
+    endif( KASTEN1OR2_NORMAL_INCLUDE_DIR AND KASTEN1OR2_CAMELCASE_INCLUDE_DIR AND
+        KASTEN1OR2_CORE_LIB AND KASTEN1OR2_GUI_LIB AND KASTEN1OR2_CONTROLLERS_LIB )
 
     if( LIBKASTEN_FOUND )
-        set( LIBKASTEN_VERSION 1 )
+        set( LIBKASTEN_VERSION ${KV} )
         set( LIBKASTEN_INCLUDE_DIRS
-            ${KASTEN1_NORMAL_INCLUDE_DIR}
-            ${KASTEN1_CAMELCASE_INCLUDE_DIR}
+            ${KASTEN1OR2_NORMAL_INCLUDE_DIR}
+            ${KASTEN1OR2_CAMELCASE_INCLUDE_DIR}
         )
         set( LIBKASTEN_LIBRARIES
-            ${KASTEN1_CORE_LIB}
-            ${KASTEN1_GUI_LIB}
-            ${KASTEN1_CONTROLLERS_LIB}
+            ${KASTEN1OR2_CORE_LIB}
+            ${KASTEN1OR2_GUI_LIB}
+            ${KASTEN1OR2_CONTROLLERS_LIB}
         )
     endif( LIBKASTEN_FOUND )
-endif( LIBKASTEN_FIND_VERSION EQUAL 1 )
+endif( LIBKASTEN_FIND_VERSION EQUAL 1 OR LIBKASTEN_FIND_VERSION EQUAL 2 )
 
 if( LIBKASTEN_FIND_VERSION EQUAL 0 )
     find_library( LIBKASTENCORE0_LIBRARY
