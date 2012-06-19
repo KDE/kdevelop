@@ -139,7 +139,6 @@ void TemplateClassAssistant::next()
             kDebug() << "Class generator has custom options";
             TemplateOptionsPage* options = new TemplateOptionsPage(this);
             d->templateOptionsPage = addPage(options, i18n("Template Options"));
-            connect (this, SIGNAL(accepted()), this, SLOT(updateTemplateOptions()));
         }
 
         return;
@@ -182,12 +181,6 @@ void TemplateClassAssistant::accept()
     generator()->setDescription(desc);
 
     CreateClassAssistant::accept();
-}
-
-
-void TemplateClassAssistant::updateTemplateOptions()
-{
-
 }
 
 TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()

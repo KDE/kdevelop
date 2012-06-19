@@ -49,9 +49,6 @@ public:
     virtual void next();
     virtual void accept();
 
-private Q_SLOTS:
-    void updateTemplateOptions();
-
 private:
     class TemplateClassAssistantPrivate* const d;
 };
