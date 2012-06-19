@@ -34,72 +34,215 @@ if (property == #name) return QVariant::fromValue(object.name);
 
 namespace KDevelop {
 
+/**
+ * @brief Represents a variable
+ *
+ * A variable has two main properties: its type and name.
+ * 
+ **/
 struct VariableDescription
 {
+    /**
+     * Creates a variable with no type and no name
+     *
+     **/
     VariableDescription();
+    /**
+     * Creates a variable with type @p type and name @p name
+     *
+     * @param type the type of this variable
+     * @param name the name of this variable
+     **/
     VariableDescription(const QString& type, const QString& name);
+    /**
+     * Creates a variable and determines it type and name from the @p declaration
+     *
+     **/
     VariableDescription(const DeclarationPointer& declaration);
 
+    /**
+     * The name of this variable
+     **/
     QString name;
+    /**
+     * The type of this variable.
+     * 
+     * In weekly typed languages, this field can be empty. 
+     **/
     QString type;
 };
 
+/**
+ * List of variable descriptions
+ **/
 typedef QList<VariableDescription> VariableDescriptionList;
 
+/**
+ * @brief Represents a function
+ * 
+ * A function has a name and any number of arguments and return values
+ **/
 struct FunctionDescription
 {
+    /**
+     * Creates a function with no name and no arguments
+     *
+     **/
     FunctionDescription();
+    /**
+     * Creates a function with name @p and specified @p arguments and @p returnArguments
+     *
+     * @param name the name of the new function
+     * @param arguments a list of variables that are passed to this function as arguments
+     * @param returnArguments a list of variables that this function returns
+     **/
     FunctionDescription(const QString& name, const VariableDescriptionList& arguments, const VariableDescriptionList& returnArguments);
+    /**
+     * Creates a function and determines its properties from the @p declaration
+     *
+     * @param declaration a function declaration
+     **/
     FunctionDescription(const DeclarationPointer& declaration);
 
+    /**
+     * The name of this function
+     **/
     QString name;
+    /**
+     * This function's input arguments
+     **/
     QList<VariableDescription> arguments;
+    /**
+     * This function's return values
+     **/
     QList<VariableDescription> returnArguments;
 
+    /**
+     * Specifies whether this function is a class constructor
+     **/
     bool isConstructor;
+    /**
+     * Specifies whether this function is a class destructor
+     */
     bool isDestructor;
+    /**
+     * Specifies whether this function is virtual and can be overridden by subclasses
+     **/
     bool isVirtual;
+    /**
+     * Specifies whether this function is static and can be called without a class instance
+     **/
     bool isStatic;
 };
 
+/**
+ * List of function descriptions
+ **/
 typedef QList<FunctionDescription> FunctionDescriptionList;
 
+/**
+ * Description of an inheritance relation. 
+ **/
 struct InheritanceDescription
 {
+    /**
+     * The mode of this inheritance. 
+     * For C++ classes, mode string are the same as access specifiers (public, protected, private). 
+     * In other languages, the mode is used to differentiate between extends/implements
+     * or other possible inheritance types. 
+     **/
     QString inheritanceMode;
+    /**
+     * The name of the base class
+     **/
     QString baseType;
 };
 
+/**
+ * List of inheritance descriptions
+ **/
 typedef QList<InheritanceDescription> InheritanceDescriptionList;
 
+/**
+ * @brief Represents a class
+ * 
+ * A class descriptions stores its name, its member variables and functions, as well as its superclasses and inheritance types. 
+ **/
 struct ClassDescription
 {
+    /**
+     * Creates an empty class
+     *
+     **/
     ClassDescription();
+    /**
+     * Creates an empty class named @p name
+     *
+     * @param name the name of the new class
+     **/
     ClassDescription(const QString& name);
 
+    /**
+     * The name of this class
+     **/
     QString name;
+    /**
+     * List of base classes (classes from which this one inherits) as well as inheritance types
+     **/
     InheritanceDescriptionList baseClasses;
+    /**
+     * List of all member variables in this class
+     **/
     VariableDescriptionList members;
+    /**
+     * List of all member functions (methods) in this class
+     **/
     FunctionDescriptionList methods;
 };
 
+/**
+ * @brief A data model that represents a single ClassDescription
+ * 
+ * This model can be used in Qt views. 
+ * 
+ * It is implemented as a tree. 
+ * Every property of the class description (name, inheritance, members, methods) is a top level branch.
+ * Their child items are the actual base classes, data members and methods. 
+ **/
 class ClassDescriptionModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
 
 public:
+    /**
+     * Enumerates the top-level branches of the tree model
+     **/
     enum TopLevelRow
     {
-        ClassNameRow = 0,
-        InheritanceRow,
-        MembersRow,
-        FunctionsRow,
-        TopLevelRowCount
+        ClassNameRow = 0, ///< The class name
+        InheritanceRow, ///< Base classes and respective inheritance types
+        MembersRow, ///< Data members
+        FunctionsRow, ///< Class functions (methods)
+        TopLevelRowCount ///< The number of top-level branches
     };
 
+    /**
+     * Creates a new description model and sets its description to @p description
+     *
+     * @param description the class description displayed by this class
+     * @param parent parent object, defaults to 0.
+     **/
     explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
+    /**
+     * Creates a new description model with an empty class description
+     * 
+     * @param parent parent object, defaults to 0.
+     **/
     explicit ClassDescriptionModel(QObject* parent = 0);
+    /**
+     * Destructor
+     **/
     virtual ~ClassDescriptionModel();
 
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
@@ -110,6 +253,11 @@ public:
     virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
+    /**
+     * @property description
+     * 
+     * The class description this model represents
+     **/
     ClassDescription description() const;
     void setDescription(const ClassDescription& description);
 
@@ -117,6 +265,14 @@ public:
 
     virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
     virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+
+    /**
+     * Moves the row at position @p source to position @p destination under index @p parent
+     *
+     * @param source position from where to take the row
+     * @param destination position where to put the row
+     * @param parent the parent index of both old and new positions
+     **/
     void moveRow(int source, int destination, const QModelIndex& parent);
 
 private:
