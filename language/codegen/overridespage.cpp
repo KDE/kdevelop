@@ -18,6 +18,7 @@
 
 #include "overridespage.h"
 #include "createclass.h"
+#include "classgenerator.h"
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

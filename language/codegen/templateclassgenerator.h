@@ -20,7 +20,7 @@
 #ifndef KDEVELOP_TEMPLATECLASSGENERATOR_H
 #define KDEVELOP_TEMPLATECLASSGENERATOR_H
 
-#include "createclass.h"
+#include "classgenerator.h"
 
 namespace KDevelop
 {
