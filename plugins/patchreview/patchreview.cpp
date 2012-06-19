@@ -109,7 +109,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return;
                         } else {
-                            int next = qBound(0, (forwards ? a+1 : a-1, m_modelList->modelCount());
+                            int next = qBound(0, forwards ? a+1 : a-1, m_modelList->modelCount()-1);
                             ICore::self()->documentController()->openDocument(urlForFileModel(m_modelList->modelAt(next)));
                         }
                     }
