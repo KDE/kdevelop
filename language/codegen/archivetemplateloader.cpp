@@ -59,7 +59,7 @@ Grantlee::Template ArchiveTemplateLoader::loadByName (const QString& name, const
 {
     const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(d->directory->entry(name));
     Q_ASSERT(file);
-    
+
     kDebug() << "Loading file" << name;
     return engine->newTemplate(file->data(), file->name());
 }

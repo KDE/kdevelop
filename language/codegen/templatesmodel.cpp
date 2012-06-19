@@ -343,4 +343,3 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
 
     return destination;
 }
-

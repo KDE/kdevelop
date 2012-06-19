@@ -29,7 +29,7 @@ class KDevelop::MultiLevelListViewPrivate
 public:
     MultiLevelListViewPrivate(int levels);
     ~MultiLevelListViewPrivate();
-    
+
     int levels;
     QList<QListView*> listViews;
     QList<QVBoxLayout*> layouts;
@@ -50,19 +50,19 @@ MultiLevelListView::MultiLevelListView (int levels, QWidget* parent, Qt::WindowF
 d(new MultiLevelListViewPrivate(levels))
 {
     Q_ASSERT(levels > 1);
-    
+
     connect (d->mapper, SIGNAL(mapped(int)), SLOT(currentChanged(int)));
 
     QHBoxLayout* layout = new QHBoxLayout();
     for (int i = 0; i < d->levels; ++i)
     {
         QVBoxLayout* levelLayout = new QVBoxLayout();
-        
+
         QListView* view = new QListView(this);
         view->setContentsMargins(0, 0, 0, 0);
         levelLayout->addWidget(view);
         layout->addItem(levelLayout);
-        
+
         d->layouts << levelLayout;
         d->listViews << view;
     }
@@ -93,9 +93,9 @@ void MultiLevelListView::setModel (QAbstractItemModel* model)
         }
         lastView = view;
     }
-    
+
     connect (lastView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)));
-        
+
     d->listViews.first()->setCurrentIndex(model->index(0,0));
 }
 
@@ -131,9 +131,9 @@ void MultiLevelListView::setCurrentIndex (const QModelIndex& index)
         indexes.prepend(idx);
         idx = idx.parent();
     }
-    
+
     Q_ASSERT(indexes.size() == d->levels);
-    
+
     for (int i = 0; i < d->levels; ++i)
     {
         d->listViews[i]->setCurrentIndex(indexes[i]);
