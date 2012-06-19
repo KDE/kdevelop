@@ -36,8 +36,8 @@ struct ClassGeneratorPrivate
     QString license;
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
 
-    QMap<QString, KUrl> fileUrls;
-    QMap<QString, SimpleCursor> filePositions;
+    QHash<QString, KUrl> fileUrls;
+    QHash<QString, SimpleCursor> filePositions;
 
     QString headerFileType;
     QString implementationFileType;
@@ -47,8 +47,8 @@ struct ClassGeneratorPrivate
 ClassGenerator::ClassGenerator()
 : d(new ClassGeneratorPrivate)
 {
-    d->headerFileType = i18n("Header");
-    d->implementationFileType = i18n("Implementation");
+    d->headerFileType = "header";
+    d->implementationFileType = "implementation";
 }
 
 ClassGenerator::~ClassGenerator()
@@ -137,9 +137,12 @@ void ClassGenerator::clearDeclarations()
     m_declarations.clear();
 }
 
-QStringList ClassGenerator::fileLabels()
+QHash<QString, QString> ClassGenerator::fileLabels()
 {
-    return QStringList() << d->headerFileType << d->implementationFileType;
+    QHash<QString, QString> labels;
+    labels.insert(d->headerFileType, i18n("Header"));
+    labels.insert(d->implementationFileType, i18n("Implementation"));
+    return labels;
 }
 
 QHash< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
@@ -209,6 +212,11 @@ SimpleCursor ClassGenerator::implementationPosition()
     return d->filePositions[d->implementationFileType];
 }
 
+SimpleCursor ClassGenerator::filePosition (const QString& fileType)
+{
+    return d->filePositions[fileType];
+}
+
 KUrl ClassGenerator::headerUrl()
 {
     return d->fileUrls[d->headerFileType];
@@ -217,6 +225,11 @@ KUrl ClassGenerator::headerUrl()
 KUrl ClassGenerator::implementationUrl()
 {
     return d->fileUrls[d->implementationFileType];
+}
+
+QHash<QString, KUrl> ClassGenerator::fileUrls()
+{
+    return d->fileUrls;
 }
 
 /// Specify license for this class

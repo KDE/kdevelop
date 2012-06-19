@@ -305,6 +305,14 @@ QVariantHash TemplateClassGenerator::templateVariables()
     variables["method_declarations"] = QVariant::fromValue(methods);
     variables["property_declarations"] = QVariant::fromValue(properties);
 
+    d->baseUrl.adjustPath(KUrl::AddTrailingSlash);
+    QHash<QString,KUrl> urls = fileUrls();
+    for (QHash<QString,KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        variables["output_file_" + it.key().toLower()] = KUrl::relativeUrl(d->baseUrl, it.value());
+        variables["output_file_" + it.key().toLower() + "_absolute"] = it.value().toLocalFile();
+    }
+
     return variables;
 }
 
@@ -344,14 +352,11 @@ DocumentChangeSet TemplateClassGenerator::generate()
     DUChainReadLocker lock(DUChain::lock());
 
     KConfig templateConfig(d->templateDescription);
-    foreach (const QString& groupName, templateConfig.groupList())
-    {
-        if (groupName == "General")
-        {
-            continue;
-        }
+    QHash<QString,KUrl> urls = fileUrls();
 
-        KConfigGroup cg(&templateConfig, groupName);
+    for (QHash<QString,KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        KConfigGroup cg(&templateConfig, it.key());
         QString fileName = cg.readEntry("File");
 
         if (fileName.isEmpty())
@@ -373,27 +378,27 @@ DocumentChangeSet TemplateClassGenerator::generate()
             continue;
         }
 
-        Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
-        QString outputName = d->render(nameTemplate, context);
-
-        KUrl url(d->baseUrl);
-        url.addPath(outputName);
+        KUrl url = it.value();
         IndexedString document(url);
         SimpleRange range(SimpleCursor(0, 0), 0);
 
-        Grantlee::Template fileTemplate = engine.newTemplate(file->data(), outputName);
+        Grantlee::Template fileTemplate = engine.newTemplate(file->data(), it.key());
 
         DocumentChange change(document, range, QString(), d->render(fileTemplate, context));
+        if (fileTemplate->error() != Grantlee::NoError)
+        {
+            kDebug() << fileTemplate->errorString();
+        }
         changes.addChange(change);
     }
 
     return changes;
 }
 
-QStringList TemplateClassGenerator::fileLabels()
+QHash< QString, QString > TemplateClassGenerator::fileLabels()
 {
     Q_ASSERT(!d->templateDescription.isEmpty());
-    QStringList labels;
+    QHash<QString,QString> labels;
 
     KConfig templateConfig(d->templateDescription);
     KConfigGroup group(&templateConfig, "General");
@@ -405,7 +410,7 @@ QStringList TemplateClassGenerator::fileLabels()
         KConfigGroup cg(&templateConfig, fileGroup);
         if (cg.hasKey("OutputFile"))
         {
-            labels << cg.readEntry("Name");
+            labels.insert(cg.name(), cg.readEntry("Name"));
         }
     }
 
@@ -443,8 +448,8 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
         }
         url.addPath(outputName);
 
-        QString fileName = cg.readEntry("Name");
-        map.insert(fileName, url);
+        QString fileType = cg.name();
+        map.insert(fileType, url);
     }
 
     return map;

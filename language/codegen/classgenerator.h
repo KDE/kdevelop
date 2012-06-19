@@ -82,15 +82,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     QList<DeclarationPointer> directInheritanceList() const;
 
     /**
-     * Should return user-readable labels for all files for the gives class-name
+     * Should return a hash of all files for the gives class-name.
+     * Its keys are unique ID's and are never shown to the user.
+     * The values are user-visible labels.
      *
-     * The default implementation returns "Header" and "Implementation"
+     * The default implementation returns "header" => i18n("Header") and "implementation" => i18n("Implementation")
      **/
-    virtual QStringList fileLabels();
+    virtual QHash<QString, QString> fileLabels();
 
     /**
      * Should return the suggested urls of all files for the gives class-name
-     * The keys should match labels returned by fileLabels()
+     * The keys should match the keys returned by fileLabels()
      *
      * The default implementation calls headerUrlFromBase() and implementationUrlFromBase()
      *
@@ -177,8 +179,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     SimpleCursor headerPosition();
     SimpleCursor implementationPosition();
 
+    /**
+     * Returns the position in the file where the contents of type @p fileType will be generated
+     *
+     * @param fileType the id of this file, should correspond to a key in fileLabels()
+     **/
+    SimpleCursor filePosition(const QString& fileType);
+
     KUrl headerUrl();
     KUrl implementationUrl();
+
+    /**
+     * Returns the URLs where the files will be generated
+     **/
+    QHash< QString, KUrl > fileUrls();
 
     /**
      * Look recursively for parent classes, and add them to the Inheritance list

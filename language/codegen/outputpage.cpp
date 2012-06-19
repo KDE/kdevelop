@@ -64,20 +64,22 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
 
-    foreach (const QString& text, d->parent->generator()->fileLabels())
+    QHash<QString, QString> labels = d->parent->generator()->fileLabels();
+    QHash<QString, QString>::const_iterator it = labels.constBegin();
+    for (; it != labels.constEnd(); ++it)
     {
-        QLabel* label = new QLabel(text, this);
+        QLabel* label = new QLabel(it.value(), this);
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
         requester->fileDialog()->setOperationMode( KFileDialog::Saving );
 
-        d->urlChangedMapper.setMapping(requester, text);
+        d->urlChangedMapper.setMapping(requester, it.key());
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
 
         d->output->urlFormLayout->addRow(label, requester);
-        d->outputFiles.insert(text, requester);
+        d->outputFiles.insert(it.key(), requester);
 
-        label = new QLabel(text, this);
+        label = new QLabel(it.value(), this);
         QHBoxLayout* layout = new QHBoxLayout(this);
 
         KIntNumInput* line = new KIntNumInput(this);
@@ -93,8 +95,8 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
         layout->addWidget(column);
 
         d->output->positionFormLayout->addRow(label, layout);
-        d->outputLines.insert(text, line);
-        d->outputColumns.insert(text, column);
+        d->outputLines.insert(it.key(), line);
+        d->outputColumns.insert(it.key(), column);
     }
 
     connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
