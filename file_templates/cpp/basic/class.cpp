@@ -4,7 +4,7 @@
  {{ license|lines_prepend:" * " }}
  */
 
-#include "{{ name }}.h"
+#include "{{ output_file_header }}"
 
 {% for declaration in declarations %}
 {% with declaration.internal_declarations as arguments %}
