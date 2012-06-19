@@ -9,7 +9,7 @@
 {% for declaration in declarations %}
 {% with declaration.internal_declarations as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}
+{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %})
 {
     {% if declaration.type %}
     return {{ declaration.default_return_value }};

@@ -12,7 +12,7 @@ class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %
 public:
     {% for declaration in declarations %}
     {% with declaration.internal_declarations as arguments %}
-        {% if declaration.is_static %}static {% endif %}{% if declaration.is_virtual %}virtual {% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}{% include "arguments.txt" %};
+        {% if declaration.is_static %}static {% endif %}{% if declaration.is_virtual %}virtual {% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}({% include "arguments_types_names.txt" %});
     {% endwith %}
     {% endfor %}
 };
