@@ -224,6 +224,7 @@ UiController::~UiController()
 
 void UiController::setupActions()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
     if (d->defaultMainWindow->menuBar()->isNativeMenuBar()) {
         KActionCollection* ac = d->defaultMainWindow->actionCollection();
 
@@ -234,6 +235,7 @@ void UiController::setupActions()
         switcherAction->setDefaultWidget(d->defaultMainWindow->areaSwitcher());
         ac->addAction("area_switcher", switcherAction);
     }
+#endif
 }
 
 void UiController::mainWindowDeleted(MainWindow* mw)
