@@ -19,6 +19,9 @@
 #ifndef KDEV_CREATECLASS_H
 #define KDEV_CREATECLASS_H
 
+// Included for source compatibility
+#include "classgenerator.h"
+
 #include "language/duchain/identifier.h"
 #include "language/duchain/duchainpointer.h"
 #include "language/duchain/types/structuretype.h"
