@@ -38,6 +38,7 @@
 #include <KComponentData>
 #include <KStandardDirs>
 #include <KTar>
+#include <KConfigGroup>
 
 #include <grantlee/engine.h>
 #include <grantlee/metatype.h>
