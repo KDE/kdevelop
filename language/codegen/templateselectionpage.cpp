@@ -125,6 +125,7 @@ void TemplateSelectionPage::currentLanguageChanged (const QModelIndex& index)
 {
     d->ui->templateView->setRootIndex(index);
     d->ui->templateView->setCurrentIndex(d->model->index(0, 0, index));
+    d->model->setHorizontalHeaderLabels(QStringList(d->model->data(index).toString()));
 }
 
 void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
