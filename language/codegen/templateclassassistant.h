@@ -32,21 +32,70 @@ class ClassMembersPage;
 class TemplateClassAssistant;
 class TemplateSelectionPage;
 
+/**
+ * @brief An assistant for creating a new class using Grantlee templates
+ * 
+ * This assistant extends the generic CreateClassAssistant with functionality, 
+ * specifit to rendering templates. This includes an extra page for selecting the template
+ * to be used. 
+ * 
+ * For language specific features, an ICreateClassHelper is needed. If no such helper exists for 
+ * the chosen template, a generic implementation is used. It uses TemplateClassGenerator for
+ * the actual generation of output. 
+ * 
+ **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new assistant
+     *
+     * @param parent parent widget, passed to CreateClassAssistant
+     * @param baseUrl the directory where the new class should be created
+     **/
     TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
+    /**
+     * Destroys the assistant
+     **/
     virtual ~TemplateClassAssistant();
 
+    /**
+     * @copydoc CreateClassAssistant::setup()
+     **/
     virtual void setup();
 
+    /**
+     * @brief Creates a new template selection page and returns it
+     * 
+     * This is the first page in the dialog. 
+     * An ICreateClassHelper is created later, depending on the chosen template. 
+     **/
     virtual TemplateSelectionPage* newTemplateSelectionPage();
+
+    /**
+     * @copydoc CreateClassAssistant::newIdentifierPage()
+     **/
     virtual ClassIdentifierPage* newIdentifierPage();
+
+    /**
+     * @copydoc CreateClassAssistant::newOverridesPage()
+     **/
     virtual OverridesPage* newOverridesPage();
+
+    /**
+     * @brief Creates a page for defining data members and returns it
+     **/
     virtual ClassMembersPage* newMembersPage();
 
+    /**
+     * @copydoc CreateClassAssistant::next()
+     **/
     virtual void next();
+
+    /**
+     * @copydoc CreateClassAssistant::accept()
+     **/
     virtual void accept();
 
 private:

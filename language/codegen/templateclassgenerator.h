@@ -25,27 +25,65 @@
 namespace KDevelop
 {
 
+/**
+ * Generates new classes from templates
+ **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator : public ClassGenerator
 {
 public:
+    /**
+     * Creates a new generator.
+     * 
+     * You should call setTemplateDescription() before any other template-related functions.
+     *
+     * @param baseUrl the folder where new files will be created
+     **/
     TemplateClassGenerator(const KUrl& baseUrl);
     ~TemplateClassGenerator();
-    
+
+    /**
+     * @brief Selects the template to be used
+     * 
+     * This function must be called before using any other functions.
+     *
+     * The passed @p templateDescription should be an absolute path to a template description (.desktop) file.
+     * TemplateClassGenerator will attempt to find a template archive with a matching name.
+     *
+     * @param templateDescription the template description file
+     **/
     void setTemplateDescription(const QString& templateDescription);
-    
+
     virtual DocumentChangeSet generate();
     virtual QStringList fileLabels();
     virtual QHash< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
     virtual QVariantHash templateVariables();
-    
+
+    /**
+     * @return true if the template uses any custom options, false otherwise
+     **/
     bool hasCustomOptions();
+
+    /**
+     * Returns the contents of the template's configuration options file.
+     * The contents are in the format of .kcfg files used by KConfig XT.
+     **/
     QByteArray customOptions();
-    
+
+    /**
+     * Adds variables @p variables to the context passed to all template files.
+     *
+     * The variable values must be of a type registered with Grantlee::registerMetaType()
+     *
+     * @param variables additional variables to be passed to all templates
+     **/
     void addVariables(const QVariantHash& variables);
-    
-    // TODO: Might want to make this a generic utility
+
+    /**
+     * Convenience function to render a string @p text as a Grantlee template
+     *
+     **/
     QString renderString(const QString& text);
-    
+
 private:
     class TemplateClassGeneratorPrivate* const d;
 };
