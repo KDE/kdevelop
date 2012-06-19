@@ -46,11 +46,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    enum
+
+    /**
+     * Extra roles for template-specific properties
+     * @sa Qt::ItemDataRole
+     **/
+    enum TemplateRole
     {
-        DescriptionFileRole = Qt::UserRole + 1,
-        IconNameRole = Qt::UserRole + 2,
-        CommentRole = Qt::UserRole + 3
+        DescriptionFileRole = Qt::UserRole + 1, ///< Template description file name
+        IconNameRole = Qt::UserRole + 2, ///< Template icon name
+        CommentRole = Qt::UserRole + 3 ///< Template comment
     };
 
     /**
@@ -72,6 +77,13 @@ public:
      **/
     virtual void refresh();
 
+    /**
+     * Loads template @p fileName and save it to the template storage directory. 
+     * 
+     * If the file is an archive, the whole archive will be copied. 
+     * If the file has a .desktop or .kdevtemplate suffix, the contents
+     * of its containing directory will be archived and saved. 
+     **/
     QString loadTemplateFile(const QString& fileName);
 
     /**
@@ -121,13 +133,13 @@ public:
 
 protected:
     /**
-     * Extracts .kdevtemplate files from all available template archives and saves them to a location
+     * Extracts description files from all available template archives and saves them to a location
      * determined by descriptionResourceType().
      **/
     void extractTemplateDescriptions();
 
     /**
-     * Checks whether the template @descriptionName exists.
+     * Checks whether the template @p descriptionName exists.
      *
      * @param descriptionName the name of the stored template description (.kdevtemplate) file
      * @return true if a matching template file exists, false otherwise
