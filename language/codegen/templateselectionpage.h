@@ -30,6 +30,9 @@ namespace KDevelop
 
 class TemplateClassAssistant;
 
+/**
+ * An assistant page for selecting a class template
+ **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateSelectionPage : public QWidget
 {
     Q_OBJECT
@@ -39,6 +42,12 @@ public:
     explicit TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
     virtual ~TemplateSelectionPage();
 
+    /**
+     * @property selectedTemplate
+     * 
+     * The class template, selected by the user. 
+     * This property stores the full path to the template description (.desktop) file
+     **/
     QString selectedTemplate() const;
 
 private:
