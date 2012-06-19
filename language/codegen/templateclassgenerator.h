@@ -22,10 +22,6 @@
 
 #include "createclass.h"
 
-#include <grantlee/templateloader.h>
-
-class KArchiveDirectory;
-
 namespace KDevelop
 {
 
@@ -52,21 +48,6 @@ public:
     
 private:
     class TemplateClassGeneratorPrivate* const d;
-};
-
-class KDEVPLATFORMLANGUAGE_EXPORT ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
-{
-public:
-    ArchiveTemplateLoader(const KArchiveDirectory* directory);
-    virtual ~ArchiveTemplateLoader();
-    
-    virtual bool canLoadTemplate (const QString& name) const;
-    virtual Grantlee::Template loadByName (const QString& name, const Grantlee::Engine* engine) const;
-    
-    virtual QPair< QString, QString > getMediaUri (const QString& fileName) const;
-    
-private:
-    class ArchiveTemplateLoaderPrivate* const d;
 };
 
 }

@@ -17,45 +17,42 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
-#define KDEVELOP_TEMPLATECLASSASSISTANT_H
+#ifndef KDEVELOP_TEMPLATESELECTIONPAGE_H
+#define KDEVELOP_TEMPLATESELECTIONPAGE_H
 
-#include "createclass.h"
-#include "codedescription.h"
+#include <QWidget>
+#include "../languageexport.h"
 
-class QItemSelection;
+class QModelIndex;
 
 namespace KDevelop
 {
 
-class ClassMembersPage;
 class TemplateClassAssistant;
-class TemplateSelectionPage;
 
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT TemplateSelectionPage : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString selectedTemplate READ selectedTemplate)
+
 public:
-    TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
-    virtual ~TemplateClassAssistant();
+    explicit TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
+    virtual ~TemplateSelectionPage();
 
-    virtual void setup();
-
-    virtual TemplateSelectionPage* newTemplateSelectionPage();
-    virtual ClassIdentifierPage* newIdentifierPage();
-    virtual OverridesPage* newOverridesPage();
-    virtual ClassMembersPage* newMembersPage();
-
-    virtual void next();
-    virtual void accept();
-
-private Q_SLOTS:
-    void updateTemplateOptions();
+    QString selectedTemplate() const;
 
 private:
-    class TemplateClassAssistantPrivate* const d;
+    class TemplateSelectionPagePrivate* const d;
+
+private slots:
+    void currentTemplateChanged (const QModelIndex& index);
+    void currentLanguageChanged (const QModelIndex& index);
+    void getMoreClicked ();
+    void loadFileClicked ();
+
+    void saveConfig();
 };
 
 }
 
-#endif // KDEVELOP_TEMPLATECLASSASSISTANT_H
+#endif // KDEVELOP_TEMPLATESELECTIONPAGE_H

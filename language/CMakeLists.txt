@@ -122,6 +122,10 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/templateclassgenerator.cpp
     codegen/templateclassassistant.cpp
     codegen/codedescription.cpp
+    codegen/archivetemplateloader.cpp
+    codegen/templateoptionspage.cpp
+    codegen/templateselectionpage.cpp
+    codegen/classmemberspage.cpp
     
     util/setrepository.cpp
     util/includeitem.cpp
@@ -330,6 +334,10 @@ install(FILES
     codegen/templateclassgenerator.h
     codegen/templateclassassistant.h
     codegen/codedescription.h
+    codegen/archivetemplateloader.h
+    codegen/templateoptionspage.h
+    codegen/templateselectionpage.h
+    codegen/classmemberspage.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

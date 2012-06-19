@@ -18,6 +18,7 @@
 */
 
 #include "templateclassgenerator.h"
+#include "archivetemplateloader.h"
 
 #include "interfaces/icore.h"
 #include "language/codegen/documentchangeset.h"
@@ -156,44 +157,6 @@ QSharedPointer< Grantlee::OutputStream > NoEscapeStream::clone (QTextStream* str
 {
     QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
     return clonedStream;
-}
-
-class KDevelop::ArchiveTemplateLoaderPrivate
-{
-public:
-    const KArchiveDirectory* directory;
-};
-
-ArchiveTemplateLoader::ArchiveTemplateLoader (const KArchiveDirectory* directory) : d(new ArchiveTemplateLoaderPrivate)
-{
-    d->directory = directory;
-}
-
-ArchiveTemplateLoader::~ArchiveTemplateLoader()
-{
-
-}
-
-bool ArchiveTemplateLoader::canLoadTemplate (const QString& name) const
-{
-    bool can = d->directory->entry(name) && d->directory->entry(name)->isFile();
-    kDebug() << "Can load" << name << "?" << can;
-    return can;
-}
-
-Grantlee::Template ArchiveTemplateLoader::loadByName (const QString& name, const Grantlee::Engine* engine) const
-{
-    const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(d->directory->entry(name));
-    Q_ASSERT(file);
-    
-    kDebug() << "Loading file" << name;
-    return engine->newTemplate(file->data(), file->name());
-}
-
-QPair< QString, QString > ArchiveTemplateLoader::getMediaUri (const QString& fileName) const
-{
-    Q_UNUSED(fileName);
-    return QPair<QString, QString>();
 }
 
 class KDevelop::TemplateClassGeneratorPrivate

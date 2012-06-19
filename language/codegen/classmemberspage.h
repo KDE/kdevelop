@@ -17,10 +17,12 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
-#define KDEVELOP_TEMPLATECLASSASSISTANT_H
+#ifndef KDEVELOP_CLASSMEMBERSPAGE_H
+#define KDEVELOP_CLASSMEMBERSPAGE_H
 
-#include "createclass.h"
+#include <QWidget>
+
+#include "../languageexport.h"
 #include "codedescription.h"
 
 class QItemSelection;
@@ -28,34 +30,39 @@ class QItemSelection;
 namespace KDevelop
 {
 
-class ClassMembersPage;
 class TemplateClassAssistant;
 class TemplateSelectionPage;
 
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT ClassMembersPage : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
+
 public:
-    TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
-    virtual ~TemplateClassAssistant();
+    explicit ClassMembersPage (QWidget* parent);
+    virtual ~ClassMembersPage();
 
-    virtual void setup();
+    ClassDescription description() const;
+    void setDescription(const ClassDescription& description);
 
-    virtual TemplateSelectionPage* newTemplateSelectionPage();
-    virtual ClassIdentifierPage* newIdentifierPage();
-    virtual OverridesPage* newOverridesPage();
-    virtual ClassMembersPage* newMembersPage();
-
-    virtual void next();
-    virtual void accept();
-
-private Q_SLOTS:
-    void updateTemplateOptions();
+    void moveRowTo(int destination, bool relative);
 
 private:
-    class TemplateClassAssistantPrivate* const d;
+    int rows();
+
+private Q_SLOTS:
+    void moveTop();
+    void moveUp();
+    void moveDown();
+    void moveBottom();
+    void currentSelectionChanged(const QItemSelection& current);
+    void addItem();
+    void removeItem();
+
+private:
+    class ClassMembersPagePrivate* const d;
 };
 
 }
 
-#endif // KDEVELOP_TEMPLATECLASSASSISTANT_H
+#endif // KDEVELOP_CLASSMEMBERSPAGE_H

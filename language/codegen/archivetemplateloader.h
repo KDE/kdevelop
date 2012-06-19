@@ -17,45 +17,33 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
-#define KDEVELOP_TEMPLATECLASSASSISTANT_H
+#ifndef KDEVELOP_ARCHIVETEMPLATELOADER_H
+#define KDEVELOP_ARCHIVETEMPLATELOADER_H
 
-#include "createclass.h"
-#include "codedescription.h"
+#include <grantlee/templateloader.h>
 
-class QItemSelection;
+#include "../languageexport.h"
+
+class KArchiveDirectory;
 
 namespace KDevelop
 {
-
-class ClassMembersPage;
-class TemplateClassAssistant;
-class TemplateSelectionPage;
-
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
+    
+class KDEVPLATFORMLANGUAGE_EXPORT ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
 {
-    Q_OBJECT
 public:
-    TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
-    virtual ~TemplateClassAssistant();
-
-    virtual void setup();
-
-    virtual TemplateSelectionPage* newTemplateSelectionPage();
-    virtual ClassIdentifierPage* newIdentifierPage();
-    virtual OverridesPage* newOverridesPage();
-    virtual ClassMembersPage* newMembersPage();
-
-    virtual void next();
-    virtual void accept();
-
-private Q_SLOTS:
-    void updateTemplateOptions();
-
+    ArchiveTemplateLoader(const KArchiveDirectory* directory);
+    virtual ~ArchiveTemplateLoader();
+    
+    virtual bool canLoadTemplate (const QString& name) const;
+    virtual Grantlee::Template loadByName (const QString& name, const Grantlee::Engine* engine) const;
+    
+    virtual QPair< QString, QString > getMediaUri (const QString& fileName) const;
+    
 private:
-    class TemplateClassAssistantPrivate* const d;
+    class ArchiveTemplateLoaderPrivate* const d;
 };
 
 }
 
-#endif // KDEVELOP_TEMPLATECLASSASSISTANT_H
+#endif // KDEVELOP_ARCHIVETEMPLATELOADER_H

@@ -17,45 +17,35 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
-#define KDEVELOP_TEMPLATECLASSASSISTANT_H
+#ifndef KDEVELOP_TEMPLATEOPTIONSPAGE_H
+#define KDEVELOP_TEMPLATEOPTIONSPAGE_H
 
-#include "createclass.h"
-#include "codedescription.h"
+#include <QWidget>
+#include <QVariantHash>
 
-class QItemSelection;
+#include "../languageexport.h"
 
 namespace KDevelop
 {
 
-class ClassMembersPage;
 class TemplateClassAssistant;
-class TemplateSelectionPage;
 
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantHash templateOptions READ templateOptions)
+
 public:
-    TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
-    virtual ~TemplateClassAssistant();
+    explicit TemplateOptionsPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
+    virtual ~TemplateOptionsPage();
 
-    virtual void setup();
-
-    virtual TemplateSelectionPage* newTemplateSelectionPage();
-    virtual ClassIdentifierPage* newIdentifierPage();
-    virtual OverridesPage* newOverridesPage();
-    virtual ClassMembersPage* newMembersPage();
-
-    virtual void next();
-    virtual void accept();
-
-private Q_SLOTS:
-    void updateTemplateOptions();
+    void loadXML(const QByteArray& contents);
+    QVariantHash templateOptions() const;
 
 private:
-    class TemplateClassAssistantPrivate* const d;
+    class TemplateOptionsPagePrivate* const d;
 };
 
 }
 
-#endif // KDEVELOP_TEMPLATECLASSASSISTANT_H
+#endif // KDEVELOP_TEMPLATEOPTIONSPAGE_H
