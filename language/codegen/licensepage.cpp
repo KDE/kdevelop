@@ -1,0 +1,232 @@
+/* This file is part of KDevelop
+    Copyright 2008 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "licensepage.h"
+#include "ui_licensechooser.h"
+
+#include <KDebug>
+#include <KStandardDirs>
+#include <KEMailSettings>
+#include <KComponentData>
+#include <KMessageBox>
+
+#include <QDirIterator>
+
+namespace KDevelop {
+
+struct LicensePagePrivate
+{
+    struct LicenseInfo
+    {
+        QString name;
+        QString path;
+        QString contents;
+    };
+    typedef QList<LicenseInfo> LicenseList;
+
+
+    LicensePagePrivate()
+        : license(0)
+    {
+    }
+
+    Ui::LicenseChooserDialog* license;
+    LicenseList availableLicenses;
+};
+
+LicensePage::LicensePage(QWidget* parent)
+: QWidget(parent)
+, d(new LicensePagePrivate)
+{
+    d->license = new Ui::LicenseChooserDialog;
+    d->license->setupUi(this);
+
+    connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
+    connect(d->license->saveLicense, SIGNAL(clicked(bool)), d->license->licenseName, SLOT(setEnabled(bool)));
+
+    // Read all the available licenses from the standard dirs
+    initializeLicenses();
+
+    //Set the license selection to the previous one
+    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
+    //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
+    licenseComboChanged(d->license->licenseComboBox->currentIndex());
+}
+
+LicensePage::~LicensePage()
+{
+    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    //Do not save invalid license numbers'
+    int index = d->license->licenseComboBox->currentIndex();
+    if( index >= 0 || index < d->availableLicenses.size() )
+    {
+        config.writeEntry("LastSelectedLicense", index);
+        config.config()->sync();
+    }
+    else
+        kWarning() << "Attempted to save an invalid license number: " << index << ". Number of licenses:" << d->availableLicenses.size();
+
+    delete d;
+}
+
+// If the user entered a custom license that they want to save, save it
+bool LicensePage::validatePage()
+{
+    if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) &&
+        d->license->saveLicense->isChecked())
+        return saveLicense();
+    else
+        return true;
+}
+
+KTextEdit* LicensePage::licenseTextEdit()
+{
+    return d->license->licenseTextEdit;
+}
+
+//! Read all the license files in the global and local config dirs
+void LicensePage::initializeLicenses()
+{
+    kDebug() << "Searching for available licenses";
+    KStandardDirs * dirs = KGlobal::dirs();
+    QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
+
+    //Iterate through the possible directories that contain licenses, and load their names
+    foreach(const QString& currentDir, licenseDirs)
+    {
+        QDirIterator it(currentDir, QDir::Files | QDir::Readable);
+        while(it.hasNext())
+        {
+            LicensePagePrivate::LicenseInfo newLicense;
+            newLicense.path = it.next();
+            newLicense.name = it.fileName();
+
+            kDebug() << "Found License: " << newLicense.name;
+
+            d->availableLicenses.push_back(newLicense);
+            d->license->licenseComboBox->addItem(newLicense.name);
+        }
+    }
+
+    //Finally add the option other for user specified licenses
+    LicensePagePrivate::LicenseInfo license;
+    d->availableLicenses.push_back(license);
+    d->license->licenseComboBox->addItem("Other");
+}
+
+// Read a license index, if it is not loaded, open it from the file
+QString& LicensePage::readLicense(int licenseIndex)
+{
+    //If the license is not loaded into memory, read it in
+    if(d->availableLicenses[licenseIndex].contents.isEmpty())
+    {
+        QString licenseText("");
+        //If we are dealing with the last option "other" just return a new empty string
+        if(licenseIndex != (d->availableLicenses.size() - 1))
+        {
+            kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
+            QFile newLicense(d->availableLicenses[licenseIndex].path);
+
+            if(newLicense.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                QTextStream newLicenseText(&newLicense);
+                newLicenseText.setAutoDetectUnicode(true);
+                licenseText = newLicenseText.readAll();
+                newLicense.close();
+            }
+            else
+                licenseText = "Error, could not open license file.\n Was it deleted?";
+        }
+
+        /* Add date, name and email to license text */
+        licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
+        QString developer("%1 <%2>");
+        KEMailSettings* emailSettings = new KEMailSettings();
+        QString name = emailSettings->getSetting(KEMailSettings::RealName);
+        if (name.isEmpty())
+        {
+            name = "<copyright holder>";
+        }
+        developer = developer.arg(name);
+        QString email = emailSettings->getSetting(KEMailSettings::EmailAddress);
+        if (email.isEmpty())
+        {
+            email = "email"; //no < > as they are already through the email field
+        }
+        developer = developer.arg(email);
+        licenseText.replace("<copyright holder>", developer);
+
+        d->availableLicenses[licenseIndex].contents = licenseText;
+    }
+
+    return d->availableLicenses[licenseIndex].contents;
+}
+
+// ---Slots---
+
+void LicensePage::licenseComboChanged(int selectedLicense)
+{
+    //If the last slot is selected enable the save license combobox
+    if(selectedLicense == (d->availableLicenses.size() - 1))
+    {
+        d->license->licenseTextEdit->clear();
+        d->license->licenseTextEdit->setReadOnly(false);
+        d->license->saveLicense->setEnabled(true);
+    }
+    else
+    {
+        d->license->saveLicense->setEnabled(false);
+        d->license->licenseTextEdit->setReadOnly(true);
+    }
+
+    if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
+        d->license->licenseTextEdit->setText(i18n("Could not load previous license"));
+    else
+        d->license->licenseTextEdit->setText(readLicense(selectedLicense));
+}
+
+bool LicensePage::saveLicense()
+{
+    kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
+
+    QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/", KGlobal::activeComponent());
+    QFile newFile(localDataDir + d->license->licenseName->text());
+
+    if(newFile.exists())
+    {
+        KMessageBox::sorry(this, i18n("The specified license already exists. Please provide a different name."));
+        return false;
+    }
+
+    newFile.open(QIODevice::WriteOnly);
+    qint64 result = newFile.write(d->license->licenseTextEdit->toPlainText().toUtf8());
+    newFile.close();
+
+    if(result == -1)
+    {
+        KMessageBox::sorry(this, i18n("There was an error writing the file."));
+        return false;
+    }
+
+    return true;
+}
+
+}
+
+Q_DECLARE_TYPEINFO(KDevelop::LicensePagePrivate::LicenseInfo, Q_MOVABLE_TYPE);

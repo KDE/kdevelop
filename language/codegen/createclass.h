@@ -19,10 +19,15 @@
 #ifndef KDEV_CREATECLASS_H
 #define KDEV_CREATECLASS_H
 
-// Included for source compatibility
+/*
+ * These classes were once defined in this file, but have since been moved to their own files. 
+ * They could be just forward-declared here, but they are included to keep source compatibility. 
+ */
 #include "classgenerator.h"
+#include "classidentifierpage.h"
+#include "licensepage.h"
+#include "outputpage.h"
 
-#include "language/duchain/identifier.h"
 #include "language/duchain/duchainpointer.h"
 #include "language/duchain/types/structuretype.h"
 
@@ -37,103 +42,7 @@ class KTextEdit;
 namespace KDevelop {
 
 struct ClassDescription;
-class ClassGenerator;
-
 class OverridesPage;
-class IndexedDeclaration;
-class Context;
-class Declaration;
-class DocumentChangeSet;
-
-class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList inheritance READ inheritanceList)
-
-public:
-    ClassIdentifierPage(QWidget* parent);
-    virtual ~ClassIdentifierPage();
-
-    /// Returns the line edit which contains the new class identifier.
-    KLineEdit* identifierLineEdit() const;
-
-    /// Returns the line edit which contains a base class identifier.
-    KLineEdit* inheritanceLineEdit() const;
-
-    /// Returns a list of inheritances for the new class
-    QStringList inheritanceList() const;
-
-Q_SIGNALS:
-    void inheritanceChanged();
-    void isValid(bool valid);
-
-public Q_SLOTS:
-    /// Called when an inheritance is to be added.  To override in subclasses,
-    /// (eg. if there is a problem with the base class proposed),
-    /// don't call this implementation.
-    virtual void addInheritance();
-
-    /**
-     * Called when an inheritance is to be removed.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void removeInheritance();
-
-    /**
-     * Called when an inheritance is to be moved up.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void moveUpInheritance();
-
-    /**
-     * Called when an inheritance is to be moved up.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void moveDownInheritance();
-
-    /**
-     * Parses a parent class into a QualifiedIdentifier, the default implementation
-     * Just returns the string converted to a QualifiedIdentifier
-     */
-    virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
-
-private Q_SLOTS:
-    void checkMoveButtonState();
-    void checkIdentifier();
-
-private:
-
-    class ClassIdentifierPagePrivate* const d;
-};
-
-//!@todo Add the name of the Author at the top of the license
-class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWidget
-{
-    Q_OBJECT
-
-public:
-    LicensePage(QWidget* parent);
-    virtual ~LicensePage();
-
-    KTextEdit* licenseTextEdit();
-    bool validatePage();
-
-public Q_SLOTS:
-    virtual void licenseComboChanged(int license);
-
-private:
-    // data
-    class LicensePagePrivate* const d;
-
-    ///FIXME: ugly internal api, move to *Private
-    // methods
-    void        initializeLicenses();
-    QString&    readLicense(int licenseIndex);
-    bool        saveLicense();
-};
 
 /**
  * Provides an assistant for creating a new class using a ClassGenerator.
@@ -192,37 +101,6 @@ private:
     class CreateClassAssistantPrivate* const d;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
-{
-    Q_OBJECT
-
-public:
-    OutputPage(CreateClassAssistant* parent);
-    virtual ~OutputPage();
-
-    virtual void initializePage();
-
-    virtual bool validatePage();
-
-    virtual bool isComplete() const;
-
-Q_SIGNALS:
-    void isValid(bool valid);
-
-private:
-    class OutputPagePrivate* const d;
-
-private Q_SLOTS:
-    virtual void updateFileNames();
-
-    /**
-     * This implementation simply enables the position widgets on a file that exists.
-     * Derived classes should overload to set the ranges where class generation should be allowed
-     *
-     * @param field the name of the file to be generated (Header, Implementation, etc)
-     */
-    virtual void updateFileRange (const QString& field);
-};
 }
 
 #endif // KDEV_CREATECLASS_H
