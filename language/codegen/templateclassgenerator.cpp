@@ -266,10 +266,13 @@ QVariantHash TemplateClassGenerator::templateVariables()
 
     d->baseUrl.adjustPath(KUrl::AddTrailingSlash);
     QHash<QString,KUrl> urls = fileUrls();
+    QRegExp nonAlphaNumeric("\\W");
     for (QHash<QString,KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
-        variables["output_file_" + it.key().toLower()] = KUrl::relativeUrl(d->baseUrl, it.value());
-        variables["output_file_" + it.key().toLower() + "_absolute"] = it.value().toLocalFile();
+        QString cleanName = it.key().toLower();
+        cleanName.replace(nonAlphaNumeric, "_");
+        variables["output_file_" + cleanName] = KUrl::relativeUrl(d->baseUrl, it.value());
+        variables["output_file_" + cleanName + "_absolute"] = it.value().toLocalFile();
     }
 
     return variables;
