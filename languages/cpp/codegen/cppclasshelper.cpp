@@ -264,18 +264,22 @@ QList<KDevelop::DeclarationPointer> CppTemplateNewClass::addBaseClass(const QStr
   if(base.isEmpty()) {
     return m_baseClasses;
   }
+
   //strip access specifier
   QStringList splitBase = base.split(' ', QString::SkipEmptyParts);
 
   //if no access specifier is found use public by default
   if(splitBase.size() == 1) {
-    m_baseAccessSpecifiers << "public";
-  } else {
-    m_baseAccessSpecifiers << splitBase[0];
+    splitBase.prepend("public");
   }
 
+  QString full = splitBase.join(" ");
+  QString name = splitBase.takeLast();
+  QString access = splitBase.join(" ");
+  m_baseAccessSpecifiers << access;
+
   //Call base function with stripped access specifier
-  return ClassGenerator::addBaseClass(splitBase.last());
+  return ClassGenerator::addBaseClass(full);
 }
 
 void CppTemplateNewClass::clearInheritance()
