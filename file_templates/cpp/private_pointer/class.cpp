@@ -1,59 +1,48 @@
 /*
 
-  {{ license }}
+  {{ license|lines_prepend" * " }}
  */
 
-#include "{{ name }}.h"
-#include "{{ name }}_p.h"
+#include "{{ output_file_header }}"
+#include "{{ output_file_private_header }}"
+
+{% include "namespace_use_cpp.txt" %}
 
 {{ private_class_name }}::{{ private_class_name }}({{ name }}* q) : q(q)
 {
-    
+
 }
 
 {{ private_class_name }}::~{{ private_class_name }}()
 {
-    
+
 }
 
-{% for declaration in private_functions %}
-{% with declaration.internal_declarations as arguments %}
-
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ private_class_name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %})
+{% with private_class_name as name %}
+{% for method in private_methods %}
+{% include "method_definition_cpp.txt" %}
 {
-    {% if declaration.type %}
-    return {{ declaration.default_return_value }};
-    {% endif %}
+
 }
-{% endwith %}
 {% endfor %}
+{% endwith %}
 
-{% for declaration in public_functions %}
-{% with declaration.internal_declarations as arguments %}
-
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %}){% if declaration.is_constructor %}: {{ private_member_name }}(new {{ private_class_name }}(this)){% endif %}
+{% for method in public_methods %}
+{% include "method_definition_cpp.txt" %}
+{% if method.isConstructor %}    : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
 {
-    {% if declaration.is_destructor %}
+    {% if method.isDestructor %}
     delete {{ private_member_name }};
     {% endif %}
-    {% if declaration.type %}
-    return {{ declaration.default_return_value }};
-    {% endif %}
 }
-{% endwith %}
 {% endfor %}
 
-{% for declaration in protected_functions %}
-{% with declaration.internal_declarations as arguments %}
-
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %}){% if declaration.is_constructor %} : {{ private_member_name }}(new {{ private_class_name }}(this)){% endif %}
+{% for method in protected_methods %}
+{% if method.isConstructor %}    : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
+{% include "method_definition_cpp.txt" %}
 {
-    {% if declaration.is_destructor %}
+    {% if method.isDestructor %}
     delete d;
     {% endif %}
-    {% if declaration.type %}
-    return {{ declaration.default_return_value }};
-    {% endif %}
 }
-{% endwith %}
 {% endfor %}

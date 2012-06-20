@@ -13,9 +13,7 @@ class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.in
 {
 public:
     {% for method in methods %}
-    {% with method.arguments as arguments %}
-        {% if declaration.isStatic %}static {% endif %}{% if declaration.isVirtual %}virtual {% endif %}{% if method.returnType %}{{ method.returnType }} {% endif %}{{ method.name }}({% include "arguments_types_names.txt" %});
-    {% endwith %}
+    {% include "method_declaraton_cpp.txt" %}
     {% endfor %}
 };
 

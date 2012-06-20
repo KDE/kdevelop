@@ -1,33 +1,37 @@
 /*
 
- {{ license }}
+ {{ license|lines_prepend:" * " }}
  */
 
-#ifndef {{ name|upper }}_H
-#define {{ name|upper }}_H
+#ifndef {% include "include_guard_cpp.txt" %}
+#define {% include "include_guard_cpp.txt" %}
 
-class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %} public {{ super.identifier }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
+{% include "namespace_begin_cpp.txt" %}
+
+{% include "class_declaration_cpp.txt" %}
 {
 public:
-    {% for declaration in public_functions %}
+    {% for method in public_methods %}
         {% include "declaration.txt" %}
     {% endfor %}
 
-    {% for declaration in public_members %}
-        {% include "declaration.txt" %}
+    {% for member in public_members %}
+    {{ member.type }} {{ member.name }};
     {% endfor %}
-    
+
 protected:
-    {% for declaration in protected_functions %}
+    {% for method in protected_methods %}
         {% include "declaration.txt" %}
     {% endfor %}
 
-    {% for declaration in protected_members %}
-        {% include "declaration.txt" %}
+    {% for member in protected_members %}
+    {{ member.type }} {{ member.name }};
     {% endfor %}
-    
+
 private:
     class {{ private_class_name }}* const {{ private_member_name }};
 };
 
-#endif // {{ name|upper }}_H
+{% include "namespace_end_cpp.txt" %}
+
+#endif // {% include "include_guard_cpp.txt" %}

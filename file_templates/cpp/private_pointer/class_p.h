@@ -1,27 +1,33 @@
 /*
 
- {{ license }}
+ {{ license|lines_prepend:" * " }}
  */
+{% with private_class_name as name %}
 
-#ifndef {{ private_class_name|upper }}_H
-#define {{ private_class_name|upper }}_H
+#ifndef {% include "include_guard_cpp.txt" %}
+#define {% include "include_guard_cpp.txt" %}
+
+{% include "namespace_begin_cpp.txt" %}
 
 class {{ private_class_name }}
 {
 public:
     {{ private_class_name }}({{ name }}* q);
     virtual ~{{ private_class_name }}();
-    
-    {% for declaration in private_functions %}
+
+    {% for method in private_methods %}
         {% include "declaration.txt" %}
     {% endfor %}
 
-    {% for declaration in private_members %}
-        {% include "declaration.txt" %}
+    {% for member in private_members %}
+    {{ member.type }} {{ member.name }};
     {% endfor %}
-    
+
 private:
     class {{ name }}* const q;
 };
 
+{% include "namespace_end_cpp.txt" %}
+
 #endif // {{ private_class_name|upper}}_H
+{% endwith %}
