@@ -146,10 +146,13 @@ typedef QList<FunctionDescription> FunctionDescriptionList;
 struct InheritanceDescription
 {
     /**
-     * The mode of this inheritance. 
-     * For C++ classes, mode string are the same as access specifiers (public, protected, private). 
+     * @brief The mode of this inheritance.
+     *
+     * For C++ classes, mode string are the same as access specifiers (public, protected, private).
      * In other languages, the mode is used to differentiate between extends/implements
-     * or other possible inheritance types. 
+     * or other possible inheritance types.
+     *
+     * Some languages do not recognise distinct inheritance modes at all.
      **/
     QString inheritanceMode;
     /**
