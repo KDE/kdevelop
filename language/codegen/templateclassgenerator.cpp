@@ -52,7 +52,7 @@ GRANTLEE_BEGIN_LOOKUP(DeclarationPointer)
     {
         return QVariant();
     }
-    if ( property == "identifier" )
+    if ( property == "identifier" || property == "name" )
         return object->identifier().toString();
     else if ( property == "toString" )
         return object->toString();
