@@ -69,10 +69,19 @@ void TestTemplateRenderer::simpleVariables()
 void TestTemplateRenderer::includeTemplates()
 {
     renderer->addVariable("namespaces", QStringList() << "Entity" << "Human" << "ComputerPerson");
-    QString content = "HELLO {% include 'include_guard_cpp.txt' %}";
-    QString result = "HELLO ENTITY_HUMAN_COMPUTERPERSON_TESTER_H";
+    QString result = renderer->render("HELLO {% include 'include_guard_cpp.txt' %}", QString());
+    QString expected = "HELLO ENTITY_HUMAN_COMPUTERPERSON_TESTER_H";
 
-    QCOMPARE(renderer->render(content, "TestingIncludes"), result);
+    QCOMPARE(result, expected);
+}
+
+void TestTemplateRenderer::kdevFilters()
+{
+    renderer->addVariable("activity", QString("testing"));
+    QString result = renderer->render("{% load kdev_filters %}I am {{ activity }} software. {{ activity|upper_first }} is a very rewarding task. ", QString());
+    QString expected = "I am testing software. Testing is a very rewarding task. ";
+
+    QCOMPARE(result, expected);
 }
 
 

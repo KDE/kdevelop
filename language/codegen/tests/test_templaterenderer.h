@@ -41,6 +41,7 @@ private slots:
     void simpleVariables();
 
     void includeTemplates();
+    void kdevFilters();
 
 private:
     KDevelop::TemplateRenderer* renderer;
