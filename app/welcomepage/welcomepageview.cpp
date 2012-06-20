@@ -53,9 +53,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
 
-    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
-            this, SLOT(areaChanged(Sublime::Area*)));
-
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     UiHelper* helper = new UiHelper(this);
@@ -64,6 +61,12 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     areaChanged(ICore::self()->uiController()->activeArea());
 
     setSource(QUrl("qrc:/main.qml"));
+    if(!errors().isEmpty()) {
+        kWarning() << "welcomepage errors:" << errors();
+    }
+    areaChanged(Core::self()->uiControllerInternal()->activeSublimeWindow()->area());
+    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
+        this, SLOT(areaChanged(Sublime::Area*)));
 }
 
 void WelcomePageView::areaChanged(Sublime::Area* area)
