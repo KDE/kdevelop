@@ -160,11 +160,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     QString license() const;
     void setLicense(const QString& license);
 
-    /**
-     * \return The class to be generated as a Type
-     */
-    virtual StructureType::Ptr objectType() const = 0;
-
     virtual void setDescription(const ClassDescription& description);
 
     virtual ClassDescription description();
