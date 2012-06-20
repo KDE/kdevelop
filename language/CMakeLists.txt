@@ -130,7 +130,8 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/classidentifierpage.cpp
     codegen/licensepage.cpp
     codegen/outputpage.cpp
-    
+    codegen/defaultcreateclasshelper.cpp
+
     util/setrepository.cpp
     util/includeitem.cpp
     util/navigationtooltip.cpp
@@ -346,6 +347,7 @@ install(FILES
     codegen/classidentifierpage.h
     codegen/licensepage.h
     codegen/outputpage.h
+    codegen/defaultcreateclasshelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

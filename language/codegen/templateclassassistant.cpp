@@ -22,6 +22,7 @@
 #include "templateoptionspage.h"
 #include "classmemberspage.h"
 #include "templateclassgenerator.h"
+#include "defaultcreateclasshelper.h"
 
 #include "interfaces/icore.h"
 #include "interfaces/ilanguagecontroller.h"
@@ -93,22 +94,18 @@ void TemplateClassAssistant::next()
 
         kDebug() << "Template name is" << group.readEntry("Name");
 
+        d->helper = 0;
         QString languageName = group.readEntry("Category").split('/').first();
-
         ILanguage* language = ICore::self()->languageController()->language(languageName);
-
-        if (!language)
+        if (language && language->languageSupport())
         {
-            kDebug() << "No language named" << languageName;
-            return;
+            d->helper = language->languageSupport()->createClassHelper(this);
         }
-
-        d->helper = language->languageSupport()->createClassHelper(this);
 
         if (!d->helper)
         {
             kDebug() << "No class creation helper for language" << languageName;
-            return;
+            d->helper = new DefaultCreateClassHelper(this);
         }
 
         ClassGenerator* generator = d->helper->generator();
