@@ -25,7 +25,6 @@ using namespace KDevelop;
 class KDevelop::ClassMembersPagePrivate
 {
 public:
-    ClassDescriptionModel* model;
     Ui::ClassMembersPage* ui;
 };
 
@@ -33,8 +32,6 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
 : QWidget(parent)
 , d(new ClassMembersPagePrivate)
 {
-    d->model = 0;
-
     d->ui = new Ui::ClassMembersPage;
     d->ui->setupUi(this);
 
@@ -54,9 +51,13 @@ ClassMembersPage::~ClassMembersPage()
 
 void ClassMembersPage::setDescription(const ClassDescription& description)
 {
-    d->model = new ClassDescriptionModel(description, this);
-    d->ui->itemView->setModel(d->model);
-    d->ui->itemView->setRootIndex(d->model->index(ClassDescriptionModel::MembersRow, 0));
+    foreach (const VariableDescription& variable, description.members)
+    {
+        int i = 0;
+        d->ui->itemView->insertRow(i);
+        d->ui->itemView->setItem(i, 0, new QTableWidgetItem(variable.type));
+        d->ui->itemView->setItem(i, 1, new QTableWidgetItem(variable.name));
+    }
 
     connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(currentSelectionChanged(QItemSelection)));
@@ -66,8 +67,15 @@ void ClassMembersPage::setDescription(const ClassDescription& description)
 
 ClassDescription ClassMembersPage::description() const
 {
-    Q_ASSERT(d->model);
-    return d->model->description();
+    ClassDescription description;
+    for (int i = 0; i < d->ui->itemView->rowCount(); ++i)
+    {
+        VariableDescription var;
+        var.type = d->ui->itemView->item(i, 0)->text();
+        var.name = d->ui->itemView->item(i, 1)->text();
+        description.members << var;
+    }
+    return description;
 }
 
 void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
@@ -93,13 +101,11 @@ void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
 
 int ClassMembersPage::rows()
 {
-    return d->model->rowCount(d->ui->itemView->rootIndex());
+    return d->ui->itemView->rowCount();
 }
-
 
 void ClassMembersPage::moveRowTo(int destination, bool relative)
 {
-    Q_ASSERT(d->model);
     Q_ASSERT(d->ui->itemView->selectionModel());
     QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
 
@@ -115,8 +121,15 @@ void ClassMembersPage::moveRowTo(int destination, bool relative)
         destination = source + destination;
     }
 
-    d->model->moveRow(source, destination, d->ui->itemView->rootIndex());
-    d->ui->itemView->setCurrentIndex(d->model->index(destination, 0, d->ui->itemView->rootIndex()));
+    VariableDescription desc;
+    desc.type = d->ui->itemView->item(source, 0)->text();
+    desc.name = d->ui->itemView->item(source, 1)->text();
+
+    d->ui->itemView->removeRow(source);
+    d->ui->itemView->insertRow(destination);
+    d->ui->itemView->setItem(destination, 0, new QTableWidgetItem(desc.type));
+    d->ui->itemView->setItem(destination, 1, new QTableWidgetItem(desc.name));
+    d->ui->itemView->setCurrentCell(destination, 0);
 }
 
 void ClassMembersPage::moveTop()
@@ -126,7 +139,7 @@ void ClassMembersPage::moveTop()
 
 void ClassMembersPage::moveBottom()
 {
-    moveRowTo(d->model->rowCount(d->ui->itemView->rootIndex())-1, false);
+    moveRowTo(rows()-1, false);
 }
 
 void ClassMembersPage::moveUp()
@@ -141,18 +154,16 @@ void ClassMembersPage::moveDown()
 
 void ClassMembersPage::addItem()
 {
-    Q_ASSERT(d->model);
-    d->model->insertRow(0, d->ui->itemView->rootIndex());
+    d->ui->itemView->insertRow(rows());
 }
 
 void ClassMembersPage::removeItem()
 {
-    Q_ASSERT(d->model);
     QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
     if (indexes.isEmpty())
     {
         return;
     }
 
-    d->model->removeRow(indexes.first().row(), d->ui->itemView->rootIndex());
+    d->ui->itemView->removeRow(indexes.first().row());
 }
