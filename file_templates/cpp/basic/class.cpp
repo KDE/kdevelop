@@ -6,6 +6,8 @@
 
 #include "{{ output_file_header }}"
 
+{% include "namespace_use_cpp.txt" %}
+
 {% for declaration in declarations %}
 {% with declaration.internal_declarations as arguments %}
 

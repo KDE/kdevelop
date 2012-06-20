@@ -4,8 +4,10 @@
  {{ license|lines_prepend:" * " }}
  */
 
-#ifndef {{ name|upper }}_H
-#define {{ name|upper }}_H
+#ifndef {% include "include_guard_cpp.txt" %}
+#define {% include "include_guard_cpp.txt" %}
+
+{% include "namespace_open_cpp.txt" %}
 
 class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %} public {{ super.identifier }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
 {
@@ -17,4 +19,6 @@ public:
     {% endfor %}
 };
 
-#endif // {{ name|upper }}_H
+{% include "namespace_close_cpp.txt" %}
+
+#endif // {% include "include_guard_cpp.txt" %}
