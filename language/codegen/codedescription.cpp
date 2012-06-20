@@ -22,6 +22,8 @@
 #include <duchain/duchain.h>
 #include <duchain/declaration.h>
 #include <duchain/types/functiontype.h>
+#include <duchain/classfunctiondeclaration.h>
+
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -78,9 +80,20 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
         Q_ASSERT(functionType);
 
-        if (functionType && functionType->returnType() && functionType->returnType())
+        if (functionType && functionType->returnType())
         {
             returnArguments << VariableDescription(name, functionType->returnType()->toString());
+        }
+
+        DUChainPointer<ClassFunctionDeclaration> function = declaration.dynamicCast<ClassFunctionDeclaration>();
+        if (function)
+        {
+            isConstructor = function->isConstructor();
+            isDestructor = function->isDestructor();
+            isVirtual = function->isVirtual();
+            isStatic = function->isStatic();
+            isSlot = function->isSlot();
+            isSignal = function->isSignal();
         }
     }
 }

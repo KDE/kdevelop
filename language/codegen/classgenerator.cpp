@@ -79,6 +79,14 @@ void ClassGenerator::setIdentifier(const QString& identifier)
 void ClassGenerator::addDeclaration(const DeclarationPointer& newDeclaration)
 {
     m_declarations << newDeclaration;
+    if (newDeclaration->isFunctionDeclaration())
+    {
+        d->description.methods << FunctionDescription(newDeclaration);
+    }
+    else
+    {
+        d->description.members << VariableDescription(newDeclaration);
+    }
 }
 
 QList<DeclarationPointer> ClassGenerator::declarations() const
@@ -86,12 +94,21 @@ QList<DeclarationPointer> ClassGenerator::declarations() const
     return m_declarations;
 }
 
-QList<DeclarationPointer> ClassGenerator::addBaseClass(const QString&  newBaseClass)
+QList<DeclarationPointer> ClassGenerator::addBaseClass(const QString& newBaseClass)
 {
+    QStringList splitBase = newBaseClass.split(' ');
+    QString identifier = splitBase.takeLast();
+    QString inheritanceMode = splitBase.join(" ");
+
+    InheritanceDescription desc;
+    desc.baseType = identifier;
+    desc.inheritanceMode = inheritanceMode;
+    d->description.baseClasses << desc;
+
     DUChainReadLocker lock;
 
     bool added = false;
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(newBaseClass)));
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(identifier)));
 
     //Search for all super classes
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
@@ -130,11 +147,14 @@ void ClassGenerator::clearInheritance()
 {
     m_baseClasses.clear();
     d->inheritedClasses.clear();
+    d->description.baseClasses.clear();
 }
 
 void ClassGenerator::clearDeclarations()
 {
     m_declarations.clear();
+    d->description.members.clear();
+    d->description.methods.clear();
 }
 
 QHash<QString, QString> ClassGenerator::fileLabels()

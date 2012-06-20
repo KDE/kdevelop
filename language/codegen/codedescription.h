@@ -133,6 +133,14 @@ struct FunctionDescription
      * Specifies whether this function is static and can be called without a class instance
      **/
     bool isStatic;
+    /**
+     * Specifies whether this function is a slot
+     **/
+    bool isSlot;
+    /**
+     * Specifies whether this function is a signal
+     **/
+    bool isSignal;
 };
 
 /**
