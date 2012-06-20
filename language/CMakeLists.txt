@@ -3,6 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
 add_subdirectory(backgroundparser/tests)
+add_subdirectory(codegen/tests)
 
 set(kdevplatformlanguage_LIB_SRCS
     editor/persistentmovingrangeprivate.cpp

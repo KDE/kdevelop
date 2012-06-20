@@ -1,0 +1,4 @@
+set(templaterenderertest_SRCS test_templaterenderer.cpp)
+
+kde4_add_unit_test(templaterenderertest ${templaterenderertest_SRCS})
+target_link_libraries(templaterenderertest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
