@@ -80,6 +80,11 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
         Q_ASSERT(functionType);
 
+        if (functionType)
+        {
+            isConst = (functionType->modifiers() & AbstractType::ConstModifier);
+        }
+
         if (functionType && functionType->returnType())
         {
             returnArguments << VariableDescription(name, functionType->returnType()->toString());
@@ -96,6 +101,15 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             isSignal = function->isSignal();
         }
     }
+}
+
+QString FunctionDescription::returnType() const
+{
+    if (returnArguments.isEmpty())
+    {
+        return QString();
+    }
+    return returnArguments.first().type;
 }
 
 ClassDescription::ClassDescription()

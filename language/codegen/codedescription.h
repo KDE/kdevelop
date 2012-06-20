@@ -141,6 +141,16 @@ struct FunctionDescription
      * Specifies whether this function is a signal
      **/
     bool isSignal;
+    /**
+     * Specifies whether this function is constant
+     **/
+    bool isConst;
+
+    /**
+     * Convenience method, returns the type of the first variable in returnArguments
+     * or an empty string if this function has no return arguments
+     */
+    QString returnType() const;
 };
 
 /**
@@ -313,6 +323,10 @@ GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
     GRANTLEE_LOOKUP_PROPERTY(isDestructor)
     GRANTLEE_LOOKUP_PROPERTY(isVirtual)
     GRANTLEE_LOOKUP_PROPERTY(isStatic)
+    if (property == "returnType")
+    {
+        return object.returnType();
+    }
 GRANTLEE_END_LOOKUP
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::InheritanceDescription)
