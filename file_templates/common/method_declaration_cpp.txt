@@ -1,0 +1,3 @@
+{% with method.arguments as arguments %}
+{% if method.isStatic %}static {% endif %}{% if declaration.isVirtual %}virtual {% endif %}{% if not method.isConstructor and not method.isDestructor %}{{ method.type|default:"void" }} {% endif %}{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %};
+{% endwith %}
