@@ -9,12 +9,12 @@
 
 {% include "namespace_open_cpp.txt" %}
 
-class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %} public {{ super.identifier }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
+class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.inheritanceMode }} {{ base.baseType }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
 {
 public:
-    {% for declaration in declarations %}
-    {% with declaration.internal_declarations as arguments %}
-        {% if declaration.is_static %}static {% endif %}{% if declaration.is_virtual %}virtual {% endif %}{% if declaration.type %}{{ declaration.type }} {% endif %}{{ declaration.identifier }}({% include "arguments_types_names.txt" %});
+    {% for method in methods %}
+    {% with method.arguments as arguments %}
+        {% if declaration.isStatic %}static {% endif %}{% if declaration.isVirtual %}virtual {% endif %}{% if method.returnType %}{{ method.returnType }} {% endif %}{{ method.name }}({% include "arguments_types_names.txt" %});
     {% endwith %}
     {% endfor %}
 };

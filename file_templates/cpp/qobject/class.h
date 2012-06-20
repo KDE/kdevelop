@@ -4,41 +4,42 @@
  {{ license|lines_prepend:" * " }}
  */
 
-#ifndef {{ name|upper }}_H
-#define {{ name|upper }}_H
+#ifndef {% include "include_guard_cpp.txt" %}
+#define {% include "include_guard_cpp.txt" %}
 
 #include <QObject>
 
+{% include "namespace_open_cpp.txt" %}
+
 class {{ name }}Private;
 
-class {{ name }}{% if is_inherited %} :{% for super in direct_inheritance_list %} public {{ super.identifier }}{% if not forloop.last %},{% endif %}{% endfor %}{% else %} : public QObject{% endif %}
+class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.inheritanceMode }} {{ base.baseType }}{% if not forloop.last %},{% endif %}{% endfor %}{% else %} : public QObject{% endif %}
 {
-    // This object has {{ properties|length }} properties.
     Q_OBJECT
     {% for property in properties %}
     Q_PROPERTY({{ property.type }} {{ property.name }} READ {{ property.name }} WRITE set{{ property.name|upper_first }})
     {% endfor %}
 public:
-    {% for declaration in public_functions %}
+    {% for method in public_methods %}
         {% include "declaration.txt" %}
     {% endfor %}
-    
+
     {% for property in properties %}
     {{ property.type }} {{ property.name }}() const;
     {% endfor %}
-    
+
 public Q_SLOTS:
     {% for property in properties %}
     void set{{ property.name|upper_first }}({{ property.type }} {{ property.name }});
     {% endfor %}
-    
+
 protected:
-    {% for declaration in protected_functions %}
+    {% for method in protected_methods %}
         {% include "declaration.txt" %}
     {% endfor %}
-    
+
 private:
     Q_DECLARE_PRIVATE({{ name }})
 };
 
-#endif // {{ name|upper }}_H
+#endif // {% include "include_guard_cpp.txt" %}

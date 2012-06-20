@@ -1,10 +1,10 @@
 {% load kdev_filters %}
 /*
 
-  {{ license }}
+ {{ license|lines_prepend:" * " }}
  */
 
-#include "{{ name }}.h"
+#include "{{ output_file_header }}"
 
 class {{ name }}Private
 {
@@ -12,43 +12,43 @@ public:
     {% for property in properties %}
     {{ property.type }} {{ property.name }};
     {% endfor %}
-    
-    {% for declaration in private_functions %}
-    {% include "declaration.txt" %}
+
+    {% for method in private_methods %}
+    {% include "method_declaration.txt" %}
     {% endfor %}
 };
 
-{% for declaration in private_functions %}
-{% with declaration.internal_declarations as arguments %}
+{% for method in private_methods %}
+{% with method.arguments as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}Private::{{ declaration.identifier }}({% include "arguments_types_names.txt" %})
+{% if method.type %}{{ method.type }} {% endif %}{{ name }}Private::{{ method.name }}({% include "arguments_types_names.txt" %})
 {
-    {% if declaration.type %}
-    return {{ declaration.default_return_value }};
+    {% if method.type %}
+    return {{ method.default_return_value }};
     {% endif %}
 }
 {% endwith %}
 {% endfor %}
 
-{% for declaration in public_functions %}
-{% with declaration.internal_declarations as arguments %}
+{% for method in public_methods %}
+{% with method.arguments as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %}){% if declaration.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
+{% if method.type %}{{ method.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
-    {% if declaration.is_destructor %}
-    delete d;{% endif %}{% if declaration.type %}return {{ declaration.default_return_value }};
+    {% if method.isDestructor %}
+    delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
 }
 {% endwith %}
 {% endfor %}
 
-{% for declaration in protected_functions %}
-{% with declaration.internal_declarations as arguments %}
+{% for method in protected_methods %}
+{% with method.arguments as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %}){% if declaration.is_constructor %} : d_ptr(new {{ name }}Private){% endif %}
+{% if method.type %}{{ method.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.is_constructor %} : d_ptr(new {{ name }}Private){% endif %}
 {
-    {% if declaration.is_destructor %}
-    delete d;{% endif %}{% if declaration.type %}return {{ declaration.default_return_value }};
+    {% if method.isDestructor %}
+    delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
 }
 {% endwith %}

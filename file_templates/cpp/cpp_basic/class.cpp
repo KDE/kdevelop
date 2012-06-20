@@ -8,14 +8,12 @@
 
 {% include "namespace_use_cpp.txt" %}
 
-{% for declaration in declarations %}
-{% with declaration.internal_declarations as arguments %}
+{% for method in method %}
+{% with method.arguments as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}({% include "arguments_types_names.txt" %})
+{% if method.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %})
 {
-    {% if declaration.type %}
-    return {{ declaration.default_return_value }};
-    {% endif %}
+
 }
 {% endwith %}
 {% endfor %}
