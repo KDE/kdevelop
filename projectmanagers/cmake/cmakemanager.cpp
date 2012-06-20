@@ -641,6 +641,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         w->setObjectName(project->name()+"_ProjectWatcher");
         w->addFile(cachefile.toLocalFile());
         connect(w, SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
+        connect(w, SIGNAL(created(QString)), this, SLOT(dirtyFile(QString)));
         connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
