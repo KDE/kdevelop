@@ -23,6 +23,7 @@
 #include "interfaces/icore.h"
 #include "language/codegen/documentchangeset.h"
 #include "codedescription.h"
+#include "templaterenderer.h"
 #include "duchain/duchainlock.h"
 #include "duchain/duchain.h"
 #include "duchain/declaration.h"
@@ -129,48 +130,15 @@ GRANTLEE_BEGIN_LOOKUP(DeclarationPointer)
     }
 GRANTLEE_END_LOOKUP
 
-class NoEscapeStream : public Grantlee::OutputStream
-{
-public:
-    NoEscapeStream();
-    explicit NoEscapeStream (QTextStream* stream);
-
-    virtual QString escape (const QString& input) const;
-    virtual QSharedPointer< OutputStream > clone (QTextStream* stream) const;
-};
-
-NoEscapeStream::NoEscapeStream() : OutputStream()
-{
-
-}
-
-NoEscapeStream::NoEscapeStream (QTextStream* stream) : OutputStream (stream)
-{
-
-}
-
-QString NoEscapeStream::escape (const QString& input) const
-{
-    return input;
-}
-
-QSharedPointer< Grantlee::OutputStream > NoEscapeStream::clone (QTextStream* stream) const
-{
-    QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
-    return clonedStream;
-}
-
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
     QString templateDescription;
     KArchive* archive;
     KUrl baseUrl;
-    ArchiveTemplateLoader* loader;
-    QVariantHash variables;
+    TemplateRenderer renderer;
 
     void loadTemplate();
-    QString render(Grantlee::Template t, Grantlee::Context& c);
 };
 
 void TemplateClassGeneratorPrivate::loadTemplate()
@@ -205,18 +173,9 @@ void TemplateClassGeneratorPrivate::loadTemplate()
     }
 
     archive->open(QIODevice::ReadOnly);
+
+    renderer.addArchive(archive->directory());
 }
-
-QString TemplateClassGeneratorPrivate::render (Grantlee::Template t, Grantlee::Context& c)
-{
-    QString ret;
-    QTextStream textStream(&ret);
-    NoEscapeStream stream(&textStream);
-
-    t->render(&stream, &c);
-    return ret;
-}
-
 
 TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl) : ClassGenerator(),
 d(new TemplateClassGeneratorPrivate)
@@ -243,7 +202,7 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
 
 QVariantHash TemplateClassGenerator::templateVariables()
 {
-    QVariantHash variables = d->variables;
+    QVariantHash variables;
 
     variables["name"] = name();
     variables["identifier"] = identifier();
@@ -320,34 +279,11 @@ QVariantHash TemplateClassGenerator::templateVariables()
 DocumentChangeSet TemplateClassGenerator::generate()
 {
     Q_ASSERT(d->archive);
-    QVariantHash variables = templateVariables();
+    d->renderer.addVariables(templateVariables());
 
     DocumentChangeSet changes;
 
-    Grantlee::Engine engine;
-    engine.setSmartTrimEnabled(true);
-
-    Grantlee::FileSystemTemplateLoader* loader = new Grantlee::FileSystemTemplateLoader;
-    loader->setTemplateDirs(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
-    engine.addTemplateLoader(Grantlee::AbstractTemplateLoader::Ptr(loader));
-
-    foreach (const QString& path, ICore::self()->componentData().dirs()->resourceDirs("lib"))
-    {
-        engine.addPluginPath(path);
-    }
-
-    Grantlee::Context context(variables);
-
-    // TODO: Add more variables to context
-
     const KArchiveDirectory* dir = d->archive->directory();
-
-    d->loader = new ArchiveTemplateLoader(dir);
-    engine.addTemplateLoader(Grantlee::AbstractTemplateLoader::Ptr(d->loader));
-
-
-
-    kDebug() << "Opened archive with contents:" << dir->entries();
 
     DUChainReadLocker lock(DUChain::lock());
 
@@ -382,13 +318,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
         IndexedString document(url);
         SimpleRange range(SimpleCursor(0, 0), 0);
 
-        Grantlee::Template fileTemplate = engine.newTemplate(file->data(), it.key());
-
-        DocumentChange change(document, range, QString(), d->render(fileTemplate, context));
-        if (fileTemplate->error() != Grantlee::NoError)
-        {
-            kDebug() << fileTemplate->errorString();
-        }
+        DocumentChange change(document, range, QString(), d->renderer.render(file->data(), it.key()));
         changes.addChange(change);
     }
 
@@ -421,9 +351,7 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
 {
     QHash<QString, KUrl> map;
 
-    Grantlee::Engine engine;
-
-    Grantlee::Context context(templateVariables());
+    d->renderer.addVariables(templateVariables());
 
     KConfig templateConfig(d->templateDescription);
     KConfigGroup group(&templateConfig, "General");
@@ -438,10 +366,8 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
             continue;
         }
 
-        Grantlee::Template nameTemplate = engine.newTemplate(cg.readEntry("OutputFile"), cg.name());
-
         KUrl url(baseUrl);
-        QString outputName = nameTemplate->render(&context);
+        QString outputName = d->renderer.render(cg.readEntry("OutputFile"), cg.name());
         if (toLower)
         {
             outputName = outputName.toLower();
@@ -482,21 +408,10 @@ QByteArray TemplateClassGenerator::customOptions()
 
 void TemplateClassGenerator::addVariables(const QVariantHash& variables)
 {
-    for (QVariantHash::const_iterator it = variables.constBegin(); it != variables.constEnd(); ++it)
-    {
-        d->variables.insert(it.key(), it.value());
-    }
+    d->renderer.addVariables(variables);
 }
 
-QString TemplateClassGenerator::renderString(const QString& text)
+QString TemplateClassGenerator::renderString (const QString& text)
 {
-    Grantlee::Engine engine;
-
-    QVariantHash variables = templateVariables();
-    kDebug() << variables;
-
-    Grantlee::Context context(variables);
-
-    Grantlee::Template t = engine.newTemplate(text, QString());
-    return t->render(&context);
+    return d->renderer.render(text);
 }

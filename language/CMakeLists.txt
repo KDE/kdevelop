@@ -131,6 +131,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/licensepage.cpp
     codegen/outputpage.cpp
     codegen/defaultcreateclasshelper.cpp
+    codegen/templaterenderer.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -348,6 +349,7 @@ install(FILES
     codegen/licensepage.h
     codegen/outputpage.h
     codegen/defaultcreateclasshelper.h
+    codegen/templaterenderer.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
