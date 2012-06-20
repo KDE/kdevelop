@@ -471,14 +471,14 @@ CMakeManager::~CMakeManager()
 
 KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
+    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     KUrl ret;
-    ProjectBaseItem* parent = item->parent();
+    ProjectBaseItem* parent = fi ? fi->formerParent() : item->parent();
     if (parent)
         ret=buildDirectory(parent);
     else
         ret=CMake::currentBuildDir(item->project());
     
-    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     if(fi)
         ret.addPath(fi->buildDir());
     return ret;
@@ -641,6 +641,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         w->setObjectName(project->name()+"_ProjectWatcher");
         w->addFile(cachefile.toLocalFile());
         connect(w, SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
+        connect(w, SIGNAL(created(QString)), this, SLOT(dirtyFile(QString)));
         connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);

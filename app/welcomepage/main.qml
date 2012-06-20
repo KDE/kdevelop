@@ -25,26 +25,20 @@ Rectangle
     id: root
     width: 360
     height: 360
-    property Item current
+    property Item current: null
+    property string areaName: area
     
-    function areasComponent(area)
-    {
+    onAreaNameChanged: {
+        if(current!=null) {
+            current.destroy(1000)
+        }
         var component = Qt.createComponent(":/"+area+".qml")
         console.log(component)
         if (component.status == Component.Ready) {
             console.log(component)
-            return component.createObject(root);
+            current = component.createObject(root);
+            current.anchors.fill=root
         } else
-            throw("Error loading component "+component.errorString());
-    }
-    
-    state: area
-    onStateChanged: {
-        if(current)
-            current.visible=false
-        
-        try { current = areasComponent(area) }
-        catch(e) { console.log(e); }
-        current.anchors.fill=root
+            console.log("Error loading component ", component.errorString());
     }
 }
