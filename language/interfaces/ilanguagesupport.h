@@ -73,12 +73,19 @@ public:
      * Should return a document change-tracker for this language that tracks the changes in the given document 
      * */
     virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
-    
+
     /**
-     * Should return a class creating helper for this language, or zero
+     * Should return a class creating helper for this language, or zero.
+     *
+     * If zero is returned, a default class helper will be created.
+     * Reimplementing this method is therefore not necessary to have classes created in this language.
+     *
+     * @param assistant the assistant dialog that will be using this helper.
+     * It should be set as parent to all dialog pages created by this helper,
+     * and can be used for getting information about the new class.
      * */
     virtual ICreateClassHelper* createClassHelper(TemplateClassAssistant* assistant) const;
-    
+
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
      * In C++, they are used to allow highlighting and navigation of macro-uses.
