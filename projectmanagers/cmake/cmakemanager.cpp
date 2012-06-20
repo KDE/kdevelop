@@ -471,14 +471,14 @@ CMakeManager::~CMakeManager()
 
 KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
+    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     KUrl ret;
-    ProjectBaseItem* parent = item->parent();
+    ProjectBaseItem* parent = fi ? fi->formerParent() : item->parent();
     if (parent)
         ret=buildDirectory(parent);
     else
         ret=CMake::currentBuildDir(item->project());
     
-    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     if(fi)
         ret.addPath(fi->buildDir());
     return ret;
