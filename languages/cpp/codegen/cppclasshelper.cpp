@@ -174,6 +174,9 @@ QVariantHash CppTemplateNewClass::templateVariables()
     variables["private_members"] = QVariant::fromValue(privateMembers);
     variables["protected_members"] = QVariant::fromValue(protectedMembers);
     variables["public_members"] = QVariant::fromValue(publicMembers);
+
+    variables["namespaces"] = m_namespaces;
+
     return variables;
 }
 
