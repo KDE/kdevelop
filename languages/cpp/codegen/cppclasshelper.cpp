@@ -1,6 +1,6 @@
 /*
  * KDevelop C++ Language Support
- * 
+ *
  * Copyright 2008 Hamish Rodda <rodda@kde.org>
  * Copyright 2012 Miha Čančula <miha@noughmad.eu>
  *
@@ -58,17 +58,17 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
     KUrl url = m_assistant->baseUrl();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     ProjectBaseItem* item = 0;
-        
+
     if (project)
     {
         QList<ProjectBaseItem*> items = project->itemsForUrl(url);
-        
+
         if (!items.isEmpty())
         {
             item = items.first();
         }
     }
-    
+
     return new CppTemplateNewClass(item);
 }
 
@@ -99,18 +99,18 @@ CppTemplateNewClass::~CppTemplateNewClass()
 QVariantHash CppTemplateNewClass::templateVariables()
 {
     QVariantHash variables = KDevelop::TemplateClassGenerator::templateVariables();
-    
+
     QList<DeclarationPointer> privateFunctions;
     QList<DeclarationPointer> protectedFunctions;
     QList<DeclarationPointer> publicFunctions;
-    
+
     QList<DeclarationPointer> privateMembers;
     QList<DeclarationPointer> protectedMembers;
     QList<DeclarationPointer> publicMembers;
-    
+
     QList<DeclarationPointer> slotDeclarations;
     QList<DeclarationPointer> signalDeclarations;
-    
+
     DUChainReadLocker lock(DUChain::lock());
     foreach (DeclarationPointer ptr, declarations())
     {
@@ -119,11 +119,11 @@ QVariantHash CppTemplateNewClass::templateVariables()
         {
             continue;
         }
-        
+
         if (member->isFunctionDeclaration())
         {
             ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(member);
-        
+
             if (function->isSlot())
             {
                 slotDeclarations << ptr;
@@ -153,24 +153,24 @@ QVariantHash CppTemplateNewClass::templateVariables()
                 case Declaration::DefaultAccess:  // In C++, class members are private by default
                     privateMembers << ptr;
                     break;
-                    
+
                 case Declaration::Protected:
                     protectedMembers << ptr;
                     break;
-                    
+
                 case Declaration::Public:
                     publicMembers << ptr;
             }
         }
     }
-    
+
     variables["private_functions"] = QVariant::fromValue(privateFunctions);
     variables["protected_functions"] = QVariant::fromValue(protectedFunctions);
     variables["public_functions"] = QVariant::fromValue(publicFunctions);
-    
+
     variables["slots"] = QVariant::fromValue(slotDeclarations);
     variables["signals"] = QVariant::fromValue(signalDeclarations);
-    
+
     variables["private_members"] = QVariant::fromValue(privateMembers);
     variables["protected_members"] = QVariant::fromValue(protectedMembers);
     variables["public_members"] = QVariant::fromValue(publicMembers);

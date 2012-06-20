@@ -40,14 +40,15 @@ class CppClassHelper : public KDevelop::ICreateClassHelper
 public:
     CppClassHelper(KDevelop::TemplateClassAssistant* assistant);
     virtual ~CppClassHelper();
-    
+
     virtual KDevelop::ClassGenerator* generator();
     virtual KDevelop::OverridesPage* overridesPage();
     virtual KDevelop::ClassIdentifierPage* identifierPage();
-    
+
 private:
     KDevelop::TemplateClassAssistant* m_assistant;
 };
+
 class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 {
   public:
@@ -61,13 +62,13 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 
     CppTemplateNewClass(KDevelop::ProjectBaseItem* parentItem);
     virtual ~CppTemplateNewClass();
-    
+
     virtual KDevelop::DocumentChangeSet generate();
     virtual QVariantHash templateVariables();
 
     virtual QList<KDevelop::DeclarationPointer> addBaseClass(const QString &);
     virtual void clearInheritance();
-    
+
     virtual void setIdentifier(const QString& identifier);
     virtual QString identifier() const;
 
