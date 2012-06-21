@@ -21,6 +21,8 @@
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <KLineEdit>
 #include <QMenu>
 
@@ -190,6 +192,9 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setModel( m_fileModel );
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
+    m_editPatch.filesList->setSelectionMode(QAbstractItemView::NoSelection);
+    m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_editPatch.filesList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customContextMenuRequested(QPoint)));
 
     m_editPatch.previousHunk->setIcon( KIcon( "arrow-up" ) );
     m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
@@ -240,6 +245,39 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
     connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( showPatch() ) );
+}
+
+void PatchReviewToolView::customContextMenuRequested(const QPoint& )
+{
+    KUrl::List urls;
+    QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
+    if(selectionIdxs.isEmpty())
+        return;
+    
+    foreach(const QModelIndex& idx, selectionIdxs) {
+        if(idx.column()==0) {
+            urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
+        }
+    }
+    
+    QPointer<QMenu> menu = new QMenu(m_editPatch.filesList);
+    QList<ContextMenuExtension> extensions;
+    if(!urls.isEmpty()) {
+        KDevelop::FileContext context(urls);
+        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+    }
+
+    QList<QAction*> vcsActions;
+    foreach( const ContextMenuExtension& ext, extensions )
+    {
+        vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
+    }
+
+    menu->addActions(vcsActions);
+    if ( !menu->isEmpty() ) {
+        menu->exec(QCursor::pos());
+    }
+    delete menu;
 }
 
 void PatchReviewToolView::nextHunk() {

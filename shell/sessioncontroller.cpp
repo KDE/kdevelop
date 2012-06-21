@@ -54,13 +54,14 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QTimer>
 #include <QStandardItemModel>
-#include <QTreeView>
+#include <QListView>
 #include <QHeaderView>
 #include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
+#include <QLayout>
 #include <QDBusConnection>
 
 
@@ -832,7 +833,7 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
 class SessionChooserDialog : public KDialog {
     Q_OBJECT
 public:
-    SessionChooserDialog(QTreeView* view, QStandardItemModel* model);
+    SessionChooserDialog(QListView* view, QStandardItemModel* model);
     bool eventFilter(QObject* object, QEvent* event);
 
 public Q_SLOTS:
@@ -845,7 +846,7 @@ private Q_SLOTS:
     void itemEntered(const QModelIndex& index);
 
 private:
-    QTreeView* m_view;
+    QListView* m_view;
     QStandardItemModel* m_model;
     QTimer m_updateStateTimer;
 
@@ -854,7 +855,7 @@ private:
     int m_deleteCandidateRow;
 };
 
-SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model)
+SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* model)
     : m_view(view), m_model(model), m_deleteCandidateRow(-1)
 {
     m_updateStateTimer.setInterval(5000);
@@ -895,16 +896,19 @@ void SessionChooserDialog::updateState() {
         if(session == i18n("Create New Session"))
             continue;
         
-        QString state;
+        QString state, tooltip;
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
-            state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
-                         lockState.holderApp, lockState.holderHostname);
+            tooltip = i18n("Active session.\npid %1, app %2, host %3", lockState.holderPid, lockState.holderApp, lockState.holderHostname);
+            state = i18n("Running");
         }
         
-        if(m_model->item(row, 2))
+        if(m_model->item(row, 2)) {
+            m_model->item(row, 1)->setIcon(lockState ? KIcon("") : KIcon("media-playback-start"));
+            m_model->item(row, 1)->setToolTip(tooltip);
             m_model->item(row, 2)->setText(state);
+        }
     }
     
     m_updateStateTimer.start();
@@ -915,10 +919,9 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     // The catalog hasn't been loaded yet
     KGlobal::locale()->insertCatalog("kdevplatform");
 
-    QTreeView* view = new QTreeView;
+    QListView* view = new QListView;
     QStandardItemModel* model = new QStandardItemModel(view);
     SessionChooserDialog dialog(view, model);
-    view->setRootIsDecorated(false);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QVBoxLayout layout(dialog.mainWidget());
@@ -930,6 +933,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
     model->setHeaderData(2, Qt::Horizontal,i18n("State"));
     view->setModel(model);
+    view->setModelColumn(1);
     layout.addWidget(view);
     
     int row = 0;
@@ -944,9 +948,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
             continue;
         }
 
-        bool running = false;
-        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
-            running = true;
+        bool running = KDevelop::SessionController::tryLockSession(si.uuid.toString());
         
         if(onlyRunning && !running)
             continue;
@@ -956,10 +958,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         
         model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
         model->setItem(row, 1, new QStandardItem(si.description));
-        
-        QString state;
-        
-        model->setItem(row, 2, new QStandardItem(""));
+        model->setItem(row, 2, new QStandardItem);
         
         if(defaultRow == row && running)
             ++defaultRow;
@@ -967,16 +966,15 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         ++row;
     }
     
-    if(!onlyRunning)
-        model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+    if(!onlyRunning) {
+        model->setItem(row, 0, new QStandardItem);
+        model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
+    }
 
     dialog.updateState();
+    dialog.mainWidget()->layout()->setContentsMargins(0,0,0,0);
     
     view->selectionModel()->setCurrentIndex(model->index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-    
-    view->resizeColumnToContents(0);
-    view->resizeColumnToContents(1);
-    view->resizeColumnToContents(2);
     view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
     dialog.setInitialSize(QSize(900, 600));
@@ -1013,13 +1011,10 @@ void SessionChooserDialog::itemEntered(const QModelIndex& index)
 
     // align the delete-button to stay on the right border of the item
     // we need the right most column's index
-    QModelIndex in = m_model->index( index.row(), 2 );
+    QModelIndex in = m_model->index( index.row(), 1 );
     const QRect rect = m_view->visualRect(in);
-    const int x = rect.right() - m_deleteButton->size().width();
-    //FIXME: Figure out why visualRect is giving wrong coordinates. Ideally the code should be
-    //       y = rect.top()
-    const int y = rect.bottom() + rect.height()/2 + 3;
-    m_deleteButton->setGeometry( x, y, rect.height(), rect.height() );
+    QPoint p(rect.right() - m_deleteButton->size().width(), rect.top() + rect.height()/4);
+    m_deleteButton->setGeometry( QRect(p, QSize(rect.height(), rect.height()) ) );
 
     m_deleteCandidateRow = index.row();
     m_deleteButtonTimer.start();

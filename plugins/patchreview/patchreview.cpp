@@ -95,9 +95,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
                         for ( QList<KTextEditor::MovingRange*>::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
-                            int line;
-
-                            line = ( *it )->start().line();
+                            int line = ( *it )->start().line();
 
                             if ( forwards ) {
                                 if ( line > c.line() && ( bestLine == -1 || line < bestLine ) )
@@ -110,6 +108,9 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                         if ( bestLine != -1 ) {
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return;
+                        } else {
+                            int next = qBound(0, forwards ? a+1 : a-1, m_modelList->modelCount()-1);
+                            ICore::self()->documentController()->openDocument(urlForFileModel(m_modelList->modelAt(next)));
                         }
                     }
                 }
