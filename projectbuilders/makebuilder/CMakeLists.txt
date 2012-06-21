@@ -1,7 +1,7 @@
 project(makebuilder)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9037 )
 
-add_subdirectory(tests)
+
 
 ########### next target ###############
 
