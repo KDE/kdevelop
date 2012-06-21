@@ -41,8 +41,6 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-//#include "makeoutputdelegate.h"
-//#include "makeoutputmodel.h"
 #include "makebuilder.h"
 
 using namespace KDevelop;
@@ -151,7 +149,6 @@ void MakeJob::start()
     m_process->setWorkingDirectory( buildDir.toLocalFile() );
     m_process->setProgram( command, cmd );
     kDebug(9037) << "Starting build:" << command << cmd << "Build directory" << buildDir;
-    kDebug(9037) << "Time at start of build is now: " << QDateTime::currentDateTime();
     m_process->start();
 }
 
@@ -329,7 +326,6 @@ void MakeJob::procError( QProcess::ProcessError err )
 void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 {
     Q_UNUSED(code)
-    kDebug(9037) << "Time at end of build is now: " << QDateTime::currentDateTime();
     m_lineMaker->flushBuffers();
     if( code==0 && status == QProcess::NormalExit )
     {
