@@ -36,14 +36,14 @@ class TemplateSelectionPage;
 class KDEVPLATFORMLANGUAGE_EXPORT ClassMembersPage : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
+    Q_PROPERTY(KDevelop::VariableDescriptionList members READ members WRITE setMembers)
 
 public:
     explicit ClassMembersPage (QWidget* parent);
     virtual ~ClassMembersPage();
 
-    ClassDescription description() const;
-    void setDescription(const ClassDescription& description);
+    VariableDescriptionList members() const;
+    void setMembers(const VariableDescriptionList& members);
 
     void moveRowTo(int destination, bool relative);
 

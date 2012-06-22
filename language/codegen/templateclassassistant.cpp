@@ -145,12 +145,7 @@ void TemplateClassAssistant::next()
 
     if (currentPage() == d->membersPage)
     {
-        ClassDescription desc(generator()->name());
-        foreach (DeclarationPointer declaration, generator()->declarations())
-        {
-            desc.methods << FunctionDescription(declaration);
-        }
-        d->membersPage->widget()->setProperty("description", QVariant::fromValue(desc));
+        d->membersPage->widget()->setProperty("members", QVariant::fromValue(generator()->description().members));
     }
 
     if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
@@ -174,7 +169,8 @@ void TemplateClassAssistant::accept()
         templateGenerator->addVariables(d->templateOptionsPage->widget()->property("templateOptions").toHash());
     }
 
-    ClassDescription desc = d->membersPage->widget()->property("description").value<ClassDescription>();
+    ClassDescription desc = generator()->description();
+    desc.members = d->membersPage->widget()->property("members").value<VariableDescriptionList>();
     generator()->setDescription(desc);
 
     CreateClassAssistant::accept();

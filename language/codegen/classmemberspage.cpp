@@ -42,6 +42,9 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
 
     connect (d->ui->addItemButton, SIGNAL(clicked(bool)), SLOT(addItem()));
     connect (d->ui->removeItemButton, SIGNAL(clicked(bool)), SLOT(removeItem()));
+
+    connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(currentSelectionChanged(QItemSelection)));
 }
 
 ClassMembersPage::~ClassMembersPage()
@@ -49,9 +52,9 @@ ClassMembersPage::~ClassMembersPage()
 
 }
 
-void ClassMembersPage::setDescription(const ClassDescription& description)
+void ClassMembersPage::setMembers (const VariableDescriptionList& members)
 {
-    foreach (const VariableDescription& variable, description.members)
+    foreach (const VariableDescription& variable, members)
     {
         int i = 0;
         d->ui->itemView->insertRow(i);
@@ -59,23 +62,20 @@ void ClassMembersPage::setDescription(const ClassDescription& description)
         d->ui->itemView->setItem(i, 1, new QTableWidgetItem(variable.name));
     }
 
-    connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(currentSelectionChanged(QItemSelection)));
-
     currentSelectionChanged(QItemSelection());
 }
 
-ClassDescription ClassMembersPage::description() const
+VariableDescriptionList ClassMembersPage::members() const
 {
-    ClassDescription description;
+    VariableDescriptionList list;
     for (int i = 0; i < d->ui->itemView->rowCount(); ++i)
     {
         VariableDescription var;
         var.type = d->ui->itemView->item(i, 0)->text();
         var.name = d->ui->itemView->item(i, 1)->text();
-        description.members << var;
+        list << var;
     }
-    return description;
+    return list;
 }
 
 void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)

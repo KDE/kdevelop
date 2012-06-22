@@ -324,6 +324,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
 
         DocumentChange change(document, range, QString(), d->renderer.render(file->data(), it.key()));
         changes.addChange(change);
+        kDebug() << "Added change for file" << document.str();
     }
 
     return changes;
