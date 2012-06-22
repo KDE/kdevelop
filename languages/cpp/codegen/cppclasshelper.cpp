@@ -200,7 +200,11 @@ KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
     folder=static_cast<ProjectFolderItem*>(m_parentItem->target()->parent());
     Q_ASSERT(folder->folder());
   }else if(!folder) {
-    QList<ProjectFolderItem*> folderList = p->foldersForUrl(implementationUrl().upUrl());
+    QHash<QString,KUrl> urls = fileUrls();
+    Q_ASSERT(!urls.isEmpty());
+    if(urls.isEmpty())
+      return changes;
+    QList<ProjectFolderItem*> folderList = p->foldersForUrl(urls.values().first().upUrl());
     if(folderList.isEmpty())
       return changes;
     folder = folderList.first();
@@ -243,14 +247,13 @@ KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
   }
 
   if(target && p->buildSystemManager()) {
-    ProjectFileItem* file = p->projectFileManager()->addFile(implementationUrl(), folder);
-    ProjectFileItem* header = p->projectFileManager()->addFile(headerUrl(), folder);
     QList<ProjectFileItem*> itemsToAdd;
-    if (file) {
-      itemsToAdd << file;
-    }
-    if (header) {
-      itemsToAdd << header;
+    foreach (const KUrl& url, fileUrls())
+    {
+      if (ProjectFileItem* file = p->projectFileManager()->addFile(url, folder))
+      {
+        itemsToAdd << file;
+      }
     }
 
     p->buildSystemManager()->addFilesToTarget(itemsToAdd, target);
