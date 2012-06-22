@@ -111,6 +111,7 @@ void CustomBuildJob::start()
         exec->setArguments( strargs );
         exec->setEnvironment( KDevelop::EnvironmentGroupList( KGlobal::config() ).createEnvironment( environment, KProcess::systemEnvironment() ) );
         exec->setWorkingDirectory( builddir );
+
         
         connect( exec, SIGNAL(completed()), SLOT(procFinished()) );
         connect( exec, SIGNAL(failed( QProcess::ProcessError )), SLOT(procError( QProcess::ProcessError )) );
