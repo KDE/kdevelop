@@ -40,7 +40,7 @@ namespace KDevelop {
  * A variable has two main properties: its type and name.
  * 
  **/
-struct VariableDescription
+struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
 {
     /**
      * Creates a variable with no type and no name
@@ -82,7 +82,7 @@ typedef QList<VariableDescription> VariableDescriptionList;
  * 
  * A function has a name and any number of arguments and return values
  **/
-struct FunctionDescription
+struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
 {
     /**
      * Creates a function with no name and no arguments
@@ -161,7 +161,7 @@ typedef QList<FunctionDescription> FunctionDescriptionList;
 /**
  * Description of an inheritance relation. 
  **/
-struct InheritanceDescription
+struct KDEVPLATFORMLANGUAGE_EXPORT InheritanceDescription
 {
     /**
      * @brief The mode of this inheritance.
@@ -189,7 +189,7 @@ typedef QList<InheritanceDescription> InheritanceDescriptionList;
  * 
  * A class descriptions stores its name, its member variables and functions, as well as its superclasses and inheritance types. 
  **/
-struct ClassDescription
+struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
 {
     /**
      * Creates an empty class
