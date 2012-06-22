@@ -46,7 +46,7 @@ public:
         ToolDisabled,
         NoCommand
     };
-    
+
     CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, CustomBuildSystemTool::ActionType t );
     virtual void start();
     virtual bool doKill();
@@ -63,7 +63,6 @@ private:
     KDevelop::CommandExecutor* exec;
     bool killed;
     bool enabled;
-    CustomBuildSystem* m_plugin;
 };
 
 #endif 
