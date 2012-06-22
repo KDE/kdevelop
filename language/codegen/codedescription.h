@@ -70,6 +70,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
      * In weekly typed languages, this field can be empty. 
      **/
     QString type;
+    /**
+     * Access specifier, only relevant for class members.
+     * 
+     * Not all languages use these, so it can be left empty.
+     **/
+    QString access;
 };
 
 /**
@@ -116,6 +122,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
      * This function's return values
      **/
     QList<VariableDescription> returnArguments;
+    /**
+     * Access specifier, only relevant for class members.
+     * 
+     * Not all languages use these, so it can be left empty.
+     **/
+    QString access;
 
     /**
      * Specifies whether this function is a class constructor
