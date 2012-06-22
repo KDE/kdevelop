@@ -228,5 +228,4 @@ KDevelop::OutputDelegate* CustomBuildSystem::delegate() const
     return m_delegate;
 }
 
-
 #include "custombuildsystemplugin.moc"

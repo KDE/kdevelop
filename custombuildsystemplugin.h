@@ -83,7 +83,7 @@ public:
     KConfigGroup configuration( KDevelop::IProject* ) const;
     QString findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* ) const;
 private:
-    KDevelop::OutputDelegate* m_delegate; 
+    KDevelop::OutputDelegate* m_delegate;
 };
 
 #endif
