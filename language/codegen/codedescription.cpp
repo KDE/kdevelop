@@ -28,6 +28,32 @@
 
 using namespace KDevelop;
 
+/**
+ * The access policy as a string, or an empty string
+ * if the policy is set to default
+ * 
+ * The DUChain must be locked when calling this function
+ **/
+QString accessPolicyName(const DeclarationPointer& declaration)
+{
+    DUChainPointer<ClassMemberDeclaration> member = declaration.dynamicCast<ClassMemberDeclaration>();
+    if (member)
+    {
+        switch (member->accessPolicy())
+        {
+            case Declaration::Private:
+                return "private";
+            case Declaration::Protected:
+                return "protected";
+            case Declaration::Public:
+                return "public";
+            default:
+                break;
+        }
+    }
+    return QString();
+}
+
 VariableDescription::VariableDescription()
 {
 
@@ -49,6 +75,8 @@ VariableDescription::VariableDescription(const DeclarationPointer& declaration)
         name = declaration->identifier().toString();
         type = declaration->abstractType()->toString();
     }
+
+    access = accessPolicyName(declaration);
 }
 
 FunctionDescription::FunctionDescription()
@@ -100,6 +128,8 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             isSlot = function->isSlot();
             isSignal = function->isSignal();
         }
+
+        access = accessPolicyName(declaration);
     }
 }
 
