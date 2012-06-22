@@ -216,6 +216,7 @@ QVariantHash TemplateClassGenerator::templateVariables()
     ClassDescription desc = description();
     variables["properties"] = QVariant::fromValue(desc.members);
     variables["methods"] = QVariant::fromValue(desc.methods);
+    variables["base_classes"] = QVariant::fromValue(desc.baseClasses);
 
     kDebug() << "Class description:" << desc.members.size() << desc.methods.size();
 

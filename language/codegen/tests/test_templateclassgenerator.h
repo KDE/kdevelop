@@ -23,6 +23,8 @@
 #define KDEVELOP_TESTTEMPLATECLASSGENERATOR_H
 
 #include <QtTest>
+
+#include "language/codegen/codedescription.h"
 #include <KUrl>
 
 namespace KDevelop
@@ -41,9 +43,15 @@ private slots:
     void fileLabels();
     void defaultFileUrls();
     void lowercaseFileUrls();
+    void customOptions();
+    void templateVariables();
+    void codeDescription();
+
+    void generate();
 
 private:
     KUrl baseUrl;
+    KDevelop::ClassDescription description;
     KDevelop::TemplateClassGenerator* generator;
 };
 

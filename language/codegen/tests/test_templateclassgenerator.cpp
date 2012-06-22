@@ -21,6 +21,7 @@
 #include "test_templateclassgenerator.h"
 #include "language/codegen/templateclassgenerator.h"
 #include "language/codegen/templatesmodel.h"
+#include "language/codegen/documentchangeset.h"
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
@@ -31,6 +32,10 @@
 
 #include <qtest_kde.h>
 
+#define CHECK_TEMPLATE_VARIABLE(name, type, val)          \
+QVERIFY(variables.contains(#name));                        \
+QCOMPARE(variables.value(#name).value<type>(), val)
+
 using namespace KDevelop;
 
 void TestTemplateClassGenerator::initTestCase()
@@ -38,8 +43,9 @@ void TestTemplateClassGenerator::initTestCase()
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    generator = new TemplateClassGenerator(baseUrl);
     KComponentData data = ICore::self()->componentData();
+    baseUrl.setDirectory(KStandardDirs::locateLocal("tmp", "test_templateclassgenerator/", data));
+    generator = new TemplateClassGenerator(baseUrl);
 
     // Needed for extracting description out of template archives
     TemplatesModel model(data, this);
@@ -61,6 +67,30 @@ void TestTemplateClassGenerator::initTestCase()
 
     QVERIFY(found);
 
+    description.name = "ClassName";
+
+    InheritanceDescription inheritance;
+    inheritance.baseType = "QObject";
+    inheritance.inheritanceMode = "public";
+    description.baseClasses << inheritance;
+
+    description.members << VariableDescription("QString", "name")
+                        << VariableDescription("int", "number")
+                        << VariableDescription("SomeCustomType", "data");
+
+    FunctionDescription function;
+    function.name = "doSomething";
+    function.isVirtual = true;
+    function.arguments << VariableDescription("double", "howMuch")
+                       << VariableDescription("bool", "doSomethingElse");
+
+    VariableDescriptionList args;
+    VariableDescriptionList returnArgs;
+    returnArgs << VariableDescription("int", "someOtherNumber");
+    FunctionDescription otherFunction("getSomeOtherNumber", args, returnArgs);
+    description.methods << function << otherFunction;
+
+    generator->setDescription(description);
     generator->setIdentifier("ClassName");
 }
 
@@ -115,5 +145,67 @@ void TestTemplateClassGenerator::lowercaseFileUrls()
     expectedImplementationUrl.addPath("classname.cpp");
     QCOMPARE(files["Implementation"], expectedImplementationUrl);
 }
+
+void TestTemplateClassGenerator::customOptions()
+{
+    QCOMPARE(generator->hasCustomOptions(), false);
+}
+
+void TestTemplateClassGenerator::templateVariables()
+{
+    QHash<QString, KUrl> urls = generator->fileUrlsFromBase(baseUrl, true);
+    foreach (const QString& file, QStringList() << "Header" << "Implementation")
+    {
+        generator->setFileUrl(file, urls[file]);
+    }
+
+    QVariantHash variables = generator->templateVariables();
+    CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
+
+    KUrl headerUrl(baseUrl);
+    headerUrl.addPath("classname.h");
+    CHECK_TEMPLATE_VARIABLE(output_file_header, QString, QString("classname.h"));
+    CHECK_TEMPLATE_VARIABLE(output_file_header_absolute, QString, headerUrl.toLocalFile());
+}
+
+void TestTemplateClassGenerator::codeDescription()
+{
+    QVariantHash variables = generator->templateVariables();
+
+    QVERIFY(variables.contains("base_classes"));
+    InheritanceDescriptionList inheritance = variables["base_classes"].value<InheritanceDescriptionList>();
+    QCOMPARE(inheritance.size(), 1);
+    QCOMPARE(inheritance.first().baseType, QString("QObject"));
+    QCOMPARE(inheritance.first().inheritanceMode, QString("public"));
+
+    QVERIFY(variables.contains("properties"));
+    VariableDescriptionList members = variables["properties"].value<VariableDescriptionList>();
+    QCOMPARE(members.size(), 3);
+    QCOMPARE(members.first().type, QString("QString"));
+    QCOMPARE(members.first().name, QString("name"));
+
+    QVERIFY(variables.contains("methods"));
+    FunctionDescriptionList methods = variables["methods"].value<FunctionDescriptionList>();
+    QCOMPARE(methods.size(), 2);
+    QCOMPARE(methods.first().name, QString("doSomething"));
+    QCOMPARE(methods.first().arguments.size(), 2);
+    QCOMPARE(methods.first().returnArguments.size(), 0);
+    QCOMPARE(methods.last().name, QString("getSomeOtherNumber"));
+    QCOMPARE(methods.last().arguments.size(), 0);
+    QCOMPARE(methods.last().returnArguments.size(), 1);
+}
+
+
+void TestTemplateClassGenerator::generate()
+{
+    DocumentChangeSet changes = generator->generate();
+    DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
+    QVERIFY(result.m_success);
+
+    QDir dir(baseUrl.toLocalFile());
+    QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+    QCOMPARE(entries.size(), 2);
+}
+
 
 QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)
