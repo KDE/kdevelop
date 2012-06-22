@@ -13,7 +13,7 @@ class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.in
 {
 public:
     {% for method in methods %}
-    {% include "method_declaraton_cpp.txt" %}
+    {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 };
 
