@@ -41,7 +41,6 @@ public:
     
 private slots:
     void findTestCases();
-    void processFinished();
     void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 
 private:

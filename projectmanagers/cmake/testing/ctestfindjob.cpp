@@ -54,49 +54,9 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    QFileInfo info(m_suite->executable().toLocalFile());
-    
-    kDebug() << m_suite->executable() << info.exists();
-    
-    if (info.exists() && info.isExecutable())
-    {
-        kDebug() << "Starting process to find test cases" << m_suite->name();
-        m_process = new KProcess(this);
-        m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
-        m_process->setProgram(info.absoluteFilePath(), QStringList() << "-functions");
-        connect (m_process, SIGNAL(finished(int)), SLOT(processFinished()));
-        m_process->start();
-    }
-    else
-    {
-        KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
-        emitResult();
-        return;
-    }
-}
-
-void CTestFindJob::processFinished()
-{
-    kDebug();
-    if (m_process->exitStatus() == KProcess::NormalExit)
-    {
-        QStringList cases;
-        foreach (const QByteArray& line, m_process->readAllStandardOutput().split('\n'))
-        {
-            QString str = line.trimmed();
-            str.remove("()");
-            if (!str.isEmpty())
-            {
-                cases << str;
-            }
-        }
-        m_suite->setTestCases(cases);
-    }
-
     m_pendingFiles = m_suite->sourceFiles();
-    
     kDebug() << "Source files to update:" << m_pendingFiles;
-    
+
     if (m_pendingFiles.isEmpty())
     {
         KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
