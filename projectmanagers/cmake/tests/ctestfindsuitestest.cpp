@@ -28,6 +28,7 @@
 #include <interfaces/itestsuite.h>
 #include <interfaces/iprojectcontroller.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 #include <qtest_kde.h>
 
@@ -41,12 +42,13 @@ using namespace KDevelop;
 void CTestFindSuitesTest::initTestCase()
 {
     AutoTestShell::init();
-    KDevelop::Core::initialize();
+    TestCore::initialize();
+    DUChain::self()->disablePersistentStorage();
 }
 
 void CTestFindSuitesTest::cleanupTestCase()
 {
-    KDevelop::Core::self()->shutdown();
+    Core::self()->shutdown();
 }
 
 void CTestFindSuitesTest::testCTestSuite()
@@ -75,12 +77,10 @@ void CTestFindSuitesTest::testQtTestSuite()
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     
     QCOMPARE(suites.size(), 1);
-    
-    DUChainReadLocker locker(DUChain::lock());
-    
-    
     ITestSuite* suite = suites.first();
     QCOMPARE(suite->cases().size(), 4);
+
+    DUChainReadLocker locker(DUChain::lock());
     QVERIFY(suite->declaration().isValid());
     
     foreach (const QString& testCase, suite->cases())
@@ -98,9 +98,17 @@ IProject* CTestFindSuitesTest::parseProject( const QString& name)
     
     kDebug() << name << url;
     
-    QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);
+    IProject* project = ICore::self()->projectController()->findProjectByName(name);
+    int t = 0;
+    const int timeout = 100;
+    while (!project && t < 30000)
+    {
+        t += timeout;
+        QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), timeout);
+        project = ICore::self()->projectController()->findProjectByName(name);
+    }
         
-    return ICore::self()->projectController()->findProjectByName(name);
+    return project;
 }
 
 #include "ctestfindsuitestest.moc"
