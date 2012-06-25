@@ -27,6 +27,13 @@ void KdeTest::unexpectedPassTestCase()
     QCOMPARE(5*2, 10);
 }
 
+void KdeTest::skippedTestCase()
+{
+    QSKIP("Don't argue with calculators", SkipAll);
+    QCOMPARE(2+2*2, 8);
+}
+
+
 void KdeTest::cleanupTestCase()
 {
     
