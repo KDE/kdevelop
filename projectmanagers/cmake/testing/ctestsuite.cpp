@@ -35,6 +35,7 @@
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/types/structuretype.h>
 #include <project/projectmodel.h>
 
 
@@ -66,38 +67,61 @@ CTestSuite::~CTestSuite()
 void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop::ReferencedTopDUContext& ref)
 {
     DUChainReadLocker locker(DUChain::lock());
-    TopDUContext* context = DUChainUtils::contentContextFromProxyContext(ref.data());
-    if (!context)
+    TopDUContext* topContext = DUChainUtils::contentContextFromProxyContext(ref.data());
+    if (!topContext)
     {
         kDebug() << "No top context in" << document.str();
         return;
     }
-    
-    kDebug() << "Found" << context->localDeclarations(context).size() << "declarations in file" << document.str();
-    foreach (Declaration* decl, context->localDeclarations(context))
+
+    Declaration* testClass = 0;
+    Identifier testCaseIdentifier("tc");
+    foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier("main")))
+    {
+        if (declaration->isDefinition())
+        {
+            kDebug() << "Found a definition for a function 'main()' ";
+            FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(declaration);
+            DUContext* main = def->internalContext();
+            foreach (Declaration* mainDeclaration, main->localDeclarations(topContext))
+            {
+                if (mainDeclaration->identifier() == testCaseIdentifier)
+                {
+                    kDebug() << "Found tc declaration in main:" << mainDeclaration->identifier().toString();
+                    kDebug() << "Its type is" << mainDeclaration->abstractType()->toString();
+                    if (StructureType::Ptr type = mainDeclaration->abstractType().cast<StructureType>())
+                    {
+                        testClass = type->declaration(topContext);
+                    }
+                }
+            }
+        }
+    }
+
+    if (!testClass)
+    {
+        kDebug() << "No test class found in " << document.str();
+        return;
+    }
+
+    if (!m_suiteDeclaration.data())
+    {
+        m_suiteDeclaration = IndexedDeclaration(testClass);
+    }
+
+    foreach (Declaration* decl, testClass->internalContext()->localDeclarations(topContext))
     {
         kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
-        FunctionDefinition* def = 0;
-        if (decl->isDefinition() && (def = dynamic_cast<FunctionDefinition*>(decl)))
-        {
-            decl = def->declaration(context);
-        }
-        
         if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
         {
             if (function->accessPolicy() == Declaration::Private && function->isSlot())
             {
                 QString name = function->qualifiedIdentifier().last().toString();
                 kDebug() << "Found private slot in test" << name; 
-                
-                if (!m_suiteDeclaration.data())
-                {
-                    m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
-                }
 
                 if (name.endsWith("_data"))
                 {
-                    break;
+                    continue;
                 }
 
                 if (name != "initTestCase" && name != "cleanupTestCase" 
@@ -106,6 +130,8 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
                     m_cases << name;
                 }
                 kDebug() << "Found test case function declaration" << function->identifier().toString();
+
+                FunctionDefinition* def = FunctionDefinition::definition(decl);
                 m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
             }
         }
