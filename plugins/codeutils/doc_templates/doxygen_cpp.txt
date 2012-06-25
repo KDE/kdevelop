@@ -8,3 +8,5 @@
  * @return {{ function.returnType }}
 {% endif %}
  */
+
+{{ declaration }}

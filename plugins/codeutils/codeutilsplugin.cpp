@@ -120,8 +120,10 @@ void CodeUtilsPlugin::documentDeclaration()
         return;
     }
     // finally - we found the declaration :)
-    const Cursor insertPos( dec->range().start.line, 0 );
-
+    int line = dec->range().start.line;
+    const Cursor insertPos( line, 0 );
+    const Range declarationRange( line, 0, line+1, 0 );
+    
     QList<ILanguage*> languages = core()->languageController()->languagesForUrl(doc->url());
     if (!languages.isEmpty())
     {
@@ -129,6 +131,7 @@ void CodeUtilsPlugin::documentDeclaration()
     }
 
     TemplateRenderer renderer;
+    renderer.addVariable("declaration", textDoc->text(declarationRange));
     renderer.addVariable("brief", i18n( "..." ));
 
     /*
@@ -158,6 +161,8 @@ void CodeUtilsPlugin::documentDeclaration()
 
     const QString comment = renderer.renderFile(KUrl(fileName));
     kDebug() << comment;
+    
+    textDoc->removeText(declarationRange);
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 
