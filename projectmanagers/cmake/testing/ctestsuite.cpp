@@ -94,8 +94,14 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
                 {
                     m_suiteDeclaration = IndexedDeclaration(function->context()->owner());
                 }
-                
-                if (name != "initTestCase" && name != "cleanupTestCase")
+
+                if (name.endsWith("_data"))
+                {
+                    break;
+                }
+
+                if (name != "initTestCase" && name != "cleanupTestCase" 
+                    && name != "init" && name != "cleanup")
                 {
                     m_cases << name;
                 }
