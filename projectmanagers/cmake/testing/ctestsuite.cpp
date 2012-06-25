@@ -23,6 +23,7 @@
 #include <KProcess>
 #include <KDebug>
 #include <QFileInfo>
+
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/indexeddeclaration.h>
@@ -33,6 +34,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/duchainutils.h>
 #include <project/projectmodel.h>
 
 
@@ -64,7 +66,7 @@ CTestSuite::~CTestSuite()
 void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop::ReferencedTopDUContext& ref)
 {
     DUChainReadLocker locker(DUChain::lock());
-    TopDUContext* context = ref.data();
+    TopDUContext* context = DUChainUtils::contentContextFromProxyContext(ref.data());
     if (!context)
     {
         kDebug() << "No top context in" << document.str();
