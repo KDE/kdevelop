@@ -50,7 +50,9 @@ struct KDEVPLATFORMINTERFACES_EXPORT TestResult
         Skipped, ///< The test case was skipped.
         Passed, ///< The test case was run and passed.
         Failed, ///< The test case was run and failed.
-        Error, ///< There was an error while trying to run the test case
+        ExpectedFail, ///< The test case was expected to fail, and did.
+        UnexpectedPass, ///< The test case was expected to fail, but passed.
+        Error, ///< There was an error while trying to run the test case.
     };
 
     /**
