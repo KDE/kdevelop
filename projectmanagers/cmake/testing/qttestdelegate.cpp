@@ -48,7 +48,7 @@ void QtTestDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
     {
         highlight(opt, failBrush);
     }
-    else if (line.startsWith("XFAIL  :"))
+    else if (line.startsWith("XFAIL  :") || line.startsWith("SKIP   :"))
     {
         highlight(opt, xFailBrush);
     }

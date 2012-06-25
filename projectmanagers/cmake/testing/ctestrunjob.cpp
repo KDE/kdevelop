@@ -149,15 +149,23 @@ void CTestRunJob::receivedLines(const QStringList& lines)
         if (m_suite->cases().contains(testCase))
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
-            if (line.startsWith("PASS"))
+            if (line.startsWith("PASS   :"))
             {
                 result = TestResult::Passed;
             }
-            else if (line.startsWith("FAIL") || line.startsWith("XFAIL"))
+            else if (line.startsWith("FAIL!  :"))
             {
                 result = TestResult::Failed;
             }
-            else if (line.startsWith("SKIP"))
+            else if (line.startsWith("XFAIL  :"))
+            {
+                result = TestResult::ExpectedFail;
+            }
+            else if (line.startsWith("XPASS  :"))
+            {
+                result = TestResult::UnexpectedPass;
+            }
+            else if (line.startsWith("SKIP   :"))
             {
                 result = TestResult::Skipped;
             }
