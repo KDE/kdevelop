@@ -78,7 +78,7 @@ void CTestFindSuitesTest::testQtTestSuite()
     
     QCOMPARE(suites.size(), 1);
     ITestSuite* suite = suites.first();
-    QCOMPARE(suite->cases().size(), 4);
+    QCOMPARE(suite->cases().size(), 5);
 
     DUChainReadLocker locker(DUChain::lock());
     QVERIFY(suite->declaration().isValid());
