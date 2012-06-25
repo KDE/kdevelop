@@ -31,6 +31,7 @@ namespace Grantlee
 class Engine;
 }
 
+class KUrl;
 class KArchiveDirectory;
 
 namespace KDevelop
@@ -81,7 +82,7 @@ public:
      * 
      **/
     void addVariable(const QString& name, const QVariant& value);
-
+    
     /**
      * @brief Renders a single template
      *
@@ -90,6 +91,15 @@ public:
      * @return the rendered template
      **/
     QString render(const QString& content, const QString& name = QString());
+
+    /**
+     * @brief Renders a single template from a file
+     *
+     * @param url the URL of the file from which to load the template
+     * @param name (optional) the name of this template
+     * @return the rendered template
+     **/
+    QString renderFile(const KUrl& url, const QString& name = QString());
 
     /**
      * @brief Renders a list of templates

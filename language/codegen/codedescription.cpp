@@ -99,10 +99,37 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
     if (declaration)
     {
         name = declaration->identifier().toString();
+        DUContext* context = declaration->internalContext();
 
-        foreach (Declaration* arg, declaration->internalContext()->localDeclarations())
+        DUChainPointer<ClassFunctionDeclaration> function = declaration.dynamicCast<ClassFunctionDeclaration>();
+        Q_ASSERT(function);
+        kDebug() << function->defaultParametersSize();
+
+        if (function)
         {
-            arguments << VariableDescription(DeclarationPointer(arg));
+            if (function->internalFunctionContext())
+            {
+                context = function->internalFunctionContext();
+            }
+            isConstructor = function->isConstructor();
+            isDestructor = function->isDestructor();
+            isVirtual = function->isVirtual();
+            isStatic = function->isStatic();
+            isSlot = function->isSlot();
+            isSignal = function->isSignal();
+        }
+
+        int i = 0;
+        foreach (Declaration* arg, context->localDeclarations())
+        {
+            VariableDescription var = VariableDescription(DeclarationPointer(arg));
+            if (function)
+            {
+                var.value = function->defaultParameterForArgument(i).str();
+                kDebug() << var.name << var.value;
+            }
+            arguments << var;
+            ++i;
         }
 
         FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
@@ -115,18 +142,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
 
         if (functionType && functionType->returnType())
         {
-            returnArguments << VariableDescription(name, functionType->returnType()->toString());
-        }
-
-        DUChainPointer<ClassFunctionDeclaration> function = declaration.dynamicCast<ClassFunctionDeclaration>();
-        if (function)
-        {
-            isConstructor = function->isConstructor();
-            isDestructor = function->isDestructor();
-            isVirtual = function->isVirtual();
-            isStatic = function->isStatic();
-            isSlot = function->isSlot();
-            isSignal = function->isSignal();
+            returnArguments << VariableDescription(functionType->returnType()->toString(), QString());
         }
 
         access = accessPolicyName(declaration);

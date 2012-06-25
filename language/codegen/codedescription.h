@@ -76,6 +76,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
      * Not all languages use these, so it can be left empty.
      **/
     QString access;
+    /**
+     * The default value of this variable.
+     */
+    QString value;
 };
 
 /**
@@ -325,10 +329,13 @@ Q_DECLARE_METATYPE(KDevelop::ClassDescription)
 GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
     GRANTLEE_LOOKUP_PROPERTY(type)
+    GRANTLEE_LOOKUP_PROPERTY(access)
+    GRANTLEE_LOOKUP_PROPERTY(value)
 GRANTLEE_END_LOOKUP
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
+    GRANTLEE_LOOKUP_PROPERTY(access)
     GRANTLEE_LOOKUP_PROPERTY(arguments)
     GRANTLEE_LOOKUP_PROPERTY(returnArguments)
     GRANTLEE_LOOKUP_PROPERTY(isConstructor)

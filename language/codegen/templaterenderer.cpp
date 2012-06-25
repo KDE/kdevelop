@@ -20,11 +20,16 @@
 
 #include "templaterenderer.h"
 #include "archivetemplateloader.h"
+#include "codedescription.h"
 #include <interfaces/icore.h>
 
 #include <grantlee/engine.h>
+#include <grantlee/metatype.h>
 #include <KComponentData>
 #include <KStandardDirs>
+#include <KUrl>
+#include <KDebug>
+#include <QFile>
 
 using namespace KDevelop;
 using namespace Grantlee;
@@ -78,6 +83,10 @@ TemplateRenderer::TemplateRenderer()
     {
         d->engine.addPluginPath(path);
     }
+
+    Grantlee::registerMetaType<KDevelop::VariableDescription>();
+    Grantlee::registerMetaType<KDevelop::FunctionDescription>();
+    Grantlee::registerMetaType<KDevelop::ClassDescription>();
 }
 
 TemplateRenderer::~TemplateRenderer()
@@ -120,6 +129,8 @@ void TemplateRenderer::addVariable (const QString& name, const QVariant& value)
 
 QString TemplateRenderer::render (const QString& content, const QString& name)
 {
+    kDebug() << d->context.stackHash(0);
+    
     Template t = d->engine.newTemplate(content, name);
     QString ret;
     QTextStream textStream(&ret);
@@ -129,8 +140,21 @@ QString TemplateRenderer::render (const QString& content, const QString& name)
     return ret;
 }
 
+QString TemplateRenderer::renderFile (const KUrl& url, const QString& name)
+{
+    QFile file(url.toLocalFile());
+    file.open(QIODevice::ReadOnly);
+    
+    QString content(file.readAll());
+    kDebug() << content;
+
+    return render(content, name);
+}
+
+
 QStringList TemplateRenderer::render (const QStringList& contents)
 {
+    kDebug() << d->context.stackHash(0);
     QStringList ret;
     foreach (const QString& content, contents)
     {
