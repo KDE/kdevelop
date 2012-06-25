@@ -194,13 +194,20 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
             return KIcon();
 
         case TestResult::Skipped:
-            return KIcon();
+            return KIcon("task-delegate");
 
         case TestResult::Passed:
-            return KIcon("dialog-ok");
+            return KIcon("dialog-ok-apply");
+
+        case TestResult::UnexpectedPass:
+            // This is a very rare occurence, so the icon should stand out
+            return KIcon("dialog-warning");
 
         case TestResult::Failed:
             return KIcon("edit-delete");
+
+        case TestResult::ExpectedFail:
+            return KIcon("dialog-ok");
 
         case TestResult::Error:
             return KIcon("dialog-cancel");
