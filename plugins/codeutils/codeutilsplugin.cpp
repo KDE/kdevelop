@@ -32,11 +32,14 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/TemplateInterface>
+#include <KStandardDirs>
 #include <QApplication>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/ilanguagecontroller.h>
 
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/declaration.h>
@@ -44,6 +47,8 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/codegen/templateclassassistant.h>
+#include <language/codegen/templaterenderer.h>
+#include <language/codegen/codedescription.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -116,9 +121,17 @@ void CodeUtilsPlugin::documentDeclaration()
     }
     // finally - we found the declaration :)
     const Cursor insertPos( dec->range().start.line, 0 );
-    QString comment;
-    QTextStream stream( &comment );
 
+    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(doc->url());
+    if (!languages.isEmpty())
+    {
+        languages.first()->languageSupport();
+    }
+
+    TemplateRenderer renderer;
+    renderer.addVariable("brief", i18n( "..." ));
+
+    /*
     QString indentation = textDoc->line( insertPos.line() );
     if (!indentation.isEmpty()) {
         int lastSpace = 0;
@@ -127,36 +140,24 @@ void CodeUtilsPlugin::documentDeclaration()
         }
         indentation.truncate(lastSpace);
     }
+    */
 
-    ///TODO: handle existing comments
-    stream << indentation << "/**\n";
-    stream << indentation << " * @brief ${" << i18n( "..." ) << "}\n";
-
-    if (dec->isFunctionDeclaration()) {
-        AbstractFunctionDeclaration* funDec = dynamic_cast<AbstractFunctionDeclaration*>(dec);
-        stream << indentation << " *\n";
-        if ( funDec && funDec->internalFunctionContext() ) {
-            int i = 0;
-            foreach(Declaration* param, funDec->internalFunctionContext()->localDeclarations()) {
-                stream << indentation << " * @param " << param->identifier().toString() << " ${p" << i << ":...}";
-                IndexedString defaultValue = funDec->defaultParameterForArgument(i);
-                if (!defaultValue.isEmpty()) {
-                    stream << " " << i18n("Defaults to %1.", defaultValue.str());
-                }
-                stream << "\n";
-                ++i;
-            }
-        }
-        if ( FunctionType::Ptr funType = dec->type<FunctionType>() ) {
-            if ( funType->returnType() ) {
-                stream << indentation << " * @return ${" << funType->returnType()->toString() << "}\n";
-            }
-        }
+    if (dec->isFunctionDeclaration())
+    {
+        FunctionDescription description = FunctionDescription(DeclarationPointer(dec));
+        renderer.addVariable("function", QVariant::fromValue(description));
+        kDebug() << "Found function" << description.name << "with" << description.arguments.size() << "arguments";
     }
 
-    stream << indentation << " **/\n" << flush;
-
     lock.unlock();
+
+    // TODO: Choose the template based on the language
+    QString fileName = core()->componentData().dirs()->findResource("data", "kdevcodeutils/templates/doxygen_cpp.txt");
+    Q_ASSERT(!fileName.isEmpty());
+    kDebug() << "Rendering template from file" << fileName;
+
+    const QString comment = renderer.renderFile(KUrl(fileName));
+    kDebug() << comment;
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 

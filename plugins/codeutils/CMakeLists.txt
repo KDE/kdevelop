@@ -19,6 +19,8 @@ target_link_libraries(kdevcodeutils
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
+add_subdirectory(doc_templates)
+
 
 install(TARGETS kdevcodeutils DESTINATION ${PLUGIN_INSTALL_DIR} )
 
