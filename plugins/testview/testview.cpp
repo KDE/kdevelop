@@ -60,7 +60,7 @@ enum CustomRoles {
     CaseRole
 };
 
-//BEGIN ProjectManagerFilterAction
+//BEGIN TestViewFilterAction
 
 TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObject* parent )
     : KAction( parent )
@@ -85,7 +85,7 @@ QWidget* TestViewFilterAction::createWidget( QWidget* parent )
     return edit;
 }
 
-//END ProjectManagerFilterAction
+//END TestViwFilterAction
 
 static const char* sessionConfigGroup = "TestView";
 static const char* filterConfigKey = "filter";
