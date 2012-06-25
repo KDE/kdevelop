@@ -39,6 +39,7 @@ private:
     KStatefulBrush passBrush;
     KStatefulBrush failBrush;
     KStatefulBrush xFailBrush;
+    KStatefulBrush xPassBrush;
     KStatefulBrush debugBrush;
 };
 

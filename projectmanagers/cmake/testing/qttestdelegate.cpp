@@ -24,7 +24,8 @@
 QtTestDelegate::QtTestDelegate(QObject* parent) : QItemDelegate(parent),
 failBrush(KColorScheme::View, KColorScheme::NegativeText),
 passBrush(KColorScheme::View, KColorScheme::PositiveText),
-xFailBrush(KColorScheme::View, KColorScheme::NeutralText),
+xFailBrush(KColorScheme::View, KColorScheme::InactiveText),
+xPassBrush(KColorScheme::View, KColorScheme::NeutralText),
 debugBrush(KColorScheme::View, KColorScheme::NormalText)
 {
 
@@ -39,19 +40,23 @@ void QtTestDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
 {
     const QString line = index.data().toString();
     QStyleOptionViewItem opt = option;
-    if (line.startsWith("PASS"))
+    if (line.startsWith("PASS   :"))
     {
         highlight(opt, passBrush);
     }
-    else if (line.startsWith("FAIL"))
+    else if (line.startsWith("FAIL!  :"))
     {
         highlight(opt, failBrush);
     }
-    else if (line.startsWith("XFAIL"))
+    else if (line.startsWith("XFAIL  :"))
     {
         highlight(opt, xFailBrush);
     }
-    else if (line.startsWith("QDEBUG"))
+    else if (line.startsWith("XPASS  :"))
+    {
+        highlight(opt, xPassBrush);
+    }
+    else if (line.startsWith("QDEBUG :"))
     {
         highlight(opt, debugBrush);
     }
