@@ -13,6 +13,8 @@ private slots:
     
     void passingTestCase();
     void failingTestCase();
+    void expectedFailTestCase();
+    void unexpectedPassTestCase();
     
     void cleanupTestCase();
 };
