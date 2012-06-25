@@ -182,10 +182,6 @@ d(new TemplateClassGeneratorPrivate)
 {
     d->archive = 0;
     d->baseUrl = baseUrl;
-
-    Grantlee::registerMetaType<DeclarationPointer>();
-    Grantlee::registerMetaType<VariableDescription>();
-    Grantlee::registerMetaType<FunctionDescription>();
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
