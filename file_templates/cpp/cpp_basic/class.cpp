@@ -8,10 +8,10 @@
 
 {% include "namespace_use_cpp.txt" %}
 
-{% for method in method %}
+{% for method in functions %}
 {% with method.arguments as arguments %}
 
-{% if method.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %})
+{% if method.type %}{{ method.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %})
 {
 
 }
