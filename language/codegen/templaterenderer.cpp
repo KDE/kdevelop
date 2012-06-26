@@ -86,6 +86,7 @@ TemplateRenderer::TemplateRenderer()
 
     Grantlee::registerMetaType<KDevelop::VariableDescription>();
     Grantlee::registerMetaType<KDevelop::FunctionDescription>();
+    Grantlee::registerMetaType<KDevelop::InheritanceDescription>();
     Grantlee::registerMetaType<KDevelop::ClassDescription>();
 }
 
