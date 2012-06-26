@@ -42,6 +42,25 @@ namespace KDevelop
  * 
  * The TemplateRenderer provides easy access to common template operations.
  * Internally, it encapsulates a Grantlee::Engine and a Grantlee::Context.
+ * 
+ * It is used by adding a set of variables, and then renderering a template string
+ * @code
+ * TemplateRenderer renderer;
+ * renderer.addVariable("greeting", "Hello");
+ * renderer.addVariable("target", "World");
+ * QString text = renderer.render("{{ greeting }}, {{ target }}!");
+ * // text == "Hello, World!"
+ * @endcode
+ * 
+ * If you wish to include other templates using the Grantlee {% include %} tag,
+ * make sure TemplateRenderer can find those template by using 
+ * addTemplateDirectories() and addArchive(). This adds everything in the specified
+ * directories or archive files to the list of files search for inclusion. 
+ * 
+ * Directories named "kdevcodegen/templates" in the "data" resource type are always included in the search path,
+ * there is no need to add them explicitely. Additionally, TemplateRenderer adds the "lib" resource directories 
+ * to the Grantlee plugin search path, so plugins installed there will be available to templates. 
+ * 
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateRenderer
 {
@@ -82,7 +101,7 @@ public:
      * 
      **/
     void addVariable(const QString& name, const QVariant& value);
-    
+
     /**
      * @brief Renders a single template
      *
@@ -103,6 +122,9 @@ public:
 
     /**
      * @brief Renders a list of templates
+     * 
+     * This is a convenience method, suitable if you have to render a large number of templates
+     * with the same context. 
      *
      * @param content the template contents
      * @return the rendered templates
