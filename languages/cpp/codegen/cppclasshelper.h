@@ -49,21 +49,41 @@ private:
     KDevelop::TemplateClassAssistant* m_assistant;
 };
 
+/**
+ * @brief A C++ specific template class generator
+ * 
+ * This class adds additional variables to the template context. 
+ * @sa templateVariables()
+ * 
+ * Additionally, it attempts to add the class to a target after it is generated. 
+ * 
+ */
 class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 {
   public:
-    ///Specify the type of object that will be created
-    enum Type
-    {
-      DefaultType,  //!<@todo Have the user configure the default type of container
-      Class,
-      Struct
-    };
-
     CppTemplateNewClass(KDevelop::ProjectBaseItem* parentItem);
     virtual ~CppTemplateNewClass();
 
     virtual KDevelop::DocumentChangeSet generate();
+    /**
+     * Reimplemented from TemplateClassGenerator::templateVariables()
+     * 
+     * In addition to the variables provider by the base class, 
+     * it groups member variables and functions by access policy. 
+     * The variables are of type VariableDescriptionList or FunctionDescriptionList
+     * and are called @c private_members, @c public_functions, etc.
+     * 
+     * Signals and slots are not included in the above variables. Instead, they are listed in
+     * @c private_slots, @c protected_slots, @c public_slots and @c signals. 
+     * 
+     * For convenience, another variable named @c needs_qobject_macro is also provided.
+     * It is set to @c true if the class contains at least one signal or slot, and @c false otherwise. 
+     * 
+     * It also adds a @c namespaces variable which holds a list of all namespaces
+     * in which the class is nested. For a class identified by Foo::Bar::ExampleClass,
+     * @c namespaces holds two strings: "Foo" and "Bar". 
+     *
+     */
     virtual QVariantHash templateVariables();
 
     virtual QList<KDevelop::DeclarationPointer> addBaseClass(const QString &);
@@ -72,16 +92,9 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
     virtual void setIdentifier(const QString& identifier);
     virtual QString identifier() const;
 
-    virtual KDevelop::StructureType::Ptr objectType() const;
-
-    void setType(Type);
-
   private:
     QStringList m_namespaces;
     QStringList m_baseAccessSpecifiers;
-    Type m_type;
-
-    mutable CppClassType::Ptr m_objectType;
 
     KDevelop::ProjectBaseItem* m_parentItem;
 };

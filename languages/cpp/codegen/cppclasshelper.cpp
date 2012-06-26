@@ -23,11 +23,8 @@
 #include "cppclasshelper.h"
 #include "cppnewclass.h"
 
-#include <codecompletion/missingincludeitem.h>
 #include <language/codegen/templateclassassistant.h>
-#include <language/codegen/coderepresentation.h>
 #include <language/codegen/documentchangeset.h>
-#include <language/duchain/classfunctiondeclaration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -84,8 +81,6 @@ KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
 
 CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
 : TemplateClassGenerator (parentItem ? parentItem->url() : KUrl())
-, m_type(DefaultType)
-, m_objectType(new CppClassType)
 , m_parentItem(parentItem)
 {
 
@@ -100,81 +95,68 @@ QVariantHash CppTemplateNewClass::templateVariables()
 {
     QVariantHash variables = KDevelop::TemplateClassGenerator::templateVariables();
 
-    QList<DeclarationPointer> privateFunctions;
-    QList<DeclarationPointer> protectedFunctions;
-    QList<DeclarationPointer> publicFunctions;
+    QMap<QString, VariableDescriptionList> variableDescriptions;
 
-    QList<DeclarationPointer> privateMembers;
-    QList<DeclarationPointer> protectedMembers;
-    QList<DeclarationPointer> publicMembers;
+    QMap<QString, FunctionDescriptionList> functionDescriptions;
+    QMap<QString, FunctionDescriptionList> slotDescriptions;
+    FunctionDescriptionList signalDescriptions;
 
-    QList<DeclarationPointer> slotDeclarations;
-    QList<DeclarationPointer> signalDeclarations;
-
-    DUChainReadLocker lock(DUChain::lock());
-    foreach (DeclarationPointer ptr, declarations())
+    foreach (const FunctionDescription& function, description().methods)
     {
-        ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(ptr.data());
-        if (!member)
+        QString access = function.access;
+        if (access.isEmpty())
         {
-            continue;
+            access = "public";
         }
-
-        if (member->isFunctionDeclaration())
+        if (function.isSignal)
         {
-            ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(member);
-
-            if (function->isSlot())
-            {
-                slotDeclarations << ptr;
-            }
-            else if (function->isSignal())
-            {
-                signalDeclarations << ptr;
-            }
-            else if (function->accessPolicy() == Declaration::Private)
-            {
-                privateFunctions << ptr;
-            }
-            else if (function->accessPolicy() == Declaration::Protected)
-            {
-                protectedFunctions << ptr;
-            }
-            else if (function->accessPolicy() == Declaration::Public)
-            {
-                publicFunctions << ptr;
-            }
+            signalDescriptions << function;
+        }
+        else if (function.isSlot)
+        {
+            slotDescriptions[access] << function;
         }
         else
         {
-            switch (member->accessPolicy())
-            {
-                case Declaration::Private:
-                case Declaration::DefaultAccess:  // In C++, class members are private by default
-                    privateMembers << ptr;
-                    break;
-
-                case Declaration::Protected:
-                    protectedMembers << ptr;
-                    break;
-
-                case Declaration::Public:
-                    publicMembers << ptr;
-            }
+            functionDescriptions[access] << function;
         }
     }
 
-    variables["private_functions"] = QVariant::fromValue(privateFunctions);
-    variables["protected_functions"] = QVariant::fromValue(protectedFunctions);
-    variables["public_functions"] = QVariant::fromValue(publicFunctions);
+    foreach (const VariableDescription& variable, description().members)
+    {
+        QString access = variable.access;
+        if (access.isEmpty())
+        {
+            access = "public";
+        }
+        variableDescriptions[access] << variable;
+    }
 
-    variables["slots"] = QVariant::fromValue(slotDeclarations);
-    variables["signals"] = QVariant::fromValue(signalDeclarations);
+    QMap<QString, VariableDescriptionList>::const_iterator vit, vend;
+    vit = variableDescriptions.constBegin();
+    vend = variableDescriptions.constEnd();
+    for (; vit != vend; ++vit)
+    {
+        variables[vit.key() + "_members"] = QVariant::fromValue(vit.value());
+    }
 
-    variables["private_members"] = QVariant::fromValue(privateMembers);
-    variables["protected_members"] = QVariant::fromValue(protectedMembers);
-    variables["public_members"] = QVariant::fromValue(publicMembers);
+    QMap<QString, FunctionDescriptionList>::const_iterator fit, fend;
+    fit = functionDescriptions.constBegin();
+    fend = functionDescriptions.constEnd();
+    for (; fit != fend; ++fit)
+    {
+        variables[fit.key() + "_methods"] = QVariant::fromValue(fit.value());
+    }
 
+    fit = slotDescriptions.constBegin();
+    fend = slotDescriptions.constEnd();
+    for (; fit != fend; ++fit)
+    {
+        variables[fit.key() + "_slots"] = QVariant::fromValue(fit.value());
+    }
+
+    variables["signals"] = QVariant::fromValue(signalDescriptions);
+    variables["needs_qobject_macro"] = !slotDescriptions.isEmpty() || !signalDescriptions.isEmpty();
     variables["namespaces"] = m_namespaces;
 
     return variables;
@@ -295,21 +277,9 @@ void CppTemplateNewClass::setIdentifier(const QString& identifier)
 {
   QStringList list = identifier.split("::");
   setName(list.last());
-  m_objectType->setDeclarationId(DeclarationId(QualifiedIdentifier(name())));
   list.pop_back();
   m_namespaces = list;
 }
-
-StructureType::Ptr CppTemplateNewClass::objectType() const
-{
-  return StructureType::Ptr::staticCast<CppClassType>(m_objectType);
-}
-
-void CppTemplateNewClass::setType(Type type)
-{
-  m_type = type;
-}
-
 
 QString CppTemplateNewClass::identifier() const
 {
