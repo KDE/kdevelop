@@ -121,17 +121,9 @@ void CodeUtilsPlugin::documentDeclaration()
     }
     // finally - we found the declaration :)
     int line = dec->range().start.line;
-    const Cursor insertPos( line, 0 );
-    const Range declarationRange( line, 0, line+1, 0 );
-    
-    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(doc->url());
-    if (!languages.isEmpty())
-    {
-        languages.first()->languageSupport();
-    }
+    Cursor insertPos( line, 0 );
 
     TemplateRenderer renderer;
-    renderer.addVariable("declaration", textDoc->text(declarationRange));
     renderer.addVariable("brief", i18n( "..." ));
 
     /*
@@ -155,14 +147,31 @@ void CodeUtilsPlugin::documentDeclaration()
     lock.unlock();
 
     // TODO: Choose the template based on the language
-    QString fileName = core()->componentData().dirs()->findResource("data", "kdevcodeutils/templates/doxygen_cpp.txt");
-    Q_ASSERT(!fileName.isEmpty());
-    kDebug() << "Rendering template from file" << fileName;
+    QString templateName = "doxygen_cpp";
+    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(doc->url());
+    if (!languages.isEmpty())
+    {
+        QString languageName = languages.first()->name();
+        if (languageName == "Php")
+        {
+            templateName = "phpdoc_php";
+        }
+        else if (languageName == "Python")
+        {
+            templateName = "rest_python";
+            // Python docstrings appear inside functions and classes, not above them
+            insertPos = Cursor(line+1, 0);
+        }
+    }
+
+    QString fileName = core()->componentData().dirs()->findResource("data", "kdevcodeutils/templates/" + templateName + ".txt");
+    if (fileName.isEmpty())
+    {
+        kWarning() << "No suitable template found" << fileName;
+        return;
+    }
 
     const QString comment = renderer.renderFile(KUrl(fileName));
-    kDebug() << comment;
-    
-    textDoc->removeText(declarationRange);
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 
