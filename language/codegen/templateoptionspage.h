@@ -30,16 +30,44 @@ namespace KDevelop
 
 class TemplateClassAssistant;
 
+/**
+ * @brief Shows a page for configuring options specified by a class template
+ * 
+ * Templates can include a file that specify configuration options. 
+ * These can be set by the user before creating the class and are passed to the template.
+ * 
+ * @sa TemplateClassGenerator::customOptions()
+ **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariantHash templateOptions READ templateOptions)
 
 public:
+    /**
+     * @brief Create a new template options page
+     *
+     * @param parent the parent template class assistant
+     * @param f window flags, passed to QWidget
+     **/
     explicit TemplateOptionsPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
+    /**
+     * Destructor
+     **/
     virtual ~TemplateOptionsPage();
 
+    /**
+     * Parses the XML-formatted .kcfg file contents and creates the UI for setting template options. 
+     *
+     * @param contents the file contents
+     **/
     void loadXML(const QByteArray& contents);
+    /**
+     * @property templateOptions
+     * 
+     * The user-set options. Keys are the options' names, and values are their values. 
+     *
+     **/
     QVariantHash templateOptions() const;
 
 private:
