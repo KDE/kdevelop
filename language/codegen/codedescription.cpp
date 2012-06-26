@@ -23,6 +23,7 @@
 #include <duchain/declaration.h>
 #include <duchain/types/functiontype.h>
 #include <duchain/classfunctiondeclaration.h>
+#include <duchain/functiondeclaration.h>
 
 #include <KLocalizedString>
 
@@ -100,23 +101,23 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
     {
         name = declaration->identifier().toString();
         DUContext* context = declaration->internalContext();
-
-        DUChainPointer<ClassFunctionDeclaration> function = declaration.dynamicCast<ClassFunctionDeclaration>();
-        Q_ASSERT(function);
-        kDebug() << function->defaultParametersSize();
-
-        if (function)
+        
+        DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
+        if (function && function->internalFunctionContext())
         {
-            if (function->internalFunctionContext())
-            {
-                context = function->internalFunctionContext();
-            }
-            isConstructor = function->isConstructor();
-            isDestructor = function->isDestructor();
-            isVirtual = function->isVirtual();
-            isStatic = function->isStatic();
-            isSlot = function->isSlot();
-            isSignal = function->isSignal();
+            context = function->internalFunctionContext();
+        }
+        
+        DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
+
+        if (method)
+        {
+            isConstructor = method->isConstructor();
+            isDestructor = method->isDestructor();
+            isVirtual = method->isVirtual();
+            isStatic = method->isStatic();
+            isSlot = method->isSlot();
+            isSignal = method->isSignal();
         }
 
         int i = 0;
@@ -133,7 +134,6 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         }
 
         FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
-        Q_ASSERT(functionType);
 
         if (functionType)
         {
