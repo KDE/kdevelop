@@ -52,7 +52,7 @@ namespace KDevelop
  * 
  * An example template description is below. It shows all features described above. 
  * 
- * @verbatim
+ * @code
  * [General]
  * Name=Example
  * Comment=Example description for a C++ Class
@@ -69,11 +69,55 @@ namespace KDevelop
  * Name=Implementation
  * File=class.cpp
  * OutputFile={{ name }}.cpp
- * @endverbatim
+ * @endcode
  * 
  * @section CustomOptions
  * 
  * Templates can expose additional configurations options. 
+ * This is done through a file with the same syntax and .kcfg files used by KConfig XT. 
+ * The name of this file is specified with the @c OptionsFile key in the [General] section of the description file. 
+ * 
+ * @note
+ * The options are not parsed by TemplateClassGenerator. 
+ * Instead, hasCustomOptions() returns true if the template specifies a custom options file, 
+ * and customOptions() returns the full text of that file. 
+ * The parsing is done by TemplateOptionsPage. 
+ * 
+ * The file can (and should) provide a type, name, label and default value for each configuration option. 
+ * So far, only variables with types String, Int and Bool are recognized. 
+ * Label is the user-visible string that will be shown next to the input field. 
+ * The default value will be rendered as a template, so it can contain variables. 
+ * 
+ * After the user configures the options, they will be available to the template as context variables. 
+ * The variable name will match the option name, and its value will be the one set by the user.
+ * 
+ * An example options.kcfg file is included below. 
+ * 
+ * @code
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+ *      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ *      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+ *      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+ *  <kcfgfile arg="true"/>
+ *  <group name="Private Class">
+ *    <entry name="private_class_name" type="String">
+ *      <label>Private class name</label>
+ *      <default>{{ name }}Private</default>
+ *    </entry>
+ *    <entry name="private_member_name" type="String">
+ *      <label>Private member name</label>
+ *      <default>d</default>
+ *    </entry>
+ *  </group>
+ * </kcfg>
+ * @endcode
+ * 
+ * In this example, if the class name is Example, the default value for the private class name will be ExamplePrivate. 
+ * After the user accepts the option values, the template will access them through the @c private_class_name 
+ * and @c private_member_name variables. 
+ * 
+ * For more information regarding the XML file format, refer to the KConfig XT documentation. 
  * 
  * @section Variables Variables Passed to Templates
  * 
@@ -132,6 +176,22 @@ public:
     virtual DocumentChangeSet generate();
     virtual QHash<QString,QString> fileLabels();
     virtual QHash< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
+    /**
+     * @brief Default variables that will be passed to templates
+     * 
+     * These are populated from description(). Subclasses can override this function
+     * to provide additional variables, but should always call the base implementation, like this
+     * 
+     * @code
+     * MyGenerator::templateVariables()
+     * {
+     *     QVariantHash variables = TemplateClassGenerator::templateVariables();
+     *     variables["my_variable"] = "SomeString";
+     *     return variables;
+     * }
+     * @endcode
+     *
+     **/
     virtual QVariantHash templateVariables();
 
     /**
