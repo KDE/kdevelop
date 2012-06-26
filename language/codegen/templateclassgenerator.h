@@ -126,11 +126,10 @@ namespace KDevelop
  * @li @c description (ClassDescription) - the class description
  * @li @c name (QString) - the class name, same as @c description.name
  * @li @c identifier (QString) - the full class identifier, composed of namespaces and name
- * @li @c properties (VariableDescriptionList) - data members, same as @c description.members
- * @li @c methods (FunctionDescriptionList) - function members, same as @c description.methods
- * @li @c baseClasses (InheritanceDescriptionList) - directly inherited classes, same as @c description.baseClasses
+ * @li @c members (VariableDescriptionList) - data members, same as @c description.members
+ * @li @c functions (FunctionDescriptionList) - function members, same as @c description.methods
+ * @li @c base_classes (InheritanceDescriptionList) - directly inherited classes, same as @c description.baseClasses
  * @li @c license (QString) - the license for this class, including author copyright, without comment characters or indentation. It is recommended to use the "lines_prepend" filters from library "kdev_filters" to format it.
- * @li @c namespaces (QStringList) - The list of nested namespaces in which the class is to be declared. For example, if the class is KDevelop::Foo::Bar, @c namespaces will contain "KDevelop" and "Foo". 
  * 
  * For each output file, TemplateClassGenerator add two variables named @c output_file_x 
  * and @c output_file_x_absolute, where @c x is replaced
