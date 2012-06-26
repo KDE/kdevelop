@@ -22,6 +22,7 @@
 
 #include "cppclasshelper.h"
 #include "cppnewclass.h"
+#include <codecompletion/missingincludeitem.h>
 
 #include <language/codegen/templateclassassistant.h>
 #include <language/codegen/documentchangeset.h>
@@ -145,7 +146,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
     fend = functionDescriptions.constEnd();
     for (; fit != fend; ++fit)
     {
-        variables[fit.key() + "_methods"] = QVariant::fromValue(fit.value());
+        variables[fit.key() + "_functions"] = QVariant::fromValue(fit.value());
     }
 
     fit = slotDescriptions.constBegin();
@@ -158,6 +159,41 @@ QVariantHash CppTemplateNewClass::templateVariables()
     variables["signals"] = QVariant::fromValue(signalDescriptions);
     variables["needs_qobject_macro"] = !slotDescriptions.isEmpty() || !signalDescriptions.isEmpty();
     variables["namespaces"] = m_namespaces;
+
+    QStringList includedFiles;
+    DUChainReadLocker locker(DUChain::lock());
+
+    KUrl sourceUrl;
+    QHash<QString, KUrl> urls = fileUrls();
+    if (!fileUrls().isEmpty())
+    {
+        sourceUrl = urls.constBegin().value();
+    }
+    else
+    {
+        if (m_parentItem)
+        {
+            sourceUrl = m_parentItem->url();
+        }
+        // includeDirectiveFromUrl() expects a header URL
+        sourceUrl.addPath(name().toLower() + ".h");
+    }
+
+    foreach (const DeclarationPointer& base, directInheritanceList())
+    {
+        if (!base)
+        {
+            continue;
+        }
+        kDebug() << "Looking for includes for class" << base->identifier().toString();
+        KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(sourceUrl, IndexedDeclaration(base.data()));
+        if(item)
+        {
+            kDebug() << "Found one in" << item->m_canonicalPath;
+            includedFiles << item->m_addedInclude;
+        }
+    }
+    variables["included_files"] = includedFiles;
 
     return variables;
 }
@@ -264,12 +300,12 @@ QList<KDevelop::DeclarationPointer> CppTemplateNewClass::addBaseClass(const QStr
   m_baseAccessSpecifiers << access;
 
   //Call base function with stripped access specifier
-  return ClassGenerator::addBaseClass(full);
+  return TemplateClassGenerator::addBaseClass(full);
 }
 
 void CppTemplateNewClass::clearInheritance()
 {
-  ClassGenerator::clearInheritance();
+  TemplateClassGenerator::clearInheritance();
   m_baseAccessSpecifiers.clear();
 }
 
