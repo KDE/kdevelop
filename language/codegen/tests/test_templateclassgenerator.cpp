@@ -34,9 +34,13 @@
 
 #include <qtest_kde.h>
 
-#define CHECK_TEMPLATE_VARIABLE(name, type, val)          \
-QVERIFY(variables.contains(#name));                        \
+#define CHECK_TEMPLATE_VARIABLE(name, type, val)            \
+QVERIFY(variables.contains(#name));                         \
 QCOMPARE(variables.value(#name).value<type>(), val)
+
+#define COMPARE_FILES(one, two)                             \
+QCOMPARE(one.size(), two.size());                          \
+QCOMPARE(QString(one.readAll()), QString(two.readAll()))    \
 
 using namespace KDevelop;
 
@@ -229,10 +233,11 @@ void TestTemplateClassGenerator::codeDescription()
     QCOMPARE(methods.last().returnArguments.size(), 1);
 }
 
-
 void TestTemplateClassGenerator::generate()
 {
     TemplateClassGenerator* generator = loadTemplate("test_cpp");
+    acceptDefaultFileUrls(generator, true);
+
     DocumentChangeSet changes = generator->generate();
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
     QVERIFY(result.m_success);
@@ -242,8 +247,55 @@ void TestTemplateClassGenerator::generate()
     QCOMPARE(entries.size(), 2);
 }
 
+void TestTemplateClassGenerator::cppOutput()
+{
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
+    acceptDefaultFileUrls(generator, true);
+    generator->generate().applyAllChanges();
+
+    KUrl headerUrl = baseUrl;
+    headerUrl.addPath("classname.h");
+    QFile header(headerUrl.toLocalFile());
+    QVERIFY(header.open(QIODevice::ReadOnly));
+
+    QFile testHeader(CODEGEN_TESTS_EXPECTED_DIR "/classname.h");
+    testHeader.open(QIODevice::ReadOnly);
+    COMPARE_FILES(header, testHeader);
+
+    KUrl implementationUrl = baseUrl;
+    implementationUrl.addPath("classname.cpp");
+    QFile implementation(implementationUrl.toLocalFile());
+    QVERIFY(implementation.open(QIODevice::ReadOnly));
+
+    QFile testImplementation(CODEGEN_TESTS_EXPECTED_DIR "/classname.cpp");
+    testImplementation.open(QIODevice::ReadOnly);
+    COMPARE_FILES(implementation, testImplementation);
+}
+
+void TestTemplateClassGenerator::yamlOutput()
+{
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
+    acceptDefaultFileUrls(generator, true);
+    generator->generate().applyAllChanges();
+
+    KUrl yamlUrl = baseUrl;
+    yamlUrl.addPath("classname.yaml");
+    QFile yaml(yamlUrl.toLocalFile());
+    QVERIFY(yaml.open(QIODevice::ReadOnly));
+
+    QFile testYaml(CODEGEN_TESTS_EXPECTED_DIR "/classname.yaml");
+    testYaml.open(QIODevice::ReadOnly);
+    COMPARE_FILES(yaml, testYaml);
+}
+
 TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString& name)
 {
+    QDir dir(baseUrl.toLocalFile());
+    foreach (const QString& fileName, dir.entryList(QDir::Files | QDir::NoDotAndDotDot))
+    {
+        dir.remove(fileName);
+    }
+
     TemplateClassGenerator* generator = new TemplateClassGenerator(baseUrl);
 
     bool found = false;
@@ -260,7 +312,17 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
 
     generator->setDescription(description);
     generator->setIdentifier("ClassName");
+    generator->setLicense("This is just a test.\nYou may do with it as you please.");
     return generator;
+}
+
+void TestTemplateClassGenerator::acceptDefaultFileUrls (TemplateClassGenerator* generator, bool toLower)
+{
+    QHash<QString, KUrl> urls = generator->fileUrlsFromBase(baseUrl, toLower);
+    for (QHash<QString, KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    {
+        generator->setFileUrl(it.key(), it.value());
+    }
 }
 
 QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)

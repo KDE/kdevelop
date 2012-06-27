@@ -1,7 +1,9 @@
 {% load kdev_filters %}
 /*
- { { license|lines_prepend:" * " }}*
+
+ {{ license|lines_prepend:" * " }}
  */
+
 
 #ifndef {{ name|upper }}_H
 #define {{ name|upper }}_H
@@ -11,13 +13,17 @@ class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.in
 {
 public:
 {% for method in functions %}
-{% include "method_declaration_cpp.txt" %}
+{% with method.arguments as arguments %}
+    {{ method.returnType|default:"void" }} {{ method.name }}({% include "arguments_types_names.txt" %});
+{% endwith %}
 {% endfor %}
 
+
 {% for member in members %}
-member.type member.name;
+    {{ member.type }} {{ member.name }};
 {% endfor %}
 
 };
+
 
 #endif // {{ name|upper }}_H

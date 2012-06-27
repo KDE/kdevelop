@@ -39,7 +39,7 @@ class TestTemplateClassGenerator : public QObject
 private slots:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void fileLabelsCpp();
     void fileLabelsYaml();
     void defaultFileUrlsCpp();
@@ -51,9 +51,12 @@ private slots:
     void codeDescription();
 
     void generate();
+    void cppOutput();
+    void yamlOutput();
 
 private:
     KDevelop::TemplateClassGenerator* loadTemplate(const QString& name);
+    void acceptDefaultFileUrls(KDevelop::TemplateClassGenerator* generator, bool toLower);
 
 private:
     KUrl baseUrl;

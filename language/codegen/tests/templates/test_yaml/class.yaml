@@ -2,8 +2,8 @@ class:
   name: {{ name }}
   members:
   {% for member in members %}
-  - type: {{ member.type }}
-    name: {{ member.name }}
+  - name: {{ member.name }}
+    type: {{ member.type }}
     {% if member.value %}
     value: {{ member.value }}
     {% endif %}
@@ -19,15 +19,16 @@ class:
     {% endif %}
     {% if function.arguments %}
     arguments:
-      {% for arg in function.arguments %}
-      - type: {{ arg.type }}
-        name: {{ arg.name }}
-      {% endfor %}
+    {% for arg in function.arguments %}
+    - name: {{ arg.name }}
+      type: {{ arg.type }}
+    {% endfor %}
     {% endif %}
     {% if function.returnArguments %}
     return values:
-      {% for arg in function.returnArguments %}
-      - type: {{ arg.type }}
-        name: {{ arg.name }}
-      {% endfor %}
+    {% for arg in function.returnArguments %}
+    - name: {{ arg.name }}
+      type: {{ arg.type }}
+    {% endfor %}
     {% endif %}
+  {% endfor %}
