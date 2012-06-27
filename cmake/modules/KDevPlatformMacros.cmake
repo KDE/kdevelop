@@ -18,8 +18,8 @@
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-# package and install the given directories as application templates
-macro(kdevplatform_add_template _installDirectory _templateName)
+# creates a template archive from the given directory
+macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
     if(WIN32)
@@ -62,11 +62,20 @@ macro(kdevplatform_add_template _installDirectory _templateName)
         )
     endif(WIN32)
 
+endmacro(kdevplatform_create_template_archive _templateName)
 
-    #install( FILES ${_templateName}/${_templateName}.kdevtemplate
-    #    DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard/templates )
-    #install( FILES ${_templateName}/${_templateName}.png
-    #    DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
+# package and install the given directory as a template archive
+macro(kdevplatform_add_template _installDirectory _templateName)
+    kdevplatform_create_template_archive(${_templateName})
+
+    get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
+    get_filename_component(_baseName ${_tmp_file} NAME_WE)
+    if(WIN32)
+        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
+    else(WIN32)
+        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
+    endif(WIN32)
+
     install( FILES ${_template} DESTINATION ${_installDirectory})
     macro_additional_clean_files(${_template})
 endmacro(kdevplatform_add_template _installDirectory _templateName)
@@ -74,13 +83,13 @@ endmacro(kdevplatform_add_template _installDirectory _templateName)
 macro(kdevplatform_add_app_templates _templateNames)
     foreach(_templateName ${ARGV})
         kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevappwizard/templates ${_templateName})
-    endforeach(_templateName ${_templateNames}) 
+    endforeach(_templateName ${ARGV}) 
 endmacro(kdevplatform_add_app_templates _templateNames)
 
 macro(kdevplatform_add_file_templates _templateNames)
     foreach(_templateName ${ARGV})
         kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevfiletemplates/templates ${_templateName})
-    endforeach(_templateName ${_templateNames}) 
+    endforeach(_templateName ${ARGV}) 
 endmacro(kdevplatform_add_file_templates _templateNames)
 
 # This needs to be reworked once we really support kross plugins
