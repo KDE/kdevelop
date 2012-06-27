@@ -29,8 +29,11 @@
 #include <QList>
 #include <QAbstractItemModel>
 
-#define GRANTLEE_LOOKUP_PROPERTY(name)      \
+#define GRANTLEE_LOOKUP_PROPERTY(name)          \
 if (property == #name) return QVariant::fromValue(object.name);
+
+#define GRANTLEE_LOOKUP_LIST_PROPERTY(name)     \
+if (property == #name) return KDevelop::CodeDescription::toVariantList(object.name);
 
 namespace KDevelop {
 
@@ -237,84 +240,20 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
     FunctionDescriptionList methods;
 };
 
-/**
- * @brief A data model that represents a single ClassDescription
- * 
- * This model can be used in Qt views. 
- * 
- * It is implemented as a tree. 
- * Every property of the class description (name, inheritance, members, methods) is a top level branch.
- * Their child items are the actual base classes, data members and methods. 
- **/
-class ClassDescriptionModel : public QAbstractItemModel
+namespace CodeDescription
 {
-    Q_OBJECT
-    Q_PROPERTY(KDevelop::ClassDescription description READ description WRITE setDescription)
 
-public:
-    /**
-     * Enumerates the top-level branches of the tree model
-     **/
-    enum TopLevelRow
+template <class T> QVariantList toVariantList(const QList<T>& list)
+{
+    QVariantList ret;
+    foreach (const T& t, list)
     {
-        ClassNameRow = 0, ///< The class name
-        InheritanceRow, ///< Base classes and respective inheritance types
-        MembersRow, ///< Data members
-        FunctionsRow, ///< Class functions (methods)
-        TopLevelRowCount ///< The number of top-level branches
-    };
+        ret << QVariant::fromValue<T>(t);
+    }
+    return ret;
+}
 
-    /**
-     * Creates a new description model and sets its description to @p description
-     *
-     * @param description the class description displayed by this class
-     * @param parent parent object, defaults to 0.
-     **/
-    explicit ClassDescriptionModel(const ClassDescription& description, QObject* parent = 0);
-    /**
-     * Creates a new description model with an empty class description
-     * 
-     * @param parent parent object, defaults to 0.
-     **/
-    explicit ClassDescriptionModel(QObject* parent = 0);
-    /**
-     * Destructor
-     **/
-    virtual ~ClassDescriptionModel();
-
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-
-    /**
-     * @property description
-     * 
-     * The class description this model represents
-     **/
-    ClassDescription description() const;
-    void setDescription(const ClassDescription& description);
-
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-
-    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
-    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
-
-    /**
-     * Moves the row at position @p source to position @p destination under index @p parent
-     *
-     * @param source position from where to take the row
-     * @param destination position where to put the row
-     * @param parent the parent index of both old and new positions
-     **/
-    void moveRow(int source, int destination, const QModelIndex& parent);
-
-private:
-    class ClassDescriptionModelPrivate* const d;
-};
+}
 
 }
 
@@ -336,8 +275,8 @@ GRANTLEE_END_LOOKUP
 GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
     GRANTLEE_LOOKUP_PROPERTY(access)
-    GRANTLEE_LOOKUP_PROPERTY(arguments)
-    GRANTLEE_LOOKUP_PROPERTY(returnArguments)
+    GRANTLEE_LOOKUP_LIST_PROPERTY(arguments)
+    GRANTLEE_LOOKUP_LIST_PROPERTY(returnArguments)
     GRANTLEE_LOOKUP_PROPERTY(isConstructor)
     GRANTLEE_LOOKUP_PROPERTY(isDestructor)
     GRANTLEE_LOOKUP_PROPERTY(isVirtual)
@@ -355,9 +294,11 @@ GRANTLEE_END_LOOKUP
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::ClassDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(baseClasses)
-    GRANTLEE_LOOKUP_PROPERTY(members)
-    GRANTLEE_LOOKUP_PROPERTY(methods)
+    GRANTLEE_LOOKUP_LIST_PROPERTY(baseClasses)
+    GRANTLEE_LOOKUP_LIST_PROPERTY(members)
+    GRANTLEE_LOOKUP_LIST_PROPERTY(methods)
 GRANTLEE_END_LOOKUP
 
 #endif // KDEVELOP_CODEDESCRIPTION_H
+
+class C;

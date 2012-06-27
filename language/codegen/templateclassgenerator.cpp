@@ -91,7 +91,7 @@ d(new TemplateClassGeneratorPrivate)
 {
     d->archive = 0;
     d->baseUrl = baseUrl;
-    d->renderer.setMaximumEmptyLines(1);
+    d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
@@ -116,9 +116,9 @@ QVariantHash TemplateClassGenerator::templateVariables()
 
     ClassDescription desc = description();
     variables["description"] = QVariant::fromValue(desc);
-    variables["members"] = QVariant::fromValue(desc.members);
-    variables["functions"] = QVariant::fromValue(desc.methods);
-    variables["base_classes"] = QVariant::fromValue(desc.baseClasses);
+    variables["members"] = CodeDescription::toVariantList(desc.members);
+    variables["functions"] = CodeDescription::toVariantList(desc.methods);
+    variables["base_classes"] = CodeDescription::toVariantList(desc.baseClasses);
 
     d->baseUrl.adjustPath(KUrl::AddTrailingSlash);
     QHash<QString,KUrl> urls = fileUrls();
