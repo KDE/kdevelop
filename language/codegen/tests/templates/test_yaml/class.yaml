@@ -1,0 +1,33 @@
+class:
+  name: {{ name }}
+  members:
+  {% for member in members %}
+  - type: {{ member.type }}
+    name: {{ member.name }}
+    {% if member.value %}
+    value: {{ member.value }}
+    {% endif %}
+    {% if member.access %}
+    access: {{ member.access }}
+    {% endif %}
+  {% endfor %}
+  functions:
+  {% for function in functions %}
+  - name: {{ function.name }}
+    {% if function.access %}
+    access: {{ function.access }}
+    {% endif %}
+    {% if function.arguments %}
+    arguments:
+      {% for arg in function.arguments %}
+      - type: {{ arg.type }}
+        name: {{ arg.name }}
+      {% endfor %}
+    {% endif %}
+    {% if function.returnArguments %}
+    return values:
+      {% for arg in function.returnArguments %}
+      - type: {{ arg.type }}
+        name: {{ arg.name }}
+      {% endfor %}
+    {% endif %}

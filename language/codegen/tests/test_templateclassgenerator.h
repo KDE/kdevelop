@@ -39,20 +39,25 @@ class TestTemplateClassGenerator : public QObject
 private slots:
     void initTestCase();
     void cleanupTestCase();
-
-    void fileLabels();
-    void defaultFileUrls();
+    
+    void fileLabelsCpp();
+    void fileLabelsYaml();
+    void defaultFileUrlsCpp();
+    void defaultFileUrlsYaml();
     void lowercaseFileUrls();
     void customOptions();
-    void templateVariables();
+    void templateVariablesCpp();
+    void templateVariablesYaml();
     void codeDescription();
 
     void generate();
 
 private:
+    KDevelop::TemplateClassGenerator* loadTemplate(const QString& name);
+
+private:
     KUrl baseUrl;
     KDevelop::ClassDescription description;
-    KDevelop::TemplateClassGenerator* generator;
 };
 
 

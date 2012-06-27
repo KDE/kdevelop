@@ -19,6 +19,8 @@
  */
 
 #include "test_templateclassgenerator.h"
+#include "codegen_tests_config.h"
+
 #include "language/codegen/templateclassgenerator.h"
 #include "language/codegen/templatesmodel.h"
 #include "language/codegen/documentchangeset.h"
@@ -45,27 +47,16 @@ void TestTemplateClassGenerator::initTestCase()
 
     KComponentData data = ICore::self()->componentData();
     baseUrl.setDirectory(KStandardDirs::locateLocal("tmp", "test_templateclassgenerator/", data));
-    generator = new TemplateClassGenerator(baseUrl);
+
+    KStandardDirs *dirs = data.dirs();
+    bool addedDir = dirs->addResourceDir("filetemplates", CODEGEN_TESTS_TEMPLATES_DIR, true);
+    QVERIFY(addedDir);
 
     // Needed for extracting description out of template archives
     TemplatesModel model(data, this);
     model.setDescriptionResourceType("filetemplate_descriptions");
     model.setTemplateResourceType("filetemplates");
     model.refresh();
-
-    // TODO: Maybe prepare a fixed test template instead of loading a real one
-    bool found = false;
-    foreach (const QString& description, data.dirs()->findAllResources("filetemplate_descriptions"))
-    {
-        if (QFileInfo(description).baseName() == "cpp_basic")
-        {
-            generator->setTemplateDescription(description);
-            found = true;
-            break;
-        }
-    }
-
-    QVERIFY(found);
 
     description.name = "ClassName";
 
@@ -89,9 +80,6 @@ void TestTemplateClassGenerator::initTestCase()
     returnArgs << VariableDescription("int", "someOtherNumber");
     FunctionDescription otherFunction("getSomeOtherNumber", args, returnArgs);
     description.methods << function << otherFunction;
-
-    generator->setDescription(description);
-    generator->setIdentifier("ClassName");
 }
 
 void TestTemplateClassGenerator::cleanupTestCase()
@@ -99,8 +87,9 @@ void TestTemplateClassGenerator::cleanupTestCase()
     TestCore::shutdown();
 }
 
-void TestTemplateClassGenerator::fileLabels()
+void TestTemplateClassGenerator::fileLabelsCpp()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
     QHash<QString,QString> labels = generator->fileLabels();
     QCOMPARE(labels.size(), 2);
 
@@ -114,8 +103,19 @@ void TestTemplateClassGenerator::fileLabels()
     QVERIFY(!labels["Implementation"].isEmpty());
 }
 
-void TestTemplateClassGenerator::defaultFileUrls()
+void TestTemplateClassGenerator::fileLabelsYaml()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
+    QHash<QString,QString> labels = generator->fileLabels();
+    QCOMPARE(labels.size(), 1);
+
+    QVERIFY(labels.contains("Description"));
+    QVERIFY(!labels["Description"].isEmpty());
+}
+
+void TestTemplateClassGenerator::defaultFileUrlsCpp()
+{
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
     QHash<QString,KUrl> files = generator->fileUrlsFromBase(baseUrl, false);
     QCOMPARE(files.size(), 2);
 
@@ -130,8 +130,21 @@ void TestTemplateClassGenerator::defaultFileUrls()
     QCOMPARE(files["Implementation"], expectedImplementationUrl);
 }
 
+void TestTemplateClassGenerator::defaultFileUrlsYaml()
+{
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
+    QHash<QString,KUrl> files = generator->fileUrlsFromBase(baseUrl, false);
+    QCOMPARE(files.size(), 1);
+
+    QVERIFY(files.contains("Description"));
+    KUrl expectedHeaderUrl(baseUrl);
+    expectedHeaderUrl.addPath("ClassName.yaml");
+    QCOMPARE(files["Description"], expectedHeaderUrl);
+}
+
 void TestTemplateClassGenerator::lowercaseFileUrls()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
     QHash<QString,KUrl> files = generator->fileUrlsFromBase(baseUrl, true);
     QCOMPARE(files.size(), 2);
 
@@ -148,11 +161,13 @@ void TestTemplateClassGenerator::lowercaseFileUrls()
 
 void TestTemplateClassGenerator::customOptions()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
     QCOMPARE(generator->hasCustomOptions(), false);
 }
 
-void TestTemplateClassGenerator::templateVariables()
+void TestTemplateClassGenerator::templateVariablesCpp()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
     QHash<QString, KUrl> urls = generator->fileUrlsFromBase(baseUrl, true);
     foreach (const QString& file, QStringList() << "Header" << "Implementation")
     {
@@ -168,8 +183,27 @@ void TestTemplateClassGenerator::templateVariables()
     CHECK_TEMPLATE_VARIABLE(output_file_header_absolute, QString, headerUrl.toLocalFile());
 }
 
+void TestTemplateClassGenerator::templateVariablesYaml()
+{
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
+    QHash<QString, KUrl> urls = generator->fileUrlsFromBase(baseUrl, true);
+    foreach (const QString& file, QStringList() << "Description")
+    {
+        generator->setFileUrl(file, urls[file]);
+    }
+
+    QVariantHash variables = generator->templateVariables();
+    CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
+
+    KUrl fileUrl(baseUrl);
+    fileUrl.addPath("classname.yaml");
+    CHECK_TEMPLATE_VARIABLE(output_file_description, QString, QString("classname.yaml"));
+    CHECK_TEMPLATE_VARIABLE(output_file_description_absolute, QString, fileUrl.toLocalFile());
+}
+
 void TestTemplateClassGenerator::codeDescription()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_yaml");
     QVariantHash variables = generator->templateVariables();
 
     QVERIFY(variables.contains("base_classes"));
@@ -178,14 +212,14 @@ void TestTemplateClassGenerator::codeDescription()
     QCOMPARE(inheritance.first().baseType, QString("QObject"));
     QCOMPARE(inheritance.first().inheritanceMode, QString("public"));
 
-    QVERIFY(variables.contains("properties"));
-    VariableDescriptionList members = variables["properties"].value<VariableDescriptionList>();
+    QVERIFY(variables.contains("members"));
+    VariableDescriptionList members = variables["members"].value<VariableDescriptionList>();
     QCOMPARE(members.size(), 3);
     QCOMPARE(members.first().type, QString("QString"));
     QCOMPARE(members.first().name, QString("name"));
 
-    QVERIFY(variables.contains("methods"));
-    FunctionDescriptionList methods = variables["methods"].value<FunctionDescriptionList>();
+    QVERIFY(variables.contains("functions"));
+    FunctionDescriptionList methods = variables["functions"].value<FunctionDescriptionList>();
     QCOMPARE(methods.size(), 2);
     QCOMPARE(methods.first().name, QString("doSomething"));
     QCOMPARE(methods.first().arguments.size(), 2);
@@ -198,6 +232,7 @@ void TestTemplateClassGenerator::codeDescription()
 
 void TestTemplateClassGenerator::generate()
 {
+    TemplateClassGenerator* generator = loadTemplate("test_cpp");
     DocumentChangeSet changes = generator->generate();
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
     QVERIFY(result.m_success);
@@ -207,5 +242,25 @@ void TestTemplateClassGenerator::generate()
     QCOMPARE(entries.size(), 2);
 }
 
+TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString& name)
+{
+    TemplateClassGenerator* generator = new TemplateClassGenerator(baseUrl);
+
+    bool found = false;
+    foreach (const QString& description, ICore::self()->componentData().dirs()->findAllResources("filetemplate_descriptions"))
+    {
+        kDebug() << "Found template description" << description;
+        if (QFileInfo(description).baseName() == name)
+        {
+            generator->setTemplateDescription(description);
+            found = true;
+            break;
+        }
+    }
+
+    generator->setDescription(description);
+    generator->setIdentifier("ClassName");
+    return generator;
+}
 
 QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)
