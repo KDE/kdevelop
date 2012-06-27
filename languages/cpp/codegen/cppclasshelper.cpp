@@ -138,7 +138,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
     vend = variableDescriptions.constEnd();
     for (; vit != vend; ++vit)
     {
-        variables[vit.key() + "_members"] = QVariant::fromValue(vit.value());
+        variables[vit.key() + "_members"] = CodeDescription::toVariantList(vit.value());
     }
 
     QMap<QString, FunctionDescriptionList>::const_iterator fit, fend;
@@ -146,17 +146,17 @@ QVariantHash CppTemplateNewClass::templateVariables()
     fend = functionDescriptions.constEnd();
     for (; fit != fend; ++fit)
     {
-        variables[fit.key() + "_functions"] = QVariant::fromValue(fit.value());
+        variables[fit.key() + "_functions"] = CodeDescription::toVariantList(fit.value());
     }
 
     fit = slotDescriptions.constBegin();
     fend = slotDescriptions.constEnd();
     for (; fit != fend; ++fit)
     {
-        variables[fit.key() + "_slots"] = QVariant::fromValue(fit.value());
+        variables[fit.key() + "_slots"] = CodeDescription::toVariantList(fit.value());
     }
 
-    variables["signals"] = QVariant::fromValue(signalDescriptions);
+    variables["signals"] = CodeDescription::toVariantList(signalDescriptions);
     variables["needs_qobject_macro"] = !slotDescriptions.isEmpty() || !signalDescriptions.isEmpty();
     variables["namespaces"] = m_namespaces;
 
