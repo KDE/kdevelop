@@ -65,6 +65,30 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateRenderer
 {
 public:
+    /**
+     * Policy for working with empty lines
+     **/
+    enum EmptyLinesPolicy
+    {
+        /**
+         * Keep empty lines as they are in the rendered output. 
+         * The output from the template is returned unmodified. 
+         */
+        KeepEmptyLines,
+        /**
+         * If the template output has more than one line, the renderer 
+         * performs a smart trim on the rendered output. 
+         * @li single empty lines are removed
+         * @li two or more consecutive empty lines are compressed into a single empty line
+         * @li a single empty line is kept at the end
+         */
+        TrimEmptyLines,
+        /**
+         * Removes all empty lines from the template output, and appends a newline at the end if needed.
+         */
+        RemoveEmptyLines
+    };
+
     TemplateRenderer();
     virtual ~TemplateRenderer();
 
@@ -132,27 +156,20 @@ public:
     QStringList render(const QStringList& contents);
 
     /**
-     * @brief Sets the maximum number of consecutive empty lines this renderer will produce
+     * @brief Sets the policy for empty lines in the rendered output
      * 
-     * If a rendered template contains more than @p lines consecutive empty lines, 
-     * extra ones will be removed. 
+     * The default is KeepEmptyLines, where the template output is return unmodified. 
      * 
-     * This allows you to use template with more whitespace, making them easier to read,
-     * witout the extra empty lines in the output.
-     * 
-     * If this is set to zero, all empty lines will be removed. 
-     * To remove the limit, set @p lines to a negative number.
-     * The default value is -1, which means there is no limit for empty lines. 
-     * 
-     * @param lines the maximum number of consecutive empty lines in the rendered output
+     * @param policy policy for empty lines in the rendered output
+     * @sa EmptyLinesPolicy
      */
-    void setMaximumEmptyLines(int lines);
+    void setEmptyLinesPolicy(EmptyLinesPolicy policy);
 
     /**
-     * Returns the currently set maximum number of consecutive empty lines in the rendered output
-     * @sa setMaximumEmptyLines()
+     * Returns the currently set policy for empty lines in the rendered output
+     * @sa EmptyLinesPolicy, setEmptyLinesPolicy()
      */
-    int maximumEmptyLines();
+    EmptyLinesPolicy emptyLinesPolicy();
 
 private:
     class TemplateRendererPrivate* const d;
