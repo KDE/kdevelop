@@ -70,12 +70,13 @@ class KDevelop::TemplateRendererPrivate
 public:
     Engine engine;
     Context context;
+    int maxEmptyLines;
 };
 
 TemplateRenderer::TemplateRenderer()
     : d(new TemplateRendererPrivate)
 {
-    d->engine.setSmartTrimEnabled(true);
+    d->maxEmptyLines = -1;
 
     addTemplateDirectories(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
 
@@ -131,14 +132,64 @@ void TemplateRenderer::addVariable (const QString& name, const QVariant& value)
 QString TemplateRenderer::render (const QString& content, const QString& name)
 {
     kDebug() << d->context.stackHash(0);
-    
-    Template t = d->engine.newTemplate(content, name);
-    QString ret;
-    QTextStream textStream(&ret);
-    NoEscapeStream stream(&textStream);
 
+    Template t = d->engine.newTemplate(content, name);
+    QString output;
+
+    QTextStream textStream(&output);
+    NoEscapeStream stream(&textStream);
     t->render(&stream, &d->context);
-    return ret;
+
+    if (d->maxEmptyLines > -1)
+    {
+        QStringList lines = output.split('\n', QString::KeepEmptyParts);
+        QMutableStringListIterator it(lines);
+        if (d->maxEmptyLines == 0)
+        {
+            while (it.hasNext())
+            {
+                it.next();
+                if (it.value().isEmpty())
+                {
+                    it.remove();
+                }
+            }
+        }
+        else
+        {
+            QList<bool> lastFull;
+            while (it.hasNext())
+            {
+                it.next();
+
+                bool allEmpty = true;
+                foreach (bool full, lastFull)
+                {
+                    if (full)
+                    {
+                        allEmpty = false;
+                        break;
+                    }
+                }
+
+                bool currentEmpty = it.value().trimmed().isEmpty();
+                if (allEmpty && currentEmpty)
+                {
+                    it.remove();
+                }
+
+                if (lastFull.size() == d->maxEmptyLines)
+                {
+                    lastFull.removeFirst();
+                }
+                lastFull << !currentEmpty;
+            }
+        }
+
+        output = lines.join("\n");
+    }
+
+    return output;
 }
 
 QString TemplateRenderer::renderFile (const KUrl& url, const QString& name)
@@ -164,3 +215,12 @@ QStringList TemplateRenderer::render (const QStringList& contents)
     return ret;
 }
 
+void TemplateRenderer::setMaximumEmptyLines (int lines)
+{
+    d->maxEmptyLines = lines;
+}
+
+int TemplateRenderer::maximumEmptyLines()
+{
+    return d->maxEmptyLines;
+}

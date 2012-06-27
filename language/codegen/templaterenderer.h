@@ -131,6 +131,29 @@ public:
      **/
     QStringList render(const QStringList& contents);
 
+    /**
+     * @brief Sets the maximum number of consecutive empty lines this renderer will produce
+     * 
+     * If a rendered template contains more than @p lines consecutive empty lines, 
+     * extra ones will be removed. 
+     * 
+     * This allows you to use template with more whitespace, making them easier to read,
+     * witout the extra empty lines in the output.
+     * 
+     * If this is set to zero, all empty lines will be removed. 
+     * To remove the limit, set @p lines to a negative number.
+     * The default value is -1, which means there is no limit for empty lines. 
+     * 
+     * @param lines the maximum number of consecutive empty lines in the rendered output
+     */
+    void setMaximumEmptyLines(int lines);
+
+    /**
+     * Returns the currently set maximum number of consecutive empty lines in the rendered output
+     * @sa setMaximumEmptyLines()
+     */
+    int maximumEmptyLines();
+
 private:
     class TemplateRendererPrivate* const d;
 };

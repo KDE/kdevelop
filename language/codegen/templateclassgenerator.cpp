@@ -91,6 +91,7 @@ d(new TemplateClassGeneratorPrivate)
 {
     d->archive = 0;
     d->baseUrl = baseUrl;
+    d->renderer.setMaximumEmptyLines(1);
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
