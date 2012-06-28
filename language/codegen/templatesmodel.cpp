@@ -236,6 +236,10 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName)
 {
     QFileInfo info(fileName);
     QString description = d->componentData.dirs()->findResource(d->descriptionResourceType, info.baseName() + ".kdevtemplate");
+    if (description.isEmpty())
+    {
+        description = d->componentData.dirs()->findResource(d->descriptionResourceType, info.baseName() + ".desktop");
+    }
 
     QModelIndexList indexes;
 
