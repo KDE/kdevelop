@@ -87,9 +87,13 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = "<pre>" + Qt::escape(
-                    CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified())
-                ) + "</pre>";
+        desc = Qt::escape(CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()));
+        int firstLine = desc.indexOf('\n');
+        firstLine = desc.indexOf('\n', firstLine+1);
+        if(firstLine>=0)
+            desc = desc.mid(firstLine+1).trimmed(); //we remove the cmake version and the command name
+        desc.replace(QLatin1String("\n       "), QLatin1String("\n"));
+        desc = QString("<b>%1</b><pre>%2</pre>").arg(id).arg(desc);
     }
 
     return desc;

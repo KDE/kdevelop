@@ -52,13 +52,10 @@ class CMakeDeclarationNavigationContext: public AbstractDeclarationNavigationCon
 
 CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const KSharedPtr<IDocumentation>& doc)
 {
-    initBrowser(200);
-
     setContext( NavigationContextPointer(new CMakeNavigationContext(top, doc->name(), doc->description())) );
 }
 
 CMakeNavigationWidget::CMakeNavigationWidget(KDevelop::DUChainPointer< KDevelop::TopDUContext > top, KDevelop::Declaration* decl)
 {
-    initBrowser(200);
     setContext( NavigationContextPointer(new CMakeDeclarationNavigationContext(DeclarationPointer(decl), top)) );
 }
