@@ -1,6 +1,6 @@
 [General]
 Name=Widget with a UI File
-Comment=QWidget subclass with a separate Designer file
+Comment=QWidget subclass with a separate Qt Designer file
 Category=C++/Qt
 Files=Header,Implementation,UI
 

@@ -1,22 +1,26 @@
 {% load kdev_filters %}
 """
 
-{{ license|lines_prepend:" " }}
+{{ license|lines_prepend:"  " }}
 """
 
-class {{ name }}{% if is_inherited %}({% for inh in direct_inheritance_list %}{{ inh.name }}{% if forloop.last %}, {% endif %}{% endfor %}){% endif %}:
-    def __init__(self{% for property in properties %}, {{ property.name }}{% endfor %}):
-        {% for inh in direct_inheritance_list %}
+
+class {{ name }}{% if base_classes %}({% for inh in base_classes %}{{ inh.baseType }}{% if forloop.last %}, {% endif %}{% endfor %}){% endif %}:
+    def __init__(self{% for member in members %}, {{ member.name }}{% endfor %}):
+        {% for inh in base_classes %}
         {{ inh.name }}.__init__(self)
         {% endfor %}
 
-        {% for property in properties %}
-        self.{{ property.name }} = {{ property.name }}
+
+        {% for member in members %}
+        self.{{ member.name }} = {{ member.name }}
         {% empty %}
         pass
         {% endfor %}
 
+
     {% for method in methods %}
+
     {% if method.isStatic %}
     @staticmethod
     def {{ method.name }}({% include "arguments_names.txt" %}):
@@ -26,4 +30,5 @@ class {{ name }}{% if is_inherited %}({% for inh in direct_inheritance_list %}{{
     def {{ method.name }}(self):
     {% endif %}{% endif %}
         pass
+
     {% endfor %}

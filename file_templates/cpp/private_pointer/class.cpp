@@ -1,12 +1,16 @@
+{% load kdev_filters %}
 /*
 
-  {{ license|lines_prepend" * " }}
+ {{ license|lines_prepend:" * " }}
  */
 
+
 #include "{{ output_file_header }}"
-#include "{{ output_file_private_header }}"
+#include "{{ output_file_privateheader }}"
+
 
 {% include "namespace_use_cpp.txt" %}
+
 
 {{ private_class_name }}::{{ private_class_name }}({{ name }}* q) : q(q)
 {
@@ -18,31 +22,42 @@
 
 }
 
-{% with private_class_name as name %}
-{% for method in private_methods %}
-{% include "method_definition_cpp.txt" %}
+{% for method in private_functions %}
+
+{% with method.arguments as arguments %}
+{{ method.returnType|default:"void" }} {{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %};
+{% endwith %}
 {
 
-}
-{% endfor %}
-{% endwith %}
 
-{% for method in public_methods %}
+}
+
+{% endfor %}
+
+{% for method in public_functions %}
+
 {% include "method_definition_cpp.txt" %}
-{% if method.isConstructor %}    : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
+{% if method.isConstructor %} : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
 {
     {% if method.isDestructor %}
     delete {{ private_member_name }};
     {% endif %}
+
+
 }
+
 {% endfor %}
 
-{% for method in protected_methods %}
-{% if method.isConstructor %}    : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
+{% for method in protected_functions %}
+
 {% include "method_definition_cpp.txt" %}
+{% if method.isConstructor %} : {{ private_member_name}}(new {{ private_class_name }}(this)){% endif %}
 {
     {% if method.isDestructor %}
     delete d;
     {% endif %}
+
+
 }
+
 {% endfor %}

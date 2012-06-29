@@ -1,20 +1,26 @@
-/*
+{% extends "cpp_implementation.cpp" %}
 
-  {{ license }}
- */
+{% block includes %}
+#include "{{ output_file_header }}"
+#include "ui_{{ output_file_ui|cut:".ui" }}.h"
+{% endblock includes %}
 
-#include "{{ name }}.h"
-#include "ui_{{ name }}.h"
+{% block function_definitions %}
+{% for method in functions %}
 
-{% for declaration in functions %}
-{% with declaration.internal_declarations as arguments %}
+{% with method.internal_methods as arguments %}
 
-{% if declaration.type %}{{ declaration.type }} {% endif %}{{ name }}::{{ declaration.identifier }}{% include "arguments.txt" %}{% if declaration.is_constructor %}: ui(new Ui::{{ name }}){% endif %}
+{% include "method_definition_cpp.txt" %}
 {
-    {% if declaration.is_constructor %}
-    ui->setupUi(this);{% endif %}{% if declaration.is_destructor %}
-    delete ui;{% endif %}{% if declaration.type %}return {{ declaration.default_return_value }};
+    {% if method.isConstructor %}
+    ui = new Ui::{{ name }};
+    ui->setupUi(this);
+    {% endif %}
+    {% if method.isDestructor %}
+    delete ui;
     {% endif %}
 }
+
 {% endwith %}
 {% endfor %}
+{% endblock function_definitions %}

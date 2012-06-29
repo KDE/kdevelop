@@ -1,15 +1,17 @@
 {% load kdev_filters %}
 {% block license_header %}
 /*
- * 
+
  {{ license|lines_prepend:" * " }}
  */
-{% endblock %}
+{% endblock license_header %}
+
 
 {% block include_guard_open %}
 #ifndef {% include "include_guard_cpp.txt" %}
 #define {% include "include_guard_cpp.txt" %}
 {% endblock include_guard_open %}
+
 
 {% block includes %}
 {% for included_file in included_files %}
@@ -17,9 +19,15 @@
 {% endfor %}
 {% endblock includes %}
 
+
 {% block namespaces_open %}
 {% include "namespace_open_cpp.txt" %}
 {% endblock namespaces_open %}
+
+
+{% block forward_declarations %}
+{% endblock forward_declarations %}
+
 
 {% block class_declaration_open %}
 class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.inheritanceMode }} {{ base.baseType }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}
@@ -33,9 +41,12 @@ public:
     {% for method in public_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
+
+
     {% for member in public_members %}
-    member.type member.name;
+    {{ member.type }} {{ member.name }};
     {% endfor %}
+
 
 {% if protected_members or protected_functions %}
 protected:
@@ -43,9 +54,12 @@ protected:
     {% for method in protected_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
+
+
     {% for member in protected_members %}
-    member.type member.name;
+    {{ member.type }} {{ member.name }};
     {% endfor %}
+
 
 {% if private_members or private_functions %}
 private:
@@ -53,8 +67,10 @@ private:
     {% for method in private_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
+
+
     {% for member in private_members %}
-    member.type member.name;
+    {{ member.type }} {{ member.name }};
     {% endfor %}
 
 {% endblock class_body %}
@@ -75,6 +91,7 @@ private:
 
 {% block outside_namespace %}
 {% endblock %}
+
 
 {% block include_guard_close %}
 #endif // {% include "include_guard_cpp.txt" %}

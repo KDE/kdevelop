@@ -1,10 +1,7 @@
+{% extends "cpp_implementation.cpp" %}
 {% load kdev_filters %}
-/*
 
- {{ license|lines_prepend:" * " }}
- */
-
-#include "{{ output_file_header }}"
+{% block extra_declarations %}
 
 class {{ name }}Private
 {
@@ -13,57 +10,87 @@ public:
     {{ property.type }} {{ property.name }};
     {% endfor %}
 
-    {% for method in private_methods %}
+    {% for method in private_functions %}
     {% include "method_declaration.txt" %}
     {% endfor %}
 };
 
-{% for method in private_methods %}
+{% endblock extra_declarations %}
+
+{% block extra_definitons %}
+
+{% with name|add:"Private" as name %}
+{% for method in private_functions %}
 {% with method.arguments as arguments %}
 
-{% if method.type %}{{ method.type }} {% endif %}{{ name }}Private::{{ method.name }}({% include "arguments_types_names.txt" %})
+{% include "method_definition_cpp.txt" %}
 {
     {% if method.type %}
     return {{ method.default_return_value }};
     {% endif %}
+
+
 }
+
 {% endwith %}
 {% endfor %}
+{% endwith %}
 
-{% for method in public_methods %}
+{% endblock extra_definitons %}
+
+{% block function_definitions %}
+
+{% for method in public_functions %}
 {% with method.arguments as arguments %}
 
-{% if method.type %}{{ method.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
+{% include "method_definition_cpp" %}
+{% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
     delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
+
+
 }
+
 {% endwith %}
 {% endfor %}
 
-{% for method in protected_methods %}
+{% for method in protected_functions %}
 {% with method.arguments as arguments %}
 
-{% if method.type %}{{ method.type }} {% endif %}{{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.is_constructor %} : d_ptr(new {{ name }}Private){% endif %}
+{% include "method_definition_cpp" %}
+{% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
     delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
+
+
 }
+
 {% endwith %}
 {% endfor %}
 
 {% for property in properties %}
+
 {{ property.type }} {{ property.name }}() const
 {
     Q_D(const {{ name }});
     return d->{{ property.name }};
 }
 
+
 void set{{ property.name|upper_first }}({{ property.type }} {{ property.name }})
 {
     Q_D({{ name }});
     d->{{ property.name }} = {{ property.name }};
 }
+
 {% endfor %}
+
+{% endblock function_definitions %}
+
+{% block bottom %}
+#include "{{ output_file_header|cut:".h"|cut:".hpp" }}.moc"
+{% endblock bottom %}
