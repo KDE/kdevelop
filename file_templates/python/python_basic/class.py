@@ -1,14 +1,14 @@
 {% load kdev_filters %}
-"""
+#
 
-{{ license|lines_prepend:"  " }}
-"""
+{{ license|lines_prepend:"# " }}
+#
 
 
-class {{ name }}{% if base_classes %}({% for inh in base_classes %}{{ inh.baseType }}{% if forloop.last %}, {% endif %}{% endfor %}){% endif %}:
+class {{ name }}{% if base_classes %}({% for inh in base_classes %}{{ inh.baseType }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}:
     def __init__(self{% for member in members %}, {{ member.name }}{% endfor %}):
         {% for inh in base_classes %}
-        {{ inh.name }}.__init__(self)
+        {{ inh.baseType }}.__init__(self)
         {% endfor %}
 
 
