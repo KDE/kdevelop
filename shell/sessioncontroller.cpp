@@ -865,7 +865,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* 
     connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
     connect(view, SIGNAL(entered(QModelIndex)), SLOT(itemEntered(QModelIndex)));
 
-    m_deleteButton = new KPushButton(view);
+    m_deleteButton = new KPushButton(view->viewport());
     m_deleteButton->setIcon(KIcon("edit-delete"));
     m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
     m_deleteButton->hide();
@@ -1013,8 +1013,10 @@ void SessionChooserDialog::itemEntered(const QModelIndex& index)
     // we need the right most column's index
     QModelIndex in = m_model->index( index.row(), 1 );
     const QRect rect = m_view->visualRect(in);
-    QPoint p(rect.right() - m_deleteButton->size().width(), rect.top() + rect.height()/4);
-    m_deleteButton->setGeometry( QRect(p, QSize(rect.height(), rect.height()) ) );
+    m_deleteButton->resize(rect.height(), rect.height());
+    
+    QPoint p(rect.right() - m_deleteButton->size().width(), rect.top()+rect.height()/2-m_deleteButton->height()/2);
+    m_deleteButton->move(p);
 
     m_deleteCandidateRow = index.row();
     m_deleteButtonTimer.start();
