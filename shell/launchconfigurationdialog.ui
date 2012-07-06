@@ -11,13 +11,6 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Launch Configurations:</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -45,6 +38,13 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Launch Configurations:</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0" rowspan="2" colspan="4">
     <widget class="QTreeView" name="tree">
      <property name="sizePolicy">
@@ -55,14 +55,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4" rowspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5">
+   <item row="1" column="4">
     <widget class="QLabel" name="configName">
      <property name="lineWidth">
       <number>1</number>
@@ -72,7 +65,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="2" column="4">
     <widget class="QStackedWidget" name="stack">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
