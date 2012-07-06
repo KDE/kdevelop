@@ -141,6 +141,15 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
             connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
         }
     }
+    // Simplify menu structure to get rid of 1-entry levels
+    while (m->actions().count() == 1) {
+        QMenu* subMenu = m->actions().first()->menu();
+        if (subMenu) {
+            m = subMenu;
+        } else {
+            break;
+        }
+    }
     addConfig->setMenu(m);
 
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
