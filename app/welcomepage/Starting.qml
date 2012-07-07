@@ -43,8 +43,14 @@ StandardPage
 
             Link {
                 iconSource: "project-development-open"
-                text: i18n("Import project")
+                text: i18n("Open project")
                 onClicked: ICore.projectController().openProject()
+            }
+
+            Link {
+                iconSource: "download"
+                text: i18n("Fetch project")
+                onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
         }
     }
