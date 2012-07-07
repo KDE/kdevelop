@@ -1,5 +1,6 @@
 /*
     This file is part of KDevelop
+    Copyright 2012 Milian Wolff <mail@milianw.de>
     Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com
 
     This program is free software: you can redistribute it and/or modify
@@ -36,6 +37,8 @@ private slots:
     void benchmarkAddlinesCompilerfilter();
     void benchmarkAddlinesScriptErrorfilter();
     void benchmarkAddlinesStaticAnalysisfilter();
+    void benchAddLongLine();
+
 private:
     void do_currentBench(KDevelop::OutputModel& testee);
 };

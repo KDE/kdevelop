@@ -21,8 +21,8 @@ namespace KDevelop
 class ActionFormat
 {
     public:
-        ActionFormat( const QString&, const QString&, const QString& regExp, int file);
-        ActionFormat( const QString&, int tool, int file, const QString& regExp);
+        ActionFormat( const QString& _action, const QString& _tool, const QString& regExp, int file );
+        ActionFormat( const QString& _action, int tool, int file, const QString& regExp );
         QString action;
         QRegExp expression;
         QString tool;
@@ -33,8 +33,8 @@ class ActionFormat
 class ErrorFormat
 {
     public:
-        ErrorFormat( const QString&, int, int, int, int column=-1 );
-        ErrorFormat( const QString&, int, int, int, const QString&, int column=-1 );
+        ErrorFormat( const QString& regExp, int file, int line, int text, int column=-1 );
+        ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp, int column=-1 );
         QRegExp expression;
         int fileGroup;
         int lineGroup, columnGroup;

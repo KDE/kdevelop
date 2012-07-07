@@ -38,6 +38,9 @@ private slots:
     void testStaticAnalysisFilterStrategy_data();
     void testStaticAnalysisFilterStrategy();
     void benchMarkCompilerFilterAction();
+    void testExtractionOfLineAndCulmn_data();
+    void testExtractionOfLineAndCulmn();
+
 };
 
 }

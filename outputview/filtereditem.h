@@ -32,7 +32,9 @@ namespace KDevelop
 
 /**
  * Holds all metadata of a given compiler/script/whatever output line. E.g. if it is an error or
- * a warning, if it is clickable or not, etc.
+ * a warning, if it is clickable or not, line number, column number, etc.
+ * Note that line and column number are stored as starting with with 0 (Your compiler/whatever tool 
+ * may count from 1 ).
  **/
 struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 {
@@ -56,9 +58,10 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
     QString shortenedText;
     bool isActivatable;
     KUrl url;
+    /// lineNo starts with 0
     int lineNo;
+    /// columnNo starts with 0
     int columnNo;
-
 };
 
 

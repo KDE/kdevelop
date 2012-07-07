@@ -1,5 +1,6 @@
 /*
     This file is part of KDevelop
+    Copyright 2012 Milian Wolff <mail@milianw.de>
     Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com
 
     This program is free software: you can redistribute it and/or modify
@@ -232,6 +233,47 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     qDebug() << "average ms spend pr. dir: " << avgDirectoryInsertion;
 
     QVERIFY(avgDirectoryInsertion < 2);
+}
+
+void FilteringStrategyTest::testExtractionOfLineAndCulmn_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<QString>("file");
+    QTest::addColumn<int>("lineNr");
+    QTest::addColumn<int>("column");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
+
+    QTest::newRow("gcc-with-col")
+        << "/path/to/file.cpp:123:45: fatal error: ..."
+        << "/path/to/file.cpp" << 122 << 44 << FilteredItem::ErrorItem;
+    QTest::newRow("gcc-no-col")
+        << "/path/to/file.cpp:123: error ..."
+        << "/path/to/file.cpp" << 122 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("fortcom")
+        << "fortcom: Error: Ogive8.f90, line 123: ..."
+        << "./Ogive8.f90" << 122 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("libtool")
+        << "libtool: link: warning: ..."
+        << "" << -1 << 0  << FilteredItem::WarningItem;
+//     QTest::newRow("gfortran") This row does not currently hit on any of the errorFormats
+//         << "/path/to/file.f90:123.456:"
+//         << "/path/to/file.f90" << 122 << 455  << FilteredItem::ErrorItem;
+}
+
+void FilteringStrategyTest::testExtractionOfLineAndCulmn()
+{
+    QFETCH(QString, line);
+    QFETCH(QString, file);
+    QFETCH(int, lineNr);
+    QFETCH(int, column);
+    QFETCH(FilteredItem::FilteredOutputItemType, itemtype);
+    KUrl projecturl( "./" );
+    CompilerFilterStrategy testee(projecturl);
+    FilteredItem item1 = testee.errorInLine(line);
+    QCOMPARE(item1.type , itemtype);
+    QCOMPARE(item1.url.path(), file);
+    QCOMPARE(item1.lineNo , lineNr);
+    QCOMPARE(item1.columnNo , column);
 }
 
 

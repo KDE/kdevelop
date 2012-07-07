@@ -85,7 +85,7 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     // Jade
     << ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 )
     // ifort
-    << ErrorFormat( "^fortcom: Error: (.*), line ([0-9]+):(.*)", 1, 2, 3, "intel" )
+    << ErrorFormat( "^fortcom: (Error): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" )
     // PGI
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" )
     // PGI (2)
@@ -177,7 +177,6 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         QRegExp regEx = curActFilter.expression;
         if( regEx.indexIn( line ) != -1 )
         {
-            //kDebug() << "found an action" << line << curActFilter.tool << curActFilter.toolGroup << curActFilter.fileGroup;
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
@@ -226,8 +225,9 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
-            //kDebug() << "found an error:" << line;
-            item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
+            if(curErrFilter.fileGroup > 0) {
+                item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
+            }
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
@@ -235,7 +235,6 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 item.columnNo = 0;
             }
 
-            //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
             if(txt.contains("error", Qt::CaseInsensitive)) {
@@ -291,14 +290,12 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            //kDebug() << "found a script error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             } else {
                 item.columnNo = 0;
             }
 
-            //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
             item.type = FilteredItem::ErrorItem;
@@ -339,14 +336,12 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            //kDebug() << "found a static code analysis error, and extracted (Url, linenumber): " << item.url.prettyUrl() << " , " << item.lineNo;
             if(curErrFilter.columnGroup >= 0) {
                 item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
             } else {
                 item.columnNo = 0;
             }
 
-            //item.shortenedText = regEx.cap( errFormat.textGroup );
             QString txt = regEx.cap(curErrFilter.textGroup);
 
             item.type = FilteredItem::ErrorItem;
