@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QTreeView>
 #include <QMenu>
+#include <QApplication>
+#include <QClipboard>
 
 #include <KAction>
 #include <KStandardAction>
@@ -39,12 +41,10 @@
 #include <KIcon>
 #include <KTextEditor/Cursor>
 
-#include "../../interfaces/icore.h"
-#include "../../interfaces/idebugcontroller.h"
-#include "../../interfaces/idocumentcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include "framestackmodel.h"
-#include <QApplication>
-#include <QClipboard>
 
 namespace KDevelop {
 

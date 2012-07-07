@@ -38,7 +38,7 @@
          <property name="whatsThis">
           <string>Project Overview</string>
          </property>
-         <attribute name="headerStretchLastSection">
+         <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
         </widget>

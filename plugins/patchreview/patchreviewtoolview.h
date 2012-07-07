@@ -82,6 +82,7 @@ private:
 public slots:
     void documentActivated( KDevelop::IDocument* );
     void patchSelectionChanged( int );
+    void customContextMenuRequested(const QPoint& p);
 };
 
 #endif // PATCHREVIEWTOOLVIEW_H

@@ -802,7 +802,7 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
 {
     if (mode & IDocument::Silent) {
         foreach (IDocument* doc, modifiedDocuments(list)) {
-            if( !doc->save(mode) )
+            if( !DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save(mode) )
             {
                 if( doc )
                     qWarning() << "!! Could not save document:" << doc->url();
