@@ -126,26 +126,6 @@ namespace Cpp {
 
 typedef QPair<Declaration*, int> DeclarationDepthPair;
 
-IndexedType switchExpressionType(DUContextPointer caseContext)
-{
-#ifndef TEST_COMPLETION
-  //Test thread has DUChain locked
-  ENSURE_CHAIN_NOT_LOCKED;
-#endif
-  ForegroundLock foregroundLock;
-  LOCKDUCHAIN;
-  if (!caseContext)
-    return IndexedType();
-  DUContext* switchContext = 0;
-  if (caseContext->importedParentContexts().size() == 1)
-    switchContext = caseContext->importedParentContexts().first().context(caseContext->topContext());
-  if (!switchContext)
-    return IndexedType();
-  QString switchExpression = switchContext->createRangeMoving()->text();
-  ExpressionParser expressionParser;
-  return expressionParser.evaluateType(switchExpression.toUtf8(), DUContextPointer(switchContext)).type;
-}
-
 //Search for a copy-constructor within class
 //*DUChain must be locked*
 bool hasCopyConstructor(CppClassType::Ptr classType, TopDUContext* topContext)
@@ -1384,7 +1364,26 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItem
 {
   QList<CompletionTreeItemPointer> items;
 
-  IndexedType switchExprType = switchExpressionType(m_duContext);
+  {
+#ifndef TEST_COMPLETION
+    // Test thread has DUChain locked
+    // This is essential here - a ForegroundLock must be acquired _before_ locking DUChain
+    ENSURE_CHAIN_NOT_LOCKED;
+#endif
+
+    ForegroundLock foregroundLock;
+    LOCKDUCHAIN;
+
+    if( m_duContext && m_duContext->importedParentContexts().size() == 1 )
+    {
+      DUContext* switchContext = m_duContext->importedParentContexts().first().context( m_duContext->topContext() );
+      ExpressionParser expressionParser;
+      m_expression = switchContext->createRangeMoving()->text();
+      m_expressionResult = expressionParser.evaluateExpression( m_expression.toUtf8(), DUContextPointer( switchContext ) );
+    }
+  }
+
+  IndexedType switchExprType = m_expressionResult.type;
 
   LOCKDUCHAIN; if (!m_duContext) return items;
 
@@ -1704,7 +1703,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
         }
       }
     }
-    else if (parent->accessType() == BinaryOpFunctionCallAccess)
+    else if (parent->accessType() == BinaryOpFunctionCallAccess || parent->accessType() == CaseAccess)
     {
       items += specialItemsForArgumentType(parent->m_expressionResult.type.abstractType());
     }
@@ -1788,6 +1787,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
     if(!m_valid)
       return items;
 
+    // Call parent context before adding our items because if parent is CaseAccess, this call
+    // will make it compute its expression type (which we need in standardAccessCompletionItems())
+    if(shouldAddParentItems(fullCompletion))
+      items = parentContext()->completionItems( shouldAbort, fullCompletion );
+
     switch(m_accessType) {
       case MemberAccess:
       case ArrowMemberAccess:
@@ -1832,9 +1836,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         }
         break;
     }
-
-    if(shouldAddParentItems(fullCompletion))
-      items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0)
     {
@@ -1909,39 +1910,20 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   return ret;
 }
 
-QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) const {
-  QualifiedIdentifier worstCase = decl->context()->scopeIdentifier(true);
-  if(!m_duContext)
-    return worstCase;
-  QualifiedIdentifier currentPrefix;
-
-  while(1) {
-    QList<Declaration*> found = m_duContext->findDeclarations( currentPrefix + decl->identifier() );
-    if(found.contains(decl))
-      return currentPrefix;
-
-    if(currentPrefix.count() >= worstCase.count()) {
-      return worstCase;
-    }else {
-      currentPrefix.push(worstCase.at(currentPrefix.count()));
-    }
-  }
-}
-
 QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::specialItemsForArgumentType(TypePtr< KDevelop::AbstractType > type) {
   QList< KSharedPtr< KDevelop::CompletionTreeItem > > items;
   if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
     Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
     if(enumDecl && enumDecl->internalContext()) {
 
-      QualifiedIdentifier prefix = requiredPrefix(enumDecl);
+      // This is necessary to avoid duplication of locally visible enumerators, which also get added by standardAccessCompletionItems().
+      if( visibleFromWithin( enumDecl, m_duContext.data() ) )
+        return items;
 
       DUContext* enumInternal = enumDecl->internalContext();
       foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
-        QualifiedIdentifier id = prefix + enumerator->identifier();
         items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), KDevelop::CodeCompletionContext::Ptr(this), 0 ));
-        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
-        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
+        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->prependScopePrefix = true;
       }
     }
   }

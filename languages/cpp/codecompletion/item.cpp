@@ -115,6 +115,11 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     if(m_declaration) {
       newText = m_declaration->identifier().toString();
+      if(prependScopePrefix) {
+        QualifiedIdentifier parentScope = Cpp::stripPrefixes(m_completionContext->duContext(), m_declaration->context()->scopeIdentifier(true));
+        if(!parentScope.isEmpty())
+            newText.prepend (parentScope.toString() + "::");
+      }
     } else {
       kDebug() << "Declaration disappeared";
       if(!alternativeText.isEmpty())
