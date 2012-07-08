@@ -178,10 +178,7 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
         prettyUrl = ICore::self()->projectController()->prettyFileName(descriptionOrUrl, KDevelop::IProjectController::FormatPlain);
     
     // appends new model to history
-    QString displayName = QString("Search %1 in %2 (at time %3)")
-                              .arg(name)
-                              .arg(prettyUrl)
-                              .arg(QTime::currentTime().toString("hh:mm"));
+    QString displayName = i18n("Search %1 in %2 (at time %3)", name, prettyUrl, QTime::currentTime().toString("hh:mm"));
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
     
     modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);

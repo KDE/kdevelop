@@ -414,7 +414,7 @@ QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem*
 QMenu* NativeAppConfigType::launcherSuggestions()
 {
     QMenu* ret = new QMenu;
-    ret->setTitle(tr("Project Executables"));
+    ret->setTitle(i18n("Project Executables"));
     
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
