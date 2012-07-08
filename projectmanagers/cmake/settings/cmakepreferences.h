@@ -36,7 +36,7 @@ namespace Ui { class CMakeBuildSettings; }
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class CMakePreferences : public ProjectKCModule<CMakeSettings>
+class CMakePreferences : public KCModule
 {
     Q_OBJECT
     public:
@@ -57,6 +57,7 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
     private:
         void configure();
         
+        KDevelop::IProject* m_project;
         KUrl m_srcFolder;
         KUrl m_subprojFolder;
         void updateCache( const KUrl & );

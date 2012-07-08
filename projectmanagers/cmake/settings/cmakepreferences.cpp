@@ -29,6 +29,7 @@
 #include <KMessageBox>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
+#include <KDebug>
 
 #include <QFile>
 #include <QHeaderView>
@@ -36,7 +37,7 @@
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
 #include "cmakebuilddirchooser.h"
-#include "cmakeconfig.h"
+#include <cmakeutils.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -48,19 +49,15 @@
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
-//TODO: Instead of 'current binary', 'current extra args' etc. this config module should store such things per
-// configured builddir since otherwise switching between builddirs with different options is impossible.
-
-static const QString currentBuildDirItemName = "currentBuildDir";
-static const QString currentInstallDirItemName = "currentInstallDir";
-static const QString currentBuildTypeItemName = "currentBuildType";
-static const QString cmakeBinItemName = "cmakeBin";
-static const QString currentExtraArgsItemName = "currentExtraArguments";
-static const QString currentEnvironment = "environment";
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<CMakeSettings>(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
+    : KCModule(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
 {
+    Q_ASSERT( args.count() > 3 );
+
+    QString projectName = args.at(4).toString();
+    m_project = KDevelop::ICore::self()->projectController()->findProjectByName( projectName );
+
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::CMakeBuildSettings;
@@ -76,7 +73,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     m_prefsUi->cacheList->verticalHeader()->hide();
-    addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(buildDirChanged(QString)));
@@ -96,29 +92,32 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 //     }
     
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    m_prefsUi->kcfg_environment->addItems( env.groups() );
-    m_prefsUi->configureEnvironment->setSelectionWidget(m_prefsUi->kcfg_environment);
+    m_prefsUi->environment->addItems( env.groups() );
+    m_prefsUi->configureEnvironment->setSelectionWidget(m_prefsUi->environment);
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
 }
 
 CMakePreferences::~CMakePreferences()
-{}
+{
+    CMake::removeOverrideBuildDirIndex(m_project);
+}
 
 void CMakePreferences::load()
 {
-    ProjectKCModule<CMakeSettings>::load();
-    CMakeSettings::self()->readConfig();
+    KCModule::load();
 
     kDebug(9042) << "********loading";
     m_prefsUi->buildDirs->clear();
-    m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
-    m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
-    m_prefsUi->kcfg_environment->setCurrentProfile(CMakeSettings::environment());
+    m_prefsUi->buildDirs->addItems( CMake::allBuildDirs(m_project) );
+    CMake::removeOverrideBuildDirIndex(m_project); // addItems() triggers buildDirChanged(), compensate for it
+    m_prefsUi->buildDirs->setCurrentIndex( CMake::currentBuildDirIndex(m_project) );
+    m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
+    m_prefsUi->cmakeDirectory->setUrl( CMake::cmakeDirectory(m_project) );
     
     m_srcFolder=m_subprojFolder;
-    m_srcFolder.cd(CMakeSettings::projectRootRelative());
+    m_srcFolder.cd( CMake::projectRootRelative(m_project) );
 
     m_prefsUi->removeBuildDir->setEnabled(m_prefsUi->buildDirs->count()!=0);
 //     QString cmDir=group.readEntry("CMakeDirectory");
@@ -129,52 +128,39 @@ void CMakePreferences::load()
 void CMakePreferences::save()
 {
     kDebug(9042) << "*******saving";
-    QStringList bDirs;
-    int count=m_prefsUi->buildDirs->model()->rowCount();
-    for(int i=0; i<count; i++)
+
+    // the build directory list is incrementally maintained through createBuildDir() and removeBuildDir().
+    // We won't rewrite it here based on the data from m_prefsUi->buildDirs.
+    CMake::removeOverrideBuildDirIndex( m_project, true ); // save current selection
+    int savedBuildDir = CMake::currentBuildDirIndex(m_project);
+    if( savedBuildDir < 0 )
     {
-        bDirs += m_prefsUi->buildDirs->itemText(i);
+        // no build directory exists: skip any writing to config file as well as configuring
+        kDebug(9042) << "doing real save from KCModule";
+        KCModule::save();
+        return;
     }
-
-    KConfigSkeletonItem* item = CMakeSettings::self()->findItem("buildDirs");
-    item->setProperty( QVariant( bDirs ) );
     
-    item = CMakeSettings::self()->findItem("currentBuildDir");
-    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_prefsUi->buildDirs->currentText() ) ) );
-
-    // Initialize the values here so in case there's no model yet we don't write empty stuff to the
-    // config. The model may be empty if a new builddir entry has been created and none existed before.
-    KUrl cmakeCmd = qVariantValue<KUrl>(CMakeSettings::self()->findItem(cmakeBinItemName)->property());
-    KUrl installPrefix = qVariantValue<KUrl>(CMakeSettings::self()->findItem(currentInstallDirItemName)->property());
-    QString buildType = CMakeSettings::self()->findItem(currentBuildTypeItemName)->property().toString();
-
     bool needReconfiguring = true;
     if(m_currentModel)
     {
-        cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
-        installPrefix=m_currentModel->value("CMAKE_INSTALL_PREFIX");
-        buildType=m_currentModel->value("CMAKE_BUILD_TYPE");
         if (!m_currentModel->writeDown()) {
             KMessageBox::error(this, i18n("Could not write CMake settings to file '%1'.\nCheck that you have write access to it", m_currentModel->filePath().pathOrUrl()));
             needReconfiguring = false;
         }
     }
-
-    item = CMakeSettings::self()->findItem(cmakeBinItemName);
-    item->setProperty(qVariantFromValue<KUrl>(cmakeCmd));
     
-    item = CMakeSettings::self()->findItem(currentInstallDirItemName);
-    item->setProperty( qVariantFromValue<KUrl>(installPrefix));
+    CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
+    CMake::setCmakeDirectory( m_project, m_prefsUi->cmakeDirectory->url() );
+    KCModule::save(); // TODO: is this needed? all the CMake::set* functions do their own ->sync()...
     
-    item = CMakeSettings::self()->findItem(currentBuildTypeItemName);
-    item->setProperty( qVariantFromValue<QString>(buildType));
-    
-    item = CMakeSettings::self()->findItem(currentEnvironment);
-    item->setProperty( qVariantFromValue<QString>(m_prefsUi->kcfg_environment->currentProfile()));
-    
-    kDebug(9042) << "doing real save from ProjectKCModule";
-    ProjectKCModule<CMakeSettings>::save();
-    CMakeSettings::self()->writeConfig();
+    kDebug(9042) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
+    kDebug(9042) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
+    kDebug(9042) << "writing to cmake config: installdir " << CMake::currentInstallDir(m_project);
+    kDebug(9042) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
+    kDebug(9042) << "writing to cmake config: cmake binary " << CMake::currentCMakeBinary(m_project);
+    kDebug(9042) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
+    kDebug(9042) << "writing to cmake config: internal directory " << CMake::cmakeDirectory(m_project);
     
     //We run cmake on the builddir to generate it 
     if (needReconfiguring) {
@@ -184,7 +170,7 @@ void CMakePreferences::save()
 
 void CMakePreferences::defaults()
 {
-    ProjectKCModule<CMakeSettings>::defaults();
+    KCModule::defaults();
 //     kDebug(9032) << "*********defaults!";
 }
 
@@ -250,6 +236,9 @@ void CMakePreferences::showInternal(int state)
 
 void CMakePreferences::buildDirChanged(const QString &str)
 {
+    int buildDirIndex = m_prefsUi->buildDirs->currentIndex();
+    CMake::setOverrideBuildDirIndex( m_project, buildDirIndex );
+    m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment( m_project ) );
     updateCache(str);
     kDebug(9042) << "builddir Changed" << str;
     emit changed(true);
@@ -260,15 +249,11 @@ void CMakePreferences::createBuildDir()
     CMakeBuildDirChooser bdCreator;
     bdCreator.setSourceFolder( m_srcFolder );
     
-    QStringList used;
-    for(int i=0; i<m_prefsUi->buildDirs->count(); i++)
-    {
-        used += m_prefsUi->buildDirs->itemText(i);
-        
-        //Comparisons are with TrailingSlash-less paths, remove it just in case
-        if(used.last().endsWith('/'))
-            used.last().chop(1);
-    }
+    // NOTE: (on removing the trailing slashes)
+    // Generally, we have no clue about how shall a trailing slash look in the current system.
+    // Moreover, the slash may be a part of the filename.
+    // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed pathes?
+    QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
     bdCreator.setCMakeBinary(KStandardDirs::findExe("cmake"));
     
@@ -276,21 +261,28 @@ void CMakePreferences::createBuildDir()
     {
         QString newbuilddir = bdCreator.buildFolder().toLocalFile(KUrl::RemoveTrailingSlash);
         m_prefsUi->buildDirs->addItem(newbuilddir);
-        m_prefsUi->buildDirs->setCurrentItem(newbuilddir);
+
+        int buildDirCount = m_prefsUi->buildDirs->count();
+        int addedBuildDirIndex = buildDirCount - 1;
+        m_prefsUi->buildDirs->setCurrentIndex(addedBuildDirIndex);
         m_prefsUi->removeBuildDir->setEnabled(true);
         
         // Initialize the kconfig items with the values from the dialog, this ensures the settings
         // end up in the config file once the changes are saved
-        CMakeSettings::self()->findItem(cmakeBinItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.cmakeBinary()));
-        CMakeSettings::self()->findItem(currentInstallDirItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.installPrefix()));
-        CMakeSettings::self()->findItem(currentBuildTypeItemName)->setProperty(QVariant(bdCreator.buildType()));
-        CMakeSettings::self()->findItem(currentBuildDirItemName)->setProperty(qVariantFromValue<KUrl>(bdCreator.buildFolder()));
-        CMakeSettings::self()->findItem(currentExtraArgsItemName)->setProperty(QVariant(bdCreator.extraArguments()));
-        
-        // Save explicitly here to store to file and then run configure which configures the builddir with the arguments
-        // set in the dialog. This is necessary since a consecutive creation of another builddir would override these
-        // arguments. See the TODO at the beginning of the file
-        save();
+        kDebug(9042) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
+        kDebug(9042) << "adding to cmake config: builddir path " << bdCreator.buildFolder().url();
+        kDebug(9042) << "adding to cmake config: installdir " << bdCreator.installPrefix().url();
+        kDebug(9042) << "adding to cmake config: extra args" << bdCreator.extraArguments();
+        kDebug(9042) << "adding to cmake config: build type " << bdCreator.buildType();
+        kDebug(9042) << "adding to cmake config: cmake binary " << bdCreator.cmakeBinary().url();
+        kDebug(9042) << "adding to cmake config: environment empty";
+        CMake::setBuildDirCount( m_project, buildDirCount );
+        CMake::setCurrentBuildDir( m_project, bdCreator.buildFolder() );
+        CMake::setCurrentInstallDir( m_project, bdCreator.installPrefix() );
+        CMake::setCurrentExtraArguments( m_project, bdCreator.extraArguments() );
+        CMake::setCurrentBuildType( m_project, bdCreator.buildType() );
+        CMake::setCurrentCMakeBinary( m_project, bdCreator.cmakeBinary() );
+        CMake::setCurrentEnvironment( m_project, QString() );
         
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
@@ -300,15 +292,12 @@ void CMakePreferences::createBuildDir()
 
 void CMakePreferences::removeBuildDir()
 {
-    QString removed=m_prefsUi->buildDirs->currentText();
     int curr=m_prefsUi->buildDirs->currentIndex();
-    if(curr>=0)
-    {
-        m_prefsUi->buildDirs->removeItem(curr);
-    }
-    if(m_prefsUi->buildDirs->count()==0)
-        m_prefsUi->removeBuildDir->setEnabled(false);
-    
+    if(curr < 0)
+        return;
+
+    KUrl removedUrl = CMake::currentBuildDir( m_project );
+    QString removed = removedUrl.toLocalFile();
     if(QDir(removed).exists())
     {
         int ret=KMessageBox::warningYesNo(this,
@@ -316,19 +305,32 @@ void CMakePreferences::removeBuildDir()
                     "Do you want KDevelop to remove it in the file system as well?", removed));
         if(ret==KMessageBox::Yes)
         {
-            bool correct=KIO::NetAccess::del(KUrl(removed), this);
+            bool correct=KIO::NetAccess::del(removedUrl, this);
             if(!correct)
                 KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
         }
     }
+
+    kDebug(9042) << "removing from cmake config: using builddir " << curr;
+    kDebug(9042) << "removing from cmake config: builddir path " << removedUrl;
+    kDebug(9042) << "removing from cmake config: installdir " << CMake::currentInstallDir( m_project );
+    kDebug(9042) << "removing from cmake config: extra args" << CMake::currentExtraArguments( m_project );
+    kDebug(9042) << "removing from cmake config: buildtype " << CMake::currentBuildType( m_project );
+    kDebug(9042) << "removing from cmake config: cmake binary " << CMake::currentCMakeBinary( m_project );
+    kDebug(9042) << "removing from cmake config: environment " << CMake::currentEnvironment( m_project );
+
+    CMake::removeBuildDirConfig(m_project);
+    m_prefsUi->buildDirs->removeItem( curr ); // this triggers buildDirChanged()
+    if(m_prefsUi->buildDirs->count()==0)
+        m_prefsUi->removeBuildDir->setEnabled(false);
+
     emit changed(true);
 }
 
 void CMakePreferences::configure()
 {
-    KDevelop::IProject* p=project();
-    KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder();
-    KJob* job=b->configure(p);
+    KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
+    KJob* job=b->configure(m_project);
     connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
     
     KDevelop::ICore::self()->runController()->registerJob(job);
