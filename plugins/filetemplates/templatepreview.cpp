@@ -19,6 +19,7 @@
  */
 
 #include "templatepreview.h"
+#include "ui_templatepreview.h"
 #include <language/codegen/templaterenderer.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -34,15 +35,13 @@ using namespace KDevelop;
 
 TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget (parent, f)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    m_browser = new KTextBrowser(this);
-    layout->addWidget(m_browser);
-    m_label = new QLabel(this);
-    layout->addWidget(m_label);
-    setLayout(layout);
+    ui = new Ui::TemplatePreview;
+    ui->setupUi(this);
 
     m_renderer = new TemplateRenderer;
-    m_renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
+
+    connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(policyIndexChanged(int)));
+    policyIndexChanged(ui->emptyLinesPolicyComboBox->currentIndex());
 
     QVariantHash vars;
     vars["name"] = "Example";
@@ -79,5 +78,26 @@ void TemplatePreview::documentChanged (IDocument* document)
 void TemplatePreview::sourceTextChanged(const QString& text)
 {
     QString rendered = m_renderer->render(text);
-    m_browser->setText(rendered);
+    ui->browser->setText(rendered);
+}
+
+void TemplatePreview::policyIndexChanged (int index)
+{
+    TemplateRenderer::EmptyLinesPolicy policy;
+    switch (index)
+    {
+        case 0:
+            policy = TemplateRenderer::KeepEmptyLines;
+            break;
+
+        case 1:
+            policy = TemplateRenderer::TrimEmptyLines;
+            break;
+
+        case 2:
+            policy = TemplateRenderer::RemoveEmptyLines;
+            break;
+    }
+    m_renderer->setEmptyLinesPolicy(policy);
+    documentChanged(m_currentDocument);
 }

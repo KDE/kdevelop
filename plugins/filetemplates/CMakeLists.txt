@@ -4,7 +4,10 @@ set(kdevfiletemplates_PART_SRCS
     filetemplatesplugin.cpp
 )
 
+kde4_add_ui_files(kdevfiletemplates_PART_SRCS templatepreview.ui)
+
 kde4_add_plugin(kdevfiletemplates ${kdevfiletemplates_PART_SRCS})
+
 target_link_libraries(kdevfiletemplates
     ${KDE4_KDECORE_LIBS}
     kdevplatforminterfaces

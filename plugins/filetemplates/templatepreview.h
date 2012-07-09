@@ -29,6 +29,11 @@ class TemplateRenderer;
 class IDocument;
 }
 
+namespace Ui
+{
+class TemplatePreview;
+}
+
 class QLabel;
 class KTextBrowser;
 
@@ -41,8 +46,7 @@ public:
     virtual ~TemplatePreview();
 
 private:
-    KTextBrowser* m_browser;
-    QLabel* m_label;
+    Ui::TemplatePreview* ui;
     KDevelop::TemplateRenderer* m_renderer;
     KDevelop::IDocument* m_currentDocument;
 
@@ -52,6 +56,7 @@ private slots:
 public slots:
     void documentActivated (KDevelop::IDocument* document);
     void documentChanged (KDevelop::IDocument* document);
+    void policyIndexChanged (int index);
 };
 
 #endif // TEMPLATEPREVIEW_H
