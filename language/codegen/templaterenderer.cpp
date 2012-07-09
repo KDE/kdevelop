@@ -141,6 +141,12 @@ QString TemplateRenderer::render (const QString& content, const QString& name)
     NoEscapeStream stream(&textStream);
     t->render(&stream, &d->context);
 
+    if (t->error() != Grantlee::NoError)
+    {
+        output += "\n\nError: ";
+        output += t->errorString();
+    }
+
     if (d->emptyLinesPolicy == TrimEmptyLines && output.contains('\n'))
     {
         QStringList lines = output.split('\n', QString::KeepEmptyParts);
