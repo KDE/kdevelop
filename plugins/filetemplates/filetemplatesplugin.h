@@ -8,6 +8,7 @@
 namespace KDevelop
 {
 class TemplatesModel;
+class IToolViewFactory;
 }
 
 
@@ -19,6 +20,7 @@ class FileTemplatesPlugin : public KDevelop::IPlugin, public KDevelop::ITemplate
 public:
     FileTemplatesPlugin (QObject* parent, const QVariantList& args);
     virtual ~FileTemplatesPlugin();
+    virtual void unload();
     
     virtual void reload();
     virtual void loadTemplate (const QString& fileName);
@@ -30,6 +32,7 @@ public:
     
 private:
     KDevelop::TemplatesModel* m_model;
+    KDevelop::IToolViewFactory* m_toolView;
 };
 
 #endif // FILETEMPLATESPLUGIN_H

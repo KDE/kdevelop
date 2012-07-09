@@ -1,9 +1,8 @@
 
 set(kdevfiletemplates_PART_SRCS
+    templatepreview.cpp
     filetemplatesplugin.cpp
 )
-
-kde4_add_ui_files(kdevfiletemplates_PART_SRCS ${kdevfiletemplates_PART_UI})
 
 kde4_add_plugin(kdevfiletemplates ${kdevfiletemplates_PART_SRCS})
 target_link_libraries(kdevfiletemplates
