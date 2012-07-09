@@ -23,6 +23,11 @@
 
 #include <QWidget>
 
+namespace KTextEditor
+{
+class Document;
+}
+
 namespace KDevelop
 {
 class TemplateRenderer;
@@ -34,8 +39,8 @@ namespace Ui
 class TemplatePreview;
 }
 
-class QLabel;
-class KTextBrowser;
+class KTemporaryFile;
+
 
 class TemplatePreview : public QWidget
 {
@@ -49,6 +54,8 @@ private:
     Ui::TemplatePreview* ui;
     KDevelop::TemplateRenderer* m_renderer;
     KDevelop::IDocument* m_currentDocument;
+    KTemporaryFile* m_tmpFile;
+    KTextEditor::Document* m_document;
 
 private slots:
     void sourceTextChanged(const QString& text);

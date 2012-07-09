@@ -20,6 +20,7 @@
 
 #include "templatepreview.h"
 #include "ui_templatepreview.h"
+
 #include <language/codegen/templaterenderer.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -28,8 +29,12 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <grantlee/engine.h>
+#include <QFileInfo>
+
 #include <KTextEditor/Document>
+#include <KTextEditor/EditorChooser>
+#include <KTextEditor/View>
+#include <KTemporaryFile>
 
 using namespace KDevelop;
 
@@ -37,11 +42,16 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
 {
     ui = new Ui::TemplatePreview;
     ui->setupUi(this);
+    m_tmpFile = 0;
 
     m_renderer = new TemplateRenderer;
 
     IDocumentController* dc = ICore::self()->documentController();
     m_currentDocument = dc->activeDocument();
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    m_document = editor->createDocument(this);
+    ui->verticalLayout->insertWidget(0, m_document->createView(this));
 
     connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(policyIndexChanged(int)));
     policyIndexChanged(ui->emptyLinesPolicyComboBox->currentIndex());
@@ -63,6 +73,14 @@ TemplatePreview::~TemplatePreview()
 
 void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 {
+    delete m_tmpFile;
+    m_tmpFile = new KTemporaryFile;
+    QFileInfo info(document->url().toLocalFile());
+    m_tmpFile->setSuffix(info.suffix());
+
+    m_tmpFile->open();
+    m_document->openUrl(KUrl(m_tmpFile->fileName()));
+
     m_currentDocument = document;
     documentChanged(document);
 }
@@ -80,8 +98,20 @@ void TemplatePreview::documentChanged (IDocument* document)
 
 void TemplatePreview::sourceTextChanged(const QString& text)
 {
+    m_document->setReadWrite(true);
     QString rendered = m_renderer->render(text);
-    ui->browser->setText(rendered);
+    if (rendered.simplified() == text.simplified())
+    {
+        // If the difference in only in whitespace, this is probably not a Grantlee template
+        m_document->setText(i18n("The active document does not appear to be a Grantlee template"));
+        m_document->save();
+    }
+    else
+    {
+        m_document->setText(rendered);
+        m_document->save();
+    }
+    m_document->setReadWrite(false);
 }
 
 void TemplatePreview::policyIndexChanged (int index)
