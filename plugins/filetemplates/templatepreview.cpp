@@ -40,6 +40,9 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
 
     m_renderer = new TemplateRenderer;
 
+    IDocumentController* dc = ICore::self()->documentController();
+    m_currentDocument = dc->activeDocument();
+
     connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(policyIndexChanged(int)));
     policyIndexChanged(ui->emptyLinesPolicyComboBox->currentIndex());
 
@@ -49,8 +52,8 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     // TODO: More variables, preferably the ones from TemplateClassGenerator
     m_renderer->addVariables(vars);
 
-    connect (ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-    connect (ICore::self()->documentController(), SIGNAL(documentContentChanged(KDevelop::IDocument*)), SLOT(documentChanged(KDevelop::IDocument*)));
+    connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
+    connect (dc, SIGNAL(documentContentChanged(KDevelop::IDocument*)), SLOT(documentChanged(KDevelop::IDocument*)));
 }
 
 TemplatePreview::~TemplatePreview()
