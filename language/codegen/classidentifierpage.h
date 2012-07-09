@@ -22,11 +22,11 @@
 #include <QWidget>
 #include "../languageexport.h"
 
+#include "../duchain/identifier.h"
+
 class KLineEdit;
 
 namespace KDevelop {
-
-class QualifiedIdentifier;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
 {
