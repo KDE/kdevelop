@@ -47,6 +47,40 @@
 #include <KSelectAction>
 #include <ktoggleaction.h>
 
+class IdealToolBar : public QToolBar
+{
+    Q_OBJECT
+    public:
+        explicit IdealToolBar(const QString& title, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
+            : QToolBar(title, parent), m_buttons(buttons)
+        {
+            setMovable(false);
+            setFloatable(false);
+            setObjectName(title);
+            layout()->setMargin(0);
+            
+            addWidget(m_buttons);
+        }
+
+        void hideWhenEmpty()
+        {
+            refresh();
+            connect(this, SIGNAL(visibilityChanged(bool)), SLOT(refresh()));
+            connect(m_buttons, SIGNAL(emptyChanged(bool)), SLOT(refresh()));
+        }
+
+    public slots:
+        void refresh()
+        {
+            if(m_buttons->isEmpty()==isVisible()) {
+                setVisible(!m_buttons->isEmpty());
+            }
+        }
+
+    private:
+        Sublime::IdealButtonBarWidget* m_buttons;
+};
+
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
@@ -98,32 +132,15 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     idealController = new IdealController(m_mainWindow);
 
-    QToolBar *leftToolBar = new QToolBar(i18n("Left Button Bar"), m_mainWindow);
-    leftToolBar->setObjectName("left_button_bar");
-    leftToolBar->setMovable(false);
-    leftToolBar->setFloatable(false);
-    leftToolBar->layout()->setMargin(0);
-    leftToolBar->addWidget(idealController->leftBarWidget);
-    idealController->leftBarWidget->show();
+    IdealToolBar* leftToolBar = new IdealToolBar(i18n("Left Button Bar"), idealController->leftBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
+    leftToolBar->hideWhenEmpty();
 
-    QToolBar *rightToolBar = new QToolBar(i18n("Right Button Bar"), m_mainWindow);
-    rightToolBar->setObjectName("right_button_bar");
-    rightToolBar->setMovable(false);
-    rightToolBar->setFloatable(false);
-    rightToolBar->layout()->setMargin(0);
-    rightToolBar->addWidget(idealController->rightBarWidget);
-    idealController->rightBarWidget->show();
+    IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
+    rightToolBar->hideWhenEmpty();
 
-    QToolBar *bottomToolBar = new QToolBar(i18n("Bottom Button Bar"), m_mainWindow);
-    bottomToolBar->setObjectName("bottom_button_bar");
-    bottomToolBar->setMovable(false);
-    bottomToolBar->setFloatable(false);
-    bottomToolBar->layout()->setMargin(0);
-    bottomToolBar->addWidget(idealController->bottomBarWidget);
-    idealController->bottomBarWidget->show();
-    m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
+    new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
 
     // adymo: intentionally do not add a toolbar for top buttonbar
     // this doesn't work well with toolbars added via xmlgui
@@ -881,4 +898,5 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 }
 
 #include "mainwindow_p.moc"
+#include "moc_mainwindow_p.cpp"
 
