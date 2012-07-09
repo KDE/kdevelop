@@ -79,6 +79,8 @@ void CMakeJob::start()
         return emitResult();
     }
 
+    CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
+
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
     KDevelop::OutputModel* m_model = new KDevelop::OutputModel(this);
@@ -148,24 +150,24 @@ KUrl CMakeJob::buildDir( KDevelop::IProject* project )
 QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
 {
     QStringList args;
-    KUrl cmakecache = buildDir( project );
-    cmakecache.addPath("CMakeCache.txt");
-    if( !CMake::currentInstallDir(project).toLocalFile().isEmpty() ) 
+    QString installDir = CMake::currentInstallDir(project).toLocalFile();
+    if( !installDir.isEmpty() )
     {
-        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
+        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(installDir);
     }
-    if( !CMake::currentBuildType(project).isEmpty() )
+    QString buildType = CMake::currentBuildType(project);
+    if( !buildType.isEmpty() )
     {
-        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
+        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
 #ifdef Q_OS_WIN
     // Visual Studio solution is the standard generator under windows, but we dont want to use
     // the VS IDE, so we need nmake makefiles
     args << QString("-G") << QString("NMake Makefiles");
 #endif
-    if( !CMake::currentExtraArguments(project).isEmpty() ) {
+    QString cmakeargs = CMake::currentExtraArguments(project);
+    if( !cmakeargs.isEmpty() ) {
         KShell::Errors err;
-        QString cmakeargs = CMake::currentExtraArguments(project);
         QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
         if( err == KShell::NoError ) {
             args += tmp;

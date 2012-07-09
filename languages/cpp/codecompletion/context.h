@@ -261,11 +261,6 @@ namespace Cpp {
       ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
       void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
       
-      ///Returns the required prefix that is needed in order to find the givne declaration from the current context.
-      ///In worst case, it is the scope prefix of the declaration.
-      ///*DUChain must be locked*
-      QualifiedIdentifier requiredPrefix(Declaration* decl) const;
-
       ///@param type The type of the argument the items are matched to.
       ///*DUChain must be locked*
       QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
