@@ -174,6 +174,7 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
         m_threads->selectionModel()->clear();
         m_frames->setModel(0);        
     }
+    m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
 }
 
 void KDevelop::FramestackWidget::currentFrameChanged(int frame)
