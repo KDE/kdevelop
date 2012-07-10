@@ -22,6 +22,7 @@
 #define TEMPLATEPREVIEW_H
 
 #include <QWidget>
+#include <QHash>
 
 namespace KTextEditor
 {
@@ -53,6 +54,7 @@ public:
 private:
     Ui::TemplatePreview* ui;
     KDevelop::TemplateRenderer* m_renderer;
+    QHash<QString,QString> m_variables;
     KDevelop::IDocument* m_currentDocument;
     KTemporaryFile* m_tmpFile;
     KTextEditor::Document* m_document;
@@ -64,7 +66,7 @@ public slots:
     void documentActivated (KDevelop::IDocument* document);
     void documentChanged (KDevelop::IDocument* document);
     void documentClosed (KDevelop::IDocument* document);
-    void policyIndexChanged (int index);
+    void selectedRendererChanged();
 };
 
 #endif // TEMPLATEPREVIEW_H

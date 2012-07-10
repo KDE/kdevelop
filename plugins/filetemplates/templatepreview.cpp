@@ -30,11 +30,13 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QFileInfo>
+#include <QDir>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/EditorChooser>
 #include <KTextEditor/View>
 #include <KTemporaryFile>
+#include <kmacroexpander.h>
 
 using namespace KDevelop;
 
@@ -53,14 +55,24 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     ui->verticalLayout->insertWidget(0, m_document->createView(this));
     documentChanged(m_currentDocument);
 
-    connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(policyIndexChanged(int)));
-    policyIndexChanged(ui->emptyLinesPolicyComboBox->currentIndex());
+    connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
+    connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedRendererChanged()));
+    selectedRendererChanged();
 
     QVariantHash vars;
     vars["name"] = "Example";
     vars["license"] = "This file is licensed under the ExampleLicense 3.0";
     // TODO: More variables, preferably the ones from TemplateClassGenerator
     m_renderer->addVariables(vars);
+
+    m_variables["APPNAME"] = "Example";
+    m_variables["APPNAMELC"] = "example";
+    m_variables["APPNAMEUC"] = "EXAMPLE";
+    m_variables["APPNAMEID"] = "Example";
+
+    m_variables["PROJECTDIR"] = QDir::homePath() + "/projects/ExampleProjectDir";
+    m_variables["PROJECTDIRNAME"] = "ExampleProjectDir";
+    m_variables["VERSIONCONTROLPLUGIN"] = "kdevgit";
 
     connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     connect (dc, SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
@@ -119,11 +131,19 @@ void TemplatePreview::sourceTextChanged(const QString& text)
     }
     else
     {
-        QString rendered = m_renderer->render(text);
+        bool project = ui->projectRadioButton->isChecked();
+        QString rendered = project ? KMacroExpander::expandMacros(text, m_variables) : m_renderer->render(text);
         if (rendered.simplified() == text.simplified())
         {
-            // If the difference in only in whitespace, this is probably not a Grantlee template
-            m_document->setText(i18n("The active document does not appear to be a Grantlee template"));
+            // If the difference in only in whitespace, this is probably not a suitable template
+            if (project)
+            {
+                m_document->setText(i18n("The active document is not a <application>KDevelop</application> project template"));
+            }
+            else
+            {
+                m_document->setText(i18n("The active document is not a <application>KDevelop</application> class template"));
+            }
         }
         else
         {
@@ -134,23 +154,26 @@ void TemplatePreview::sourceTextChanged(const QString& text)
     m_document->setReadWrite(false);
 }
 
-void TemplatePreview::policyIndexChanged (int index)
+void TemplatePreview::selectedRendererChanged()
 {
-    TemplateRenderer::EmptyLinesPolicy policy;
-    switch (index)
+    if (ui->classRadioButton->isChecked())
     {
-        case 0:
-            policy = TemplateRenderer::KeepEmptyLines;
-            break;
+        TemplateRenderer::EmptyLinesPolicy policy;
+        switch (ui->emptyLinesPolicyComboBox->currentIndex())
+        {
+            case 0:
+                policy = TemplateRenderer::KeepEmptyLines;
+                break;
 
-        case 1:
-            policy = TemplateRenderer::TrimEmptyLines;
-            break;
+            case 1:
+                policy = TemplateRenderer::TrimEmptyLines;
+                break;
 
-        case 2:
-            policy = TemplateRenderer::RemoveEmptyLines;
-            break;
+            case 2:
+                policy = TemplateRenderer::RemoveEmptyLines;
+                break;
+        }
+        m_renderer->setEmptyLinesPolicy(policy);
     }
-    m_renderer->setEmptyLinesPolicy(policy);
     documentChanged(m_currentDocument);
 }
