@@ -165,7 +165,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
 
     KUrl sourceUrl;
     QHash<QString, KUrl> urls = fileUrls();
-    if (!fileUrls().isEmpty())
+    if (!urls.isEmpty())
     {
         sourceUrl = urls.constBegin().value();
     }
