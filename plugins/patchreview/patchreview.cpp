@@ -237,7 +237,7 @@ void PatchReviewPlugin::updateKompareModel() {
         QString patchFile;
         if(m_patch->file().isLocalFile())
           patchFile = m_patch->file().toLocalFile();
-        else {
+        else if(m_patch->file().isValid() && !m_patch->file().isEmpty()){
           bool ret = KIO::NetAccess::download(m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow());
           if(!ret)
             kWarning() << "Problem while downloading: " << m_patch->file();
