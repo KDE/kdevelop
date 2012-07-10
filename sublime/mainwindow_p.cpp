@@ -66,7 +66,7 @@ class IdealToolBar : public QToolBar
         {
             refresh();
             connect(this, SIGNAL(visibilityChanged(bool)), SLOT(refresh()));
-            connect(m_buttons, SIGNAL(emptyChanged(bool)), SLOT(refresh()));
+            connect(m_buttons, SIGNAL(emptyChanged()), SLOT(refresh()));
         }
 
     public slots:
