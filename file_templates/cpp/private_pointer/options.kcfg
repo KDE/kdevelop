@@ -6,10 +6,12 @@
   <kcfgfile arg="true"/>
   <group name="Private Class">
     <entry name="private_class_name" type="String">
-        <default>{{ name }}Private</default>
+      <label>Private class name</label>
+      <default>{{ name }}Private</default>
     </entry>
     <entry name="private_member_name" type="String">
-        <default>d</default>
+      <label>Private member name</label>
+      <default>d</default>
     </entry>
   </group>
 </kcfg>
