@@ -138,7 +138,8 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
 
-    new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
+    IdealToolBar* bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
+    m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
 
     // adymo: intentionally do not add a toolbar for top buttonbar
     // this doesn't work well with toolbars added via xmlgui
