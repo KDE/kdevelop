@@ -63,6 +63,7 @@ private slots:
 public slots:
     void documentActivated (KDevelop::IDocument* document);
     void documentChanged (KDevelop::IDocument* document);
+    void documentClosed (KDevelop::IDocument* document);
     void policyIndexChanged (int index);
 };
 

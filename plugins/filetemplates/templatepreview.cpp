@@ -42,7 +42,6 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
 {
     ui = new Ui::TemplatePreview;
     ui->setupUi(this);
-    m_tmpFile = 0;
 
     m_renderer = new TemplateRenderer;
 
@@ -52,6 +51,7 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     m_document = editor->createDocument(this);
     ui->verticalLayout->insertWidget(0, m_document->createView(this));
+    documentChanged(m_currentDocument);
 
     connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(policyIndexChanged(int)));
     policyIndexChanged(ui->emptyLinesPolicyComboBox->currentIndex());
@@ -63,6 +63,7 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     m_renderer->addVariables(vars);
 
     connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
+    connect (dc, SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
     connect (dc, SIGNAL(documentContentChanged(KDevelop::IDocument*)), SLOT(documentChanged(KDevelop::IDocument*)));
 }
 
@@ -73,12 +74,16 @@ TemplatePreview::~TemplatePreview()
 
 void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 {
+    Q_ASSERT(document);
+    kDebug() << document->url();
+    
     delete m_tmpFile;
     m_tmpFile = new KTemporaryFile;
     QFileInfo info(document->url().toLocalFile());
-    m_tmpFile->setSuffix(info.suffix());
+    m_tmpFile->setSuffix('.' + info.suffix());
 
     m_tmpFile->open();
+    kDebug() << m_tmpFile->fileName();
     m_document->openUrl(KUrl(m_tmpFile->fileName()));
 
     m_currentDocument = document;
@@ -87,7 +92,7 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 
 void TemplatePreview::documentChanged (IDocument* document)
 {
-    if (document != m_currentDocument)
+    if (document != m_currentDocument || !document)
     {
         return;
     }
@@ -96,21 +101,36 @@ void TemplatePreview::documentChanged (IDocument* document)
     sourceTextChanged(text);
 }
 
+void TemplatePreview::documentClosed (IDocument* document)
+{
+    if (document == m_currentDocument)
+    {
+        m_currentDocument = 0;
+    }
+    sourceTextChanged(QString());
+}
+
 void TemplatePreview::sourceTextChanged(const QString& text)
 {
     m_document->setReadWrite(true);
-    QString rendered = m_renderer->render(text);
-    if (rendered.simplified() == text.simplified())
+    if (text.isEmpty())
     {
-        // If the difference in only in whitespace, this is probably not a Grantlee template
-        m_document->setText(i18n("The active document does not appear to be a Grantlee template"));
-        m_document->save();
+        m_document->setText(i18n("No active document"));
     }
     else
     {
-        m_document->setText(rendered);
-        m_document->save();
+        QString rendered = m_renderer->render(text);
+        if (rendered.simplified() == text.simplified())
+        {
+            // If the difference in only in whitespace, this is probably not a Grantlee template
+            m_document->setText(i18n("The active document does not appear to be a Grantlee template"));
+        }
+        else
+        {
+            m_document->setText(rendered);
+        }
     }
+    m_document->save();
     m_document->setReadWrite(false);
 }
 
