@@ -109,7 +109,7 @@ private:
                            Sublime::Area* area);
     Sublime::View* addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
-                           Sublime::Area* area, Sublime::Position p=Sublime::Position::AllPositions);
+                           Sublime::Area* area, Sublime::Position p=Sublime::AllPositions);
     void setupActions();
 
 public Q_SLOTS:
