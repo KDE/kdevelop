@@ -99,7 +99,7 @@ public:
 
     /// Adds a tool view in the active area to the dock area @p area.
     /// @see activeArea()
-    void addToolViewToDockArea(const QString& name, IToolViewFactory* factory, Qt::DockWidgetArea area);
+    void addToolViewToDockArea(KDevelop::IToolViewFactory* factory, Qt::DockWidgetArea area);
 
     bool toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area);
 
@@ -109,7 +109,7 @@ private:
                            Sublime::Area* area);
     Sublime::View* addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
-                           Sublime::Area* area);
+                           Sublime::Area* area, Sublime::Position p=Sublime::Position::AllPositions);
     void setupActions();
 
 public Q_SLOTS:
