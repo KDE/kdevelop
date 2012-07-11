@@ -1897,7 +1897,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
         case StringAst::Strip:
-            m_vars->insert(sast->outputVariable(), QStringList(CMakeFunctionArgument::unescapeValue( sast->string() )));
+            m_vars->insert(sast->outputVariable(), QStringList( sast->string().trimmed() ));
             break;
         case StringAst::Random: {
             QString alphabet=sast->string(), result;

@@ -50,7 +50,8 @@ class CMakePreferences : public KCModule
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(true); }
-        void buildDirChanged(const QString &);
+        void buildDirChanged(int index);
+        void cacheUpdated();
         void createBuildDir();
         void removeBuildDir();
         void showAdvanced(bool v);
