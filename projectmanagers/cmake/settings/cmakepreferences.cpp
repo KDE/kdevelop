@@ -74,8 +74,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     m_prefsUi->cacheList->verticalHeader()->hide();
 
-    connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(buildDirChanged(QString)));
+    connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(buildDirChanged(int)));
     connect(m_prefsUi->showInternal, SIGNAL(stateChanged(int)),
             this, SLOT(showInternal(int)));
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
@@ -234,14 +234,21 @@ void CMakePreferences::showInternal(int state)
     }
 }
 
-void CMakePreferences::buildDirChanged(const QString &str)
+void CMakePreferences::buildDirChanged(int index)
 {
-    int buildDirIndex = m_prefsUi->buildDirs->currentIndex();
-    CMake::setOverrideBuildDirIndex( m_project, buildDirIndex );
+    CMake::setOverrideBuildDirIndex( m_project, index );
+    KUrl str = CMake::currentBuildDir(m_project);
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment( m_project ) );
     updateCache(str);
     kDebug(9042) << "builddir Changed" << str;
     emit changed(true);
+}
+
+void CMakePreferences::cacheUpdated()
+{
+    KUrl str = CMake::currentBuildDir(m_project);
+    updateCache(str);
+    kDebug(9042) << "cache updated for" << str;
 }
 
 void CMakePreferences::createBuildDir()
@@ -332,6 +339,7 @@ void CMakePreferences::configure()
     KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
     connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
+    connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
     
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
