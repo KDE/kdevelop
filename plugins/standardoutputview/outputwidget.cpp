@@ -119,8 +119,8 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         filterInput = new KLineEdit();
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
-        filterInput->setClickMessage("search...");
-        filterInput->setToolTip("Enter a wild card string to filter the output view");
+        filterInput->setClickMessage(i18n("Search..."));
+        filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
         addAction(filterAction);
