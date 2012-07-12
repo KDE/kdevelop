@@ -106,7 +106,7 @@ void CreateClassAssistant::setup()
 
     if (d->outputPage)
     {
-        removePage(d->licensePage);
+        removePage(d->outputPage);
     }
     d->outputPageWidget = new OutputPage(this);
     connect(d->outputPageWidget, SIGNAL(isValid(bool)), this, SLOT(checkOutputPage(bool)));
