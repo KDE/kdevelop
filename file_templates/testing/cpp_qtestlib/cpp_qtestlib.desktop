@@ -1,7 +1,7 @@
 [General]
 Name=QTestLib
 Comment=A unit test using the QTest library without a graphical user interface
-Category=C++
+Category=Test/C++
 Files=Header,Implementation
 
 [Header]
