@@ -77,7 +77,15 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
 
-    QModelIndex languageIndex = d->model->index(0, 0);
+    QModelIndex categoryIndex;
+    QList<QStandardItem*> classes = d->model->findItems("Class");
+    if (!classes.isEmpty())
+    {
+        categoryIndex = classes.first()->index();
+    }
+    d->ui->languageView->setRootIndex(categoryIndex);
+
+    QModelIndex languageIndex = d->model->index(0, 0, categoryIndex);
     QModelIndex templateIndex = d->model->index(0, 0, languageIndex);
 
     while (templateIndex.child(0, 0).isValid())

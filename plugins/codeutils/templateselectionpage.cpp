@@ -22,6 +22,15 @@ TemplateSelectionPage::TemplateSelectionPage (QWidget* parent)
     m_model->refresh();
 
     ui->treeView->setModel(m_model);
+
+    QModelIndex categoryIndex;
+    QList<QStandardItem*> tests = m_model->findItems("Test");
+    if (!tests.isEmpty())
+    {
+        categoryIndex = tests.first()->index();
+    }
+    ui->treeView->setRootIndex(categoryIndex);
+
     connect (ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(contentsChanged()));
     connect (ui->identifierLineEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
     connect (ui->directoryUrlRequester, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
