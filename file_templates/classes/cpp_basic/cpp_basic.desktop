@@ -1,7 +1,7 @@
 [General]
 Name=Basic
 Comment=Basic C++ Class
-Category=C++
+Category=Class/C++/Basic
 Files=Header,Implementation
 
 [Header]

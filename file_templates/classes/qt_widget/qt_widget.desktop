@@ -1,7 +1,7 @@
 [General]
 Name=Widget with a UI File
 Comment=QWidget subclass with a separate Qt Designer file
-Category=C++/Qt
+Category=Class/C++/Qt
 Files=Header,Implementation,UI
 
 [Header]

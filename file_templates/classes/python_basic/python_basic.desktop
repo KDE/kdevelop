@@ -1,7 +1,7 @@
 [General]
 Name=Basic
 Comment=Basic Python Class
-Category=Python
+Category=Class/Python/Basic
 Files=Definition
 
 [Definition]

@@ -1,9 +1,9 @@
 set(filetemplate_DIRS
-    cpp/cpp_basic
-    cpp/private_pointer
-    cpp/qt_widget
-    cpp/qobject
-    python/python_basic
+    classes/cpp_basic
+    classes/private_pointer
+    classes/qt_widget
+    classes/qobject
+    classes/python_basic
 
     testing/cpp_qtestlib
     testing/python_pyunit

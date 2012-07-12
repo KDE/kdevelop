@@ -1,7 +1,7 @@
 [General]
 Name=Qt Object
 Comment=QObject subclass with properties and private member
-Category=C++/Qt
+Category=Class/C++/Qt
 Files=Header,Implementation
 
 [Header]
