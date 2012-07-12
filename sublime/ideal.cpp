@@ -200,11 +200,11 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     _widgets[action] = dock;
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
+    bool wasEmpty = actions().isEmpty();
     addAction(action);
-    // adymo: layout doesn't notice the addition of actions for some reason,
-    // enforce the invalidation
-    layout()->invalidate();
 
+    if(wasEmpty)
+        emit emptyChanged();
     return action;
 }
 
@@ -218,6 +218,11 @@ void IdealButtonBarWidget::removeAction(QAction * action)
     _widgets.remove(action);
     delete _buttons.take(action);
     delete action;
+}
+
+bool IdealButtonBarWidget::isEmpty()
+{
+    return layout()->isEmpty();
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
@@ -310,11 +315,13 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
                     if (item->widget() == button) {
                         action->disconnect(this);
                         delete layout()->takeAt(index);
-                        layout()->invalidate();
                         break;
                     }
                 }
             }
+        }
+        if(layout()->isEmpty()) {
+            emit emptyChanged();
         }
     } break;
 
@@ -619,7 +626,6 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
         action->setShortcut(shortcut);
 
         m_docks->addAction(action);
-        bar->show();
         connect(dock, SIGNAL(close()), action, SLOT(toggle()));
     }
 

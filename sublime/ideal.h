@@ -87,10 +87,14 @@ public:
     QWidget* corner();
 
     void toggleAction(QAction *action, bool state);
+    bool isEmpty();
 
 private Q_SLOTS:
     void showWidget(bool checked);
     void actionToggled(bool state);
+
+signals:
+    void emptyChanged();
 
 protected:
     virtual void actionEvent(QActionEvent *event);

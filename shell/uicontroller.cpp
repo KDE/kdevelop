@@ -604,14 +604,9 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
-void UiController::addToolViewToDockArea(const QString& /*name*/,
-                                         IToolViewFactory* factory,
-                                         Qt::DockWidgetArea area)
+void UiController::addToolViewToDockArea(IToolViewFactory* factory, Qt::DockWidgetArea area)
 {
-    ///TODO: we should probably add a bool forcePosition member to
-    /// Area::addToolView(), to force adding at the given position.
-    Sublime::View* view = addToolViewToArea(factory, d->factoryDocuments[factory], activeArea());
-    activeArea()->moveToolView(view, Sublime::dockAreaToPosition(area));
+    addToolViewToArea(factory, d->factoryDocuments[factory], activeArea(), Sublime::dockAreaToPosition(area));
 }
 
 bool UiController::toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area)
@@ -635,12 +630,12 @@ void UiController::addToolViewIfWanted(IToolViewFactory* factory,
 
 Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
                                      Sublime::ToolDocument* doc,
-                                     Sublime::Area* area)
+                                     Sublime::Area* area, Sublime::Position p)
 {
     Sublime::View* view = doc->createView();
     area->addToolView(
         view,
-        Sublime::dockAreaToPosition(factory->defaultPosition()));
+        p == Sublime::Position::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, SIGNAL(raise(Sublime::View*)),
             SLOT(raiseToolView(Sublime::View*)));

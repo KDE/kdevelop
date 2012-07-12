@@ -58,6 +58,9 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     emit isCorrect(false);
 
     sourceChanged(0);
+    
+    if(!m_plugins.isEmpty())
+        m_ui->sources->setCurrentIndex(1);
 }
 
 void ProjectSourcePage::sourceChanged(int index)

@@ -34,6 +34,7 @@
 #include "../functiondefinition.h"
 #include <interfaces/iuicontroller.h>
 #include <codegen/coderepresentation.h>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 
@@ -375,7 +376,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   
   if(topContext->parsingEnvironmentFile()->needsUpdate()) {
       kWarning() << "WARNING: context" << topContext->url().str() << "is not up to date!";
-      ICore::self()->uiController()->showErrorMessage(ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " still needs an update!", 5);
+      ICore::self()->uiController()->showErrorMessage(i18n("%1 still needs an update!", ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain)), 5);
 //       return;
   }
   
