@@ -20,7 +20,7 @@ class {{ name }}(unittest.TestCase):
 
 
     {% for case in testCases %}
-    def test_{{ case.name }}(self):
+    def test_{{ case }}(self):
         pass
 
 

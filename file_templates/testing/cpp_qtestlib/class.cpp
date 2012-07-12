@@ -32,16 +32,8 @@ void cleanup()
 
 
 {% for case in testCases %}
-{% if case.isDataDriven %}
 
-void {{ case.name }}_data()
-{
-
-}
-
-{% endif %}
-
-void {{ case.name }}()
+void {{ case }}()
 {
 
 
