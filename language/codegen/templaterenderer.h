@@ -175,7 +175,7 @@ public:
      */
     EmptyLinesPolicy emptyLinesPolicy();
 
-    DocumentChangeSet renderFileTemplate (KDevelop::SourceFileTemplate* fileTemplate, QHash< QString, KUrl > fileUrls);
+    DocumentChangeSet renderFileTemplate (KDevelop::SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls);
 
 private:
     class TemplateRendererPrivate* const d;

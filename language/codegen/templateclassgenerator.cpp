@@ -81,17 +81,6 @@ QVariantHash TemplateClassGenerator::templateVariables()
     variables["functions"] = CodeDescription::toVariantList(desc.methods);
     variables["base_classes"] = CodeDescription::toVariantList(desc.baseClasses);
 
-    d->baseUrl.adjustPath(KUrl::AddTrailingSlash);
-    QHash<QString,KUrl> urls = fileUrls();
-    QRegExp nonAlphaNumeric("\\W");
-    for (QHash<QString,KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
-    {
-        QString cleanName = it.key().toLower();
-        cleanName.replace(nonAlphaNumeric, "_");
-        variables["output_file_" + cleanName] = KUrl::relativeUrl(d->baseUrl, it.value());
-        variables["output_file_" + cleanName + "_absolute"] = it.value().toLocalFile();
-    }
-
     return variables;
 }
 
@@ -101,7 +90,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
     Q_ASSERT(d->archive);
     d->renderer.addVariables(templateVariables());
 
-    return d->renderer.renderFileTemplate(d->fileTemplate, fileUrls());
+    return d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
 }
 
 QHash< QString, QString > TemplateClassGenerator::fileLabels()

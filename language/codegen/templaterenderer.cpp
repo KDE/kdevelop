@@ -277,9 +277,21 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
     return d->emptyLinesPolicy;
 }
 
-DocumentChangeSet TemplateRenderer::renderFileTemplate (SourceFileTemplate* fileTemplate, QHash< QString, KUrl > fileUrls)
+DocumentChangeSet TemplateRenderer::renderFileTemplate (SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
 {
     DocumentChangeSet changes;
+    KUrl url(baseUrl);
+    
+    url.adjustPath(KUrl::AddTrailingSlash);
+    QRegExp nonAlphaNumeric("\\W");
+    for (QHash<QString,KUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
+    {
+        QString cleanName = it.key().toLower();
+        cleanName.replace(nonAlphaNumeric, "_");
+        addVariable("output_file_" + cleanName, KUrl::relativeUrl(url, it.value()));
+        addVariable("output_file_" + cleanName + "_absolute", it.value().toLocalFile());
+    }
+
     const KArchiveDirectory* directory = fileTemplate->directory();
     foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate->outputFiles())
     {
