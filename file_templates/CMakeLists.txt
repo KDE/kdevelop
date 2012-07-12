@@ -4,6 +4,9 @@ set(filetemplate_DIRS
     cpp/qt_widget
     cpp/qobject
     python/python_basic
+
+    testing/cpp_qtestlib
+    testing/python_pyunit
 )
 
 kdevplatform_add_file_templates(${filetemplate_DIRS})

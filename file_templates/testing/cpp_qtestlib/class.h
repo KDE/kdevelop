@@ -1,0 +1,35 @@
+{% load kdev_filters %}
+/*
+
+ {{ license|lines_prepend:" * " }}
+ */
+
+
+#ifndef {{ name|upper }}_H
+#define {{ name|upper }}_H
+
+
+#include <QtTest/QtTest>
+
+
+class {{ name }} : public QObject
+{
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
+
+    void init();
+    void cleanup();
+
+
+    {% for case in testCases %}
+    {% if case.isDataDriven %}
+    void {{ case.name }}_data();
+    {% endif %}
+    void {{ case.name }}();
+    {% endfor %}
+};
+
+
+#endif // {{ name|upper }}_H
