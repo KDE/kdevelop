@@ -28,7 +28,7 @@ StandardBackground {
          GradientStop { position: 1.0; color: "#A3D69B" }
     }
     
-    Component.onCompleted: root.state="starting"
+    state: "starting"
 
     tools: ButtonColumn {
         spacing: 10
@@ -53,23 +53,18 @@ StandardBackground {
         x: root.marginLeft
         height: parent.height
         width: parent.width-x
-
-        Starting {
-            id: startingPage
-            
+        
+        Loader {
+            id: codeContents
             anchors.fill: parent
-            visible: root.state=="starting"
-        }
-
-        UseKDevelop {
-            id: usePage
-
-            anchors.fill: parent
-            visible: root.state=="learning"
         }
     }
     states: [
-        State { name: "learning" },
-        State { name: "starting" }
+        State { name: "learning"
+            PropertyChanges { target: codeContents; source: "qrc:/UseKDevelop.qml"}
+        },
+        State { name: "starting"
+            PropertyChanges { target: codeContents; source: "qrc:/Starting.qml"}
+        }
     ]
 }

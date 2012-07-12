@@ -80,7 +80,6 @@
 #include <language/duchain/use.h>
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
-#include <cmakeconfig.h>
 
 #include <language/highlighting/codehighlighting.h>
 #include <interfaces/iruncontroller.h>
@@ -578,6 +577,16 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
 
 KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 {
+    kDebug(9042) << "== migrating cmake settings";
+    CMake::attemptMigrate(project);
+    kDebug(9042) << "== completed cmake migration";
+
+    kDebug(9042) << "== updating cmake settings from model";
+    int buildDirCount = CMake::buildDirCount(project);
+    for( int i = 0; i < buildDirCount; ++i )
+        CMake::updateConfig( project, i );
+    kDebug(9042) << "== completed updating cmake settings";
+
     CMakeFolderItem* m_rootItem=0;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();

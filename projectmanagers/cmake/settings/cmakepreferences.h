@@ -36,7 +36,7 @@ namespace Ui { class CMakeBuildSettings; }
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class CMakePreferences : public ProjectKCModule<CMakeSettings>
+class CMakePreferences : public KCModule
 {
     Q_OBJECT
     public:
@@ -50,13 +50,15 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(true); }
-        void buildDirChanged(const QString &);
+        void buildDirChanged(int index);
+        void cacheUpdated();
         void createBuildDir();
         void removeBuildDir();
         void showAdvanced(bool v);
     private:
         void configure();
         
+        KDevelop::IProject* m_project;
         KUrl m_srcFolder;
         KUrl m_subprojFolder;
         void updateCache( const KUrl & );

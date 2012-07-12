@@ -204,23 +204,20 @@ void TestCppCodeCompletion::testExpressionBefore()
 
 void TestCppCodeCompletion::testSpecialItems()
 {
-  //Special items are (at this time) just all the enum members given duplicate values that qualify for "Best Match" status
-  //If reasonably possible, it would be nice to not duplicate while still having best matches
-  //See Also: context.cpp's CodeCompletionContext::specialItemsForArgumentType function
   QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester test(top->childContexts()[ctxt], "c = ");
-  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test2(top->childContexts()[ctxt], "test(");
-  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
-  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
-  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
-  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   release(top);
 }
 
@@ -433,6 +430,15 @@ void TestCppCodeCompletion::testParentContexts()
   release(top);
 }
 
+/*
+ * A comment on expect-fails in following 3 tests:
+ * "case" statement completion uses DUChainBase::createRangeMoving()->text() to get the switch'd expression
+ * and parse its type. Unfortunately, PersistentRangeMoving class itself is not yet completed and doesn't work without an editor.
+ * Hence the expression type cannot be resolved, which leads to 2 problems:
+ * 1) best matches are not selected, so all items have match quality of 0;
+ * 2) specialItemsForArgumentType() which is responsible for fetching enumerators from different scopes doesn't work either.
+ */
+
 void TestCppCodeCompletion::testCaseContext()
 {
   QByteArray method = "enum testEnum { foo, bar }; void test() { switch( testEnum ) { } }";
@@ -443,6 +449,47 @@ void TestCppCodeCompletion::testCaseContext()
   CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
   QCOMPARE(caseContext.names, QStringList() << "testEnum" << "test" << "foo" << "bar");
   QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QCOMPARE(caseContext.itemData("test",       KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("bar",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextComplexExpression()
+{
+  QByteArray method = "enum testEnum { foo, bar }; struct testStruct { testEnum e; }; void test(testStruct s) { switch (s.e) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 3;
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
+  QCOMPARE(caseContext.names, QStringList() << "s" << "testEnum" << "testStruct"  << "test" << "foo" << "bar");
+  QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QCOMPARE(caseContext.itemData("s",          KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QCOMPARE(caseContext.itemData("testStruct", KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QCOMPARE(caseContext.itemData("test",       KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("bar",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextDifferentScope()
+{
+  QByteArray method = "struct testStruct { enum testEnum { foo, bar } e; }; void test(testStruct s) { switch (s.e) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
+  QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.names, QStringList() << "s" << "testStruct" << "test" << "testStruct::foo" << "testStruct::bar");
   release(top);
 }
 
