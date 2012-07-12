@@ -38,6 +38,7 @@ public:
 private slots:
     void documentDeclaration();
     void createClass();
+    void createTest();
 };
 
 

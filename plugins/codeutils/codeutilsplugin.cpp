@@ -19,6 +19,7 @@
  */
 
 #include "codeutilsplugin.h"
+#include "createtestassistant.h"
 
 #include <QVariantList>
 
@@ -49,6 +50,8 @@
 #include <language/codegen/templateclassassistant.h>
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
+#include <language/codegen/sourcefiletemplate.h>
+#include <language/codegen/documentchangeset.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -88,6 +91,11 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
     action->setIcon( KIcon( "code-class" ) );
     action->setToolTip( i18n( "Create a new class from a template" ) );
+
+    action = actionCollection()->addAction( "test_from_template" );
+    action->setText( i18n( "Create Test " ) );
+    action->setIcon( KIcon( "preflight-verifier" ) );
+    action->setToolTip( i18n( "Create a new test case from a template" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
@@ -186,6 +194,18 @@ void CodeUtilsPlugin::createClass()
     assistant.exec();
 }
 
+void CodeUtilsPlugin::createTest()
+{
+    KUrl url;
+    if (QAction* action = qobject_cast<QAction*>(sender()))
+    {
+        url = action->data().value<KUrl>();
+    }
+    CreateTestAssistant assistant(url, QApplication::activeWindow());
+    assistant.exec();
+}
+
+
 CodeUtilsPlugin::~CodeUtilsPlugin()
 {
 }
@@ -204,6 +224,12 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
                 action->setData(projectContext->items().first()->url());
 
                 connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
+                ext.addAction(ContextMenuExtension::FileGroup, action);
+
+                action = new KAction(KIcon("preflight-verifier"), i18n("Create Test"), actionCollection());
+                action->setData(projectContext->items().first()->url());
+
+                connect( action, SIGNAL(triggered(bool)), this, SLOT(createTest()));
                 ext.addAction(ContextMenuExtension::FileGroup, action);
             }
         }

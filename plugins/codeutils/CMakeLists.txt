@@ -3,9 +3,16 @@ project(codeutils)
 ########### install target ###############
 
 set(kdevcodeutils_PART_SRCS
+    templateselectionpage.cpp
     codeutilsplugin.cpp
+    testcaseswidget.cpp
+    createtestassistant.cpp
+    testoutputpage.cpp
 )
 
+include_directories(CMAKE_CURRENT_BINARY_DIR)
+
+kde4_add_ui_files(kdevcodeutils_PART_SRCS templateselectionpage.ui)
 kde4_add_plugin(kdevcodeutils ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
