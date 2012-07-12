@@ -37,6 +37,10 @@ class KArchiveDirectory;
 namespace KDevelop
 {
 
+class SourceFileTemplate;
+
+class DocumentChangeSet;
+
 /**
  * @brief Convenience class for rendering multiple templates with the same context
  * 
@@ -170,6 +174,8 @@ public:
      * @sa EmptyLinesPolicy, setEmptyLinesPolicy()
      */
     EmptyLinesPolicy emptyLinesPolicy();
+
+    DocumentChangeSet renderFileTemplate (KDevelop::SourceFileTemplate* fileTemplate, QHash< QString, KUrl > fileUrls);
 
 private:
     class TemplateRendererPrivate* const d;

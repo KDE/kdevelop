@@ -21,14 +21,22 @@
 #include "templaterenderer.h"
 #include "archivetemplateloader.h"
 #include "codedescription.h"
+#include "documentchangeset.h"
+#include "sourcefiletemplate.h"
+#include <language/editor/simplecursor.h>
+#include <language/editor/simplerange.h>
+#include <language/duchain/indexedstring.h>
 #include <interfaces/icore.h>
 
 #include <grantlee/engine.h>
 #include <grantlee/metatype.h>
+
 #include <KComponentData>
 #include <KStandardDirs>
 #include <KUrl>
 #include <KDebug>
+#include <KArchive>
+#include <KConfigGroup>
 #include <QFile>
 
 using namespace KDevelop;
@@ -269,3 +277,34 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
     return d->emptyLinesPolicy;
 }
 
+DocumentChangeSet TemplateRenderer::renderFileTemplate (SourceFileTemplate* fileTemplate, QHash< QString, KUrl > fileUrls)
+{
+    DocumentChangeSet changes;
+    const KArchiveDirectory* directory = fileTemplate->directory();
+    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate->outputFiles())
+    {
+        const KArchiveEntry* entry = directory->entry(outputFile.fileName);
+        if (!entry)
+        {
+            kDebug() << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
+            continue;
+        }
+
+        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
+        if (!file)
+        {
+            kDebug() << "Entry" << entry->name() << "is not a file";
+            continue;
+        }
+
+        KUrl url = fileUrls[outputFile.identifier];
+        IndexedString document(url);
+        SimpleRange range(SimpleCursor(0, 0), 0);
+
+        DocumentChange change(document, range, QString(), render(file->data(), outputFile.identifier));
+        changes.addChange(change);
+        kDebug() << "Added change for file" << document.str();
+    }
+
+    return changes;
+}

@@ -22,6 +22,7 @@
 #include "templateoptionspage.h"
 #include "classmemberspage.h"
 #include "templateclassgenerator.h"
+#include "sourcefiletemplate.h"
 #include "defaultcreateclasshelper.h"
 
 #include "interfaces/icore.h"
@@ -131,7 +132,7 @@ void TemplateClassAssistant::next()
         ClassMembersPage* membersPage = new ClassMembersPage(this);
         d->membersPage = addPage(membersPage, i18n("Data Members"));
 
-        if (templateGenerator && templateGenerator->hasCustomOptions())
+        if (templateGenerator && templateGenerator->sourceFileTemplate()->hasCustomOptions())
         {
             kDebug() << "Class generator has custom options";
             TemplateOptionsPage* options = new TemplateOptionsPage(this);
@@ -153,7 +154,7 @@ void TemplateClassAssistant::next()
         TemplateOptionsPage* options = qobject_cast<TemplateOptionsPage*>(d->templateOptionsPage->widget());
         TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
 
-        options->loadXML(templateGenerator->customOptions());
+        options->loadXML(templateGenerator->sourceFileTemplate()->customOptions());
     }
 }
 

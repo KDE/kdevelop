@@ -133,6 +133,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/outputpage.cpp
     codegen/defaultcreateclasshelper.cpp
     codegen/templaterenderer.cpp
+    codegen/sourcefiletemplate.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -351,6 +352,7 @@ install(FILES
     codegen/outputpage.h
     codegen/defaultcreateclasshelper.h
     codegen/templaterenderer.h
+    codegen/sourcefiletemplate.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

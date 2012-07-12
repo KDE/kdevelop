@@ -24,6 +24,7 @@
 #include "language/codegen/templateclassgenerator.h"
 #include "language/codegen/templatesmodel.h"
 #include "language/codegen/documentchangeset.h"
+#include "language/codegen/sourcefiletemplate.h"
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
@@ -166,7 +167,7 @@ void TestTemplateClassGenerator::lowercaseFileUrls()
 void TestTemplateClassGenerator::customOptions()
 {
     TemplateClassGenerator* generator = loadTemplate("test_yaml");
-    QCOMPARE(generator->hasCustomOptions(), false);
+    QCOMPARE(generator->sourceFileTemplate()->hasCustomOptions(), false);
 }
 
 void TestTemplateClassGenerator::templateVariablesCpp()

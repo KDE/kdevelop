@@ -24,13 +24,13 @@
 #include "language/codegen/documentchangeset.h"
 #include "codedescription.h"
 #include "templaterenderer.h"
+#include "sourcefiletemplate.h"
 
 #include <KArchive>
 #include <KZip>
 #include <KComponentData>
 #include <KStandardDirs>
 #include <KTar>
-#include <KConfigGroup>
 
 #include <grantlee/engine.h>
 #include <grantlee/metatype.h>
@@ -42,68 +42,29 @@ using namespace KDevelop;
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
-    QString templateDescription;
-    KArchive* archive;
+    SourceFileTemplate* fileTemplate;
     KUrl baseUrl;
     TemplateRenderer renderer;
-
-    void loadTemplate();
 };
-
-void TemplateClassGeneratorPrivate::loadTemplate()
-{
-    QString archiveFileName;
-
-    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("filetemplates"))
-    {
-        kDebug() << "Found template archive" << file;
-        if (QFileInfo(file).baseName() == QFileInfo(templateDescription).baseName())
-        {
-            archiveFileName = file;
-            break;
-        }
-    }
-
-    if (archiveFileName.isEmpty())
-    {
-        kDebug() << "Could not find a template archive for description" << templateDescription;
-        return;
-    }
-
-    QFileInfo info(archiveFileName);
-
-    if (info.suffix() == ".zip")
-    {
-        archive = new KZip(archiveFileName);
-    }
-    else
-    {
-        archive = new KTar(archiveFileName);
-    }
-
-    archive->open(QIODevice::ReadOnly);
-
-    renderer.addArchive(archive->directory());
-}
 
 TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl) : ClassGenerator(),
 d(new TemplateClassGeneratorPrivate)
 {
-    d->archive = 0;
+    d->fileTemplate = 0;
     d->baseUrl = baseUrl;
     d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
 {
-    delete d->archive;
+    delete d->fileTemplate;
     delete d;
 }
 
 void TemplateClassGenerator::setTemplateDescription (const QString& templateDescription)
 {
-    d->templateDescription = templateDescription;
-    d->loadTemplate();
+    d->fileTemplate = new SourceFileTemplate(templateDescription);
+    d->renderer.addArchive(d->fileTemplate->directory());
 }
 
 QVariantHash TemplateClassGenerator::templateVariables()
@@ -140,66 +101,17 @@ DocumentChangeSet TemplateClassGenerator::generate()
     Q_ASSERT(d->archive);
     d->renderer.addVariables(templateVariables());
 
-    DocumentChangeSet changes;
-
-    const KArchiveDirectory* dir = d->archive->directory();
-
-    KConfig templateConfig(d->templateDescription);
-    QHash<QString,KUrl> urls = fileUrls();
-
-    for (QHash<QString,KUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
-    {
-        KConfigGroup cg(&templateConfig, it.key());
-        QString fileName = cg.readEntry("File");
-
-        if (fileName.isEmpty())
-        {
-            continue;
-        }
-
-        const KArchiveEntry* entry = dir->entry(fileName);
-        if (!entry)
-        {
-            kDebug() << "Entry" << cg.readEntry("File") << "is mentioned in group" << cg.name() << "but is not present in the archive";
-            continue;
-        }
-
-        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
-        if (!file)
-        {
-            kDebug() << "Entry" << entry->name() << "is not a file";
-            continue;
-        }
-
-        KUrl url = it.value();
-        IndexedString document(url);
-        SimpleRange range(SimpleCursor(0, 0), 0);
-
-        DocumentChange change(document, range, QString(), d->renderer.render(file->data(), it.key()));
-        changes.addChange(change);
-        kDebug() << "Added change for file" << document.str();
-    }
-
-    return changes;
+    return d->renderer.renderFileTemplate(d->fileTemplate, fileUrls());
 }
 
 QHash< QString, QString > TemplateClassGenerator::fileLabels()
 {
-    Q_ASSERT(!d->templateDescription.isEmpty());
+    Q_ASSERT(d->fileTemplate);
     QHash<QString,QString> labels;
 
-    KConfig templateConfig(d->templateDescription);
-    KConfigGroup group(&templateConfig, "General");
-
-    QStringList files = group.readEntry("Files", QStringList());
-    kDebug() << "Files in template" << files;
-    foreach (const QString& fileGroup, files)
+    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate->outputFiles())
     {
-        KConfigGroup cg(&templateConfig, fileGroup);
-        if (cg.hasKey("OutputFile"))
-        {
-            labels.insert(cg.name(), cg.readEntry("Name"));
-        }
+        labels.insert(outputFile.identifier, outputFile.label);
     }
 
     return labels;
@@ -211,57 +123,19 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrlsFromBase (const KUrl& bas
 
     d->renderer.addVariables(templateVariables());
 
-    KConfig templateConfig(d->templateDescription);
-    KConfigGroup group(&templateConfig, "General");
-    QStringList files = group.readEntry("Files", QStringList());
-    kDebug() << "Files in template" << files;
-
-    foreach (const QString& fileGroup, files)
+    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate->outputFiles())
     {
-        KConfigGroup cg(&templateConfig, fileGroup);
-        if (!cg.hasKey("OutputFile"))
-        {
-            continue;
-        }
-
         KUrl url(baseUrl);
-        QString outputName = d->renderer.render(cg.readEntry("OutputFile"), cg.name());
+        QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
         if (toLower)
         {
             outputName = outputName.toLower();
         }
         url.addPath(outputName);
-
-        QString fileType = cg.name();
-        map.insert(fileType, url);
+        map.insert(outputFile.identifier, url);
     }
 
     return map;
-}
-
-bool TemplateClassGenerator::hasCustomOptions()
-{
-    KConfig templateConfig(d->templateDescription);
-    KConfigGroup cg(&templateConfig, "General");
-    bool hasOptions = d->archive->directory()->entries().contains(cg.readEntry("OptionsFile", "options.kcfg"));
-
-    kDebug() << cg.readEntry("OptionsFile", "options.kcfg") << hasOptions;
-    return hasOptions;
-}
-
-QByteArray TemplateClassGenerator::customOptions()
-{
-    KConfig templateConfig(d->templateDescription);
-    KConfigGroup cg(&templateConfig, "General");
-    const KArchiveEntry* entry = d->archive->directory()->entry(cg.readEntry("OptionsFile", "options.kcfg"));
-
-    if (entry->isFile())
-    {
-        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
-        return file->data();
-    }
-
-    return QByteArray();
 }
 
 void TemplateClassGenerator::addVariables(const QVariantHash& variables)
@@ -272,4 +146,9 @@ void TemplateClassGenerator::addVariables(const QVariantHash& variables)
 QString TemplateClassGenerator::renderString (const QString& text)
 {
     return d->renderer.render(text);
+}
+
+SourceFileTemplate* TemplateClassGenerator::sourceFileTemplate()
+{
+    return d->fileTemplate;
 }

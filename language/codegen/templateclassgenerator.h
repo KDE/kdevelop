@@ -25,6 +25,8 @@
 namespace KDevelop
 {
 
+class SourceFileTemplate;
+
 /**
  * Generates new classes from templates
  * 
@@ -193,16 +195,7 @@ public:
      **/
     virtual QVariantHash templateVariables();
 
-    /**
-     * @return true if the template uses any custom options, false otherwise
-     **/
-    bool hasCustomOptions();
-
-    /**
-     * Returns the contents of the template's configuration options file.
-     * The contents are in the format of .kcfg files used by KConfig XT.
-     **/
-    QByteArray customOptions();
+    SourceFileTemplate* sourceFileTemplate();
 
     /**
      * Adds variables @p variables to the context passed to all template files.
