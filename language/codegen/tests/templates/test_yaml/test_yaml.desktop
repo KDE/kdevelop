@@ -1,7 +1,7 @@
 [General]
 Name=Testing YAML template
 Comment=Describes a class using YAML syntax
-Category=Testing/YAML
+Category=Class/Testing/YAML
 Files=Description
 OptionsFile=options.kcfg
 
