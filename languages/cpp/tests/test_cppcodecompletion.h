@@ -75,6 +75,7 @@ private slots:
   void testCaseContext();
   void testCaseContextComplexExpression();
   void testCaseContextDifferentScope();
+  void testCaseContextConstants();
   void testUnaryOperators();
   void testBinaryOperators();
   void testDeclarationIsInitialization();

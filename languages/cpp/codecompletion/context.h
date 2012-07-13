@@ -173,6 +173,7 @@ namespace Cpp {
 #endif
       enum OnlyShow {
         ShowAll,
+        ShowIntegralConstants, // compile-time integral constants and related items (scopes, ...)
         ShowTypes,
         ShowSignals,
         ShowSlots,
@@ -267,6 +268,10 @@ namespace Cpp {
       
       ///Returns whether the declaration is directly visible from within the current context
       bool visibleFromWithin(Declaration* decl, DUContext* currentContext);
+
+      ///Returns whether the declaration can be considered an integral constant
+      ///@param acceptHelperItems whether we check for filtering (true) or for marking match quality (false)
+      bool isIntegralConstant(Declaration* decl, bool acceptHelperItems);
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
