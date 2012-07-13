@@ -83,15 +83,22 @@ SourceFileTemplate::~SourceFileTemplate()
     delete d;
 }
 
+QString SourceFileTemplate::name() const
+{
+    KConfig templateConfig(d->descriptionFileName);
+    KConfigGroup cg(&templateConfig, "General");
+    return cg.readEntry("Name");
+}
+
 const KArchiveDirectory* SourceFileTemplate::directory()
 {
     return d->archive->directory();
 }
 
-QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles()
+QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles() const
 {
     QList<SourceFileTemplate::OutputFile> outputFiles;
-    
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup group(&templateConfig, "General");
 

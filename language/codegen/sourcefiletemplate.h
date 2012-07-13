@@ -44,9 +44,9 @@ public:
     SourceFileTemplate(const QString& templateDescription);
     ~SourceFileTemplate();
 
-    QString name();
+    QString name() const;
     const KArchiveDirectory* directory();
-    QList<OutputFile> outputFiles();
+    QList<OutputFile> outputFiles() const;
 
     /**
      * @return true if the template uses any custom options, false otherwise
