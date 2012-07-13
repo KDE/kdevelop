@@ -58,6 +58,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     button( KDialog::Apply )->setEnabled( false );
     
     setupUi( mainWidget() );
+    mainWidget()->layout()->setContentsMargins( 0, 0, 0, 0 );
     
     addConfig->setIcon( KIcon("list-add") );
     addConfig->setEnabled( false );
@@ -138,6 +139,15 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         if(suggestionsMenu) {
             m->addMenu(suggestionsMenu);
             connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        }
+    }
+    // Simplify menu structure to get rid of 1-entry levels
+    while (m->actions().count() == 1) {
+        QMenu* subMenu = m->actions().first()->menu();
+        if (subMenu) {
+            m = subMenu;
+        } else {
+            break;
         }
     }
     addConfig->setMenu(m);
@@ -756,6 +766,7 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
     : QWidget(parent)
 {
     setLayout( new QVBoxLayout( this ) );
+    layout()->setContentsMargins( 0, 0, 0, 0 );
     QWidget* parentwidget = this;
     KTabWidget* tab = 0;
     if( factories.count() > 1 )
@@ -767,6 +778,9 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
     foreach( LaunchConfigurationPageFactory* fac, factories )
     {
         LaunchConfigurationPage* page = fac->createWidget( parentwidget );
+        if ( page->layout() ) {
+            page->layout()->setContentsMargins( 0, 0, 0, 0 );
+        }
         pages.append( page );
         connect( page, SIGNAL(changed()), SIGNAL(changed()) );
         if( tab ) {
