@@ -7,4 +7,4 @@ include(KDevPlatformMacros)
 
 foreach(_templateName ${test_filetemplate_DIRS})
     kdevplatform_create_template_archive(${_templateName})
-endforeach(_templateName ${_test_filetemplate_DIRS}) 
+endforeach(_templateName ${test_filetemplate_DIRS})
