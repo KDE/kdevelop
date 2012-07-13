@@ -69,7 +69,7 @@ void CreateTestAssistant::next()
         foreach (const KDevelop::SourceFileTemplate::OutputFile& file, d->fileTemplate->outputFiles())
         {
             KUrl url(d->baseUrl);
-            url.addPath(d->renderer.render(file.outputName));
+            url.addPath(d->renderer.render(file.outputName).toLower());
             urls.insert(file.identifier, url);
             labels.insert(file.identifier, file.label);
         }
