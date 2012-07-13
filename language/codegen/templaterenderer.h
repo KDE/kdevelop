@@ -175,6 +175,28 @@ public:
      */
     EmptyLinesPolicy emptyLinesPolicy();
 
+    /**
+     * @brief Renders all templates in the archive represented by @p fileTemplate
+     * 
+     * Output files are saved to corresponding URLs in @p fileUrls
+     *
+     * For each output file, TemplateRenderer add two variables named @c output_file_x
+     * and @c output_file_x_absolute, where @c x is replaced
+     * with the file name specified in the template description file.
+     * The variable name is entirely lowercase and cleaned by replacing
+     * all non-alphanumerical characters with underscores.
+     * For example, if the file is named "Public Header" in
+     * the description file, the variable will be @c output_file_public_heder.
+     *
+     * As their name suggests, @c output_file_x contains the relative path from baseUrl() to the URL of the
+     * x's output location, while @c output_file_x_absolute contains x's absolute output URL.
+     * Both are avaliable to templates as strings.
+     *
+     * @param fileTemplate the source file template to render
+     * @param baseUrl the base URL used for calculating relative output file URLs
+     * @param fileUrls destination URLs of the output files
+     * @return KDevelop::DocumentChangeSet
+     */
     DocumentChangeSet renderFileTemplate (KDevelop::SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls);
 
 private:
