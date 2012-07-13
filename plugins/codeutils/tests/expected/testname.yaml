@@ -1,0 +1,5 @@
+name: TestName
+cases:
+- name: firstTestCase
+- name: secondTestCase
+- name: thirdTestCase

@@ -1,0 +1,16 @@
+[General]
+Name=Testing C++ Template
+Comment=A unit test using the QTest library without a graphical user interface
+Category=Test/Test/C++
+Files=Header,Implementation
+
+[Header]
+Name=Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
+ 
