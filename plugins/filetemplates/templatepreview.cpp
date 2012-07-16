@@ -22,6 +22,7 @@
 #include "ui_templatepreview.h"
 
 #include <language/codegen/templaterenderer.h>
+#include <language/codegen/codedescription.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
@@ -63,6 +64,21 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     vars["name"] = "Example";
     vars["license"] = "This file is licensed under the ExampleLicense 3.0";
     // TODO: More variables, preferably the ones from TemplateClassGenerator
+
+    VariableDescriptionList members;
+    members << VariableDescription("int", "number");
+    members << VariableDescription("string", "name");
+    vars["members"] = CodeDescription::toVariantList(members);
+
+    FunctionDescriptionList functions;
+    functions << FunctionDescription("doSomething", VariableDescriptionList(), VariableDescriptionList());
+    FunctionDescription complexFunction("doSomethingElse", VariableDescriptionList(), VariableDescriptionList());
+    complexFunction.arguments << VariableDescription("bool", "really");
+    complexFunction.arguments << VariableDescription("int", "howMuch");
+    complexFunction.returnArguments << VariableDescription("double", QString());
+    functions << complexFunction;
+    vars["functions"] = CodeDescription::toVariantList(functions);
+
     m_renderer->addVariables(vars);
 
     m_variables["APPNAME"] = "Example";
@@ -158,7 +174,7 @@ void TemplatePreview::selectedRendererChanged()
 {
     if (ui->classRadioButton->isChecked())
     {
-        TemplateRenderer::EmptyLinesPolicy policy;
+        TemplateRenderer::EmptyLinesPolicy policy = TemplateRenderer::KeepEmptyLines;
         switch (ui->emptyLinesPolicyComboBox->currentIndex())
         {
             case 0:
