@@ -4,8 +4,11 @@ set(filetemplate_DIRS
     classes/qt_widget
     classes/qobject
     classes/python_basic
-
+    classes/c_gobject
+    
     testing/cpp_qtestlib
+    testing/cpp_qtestlib_kde
+    testing/cpp_qtestlib_kdevelop
     testing/python_pyunit
 )
 
