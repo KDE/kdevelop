@@ -5,6 +5,8 @@ set(filetemplate_DIRS
     classes/qobject
     classes/python_basic
     classes/c_gobject
+    classes/c_gobject_private
+    classes/c_gobject_properties
     
     testing/cpp_qtestlib
     testing/cpp_qtestlib_kde
