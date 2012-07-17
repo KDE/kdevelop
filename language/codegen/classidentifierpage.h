@@ -46,45 +46,17 @@ public:
     /// Returns a list of inheritances for the new class
     QStringList inheritanceList() const;
 
-Q_SIGNALS:
-    void inheritanceChanged();
-    void isValid(bool valid);
-
-public Q_SLOTS:
-    /// Called when an inheritance is to be added.  To override in subclasses,
-    /// (eg. if there is a problem with the base class proposed),
-    /// don't call this implementation.
-    virtual void addInheritance();
-
-    /**
-     * Called when an inheritance is to be removed.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void removeInheritance();
-
-    /**
-     * Called when an inheritance is to be moved up.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void moveUpInheritance();
-
-    /**
-     * Called when an inheritance is to be moved up.
-     *
-     * To override in subclasses, don't call this implementation.
-     */
-    virtual void moveDownInheritance();
-
     /**
      * Parses a parent class into a QualifiedIdentifier, the default implementation
      * Just returns the string converted to a QualifiedIdentifier
      */
     virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 
+Q_SIGNALS:
+    void inheritanceChanged();
+    void isValid(bool valid);
+
 private Q_SLOTS:
-    void checkMoveButtonState();
     void checkIdentifier();
 
 private:
