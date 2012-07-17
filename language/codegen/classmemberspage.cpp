@@ -18,33 +18,33 @@
 */
 
 #include "classmemberspage.h"
-#include "ui_classmembers.h"
+
+#include <KEditListWidget>
+#include <KDebug>
+#include <KLineEdit>
+#include <KLocalizedString>
+
+#include <QVBoxLayout>
 
 using namespace KDevelop;
+
 
 class KDevelop::ClassMembersPagePrivate
 {
 public:
-    Ui::ClassMembersPage* ui;
+    KEditListWidget* editListWidget;
 };
 
 ClassMembersPage::ClassMembersPage(QWidget* parent)
 : QWidget(parent)
 , d(new ClassMembersPagePrivate)
 {
-    d->ui = new Ui::ClassMembersPage;
-    d->ui->setupUi(this);
+    d->editListWidget = new KEditListWidget(this);
+    d->editListWidget->lineEdit()->setPlaceholderText(i18n("Variable type and identifier"));
 
-    connect (d->ui->topButton, SIGNAL(clicked(bool)), SLOT(moveTop()));
-    connect (d->ui->upButton, SIGNAL(clicked(bool)), SLOT(moveUp()));
-    connect (d->ui->downButton, SIGNAL(clicked(bool)), SLOT(moveDown()));
-    connect (d->ui->bottomButton, SIGNAL(clicked(bool)), SLOT(moveBottom()));
-
-    connect (d->ui->addItemButton, SIGNAL(clicked(bool)), SLOT(addItem()));
-    connect (d->ui->removeItemButton, SIGNAL(clicked(bool)), SLOT(removeItem()));
-
-    connect (d->ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(currentSelectionChanged(QItemSelection)));
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(d->editListWidget);
+    setLayout(layout);
 }
 
 ClassMembersPage::~ClassMembersPage()
@@ -54,116 +54,57 @@ ClassMembersPage::~ClassMembersPage()
 
 void ClassMembersPage::setMembers (const VariableDescriptionList& members)
 {
+    QStringList memberItems;
     foreach (const VariableDescription& variable, members)
     {
-        int i = 0;
-        d->ui->itemView->insertRow(i);
-        d->ui->itemView->setItem(i, 0, new QTableWidgetItem(variable.type));
-        d->ui->itemView->setItem(i, 1, new QTableWidgetItem(variable.name));
+        QStringList items;
+        if (!variable.access.isEmpty())
+        {
+            items << variable.access;
+        }
+        if (!variable.type.isEmpty())
+        {
+            items << variable.type;
+        }
+        items << variable.name;
+        memberItems << items.join(" ");
     }
-
-    currentSelectionChanged(QItemSelection());
+    d->editListWidget->setItems(memberItems);
 }
 
 VariableDescriptionList ClassMembersPage::members() const
 {
     VariableDescriptionList list;
-    for (int i = 0; i < d->ui->itemView->rowCount(); ++i)
+    foreach (const QString& item, d->editListWidget->items())
     {
         VariableDescription var;
-        var.type = d->ui->itemView->item(i, 0)->text();
-        var.name = d->ui->itemView->item(i, 1)->text();
-        list << var;
+        QStringList parts = item.split(' ');
+        switch (parts.size())
+        {
+            case 1:
+                var.name = parts[0];
+                break;
+
+            case 2:
+                var.type = parts[0];
+                var.name = parts[1];
+                break;
+
+            case 3:
+                var.access = parts[0];
+                var.type = parts[1];
+                var.name = parts[2];
+                break;
+
+            default:
+                kDebug() << "Malformed class member" << item;
+                break;
+        }
+
+        if (!var.name.isEmpty())
+        {
+            list << var;
+        }
     }
     return list;
-}
-
-void ClassMembersPage::currentSelectionChanged(const QItemSelection& current)
-{
-    bool up = false;
-    bool down = false;
-    bool remove = false;
-
-    if (!current.indexes().isEmpty())
-    {
-        up = current.indexes().first().row() > 0;
-        down = current.indexes().first().row() < rows()-1;
-        remove = true;
-    }
-
-    d->ui->topButton->setEnabled(up);
-    d->ui->upButton->setEnabled(up);
-    d->ui->downButton->setEnabled(down);
-    d->ui->bottomButton->setEnabled(down);
-
-    d->ui->removeItemButton->setEnabled(remove);
-}
-
-int ClassMembersPage::rows()
-{
-    return d->ui->itemView->rowCount();
-}
-
-void ClassMembersPage::moveRowTo(int destination, bool relative)
-{
-    Q_ASSERT(d->ui->itemView->selectionModel());
-    QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
-
-    if (indexes.isEmpty())
-    {
-        return;
-    }
-
-    int source = indexes.first().row();
-
-    if (relative)
-    {
-        destination = source + destination;
-    }
-
-    VariableDescription desc;
-    desc.type = d->ui->itemView->item(source, 0)->text();
-    desc.name = d->ui->itemView->item(source, 1)->text();
-
-    d->ui->itemView->removeRow(source);
-    d->ui->itemView->insertRow(destination);
-    d->ui->itemView->setItem(destination, 0, new QTableWidgetItem(desc.type));
-    d->ui->itemView->setItem(destination, 1, new QTableWidgetItem(desc.name));
-    d->ui->itemView->setCurrentCell(destination, 0);
-}
-
-void ClassMembersPage::moveTop()
-{
-    moveRowTo(0, false);
-}
-
-void ClassMembersPage::moveBottom()
-{
-    moveRowTo(rows()-1, false);
-}
-
-void ClassMembersPage::moveUp()
-{
-    moveRowTo(-1, true);
-}
-
-void ClassMembersPage::moveDown()
-{
-    moveRowTo(1, true);
-}
-
-void ClassMembersPage::addItem()
-{
-    d->ui->itemView->insertRow(rows());
-}
-
-void ClassMembersPage::removeItem()
-{
-    QModelIndexList indexes = d->ui->itemView->selectionModel()->selectedRows();
-    if (indexes.isEmpty())
-    {
-        return;
-    }
-
-    d->ui->itemView->removeRow(indexes.first().row());
 }

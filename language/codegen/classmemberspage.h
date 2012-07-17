@@ -50,15 +50,6 @@ public:
 private:
     int rows();
 
-private Q_SLOTS:
-    void moveTop();
-    void moveUp();
-    void moveDown();
-    void moveBottom();
-    void currentSelectionChanged(const QItemSelection& current);
-    void addItem();
-    void removeItem();
-
 private:
     class ClassMembersPagePrivate* const d;
 };
