@@ -222,7 +222,7 @@ void IdealButtonBarWidget::removeAction(QAction * action)
 
 bool IdealButtonBarWidget::isEmpty()
 {
-    return layout()->isEmpty();
+    return actions().isEmpty();
 }
 
 Qt::Orientation IdealButtonBarWidget::orientation() const
