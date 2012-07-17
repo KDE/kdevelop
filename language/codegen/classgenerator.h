@@ -157,6 +157,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     virtual QString identifier() const;
 
+    /**
+     * \param namespaces The list of nested namespaces in which this class is to be declared
+     */
+    virtual void setNamespaces(const QStringList& namespaces) const;
+
+    /**
+     * \return The list of nested namespace in which this class will be declared
+     */
+    virtual QStringList namespaces() const;
+
     QString license() const;
     void setLicense(const QString& license);
 

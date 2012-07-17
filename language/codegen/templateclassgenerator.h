@@ -37,6 +37,7 @@ class SourceFileTemplate;
  * From this description, it constructs the following variables:
  * @li @c description (ClassDescription) - the class description
  * @li @c name (QString) - the class name, same as @c description.name
+ * @li @c namespaces (QStringList) - the list of nested namespaces in which the class will be declared
  * @li @c identifier (QString) - the full class identifier, composed of namespaces and name
  * @li @c members (VariableDescriptionList) - data members, same as @c description.members
  * @li @c functions (FunctionDescriptionList) - function members, same as @c description.methods

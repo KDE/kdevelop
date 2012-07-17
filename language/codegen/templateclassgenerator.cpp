@@ -72,6 +72,7 @@ QVariantHash TemplateClassGenerator::templateVariables()
     QVariantHash variables;
 
     variables["name"] = name();
+    variables["namespaces"] = namespaces();
     variables["identifier"] = identifier();
     variables["license"] = license();
 

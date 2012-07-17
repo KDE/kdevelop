@@ -42,6 +42,7 @@ struct ClassGeneratorPrivate
     QString headerFileType;
     QString implementationFileType;
     ClassDescription description;
+    QStringList namespaces;
 };
 
 ClassGenerator::ClassGenerator()
@@ -73,7 +74,29 @@ QString ClassGenerator::identifier() const
 
 void ClassGenerator::setIdentifier(const QString& identifier)
 {
-    setName(identifier);
+    QStringList separators;
+    separators << "::" << "." << ":" << "\\" << "/";
+    QStringList ns;
+    foreach (const QString& separator, separators)
+    {
+        ns = identifier.split(separator);
+        if (ns.size() > 1)
+        {
+            break;
+        }
+    }
+    setName(ns.takeLast());
+    setNamespaces(ns);
+}
+
+QStringList ClassGenerator::namespaces() const
+{
+    return d->namespaces;
+}
+
+void ClassGenerator::setNamespaces (const QStringList& namespaces) const
+{
+    d->namespaces = namespaces;
 }
 
 void ClassGenerator::addDeclaration(const DeclarationPointer& newDeclaration)
