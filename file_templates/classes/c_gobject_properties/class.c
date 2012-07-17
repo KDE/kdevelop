@@ -55,7 +55,7 @@ enum {
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void
-maman_bar_set_property (GObject      *object,
+{{ lc_prefix }}{{ name|lower }}_set_property (GObject      *object,
                         guint         property_id,
                         const GValue *value,
                         GParamSpec   *pspec)
@@ -81,7 +81,7 @@ maman_bar_set_property (GObject      *object,
 
 
 static void
-maman_bar_get_property (GObject      *object,
+{{ lc_prefix }}{{ name|lower }}_get_property (GObject      *object,
                         guint         property_id,
                         GValue       *value,
                         GParamSpec   *pspec)
