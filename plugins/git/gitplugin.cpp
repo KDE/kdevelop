@@ -622,6 +622,11 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
     QStringList branchList;
     foreach(QString branch, branchListDirty)
     {
+        // Skip pointers to another branches (one example of this is "origin/HEAD -> origin/master");
+        // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
+        if (branch.contains("->"))
+            continue;
+        
         if (branch.startsWith('*'))
             branch = branch.right(branch.size()-2);
         
