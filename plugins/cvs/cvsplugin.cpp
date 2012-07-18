@@ -391,7 +391,7 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
 
 KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-u"/*always unified*/);
+    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-uN"/*always unified*/);
     return job;
 }
 
