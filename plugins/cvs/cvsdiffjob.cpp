@@ -39,21 +39,14 @@ QVariant CvsDiffJob::fetchResults()
     return qVariantFromValue( diff );
 }
 
-KDevelop::VcsJob::JobStatus CvsDiffJob::status() const
-{
-    KDevelop::VcsJob::JobStatus rv = CvsJob::status();
+void CvsDiffJob::slotProcessError(QProcess::ProcessError error) {
+    // Do not blindly raise an error on non-zero return code of "cvs diff".
+    // If its output contains the "Index:" mark, the diff is probably intact,
+    // and non-zero return code indicates just that there are changes.
+    if (error == QProcess::UnknownError && output().contains("Index:"))
+        return;
 
-    // CVS has a bit of a weird return value handling.
-    // Although cvs diff went ok it still returns non-zero
-    if (rv == KDevelop::VcsJob::JobFailed) {
-        // so if the output contains the "Index:" mark the diff seams to be ok 
-        // -> change the return value according to this
-        if (output().contains("Index:")) {
-            rv = KDevelop::VcsJob::JobSucceeded;
-        }
-    }
-
-    return rv;
+    KDevelop::DVcsJob::slotProcessError(error);
 }
 
 #include "cvsdiffjob.moc"

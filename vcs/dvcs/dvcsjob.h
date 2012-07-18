@@ -205,8 +205,10 @@ public Q_SLOTS:
 Q_SIGNALS:
     void readyForParsing(KDevelop::DVcsJob *job);
 
+protected Q_SLOTS:
+    virtual void slotProcessError( QProcess::ProcessError );
+
 private Q_SLOTS:
-    void slotProcessError( QProcess::ProcessError );
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout();
 
