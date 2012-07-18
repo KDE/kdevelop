@@ -36,7 +36,7 @@ class TemplateSelectionPage;
  * @brief An assistant for creating a new class using Grantlee templates
  * 
  * This assistant extends the generic CreateClassAssistant with functionality, 
- * specifit to rendering templates. This includes an extra page for selecting the template
+ * specific to rendering templates. This includes an extra page for selecting the template
  * to be used. 
  * 
  * For language specific features, an ICreateClassHelper is needed. If no such helper exists for 

@@ -125,7 +125,7 @@ CorePrivate::CorePrivate(Core *core):
     /*
      * WARNING: This is probably not the best place for registering resource locations
      * However, I think it's better if these directories are stored in the core componentData
-     * rather than every user having to provider its own
+     * rather than every user having to provide its own
      */
     
     KStandardDirs *dirs = m_componentData.dirs();
