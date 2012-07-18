@@ -115,8 +115,10 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
         p |= CodeCompletionModel::Variable;
         break;
       case AbstractType::TypeEnumeration:
-      case AbstractType::TypeEnumerator:
         p |= CodeCompletionModel::Enum;
+        break;
+      case AbstractType::TypeEnumerator:
+        p |= CodeCompletionModel::Variable;
         break;
       case AbstractType::TypeAbstract:
       case AbstractType::TypeDelayed:
