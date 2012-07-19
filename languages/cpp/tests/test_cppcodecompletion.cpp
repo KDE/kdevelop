@@ -447,10 +447,9 @@ void TestCppCodeCompletion::testCaseContext()
   int sctxt = 1;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
-  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "test" << "foo" << "bar");
+  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "foo" << "bar");
   QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
   QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
-  QCOMPARE(caseContext.itemData("test",       KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
   QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
   QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
   QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
@@ -466,12 +465,10 @@ void TestCppCodeCompletion::testCaseContextComplexExpression()
   int sctxt = 1;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
-  QCOMPARE(caseContext.names, QStringList() << "s" << "testEnum" << "testStruct"  << "test" << "foo" << "bar");
+  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "testStruct" << "foo" << "bar");
   QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
-  QCOMPARE(caseContext.itemData("s",          KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
   QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
   QCOMPARE(caseContext.itemData("testStruct", KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
-  QCOMPARE(caseContext.itemData("test",       KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
   QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
   QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
   QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
@@ -489,8 +486,52 @@ void TestCppCodeCompletion::testCaseContextDifferentScope()
   CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
   QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
   QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
-  QCOMPARE(caseContext.names, QStringList() << "s" << "testStruct" << "test" << "testStruct::foo" << "testStruct::bar");
+  QCOMPARE(caseContext.names, QStringList() << "testStruct" << "testStruct::foo" << "testStruct::bar");
   release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextConstants()
+{
+  QByteArray method = "enum testEnum { foo, bar };"
+                      "testEnum enum_nc; const testEnum enum_c; const testEnum enum_cc = foo;"
+                      "int int_nc; const int int_c; const int int_cc = 0;"
+                      "float float_nc; const float float_c; const float float_cc = 0.0;"
+                      "testEnum func_enum(); constexpr testEnum func_enum_cc();"
+                      "int func_int(); constexpr int func_int_cc();"
+                      "void func_void(); float func_float(); constexpr float func_float_cc();"
+                      "void testcase() { switch (enum_nc) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts().last()->childContexts()[sctxt], "case ");
+  QStringList names = caseContext.names;
+  QVERIFY(names.contains("testEnum"));
+
+  QVERIFY(!names.contains("enum_nc"));
+  QVERIFY(!names.contains("enum_c"));
+  QVERIFY( names.contains("enum_cc"));
+
+  QVERIFY(!names.contains("int_nc"));
+  QVERIFY(!names.contains("int_c"));
+  QVERIFY( names.contains("int_cc"));
+
+  QVERIFY(!names.contains("float_nc"));
+  QVERIFY(!names.contains("float_c"));
+  QVERIFY(!names.contains("float_cc"));
+
+  QVERIFY(!names.contains("func_void"));
+  QVERIFY(!names.contains("func_float"));
+  QVERIFY(!names.contains("func_float_cc"));
+
+  QEXPECT_FAIL("", "constexpr needs to be handled", Continue);
+  QVERIFY(!names.contains("func_enum"));
+  QVERIFY(names.contains("func_enum_cc"));
+
+  QEXPECT_FAIL("", "constexpr needs to be handled", Continue);
+  QVERIFY(!names.contains("func_int"));
+  QVERIFY(names.contains("func_int_cc"));
+
+  release (top);
 }
 
 void TestCppCodeCompletion::testUnaryOperators()
@@ -795,10 +836,10 @@ void TestCppCodeCompletion::testKeywords() {
   QCOMPARE(testQEmit.names, QStringList() << "a" << "Values" << "v" << "test");
   CompletionItemTester testCase(context->childContexts()[ctxt], "switch (a) { case ");
   QVERIFY(testCase.completionContext->isValid());
-  QCOMPARE(testCase.names, QStringList() << "a" << "Values" << "v" << "test");
+  QCOMPARE(testCase.names, QStringList() << "Values" << "test");
   CompletionItemTester testCase2(context->childContexts()[ctxt], "switch (a) { case v.");
   QVERIFY(testCase2.completionContext->isValid());
-  QCOMPARE(testCase2.names, QStringList() << "Value1" << "Value2");
+  QCOMPARE(testCase2.names, QStringList());
   CompletionItemTester testReturn(context->childContexts()[ctxt], "return ");
   QVERIFY(testReturn.completionContext->isValid());
   QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "v" << "test");

@@ -35,6 +35,7 @@ Comment[et]=Qt4 CMake QTest Core rakendus. Rakenduse loomine CMake/Qt4 põhjal (
 Comment[fi]=Qt4 CMake QTest Core -sovellus. Generoi CMake/Qt4-perustainen sovellus (eri käyttöjärjestelmissä yhteensopiva)
 Comment[fr]=Application principale QTest CMake pour Qt4. Génère une application utilisant CMake / Qt4 (compatible multi-plateforme)
 Comment[gl]=Programa principal QTest con CMake para Qt4. Xera un programa baseado en QMake/Qt4 (compatíbel con multiplataforma)
+Comment[hu]=Qt4 CMake QTest mag alkalmazás. Előállít egy CMake/Qt4 alapú alkalmazást (keresztplatform)
 Comment[it]=Applicazione base QTest CMake in Qt4. Genera un'applicazione basata su CMake/Qt4 (multipiattaforma)
 Comment[nb]=Qt4 CMake QTest kjerneprogram. Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nds]=Qt4-CMake-QTest-Karnprogramm. Stellt en op CMake un Qt4 opbuut Programm op (över Bedriefümgeven weg kompatibel)
