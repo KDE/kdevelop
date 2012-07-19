@@ -35,7 +35,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/implementationhelperitem.cpp
     codecompletion/missingincludemodel.cpp
 
-    codegen/cppnewclass.cpp
+#    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp

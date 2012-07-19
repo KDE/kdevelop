@@ -72,12 +72,12 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
 
 KDevelop::OverridesPage* CppClassHelper::overridesPage()
 {
-    return new CppOverridesPage(m_assistant->generator(), m_assistant);
+    return new OverridesPage(m_assistant);
 }
 
 KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
 {
-    return new CppClassIdentifierPage(m_assistant);
+    return new ClassIdentifierPage(m_assistant);
 }
 
 CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
@@ -158,7 +158,6 @@ QVariantHash CppTemplateNewClass::templateVariables()
 
     variables["signals"] = CodeDescription::toVariantList(signalDescriptions);
     variables["needs_qobject_macro"] = !slotDescriptions.isEmpty() || !signalDescriptions.isEmpty();
-    variables["namespaces"] = m_namespaces;
 
     QStringList includedFiles;
     DUChainReadLocker locker(DUChain::lock());
@@ -297,7 +296,6 @@ QList<KDevelop::DeclarationPointer> CppTemplateNewClass::addBaseClass(const QStr
   QString full = splitBase.join(" ");
   QString name = splitBase.takeLast();
   QString access = splitBase.join(" ");
-  m_baseAccessSpecifiers << access;
 
   //Call base function with stripped access specifier
   return TemplateClassGenerator::addBaseClass(full);
@@ -306,22 +304,19 @@ QList<KDevelop::DeclarationPointer> CppTemplateNewClass::addBaseClass(const QStr
 void CppTemplateNewClass::clearInheritance()
 {
   TemplateClassGenerator::clearInheritance();
-  m_baseAccessSpecifiers.clear();
 }
 
 void CppTemplateNewClass::setIdentifier(const QString& identifier)
 {
   QStringList list = identifier.split("::");
-  setName(list.last());
-  list.pop_back();
-  m_namespaces = list;
+  setName(list.takeLast());
+  setNamespaces(list);
 }
 
 QString CppTemplateNewClass::identifier() const
 {
-  QString identifier = m_namespaces.join("::");
-
-  identifier.append(m_namespaces.empty() ? name() : "::" + name());
-  return identifier;
+  QStringList ids = namespaces();
+  ids << name();
+  return ids.join("::");
 }
 

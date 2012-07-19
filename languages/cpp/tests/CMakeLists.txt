@@ -18,7 +18,6 @@ set(test_common_SRCS
   ../includepathresolver.cpp
   ../setuphelpers.cpp
   ../setuphelpers_gcc.cpp
-  ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
   ../cpputils.cpp

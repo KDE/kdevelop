@@ -46,7 +46,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include "cppnewclass.h"
+//#include "cppnewclass.h"
 //#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
 #include "../cpputils.h"
@@ -169,6 +169,7 @@ void SimpleRefactoring::executeNewClassAction() {
 
 void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
+    /*
   ///TODO: refactor and put this also into the CppNewClassAssistant
   KUrl u;
   
@@ -188,6 +189,7 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   CppNewClass newClassGenerator(item);
   CppNewClassAssistant newClassAssistant(qApp->activeWindow(), &newClassGenerator, u);
   newClassAssistant.exec();
+  */
 }
 
 void SimpleRefactoring::executeMoveIntoSourceAction() {

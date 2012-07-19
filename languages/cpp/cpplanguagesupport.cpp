@@ -83,7 +83,6 @@
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
 #include "codegen/codeassistant.h"
-#include "codegen/cppnewclass.h"
 #include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
 

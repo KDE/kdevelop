@@ -93,9 +93,6 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
     virtual QString identifier() const;
 
   private:
-    QStringList m_namespaces;
-    QStringList m_baseAccessSpecifiers;
-
     KDevelop::ProjectBaseItem* m_parentItem;
 };
 
