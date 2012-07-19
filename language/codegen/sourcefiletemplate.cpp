@@ -19,6 +19,7 @@
  */
 
 #include "sourcefiletemplate.h"
+#include "templaterenderer.h"
 
 #include <interfaces/icore.h>
 
@@ -31,6 +32,7 @@
 #include <KConfigGroup>
 
 #include <QFileInfo>
+#include <QDomDocument>
 
 using namespace KDevelop;
 
@@ -39,11 +41,69 @@ class KDevelop::SourceFileTemplatePrivate
 public:
     KArchive* archive;
     QString descriptionFileName;
+
+    SourceFileTemplate::ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
 };
 
-SourceFileTemplate::SourceFileTemplate(const QString& templateDescription)
-: d(new SourceFileTemplatePrivate)
+SourceFileTemplate::ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element, TemplateRenderer* renderer)
 {
+    SourceFileTemplate::ConfigOption entry;
+
+    entry.name = element.attribute("name");
+    entry.type = element.attribute("type", "String");
+
+    for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+    {
+        QString tag = e.tagName();
+
+        if (tag == "label")
+        {
+            entry.label = e.text();
+        }
+        else if (tag == "tooltip")
+        {
+            entry.label = e.text();
+        }
+        else if (tag == "whatsthis")
+        {
+            entry.label = e.text();
+        }
+        else if ( tag == "min" )
+        {
+            entry.minValue = e.text();
+        }
+        else if ( tag == "max" )
+        {
+            entry.maxValue = e.text();
+        }
+        else if ( tag == "default" )
+        {
+            entry.value = renderer->render(e.text(), entry.name);
+        }
+    }
+
+    kDebug() << "Read entry" << entry.name << "with default value" << entry.value;
+    return entry;
+}
+
+
+SourceFileTemplate::SourceFileTemplate (const QString& templateDescription)
+: d(new KDevelop::SourceFileTemplatePrivate)
+{
+    d->archive = 0;
+    setTemplateDescription(templateDescription);
+}
+
+SourceFileTemplate::SourceFileTemplate()
+: d(new KDevelop::SourceFileTemplatePrivate)
+{
+    d->archive = 0;
+}
+
+void SourceFileTemplate::setTemplateDescription (const QString& templateDescription)
+{
+    delete d->archive;
+
     d->descriptionFileName = templateDescription;
     QString archiveFileName;
 
@@ -60,6 +120,7 @@ SourceFileTemplate::SourceFileTemplate(const QString& templateDescription)
     if (archiveFileName.isEmpty())
     {
         kDebug() << "Could not find a template archive for description" << templateDescription;
+        d->archive = 0;
     }
     else
     {
@@ -90,6 +151,13 @@ QString SourceFileTemplate::name() const
     return cg.readEntry("Name");
 }
 
+QString SourceFileTemplate::languageName() const
+{
+    KConfig templateConfig(d->descriptionFileName);
+    KConfigGroup cg(&templateConfig, "General");
+    return cg.readEntry("Category").split('/').first();
+}
+
 const KArchiveDirectory* SourceFileTemplate::directory()
 {
     return d->archive->directory();
@@ -118,7 +186,7 @@ QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles() const
     return outputFiles;
 }
 
-bool SourceFileTemplate::hasCustomOptions()
+bool SourceFileTemplate::hasCustomOptions() const
 {
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
@@ -128,17 +196,54 @@ bool SourceFileTemplate::hasCustomOptions()
     return hasOptions;
 }
 
-QByteArray SourceFileTemplate::customOptions()
+QHash< QString, QList< SourceFileTemplate::ConfigOption > > SourceFileTemplate::customOptions(TemplateRenderer* renderer) const
 {
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     const KArchiveEntry* entry = d->archive->directory()->entry(cg.readEntry("OptionsFile", "options.kcfg"));
 
-    if (entry->isFile())
+    QHash<QString, QList<ConfigOption> > options;
+
+    if (!entry->isFile())
     {
-        const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
-        return file->data();
+        return options;
+    }
+    const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
+
+    /*
+     * Copied from kconfig_compiler.kcfg
+     */
+    QDomDocument doc;
+    QString errorMsg;
+    int errorRow;
+    int errorCol;
+    if ( !doc.setContent( file->data(), &errorMsg, &errorRow, &errorCol ) ) {
+        kDebug() << "Unable to load document.";
+        kDebug() << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+        return options;
     }
 
-    return QByteArray();
+    QDomElement cfgElement = doc.documentElement();
+    if ( cfgElement.isNull() ) {
+        kDebug() << "No document in kcfg file";
+        return options;
+    }
+
+    QDomNodeList groups = cfgElement.elementsByTagName("group");
+    for (int i = 0; i < groups.size(); ++i)
+    {
+        QDomElement group = groups.at(i).toElement();
+        QList<ConfigOption> optionGroup;
+        QString groupName = group.attribute("name");
+
+        QDomNodeList entries = group.elementsByTagName("entry");
+        for (int j = 0; j < entries.size(); ++j)
+        {
+            QDomElement entry = entries.at(j).toElement();
+            optionGroup << d->readEntry(entry, renderer);
+        }
+
+        options.insert(groupName, optionGroup);
+    }
+    return options;
 }

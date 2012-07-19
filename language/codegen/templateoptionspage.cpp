@@ -20,6 +20,7 @@
 #include "templateoptionspage.h"
 #include "templateclassassistant.h"
 #include "templateclassgenerator.h"
+#include "sourcefiletemplate.h"
 
 #include <KLineEdit>
 #include <KIntNumInput>
@@ -54,88 +55,11 @@ public:
     QHash<QString, QByteArray> typeProperties;
 
     ConfigEntry readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout);
+
+    TemplateClassGenerator* generator;
 };
 
-ConfigEntry TemplateOptionsPagePrivate::readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout)
-{
-    ConfigEntry entry;
 
-    entry.name = element.attribute("name");
-    entry.type = element.attribute("type", "String");
-
-    for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-    {
-        QString tag = e.tagName();
-
-        if (tag == "label")
-        {
-            entry.label = e.text();
-        }
-        else if (tag == "tooltip")
-        {
-            entry.label = e.text();
-        }
-        else if (tag == "whatsthis")
-        {
-            entry.label = e.text();
-        }
-        else if ( tag == "min" )
-        {
-            entry.minValue = e.text();
-        }
-        else if ( tag == "max" )
-        {
-            entry.maxValue = e.text();
-        }
-        else if ( tag == "default" )
-        {
-            TemplateClassGenerator* gen = dynamic_cast<TemplateClassGenerator*>(assistant->generator());
-            entry.value = gen->renderString(e.text());
-        }
-    }
-
-    kDebug() << "Read entry" << entry.name << "with default value" << entry.value;
-
-    QLabel* label = new QLabel(entry.label, parent);
-    QWidget* control = 0;
-    const QString type = entry.type;
-    if (type == "String")
-    {
-        control = new KLineEdit(entry.value.toString(), parent);
-    }
-    else if (type == "Int")
-    {
-        KIntNumInput* input = new KIntNumInput(entry.value.toInt(), parent);
-        if (!entry.minValue.isEmpty())
-        {
-            input->setMinimum(entry.minValue.toInt());
-        }
-        if (!entry.maxValue.isEmpty())
-        {
-            input->setMaximum(entry.maxValue.toInt());
-        }
-        control = input;
-    }
-    else if (type == "Bool")
-    {
-        bool checked = (QString::compare(entry.value.toString(), "true", Qt::CaseInsensitive) == 0);
-        QCheckBox* checkBox = new QCheckBox(entry.label, parent);
-        checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
-    }
-    else
-    {
-        kDebug() << "Unrecognized option type" << entry.type;
-    }
-
-    if (control)
-    {
-        layout->addRow(label, control);
-        entries << entry;
-        controls.insert(entry.name, control);
-    }
-
-    return entry;
-}
 
 TemplateOptionsPage::TemplateOptionsPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
@@ -153,45 +77,55 @@ TemplateOptionsPage::~TemplateOptionsPage()
     delete d;
 }
 
-void TemplateOptionsPage::loadXML(const QByteArray& contents)
+void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate)
 {
-    /*
-     * Copied from kconfig_compiler.kcfg
-     */
-
     QLayout* layout = new QVBoxLayout();
+    QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(d->generator->renderer());
+    QHash<QString, QList<SourceFileTemplate::ConfigOption> >::const_iterator it;
 
-    QDomDocument doc;
-    QString errorMsg;
-    int errorRow;
-    int errorCol;
-    if ( !doc.setContent( contents, &errorMsg, &errorRow, &errorCol ) ) {
-        kDebug() << "Unable to load document.";
-        kDebug() << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
-        return;
-    }
-
-    QDomElement cfgElement = doc.documentElement();
-    if ( cfgElement.isNull() ) {
-        kDebug() << "No document in kcfg file";
-        return;
-    }
-
-    QDomNodeList groups = cfgElement.elementsByTagName("group");
-    for (int i = 0; i < groups.size(); ++i)
+    for (it = options.constBegin(); it != options.constEnd(); ++it)
     {
-        QDomElement group = groups.at(i).toElement();
-
         QGroupBox* box = new QGroupBox(this);
-        box->setTitle(group.attribute("name"));
+        box->setTitle(it.key());
 
         QFormLayout* formLayout = new QFormLayout;
-
-        QDomNodeList entries = group.elementsByTagName("entry");
-        for (int j = 0; j < entries.size(); ++j)
+        foreach (const SourceFileTemplate::ConfigOption& entry, it.value())
         {
-            QDomElement entry = entries.at(j).toElement();
-            ConfigEntry cfgEntry = d->readEntry(entry, box, formLayout);
+            QLabel* label = new QLabel(entry.label, box);
+            QWidget* control = 0;
+            const QString type = entry.type;
+            if (type == "String")
+            {
+                control = new KLineEdit(entry.value.toString(), box);
+            }
+            else if (type == "Int")
+            {
+                KIntNumInput* input = new KIntNumInput(entry.value.toInt(), box);
+                if (!entry.minValue.isEmpty())
+                {
+                    input->setMinimum(entry.minValue.toInt());
+                }
+                if (!entry.maxValue.isEmpty())
+                {
+                    input->setMaximum(entry.maxValue.toInt());
+                }
+                control = input;
+            }
+            else if (type == "Bool")
+            {
+                bool checked = (QString::compare(entry.value.toString(), "true", Qt::CaseInsensitive) == 0);
+                QCheckBox* checkBox = new QCheckBox(entry.label, box);
+                checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+            }
+            else
+            {
+                kDebug() << "Unrecognized option type" << entry.type;
+            }
+            if (control)
+            {
+                formLayout->addRow(label, control);
+                d->controls.insert(entry.name, control);
+            }
         }
 
         box->setLayout(formLayout);
@@ -216,3 +150,9 @@ QVariantHash TemplateOptionsPage::templateOptions() const
 
     return values;
 }
+
+
+
+
+
+

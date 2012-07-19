@@ -23,12 +23,16 @@
 
 #include <QString>
 #include <QList>
+#include <QVariant>
 
 #include "../languageexport.h"
 
+class C;
 class KArchiveDirectory;
 namespace KDevelop
 {
+
+class TemplateRenderer;
 
 /**
  * Represents a source file template archive
@@ -154,15 +158,65 @@ public:
     };
 
     /**
+     * Describes one configuration option
+     */
+    struct ConfigOption
+    {
+        /**
+         * The type of this option.
+         *
+         * Currently supported are Int, String and Bool
+         */
+        QString type;
+        /**
+         * A unique identifier for this option
+         */
+        QString name;
+        /**
+         * User-visible label
+         */
+        QString label;
+        /**
+         * A context description for the option, shown to the user as a tooltip
+         */
+        QString context;
+
+        /**
+         * The default value of this option
+         */
+        QVariant value;
+
+        /**
+         * The maximum value of this entry, as a string
+         *
+         * This is applicable only to integers
+         */
+        QString maxValue;
+        /**
+         * The minimum value of this entry, as a string
+         *
+         * This is applicable only to integers
+         */
+        QString minValue;
+    };
+
+    /**
      * Creates a SourceFileTemplate representing the template archive with description file @p templateDescription
      * @param templateDescription template description file, used to find the archive and read information
      */
     SourceFileTemplate(const QString& templateDescription);
 
     /**
+     * Creates an invalid SourceFileTemplate
+     */
+    SourceFileTemplate();
+
+    /**
      * Destroys this SourceFileTemplate
      */
     ~SourceFileTemplate();
+
+    void setTemplateDescription(const QString& templateDescription);
 
     /**
      * The name of this template, corresponds to the @c Name entry in the description file
@@ -184,13 +238,17 @@ public:
     /**
      * @return true if the template uses any custom options, false otherwise
      **/
-    bool hasCustomOptions();
+    bool hasCustomOptions() const;
 
     /**
-     * Returns the contents of the template's configuration options file.
-     * The contents are in the format of .kcfg files used by KConfig XT.
+     * Return the custom options this template exposes
      **/
-    QByteArray customOptions();
+    QHash<QString, QList<ConfigOption> > customOptions(TemplateRenderer* renderer) const;
+
+    /**
+     * The name of the programming language of the output class
+     */
+    QString languageName() const;
 
 private:
     class SourceFileTemplatePrivate* const d;

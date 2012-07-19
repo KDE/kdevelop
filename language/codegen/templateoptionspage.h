@@ -28,6 +28,8 @@
 namespace KDevelop
 {
 
+class SourceFileTemplate;
+
 class TemplateClassAssistant;
 
 /**
@@ -61,7 +63,7 @@ public:
      *
      * @param contents the file contents
      **/
-    void loadXML(const QByteArray& contents);
+    void load(const SourceFileTemplate& fileTemplate);
     /**
      * @property templateOptions
      * 
