@@ -38,6 +38,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
     : VCSDiffPatchSource(updater), m_vcs(vcs)
 {
     Q_ASSERT(m_vcs);
+    m_base = url;
     
     QScopedPointer<VcsJob> statusJob(vcs->status(url));
     QVariant varlist;
