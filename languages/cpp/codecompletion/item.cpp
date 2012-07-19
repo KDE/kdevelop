@@ -301,21 +301,11 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
     }
 
     switch (dec->abstractType()->whichType()) {
-      case AbstractType::TypeIntegral:
-        if (dec->type<EnumerationType>()) {
-          // Remove variable bit set in DUChainUtils
-          p &= ~CodeCompletionModel::Variable;
-          p |= CodeCompletionModel::Enum;
-        }
-        if (dec->type<EnumeratorType>()) {
+      case AbstractType::TypeEnumerator:
           //Get the properties from the parent, because that may contain information like "private"
           if(dec->context()->owner()) {
             p = DUChainUtils::completionProperties(dec->context()->owner());
           }
-          // Remove variable bit set in DUChainUtils
-          p &= 0xffffffff - CodeCompletionModel::Variable;
-          p |= CodeCompletionModel::Enum;
-        }
         break;
       case AbstractType::TypeStructure:
         if (CppClassType::Ptr classType =  dec->type<CppClassType>())

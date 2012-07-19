@@ -81,6 +81,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
     connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
+    connect(m_prefsUi->cmakeDirectory, SIGNAL(urlSelected(KUrl)), this, SLOT(changed()));
+    connect(m_prefsUi->environment, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     
     showInternal(m_prefsUi->showInternal->checkState());
     m_subprojFolder=KUrl(args[1].toString()).upUrl();

@@ -946,6 +946,9 @@ CodeCompletionContext::OnlyShow CodeCompletionContext::findOnlyShow(const QStrin
   if ( parentContext() && parentContext()->accessType() == TemplateAccess )
     return ShowTypes;
 
+  if ( parentContext() && parentContext()->accessType() == CaseAccess )
+    return ShowIntegralConstants;
+
   //Only ShowTypes in these DUContexts unless initializing a declaration
   //ie, m_expressionIsTypePrefix == true
   if (m_duContext->type() == DUContext::Class ||
@@ -1686,8 +1689,14 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
-  foreach( const DeclarationDepthPair& decl, decls )
-    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second ) );
+  foreach( const DeclarationDepthPair& decl, decls ) {
+    NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second );
+
+    if( m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl.first, false) )
+      item->m_fixedMatchQuality = 0;
+
+    items << CompletionTreeItemPointer(item);
+  }
 
   ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();
@@ -1825,7 +1834,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
           break;
       default:
-        if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes))
+        if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes || m_onlyShow == ShowIntegralConstants))
         {
           items += standardAccessCompletionItems();
           LOCKDUCHAIN; if (!m_duContext) return items;
@@ -1939,6 +1948,52 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
+bool CodeCompletionContext::isIntegralConstant(Declaration* decl, bool acceptHelperItems) {
+
+    // Usability issue: if we're matching for integral constants,
+    // types and functions are also allowed (see filterDeclaration()),
+    // but shall not pollute "best matches" as one rarely would need them.
+    // So introduce "acceptHelperItems" to distinguish between filtering items and demoting them to zero match quality.
+    // (see standardAccessCompletionItems())
+
+    switch (decl->kind()) {
+      case Declaration::Namespace:
+      case Declaration::NamespaceAlias:
+      case Declaration::Type:
+        // Type-names and namespace-names in general may be used for completing constants either as:
+        // "IntegralType(42)"
+        // "EnumName::someEnumerator" (that's valid C++11)
+        // "ClassName::someStaticConstantField"
+        // "NamespaceName::see_everything_above"
+        return acceptHelperItems;
+
+      case Declaration::Instance: {
+        FunctionType::Ptr funType;
+        IntegralType::Ptr integralType;
+
+        // If a declaration is a known integer compile-time constant, it's valid.
+        // NOTE: are there any chances of missing a compile-time constant due to our parser's shortcomings?
+        if (ConstantIntegralType::Ptr constantIntegralType = decl->type<ConstantIntegralType>())
+          integralType = constantIntegralType.cast<IntegralType>();
+
+        // If a declaration is a constexpr function returning integral type, it's valid.
+        // TODO: change this when constexpr becomes parsed:
+        // - add check for constexpr-ness after (funType = ...)
+        // - remove (acceptHelperItems) since that will be a true match - eligible for "best matches"
+        else if (acceptHelperItems && (funType = decl->type<FunctionType>()))
+          integralType = funType->returnType().cast<IntegralType>();
+
+        // Finally, check if retrieved type is integer.
+        return (integralType && TypeUtils::isIntegerType(integralType));
+      }
+
+      case Declaration::Alias:
+      case Declaration::Import:
+      default:
+        return false;
+    }
+}
+
 /**
  * see @p type as function type and try to get it's return type as IntegralType data type.
  */
@@ -1988,6 +2043,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
       return false;
     }
   }
+
+  if(m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl, true))
+    return false;
 
   if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
      && decl->kind() != Declaration::NamespaceAlias )
