@@ -39,8 +39,7 @@ public:
     LicensePage(QWidget* parent);
     virtual ~LicensePage();
 
-    KTextEdit* licenseTextEdit();
-    bool validatePage();
+    QString license() const;
 
 public Q_SLOTS:
     virtual void licenseComboChanged(int license);

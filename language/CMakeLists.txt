@@ -110,7 +110,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/normaldeclarationcompletionitem.cpp
 
     codegen/applychangeswidget.cpp
-    codegen/createclass.cpp
+    #codegen/createclass.cpp
     #codegen/codegenerator.cpp
     codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp

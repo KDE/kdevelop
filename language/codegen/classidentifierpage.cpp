@@ -53,24 +53,14 @@ ClassIdentifierPage::~ClassIdentifierPage()
     delete d;
 }
 
-KLineEdit* ClassIdentifierPage::identifierLineEdit() const
+QString ClassIdentifierPage::identifier() const
 {
-    return d->classid->identifierLineEdit;
-}
-
-KLineEdit* ClassIdentifierPage::inheritanceLineEdit() const
-{
-    return d->classid->keditlistwidget->lineEdit();
+    return d->classid->identifierLineEdit->userText();
 }
 
 void ClassIdentifierPage::checkIdentifier()
 {
-    emit isValid(!identifierLineEdit()->userText().isEmpty());
-}
-
-QualifiedIdentifier ClassIdentifierPage::parseParentClassId(const QString& inheritedObject)
-{
-    return QualifiedIdentifier(inheritedObject);
+    emit isValid(!identifier().isEmpty());
 }
 
 QStringList ClassIdentifierPage::inheritanceList() const

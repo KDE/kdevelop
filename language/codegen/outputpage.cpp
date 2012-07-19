@@ -18,7 +18,10 @@
 
 #include "outputpage.h"
 #include "ui_outputlocation.h"
+
 #include "createclass.h"
+#include "sourcefiletemplate.h"
+#include "templaterenderer.h"
 
 #include <KUrlRequester>
 #include <KIntNumInput>
@@ -32,19 +35,17 @@ namespace KDevelop {
 
 struct OutputPagePrivate
 {
-    OutputPagePrivate()
-        : output(0)
-    {
-    }
-
     Ui::OutputLocationDialog* output;
-    CreateClassAssistant* parent;
     QSignalMapper urlChangedMapper;
 
     QHash<QString, KUrlRequester*> outputFiles;
     QHash<QString, KIntNumInput*> outputLines;
     QHash<QString, KIntNumInput*> outputColumns;
 
+    QHash<QString, KUrl> defaultUrls;
+    QHash<QString, KUrl> lowerCaseUrls;
+    QStringList fileIdentifiers;
+    
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
 
@@ -55,31 +56,48 @@ void OutputPagePrivate::updateRanges(KIntNumInput * line, KIntNumInput * column,
     column->setEnabled(enable);
 }
 
-OutputPage::OutputPage(CreateClassAssistant* parent)
+OutputPage::OutputPage(QWidget* parent)
 : QWidget(parent)
 , d(new OutputPagePrivate)
 {
-    d->parent = parent;
-
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
 
-    QHash<QString, QString> labels = d->parent->generator()->fileLabels();
-    QHash<QString, QString>::const_iterator it = labels.constBegin();
-    for (; it != labels.constEnd(); ++it)
+    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
+    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
+}
+
+void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, TemplateRenderer* renderer)
+{
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
+    d->output->lowerFilenameCheckBox->setChecked(lower);
+
+    foreach (const SourceFileTemplate::OutputFile& file, fileTemplate.outputFiles())
     {
-        QLabel* label = new QLabel(it.value(), this);
+        d->fileIdentifiers << file.identifier;
+
+        KUrl url = baseUrl;
+        url.addPath(renderer->render(file.outputName));
+        d->defaultUrls.insert(file.identifier, url);
+
+        url = baseUrl;
+        url.addPath(renderer->render(file.outputName).toLower());
+        d->lowerCaseUrls.insert(file.identifier, url);
+        
+        QLabel* label = new QLabel(file.label, this);
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
         requester->fileDialog()->setOperationMode( KFileDialog::Saving );
 
-        d->urlChangedMapper.setMapping(requester, it.key());
+        d->urlChangedMapper.setMapping(requester, file.identifier);
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
 
         d->output->urlFormLayout->addRow(label, requester);
-        d->outputFiles.insert(it.key(), requester);
+        d->outputFiles.insert(file.identifier, requester);
 
-        label = new QLabel(it.value(), this);
+        label = new QLabel(file.label, this);
         QHBoxLayout* layout = new QHBoxLayout(this);
 
         KIntNumInput* line = new KIntNumInput(this);
@@ -95,29 +113,18 @@ OutputPage::OutputPage(CreateClassAssistant* parent)
         layout->addWidget(column);
 
         d->output->positionFormLayout->addRow(label, layout);
-        d->outputLines.insert(it.key(), line);
-        d->outputColumns.insert(it.key(), column);
+        d->outputLines.insert(file.identifier, line);
+        d->outputColumns.insert(file.identifier, column);
     }
-
-    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
-    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
-}
-
-void OutputPage::initializePage()
-{
-     //Read the setting for lower case filenames
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
-    bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
-    d->output->lowerFilenameCheckBox->setChecked(lower);
 
     updateFileNames();
 }
 
 void OutputPage::updateFileNames()
 {
-    QHash<QString, KUrl> urls = d->parent->generator()->fileUrlsFromBase(d->parent->baseUrl(), d->output->lowerFilenameCheckBox->isChecked());
+    bool lower = d->output->lowerFilenameCheckBox->isChecked();
 
+    QHash<QString, KUrl> urls = lower ? d->lowerCaseUrls : d->defaultUrls;
     for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         if (urls.contains(it.key()))
@@ -161,17 +168,24 @@ bool OutputPage::isComplete() const
     return true;
 }
 
-bool OutputPage::validatePage()
+QHash< QString, KUrl > OutputPage::fileUrls() const
 {
-    for (QHash<QString,KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
+    QHash<QString, KUrl> urls;
+    for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
-        d->parent->generator()->setFileUrl(it.key(), it.value()->url());
-
-        int line = d->outputLines[it.key()]->value();
-        int column = d->outputColumns[it.key()]->value();
-        d->parent->generator()->setFilePosition(it.key(), SimpleCursor(line, column));
+        urls.insert(it.key(), it.value()->url());
     }
-    return true;
+    return urls;
+}
+
+QHash< QString, SimpleCursor > OutputPage::filePositions() const
+{
+    QHash<QString, SimpleCursor> positions;
+    foreach (const QString& identifier, d->fileIdentifiers)
+    {
+        positions.insert(identifier, SimpleCursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
+    }
+    return positions;
 }
 
 OutputPage::~OutputPage()

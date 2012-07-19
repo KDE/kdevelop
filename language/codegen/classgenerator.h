@@ -204,6 +204,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     void fetchParentClasses(const Context * baseClass);
 
+    /**
+     * Adds the newly-created class to a project target.
+     *
+     * A dialog for selecting the target is shown to the user.
+     * If it is cancelled, the class is not added to any target,
+     * but it is still generated.
+     *
+     * @param url the folder where the class is generated
+     */
+    void addToTarget(const KUrl& url);
+
     QList<DeclarationPointer> m_baseClasses;  //!< These are the base classes, that are directly inherited from
     QList<DeclarationPointer> m_declarations; //!< Declarations
 

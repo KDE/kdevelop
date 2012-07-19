@@ -37,20 +37,10 @@ public:
     ClassIdentifierPage(QWidget* parent);
     virtual ~ClassIdentifierPage();
 
-    /// Returns the line edit which contains the new class identifier.
-    KLineEdit* identifierLineEdit() const;
-
-    /// Returns the line edit which contains a base class identifier.
-    KLineEdit* inheritanceLineEdit() const;
+    QString identifier() const;
 
     /// Returns a list of inheritances for the new class
     QStringList inheritanceList() const;
-
-    /**
-     * Parses a parent class into a QualifiedIdentifier, the default implementation
-     * Just returns the string converted to a QualifiedIdentifier
-     */
-    virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 
 Q_SIGNALS:
     void inheritanceChanged();

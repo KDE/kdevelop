@@ -20,8 +20,9 @@
 #ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
 #define KDEVELOP_TEMPLATECLASSASSISTANT_H
 
-#include "createclass.h"
 #include "codedescription.h"
+
+#include <KAssistantDialog>
 
 class QItemSelection;
 
@@ -44,14 +45,14 @@ class TemplateSelectionPage;
  * the actual generation of output. 
  * 
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public CreateClassAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public KAssistantDialog
 {
     Q_OBJECT
 public:
     /**
      * Creates a new assistant
      *
-     * @param parent parent widget, passed to CreateClassAssistant
+     * @param parent parent widget
      * @param baseUrl the directory where the new class should be created
      **/
     TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl = KUrl());
@@ -60,43 +61,23 @@ public:
      **/
     virtual ~TemplateClassAssistant();
 
-    /**
-     * @copydoc CreateClassAssistant::setup()
-     **/
-    virtual void setup();
+    void setup();
 
-    /**
-     * @brief Creates a new template selection page and returns it
-     * 
-     * This is the first page in the dialog. 
-     * An ICreateClassHelper is created later, depending on the chosen template. 
-     **/
-    virtual TemplateSelectionPage* newTemplateSelectionPage();
+    KUrl baseUrl() const;
 
-    /**
-     * @copydoc CreateClassAssistant::newIdentifierPage()
-     **/
-    virtual ClassIdentifierPage* newIdentifierPage();
 
+public Q_SLOTS:
     /**
-     * @copydoc CreateClassAssistant::newOverridesPage()
-     **/
-    virtual OverridesPage* newOverridesPage();
-
-    /**
-     * @brief Creates a page for defining data members and returns it
-     **/
-    virtual ClassMembersPage* newMembersPage();
-
-    /**
-     * @copydoc CreateClassAssistant::next()
-     **/
+     * Called when the next button is clicked.
+     */
     virtual void next();
-
+    virtual void back();
     /**
-     * @copydoc CreateClassAssistant::accept()
-     **/
+     * Called when the assistant completes.
+     */
     virtual void accept();
+
+    void setCurrentPageValid(bool valid);
 
 private:
     class TemplateClassAssistantPrivate* const d;

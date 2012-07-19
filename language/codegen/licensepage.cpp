@@ -85,19 +85,9 @@ LicensePage::~LicensePage()
     delete d;
 }
 
-// If the user entered a custom license that they want to save, save it
-bool LicensePage::validatePage()
+QString LicensePage::license() const
 {
-    if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) &&
-        d->license->saveLicense->isChecked())
-        return saveLicense();
-    else
-        return true;
-}
-
-KTextEdit* LicensePage::licenseTextEdit()
-{
-    return d->license->licenseTextEdit;
+    return d->license->licenseTextEdit->document()->toPlainText();
 }
 
 //! Read all the license files in the global and local config dirs

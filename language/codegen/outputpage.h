@@ -20,11 +20,16 @@
 #define KDEV_OUTPUTPAGE_H
 
 #include <QWidget>
+#include <KUrl>
 
 #include "../languageexport.h"
+#include <language/editor/simplecursor.h>
 
+class KUrl;
 namespace KDevelop {
-    
+
+class TemplateRenderer;
+class SourceFileTemplate;
 class CreateClassAssistant; 
 
 class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
@@ -32,14 +37,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
     Q_OBJECT
 
 public:
-    OutputPage(CreateClassAssistant* parent);
+    OutputPage(QWidget* parent);
     virtual ~OutputPage();
 
-    virtual void initializePage();
+    void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, KDevelop::TemplateRenderer* renderer);
 
-    virtual bool validatePage();
+    QHash<QString, KUrl> fileUrls() const;
+    QHash<QString, SimpleCursor> filePositions() const;
 
-    virtual bool isComplete() const;
+    bool isComplete() const;
 
 Q_SIGNALS:
     void isValid(bool valid);

@@ -25,6 +25,8 @@
 namespace KDevelop
 {
 
+class TemplateRenderer;
+
 class SourceFileTemplate;
 
 /**
@@ -117,6 +119,13 @@ public:
      *
      **/
     QString renderString(const QString& text);
+
+    /**
+     * The template renderer used to render all the templates for this class.
+     *
+     * This function is useful if you want a rendeder with all current template variables. 
+     */
+    TemplateRenderer* renderer();
 
 private:
     class TemplateClassGeneratorPrivate* const d;

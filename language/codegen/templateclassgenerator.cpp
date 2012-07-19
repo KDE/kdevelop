@@ -91,7 +91,10 @@ DocumentChangeSet TemplateClassGenerator::generate()
     Q_ASSERT(d->archive);
     d->renderer.addVariables(templateVariables());
 
-    return d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
+    DocumentChangeSet changes = d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
+
+    addToTarget(d->baseUrl);
+    return changes;
 }
 
 QHash< QString, QString > TemplateClassGenerator::fileLabels()
@@ -142,3 +145,9 @@ SourceFileTemplate* TemplateClassGenerator::sourceFileTemplate()
 {
     return d->fileTemplate;
 }
+
+TemplateRenderer* TemplateClassGenerator::renderer()
+{
+    return &(d->renderer);
+}
+

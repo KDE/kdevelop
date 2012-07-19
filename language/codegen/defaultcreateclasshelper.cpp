@@ -21,6 +21,7 @@
 #include "templateclassgenerator.h"
 #include "templateclassassistant.h"
 #include "overridespage.h"
+#include "classidentifierpage.h"
 
 using namespace KDevelop;
 
@@ -48,7 +49,7 @@ KDevelop::ClassGenerator* DefaultCreateClassHelper::generator()
 
 KDevelop::OverridesPage* DefaultCreateClassHelper::overridesPage()
 {
-    return new OverridesPage(d->assistant->generator(), d->assistant);
+    return new OverridesPage(d->assistant);
 }
 
 KDevelop::ClassIdentifierPage* DefaultCreateClassHelper::identifierPage()

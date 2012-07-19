@@ -28,28 +28,22 @@ class QTreeWidgetItem;
 
 namespace KDevelop {
 
-class ClassGenerator;
-
 class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    OverridesPage(ClassGenerator* generator, QWidget* parent);
+    OverridesPage(QWidget* parent);
     virtual ~OverridesPage();
 
-    QTreeWidget* overrideTree() const;
-
-    QWidget* extraFunctionsContainer() const;
-    
-    void updateOverrideTree();
-    void validateOverrideTree();
     /**
      * Default implementation populates the tree with all virtual functions in the base classes.
      * Calls @c addPotentialOverride() on each function, where more filtering can be applied.
-     * @param baseList Declarations of implemented base classes.
+     * 
+     * @param directBases Declarations of base classes from which the new class inherits directly.
+     * @param allBases Declarations of all base classes from which functions can be overriden
      */
-    virtual void populateOverrideTree(const QList<DeclarationPointer> & baseList);
+    virtual void populateOverrideTree(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases);
     /**
      * Add @p childDeclaration as potential override. Don't call @c KDevelop::OverridesPage::addPotentialOverride()
      * in overloaded class to filter a declaration.
@@ -58,8 +52,13 @@ public:
      */
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
 
-protected:
-    ClassGenerator* generator() const;
+    virtual QList<DeclarationPointer> selectedOverrides();
+
+
+    QTreeWidget* overrideTree() const;
+
+    QWidget* extraFunctionsContainer() const;
+
 
 public Q_SLOTS:
     virtual void selectAll();

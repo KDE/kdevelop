@@ -24,6 +24,10 @@
 #include "templateclassgenerator.h"
 #include "sourcefiletemplate.h"
 #include "defaultcreateclasshelper.h"
+#include "classidentifierpage.h"
+#include "overridespage.h"
+#include "licensepage.h"
+#include "outputpage.h"
 
 #include "interfaces/icore.h"
 #include "interfaces/ilanguagecontroller.h"
@@ -40,17 +44,32 @@ class KDevelop::TemplateClassAssistantPrivate
 {
 public:
     KPageWidgetItem* templateSelectionPage;
-    KPageWidgetItem* dummyPage;
     KPageWidgetItem* templateOptionsPage;
     KPageWidgetItem* membersPage;
+    KPageWidgetItem* classIdentifierPage;
+    KPageWidgetItem* overridesPage;
+    KPageWidgetItem* licensePage;
+    KPageWidgetItem* outputPage;
+
+    TemplateSelectionPage* templateSelectionPageWidget;
+    TemplateOptionsPage* templateOptionsPageWidget;
+    ClassMembersPage* membersPageWidget;
+    OverridesPage* overridesPageWidget;
+    LicensePage* licensePageWidget;
+    OutputPage* outputPageWidget;
+
+    SourceFileTemplate fileTemplate;
     ICreateClassHelper* helper;
+    ClassGenerator* generator;
+    ClassIdentifierPage* classIdentifierPageWidget;
+    KUrl baseUrl;
 };
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
-: CreateClassAssistant (parent, baseUrl)
+: KAssistantDialog (parent)
 , d(new TemplateClassAssistantPrivate)
 {
-    d->templateOptionsPage = 0;
+    d->baseUrl = baseUrl;
     setup();
 }
 
@@ -63,20 +82,49 @@ void TemplateClassAssistant::setup()
 {
     setWindowTitle(i18n("Create New Class in %1", baseUrl().prettyUrl()));
 
-    TemplateSelectionPage* page = newTemplateSelectionPage();
-    d->templateSelectionPage = addPage(page, i18n("Language and Template"));
-    connect (this, SIGNAL(accepted()), page, SLOT(saveConfig()));
+    d->templateSelectionPageWidget = new TemplateSelectionPage(this);
+    connect (this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
+    d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
+    d->templateSelectionPage->setIcon(KIcon("project-development-new-template"));
 
-    /*
-     * All assistant pages except the first one require the helper to already be set.
-     * However, we can only choose the helper aften the language is selected,
-     * so other pages cannot be loaded here yet.
-     *
-     * OTOH, having only one page disables the "next" button and enables the "finish" button.
-     * This is not wanted, so we create a dummy page and delete it when "next" is clicked
-     */
-    QWidget* dummy = new QWidget(this);
-    d->dummyPage = addPage(dummy, QLatin1String("Dummy Page"));
+    d->classIdentifierPageWidget = new ClassIdentifierPage(this);
+    d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
+    d->classIdentifierPage->setIcon(KIcon("classnew"));
+
+    d->overridesPageWidget = new OverridesPage(this);
+    d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
+    d->overridesPage->setIcon(KIcon("code-class"));
+
+    d->membersPageWidget = new ClassMembersPage(this);
+    d->membersPage = addPage(d->membersPageWidget, i18n("Class Members"));
+    d->membersPage->setIcon(KIcon("field"));
+
+    d->licensePageWidget = new LicensePage(this);
+    d->licensePage = addPage(d->licensePageWidget, i18n("License"));
+    d->licensePage->setIcon(KIcon("text-x-copying"));
+
+    d->outputPageWidget = new OutputPage(this);
+    d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
+    d->outputPage->setIcon(KIcon("document-save"));
+
+    QWidgetList pages;
+    pages << d->templateSelectionPageWidget
+          << d->classIdentifierPageWidget
+          << d->overridesPageWidget
+          << d->membersPageWidget
+          << d->licensePageWidget
+          << d->outputPageWidget;
+
+    foreach (QWidget* page, pages)
+    {
+        connect (page, SIGNAL(isValid(bool)), this, SLOT(setCurrentPageValid(bool)));
+    }
+
+    setValid(d->classIdentifierPage, false);
+    setValid(d->overridesPage, true);
+    setValid(d->licensePage, true);
+    setValid(d->outputPage, false);
+    showButton(KDialog::Help, false);
 
     setCurrentPage(d->templateSelectionPage);
 }
@@ -85,18 +133,13 @@ void TemplateClassAssistant::next()
 {
     if (currentPage() == d->templateSelectionPage)
     {
-        kDebug() << "Current page is template selection";
+        // We have chosen the template
+        // Depending on the template's language, we can now create a helper
         QString description = currentPage()->widget()->property("selectedTemplate").toString();
-
-        kDebug() << "Chosen template is" << description;
-
-        KConfig config(description);
-        KConfigGroup group(&config, "General");
-
-        kDebug() << "Template name is" << group.readEntry("Name");
-
+        d->fileTemplate.setTemplateDescription(description);
         d->helper = 0;
-        QString languageName = group.readEntry("Category").split('/').first();
+
+        QString languageName = d->fileTemplate.languageName();
         ILanguage* language = ICore::self()->languageController()->language(languageName);
         if (language && language->languageSupport())
         {
@@ -109,25 +152,18 @@ void TemplateClassAssistant::next()
             d->helper = new DefaultCreateClassHelper(this);
         }
 
-        ClassGenerator* generator = d->helper->generator();
-        if (!generator)
+        d->generator = d->helper->generator();
+        if (!d->generator)
         {
             kDebug() << "No generator for language" << languageName;
             return;
         }
 
-
-        setGenerator(generator);
-
-        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator);
+        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(d->generator);
         if (templateGenerator)
         {
-            kDebug() << "Class generator uses templates";
             templateGenerator->setTemplateDescription(description);
         }
-
-        removePage(d->dummyPage);
-        KDevelop::CreateClassAssistant::setup();
 
         ClassMembersPage* membersPage = new ClassMembersPage(this);
         d->membersPage = addPage(membersPage, i18n("Data Members"));
@@ -138,62 +174,74 @@ void TemplateClassAssistant::next()
             TemplateOptionsPage* options = new TemplateOptionsPage(this);
             d->templateOptionsPage = addPage(options, i18n("Template Options"));
         }
-
-        return;
+    }
+    else if (currentPage() == d->classIdentifierPage)
+    {
+        d->generator->setIdentifier(d->classIdentifierPageWidget->identifier());
+        foreach (const QString& base, d->classIdentifierPageWidget->inheritanceList())
+        {
+            d->generator->addBaseClass(base);
+        }
+    }
+    else if (currentPage() == d->overridesPage)
+    {
+        ClassDescription desc = d->generator->description();
+        foreach (const DeclarationPointer& declaration, d->overridesPageWidget->selectedOverrides())
+        {
+            desc.methods << FunctionDescription(declaration);
+        }
+        d->generator->setDescription(desc);
+    }
+    else if (currentPage() == d->membersPage)
+    {
+        ClassDescription desc = d->generator->description();
+        desc.members << d->membersPageWidget->members();
+        d->generator->setDescription(desc);
+    }
+    else if (currentPage() == d->licensePage)
+    {
+        d->generator->setLicense(d->licensePageWidget->license());
     }
 
-    KDevelop::CreateClassAssistant::next();
+    KAssistantDialog::next();
 
     if (currentPage() == d->membersPage)
     {
-        d->membersPage->widget()->setProperty("members", QVariant::fromValue(generator()->description().members));
+        d->membersPage->widget()->setProperty("members", QVariant::fromValue(d->generator->description().members));
     }
-
-    if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
+    else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
-        TemplateOptionsPage* options = qobject_cast<TemplateOptionsPage*>(d->templateOptionsPage->widget());
-        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
+        d->templateOptionsPageWidget->load(d->fileTemplate);
+    }
+    else if (currentPage() == d->outputPage)
+    {
+        d->outputPageWidget->loadFileTemplate(d->fileTemplate, d->baseUrl, static_cast<TemplateClassGenerator*>(d->generator)->renderer());
+    }
+}
 
-        options->loadXML(templateGenerator->sourceFileTemplate()->customOptions());
+void TemplateClassAssistant::back()
+{
+    KAssistantDialog::back();
+    if (currentPage() == d->templateSelectionPage)
+    {
+        delete d->helper;
+        delete d->generator;
+        d->helper = 0;
+        d->generator = 0;
     }
 }
 
 void TemplateClassAssistant::accept()
 {
-    if (d->templateOptionsPage)
-    {
-        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(generator());
-        Q_ASSERT(templateGenerator);
-
-        kDebug() << d->templateOptionsPage->widget()->property("templateOptions");
-        kDebug() << d->templateOptionsPage->widget()->property("templateOptions").toHash();
-        templateGenerator->addVariables(d->templateOptionsPage->widget()->property("templateOptions").toHash());
-    }
-
-    ClassDescription desc = generator()->description();
-    desc.members = d->membersPage->widget()->property("members").value<VariableDescriptionList>();
-    generator()->setDescription(desc);
-
-    CreateClassAssistant::accept();
+    KAssistantDialog::accept();
 }
 
-TemplateSelectionPage* TemplateClassAssistant::newTemplateSelectionPage()
+void TemplateClassAssistant::setCurrentPageValid (bool valid)
 {
-    return new TemplateSelectionPage(this);
+    setValid(currentPage(), valid);
 }
 
-ClassIdentifierPage* TemplateClassAssistant::newIdentifierPage()
+KUrl TemplateClassAssistant::baseUrl() const
 {
-    return d->helper->identifierPage();
+    return d->baseUrl;
 }
-
-OverridesPage* TemplateClassAssistant::newOverridesPage()
-{
-    return d->helper->overridesPage();
-}
-
-ClassMembersPage* TemplateClassAssistant::newMembersPage()
-{
-    return new ClassMembersPage(this);
-}
-
