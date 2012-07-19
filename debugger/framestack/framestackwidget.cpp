@@ -161,20 +161,15 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
         IFrameStackModel* model = m_session->frameStackModel();
         QModelIndex idx = model->currentThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        m_threadsWidget->setVisible(model->rowCount() > 1);
         m_frames->setModel(m_session->frameStackModel());
         m_frames->setRootIndex(idx);
-
-        if (model->rowCount() <= 1) {
-            m_threadsWidget->hide();
-        } else {
-            m_threadsWidget->show();
-        }
+        m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
     } else {
         m_threadsWidget->hide();
         m_threads->selectionModel()->clear();
         m_frames->setModel(0);        
     }
-    m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
 }
 
 void KDevelop::FramestackWidget::currentFrameChanged(int frame)
