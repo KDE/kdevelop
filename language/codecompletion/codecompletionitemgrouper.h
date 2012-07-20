@@ -25,6 +25,8 @@
 
 #include "codecompletionmodel.h"
 #include "codecompletionitem.h"
+#include <duchain/duchain.h>
+#include <duchain/duchainlock.h>
 
 namespace KDevelop {
 
@@ -99,6 +101,7 @@ struct SimplifiedAttributesExtractor {
   static int groupingProperties;
   
   static KeyType extract( const CompletionTreeItemPointer& item ) {
+      DUChainReadLocker lock(DUChain::lock());
       return item->completionProperties() & groupingProperties;
   }
 };
