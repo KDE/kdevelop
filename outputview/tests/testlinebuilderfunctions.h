@@ -37,6 +37,18 @@ QString buildCppCheckErrorLine()
     return outputline;
 }
 
+QString buildKrazyErrorLine()
+{
+    /// Use existing directory with one file
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+
+    /// Test krazy2 output
+    QString outputline;
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp: line#22 (1)");
+    return outputline;
+}
+
 QString buildCompilerLine()
 {
     /// Test with compiler output

@@ -312,11 +312,12 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 
 /// --- Static Analysis filter strategy ---
 
-// A list of filters for possible Python and PHP errors
+// A list of filters for static analysis tools (krazy2, cppcheck)
 const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
     // CppCheck
-    << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 );
-
+    << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 )
+    // krazy2
+    << ErrorFormat( "(.+?): line#(\d+)", 1, 2, -1 );
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
