@@ -317,7 +317,7 @@ const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
     // CppCheck
     << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 )
     // krazy2
-    << ErrorFormat( "(.+?): line#(\d+)", 1, 2, -1 );
+    << ErrorFormat( "(.*): line#([0-9]+)", 1, 2, -1 );
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
