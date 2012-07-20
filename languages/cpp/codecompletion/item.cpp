@@ -305,6 +305,8 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
           //Get the properties from the parent, because that may contain information like "private"
           if(dec->context()->owner()) {
             p = DUChainUtils::completionProperties(dec->context()->owner());
+            p &= ~CodeCompletionModel::Enum;
+            p |=  CodeCompletionModel::Variable;
           }
         break;
       case AbstractType::TypeStructure:
