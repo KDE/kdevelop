@@ -21,7 +21,6 @@
  */
 
 #include "cppclasshelper.h"
-#include "cppnewclass.h"
 #include <codecompletion/missingincludeitem.h>
 
 #include <language/codegen/templateclassassistant.h>
@@ -34,6 +33,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 
 #include <KLocalizedString>
+#include <KTemporaryFile>
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -51,7 +51,7 @@ CppClassHelper::~CppClassHelper()
 
 }
 
-KDevelop::ClassGenerator* CppClassHelper::generator()
+TemplateClassGenerator* CppClassHelper::generator()
 {
     KUrl url = m_assistant->baseUrl();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
@@ -70,14 +70,41 @@ KDevelop::ClassGenerator* CppClassHelper::generator()
     return new CppTemplateNewClass(item);
 }
 
-KDevelop::OverridesPage* CppClassHelper::overridesPage()
+QList< DeclarationPointer > CppClassHelper::defaultMethods(const QString& name)
 {
-    return new OverridesPage(m_assistant);
-}
+    KTemporaryFile file;
+    file.setSuffix( ".cpp" );
+    file.setAutoRemove(false);
+    file.open();
+    QTextStream stream(&file);
+    stream << "class " << name << " {\n"
+    << "  public:\n"
+    // default ctor
+    << "    " << name << "();\n"
+    // copy ctor
+    << "    " << name << "(const " << name << "& other);\n"
+    // default dtor
+    << "    ~" << name << "();\n"
+    // assignment operator
+    << "    " << name << "& operator=(const " << name << "& other);\n"
+    // equality operator
+    << "    bool operator==(const " << name << "& other) const;\n"
+    << "};\n";
+    file.close();
+    ReferencedTopDUContext context(DUChain::self()->waitForUpdate( IndexedString(file.fileName()), KDevelop::TopDUContext::AllDeclarationsAndContexts ));
+    DUChainReadLocker lock;
 
-KDevelop::ClassIdentifierPage* CppClassHelper::identifierPage()
-{
-    return new ClassIdentifierPage(m_assistant);
+    QList<DeclarationPointer> methods;
+
+    if (context && context->childContexts().size() == 1) {
+        foreach (Declaration* declaration, context->childContexts().first()->localDeclarations())
+        {
+            methods << DeclarationPointer(declaration);
+        }
+    }
+
+    file.remove();
+    return methods;
 }
 
 CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
@@ -178,7 +205,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
         sourceUrl.addPath(name().toLower() + ".h");
     }
 
-    foreach (const DeclarationPointer& base, directInheritanceList())
+    foreach (const DeclarationPointer& base, baseClasses())
     {
         if (!base)
         {
@@ -279,31 +306,19 @@ KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
   return changes;
 }
 
-QList<KDevelop::DeclarationPointer> CppTemplateNewClass::addBaseClass(const QString& base)
+void CppTemplateNewClass::addBaseClass(const QString& base)
 {
-  if(base.isEmpty()) {
-    return m_baseClasses;
-  }
-
   //strip access specifier
   QStringList splitBase = base.split(' ', QString::SkipEmptyParts);
 
   //if no access specifier is found use public by default
-  if(splitBase.size() == 1) {
+  if(splitBase.size() == 1)
+  {
     splitBase.prepend("public");
   }
 
-  QString full = splitBase.join(" ");
-  QString name = splitBase.takeLast();
-  QString access = splitBase.join(" ");
-
-  //Call base function with stripped access specifier
-  return TemplateClassGenerator::addBaseClass(full);
-}
-
-void CppTemplateNewClass::clearInheritance()
-{
-  TemplateClassGenerator::clearInheritance();
+  //Call base function with the access specifier
+  TemplateClassGenerator::addBaseClass(splitBase.join(" "));
 }
 
 void CppTemplateNewClass::setIdentifier(const QString& identifier)
@@ -313,10 +328,4 @@ void CppTemplateNewClass::setIdentifier(const QString& identifier)
   setNamespaces(list);
 }
 
-QString CppTemplateNewClass::identifier() const
-{
-  QStringList ids = namespaces();
-  ids << name();
-  return ids.join("::");
-}
 
