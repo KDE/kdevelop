@@ -127,7 +127,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/templateoptionspage.cpp
     codegen/templateselectionpage.cpp
     codegen/classmemberspage.cpp
-    codegen/classgenerator.cpp
+    #codegen/classgenerator.cpp
     codegen/classidentifierpage.cpp
     codegen/licensepage.cpp
     codegen/outputpage.cpp

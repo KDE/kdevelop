@@ -44,7 +44,6 @@ private slots:
     void fileLabelsYaml();
     void defaultFileUrlsCpp();
     void defaultFileUrlsYaml();
-    void lowercaseFileUrls();
     void customOptions();
     void templateVariablesCpp();
     void templateVariablesYaml();
@@ -56,7 +55,6 @@ private slots:
 
 private:
     KDevelop::TemplateClassGenerator* loadTemplate(const QString& name);
-    void acceptDefaultFileUrls(KDevelop::TemplateClassGenerator* generator, bool toLower);
 
 private:
     KUrl baseUrl;

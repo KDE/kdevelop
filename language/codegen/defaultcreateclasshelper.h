@@ -34,9 +34,8 @@ public:
     DefaultCreateClassHelper(TemplateClassAssistant* assistant);
     virtual ~DefaultCreateClassHelper();
 
-    virtual KDevelop::ClassGenerator* generator();
-    virtual KDevelop::OverridesPage* overridesPage();
-    virtual KDevelop::ClassIdentifierPage* identifierPage();
+    virtual KDevelop::TemplateClassGenerator* generator();
+    virtual QList< DeclarationPointer > defaultMethods(const QString& name);
 
 private:
     class DefaultCreateClassHelperPrivate* const d;

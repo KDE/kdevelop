@@ -24,6 +24,7 @@
 
 #include <KLineEdit>
 #include <KIntNumInput>
+#include <KDebug>
 
 #include <QDomElement>
 #include <QGroupBox>

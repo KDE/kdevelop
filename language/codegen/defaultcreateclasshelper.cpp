@@ -42,18 +42,13 @@ DefaultCreateClassHelper::~DefaultCreateClassHelper()
     delete d;
 }
 
-KDevelop::ClassGenerator* DefaultCreateClassHelper::generator()
+KDevelop::TemplateClassGenerator* DefaultCreateClassHelper::generator()
 {
     return new TemplateClassGenerator(d->assistant->baseUrl());
 }
 
-KDevelop::OverridesPage* DefaultCreateClassHelper::overridesPage()
+QList< DeclarationPointer > DefaultCreateClassHelper::defaultMethods(const QString& name)
 {
-    return new OverridesPage(d->assistant);
+    Q_UNUSED(name);
+    return QList<DeclarationPointer>();
 }
-
-KDevelop::ClassIdentifierPage* DefaultCreateClassHelper::identifierPage()
-{
-    return new ClassIdentifierPage(d->assistant);
-}
-

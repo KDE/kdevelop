@@ -20,14 +20,22 @@
 #ifndef KDEVELOP_TEMPLATECLASSGENERATOR_H
 #define KDEVELOP_TEMPLATECLASSGENERATOR_H
 
-#include "classgenerator.h"
+#include <QHash>
+#include <QVariantHash>
+
+#include "../languageexport.h"
+#include <language/duchain/duchainpointer.h>
+
+class KUrl;
 
 namespace KDevelop
 {
 
+class SimpleCursor;
+struct ClassDescription;
 class TemplateRenderer;
-
 class SourceFileTemplate;
+class DocumentChangeSet;
 
 /**
  * Generates new classes from templates
@@ -57,9 +65,11 @@ class SourceFileTemplate;
  * Subclasses can override templateVariables() and insert additional variables. 
  * 
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator : public ClassGenerator
+class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator
 {
 public:
+    typedef QHash<QString,KUrl> UrlHash;
+
     /**
      * Creates a new generator.
      * 
@@ -67,8 +77,8 @@ public:
      *
      * @param baseUrl the folder where new files will be created
      **/
-    TemplateClassGenerator(const KUrl& baseUrl);
-    ~TemplateClassGenerator();
+    explicit TemplateClassGenerator(const KUrl& baseUrl);
+    virtual ~TemplateClassGenerator();
 
     /**
      * @brief Selects the template to be used
@@ -82,9 +92,60 @@ public:
      **/
     void setTemplateDescription(const QString& templateDescription);
 
+    /**
+     * Set the name (without namespace) for this class
+     */
+    void setName(const QString&);
+    
+    /**
+     * \return The name of the class to generate (excluding namespaces)
+     */
+    QString name() const;
+    
+    /**
+     * \param identifier The Qualified identifier that the class will have
+     */
+    virtual void setIdentifier(const QString& identifier);
+    
+    /**
+     * \return The Identifier of the class to generate (including all used namespaces)
+     */
+    virtual QString identifier() const;
+    
+    /**
+     * \param namespaces The list of nested namespaces in which this class is to be declared
+     */
+    virtual void setNamespaces(const QStringList& namespaces) const;
+    
+    /**
+     * \return The list of nested namespace in which this class will be declared
+     */
+    virtual QStringList namespaces() const;
+
+    void addBaseClass(const QString& base);
+    QList<DeclarationPointer> baseClasses();
+
+    QString license() const;
+    void setLicense(const QString& license);
+
+    void setDescription(const ClassDescription& description);
+
+    ClassDescription description() const;
+
     virtual DocumentChangeSet generate();
-    virtual QHash<QString,QString> fileLabels();
-    virtual QHash< QString, KUrl > fileUrlsFromBase (const KUrl& baseUrl, bool toLower = true);
+    virtual void addToTarget();
+
+    QHash<QString,QString> fileLabels();
+
+    QHash< QString, KUrl > fileUrls();
+    
+    KUrl fileUrl(const QString& outputFile);
+    void setFileUrl(const QString& outputFile, const KUrl& url);
+
+    SimpleCursor filePosition(const QString& outputFile);
+    void setFilePosition(const QString& outputFile, const SimpleCursor& position);
+    
+
     /**
      * @brief Default variables that will be passed to templates
      * 

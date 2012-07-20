@@ -205,4 +205,14 @@ void OverridesPage::deselectAll()
     }
 }
 
+void OverridesPage::addCustomDeclarations (const QString& category, const QList<DeclarationPointer>& declarations)
+{
+    QTreeWidgetItem* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);
+    foreach (const DeclarationPointer& declaration, declarations)
+    {
+        addPotentialOverride(item, declaration);
+    }
+}
+
+
 #include "overridespage.moc"

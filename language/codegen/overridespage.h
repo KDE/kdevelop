@@ -52,6 +52,8 @@ public:
      */
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
 
+    void addCustomDeclarations(const QString& category, const QList< KDevelop::DeclarationPointer >& declarations);
+
     virtual QList<DeclarationPointer> selectedOverrides();
 
 

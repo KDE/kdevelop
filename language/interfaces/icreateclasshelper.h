@@ -21,10 +21,11 @@
 #define KDEVELOP_ICREATECLASSHELPER_H
 
 #include "../languageexport.h"
+#include <language/duchain/duchainpointer.h>
 
 namespace KDevelop {
 
-class ClassGenerator;
+class TemplateClassGenerator;
 class ClassIdentifierPage;
 class OverridesPage;
 
@@ -42,19 +43,11 @@ public:
     virtual ~ICreateClassHelper();
 
     /**
-     * Should return a new dialog page for setting the class identifier
-     **/
-    virtual ClassIdentifierPage* identifierPage() = 0;
-    /**
-     * Should return a new dialog page for choosing overridden virtual methods
-     **/
-    virtual OverridesPage* overridesPage() = 0;
-    /**
      * Should return a new class generator.
-     * 
-     * To support class generation from templates, the generator should inherit from TemplateClassGenerator.
      **/
-    virtual ClassGenerator* generator() = 0;
+    virtual TemplateClassGenerator* generator() = 0;
+
+    virtual QList<DeclarationPointer> defaultMethods(const QString& name) = 0;
 };
 
 }

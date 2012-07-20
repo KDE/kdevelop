@@ -60,7 +60,7 @@ public:
 
     SourceFileTemplate fileTemplate;
     ICreateClassHelper* helper;
-    ClassGenerator* generator;
+    TemplateClassGenerator* generator;
     ClassIdentifierPage* classIdentifierPageWidget;
     KUrl baseUrl;
 };
@@ -158,17 +158,13 @@ void TemplateClassAssistant::next()
             kDebug() << "No generator for language" << languageName;
             return;
         }
-
-        TemplateClassGenerator* templateGenerator = dynamic_cast<TemplateClassGenerator*>(d->generator);
-        if (templateGenerator)
-        {
-            templateGenerator->setTemplateDescription(description);
-        }
+        
+        d->generator->setTemplateDescription(description);
 
         ClassMembersPage* membersPage = new ClassMembersPage(this);
         d->membersPage = addPage(membersPage, i18n("Data Members"));
 
-        if (templateGenerator && templateGenerator->sourceFileTemplate()->hasCustomOptions())
+        if (d->generator->sourceFileTemplate()->hasCustomOptions())
         {
             kDebug() << "Class generator has custom options";
             TemplateOptionsPage* options = new TemplateOptionsPage(this);
@@ -208,6 +204,12 @@ void TemplateClassAssistant::next()
     if (currentPage() == d->membersPage)
     {
         d->membersPage->widget()->setProperty("members", QVariant::fromValue(d->generator->description().members));
+    }
+    else if (currentPage() == d->overridesPage)
+    {
+        // TODO: Again separate direct and indirect bases
+        d->overridesPageWidget->populateOverrideTree(d->generator->baseClasses(), d->generator->baseClasses());
+        d->overridesPageWidget->addCustomDeclarations(i18n("Default"), d->helper->defaultMethods(d->generator->name()));
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
