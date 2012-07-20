@@ -70,11 +70,9 @@ QByteArray urlToData(const KUrl& url)
 void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
 {
     kDebug() << "exporting patch to pastebin" << source->file();
-    
-    QByteArray bytearray = "paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
-    bytearray += "&paste_format=diff&paste_expiry_date=1D&paste_email=";
+    QByteArray bytearray = "api_option=paste&api_paste_private=1&api_paste_name=kdevelop-pastebin-plugin&api_paste_expire_date=1D&api_paste_format=diff&api_dev_key=0c8b6add8e0f6d53f61fe5ce870a1afa&api_paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
 
-    KUrl url("http://pastebin.com/api_public.php");
+    KUrl url("http://pastebin.com/api/api_post.php");
 
     KIO::TransferJob *tf = KIO::http_post(url, bytearray);
 
