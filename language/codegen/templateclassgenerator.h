@@ -144,25 +144,6 @@ public:
 
     SimpleCursor filePosition(const QString& outputFile);
     void setFilePosition(const QString& outputFile, const SimpleCursor& position);
-    
-
-    /**
-     * @brief Default variables that will be passed to templates
-     * 
-     * These are populated from description(). Subclasses can override this function
-     * to provide additional variables, but should always call the base implementation, like this
-     * 
-     * @code
-     * MyGenerator::templateVariables()
-     * {
-     *     QVariantHash variables = TemplateClassGenerator::templateVariables();
-     *     variables["my_variable"] = "SomeString";
-     *     return variables;
-     * }
-     * @endcode
-     *
-     **/
-    virtual QVariantHash templateVariables();
 
     SourceFileTemplate* sourceFileTemplate();
 

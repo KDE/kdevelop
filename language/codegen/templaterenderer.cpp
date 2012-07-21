@@ -138,6 +138,11 @@ void TemplateRenderer::addVariable (const QString& name, const QVariant& value)
     d->context.insert(name, value);
 }
 
+QVariantHash TemplateRenderer::variables() const
+{
+    return d->context.stackHash(0);
+}
+
 QString TemplateRenderer::render (const QString& content, const QString& name)
 {
     kDebug() << d->context.stackHash(0);

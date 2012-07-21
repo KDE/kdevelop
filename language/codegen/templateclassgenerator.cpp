@@ -113,29 +113,9 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
     d->renderer.addArchive(d->fileTemplate->directory());
 }
 
-QVariantHash TemplateClassGenerator::templateVariables()
-{
-    QVariantHash variables;
-
-    variables["name"] = name();
-    variables["namespaces"] = namespaces();
-    variables["identifier"] = identifier();
-    variables["license"] = license();
-
-    ClassDescription desc = description();
-    variables["description"] = QVariant::fromValue(desc);
-    variables["members"] = CodeDescription::toVariantList(desc.members);
-    variables["functions"] = CodeDescription::toVariantList(desc.methods);
-    variables["base_classes"] = CodeDescription::toVariantList(desc.baseClasses);
-
-    return variables;
-}
-
-
 DocumentChangeSet TemplateClassGenerator::generate()
 {
     Q_ASSERT(d->archive);
-    d->renderer.addVariables(templateVariables());
 
     DocumentChangeSet changes = d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
 
@@ -160,7 +140,6 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrls ()
 {
     if (d->fileUrls.isEmpty())
     {
-        d->renderer.addVariables(templateVariables());
         foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate->outputFiles())
         {
             KUrl url(d->baseUrl);
@@ -181,6 +160,8 @@ KUrl TemplateClassGenerator::fileUrl (const QString& outputFile)
 void TemplateClassGenerator::setFileUrl (const QString& outputFile, const KUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
+    d->renderer.addVariable("output_file_" + outputFile.toLower(), KUrl::relativeUrl(d->baseUrl, url));
+    d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
 }
 
 SimpleCursor TemplateClassGenerator::filePosition (const QString& outputFile)
@@ -222,6 +203,7 @@ QString TemplateClassGenerator::name() const
 void TemplateClassGenerator::setName(const QString& newName)
 {
     d->name = newName;
+    d->renderer.addVariable("name", newName);
 }
 
 QString TemplateClassGenerator::identifier() const
@@ -231,6 +213,7 @@ QString TemplateClassGenerator::identifier() const
 
 void TemplateClassGenerator::setIdentifier(const QString& identifier)
 {
+    d->renderer.addVariable("identifier", identifier);;
     QStringList separators;
     separators << "::" << "." << ":" << "\\" << "/";
     QStringList ns;
@@ -254,6 +237,7 @@ QStringList TemplateClassGenerator::namespaces() const
 void TemplateClassGenerator::setNamespaces (const QStringList& namespaces) const
 {
     d->namespaces = namespaces;
+    d->renderer.addVariable("namespaces", namespaces);
 }
 
 
@@ -262,6 +246,7 @@ void TemplateClassGenerator::setLicense(const QString& license)
 {
     kDebug() << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
+    d->renderer.addVariable("license", license);
 }
 
 /// Get the license specified for this classes
@@ -369,6 +354,13 @@ void TemplateClassGenerator::addToTarget()
 void TemplateClassGenerator::setDescription (const ClassDescription& description)
 {
     d->description = description;
+
+    QVariantHash variables;
+    variables["description"] = QVariant::fromValue(description);
+    variables["members"] = CodeDescription::toVariantList(description.members);
+    variables["functions"] = CodeDescription::toVariantList(description.methods);
+    variables["base_classes"] = CodeDescription::toVariantList(description.baseClasses);
+    d->renderer.addVariables(variables);
 }
 
 ClassDescription TemplateClassGenerator::description() const
@@ -385,7 +377,10 @@ void TemplateClassGenerator::addBaseClass (const QString& base)
     InheritanceDescription desc;
     desc.baseType = identifier;
     desc.inheritanceMode = inheritanceMode;
-    d->description.baseClasses << desc;
+
+    ClassDescription cd = description();
+    cd.baseClasses << desc;
+    setDescription(cd);
     
     DUChainReadLocker lock;
     

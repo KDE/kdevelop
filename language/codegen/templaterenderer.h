@@ -130,6 +130,8 @@ public:
      **/
     void addVariable(const QString& name, const QVariant& value);
 
+    QVariantHash variables() const;
+
     /**
      * @brief Renders a single template
      *
