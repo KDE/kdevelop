@@ -43,9 +43,21 @@ QString buildKrazyErrorLine()
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
 
     /// Test krazy2 output
-    QString outputline;
+    QString outputline("\t");
     outputline.append(projecturl.path());
     outputline.append("main.cpp: line#22 (1)");
+    return outputline;
+}
+
+QString buildKrazyErrorLineNoLineInfo()
+{
+    /// Use existing directory with one file
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+
+    /// Test krazy2 output
+    QString outputline("\t");
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp: missing license");
     return outputline;
 }
 

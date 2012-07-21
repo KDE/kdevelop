@@ -136,6 +136,8 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
     << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("krazy2-error-line")
     << buildKrazyErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("krazy2-error-line-wo-line-info")
+    << buildKrazyErrorLineNoLineInfo() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
     << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")

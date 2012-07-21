@@ -317,7 +317,9 @@ const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
     // CppCheck
     << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 )
     // krazy2
-    << ErrorFormat( "(.*): line#([0-9]+)", 1, 2, -1 );
+    << ErrorFormat( "^\t(.*): line#([0-9]+).*\\([0-9]+\\)", 1, 2, -1 )
+    // krazy2 without line info
+    << ErrorFormat( "^\t(.*): missing license", 1, -1, -1 );
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
@@ -333,6 +335,7 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
     FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
         QRegExp regEx = curErrFilter.expression;
+        QString currentRegEx = regEx.pattern();
         if( regEx.indexIn( line ) != -1 )
         {
             item.url = regEx.cap( curErrFilter.fileGroup );
