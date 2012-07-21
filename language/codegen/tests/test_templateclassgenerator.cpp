@@ -25,6 +25,7 @@
 #include "language/codegen/templatesmodel.h"
 #include "language/codegen/documentchangeset.h"
 #include "language/codegen/sourcefiletemplate.h"
+#include "language/codegen/templaterenderer.h"
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
@@ -62,13 +63,6 @@ void TestTemplateClassGenerator::initTestCase()
     model.setDescriptionResourceType("filetemplate_descriptions");
     model.setTemplateResourceType("filetemplates");
     model.refresh();
-
-    description.name = "ClassName";
-
-    InheritanceDescription inheritance;
-    inheritance.baseType = "QObject";
-    inheritance.inheritanceMode = "public";
-    description.baseClasses << inheritance;
 
     description.members << VariableDescription("QString", "name")
                         << VariableDescription("int", "number")
@@ -156,13 +150,9 @@ void TestTemplateClassGenerator::customOptions()
 void TestTemplateClassGenerator::templateVariablesCpp()
 {
     TemplateClassGenerator* generator = loadTemplate("test_cpp");
-    QHash<QString, KUrl> urls = generator->fileUrls();
-    foreach (const QString& file, QStringList() << "Header" << "Implementation")
-    {
-        generator->setFileUrl(file, urls[file]);
-    }
+    setLowercaseFileNames(generator);
 
-    QVariantHash variables = generator->templateVariables();
+    QVariantHash variables = generator->renderer()->variables();
     CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
 
     KUrl headerUrl(baseUrl);
@@ -174,13 +164,9 @@ void TestTemplateClassGenerator::templateVariablesCpp()
 void TestTemplateClassGenerator::templateVariablesYaml()
 {
     TemplateClassGenerator* generator = loadTemplate("test_yaml");
-    QHash<QString, KUrl> urls = generator->fileUrls();
-    foreach (const QString& file, QStringList() << "Description")
-    {
-        generator->setFileUrl(file, urls[file]);
-    }
+    setLowercaseFileNames(generator);
 
-    QVariantHash variables = generator->templateVariables();
+    QVariantHash variables = generator->renderer()->variables();
     CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
 
     KUrl fileUrl(baseUrl);
@@ -192,29 +178,32 @@ void TestTemplateClassGenerator::templateVariablesYaml()
 void TestTemplateClassGenerator::codeDescription()
 {
     TemplateClassGenerator* generator = loadTemplate("test_yaml");
-    QVariantHash variables = generator->templateVariables();
+
+    QVariantHash variables = generator->renderer()->variables();
+
+    qDebug() << variables;
 
     QVERIFY(variables.contains("base_classes"));
-    InheritanceDescriptionList inheritance = variables["base_classes"].value<InheritanceDescriptionList>();
+    QVariantList inheritance = variables["base_classes"].toList();
     QCOMPARE(inheritance.size(), 1);
-    QCOMPARE(inheritance.first().baseType, QString("QObject"));
-    QCOMPARE(inheritance.first().inheritanceMode, QString("public"));
+    QCOMPARE(inheritance.first().value<InheritanceDescription>().baseType, QString("QObject"));
+    QCOMPARE(inheritance.first().value<InheritanceDescription>().inheritanceMode, QString("public"));
 
     QVERIFY(variables.contains("members"));
-    VariableDescriptionList members = variables["members"].value<VariableDescriptionList>();
+    QVariantList members = variables["members"].toList();
     QCOMPARE(members.size(), 3);
-    QCOMPARE(members.first().type, QString("QString"));
-    QCOMPARE(members.first().name, QString("name"));
+    QCOMPARE(members.first().value<VariableDescription>().type, QString("QString"));
+    QCOMPARE(members.first().value<VariableDescription>().name, QString("name"));
 
     QVERIFY(variables.contains("functions"));
-    FunctionDescriptionList methods = variables["functions"].value<FunctionDescriptionList>();
+    QVariantList methods = variables["functions"].toList();
     QCOMPARE(methods.size(), 2);
-    QCOMPARE(methods.first().name, QString("doSomething"));
-    QCOMPARE(methods.first().arguments.size(), 2);
-    QCOMPARE(methods.first().returnArguments.size(), 0);
-    QCOMPARE(methods.last().name, QString("getSomeOtherNumber"));
-    QCOMPARE(methods.last().arguments.size(), 0);
-    QCOMPARE(methods.last().returnArguments.size(), 1);
+    QCOMPARE(methods.first().value<FunctionDescription>().name, QString("doSomething"));
+    QCOMPARE(methods.first().value<FunctionDescription>().arguments.size(), 2);
+    QCOMPARE(methods.first().value<FunctionDescription>().returnArguments.size(), 0);
+    QCOMPARE(methods.last().value<FunctionDescription>().name, QString("getSomeOtherNumber"));
+    QCOMPARE(methods.last().value<FunctionDescription>().arguments.size(), 0);
+    QCOMPARE(methods.last().value<FunctionDescription>().returnArguments.size(), 1);
 }
 
 void TestTemplateClassGenerator::generate()
@@ -233,6 +222,7 @@ void TestTemplateClassGenerator::generate()
 void TestTemplateClassGenerator::cppOutput()
 {
     TemplateClassGenerator* generator = loadTemplate("test_cpp");
+    setLowercaseFileNames(generator);
     generator->generate().applyAllChanges();
 
     KUrl headerUrl = baseUrl;
@@ -257,6 +247,7 @@ void TestTemplateClassGenerator::cppOutput()
 void TestTemplateClassGenerator::yamlOutput()
 {
     TemplateClassGenerator* generator = loadTemplate("test_yaml");
+    setLowercaseFileNames(generator);
     generator->generate().applyAllChanges();
 
     KUrl yamlUrl = baseUrl;
@@ -291,8 +282,23 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
 
     generator->setDescription(description);
     generator->setIdentifier("ClassName");
+    generator->addBaseClass("public QObject");
     generator->setLicense("This is just a test.\nYou may do with it as you please.");
     return generator;
 }
+
+void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* generator)
+{
+    QHash<QString, KUrl> urls = generator->fileUrls();
+    QHash<QString, KUrl>::const_iterator it = urls.constBegin();
+    for (; it != urls.constEnd(); ++it)
+    {
+        QString fileName = it.value().fileName().toLower();
+        KUrl base = it.value().upUrl();
+        base.addPath(fileName);
+        generator->setFileUrl(it.key(), base);
+    }
+}
+
 
 QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)

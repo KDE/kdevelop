@@ -61,7 +61,9 @@ void TestTemplatesModel::cleanupTestCase()
 void TestTemplatesModel::descriptionExtraction()
 {
     QCOMPARE(model->rowCount(), 1);
-    QModelIndex testingCategoryIndex = model->index(0, 0);
+    QModelIndex classCategoryIndex = model->index(0, 0);
+    QCOMPARE(model->rowCount(classCategoryIndex), 1);
+    QModelIndex testingCategoryIndex = model->index(0, 0, classCategoryIndex);
     QCOMPARE(model->rowCount(testingCategoryIndex), 2);
 
     for (int i = 0; i < 2; ++i)
@@ -89,11 +91,12 @@ void TestTemplatesModel::descriptionParsing()
 void TestTemplatesModel::templateIndexes()
 {
     QModelIndexList indexes = model->templateIndexes(CODEGEN_TESTS_TEMPLATES_DIR "/test_yaml.tar.bz2");
-    QCOMPARE(indexes.size(), 3);
+    QCOMPARE(indexes.size(), 4);
     
-    QCOMPARE(model->data(indexes[0]).toString(), QString("Testing"));
-    QCOMPARE(model->data(indexes[1]).toString(), QString("YAML"));
-    QCOMPARE(model->data(indexes[2]).toString(), QString("Testing YAML template"));
+    QCOMPARE(model->data(indexes[0]).toString(), QString("Class"));
+    QCOMPARE(model->data(indexes[1]).toString(), QString("Testing"));
+    QCOMPARE(model->data(indexes[2]).toString(), QString("YAML"));
+    QCOMPARE(model->data(indexes[3]).toString(), QString("Testing YAML template"));
 }
 
 

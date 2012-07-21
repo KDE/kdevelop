@@ -59,6 +59,7 @@ private:
 private:
     KUrl baseUrl;
     KDevelop::ClassDescription description;
+    void setLowercaseFileNames(KDevelop::TemplateClassGenerator* generator);
 };
 
 
