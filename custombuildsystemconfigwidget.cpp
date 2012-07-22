@@ -38,6 +38,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
 
     connect( ui->addConfig, SIGNAL(clicked(bool)), SLOT(addConfig()));
     connect( ui->removeConfig, SIGNAL(clicked(bool)), SLOT(removeConfig()));
+
+    connect( this, SIGNAL(changed()), SLOT(verify()) );
 }
 
 void CustomBuildSystemConfigWidget::loadDefaults()
@@ -209,15 +211,14 @@ void CustomBuildSystemConfigWidget::configChanged()
 
 void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 {
-    if( idx == -1 ) {
-        ui->configWidget->setEnabled( false );
+    if( idx < 0 || idx >= configs.size() ) {
         ui->configWidget->clear();
+        emit changed();
         return;
     }
-    Q_ASSERT( idx >= 0 && idx < configs.size() );
-    ui->configWidget->setEnabled( true );
     CustomBuildSystemConfig cfg = configs.at( idx );
     ui->configWidget->loadConfig( cfg );
+    emit changed();
 }
 
 void CustomBuildSystemConfigWidget::addConfig()
@@ -241,6 +242,16 @@ void CustomBuildSystemConfigWidget::removeConfig()
     changeCurrentConfig( ui->currentConfig->currentIndex() );
 }
 
+void CustomBuildSystemConfigWidget::verify() {
+    Q_ASSERT( ui->currentConfig->count() == configs.count() );
+
+    bool hasAnyConfigurations = (configs.count() != 0);
+    bool configurationSelected = (ui->currentConfig->currentIndex() >= 0);
+    Q_ASSERT( !hasAnyConfigurations || configurationSelected );
+
+    ui->configWidget->setEnabled( hasAnyConfigurations );
+    ui->removeConfig->setEnabled( hasAnyConfigurations );
+}
 
 #include "custombuildsystemconfigwidget.moc"
 

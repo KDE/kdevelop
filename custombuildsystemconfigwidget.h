@@ -52,6 +52,7 @@ private slots:
     void changeCurrentConfig(int);
     void addConfig();
     void removeConfig();
+    void verify();
 private:
     void saveConfig( KConfigGroup& , CustomBuildSystemConfig& );
     Ui::CustomBuildSystemConfigWidget* ui;
