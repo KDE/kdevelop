@@ -44,6 +44,8 @@ struct CustomBuildSystemProjectPathConfig
     QString path;
     QStringList includes;
     QHash<QString,QVariant> defines;
+
+    CustomBuildSystemProjectPathConfig( const QString& c_path = QString() ) : path (c_path) {}
 };
 
 struct CustomBuildSystemConfig

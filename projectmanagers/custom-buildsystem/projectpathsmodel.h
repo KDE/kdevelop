@@ -37,10 +37,12 @@ public:
     enum SpecialRoles {
         IncludesDataRole = Qt::UserRole + 1,
         DefinesDataRole = Qt::UserRole + 2,
+        FullUrlDataRole = Qt::UserRole + 3
     };
     ProjectPathsModel( QObject* parent = 0 );
-    void setPaths( const QList<CustomBuildSystemProjectPathConfig>&  );
     void setProject( KDevelop::IProject* w_project );
+    void setPaths( const QList< CustomBuildSystemProjectPathConfig >& paths );
+    void addPath( const KUrl& url );
     QList<CustomBuildSystemProjectPathConfig> paths() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -50,6 +52,10 @@ public:
 private:
     QList<CustomBuildSystemProjectPathConfig> projectPaths;
     KDevelop::IProject* project;
+
+    void addPathInternal( const CustomBuildSystemProjectPathConfig& config, bool prepend );
+    QString sanitizePath( const QString& path, bool expectRelative = true, bool needRelative = true ) const;
+    QString sanitizeUrl( KUrl url, bool needRelative = true ) const;
 };
 
 #endif // PROJECTPATHSMODEL_H
