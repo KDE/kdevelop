@@ -81,7 +81,7 @@ public:
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
-    QString findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* ) const;
+    KConfigGroup findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* item ) const;
 private:
     KDevelop::OutputDelegate* m_delegate;
 };
