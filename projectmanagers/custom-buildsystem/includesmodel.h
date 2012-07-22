@@ -37,8 +37,10 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+    void addInclude( const QString& );
 private:
     QStringList m_includes;
+    void addIncludeInternal( const QString& includePath );
 };
 
 #endif // INCLUDESMODEL_H
