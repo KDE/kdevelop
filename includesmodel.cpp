@@ -93,8 +93,9 @@ QStringList IncludesModel::includes() const
 
 void IncludesModel::setIncludes(const QStringList& includes )
 {
+    beginResetModel();
     m_includes = includes;
-    reset();
+    endResetModel();
 }
 
 bool IncludesModel::removeRows( int row, int count, const QModelIndex& parent )

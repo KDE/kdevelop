@@ -115,8 +115,9 @@ QList< CustomBuildSystemProjectPathConfig > ProjectPathsModel::paths() const
 
 void ProjectPathsModel::setPaths(const QList< CustomBuildSystemProjectPathConfig >& paths )
 {
+    beginResetModel();
     projectPaths = paths;
-    this->reset();
+    endResetModel();
 }
 
 bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& parent )

@@ -132,11 +132,12 @@ QHash<QString,QVariant> DefinesModel::defines() const
 
 void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
 {
+    beginResetModel();
     m_defines.clear();
     foreach( const QString& k, includes.keys() ) {
         m_defines << qMakePair<QString,QVariant>( k, includes[k] );
     }
-    reset();
+    endResetModel();
 }
 
 bool DefinesModel::removeRows( int row, int count, const QModelIndex& parent )
