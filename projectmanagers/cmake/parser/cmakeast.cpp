@@ -1003,7 +1003,7 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FileAst::FileAst()
-    : m_newlineConsume(false), m_noHexConversion(false)
+    : m_newlineConsume(false), m_noHexConversion(false), m_isFollowingSymlinks(false)
 {
 }
 
