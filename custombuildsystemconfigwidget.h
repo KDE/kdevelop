@@ -50,6 +50,7 @@ signals:
 private slots:
     void configChanged();
     void changeCurrentConfig(int);
+    void renameCurrentConfig(const QString& name);
     void addConfig();
     void removeConfig();
     void verify();

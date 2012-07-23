@@ -60,6 +60,7 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
 
     connect( ui->addConfig, SIGNAL(clicked(bool)), SLOT(addConfig()));
     connect( ui->removeConfig, SIGNAL(clicked(bool)), SLOT(removeConfig()));
+    connect( ui->currentConfig, SIGNAL(editTextChanged(QString)), SLOT(renameCurrentConfig(QString)) );
 
     connect( this, SIGNAL(changed()), SLOT(verify()) );
 }
@@ -186,13 +187,7 @@ void CustomBuildSystemConfigWidget::configChanged()
 {
     int idx = ui->currentConfig->currentIndex();
     if( idx >= 0 && idx < configs.count() ) {
-        CustomBuildSystemConfig c = configs[ idx ];
-        CustomBuildSystemConfig updated = ui->configWidget->config();
-        // Only update the stuff thats configurable inside the configwidget, leave the grp and title alone
-        c.buildDir = updated.buildDir;
-        c.projectPaths = updated.projectPaths;
-        c.tools = updated.tools;
-        configs[ idx ] = c;
+        configs[idx] = ui->configWidget->config();
         emit changed();
     }
 }
@@ -212,7 +207,7 @@ void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 void CustomBuildSystemConfigWidget::addConfig()
 {
     CustomBuildSystemConfig c;
-    c.title = ui->currentConfig->currentText();
+    c.title = "";
     configs.append( c );
     ui->currentConfig->addItem( c.title );
     ui->currentConfig->setCurrentIndex( ui->currentConfig->count() - 1 );
@@ -239,6 +234,15 @@ void CustomBuildSystemConfigWidget::verify() {
 
     ui->configWidget->setEnabled( hasAnyConfigurations );
     ui->removeConfig->setEnabled( hasAnyConfigurations );
+    ui->currentConfig->setEditable( hasAnyConfigurations );
+}
+
+void CustomBuildSystemConfigWidget::renameCurrentConfig(const QString& name) {
+    int idx = ui->currentConfig->currentIndex();
+    if( idx >= 0 && idx < configs.count() ) {
+        ui->currentConfig->setItemText( idx, name );
+        emit changed();
+    }
 }
 
 
