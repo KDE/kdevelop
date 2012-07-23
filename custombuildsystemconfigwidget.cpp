@@ -53,7 +53,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         KConfigGroup subgrp = grp.group( grpName );
         CustomBuildSystemConfig config;
 
-        config.title = subgrp.readEntry( "Title", "" );
+        config.title = subgrp.readEntry( ConfigConstants::configTitleKey, "" );
         config.grpName = grpName;
         config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, "" );
 
