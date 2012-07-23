@@ -212,7 +212,7 @@ void ConfigWidget::definesChanged()
 {
     QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
     if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
+        bool b = pathsModel->setData( idx.first(), definesModel->defines(), ProjectPathsModel::DefinesDataRole );
         if( b ) {
             emit changed();
         }
@@ -223,7 +223,7 @@ void ConfigWidget::includesChanged()
 {
     QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
     if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), includesModel->includes(), ProjectPathsModel::SetIncludesRole );
+        bool b = pathsModel->setData( idx.first(), includesModel->includes(), ProjectPathsModel::IncludesDataRole );
         if( b ) {
             emit changed();
         }

@@ -32,8 +32,6 @@ public:
     enum SpecialRoles {
         IncludesDataRole = Qt::UserRole + 1,
         DefinesDataRole = Qt::UserRole + 2,
-        SetIncludesRole = Qt::UserRole + 3,
-        SetDefinesRole = Qt::UserRole + 4
     };
     ProjectPathsModel( QObject* parent = 0 );
     void setPaths( const QList<CustomBuildSystemProjectPathConfig>&  );

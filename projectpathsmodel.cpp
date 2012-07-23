@@ -65,7 +65,7 @@ int ProjectPathsModel::rowCount( const QModelIndex& parent ) const
 
 bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    if( !index.isValid() || ( role != Qt::EditRole && role != SetIncludesRole && role != SetDefinesRole ) ) {
+    if( !index.isValid() || ( role != Qt::EditRole && role != IncludesDataRole && role != DefinesDataRole ) ) {
         return false;
     }
     if( index.row() < 0 || index.row() >= rowCount() || index.column() != 0 ) {
@@ -82,10 +82,10 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         }
     } else {
         switch( role ) {
-            case SetIncludesRole:
+            case IncludesDataRole:
                 projectPaths[index.row()].includes = value.toStringList();
                 break;
-            case SetDefinesRole:
+            case DefinesDataRole:
                 projectPaths[index.row()].defines = value.toHash();
                 break;
             default:
