@@ -41,10 +41,14 @@ QVariant DefinesModel::data( const QModelIndex& index, int role ) const
     if( index.row() == m_defines.count() && index.column() == 0 ) {
         return i18n( "Double-Click here to insert a new define to be used for the path" );
     } else if( index.row() < m_defines.count() ) {
-        if( index.column() == 0 ) {
+        switch( index.column() ) {
+        case 0:
             return m_defines.at( index.row() ).first;
-        } else {
+        case 1:
             return m_defines.at( index.row() ).second;
+        default:
+            Q_ASSERT_X( 0, "DefinesModel::data", "Invalid column requested" );
+            break;
         }
     }
     return QVariant();
@@ -69,10 +73,14 @@ int DefinesModel::columnCount(const QModelIndex& parent) const
 QVariant DefinesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
-        if( section == 0 ) {
+        switch( section ) {
+        case 0:
             return i18n("Define");
-        } else if( section == 1 ) {
+        case 1:
             return i18n("Value");
+        default:
+            Q_ASSERT_X( 0, "DefinesModel::headerData", "Invalid column requested" );
+            break;
         }
     }
     return QVariant();
@@ -95,10 +103,16 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
             endInsertRows();
         }
     } else {
-        if( index.column() == 0 ) {
+        switch( index.column() ) {
+        case 0:
             m_defines[ index.row() ].first = value.toString();
-        } else {
+            break;
+        case 1:
             m_defines[ index.row() ].second = QVariant( value.toString() );
+            break;
+        default:
+            Q_ASSERT_X( 0, "DefinesModel::setData", "Invalid column requested" );
+            return false;
         }
         emit dataChanged( index, index );
         return true;
