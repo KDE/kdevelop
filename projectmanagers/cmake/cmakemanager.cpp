@@ -1729,7 +1729,7 @@ void CMakeManager::projectClosing(IProject* p)
     m_projectsData.remove(p); 
     
     QMutexLocker locker(&m_dirWatchersMutex);
-    m_watchers.remove(p);
+    delete m_watchers.take(p);
 }
 
 void CMakeManager::addDeleteItem(ProjectBaseItem* item)
