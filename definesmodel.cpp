@@ -64,10 +64,10 @@ int DefinesModel::rowCount( const QModelIndex& parent ) const
 
 int DefinesModel::columnCount(const QModelIndex& parent) const
 {
-    if( !parent.isValid() ) {
-        return 2;
+    if( parent.isValid() ) {
+        return 0;
     }
-    return 0;
+    return 2;
 }
 
 QVariant DefinesModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -97,7 +97,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
     }
 
     if( index.row() == m_defines.count() ) {
-        if( value.toString() != data( index ).toString() && index.column() == 0 ) {
+        if( index.column() == 0 && value != data(index) ) {
             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
             m_defines << qMakePair<QString,QVariant>( value.toString(), "" );
             endInsertRows();
