@@ -122,10 +122,10 @@ Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
 
 QHash<QString,QVariant> DefinesModel::defines() const
 {
+    typedef QPair<QString, QVariant> DefinePair;
     QHash<QString,QVariant> tmp;
-    QList<QPair<QString, QVariant> >::const_iterator it, end = m_defines.constEnd();
-    for( it = m_defines.constBegin() ; it != end; it++ ) {
-        tmp[(*it).first] = (*it).second;
+    foreach(const DefinePair& pair, m_defines) {
+        tmp[pair.first] = pair.second;
     }
     return tmp;
 }
