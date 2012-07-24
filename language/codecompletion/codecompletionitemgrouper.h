@@ -25,8 +25,8 @@
 
 #include "codecompletionmodel.h"
 #include "codecompletionitem.h"
-#include <duchain/duchain.h>
-#include <duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 
 namespace KDevelop {
 
