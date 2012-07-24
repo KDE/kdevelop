@@ -37,8 +37,10 @@ Comment[fi]=Luettelee ja käynnistää KDevelop-istuntoja
 Comment[ga]=Taispeáin agus tosaigh seisiúin KDevelop
 Comment[nl]=Maak een lijst van en start KDevelop sessies
 Comment[pl]=Wymień i uruchom sesje KDevelop
+Comment[pt_BR]=Listar e lançar sessões do KDevelop
 Comment[sv]=Lista och starta KDevelop-sessioner
 Comment[uk]=Показ списку і запуск сеансів KDevelop
+Comment[x-test]=xxList and launch KDevelop sessionsxx
 Comment[zh_TW]=列出並啟動 KDevelop 工作階段
 
 Type=Service
