@@ -635,7 +635,7 @@ Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
     Sublime::View* view = doc->createView();
     area->addToolView(
         view,
-        p == Sublime::Position::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
+        p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, SIGNAL(raise(Sublime::View*)),
             SLOT(raiseToolView(Sublime::View*)));
