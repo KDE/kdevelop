@@ -1926,8 +1926,9 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
         case GetCMakePropertyAst::CacheVariables:
             output = m_cache->keys();
             break;
-        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands yet
-            output = QStringList();
+        case GetCMakePropertyAst::Components:
+        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands or components yet
+            output = QStringList("NOTFOUND");
             break;
         case GetCMakePropertyAst::Macros:
             output = m_macros->keys();

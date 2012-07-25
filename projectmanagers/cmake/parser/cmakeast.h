@@ -360,7 +360,7 @@ CMAKE_END_AST_CLASS( ForeachAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
-    enum PropertyType { Variables, CacheVariables, Commands, Macros };
+    enum PropertyType { Variables, CacheVariables, Commands, Macros, Components };
 CMAKE_ADD_AST_MEMBER( PropertyType, type )
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )

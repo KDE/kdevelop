@@ -1662,6 +1662,8 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type=Commands;
     else if(type=="MACROS")
         m_type=Macros;
+    else if(type=="COMPONENTS")
+        m_type=Components;
     else
         return false;
     return true;
