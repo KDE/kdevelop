@@ -72,13 +72,13 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 {
     ui->configWidget->clear();
     ui->currentConfig->clear();
+    QStringList groupNameList;
     KConfigGroup grp = cfg->group( ConfigConstants::customBuildSystemGroup );
     foreach( const QString& grpName, grp.groupList() ) {
         KConfigGroup subgrp = grp.group( grpName );
         CustomBuildSystemConfig config;
 
         config.title = subgrp.readEntry( ConfigConstants::configTitleKey, "" );
-        config.grpName = grpName;
         config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, "" );
 
         foreach( const QString& subgrpName, subgrp.groupList() ) {
@@ -112,9 +112,13 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
             }
         }
         configs << config;
-        ui->currentConfig->addItem( config.title, config.grpName );
+        ui->currentConfig->addItem( config.title );
+        groupNameList << grpName;
     }
-    int idx = ui->currentConfig->findData( grp.readEntry( ConfigConstants::currentConfigKey, "" ) );
+    int idx = groupNameList.indexOf( grp.readEntry( ConfigConstants::currentConfigKey, "" ) );
+    if( !groupNameList.isEmpty() && idx < 0 )
+        idx = 0;
+
     ui->currentConfig->setCurrentIndex( idx );
     changeCurrentConfig( idx );
 }
@@ -125,6 +129,9 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
     KConfigGroup subgrp = grp.group( ConfigConstants::buildConfigPrefix + QString::number(index) );
     subgrp.deleteGroup();
 
+    // Write current configuration key, if our group is current
+    if( ui->currentConfig->currentIndex() == index )
+        grp.writeEntry( ConfigConstants::currentConfigKey, subgrp.name() );
 
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
     subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
@@ -165,10 +172,8 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* pr
     subgrp.deleteGroup();
     for( int i = 0; i < ui->currentConfig->count(); i++ ) {
         configs[i].title = ui->currentConfig->itemText(i);
-        ui->currentConfig->setItemData( i, configs[i].grpName );
         saveConfig( subgrp, configs[i], i );
     }
-    subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ) );
     cfg->sync();
 
     if ( KDevelop::IProjectController::parseAllProjectSources()) {

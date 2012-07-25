@@ -49,7 +49,6 @@ struct CustomBuildSystemProjectPathConfig
 struct CustomBuildSystemConfig
 {
     QString title;
-    QString grpName;
     KUrl buildDir;
     QVector<CustomBuildSystemTool> tools;
     QList<CustomBuildSystemProjectPathConfig> projectPaths;
