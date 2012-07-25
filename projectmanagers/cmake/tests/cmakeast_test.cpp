@@ -1667,7 +1667,6 @@ void CMakeAstTest::testFindLibraryBadParse_data()
 
 void CMakeAstTest::testFindPackageGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("find_package");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -1676,6 +1675,12 @@ void CMakeAstTest::testFindPackageGoodParse()
 
 void CMakeAstTest::testFindPackageGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "find_package";
+    l.addArguments(QString("PolkitQt-1 0.99.0 QUIET NO_MODULE PATHS /home/kde-devel/kde/lib/PolkitQt-1/cmake").split(' '));
+    QTest::newRow("complex") << l;
 }
 
 void CMakeAstTest::testFindPackageBadParse()
