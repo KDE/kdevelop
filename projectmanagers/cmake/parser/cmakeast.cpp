@@ -1264,6 +1264,8 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1281,7 +1283,7 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 

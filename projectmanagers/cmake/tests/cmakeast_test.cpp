@@ -1577,7 +1577,6 @@ void CMakeAstTest::testFileBadParse_data()
 
 void CMakeAstTest::testFindFileGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("find_file");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -1586,6 +1585,13 @@ void CMakeAstTest::testFindFileGoodParse()
 
 void CMakeAstTest::testFindFileGoodParse_data()
 {
+
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "find_file";
+    l.addArguments(QString("_SOPRANO_MACRO_FILE NAMES SopranoAddOntology.cmake HINTS /home/kde-devel/kde/share/soprano/cmake").split(' '));
+    QTest::newRow("find file") << l;
 }
 
 void CMakeAstTest::testFindFileBadParse()
