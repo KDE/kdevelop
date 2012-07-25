@@ -1404,7 +1404,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.constEnd();
 
     bool ret=true;
-    enum State { None, Components };
+    enum State { None, Components, Paths };
     State s=None;
     for(; it!=itEnd; ++it)
     {
@@ -1415,8 +1415,11 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_MODULE") m_noModule=true;
         else if(it->value=="REQUIRED") { m_isRequired=true; s=Components; }
         else if(it->value=="COMPONENTS") s=Components;
+        else if(it->value=="PATHS") s=Paths;
         else if(s==Components)
             m_components.append(it->value);
+        else if(s==Paths)
+            m_paths.append(it->value);
         else
             ret=false;
     }
