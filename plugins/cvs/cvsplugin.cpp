@@ -183,7 +183,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
 
     bool hasVersionControlledEntries = false;
     foreach(const KUrl &url, ctxUrlList) {
-        if (isVersionControlled(url)) {
+        if (d->m_proxy->isValidDirectory(url)) {
             hasVersionControlledEntries = true;
             break;
         }
@@ -276,7 +276,7 @@ QString CvsPlugin::findWorkingDir(const KUrl& location)
 
 bool CvsPlugin::isVersionControlled(const KUrl & localLocation)
 {
-    return d->m_proxy->isValidDirectory(localLocation);
+    return d->m_proxy->isVersionControlled(localLocation);
 }
 
 KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)

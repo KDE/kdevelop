@@ -54,6 +54,7 @@ public:
     ~CvsProxy();
 
     bool isValidDirectory(const KUrl &dirPath) const;
+    bool isVersionControlled(const KUrl& filePath) const;
 
     CvsJob* import(const KUrl& directory,
                 const QString & server, const QString& repositoryName,
