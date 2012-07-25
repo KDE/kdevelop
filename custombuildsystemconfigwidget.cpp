@@ -97,30 +97,12 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
     changeCurrentConfig( idx );
 }
 
-void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig& c )
+void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSystemConfig& c, int index )
 {
-    // First generate a groupname if none exists yet
-    if( c.grpName.isEmpty() ) {
-        int maxnum = 0;
-        foreach( const QString& grpname, cfg.groupList() ) {
-            int grpnum = grpname.mid( QString("BuildConifg").length() ).toInt();
-            if( grpnum >= maxnum ) {
-                maxnum = grpnum + 1;
-            }
-        }
-        c.grpName = QString("BuildConfig%1").arg( maxnum );
-    }
+    // Generate group name, access and clear it
+    KConfigGroup subgrp = grp.group( ConfigConstants::buildConfigPrefix + QString::number(index) );
+    subgrp.deleteGroup();
 
-    // then access the subgrp
-    KConfigGroup subgrp = cfg.group( c.grpName );
-
-    // Clear out all path-groups so we properly delete paths
-    // that were removed in the gui.
-    foreach( const QString& grpname, subgrp.groupList() ) {
-        if( grpname.startsWith( ConfigConstants::projectPathPrefix ) ) {
-            subgrp.deleteGroup( grpname );
-        }
-    }
 
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
     subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
@@ -156,9 +138,11 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
         toolgrp.writeEntry( ConfigConstants::toolExecutable, tool.executable );
         toolgrp.writeEntry( ConfigConstants::toolArguments, tool.arguments );
     }
-    for( int i = 0; i < c.projectPaths.count(); i++ ) {
-        KConfigGroup pathgrp = subgrp.group( QString("%1%2").arg( ConfigConstants::projectPathPrefix ).arg( i ) );
-        CustomBuildSystemProjectPathConfig path = c.projectPaths.at( i );
+
+    // Write paths
+    int pathIndex = 0;
+    foreach (const CustomBuildSystemProjectPathConfig& path, c.projectPaths) {
+        KConfigGroup pathgrp = subgrp.group( ConfigConstants::projectPathPrefix + QString::number(pathIndex++) );
         pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
         {
             QByteArray tmp;
@@ -180,10 +164,11 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
 void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* project )
 {
     KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
+    subgrp.deleteGroup();
     for( int i = 0; i < ui->currentConfig->count(); i++ ) {
         configs[i].title = ui->currentConfig->itemText(i);
-        saveConfig( subgrp, configs[i] );
         ui->currentConfig->setItemData( i, configs[i].grpName );
+        saveConfig( subgrp, configs[i], i );
     }
     subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ) );
     cfg->sync();

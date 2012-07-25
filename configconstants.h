@@ -24,6 +24,7 @@
 
 namespace ConfigConstants
 {
+    const QString buildConfigPrefix("BuildConfig");
     const QString buildDirKey("BuildDir");
     const QString currentConfigKey("CurrentConfiguration");
     const QString definesKey("Defines");
