@@ -55,6 +55,9 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->addConfig->setIcon(KIcon( "list-add" ));
+    ui->removeConfig->setIcon(KIcon( "list-remove" ));
+
     connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
     connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
 
