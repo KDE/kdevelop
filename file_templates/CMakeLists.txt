@@ -9,8 +9,8 @@ set(filetemplate_DIRS
     classes/c_gobject_properties
     
     testing/cpp_qtestlib
-    testing/cpp_qtestlib_kde
-    testing/cpp_qtestlib_kdevelop
+#    testing/cpp_qtestlib_kde
+#    testing/cpp_qtestlib_kdevelop
     testing/python_pyunit
 )
 
