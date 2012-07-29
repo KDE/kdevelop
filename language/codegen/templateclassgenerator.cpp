@@ -115,8 +115,6 @@ void TemplateClassGenerator::setTemplateDescription (const QString& templateDesc
 
 DocumentChangeSet TemplateClassGenerator::generate()
 {
-    Q_ASSERT(d->archive);
-
     DocumentChangeSet changes = d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
 
     addToTarget();
