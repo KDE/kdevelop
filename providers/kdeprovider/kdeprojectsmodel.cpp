@@ -41,8 +41,8 @@ QVariant SourceItem::data(int role) const
     }
 }
 
-Source::Source(const QString& anIcon, const QString& aName, const QPair<QString, QString>& aUrl)
-    : name(aName), icon(anIcon)
+Source::Source(const SourceType& aType, const QString& anIcon, const QString& aName, const QPair<QString, QString>& aUrl)
+    : type(aType), name(aName), icon(anIcon)
 {
     m_urls[aUrl.first] = aUrl.second;
 }
