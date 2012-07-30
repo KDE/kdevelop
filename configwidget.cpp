@@ -96,15 +96,7 @@ CustomBuildSystemConfig ConfigWidget::config() const
 {
     CustomBuildSystemConfig c;
     c.buildDir = ui->buildDir->url();
-    for( int i = 0; i < ui->buildAction->count(); i++ ) {
-        QVariant data = ui->buildAction->itemData( i );
-        CustomBuildSystemTool t;
-        if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-            t = data.value<CustomBuildSystemTool>();
-        }
-        Q_ASSERT( t.type != CustomBuildSystemTool::Undefined );
-        c.tools[ CustomBuildSystemTool::ActionType( i ) ] = t;
-    }
+    c.tools = m_tools;
     c.projectPaths = pathsModel->paths();
     return c;
 }
@@ -113,99 +105,69 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
 {
     bool b = blockSignals( true );
     ui->buildDir->setUrl( cfg.buildDir );
-    fillTools( cfg.tools );
+    m_tools = cfg.tools;
     pathsModel->setPaths( cfg.projectPaths );
     blockSignals( b );
 }
 
-void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools)
+void ConfigWidget::setTool(const CustomBuildSystemTool& tool)
 {
-    for( int i = 0; i < ui->buildAction->count(); i++ ) {
-        QHash< CustomBuildSystemTool::ActionType, CustomBuildSystemTool>::const_iterator it = tools.find( CustomBuildSystemTool::ActionType( i ) );
-        CustomBuildSystemTool t;
-        t.type = CustomBuildSystemTool::ActionType( i );
-        t.enabled = false;
-        if( it != tools.end() ) {
-            t = *it;
-        }
-        Q_ASSERT( t.type != CustomBuildSystemTool::Undefined );
-        Q_ASSERT( t.type == CustomBuildSystemTool::ActionType( i ) );
-        ui->buildAction->setItemData( i, QVariant::fromValue<CustomBuildSystemTool>( t ) );
-    }
-    ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
-    changeAction( ui->buildAction->currentIndex() );
+    bool b = ui->enableAction->blockSignals( true );
+    ui->enableAction->setChecked( tool.enabled );
+    ui->enableAction->blockSignals( b );
+
+    ui->actionArguments->setText( tool.arguments );
+    ui->actionArguments->setEnabled( tool.enabled );
+    ui->actionExecutable->setUrl( tool.executable );
+    ui->actionExecutable->setEnabled( tool.enabled );
+    ui->actionEnvironment->setCurrentProfile( tool.envGrp );
+    ui->actionEnvironment->setEnabled( tool.enabled );
+    ui->execLabel->setEnabled( tool.enabled );
+    ui->argLabel->setEnabled( tool.enabled );
+    ui->envLabel->setEnabled( tool.enabled );
 }
 
 void ConfigWidget::changeAction( int idx )
 {
-    Q_ASSERT( idx >= 0 && idx < ui->buildAction->count() );
-
-    QVariant data = ui->buildAction->itemData( idx );
-    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
-        bool b = ui->enableAction->blockSignals( true );
-        ui->enableAction->setChecked( t.enabled );
-        ui->enableAction->blockSignals( b );
-
-        ui->actionArguments->setText( t.arguments );
-        ui->actionArguments->setEnabled( t.enabled );
-        ui->actionExecutable->setUrl( t.executable );
-        ui->actionExecutable->setEnabled( t.enabled );
-        ui->actionEnvironment->setCurrentIndex( ui->actionEnvironment->findText( t.envGrp ) );
-        ui->actionEnvironment->setEnabled( t.enabled );
-        ui->execLabel->setEnabled( t.enabled );
-        ui->argLabel->setEnabled( t.enabled );
-        ui->envLabel->setEnabled( t.enabled );
+    if (idx < 0 || idx >= m_tools.count() ) {
+        CustomBuildSystemTool emptyTool;
+        emptyTool.type = CustomBuildSystemTool::Build;
+        emptyTool.enabled = false;
+        setTool(emptyTool);
+    } else {
+        CustomBuildSystemTool& selectedTool = m_tools[idx];
+        setTool(selectedTool);
     }
 }
 
 void ConfigWidget::toggleActionEnablement( bool enable )
 {
-    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
-    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
-        t.enabled = enable;
-        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
-        emit changed();
-    }
+    m_tools[ ui->buildAction->currentIndex() ].enabled = enable;
+    emit changed();
 }
 
 void ConfigWidget::actionArgumentsEdited( const QString& txt )
 {
-    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
-    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
-        t.arguments = txt;
-        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
-        emit changed();
-    }
+    m_tools[ ui->buildAction->currentIndex() ].arguments = txt;
+    emit changed();
 }
 
 void ConfigWidget::actionEnvironmentChanged( int )
 {
-    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
-    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
-        t.envGrp = ui->actionEnvironment->currentProfile();
-        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
-        emit changed();
-    }
+    m_tools[ ui->buildAction->currentIndex() ].envGrp = ui->actionEnvironment->currentProfile();
+    emit changed();
 }
 
 void ConfigWidget::actionExecutableChanged( const KUrl& url )
 {
-    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
-    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
-        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
-        t.executable = url;
-        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
-        emit changed();
-    }
+    m_tools[ ui->buildAction->currentIndex() ].executable = url.toLocalFile();
+    emit changed();
 }
 
 void ConfigWidget::actionExecutableChanged(const QString& txt )
 {
-    actionExecutableChanged( KUrl( txt ) );
+    m_tools[ ui->buildAction->currentIndex() ].executable = txt;
+    emit changed();
 }
 
 void ConfigWidget::definesChanged()
@@ -251,11 +213,6 @@ void ConfigWidget::clear()
     pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
     includesModel->setIncludes( QStringList() );
     definesModel->setDefines( QHash<QString,QVariant>() );
-    for( int i = 0; i < ui->buildAction->count(); i++ ) {
-        CustomBuildSystemTool t;
-        t.type = CustomBuildSystemTool::ActionType( i );
-        ui->buildAction->setItemData( i, QVariant::fromValue( t ) );
-    }
     ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
     changeAction( ui->buildAction->currentIndex() );
     ui->buildDir->setText("");

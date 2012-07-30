@@ -68,7 +68,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
                 tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, "default" );
                 tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
-                config.tools.insert( tool.type, tool );
+                config.tools[tool.type] = tool;
             } else if( subgrpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
                 KConfigGroup pathgrp = subgrp.group( subgrpName );
                 CustomBuildSystemProjectPathConfig path;
@@ -124,7 +124,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
 
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
     subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
-    foreach( const CustomBuildSystemTool& tool, c.tools.values() ) {
+    foreach( const CustomBuildSystemTool& tool, c.tools ) {
         KConfigGroup toolgrp;
         switch( tool.type ) {
             case CustomBuildSystemTool::Build: {

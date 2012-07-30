@@ -21,9 +21,9 @@
 #define CUSTOMBUILDSYSTEMCONFIG_H
 
 #include <QMap>
+#include <QVector>
 #include <QList>
 #include <QStringList>
-#include <QHash>
 #include <KUrl>
 
 struct CustomBuildSystemTool
@@ -51,8 +51,18 @@ struct CustomBuildSystemConfig
     QString title;
     QString grpName;
     KUrl buildDir;
-    QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool> tools;
+    QVector<CustomBuildSystemTool> tools;
     QList<CustomBuildSystemProjectPathConfig> projectPaths;
+
+    CustomBuildSystemConfig()
+    {
+        for (int i = CustomBuildSystemTool::Build; i < CustomBuildSystemTool::Undefined; ++i) {
+            CustomBuildSystemTool tool;
+            tool.type = CustomBuildSystemTool::ActionType(i);
+            tool.enabled = false;
+            tools << tool;
+        }
+    }
 };
 
 #endif

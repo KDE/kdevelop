@@ -59,11 +59,12 @@ private slots:
     void deleteIncludePath();
     void deleteProjectPath();
 private:
-    void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;
     ProjectPathsModel* pathsModel;
     IncludesModel* includesModel;
     DefinesModel* definesModel;
+    QVector<CustomBuildSystemTool> m_tools;
+    void setTool (const CustomBuildSystemTool& tool);
 };
 
 #endif
