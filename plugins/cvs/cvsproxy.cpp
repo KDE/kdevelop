@@ -36,7 +36,7 @@ CvsProxy::~CvsProxy()
 {
 }
 
-bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
+bool CvsProxy::isValidDirectory(KUrl dirPath) const
 {
     QFileInfo fsObject( dirPath.toLocalFile() );
     if( !fsObject.isDir() )
@@ -47,7 +47,7 @@ bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
     return fsObject.exists();
 }
 
-bool CvsProxy::isVersionControlled(const KUrl& filePath) const
+bool CvsProxy::isVersionControlled(KUrl filePath) const
 {
     QFileInfo fsObject( filePath.toLocalFile() );
     if( !fsObject.isDir() )
