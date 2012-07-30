@@ -100,12 +100,13 @@ void IncludesModel::setIncludes(const QStringList& includes )
 
 bool IncludesModel::removeRows( int row, int count, const QModelIndex& parent )
 {
-    if( row >= 0 && count > 0 && row < rowCount() - 1 ) {
+    if( row >= 0 && count > 0 && row < m_includes.count() ) {
         beginRemoveRows( parent, row, row + count - 1 );
-        for( int i = row + count - 1; i >= row; i-- ) {
-            m_includes.removeAt( i );
+        for( int i = 0; i < count; ++i ) {
+            m_includes.removeAt( row );
         }
         endRemoveRows();
+        return true;
     }
     return false;
 }
