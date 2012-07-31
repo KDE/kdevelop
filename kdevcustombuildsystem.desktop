@@ -29,6 +29,7 @@ Name[zh_CN]=自定义构建系统
 Name[zh_TW]=自訂編譯系統
 Comment=Allows to use custom buildsystems for KDevelop projects
 Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop
+Comment[et]=Võimaldab kasutada KDevelopi projektide puhul kohandatud ehitamissüsteemi
 Comment[hu]=Lehetővé teszi egyéni fordítórendszerek használatát a KDevelop projektekhez
 Comment[it]=Permette di usare sistemi di compilazione personalizzati per i progetti di KDevelop
 Comment[nl]=Staat toe eigengemaakte bouwsystemen voor projecten van KDevelop te gebruiken

@@ -38,6 +38,7 @@ Name[zh_CN]=自定义构建系统
 Name[zh_TW]=自訂編譯系統
 Comment=Configure a projects custom build tool and includes/defines for the language support.
 Comment[es]=Configurar una herramienta de construcción personalizada de proyecto e includes y defines para el lenguaje.
+Comment[et]=Projektide kohandatud ehitamistööriista ning keeletoetuseks vajalike päiste ja definitsioonide seadistamine.
 Comment[hu]=A projektek egyéni fordítóeszközének beállítása és tartalmazása/meghatározása a nyelvi támogatáshoz.
 Comment[it]=Configura uno strumento di compilazione personalizzato per i progetti e le direttive include/define per il supporto linguistico.
 Comment[nl]=Stel een eigengemaakt hulpmiddel in en wat ingevoegd/gedefinieerd moet worden voor de taalondersteuning.
