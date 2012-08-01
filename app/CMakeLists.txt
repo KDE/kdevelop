@@ -27,12 +27,11 @@ target_link_libraries(kdevelop
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
-    ${KDE4_PLASMA_LIBS}
 
     ${QT_QTDECLARATIVE_LIBRARIES}
 )
 if(KDECLARATIVE_FOUND)
-    target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY})
+    target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY} ${KDE4_PLASMA_LIBS})
 endif(KDECLARATIVE_FOUND)
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
