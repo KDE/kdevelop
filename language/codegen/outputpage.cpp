@@ -41,11 +41,12 @@ struct OutputPagePrivate
     QHash<QString, KUrlRequester*> outputFiles;
     QHash<QString, KIntNumInput*> outputLines;
     QHash<QString, KIntNumInput*> outputColumns;
+    QList<QLabel*> labels;
 
     QHash<QString, KUrl> defaultUrls;
     QHash<QString, KUrl> lowerCaseUrls;
     QStringList fileIdentifiers;
-    
+
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
 
@@ -69,6 +70,36 @@ OutputPage::OutputPage(QWidget* parent)
 
 void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, TemplateRenderer* renderer)
 {
+    // First clear any existing file configurations
+    // This can happen when going back and forth between assistant pages
+    d->fileIdentifiers.clear();
+    d->defaultUrls.clear();
+    d->lowerCaseUrls.clear();
+
+    while (d->output->urlFormLayout->count() > 0)
+    {
+        d->output->urlFormLayout->takeAt(0);
+    }
+    while (d->output->positionFormLayout->count() > 0)
+    {
+        d->output->positionFormLayout->takeAt(0);
+    }
+
+    foreach (KUrlRequester* req, d->outputFiles)
+    {
+        d->urlChangedMapper.removeMappings(req);
+    }
+
+    qDeleteAll(d->outputFiles);
+    qDeleteAll(d->outputLines);
+    qDeleteAll(d->outputColumns);
+    qDeleteAll(d->labels);
+
+    d->outputFiles.clear();
+    d->outputLines.clear();
+    d->outputColumns.clear();
+    d->labels.clear();
+
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup codegenGroup( config, "CodeGeneration" );
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
@@ -85,8 +116,9 @@ void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const
         url = baseUrl;
         url.addPath(renderer->render(file.outputName).toLower());
         d->lowerCaseUrls.insert(file.identifier, url);
-        
+
         QLabel* label = new QLabel(file.label, this);
+        d->labels << label;
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
         requester->fileDialog()->setOperationMode( KFileDialog::Saving );
@@ -98,6 +130,7 @@ void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const
         d->outputFiles.insert(file.identifier, requester);
 
         label = new QLabel(file.label, this);
+        d->labels << label;
         QHBoxLayout* layout = new QHBoxLayout(this);
 
         KIntNumInput* line = new KIntNumInput(this);
