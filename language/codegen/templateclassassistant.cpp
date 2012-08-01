@@ -217,7 +217,7 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->outputPage)
     {
-        d->outputPageWidget->loadFileTemplate(d->fileTemplate, d->baseUrl, static_cast<TemplateClassGenerator*>(d->generator)->renderer());
+        d->outputPageWidget->loadFileTemplate(d->fileTemplate, d->baseUrl, d->generator->renderer());
     }
 }
 
