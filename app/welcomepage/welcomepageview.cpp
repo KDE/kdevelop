@@ -34,6 +34,7 @@
 
 #include <kdeclarative.h>
 #include <KDebug>
+#include <Plasma/Theme>
 #include <qdeclarative.h>
 
 using namespace KDevelop;
@@ -45,6 +46,9 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
+    
+    Plasma::Theme::defaultTheme()->setUseGlobalSettings(false); //don't change every plasma theme!
+    Plasma::Theme::defaultTheme()->setThemeName("appdashboard");
 
     //setup kdeclarative library
     KDeclarative kdeclarative;
