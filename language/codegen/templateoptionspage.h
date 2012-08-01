@@ -28,6 +28,8 @@
 namespace KDevelop
 {
 
+class TemplateRenderer;
+
 class SourceFileTemplate;
 
 class TemplateClassAssistant;
@@ -63,7 +65,7 @@ public:
      *
      * @param contents the file contents
      **/
-    void load(const SourceFileTemplate& fileTemplate);
+    void load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer);
     /**
      * @property templateOptions
      * 

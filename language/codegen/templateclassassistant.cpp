@@ -212,7 +212,7 @@ void TemplateClassAssistant::next()
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
-        d->templateOptionsPageWidget->load(d->fileTemplate);
+        d->templateOptionsPageWidget->load(d->fileTemplate, d->generator->renderer());
     }
     else if (currentPage() == d->outputPage)
     {

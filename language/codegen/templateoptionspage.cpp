@@ -56,8 +56,6 @@ public:
     QHash<QString, QByteArray> typeProperties;
 
     ConfigEntry readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout);
-
-    TemplateClassGenerator* generator;
 };
 
 
@@ -78,10 +76,10 @@ TemplateOptionsPage::~TemplateOptionsPage()
     delete d;
 }
 
-void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate)
+void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
 {
     QLayout* layout = new QVBoxLayout();
-    QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(d->generator->renderer());
+    QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(renderer);
     QHash<QString, QList<SourceFileTemplate::ConfigOption> >::const_iterator it;
 
     for (it = options.constBegin(); it != options.constEnd(); ++it)
