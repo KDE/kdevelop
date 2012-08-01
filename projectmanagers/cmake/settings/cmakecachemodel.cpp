@@ -43,9 +43,11 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
 
 void CMakeCacheModel::reset()
 {
+    emit beginResetModel();
     clear();
     m_internal.clear();
     read();
+    emit endResetModel();
 }
 
 void CMakeCacheModel::read()
