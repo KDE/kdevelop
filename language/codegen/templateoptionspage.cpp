@@ -35,37 +35,18 @@
 
 using namespace KDevelop;
 
-struct ConfigEntry
-{
-    QString name;
-    QString label;
-    QVariant value;
-    QString context;
-
-    QString maxValue;
-    QString minValue;
-    QString type;
-};
-
 class KDevelop::TemplateOptionsPagePrivate
 {
 public:
-    TemplateClassAssistant* assistant;
-    QList<ConfigEntry> entries;
+    QList<SourceFileTemplate::ConfigOption> entries;
     QHash<QString, QWidget*> controls;
     QHash<QString, QByteArray> typeProperties;
-
-    ConfigEntry readEntry(const QDomElement& element, QWidget* parent, QFormLayout* layout);
 };
 
-
-
-TemplateOptionsPage::TemplateOptionsPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
+TemplateOptionsPage::TemplateOptionsPage(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , d(new TemplateOptionsPagePrivate)
 {
-    d->assistant = parent;
-
     d->typeProperties.insert("String", "text");
     d->typeProperties.insert("Int", "value");
     d->typeProperties.insert("Bool", "checked");
@@ -78,6 +59,8 @@ TemplateOptionsPage::~TemplateOptionsPage()
 
 void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
 {
+    d->entries.clear();
+
     QLayout* layout = new QVBoxLayout();
     QHash<QString, QList<SourceFileTemplate::ConfigOption> > options = fileTemplate.customOptions(renderer);
     QHash<QString, QList<SourceFileTemplate::ConfigOption> >::const_iterator it;
@@ -88,6 +71,8 @@ void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate, Template
         box->setTitle(it.key());
 
         QFormLayout* formLayout = new QFormLayout;
+
+        d->entries << it.value();
         foreach (const SourceFileTemplate::ConfigOption& entry, it.value())
         {
             QLabel* label = new QLabel(entry.label, box);
@@ -137,7 +122,7 @@ QVariantHash TemplateOptionsPage::templateOptions() const
 {
     QVariantHash values;
 
-    foreach (const ConfigEntry& entry, d->entries)
+    foreach (const SourceFileTemplate::ConfigOption& entry, d->entries)
     {
         Q_ASSERT(d->controls.contains(entry.name));
         Q_ASSERT(d->typeProperties.contains(entry.type));

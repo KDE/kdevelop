@@ -54,7 +54,7 @@ public:
      * @param parent the parent template class assistant
      * @param f window flags, passed to QWidget
      **/
-    explicit TemplateOptionsPage (TemplateClassAssistant* parent, Qt::WindowFlags f = 0);
+    explicit TemplateOptionsPage (QWidget* parent, Qt::WindowFlags f = 0);
     /**
      * Destructor
      **/

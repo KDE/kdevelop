@@ -34,6 +34,7 @@
 #include "interfaces/ilanguagecontroller.h"
 #include "interfaces/ilanguagesupport.h"
 #include "interfaces/ilanguage.h"
+#include "interfaces/idocumentcontroller.h"
 #include "interfaces/icreateclasshelper.h"
 
 #include <KLocalizedString>
@@ -168,6 +169,11 @@ void TemplateClassAssistant::next()
             d->templateOptionsPageWidget = new TemplateOptionsPage(this);
             d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget, i18n("Template Options"));
         }
+        else
+        {
+            d->templateOptionsPage = 0;
+            d->templateOptionsPageWidget = 0;
+        }
 
         d->outputPageWidget->prepareForm(d->fileTemplate);
     }
@@ -197,6 +203,10 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->licensePage)
     {
         d->generator->setLicense(d->licensePageWidget->license());
+    }
+    else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
+    {
+        d->generator->addVariables(d->templateOptionsPageWidget->templateOptions());
     }
 
     KAssistantDialog::next();
