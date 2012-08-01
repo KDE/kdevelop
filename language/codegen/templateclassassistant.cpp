@@ -28,6 +28,7 @@
 #include "overridespage.h"
 #include "licensepage.h"
 #include "outputpage.h"
+#include "documentchangeset.h"
 
 #include "interfaces/icore.h"
 #include "interfaces/ilanguagecontroller.h"
@@ -234,6 +235,9 @@ void TemplateClassAssistant::back()
 
 void TemplateClassAssistant::accept()
 {
+    DocumentChangeSet changes = d->generator->generate();
+    changes.applyAllChanges();
+
     KAssistantDialog::accept();
 }
 
