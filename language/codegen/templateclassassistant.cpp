@@ -161,14 +161,11 @@ void TemplateClassAssistant::next()
 
         d->generator->setTemplateDescription(description);
 
-        ClassMembersPage* membersPage = new ClassMembersPage(this);
-        d->membersPage = addPage(membersPage, i18n("Data Members"));
-
         if (d->generator->sourceFileTemplate()->hasCustomOptions())
         {
             kDebug() << "Class generator has custom options";
-            TemplateOptionsPage* options = new TemplateOptionsPage(this);
-            d->templateOptionsPage = addPage(options, i18n("Template Options"));
+            d->templateOptionsPageWidget = new TemplateOptionsPage(this);
+            d->templateOptionsPage = insertPage(d->membersPage, d->templateOptionsPageWidget, i18n("Template Options"));
         }
 
         d->outputPageWidget->prepareForm(d->fileTemplate);
