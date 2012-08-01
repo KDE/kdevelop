@@ -248,6 +248,11 @@ void TemplateClassAssistant::accept()
     DocumentChangeSet changes = d->generator->generate();
     changes.applyAllChanges();
 
+    foreach (const KUrl& url, d->generator->fileUrls())
+    {
+        ICore::self()->documentController()->openDocument(url);
+    }
+
     KAssistantDialog::accept();
 }
 
