@@ -183,6 +183,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     file.addPath("CMakeCache.txt");
     if(QFile::exists(file.toLocalFile()))
     {
+        m_currentModel->deleteLater();
         m_currentModel=new CMakeCacheModel(this, file);
         m_prefsUi->cacheList->setModel(m_currentModel);
         m_prefsUi->cacheList->hideColumn(1);
