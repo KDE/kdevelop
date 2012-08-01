@@ -124,6 +124,7 @@ void TemplateClassAssistant::setup()
 
     setValid(d->classIdentifierPage, false);
     setValid(d->overridesPage, true);
+    setValid(d->membersPage, true);
     setValid(d->licensePage, true);
     setValid(d->outputPage, false);
     showButton(KDialog::Help, false);
