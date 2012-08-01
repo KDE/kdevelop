@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 4 )
 set( KDEVELOP_VERSION_MINOR 3 )
-set( KDEVELOP_VERSION_PATCH 70 )
+set( KDEVELOP_VERSION_PATCH 80 )
 
 set(KDE_MIN_VERSION "4.5.0")
 find_package(KDE4 4.5.0 REQUIRED)
@@ -25,7 +25,7 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-find_package(KDevPlatform 1.3.60 REQUIRED)
+find_package(KDevPlatform 1.3.80 REQUIRED)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
