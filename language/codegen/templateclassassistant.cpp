@@ -165,7 +165,7 @@ void TemplateClassAssistant::next()
         {
             kDebug() << "Class generator has custom options";
             d->templateOptionsPageWidget = new TemplateOptionsPage(this);
-            d->templateOptionsPage = insertPage(d->membersPage, d->templateOptionsPageWidget, i18n("Template Options"));
+            d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget, i18n("Template Options"));
         }
 
         d->outputPageWidget->prepareForm(d->fileTemplate);
