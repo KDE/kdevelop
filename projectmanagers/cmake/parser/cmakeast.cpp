@@ -113,6 +113,7 @@ CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
 CMAKE_REGISTER_AST( UseMangledMesaAst, use_mangled_mesa )
 CMAKE_REGISTER_AST( UtilitySourceAst, utility_source )
+CMAKE_REGISTER_AST( UnsetAst, unset )
 CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
 CMAKE_REGISTER_AST( WhileAst, while)
 CMAKE_REGISTER_AST( WriteFileAst, write_file)
@@ -3372,6 +3373,29 @@ bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_fileList.append(arg.value);
     }
     return true;
+}
+
+UnsetAst::UnsetAst()
+{
+}
+
+UnsetAst::~UnsetAst()
+{
+}
+
+
+bool UnsetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="unset" || func.arguments.count()<1 || func.arguments.count()>2)
+        return false;
+    m_variableName = func.arguments.first().value;
+    addOutputArgument(func.arguments.first());
+    m_cache = func.arguments.count()==2 && func.arguments.last().value=="CACHE";
+    m_env = m_variableName.startsWith("ENV{");
+    if(m_env) {
+        m_variableName = m_variableName.mid(4, -2);
+    }
+    return func.arguments.count()==1 || (m_cache && !m_env);
 }
 
 VariableRequiresAst::VariableRequiresAst()

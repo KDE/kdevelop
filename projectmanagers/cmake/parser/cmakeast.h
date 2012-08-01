@@ -628,6 +628,11 @@ CMAKE_ADD_AST_MEMBER( QString, documentation )
 CMAKE_ADD_AST_MEMBER( bool, parentScope )
 CMAKE_END_AST_CLASS( SetAst )
 
+CMAKE_BEGIN_AST_CLASS( UnsetAst )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( bool, cache )
+CMAKE_ADD_AST_MEMBER( bool, env )
+CMAKE_END_AST_CLASS( SetAst )
 
 CMAKE_BEGIN_AST_CLASS( SetDirectoryPropsAst )
     typedef QPair<QString, QString> PropPair;

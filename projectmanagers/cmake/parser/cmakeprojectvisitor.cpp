@@ -476,6 +476,20 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     return 1;
 }
 
+int CMakeProjectVisitor::visit(const UnsetAst* unset)
+{
+    if(unset->env()) {
+        qDebug() << "error! can't unset the env var: " << unset->variableName();
+    } else {
+        m_vars->remove(unset->variableName());
+        if(unset->cache()) {
+            qDebug() << "error! can't unset the cached var: " << unset->variableName();
+        }
+    }
+    kDebug(9042) << "unset variable:" << unset->variableName();
+    return 1;
+}
+
 int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 {
     kDebug(9042) << "adding include directories" << dirs->includedDirectories();

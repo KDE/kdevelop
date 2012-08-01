@@ -3989,6 +3989,55 @@ void CMakeAstTest::testTryRunBadParse_data()
 
 
 
+void CMakeAstTest::testUnsetGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("unset");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testUnsetGoodParse_data()
+{
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc l;
+    l.name = "unset";
+    l.addArguments(QStringList("HOLA"));
+    QTest::newRow("a") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "HOLA" << "CACHE");
+    QTest::newRow("a cache") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "ENV{HOLA}");
+    QTest::newRow("env{a}") << l;
+}
+
+void CMakeAstTest::testUnsetBadParse()
+{
+    TDD_TODO;
+    QFETCH( CMakeFunctionDesc, function );
+    UnsetAst* ast = (UnsetAst*) AstFactory::self()->createAst("unset");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    QVERIFY( QRegExp("[A-Z]*").exactMatch(ast->variableName()) );
+    delete ast;
+}
+
+void CMakeAstTest::testUnsetBadParse_data()
+{
+}
+
+
+
+
+
+
+
+
+
+
 void CMakeAstTest::testUseMangledMesaGoodParse()
 {
     TDD_TODO;
