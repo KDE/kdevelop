@@ -68,7 +68,7 @@ OutputPage::OutputPage(QWidget* parent)
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
 }
 
-void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, TemplateRenderer* renderer)
+void OutputPage::prepareForm (const SourceFileTemplate& fileTemplate)
 {
     // First clear any existing file configurations
     // This can happen when going back and forth between assistant pages
@@ -100,22 +100,9 @@ void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const
     d->outputColumns.clear();
     d->labels.clear();
 
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
-    bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
-    d->output->lowerFilenameCheckBox->setChecked(lower);
-
     foreach (const SourceFileTemplate::OutputFile& file, fileTemplate.outputFiles())
     {
         d->fileIdentifiers << file.identifier;
-
-        KUrl url = baseUrl;
-        url.addPath(renderer->render(file.outputName));
-        d->defaultUrls.insert(file.identifier, url);
-
-        url = baseUrl;
-        url.addPath(renderer->render(file.outputName).toLower());
-        d->lowerCaseUrls.insert(file.identifier, url);
 
         QLabel* label = new QLabel(file.label, this);
         d->labels << label;
@@ -148,6 +135,27 @@ void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const
         d->output->positionFormLayout->addRow(label, layout);
         d->outputLines.insert(file.identifier, line);
         d->outputColumns.insert(file.identifier, column);
+    }
+}
+
+void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, TemplateRenderer* renderer)
+{
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
+    d->output->lowerFilenameCheckBox->setChecked(lower);
+
+    foreach (const SourceFileTemplate::OutputFile& file, fileTemplate.outputFiles())
+    {
+        d->fileIdentifiers << file.identifier;
+
+        KUrl url = baseUrl;
+        url.addPath(renderer->render(file.outputName));
+        d->defaultUrls.insert(file.identifier, url);
+
+        url = baseUrl;
+        url.addPath(renderer->render(file.outputName).toLower());
+        d->lowerCaseUrls.insert(file.identifier, url);
     }
 
     updateFileNames();

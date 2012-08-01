@@ -40,6 +40,7 @@ public:
     OutputPage(QWidget* parent);
     virtual ~OutputPage();
 
+    void prepareForm(const KDevelop::SourceFileTemplate& fileTemplate);
     void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, KDevelop::TemplateRenderer* renderer);
 
     QHash<QString, KUrl> fileUrls() const;

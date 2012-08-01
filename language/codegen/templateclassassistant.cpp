@@ -158,7 +158,7 @@ void TemplateClassAssistant::next()
             kDebug() << "No generator for language" << languageName;
             return;
         }
-        
+
         d->generator->setTemplateDescription(description);
 
         ClassMembersPage* membersPage = new ClassMembersPage(this);
@@ -170,6 +170,8 @@ void TemplateClassAssistant::next()
             TemplateOptionsPage* options = new TemplateOptionsPage(this);
             d->templateOptionsPage = addPage(options, i18n("Template Options"));
         }
+
+        d->outputPageWidget->prepareForm(d->fileTemplate);
     }
     else if (currentPage() == d->classIdentifierPage)
     {
