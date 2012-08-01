@@ -177,6 +177,30 @@ void CMakePreferences::defaults()
 //     kDebug(9032) << "*********defaults!";
 }
 
+void CMakePreferences::configureCacheView()
+{
+    // Sets up the cache view after model re-creation/reset.
+    // Emits changed(false) because model re-creation probably means
+    // mass programmatical invocation of itemChanged(), which invokes changed(true) - which is not what we want.
+    m_prefsUi->cacheList->setModel(m_currentModel);
+    m_prefsUi->cacheList->hideColumn(1);
+    m_prefsUi->cacheList->hideColumn(3);
+    m_prefsUi->cacheList->hideColumn(4);
+    m_prefsUi->cacheList->resizeColumnToContents(0);
+
+    if( m_currentModel ) {
+        m_prefsUi->cacheList->setEnabled( true );
+        foreach(const QModelIndex & idx, m_currentModel->persistentIndices()) {
+            m_prefsUi->cacheList->openPersistentEditor(idx);
+        }
+    } else {
+        m_prefsUi->cacheList->setEnabled( false );
+    }
+
+    showInternal(m_prefsUi->showInternal->checkState());
+    emit changed(false);
+}
+
 void CMakePreferences::updateCache(const KUrl& newBuildDir)
 {
     KUrl file(newBuildDir);
@@ -185,33 +209,24 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     {
         m_currentModel->deleteLater();
         m_currentModel=new CMakeCacheModel(this, file);
-        m_prefsUi->cacheList->setModel(m_currentModel);
-        m_prefsUi->cacheList->hideColumn(1);
-        m_prefsUi->cacheList->hideColumn(3);
-        m_prefsUi->cacheList->hideColumn(4);
-        m_prefsUi->cacheList->resizeColumnToContents(0);
-        m_prefsUi->cacheList->setEnabled(true);
+        configureCacheView();
         connect(m_currentModel, SIGNAL(itemChanged(QStandardItem*)),
                 this, SLOT(cacheEdited(QStandardItem*)));
+        connect(m_currentModel, SIGNAL(modelReset()),
+                this, SLOT(configureCacheView()));
         connect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(listSelectionChanged(QModelIndex,QModelIndex)));
-        
-        foreach(const QModelIndex &idx, m_currentModel->persistentIndices())
-        {
-            m_prefsUi->cacheList->openPersistentEditor(idx);
-        }
-        
-        showInternal(m_prefsUi->showInternal->checkState());
     }
     else
     {
         disconnect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, 0);
         m_currentModel->deleteLater();
         m_currentModel=0;
-        m_prefsUi->cacheList->setModel(0);
-        m_prefsUi->cacheList->setEnabled(false);
-        emit changed(true);
+        configureCacheView();
     }
+
+    if( !m_currentModel )
+        emit changed(true);
 }
 
 void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QModelIndex& )
@@ -342,9 +357,12 @@ void CMakePreferences::configure()
 {
     KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
-    connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
-    connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
-    
+    if( m_currentModel ) {
+        connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
+    } else {
+        connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
+    }
+
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 

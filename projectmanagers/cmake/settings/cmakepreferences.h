@@ -55,6 +55,7 @@ class CMakePreferences : public KCModule
         void createBuildDir();
         void removeBuildDir();
         void showAdvanced(bool v);
+        void configureCacheView();
     private:
         void configure();
         
