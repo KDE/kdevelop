@@ -47,8 +47,9 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
     
-    Plasma::Theme::defaultTheme()->setUseGlobalSettings(false); //don't change every plasma theme!
-    Plasma::Theme::defaultTheme()->setThemeName("appdashboard");
+    QPalette p = palette();
+    p.setColor(QPalette::Active, QPalette::Text, QColor(Qt::black));
+    setPalette(p);
 
     //setup kdeclarative library
     KDeclarative kdeclarative;

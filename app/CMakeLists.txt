@@ -31,7 +31,7 @@ target_link_libraries(kdevelop
     ${QT_QTDECLARATIVE_LIBRARIES}
 )
 if(KDECLARATIVE_FOUND)
-    target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY} ${KDE4_PLASMA_LIBS})
+    target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY})
 endif(KDECLARATIVE_FOUND)
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
