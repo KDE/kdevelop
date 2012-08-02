@@ -1262,8 +1262,9 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
     ENSURE_CAN_READ
   }
 
-if(!declaration)
-  return std::numeric_limits<int>::max();
+  if(!declaration) {
+    return std::numeric_limits<int>::max();
+  }
 
   if(declaration->topContext() == this && !declaration->inSymbolTable() && !m_dynamicData->isTemporaryDeclarationIndex(declaration->ownIndex())) {
     uint index = declaration->ownIndex();
