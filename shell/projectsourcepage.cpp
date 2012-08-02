@@ -63,6 +63,11 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
         m_ui->sources->setCurrentIndex(1);
 }
 
+ProjectSourcePage::~ProjectSourcePage()
+{
+    delete m_ui;
+}
+
 void ProjectSourcePage::sourceChanged(int index)
 {
     m_locationWidget=0;

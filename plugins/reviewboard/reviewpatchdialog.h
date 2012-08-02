@@ -32,6 +32,7 @@ class ReviewPatchDialog : public KDialog
     Q_OBJECT
     public:
         ReviewPatchDialog(QWidget* parent = 0);
+        virtual ~ReviewPatchDialog();
         
         void setBaseDir(const QString& dir);
         void setServer(const KUrl& server);

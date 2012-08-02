@@ -35,6 +35,11 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
     }
 }
 
+ProjectInfoPage::~ProjectInfoPage()
+{
+    delete page_ui;
+}
+
 void ProjectInfoPage::changeProjectManager( int idx )
 {
     emit projectManagerChanged( page_ui->managerCombo->itemData( idx ).toString() );
