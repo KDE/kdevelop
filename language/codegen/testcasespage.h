@@ -25,14 +25,14 @@
 
 class KEditListWidget;
 
-class TestCasesWidget : public QWidget
+class TestCasesPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)
 
 public:
-    explicit TestCasesWidget (QWidget* parent = 0, Qt::WindowFlags f = 0);
-    virtual ~TestCasesWidget();
+    explicit TestCasesPage (QWidget* parent = 0, Qt::WindowFlags f = 0);
+    virtual ~TestCasesPage();
 
     QStringList testCases() const;
     void setTestCases(const QStringList& testCases);

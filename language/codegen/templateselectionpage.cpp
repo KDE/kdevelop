@@ -67,24 +67,17 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
 
     d->ui->languageView->setModel(d->model);
     d->ui->templateView->setModel(d->model);
-
-    connect (d->ui->languageView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-        this, SLOT(currentLanguageChanged(QModelIndex)));
-
-    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-        this, SLOT(currentTemplateChanged(QModelIndex)));
+    
+    connect (d->ui->languageView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
+             SLOT(currentLanguageChanged(QModelIndex)));
+    
+    connect (d->ui->templateView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
+             SLOT(currentTemplateChanged(QModelIndex)));
 
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
 
-    QModelIndex categoryIndex;
-    QList<QStandardItem*> classes = d->model->findItems("Class");
-    if (!classes.isEmpty())
-    {
-        categoryIndex = classes.first()->index();
-    }
-    d->ui->languageView->setRootIndex(categoryIndex);
-
+    QModelIndex categoryIndex = d->model->index(0, 0);
     QModelIndex languageIndex = d->model->index(0, 0, categoryIndex);
     QModelIndex templateIndex = d->model->index(0, 0, languageIndex);
 
@@ -167,9 +160,10 @@ void TemplateSelectionPage::loadFileClicked()
     {
         QString destination = d->model->loadTemplateFile(fileName);
         QModelIndexList indexes = d->model->templateIndexes(destination);
-        if (indexes.size() > 1)
+        int n = indexes.size();
+        if (n > 1)
         {
-            d->ui->languageView->setCurrentIndex(indexes.first());
+            d->ui->languageView->setCurrentIndex(indexes[1]);
             d->ui->templateView->setCurrentIndex(indexes.last());
         }
     }

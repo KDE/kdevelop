@@ -3,11 +3,7 @@ project(codeutils)
 ########### install target ###############
 
 set(kdevcodeutils_PART_SRCS
-    templateselectionpage.cpp
     codeutilsplugin.cpp
-    testcaseswidget.cpp
-    createtestassistant.cpp
-    testoutputpage.cpp
 )
 
 include_directories(CMAKE_CURRENT_BINARY_DIR)

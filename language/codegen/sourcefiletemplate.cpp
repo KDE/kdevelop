@@ -151,14 +151,22 @@ QString SourceFileTemplate::name() const
     return cg.readEntry("Name");
 }
 
-QString SourceFileTemplate::languageName() const
+QString SourceFileTemplate::type() const
 {
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("Category").split('/').first();
 }
 
-const KArchiveDirectory* SourceFileTemplate::directory()
+QString SourceFileTemplate::languageName() const
+{
+    KConfig templateConfig(d->descriptionFileName);
+    KConfigGroup cg(&templateConfig, "General");
+    QStringList categories = cg.readEntry("Category").split('/');
+    return categories.size() > 1 ? categories[1] : QString();
+}
+
+const KArchiveDirectory* SourceFileTemplate::directory() const
 {
     return d->archive->directory();
 }

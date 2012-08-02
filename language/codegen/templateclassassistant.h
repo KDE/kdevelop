@@ -65,6 +65,8 @@ public:
 
     KUrl baseUrl() const;
 
+    void templateChosen(const QString& templateDescription);
+
 
 public Q_SLOTS:
     /**

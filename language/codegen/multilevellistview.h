@@ -33,7 +33,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MultiLevelListView (int levels = 2, QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit MultiLevelListView (QWidget* parent = 0, Qt::WindowFlags f = 0, int levels = 2);
     virtual ~MultiLevelListView();
 
     void setModel(QAbstractItemModel* model);

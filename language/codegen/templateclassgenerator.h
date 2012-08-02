@@ -90,7 +90,7 @@ public:
      *
      * @param templateDescription the template description file
      **/
-    void setTemplateDescription(const QString& templateDescription);
+    void setTemplateDescription(const SourceFileTemplate& templateDescription);
 
     /**
      * Set the name (without namespace) for this class
@@ -145,7 +145,7 @@ public:
     SimpleCursor filePosition(const QString& outputFile);
     void setFilePosition(const QString& outputFile, const SimpleCursor& position);
 
-    SourceFileTemplate* sourceFileTemplate();
+    const SourceFileTemplate* sourceFileTemplate() const;
 
     /**
      * Adds variables @p variables to the context passed to all template files.

@@ -50,7 +50,7 @@ using namespace KDevelop;
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
-    SourceFileTemplate* fileTemplate;
+    const SourceFileTemplate* fileTemplate;
     KUrl baseUrl;
     TemplateRenderer renderer;
 
@@ -107,9 +107,9 @@ TemplateClassGenerator::~TemplateClassGenerator()
     delete d;
 }
 
-void TemplateClassGenerator::setTemplateDescription (const QString& templateDescription)
+void TemplateClassGenerator::setTemplateDescription (const SourceFileTemplate& fileTemplate)
 {
-    d->fileTemplate = new SourceFileTemplate(templateDescription);
+    d->fileTemplate = &fileTemplate;
     d->renderer.addArchive(d->fileTemplate->directory());
 }
 
@@ -182,7 +182,7 @@ QString TemplateClassGenerator::renderString (const QString& text)
     return d->renderer.render(text);
 }
 
-SourceFileTemplate* TemplateClassGenerator::sourceFileTemplate()
+const SourceFileTemplate* TemplateClassGenerator::sourceFileTemplate() const
 {
     return d->fileTemplate;
 }

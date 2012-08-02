@@ -18,13 +18,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "testcaseswidget.h"
+#include "testcasespage.h"
 
 #include <KEditListWidget>
 #include <QLayout>
 #include <QVBoxLayout>
 
-TestCasesWidget::TestCasesWidget (QWidget* parent, Qt::WindowFlags f) : QWidget (parent, f)
+TestCasesPage::TestCasesPage (QWidget* parent, Qt::WindowFlags f) : QWidget (parent, f)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     ui = new KEditListWidget(this);
@@ -32,17 +32,17 @@ TestCasesWidget::TestCasesWidget (QWidget* parent, Qt::WindowFlags f) : QWidget 
     setLayout(layout);
 }
 
-TestCasesWidget::~TestCasesWidget()
+TestCasesPage::~TestCasesPage()
 {
 
 }
 
-void TestCasesWidget::setTestCases (const QStringList& testCases)
+void TestCasesPage::setTestCases (const QStringList& testCases)
 {
     ui->setItems(testCases);
 }
 
-QStringList TestCasesWidget::testCases() const
+QStringList TestCasesPage::testCases() const
 {
     return ui->items();
 }

@@ -134,6 +134,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/defaultcreateclasshelper.cpp
     codegen/templaterenderer.cpp
     codegen/sourcefiletemplate.cpp
+    codegen/testcasespage.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -353,6 +354,7 @@ install(FILES
     codegen/defaultcreateclasshelper.h
     codegen/templaterenderer.h
     codegen/sourcefiletemplate.h
+    codegen/testcasespage.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

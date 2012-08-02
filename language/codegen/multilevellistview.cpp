@@ -46,7 +46,7 @@ MultiLevelListViewPrivate::~MultiLevelListViewPrivate()
     delete mapper;
 }
 
-MultiLevelListView::MultiLevelListView (int levels, QWidget* parent, Qt::WindowFlags f) : QWidget(parent, f),
+MultiLevelListView::MultiLevelListView (QWidget* parent, Qt::WindowFlags f, int levels) : QWidget(parent, f),
 d(new MultiLevelListViewPrivate(levels))
 {
     Q_ASSERT(levels > 1);

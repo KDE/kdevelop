@@ -194,18 +194,6 @@ void CodeUtilsPlugin::createClass()
     assistant.exec();
 }
 
-void CodeUtilsPlugin::createTest()
-{
-    KUrl url;
-    if (QAction* action = qobject_cast<QAction*>(sender()))
-    {
-        url = action->data().value<KUrl>();
-    }
-    CreateTestAssistant assistant(url, QApplication::activeWindow());
-    assistant.exec();
-}
-
-
 CodeUtilsPlugin::~CodeUtilsPlugin()
 {
 }
@@ -220,16 +208,10 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
         {
             if (projectContext->items().size() == 1)
             {
-                KAction* action = new KAction(KIcon("code-class"), i18n("Create Class from &Template"), actionCollection() );
+                KAction* action = new KAction(KIcon("code-class"), i18n("Create from &Template"), actionCollection() );
                 action->setData(projectContext->items().first()->url());
 
                 connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
-                ext.addAction(ContextMenuExtension::FileGroup, action);
-
-                action = new KAction(KIcon("preflight-verifier"), i18n("Create Test"), actionCollection());
-                action->setData(projectContext->items().first()->url());
-
-                connect( action, SIGNAL(triggered(bool)), this, SLOT(createTest()));
                 ext.addAction(ContextMenuExtension::FileGroup, action);
             }
         }

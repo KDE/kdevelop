@@ -51,7 +51,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
              this, SLOT(nameChanged()) );
     
-    m_listView = new KDevelop::MultiLevelListView(2);
+    m_listView = new KDevelop::MultiLevelListView(this);
     m_listView->setModel(templatesModel);
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));

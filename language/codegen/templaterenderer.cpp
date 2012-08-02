@@ -282,7 +282,7 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
     return d->emptyLinesPolicy;
 }
 
-DocumentChangeSet TemplateRenderer::renderFileTemplate (SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
+DocumentChangeSet TemplateRenderer::renderFileTemplate (const SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
 {
     DocumentChangeSet changes;
     KUrl url(baseUrl);

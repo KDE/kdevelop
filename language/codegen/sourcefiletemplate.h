@@ -228,7 +228,7 @@ public:
      *
      * @sa KArchive::directory()
      */
-    const KArchiveDirectory* directory();
+    const KArchiveDirectory* directory() const;
 
     /**
      * The list of all output files in this template
@@ -244,6 +244,8 @@ public:
      * Return the custom options this template exposes
      **/
     QHash<QString, QList<ConfigOption> > customOptions(TemplateRenderer* renderer) const;
+
+    QString type() const;
 
     /**
      * The name of the programming language of the output class
