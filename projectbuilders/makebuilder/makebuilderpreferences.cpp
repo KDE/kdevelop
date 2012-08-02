@@ -95,6 +95,7 @@ void MakeBuilderPreferences::defaults()
 
 MakeBuilderPreferences::~MakeBuilderPreferences()
 {
+    delete m_prefsUi;
 }
 
 QString MakeBuilderPreferences::standardMakeComannd()

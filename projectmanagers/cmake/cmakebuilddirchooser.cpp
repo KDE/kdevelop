@@ -66,6 +66,8 @@ CMakeBuildDirChooser::~CMakeBuildDirChooser()
     KConfigGroup config = KGlobal::config()->group("CMakeBuildDirChooser");
     config.writeEntry("LastExtraArguments", extraArgumentsHistory());
     config.sync();
+
+    delete m_chooserUi;
 }
 
 void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
