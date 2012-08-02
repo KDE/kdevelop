@@ -49,9 +49,6 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
 
     addConfig( MakeBuilderSettings::self(), w );
-
-    load();
-
 }
 
 void MakeBuilderPreferences::load()
