@@ -41,6 +41,7 @@ class CMakeCacheDelegate : public QItemDelegate
 
     private slots:
         void closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = NoHint);
+        void checkboxToggled();
 
     private:
         KUrlRequester *m_sample;

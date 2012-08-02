@@ -46,7 +46,9 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
         if(type=="BOOL")
         {
-            ret=new QCheckBox(parent);
+            QCheckBox* box=new QCheckBox(parent);
+            connect(box, SIGNAL(toggled(bool)), this, SLOT(checkboxToggled()));
+            ret = box;
         }
         else if(type=="PATH" || type=="FILEPATH")
         {
@@ -149,6 +151,17 @@ QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
         }
     }
     return ret;
+}
+
+void CMakeCacheDelegate::checkboxToggled()
+{
+    // whenever the check box gets toggled, we directly want to set the
+    // model data which is done by closing the editor which in turn
+    // calls setModelData. otherwise, the behavior is quite confusing, see e.g.
+    // https://bugs.kde.org/show_bug.cgi?id=304352
+    QCheckBox* editor = qobject_cast<QCheckBox*>(sender());
+    Q_ASSERT(editor);
+    closeEditor(editor);
 }
 
 void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint)
