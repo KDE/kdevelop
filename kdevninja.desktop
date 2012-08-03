@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Name=Ninja Project Builder
+GenericName=Project Builder
+Comment=KDevelop Ninja Builder
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevninja
+X-KDE-PluginInfo-Name=KDevNinjaBuilder
+X-KDE-PluginInfo-Category=Project Management
+X-KDevelop-Version=14
+X-KDevelop-Category=Project
+X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder
+X-KDevelop-IRequired=org.kdevelop.IOutputView
+X-KDevelop-Mode=NoGUI
