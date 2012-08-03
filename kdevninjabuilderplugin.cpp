@@ -32,6 +32,7 @@ K_EXPORT_PLUGIN(NinjaBuilderFactory(KAboutData("kdevninja", "kdevninja", ki18n("
 KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantList& )
     : KDevelop::IPlugin(NinjaBuilderFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     if(hasError())
         kWarning() << "Ninja plugin installed but ninja is not installed.";
 }

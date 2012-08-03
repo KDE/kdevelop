@@ -10,6 +10,6 @@ X-KDE-PluginInfo-Name=KDevNinjaBuilder
 X-KDE-PluginInfo-Category=Project Management
 X-KDevelop-Version=14
 X-KDevelop-Category=Project
-X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder
+X-KDevelop-Interfaces=org.kdevelop.IProjectBuilder
 X-KDevelop-IRequired=org.kdevelop.IOutputView
 X-KDevelop-Mode=NoGUI
