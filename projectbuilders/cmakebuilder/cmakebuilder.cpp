@@ -117,7 +117,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             fldr->appendRow(it);
              
             builditem=it;
-            m_deleteWhenDone << fldr << it;
+            m_deleteWhenDone << it;
         }
         KJob* configure = 0;
         if( CMake::checkForNeedingConfigure(dom) )
