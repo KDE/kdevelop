@@ -85,5 +85,5 @@ KJob* KDevNinjaBuilderPlugin::clean(KDevelop::ProjectBaseItem* item)
 KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
 {
     KDevelop::IProject* p = item->project();
-    return new NinjaJob(p->buildSystemManager()->buildDirectory(p->projectItem()), QStringList("install"), this);
+    return new NinjaJob(p->buildSystemManager()->buildDirectory(p->projectItem()), QStringList("-t") << "clean", this);
 }
