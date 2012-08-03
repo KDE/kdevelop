@@ -75,7 +75,7 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
-        m_builder = i->extension<IMakeBuilder>();
+        m_builder = i->extension<IProjectBuilder>();
         if( m_builder )
         {
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
