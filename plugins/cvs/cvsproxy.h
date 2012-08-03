@@ -53,7 +53,8 @@ public:
     CvsProxy(KDevelop::IPlugin* parent = 0);
     ~CvsProxy();
 
-    bool isValidDirectory(const KUrl &dirPath) const;
+    bool isValidDirectory(KUrl dirPath) const;
+    bool isVersionControlled(KUrl filePath) const;
 
     CvsJob* import(const KUrl& directory,
                 const QString & server, const QString& repositoryName,

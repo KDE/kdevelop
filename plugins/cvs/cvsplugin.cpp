@@ -183,7 +183,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
 
     bool hasVersionControlledEntries = false;
     foreach(const KUrl &url, ctxUrlList) {
-        if (isVersionControlled(url)) {
+        if (d->m_proxy->isValidDirectory(url)) {
             hasVersionControlledEntries = true;
             break;
         }
@@ -276,7 +276,7 @@ QString CvsPlugin::findWorkingDir(const KUrl& location)
 
 bool CvsPlugin::isVersionControlled(const KUrl & localLocation)
 {
-    return d->m_proxy->isValidDirectory(localLocation);
+    return d->m_proxy->isVersionControlled(localLocation);
 }
 
 KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)
@@ -391,7 +391,7 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
 
 KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-u"/*always unified*/);
+    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-uN"/*always unified*/);
     return job;
 }
 

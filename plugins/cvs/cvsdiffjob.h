@@ -27,8 +27,12 @@ public:
 
     // Begin:  KDevelop::VcsJob
     virtual QVariant fetchResults();
-    virtual KDevelop::VcsJob::JobStatus status() const;
     // End:  KDevelop::VcsJob
+
+private:
+    // Begin: KDevelop::DVcsJob
+    virtual void slotProcessError(QProcess::ProcessError error);
+    // End: KDevelop::DVcsJob
 };
 
 #endif

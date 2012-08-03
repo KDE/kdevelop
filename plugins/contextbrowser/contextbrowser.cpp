@@ -243,6 +243,8 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
     outline->setDefaultWidget(w);
+    // Add to the actioncollection so one can set global shortcuts for the action
+    actions.addAction("find_uses", m_findUses);
 }
 
 void ContextBrowserPlugin::nextContextShortcut()
@@ -278,7 +280,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateViews()) );
   
   //Needed global action for the context-menu extensions
-  m_findUses = new QAction(i18n("Find Uses"), this);
+  m_findUses = new KAction(i18n("Find Uses"), this);
   connect(m_findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
 }
 
