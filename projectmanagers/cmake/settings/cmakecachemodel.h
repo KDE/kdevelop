@@ -38,7 +38,6 @@ class CMakeCacheModel : public QStandardItemModel
     public:
         CMakeCacheModel(QObject* parent, const KUrl &path);
         ~CMakeCacheModel() {}
-        bool changed() const { return m_changed; }
         bool writeDown() const { return writeBack(m_filePath); }
         int internal() const { return m_internalBegin; }
         
@@ -51,14 +50,12 @@ class CMakeCacheModel : public QStandardItemModel
         void read();
         
     private slots:
-        void edited() { m_changed=true; }
         void reset();
         
     private:
         bool writeBack(const KUrl& path) const;
         
         KUrl m_filePath;
-        bool m_changed;
         int m_internalBegin;
         QSet<QString> m_internal;
 };

@@ -69,7 +69,6 @@ Q_SIGNALS:
     void pruned(KDevelop::IProject*);
 
 private:
-    bool m_dirty;
     IMakeBuilder* m_builder;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
 };

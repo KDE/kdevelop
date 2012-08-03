@@ -104,6 +104,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 CMakePreferences::~CMakePreferences()
 {
     CMake::removeOverrideBuildDirIndex(m_project);
+    delete m_prefsUi;
 }
 
 void CMakePreferences::load()
