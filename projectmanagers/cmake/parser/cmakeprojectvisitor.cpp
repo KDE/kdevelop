@@ -416,7 +416,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     
     Target target;
     target.name=id.isEmpty() ? "<wrong-target>" : id;
-    target.declaration=d;
+    target.declaration=IndexedDeclaration(d);
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
@@ -473,6 +473,20 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
     
     kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope() /*<< "to" << values*/;
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const UnsetAst* unset)
+{
+    if(unset->env()) {
+        qDebug() << "error! can't unset the env var: " << unset->variableName();
+    } else {
+        m_vars->remove(unset->variableName());
+        if(unset->cache()) {
+            qDebug() << "error! can't unset the cached var: " << unset->variableName();
+        }
+    }
+    kDebug(9042) << "unset variable:" << unset->variableName();
     return 1;
 }
 
@@ -609,7 +623,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possibleModuleNames += possib;
     }
 
-    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath + pack->paths();
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
@@ -1042,7 +1056,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     Identifier identifier(id);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
-    DUChainReadLocker lock;
+    DUChainWriteLocker lock;
     QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     
     //Only consider declarations in a CMake file
@@ -1053,9 +1067,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         else
             it = decls.erase(it);
     }
-    lock.unlock();
-    
-    DUChainWriteLocker wlock;
+
     int idx;
     if(!decls.isEmpty())
     {
@@ -1141,13 +1153,11 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         else
         {
             {
-                DUChainReadLocker lock;
+                DUChainWriteLocker lock;
                 QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name().toLower()));
-                lock.unlock();
 
                 if(!decls.isEmpty())
                 {
-                    DUChainWriteLocker lock;
                     int idx=m_topctx->indexForUsedDeclaration(decls.first());
                     m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
                 }
@@ -1224,13 +1234,12 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
     foreach(int use, args)
     {
         QString var=names[use];
-        DUChainReadLocker lock;
+
+        DUChainWriteLocker lock;
         QList<Declaration*> decls=topctx->findDeclarations(Identifier(var));
-        lock.unlock();
 
         if(!decls.isEmpty() && func.arguments.count() > use)
         {
-            DUChainWriteLocker lock;
             CMakeFunctionArgument arg=func.arguments[use];
             int idx=topctx->indexForUsedDeclaration(decls.first());
             topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
@@ -1926,8 +1935,9 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
         case GetCMakePropertyAst::CacheVariables:
             output = m_cache->keys();
             break;
-        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands yet
-            output = QStringList();
+        case GetCMakePropertyAst::Components:
+        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands or components yet
+            output = QStringList("NOTFOUND");
             break;
         case GetCMakePropertyAst::Macros:
             output = m_macros->keys();
@@ -2254,20 +2264,17 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
         if(!arg.isCorrect())
             continue;
         Identifier id(arg.value);
-        
-        DUChainReadLocker lock;
+
+        DUChainWriteLocker lock;
         QList<Declaration*> decls=m_topctx->findDeclarations(id);
-        lock.unlock();
-        
+
         if(decls.isEmpty())
         {
-            DUChainWriteLocker lock;
             Declaration *d = new Declaration(arg.range(), m_topctx);
             d->setIdentifier(id);
         }
         else
         {
-            DUChainWriteLocker lock;
             int idx=m_topctx->indexForUsedDeclaration(decls.first());
             m_topctx->createUse(idx, arg.range(), 0);
         }
@@ -2289,13 +2296,11 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
             
-            DUChainReadLocker lock(DUChain::lock());
+            DUChainWriteLocker lock;
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-            lock.unlock();
             
             if(!decls.isEmpty())
             {
-                DUChainWriteLocker lock(DUChain::lock());
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());
                 m_topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column+it->first, arg.line-1, arg.column+it->second-1), 0);
             }

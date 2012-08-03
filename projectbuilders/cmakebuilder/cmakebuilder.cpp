@@ -68,7 +68,7 @@ K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuil
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
-      m_dirty(true), m_builder( 0 )
+      m_builder( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
 

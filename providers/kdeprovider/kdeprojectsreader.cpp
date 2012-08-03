@@ -72,8 +72,15 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
         if(token==QXmlStreamReader::StartElement) {
             QStringRef name = xml.name();
             
-            if(name == "project")
+            if(name == "project" || name == "module")
+            {
                 m_current.push(Source());
+
+                if (name == "project")
+		  m_current.top().type = Source::Project;
+                else if (name == "module")
+		  m_current.top().type = Source::Module;
+            }
             else if(!m_current.isEmpty())
             {
                 if(name == "name")
@@ -86,9 +93,14 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
             }
         } else if(token==QXmlStreamReader::EndElement) {
             QStringRef name = xml.name();
-            if(name == "project") {
+            if(name == "project" || name == "module") {
                 Source p = m_current.pop();
-                
+
+                if (name == "project")
+                    Q_ASSERT(p.type == Source::Project);
+                else if (name == "module")
+                    Q_ASSERT(p.type == Source::Module);
+
                 if(!p.m_urls.isEmpty()) {
                     SourceItem* item = new SourceItem(p);
                     m_m->appendRow(item);

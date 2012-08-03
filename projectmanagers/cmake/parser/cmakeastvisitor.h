@@ -73,6 +73,7 @@ class StringAst;
 class SubdirsAst;
 class TryCompileAst;
 class TargetLinkLibrariesAst;
+class UnsetAst;
 class WhileAst;
 
 class CMakeAstVisitor {
@@ -123,6 +124,7 @@ class CMakeAstVisitor {
         virtual int visit( const TryCompileAst * ) = 0;
         virtual int visit( const TargetLinkLibrariesAst * ) = 0;
         virtual int visit( const SeparateArgumentsAst * ) = 0;
+        virtual int visit( const UnsetAst * ) = 0;
         virtual int visit( const WhileAst * ) = 0;
 
         virtual int visit( const CMakeAst * ) = 0;

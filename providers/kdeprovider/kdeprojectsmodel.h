@@ -27,9 +27,16 @@ namespace KDevelop {
 
 struct Source
 {
-    Source() {}
-    Source(const QString& anIcon, const QString& aName, const QPair< QString, QString >& aUrl);
+    enum SourceType
+    {
+        Project,
+        Module
+    };
     
+    Source() {}
+    Source(const SourceType & aType, const QString& anIcon, const QString& aName, const QPair< QString, QString >& aUrl);
+    
+    SourceType type;
     QString name;
     QString icon;
     
