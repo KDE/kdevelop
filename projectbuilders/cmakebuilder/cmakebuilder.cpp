@@ -67,17 +67,26 @@ K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuil
                                                "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
-      m_builder( 0 )
+    : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
 
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+    addBuilder("Makefile", core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder"));
+    addBuilder("build.ninja", core()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder"));
+}
+
+CMakeBuilder::~CMakeBuilder()
+{
+}
+
+void CMakeBuilder::addBuilder(const QString& neededfile, KDevelop::IPlugin* i)
+{
     if( i )
     {
-        m_builder = i->extension<IProjectBuilder>();
-        if( m_builder )
+        IProjectBuilder* b = i->extension<KDevelop::IProjectBuilder>();
+        if( b )
         {
+            m_builders[neededfile] = b;
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             
@@ -85,12 +94,12 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(installed(KDevelop::ProjectBaseItem*)), this, SIGNAL(installed(KDevelop::ProjectBaseItem*)));
-        }
-    }
-}
 
-CMakeBuilder::~CMakeBuilder()
-{
+            kDebug() << "Added builder " << i->metaObject()->className() << "for" << neededfile;
+        }
+        else
+            kWarning() << "Couldn't add " << i->metaObject()->className() << i->extensions();
+    }
 }
 
 void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
@@ -104,7 +113,8 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     KDevelop::ProjectBaseItem* builditem = dom;
     KDevelop::IProject* p = dom->project();
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(p);
+    if( builder )
     {
         if(dom->file())
         {
@@ -132,7 +142,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Building with make";
-        KJob* build = m_builder->build(builditem);
+        KJob* build = builder->build(builditem);
         if( configure ) 
         {
             kDebug() << "creating composite job";
@@ -145,9 +155,10 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
-    KDevelop::ProjectBaseItem* item = dom;
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(dom->project());
+    if( builder )
     {
+        KDevelop::ProjectBaseItem* item = dom;
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
@@ -163,7 +174,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Cleaning with make";
-        KJob* clean = m_builder->clean(item);
+        KJob* clean = builder->clean(item);
         if( configure ) {
             clean = new ConfigureAndBuildJob( configure, clean );
         }
@@ -174,9 +185,10 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 
 KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
-    KDevelop::ProjectBaseItem* item = dom;
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(dom->project());
+    if( builder )
     {
+        KDevelop::ProjectBaseItem* item = dom;
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
@@ -193,7 +205,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Installing with make";
-        KJob* install = m_builder->install(item);
+        KJob* install = builder->install(item);
         if( configure ) {
             install = new ConfigureAndBuildJob( configure, install );
         }
@@ -240,6 +252,20 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
         urls << tmp;
     }
     return KIO::del( urls );
+}
+
+KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p)
+{
+    QString builddir = p->buildSystemManager()->buildDirectory(p->projectItem()).toLocalFile();
+    QMap<QString, IProjectBuilder*>::const_iterator it = m_builders.constBegin(), itEnd = m_builders.constEnd();
+    for(; it!=itEnd; ++it) {
+        if(QFile::exists(builddir+'/'+it.key()))
+            return it.value();
+    }
+    kWarning() << "Couldn't find a builder for "<< builddir;
+    //We return makefile because sometimes we just want to configure
+    //TODO: polish this further in the future
+    return m_builders["Makefile"];
 }
 
 #include "cmakebuilder.moc"

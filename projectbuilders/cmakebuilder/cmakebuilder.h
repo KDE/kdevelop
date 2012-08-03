@@ -68,7 +68,9 @@ Q_SIGNALS:
     void pruned(KDevelop::IProject*);
 
 private:
-    KDevelop::IProjectBuilder* m_builder;
+    void addBuilder(const QString& neededfile, IPlugin* plugin);
+    KDevelop::IProjectBuilder* builderForProject(KDevelop::IProject* p);
+    QMap<QString, KDevelop::IProjectBuilder*> m_builders;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
 };
 
