@@ -28,6 +28,11 @@ Item {
     property int minimumWidth: 200
     property int minimumHeight: 150
 
+    function popupEventSlot(shown) {
+        if(shown)
+            view.forceActiveFocus();
+    }
+
     PlasmaCore.DataSource {
         id: sessionsSource
         engine: "org.kde.kdevelopsessions"
@@ -45,6 +50,7 @@ Item {
     Component.onCompleted: {
         plasmoid.popupIcon = "kdevelop";
         plasmoid.aspectRatioMode = IgnoreAspectRatio;
+        plasmoid.popupEvent.connect('popupEvent', popupEventSlot);
     }
 
    PlasmaCore.Svg {
@@ -99,6 +105,7 @@ Item {
             sortRole: "sessionString"
         }
         clip: true
+        focus: true
 
         delegate: Item {
             id: listdelegate
@@ -107,6 +114,12 @@ Item {
             anchors {
                 left: parent.left
                 right: parent.right
+            }
+
+            function openSession() {
+                var service = sessionsSource.serviceForSource(model["DataEngineSource"])
+                var operation = service.operationDescription("open")
+                var job = service.startOperationCall(operation)
             }
 
             PlasmaComponents.Label {
@@ -131,9 +144,7 @@ Item {
                 hoverEnabled: true
 
                 onClicked: {
-                    var service = sessionsSource.serviceForSource(model["DataEngineSource"])
-                    var operation = service.operationDescription("open")
-                    var job = service.startOperationCall(operation)
+                    openSession();
                 }
 
                 onEntered: {
@@ -144,6 +155,10 @@ Item {
                 onExited: {
                     view.highlightItem.opacity = 0
                 }
+            }
+            Keys.onPressed: {
+            if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return)
+                openSession();
             }
         }
 
