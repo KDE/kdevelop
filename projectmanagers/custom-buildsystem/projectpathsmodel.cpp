@@ -20,12 +20,18 @@
 #include "projectpathsmodel.h"
 
 #include <klocale.h>
+#include <interfaces/iproject.h>
 
 #include "custombuildsystemconfig.h"
 
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
-    : QAbstractListModel( parent )
+    : QAbstractListModel( parent ), project( 0 )
 {
+}
+
+void ProjectPathsModel::setProject(KDevelop::IProject* w_project)
+{
+    project = w_project;
 }
 
 QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const

@@ -28,6 +28,7 @@
 #include "includesmodel.h"
 #include "definesmodel.h"
 #include <util/environmentgrouplist.h>
+#include <interfaces/iproject.h>
 
 
 ConfigWidget::ConfigWidget( QWidget* parent )
@@ -234,6 +235,11 @@ void ConfigWidget::deleteProjectPath()
 {
     QModelIndex idx = ui->projectPaths->currentIndex();
     pathsModel->removeRows( idx.row(), 1, QModelIndex() );
+}
+
+void ConfigWidget::setProject(KDevelop::IProject* w_project)
+{
+    pathsModel->setProject( w_project );
 }
 
 #include "configwidget.moc"

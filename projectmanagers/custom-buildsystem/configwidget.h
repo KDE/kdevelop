@@ -30,6 +30,11 @@ namespace Ui
 class ConfigWidget;
 }
 
+namespace KDevelop
+{
+    class IProject;
+}
+
 class ProjectPathsModel;
 class IncludesModel;
 class DefinesModel;
@@ -40,6 +45,7 @@ class ConfigWidget : public QWidget
 Q_OBJECT
 public:
     ConfigWidget( QWidget* parent = 0 );
+    void setProject(KDevelop::IProject* w_project);
     void loadConfig( CustomBuildSystemConfig cfg );
     CustomBuildSystemConfig config() const;
     void clear();

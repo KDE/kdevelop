@@ -25,6 +25,11 @@
 
 #include "custombuildsystemconfig.h"
 
+namespace KDevelop
+{
+class IProject;
+}
+
 class ProjectPathsModel : public QAbstractListModel
 {
 Q_OBJECT
@@ -35,6 +40,7 @@ public:
     };
     ProjectPathsModel( QObject* parent = 0 );
     void setPaths( const QList<CustomBuildSystemProjectPathConfig>&  );
+    void setProject( KDevelop::IProject* w_project );
     QList<CustomBuildSystemProjectPathConfig> paths() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -43,6 +49,7 @@ public:
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 private:
     QList<CustomBuildSystemProjectPathConfig> projectPaths;
+    KDevelop::IProject* project;
 };
 
 #endif // PROJECTPATHSMODEL_H
