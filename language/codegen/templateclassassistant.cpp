@@ -88,6 +88,8 @@ public:
     QString type;
     QHash< QString, KUrl > fileUrls;
     QHash< QString, SimpleCursor > filePositions;
+    QString license;
+    QVariantHash templateOptions;
 };
 
 TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
@@ -249,11 +251,11 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->licensePage)
     {
-        d->generator->setLicense(d->licensePageWidget->license());
+        d->license = d->licensePageWidget->license();
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
-        d->generator->addVariables(d->templateOptionsPageWidget->templateOptions());
+        d->templateOptions = d->templateOptionsPageWidget->templateOptions();
     }
 
     KAssistantDialog::next();
@@ -301,24 +303,21 @@ void TemplateClassAssistant::back()
 void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
-    if (d->outputPage)
-    {
-        d->fileUrls = d->outputPageWidget->fileUrls();
-        d->filePositions = d->outputPageWidget->filePositions();
-        if (d->generator)
-        {
-            QHash<QString, KUrl>::const_iterator it = d->fileUrls.constBegin();
-            for (; it != d->fileUrls.constEnd(); ++it)
-            {
-                d->generator->setFileUrl(it.key(), it.value());
-                d->generator->setFilePosition(it.key(), d->filePositions.value(it.key()));
-            }
-        }
-    }
+    d->fileUrls = d->outputPageWidget->fileUrls();
+    d->filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
     if (d->generator)
     {
+        QHash<QString, KUrl>::const_iterator it = d->fileUrls.constBegin();
+        for (; it != d->fileUrls.constEnd(); ++it)
+        {
+            d->generator->setFileUrl(it.key(), it.value());
+            d->generator->setFilePosition(it.key(), d->filePositions.value(it.key()));
+        }
+
+        d->generator->setLicense(d->license);
+        d->generator->addVariables(d->templateOptions);
         changes = d->generator->generate();
     }
     else
