@@ -28,6 +28,28 @@
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
 
+namespace
+{
+
+QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
+{
+    static const int toolTypeCount = CustomBuildSystemTool::Undefined + 1;
+    // Static Qt-based objects are discouraged (MSVC-incompatible), so use raw strings
+    static const char* toolTypes[] = {
+        "Build",
+        "Configure",
+        "Install",
+        "Clean",
+        "Prune",
+        "Undefined"
+    };
+
+    Q_ASSERT( type >= 0 && type < toolTypeCount );
+    return ConfigConstants::toolGroupPrefix + toolTypes[type];
+}
+
+}
+
 CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
 {
@@ -107,31 +129,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
     subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
     foreach( const CustomBuildSystemTool& tool, c.tools ) {
-        KConfigGroup toolgrp;
-        switch( tool.type ) {
-            case CustomBuildSystemTool::Build: {
-                toolgrp = subgrp.group( QString("%1Build").arg( ConfigConstants::toolGroupPrefix ) );
-                break;
-            }
-            case CustomBuildSystemTool::Configure: {
-                toolgrp = subgrp.group( QString("%1Configure").arg( ConfigConstants::toolGroupPrefix ) );
-                break;
-            }
-            case CustomBuildSystemTool::Clean: {
-                toolgrp = subgrp.group( QString("%1Clean").arg( ConfigConstants::toolGroupPrefix ) );
-                break;
-            }
-            case CustomBuildSystemTool::Install: {
-                toolgrp = subgrp.group( QString("%1Install").arg( ConfigConstants::toolGroupPrefix ) );
-                break;
-            }
-            case CustomBuildSystemTool::Prune: {
-                toolgrp = subgrp.group( QString("%1Prune").arg( ConfigConstants::toolGroupPrefix ) );
-                break;
-            }
-            default:
-                break;
-        }
+        KConfigGroup toolgrp = subgrp.group( generateToolGroupName( tool.type ) );
         toolgrp.writeEntry( ConfigConstants::toolType, int(tool.type) );
         toolgrp.writeEntry( ConfigConstants::toolEnvironment , tool.envGrp );
         toolgrp.writeEntry( ConfigConstants::toolEnabled, tool.enabled );
@@ -237,6 +235,7 @@ void CustomBuildSystemConfigWidget::verify() {
     ui->configWidget->setEnabled( hasAnyConfigurations );
     ui->removeConfig->setEnabled( hasAnyConfigurations );
 }
+
 
 #include "custombuildsystemconfigwidget.moc"
 
