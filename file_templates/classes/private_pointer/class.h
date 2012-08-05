@@ -1,4 +1,4 @@
-{% extends "cpp_header.h" %}
+{% extends "cpp_header_onlyfunctions.h" %}
 
 {% block class_bottom %}
 private:

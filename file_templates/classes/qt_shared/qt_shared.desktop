@@ -1,0 +1,15 @@
+[General]
+Name=Implicitly shared class
+Comment=Class with a private QSharedData member
+Category=Class/C++/Qt
+Files=Header,Implementation
+
+[Header]
+Name=Public Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
