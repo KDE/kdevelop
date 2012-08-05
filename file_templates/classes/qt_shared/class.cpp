@@ -6,12 +6,13 @@
 {% endblock includes %}
 
 {% block extra_declarations %}
-class {{ private_class_name }} : public QSharedData
+class {% if namespaces %}{{ namespaces|join:"::" }}::{% endif %}{{ name }}Data : public QSharedData
 {
 public:
 {% for member in members %}
 {{ member.type }} {{ member.name }};
 {% endfor %}
+};
 
 {% endblock extra_declarations %}
 
