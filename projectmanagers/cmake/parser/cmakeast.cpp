@@ -113,6 +113,7 @@ CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
 CMAKE_REGISTER_AST( UseMangledMesaAst, use_mangled_mesa )
 CMAKE_REGISTER_AST( UtilitySourceAst, utility_source )
+CMAKE_REGISTER_AST( UnsetAst, unset )
 CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
 CMAKE_REGISTER_AST( WhileAst, while)
 CMAKE_REGISTER_AST( WriteFileAst, write_file)
@@ -1003,7 +1004,7 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FileAst::FileAst()
-    : m_newlineConsume(false), m_noHexConversion(false)
+    : m_isFollowingSymlinks(false), m_newlineConsume(false), m_noHexConversion(false)
 {
 }
 
@@ -1264,6 +1265,8 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1281,7 +1284,7 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 
@@ -1402,7 +1405,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.constEnd();
 
     bool ret=true;
-    enum State { None, Components };
+    enum State { None, Components, Paths };
     State s=None;
     for(; it!=itEnd; ++it)
     {
@@ -1413,8 +1416,11 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_MODULE") m_noModule=true;
         else if(it->value=="REQUIRED") { m_isRequired=true; s=Components; }
         else if(it->value=="COMPONENTS") s=Components;
+        else if(it->value=="PATHS") s=Paths;
         else if(s==Components)
             m_components.append(it->value);
+        else if(s==Paths)
+            m_paths.append(it->value);
         else
             ret=false;
     }
@@ -1662,6 +1668,8 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type=Commands;
     else if(type=="MACROS")
         m_type=Macros;
+    else if(type=="COMPONENTS")
+        m_type=Components;
     else
         return false;
     return true;
@@ -3365,6 +3373,29 @@ bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_fileList.append(arg.value);
     }
     return true;
+}
+
+UnsetAst::UnsetAst()
+{
+}
+
+UnsetAst::~UnsetAst()
+{
+}
+
+
+bool UnsetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="unset" || func.arguments.count()<1 || func.arguments.count()>2)
+        return false;
+    m_variableName = func.arguments.first().value;
+    addOutputArgument(func.arguments.first());
+    m_cache = func.arguments.count()==2 && func.arguments.last().value=="CACHE";
+    m_env = m_variableName.startsWith("ENV{");
+    if(m_env) {
+        m_variableName = m_variableName.mid(4, -2);
+    }
+    return func.arguments.count()==1 || (m_cache && !m_env);
 }
 
 VariableRequiresAst::VariableRequiresAst()

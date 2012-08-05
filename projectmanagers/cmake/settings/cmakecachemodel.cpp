@@ -28,7 +28,7 @@
 //4 columns: name, type, value, comment
 //name:type=value - comment
 CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
-    : QStandardItemModel(parent), m_filePath(path), m_changed(false)
+    : QStandardItemModel(parent), m_filePath(path)
 {
     QStringList labels;
     labels.append(i18n("Name"));

@@ -35,6 +35,7 @@ class DocWidget : public QWidget
 Q_OBJECT
 public:
     DocWidget();
+    virtual ~DocWidget();
 private:
     Ui::DocWidget* ui;
     QHelpEngine* engine;

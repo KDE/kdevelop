@@ -353,6 +353,10 @@ private slots:
     void testTryRunGoodParse_data();
     void testTryRunBadParse();
     void testTryRunBadParse_data();
+    void testUnsetGoodParse();
+    void testUnsetGoodParse_data();
+    void testUnsetBadParse();
+    void testUnsetBadParse_data();
     void testUseMangledMesaGoodParse();
     void testUseMangledMesaGoodParse_data();
     void testUseMangledMesaBadParse();

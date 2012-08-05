@@ -251,6 +251,8 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
 void Parser::clear()
 {
   _M_hold_errors = false;
+  _M_problem_count = 0;
+  _M_hadMismatchingCompoundTokens = false;
   m_tokenMarkers.clear();
 }
 
@@ -628,8 +630,7 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
 
 bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 {
-  _M_problem_count = 0;
-  _M_hadMismatchingCompoundTokens = false;
+  clear();
 
 /*  kDebug() << "tokens:";
   for(uint a = 0; a < session->token_stream->size(); ++a)

@@ -18,6 +18,7 @@
     <entry name="suCommand" key="Su Command" type="Int">
     </entry>
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
+        <default>2</default>
     </entry>
     <entry name="makeBinary" key="Make Binary" type="String">
         <default code="true">MakeBuilderPreferences::standardMakeComannd()</default>

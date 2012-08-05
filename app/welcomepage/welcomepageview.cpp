@@ -34,6 +34,7 @@
 
 #include <kdeclarative.h>
 #include <KDebug>
+#include <Plasma/Theme>
 #include <qdeclarative.h>
 
 using namespace KDevelop;
@@ -45,6 +46,10 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
+    
+    QPalette p = palette();
+    p.setColor(QPalette::Active, QPalette::Text, QColor(Qt::black));
+    setPalette(p);
 
     //setup kdeclarative library
     KDeclarative kdeclarative;

@@ -809,7 +809,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 //             kDebug() << "poor guess";
 
         QStringList directories;
-        directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
+        if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR").join(QString())=="ON") {
+            directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
+            directories += folder->buildDir();
+        }
         directories += resolvePaths(folder->url(), data.includeDirectories);
         directories.removeDuplicates();
         folder->setIncludeDirectories(directories);
@@ -893,11 +896,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(sFile.startsWith("#[") || sFile.isEmpty())
                     continue;
 
-                KUrl sourceFile(sFile);
-                if(sourceFile.isRelative()) {
+                KUrl sourceFile;
+                if(KUrl::isRelativeUrl(sFile)) {
                     sourceFile = folder->url();
                     sourceFile.addPath( sFile );
-                }
+                    if(!QFile::exists(sourceFile.toLocalFile())) {
+                        sourceFile = buildDirectory(folder);
+                        sourceFile.addPath( sFile );
+                    }
+                } else
+                    sourceFile = sFile;
                 sourceFile.cleanPath();
                 tfiles += sourceFile;
                 kDebug(9042) << "..........Adding:" << sourceFile << sFile << folder->url();
@@ -1729,7 +1737,7 @@ void CMakeManager::projectClosing(IProject* p)
     m_projectsData.remove(p); 
     
     QMutexLocker locker(&m_dirWatchersMutex);
-    m_watchers.remove(p);
+    delete m_watchers.take(p);
 }
 
 void CMakeManager::addDeleteItem(ProjectBaseItem* item)

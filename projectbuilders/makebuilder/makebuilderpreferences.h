@@ -40,9 +40,9 @@ public:
     void load();
     void save();
     void defaults();
-    
+
     static QString standardMakeComannd();
-    
+
 private:
     Ui::MakeConfig* m_prefsUi;
 };

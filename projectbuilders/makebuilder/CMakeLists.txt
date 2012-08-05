@@ -1,15 +1,12 @@
 project(makebuilder)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9037 )
 
-add_subdirectory(tests)
+
 
 ########### next target ###############
 
 set(kdevmakebuilder_LIB_SRCS
     makebuilder.cpp
-    makeoutputmodel.cpp
-    outputfilters.cpp
-    makeoutputdelegate.cpp
     makejob.cpp
 )
 
