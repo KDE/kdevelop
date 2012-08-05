@@ -71,15 +71,14 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     connect (d->ui->languageView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
              SLOT(currentLanguageChanged(QModelIndex)));
     
-    connect (d->ui->templateView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
+    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              SLOT(currentTemplateChanged(QModelIndex)));
 
     connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
     connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
 
     QModelIndex categoryIndex = d->model->index(0, 0);
-    QModelIndex languageIndex = d->model->index(0, 0, categoryIndex);
-    QModelIndex templateIndex = d->model->index(0, 0, languageIndex);
+    QModelIndex templateIndex = categoryIndex;
 
     while (templateIndex.child(0, 0).isValid())
     {
@@ -97,17 +96,16 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
         if (!indexes.isEmpty())
         {
             templateIndex = indexes.first();
-            QStandardItem* item = d->model->itemFromIndex(templateIndex);
-
-            while (item->parent() && item->parent() != d->model->invisibleRootItem())
-            {
-                item = item->parent();
-            }
-            languageIndex = item->index();
         }
     }
 
-    d->ui->languageView->setCurrentIndex(languageIndex);
+    categoryIndex = templateIndex;
+    while (categoryIndex.parent().isValid() && categoryIndex.parent().parent().isValid())
+    {
+        categoryIndex = categoryIndex.parent();
+    }
+
+    d->ui->languageView->setCurrentIndex(categoryIndex);
     d->ui->templateView->setCurrentIndex(templateIndex);
 }
 
@@ -126,7 +124,13 @@ void TemplateSelectionPage::currentLanguageChanged (const QModelIndex& index)
 {
     d->ui->templateView->setRootIndex(index);
     d->ui->templateView->expandAll();
-    d->ui->templateView->setCurrentIndex(d->model->index(0, 0, index));
+
+    QModelIndex templateIndex = index;
+    while (templateIndex.child(0, 0).isValid())
+    {
+        templateIndex = templateIndex.child(0, 0);
+    }
+    d->ui->templateView->setCurrentIndex(templateIndex);
     d->model->setHorizontalHeaderLabels(QStringList(d->model->data(index).toString()));
 }
 

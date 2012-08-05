@@ -44,6 +44,17 @@
 #include <KLocalizedString>
 #include <KConfig>
 
+#define REMOVE_PAGE(name)       \
+if (d->name##Page)              \
+    removePage(d->name##Page);  \
+delete d->name##Page;           \
+d->name##Page = 0;              \
+d->name##PageWidget = 0;
+
+#define ZERO_PAGE(name)         \
+d->name##Page = 0;              \
+d->name##PageWidget = 0;
+
 using namespace KDevelop;
 
 class KDevelop::TemplateClassAssistantPrivate
@@ -60,6 +71,7 @@ public:
     TemplateSelectionPage* templateSelectionPageWidget;
     TemplateOptionsPage* templateOptionsPageWidget;
     ClassMembersPage* membersPageWidget;
+    ClassIdentifierPage* classIdentifierPageWidget;
     OverridesPage* overridesPageWidget;
     LicensePage* licensePageWidget;
     OutputPage* outputPageWidget;
@@ -68,7 +80,6 @@ public:
     ICreateClassHelper* helper;
     TemplateClassGenerator* generator;
     TemplateRenderer* renderer;
-    ClassIdentifierPage* classIdentifierPageWidget;
     KUrl baseUrl;
     KPageWidgetItem* dummyPage;
     TestCasesPage* testCasesPageWidget;
@@ -84,7 +95,17 @@ TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& bas
 , d(new TemplateClassAssistantPrivate)
 {
     d->baseUrl = baseUrl;
+
+    ZERO_PAGE(templateSelection)
+    ZERO_PAGE(templateOptions)
+    ZERO_PAGE(members)
+    ZERO_PAGE(classIdentifier)
+    ZERO_PAGE(overrides)
+    ZERO_PAGE(license)
+    ZERO_PAGE(output)
+
     setup();
+    pageWidget()->setFaceType(KPageView::List);
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
@@ -107,14 +128,18 @@ void TemplateClassAssistant::setup()
 
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 {
-    removePage(d->dummyPage);
-
     d->fileTemplate.setTemplateDescription(templateDescription);
     d->type = d->fileTemplate.type();
 
     d->generator = 0;
 
+    if (!d->fileTemplate.isValid())
+    {
+        return;
+    }
+
     kDebug() << "Selected template" << templateDescription << "of type" << d->type;
+    removePage(d->dummyPage);
 
     if (d->type == "Class")
     {
@@ -141,13 +166,13 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         {
             d->helper = language->languageSupport()->createClassHelper(this);
         }
-        
+
         if (!d->helper)
         {
             kDebug() << "No class creation helper for language" << languageName;
             d->helper = new DefaultCreateClassHelper(this);
         }
-        
+
         d->generator = d->helper->generator();
         Q_ASSERT(d->generator);
         d->generator->setTemplateDescription(d->fileTemplate);
@@ -163,13 +188,6 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->renderer->addArchive(d->fileTemplate.directory());
     }
 
-    if (d->fileTemplate.hasCustomOptions())
-    {
-        kDebug() << "Class generator has custom options";
-        d->templateOptionsPageWidget = new TemplateOptionsPage(this);
-        d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget, i18n("Template Options"));
-    }
-
     d->licensePageWidget = new LicensePage(this);
     d->licensePage = addPage(d->licensePageWidget, i18n("License"));
     d->licensePage->setIcon(KIcon("text-x-copying"));
@@ -179,19 +197,32 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     d->outputPageWidget->prepareForm(d->fileTemplate);
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
     d->outputPage->setIcon(KIcon("document-save"));
+    connect (d->outputPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
     setValid(d->outputPage, false);
+
+    if (d->fileTemplate.hasCustomOptions())
+    {
+        kDebug() << "Class generator has custom options";
+        d->templateOptionsPageWidget = new TemplateOptionsPage(this);
+        d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget, i18n("Template Options"));
+    }
 
     setCurrentPage(d->templateSelectionPage);
 }
 
 void TemplateClassAssistant::next()
 {
+    kDebug() << currentPage()->name() << currentPage()->header();
     if (currentPage() == d->templateSelectionPage)
     {
         // We have chosen the template
         // Depending on the template's language, we can now create a helper
         QString description = d->templateSelectionPageWidget->selectedTemplate();
         templateChosen(description);
+        if (!d->fileTemplate.isValid())
+        {
+            return;
+        }
     }
     else if (currentPage() == d->classIdentifierPage)
     {
@@ -224,20 +255,6 @@ void TemplateClassAssistant::next()
     {
         d->generator->addVariables(d->templateOptionsPageWidget->templateOptions());
     }
-    else if (currentPage() == d->outputPage)
-    {
-        d->fileUrls = d->outputPageWidget->fileUrls();
-        d->filePositions = d->outputPageWidget->filePositions();
-        if (d->generator)
-        {
-            QHash<QString, KUrl>::const_iterator it = d->fileUrls.constBegin();
-            for (; it != d->fileUrls.constEnd(); ++it)
-            {
-                d->generator->setFileUrl(it.key(), it.value());
-                d->generator->setFilePosition(it.key(), d->filePositions.value(it.key()));
-            }
-        }
-    }
 
     KAssistantDialog::next();
 
@@ -266,6 +283,14 @@ void TemplateClassAssistant::back()
     KAssistantDialog::back();
     if (currentPage() == d->templateSelectionPage)
     {
+        REMOVE_PAGE(classIdentifier)
+        REMOVE_PAGE(overrides)
+        REMOVE_PAGE(members)
+        REMOVE_PAGE(testCases)
+        REMOVE_PAGE(output)
+        REMOVE_PAGE(templateOptions)
+        REMOVE_PAGE(license)
+
         delete d->helper;
         delete d->generator;
         d->helper = 0;
@@ -275,11 +300,26 @@ void TemplateClassAssistant::back()
 
 void TemplateClassAssistant::accept()
 {
+    // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
+    if (d->outputPage)
+    {
+        d->fileUrls = d->outputPageWidget->fileUrls();
+        d->filePositions = d->outputPageWidget->filePositions();
+        if (d->generator)
+        {
+            QHash<QString, KUrl>::const_iterator it = d->fileUrls.constBegin();
+            for (; it != d->fileUrls.constEnd(); ++it)
+            {
+                d->generator->setFileUrl(it.key(), it.value());
+                d->generator->setFilePosition(it.key(), d->filePositions.value(it.key()));
+            }
+        }
+    }
+
     DocumentChangeSet changes;
     if (d->generator)
     {
         changes = d->generator->generate();
-        changes.applyAllChanges();
     }
     else
     {

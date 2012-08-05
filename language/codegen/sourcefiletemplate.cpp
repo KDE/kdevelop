@@ -100,6 +100,19 @@ SourceFileTemplate::SourceFileTemplate()
     d->archive = 0;
 }
 
+SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
+: d(new KDevelop::SourceFileTemplatePrivate)
+{
+    d->archive = 0;
+    setTemplateDescription(other.d->descriptionFileName);
+}
+
+SourceFileTemplate& SourceFileTemplate::operator= (const SourceFileTemplate& other)
+{
+    setTemplateDescription(other.d->descriptionFileName);
+    return *this;
+}
+
 void SourceFileTemplate::setTemplateDescription (const QString& templateDescription)
 {
     delete d->archive;
@@ -117,7 +130,7 @@ void SourceFileTemplate::setTemplateDescription (const QString& templateDescript
         }
     }
 
-    if (archiveFileName.isEmpty())
+    if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists())
     {
         kDebug() << "Could not find a template archive for description" << templateDescription;
         d->archive = 0;
@@ -144,6 +157,11 @@ SourceFileTemplate::~SourceFileTemplate()
     delete d;
 }
 
+bool SourceFileTemplate::isValid() const
+{
+    return d->archive;
+}
+
 QString SourceFileTemplate::name() const
 {
     KConfig templateConfig(d->descriptionFileName);
@@ -168,6 +186,7 @@ QString SourceFileTemplate::languageName() const
 
 const KArchiveDirectory* SourceFileTemplate::directory() const
 {
+    Q_ASSERT(isValid());
     return d->archive->directory();
 }
 
@@ -196,6 +215,8 @@ QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles() const
 
 bool SourceFileTemplate::hasCustomOptions() const
 {
+    Q_ASSERT(isValid());
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     bool hasOptions = d->archive->directory()->entries().contains(cg.readEntry("OptionsFile", "options.kcfg"));
@@ -206,6 +227,8 @@ bool SourceFileTemplate::hasCustomOptions() const
 
 QHash< QString, QList< SourceFileTemplate::ConfigOption > > SourceFileTemplate::customOptions(TemplateRenderer* renderer) const
 {
+    Q_ASSERT(isValid());
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     const KArchiveEntry* entry = d->archive->directory()->entry(cg.readEntry("OptionsFile", "options.kcfg"));

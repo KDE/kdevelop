@@ -106,13 +106,6 @@ QListView* MultiLevelListView::viewForLevel (int level)
 
 QModelIndex MultiLevelListView::currentIndex()
 {
-    int level = 0;
-    QModelIndex index = d->listViews.first()->currentIndex();
-    if (index.child(0,0).isValid())
-    {
-        ++level;
-        index = d->listViews[level]->currentIndex();
-    }
     return d->listViews.last()->currentIndex();
 }
 
@@ -124,6 +117,8 @@ void MultiLevelListView::addWidget (int level, QWidget* widget)
 
 void MultiLevelListView::setCurrentIndex (const QModelIndex& index)
 {
+    QModelIndex previous = currentIndex();
+
     QModelIndex idx(index);
     QModelIndexList indexes;
     while (idx.isValid() && indexes.size() < d->levels)
@@ -138,6 +133,8 @@ void MultiLevelListView::setCurrentIndex (const QModelIndex& index)
     {
         d->listViews[i]->setCurrentIndex(indexes[i]);
     }
+
+    emit currentIndexChanged(index, previous);
 }
 
 void MultiLevelListView::setRootIndex (const QModelIndex& index)

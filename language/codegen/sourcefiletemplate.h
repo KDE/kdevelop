@@ -206,6 +206,8 @@ public:
      */
     SourceFileTemplate(const QString& templateDescription);
 
+    SourceFileTemplate(const SourceFileTemplate& other);
+
     /**
      * Creates an invalid SourceFileTemplate
      */
@@ -216,7 +218,14 @@ public:
      */
     ~SourceFileTemplate();
 
+    SourceFileTemplate& operator=(const SourceFileTemplate& other);
+
     void setTemplateDescription(const QString& templateDescription);
+
+    /**
+     * Returns true if this SourceFileTemplate represents an actual template archive, and false otherwise
+     */
+    bool isValid() const;
 
     /**
      * The name of this template, corresponds to the @c Name entry in the description file
