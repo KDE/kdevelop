@@ -257,6 +257,10 @@ void TemplateClassAssistant::next()
     {
         d->templateOptions = d->templateOptionsPageWidget->templateOptions();
     }
+    else if (currentPage() == d->testCasesPage)
+    {
+        d->renderer->addVariable("testCases", d->testCasesPageWidget->testCases());
+    }
 
     KAssistantDialog::next();
 
