@@ -187,6 +187,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         setValid(d->testCasesPage, true);
 
         d->renderer = new TemplateRenderer;
+        d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
         d->renderer->addArchive(d->fileTemplate.directory());
     }
 
