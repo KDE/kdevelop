@@ -5,13 +5,13 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 find_package(KDE4 4.5.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
-find_package(KDevPlatform 1.3.60 REQUIRED)
+find_package(KDevPlatform 1.4.60 REQUIRED)
 
-if(KDevPlatform_VERSION VERSION_GREATER 1.4.59)
-    MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.5, version 1.4 is required")
-endif(KDevPlatform_VERSION VERSION_GREATER 1.4.59)
+if(KDevPlatform_VERSION VERSION_GREATER 1.5.59)
+    MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.6, version 1.5 is required")
+endif(KDevPlatform_VERSION VERSION_GREATER 1.5.59)
 
-set(CUSTOM_BUILDSYSTEM_VERSION 1.2.2)
+set(CUSTOM_BUILDSYSTEM_VERSION 1.2.3)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
