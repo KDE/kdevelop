@@ -26,6 +26,7 @@
 #include <KShell>
 
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 #include <util/commandexecutor.h>
@@ -72,6 +73,7 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
     environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
     arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    setDelegate( plugin->delegate() );
 }
 
 void CustomBuildJob::start()
@@ -98,8 +100,10 @@ void CustomBuildJob::start()
         }
         setStandardToolView( KDevelop::IOutputView::BuildView );
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-        KDevelop::OutputModel* model = new KDevelop::OutputModel( this );
+        KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir, this );
+        model->setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
         setModel( model, KDevelop::IOutputView::TakeOwnership );
+
         startOutput();
 
         exec = new KDevelop::CommandExecutor( cmd, this );
