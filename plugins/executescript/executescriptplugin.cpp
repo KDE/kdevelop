@@ -58,6 +58,7 @@ QString ExecuteScriptPlugin::environmentGroupEntry = "EnvironmentGroup";
 //QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
 QString ExecuteScriptPlugin::userIdToRunEntry = "User Id to Run";
 QString ExecuteScriptPlugin::projectTargetEntry = "Project Target";
+QString ExecuteScriptPlugin::outputFilteringEntry = "Output Filtering Mode";
 
 using namespace KDevelop;
 
@@ -67,11 +68,12 @@ K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutes
 ))
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
+    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent),
+    KDevelop::DelegateHolder( this )
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
-    m_configType->addLauncher( new ScriptAppLauncher() );
+    m_configType->addLauncher( new ScriptAppLauncher( this ) );
     kDebug() << "adding script launch config";
     core()->runController()->addConfigurationType( m_configType );
 }
@@ -192,6 +194,17 @@ QString ExecuteScriptPlugin::environmentGroup( KDevelop::ILaunchConfiguration* c
     
     return cfg->config().readEntry( ExecuteScriptPlugin::environmentGroupEntry, "" );
 }
+
+int ExecuteScriptPlugin::outputFilterModeId( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return 0;
+    }
+
+    return cfg->config().readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0 );
+}
+
 
 
 QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, QString& err ) const

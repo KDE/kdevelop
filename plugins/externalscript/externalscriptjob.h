@@ -41,13 +41,14 @@ class Document;
 }
 
 class KProcess;
+class ExternalScriptPlugin;
 
 class ExternalScriptJob : public KDevelop::OutputJob
 {
   Q_OBJECT
 
 public:
-  ExternalScriptJob( ExternalScriptItem* item, QObject* parent );
+  ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPlugin* parent );
   virtual void start();
   KDevelop::OutputModel* model();
 
@@ -60,11 +61,14 @@ private slots:
 
 private:
   void appendLine( const QString &l );
+
+  ExternalScriptPlugin* m_plugin;
   KProcess* m_proc;
   KDevelop::ProcessLineMaker* m_lineMaker;
   ExternalScriptItem::OutputMode m_outputMode;
   ExternalScriptItem::InputMode m_inputMode;
   ExternalScriptItem::ErrorMode m_errorMode;
+  int m_filterMode;
   KTextEditor::Document* m_document;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;

@@ -49,7 +49,7 @@ public:
     void startOutput();
 
     OutputJobVerbosity verbosity() const;
-    
+
     void setVerbosity(OutputJobVerbosity verbosity);
 
 protected:

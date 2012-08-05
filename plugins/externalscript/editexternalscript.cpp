@@ -106,6 +106,11 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
     "<p>Defines whether the output of the script should be shown in a toolview.</p>"
   );
   showOutputBox->setToolTip( tooltip );
+  tooltip = i18n(
+    "<p>Defines what type of filtering should be applied to the output. E.g. to indicate errors by red text.</p>"
+  );
+  outputFilterLabel->setToolTip( tooltip );
+  outputFilterCombo->setToolTip( tooltip );
   //END setup tooltips
 
   //BEGIN item to UI copying
@@ -122,6 +127,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   saveCombo->setCurrentIndex( item->saveMode() );
   shortcutWidget->setShortcut( item->action()->shortcut() );
   showOutputBox->setChecked( item->showOutput() );
+  outputFilterCombo->setCurrentIndex( item->filterMode() );
   //END item to UI copying
 
   validate();
@@ -167,6 +173,7 @@ void EditExternalScript::save()
 
   m_item->setShowOutput( showOutputBox->isChecked() );
 
+  m_item->setFilterMode( outputFilterCombo->currentIndex() );
   m_item->action()->setShortcut( shortcutWidget->shortcut() );
 }
 

@@ -59,7 +59,7 @@ void OutputJob::startOutput()
 
             if (m_title.isEmpty())
                 m_title = objectName();
-                
+
             m_outputId = view->registerOutputInToolView( tvid, m_title, m_behaviours );
 
             if (!m_outputModel) {
@@ -147,7 +147,7 @@ void OutputJob::setToolTitle(const QString& title)
 }
 
 void OutputJob::setToolIcon(const KIcon& icon)
-{   
+{
     m_toolIcon = icon;
 }
 

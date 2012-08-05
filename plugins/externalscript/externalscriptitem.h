@@ -80,6 +80,16 @@ public:
    */
   void setSaveMode( SaveMode mode );
 
+  /**
+   * @return what type of filter should be applied to the execution of the external script
+   **/
+  int filterMode() const;
+
+  /**
+   * Sets the filtering mode 
+   **/
+  void setFilterMode( int mode );
+
   /// Defines what should be done with the @c STDOUT of a script run.
   enum OutputMode {
     /// Ignore output and do nothing.
@@ -196,6 +206,7 @@ private:
   InputMode m_inputMode;
   KAction* m_action;
   bool m_showOutput;
+  int m_filterMode;
   bool m_performReplacements;
 };
 

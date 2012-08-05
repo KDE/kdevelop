@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>390</height>
+    <height>416</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -194,6 +194,40 @@
        <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
         <property name="toolTip">
          <string>Select an environment to be used</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="outputFilteringMode">
+        <property name="toolTip">
+         <string>Select the filter to applied to the output. E.g. to mark errors with red text</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>no filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>compiler filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>script error filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>static analysis filter</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Output filter</string>
         </property>
        </widget>
       </item>

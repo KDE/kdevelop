@@ -67,7 +67,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
-    d->model = new OutputModel;
+    d->model = new OutputModel( this );
     setModel(d->model, IOutputView::TakeOwnership);
     
     connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
@@ -240,7 +240,10 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     d->status = JobSucceeded;
 
-    if (exitStatus != QProcess::NormalExit || exitCode != 0)
+    if (exitStatus == QProcess::CrashExit)
+        slotProcessError(QProcess::Crashed);
+
+    else if (exitCode != 0)
         slotProcessError(QProcess::UnknownError);
 
     d->model->appendLine(i18n("Command exited with value %1.", exitCode));

@@ -26,13 +26,14 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
+#include <outputview/delegateholder.h>
 #include "iexecutescriptplugin.h"
 
 class ScriptAppConfigType;
 class KUrl;
 class KJob;
 
-class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin
+class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin, public KDevelop::DelegateHolder
 {
     Q_OBJECT
     Q_INTERFACES( IExecuteScriptPlugin )
@@ -53,6 +54,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     //static QString useTerminalEntry;
     static QString userIdToRunEntry;
     static QString projectTargetEntry;
+    static QString outputFilteringEntry;
     
     virtual void unload();
     
@@ -64,6 +66,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;
+    int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const;
 
     ScriptAppConfigType* m_configType;
 };

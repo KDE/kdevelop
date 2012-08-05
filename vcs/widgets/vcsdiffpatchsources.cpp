@@ -40,25 +40,6 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, cons
     Q_ASSERT(m_vcs);
     m_base = url;
     
-    QScopedPointer<VcsJob> statusJob(vcs->status(url));
-    QVariant varlist;
-
-    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
-    {
-        varlist = statusJob->fetchResults();
-
-        foreach( const QVariant &var, varlist.toList() )
-        {
-            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
-            
-            m_infos += info;
-            if(info.state()!=VcsStatusInfo::ItemUpToDate)
-                m_selectable[info.url()] = info.state();
-        }
-    }
-    else
-        kDebug() << "Couldn't get status for urls: " << url;
-
     m_commitMessageWidget = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
 
@@ -123,6 +104,27 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
     : m_updater(updater)
 {
     update();
+    KDevelop::IBasicVersionControl* vcs = m_updater->vcs();
+    KUrl url = m_updater->url();
+
+    QScopedPointer<VcsJob> statusJob(vcs->status(url));
+    QVariant varlist;
+
+    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
+    {
+        varlist = statusJob->fetchResults();
+
+        foreach( const QVariant &var, varlist.toList() )
+        {
+            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            
+            m_infos += info;
+            if(info.state()!=VcsStatusInfo::ItemUpToDate)
+                m_selectable[info.url()] = info.state();
+        }
+    }
+    else
+        kDebug() << "Couldn't get status for urls: " << url;
 }
 
 VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& diff)
@@ -191,7 +193,7 @@ bool VCSCommitDiffPatchSource::canSelectFiles() const {
     return true;
 }
 
-QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSCommitDiffPatchSource::additionalSelectableFiles() const {
+QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSDiffPatchSource::additionalSelectableFiles() const {
     return m_selectable;
 }
 

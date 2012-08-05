@@ -965,7 +965,8 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         
         ++row;
     }
-    
+
+    int cnsRow = row;
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
         model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
@@ -987,12 +988,13 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     QModelIndex selected = view->selectionModel()->currentIndex();
     if(selected.isValid())
     {
-        selected = selected.sibling(selected.row(), 0);
-        QString ret = selected.data().toString();
-        if(ret == i18n("Create New Session"))
-        {
+        QString ret;
+        if( selected.row() == cnsRow ) {
             qsrand(QDateTime::currentDateTime().toTime_t());
             ret = QUuid::createUuid().toString();
+        } else {
+            selected = selected.sibling(selected.row(), 0);
+            ret = selected.data().toString();
         }
         return ret;
     }

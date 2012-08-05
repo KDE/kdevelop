@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
-    <height>262</height>
+    <width>521</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -40,19 +40,6 @@
       <string>please insert a name</string>
      </property>
     </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="shortcutLabel">
-     <property name="toolTip">
-      <string>&lt;p&gt;Defines shortcuts you can use to execute this script.&lt;/p&gt;</string>
-     </property>
-     <property name="text">
-      <string>Shortcut:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="KShortcutWidget" name="shortcutWidget"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="commandLabel">
@@ -158,45 +145,6 @@
      </item>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="saveLabel">
-     <property name="text">
-      <string>Save &amp;Mode:</string>
-     </property>
-     <property name="buddy">
-      <cstring>saveCombo</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QComboBox" name="saveCombo">
-     <item>
-      <property name="text">
-       <string>save nothing</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>save active document</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>save all open documents</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QCheckBox" name="showOutputBox">
-     <property name="text">
-      <string>Show Out&amp;put</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="stderrLabel">
      <property name="text">
@@ -244,6 +192,89 @@
        <string>create new file</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="saveLabel">
+     <property name="text">
+      <string>Save &amp;Mode:</string>
+     </property>
+     <property name="buddy">
+      <cstring>saveCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QComboBox" name="saveCombo">
+     <item>
+      <property name="text">
+       <string>save nothing</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>save active document</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>save all open documents</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="shortcutLabel">
+     <property name="toolTip">
+      <string>&lt;p&gt;Defines shortcuts you can use to execute this script.&lt;/p&gt;</string>
+     </property>
+     <property name="text">
+      <string>Shortcut:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="KShortcutWidget" name="shortcutWidget"/>
+   </item>
+   <item row="9" column="1">
+    <widget class="QComboBox" name="outputFilterCombo">
+     <item>
+      <property name="text">
+       <string>no filter</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>compiler filter</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>script error filter</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>static analysis error filter</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="outputFilterLabel">
+     <property name="text">
+      <string>Output Filter:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="showOutputBox">
+     <property name="text">
+      <string>Show Out&amp;put</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>

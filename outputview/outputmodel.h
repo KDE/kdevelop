@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -21,32 +22,86 @@
 #ifndef OUTPUTMODEL_H
 #define OUTPUTMODEL_H
 
-#include <QtGui/QStandardItemModel>
 #include "outputviewexport.h"
-class QString;
-class QStringList;
+#include "ioutputviewmodel.h"
+#include "filtereditem.h"
+#include "ifilterstrategy.h"
+
+#include <QtCore/QAbstractListModel>
+#include <QString>
+#include <KUrl>
+#include <QLinkedList>
+#include <QQueue>
+#include <QSharedPointer>
+
+#include <set>
 
 namespace KDevelop
 {
 
-class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QStandardItemModel
+class FilteredItem;
+
+struct OutputModelPrivate
+{
+    OutputModelPrivate();
+    OutputModelPrivate( const KUrl& builddir );
+    ~OutputModelPrivate();
+    bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
+    QList<FilteredItem> m_filteredItems;
+    // We use std::set because that is ordered
+    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next 
+    KUrl m_buildDir;
+
+    QQueue<QString> m_lineBuffer;
+    QSharedPointer<IFilterStrategy> m_filter;
+};
+
+class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
-    public:
-        OutputModel( QObject* parent = 0 );
-        virtual ~OutputModel();
-        
-    public Q_SLOTS:
-        void appendLine( const QString& );
-        void appendLines( const QStringList& );
-        
-        void addPending();
-        
-    private:
-      class OutputModelPrivate* const d;
+public:
+
+    enum CustomRoles {
+        OutputItemTypeRole = Qt::UserRole + 1
+    };
+
+    enum OutputFilterStrategy
+    {
+        NoFilter,
+        CompilerFilter,
+        ScriptErrorFilter,
+        StaticAnalysisFilter
+    };
+
+    explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
+    OutputModel( QObject* parent );
+    virtual ~OutputModel();
+
+    /// IOutputViewModel interfaces
+    void activate( const QModelIndex& index );
+    QModelIndex nextHighlightIndex( const QModelIndex &current );
+    QModelIndex previousHighlightIndex( const QModelIndex &current );
+
+    /// QAbstractItemModel interfaces
+    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
+    int rowCount( const QModelIndex& = QModelIndex() ) const;
+    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
+
+    void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
+
+public Q_SLOTS:
+    void appendLine( const QString& );
+    void appendLines( const QStringList& );
+
+private slots:
+    /// add batches of lines to prevent UI-lockup
+    void addLineBatch();
+
+private:
+    OutputModelPrivate* const d;
 };
+
+//Q_DECLARE_METATYPE( OutputModel::OutputItemType )
 }
-
 #endif
-
 
