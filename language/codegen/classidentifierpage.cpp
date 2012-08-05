@@ -43,6 +43,8 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
     d->classid->keditlistwidget->layout()->setContentsMargins(0, 0, 0, 0);
     d->classid->keditlistwidget->lineEdit()->setPlaceholderText(i18n("Inheritance type and base class name"));
 
+    d->classid->inheritanceLabel->setBuddy(d->classid->keditlistwidget->lineEdit());
+
     connect(d->classid->identifierLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkIdentifier()));
 
     emit isValid(false);
