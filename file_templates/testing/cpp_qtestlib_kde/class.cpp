@@ -4,8 +4,9 @@
  {{ license|lines_prepend:" * " }}
  */
 
+
 #include "{{ output_file_header }}"
-#include <QtTest>
+#include <qtest_kde.h>
 
 
 void initTestCase()
@@ -42,5 +43,5 @@ void {{ case }}()
 
 {% endfor %}
 
-QTEST_MAIN({{ name }});
+QTEST_KDEMAIN({{ name }}, NoGUI);
 #include {{ output_file_header|cut:".h" }}.moc

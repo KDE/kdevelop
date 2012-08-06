@@ -19,10 +19,6 @@ private slots:
     void cleanupTestCase();
 
 
-    void init();
-    void cleanup();
-
-
     {% for case in testCases %}
     void {{ case }}();
     {% endfor %}
