@@ -86,16 +86,11 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     action->setIcon( KIcon( "documentinfo" ) );
 
     action = actionCollection()->addAction( "class_from_template" );
-    action->setText( i18n( "Create Class from &Template" ) );
+    action->setText( i18n( "Create From &Template" ) );
     action->setShortcut( i18n( "Alt+Shift+t" ) );
     connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
     action->setIcon( KIcon( "code-class" ) );
-    action->setToolTip( i18n( "Create a new class from a template" ) );
-
-    action = actionCollection()->addAction( "test_from_template" );
-    action->setText( i18n( "Create Test " ) );
-    action->setIcon( KIcon( "preflight-verifier" ) );
-    action->setToolTip( i18n( "Create a new test case from a template" ) );
+    action->setToolTip( i18n( "Create new source code files from a template" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
@@ -208,11 +203,15 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
         {
             if (projectContext->items().size() == 1)
             {
-                KAction* action = new KAction(KIcon("code-class"), i18n("Create from &Template"), actionCollection() );
-                action->setData(projectContext->items().first()->url());
+                ProjectBaseItem* item = projectContext->items().first();
+                if (item->folder() || item->target())
+                {
+                    KAction* action = new KAction(KIcon("code-class"), i18n("Create from &Template"), actionCollection() );
+                    action->setData(projectContext->items().first()->url());
 
-                connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
-                ext.addAction(ContextMenuExtension::FileGroup, action);
+                    connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
+                    ext.addAction(ContextMenuExtension::FileGroup, action);
+                }
             }
         }
     }
