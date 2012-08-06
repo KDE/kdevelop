@@ -191,7 +191,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
 
         return true;
     } else if( !QFileInfo( builddir.toLocalFile() + "/CMakeCache.txt" ).exists() ||
-               !(QFileInfo( builddir.toLocalFile() + "/Makefile" ).exists() && QFileInfo( builddir.toLocalFile(), "build.ninja" ).exists())
+               !(QFileInfo( builddir.toLocalFile() + "/Makefile" ).exists() || QFileInfo( builddir.toLocalFile() + "/build.ninja" ).exists())
     ) //TODO: maybe we could use the builder for that?
     {
         // User entered information already, but cmake hasn't actually been run yet.
