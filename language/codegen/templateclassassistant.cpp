@@ -110,7 +110,6 @@ TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& bas
     d->dummyPage = 0;
 
     setup();
-    pageWidget()->setFaceType(KPageView::List);
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
