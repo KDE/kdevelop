@@ -204,7 +204,16 @@ ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
             if (projectContext->items().size() == 1)
             {
                 ProjectBaseItem* item = projectContext->items().first();
-                if (item->folder() || item->target())
+                KUrl url;
+                if (item->folder())
+                {
+                    url = item->url();
+                }
+                else if (item->target())
+                {
+                    url = item->parent()->url();
+                }
+                if (url.isValid())
                 {
                     KAction* action = new KAction(KIcon("code-class"), i18n("Create from &Template"), actionCollection() );
                     action->setData(projectContext->items().first()->url());
