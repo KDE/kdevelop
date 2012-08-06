@@ -152,6 +152,7 @@ set( kdevplatformlanguage_LIB_UI
     codegen/ui/outputlocation.ui
     codegen/ui/templateselection.ui
     codegen/ui/classmembers.ui
+    codegen/ui/testcases.ui
 )
 
 kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} )

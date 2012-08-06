@@ -20,29 +20,46 @@
 
 #include "testcasespage.h"
 
+#include "ui_testcases.h"
+
 #include <KEditListWidget>
 #include <QLayout>
 #include <QVBoxLayout>
 
-TestCasesPage::TestCasesPage (QWidget* parent, Qt::WindowFlags f) : QWidget (parent, f)
+using namespace KDevelop;
+
+class KDevelop::TestCasesPagePrivate
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    ui = new KEditListWidget(this);
-    layout->addWidget(ui);
-    setLayout(layout);
+public:
+    Ui::TestCasesPage* ui;
+};
+
+TestCasesPage::TestCasesPage (QWidget* parent, Qt::WindowFlags f)
+: QWidget (parent, f)
+, d(new TestCasesPagePrivate)
+{
+    d->ui = new Ui::TestCasesPage();
+    d->ui->setupUi(this);
+
+    d->ui->testCasesLabel->setBuddy(d->ui->keditlistwidget->lineEdit());
 }
 
 TestCasesPage::~TestCasesPage()
 {
+    delete d;
+}
 
+QString TestCasesPage::name() const
+{
+    return d->ui->identifierLineEdit->text();
 }
 
 void TestCasesPage::setTestCases (const QStringList& testCases)
 {
-    ui->setItems(testCases);
+    d->ui->keditlistwidget->setItems(testCases);
 }
 
 QStringList TestCasesPage::testCases() const
 {
-    return ui->items();
+    return d->ui->keditlistwidget->items();
 }

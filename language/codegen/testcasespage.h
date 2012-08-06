@@ -23,13 +23,18 @@
 
 #include <QtGui/QWidget>
 
+#include "../languageexport.h"
+
 class KEditListWidget;
+
+namespace KDevelop
+{
 
 /**
  * Assistant page for specifying the list of test cases
  *
  */
-class TestCasesPage : public QWidget
+class KDEVPLATFORMLANGUAGE_EXPORT TestCasesPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)
@@ -37,6 +42,11 @@ class TestCasesPage : public QWidget
 public:
     explicit TestCasesPage (QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~TestCasesPage();
+
+    /**
+     * The name of the new test, as set by the user
+     */
+    QString name() const;
 
     /**
      * Returns the list of test case names
@@ -48,8 +58,10 @@ public:
     void setTestCases(const QStringList& testCases);
 
 private:
-    KEditListWidget* ui;
+    class TestCasesPagePrivate* const d;
 
 };
+
+}
 
 #endif // TESTCASESWIDGET_H
