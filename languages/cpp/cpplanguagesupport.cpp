@@ -745,12 +745,6 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
 }
 
-void CppLanguageSupport::newClassAssistant()
-{
-  //TODO: Should give some hint on where it should be added
-  SimpleRefactoring::self().createNewClass(0);
-}
-
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }
 
