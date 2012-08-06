@@ -76,7 +76,8 @@ void CMakeJob::start()
     if( !m_project ) {
         setError(NoProjectError);
         setErrorText("Internal error: no project specified to configure.");
-        return emitResult();
+        emitResult();
+        return;
     }
 
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
