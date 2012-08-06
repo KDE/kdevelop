@@ -24,11 +24,13 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
+#include <KLocalizedString>
 
 ConfigureAndBuildJob::ConfigureAndBuildJob( KJob* configureJob, KJob* buildJob )
 {
      addSubjob( configureJob );
      addSubjob( buildJob );
+     setObjectName(i18n("'%1' + '%2'", configureJob->objectName(), buildJob->objectName()));
      kDebug() << "added job" << hasSubjobs();
 }
 
