@@ -99,6 +99,21 @@ public:
      */
     void setUseShell( bool shell );
     
+    /**
+     * @returns the arguments
+     */
+    QStringList arguments() const;
+    
+    /**
+     * @returns the command
+     */
+    QString command() const;
+    
+    /**
+     * @returns the working directory
+     */
+    QString workingDirectory() const;
+    
 Q_SIGNALS:
     void receivedStandardError( const QStringList& );
     void receivedStandardOutput( const QStringList& );

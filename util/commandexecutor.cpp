@@ -148,6 +148,21 @@ void CommandExecutor::kill()
     d->m_process->close();
 }
 
+QString CommandExecutor::command() const
+{
+    return d->m_command;
+}
+
+QStringList CommandExecutor::arguments() const
+{
+    return d->m_args;
+}
+
+QString CommandExecutor::workingDirectory() const
+{
+    return d->m_workDir;
+}
+
 }
 
 #include "commandexecutor.moc"
