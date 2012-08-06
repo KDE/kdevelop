@@ -13,6 +13,7 @@ set(filetemplate_DIRS
     testing/cpp_qtestlib_kde
     testing/cpp_qtestlib_kdevelop
     testing/python_pyunit
+    testing/php_phpunit
 )
 
 kdevplatform_add_file_templates(${filetemplate_DIRS})
