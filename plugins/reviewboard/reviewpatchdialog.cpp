@@ -55,6 +55,11 @@ void ReviewPatchDialog::setUsername(const QString& user)
     m_ui->username->setText(user);
 }
 
+void ReviewPatchDialog::setRepository(const QString& repo)
+{
+    m_preferredRepository = repo;
+}
+
 QString ReviewPatchDialog::baseDir() const
 {
     return m_ui->basedir->text();
@@ -90,6 +95,12 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     
     m_ui->repositories->sortItems(Qt::AscendingOrder);
     m_ui->repositoriesBox->setEnabled(job->error()==0);
+    
+    if(!m_preferredRepository.isEmpty()) {
+        QList< QListWidgetItem* > items = m_ui->repositories->findItems(m_preferredRepository, Qt::MatchExactly);
+        if(!items.isEmpty())
+            items.first()->setSelected(true);
+    }
 }
 
 QString ReviewPatchDialog::repository() const

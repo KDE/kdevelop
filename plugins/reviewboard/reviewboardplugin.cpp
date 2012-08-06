@@ -65,6 +65,8 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     
         d.setServer(versionedConfig.readEntry<KUrl>("server", KUrl("https://git.reviewboard.kde.org")));
         d.setUsername(versionedConfig.readEntry("username", QString()));
+        d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
+        d.setRepository(versionedConfig.readEntry("repository", QString()));
     }
     
     int ret = d.exec();
@@ -78,6 +80,14 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             
             KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
                                      QString(), QString(), KMessageBox::AllowLink);
+            if(p) {
+                KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
+            
+                versionedConfig.writeEntry("server", url);
+                versionedConfig.writeEntry("username", d.server().userName());
+                versionedConfig.writeEntry("baseDir", d.baseDir());
+                versionedConfig.writeEntry("repository", d.repository());
+            }
         } else {
             KMessageBox::error(0, job->errorText());
         }
