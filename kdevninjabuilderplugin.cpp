@@ -56,6 +56,9 @@ static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
 
 static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 {
+    if(!item->parent())
+      return QStringList();
+
     switch(item->type()) {
         case KDevelop::ProjectBaseItem::File:
           return QStringList(item->url().toLocalFile()+'^');
