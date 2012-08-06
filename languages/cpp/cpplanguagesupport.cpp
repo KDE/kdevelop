@@ -215,10 +215,6 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
-    KAction* newClassAction = actions.addAction("code_new_class");
-    newClassAction->setText( i18n("Create &New Class") );
-    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassAssistant()));
-    
 //    KAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
 //    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
