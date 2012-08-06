@@ -87,9 +87,6 @@ public:
     KUrl baseUrl;
 
     QString type;
-    QHash< QString, KUrl > fileUrls;
-    QHash< QString, SimpleCursor > filePositions;
-    QString license;
     QVariantHash templateOptions;
 };
 
@@ -254,11 +251,25 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->licensePage)
     {
-        d->license = d->licensePageWidget->license();
+        if (d->generator)
+        {
+            d->generator->setLicense(d->licensePageWidget->license());
+        }
+        else
+        {
+            d->renderer->addVariable("license", d->licensePageWidget->license());
+        }
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
-        d->templateOptions = d->templateOptionsPageWidget->templateOptions();
+        if (d->generator)
+        {
+            d->generator->addVariables(d->templateOptionsPageWidget->templateOptions());
+        }
+        else
+        {
+            d->renderer->addVariables(d->templateOptionsPageWidget->templateOptions());
+        }
     }
     else if (currentPage() == d->testCasesPage)
     {
@@ -313,30 +324,29 @@ void TemplateClassAssistant::back()
 void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
-    d->fileUrls = d->outputPageWidget->fileUrls();
-    d->filePositions = d->outputPageWidget->filePositions();
+    QHash<QString, KUrl> fileUrls = d->outputPageWidget->fileUrls();
+    QHash<QString, SimpleCursor> filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
     if (d->generator)
     {
-        QHash<QString, KUrl>::const_iterator it = d->fileUrls.constBegin();
-        for (; it != d->fileUrls.constEnd(); ++it)
+        QHash<QString, KUrl>::const_iterator it = fileUrls.constBegin();
+        for (; it != fileUrls.constEnd(); ++it)
         {
             d->generator->setFileUrl(it.key(), it.value());
-            d->generator->setFilePosition(it.key(), d->filePositions.value(it.key()));
+            d->generator->setFilePosition(it.key(), filePositions.value(it.key()));
         }
 
-        d->generator->setLicense(d->license);
         d->generator->addVariables(d->templateOptions);
         changes = d->generator->generate();
     }
     else
     {
-        changes = d->renderer->renderFileTemplate(d->fileTemplate, d->baseUrl, d->fileUrls);
+        changes = d->renderer->renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls);
     }
     changes.applyAllChanges();
 
-    foreach (const KUrl& url, d->fileUrls)
+    foreach (const KUrl& url, fileUrls)
     {
         ICore::self()->documentController()->openDocument(url);
     }
