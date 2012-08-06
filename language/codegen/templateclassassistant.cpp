@@ -262,6 +262,7 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->testCasesPage)
     {
+        d->renderer->addVariable("name", d->testCasesPageWidget->name());
         d->renderer->addVariable("testCases", d->testCasesPageWidget->testCases());
     }
 
