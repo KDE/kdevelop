@@ -26,7 +26,12 @@
 #include <kdebug.h>
 
 OutputData::OutputData( ToolViewData* tv )
-    : QObject( tv ), delegate(0), ownsDelegate(false), model(0), ownsModel(false), toolView(tv), id(-1)
+: QObject( tv )
+, ownsDelegate(false)
+, model(0)
+, ownsModel(false)
+, toolView(tv)
+, id(-1)
 {
 }
 
@@ -42,7 +47,7 @@ void OutputData::setDelegate( QAbstractItemDelegate* del, bool takeOwnership )
 {
     delegate = del;
     if (takeOwnership)
-        delegate->setParent(this);
+        del->setParent(this);
     emit delegateChanged( id );
 }
 

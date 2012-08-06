@@ -43,7 +43,7 @@ class OutputData : public QObject
 Q_OBJECT
 public:
     OutputData( ToolViewData* tv );
-    QAbstractItemDelegate* delegate;
+    QWeakPointer<QAbstractItemDelegate> delegate;
     bool ownsDelegate;
     QAbstractItemModel* model;
     bool ownsModel;

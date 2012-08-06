@@ -197,6 +197,11 @@ SessionDialog::SessionDialog( QWidget* parent )
     enableButtons();
 }
 
+SessionDialog::~SessionDialog()
+{
+    delete m_ui;
+}
+
 void SessionDialog::enableButtons()
 {
     m_ui->activateButton->setEnabled( m_model->rowCount() > 1 );

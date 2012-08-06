@@ -431,6 +431,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 
 ClassIdentifierPage::~ClassIdentifierPage()
 {
+    delete d->classid;
     delete d;
 }
 
@@ -583,6 +584,7 @@ LicensePage::~LicensePage()
     else
         kWarning() << "Attempted to save an invalid license number: " << index << ". Number of licenses:" << d->availableLicenses.size();
 
+    delete d->license;
     delete d;
 }
 
@@ -822,6 +824,7 @@ bool OutputPage::validatePage()
 
 OutputPage::~OutputPage()
 {
+    delete d->output;
     delete d;
 }
 

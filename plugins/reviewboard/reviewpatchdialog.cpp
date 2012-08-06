@@ -35,6 +35,11 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
 }
 
+ReviewPatchDialog::~ReviewPatchDialog()
+{
+    delete m_ui;
+}
+
 void ReviewPatchDialog::setBaseDir(const QString& repo)
 {
     m_ui->basedir->setText(repo);
