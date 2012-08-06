@@ -62,12 +62,14 @@ void NinjaJob::start()
 bool NinjaJob::doKill()
 {
     m_process->kill();
+    m_model->appendLine( i18n("*** Aborted ***") );
     return true;
 }
 
 void NinjaJob::slotCompleted()
 {
     emitResult();
+    m_model->appendLine( i18n("*** Finished ***") );
 }
 
 void NinjaJob::slotFailed(QProcess::ProcessError error)
@@ -75,4 +77,5 @@ void NinjaJob::slotFailed(QProcess::ProcessError error)
     setError(Failed);
     // FIXME need more detail
     setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
+    m_model->appendLine( i18n("*** Failed ***") );
 }
