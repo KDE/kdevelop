@@ -20,6 +20,7 @@
 #define NINJAJOB_H
 
 #include <outputview/outputjob.h>
+#include <QProcess>
 
 namespace KDevelop {
     class CommandExecutor;
@@ -32,10 +33,18 @@ class KUrl;
 class NinjaJob : public KDevelop::OutputJob
 {
     Q_OBJECT
+    enum ErrorTypes {
+        Correct = 0,
+        Failed
+    };
     public:
         NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent = 0);
         virtual void start();
         virtual bool doKill();
+
+    public slots:
+        void slotFailed(QProcess::ProcessError error);
+        void slotCompleted();
 
     private:
         KDevelop::CommandExecutor* m_process;

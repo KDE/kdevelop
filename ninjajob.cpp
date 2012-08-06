@@ -20,17 +20,19 @@
 #include <KProcess>
 #include <KUrl>
 #include <KDebug>
+#include <KLocalizedString>
 #include <outputview/outputmodel.h>
 #include <util/commandexecutor.h>
 
 NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent)
     : OutputJob(parent, Verbose)
 {
-    Q_ASSERT(!dir.isRelative());
+    Q_ASSERT(!dir.isRelative() && !dir.isEmpty());
     setToolTitle("Ninja");
     setCapabilities(Killable);
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+    setObjectName("ninja "+arguments.join(" "));
  
     m_process = new KDevelop::CommandExecutor("ninja", this);
     m_process->setArguments( arguments );
@@ -61,4 +63,16 @@ bool NinjaJob::doKill()
 {
     m_process->kill();
     return true;
+}
+
+void NinjaJob::slotCompleted()
+{
+    emitResult();
+}
+
+void NinjaJob::slotFailed(QProcess::ProcessError error)
+{
+    setError(Failed);
+    // FIXME need more detail
+    setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
 }
