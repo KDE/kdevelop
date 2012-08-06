@@ -38,6 +38,7 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     
     m_model = new KDevelop::OutputModel(this);
     setModel( m_model, KDevelop::IOutputView::TakeOwnership );
+    m_model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
 
     connect(m_process, SIGNAL(receivedStandardError(QStringList)),
             model(), SLOT(appendLines(QStringList)) );
