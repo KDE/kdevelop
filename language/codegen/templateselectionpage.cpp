@@ -33,6 +33,7 @@
 #include "ui_classmembers.h"
 
 #include <KNS3/DownloadDialog>
+#include <KNS3/KNewStuffButton>
 #include <KLocalizedString>
 #include <KComponentData>
 #include <KFileDialog>
@@ -74,9 +75,6 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
     connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              SLOT(currentTemplateChanged(QModelIndex)));
 
-    connect (d->ui->getMoreButton, SIGNAL(clicked(bool)), this, SLOT(getMoreClicked()));
-    connect (d->ui->loadFileButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
-
     QModelIndex categoryIndex = d->model->index(0, 0);
     QModelIndex templateIndex = categoryIndex;
 
@@ -107,6 +105,16 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
 
     d->ui->languageView->setCurrentIndex(categoryIndex);
     d->ui->templateView->setCurrentIndex(templateIndex);
+
+    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevclassassistant.knsrc", d->ui->languageView);
+    connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
+    d->ui->languageView->addWidget(0, getMoreButton);
+
+    KPushButton* loadButton = new KPushButton(KIcon("application-x-archive"), i18n("Load Template From File"), d->ui->languageView);
+    connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));
+    d->ui->languageView->addWidget(0, loadButton);
+
+    d->ui->languageView->setContentsMargins(0, 0, 0, 0);
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()
@@ -150,8 +158,6 @@ void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
 
 void TemplateSelectionPage::getMoreClicked()
 {
-    KNS3::DownloadDialog dialog("kdevclassassistant.knsrc");
-    dialog.exec();
     d->model->refresh();
 }
 

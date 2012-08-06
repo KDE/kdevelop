@@ -13,45 +13,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
     <widget class="KDevelop::MultiLevelListView" name="languageView" native="true"/>
    </item>
-   <item row="2" column="0">
-    <widget class="KPushButton" name="loadFileButton">
-     <property name="text">
-      <string>Load Template From File</string>
-     </property>
-     <property name="icon">
-      <iconset theme="application-x-archive">
-       <normaloff/>
-      </iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="KPushButton" name="getMoreButton">
-     <property name="text">
-      <string>Get More Templates</string>
-     </property>
-     <property name="icon">
-      <iconset theme="get-hot-new-stuff">
-       <normaloff/>
-      </iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" rowspan="3">
+   <item>
     <widget class="QTreeView" name="templateView"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KDevelop::MultiLevelListView</class>
    <extends>QWidget</extends>
