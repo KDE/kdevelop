@@ -27,7 +27,6 @@
 
 #include "../languageexport.h"
 
-class C;
 class KArchiveDirectory;
 namespace KDevelop
 {
@@ -39,7 +38,7 @@ class TemplateRenderer;
  *
  * @section TemplateStructure Template Archive Structure
  *
- * Class templates in KDevPlatform are archive files.
+ * Source file templates in KDevPlatform are archive files.
  * The archive must contain at least one .desktop file with the template's description.
  * If multiple such files are present, the one with the same base name as the archive itself will be used.
  *
@@ -206,6 +205,14 @@ public:
      */
     SourceFileTemplate(const QString& templateDescription);
 
+    /**
+     * Copy constructor
+     *
+     * Creates a SourceFileTemplate representing the same template archive as @p other.
+     * This new objects shares no data with the @p other, so they can be read and deleted independently. 
+     *
+     * @param other the template to copy
+     */
     SourceFileTemplate(const SourceFileTemplate& other);
 
     /**
@@ -254,10 +261,14 @@ public:
      **/
     QHash<QString, QList<ConfigOption> > customOptions(TemplateRenderer* renderer) const;
 
+    /**
+     * The type of this template, which is the first category specified in the template description file.
+     * This can be any string, but TemplateClassAssistant only supports @c Class and @c Test. 
+     */
     QString type() const;
 
     /**
-     * The name of the programming language of the output class
+     * The name of the programming language of the generated files
      */
     QString languageName() const;
 
