@@ -82,7 +82,7 @@ void TestGenerationTest::yamlTemplate()
     SourceFileTemplate file(description);
     QCOMPARE(file.name(), QString("Testing YAML Template"));
 
-    DocumentChangeSet changes = renderer->renderFileTemplate(&file, baseUrl, urls(file));
+    DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
     changes.applyAllChanges();
 
     COMPARE_FILES("testname.yaml");
@@ -96,7 +96,7 @@ void TestGenerationTest::cppTemplate()
 
     QCOMPARE(file.name(), QString("Testing C++ Template"));
 
-    DocumentChangeSet changes = renderer->renderFileTemplate(&file, baseUrl, urls(file));
+    DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
     changes.applyAllChanges();
 
     COMPARE_FILES("testname.h");

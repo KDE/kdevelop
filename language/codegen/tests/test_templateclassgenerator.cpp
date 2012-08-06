@@ -144,7 +144,7 @@ void TestTemplateClassGenerator::defaultFileUrlsYaml()
 void TestTemplateClassGenerator::customOptions()
 {
     TemplateClassGenerator* generator = loadTemplate("test_yaml");
-    QCOMPARE(generator->sourceFileTemplate()->hasCustomOptions(), false);
+    QCOMPARE(generator->sourceFileTemplate().hasCustomOptions(), false);
 }
 
 void TestTemplateClassGenerator::templateVariablesCpp()

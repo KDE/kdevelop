@@ -50,7 +50,7 @@ using namespace KDevelop;
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
-    const SourceFileTemplate* fileTemplate;
+    SourceFileTemplate fileTemplate;
     KUrl baseUrl;
     TemplateRenderer renderer;
 
@@ -96,21 +96,19 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses (const DeclarationPointer&
 TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl)
  : d(new TemplateClassGeneratorPrivate)
 {
-    d->fileTemplate = 0;
     d->baseUrl = baseUrl;
     d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 }
 
 TemplateClassGenerator::~TemplateClassGenerator()
 {
-    delete d->fileTemplate;
     delete d;
 }
 
 void TemplateClassGenerator::setTemplateDescription (const SourceFileTemplate& fileTemplate)
 {
-    d->fileTemplate = &fileTemplate;
-    d->renderer.addArchive(d->fileTemplate->directory());
+    d->fileTemplate = fileTemplate;
+    d->renderer.addArchive(d->fileTemplate.directory());
 }
 
 DocumentChangeSet TemplateClassGenerator::generate()
@@ -123,10 +121,10 @@ DocumentChangeSet TemplateClassGenerator::generate()
 
 QHash< QString, QString > TemplateClassGenerator::fileLabels()
 {
-    Q_ASSERT(d->fileTemplate);
+    Q_ASSERT(d->fileTemplate.isValid());
     QHash<QString,QString> labels;
 
-    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate->outputFiles())
+    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
     {
         labels.insert(outputFile.identifier, outputFile.label);
     }
@@ -138,7 +136,7 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrls ()
 {
     if (d->fileUrls.isEmpty())
     {
-        foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate->outputFiles())
+        foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
         {
             KUrl url(d->baseUrl);
             QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
@@ -182,7 +180,7 @@ QString TemplateClassGenerator::renderString (const QString& text)
     return d->renderer.render(text);
 }
 
-const SourceFileTemplate* TemplateClassGenerator::sourceFileTemplate() const
+SourceFileTemplate TemplateClassGenerator::sourceFileTemplate() const
 {
     return d->fileTemplate;
 }

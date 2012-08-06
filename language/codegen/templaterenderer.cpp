@@ -282,7 +282,7 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
     return d->emptyLinesPolicy;
 }
 
-DocumentChangeSet TemplateRenderer::renderFileTemplate (const SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
+DocumentChangeSet TemplateRenderer::renderFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
 {
     DocumentChangeSet changes;
     KUrl url(baseUrl);
@@ -297,8 +297,8 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate (const SourceFileTemplate
         addVariable("output_file_" + cleanName + "_absolute", it.value().toLocalFile());
     }
 
-    const KArchiveDirectory* directory = fileTemplate->directory();
-    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate->outputFiles())
+    const KArchiveDirectory* directory = fileTemplate.directory();
+    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate.outputFiles())
     {
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);
         if (!entry)

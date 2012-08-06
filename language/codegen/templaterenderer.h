@@ -199,7 +199,7 @@ public:
      * @param fileUrls destination URLs of the output files
      * @return KDevelop::DocumentChangeSet
      */
-    DocumentChangeSet renderFileTemplate (const KDevelop::SourceFileTemplate* fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls);
+    DocumentChangeSet renderFileTemplate (const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls);
 
 private:
     class TemplateRendererPrivate* const d;

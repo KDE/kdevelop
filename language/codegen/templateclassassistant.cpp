@@ -46,10 +46,11 @@
 
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
+{                               \
     removePage(d->name##Page);  \
-delete d->name##Page;           \
-d->name##Page = 0;              \
-d->name##PageWidget = 0;
+    d->name##Page = 0;          \
+    d->name##PageWidget = 0;    \
+}
 
 #define ZERO_PAGE(name)         \
 d->name##Page = 0;              \
@@ -61,19 +62,22 @@ class KDevelop::TemplateClassAssistantPrivate
 {
 public:
     KPageWidgetItem* templateSelectionPage;
-    KPageWidgetItem* templateOptionsPage;
-    KPageWidgetItem* membersPage;
     KPageWidgetItem* classIdentifierPage;
     KPageWidgetItem* overridesPage;
+    KPageWidgetItem* membersPage;
+    KPageWidgetItem* testCasesPage;
     KPageWidgetItem* licensePage;
+    KPageWidgetItem* templateOptionsPage;
     KPageWidgetItem* outputPage;
-
+    KPageWidgetItem* dummyPage;
+    
     TemplateSelectionPage* templateSelectionPageWidget;
-    TemplateOptionsPage* templateOptionsPageWidget;
-    ClassMembersPage* membersPageWidget;
     ClassIdentifierPage* classIdentifierPageWidget;
     OverridesPage* overridesPageWidget;
+    ClassMembersPage* membersPageWidget;
+    TestCasesPage* testCasesPageWidget;
     LicensePage* licensePageWidget;
+    TemplateOptionsPage* templateOptionsPageWidget;
     OutputPage* outputPageWidget;
 
     SourceFileTemplate fileTemplate;
@@ -81,9 +85,6 @@ public:
     TemplateClassGenerator* generator;
     TemplateRenderer* renderer;
     KUrl baseUrl;
-    KPageWidgetItem* dummyPage;
-    TestCasesPage* testCasesPageWidget;
-    KPageWidgetItem* testCasesPage;
 
     QString type;
     QHash< QString, KUrl > fileUrls;
@@ -105,6 +106,8 @@ TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& bas
     ZERO_PAGE(overrides)
     ZERO_PAGE(license)
     ZERO_PAGE(output)
+    ZERO_PAGE(testCases)
+    d->dummyPage = 0;
 
     setup();
     pageWidget()->setFaceType(KPageView::List);
@@ -302,6 +305,8 @@ void TemplateClassAssistant::back()
         delete d->generator;
         d->helper = 0;
         d->generator = 0;
+
+        d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
     }
 }
 
@@ -327,7 +332,7 @@ void TemplateClassAssistant::accept()
     }
     else
     {
-        changes = d->renderer->renderFileTemplate(&d->fileTemplate, d->baseUrl, d->fileUrls);
+        changes = d->renderer->renderFileTemplate(d->fileTemplate, d->baseUrl, d->fileUrls);
     }
     changes.applyAllChanges();
 

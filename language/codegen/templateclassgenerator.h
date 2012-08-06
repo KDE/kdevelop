@@ -145,7 +145,7 @@ public:
     SimpleCursor filePosition(const QString& outputFile);
     void setFilePosition(const QString& outputFile, const SimpleCursor& position);
 
-    const SourceFileTemplate* sourceFileTemplate() const;
+    SourceFileTemplate sourceFileTemplate() const;
 
     /**
      * Adds variables @p variables to the context passed to all template files.
