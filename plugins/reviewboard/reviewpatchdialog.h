@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2010-2012 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -44,12 +44,15 @@ class ReviewPatchDialog : public KDialog
         QString baseDir() const;
         QString repository() const;
         
+        void setRepository(const QString& repo);
+        
     private slots:
         void serverChanged();
         void receivedProjects(KJob* job);
         
     private:
         Ui::ReviewPatch* m_ui;
+        QString m_preferredRepository;
 };
 
 #endif
