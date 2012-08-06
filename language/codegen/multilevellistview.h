@@ -29,25 +29,89 @@ class QAbstractItemModel;
 namespace KDevelop
 {
 
+/**
+ * A view for displaying a tree structure in a series of list views.
+ *
+ * A MultiLevelListView can have any number of levels, with one list view for each level.
+ * Selecting an item at one level causes that item to become the root of the next level.
+ *
+ * For compatibility and convenience, this class has methods and signals similar to those of
+ * QAbstractItemView, such as setModel(), setRootIndex() and currentIndexChanged(). 
+ *
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * Creates a new MultiLevelListView with parent @p parent and the specified number of @p levels.
+     *
+     * @param parent parent widget
+     * @param f window flags, passed to QWidget
+     * @param levels the number of levels in this view
+     */
     explicit MultiLevelListView (QWidget* parent = 0, Qt::WindowFlags f = 0, int levels = 2);
+    /**
+     * Default destructor
+     */
     virtual ~MultiLevelListView();
 
+    /**
+     * Sets the model to be displayed by this view. 
+     * 
+     * @param model the model to be displayed
+     * @sa QAbstractItemView::setModel()
+     */
     void setModel(QAbstractItemModel* model);
+    /**
+     * Provides access to the QListView objects used internally.
+     * Returns the view for level @p level of the tree structure.
+     *
+     * @param level the level of the tree structure shown by the returned view
+     */
     QListView* viewForLevel(int level);
 
+    /**
+     * The current index of the view.
+     *
+     * The current index is determined as the current index of the last list view. 
+     *
+     * @sa QAbstractItemView::currentIndex()
+     */
     QModelIndex currentIndex();
 
+    /**
+     * Adds the widget @p widget under the list view for level @p level.
+     * This function can be used to insert custom widgets into the view hierarchy. 
+     *
+     * @param level specifies where to place the widget
+     * @param widget the widget to add
+    */
     void addWidget(int level, QWidget* widget);
 
 signals:
+    /**
+     * Notified that the current index has changed from @p previous to @p current
+     *
+     * @param current the new current index
+     * @param previous the previous index
+     * 
+     * @sa currentIndex(), QItemSelectionModel::currentChanged()
+     */
     void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);
 
 public slots:
+    /**
+     * Sets the root index of the entire view to @p index.
+     *
+     * @sa QAbstractItemView::setRootIndex()
+     */
     void setRootIndex(const QModelIndex& index);
+    /**
+     * Sets the current index to @p index.
+     *
+     * @sa currentIndex(), QAbstractItemView::setCurrentIndex()
+     */
     void setCurrentIndex(const QModelIndex& index);
 
 private slots:

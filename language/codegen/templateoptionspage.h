@@ -40,7 +40,7 @@ class TemplateClassAssistant;
  * Templates can include a file that specify configuration options. 
  * These can be set by the user before creating the class and are passed to the template.
  * 
- * @sa TemplateClassGenerator::customOptions()
+ * @sa SourceFileTemplate::customOptions()
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
 {

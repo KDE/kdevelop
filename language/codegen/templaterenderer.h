@@ -130,6 +130,11 @@ public:
      **/
     void addVariable(const QString& name, const QVariant& value);
 
+    /**
+     * Returns the current variables defined for this renderer
+     *
+     * @sa addVariable(), addVariables()
+     */
     QVariantHash variables() const;
 
     /**

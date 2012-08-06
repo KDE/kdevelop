@@ -25,6 +25,10 @@
 
 class KEditListWidget;
 
+/**
+ * Assistant page for specifying the list of test cases
+ *
+ */
 class TestCasesPage : public QWidget
 {
     Q_OBJECT
@@ -34,7 +38,13 @@ public:
     explicit TestCasesPage (QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~TestCasesPage();
 
+    /**
+     * Returns the list of test case names
+     */
     QStringList testCases() const;
+    /**
+     * Sets the current list of test case names to @p testCases
+     */
     void setTestCases(const QStringList& testCases);
 
 private:

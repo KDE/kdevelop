@@ -28,6 +28,9 @@ class KLineEdit;
 
 namespace KDevelop {
 
+/**
+ * Assistant dialog page for setting the identifier and inheritances of a new class
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
 {
     Q_OBJECT
@@ -37,13 +40,26 @@ public:
     ClassIdentifierPage(QWidget* parent);
     virtual ~ClassIdentifierPage();
 
+    /**
+     * The full identifier of the new class, with namespaces, as entered by the user. 
+     */
     QString identifier() const;
 
-    /// Returns a list of inheritances for the new class
+    /**
+     * Returns a list of inheritances for the new class.
+     *
+     * Each list elements contains both inheritance type and the base class name,
+     * such as "public QObject" or "implements Serializable"
+     */
     QStringList inheritanceList() const;
 
 Q_SIGNALS:
     void inheritanceChanged();
+    /**
+     * Emitted whenever the content of the page changes.
+     *
+     * @param valid true if the content is valid and the user can procede to the next page, false otherwise
+     */
     void isValid(bool valid);
 
 private Q_SLOTS:

@@ -28,6 +28,10 @@ class QTreeWidgetItem;
 
 namespace KDevelop {
 
+/**
+ * Assistant page for choosing class functions, overriden from base classes. 
+ *
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWidget
 {
     Q_OBJECT
@@ -52,6 +56,12 @@ public:
      */
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
 
+    /**
+     * Add @p declarations as potential overrides under the category @p category.
+     *
+     * @param category the user-visible category name
+     * @param declarations a list of declarations that can be overriden or implemented in the new class
+     */
     void addCustomDeclarations(const QString& category, const QList< KDevelop::DeclarationPointer >& declarations);
 
     virtual QList<DeclarationPointer> selectedOverrides();
@@ -63,7 +73,13 @@ public:
 
 
 public Q_SLOTS:
+    /**
+     * Selects all functions for overriding
+     */
     virtual void selectAll();
+    /**
+     * Deselects all potential overrides
+     */
     virtual void deselectAll();
 
 private:

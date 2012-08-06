@@ -28,13 +28,23 @@ namespace KDevelop
 
 class TemplateClassAssistant;
 
-class DefaultCreateClassHelper : public ICreateClassHelper
+/**
+ * A default class creation helper, used when no custom helper is supplied by the language plugin. 
+ *
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT DefaultCreateClassHelper : public ICreateClassHelper
 {
 public:
     DefaultCreateClassHelper(TemplateClassAssistant* assistant);
     virtual ~DefaultCreateClassHelper();
 
+    /**
+     * Returns a new TemplateClassGenerator
+     */
     virtual KDevelop::TemplateClassGenerator* generator();
+    /**
+     * Returns and empty list of methods
+     */
     virtual QList< DeclarationPointer > defaultMethods(const QString& name);
 
 private:

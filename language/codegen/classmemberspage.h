@@ -33,6 +33,10 @@ namespace KDevelop
 class TemplateClassAssistant;
 class TemplateSelectionPage;
 
+/**
+ * Assistant dialog page for declaring data members of a new class
+ *
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT ClassMembersPage : public QWidget
 {
     Q_OBJECT
@@ -42,13 +46,14 @@ public:
     explicit ClassMembersPage (QWidget* parent);
     virtual ~ClassMembersPage();
 
+    /**
+     * Returns the list of data members, as entered by the user. 
+     */
     VariableDescriptionList members() const;
+    /**
+     * Sets the list of data members to @p members
+     */
     void setMembers(const VariableDescriptionList& members);
-
-    void moveRowTo(int destination, bool relative);
-
-private:
-    int rows();
 
 private:
     class ClassMembersPagePrivate* const d;

@@ -32,6 +32,9 @@ class TemplateRenderer;
 class SourceFileTemplate;
 class CreateClassAssistant; 
 
+/**
+ * Assistant page for setting the output location of generated source code
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
 {
     Q_OBJECT
@@ -40,15 +43,40 @@ public:
     OutputPage(QWidget* parent);
     virtual ~OutputPage();
 
+    /**
+     * Creates form widgets according to the number of output files of the template @p fileTemplate.
+     * File identifiers and labels are read from @p fileTemplate, but not the actual URLs.
+     *
+     * This function is useful to prevent UI flickering that occurs when adding widgets while the page is visible.
+     * It can be called immediately after the template is selected, before the user specified anything for the generated code.
+     */
     void prepareForm(const KDevelop::SourceFileTemplate& fileTemplate);
+    /**
+     * Loads file URLs from the template @p fileTemplate.
+     * This function only sets URLs and file positions to widgets created by prepareForm(),
+     * so be sure to call prepareForm() before calling this function. 
+     *
+     * @param fileTemplate the template archive with the generated files
+     * @param baseUrl the directory where the files are to be generated
+     * @param renderer used to render any variables in output URLs
+     */
     void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, KDevelop::TemplateRenderer* renderer);
 
+    /**
+     * Returns the file URLs, as specified by the user.
+     */
     QHash<QString, KUrl> fileUrls() const;
+    /**
+     * Returns the positions within files where code is to be generated. 
+     */
     QHash<QString, SimpleCursor> filePositions() const;
 
     bool isComplete() const;
 
 Q_SIGNALS:
+    /**
+     * @copydoc ClassIdentifierPage::isValid
+     */
     void isValid(bool valid);
 
 private:

@@ -30,7 +30,12 @@ namespace KDevelop {
 struct ClassDescription;
 class OverridesPage;
 
-//!@todo Add the name of the Author at the top of the license
+
+/**
+ * Assistant dialog page for choosing the license of new source files
+ *
+ * @todo Add the name of the Author at the top of the license
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWidget
 {
     Q_OBJECT
@@ -39,6 +44,9 @@ public:
     LicensePage(QWidget* parent);
     virtual ~LicensePage();
 
+    /**
+     * Returns the full license header, either a pre-defined or user-supplied one.
+     */
     QString license() const;
 
 public Q_SLOTS:
