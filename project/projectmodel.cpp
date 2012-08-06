@@ -1038,12 +1038,6 @@ ProjectBaseItem* ProjectModel::takeRow( int row )
     return d->rootItem->takeRow( row );
 }
 
-bool ProjectModel::hasChildren(const QModelIndex& parent) const
-{
-    bool b = QAbstractItemModel::hasChildren(parent);
-    return b;
-}
-
 Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
 {
     ProjectBaseItem* item = itemFromIndex( index );
