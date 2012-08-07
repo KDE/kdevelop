@@ -224,7 +224,13 @@ void CustomBuildSystemConfigWidget::removeConfig()
     configs.removeAt( curidx );
     ui->currentConfig->removeItem( curidx );
 
-    ui->currentConfig->setCurrentIndex( curidx - 1 );
+    // Make sure the new index is valid if possible, removing the first index
+    // would otherwise set the index to -1 and that will cause havoc in changeCurrentConfig
+    // since it clears the config if a negative index comes in. I'm not sure that is actually
+    // correct, but well easier to fix and understand here right now and the combobox should
+    // be dropped ultimately anyway I guess - or at least not be editable anymore.
+    int newidx = curidx > 0 ? curidx - 1 : 0;
+    ui->currentConfig->setCurrentIndex( newidx );
     changeCurrentConfig( ui->currentConfig->currentIndex() );
 }
 
