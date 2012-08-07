@@ -54,7 +54,10 @@ TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget 
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     m_document = editor->createDocument(this);
     ui->verticalLayout->insertWidget(0, m_document->createView(this));
-    documentChanged(m_currentDocument);
+    if (m_currentDocument)
+    {
+        documentActivated(m_currentDocument);
+    }
 
     connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
     connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedRendererChanged()));
@@ -111,8 +114,9 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
     m_tmpFile->setSuffix('.' + info.suffix());
 
     m_tmpFile->open();
-    kDebug() << m_tmpFile->fileName();
-    m_document->openUrl(KUrl(m_tmpFile->fileName()));
+    KUrl tmpUrl = KUrl::fromLocalFile(m_tmpFile->fileName());
+    kDebug() << tmpUrl;
+    m_document->openUrl(tmpUrl);
 
     m_currentDocument = document;
     documentChanged(document);
