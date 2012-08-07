@@ -36,7 +36,7 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     connect(m_ui->repositories, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
             this, SLOT(repositoryChanged(QListWidgetItem*)));
 
-    repositoryChanged(0, 0);
+    repositoryChanged(0);
 }
 
 ReviewPatchDialog::~ReviewPatchDialog()
