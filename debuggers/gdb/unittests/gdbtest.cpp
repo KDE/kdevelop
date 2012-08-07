@@ -46,6 +46,8 @@
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include "gdbframestackmodel.h"
+#include <mi/milexer.h>
+#include <mi/miparser.h>
 
 using KDevelop::AutoTestShell;
 
@@ -1562,6 +1564,34 @@ void GdbTest::testCatchpoint()
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
+}
+
+void GdbTest::parseBug304730()
+{
+    FileSymbol file;
+    file.contents = QByteArray("^done,bkpt={"
+        "number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"<MULTIPLE>\",times=\"0\","
+        "original-location=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp:231\"},"
+        "{number=\"1.1\",enabled=\"y\",addr=\"0x081d84aa\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<ForwardPropagationNeighbors>(ForwardPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"},"
+        "{number=\"1.2\",enabled=\"y\",addr=\"0x081d8ae2\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<BackwardPropagationNeighbors>(BackwardPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"},"
+        "{number=\"1.3\",enabled=\"y\",addr=\"0x081d911a\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<AllowedPropagationNeighbors>(AllowedPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"}");
+
+    MIParser parser;
+
+    QScopedPointer<GDBMI::Record> record(parser.parse(&file));
+    QVERIFY(!record.isNull());
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
