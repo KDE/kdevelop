@@ -31,8 +31,12 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     m_ui->setupUi(w);
     m_ui->repositoriesFilter->setListWidget(m_ui->repositories);
     setMainWidget(w);
-    
+
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
+    connect(m_ui->repositories, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(repositoryChanged(QListWidgetItem*,QListWidgetItem*)));
+
+    repositoryChanged(0, 0);
 }
 
 ReviewPatchDialog::~ReviewPatchDialog()
@@ -107,4 +111,9 @@ QString ReviewPatchDialog::repository() const
 {
     Q_ASSERT(m_ui->repositories->currentIndex().isValid());
     return m_ui->repositories->currentItem()->data(Qt::UserRole).toString();
+}
+
+void ReviewPatchDialog::repositoryChanged(QListWidgetItem* newItem)
+{
+    enableButtonOk(newItem);
 }
