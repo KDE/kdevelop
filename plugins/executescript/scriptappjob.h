@@ -50,7 +50,6 @@ private:
     void appendLine(const QString &l);
     KProcess* proc;
     KDevelop::ProcessLineMaker* lineMaker;
-    ExecuteScriptPlugin* plugin;
 };
 
 #endif

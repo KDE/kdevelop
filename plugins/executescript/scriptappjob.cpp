@@ -47,7 +47,7 @@
 #include "iexecutescriptplugin.h"
 
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
-    : KDevelop::OutputJob( parent ), proc(0), plugin( parent )
+    : KDevelop::OutputJob( parent ), proc(0)
 {
     kDebug() << "creating script app job";
     setCapabilities(Killable);
@@ -114,9 +114,9 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::ExecuteScriptOutputModel( this ), KDevelop::IOutputView::TakeOwnership );
+    setModel( new KDevelop::ExecuteScriptOutputModel );
     model()->setFilteringStrategy(currentFilterMode);
-    setDelegate( plugin->delegate() );
+    setDelegate( new KDevelop::OutputDelegate );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );

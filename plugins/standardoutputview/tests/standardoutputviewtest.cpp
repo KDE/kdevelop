@@ -199,28 +199,14 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
 
-    outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
-    QAbstractItemModel* model = new QStandardItemModel();
-    m_stdOutputView->setModel(outputId[0], model, KDevelop::IOutputView::KeepOwnership);
-    QAbstractItemDelegate* delegate = new QItemDelegate();
-    m_stdOutputView->setDelegate(outputId[0], delegate, KDevelop::IOutputView::KeepOwnership);
-
-    QCOMPARE(outputWidget->views.value(outputId[0])->model(), model);
-    QCOMPARE(outputWidget->views.value(outputId[0])->itemDelegate(), delegate);
-
-    m_stdOutputView->removeToolView(toolviewId);
-    QVERIFY(!toolviewPointer(toolviewTitle));
-
-    QVERIFY(!model->parent()); // they don't have any parent, so parent() == 0x0
-    QVERIFY(!delegate->parent());
-
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView, KIcon());
-    outputWidget = toolviewPointer(toolviewTitle);
-    QVERIFY(outputWidget);
+    QAbstractItemModel* model = new QStandardItemModel;
+    QWeakPointer<QAbstractItemModel> checkModel(model);
+    QAbstractItemDelegate* delegate = new QItemDelegate;
+    QWeakPointer<QAbstractItemDelegate> checkDelegate(delegate);
 
     outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
-    m_stdOutputView->setModel(outputId[0], model, KDevelop::IOutputView::TakeOwnership);
-    m_stdOutputView->setDelegate(outputId[0], delegate, KDevelop::IOutputView::TakeOwnership);
+    m_stdOutputView->setModel(outputId[0], model);
+    m_stdOutputView->setDelegate(outputId[0], delegate);
 
     QCOMPARE(outputWidget->views.value(outputId[0])->model(), model);
     QCOMPARE(outputWidget->views.value(outputId[0])->itemDelegate(), delegate);
@@ -230,4 +216,8 @@ void StandardOutputViewTest::testSetModelAndDelegate()
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
+
+    // view deleted, hence model + delegate deleted
+    QVERIFY(!checkModel.data());
+    QVERIFY(!checkDelegate.data());
 }

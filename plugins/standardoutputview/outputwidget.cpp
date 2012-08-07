@@ -182,11 +182,7 @@ void OutputWidget::setCurrentWidget( QTreeView* view )
 void OutputWidget::changeDelegate( int id )
 {
     if( data->outputdata.contains( id ) && views.contains( id ) ) {
-        QAbstractItemDelegate* delegate = data->outputdata.value(id)->delegate.data();
-        if (!delegate) {
-            kWarning() << "OutputWidget delegate was deleted for id" << id << data->outputdata.value(id)->title;
-        }
-        views.value(id)->setItemDelegate(delegate);
+        views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
     } else {
         addOutput(id);
     }

@@ -74,7 +74,7 @@ public:
     };
 
     explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
-    OutputModel( QObject* parent );
+    OutputModel( QObject* parent = 0 );
     virtual ~OutputModel();
 
     /// IOutputViewModel interfaces

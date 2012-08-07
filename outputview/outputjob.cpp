@@ -36,9 +36,7 @@ OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     , m_killJobOnOutputClose(true)
     , m_verbosity(verbosity)
     , m_outputId(-1)
-    , m_modelOwnership(IOutputView::KeepOwnership)
     , m_outputDelegate(0)
-    , m_delegateOwnership(IOutputView::KeepOwnership)
 {
 }
 
@@ -64,18 +62,16 @@ void OutputJob::startOutput()
 
             if (!m_outputModel) {
                 m_outputModel = new QStandardItemModel(0);
-                m_modelOwnership = IOutputView::TakeOwnership;
             }
 
             // Keep the item model around after the job is gone
-            view->setModel(m_outputId, m_outputModel, m_modelOwnership);
+            view->setModel(m_outputId, m_outputModel);
 
             if (!m_outputDelegate) {
                 m_outputDelegate = new QItemDelegate(0);
-                m_delegateOwnership = IOutputView::TakeOwnership;
             }
 
-            view->setDelegate(m_outputId, m_outputDelegate, m_delegateOwnership);
+            view->setDelegate(m_outputId, m_outputDelegate);
 
             if (m_killJobOnOutputClose)
                 connect(i, SIGNAL(outputRemoved(int,int)), this, SLOT(outputViewRemoved(int,int)));
@@ -119,15 +115,13 @@ void KDevelop::OutputJob::setKillJobOnOutputClose(bool killJobOnOutputClose)
     m_killJobOnOutputClose = killJobOnOutputClose;
 }
 
-void KDevelop::OutputJob::setModel(QAbstractItemModel * model, IOutputView::Ownership takeOwnership)
+void KDevelop::OutputJob::setModel(QAbstractItemModel * model)
 {
-    m_modelOwnership = takeOwnership;
     m_outputModel = model;
 }
 
-void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate, IOutputView::Ownership takeOwnership)
+void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate)
 {
-    m_delegateOwnership = takeOwnership;
     m_outputDelegate = delegate;
 }
 

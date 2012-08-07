@@ -43,16 +43,14 @@ class OutputData : public QObject
 Q_OBJECT
 public:
     OutputData( ToolViewData* tv );
-    QWeakPointer<QAbstractItemDelegate> delegate;
-    bool ownsDelegate;
+    QAbstractItemDelegate* delegate;
     QAbstractItemModel* model;
-    bool ownsModel;
     ToolViewData* toolView;
     KDevelop::IOutputView::Behaviours behaviour;
     QString title;
     int id;
-    void setModel( QAbstractItemModel* model, bool takeOwnership);
-    void setDelegate( QAbstractItemDelegate* delegate, bool takeOwnership);
+    void setModel( QAbstractItemModel* model );
+    void setDelegate( QAbstractItemDelegate* delegate );
 signals:
     void modelChanged( int );
     void delegateChanged( int );

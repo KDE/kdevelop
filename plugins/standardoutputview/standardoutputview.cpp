@@ -233,7 +233,7 @@ void StandardOutputView::raiseOutput(int outputId)
     }
 }
 
-void StandardOutputView::setModel( int outputId, QAbstractItemModel* model, Ownership takeOwnership )
+void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
@@ -248,11 +248,11 @@ void StandardOutputView::setModel( int outputId, QAbstractItemModel* model, Owne
         kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( outputId )->setModel( model, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setModel( model );
     }
 }
 
-void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate, Ownership takeOwnership )
+void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate )
 {
     int tvid = -1;
     foreach( int _id, toolviews.keys() )
@@ -267,7 +267,7 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
         kDebug() << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate, takeOwnership == TakeOwnership );
+        toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate );
     }
 }
 

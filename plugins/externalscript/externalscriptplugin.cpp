@@ -81,7 +81,6 @@ ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( ExternalScriptFactory::componentData(), parent ),
-     KDevelop::DelegateHolder( this ),
     m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
   Q_ASSERT( !m_self );

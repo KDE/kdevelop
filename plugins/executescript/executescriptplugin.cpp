@@ -68,8 +68,7 @@ K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutes
 ))
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent),
-    KDevelop::DelegateHolder( this )
+    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();

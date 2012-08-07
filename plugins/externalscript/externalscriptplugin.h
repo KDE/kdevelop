@@ -23,7 +23,6 @@
 #define EXTERNALSCRIPTPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <outputview/delegateholder.h>
 #include <QVariantList>
 #include <KConfigGroup>
 #include <QModelIndex>
@@ -33,7 +32,7 @@ class ExternalScriptItem;
 class QStandardItem;
 class QStandardItemModel;
 
-class ExternalScriptPlugin : public KDevelop::IPlugin, public KDevelop::DelegateHolder
+class ExternalScriptPlugin : public KDevelop::IPlugin
 {
   Q_OBJECT
   Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.ExternalScriptPlugin" )
