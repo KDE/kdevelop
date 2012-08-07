@@ -67,7 +67,7 @@ void QMakeJob::start()
 
     setStandardToolView(KDevelop::IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel(new KDevelop::OutputModel(this), KDevelop::IOutputView::TakeOwnership);
+    setModel(new KDevelop::OutputModel);
     startOutput();
 
     m_item = m_project->projectItem();

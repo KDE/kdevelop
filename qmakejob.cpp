@@ -79,9 +79,9 @@ void QMakeJob::setExtraArguments(const QString& args)
 void QMakeJob::start()
 {
     static const char *BUILD_TYPES[] = { "debug", "build", "(don't specify)" };
-    
-    m_model = new OutputModel(this);
-    setModel( m_model, IOutputView::TakeOwnership );
+
+    m_model = new OutputModel;
+    setModel( m_model );
 
     startOutput();
 
