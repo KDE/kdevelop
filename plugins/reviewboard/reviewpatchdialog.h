@@ -22,7 +22,10 @@
 #define REVIEWPATCHDIALOG_H
 #include <KDialog>
 
+class QListWidgetItem;
+
 class KJob;
+
 namespace Ui {
     class ReviewPatch;
 }
@@ -54,6 +57,9 @@ class ReviewPatchDialog : public KDialog
     private:
         Ui::ReviewPatch* m_ui;
         QString m_preferredRepository;
+
+    private slots:
+        void repositoryChanged(QListWidgetItem* newItem);
 };
 
 #endif
