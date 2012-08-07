@@ -34,7 +34,6 @@ class IGenericProjectManager;
 class ProjectBaseItem;
 class IOutputView;
 class IProject;
-class OutputDelegate;
 }
 
 class CustomBuildSystem : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IProjectBuilder, public KDevelop::IBuildSystemManager
@@ -46,7 +45,6 @@ class CustomBuildSystem : public KDevelop::AbstractFileManagerPlugin, public KDe
 public:
     explicit CustomBuildSystem( QObject *parent = 0, const QVariantList &args = QVariantList() );
     virtual ~CustomBuildSystem();
-    KDevelop::OutputDelegate* delegate() const;
 
 // ProjectBuilder API
     KJob* build( KDevelop::ProjectBaseItem* dom );
@@ -82,8 +80,6 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     KConfigGroup findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* item ) const;
-private:
-    KDevelop::OutputDelegate* m_delegate;
 };
 
 #endif

@@ -73,7 +73,7 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
     environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
     arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
-    setDelegate( plugin->delegate() );
+    setDelegate( new KDevelop::OutputDelegate );
 }
 
 void CustomBuildJob::start()
