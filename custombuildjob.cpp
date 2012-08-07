@@ -100,9 +100,9 @@ void CustomBuildJob::start()
         }
         setStandardToolView( KDevelop::IOutputView::BuildView );
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-        KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir, this );
+        KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir );
         model->setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
-        setModel( model, KDevelop::IOutputView::TakeOwnership );
+        setModel( model );
 
         startOutput();
 
