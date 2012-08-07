@@ -30,8 +30,6 @@
 #include "imakebuilder.h"
 #include "makejob.h"
 
-class MakeOutputDelegate;
-
 namespace KDevelop {
 class ProjectBaseItem;
 }
@@ -75,8 +73,6 @@ public:
     KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
                    const MakeVariables& variables = MakeVariables() );
 
-    MakeOutputDelegate* delegate() const;
-
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem* );
@@ -86,9 +82,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void jobFinished(KJob* job);
-
-private:
-    MakeOutputDelegate* m_delegate;
 };
 
 #endif // KDEVMAKEBUILDER_H

@@ -27,7 +27,7 @@
 class MakeOutputDelegate : public QItemDelegate
 {
   public:
-    MakeOutputDelegate( QObject* );
+    MakeOutputDelegate( QObject* parent = 0 );
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
 private:
     KStatefulBrush errorBrush;

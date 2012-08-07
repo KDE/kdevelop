@@ -32,7 +32,6 @@
 #include <KDebug>
 
 #include "makeoutputmodel.h"
-#include "makeoutputdelegate.h"
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
@@ -40,7 +39,6 @@ K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
-    , m_delegate(new MakeOutputDelegate(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
@@ -131,11 +129,6 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     return job;
-}
-
-MakeOutputDelegate * MakeBuilder::delegate() const
-{
-    return m_delegate;
 }
 
 #include "makebuilder.moc"

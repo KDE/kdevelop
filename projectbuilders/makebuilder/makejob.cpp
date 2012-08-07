@@ -38,6 +38,7 @@
 
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <outputview/outputdelegate.h>
 
 #include "makeoutputdelegate.h"
 #include "makeoutputmodel.h"
@@ -125,7 +126,7 @@ void MakeJob::start()
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
     setModel(new MakeOutputModel(buildDir), IOutputView::TakeOwnership);
-    setDelegate(m_builder->delegate());
+    setDelegate(new MakeOutputDelegate, IOutputView::TakeOwnership);
 
     startOutput();
 
