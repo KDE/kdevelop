@@ -201,6 +201,7 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
         }
         
         showInternal(m_prefsUi->showInternal->checkState());
+        emit changed(false);
     }
     else
     {
@@ -341,7 +342,6 @@ void CMakePreferences::configure()
 {
     KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
-    connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
     connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
     
     KDevelop::ICore::self()->runController()->registerJob(job);
