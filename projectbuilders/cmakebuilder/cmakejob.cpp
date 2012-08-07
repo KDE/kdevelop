@@ -84,16 +84,16 @@ void CMakeJob::start()
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    KDevelop::OutputModel* m_model = new KDevelop::OutputModel(this);
-    setModel( m_model, KDevelop::IOutputView::TakeOwnership );
+    KDevelop::OutputModel* model = new KDevelop::OutputModel;
+    setModel( model );
     startOutput();
 
     QString cmd = cmakeBinary( m_project );
     m_executor = new KDevelop::CommandExecutor(cmd, this);
     connect(m_executor, SIGNAL(receivedStandardError(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            model, SLOT(appendLines(QStringList)) );
     connect(m_executor, SIGNAL(receivedStandardOutput(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            model, SLOT(appendLines(QStringList)) );
     KUrl buildDirUrl = KUrl(QFileInfo(buildDir( m_project ).toLocalFile()).absoluteFilePath());
     if( !QFileInfo(buildDirUrl.toLocalFile()).exists() )
     {
@@ -107,7 +107,7 @@ void CMakeJob::start()
     connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
-    m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
+    model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
     m_executor->start();
 }
 
