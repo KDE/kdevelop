@@ -259,7 +259,10 @@ void ConfigWidget::clear()
 
 void ConfigWidget::deleteDefine()
 {
-    definesModel->removeRow( ui->defines->currentIndex().row() );
+    QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
+    foreach( const QModelIndex& row, selection ) {
+        definesModel->removeRow( row.row() );
+    }
 }
 
 void ConfigWidget::addIncludePath() {
