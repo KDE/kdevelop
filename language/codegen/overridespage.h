@@ -59,6 +59,8 @@ public:
     /**
      * Add @p declarations as potential overrides under the category @p category.
      *
+     * The DUChain must be locked for reading before calling this function
+     *
      * @param category the user-visible category name
      * @param declarations a list of declarations that can be overriden or implemented in the new class
      */

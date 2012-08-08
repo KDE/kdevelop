@@ -126,11 +126,17 @@ void OverridesPage::populateOverrideTree(const QList<DeclarationPointer>& direct
 
 void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration)
 {
-    if (d->overriddenFunctions.contains(childDeclaration->identifier())) {
+    kDebug() << childDeclaration->toString();
+    if (d->overriddenFunctions.contains(childDeclaration->identifier()))
+    {
         foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
+        {
             if (decl->indexedType() == childDeclaration->indexedType())
-                // This signature is already shown somewhere else
+            {
+                kDebug() << "Declaration is already shown";
                 return;
+            }
+        }
     }
 
     d->overriddenFunctions.insert(childDeclaration->identifier(), childDeclaration);
@@ -149,6 +155,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
 
             case Declaration::Private:
                 accessModifier = i18n("Private");
+                kDebug() << "Declaration is private, returning";
                 return;
         }
     }
@@ -207,11 +214,17 @@ void OverridesPage::deselectAll()
 
 void OverridesPage::addCustomDeclarations (const QString& category, const QList<DeclarationPointer>& declarations)
 {
+    kDebug() << category << declarations.size();
+    DUChainReadLocker lock(DUChain::lock());
+
     QTreeWidgetItem* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);
     foreach (const DeclarationPointer& declaration, declarations)
     {
         addPotentialOverride(item, declaration);
     }
+
+    overrideTree()->expandAll();
+    overrideTree()->header()->resizeSections(QHeaderView::ResizeToContents);
 }
 
 
