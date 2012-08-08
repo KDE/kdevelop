@@ -811,12 +811,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         QStringList directories;
         if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR").join(QString())=="ON") {
             directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
-            directories += folder->buildDir();
+            directories += buildDirectory(folder).toLocalFile();
         }
         directories += resolvePaths(folder->url(), data.includeDirectories);
         directories.removeDuplicates();
+        directories.removeAll(QString());
         folder->setIncludeDirectories(directories);
-//             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << folder->includeDirectories();
+//             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << includeDirectories(folder);
         folder->setDefinitions(data.definitions);
 
         deleteAllLater(castToBase(folder->cleanupTargets(data.targets)));
