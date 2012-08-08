@@ -54,6 +54,7 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
     QCOMPARE(v.targets.count(), 1);
     QCOMPARE(v.targets.at( 0 ).name, QString("foo") );
     QCOMPARE(v.targets.at( 0 ).files, QStringList() << "foo.cpp" );
+    QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("OFF"));
 }
 
 void CMakeLoadProjectTest::testSmallQt4Project()
