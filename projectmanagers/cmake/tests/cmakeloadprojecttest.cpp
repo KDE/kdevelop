@@ -50,42 +50,43 @@ CMakeLoadProjectTest::~CMakeLoadProjectTest()
 
 void CMakeLoadProjectTest::testTinyCMakeProject()
 {
-    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project" );
-    QCOMPARE(v.targets().count(), 1);
-    QCOMPARE(v.targets().at( 0 ).name, QString("foo") );
-    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "foo.cpp" );
+    CMakeProjectData v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project" );
+    QCOMPARE(v.targets.count(), 1);
+    QCOMPARE(v.targets.at( 0 ).name, QString("foo") );
+    QCOMPARE(v.targets.at( 0 ).files, QStringList() << "foo.cpp" );
 }
 
 void CMakeLoadProjectTest::testSmallQt4Project()
 {
-    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/qt4app");
-    QCOMPARE(v.targets().count(), 1);
-    QCOMPARE(v.projectName(), QString("qt4app"));
-    QCOMPARE(v.targets().at( 0 ).name, QString("qt4app") );
-    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "qt4app.cpp" << "main.cpp" );
+    CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/qt4app");
+    QCOMPARE(v.targets.count(), 1);
+    QCOMPARE(v.projectName, QString("qt4app"));
+    QCOMPARE(v.targets.at( 0 ).name, QString("qt4app") );
+    QCOMPARE(v.targets.at( 0 ).files, QStringList() << "qt4app.cpp" << "main.cpp" );
 }
 
 
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
-    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
-    QCOMPARE(v.targets().count(), 4);
-    QCOMPARE(v.projectName(), QString("kde4app"));
-    QCOMPARE(v.targets().at( 0 ).name, QString("buildtests") );
-    QCOMPARE(v.targets().at( 1 ).name, QString("kde4app") );
-    QCOMPARE(v.targets().at( 1 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
+    CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
+    QCOMPARE(v.targets.count(), 4);
+    QCOMPARE(v.projectName, QString("kde4app"));
+    QCOMPARE(v.targets.at( 0 ).name, QString("buildtests") );
+    QCOMPARE(v.targets.at( 1 ).name, QString("kde4app") );
+    QCOMPARE(v.targets.at( 1 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
-    QCOMPARE(v.targets().at( 2 ).name, QString("test") );
+    QCOMPARE(v.targets.at( 2 ).name, QString("test") );
     
-    QCOMPARE(v.targets().at( 2 ).files, QStringList() << "kde4app.cpp");
-    QCOMPARE(v.targets().at( 3 ).name, QString("uninstall") );
+    QCOMPARE(v.targets.at( 2 ).files, QStringList() << "kde4app.cpp");
+    QCOMPARE(v.targets.at( 3 ).name, QString("uninstall") );
+    QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("ON"));
     
 }
 
-CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
+CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
 {
     QString projectfile = sourcedir+"/CMakeLists.txt";
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
@@ -114,9 +115,22 @@ CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir
     v.setCacheValues(&data.cache);
     v.setModulePath(modulesPath);
     v.walk(code, 0);
+    
+    data.projectName=v.projectName();
+    data.subdirectories=v.subdirectories();
+    data.definitions=v.definitions();
+    data.includeDirectories=v.includeDirectories();
+    data.targets=v.targets();
+    data.properties=v.properties();
+    
+    //printSubdirectories(data->subdirectories);
+    
+    data.vm.remove("CMAKE_CURRENT_LIST_FILE");
+    data.vm.remove("CMAKE_CURRENT_LIST_DIR");
+    data.vm.remove("CMAKE_CURRENT_SOURCE_DIR");
+    data.vm.remove("CMAKE_CURRENT_BINARY_DIR");
 
-    ReferencedTopDUContext ctx=v.context();
-    return v;
+    return data;
 }
 
 #include "cmakeloadprojecttest.moc"
