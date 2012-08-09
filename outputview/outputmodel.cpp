@@ -46,7 +46,7 @@ struct OutputModelPrivate
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
     QList<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
-    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next
+    std::set<int> m_errorItems; // Indices of all items that we want to move to using previous and next
     KUrl m_buildDir;
 
     QQueue<QString> m_lineBuffer;
@@ -150,13 +150,13 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
     int startrow = d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() + 1 : 0;
 
-    if( !d->m_activateableItems.empty() )
+    if( !d->m_errorItems.empty() )
     {
         kDebug() << "searching next error";
         // Jump to the next error item
-        std::set< int >::const_iterator next = d->m_activateableItems.lower_bound( startrow );
-        if( next == d->m_activateableItems.end() )
-            next = d->m_activateableItems.begin();
+        std::set< int >::const_iterator next = d->m_errorItems.lower_bound( startrow );
+        if( next == d->m_errorItems.end() )
+            next = d->m_errorItems.begin();
 
         return index( *next, 0, QModelIndex() );
     }
@@ -177,15 +177,15 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
     //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
     int startrow = rowCount() + (d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() : rowCount()) - 1;
 
-    if(!d->m_activateableItems.empty())
+    if(!d->m_errorItems.empty())
     {
         kDebug() << "searching previous error";
 
         // Jump to the previous error item
-        std::set< int >::const_iterator previous = d->m_activateableItems.lower_bound( currentIdx.row() );
+        std::set< int >::const_iterator previous = d->m_errorItems.lower_bound( currentIdx.row() );
 
-        if( previous == d->m_activateableItems.begin() )
-            previous = d->m_activateableItems.end();
+        if( previous == d->m_errorItems.begin() )
+            previous = d->m_errorItems.end();
 
         --previous;
 
@@ -262,7 +262,7 @@ void OutputModel::addLineBatch()
             item = d->m_filter->actionInLine(line);
         }
         if( item.type == FilteredItem::ErrorItem ) {
-            d->m_activateableItems.insert(d->m_filteredItems.size());
+            d->m_errorItems.insert(d->m_filteredItems.size());
         }
 
         d->m_filteredItems << item;
