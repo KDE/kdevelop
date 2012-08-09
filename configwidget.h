@@ -64,7 +64,7 @@ private:
     IncludesModel* includesModel;
     DefinesModel* definesModel;
     QVector<CustomBuildSystemTool> m_tools;
-    void setTool (const CustomBuildSystemTool& tool);
+    void setTool( const CustomBuildSystemTool& tool );
 };
 
 #endif
