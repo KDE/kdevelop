@@ -17,16 +17,6 @@
       <string>Identify the class and any classes from which it is to inherit.</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QLabel" name="inheritanceLabel">
-        <property name="text">
-         <string>In&amp;heritance:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="identifierLabel">
         <property name="text">
@@ -37,6 +27,16 @@
         </property>
         <property name="buddy">
          <cstring>identifierLineEdit</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="inheritanceLabel">
+        <property name="text">
+         <string>In&amp;heritance:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -53,11 +53,11 @@
         </property>
        </spacer>
       </item>
+      <item row="0" column="1">
+          <widget class="KLineEdit" name="identifierLineEdit"/>
+      </item>
       <item row="1" column="1" rowspan="2">
        <widget class="KEditListWidget" name="keditlistwidget"/>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="KLineEdit" name="identifierLineEdit"/>
       </item>
      </layout>
     </widget>
@@ -76,6 +76,9 @@
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>identifierLineEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
