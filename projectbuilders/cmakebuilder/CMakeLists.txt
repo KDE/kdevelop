@@ -14,6 +14,7 @@ set(cmakebuilder_LIB_SRCS
     configureandbuildjob.cpp
 )
 
+kde4_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
 kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder

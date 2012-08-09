@@ -38,13 +38,44 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariant
     m_prefsUi = new Ui::CMakeBuilderConfig;
     m_prefsUi->setupUi( w );
     l->addWidget( w );
-
-    m_prefsUi->kcfg_generator->addItem("Unix Makefiles");
-    m_prefsUi->kcfg_generator->addItem("Ninja");
-    addConfig( CMakeBuilderSettings::self(), w );
+#ifdef Q_OS_WIN
+    // Visual Studio solution is the standard generator under windows, but we dont want to use
+    // the VS IDE, so we need nmake makefiles
+    m_prefsUi->generator->addItem("NMake Makefiles");
+#else
+    m_prefsUi->generator->addItem("Unix Makefiles");
+#endif
+    m_prefsUi->generator->addItem("Ninja");
+    
+    connect(m_prefsUi->generator, SIGNAL(currentIndexChanged(QString)), SLOT(generatorChanged(QString)));
 }
 
 CMakeBuilderPreferences::~CMakeBuilderPreferences()
 {
     delete m_prefsUi;
+}
+
+void CMakeBuilderPreferences::defaults()
+{
+    m_prefsUi->generator->setCurrentIndex(0);
+    KCModule::defaults();
+}
+
+void CMakeBuilderPreferences::save()
+{
+    CMakeBuilderSettings::setGenerator(m_prefsUi->generator->currentText());
+    KCModule::save();
+    CMakeBuilderSettings::self()->writeConfig();
+}
+
+void CMakeBuilderPreferences::load()
+{
+    int idx = m_prefsUi->generator->findText(CMakeBuilderSettings::self()->generator());
+    m_prefsUi->generator->setCurrentIndex(idx);
+    KCModule::load();
+}
+
+void CMakeBuilderPreferences::generatorChanged(const QString& generator)
+{
+    emit changed(CMakeBuilderSettings::self()->generator()!=generator);
 }

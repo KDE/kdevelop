@@ -23,6 +23,7 @@
 #include "cmakejob.h"
 
 #include <config.h>
+#include <cmakebuilderconfig.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QSignalMapper>
@@ -159,11 +160,13 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
     {
         args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
-#ifdef Q_OS_WIN
-    // Visual Studio solution is the standard generator under windows, but we dont want to use
-    // the VS IDE, so we need nmake makefiles
-    args << QString("-G") << QString("NMake Makefiles");
-#endif
+    
+    //if we are creating a new build directory, we'll want to specify the generator
+    QDir builddir(CMake::currentBuildDir(project).toLocalFile());
+    qDebug() << "-----------" << builddir.exists() << builddir.count();
+    if(!builddir.exists() || builddir.count()==2) {
+        args << QString("-G") << CMakeBuilderSettings::self()->generator();
+    }
     QString cmakeargs = CMake::currentExtraArguments(project);
     if( !cmakeargs.isEmpty() ) {
         KShell::Errors err;

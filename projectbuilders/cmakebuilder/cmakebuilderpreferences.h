@@ -38,6 +38,13 @@ public:
     explicit CMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~CMakeBuilderPreferences();
     
+    virtual void save();
+    virtual void load();
+    virtual void defaults();
+
+public slots:
+    void generatorChanged(const QString& generator);
+
 private:
     Ui::CMakeBuilderConfig* m_prefsUi;
 };
