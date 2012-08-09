@@ -105,8 +105,8 @@ void CMakeJob::start()
     m_executor->setEnvironment(buildEnvironment());
     connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
-    kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
-    model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
+    kDebug() << "Executing" << m_executor->command() << buildDirUrl.toLocalFile() << m_executor->arguments();
+    model->appendLine( buildDirUrl.toLocalFile() + "> " + m_executor->command() + " " + m_executor->arguments().join(" "));
     m_executor->start();
 }
 
@@ -163,7 +163,6 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
     
     //if we are creating a new build directory, we'll want to specify the generator
     QDir builddir(CMake::currentBuildDir(project).toLocalFile());
-    qDebug() << "-----------" << builddir.exists() << builddir.count();
     if(!builddir.exists() || builddir.count()==2) {
         args << QString("-G") << CMakeBuilderSettings::self()->generator();
     }
