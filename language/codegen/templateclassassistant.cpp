@@ -286,8 +286,9 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->overridesPage)
     {
         // TODO: Again separate direct and indirect bases
-        d->overridesPageWidget->populateOverrideTree(d->generator->directBaseClasses(), d->generator->allBaseClasses());
+        d->overridesPageWidget->clear();
         d->overridesPageWidget->addCustomDeclarations(i18n("Default"), d->helper->defaultMethods(d->generator->name()));
+        d->overridesPageWidget->addBaseClasses(d->generator->directBaseClasses(), d->generator->allBaseClasses());
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {

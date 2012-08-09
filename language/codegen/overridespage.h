@@ -47,7 +47,7 @@ public:
      * @param directBases Declarations of base classes from which the new class inherits directly.
      * @param allBases Declarations of all base classes from which functions can be overriden
      */
-    virtual void populateOverrideTree(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases);
+    virtual void addBaseClasses(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases);
     /**
      * Add @p childDeclaration as potential override. Don't call @c KDevelop::OverridesPage::addPotentialOverride()
      * in overloaded class to filter a declaration.
@@ -68,6 +68,7 @@ public:
 
     virtual QList<DeclarationPointer> selectedOverrides();
 
+    void clear();
 
     QTreeWidget* overrideTree() const;
 

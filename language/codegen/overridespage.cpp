@@ -87,13 +87,16 @@ QList< DeclarationPointer > OverridesPage::selectedOverrides()
     return declarations;
 }
 
-void OverridesPage::populateOverrideTree(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases)
+void OverridesPage::clear()
 {
     d->overriddenFunctions.clear();
     overrideTree()->clear();
     d->chosenOverrides.clear();
     d->declarationMap.clear();
-    
+}
+
+void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases)
+{
     KDevelop::DUChainReadLocker lock(DUChain::lock());
 
     foreach(const DeclarationPointer& baseClass, allBases) {
