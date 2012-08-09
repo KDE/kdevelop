@@ -76,10 +76,14 @@ QList< DeclarationPointer > OverridesPage::selectedOverrides()
         {
             QTreeWidgetItem* child = item->child(j);
             if (child->checkState(0) == Qt::Checked)
+            {
+                kDebug() << "Adding declaration" << d->declarationMap[child]->toString();
                 declarations << d->declarationMap[child];
+            }
         }
     }
 
+    kDebug() << declarations.size();
     return declarations;
 }
 
@@ -104,8 +108,12 @@ void OverridesPage::populateOverrideTree(const QList<DeclarationPointer>& direct
             {
                 if (func->isVirtual())
                 {
-                    // Its a virtual function, add it to the list
-                    addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
+                    // Its a virtual function, add it to the list unless it's a destructor
+                    ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+                    if (cFunc && !cFunc->isDestructor())
+                    {
+                        addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
+                    }
                 }
                 else if (directBases.contains(baseClass))
                 {
