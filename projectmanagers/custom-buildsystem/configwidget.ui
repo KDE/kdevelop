@@ -135,94 +135,120 @@ If this is the same as the source directory you can leave it empty.</string>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Includes/Imports and Defines for Project Directories/Files</string>
+      <string>Path-specific language parameters</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Directories/Files:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QListView" name="projectPaths">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>3</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>A list of paths specifying project directories or files, for which includes and
-defines should be set up. &quot;/&quot; denotes the top level project directory. If the
-path identifies a directory the includes/defines are active for that directory
-and all sub (and sub-sub)directories.</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KComboBox" name="switchIncludeDefines">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Switch between configuring Includes/Imports and Defines</string>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <property name="text">
-          <string>Includes/Imports</string>
-         </property>
+         <widget class="KUrlComboRequester" name="pathRequester">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Select a configured sub-project path or double-click to edit</string>
+          </property>
+         </widget>
         </item>
         <item>
-         <property name="text">
-          <string>Defines</string>
-         </property>
+         <widget class="KPushButton" name="addPath">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new sub-project path entry.&lt;/p&gt;&lt;p&gt;If edit is activated, use current line-edit content;&lt;br/&gt;otherwise switch to the edit mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
         </item>
-       </widget>
+        <item>
+         <widget class="KPushButton" name="savePath">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Write the current line-edit contents to the selected sub-project path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Save</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="editPath">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Switch to the path edit mode for current selection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Edit</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="cancelEditPath">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Return from edit mode without saving changes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPushButton" name="removePath">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete current sub-project path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="2" column="1">
-       <widget class="QStackedWidget" name="stackedWidget">
+      <item row="1" column="0">
+       <widget class="KTabWidget" name="languageParameters">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>8</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip">
-         <string>List of include paths for the selected project item</string>
-        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="page">
+        <widget class="QWidget" name="includePathsPage">
+         <attribute name="title">
+          <string>Includes/Imports</string>
+         </attribute>
          <layout class="QGridLayout" name="gridLayout_4">
           <property name="margin">
            <number>0</number>
           </property>
           <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="KUrlRequester" name="includePathRequester">
+              <property name="clickMessage">
+               <string>A new include path to use for parsing files under given directory</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="addIncludePath">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
            <widget class="QListView" name="includePaths">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>8</verstretch>
              </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>A list of absolute include paths that the KDevelop parser should be using
-when parsing the project files in the given project path.</string>
             </property>
             <property name="selectionBehavior">
              <enum>QAbstractItemView::SelectRows</enum>
@@ -231,24 +257,21 @@ when parsing the project files in the given project path.</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="definesPage">
+         <attribute name="title">
+          <string>Defines</string>
+         </attribute>
          <layout class="QGridLayout" name="gridLayout_2">
           <property name="margin">
            <number>0</number>
           </property>
           <item row="0" column="0">
            <widget class="QTableView" name="defines">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>8</verstretch>
              </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Specify a list of pre-processor defines and their values that the KDevelop parser should use when parsing the files in the given project path.</string>
             </property>
             <property name="selectionBehavior">
              <enum>QAbstractItemView::SelectRows</enum>
@@ -266,14 +289,30 @@ when parsing the project files in the given project path.</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlComboRequester</class>
+   <extends>KUrlRequester</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
@@ -376,22 +415,6 @@ when parsing the project files in the given project path.</string>
     <hint type="destinationlabel">
      <x>34</x>
      <y>176</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>switchIncludeDefines</sender>
-   <signal>activated(int)</signal>
-   <receiver>stackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>226</x>
-     <y>459</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>685</x>
-     <y>479</y>
     </hint>
    </hints>
   </connection>

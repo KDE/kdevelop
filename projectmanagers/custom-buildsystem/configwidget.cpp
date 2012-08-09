@@ -19,6 +19,8 @@
 
 #include "configwidget.h"
 
+#include <QToolButton>
+
 #include <KDebug>
 #include <KLineEdit>
 #include <KAction>
@@ -36,10 +38,40 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     , pathsModel( new ProjectPathsModel( this ) )
     , includesModel( new IncludesModel( this ) )
     , definesModel( new DefinesModel( this ) )
+    , m_mode( UI_NORMAL )
 {
     ui->setupUi( this );
     KDevelop::EnvironmentGroupList l( KGlobal::config() );
     ui->actionEnvironment->addItems( l.groups() );
+
+    ui->addPath->setIcon(KIcon( "list-add" ));
+    ui->removePath->setIcon(KIcon( "list-remove" ));
+    ui->editPath->setIcon(KIcon( "document-edit" ));
+    ui->cancelEditPath->setIcon(KIcon( "dialog-cancel" ));
+    ui->savePath->setIcon(KIcon( "dialog-ok" ));
+    connect( ui->addPath, SIGNAL(clicked(bool)), SLOT(addProjectPath()) );
+    connect( ui->removePath, SIGNAL(clicked(bool)), SLOT(deleteProjectPath()) );
+    connect( ui->savePath, SIGNAL(clicked(bool)), SLOT(saveProjectPath()));
+    connect( ui->editPath, SIGNAL(clicked(bool)), SLOT(editProjectPath()) );
+    connect( ui->cancelEditPath, SIGNAL(clicked(bool)), SLOT(cancelEditingProjectPath()) );
+    configurePathButtons();
+
+    ui->addIncludePath->setIcon(KIcon( "list-add" ));
+    connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
+
+    {
+        QToolButton* removeEntry = new QToolButton( ui->languageParameters );
+        removeEntry->setIcon(KIcon( "list-remove" ));
+        removeEntry->setText( i18n("Remove selection") );
+        removeEntry->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+        connect( removeEntry, SIGNAL(clicked(bool)) , SIGNAL(deleteLanguageParametersEntry()) );
+        ui->languageParameters->setCornerWidget( removeEntry, Qt::TopRightCorner );
+        ui->languageParameters->updateGeometry();
+    }
+
+    ui->pathRequester->setMode( KFile::File | KFile::Directory );
+    ui->includePathRequester->setMode( KFile::Directory );
+
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );
@@ -54,8 +86,9 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
     connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
 
-    ui->projectPaths->setModel( pathsModel );
-    connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
+    ui->pathRequester->comboBox()->setModel( pathsModel );
+    connect( ui->pathRequester->comboBox(), SIGNAL(currentIndexChanged(int)), SLOT(projectPathSelected(int)) );
+    connect( ui->pathRequester, SIGNAL(openFileDialog(KUrlRequester*)), SLOT(editProjectPath()) );
     connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
@@ -71,13 +104,14 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
     connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
 
-    ui->switchIncludeDefines->setCurrentIndex( 0 );
-    ui->stackedWidget->setCurrentIndex( 0 );
+    ui->languageParameters->setCurrentIndex(0);
+    languageParametersTabSelected(0);
+    connect( ui->languageParameters, SIGNAL(currentChanged(int)), SLOT(languageParametersTabSelected(int)) );
 
     KAction* delPathAction = new KAction( i18n("Delete Project Path"), this );
     delPathAction->setShortcut( KShortcut( "Del" ) );
     delPathAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->projectPaths->addAction( delPathAction );
+    ui->pathRequester->comboBox()->addAction( delPathAction );
     connect( delPathAction, SIGNAL(triggered()), SLOT(deleteProjectPath()) );
 
     KAction* delIncAction = new KAction( i18n("Delete Include Path"), this );
@@ -91,6 +125,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     ui->defines->addAction( delDefAction );
     connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
+
+    connect( this, SIGNAL(changed()), SLOT(verify()) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -105,10 +141,16 @@ CustomBuildSystemConfig ConfigWidget::config() const
 void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
 {
     bool b = blockSignals( true );
+    clear();
     ui->buildDir->setUrl( cfg.buildDir );
-    m_tools = cfg.tools;
     pathsModel->setPaths( cfg.projectPaths );
+    m_tools = cfg.tools;
     blockSignals( b );
+    ui->pathRequester->comboBox()->setCurrentIndex(0); // at least a project root item is present
+    projectPathSelected(0);
+    changeAction( ui->buildAction->currentIndex() );
+    m_tools = cfg.tools;
+    verify();
 }
 
 void ConfigWidget::setTool(const CustomBuildSystemTool& tool)
@@ -173,9 +215,9 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
 
 void ConfigWidget::definesChanged()
 {
-    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
-    if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), definesModel->defines(), ProjectPathsModel::DefinesDataRole );
+    QModelIndex idx = currentPathIndex();
+    if( idx.isValid() ) {
+        bool b = pathsModel->setData( idx, definesModel->defines(), ProjectPathsModel::DefinesDataRole );
         if( b ) {
             emit changed();
         }
@@ -184,25 +226,21 @@ void ConfigWidget::definesChanged()
 
 void ConfigWidget::includesChanged()
 {
-    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
-    if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), includesModel->includes(), ProjectPathsModel::IncludesDataRole );
+    QModelIndex idx = currentPathIndex();
+    if( idx.isValid() ) {
+        bool b = pathsModel->setData( idx, includesModel->includes(), ProjectPathsModel::IncludesDataRole );
         if( b ) {
             emit changed();
         }
     }
 }
 
-void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& )
+void ConfigWidget::projectPathSelected( int index )
 {
-    bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
-    ui->includePaths->setEnabled( enable );
-    ui->defines->setEnabled( enable );
-    ui->switchIncludeDefines->setEnabled( enable );
-
-    if( enable ) {
-        includesModel->setIncludes( pathsModel->data( selected.indexes().first(), ProjectPathsModel::IncludesDataRole ).toStringList() );
-        definesModel->setDefines( pathsModel->data( selected.indexes().first(), ProjectPathsModel::DefinesDataRole ).toHash() );
+    if( index >= 0 ) {
+        QModelIndex modelIndex = pathsModel->index(index, 0);
+        includesModel->setIncludes( modelIndex.data( ProjectPathsModel::IncludesDataRole ).toStringList() );
+        definesModel->setDefines( modelIndex.data( ProjectPathsModel::DefinesDataRole ).toHash() );
     } else {
         includesModel->setIncludes( QStringList() );
         definesModel->setDefines( QHash<QString,QVariant>() );
@@ -221,26 +259,206 @@ void ConfigWidget::clear()
 
 void ConfigWidget::deleteDefine()
 {
-    QModelIndex idx = ui->defines->currentIndex();
-    definesModel->removeRows( idx.row(), 1, QModelIndex() );
+    definesModel->removeRow( ui->defines->currentIndex().row() );
+}
+
+void ConfigWidget::addIncludePath() {
+    KUrl addedUrl = ui->includePathRequester->url();
+    addedUrl.cleanPath();
+    includesModel->addInclude( addedUrl.toLocalFile( KUrl::RemoveTrailingSlash ) );
 }
 
 void ConfigWidget::deleteIncludePath()
 {
-    QModelIndex idx = ui->includePaths->currentIndex();
-    includesModel->removeRows( idx.row(), 1, QModelIndex() );
+    includesModel->removeRow( ui->includePaths->currentIndex().row() );
+}
+
+void ConfigWidget::languageParametersTabSelected( int index )
+{
+    disconnect( this, SIGNAL(deleteLanguageParametersEntry()) );
+
+    switch(index) {
+    // Include pathes
+    case 0:
+        connect( this, SIGNAL(deleteLanguageParametersEntry()), SLOT(deleteIncludePath()) );
+        break;
+
+    // Defines
+    case 1:
+        connect( this, SIGNAL(deleteLanguageParametersEntry()), SLOT(deleteDefine()) );
+        break;
+
+    default:
+        break;
+    }
+}
+
+void ConfigWidget::addProjectPath()
+{
+    switch( m_mode ) {
+    case UI_NORMAL:
+        setUiMode( UI_ADDING );
+        break;
+
+    case UI_EDITING:
+        // "Add" pressed in editing mode means we should save the data by adding a new item
+        // instead of overwriting
+        // So pretend that we were in adding mode, not editing
+        m_mode = UI_ADDING;
+        setUiMode( UI_NORMAL );
+        break;
+
+    case UI_ADDING:
+    default:
+        Q_ASSERT_X( 0, "ConfigWidget::addProjectPath()", "Invalid state for add button" );
+        break;
+    }
+}
+
+void ConfigWidget::editProjectPath()
+{
+    if( m_mode == UI_NORMAL )
+        setUiMode( UI_EDITING );
+}
+
+void ConfigWidget::saveProjectPath()
+{
+    setUiMode( UI_NORMAL );
+}
+
+void ConfigWidget::cancelEditingProjectPath()
+{
+    if( m_mode != UI_NORMAL ) {
+        m_mode = UI_NORMAL;
+        setPathSelectorNonEditable();
+        configurePathButtons();
+    }
 }
 
 void ConfigWidget::deleteProjectPath()
 {
-    QModelIndex idx = ui->projectPaths->currentIndex();
-    pathsModel->removeRows( idx.row(), 1, QModelIndex() );
+    pathsModel->removeRow( ui->pathRequester->comboBox()->currentIndex() );
+}
+
+QModelIndex ConfigWidget::currentPathIndex()
+{
+    int currentPath = ui->pathRequester->comboBox()->currentIndex();
+    return (currentPath < 0) ? QModelIndex() : ui->pathRequester->comboBox()->model()->index( currentPath, 0 );
 }
 
 void ConfigWidget::setProject(KDevelop::IProject* w_project)
 {
     pathsModel->setProject( w_project );
+    ui->pathRequester->setStartDir( w_project->folder() );
+    ui->includePathRequester->setStartDir( w_project->folder() );
 }
+
+void ConfigWidget::verify() {
+    Q_ASSERT( ui->pathRequester->comboBox()->count() == pathsModel->rowCount() );
+
+    bool hasAnyPaths = (ui->pathRequester->comboBox()->count() != 0);
+    bool pathSelected = (ui->pathRequester->comboBox()->currentIndex() != -1);
+    Q_ASSERT( !hasAnyPaths || pathSelected );
+
+    ui->languageParameters->setEnabled( hasAnyPaths );
+    ui->removePath->setEnabled( hasAnyPaths );
+}
+
+void ConfigWidget::setPathSelectorEditable( QString editText )
+{
+    ui->pathRequester->comboBox()->setEditable( true );
+
+    if( editText.isEmpty() )
+        ui->pathRequester->comboBox()->clearEditText();
+    else
+        ui->pathRequester->comboBox()->setEditText( editText );
+}
+
+void ConfigWidget::setPathSelectorNonEditable()
+{
+    ui->pathRequester->comboBox()->setEditable( false );
+}
+
+void ConfigWidget::setUiMode( ConfigWidget::UiMode mode )
+{
+    if( m_mode == mode )
+        return;
+
+    QModelIndex pathIndex = currentPathIndex();
+
+    // Do not allow to edit inexistent records
+    // Instead, add a new record in all these cases
+    if( mode == UI_EDITING && !pathIndex.isValid() )
+        mode = UI_ADDING;
+
+    switch( mode ) {
+    case UI_ADDING:
+        setPathSelectorEditable( QString() );
+
+        break;
+
+    case UI_EDITING:
+        setPathSelectorEditable( pathsModel->data( currentPathIndex(), Qt::EditRole ).toString() );
+
+        break;
+
+    case UI_NORMAL: {
+        KUrl savedUrl = ui->pathRequester->url();
+
+        // Refuse to write an invalid or empty URL
+        if( !savedUrl.isValid() || savedUrl.isEmpty() )
+            return;
+
+        // Further actions depend on previous mode
+        switch( m_mode ) {
+        case UI_ADDING:
+            pathsModel->addPath( savedUrl );
+            setPathSelectorNonEditable();
+            break;
+
+        case UI_EDITING:
+            pathsModel->setData( pathIndex, savedUrl.url(), Qt::EditRole );
+            setPathSelectorNonEditable();
+            break;
+
+        case UI_NORMAL:
+        default:
+            Q_ASSERT_X( 0, "ConfigWidget::setUiMode()", "Invalid transition" );
+            break;
+        }
+
+        // The item may got inserted or not due to duplicate detection, we don't know
+        // Attempt a search to find it
+        for( int i = 0; i < pathsModel->rowCount(); ++i ) {
+            if( pathsModel->data( pathsModel->index(i), ProjectPathsModel::FullUrlDataRole ).value<KUrl>() == savedUrl ) {
+                ui->pathRequester->comboBox()->setCurrentIndex( i );
+                projectPathSelected( i );
+                break;
+            }
+        }
+
+        break;
+    } // case UI_NORMAL
+
+    default:
+        Q_ASSERT_X( 0, "ConfigWidget::setUiMode()", "Invalid target" );
+        break;
+    }
+
+    m_mode = mode;
+    configurePathButtons();
+}
+
+void ConfigWidget::configurePathButtons()
+{
+    bool editing = ( m_mode != UI_NORMAL );
+    ui->cancelEditPath->setVisible( editing );
+    ui->savePath->setVisible( editing );
+    ui->removePath->setVisible( !editing );
+    ui->editPath->setVisible( !editing );
+    ui->addPath->setEnabled( m_mode != UI_ADDING );
+}
+
 
 #include "configwidget.moc"
 

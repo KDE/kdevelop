@@ -51,6 +51,7 @@ public:
     void clear();
 signals:
     void changed();
+    void deleteLanguageParametersEntry();
 private slots:
     void changeAction( int );
     void toggleActionEnablement( bool );
@@ -58,12 +59,21 @@ private slots:
     void actionEnvironmentChanged( int );
     void actionExecutableChanged( const KUrl& );
     void actionExecutableChanged( const QString& );
-    void projectPathSelected(const QItemSelection&, const QItemSelection& );
+    void languageParametersTabSelected( int index );
+    void projectPathSelected( int index );
     void includesChanged();
     void definesChanged();
     void deleteDefine();
+    void addIncludePath();
     void deleteIncludePath();
+    void addProjectPath();
     void deleteProjectPath();
+    void saveProjectPath();
+    void editProjectPath();
+    void cancelEditingProjectPath();
+    void setPathSelectorEditable(QString editText);
+    void setPathSelectorNonEditable();
+    void verify();
 private:
     Ui::ConfigWidget* ui;
     ProjectPathsModel* pathsModel;
@@ -71,6 +81,18 @@ private:
     DefinesModel* definesModel;
     QVector<CustomBuildSystemTool> m_tools;
     void setTool( const CustomBuildSystemTool& tool );
+    QModelIndex currentPathIndex();
+
+    enum UiMode
+    {
+        UI_NORMAL,
+        UI_EDITING,
+        UI_ADDING
+    };
+    UiMode m_mode;
+
+    void setUiMode( UiMode mode );
+    void configurePathButtons();
 };
 
 #endif
