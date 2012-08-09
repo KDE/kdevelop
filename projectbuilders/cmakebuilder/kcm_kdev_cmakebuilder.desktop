@@ -1,0 +1,14 @@
+[Desktop Entry]
+Icon=cmake
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_cmakebuilder
+X-KDE-FactoryName=kcm_kdev_cmakebuilder
+X-KDE-ParentComponents=KDevCMakeBuilder
+X-KDE-CfgDlgHierarchy=BUILDTOOL
+X-KDE-ParentComponents=kdevplatform
+
+Name=CMake
+Comment=Configure global CMake settings
