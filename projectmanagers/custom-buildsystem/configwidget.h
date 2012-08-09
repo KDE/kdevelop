@@ -60,7 +60,9 @@ private slots:
     void actionExecutableChanged( const KUrl& );
     void actionExecutableChanged( const QString& );
     void languageParametersTabSelected( int index );
+    void languageParametersItemsChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     void projectPathSelected( int index );
+    void projectPathEdited();
     void includesChanged();
     void definesChanged();
     void deleteDefine();
@@ -69,10 +71,6 @@ private slots:
     void addProjectPath();
     void deleteProjectPath();
     void saveProjectPath();
-    void editProjectPath();
-    void cancelEditingProjectPath();
-    void setPathSelectorEditable(QString editText);
-    void setPathSelectorNonEditable();
     void verify();
 private:
     Ui::ConfigWidget* ui;
@@ -83,16 +81,8 @@ private:
     void setTool( const CustomBuildSystemTool& tool );
     QModelIndex currentPathIndex();
 
-    enum UiMode
-    {
-        UI_NORMAL,
-        UI_EDITING,
-        UI_ADDING
-    };
-    UiMode m_mode;
-
-    void setUiMode( UiMode mode );
-    void configurePathButtons();
+    void commitProjectPathRequester( bool add = false );
+    void configureItemRemoveButton( const QAbstractItemModel* model );
 };
 
 #endif
