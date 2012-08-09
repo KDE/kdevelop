@@ -19,7 +19,6 @@
  */
 
 #include "cmakebuilder.h"
-#include "imakebuilder.h"
 
 #include <config.h>
 
