@@ -38,6 +38,21 @@
 namespace KDevelop
 {
 
+struct OutputModelPrivate
+{
+    OutputModelPrivate();
+    OutputModelPrivate( const KUrl& builddir );
+    ~OutputModelPrivate();
+    bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
+    QList<FilteredItem> m_filteredItems;
+    // We use std::set because that is ordered
+    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next
+    KUrl m_buildDir;
+
+    QQueue<QString> m_lineBuffer;
+    QSharedPointer<IFilterStrategy> m_filter;
+};
+
 OutputModelPrivate::OutputModelPrivate()
 : m_filter( new NoFilterStrategy )
 {
