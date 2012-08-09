@@ -63,11 +63,14 @@ private slots:
     void languageParametersItemsChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     void projectPathSelected( int index );
     void projectPathEdited();
+    void includePathSelected( const QModelIndex& selected );
+    void includePathEdited();
     void includesChanged();
     void definesChanged();
     void deleteDefine();
     void addIncludePath();
     void deleteIncludePath();
+    void saveIncludePath();
     void addProjectPath();
     void deleteProjectPath();
     void saveProjectPath();
@@ -82,6 +85,7 @@ private:
     QModelIndex currentPathIndex();
 
     void commitProjectPathRequester( bool add = false );
+    void commitIncludePathRequester( bool add = false );
     void configureItemRemoveButton( const QAbstractItemModel* model );
 };
 

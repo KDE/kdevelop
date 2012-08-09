@@ -51,7 +51,9 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->savePath, SIGNAL(clicked(bool)), SLOT(saveProjectPath()));
 
     ui->addIncludePath->setIcon(KIcon( "list-add" ));
+    ui->saveIncludePath->setIcon(KIcon( "dialog-ok" ));
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
+    connect( ui->saveIncludePath, SIGNAL(clicked(bool)), SLOT(saveIncludePath()) );
 
     {
         QToolButton* removeEntry = new QToolButton( ui->languageParameters );
@@ -88,6 +90,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
     ui->includePaths->setModel( includesModel );
+    connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
+    connect( ui->includePathRequester, SIGNAL(textChanged(QString)), SLOT(includePathEdited()) );
     connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
     connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
     connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
@@ -98,8 +102,6 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
     connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
 
-    ui->languageParameters->setCurrentIndex(0);
-    languageParametersTabSelected(0);
     connect( ui->languageParameters, SIGNAL(currentChanged(int)), SLOT(languageParametersTabSelected(int)) );
 
     KAction* delPathAction = new KAction( i18n("Delete Project Path"), this );
@@ -142,6 +144,8 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
     blockSignals( b );
     ui->projectPaths->setCurrentIndex(0); // at least a project root item is present
     projectPathSelected(0);
+    ui->languageParameters->setCurrentIndex(0);
+    languageParametersTabSelected(0);
     changeAction( ui->buildAction->currentIndex() );
     m_tools = cfg.tools;
     verify();
@@ -227,6 +231,26 @@ void ConfigWidget::includesChanged()
             emit changed();
         }
     }
+    includePathSelected( ui->includePaths->currentIndex() );
+}
+
+void ConfigWidget::includePathSelected( const QModelIndex& selected )
+{
+    if( selected.isValid() ) {
+        ui->includePathRequester->setUrl( selected.data().toString() );
+    } else {
+        ui->includePathRequester->clear();
+    }
+
+    ui->addIncludePath->setEnabled( false );
+    ui->saveIncludePath->setEnabled( false );
+}
+
+void ConfigWidget::includePathEdited()
+{
+    bool hasAnyPaths = (includesModel->rowCount() != 0);
+    ui->addIncludePath->setEnabled( true );
+    ui->saveIncludePath->setEnabled( hasAnyPaths );
 }
 
 void ConfigWidget::projectPathSelected( int index )
@@ -277,10 +301,14 @@ void ConfigWidget::deleteDefine()
     }
 }
 
-void ConfigWidget::addIncludePath() {
-    KUrl addedUrl = ui->includePathRequester->url();
-    addedUrl.cleanPath();
-    includesModel->addInclude( addedUrl.toLocalFile( KUrl::RemoveTrailingSlash ) );
+void ConfigWidget::addIncludePath()
+{
+    commitIncludePathRequester( true );
+}
+
+void ConfigWidget::saveIncludePath()
+{
+    commitIncludePathRequester( false );
 }
 
 void ConfigWidget::deleteIncludePath()
@@ -299,6 +327,7 @@ void ConfigWidget::languageParametersTabSelected( int index )
     // Include pathes
     case 0:
         connect( this, SIGNAL(deleteLanguageParametersEntry()), SLOT(deleteIncludePath()) );
+        includePathSelected( QModelIndex() );
         model = includesModel;
         break;
 
@@ -400,6 +429,33 @@ void ConfigWidget::commitProjectPathRequester( bool add )
         if( pathsModel->data( pathsModel->index(i), ProjectPathsModel::FullUrlDataRole ).value<KUrl>() == savedUrl ) {
             ui->projectPaths->setCurrentIndex( i );
             projectPathSelected( i );
+            break;
+        }
+    }
+}
+
+void ConfigWidget::commitIncludePathRequester( bool add )
+{
+    QModelIndex pathIndex = ui->includePaths->currentIndex();
+
+    if( !pathIndex.isValid() ) {
+        add = true;
+    }
+
+    KUrl savedUrl = ui->includePathRequester->url();
+    savedUrl.cleanPath();
+    QString savedPath = savedUrl.toLocalFile( KUrl::RemoveTrailingSlash );
+
+    if( add ) {
+        includesModel->addInclude( savedPath );
+    } else {
+        includesModel->setData( pathIndex, savedPath, Qt::EditRole );
+    }
+
+    for( int i = 0; i < includesModel->rowCount(); ++i ) {
+        QModelIndex index = includesModel->index(i);
+        if( index.data( Qt::EditRole ).toString() == savedPath ) {
+            ui->includePaths->setCurrentIndex( index );
             break;
         }
     }

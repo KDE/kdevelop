@@ -168,8 +168,21 @@ If this is the same as the source directory you can leave it empty.</string>
             </item>
             <item>
              <widget class="KPushButton" name="addIncludePath">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new include path entry from this URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KPushButton" name="saveIncludePath">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Replace selected include path entry with this URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Replace</string>
               </property>
              </widget>
             </item>
