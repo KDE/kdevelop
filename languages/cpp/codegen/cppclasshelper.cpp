@@ -121,8 +121,6 @@ CppTemplateNewClass::~CppTemplateNewClass()
 
 QVariantHash CppTemplateNewClass::extraVariables()
 {
-    // TODO: this function is now never called. Either call it, or reimplement setDescription()
-    // to pass these variables to the TemplateRenderer
     QVariantHash variables;
 
     QMap<QString, VariableDescriptionList> variableDescriptions;
