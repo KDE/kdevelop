@@ -119,7 +119,7 @@ CppTemplateNewClass::~CppTemplateNewClass()
 
 }
 
-QVariantHash CppTemplateNewClass::templateVariables()
+QVariantHash CppTemplateNewClass::extraVariables()
 {
     // TODO: this function is now never called. Either call it, or reimplement setDescription()
     // to pass these variables to the TemplateRenderer
@@ -207,7 +207,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
         sourceUrl.addPath(name().toLower() + ".h");
     }
 
-    foreach (const DeclarationPointer& base, baseClasses())
+    foreach (const DeclarationPointer& base, directBaseClasses())
     {
         if (!base)
         {
@@ -229,6 +229,7 @@ QVariantHash CppTemplateNewClass::templateVariables()
 
 KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
 {
+  addVariables(extraVariables());
   KDevelop::DocumentChangeSet changes = TemplateClassGenerator::generate();
 
   if (!m_parentItem) {

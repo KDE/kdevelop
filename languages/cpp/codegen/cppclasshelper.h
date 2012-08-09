@@ -65,9 +65,7 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 
     virtual KDevelop::DocumentChangeSet generate();
     /**
-     * Reimplemented from TemplateClassGenerator::templateVariables()
-     * 
-     * In addition to the variables provider by the base class, 
+     * In addition to the variables provided by the base class,
      * it groups member variables and functions by access policy. 
      * The variables are of type VariableDescriptionList or FunctionDescriptionList
      * and are called @c private_members, @c public_functions, etc.
@@ -83,7 +81,7 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
      * @c namespaces holds two strings: "Foo" and "Bar". 
      *
      */
-    virtual QVariantHash templateVariables();
+    virtual QVariantHash extraVariables();
 
     void addBaseClass(const QString& base);
 
