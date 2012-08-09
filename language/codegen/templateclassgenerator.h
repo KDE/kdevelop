@@ -123,7 +123,8 @@ public:
     virtual QStringList namespaces() const;
 
     void addBaseClass(const QString& base);
-    QList<DeclarationPointer> baseClasses();
+    QList<DeclarationPointer> directBaseClasses();
+    QList<DeclarationPointer> allBaseClasses();
 
     QString license() const;
     void setLicense(const QString& license);

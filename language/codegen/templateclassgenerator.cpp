@@ -62,8 +62,9 @@ public:
     QHash<QString, KUrl> fileUrls;
     QHash<QString, SimpleCursor> filePositions;
     ClassDescription description;
-
-    QList<DeclarationPointer> baseClasses;
+    
+    QList<DeclarationPointer> directBaseClasses;
+    QList<DeclarationPointer> allBaseClasses;
 
     void fetchSuperClasses(const DeclarationPointer& declaration);
 };
@@ -71,15 +72,15 @@ public:
 void TemplateClassGeneratorPrivate::fetchSuperClasses (const DeclarationPointer& declaration)
 {
     DUChainReadLocker lock;
-    
+
     //Prevent duplicity
-    if(baseClasses.contains(declaration))
+    if(allBaseClasses.contains(declaration))
     {
         return;
     }
 
-    baseClasses << declaration;
-    
+    allBaseClasses << declaration;
+
     DUContext* context = declaration->internalContext();
     if (context) {
         foreach (const DUContext::Import& import, context->importedParentContexts()) {
@@ -395,13 +396,19 @@ void TemplateClassGenerator::addBaseClass (const QString& base)
         if(declaration->type<StructureType>())
         {
             d->fetchSuperClasses(declaration);
-            d->baseClasses << declaration;
+            d->directBaseClasses << declaration;
             break;
         }
     }
 }
 
-QList< DeclarationPointer > TemplateClassGenerator::baseClasses()
+QList< DeclarationPointer > TemplateClassGenerator::directBaseClasses()
 {
-    return d->baseClasses;
+    return d->directBaseClasses;
 }
+
+QList< DeclarationPointer > TemplateClassGenerator::allBaseClasses()
+{
+    return d->allBaseClasses;
+}
+
