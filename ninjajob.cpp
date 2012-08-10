@@ -22,6 +22,7 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/commandexecutor.h>
 
 NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent)
@@ -33,6 +34,7 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
     setObjectName("ninja "+arguments.join(" "));
+    setDelegate(new KDevelop::OutputDelegate);
  
     m_process = new KDevelop::CommandExecutor("ninja", this);
     m_process->setArguments( arguments );
