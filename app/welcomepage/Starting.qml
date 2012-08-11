@@ -74,7 +74,10 @@ StandardPage
                     
                     Label {
                         width: parent.width
-                        text: (display=="" ? projectNames.join(", ") : i18n("%1: %2", display, projectNames.join(", ")))
+                        text: (display=="" ?
+                                    projectNames.join(", ").replace(/.kdev4/g, "")
+                                  :
+                                  i18n("%1: %2", display, projectNames.join(", ").replace(/.kdev4/g, "")))
                         elide: Text.ElideRight
                     }
                 }
@@ -103,7 +106,7 @@ StandardPage
                     function justName(str) {
                         var idx = str.indexOf(" [")
                         
-                        return str.substr(0, idx);
+                        return str.substr(0, idx).replace("&", "").replace(/.kdev4/g, "");
                     }
                     width: projectsView.width
                     height: 30
