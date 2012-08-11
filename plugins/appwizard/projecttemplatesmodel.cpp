@@ -25,6 +25,7 @@ ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
     :KDevelop::TemplatesModel(parent->componentData(), parent)
 {
     setDescriptionResourceType("apptemplate_descriptions");
+    setPreviewResourceType("apptemplate_previews");
     setTemplateResourceType("apptemplates");
 }
 

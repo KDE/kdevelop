@@ -113,6 +113,21 @@ public:
     QByteArray descriptionResourceType() const;
 
     /**
+     * Sets the resource type for template previews to @p type
+     *
+     * @param type the new resource type for template previews
+     * @sa previewResourceType(), KStandardDirs
+     **/
+    void setPreviewResourceType(const QByteArray& type);
+
+    /**
+     * Returns the current resource type for template previews
+     *
+     * @sa setPreviewResourceType()
+     **/
+    QByteArray previewResourceType() const;
+
+    /**
      * Sets the resource type for template archives to @p type
      *
      * @param type the new resource type for template archives

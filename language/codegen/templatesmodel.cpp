@@ -41,6 +41,8 @@ public:
 
     QByteArray descriptionResourceType;
     QByteArray templateResourceType;
+    QByteArray previewResourceType;
+
     QMap<QString, QStandardItem*> templateItems;
     KComponentData componentData;
 };
@@ -93,13 +95,23 @@ void TemplatesModel::refresh()
             KConfigGroup general(&templateConfig, "General");
             QString name = general.readEntry("Name");
             QString category = general.readEntry("Category");
-            QString icon = general.readEntry("Icon");
             QString comment = general.readEntry("Comment");
 
             QStandardItem *templateItem = createItem(name, category);
             templateItem->setData(templateDescription, DescriptionFileRole);
-            templateItem->setData(icon, IconNameRole);
             templateItem->setData(comment, CommentRole);
+
+            if (!d->previewResourceType.isEmpty() && general.hasKey("Icon"))
+            {
+                foreach (const QString& icon, dirs->findAllResources(d->previewResourceType))
+                {
+                    if (QFileInfo(icon).baseName() == QFileInfo(templateDescription).baseName())
+                    {
+                        templateItem->setData(icon, IconNameRole);
+                        break;
+                    }
+                }
+            }
         } else {
             // Template file doesn't exist anymore, so remove the description
             // saves us the extra lookups for templateExists on the next run
@@ -212,7 +224,7 @@ void TemplatesModel::extractTemplateDescriptions()
                 kDebug() << "template" << archName << "does not contain .kdevtemplate or .desktop file";
                 continue;
             }
-            const KArchiveFile *templateFile = (KArchiveFile*)templateEntry;
+            const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
 
             kDebug() << "copy template description to" << localDescriptionsDir;
             templateFile->copyTo(localDescriptionsDir);
@@ -222,10 +234,27 @@ void TemplatesModel::extractTemplateDescriptions()
              * so that its basename matches the basename of the template archive
              */
             QFileInfo descriptionInfo(localDescriptionsDir + templateEntry->name());
-            QFile::rename(
-                descriptionInfo.absoluteFilePath(),
-                localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix()
-            );
+            QString destinationName = localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix();
+            QFile::rename(descriptionInfo.absoluteFilePath(), destinationName);
+
+            if (!d->previewResourceType.isEmpty())
+            {
+                KConfig config(destinationName);
+                KConfigGroup group(&config, "General");
+                if (group.hasKey("Icon"))
+                {
+                    const KArchiveEntry* iconEntry = templateArchive->directory()->entry(group.readEntry("Icon"));
+                    if (iconEntry && iconEntry->isFile())
+                    {
+                        kDebug() << "copy template preview" << iconEntry->name() << "to" << dirs->saveLocation(d->previewResourceType);
+                        const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
+                        QString saveDir = dirs->saveLocation(d->previewResourceType);
+                        iconFile->copyTo(saveDir);
+                        QFileInfo iconInfo(saveDir + templateEntry->name());
+                        QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());
+                    }
+                }
+            }
         }
         else
             kDebug() << "could not open template" << archName;
@@ -283,6 +312,16 @@ QByteArray TemplatesModel::descriptionResourceType() const
 void TemplatesModel::setDescriptionResourceType (const QByteArray& type)
 {
     d->descriptionResourceType = type;
+}
+
+QByteArray TemplatesModel::previewResourceType() const
+{
+    return d->previewResourceType;
+}
+
+void TemplatesModel::setPreviewResourceType (const QByteArray& type)
+{
+    d->previewResourceType = type;
 }
 
 QByteArray TemplatesModel::templateResourceType() const

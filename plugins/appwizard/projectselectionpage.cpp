@@ -107,7 +107,7 @@ void ProjectSelectionPage::templateChanged(int current)
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
     KStandardDirs* dirs = KDevelop::ICore::self()->componentData().dirs();
-    QString picPath = dirs->findResource("apptemplate_previews", current.data( Qt::UserRole+2 ).toString() );
+    QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
     if( picPath.isEmpty() ) 
     {
         picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
