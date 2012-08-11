@@ -947,7 +947,12 @@ int ProjectModel::columnCount( const QModelIndex& ) const
 int ProjectModel::rowCount( const QModelIndex& parent ) const
 {
     ProjectBaseItem* item = d->itemFromIndex( parent );
-    return item ? item->rowCount() : 0;
+    if (item && item->rowCount())
+        return item->rowCount() + 1; // 1 additional entry for the "... X filtered" element
+    else if(item == d->rootItem)
+        return 1; // 1 entry for the "... X filtered" element
+    else
+        return 0;
 }
 
 QModelIndex ProjectModel::parent( const QModelIndex& child ) const
@@ -975,6 +980,8 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
             return parent->child( index.row() );
         }
     }
+    if(!index.isValid())
+        return d->rootItem;
     return 0;
 }
 
@@ -1017,7 +1024,8 @@ ProjectVisitor::ProjectVisitor()
 QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
     ProjectBaseItem* parentItem = d->itemFromIndex( parent );
-    if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
+    // Allow creating indices for the trailing "... X filtered" item too, thus rowCount() + 1
+    if( parentItem && row >= 0 && row < parentItem->rowCount() + 1 && column == 0 ) {
         return createIndex( row, column, parentItem );
     }
     return QModelIndex();
@@ -1044,7 +1052,7 @@ Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
     if(item)
         return item->flags();
     else
-        return 0;
+        return Qt::ItemIsEnabled;
 }
 
 bool ProjectModel::insertColumns(int, int, const QModelIndex&)
