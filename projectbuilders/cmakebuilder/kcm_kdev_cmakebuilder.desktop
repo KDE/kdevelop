@@ -54,3 +54,7 @@ Name[x-test]=xxCMakexx
 Name[zh_CN]=CMake
 Name[zh_TW]=CMake
 Comment=Configure global CMake settings
+Comment[cs]=Nastavit globální možnosti CMake
+Comment[pt_BR]=Configurar as opções gerais do CMake
+Comment[uk]=Налаштування загальних параметрів CMake
+Comment[x-test]=xxConfigure global CMake settingsxx
