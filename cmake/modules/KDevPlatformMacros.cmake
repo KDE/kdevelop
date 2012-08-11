@@ -47,7 +47,7 @@ macro(kdevplatform_add_app_templates _templateNames)
 
         if(WIN32)
             add_custom_command(OUTPUT ${_template}
-                COMMAND zip ARGS -r -x .svn _svn .kdev_ignore ${_template} .
+                COMMAND zip ARGS -r ${_template} . -x .svn _svn .kdev_ignore
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                 DEPENDS ${_deps}
             )
