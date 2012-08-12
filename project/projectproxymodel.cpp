@@ -93,7 +93,7 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
                 return i18n("... hide %1 filtered", mExpandedFilters[parentItem]);
             if(parentItem && mFilterCache.contains(parentItem))
                 filteredCount = mFilterCache[parentItem].filteredChildren;
-            return i18n("... %1 filtered", filteredCount);
+            return i18np("... %1 filtered", "... %1 filtered", filteredCount);
         }
         if (role == Qt::ForegroundRole)
             return QApplication::palette().brush(QPalette::Disabled, QPalette::Foreground);
