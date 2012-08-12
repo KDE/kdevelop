@@ -1,0 +1,15 @@
+To install simply follow these rules:
+
+mkdir build
+cd  build
+cmake -DCMAKE_INSTALL_PREFIX=<kdevplatformdir> -DCMAKE_PREFIX_PATH=<kdevplatformdir> ../
+make -j2
+make install
+
+The term <kdevplatformdir> above refers to the installation prefix of KDevPlatform. If you
+installed KDevPlatform from your distribution packages I suggest to use
+$HOME/kdevelop with CMAKE_INSTALL_PREFIX. This will allow to install the plugin
+without polluting the system directory.  If you install outside of the
+KDevPlatform directory you'll have to set the environment variable KDEDIRS to
+include the installation directory of the plugin and run kbuildsycoca4 before
+starting kdevelop from the same terminal.

@@ -10,4 +10,4 @@ Doxyfile
 *.kdevelop.filelist
 *.kdevelop.pcs
 *.kdevses
-
+build/
