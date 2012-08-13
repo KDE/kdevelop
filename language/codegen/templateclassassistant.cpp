@@ -174,7 +174,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
             d->helper = new DefaultCreateClassHelper(this);
         }
 
-        d->generator = d->helper->generator();
+        d->generator = d->helper->createGenerator();
         Q_ASSERT(d->generator);
         d->generator->setTemplateDescription(d->fileTemplate);
         d->renderer = d->generator->renderer();

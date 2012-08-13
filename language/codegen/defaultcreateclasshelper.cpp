@@ -42,7 +42,7 @@ DefaultCreateClassHelper::~DefaultCreateClassHelper()
     delete d;
 }
 
-KDevelop::TemplateClassGenerator* DefaultCreateClassHelper::generator()
+KDevelop::TemplateClassGenerator* DefaultCreateClassHelper::createGenerator()
 {
     return new TemplateClassGenerator(d->assistant->baseUrl());
 }

@@ -42,7 +42,7 @@ public:
     /**
      * @return a new @c TemplateClassGenerator.
      */
-    virtual KDevelop::TemplateClassGenerator* generator();
+    virtual KDevelop::TemplateClassGenerator* createGenerator();
     /**
      * @return an empty list of methods.
      */

@@ -45,7 +45,7 @@ public:
     /**
      * @return a new class generator.
      **/
-    virtual TemplateClassGenerator* generator() = 0;
+    virtual TemplateClassGenerator* createGenerator() = 0;
 
     virtual QList<DeclarationPointer> defaultMethods(const QString& name) const = 0;
 };
