@@ -68,10 +68,10 @@ TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt
 
     d->ui->languageView->setModel(d->model);
     d->ui->templateView->setModel(d->model);
-    
+
     connect (d->ui->languageView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
              SLOT(currentLanguageChanged(QModelIndex)));
-    
+
     connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              SLOT(currentTemplateChanged(QModelIndex)));
 

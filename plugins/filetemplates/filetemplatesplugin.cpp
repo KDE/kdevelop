@@ -22,11 +22,11 @@ int debugArea()
 }
 
 K_PLUGIN_FACTORY(FileTemplatesFactory, registerPlugin<FileTemplatesPlugin>();)
-K_EXPORT_PLUGIN(FileTemplatesFactory(KAboutData("kdevfiletemplates","kdevfiletemplates", ki18n("File Templates Configuration"), "0.1", ki18n("Support for managing file templates"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(FileTemplatesFactory(KAboutData("kdevfiletemplates", "kdevfiletemplates", ki18n("File Templates Configuration"), "0.1", ki18n("Support for managing file templates"), KAboutData::License_GPL)))
 
 class TemplatePreviewFactory : public KDevelop::IToolViewFactory
 {
-    virtual QWidget* create (QWidget* parent = 0)
+    virtual QWidget* create(QWidget* parent = 0)
     {
         return new TemplatePreview(parent);
     }
@@ -42,11 +42,12 @@ class TemplatePreviewFactory : public KDevelop::IToolViewFactory
     }
 };
 
-FileTemplatesPlugin::FileTemplatesPlugin (QObject* parent, const QVariantList& args) : IPlugin (FileTemplatesFactory::componentData(), parent)
+FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
+: IPlugin(FileTemplatesFactory::componentData(), parent)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
-    
+
     m_model = new TemplatesModel(core()->self()->componentData(), this);
     m_model->setDescriptionResourceType("filetemplate_descriptions");
     m_model->setTemplateResourceType("filetemplates");

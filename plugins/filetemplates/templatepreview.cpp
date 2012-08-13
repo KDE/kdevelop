@@ -41,7 +41,8 @@
 
 using namespace KDevelop;
 
-TemplatePreview::TemplatePreview (QWidget* parent, Qt::WindowFlags f) : QWidget (parent, f)
+TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
+: QWidget(parent, f)
 {
     ui = new Ui::TemplatePreview;
     ui->setupUi(this);
@@ -107,7 +108,7 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 {
     Q_ASSERT(document);
     kDebug() << document->url();
-    
+
     delete m_tmpFile;
     m_tmpFile = new KTemporaryFile;
     QFileInfo info(document->url().toLocalFile());

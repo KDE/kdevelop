@@ -23,13 +23,7 @@
 
 #include "../languageexport.h"
 
-class KTextEdit;
-
 namespace KDevelop {
-
-struct ClassDescription;
-class OverridesPage;
-
 
 /**
  * Assistant dialog page for choosing the license of new source files
@@ -45,7 +39,8 @@ public:
     virtual ~LicensePage();
 
     /**
-     * Returns the full license header, either a pre-defined or user-supplied one.
+     * @return the full license header, which might either be a pre-defined
+     *         or user-supplied one.
      */
     QString license() const;
 

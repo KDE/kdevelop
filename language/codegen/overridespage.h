@@ -30,7 +30,6 @@ namespace KDevelop {
 
 /**
  * Assistant page for choosing class functions, overriden from base classes. 
- *
  */
 class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWidget
 {
@@ -43,18 +42,24 @@ public:
     /**
      * Default implementation populates the tree with all virtual functions in the base classes.
      * Calls @c addPotentialOverride() on each function, where more filtering can be applied.
-     * 
+     *
      * @param directBases Declarations of base classes from which the new class inherits directly.
      * @param allBases Declarations of all base classes from which functions can be overriden
      */
-    virtual void addBaseClasses(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases);
+    virtual void addBaseClasses(const QList<DeclarationPointer>& directBases,
+                                const QList<DeclarationPointer>& allBases);
     /**
-     * Add @p childDeclaration as potential override. Don't call @c KDevelop::OverridesPage::addPotentialOverride()
-     * in overloaded class to filter a declaration.
-     * @p classItem The parent class from which @p childDeclaration stems from. Should be used as parent for the override item.
+     * Add @p childDeclaration as potential override.
+     *
+     * Don't call @c KDevelop::OverridesPage::addPotentialOverride() in overloaded
+     * class to filter a declaration.
+     *
+     * @p classItem The parent class from which @p childDeclaration stems from.
+     *              Should be used as parent for the override item.
      * @p childDeclaration The overridable function.
      */
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem,
+                                      const DeclarationPointer& childDeclaration);
 
     /**
      * Add @p declarations as potential overrides under the category @p category.
@@ -73,7 +78,6 @@ public:
     QTreeWidget* overrideTree() const;
 
     QWidget* extraFunctionsContainer() const;
-
 
 public Q_SLOTS:
     /**

@@ -47,9 +47,9 @@ TemplateSelectionPage::TemplateSelectionPage (QWidget* parent)
     }
     ui->treeView->setRootIndex(categoryIndex);
 
-    connect (ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(contentsChanged()));
-    connect (ui->identifierLineEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
-    connect (ui->directoryUrlRequester, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(contentsChanged()));
+    connect(ui->identifierLineEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
+    connect(ui->directoryUrlRequester, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()

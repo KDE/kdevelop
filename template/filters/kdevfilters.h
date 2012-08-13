@@ -27,48 +27,57 @@
 #include <QtPlugin>
 
 namespace KDevelop {
-    
+
 class CamelCaseFilter : public Grantlee::Filter
 {
 public:
-    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
 };
 
 class LowerCamelCaseFilter : public Grantlee::Filter
 {
 public:
-    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
 };
 
 class UnderscoreFilter : public Grantlee::Filter
 {
 public:
-    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
 };
 
 class UpperFirstFilter : public Grantlee::Filter
 {
 public:
-    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
 };
 
 class SplitLinesFilter : public Grantlee::Filter
 {
 public:
-    virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
 };
 
 class KDevFilters : public QObject, public Grantlee::TagLibraryInterface
 {
     Q_OBJECT
     Q_INTERFACES(Grantlee::TagLibraryInterface)
-    
+
 public:
     explicit KDevFilters(QObject* parent = 0);
     virtual ~KDevFilters();
-    
+
     virtual QHash< QString, Grantlee::Filter* > filters(const QString& name = QString());
-    
 };
 
 }

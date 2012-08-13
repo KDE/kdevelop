@@ -39,7 +39,7 @@ TestOutputPage::~TestOutputPage()
 
 }
 
-void TestOutputPage::setFileUrls (const TestOutputPage::UrlHash& urls, const QHash<QString,QString>& labels)
+void TestOutputPage::setFileUrls(const TestOutputPage::UrlHash& urls, const QHash<QString,QString>& labels)
 {
     for (UrlHash::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {

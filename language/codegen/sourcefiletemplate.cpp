@@ -35,6 +35,7 @@
 #include <QDomDocument>
 
 using namespace KDevelop;
+typedef SourceFileTemplate::ConfigOption ConfigOption;
 
 class KDevelop::SourceFileTemplatePrivate
 {
@@ -42,12 +43,13 @@ public:
     KArchive* archive;
     QString descriptionFileName;
 
-    SourceFileTemplate::ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
+    ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
 };
 
-SourceFileTemplate::ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element, TemplateRenderer* renderer)
+ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
+                                                  TemplateRenderer* renderer)
 {
-    SourceFileTemplate::ConfigOption entry;
+    ConfigOption entry;
 
     entry.name = element.attribute("name");
     entry.type = element.attribute("type", "String");
@@ -225,7 +227,7 @@ bool SourceFileTemplate::hasCustomOptions() const
     return hasOptions;
 }
 
-QHash< QString, QList< SourceFileTemplate::ConfigOption > > SourceFileTemplate::customOptions(TemplateRenderer* renderer) const
+QHash< QString, QList<ConfigOption> > SourceFileTemplate::customOptions(TemplateRenderer* renderer) const
 {
     Q_ASSERT(isValid());
 

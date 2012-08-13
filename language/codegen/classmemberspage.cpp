@@ -52,7 +52,7 @@ ClassMembersPage::~ClassMembersPage()
 
 }
 
-void ClassMembersPage::setMembers (const VariableDescriptionList& members)
+void ClassMembersPage::setMembers(const VariableDescriptionList& members)
 {
     QStringList memberItems;
     foreach (const VariableDescription& variable, members)

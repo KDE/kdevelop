@@ -57,17 +57,17 @@ NoEscapeStream::NoEscapeStream() : OutputStream()
 
 }
 
-NoEscapeStream::NoEscapeStream (QTextStream* stream) : OutputStream (stream)
+NoEscapeStream::NoEscapeStream(QTextStream* stream) : OutputStream (stream)
 {
 
 }
 
-QString NoEscapeStream::escape (const QString& input) const
+QString NoEscapeStream::escape(const QString& input) const
 {
     return input;
 }
 
-QSharedPointer< OutputStream > NoEscapeStream::clone (QTextStream* stream) const
+QSharedPointer<OutputStream> NoEscapeStream::clone(QTextStream* stream) const
 {
     QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
     return clonedStream;
@@ -110,20 +110,20 @@ Grantlee::Engine* TemplateRenderer::engine()
     return &(d->engine);
 }
 
-void TemplateRenderer::addTemplateDirectories (const QStringList& directories)
+void TemplateRenderer::addTemplateDirectories(const QStringList& directories)
 {
     FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
     loader->setTemplateDirs(directories);
     d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
 }
 
-void TemplateRenderer::addArchive (const KArchiveDirectory* directory)
+void TemplateRenderer::addArchive(const KArchiveDirectory* directory)
 {
     ArchiveTemplateLoader* loader = new ArchiveTemplateLoader(directory);
     d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
 }
 
-void TemplateRenderer::addVariables (const QVariantHash& variables)
+void TemplateRenderer::addVariables(const QVariantHash& variables)
 {
     QVariantHash::const_iterator it = variables.constBegin();
     QVariantHash::const_iterator end = variables.constEnd();
@@ -133,7 +133,7 @@ void TemplateRenderer::addVariables (const QVariantHash& variables)
     }
 }
 
-void TemplateRenderer::addVariable (const QString& name, const QVariant& value)
+void TemplateRenderer::addVariable(const QString& name, const QVariant& value)
 {
     d->context.insert(name, value);
 }
@@ -253,7 +253,7 @@ QString TemplateRenderer::renderFile (const KUrl& url, const QString& name)
 {
     QFile file(url.toLocalFile());
     file.open(QIODevice::ReadOnly);
-    
+
     QString content(file.readAll());
     kDebug() << content;
 
@@ -272,7 +272,7 @@ QStringList TemplateRenderer::render (const QStringList& contents)
     return ret;
 }
 
-void TemplateRenderer::setEmptyLinesPolicy (TemplateRenderer::EmptyLinesPolicy policy)
+void TemplateRenderer::setEmptyLinesPolicy(TemplateRenderer::EmptyLinesPolicy policy)
 {
     d->emptyLinesPolicy = policy;
 }
@@ -282,11 +282,13 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
     return d->emptyLinesPolicy;
 }
 
-DocumentChangeSet TemplateRenderer::renderFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls)
+DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate& fileTemplate,
+                                                       const KUrl& baseUrl,
+                                                       const QHash<QString, KUrl>& fileUrls)
 {
     DocumentChangeSet changes;
     KUrl url(baseUrl);
-    
+
     url.adjustPath(KUrl::AddTrailingSlash);
     QRegExp nonAlphaNumeric("\\W");
     for (QHash<QString,KUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)

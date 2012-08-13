@@ -28,20 +28,13 @@
 #include "licensepage.h"
 #include "outputpage.h"
 
-#include "language/duchain/duchainpointer.h"
-#include "language/duchain/types/structuretype.h"
-
 #include <KAssistantDialog>
 #include <KUrl>
 
 #include "../languageexport.h"
 
-class KLineEdit;
-class KTextEdit;
-
 namespace KDevelop {
 
-struct ClassDescription;
 class OverridesPage;
 
 /**
@@ -72,7 +65,7 @@ public:
     virtual OverridesPage* newOverridesPage();
 
     /**
-     * Returns the base url from which the assistant was called
+     * @return The base url from which the assistant was called.
      **/
     KUrl baseUrl();
 

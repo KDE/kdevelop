@@ -39,11 +39,11 @@ class DocumentChangeSet;
 
 /**
  * Generates new classes from templates
- * 
+ *
  *
  * @section Variables Variables Passed to Templates
- * 
- * TemplateClassGenerator makes use of the ClassDescription returned by ClassGenerator::description(). 
+ *
+ * TemplateClassGenerator makes use of the ClassDescription returned by ClassGenerator::description().
  * From this description, it constructs the following variables:
  * @li @c description (ClassDescription) - the class description
  * @li @c name (QString) - the class name, same as @c description.name
@@ -53,17 +53,17 @@ class DocumentChangeSet;
  * @li @c functions (FunctionDescriptionList) - function members, same as @c description.methods
  * @li @c base_classes (InheritanceDescriptionList) - directly inherited classes, same as @c description.baseClasses
  * @li @c license (QString) - the license for this class, including author copyright, without comment characters or indentation. It is recommended to use the "lines_prepend" filters from library "kdev_filters" to format it.
- * 
+ *
  * For each output file, TemplateRenderer add two variables named @c output_file_x
  * and @c output_file_x_absolute, where @c x is replaced
  * with the file name specified in the template description file.
- * See TemplateRenderer::renderFileTemplate() for details. 
- * 
+ * See TemplateRenderer::renderFileTemplate() for details.
+ *
  * If the templates uses custom options, these options are added to the template variables. Their names match the
- * names specified in the options file, and their values to the values entered by the user. 
- * 
- * Subclasses can override templateVariables() and insert additional variables. 
- * 
+ * names specified in the options file, and their values to the values entered by the user.
+ *
+ * Subclasses can override templateVariables() and insert additional variables.
+ *
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator
 {
@@ -72,7 +72,7 @@ public:
 
     /**
      * Creates a new generator.
-     * 
+     *
      * You should call setTemplateDescription() before any other template-related functions.
      *
      * @param baseUrl the folder where new files will be created
@@ -82,7 +82,7 @@ public:
 
     /**
      * @brief Selects the template to be used
-     * 
+     *
      * This function must be called before using any other functions.
      *
      * The passed @p templateDescription should be an absolute path to a template description (.desktop) file.
@@ -96,27 +96,27 @@ public:
      * Set the name (without namespace) for this class
      */
     void setName(const QString&);
-    
+
     /**
      * \return The name of the class to generate (excluding namespaces)
      */
     QString name() const;
-    
+
     /**
      * \param identifier The Qualified identifier that the class will have
      */
     virtual void setIdentifier(const QString& identifier);
-    
+
     /**
      * \return The Identifier of the class to generate (including all used namespaces)
      */
     virtual QString identifier() const;
-    
+
     /**
      * \param namespaces The list of nested namespaces in which this class is to be declared
      */
     virtual void setNamespaces(const QStringList& namespaces) const;
-    
+
     /**
      * \return The list of nested namespace in which this class will be declared
      */
@@ -130,7 +130,6 @@ public:
     void setLicense(const QString& license);
 
     void setDescription(const ClassDescription& description);
-
     ClassDescription description() const;
 
     virtual DocumentChangeSet generate();
@@ -159,14 +158,13 @@ public:
 
     /**
      * Convenience function to render a string @p text as a Grantlee template
-     *
      **/
     QString renderString(const QString& text);
 
     /**
      * The template renderer used to render all the templates for this class.
      *
-     * This function is useful if you want a rendeder with all current template variables. 
+     * This function is useful if you want a rendeder with all current template variables.
      */
     TemplateRenderer* renderer();
 

@@ -41,12 +41,12 @@ class TestOutputPage : public QWidget
 
 public:
     typedef QHash<QString, KUrl> UrlHash;
-    
+
     TestOutputPage (QWidget* parent);
     virtual ~TestOutputPage();
 
     UrlHash fileUrls() const;
-    void setFileUrls(const TestOutputPage::UrlHash& urls, const QHash< QString, QString >& labels);
+    void setFileUrls(const TestOutputPage::UrlHash& urls, const QHash<QString, QString>& labels);
 
 private:
     QFormLayout* m_layout;

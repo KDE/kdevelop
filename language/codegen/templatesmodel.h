@@ -78,11 +78,11 @@ public:
     virtual void refresh();
 
     /**
-     * Loads template @p fileName and save it to the template storage directory. 
-     * 
-     * If the file is an archive, the whole archive will be copied. 
+     * Loads template @p fileName and save it to the template storage directory.
+     *
+     * If the file is an archive, the whole archive will be copied.
      * If the file has a .desktop or .kdevtemplate suffix, the contents
-     * of its containing directory will be archived and saved. 
+     * of its containing directory will be archived and saved.
      **/
     QString loadTemplateFile(const QString& fileName);
 

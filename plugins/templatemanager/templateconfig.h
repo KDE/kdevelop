@@ -14,7 +14,7 @@ class TemplateConfig : public KCModule
 public:
     explicit TemplateConfig (QWidget* parent = 0, const QVariantList& args = QVariantList());
     virtual ~TemplateConfig();
-    
+
 private:
     Ui::TemplateConfig* ui;
 };

@@ -70,7 +70,7 @@ public:
     KPageWidgetItem* templateOptionsPage;
     KPageWidgetItem* outputPage;
     KPageWidgetItem* dummyPage;
-    
+
     TemplateSelectionPage* templateSelectionPageWidget;
     ClassIdentifierPage* classIdentifierPageWidget;
     OverridesPage* overridesPageWidget;
@@ -90,8 +90,8 @@ public:
     QVariantHash templateOptions;
 };
 
-TemplateClassAssistant::TemplateClassAssistant (QWidget* parent, const KUrl& baseUrl)
-: KAssistantDialog (parent)
+TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& baseUrl)
+: KAssistantDialog(parent)
 , d(new TemplateClassAssistantPrivate)
 {
     d->baseUrl = baseUrl;
@@ -119,7 +119,7 @@ void TemplateClassAssistant::setup()
     setWindowTitle(i18n("Create From Template in %1", baseUrl().prettyUrl()));
 
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
-    connect (this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
+    connect(this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
     d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
     d->templateSelectionPage->setIcon(KIcon("project-development-new-template"));
 
@@ -147,7 +147,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
         d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
         d->classIdentifierPage->setIcon(KIcon("classnew"));
-        connect (d->classIdentifierPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+        connect(d->classIdentifierPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
         setValid(d->classIdentifierPage, false);
 
         d->overridesPageWidget = new OverridesPage(this);
@@ -199,14 +199,15 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     d->outputPageWidget->prepareForm(d->fileTemplate);
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
     d->outputPage->setIcon(KIcon("document-save"));
-    connect (d->outputPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+    connect(d->outputPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
     setValid(d->outputPage, false);
 
     if (d->fileTemplate.hasCustomOptions())
     {
         kDebug() << "Class generator has custom options";
         d->templateOptionsPageWidget = new TemplateOptionsPage(this);
-        d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget, i18n("Template Options"));
+        d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget,
+                                            i18n("Template Options"));
     }
 
     setCurrentPage(d->templateSelectionPage);
@@ -286,8 +287,10 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->overridesPage)
     {
         d->overridesPageWidget->clear();
-        d->overridesPageWidget->addCustomDeclarations(i18n("Default"), d->helper->defaultMethods(d->generator->name()));
-        d->overridesPageWidget->addBaseClasses(d->generator->directBaseClasses(), d->generator->allBaseClasses());
+        d->overridesPageWidget->addCustomDeclarations(i18n("Default"),
+            d->helper->defaultMethods(d->generator->name()));
+        d->overridesPageWidget->addBaseClasses(d->generator->directBaseClasses(),
+                                               d->generator->allBaseClasses());
     }
     else if (d->templateOptionsPage && (currentPage() == d->templateOptionsPage))
     {
@@ -354,7 +357,7 @@ void TemplateClassAssistant::accept()
     KAssistantDialog::accept();
 }
 
-void TemplateClassAssistant::setCurrentPageValid (bool valid)
+void TemplateClassAssistant::setCurrentPageValid(bool valid)
 {
     setValid(currentPage(), valid);
 }

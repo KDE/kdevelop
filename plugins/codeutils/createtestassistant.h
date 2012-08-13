@@ -30,7 +30,7 @@ class CreateTestAssistant : public KAssistantDialog
     Q_OBJECT
 
 public:
-    explicit CreateTestAssistant (const KUrl& baseUrl, QWidget* parent = 0, Qt::WFlags flags = 0);
+    explicit CreateTestAssistant(const KUrl& baseUrl, QWidget* parent = 0, Qt::WFlags flags = 0);
     virtual ~CreateTestAssistant();
 
     virtual void accept();

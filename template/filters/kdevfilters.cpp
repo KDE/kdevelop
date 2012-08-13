@@ -35,12 +35,12 @@ QStringList words(const QVariant& input)
     {
         return QStringList(string);
     }
-    
+
     if (string.contains('_'))
     {
         return string.toLower().split('_');
     }
-    
+
     int n = string.size();
     QStringList ret;
     int last = 0;
@@ -113,9 +113,10 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 }
 
 
-KDevFilters::KDevFilters(QObject* parent): QObject(parent)
+KDevFilters::KDevFilters(QObject* parent)
+: QObject(parent)
 {
-    
+
 }
 
 KDevFilters::~KDevFilters()
@@ -124,16 +125,16 @@ KDevFilters::~KDevFilters()
 }
 
 QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
-{    
+{
     Q_UNUSED(name);
     QHash< QString, Grantlee::Filter* > filters;
-    
+
     filters["camel_case"] = new CamelCaseFilter();
     filters["camel_case_lower"] = new LowerCamelCaseFilter();
     filters["underscores"] = new UnderscoreFilter();
     filters["lines_prepend"] = new SplitLinesFilter();
     filters["upper_first"] = new UpperFirstFilter();
-    
+
     return filters;
 }
 

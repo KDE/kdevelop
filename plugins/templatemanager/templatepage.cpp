@@ -10,16 +10,19 @@ m_provider(provider)
 {
     ui = new Ui::TemplatePage;
     ui->setupUi(this);
-    
+
     ui->getNewButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect (ui->getNewButton, SIGNAL(clicked(bool)), this, SLOT(getMoreTemplates()));
-    
+    connect(ui->getNewButton, SIGNAL(clicked(bool)),
+            this, SLOT(getMoreTemplates()));
+
     ui->shareButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect (ui->shareButton, SIGNAL(clicked(bool)), this, SLOT(shareTemplates()));
-    
+    connect(ui->shareButton, SIGNAL(clicked(bool)),
+            this, SLOT(shareTemplates()));
+
     ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
-    connect (ui->loadButton, SIGNAL(clicked(bool)), SLOT(loadFromFile()));
-    
+    connect(ui->loadButton, SIGNAL(clicked(bool)),
+            this, SLOT(loadFromFile()));
+
     ui->treeView->setModel(provider->templatesModel());
 }
 
@@ -31,12 +34,12 @@ TemplatePage::~TemplatePage()
 void TemplatePage::loadFromFile()
 {
     QString filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevtemplates"), m_provider->supportedMimeTypes().join(" "), this);
-    
+
     if (!filename.isEmpty())
     {
         m_provider->loadTemplate(filename);
     }
-    
+
     m_provider->reload();
 }
 
@@ -44,7 +47,7 @@ void TemplatePage::getMoreTemplates()
 {
     KNS3::DownloadDialog dialog(m_provider->knsConfigurationFile(), this);
     dialog.exec();
-    
+
     if (!dialog.changedEntries().isEmpty())
     {
         m_provider->reload();

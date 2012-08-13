@@ -17,14 +17,14 @@ class TemplatePage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent = 0);
+    explicit TemplatePage(KDevelop::ITemplateProvider* provider, QWidget* parent = 0);
     virtual ~TemplatePage();
-    
+
 private slots:
     void loadFromFile();
     void getMoreTemplates();
     void shareTemplates();
-    
+
 private:
     KDevelop::ITemplateProvider* m_provider;
     Ui::TemplatePage* ui;

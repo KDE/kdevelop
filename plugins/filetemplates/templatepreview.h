@@ -48,7 +48,7 @@ class TemplatePreview : public QWidget
     Q_OBJECT
 
 public:
-    explicit TemplatePreview (QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit TemplatePreview(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~TemplatePreview();
 
 private:
@@ -63,9 +63,9 @@ private slots:
     void sourceTextChanged(const QString& text);
 
 public slots:
-    void documentActivated (KDevelop::IDocument* document);
-    void documentChanged (KDevelop::IDocument* document);
-    void documentClosed (KDevelop::IDocument* document);
+    void documentActivated(KDevelop::IDocument* document);
+    void documentChanged(KDevelop::IDocument* document);
+    void documentClosed(KDevelop::IDocument* document);
     void selectedRendererChanged();
 };
 

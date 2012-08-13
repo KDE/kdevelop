@@ -82,43 +82,51 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     QList<DeclarationPointer> directInheritanceList() const;
 
     /**
-     * Should return a hash of all files for the gives class-name.
-     * Its keys are unique ID's and are never shown to the user.
+     * @return A hash of all files for the given class name.
+     *
+     * The keys are unique IDs and are never shown to the user.
      * The values are user-visible labels.
      *
-     * The default implementation returns "header" => i18n("Header") and "implementation" => i18n("Implementation")
+     * The default implementation returns:
+     * @code
+     * "header" => i18n("Header"),
+     * "implementation" => i18n("Implementation")
+     * @endcode
      **/
     virtual QHash<QString, QString> fileLabels();
 
     /**
-     * Should return the suggested urls of all files for the gives class-name
-     * The keys should match the keys returned by fileLabels()
+     * @return The suggested URLs of all files for the gives class name.
      *
-     * The default implementation calls headerUrlFromBase() and implementationUrlFromBase()
+     * The keys should match the keys returned by @c fileLabels()
      *
-     * @param baseUrl The base url, where the files should be located
+     * The default implementation calls @c headerUrlFromBase() and
+     * @c implementationUrlFromBase().
+     *
+     * @param baseUrl The base URL, where the files should be located.
      * @param toLowor Whether filenames should be all lowercase, defaults to true.
      **/
     virtual QHash<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
 
     /**
-     *Should return the suggested url of the header file for the given class-name
+     * @return The suggested URL of the header file for the given class name.
      */
     virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
 
     /**
-     *Should return the suggested url of the implementation file for the given class-name,
-     *if header and implementation are separate for this language.
+     * @return The suggested URL of the implementation file for the given class
+     *         name, if header and implementation are separate for this language.
+     *         Otherwise, return an invalid URL which is also the default.
      */
     virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
 
     /**
-     * Set the URL where the file of type @p fileType will be implemented
+     * Set the URL where the file of type @p fileType will be implemented.
      **/
     void setFileUrl(const QString& fileType, const KUrl url);
 
     /**
-     * Set the URL where the header will be implemented
+     * Set the URL where the header will be implemented.
      */
     void setHeaderUrl(const KUrl& header);
 
@@ -167,7 +175,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     virtual QStringList namespaces() const;
 
+    /**
+     * Get the license specified for this class.
+     */
     QString license() const;
+    /**
+     * Specify license for this class.
+     */
     void setLicense(const QString& license);
 
     virtual void setDescription(const ClassDescription& description);

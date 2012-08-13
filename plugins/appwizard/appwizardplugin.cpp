@@ -502,7 +502,7 @@ QString AppWizardPlugin::name()
     return i18n("Project Templates");
 }
 
-void AppWizardPlugin::loadTemplate (const QString& fileName)
+void AppWizardPlugin::loadTemplate(const QString& fileName)
 {
     m_templatesModel->loadTemplateFile(fileName);
 }

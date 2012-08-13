@@ -43,10 +43,10 @@ class DocumentChangeSet;
 
 /**
  * @brief Convenience class for rendering multiple templates with the same context
- * 
+ *
  * The TemplateRenderer provides easy access to common template operations.
  * Internally, it encapsulates a Grantlee::Engine and a Grantlee::Context.
- * 
+ *
  * It is used by adding a set of variables, and then renderering a template string
  * @code
  * TemplateRenderer renderer;
@@ -55,16 +55,16 @@ class DocumentChangeSet;
  * QString text = renderer.render("{{ greeting }}, {{ target }}!");
  * // text == "Hello, World!"
  * @endcode
- * 
+ *
  * If you wish to include other templates using the Grantlee {% include %} tag,
- * make sure TemplateRenderer can find those template by using 
+ * make sure TemplateRenderer can find those template by using
  * addTemplateDirectories() and addArchive(). This adds everything in the specified
- * directories or archive files to the list of files search for inclusion. 
- * 
+ * directories or archive files to the list of files search for inclusion.
+ *
  * Directories named "kdevcodegen/templates" in the "data" resource type are always included in the search path,
- * there is no need to add them explicitely. Additionally, TemplateRenderer adds the "lib" resource directories 
- * to the Grantlee plugin search path, so plugins installed there will be available to templates. 
- * 
+ * there is no need to add them explicitely. Additionally, TemplateRenderer adds the "lib" resource directories
+ * to the Grantlee plugin search path, so plugins installed there will be available to templates.
+ *
  **/
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateRenderer
 {
@@ -75,13 +75,13 @@ public:
     enum EmptyLinesPolicy
     {
         /**
-         * Keep empty lines as they are in the rendered output. 
-         * The output from the template is returned unmodified. 
+         * Keep empty lines as they are in the rendered output.
+         * The output from the template is returned unmodified.
          */
         KeepEmptyLines,
         /**
-         * If the template output has more than one line, the renderer 
-         * performs a smart trim on the rendered output. 
+         * If the template output has more than one line, the renderer
+         * performs a smart trim on the rendered output.
          * @li single empty lines are removed
          * @li two or more consecutive empty lines are compressed into a single empty line
          * @li a single empty line is kept at the end
@@ -97,7 +97,7 @@ public:
     virtual ~TemplateRenderer();
 
     /**
-     * Provides access to the encapsulated Grantlee::Engine. 
+     * Provides access to the encapsulated Grantlee::Engine.
      *
      **/
     Grantlee::Engine* engine();
@@ -109,24 +109,24 @@ public:
     void addTemplateDirectories(const QStringList& directories);
     /**
      * Adds the archive @p directory to the list of places searched for templates
-     * 
+     *
      **/
     void addArchive(const KArchiveDirectory* directory);
 
     /**
      * Adds @p variables to the Grantlee::Context passed to each template.
-     * 
+     *
      * If the context already contains a variables with the same name as a key in @p variables,
      * it is overwritten.
-     * 
+     *
      **/
     void addVariables(const QVariantHash& variables);
 
     /**
      * Adds variable with name @p name and value @p value to the Grantlee::Context passed to each template.
-     * 
+     *
      * If the context already contains a variables with the same @p name, it is overwritten.
-     * 
+     *
      **/
     void addVariable(const QString& name, const QVariant& value);
 
@@ -157,9 +157,9 @@ public:
 
     /**
      * @brief Renders a list of templates
-     * 
+     *
      * This is a convenience method, suitable if you have to render a large number of templates
-     * with the same context. 
+     * with the same context.
      *
      * @param content the template contents
      * @return the rendered templates
@@ -168,9 +168,9 @@ public:
 
     /**
      * @brief Sets the policy for empty lines in the rendered output
-     * 
-     * The default is KeepEmptyLines, where the template output is return unmodified. 
-     * 
+     *
+     * The default is KeepEmptyLines, where the template output is return unmodified.
+     *
      * @param policy policy for empty lines in the rendered output
      * @sa EmptyLinesPolicy
      */
@@ -184,7 +184,7 @@ public:
 
     /**
      * @brief Renders all templates in the archive represented by @p fileTemplate
-     * 
+     *
      * Output files are saved to corresponding URLs in @p fileUrls
      *
      * For each output file, TemplateRenderer add two variables named @c output_file_x
@@ -204,7 +204,8 @@ public:
      * @param fileUrls destination URLs of the output files
      * @return KDevelop::DocumentChangeSet
      */
-    DocumentChangeSet renderFileTemplate (const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, QHash< QString, KUrl > fileUrls);
+    DocumentChangeSet renderFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate,
+                                         const KUrl& baseUrl, const QHash<QString, KUrl>& fileUrls);
 
 private:
     class TemplateRendererPrivate* const d;

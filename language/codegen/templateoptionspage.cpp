@@ -57,7 +57,7 @@ TemplateOptionsPage::~TemplateOptionsPage()
     delete d;
 }
 
-void TemplateOptionsPage::load (const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
+void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateRenderer* renderer)
 {
     d->entries.clear();
 
@@ -134,9 +134,3 @@ QVariantHash TemplateOptionsPage::templateOptions() const
 
     return values;
 }
-
-
-
-
-
-

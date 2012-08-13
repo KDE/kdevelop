@@ -28,6 +28,7 @@
 #include "../languageexport.h"
 
 class KArchiveDirectory;
+
 namespace KDevelop
 {
 
@@ -42,7 +43,7 @@ class TemplateRenderer;
  * The archive must contain at least one .desktop file with the template's description.
  * If multiple such files are present, the one with the same base name as the archive itself will be used.
  *
- * The description file must contain a [General] section with the following keys:
+ * The description file must contain a @c [General] section with the following keys:
  * @li @c Name - The user-visible name of this template
  * @li @c Comment - A short user-visible comment
  * @li @c Category - The category of this template. It can be nested, in which case levels are separated
@@ -200,8 +201,11 @@ public:
     };
 
     /**
-     * Creates a SourceFileTemplate representing the template archive with description file @p templateDescription
-     * @param templateDescription template description file, used to find the archive and read information
+     * Creates a SourceFileTemplate representing the template archive with
+     * description file @p templateDescription.
+     *
+     * @param templateDescription template description file, used to find the
+     *        archive and read information
      */
     SourceFileTemplate(const QString& templateDescription);
 
@@ -209,7 +213,7 @@ public:
      * Copy constructor
      *
      * Creates a SourceFileTemplate representing the same template archive as @p other.
-     * This new objects shares no data with the @p other, so they can be read and deleted independently. 
+     * This new objects shares no data with the @p other, so they can be read and deleted independently.
      *
      * @param other the template to copy
      */

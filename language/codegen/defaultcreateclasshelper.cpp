@@ -31,8 +31,8 @@ public:
     TemplateClassAssistant* assistant;
 };
 
-DefaultCreateClassHelper::DefaultCreateClassHelper (TemplateClassAssistant* assistant)
-    : d(new DefaultCreateClassHelperPrivate)
+DefaultCreateClassHelper::DefaultCreateClassHelper(TemplateClassAssistant* assistant)
+: d(new DefaultCreateClassHelperPrivate)
 {
     d->assistant = assistant;
 }

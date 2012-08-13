@@ -12,11 +12,12 @@
 K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
 K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
 
-TemplateConfig::TemplateConfig (QWidget* parent, const QVariantList& args) : KCModule (TemplateConfigFactory::componentData(), parent, args)
+TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
+: KCModule(TemplateConfigFactory::componentData(), parent, args)
 {
     ui = new Ui::TemplateConfig;
     ui->setupUi(this);
-    
+
     foreach (KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITemplateProvider"))
     {
         if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>())

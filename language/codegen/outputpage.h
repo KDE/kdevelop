@@ -30,7 +30,7 @@ namespace KDevelop {
 
 class TemplateRenderer;
 class SourceFileTemplate;
-class CreateClassAssistant; 
+class CreateClassAssistant;
 
 /**
  * Assistant page for setting the output location of generated source code
@@ -54,20 +54,21 @@ public:
     /**
      * Loads file URLs from the template @p fileTemplate.
      * This function only sets URLs and file positions to widgets created by prepareForm(),
-     * so be sure to call prepareForm() before calling this function. 
+     * so be sure to call prepareForm() before calling this function.
      *
      * @param fileTemplate the template archive with the generated files
      * @param baseUrl the directory where the files are to be generated
      * @param renderer used to render any variables in output URLs
      */
-    void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl, KDevelop::TemplateRenderer* renderer);
+    void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl,
+                          KDevelop::TemplateRenderer* renderer);
 
     /**
      * Returns the file URLs, as specified by the user.
      */
     QHash<QString, KUrl> fileUrls() const;
     /**
-     * Returns the positions within files where code is to be generated. 
+     * Returns the positions within files where code is to be generated.
      */
     QHash<QString, SimpleCursor> filePositions() const;
 

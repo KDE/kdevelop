@@ -26,6 +26,7 @@
 class QModelIndex;
 class QListView;
 class QAbstractItemModel;
+
 namespace KDevelop
 {
 
@@ -36,8 +37,7 @@ namespace KDevelop
  * Selecting an item at one level causes that item to become the root of the next level.
  *
  * For compatibility and convenience, this class has methods and signals similar to those of
- * QAbstractItemView, such as setModel(), setRootIndex() and currentIndexChanged(). 
- *
+ * QAbstractItemView, such as setModel(), setRootIndex() and currentIndexChanged().
  */
 class KDEVPLATFORMLANGUAGE_EXPORT MultiLevelListView : public QWidget
 {
@@ -50,15 +50,15 @@ public:
      * @param f window flags, passed to QWidget
      * @param levels the number of levels in this view
      */
-    explicit MultiLevelListView (QWidget* parent = 0, Qt::WindowFlags f = 0, int levels = 2);
+    explicit MultiLevelListView(QWidget* parent = 0, Qt::WindowFlags f = 0, int levels = 2);
     /**
      * Default destructor
      */
     virtual ~MultiLevelListView();
 
     /**
-     * Sets the model to be displayed by this view. 
-     * 
+     * Sets the model to be displayed by this view.
+     *
      * @param model the model to be displayed
      * @sa QAbstractItemView::setModel()
      */
@@ -74,7 +74,7 @@ public:
     /**
      * The current index of the view.
      *
-     * The current index is determined as the current index of the last list view. 
+     * The current index is determined as the current index of the last list view.
      *
      * @sa QAbstractItemView::currentIndex()
      */
@@ -82,7 +82,7 @@ public:
 
     /**
      * Adds the widget @p widget under the list view for level @p level.
-     * This function can be used to insert custom widgets into the view hierarchy. 
+     * This function can be used to insert custom widgets into the view hierarchy.
      *
      * @param level specifies where to place the widget
      * @param widget the widget to add
@@ -95,7 +95,7 @@ signals:
      *
      * @param current the new current index
      * @param previous the previous index
-     * 
+     *
      * @sa currentIndex(), QItemSelectionModel::currentChanged()
      */
     void currentIndexChanged(const QModelIndex& current, const QModelIndex& previous);

@@ -50,7 +50,7 @@ struct OutputPagePrivate
     void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
 
-void OutputPagePrivate::updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable)
+void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable)
 {
     kDebug() << "Updating Ranges, file exists: " << enable;
     line->setEnabled(enable);
@@ -68,7 +68,7 @@ OutputPage::OutputPage(QWidget* parent)
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
 }
 
-void OutputPage::prepareForm (const SourceFileTemplate& fileTemplate)
+void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 {
     // First clear any existing file configurations
     // This can happen when going back and forth between assistant pages
@@ -138,7 +138,9 @@ void OutputPage::prepareForm (const SourceFileTemplate& fileTemplate)
     }
 }
 
-void OutputPage::loadFileTemplate (const SourceFileTemplate& fileTemplate, const KUrl& baseUrl, TemplateRenderer* renderer)
+void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
+                                   const KUrl& baseUrl,
+                                   TemplateRenderer* renderer)
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup codegenGroup( config, "CodeGeneration" );

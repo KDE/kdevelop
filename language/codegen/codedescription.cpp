@@ -32,7 +32,7 @@ using namespace KDevelop;
 /**
  * The access policy as a string, or an empty string
  * if the policy is set to default
- * 
+ *
  * The DUChain must be locked when calling this function
  **/
 QString accessPolicyName(const DeclarationPointer& declaration)
@@ -69,7 +69,7 @@ VariableDescription::VariableDescription(const QString& type, const QString& nam
 
 VariableDescription::VariableDescription(const DeclarationPointer& declaration)
 {
-    DUChainReadLocker locker(DUChain::lock());
+    DUChainReadLocker lock;
 
     if (declaration)
     {
@@ -85,7 +85,8 @@ FunctionDescription::FunctionDescription()
 
 }
 
-FunctionDescription::FunctionDescription(const QString& name, const VariableDescriptionList& arguments, const VariableDescriptionList& returnArguments)
+FunctionDescription::FunctionDescription(const QString& name, const VariableDescriptionList& arguments,
+                                         const VariableDescriptionList& returnArguments)
 : name(name)
 , arguments(arguments)
 , returnArguments(returnArguments)
@@ -95,19 +96,19 @@ FunctionDescription::FunctionDescription(const QString& name, const VariableDesc
 
 FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
 {
-    DUChainReadLocker locker(DUChain::lock());
+    DUChainReadLocker lock;
 
     if (declaration)
     {
         name = declaration->identifier().toString();
         DUContext* context = declaration->internalContext();
-        
+
         DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
         if (function && function->internalFunctionContext())
         {
             context = function->internalFunctionContext();
         }
-        
+
         DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
 
         if (method)

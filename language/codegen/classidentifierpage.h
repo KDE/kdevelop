@@ -41,12 +41,13 @@ public:
     virtual ~ClassIdentifierPage();
 
     /**
-     * The full identifier of the new class, with namespaces, as entered by the user. 
+     * @return The full identifier of the new class, with namespaces,
+     *         as entered by the user.
      */
     QString identifier() const;
 
     /**
-     * Returns a list of inheritances for the new class.
+     * @return A list of inheritances for the new class.
      *
      * Each list elements contains both inheritance type and the base class name,
      * such as "public QObject" or "implements Serializable"
@@ -58,7 +59,8 @@ Q_SIGNALS:
     /**
      * Emitted whenever the content of the page changes.
      *
-     * @param valid true if the content is valid and the user can procede to the next page, false otherwise
+     * @param valid @c true if the content is valid and the user can procede to
+     *        the next page, @c false otherwise.
      */
     void isValid(bool valid);
 

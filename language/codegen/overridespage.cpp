@@ -95,9 +95,10 @@ void OverridesPage::clear()
     d->declarationMap.clear();
 }
 
-void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases, const QList<DeclarationPointer>& allBases)
+void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
+                                   const QList<DeclarationPointer>& allBases)
 {
-    KDevelop::DUChainReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock;
 
     foreach(const DeclarationPointer& baseClass, allBases) {
         DUContext* context = baseClass->internalContext();

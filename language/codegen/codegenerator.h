@@ -96,8 +96,8 @@ public:
      * Most probable scenarios are: Testing, and a generator that is being used by another one
      * @param context If not NULL, the custom context to use, instead of user selection
      * @param position If not NULL, the cursom range to use instead of user selection
-     * @note If this function is called, then gather information will not be called. Derived classes should provide
-     * an alternative way of setting up the generator.
+     * @note If this function is called, then gather information will not be called.
+     *       Derived classes should provide an alternative way of setting up the generator.
      */
     void autoGenerate(DUContext * context, const DocumentRange * range);
 

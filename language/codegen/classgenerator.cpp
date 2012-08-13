@@ -224,7 +224,7 @@ KUrl ClassGenerator::implementationUrlFromBase(const KUrl& baseUrl, bool toLower
     return KUrl();
 }
 
-void ClassGenerator::setFilePosition (const QString& fileType, const SimpleCursor& position)
+void ClassGenerator::setFilePosition(const QString& fileType, const SimpleCursor& position)
 {
     d->filePositions[fileType] = position;
 }
@@ -240,7 +240,7 @@ void ClassGenerator::setImplementationPosition(const SimpleCursor& position)
     setFilePosition(d->implementationFileType, position);
 }
 
-void ClassGenerator::setFileUrl (const QString& fileType, const KUrl url)
+void ClassGenerator::setFileUrl(const QString& fileType, const KUrl url)
 {
     d->fileUrls[fileType] = url;
 }
@@ -287,14 +287,12 @@ QHash<QString, KUrl> ClassGenerator::fileUrls()
     return d->fileUrls;
 }
 
-/// Specify license for this class
 void ClassGenerator::setLicense(const QString& license)
 {
     kDebug() << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
 }
 
-/// Get the license specified for this classes
 QString ClassGenerator::license() const
 {
     return d->license;
@@ -395,7 +393,7 @@ void ClassGenerator::addToTarget(const KUrl& url)
             dialog->setButtons( KDialog::Ok | KDialog::Cancel);
             dialog->enableButtonOk(true);
             dialog->setMainWidget(widget);
-        
+
             if(dialog->exec() == QDialog::Accepted)
             {
                 if (targetsWidget->selectedItems().isEmpty())

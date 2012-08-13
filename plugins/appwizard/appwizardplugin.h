@@ -24,12 +24,13 @@ class KArchiveDirectory;
 class KTempDir;
 class KUrl;
 
-class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvider {
+class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvider
+{
     Q_OBJECT
     Q_INTERFACES(KDevelop::ITemplateProvider)
-    
+
 public:
-    AppWizardPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~AppWizardPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     

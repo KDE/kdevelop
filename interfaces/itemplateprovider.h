@@ -35,7 +35,7 @@ namespace KDevelop
  *
  * A template provider loads any kind of source code templates and presents them in a model
  * via the tempatesModel() function. This model will usually, but not necessarily, be connected
- * to a tree view, to a tree structure is recommended.
+ * to a tree view, so a tree structure is recommended.
  *
  * If the templates have a similar structure as those used by the AppWizard plugin,
  * the TemplatesModel class may be used for convenience.
@@ -54,44 +54,42 @@ class KDEVPLATFORMINTERFACES_EXPORT ITemplateProvider
 public:
     /**
      * Destructor
-     *
      **/
     virtual ~ITemplateProvider();
 
     /**
-     * The name of this provider.
+     * @return The name of this provider.
      **/
     virtual QString name() = 0;
     /**
-     * An icon associated with this provider.
+     * @return An icon associated with this provider.
      **/
     virtual QIcon icon() = 0;
 
     /**
-     * A model containing all available templates.
+     * @return A model containing all available templates.
      **/
     virtual QAbstractItemModel* templatesModel() = 0;
 
     /**
-     * The configuration file for Get Hot New Stuff.
+     * @return The configuration file for Get Hot New Stuff.
      *
      * If GHNS is not used by this provider, return an empty string.
-     *
      **/
     virtual QString knsConfigurationFile() = 0;
 
     /**
-     * Types of files this provider can load.
+     * @return Types of files this provider can load.
      *
      * If loading is not supported, return an empty list.
-     *
      **/
     virtual QStringList supportedMimeTypes() = 0;
 
     /**
      * Load a template from the file @p fileName.
      *
-     * This function will only be called if supportedMimeTypes() returns a non-empty list.
+     * This function will only be called if @c supportedMimeTypes() returns
+     * a non-empty list.
      *
      * @param fileName the name of the file to load.
      **/
@@ -101,7 +99,6 @@ public:
      * Reloads all template data.
      *
      * This is usually called after loading or updating new templates.
-     *
      **/
     virtual void reload() = 0;
 };

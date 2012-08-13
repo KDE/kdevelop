@@ -309,7 +309,7 @@ QByteArray TemplatesModel::descriptionResourceType() const
     return d->descriptionResourceType;
 }
 
-void TemplatesModel::setDescriptionResourceType (const QByteArray& type)
+void TemplatesModel::setDescriptionResourceType(const QByteArray& type)
 {
     d->descriptionResourceType = type;
 }
@@ -329,7 +329,7 @@ QByteArray TemplatesModel::templateResourceType() const
     return d->templateResourceType;
 }
 
-void TemplatesModel::setTemplateResourceType (const QByteArray& type)
+void TemplatesModel::setTemplateResourceType(const QByteArray& type)
 {
     d->templateResourceType = type;
 }

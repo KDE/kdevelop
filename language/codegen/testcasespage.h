@@ -40,7 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TestCasesPage : public QWidget
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)
 
 public:
-    explicit TestCasesPage (QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit TestCasesPage(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~TestCasesPage();
 
     /**
@@ -59,7 +59,6 @@ public:
 
 private:
     class TestCasesPagePrivate* const d;
-
 };
 
 }

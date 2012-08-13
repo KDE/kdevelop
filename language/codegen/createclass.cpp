@@ -209,11 +209,10 @@ ClassGenerator * CreateClassAssistant::generator()
     return d->generator;
 }
 
-void CreateClassAssistant::setGenerator (ClassGenerator* generator)
+void CreateClassAssistant::setGenerator(ClassGenerator* generator)
 {
     d->generator = generator;
 }
-
 
 ClassIdentifierPage* CreateClassAssistant::newIdentifierPage()
 {

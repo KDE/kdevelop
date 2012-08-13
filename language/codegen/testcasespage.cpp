@@ -34,7 +34,7 @@ public:
     Ui::TestCasesPage* ui;
 };
 
-TestCasesPage::TestCasesPage (QWidget* parent, Qt::WindowFlags f)
+TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
 : QWidget (parent, f)
 , d(new TestCasesPagePrivate)
 {
@@ -54,7 +54,7 @@ QString TestCasesPage::name() const
     return d->ui->identifierLineEdit->text();
 }
 
-void TestCasesPage::setTestCases (const QStringList& testCases)
+void TestCasesPage::setTestCases(const QStringList& testCases)
 {
     d->ui->keditlistwidget->setItems(testCases);
 }

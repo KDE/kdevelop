@@ -41,7 +41,6 @@ namespace KDevelop {
  * @brief Represents a variable
  *
  * A variable has two main properties: its type and name.
- * 
  **/
 struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
 {
@@ -69,13 +68,13 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
     QString name;
     /**
      * The type of this variable.
-     * 
-     * In weekly typed languages, this field can be empty. 
+     *
+     * In weekly typed languages, this field can be empty.
      **/
     QString type;
     /**
      * Access specifier, only relevant for class members.
-     * 
+     *
      * Not all languages use these, so it can be left empty.
      **/
     QString access;
@@ -92,7 +91,7 @@ typedef QList<VariableDescription> VariableDescriptionList;
 
 /**
  * @brief Represents a function
- * 
+ *
  * A function has a name and any number of arguments and return values
  **/
 struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
@@ -131,7 +130,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
     QList<VariableDescription> returnArguments;
     /**
      * Access specifier, only relevant for class members.
-     * 
+     *
      * Not all languages use these, so it can be left empty.
      **/
     QString access;
@@ -178,7 +177,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
 typedef QList<FunctionDescription> FunctionDescriptionList;
 
 /**
- * Description of an inheritance relation. 
+ * Description of an inheritance relation.
  **/
 struct KDEVPLATFORMLANGUAGE_EXPORT InheritanceDescription
 {
@@ -205,8 +204,8 @@ typedef QList<InheritanceDescription> InheritanceDescriptionList;
 
 /**
  * @brief Represents a class
- * 
- * A class descriptions stores its name, its member variables and functions, as well as its superclasses and inheritance types. 
+ *
+ * A class descriptions stores its name, its member variables and functions, as well as its superclasses and inheritance types.
  **/
 struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
 {
@@ -300,5 +299,3 @@ GRANTLEE_BEGIN_LOOKUP(KDevelop::ClassDescription)
 GRANTLEE_END_LOOKUP
 
 #endif // KDEVELOP_CODEDESCRIPTION_H
-
-class C;

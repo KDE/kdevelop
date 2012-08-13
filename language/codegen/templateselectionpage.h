@@ -44,8 +44,8 @@ public:
 
     /**
      * @property selectedTemplate
-     * 
-     * The class template, selected by the user. 
+     *
+     * The class template, selected by the user.
      * This property stores the full path to the template description (.desktop) file
      **/
     QString selectedTemplate() const;

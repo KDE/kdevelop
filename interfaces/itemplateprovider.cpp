@@ -25,4 +25,3 @@ ITemplateProvider::~ITemplateProvider()
 {
 
 }
-

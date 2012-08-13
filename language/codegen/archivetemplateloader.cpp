@@ -38,7 +38,8 @@ public:
     const KArchiveDirectory* directory;
 };
 
-ArchiveTemplateLoader::ArchiveTemplateLoader (const KArchiveDirectory* directory) : d(new ArchiveTemplateLoaderPrivate)
+ArchiveTemplateLoader::ArchiveTemplateLoader(const KArchiveDirectory* directory)
+: d(new ArchiveTemplateLoaderPrivate)
 {
     d->directory = directory;
 }
@@ -48,14 +49,14 @@ ArchiveTemplateLoader::~ArchiveTemplateLoader()
 
 }
 
-bool ArchiveTemplateLoader::canLoadTemplate (const QString& name) const
+bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 {
     bool can = d->directory->entry(name) && d->directory->entry(name)->isFile();
     kDebug() << "Can load" << name << "?" << can;
     return can;
 }
 
-Grantlee::Template ArchiveTemplateLoader::loadByName (const QString& name, const Grantlee::Engine* engine) const
+Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
 {
     const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(d->directory->entry(name));
     Q_ASSERT(file);
@@ -64,7 +65,7 @@ Grantlee::Template ArchiveTemplateLoader::loadByName (const QString& name, const
     return engine->newTemplate(file->data(), file->name());
 }
 
-QPair< QString, QString > ArchiveTemplateLoader::getMediaUri (const QString& fileName) const
+QPair< QString, QString > ArchiveTemplateLoader::getMediaUri(const QString& fileName) const
 {
     Q_UNUSED(fileName);
     return QPair<QString, QString>();

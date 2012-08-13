@@ -43,7 +43,7 @@ public:
     KDevelop::SourceFileTemplate* fileTemplate;
 };
 
-CreateTestAssistant::CreateTestAssistant (const KUrl& baseUrl, QWidget* parent, Qt::WFlags flags)
+CreateTestAssistant::CreateTestAssistant(const KUrl& baseUrl, QWidget* parent, Qt::WFlags flags)
 : KAssistantDialog (parent, flags)
 , d(new CreateTestAssistantPrivate)
 {
@@ -66,7 +66,7 @@ CreateTestAssistant::~CreateTestAssistant()
 
 }
 
-void CreateTestAssistant::templateValid (bool valid)
+void CreateTestAssistant::templateValid(bool valid)
 {
     setValid(d->templateSelectionPage, valid);
 }

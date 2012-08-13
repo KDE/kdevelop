@@ -69,7 +69,7 @@ public:
     void fetchSuperClasses(const DeclarationPointer& declaration);
 };
 
-void TemplateClassGeneratorPrivate::fetchSuperClasses (const DeclarationPointer& declaration)
+void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& declaration)
 {
     DUChainReadLocker lock;
 
@@ -106,7 +106,7 @@ TemplateClassGenerator::~TemplateClassGenerator()
     delete d;
 }
 
-void TemplateClassGenerator::setTemplateDescription (const SourceFileTemplate& fileTemplate)
+void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fileTemplate)
 {
     d->fileTemplate = fileTemplate;
     d->renderer.addArchive(d->fileTemplate.directory());
@@ -154,7 +154,7 @@ KUrl TemplateClassGenerator::fileUrl (const QString& outputFile)
     return fileUrls().value(outputFile);
 }
 
-void TemplateClassGenerator::setFileUrl (const QString& outputFile, const KUrl& url)
+void TemplateClassGenerator::setFileUrl(const QString& outputFile, const KUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
     d->renderer.addVariable("output_file_" + outputFile.toLower(), KUrl::relativeUrl(d->baseUrl, url));
@@ -166,7 +166,7 @@ SimpleCursor TemplateClassGenerator::filePosition (const QString& outputFile)
     return d->filePositions.value(outputFile);
 }
 
-void TemplateClassGenerator::setFilePosition (const QString& outputFile, const SimpleCursor& position)
+void TemplateClassGenerator::setFilePosition(const QString& outputFile, const SimpleCursor& position)
 {
     d->filePositions.insert(outputFile, position);
 }
@@ -260,15 +260,15 @@ void TemplateClassGenerator::addToTarget()
     {
         return;
     }
-    
+
     QList<ProjectBaseItem*> items = project->itemsForUrl(d->baseUrl);
     if (items.isEmpty())
     {
         return;
     }
-    
+
     ProjectBaseItem* baseItem = items.first();
-    
+
     //Pick the folder Item that should contain the new class
     ProjectFolderItem* folder = baseItem->folder();
     ProjectTargetItem* target = baseItem->target();
@@ -280,20 +280,20 @@ void TemplateClassGenerator::addToTarget()
     {
         folder = baseItem->parent()->folder();
     }
-    
+
     // find target to add created class to
     if(!target && folder && project->projectFileManager()->features() & IProjectFileManager::Targets )
     {
         /*
          * NOTE: This requires linking agains KDevPlatformProject
          */
-        
+
         /*
          *       QList<KDevelop::ProjectTargetItem*> t = folder->targetList();
          *       for(ProjectBaseItem* it = folder; it && t.isEmpty(); it = it->parent()) {
          *           t = it->targetList();
          }
-         
+
          if (t.count() == 1)
          { //Just choose this one
          target = t.first();
@@ -310,12 +310,12 @@ void TemplateClassGenerator::addToTarget()
             targetsWidget->addItem(it->text());
     }
     widget->layout()->addWidget(targetsWidget);
-    
+
     targetsWidget->setCurrentRow(0);
     dialog->setButtons( KDialog::Ok | KDialog::Cancel);
     dialog->enableButtonOk(true);
     dialog->setMainWidget(widget);
-    
+
     if(dialog->exec() == QDialog::Accepted)
     {
         if (targetsWidget->selectedItems().isEmpty())
@@ -332,7 +332,7 @@ void TemplateClassGenerator::addToTarget()
     }
     */
     }
-    
+
     if (target && project->buildSystemManager())
     {
         QList<ProjectFileItem*> itemsToAdd;
@@ -348,7 +348,7 @@ void TemplateClassGenerator::addToTarget()
     }
 }
 
-void TemplateClassGenerator::setDescription (const ClassDescription& description)
+void TemplateClassGenerator::setDescription(const ClassDescription& description)
 {
     d->description = description;
 
@@ -365,12 +365,12 @@ ClassDescription TemplateClassGenerator::description() const
     return d->description;
 }
 
-void TemplateClassGenerator::addBaseClass (const QString& base)
+void TemplateClassGenerator::addBaseClass(const QString& base)
 {
     QStringList splitBase = base.split(' ');
     QString identifier = splitBase.takeLast();
     QString inheritanceMode = splitBase.join(" ");
-    
+
     InheritanceDescription desc;
     desc.baseType = identifier;
     desc.inheritanceMode = inheritanceMode;
@@ -378,11 +378,11 @@ void TemplateClassGenerator::addBaseClass (const QString& base)
     ClassDescription cd = description();
     cd.baseClasses << desc;
     setDescription(cd);
-    
+
     DUChainReadLocker lock;
-    
+
     PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(identifier)));
-    
+
     //Search for all super classes
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
     {
