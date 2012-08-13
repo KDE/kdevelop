@@ -56,7 +56,8 @@ QStringList words(const QVariant& input)
     return ret;
 }
 
-QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
+                                   bool /*autoescape*/) const
 {
     QString ret;
     foreach (const QString& word, words(input))
@@ -68,7 +69,8 @@ QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& argume
     return Grantlee::SafeString(ret);
 }
 
-QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
+                                        bool /*autoescape*/) const
 {
     QString ret;
     foreach (const QString& word, words(input))
@@ -84,13 +86,15 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& a
     return Grantlee::SafeString(ret);
 }
 
-QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
+                                    bool /*autoescape*/) const
 {
     QString ret = words(input).join("_");
     return Grantlee::SafeString(ret);
 }
 
-QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
+                                    bool /*autoescape*/) const
 {
     QString in = getSafeString(input);
     if (!in.isEmpty())
@@ -101,7 +105,8 @@ QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& argum
 }
 
 
-QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argument,
+                                    bool /*autoescape*/) const
 {
     QStringList retLines;
     QString start = getSafeString(argument);
