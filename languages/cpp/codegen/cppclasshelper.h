@@ -41,8 +41,8 @@ public:
     CppClassHelper(KDevelop::TemplateClassAssistant* assistant);
     virtual ~CppClassHelper();
 
-    virtual KDevelop::TemplateClassGenerator* generator();
-    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name);
+    virtual KDevelop::TemplateClassGenerator* createGenerator();
+    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
 
 private:
     KDevelop::TemplateClassAssistant* m_assistant;

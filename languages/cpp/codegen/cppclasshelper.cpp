@@ -52,7 +52,7 @@ CppClassHelper::~CppClassHelper()
 
 }
 
-TemplateClassGenerator* CppClassHelper::generator()
+TemplateClassGenerator* CppClassHelper::createGenerator()
 {
     KUrl url = m_assistant->baseUrl();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
@@ -71,7 +71,7 @@ TemplateClassGenerator* CppClassHelper::generator()
     return new CppTemplateNewClass(item);
 }
 
-QList< DeclarationPointer > CppClassHelper::defaultMethods(const QString& name)
+QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) const
 {
     KTemporaryFile file;
     file.setSuffix( ".cpp" );
