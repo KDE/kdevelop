@@ -49,7 +49,7 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
 
 ClassMembersPage::~ClassMembersPage()
 {
-
+    delete d;
 }
 
 void ClassMembersPage::setMembers(const VariableDescriptionList& members)

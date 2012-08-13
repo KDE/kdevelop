@@ -109,7 +109,13 @@ SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
     setTemplateDescription(other.d->descriptionFileName);
 }
 
-SourceFileTemplate& SourceFileTemplate::operator= (const SourceFileTemplate& other)
+SourceFileTemplate::~SourceFileTemplate()
+{
+    delete d->archive;
+    delete d;
+}
+
+SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& other)
 {
     setTemplateDescription(other.d->descriptionFileName);
     return *this;
@@ -151,12 +157,6 @@ void SourceFileTemplate::setTemplateDescription (const QString& templateDescript
         }
         d->archive->open(QIODevice::ReadOnly);
     }
-}
-
-SourceFileTemplate::~SourceFileTemplate()
-{
-    delete d->archive;
-    delete d;
 }
 
 bool SourceFileTemplate::isValid() const

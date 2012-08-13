@@ -52,6 +52,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 
 ClassIdentifierPage::~ClassIdentifierPage()
 {
+    delete d->classid;
     delete d;
 }
 

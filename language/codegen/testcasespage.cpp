@@ -46,6 +46,7 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
 
 TestCasesPage::~TestCasesPage()
 {
+    delete d->ui;
     delete d;
 }
 

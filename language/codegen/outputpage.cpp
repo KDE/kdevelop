@@ -64,8 +64,16 @@ OutputPage::OutputPage(QWidget* parent)
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
 
-    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)), SLOT(updateFileRange(QString)));
-    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
+    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)),
+            SLOT(updateFileRange(QString)));
+    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(updateFileNames()));
+}
+
+OutputPage::~OutputPage()
+{
+    delete d->output;
+    delete d;
 }
 
 void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
@@ -231,9 +239,5 @@ QHash< QString, SimpleCursor > OutputPage::filePositions() const
     return positions;
 }
 
-OutputPage::~OutputPage()
-{
-    delete d;
 }
 
-}

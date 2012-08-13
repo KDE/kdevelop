@@ -63,7 +63,7 @@ CreateTestAssistant::CreateTestAssistant(const KUrl& baseUrl, QWidget* parent, Q
 
 CreateTestAssistant::~CreateTestAssistant()
 {
-
+    delete d;
 }
 
 void CreateTestAssistant::templateValid(bool valid)

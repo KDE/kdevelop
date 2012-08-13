@@ -185,6 +185,8 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
         setValid(d->testCasesPage, true);
 
+        ///FIXME: this is leaking! who owns the renderer, see also above,
+        ///       should it be TemplateClassGenerator::createRenderer?
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
         d->renderer->addArchive(d->fileTemplate.directory());

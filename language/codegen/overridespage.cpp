@@ -62,6 +62,7 @@ OverridesPage::OverridesPage(QWidget* parent)
 
 OverridesPage::~OverridesPage()
 {
+    delete d->overrides;
     delete d;
 }
 

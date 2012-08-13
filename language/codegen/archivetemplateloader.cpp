@@ -46,7 +46,7 @@ ArchiveTemplateLoader::ArchiveTemplateLoader(const KArchiveDirectory* directory)
 
 ArchiveTemplateLoader::~ArchiveTemplateLoader()
 {
-
+    delete d;
 }
 
 bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const

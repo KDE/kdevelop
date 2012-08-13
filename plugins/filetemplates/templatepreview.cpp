@@ -101,6 +101,7 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 
 TemplatePreview::~TemplatePreview()
 {
+    delete ui;
     delete m_renderer;
 }
 
