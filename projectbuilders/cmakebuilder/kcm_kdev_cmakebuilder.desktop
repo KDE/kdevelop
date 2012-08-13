@@ -55,6 +55,7 @@ Name[zh_CN]=CMake
 Name[zh_TW]=CMake
 Comment=Configure global CMake settings
 Comment[cs]=Nastavit globální možnosti CMake
+Comment[es]=Configurar las preferencias globales de CMake
 Comment[nl]=Globale CMake-instellingen configureren
 Comment[pt]=Configurar as opções globais do CMake
 Comment[pt_BR]=Configurar as opções gerais do CMake
