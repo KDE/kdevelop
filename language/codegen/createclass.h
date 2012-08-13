@@ -45,7 +45,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CreateClassAssistant : public KAssistantDialog
     Q_OBJECT
 
 public:
-    CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl = KUrl());
     CreateClassAssistant(QWidget* parent, const KUrl& baseUrl = KUrl());
     virtual ~CreateClassAssistant();
     /**

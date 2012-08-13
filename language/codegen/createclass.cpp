@@ -52,17 +52,7 @@ CreateClassAssistantPrivate::CreateClassAssistantPrivate()
 
 }
 
-
-CreateClassAssistant::CreateClassAssistant(QWidget* parent, ClassGenerator * generator, const KUrl& baseUrl)
-: KAssistantDialog(parent)
-, d(new CreateClassAssistantPrivate)
-{
-    d->baseUrl = baseUrl;
-    Q_ASSERT(generator);
-    d->generator = generator;
-}
-
-CreateClassAssistant::CreateClassAssistant (QWidget* parent, const KUrl& baseUrl)
+CreateClassAssistant::CreateClassAssistant(QWidget* parent, const KUrl& baseUrl)
 : KAssistantDialog (parent)
 , d(new CreateClassAssistantPrivate)
 {
