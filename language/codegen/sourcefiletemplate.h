@@ -279,6 +279,10 @@ public:
 private:
     class SourceFileTemplatePrivate* const d;
 };
+
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::OutputFile, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::ConfigOption, Q_MOVABLE_TYPE);
 
 #endif // KDEVELOP_SOURCEFILETEMPLATE_H
