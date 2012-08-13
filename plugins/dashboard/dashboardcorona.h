@@ -33,6 +33,10 @@ class DashboardCorona : public Plasma::Corona
         virtual void loadDefaultLayout();
         KDevelop::IProject* project() const;
         
+    private slots:
+        void containmentAddedToCorona(Plasma::Containment* c);
+        void saveToProject();
+
     private:
         KDevelop::IProject* m_project;
 };

@@ -51,11 +51,11 @@ Dashboard::~Dashboard()
 {
     m_selector->hide();
     
-    corona->saveLayout(QString());
     foreach (Plasma::Containment *containment, corona->containments()) {
         containment->config().deleteEntry("geometry");
         containment->config().deleteEntry("zvalue");
     }
+    corona->saveLayout(QString());
 }
 
 void Dashboard::updateView()
