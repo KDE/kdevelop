@@ -5,28 +5,33 @@
  */
 
 #include "{{ output_file_header }}"
+
+
 #include <QtTest>
 
 
-void initTestCase()
+QTEST_MAIN({{ name }});
+
+
+void {{name}}::initTestCase()
 {
     // Called before the first testfunction is executed
 }
 
 
-void cleanupTestCase()
+void {{name}}::cleanupTestCase()
 {
     // Called after the last testfunction was executed
 }
 
 
-void init()
+void {{name}}::init()
 {
     // Called before each testfunction is executed
 }
 
 
-void cleanup()
+void {{name}}::cleanup()
 {
     // Called after every testfunction
 }
@@ -34,7 +39,7 @@ void cleanup()
 
 {% for case in testCases %}
 
-void {{ case }}()
+void {{name}}::{{ case }}()
 {
 
 
@@ -42,5 +47,4 @@ void {{ case }}()
 
 {% endfor %}
 
-QTEST_MAIN({{ name }});
-#include {{ output_file_header|cut:".h" }}.moc
+#include "{{ output_file_header|cut:".h" }}.moc"

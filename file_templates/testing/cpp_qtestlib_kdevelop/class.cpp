@@ -6,6 +6,8 @@
 
 
 #include "{{ output_file_header }}"
+
+
 #include <qtest_kde.h>
 
 
@@ -13,17 +15,20 @@
 #include <tests/autotestshell.h>
 
 
+QTEST_KDEMAIN({{ name }}, NoGUI);
+
+
 using namespace KDevelop;
 
 
-void initTestCase()
+void {{ name }}::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUI);
 }
 
 
-void cleanupTestCase()
+void {{ name }}::cleanupTestCase()
 {
     TestCore::shutdown();
 }
@@ -31,7 +36,7 @@ void cleanupTestCase()
 
 {% for case in testCases %}
 
-void {{ case }}()
+void {{ name }}::{{ case }}()
 {
 
 
@@ -39,5 +44,4 @@ void {{ case }}()
 
 {% endfor %}
 
-QTEST_KDEMAIN({{ name }}, NoGUI);
-#include {{ output_file_header|cut:".h" }}.moc
+#include "{{ output_file_header|cut:".h" }}.moc"
