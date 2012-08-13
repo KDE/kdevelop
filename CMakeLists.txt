@@ -37,8 +37,13 @@ include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDE
 # TODO: Remove when LTS for g++ < 4.3 has ended.
 #       See also: languages/cpp/parser/parser.h
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # unordered_map depends on the -std=c++0x parameter, so add it temporarily here
+    set(oldFlags ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c++0x)
     include(CheckIncludeFileCXX)
     check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
+    # reset CMAKE_REQUIRED_FLAGS again
+    set(CMAKE_REQUIRED_FLAGS ${oldFlags})
 
     if(HAVE_UNORDERED_MAP)
         message(STATUS "Enabling c++0x support for unordered map")
