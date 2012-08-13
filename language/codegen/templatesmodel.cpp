@@ -67,7 +67,7 @@ TemplatesModel::~TemplatesModel()
 }
 
 
-bool TemplatesModel::templateExists( const QString& descriptionName )
+bool TemplatesModel::templateExists(const QString& descriptionName) const
 {
     QFileInfo fi(descriptionName);
     foreach( const QString& templatename, d->componentData.dirs()->findAllResources(d->templateResourceType) )
@@ -261,7 +261,7 @@ void TemplatesModel::extractTemplateDescriptions()
     }
 }
 
-QModelIndexList TemplatesModel::templateIndexes(const QString& fileName)
+QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
     QFileInfo info(fileName);
     QString description = d->componentData.dirs()->findResource(d->descriptionResourceType, info.baseName() + ".kdevtemplate");
@@ -334,7 +334,7 @@ void TemplatesModel::setTemplateResourceType(const QByteArray& type)
     d->templateResourceType = type;
 }
 
-KComponentData TemplatesModel::componentData()
+KComponentData TemplatesModel::componentData() const
 {
     return d->componentData;
 }

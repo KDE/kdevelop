@@ -106,7 +106,7 @@ QStringList ClassGenerator::namespaces() const
     return d->namespaces;
 }
 
-void ClassGenerator::setNamespaces (const QStringList& namespaces) const
+void ClassGenerator::setNamespaces(const QStringList& namespaces)
 {
     d->namespaces = namespaces;
 }
@@ -192,7 +192,7 @@ void ClassGenerator::clearDeclarations()
     d->description.methods.clear();
 }
 
-QHash<QString, QString> ClassGenerator::fileLabels()
+QHash<QString, QString> ClassGenerator::fileLabels() const
 {
     QHash<QString, QString> labels;
     labels.insert(d->headerFileType, i18n("Header"));
@@ -200,7 +200,7 @@ QHash<QString, QString> ClassGenerator::fileLabels()
     return labels;
 }
 
-QHash< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bool toLower)
+QHash< QString, KUrl > ClassGenerator::fileUrlsFromBase(const KUrl& baseUrl, bool toLower) const
 {
     QHash<QString, KUrl> map;
     map.insert(d->headerFileType, headerUrlFromBase(baseUrl, toLower));
@@ -208,7 +208,7 @@ QHash< QString, KUrl > ClassGenerator::fileUrlsFromBase (const KUrl& baseUrl, bo
     return map;
 }
 
-KUrl ClassGenerator::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
+KUrl ClassGenerator::headerUrlFromBase(const KUrl& baseUrl, bool toLower) const
 {
     Q_UNUSED(baseUrl);
     Q_UNUSED(toLower);
@@ -217,7 +217,7 @@ KUrl ClassGenerator::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
     return url;
 }
 
-KUrl ClassGenerator::implementationUrlFromBase(const KUrl& baseUrl, bool toLower)
+KUrl ClassGenerator::implementationUrlFromBase(const KUrl& baseUrl, bool toLower) const
 {
     Q_UNUSED(baseUrl);
     Q_UNUSED(toLower);
@@ -257,32 +257,32 @@ void ClassGenerator::setImplementationUrl(const KUrl& implementation)
     setFileUrl(d->implementationFileType, implementation);
 }
 
-SimpleCursor ClassGenerator::headerPosition()
+SimpleCursor ClassGenerator::headerPosition() const
 {
     return d->filePositions[d->headerFileType];
 }
 
-SimpleCursor ClassGenerator::implementationPosition()
+SimpleCursor ClassGenerator::implementationPosition() const
 {
     return d->filePositions[d->implementationFileType];
 }
 
-SimpleCursor ClassGenerator::filePosition (const QString& fileType)
+SimpleCursor ClassGenerator::filePosition(const QString& fileType) const
 {
     return d->filePositions[fileType];
 }
 
-KUrl ClassGenerator::headerUrl()
+KUrl ClassGenerator::headerUrl() const
 {
     return d->fileUrls[d->headerFileType];
 }
 
-KUrl ClassGenerator::implementationUrl()
+KUrl ClassGenerator::implementationUrl() const
 {
     return d->fileUrls[d->implementationFileType];
 }
 
-QHash<QString, KUrl> ClassGenerator::fileUrls()
+QHash<QString, KUrl> ClassGenerator::fileUrls() const
 {
     return d->fileUrls;
 }
@@ -303,7 +303,7 @@ void ClassGenerator::setDescription(const ClassDescription& description)
     d->description = description;
 }
 
-ClassDescription ClassGenerator::description()
+ClassDescription ClassGenerator::description() const
 {
     return d->description;
 }

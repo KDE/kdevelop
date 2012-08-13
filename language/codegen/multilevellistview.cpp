@@ -103,12 +103,12 @@ void MultiLevelListView::setModel(QAbstractItemModel* model)
     d->listViews.first()->setCurrentIndex(model->index(0,0));
 }
 
-QListView* MultiLevelListView::viewForLevel (int level)
+QListView* MultiLevelListView::viewForLevel(int level) const
 {
     return d->listViews[level];
 }
 
-QModelIndex MultiLevelListView::currentIndex()
+QModelIndex MultiLevelListView::currentIndex() const
 {
     return d->listViews.last()->currentIndex();
 }

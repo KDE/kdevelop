@@ -33,13 +33,13 @@ public:
     AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~AppWizardPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    
-    virtual QAbstractItemModel* templatesModel();
-    virtual QString knsConfigurationFile();
-    virtual QStringList supportedMimeTypes();
-    virtual QString name();
-    virtual QIcon icon();
-    virtual void loadTemplate (const QString& fileName);
+
+    virtual QAbstractItemModel* templatesModel() const;
+    virtual QString knsConfigurationFile() const;
+    virtual QStringList supportedMimeTypes() const;
+    virtual QString name() const;
+    virtual QIcon icon() const;
+    virtual void loadTemplate(const QString& fileName);
     virtual void reload();
 
 private slots:
@@ -50,7 +50,9 @@ private:
     bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
-    ProjectTemplatesModel *m_templatesModel;
+    ///TODO: don't mark as mutable, figure out why refresh is required
+    ///      in @c templatesModel() model
+    mutable ProjectTemplatesModel* m_templatesModel;
     QAction* m_newFromTemplate;
     QHash<QString, QString> m_variables;
 };

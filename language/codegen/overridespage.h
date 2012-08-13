@@ -71,7 +71,7 @@ public:
      */
     void addCustomDeclarations(const QString& category, const QList< KDevelop::DeclarationPointer >& declarations);
 
-    virtual QList<DeclarationPointer> selectedOverrides();
+    QList<DeclarationPointer> selectedOverrides() const;
 
     void clear();
 

@@ -56,7 +56,7 @@ public:
     /**
      * \return The generator that this assistant will use
      */
-    virtual ClassGenerator * generator();
+    ClassGenerator* generator() const;
 
     void setGenerator(ClassGenerator* generator);
 
@@ -67,7 +67,7 @@ public:
     /**
      * @return The base url from which the assistant was called.
      **/
-    KUrl baseUrl();
+    KUrl baseUrl() const;
 
 
 public Q_SLOTS:

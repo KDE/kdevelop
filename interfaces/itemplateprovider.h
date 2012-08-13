@@ -60,30 +60,30 @@ public:
     /**
      * @return The name of this provider.
      **/
-    virtual QString name() = 0;
+    virtual QString name() const = 0;
     /**
      * @return An icon associated with this provider.
      **/
-    virtual QIcon icon() = 0;
+    virtual QIcon icon() const = 0;
 
     /**
      * @return A model containing all available templates.
      **/
-    virtual QAbstractItemModel* templatesModel() = 0;
+    virtual QAbstractItemModel* templatesModel() const = 0;
 
     /**
      * @return The configuration file for Get Hot New Stuff.
      *
      * If GHNS is not used by this provider, return an empty string.
      **/
-    virtual QString knsConfigurationFile() = 0;
+    virtual QString knsConfigurationFile() const = 0;
 
     /**
      * @return Types of files this provider can load.
      *
      * If loading is not supported, return an empty list.
      **/
-    virtual QStringList supportedMimeTypes() = 0;
+    virtual QStringList supportedMimeTypes() const = 0;
 
     /**
      * Load a template from the file @p fileName.

@@ -69,7 +69,7 @@ public:
      *
      * @param level the level of the tree structure shown by the returned view
      */
-    QListView* viewForLevel(int level);
+    QListView* viewForLevel(int level) const;
 
     /**
      * The current index of the view.
@@ -78,7 +78,7 @@ public:
      *
      * @sa QAbstractItemView::currentIndex()
      */
-    QModelIndex currentIndex();
+    QModelIndex currentIndex() const;
 
     /**
      * Adds the widget @p widget under the list view for level @p level.

@@ -204,7 +204,7 @@ void CreateClassAssistant::accept()
     KAssistantDialog::accept();
 }
 
-ClassGenerator * CreateClassAssistant::generator()
+ClassGenerator * CreateClassAssistant::generator() const
 {
     return d->generator;
 }
@@ -224,7 +224,7 @@ OverridesPage* CreateClassAssistant::newOverridesPage()
     return new OverridesPage(generator(), this);
 }
 
-KUrl CreateClassAssistant::baseUrl()
+KUrl CreateClassAssistant::baseUrl() const
 {
     return d->baseUrl;
 }

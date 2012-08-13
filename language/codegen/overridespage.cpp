@@ -65,7 +65,7 @@ OverridesPage::~OverridesPage()
     delete d;
 }
 
-QList< DeclarationPointer > OverridesPage::selectedOverrides()
+QList< DeclarationPointer > OverridesPage::selectedOverrides() const
 {
     QList<DeclarationPointer> declarations;
 

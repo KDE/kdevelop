@@ -46,7 +46,7 @@ public:
     /**
      * @return an empty list of methods.
      */
-    virtual QList< DeclarationPointer > defaultMethods(const QString& name);
+    virtual QList< DeclarationPointer > defaultMethods(const QString& name) const;
 
 private:
     class DefaultCreateClassHelperPrivate* const d;

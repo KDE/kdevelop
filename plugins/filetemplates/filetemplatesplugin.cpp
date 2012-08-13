@@ -67,17 +67,27 @@ void FileTemplatesPlugin::unload()
     core()->uiController()->removeToolView(m_toolView);
 }
 
-void FileTemplatesPlugin::reload()
+QString FileTemplatesPlugin::name() const
 {
-    m_model->refresh();
+    return i18n("File Templates");
 }
 
-void FileTemplatesPlugin::loadTemplate (const QString& fileName)
+QIcon FileTemplatesPlugin::icon() const
 {
-    m_model->loadTemplateFile(fileName);
+    return KIcon("code-class");
 }
 
-QStringList FileTemplatesPlugin::supportedMimeTypes()
+QAbstractItemModel* FileTemplatesPlugin::templatesModel() const
+{
+    return m_model;
+}
+
+QString FileTemplatesPlugin::knsConfigurationFile() const
+{
+    return "filetemplates.knsrc";
+}
+
+QStringList FileTemplatesPlugin::supportedMimeTypes() const
 {
     QStringList types;
     types << "application/x-desktop";
@@ -86,23 +96,12 @@ QStringList FileTemplatesPlugin::supportedMimeTypes()
     return types;
 }
 
-QString FileTemplatesPlugin::knsConfigurationFile()
+void FileTemplatesPlugin::reload()
 {
-    return "filetemplates.knsrc";
+    m_model->refresh();
 }
 
-QAbstractItemModel* FileTemplatesPlugin::templatesModel()
+void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 {
-    return m_model;
+    m_model->loadTemplateFile(fileName);
 }
-
-QIcon FileTemplatesPlugin::icon()
-{
-    return KIcon("code-class");
-}
-
-QString FileTemplatesPlugin::name()
-{
-    return i18n("File Templates");
-}
-

@@ -16,20 +16,20 @@ class FileTemplatesPlugin : public KDevelop::IPlugin, public KDevelop::ITemplate
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::ITemplateProvider)
-    
+
 public:
-    FileTemplatesPlugin (QObject* parent, const QVariantList& args);
+    FileTemplatesPlugin(QObject* parent, const QVariantList& args);
     virtual ~FileTemplatesPlugin();
     virtual void unload();
-    
+
+    virtual QString name() const;
+    virtual QIcon icon() const;
+    virtual QAbstractItemModel* templatesModel() const;
+    virtual QString knsConfigurationFile() const;
+    virtual QStringList supportedMimeTypes() const;
+
     virtual void reload();
-    virtual void loadTemplate (const QString& fileName);
-    virtual QStringList supportedMimeTypes();
-    virtual QString knsConfigurationFile();
-    virtual QAbstractItemModel* templatesModel();
-    virtual QIcon icon();
-    virtual QString name();
-    
+    virtual void loadTemplate(const QString& fileName);
 private:
     KDevelop::TemplatesModel* m_model;
     KDevelop::IToolViewFactory* m_toolView;

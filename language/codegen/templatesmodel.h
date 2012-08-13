@@ -95,7 +95,7 @@ public:
      *
      * @param fileName the template file name
      **/
-    QModelIndexList templateIndexes(const QString& fileName);
+    QModelIndexList templateIndexes(const QString& fileName) const;
 
     /**
      * Sets the resource type for template descriptions to @p type
@@ -144,7 +144,7 @@ public:
     /**
      * @return the component data used by this model.
      **/
-    KComponentData componentData();
+    KComponentData componentData() const;
 
 protected:
     /**
@@ -159,7 +159,7 @@ protected:
      * @param descriptionName the name of the stored template description (.kdevtemplate) file
      * @return true if a matching template file exists, false otherwise
      **/
-    bool templateExists(const QString& descriptionName);
+    bool templateExists(const QString& descriptionName) const;
 
     /**
      * Creates a model item for the template @p name in category @p category

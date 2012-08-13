@@ -123,11 +123,11 @@ public:
     virtual QStringList namespaces() const;
 
     void addBaseClass(const QString& base);
-    QList<DeclarationPointer> directBaseClasses();
-    QList<DeclarationPointer> allBaseClasses();
+    QList<DeclarationPointer> directBaseClasses() const;
+    QList<DeclarationPointer> allBaseClasses() const;
 
-    QString license() const;
     void setLicense(const QString& license);
+    QString license() const;
 
     void setDescription(const ClassDescription& description);
     ClassDescription description() const;
@@ -135,15 +135,15 @@ public:
     virtual DocumentChangeSet generate();
     virtual void addToTarget();
 
-    QHash<QString,QString> fileLabels();
+    QHash<QString,QString> fileLabels() const;
 
-    QHash< QString, KUrl > fileUrls();
-    
-    KUrl fileUrl(const QString& outputFile);
+    UrlHash fileUrls() const;
+
     void setFileUrl(const QString& outputFile, const KUrl& url);
+    KUrl fileUrl(const QString& outputFile) const;
 
-    SimpleCursor filePosition(const QString& outputFile);
     void setFilePosition(const QString& outputFile, const SimpleCursor& position);
+    SimpleCursor filePosition(const QString& outputFile) const;
 
     SourceFileTemplate sourceFileTemplate() const;
 
@@ -159,14 +159,14 @@ public:
     /**
      * Convenience function to render a string @p text as a Grantlee template
      **/
-    QString renderString(const QString& text);
+    QString renderString(const QString& text) const;
 
     /**
      * The template renderer used to render all the templates for this class.
      *
      * This function is useful if you want a rendeder with all current template variables.
      */
-    TemplateRenderer* renderer();
+    TemplateRenderer* renderer() const;
 
 private:
     class TemplateClassGeneratorPrivate* const d;

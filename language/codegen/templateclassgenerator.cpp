@@ -120,7 +120,7 @@ DocumentChangeSet TemplateClassGenerator::generate()
     return changes;
 }
 
-QHash< QString, QString > TemplateClassGenerator::fileLabels()
+QHash<QString, QString> TemplateClassGenerator::fileLabels() const
 {
     Q_ASSERT(d->fileTemplate.isValid());
     QHash<QString,QString> labels;
@@ -133,7 +133,7 @@ QHash< QString, QString > TemplateClassGenerator::fileLabels()
     return labels;
 }
 
-QHash< QString, KUrl > TemplateClassGenerator::fileUrls ()
+TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
 {
     if (d->fileUrls.isEmpty())
     {
@@ -149,7 +149,7 @@ QHash< QString, KUrl > TemplateClassGenerator::fileUrls ()
     return d->fileUrls;
 }
 
-KUrl TemplateClassGenerator::fileUrl (const QString& outputFile)
+KUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 {
     return fileUrls().value(outputFile);
 }
@@ -161,7 +161,7 @@ void TemplateClassGenerator::setFileUrl(const QString& outputFile, const KUrl& u
     d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
 }
 
-SimpleCursor TemplateClassGenerator::filePosition (const QString& outputFile)
+SimpleCursor TemplateClassGenerator::filePosition(const QString& outputFile) const
 {
     return d->filePositions.value(outputFile);
 }
@@ -176,7 +176,7 @@ void TemplateClassGenerator::addVariables(const QVariantHash& variables)
     d->renderer.addVariables(variables);
 }
 
-QString TemplateClassGenerator::renderString (const QString& text)
+QString TemplateClassGenerator::renderString(const QString& text) const
 {
     return d->renderer.render(text);
 }
@@ -186,7 +186,7 @@ SourceFileTemplate TemplateClassGenerator::sourceFileTemplate() const
     return d->fileTemplate;
 }
 
-TemplateRenderer* TemplateClassGenerator::renderer()
+TemplateRenderer* TemplateClassGenerator::renderer() const
 {
     return &(d->renderer);
 }
@@ -231,7 +231,7 @@ QStringList TemplateClassGenerator::namespaces() const
     return d->namespaces;
 }
 
-void TemplateClassGenerator::setNamespaces (const QStringList& namespaces) const
+void TemplateClassGenerator::setNamespaces(const QStringList& namespaces) const
 {
     d->namespaces = namespaces;
     d->renderer.addVariable("namespaces", namespaces);
@@ -402,12 +402,12 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
     }
 }
 
-QList< DeclarationPointer > TemplateClassGenerator::directBaseClasses()
+QList< DeclarationPointer > TemplateClassGenerator::directBaseClasses() const
 {
     return d->directBaseClasses;
 }
 
-QList< DeclarationPointer > TemplateClassGenerator::allBaseClasses()
+QList< DeclarationPointer > TemplateClassGenerator::allBaseClasses() const
 {
     return d->allBaseClasses;
 }

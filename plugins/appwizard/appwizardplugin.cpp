@@ -472,18 +472,18 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-QAbstractItemModel* AppWizardPlugin::templatesModel()
+QAbstractItemModel* AppWizardPlugin::templatesModel() const
 {
     m_templatesModel->refresh();
     return m_templatesModel;
 }
 
-QString AppWizardPlugin::knsConfigurationFile()
+QString AppWizardPlugin::knsConfigurationFile() const
 {
     return "kdevappwizard.knsrc";
 }
 
-QStringList AppWizardPlugin::supportedMimeTypes()
+QStringList AppWizardPlugin::supportedMimeTypes() const
 {
     QStringList types;
     types << "application/x-desktop";
@@ -492,12 +492,12 @@ QStringList AppWizardPlugin::supportedMimeTypes()
     return types;
 }
 
-QIcon AppWizardPlugin::icon()
+QIcon AppWizardPlugin::icon() const
 {
     return KIcon("project-development-new-template");
 }
 
-QString AppWizardPlugin::name()
+QString AppWizardPlugin::name() const
 {
     return i18n("Project Templates");
 }

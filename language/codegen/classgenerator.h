@@ -93,7 +93,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * "implementation" => i18n("Implementation")
      * @endcode
      **/
-    virtual QHash<QString, QString> fileLabels();
+    virtual QHash<QString, QString> fileLabels() const;
 
     /**
      * @return The suggested URLs of all files for the gives class name.
@@ -106,19 +106,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * @param baseUrl The base URL, where the files should be located.
      * @param toLowor Whether filenames should be all lowercase, defaults to true.
      **/
-    virtual QHash<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual QHash<QString, KUrl> fileUrlsFromBase(const KUrl& baseUrl, bool toLower = true) const;
 
     /**
      * @return The suggested URL of the header file for the given class name.
      */
-    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true) const;
 
     /**
      * @return The suggested URL of the implementation file for the given class
      *         name, if header and implementation are separate for this language.
      *         Otherwise, return an invalid URL which is also the default.
      */
-    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true) const;
 
     /**
      * Set the URL where the file of type @p fileType will be implemented.
@@ -168,7 +168,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      * \param namespaces The list of nested namespaces in which this class is to be declared
      */
-    virtual void setNamespaces(const QStringList& namespaces) const;
+    virtual void setNamespaces(const QStringList& namespaces);
 
     /**
      * \return The list of nested namespace in which this class will be declared
@@ -184,9 +184,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     void setLicense(const QString& license);
 
+    virtual ClassDescription description() const;
     virtual void setDescription(const ClassDescription& description);
-
-    virtual ClassDescription description();
 
   protected:
 
@@ -195,23 +194,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      */
     void setName(const QString&);
 
-    SimpleCursor headerPosition();
-    SimpleCursor implementationPosition();
+    SimpleCursor headerPosition() const;
+    SimpleCursor implementationPosition() const;
 
     /**
      * Returns the position in the file where the contents of type @p fileType will be generated
      *
      * @param fileType the id of this file, should correspond to a key in fileLabels()
      **/
-    SimpleCursor filePosition(const QString& fileType);
+    SimpleCursor filePosition(const QString& fileType) const;
 
-    KUrl headerUrl();
-    KUrl implementationUrl();
+    KUrl headerUrl() const;
+    KUrl implementationUrl() const;
 
     /**
      * Returns the URLs where the files will be generated
      **/
-    QHash< QString, KUrl > fileUrls();
+    QHash< QString, KUrl > fileUrls() const;
 
     /**
      * Look recursively for parent classes, and add them to the Inheritance list

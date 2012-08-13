@@ -105,7 +105,7 @@ TemplateRenderer::~TemplateRenderer()
     delete d;
 }
 
-Grantlee::Engine* TemplateRenderer::engine()
+Grantlee::Engine* TemplateRenderer::engine() const
 {
     return &(d->engine);
 }
@@ -143,7 +143,7 @@ QVariantHash TemplateRenderer::variables() const
     return d->context.stackHash(0);
 }
 
-QString TemplateRenderer::render (const QString& content, const QString& name)
+QString TemplateRenderer::render(const QString& content, const QString& name) const
 {
     kDebug() << d->context.stackHash(0);
 
@@ -249,7 +249,7 @@ QString TemplateRenderer::render (const QString& content, const QString& name)
     return output;
 }
 
-QString TemplateRenderer::renderFile (const KUrl& url, const QString& name)
+QString TemplateRenderer::renderFile(const KUrl& url, const QString& name) const
 {
     QFile file(url.toLocalFile());
     file.open(QIODevice::ReadOnly);
@@ -261,7 +261,7 @@ QString TemplateRenderer::renderFile (const KUrl& url, const QString& name)
 }
 
 
-QStringList TemplateRenderer::render (const QStringList& contents)
+QStringList TemplateRenderer::render(const QStringList& contents) const
 {
     kDebug() << d->context.stackHash(0);
     QStringList ret;
@@ -277,7 +277,7 @@ void TemplateRenderer::setEmptyLinesPolicy(TemplateRenderer::EmptyLinesPolicy po
     d->emptyLinesPolicy = policy;
 }
 
-TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy()
+TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy() const
 {
     return d->emptyLinesPolicy;
 }

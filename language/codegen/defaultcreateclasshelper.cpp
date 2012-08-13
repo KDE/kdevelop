@@ -47,7 +47,7 @@ KDevelop::TemplateClassGenerator* DefaultCreateClassHelper::generator()
     return new TemplateClassGenerator(d->assistant->baseUrl());
 }
 
-QList< DeclarationPointer > DefaultCreateClassHelper::defaultMethods(const QString& name)
+QList< DeclarationPointer > DefaultCreateClassHelper::defaultMethods(const QString& name) const
 {
     Q_UNUSED(name);
     return QList<DeclarationPointer>();

@@ -100,7 +100,7 @@ public:
      * Provides access to the encapsulated Grantlee::Engine.
      *
      **/
-    Grantlee::Engine* engine();
+    Grantlee::Engine* engine() const;
 
     /**
      * Adds @p directories to the list of directories searched for templates
@@ -144,7 +144,7 @@ public:
      * @param name (optional) the name of this template
      * @return the rendered template
      **/
-    QString render(const QString& content, const QString& name = QString());
+    QString render(const QString& content, const QString& name = QString()) const;
 
     /**
      * @brief Renders a single template from a file
@@ -153,7 +153,7 @@ public:
      * @param name (optional) the name of this template
      * @return the rendered template
      **/
-    QString renderFile(const KUrl& url, const QString& name = QString());
+    QString renderFile(const KUrl& url, const QString& name = QString()) const;
 
     /**
      * @brief Renders a list of templates
@@ -164,7 +164,7 @@ public:
      * @param content the template contents
      * @return the rendered templates
      **/
-    QStringList render(const QStringList& contents);
+    QStringList render(const QStringList& contents) const;
 
     /**
      * @brief Sets the policy for empty lines in the rendered output
@@ -180,7 +180,7 @@ public:
      * Returns the currently set policy for empty lines in the rendered output
      * @sa EmptyLinesPolicy, setEmptyLinesPolicy()
      */
-    EmptyLinesPolicy emptyLinesPolicy();
+    EmptyLinesPolicy emptyLinesPolicy() const;
 
     /**
      * @brief Renders all templates in the archive represented by @p fileTemplate
