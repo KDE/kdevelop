@@ -44,18 +44,10 @@ public:
      */
     QString license() const;
 
-public Q_SLOTS:
-    virtual void licenseComboChanged(int license);
-
 private:
     // data
     class LicensePagePrivate* const d;
-
-    ///FIXME: ugly internal api, move to *Private
-    // methods
-    void        initializeLicenses();
-    QString&    readLicense(int licenseIndex);
-    bool        saveLicense();
+    Q_PRIVATE_SLOT(d, void licenseComboChanged(int license))
 };
 
 }

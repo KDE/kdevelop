@@ -44,6 +44,8 @@ namespace KDevelop {
 
 struct ClassGeneratorPrivate
 {
+    void fetchSuperClasses(const DeclarationPointer& derivedClass);
+
     QString name; ///< The name for the class to be generated (does not include namespace if relevant)
     QString license;
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
@@ -56,6 +58,29 @@ struct ClassGeneratorPrivate
     ClassDescription description;
     QStringList namespaces;
 };
+
+void ClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& derivedClass)
+{
+    DUChainReadLocker lock;
+
+    //Prevent duplicity
+    if(inheritedClasses.contains(derivedClass)) {
+        return;
+    }
+
+    inheritedClasses.append(derivedClass);
+
+    DUContext* context = derivedClass->internalContext();
+    if (context) {
+        foreach (const DUContext::Import& import, context->importedParentContexts()) {
+            if (DUContext * parentContext = import.context(context->topContext())) {
+                if (parentContext->type() == DUContext::Class) {
+                    fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+                }
+            }
+        }
+    }
+}
 
 ClassGenerator::ClassGenerator()
 : d(new ClassGeneratorPrivate)
@@ -155,7 +180,7 @@ QList<DeclarationPointer> ClassGenerator::addBaseClass(const QString& newBaseCla
         // Check if it's a class/struct/etc
         if(declaration->type<StructureType>())
         {
-            fetchSuperClasses(declaration);
+            d->fetchSuperClasses(declaration);
             m_baseClasses << declaration;
             added = true;
             break;
@@ -306,29 +331,6 @@ void ClassGenerator::setDescription(const ClassDescription& description)
 ClassDescription ClassGenerator::description() const
 {
     return d->description;
-}
-
-void ClassGenerator::fetchSuperClasses(const DeclarationPointer& derivedClass)
-{
-    DUChainReadLocker lock;
-
-    //Prevent duplicity
-    if(d->inheritedClasses.contains(derivedClass)) {
-        return;
-    }
-
-    d->inheritedClasses.append(derivedClass);
-
-    DUContext* context = derivedClass->internalContext();
-    if (context) {
-        foreach (const DUContext::Import& import, context->importedParentContexts()) {
-            if (DUContext * parentContext = import.context(context->topContext())) {
-                if (parentContext->type() == DUContext::Class) {
-                    fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
-                }
-            }
-        }
-    }
 }
 
 void ClassGenerator::addToTarget(const KUrl& url)

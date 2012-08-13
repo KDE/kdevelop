@@ -40,58 +40,26 @@ struct LicensePagePrivate
     typedef QList<LicenseInfo> LicenseList;
 
 
-    LicensePagePrivate()
-        : license(0)
+    LicensePagePrivate(LicensePage* page_)
+    : license(0)
+    , page(page_)
     {
     }
+
+    // methods
+    void        initializeLicenses();
+    QString&    readLicense(int licenseIndex);
+    bool        saveLicense();
+    // slots
+    void licenseComboChanged(int license);
 
     Ui::LicenseChooserDialog* license;
     LicenseList availableLicenses;
+    LicensePage* page;
 };
 
-LicensePage::LicensePage(QWidget* parent)
-: QWidget(parent)
-, d(new LicensePagePrivate)
-{
-    d->license = new Ui::LicenseChooserDialog;
-    d->license->setupUi(this);
-
-    connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
-    connect(d->license->saveLicense, SIGNAL(clicked(bool)), d->license->licenseName, SLOT(setEnabled(bool)));
-
-    // Read all the available licenses from the standard dirs
-    initializeLicenses();
-
-    //Set the license selection to the previous one
-    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
-    d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
-    //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
-    licenseComboChanged(d->license->licenseComboBox->currentIndex());
-}
-
-LicensePage::~LicensePage()
-{
-    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
-    //Do not save invalid license numbers'
-    int index = d->license->licenseComboBox->currentIndex();
-    if( index >= 0 || index < d->availableLicenses.size() )
-    {
-        config.writeEntry("LastSelectedLicense", index);
-        config.config()->sync();
-    }
-    else
-        kWarning() << "Attempted to save an invalid license number: " << index << ". Number of licenses:" << d->availableLicenses.size();
-
-    delete d;
-}
-
-QString LicensePage::license() const
-{
-    return d->license->licenseTextEdit->document()->toPlainText();
-}
-
 //! Read all the license files in the global and local config dirs
-void LicensePage::initializeLicenses()
+void LicensePagePrivate::initializeLicenses()
 {
     kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
@@ -109,29 +77,29 @@ void LicensePage::initializeLicenses()
 
             kDebug() << "Found License: " << newLicense.name;
 
-            d->availableLicenses.push_back(newLicense);
-            d->license->licenseComboBox->addItem(newLicense.name);
+            availableLicenses.push_back(newLicense);
+            license->licenseComboBox->addItem(newLicense.name);
         }
     }
 
     //Finally add the option other for user specified licenses
-    LicensePagePrivate::LicenseInfo license;
-    d->availableLicenses.push_back(license);
-    d->license->licenseComboBox->addItem("Other");
+    LicensePagePrivate::LicenseInfo otherLicense;
+    availableLicenses.push_back(otherLicense);
+    license->licenseComboBox->addItem("Other");
 }
 
 // Read a license index, if it is not loaded, open it from the file
-QString& LicensePage::readLicense(int licenseIndex)
+QString& LicensePagePrivate::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
-    if(d->availableLicenses[licenseIndex].contents.isEmpty())
+    if(availableLicenses[licenseIndex].contents.isEmpty())
     {
-        QString licenseText("");
+        QString licenseText;
         //If we are dealing with the last option "other" just return a new empty string
-        if(licenseIndex != (d->availableLicenses.size() - 1))
+        if(licenseIndex != (availableLicenses.size() - 1))
         {
-            kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
-            QFile newLicense(d->availableLicenses[licenseIndex].path);
+            kDebug() << "Reading license: " << availableLicenses[licenseIndex].name ;
+            QFile newLicense(availableLicenses[licenseIndex].path);
 
             if(newLicense.open(QIODevice::ReadOnly | QIODevice::Text))
             {
@@ -162,61 +130,113 @@ QString& LicensePage::readLicense(int licenseIndex)
         developer = developer.arg(email);
         licenseText.replace("<copyright holder>", developer);
 
-        d->availableLicenses[licenseIndex].contents = licenseText;
+        availableLicenses[licenseIndex].contents = licenseText;
     }
 
-    return d->availableLicenses[licenseIndex].contents;
+    return availableLicenses[licenseIndex].contents;
 }
 
 // ---Slots---
 
-void LicensePage::licenseComboChanged(int selectedLicense)
+void LicensePagePrivate::licenseComboChanged(int selectedLicense)
 {
     //If the last slot is selected enable the save license combobox
-    if(selectedLicense == (d->availableLicenses.size() - 1))
+    if(selectedLicense == (availableLicenses.size() - 1))
     {
-        d->license->licenseTextEdit->clear();
-        d->license->licenseTextEdit->setReadOnly(false);
-        d->license->saveLicense->setEnabled(true);
+        license->licenseTextEdit->clear();
+        license->licenseTextEdit->setReadOnly(false);
+        license->saveLicense->setEnabled(true);
     }
     else
     {
-        d->license->saveLicense->setEnabled(false);
-        d->license->licenseTextEdit->setReadOnly(true);
+        license->saveLicense->setEnabled(false);
+        license->licenseTextEdit->setReadOnly(true);
     }
 
-    if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
-        d->license->licenseTextEdit->setText(i18n("Could not load previous license"));
+    if(selectedLicense < 0 || selectedLicense >= availableLicenses.size())
+        license->licenseTextEdit->setText(i18n("Could not load previous license"));
     else
-        d->license->licenseTextEdit->setText(readLicense(selectedLicense));
+        license->licenseTextEdit->setText(readLicense(selectedLicense));
 }
 
-bool LicensePage::saveLicense()
+bool LicensePagePrivate::saveLicense()
 {
-    kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
+    kDebug() << "Attempting to save custom license: " << license->licenseName->text();
 
-    QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/", KGlobal::activeComponent());
-    QFile newFile(localDataDir + d->license->licenseName->text());
+    QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/",
+                                                      KGlobal::activeComponent());
+    QFile newFile(localDataDir + license->licenseName->text());
 
     if(newFile.exists())
     {
-        KMessageBox::sorry(this, i18n("The specified license already exists. Please provide a different name."));
+        KMessageBox::sorry(page, i18n("The specified license already exists. "
+                                      "Please provide a different name."));
         return false;
     }
 
     newFile.open(QIODevice::WriteOnly);
-    qint64 result = newFile.write(d->license->licenseTextEdit->toPlainText().toUtf8());
+    qint64 result = newFile.write(license->licenseTextEdit->toPlainText().toUtf8());
     newFile.close();
 
     if(result == -1)
     {
-        KMessageBox::sorry(this, i18n("There was an error writing the file."));
+        KMessageBox::sorry(page, i18n("There was an error writing the file."));
         return false;
     }
 
     return true;
 }
 
+LicensePage::LicensePage(QWidget* parent)
+: QWidget(parent)
+, d(new LicensePagePrivate(this))
+{
+    d->license = new Ui::LicenseChooserDialog;
+    d->license->setupUi(this);
+
+    connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(licenseComboChanged(int)));
+    connect(d->license->saveLicense, SIGNAL(clicked(bool)),
+            d->license->licenseName, SLOT(setEnabled(bool)));
+
+    // Read all the available licenses from the standard dirs
+    d->initializeLicenses();
+
+    //Set the license selection to the previous one
+    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
+    // Needed to avoid a bug where licenseComboChanged doesn't get
+    // called by QComboBox if the past selection was 0
+    d->licenseComboChanged(d->license->licenseComboBox->currentIndex());
+}
+
+LicensePage::~LicensePage()
+{
+    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    //Do not save invalid license numbers'
+    int index = d->license->licenseComboBox->currentIndex();
+    if( index >= 0 || index < d->availableLicenses.size() )
+    {
+        config.writeEntry("LastSelectedLicense", index);
+        config.config()->sync();
+    }
+    else
+    {
+        kWarning() << "Attempted to save an invalid license number: " << index
+                   << ". Number of licenses:" << d->availableLicenses.size();
+    }
+
+    delete d->license;
+    delete d;
+}
+
+QString LicensePage::license() const
+{
+    return d->license->licenseTextEdit->document()->toPlainText();
+}
+
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::LicensePagePrivate::LicenseInfo, Q_MOVABLE_TYPE);
+
+#include "licensepage.moc"

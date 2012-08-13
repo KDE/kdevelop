@@ -46,15 +46,88 @@ const char* ClassTemplatesGroup = "ClassTemplates";
 class KDevelop::TemplateSelectionPagePrivate
 {
 public:
+    TemplateSelectionPagePrivate(TemplateSelectionPage* page_)
+    : page(page_)
+    {}
+
+    TemplateSelectionPage* page;
     Ui::TemplateSelection* ui;
     QString selectedTemplate;
     TemplateClassAssistant* assistant;
     TemplatesModel* model;
+
+    void currentTemplateChanged(const QModelIndex& index);
+    void currentLanguageChanged(const QModelIndex& index);
+    void getMoreClicked();
+    void loadFileClicked();
+    void saveConfig();
 };
 
-TemplateSelectionPage::TemplateSelectionPage (TemplateClassAssistant* parent, Qt::WindowFlags f)
-: QWidget (parent, f)
-, d(new TemplateSelectionPagePrivate)
+void TemplateSelectionPagePrivate::currentLanguageChanged(const QModelIndex& index)
+{
+    ui->templateView->setRootIndex(index);
+    ui->templateView->expandAll();
+
+    QModelIndex templateIndex = index;
+    while (templateIndex.child(0, 0).isValid())
+    {
+        templateIndex = templateIndex.child(0, 0);
+    }
+    ui->templateView->setCurrentIndex(templateIndex);
+    model->setHorizontalHeaderLabels(QStringList(model->data(index).toString()));
+}
+
+void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
+{
+    if (!index.isValid() || model->index(0, 0, index).isValid())
+    {
+        // This index is invalid or has a child, so it is not a template
+        assistant->setValid(assistant->currentPage(), false);
+    }
+    else
+    {
+        selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
+        assistant->setValid(assistant->currentPage(), true);
+    }
+}
+
+void TemplateSelectionPagePrivate::getMoreClicked()
+{
+    model->refresh();
+}
+
+void TemplateSelectionPagePrivate::loadFileClicked()
+{
+    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevclasstemplate"), filter, page);
+
+    if (!fileName.isEmpty())
+    {
+        QString destination = model->loadTemplateFile(fileName);
+        QModelIndexList indexes = model->templateIndexes(destination);
+        int n = indexes.size();
+        if (n > 1)
+        {
+            ui->languageView->setCurrentIndex(indexes[1]);
+            ui->templateView->setCurrentIndex(indexes.last());
+        }
+    }
+}
+
+void TemplateSelectionPagePrivate::saveConfig()
+{
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(assistant->baseUrl());
+    if (project)
+    {
+        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
+        group.writeEntry(LastUsedTemplateEntry, selectedTemplate);
+        group.sync();
+    }
+}
+
+TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
+: QWidget(parent, f)
+, d(new TemplateSelectionPagePrivate(this))
 {
     d->assistant = parent;
 
@@ -128,64 +201,4 @@ QString TemplateSelectionPage::selectedTemplate() const
     return d->selectedTemplate;
 }
 
-void TemplateSelectionPage::currentLanguageChanged (const QModelIndex& index)
-{
-    d->ui->templateView->setRootIndex(index);
-    d->ui->templateView->expandAll();
-
-    QModelIndex templateIndex = index;
-    while (templateIndex.child(0, 0).isValid())
-    {
-        templateIndex = templateIndex.child(0, 0);
-    }
-    d->ui->templateView->setCurrentIndex(templateIndex);
-    d->model->setHorizontalHeaderLabels(QStringList(d->model->data(index).toString()));
-}
-
-void TemplateSelectionPage::currentTemplateChanged (const QModelIndex& index)
-{
-    if (!index.isValid() || d->model->index(0, 0, index).isValid())
-    {
-        // This index is invalid or has a child, so it is not a template
-        d->assistant->setValid(d->assistant->currentPage(), false);
-    }
-    else
-    {
-        d->selectedTemplate = d->model->data(index, TemplatesModel::DescriptionFileRole).toString();
-        d->assistant->setValid(d->assistant->currentPage(), true);
-    }
-}
-
-void TemplateSelectionPage::getMoreClicked()
-{
-    d->model->refresh();
-}
-
-void TemplateSelectionPage::loadFileClicked()
-{
-    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevclasstemplate"), filter, this);
-
-    if (!fileName.isEmpty())
-    {
-        QString destination = d->model->loadTemplateFile(fileName);
-        QModelIndexList indexes = d->model->templateIndexes(destination);
-        int n = indexes.size();
-        if (n > 1)
-        {
-            d->ui->languageView->setCurrentIndex(indexes[1]);
-            d->ui->templateView->setCurrentIndex(indexes.last());
-        }
-    }
-}
-
-void TemplateSelectionPage::saveConfig()
-{
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl());
-    if (project)
-    {
-        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
-        group.writeEntry(LastUsedTemplateEntry, selectedTemplate());
-        group.sync();
-    }
-}
+#include "templateselectionpage.moc"

@@ -53,13 +53,11 @@ public:
 private:
     class TemplateSelectionPagePrivate* const d;
 
-private slots:
-    void currentTemplateChanged (const QModelIndex& index);
-    void currentLanguageChanged (const QModelIndex& index);
-    void getMoreClicked ();
-    void loadFileClicked ();
-
-    void saveConfig();
+    Q_PRIVATE_SLOT(d, void currentTemplateChanged(const QModelIndex& index))
+    Q_PRIVATE_SLOT(d, void currentLanguageChanged(const QModelIndex& index))
+    Q_PRIVATE_SLOT(d, void getMoreClicked())
+    Q_PRIVATE_SLOT(d, void loadFileClicked())
+    Q_PRIVATE_SLOT(d, void saveConfig())
 };
 
 }

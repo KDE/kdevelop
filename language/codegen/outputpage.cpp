@@ -35,6 +35,11 @@ namespace KDevelop {
 
 struct OutputPagePrivate
 {
+    OutputPagePrivate(OutputPage* page_)
+    : page(page_)
+    , output(0)
+    { }
+    OutputPage* page;
     Ui::OutputLocationDialog* output;
     QSignalMapper urlChangedMapper;
 
@@ -47,7 +52,9 @@ struct OutputPagePrivate
     QHash<QString, KUrl> lowerCaseUrls;
     QStringList fileIdentifiers;
 
-    void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
+    void updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable);
+    void updateFileRange(const QString& field);
+    void updateFileNames();
 };
 
 void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable)
@@ -57,9 +64,46 @@ void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, b
     column->setEnabled(enable);
 }
 
+void OutputPagePrivate::updateFileRange(const QString& field)
+{
+    if (!outputFiles.contains(field))
+    {
+        return;
+    }
+
+    QString url = outputFiles[field]->url().toLocalFile();
+    QFileInfo info(url);
+
+    updateRanges(outputLines[field], outputColumns[field], info.exists() && !info.isDir());
+
+    emit page->isValid(page->isComplete());
+}
+
+void OutputPagePrivate::updateFileNames()
+{
+    bool lower = output->lowerFilenameCheckBox->isChecked();
+
+    QHash<QString, KUrl> urls = lower ? lowerCaseUrls : defaultUrls;
+    for (QHash<QString, KUrlRequester*>::const_iterator it = outputFiles.constBegin();
+         it != outputFiles.constEnd(); ++it)
+    {
+        if (urls.contains(it.key()))
+        {
+            it.value()->setUrl(urls[it.key()]);
+        }
+    }
+
+    //Save the setting for next time
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    codegenGroup.writeEntry( "LowerCaseFilenames", output->lowerFilenameCheckBox->isChecked() );
+
+    emit page->isValid(page->isComplete());
+}
+
 OutputPage::OutputPage(QWidget* parent)
 : QWidget(parent)
-, d(new OutputPagePrivate)
+, d(new OutputPagePrivate(this))
 {
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
@@ -168,43 +212,7 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
         d->lowerCaseUrls.insert(file.identifier, url);
     }
 
-    updateFileNames();
-}
-
-void OutputPage::updateFileNames()
-{
-    bool lower = d->output->lowerFilenameCheckBox->isChecked();
-
-    QHash<QString, KUrl> urls = lower ? d->lowerCaseUrls : d->defaultUrls;
-    for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
-    {
-        if (urls.contains(it.key()))
-        {
-            it.value()->setUrl(urls[it.key()]);
-        }
-    }
-
-    //Save the setting for next time
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
-    codegenGroup.writeEntry( "LowerCaseFilenames", d->output->lowerFilenameCheckBox->isChecked() );
-
-    emit isValid(isComplete());
-}
-
-void OutputPage::updateFileRange (const QString& field)
-{
-    if (!d->outputFiles.contains(field))
-    {
-        return;
-    }
-
-    QString url = d->outputFiles[field]->url().toLocalFile();
-    QFileInfo info(url);
-
-    d->updateRanges(d->outputLines[field], d->outputColumns[field], info.exists() && !info.isDir());
-
-    emit isValid(isComplete());
+    d->updateFileNames();
 }
 
 bool OutputPage::isComplete() const
@@ -241,3 +249,4 @@ QHash< QString, SimpleCursor > OutputPage::filePositions() const
 
 }
 
+#include "outputpage.moc"

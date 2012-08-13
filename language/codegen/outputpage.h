@@ -81,10 +81,10 @@ Q_SIGNALS:
     void isValid(bool valid);
 
 private:
+    friend class OutputPagePrivate;
     class OutputPagePrivate* const d;
 
-private Q_SLOTS:
-    virtual void updateFileNames();
+    Q_PRIVATE_SLOT(d, void updateFileNames());
 
     /**
      * This implementation simply enables the position widgets on a file that exists.
@@ -92,7 +92,7 @@ private Q_SLOTS:
      *
      * @param field the name of the file to be generated (Header, Implementation, etc)
      */
-    virtual void updateFileRange (const QString& field);
+    Q_PRIVATE_SLOT(d, void updateFileRange(const QString& field));
 };
 
 }

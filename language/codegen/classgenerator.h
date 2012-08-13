@@ -233,9 +233,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 
   private:
     struct ClassGeneratorPrivate * const d;
-
-    ///FIXME: move to *Private
-    void fetchSuperClasses(const DeclarationPointer& derivedClass);
 };
 
 }

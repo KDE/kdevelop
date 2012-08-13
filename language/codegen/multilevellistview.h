@@ -114,11 +114,9 @@ public slots:
      */
     void setCurrentIndex(const QModelIndex& index);
 
-private slots:
-    void currentChanged(int i);
-
 private:
     class MultiLevelListViewPrivate* const d;
+    Q_PRIVATE_SLOT(d, void currentChanged(int i))
 };
 
 }

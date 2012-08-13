@@ -30,6 +30,8 @@ public:
     MultiLevelListViewPrivate(int levels);
     ~MultiLevelListViewPrivate();
 
+    void currentChanged(int i);
+
     int levels;
     QList<QListView*> listViews;
     QList<QVBoxLayout*> layouts;
@@ -47,8 +49,17 @@ MultiLevelListViewPrivate::~MultiLevelListViewPrivate()
     delete mapper;
 }
 
-MultiLevelListView::MultiLevelListView (QWidget* parent, Qt::WindowFlags f, int levels) : QWidget(parent, f),
-d(new MultiLevelListViewPrivate(levels))
+void MultiLevelListViewPrivate::currentChanged(int i)
+{
+    Q_ASSERT(i < levels - 1);
+    QModelIndex index = listViews[i]->currentIndex();
+    listViews[i+1]->setRootIndex(index);
+    listViews[i+1]->setCurrentIndex(index.child(0, 0));
+}
+
+MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f, int levels)
+: QWidget(parent, f)
+, d(new MultiLevelListViewPrivate(levels))
 {
     Q_ASSERT(levels > 1);
 
@@ -146,10 +157,4 @@ void MultiLevelListView::setRootIndex(const QModelIndex& index)
     d->listViews.first()->setRootIndex(index);
 }
 
-void MultiLevelListView::currentChanged (int i)
-{
-    Q_ASSERT(i < d->levels - 1);
-    QModelIndex index = d->listViews[i]->currentIndex();
-    d->listViews[i+1]->setRootIndex(index);
-    d->listViews[i+1]->setCurrentIndex(index.child(0, 0));
-}
+#include "multilevellistview.moc"
