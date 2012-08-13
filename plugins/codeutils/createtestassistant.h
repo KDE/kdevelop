@@ -40,6 +40,7 @@ public slots:
     void templateValid(bool valid);
 
 private:
+    ///TODO: unpimpl, this is not public API
     class CreateTestAssistantPrivate* const d;
 
 };
