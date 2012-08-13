@@ -41,7 +41,8 @@
 
 using namespace KDevelop;
 
-CppClassHelper::CppClassHelper (KDevelop::TemplateClassAssistant* assistant) : m_assistant(assistant)
+CppClassHelper::CppClassHelper(KDevelop::TemplateClassAssistant* assistant)
+: m_assistant(assistant)
 {
 
 }
@@ -107,8 +108,8 @@ QList< DeclarationPointer > CppClassHelper::defaultMethods(const QString& name)
     return methods;
 }
 
-CppTemplateNewClass::CppTemplateNewClass (ProjectBaseItem* parentItem)
-: TemplateClassGenerator (parentItem ? parentItem->url() : KUrl())
+CppTemplateNewClass::CppTemplateNewClass(ProjectBaseItem* parentItem)
+: TemplateClassGenerator(parentItem ? parentItem->url() : KUrl())
 , m_parentItem(parentItem)
 {
 
@@ -225,10 +226,10 @@ QVariantHash CppTemplateNewClass::extraVariables()
 }
 
 
-KDevelop::DocumentChangeSet CppTemplateNewClass::generate()
+DocumentChangeSet CppTemplateNewClass::generate()
 {
   addVariables(extraVariables());
-  KDevelop::DocumentChangeSet changes = TemplateClassGenerator::generate();
+  DocumentChangeSet changes = TemplateClassGenerator::generate();
 
   if (!m_parentItem) {
     // happens when we don't select anything in the project view
