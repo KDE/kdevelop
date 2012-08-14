@@ -1,7 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[es]=Sistema de construcción personalizado
+Name[pt]=Sistema de Compilação Personalizado
+Name[pt_BR]=Sistema de compilação personalizado
+Name[sv]=Eget byggsystem
+Name[uk]=Нетипова система збирання
+Name[x-test]=xxCustom BuildSystemxx
 Comment=Allows to use custom buildsystems for KDevelop projects
+Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop
+Comment[pt]=Permite usar sistemas de compilação personalizados para os projectos do KDevelop
+Comment[pt_BR]=Permite usar sistemas de compilação personalizados para projetos do KDevelop
+Comment[sv]=Gör det möjligt att använda egna byggsystem för projekt i KDevelop
+Comment[uk]=Надає змогу використовувати нетипові системи збирання у проектах KDevelop
+Comment[x-test]=xxAllows to use custom buildsystems for KDevelop projectsxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustombuildsystem
