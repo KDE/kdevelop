@@ -1036,7 +1036,7 @@ void ProjectController::commitCurrentProject()
         if(vcs) {
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
-            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl), baseUrl, vcs);
+            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl));
 
             bool ret = showVcsDiff(patchSource);
 

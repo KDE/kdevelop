@@ -94,7 +94,7 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
     Q_OBJECT
     public:
     /// The ownership of the updater is taken
-    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& base, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
     ~VCSCommitDiffPatchSource() ;
     
     QStringList oldMessages() const;
