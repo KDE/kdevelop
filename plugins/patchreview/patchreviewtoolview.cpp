@@ -244,7 +244,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
-    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( showPatch() ) );
+    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )

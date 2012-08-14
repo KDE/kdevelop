@@ -201,10 +201,6 @@ void PatchReviewPlugin::notifyPatchChanged() {
     m_updateKompareTimer->start( 500 );
 }
 
-void PatchReviewPlugin::showPatch() {
-    startReview( m_patch, OpenAndRaise );
-}
-
 void PatchReviewPlugin::forceUpdate() {
     if( m_patch ) {
         m_patch->update();
