@@ -44,9 +44,18 @@ public:
 
     /**
      * @return a new class generator.
+     *
+     * The caller takes ownership of the returned object.
      **/
     virtual TemplateClassGenerator* createGenerator() = 0;
 
+    /**
+     * Returns a list of suggested default methods for a new class named @p name.
+     * The user will be able to select the ones for including in the class.
+     *
+     * @param name the name of the new class
+     * @return a list of default methods for the new class
+     */
     virtual QList<DeclarationPointer> defaultMethods(const QString& name) const = 0;
 };
 
