@@ -52,7 +52,7 @@ private:
  * @brief A C++ specific template class generator
  * 
  * This class adds additional variables to the template context. 
- * @sa templateVariables()
+ * @sa extraVariables()
  * 
  * Additionally, it attempts to add the class to a target after it is generated. 
  * 
@@ -81,7 +81,7 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
      * @c namespaces holds two strings: "Foo" and "Bar". 
      *
      */
-    virtual QVariantHash extraVariables();
+    QVariantHash extraVariables();
 
     void addBaseClass(const QString& base);
 
