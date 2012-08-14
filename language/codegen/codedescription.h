@@ -26,14 +26,13 @@
 #include <grantlee/metatype.h>
 
 #include <QString>
-#include <QList>
 #include <QAbstractItemModel>
 
 #define GRANTLEE_LOOKUP_PROPERTY(name)          \
 if (property == #name) return QVariant::fromValue(object.name);
 
 #define GRANTLEE_LOOKUP_LIST_PROPERTY(name)     \
-if (property == #name) return KDevelop::CodeDescription::toVariantList(object.name);
+if (property == #name) return QVariant::fromValue(KDevelop::CodeDescription::toVariantList(object.name));
 
 namespace KDevelop {
 
@@ -87,7 +86,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
 /**
  * List of variable descriptions
  **/
-typedef QList<VariableDescription> VariableDescriptionList;
+typedef QVector<VariableDescription> VariableDescriptionList;
 
 /**
  * @brief Represents a function
@@ -123,11 +122,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
     /**
      * This function's input arguments
      **/
-    QList<VariableDescription> arguments;
+    QVector<VariableDescription> arguments;
     /**
      * This function's return values
      **/
-    QList<VariableDescription> returnArguments;
+    QVector<VariableDescription> returnArguments;
     /**
      * Access specifier, only relevant for class members.
      *
@@ -174,7 +173,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
 /**
  * List of function descriptions
  **/
-typedef QList<FunctionDescription> FunctionDescriptionList;
+typedef QVector<FunctionDescription> FunctionDescriptionList;
 
 /**
  * Description of an inheritance relation.
@@ -200,7 +199,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT InheritanceDescription
 /**
  * List of inheritance descriptions
  **/
-typedef QList<InheritanceDescription> InheritanceDescriptionList;
+typedef QVector<InheritanceDescription> InheritanceDescriptionList;
 
 /**
  * @brief Represents a class
@@ -242,19 +241,24 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
 namespace CodeDescription
 {
 
-template <class T> QVariantList toVariantList(const QList<T>& list)
+template <class T> QVariant toVariantList(const QVector<T>& list)
 {
-    QVariantList ret;
+    QVector<QVariant> ret;
     foreach (const T& t, list)
     {
         ret << QVariant::fromValue<T>(t);
     }
-    return ret;
+    return QVariant::fromValue(ret);
 }
 
 }
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::VariableDescription, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::FunctionDescription, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::InheritanceDescription, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::ClassDescription, Q_MOVABLE_TYPE);
 
 Q_DECLARE_METATYPE(KDevelop::VariableDescription)
 Q_DECLARE_METATYPE(KDevelop::VariableDescriptionList)
@@ -263,6 +267,8 @@ Q_DECLARE_METATYPE(KDevelop::FunctionDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
+
+Q_DECLARE_METATYPE(QVector<QVariant>)
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)

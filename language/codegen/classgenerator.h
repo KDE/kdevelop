@@ -24,6 +24,8 @@
 
 #include "../languageexport.h"
 
+#include "KConfigSkeleton"
+
 namespace KDevelop {
 
 struct ClassDescription;
