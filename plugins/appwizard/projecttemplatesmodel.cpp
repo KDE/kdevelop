@@ -27,6 +27,7 @@ ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
     setDescriptionResourceType("apptemplate_descriptions");
     setPreviewResourceType("apptemplate_previews");
     setTemplateResourceType("apptemplates");
+    refresh();
 }
 
 void ProjectTemplatesModel::refresh()

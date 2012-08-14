@@ -50,9 +50,7 @@ private:
     bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
-    ///TODO: don't mark as mutable, figure out why refresh is required
-    ///      in @c templatesModel() model
-    mutable ProjectTemplatesModel* m_templatesModel;
+    ProjectTemplatesModel* m_templatesModel;
     QAction* m_newFromTemplate;
     QHash<QString, QString> m_variables;
 };
