@@ -75,8 +75,8 @@ class CppNewClass : public KDevelop::ClassGenerator
     virtual QList<KDevelop::DeclarationPointer> addBaseClass(const QString &);
     virtual void clearInheritance();
 
-    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true);
-    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true);
+    virtual KUrl headerUrlFromBase(const KUrl& baseUrl, bool toLower = true) const;
+    virtual KUrl implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true) const;
 
     virtual void setIdentifier(const QString& identifier);
     virtual QString identifier() const;

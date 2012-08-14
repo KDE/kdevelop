@@ -286,7 +286,7 @@ QString CppNewClass::identifier() const
   return identifier;
 }
 
-KUrl CppNewClass::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
+KUrl CppNewClass::headerUrlFromBase(const KUrl& baseUrl, bool toLower = true) const
 {
   KUrl url(baseUrl); ///@todo Add some settings somewhere to set up how this is computed
   if( toLower ) {
@@ -297,7 +297,7 @@ KUrl CppNewClass::headerUrlFromBase(const KUrl& baseUrl, bool toLower)
   return url;
 }
 
-KUrl CppNewClass::implementationUrlFromBase(const KUrl& baseUrl, bool toLower)
+KUrl CppNewClass::implementationUrlFromBase(const KUrl& baseUrl, bool toLower = true) const
 {
   KUrl url(baseUrl);
   if( toLower ) {

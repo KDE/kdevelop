@@ -6,28 +6,33 @@
 
 
 #include "{{ output_file_header }}"
+
+
 #include <qtest_kde.h>
 
 
-void initTestCase()
+QTEST_KDEMAIN({{ name }}, NoGUI);
+
+
+void {{ name }}::initTestCase()
 {
     // Called before the first testfunction is executed
 }
 
 
-void cleanupTestCase()
+void {{ name }}::cleanupTestCase()
 {
     // Called after the last testfunction was executed
 }
 
 
-void init()
+void {{ name }}::init()
 {
     // Called before each testfunction is executed
 }
 
 
-void cleanup()
+void {{ name }}::cleanup()
 {
     // Called after every testfunction
 }
@@ -35,7 +40,7 @@ void cleanup()
 
 {% for case in testCases %}
 
-void {{ case }}()
+void {{ name }}::{{ case }}()
 {
 
 
@@ -43,5 +48,4 @@ void {{ case }}()
 
 {% endfor %}
 
-QTEST_KDEMAIN({{ name }}, NoGUI);
-#include {{ output_file_header|cut:".h" }}.moc
+#include "{{ output_file_header|cut:".h" }}.moc"
