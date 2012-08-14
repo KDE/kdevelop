@@ -68,6 +68,8 @@ public:
 
     /**
      * @return A model containing all available templates.
+     *
+     * The called does not take ownership of the model.
      **/
     virtual QAbstractItemModel* templatesModel() const = 0;
 
