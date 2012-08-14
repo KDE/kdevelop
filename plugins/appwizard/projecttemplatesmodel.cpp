@@ -29,9 +29,3 @@ ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
     setTemplateResourceType("apptemplates");
     refresh();
 }
-
-void ProjectTemplatesModel::refresh()
-{
-    KDevelop::TemplatesModel::refresh();
-    setHorizontalHeaderLabels(QStringList() << i18n("Project Templates"));
-}

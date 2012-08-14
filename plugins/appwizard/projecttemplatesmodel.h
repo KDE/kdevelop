@@ -20,7 +20,6 @@ class AppWizardPlugin;
 class ProjectTemplatesModel: public KDevelop::TemplatesModel {
 public:
     ProjectTemplatesModel(AppWizardPlugin *parent);
-    virtual void refresh();
 };
 
 #endif

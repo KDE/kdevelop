@@ -52,6 +52,8 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT(nameChanged()) );
     
     m_listView = new KDevelop::MultiLevelListView(this);
+    m_listView->setLevels(2);
+    m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type") << i18n("Template"));
     m_listView->setModel(templatesModel);
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
@@ -87,6 +89,11 @@ ProjectSelectionPage::~ProjectSelectionPage()
 
 void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
 {
+    if (!idx.model())
+    {
+        kDebug() << "Index with no model";
+        return;
+    }
     bool hasChildren = idx.model()->rowCount(idx)>0;
     if(hasChildren) {
         ui->templateType->setModel(m_templatesModel);

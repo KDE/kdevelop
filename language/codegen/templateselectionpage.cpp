@@ -74,7 +74,6 @@ void TemplateSelectionPagePrivate::currentLanguageChanged(const QModelIndex& ind
         templateIndex = templateIndex.child(0, 0);
     }
     ui->templateView->setCurrentIndex(templateIndex);
-    model->setHorizontalHeaderLabels(QStringList(model->data(index).toString()));
 }
 
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
@@ -139,7 +138,10 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->model->setDescriptionResourceType("filetemplate_descriptions");
     d->model->refresh();
 
+    d->ui->languageView->setLevels(2);
+    d->ui->languageView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Language") << i18n("Template"));
     d->ui->languageView->setModel(d->model);
+
     d->ui->templateView->setModel(d->model);
 
     connect (d->ui->languageView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),

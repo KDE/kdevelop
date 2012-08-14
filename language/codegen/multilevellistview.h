@@ -23,6 +23,7 @@
 #include <QtGui/QWidget>
 #include "../languageexport.h"
 
+class QListView;
 class QModelIndex;
 class QListView;
 class QAbstractItemModel;
@@ -57,6 +58,21 @@ public:
     virtual ~MultiLevelListView();
 
     /**
+     * @return the number of list view
+     */
+    int levels() const;
+    /**
+     * Sets the number of levels, i.e. the number of list views visible, to @p levels
+     * @param levels the new number of levels
+     */
+    void setLevels(int levels);
+
+    /**
+     * @return the model displayed by this view, or 0 if none was set
+     * @sa QAbstractItemView::model()
+     */
+    QAbstractItemModel* model() const;
+    /**
      * Sets the model to be displayed by this view.
      *
      * @param model the model to be displayed
@@ -88,6 +104,8 @@ public:
      * @param widget the widget to add
     */
     void addWidget(int level, QWidget* widget);
+
+    void setHeaderLabels(const QStringList& labels);
 
 signals:
     /**
