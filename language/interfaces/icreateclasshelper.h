@@ -26,8 +26,6 @@
 namespace KDevelop {
 
 class TemplateClassGenerator;
-class ClassIdentifierPage;
-class OverridesPage;
 
 /**
  * @brief A language-specific helper interface for creating new classes.
