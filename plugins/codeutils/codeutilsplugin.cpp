@@ -19,7 +19,6 @@
  */
 
 #include "codeutilsplugin.h"
-#include "createtestassistant.h"
 
 #include <QVariantList>
 

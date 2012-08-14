@@ -8,7 +8,6 @@ set(kdevcodeutils_PART_SRCS
 
 include_directories(CMAKE_CURRENT_BINARY_DIR)
 
-kde4_add_ui_files(kdevcodeutils_PART_SRCS templateselectionpage.ui)
 kde4_add_plugin(kdevcodeutils ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
