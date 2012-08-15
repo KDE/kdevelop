@@ -23,6 +23,7 @@ m_provider(provider)
     connect(ui->loadButton, SIGNAL(clicked(bool)),
             this, SLOT(loadFromFile()));
 
+    provider->reload();
     ui->treeView->setModel(provider->templatesModel());
 }
 
