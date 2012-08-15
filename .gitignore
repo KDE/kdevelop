@@ -10,4 +10,5 @@ Doxyfile
 *.kdevelop.filelist
 *.kdevelop.pcs
 *.kdevses
+.*kate-swp
 build/
