@@ -391,6 +391,6 @@ install(FILES
 )
 
 install(FILES
-    codegen/kdevclassassistant.knsrc
+    codegen/kdevfiletemplates.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR}
 )

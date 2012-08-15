@@ -84,7 +84,7 @@ QAbstractItemModel* FileTemplatesPlugin::templatesModel() const
 
 QString FileTemplatesPlugin::knsConfigurationFile() const
 {
-    return "filetemplates.knsrc";
+    return "kdevfiletemplates.knsrc";
 }
 
 QStringList FileTemplatesPlugin::supportedMimeTypes() const
