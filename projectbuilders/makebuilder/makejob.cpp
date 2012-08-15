@@ -38,7 +38,6 @@
 
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <outputview/outputdelegate.h>
 
 #include "makeoutputdelegate.h"
 #include "makeoutputmodel.h"
