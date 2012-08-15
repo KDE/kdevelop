@@ -23,10 +23,6 @@
 
 #include "ui_custombuildsystemconfigwidget.h"
 #include "configconstants.h"
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iruncontroller.h>
-#include <language/backgroundparser/parseprojectjob.h>
 
 namespace
 {
@@ -179,11 +175,6 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* pr
         saveConfig( subgrp, configs[i], i );
     }
     cfg->sync();
-
-    if ( KDevelop::IProjectController::parseAllProjectSources()) {
-        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
-        KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
-    }
 }
 
 void CustomBuildSystemConfigWidget::configChanged()
