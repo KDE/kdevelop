@@ -2,6 +2,7 @@
 Name=Widget with a UI File
 Comment=QWidget subclass with a separate Qt Designer file
 Category=Class/C++/Qt
+BaseClasses=public QWidget
 Files=Header,Implementation,UI
 
 [Header]
