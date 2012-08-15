@@ -143,10 +143,7 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
 
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
-    m_editPatch.tabWidget->setVisible( lpatch );
-    m_editPatch.baseDir->setVisible( lpatch );
-    m_editPatch.label->setVisible( lpatch );
-    m_editPatch.applied->setVisible( lpatch );
+    m_editPatch.localPatchOptions->setVisible( lpatch );
     if( !lpatch )
         return;
 
@@ -190,6 +187,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
+    m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
