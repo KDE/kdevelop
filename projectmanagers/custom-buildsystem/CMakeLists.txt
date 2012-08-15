@@ -1,17 +1,9 @@
 project(kdevelop4-custom-buildsystem)
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
-
-find_package(KDE4 4.5.0 REQUIRED)
-include(KDE4Defaults)
 include(MacroLibrary)
-find_package(KDevPlatform 1.4.60 REQUIRED)
 
-if(KDevPlatform_VERSION VERSION_GREATER 1.5.59)
-    MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.6, version 1.5 is required")
-endif(KDevPlatform_VERSION VERSION_GREATER 1.5.59)
-
-set(CUSTOM_BUILDSYSTEM_VERSION 1.2.3)
+# Needs to be updated on kdevelop releases
+set(CUSTOM_BUILDSYSTEM_VERSION 1.2.60)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
@@ -52,9 +44,3 @@ install( TARGETS kcm_kdevcustombuildsystem
 install( FILES kdevcustombuildsystem.desktop
                kcm_kdevcustombuildsystem.desktop
          DESTINATION ${SERVICES_INSTALL_DIR} )
-
-include(CTest)
-
-# CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
-# in the KDE build system, this is the same as kdevelop4-custom-buildsystem_BINARY_DIR.
-configure_file(${kdevelop4-custom-buildsystem_SOURCE_DIR}/CTestCustom.cmake ${kdevelop4-custom-buildsystem_BINARY_DIR}/CTestCustom.cmake)
