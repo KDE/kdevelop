@@ -45,6 +45,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
+#include <language/codegen/templateclassassistant.h>
 
 #include "projectmanagerview.h"
 #include "builditembuilderjob.h"
@@ -107,6 +108,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
+
     d->m_build = new KAction( i18n("Build Selection"), this );
     d->m_build->setIconText( i18n("Build") );
     d->m_build->setShortcut( Qt::Key_F8 );
@@ -234,6 +236,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         KAction* action = new KAction( i18n( "Create File" ), this );
         action->setIcon(KIcon("document-new"));
         connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, action );
+
+        action = new KAction( i18n( "Create from Template" ), this );
+        action->setIcon(KIcon("code-class"));
+        connect( action, SIGNAL(triggered()), this, SLOT(createFromTemplateFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
@@ -599,6 +606,27 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
                 if(f)
                     item->project()->buildSystemManager()->addFilesToTarget(QList<ProjectFileItem*>() << f, item->target());
             }
+        }
+    }
+}
+
+void ProjectManagerViewPlugin::createFromTemplateFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        KUrl url;
+        if (item->folder())
+        {
+            url = item->url();
+        }
+        else if (item->target())
+        {
+            url = item->parent()->url();
+        }
+        if (url.isValid())
+        {
+            KDevelop::TemplateClassAssistant assistant(QApplication::activeWindow(), url);
+            assistant.exec();
         }
     }
 }

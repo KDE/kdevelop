@@ -83,13 +83,6 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
                                 "parameter of a function."
                                 "</p>" ) );
     action->setIcon( KIcon( "documentinfo" ) );
-
-    action = actionCollection()->addAction( "class_from_template" );
-    action->setText( i18n( "Create From &Template" ) );
-    action->setShortcut( i18n( "Alt+Shift+t" ) );
-    connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
-    action->setIcon( KIcon( "code-class" ) );
-    action->setToolTip( i18n( "Create new source code files from a template" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
@@ -177,51 +170,6 @@ void CodeUtilsPlugin::documentDeclaration()
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 }
 
-void CodeUtilsPlugin::createClass()
-{
-    KUrl url;
-    if (QAction* action = qobject_cast<QAction*>(sender()))
-    {
-        url = action->data().value<KUrl>();
-    }
-    TemplateClassAssistant assistant(QApplication::activeWindow(), url);
-    assistant.exec();
-}
-
 CodeUtilsPlugin::~CodeUtilsPlugin()
 {
-}
-
-ContextMenuExtension CodeUtilsPlugin::contextMenuExtension (Context* context)
-{
-    ContextMenuExtension ext;
-
-    if (context->hasType(Context::ProjectItemContext))
-    {
-        if (ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context))
-        {
-            if (projectContext->items().size() == 1)
-            {
-                ProjectBaseItem* item = projectContext->items().first();
-                KUrl url;
-                if (item->folder())
-                {
-                    url = item->url();
-                }
-                else if (item->target())
-                {
-                    url = item->parent()->url();
-                }
-                if (url.isValid())
-                {
-                    KAction* action = new KAction(KIcon("code-class"), i18n("Create from &Template"), actionCollection() );
-                    action->setData(projectContext->items().first()->url());
-
-                    connect( action, SIGNAL(triggered(bool)), this, SLOT(createClass()));
-                    ext.addAction(ContextMenuExtension::FileGroup, action);
-                }
-            }
-        }
-    }
-    return ext;
 }

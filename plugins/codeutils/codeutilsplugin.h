@@ -32,12 +32,9 @@ class CodeUtilsPlugin : public KDevelop::IPlugin
 public:
     CodeUtilsPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CodeUtilsPlugin();
-    
-    virtual KDevelop::ContextMenuExtension contextMenuExtension (KDevelop::Context* context);
 
 private slots:
     void documentDeclaration();
-    void createClass();
 };
 
 
