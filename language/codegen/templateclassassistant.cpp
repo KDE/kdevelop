@@ -116,7 +116,7 @@ TemplateClassAssistant::~TemplateClassAssistant()
 
 void TemplateClassAssistant::setup()
 {
-    setWindowTitle(i18n("Create From Template in %1", baseUrl().prettyUrl()));
+    setWindowTitle(i18n("Create from Template in <filename>%1</filename>", baseUrl().prettyUrl()));
 
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
     connect(this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
@@ -141,6 +141,8 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     kDebug() << "Selected template" << templateDescription << "of type" << d->type;
     removePage(d->dummyPage);
+
+    setWindowTitle(i18n("Create from Template <filename>%1</filename> in <filename>%2</filename>", d->fileTemplate.name(), baseUrl().prettyUrl()));
 
     if (d->type == "Class")
     {
@@ -322,6 +324,7 @@ void TemplateClassAssistant::back()
         d->helper = 0;
         d->generator = 0;
 
+        setWindowTitle(i18n("Create from Template in <filename>%1</filename>", baseUrl().prettyUrl()));
         d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
     }
 }
