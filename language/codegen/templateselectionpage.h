@@ -50,6 +50,14 @@ public:
      **/
     QString selectedTemplate() const;
 
+public Q_SLOTS:
+    /**
+     * Saves the selected template setting into the current project's configuration.
+     *
+     * If the assistant's base URL does not point to any project, this function does nothing.
+     */
+    void saveConfig();
+
 private:
     class TemplateSelectionPagePrivate* const d;
 
@@ -57,7 +65,6 @@ private:
     Q_PRIVATE_SLOT(d, void currentLanguageChanged(const QModelIndex& index))
     Q_PRIVATE_SLOT(d, void getMoreClicked())
     Q_PRIVATE_SLOT(d, void loadFileClicked())
-    Q_PRIVATE_SLOT(d, void saveConfig())
 };
 
 }

@@ -28,6 +28,7 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/isession.h>
 
 #include "ui_templateselection.h"
 #include "ui_classmembers.h"
@@ -41,7 +42,7 @@
 using namespace KDevelop;
 
 const char* LastUsedTemplateEntry = "LastUsedTemplate";
-const char* ClassTemplatesGroup = "ClassTemplates";
+const char* FileTemplatesGroup = "SourceFileTemplates";
 
 class KDevelop::TemplateSelectionPagePrivate
 {
@@ -60,7 +61,6 @@ public:
     void currentLanguageChanged(const QModelIndex& index);
     void getMoreClicked();
     void loadFileClicked();
-    void saveConfig();
 };
 
 void TemplateSelectionPagePrivate::currentLanguageChanged(const QModelIndex& index)
@@ -113,15 +113,21 @@ void TemplateSelectionPagePrivate::loadFileClicked()
     }
 }
 
-void TemplateSelectionPagePrivate::saveConfig()
+void TemplateSelectionPage::saveConfig()
 {
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(assistant->baseUrl());
-    if (project)
+    KSharedConfig::Ptr config;
+    if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))
     {
-        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
-        group.writeEntry(LastUsedTemplateEntry, selectedTemplate);
-        group.sync();
+        config = project->projectConfiguration();
     }
+    else
+    {
+        config = ICore::self()->activeSession()->config();
+    }
+
+    KConfigGroup group(config, FileTemplatesGroup);
+    group.writeEntry(LastUsedTemplateEntry, d->selectedTemplate);
+    group.sync();
 }
 
 TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt::WindowFlags f)
@@ -158,18 +164,24 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
         templateIndex = templateIndex.child(0, 0);
     }
 
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl());
-    if (project)
+    KSharedConfig::Ptr config;
+    if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))
     {
-        KConfigGroup group(project->projectConfiguration(), ClassTemplatesGroup);
-        QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
+        config = project->projectConfiguration();
+    }
+    else
+    {
+        config = ICore::self()->activeSession()->config();
+    }
 
-        QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate);
+    KConfigGroup group(config, FileTemplatesGroup);
+    QString lastTemplate = group.readEntry(LastUsedTemplateEntry);
 
-        if (!indexes.isEmpty())
-        {
-            templateIndex = indexes.first();
-        }
+    QModelIndexList indexes = d->model->match(d->model->index(0, 0), TemplatesModel::DescriptionFileRole, lastTemplate, 1, Qt::MatchRecursive);
+
+    if (!indexes.isEmpty())
+    {
+        templateIndex = indexes.first();
     }
 
     categoryIndex = templateIndex;
