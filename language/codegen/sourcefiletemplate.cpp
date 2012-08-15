@@ -186,6 +186,13 @@ QString SourceFileTemplate::languageName() const
     return categories.size() > 1 ? categories[1] : QString();
 }
 
+QStringList SourceFileTemplate::defaultBaseClasses() const
+{
+    KConfig templateConfig(d->descriptionFileName);
+    KConfigGroup cg(&templateConfig, "General");
+    return cg.readEntry("BaseClasses", QStringList());
+}
+
 const KArchiveDirectory* SourceFileTemplate::directory() const
 {
     Q_ASSERT(isValid());

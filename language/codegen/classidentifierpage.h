@@ -54,6 +54,13 @@ public:
      */
     QStringList inheritanceList() const;
 
+    /**
+     * Sets the contents of the inheritance list to @p list
+     *
+     * @param list list of inheritance descriptions. 
+     */
+    void setInheritanceList(const QStringList& list);
+
 Q_SIGNALS:
     void inheritanceChanged();
     /**

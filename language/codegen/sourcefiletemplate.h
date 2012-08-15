@@ -27,6 +27,7 @@
 
 #include "../languageexport.h"
 
+class QStringList;
 class KArchiveDirectory;
 
 namespace KDevelop
@@ -275,6 +276,14 @@ public:
      * The name of the programming language of the generated files
      */
     QString languageName() const;
+
+    /**
+     * @return the list of base classes specified by this template.
+     * If this is not a class template, or if it specifies no default base classes, an empty list is returned. 
+     *
+     * Each element is the full inheritance description, such as "public QObject".
+     */
+    QStringList defaultBaseClasses() const;
 
 private:
     class SourceFileTemplatePrivate* const d;

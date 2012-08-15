@@ -284,7 +284,11 @@ void TemplateClassAssistant::next()
 
     KAssistantDialog::next();
 
-    if (currentPage() == d->membersPage)
+    if (currentPage() == d->classIdentifierPage)
+    {
+        d->classIdentifierPageWidget->setInheritanceList(d->fileTemplate.defaultBaseClasses());
+    }
+    else if (currentPage() == d->membersPage)
     {
         d->membersPage->widget()->setProperty("members", QVariant::fromValue(d->generator->description().members));
     }

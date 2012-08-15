@@ -71,4 +71,9 @@ QStringList ClassIdentifierPage::inheritanceList() const
     return d->classid->keditlistwidget->items();
 }
 
+void ClassIdentifierPage::setInheritanceList (const QStringList& list)
+{
+    d->classid->keditlistwidget->setItems(list);
+}
+
 }
