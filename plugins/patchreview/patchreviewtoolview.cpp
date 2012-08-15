@@ -268,14 +268,32 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     delete menu;
 }
 
-void PatchReviewToolView::nextHunk() {
-//   updateKompareModel();
-    m_plugin->seekHunk( true );
+void PatchReviewToolView::nextHunk()
+{
+    IDocument* current = ICore::self()->documentController()->activeDocument();
+    if(current->url() == m_plugin->patch()->file())
+        fileDoubleClicked( m_fileModel->index(0,0) );
+    else if(!current->textDocument())
+    {
+        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
+        fileDoubleClicked( idx.sibling(idx.row()+1 % m_fileModel->rowCount(), 0) );
+    }
+    else
+        m_plugin->seekHunk( true );
 }
 
-void PatchReviewToolView::prevHunk() {
-//   updateKompareModel();
-    m_plugin->seekHunk( false );
+void PatchReviewToolView::prevHunk()
+{
+    IDocument* current = ICore::self()->documentController()->activeDocument();
+    if(current->url() == m_plugin->patch()->file())
+        fileDoubleClicked( m_fileModel->index(m_fileModel->rowCount()-1,0) );
+    else if(!current->textDocument())
+    {
+        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
+        fileDoubleClicked( idx.sibling(idx.row()-1 % m_fileModel->rowCount(), 0) );
+    }
+    else
+        m_plugin->seekHunk( false );
 }
 
 void PatchReviewToolView::finishReview() {
