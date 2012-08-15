@@ -175,16 +175,6 @@ void PatchReviewToolView::slotAppliedChanged( int newState ) {
     }
 }
 
-void PatchReviewToolView::slotEditCommandChanged() {
-//     m_editPatch.filename->lineEdit()->setText( "" );
-    updatePatchFromEdit();
-}
-
-void PatchReviewToolView::slotEditFileNameChanged() {
-//     m_editPatch.command->setText( "" );
-    updatePatchFromEdit();
-}
-
 void PatchReviewToolView::showEditDialog() {
     m_editPatch.setupUi( this );
 
@@ -226,8 +216,8 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( slotAppliedChanged( int ) ) );
-    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( slotEditFileNameChanged() ) );
+    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
 
     m_editPatch.baseDir->setMode( KFile::Directory );
 
