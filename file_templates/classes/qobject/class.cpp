@@ -74,14 +74,14 @@ public:
 
 {% for property in members %}
 
-{{ property.type }} {{ property.name }}() const
+{{ property.type }} {{ name }}::{{ property.name }}() const
 {
     Q_D(const {{ name }});
     return d->{{ property.name }};
 }
 
 
-void set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})
+void {{ name }}::set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})
 {
     Q_D({{ name }});
     d->{{ property.name }} = {{ property.name }};

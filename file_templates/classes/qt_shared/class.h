@@ -1,4 +1,5 @@
 {% extends "cpp_header_onlyfunctions.h" %}
+{% load kdev_filters %}
 
 {% block includes %}
 {{ block.super }}
@@ -15,7 +16,7 @@ class {{ name }}Data;
 {% for member in members %}
 
     {{ member.type }} {{ member.name }}() const;
-    void set{{ member.name|capfirst }}({{ member.type }} {{ member.name }});
+    void set{{ member.name|capfirst }}({{ member.type|arg_type }} {{ member.name }});
 
 {% endfor %}
 

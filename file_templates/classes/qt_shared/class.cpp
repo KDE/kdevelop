@@ -1,4 +1,5 @@
 {% extends "cpp_implementation.cpp" %}
+{% load kdev_filters %}
 
 {% block includes %}
 {{ block.super }}
@@ -20,13 +21,13 @@ public:
 
 {% for member in members %}
 
-{{ member.type }} {{ member.name }}() const
+{{ member.type }} {{ name }}::{{ member.name }}() const
 {
     return d->{{ member.name }};
 }
 
 
-void set{{ member.name|capfirst }}({{ member.type }} {{ member.name }})
+void {{ name }}::set{{ member.name|capfirst }}({{ member.type|arg_type }} {{ member.name }})
 {
     d->{{ member.name }} = {{ member.name }};
 }
