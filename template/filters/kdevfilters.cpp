@@ -137,7 +137,7 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
         {
             continue;
         }
-        
+
         // Check if it's a class/struct/etc
         if(declaration->type<StructureType>())
         {
