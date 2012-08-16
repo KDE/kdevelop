@@ -243,7 +243,7 @@ namespace CodeDescription
 
 template <class T> QVariant toVariantList(const QVector<T>& list)
 {
-    QVector<QVariant> ret;
+    QVariantList ret;
     foreach (const T& t, list)
     {
         ret << QVariant::fromValue<T>(t);
@@ -267,8 +267,6 @@ Q_DECLARE_METATYPE(KDevelop::FunctionDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
-
-Q_DECLARE_METATYPE(QVector<QVariant>)
 
 GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
     GRANTLEE_LOOKUP_PROPERTY(name)
