@@ -6,7 +6,7 @@
 class {{ name }}Private
 {
 public:
-    {% for property in properties %}
+    {% for property in members %}
     {{ property.type }} {{ property.name }};
     {% endfor %}
 
@@ -43,11 +43,11 @@ public:
 {% for method in public_functions %}
 {% with method.arguments as arguments %}
 
-{% include "method_definition_cpp" %}
+{% include "method_definition_cpp.txt" %}
 {% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
-    delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
+    delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
 
 
@@ -59,11 +59,11 @@ public:
 {% for method in protected_functions %}
 {% with method.arguments as arguments %}
 
-{% include "method_definition_cpp" %}
+{% include "method_definition_cpp.txt" %}
 {% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
-    delete d;{% endif %}{% if method.type %}return {{ method.default_return_value }};
+    delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
     {% endif %}
 
 
@@ -72,7 +72,7 @@ public:
 {% endwith %}
 {% endfor %}
 
-{% for property in properties %}
+{% for property in members %}
 
 {{ property.type }} {{ property.name }}() const
 {
@@ -81,7 +81,7 @@ public:
 }
 
 
-void set{{ property.name|upper_first }}({{ property.type }} {{ property.name }})
+void set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})
 {
     Q_D({{ name }});
     d->{{ property.name }} = {{ property.name }};

@@ -25,7 +25,7 @@ class {{ name }} : public QObject
 
 {% block class_body %}
     Q_OBJECT
-    {% for property in properties %}
+    {% for property in members %}
     Q_PROPERTY({{ property.type }} {{ property.name }} READ {{ property.name }} WRITE set{{ property.name|upper_first }})
     {% endfor %}
 
@@ -34,7 +34,7 @@ class {{ name }} : public QObject
 public:
 {% endif %}
     {% for method in public_functions %}
-        {% include "declaration.txt" %}
+        {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 
     {% for property in members %}
@@ -45,7 +45,7 @@ public:
 {% if members %}
 public Q_SLOTS:
     {% for property in members %}
-    void set{{ property.name|upper_first }}({{ property.type }} {{ property.name }});
+    void set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }});
     {% endfor %}
 {% endif %}
 
@@ -53,7 +53,7 @@ public Q_SLOTS:
 {% if protected_functions %}
 protected:
     {% for method in protected_functions %}
-        {% include "declaration.txt" %}
+        {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 {% endif %}
 
