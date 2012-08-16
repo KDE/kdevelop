@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>332</width>
-    <height>499</height>
+    <height>519</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -413,16 +413,6 @@ correctly.
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <layout class="QGridLayout" name="gridLayout_6">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblParenthesis">
-              <property name="text">
-               <string>Pad parenthesis</string>
-              </property>
-              <property name="margin">
-               <number>6</number>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="KComboBox" name="cbParenthesisPadding">
               <property name="sizePolicy">
@@ -458,7 +448,7 @@ correctly.
               </item>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2">
+            <item row="2" column="0" colspan="2">
              <widget class="QCheckBox" name="chkPadOperators">
               <property name="toolTip">
                <string>Insert space padding around operators.
@@ -467,6 +457,26 @@ There is no unpad operator option.</string>
               </property>
               <property name="text">
                <string>&amp;Add spaces around operators</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblParenthesis">
+              <property name="text">
+               <string>Pad parenthesis</string>
+              </property>
+              <property name="margin">
+               <number>6</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QCheckBox" name="chkPadParenthesisHeader">
+              <property name="toolTip">
+               <string>Insert space padding after parenthesis headers (e.g. 'if', 'for', 'while', ...)</string>
+              </property>
+              <property name="text">
+               <string>Add spaces after parenthesis &amp;headers</string>
               </property>
              </widget>
             </item>
@@ -566,14 +576,14 @@ multiple single-statement lines.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KListWidget</class>
    <extends>QListWidget</extends>
    <header>klistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>

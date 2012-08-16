@@ -75,6 +75,7 @@ AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
 
 AStylePreferences::~AStylePreferences( )
 {
+    delete m_formatter;
 }
 
 void AStylePreferences::init()
@@ -107,6 +108,7 @@ void AStylePreferences::init()
     connect(chkBlockIfElse, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
 
     connect(cbParenthesisPadding, SIGNAL(currentIndexChanged(int)), this, SLOT(paddingChanged()));
+    connect(chkPadParenthesisHeader, SIGNAL(stateChanged(int)), this, SLOT(paddingChanged()));
     connect(chkPadOperators, SIGNAL(stateChanged(int)), this, SLOT(paddingChanged()));
 
     connect(chkKeepStatements, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
@@ -203,6 +205,11 @@ void AStylePreferences::updateWidgets()
     } else
         cbParenthesisPadding->setCurrentIndex(PADDING_NOCHANGE);
 
+    // padding header has no influence with padding out
+    if (padout)
+        chkPadParenthesisHeader->setDisabled(true);
+
+    chkPadParenthesisHeader->setChecked(m_formatter->option("PadParenthesesHeader").toBool());
     chkPadOperators->setChecked(m_formatter->option("PadOperators").toBool());
     // oneliner
     chkKeepStatements->setChecked(m_formatter->option("KeepStatements").toBool());
@@ -349,29 +356,37 @@ void AStylePreferences::paddingChanged()
             m_formatter->setParensUnPaddingMode(false);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(false);
+            chkPadParenthesisHeader->setDisabled(false);
             break;
         case PADDING_NO:
             m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(false);
+            chkPadParenthesisHeader->setDisabled(false);
             break;
         case PADDING_IN:
             m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(true);
             m_formatter->setParensOutsidePaddingMode(false);
+            chkPadParenthesisHeader->setDisabled(false);
             break;
         case PADDING_OUT:
             m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(true);
+            // padding header has no influence with padding out
+            chkPadParenthesisHeader->setDisabled(true);
             break;
         case PADDING_INOUT:
             m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(true);
             m_formatter->setParensOutsidePaddingMode(true);
+            // padding header has no influence with padding out
+            chkPadParenthesisHeader->setDisabled(true);
             break;
     }
 
+    m_formatter->setParensHeaderPaddingMode(chkPadParenthesisHeader->isChecked());
     m_formatter->setOperatorPaddingMode(chkPadOperators->isChecked());
 
     updatePreviewText();
