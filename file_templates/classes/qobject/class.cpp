@@ -44,7 +44,7 @@ public:
 {% with method.arguments as arguments %}
 
 {% include "method_definition_cpp.txt" %}
-{% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
+{% if method.isConstructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
     delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
@@ -60,7 +60,7 @@ public:
 {% with method.arguments as arguments %}
 
 {% include "method_definition_cpp.txt" %}
-{% if method.is_constructor %}: d_ptr(new {{ name }}Private){% endif %}
+{% if method.isConstructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
     {% if method.isDestructor %}
     delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
