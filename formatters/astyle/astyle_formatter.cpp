@@ -130,6 +130,7 @@ void AStyleFormatter::updateFormatter()
     AStyleFormatter::setOperatorPaddingMode(m_options["PadOperators"].toBool());
     AStyleFormatter::setParensInsidePaddingMode(m_options["PadParenthesesIn"].toBool());
     AStyleFormatter::setParensOutsidePaddingMode(m_options["PadParenthesesOut"].toBool());
+    AStyleFormatter::setParensHeaderPaddingMode(m_options["PadParenthesesHeader"].toBool());
     AStyleFormatter::setParensUnPaddingMode(m_options["PadParenthesesUn"].toBool());
 
     // oneliner
@@ -176,6 +177,7 @@ void AStyleFormatter::resetStyle()
     setOperatorPaddingMode(false);
     setParensInsidePaddingMode(true);
     setParensOutsidePaddingMode(true);
+    setParensHeaderPaddingMode(true);
     setParensUnPaddingMode(true);
 }
 
@@ -289,6 +291,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setNamespaceIndent(false);
         return true;
     } else if (style == "KDELibs") {
+        // http://techbase.kde.org/Policies/Kdelibs_Coding_Style
         resetStyle();
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::LINUX_MODE);
@@ -296,7 +299,8 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setLabelIndent(true);
         setOperatorPaddingMode(true);
         setParensInsidePaddingMode(false);
-        setParensOutsidePaddingMode(true);
+        setParensOutsidePaddingMode(false);
+        setParensHeaderPaddingMode(true);
         setParensUnPaddingMode(true);
         setSingleStatementsMode(false);
         setTabSpaceConversionMode(true);
@@ -306,6 +310,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setNamespaceIndent(false);
         return true;
     } else if (style == "Qt") {
+        // http://qt-project.org/wiki/Qt_Coding_Style
         resetStyle();
         setPointerAlignment(astyle::ALIGN_NAME);
         setOperatorPaddingMode(true);
@@ -313,6 +318,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setParensInsidePaddingMode(false);
         setParensOutsidePaddingMode(false);
+        setParensHeaderPaddingMode(true);
         setParensUnPaddingMode(true);
         setSpaceIndentation(4);
         setClassIndent(false);
@@ -527,6 +533,11 @@ void AStyleFormatter::setParensInsidePaddingMode(bool mode)
 {
     m_options["PadParenthesesIn"] = mode;
     ASFormatter::setParensInsidePaddingMode(mode);
+}
+
+void AStyleFormatter::setParensHeaderPaddingMode(bool mode) {
+    m_options["PadParenthesesHeader"] = mode;
+    ASFormatter::setParensHeaderPaddingMode(mode);
 }
 
 void AStyleFormatter::setParensUnPaddingMode(bool state)

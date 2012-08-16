@@ -80,6 +80,7 @@ class AStyleFormatter : public astyle::ASFormatter
         void setOperatorPaddingMode(bool mode);
         void setParensOutsidePaddingMode(bool mode);
         void setParensInsidePaddingMode(bool mode);
+        void setParensHeaderPaddingMode(bool mode);
         void setParensUnPaddingMode(bool state);
         //oneliners
         void setBreakOneLineBlocksMode(bool state);
