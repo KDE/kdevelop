@@ -48,4 +48,4 @@ void {{ name }}::{{ case }}()
 
 {% endfor %}
 
-#include "{{ output_file_header|cut:".h" }}.moc"
+#include "{{ output_file_header|cut:".h"|cut:".hpp" }}.moc"

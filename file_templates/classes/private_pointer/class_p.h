@@ -24,7 +24,7 @@ public:
     {% endfor %}
 
 
-    {% for member in private_members %}
+    {% for member in members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
 

@@ -25,7 +25,7 @@
 {% for method in private_functions %}
 
 {% with method.arguments as arguments %}
-{{ method.returnType|default:"void" }} {{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %};
+{{ method.returnType|default:"void" }} {{ name }}::{{ method.name }}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %}
 {% endwith %}
 {
 
