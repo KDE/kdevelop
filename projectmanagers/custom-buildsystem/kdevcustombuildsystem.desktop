@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[de]=Eigenes Build-System
 Name[es]=Sistema de construcción personalizado
+Name[nl]=Eigen bouwsysteem
 Name[pt]=Sistema de Compilação Personalizado
 Name[pt_BR]=Sistema de compilação personalizado
 Name[sv]=Eget byggsystem
@@ -9,6 +11,7 @@ Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Comment=Allows to use custom buildsystems for KDevelop projects
 Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop
+Comment[nl]=Staat toe eigengemaakte bouwsystemen voor projecten van KDevelop te gebruiken
 Comment[pt]=Permite usar sistemas de compilação personalizados para os projectos do KDevelop
 Comment[pt_BR]=Permite usar sistemas de compilação personalizados para projetos do KDevelop
 Comment[sv]=Gör det möjligt att använda egna byggsystem för projekt i KDevelop
