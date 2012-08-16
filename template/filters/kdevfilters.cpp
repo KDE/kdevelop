@@ -19,6 +19,11 @@
 
 #include "kdevfilters.h"
 
+#include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/types/structuretype.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+
 #include <KDebug>
 
 using namespace KDevelop;
@@ -117,6 +122,32 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
     return Grantlee::SafeString(retLines.join(QString('\n')));
 }
 
+QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,
+                                       bool /*autoescape*/) const
+{
+    QString type = getSafeString(input);
+
+    DUChainReadLocker locker(DUChain::lock());
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)));
+
+    for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
+    {
+        DeclarationPointer declaration = DeclarationPointer(it->declaration());
+        if(declaration->isForwardDeclaration())
+        {
+            continue;
+        }
+        
+        // Check if it's a class/struct/etc
+        if(declaration->type<StructureType>())
+        {
+            QString refType = QString("const %1&").arg(type);
+            return Grantlee::SafeString(refType);
+        }
+    }
+
+    return Grantlee::SafeString(type);
+}
 
 KDevFilters::KDevFilters(QObject* parent)
 : QObject(parent)
@@ -139,6 +170,7 @@ QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
     filters["underscores"] = new UnderscoreFilter();
     filters["lines_prepend"] = new SplitLinesFilter();
     filters["upper_first"] = new UpperFirstFilter();
+    filters["arg_type"] = new ArgumentTypeFilter();
 
     return filters;
 }

@@ -68,6 +68,14 @@ public:
                               bool autoescape = false) const;
 };
 
+class ArgumentTypeFilter : public Grantlee::Filter
+{
+public:
+    virtual QVariant doFilter(const QVariant& input,
+                              const QVariant& argument = QVariant(),
+                              bool autoescape = false) const;
+};
+
 class KDevFilters : public QObject, public Grantlee::TagLibraryInterface
 {
     Q_OBJECT
