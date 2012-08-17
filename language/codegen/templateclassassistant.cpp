@@ -127,17 +127,11 @@ TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& base
     ZERO_PAGE(output)
     ZERO_PAGE(testCases)
 
-    d->helper = 0;
-    d->generator = 0;
-    d->renderer = 0;
-
     setup();
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
 {
-    delete d->generator;
-    delete d->helper;
     delete d;
 }
 
@@ -366,9 +360,18 @@ void TemplateClassAssistant::back()
         REMOVE_PAGE(license)
 
         delete d->helper;
-        delete d->generator;
         d->helper = 0;
+
+        if (d->generator)
+        {
+            delete d->generator;
+        }
+        else
+        {
+            delete d->renderer;
+        }
         d->generator = 0;
+        d->renderer = 0;
 
         if (d->baseUrl.isValid())
         {
