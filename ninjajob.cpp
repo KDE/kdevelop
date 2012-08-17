@@ -40,7 +40,7 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     m_process->setArguments( arguments );
     m_process->setWorkingDirectory(dir.toLocalFile(KUrl::RemoveTrailingSlash));
     
-    m_model = new KDevelop::OutputModel(this);
+    m_model = new KDevelop::OutputModel(dir, this);
     setModel( m_model );
     m_model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
 
