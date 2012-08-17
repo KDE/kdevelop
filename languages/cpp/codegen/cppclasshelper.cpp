@@ -92,7 +92,8 @@ QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) co
     << "    bool operator==(const " << name << "& other) const;\n"
     << "};\n";
     file.close();
-    ReferencedTopDUContext context(DUChain::self()->waitForUpdate( IndexedString(file.fileName()), KDevelop::TopDUContext::AllDeclarationsAndContexts ));
+    ReferencedTopDUContext context(DUChain::self()->waitForUpdate( IndexedString(file.fileName()),
+                                                                   TopDUContext::AllDeclarationsAndContexts ));
     DUChainReadLocker lock;
 
     QList<DeclarationPointer> methods;
