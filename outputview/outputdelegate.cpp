@@ -57,16 +57,21 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     QVariant status = index.data(OutputModel::OutputItemTypeRole);
     if( status.isValid() ) {
         FilteredItem::FilteredOutputItemType type = static_cast<FilteredItem::FilteredOutputItemType>(status.toInt());
-        if( type == FilteredItem::ErrorItem ) {
-            opt.palette.setBrush( QPalette::Text, d->errorBrush.brush( option.palette ) );
-            opt.font.setBold( true );
-        } else if( type == FilteredItem::WarningItem ) {
-            opt.palette.setBrush( QPalette::Text, d->warningBrush.brush( option.palette ) );
-        } else if( type == FilteredItem::InformationItem ) {
-            opt.palette.setBrush( QPalette::Text, d->informationBrush.brush( option.palette ) );
-        } else if( type == FilteredItem::ActionItem ) {
-            opt.palette.setBrush( QPalette::Text, d->builtBrush.brush( option.palette ) );
-            opt.font.setBold( true );
+        switch(type) {
+            case FilteredItem::ErrorItem:
+                opt.palette.setBrush( QPalette::Text, d->errorBrush.brush( option.palette ) );
+                opt.font.setBold( true );
+                break;
+            case FilteredItem::WarningItem:
+                opt.palette.setBrush( QPalette::Text, d->warningBrush.brush( option.palette ) );
+                break;
+            case FilteredItem::InformationItem:
+                opt.palette.setBrush( QPalette::Text, d->informationBrush.brush( option.palette ) );
+                break;
+            case FilteredItem::ActionItem:
+                opt.palette.setBrush( QPalette::Text, d->builtBrush.brush( option.palette ) );
+                opt.font.setBold( true );
+                break;
         }
     }
     QItemDelegate::paint(painter, opt, index);
