@@ -61,6 +61,9 @@ using namespace KDevelop;
 class KDevelop::TemplateClassAssistantPrivate
 {
 public:
+    TemplateClassAssistantPrivate(const KUrl& baseUrl);
+    ~TemplateClassAssistantPrivate();
+
     KPageWidgetItem* templateSelectionPage;
     KPageWidgetItem* classIdentifierPage;
     KPageWidgetItem* overridesPage;
@@ -80,22 +83,41 @@ public:
     TemplateOptionsPage* templateOptionsPageWidget;
     OutputPage* outputPageWidget;
 
+    KUrl baseUrl;
     SourceFileTemplate fileTemplate;
     ICreateClassHelper* helper;
     TemplateClassGenerator* generator;
     TemplateRenderer* renderer;
-    KUrl baseUrl;
 
     QString type;
     QVariantHash templateOptions;
 };
 
+TemplateClassAssistantPrivate::TemplateClassAssistantPrivate(const KUrl& baseUrl)
+: baseUrl(baseUrl)
+, helper(0)
+, generator(0)
+, renderer(0)
+{
+}
+
+TemplateClassAssistantPrivate::~TemplateClassAssistantPrivate()
+{
+    delete helper;
+    if (generator)
+    {
+        delete generator;
+    }
+    else
+    {
+        delete renderer;
+    }
+}
+
 TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& baseUrl)
 : KAssistantDialog(parent)
-, d(new TemplateClassAssistantPrivate)
+, d(new TemplateClassAssistantPrivate(baseUrl))
 {
-    d->baseUrl = baseUrl;
-
     ZERO_PAGE(templateSelection)
     ZERO_PAGE(templateOptions)
     ZERO_PAGE(members)
@@ -104,7 +126,6 @@ TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& base
     ZERO_PAGE(license)
     ZERO_PAGE(output)
     ZERO_PAGE(testCases)
-    d->dummyPage = 0;
 
     setup();
 }
@@ -187,8 +208,6 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
         setValid(d->testCasesPage, true);
 
-        ///FIXME: this is leaking! who owns the renderer, see also above,
-        ///       should it be TemplateClassGenerator::createRenderer?
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
         d->renderer->addArchive(d->fileTemplate.directory());
