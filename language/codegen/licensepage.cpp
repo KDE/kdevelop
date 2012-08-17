@@ -115,14 +115,14 @@ QString& LicensePagePrivate::readLicense(int licenseIndex)
         /* Add date, name and email to license text */
         licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
         QString developer("%1 <%2>");
-        KEMailSettings* emailSettings = new KEMailSettings();
-        QString name = emailSettings->getSetting(KEMailSettings::RealName);
+        KEMailSettings emailSettings;
+        QString name = emailSettings.getSetting(KEMailSettings::RealName);
         if (name.isEmpty())
         {
             name = "<copyright holder>";
         }
         developer = developer.arg(name);
-        QString email = emailSettings->getSetting(KEMailSettings::EmailAddress);
+        QString email = emailSettings.getSetting(KEMailSettings::EmailAddress);
         if (email.isEmpty())
         {
             email = "email"; //no < > as they are already through the email field
