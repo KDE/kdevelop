@@ -14,6 +14,8 @@ set(filetemplate_DIRS
     testing/cpp_qtestlib_kdevelop
     testing/python_pyunit
     testing/php_phpunit
+
+    other/cmake_module
 )
 
 kdevplatform_add_file_templates(${filetemplate_DIRS})

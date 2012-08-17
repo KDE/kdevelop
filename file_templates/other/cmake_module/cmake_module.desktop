@@ -1,0 +1,11 @@
+[General]
+Name=CMake Module with pkg-config
+Comment=CMake module for finding a library using pkg-config
+Category=CMake/Module
+Files=Module
+OptionsFile=options.kcfg
+
+[Module]
+Name=Module
+File=output.cmake
+OutputFile=Find{{ name|capfirst }}.cmake
