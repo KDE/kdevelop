@@ -218,12 +218,15 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->generator->setTemplateDescription(d->fileTemplate);
         d->renderer = d->generator->renderer();
     }
-    else if (d->type == "Test")
+    else
     {
-        d->testCasesPageWidget = new TestCasesPage(this);
-        d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
-        connect(d->testCasesPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
-        setValid(d->testCasesPage, false);
+        if (d->type == "Test")
+        {
+            d->testCasesPageWidget = new TestCasesPage(this);
+            d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
+            connect(d->testCasesPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+            setValid(d->testCasesPage, false);
+        }
 
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
