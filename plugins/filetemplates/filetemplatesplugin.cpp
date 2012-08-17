@@ -2,6 +2,7 @@
 #include "templatepreview.h"
 
 #include <language/codegen/templatesmodel.h>
+#include <language/codegen/templateclassassistant.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
@@ -10,6 +11,9 @@
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KActionCollection>
+#include <KAction>
+#include <QApplication>
 
 #define debug() kDebug(debugArea())
 
@@ -47,6 +51,14 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
+
+    setXMLFile("kdevfiletemplates.rc");
+    KAction* action = actionCollection()->addAction("new_from_template");
+    action->setText( i18n( "New from Template" ) );
+    action->setIcon( KIcon( "code-class" ) );
+    action->setWhatsThis( i18n( "<b>Create new files from a template</b><br/>Allows you to create new source code files, such as classes or unit tests, using templates." ) );
+    action->setStatusTip( i18n( "Create new files from a template" ) );
+    connect (action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
 
     m_model = new TemplatesModel(core()->self()->componentData(), this);
     m_model->setDescriptionResourceType("filetemplate_descriptions");
@@ -104,4 +116,10 @@ void FileTemplatesPlugin::reload()
 void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 {
     m_model->loadTemplateFile(fileName);
+}
+
+void FileTemplatesPlugin::createFromTemplate()
+{
+    TemplateClassAssistant assistant(QApplication::activeWindow());
+    assistant.exec();
 }

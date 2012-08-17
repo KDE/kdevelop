@@ -30,9 +30,13 @@ public:
 
     virtual void reload();
     virtual void loadTemplate(const QString& fileName);
+
 private:
     KDevelop::TemplatesModel* m_model;
     KDevelop::IToolViewFactory* m_toolView;
+
+public slots:
+    void createFromTemplate();
 };
 
 #endif // FILETEMPLATESPLUGIN_H
