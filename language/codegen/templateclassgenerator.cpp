@@ -34,11 +34,8 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
-#include <KArchive>
-#include <KZip>
 #include <KComponentData>
 #include <KStandardDirs>
-#include <KTar>
 
 #include <grantlee/engine.h>
 #include <grantlee/metatype.h>
