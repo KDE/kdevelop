@@ -76,6 +76,7 @@ void NinjaJob::slotCompleted()
 
 void NinjaJob::slotFailed(QProcess::ProcessError error)
 {
+    Q_UNUSED( error )
     setError(Failed);
     // FIXME need more detail
     setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
