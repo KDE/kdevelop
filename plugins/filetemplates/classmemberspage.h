@@ -17,38 +17,37 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "defaultcreateclasshelper.h"
-#include "templateclassgenerator.h"
-#include "templateclassassistant.h"
-#include "overridespage.h"
-#include "classidentifierpage.h"
+#ifndef KDEVELOP_CLASSMEMBERSPAGE_H
+#define KDEVELOP_CLASSMEMBERSPAGE_H
 
-using namespace KDevelop;
+#include <QWidget>
 
-class KDevelop::DefaultCreateClassHelperPrivate
+#include <language/codegen/codedescription.h>
+
+/**
+ * Assistant dialog page for declaring data members of a new class
+ *
+ */
+class ClassMembersPage : public QWidget
 {
+    Q_OBJECT
+    Q_PROPERTY(KDevelop::VariableDescriptionList members READ members WRITE setMembers)
+
 public:
-    TemplateClassAssistant* assistant;
+    explicit ClassMembersPage(QWidget* parent);
+    virtual ~ClassMembersPage();
+
+    /**
+     * @return The list of data members, as entered by the user.
+     */
+    KDevelop::VariableDescriptionList members() const;
+    /**
+     * Set the list of data members to @p members.
+     */
+    void setMembers(const KDevelop::VariableDescriptionList& members);
+
+private:
+    class ClassMembersPagePrivate* const d;
 };
 
-DefaultCreateClassHelper::DefaultCreateClassHelper(TemplateClassAssistant* assistant)
-: d(new DefaultCreateClassHelperPrivate)
-{
-    d->assistant = assistant;
-}
-
-DefaultCreateClassHelper::~DefaultCreateClassHelper()
-{
-    delete d;
-}
-
-KDevelop::TemplateClassGenerator* DefaultCreateClassHelper::createGenerator()
-{
-    return new TemplateClassGenerator(d->assistant->baseUrl());
-}
-
-QList< DeclarationPointer > DefaultCreateClassHelper::defaultMethods(const QString& name) const
-{
-    Q_UNUSED(name);
-    return QList<DeclarationPointer>();
-}
+#endif // KDEVELOP_CLASSMEMBERSPAGE_H

@@ -23,6 +23,8 @@
 #include "../languageexport.h"
 #include <language/duchain/duchainpointer.h>
 
+class KUrl;
+
 namespace KDevelop {
 
 class TemplateClassGenerator;
@@ -45,7 +47,7 @@ public:
      *
      * The caller takes ownership of the returned object.
      **/
-    virtual TemplateClassGenerator* createGenerator() = 0;
+    virtual TemplateClassGenerator* createGenerator(const KUrl& url) = 0;
 
     /**
      * Returns a list of suggested default methods for a new class named @p name.

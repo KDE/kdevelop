@@ -20,18 +20,11 @@
 #define KDEV_CLASSIDENTIFIERPAGE_H
 
 #include <QWidget>
-#include "../languageexport.h"
-
-#include "../duchain/identifier.h"
-
-class KLineEdit;
-
-namespace KDevelop {
 
 /**
  * Assistant dialog page for setting the identifier and inheritances of a new class
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWidget
+class ClassIdentifierPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QStringList inheritance READ inheritanceList)
@@ -77,7 +70,5 @@ private Q_SLOTS:
 private:
     class ClassIdentifierPagePrivate* const d;
 };
-
-}
 
 #endif // KDEV_CLASSIDENTIFIERPAGE_H

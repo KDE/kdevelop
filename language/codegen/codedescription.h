@@ -34,7 +34,8 @@ if (property == #name) return QVariant::fromValue(object.name);
 #define GRANTLEE_LOOKUP_LIST_PROPERTY(name)     \
 if (property == #name) return QVariant::fromValue(KDevelop::CodeDescription::toVariantList(object.name));
 
-namespace KDevelop {
+namespace KDevelop
+{
 
 /**
  * @brief Represents a variable

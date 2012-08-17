@@ -19,8 +19,9 @@
 
 #include "templateoptionspage.h"
 #include "templateclassassistant.h"
-#include "templateclassgenerator.h"
-#include "sourcefiletemplate.h"
+
+#include <language/codegen/templateclassgenerator.h>
+#include <language/codegen/sourcefiletemplate.h>
 
 #include <KLineEdit>
 #include <KIntNumInput>

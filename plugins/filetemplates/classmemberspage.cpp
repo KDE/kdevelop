@@ -28,8 +28,7 @@
 
 using namespace KDevelop;
 
-
-class KDevelop::ClassMembersPagePrivate
+class ClassMembersPagePrivate
 {
 public:
     KEditListWidget* editListWidget;

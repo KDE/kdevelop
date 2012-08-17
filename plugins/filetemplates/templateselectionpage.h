@@ -21,7 +21,7 @@
 #define KDEVELOP_TEMPLATESELECTIONPAGE_H
 
 #include <QWidget>
-#include "../languageexport.h"
+
 
 class QModelIndex;
 
@@ -33,7 +33,7 @@ class TemplateClassAssistant;
 /**
  * An assistant page for selecting a class template
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateSelectionPage : public QWidget
+class TemplateSelectionPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString selectedTemplate READ selectedTemplate)

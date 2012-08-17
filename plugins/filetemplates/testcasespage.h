@@ -23,7 +23,7 @@
 
 #include <QtGui/QWidget>
 
-#include "../languageexport.h"
+
 
 class KEditListWidget;
 
@@ -34,7 +34,7 @@ namespace KDevelop
  * Assistant page for specifying the list of test cases
  *
  */
-class KDEVPLATFORMLANGUAGE_EXPORT TestCasesPage : public QWidget
+class TestCasesPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QStringList testCases READ testCases WRITE setTestCases)

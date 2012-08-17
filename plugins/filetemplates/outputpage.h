@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <KUrl>
 
-#include "../languageexport.h"
+
 #include <language/editor/simplecursor.h>
 
 class KUrl;
@@ -35,7 +35,7 @@ class CreateClassAssistant;
 /**
  * Assistant page for setting the output location of generated source code
  */
-class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWidget
+class OutputPage : public QWidget
 {
     Q_OBJECT
 

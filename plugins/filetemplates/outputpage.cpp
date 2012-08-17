@@ -19,8 +19,8 @@
 #include "outputpage.h"
 #include "ui_outputlocation.h"
 
-#include "sourcefiletemplate.h"
-#include "templaterenderer.h"
+#include <language/codegen/sourcefiletemplate.h>
+#include <language/codegen/templaterenderer.h>
 
 #include <KUrlRequester>
 #include <KIntNumInput>

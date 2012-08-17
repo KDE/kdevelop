@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-#include "../languageexport.h"
+
 
 namespace KDevelop {
 
@@ -30,7 +30,7 @@ namespace KDevelop {
  *
  * @todo Add the name of the Author at the top of the license
  */
-class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWidget
+class LicensePage : public QWidget
 {
     Q_OBJECT
 

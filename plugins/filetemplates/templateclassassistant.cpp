@@ -27,19 +27,19 @@
 #include "licensepage.h"
 #include "outputpage.h"
 #include "testcasespage.h"
-
-#include "templateclassgenerator.h"
-#include "sourcefiletemplate.h"
 #include "defaultcreateclasshelper.h"
-#include "documentchangeset.h"
-#include "templaterenderer.h"
 
-#include "interfaces/icore.h"
-#include "interfaces/ilanguagecontroller.h"
-#include "interfaces/ilanguagesupport.h"
-#include "interfaces/ilanguage.h"
-#include "interfaces/idocumentcontroller.h"
-#include "interfaces/icreateclasshelper.h"
+#include <language/codegen/templateclassgenerator.h>
+#include <language/codegen/sourcefiletemplate.h>
+#include <language/codegen/documentchangeset.h>
+#include <language/codegen/templaterenderer.h>
+#include <language/interfaces/icreateclasshelper.h>
+#include <language/interfaces/ilanguagesupport.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -204,16 +204,16 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         ILanguage* language = ICore::self()->languageController()->language(languageName);
         if (language && language->languageSupport())
         {
-            d->helper = language->languageSupport()->createClassHelper(this);
+            d->helper = language->languageSupport()->createClassHelper();
         }
 
         if (!d->helper)
         {
             kDebug() << "No class creation helper for language" << languageName;
-            d->helper = new DefaultCreateClassHelper(this);
+            d->helper = new DefaultCreateClassHelper;
         }
 
-        d->generator = d->helper->createGenerator();
+        d->generator = d->helper->createGenerator(d->baseUrl);
         Q_ASSERT(d->generator);
         d->generator->setTemplateDescription(d->fileTemplate);
         d->renderer = d->generator->renderer();

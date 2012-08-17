@@ -45,7 +45,6 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
-#include <language/codegen/templateclassassistant.h>
 
 #include "projectmanagerview.h"
 #include "builditembuilderjob.h"
@@ -606,27 +605,6 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
                 if(f)
                     item->project()->buildSystemManager()->addFilesToTarget(QList<ProjectFileItem*>() << f, item->target());
             }
-        }
-    }
-}
-
-void ProjectManagerViewPlugin::createFromTemplateFromContextMenu()
-{
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        KUrl url;
-        if (item->folder())
-        {
-            url = item->url();
-        }
-        else if (item->target())
-        {
-            url = item->parent()->url();
-        }
-        if (url.isValid())
-        {
-            KDevelop::TemplateClassAssistant assistant(QApplication::activeWindow(), url);
-            assistant.exec();
         }
     }
 }

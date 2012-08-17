@@ -46,7 +46,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/types/functiontype.h>
-#include <language/codegen/templateclassassistant.h>
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
 #include <language/codegen/sourcefiletemplate.h>

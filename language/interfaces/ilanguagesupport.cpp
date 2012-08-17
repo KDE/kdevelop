@@ -54,7 +54,7 @@ ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
     return 0;
 }
 
-ICreateClassHelper* ILanguageSupport::createClassHelper(TemplateClassAssistant* assistant) const {
+ICreateClassHelper* ILanguageSupport::createClassHelper() const {
     return 0;
 }
 

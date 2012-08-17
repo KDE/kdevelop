@@ -20,8 +20,6 @@
 #ifndef KDEVELOP_TEMPLATECLASSASSISTANT_H
 #define KDEVELOP_TEMPLATECLASSASSISTANT_H
 
-#include "codedescription.h"
-
 #include <KAssistantDialog>
 
 namespace KDevelop
@@ -40,7 +38,7 @@ namespace KDevelop
  * If no such helper exists for the chosen template, a generic implementation is used.
  * The actual generation of classes is done using a TemplateClassGenerator.
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassAssistant : public KAssistantDialog
+class TemplateClassAssistant : public KAssistantDialog
 {
     Q_OBJECT
 public:

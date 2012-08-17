@@ -31,7 +31,7 @@ namespace KDevelop {
 /**
  * Assistant page for choosing class functions, overriden from base classes. 
  */
-class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWidget
+class OverridesPage : public QWidget
 {
     Q_OBJECT
 

@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QVariantHash>
 
-#include "../languageexport.h"
+
 
 namespace KDevelop
 {
@@ -42,7 +42,7 @@ class TemplateClassAssistant;
  * 
  * @sa SourceFileTemplate::customOptions()
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplateOptionsPage : public QWidget
+class TemplateOptionsPage : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariantHash templateOptions READ templateOptions)

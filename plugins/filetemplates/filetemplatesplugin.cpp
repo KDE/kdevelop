@@ -1,10 +1,13 @@
 #include "filetemplatesplugin.h"
 #include "templatepreview.h"
+#include "templateclassassistant.h"
 
 #include <language/codegen/templatesmodel.h>
-#include <language/codegen/templateclassassistant.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
+#include <project/projectmodel.h>
 
 #include <KIcon>
 #include <KDebug>
@@ -79,6 +82,42 @@ void FileTemplatesPlugin::unload()
     core()->uiController()->removeToolView(m_toolView);
 }
 
+ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context)
+{
+    if (context->type() != Context::ProjectItemContext)
+    {
+        return IPlugin::contextMenuExtension(context);
+    }
+
+    ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context);
+    QList<ProjectBaseItem*> items = projectContext->items();
+    if (items.size() != 1)
+    {
+        return IPlugin::contextMenuExtension(context);
+    }
+
+    ContextMenuExtension ext;
+    KUrl url;
+    ProjectBaseItem* item = items.first();
+    if (item->folder())
+    {
+        url = item->url();
+    }
+    else if (item->target())
+    {
+        url = item->parent()->url();
+    }
+    if (url.isValid())
+    {
+        KAction* action = new KAction(i18n("Create from Template"), this);
+        action->setIcon(KIcon("code-class"));
+        connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
+        ext.addAction(ContextMenuExtension::FileGroup, action);
+    }
+
+    return ext;
+}
+
 QString FileTemplatesPlugin::name() const
 {
     return i18n("File Templates");
@@ -120,6 +159,11 @@ void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 
 void FileTemplatesPlugin::createFromTemplate()
 {
+    KUrl baseUrl;
+    if (QAction* action = qobject_cast<QAction*>(sender()))
+    {
+        baseUrl = action->data().value<KUrl>();
+    }
     TemplateClassAssistant assistant(QApplication::activeWindow());
     assistant.exec();
 }

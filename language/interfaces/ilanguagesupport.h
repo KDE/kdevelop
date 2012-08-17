@@ -34,7 +34,6 @@ class SimpleCursor;
 class SimpleRange;
 class ICodeHighlighting;
 class DocumentChangeTracker;
-class TemplateClassAssistant;
 class ICreateClassHelper;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
@@ -79,12 +78,8 @@ public:
      *
      * If zero is returned, a default class helper will be created.
      * Reimplementing this method is therefore not necessary to have classes created in this language.
-     *
-     * @param assistant the assistant dialog that will be using this helper.
-     * It should be set as parent to all dialog pages created by this helper,
-     * and can be used for getting information about the new class.
      * */
-    virtual ICreateClassHelper* createClassHelper(TemplateClassAssistant* assistant) const;
+    virtual ICreateClassHelper* createClassHelper() const;
 
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.

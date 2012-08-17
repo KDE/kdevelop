@@ -21,8 +21,6 @@
 
 #include "ui_newclass.h"
 
-namespace KDevelop {
-
 struct ClassIdentifierPagePrivate
 {
     ClassIdentifierPagePrivate()
@@ -74,6 +72,4 @@ QStringList ClassIdentifierPage::inheritanceList() const
 void ClassIdentifierPage::setInheritanceList (const QStringList& list)
 {
     d->classid->keditlistwidget->setItems(list);
-}
-
 }

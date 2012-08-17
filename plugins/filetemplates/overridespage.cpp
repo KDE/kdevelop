@@ -19,14 +19,14 @@
 #include "overridespage.h"
 #include "ui_overridevirtuals.h"
 
-#include "../duchain/duchain.h"
-#include "../duchain/persistentsymboltable.h"
-#include "../duchain/duchainlock.h"
-#include "../duchain/types/alltypes.h"
-#include "../duchain/classmemberdeclaration.h"
-#include "../duchain/abstractfunctiondeclaration.h"
-#include "../duchain/duchainutils.h"
-#include "../duchain/classfunctiondeclaration.h"
+#include <language/duchain/duchain.h>
+#include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/types/alltypes.h>
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/classfunctiondeclaration.h>
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

@@ -114,24 +114,14 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
     codegen/komparesupport.cpp
-    codegen/overridespage.cpp
     codegen/utilities.cpp
     codegen/templatesmodel.cpp
     codegen/multilevellistview.cpp
     codegen/templateclassgenerator.cpp
-    codegen/templateclassassistant.cpp
     codegen/codedescription.cpp
-    codegen/archivetemplateloader.cpp
-    codegen/templateoptionspage.cpp
-    codegen/templateselectionpage.cpp
-    codegen/classmemberspage.cpp
-    codegen/classidentifierpage.cpp
-    codegen/licensepage.cpp
-    codegen/outputpage.cpp
-    codegen/defaultcreateclasshelper.cpp
-    codegen/templaterenderer.cpp
     codegen/sourcefiletemplate.cpp
-    codegen/testcasespage.cpp
+    codegen/templaterenderer.cpp
+    codegen/archivetemplateloader.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -141,19 +131,6 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/configurablecolors.cpp
     highlighting/codehighlighting.cpp
 )
-
-set( kdevplatformlanguage_LIB_UI
-    codegen/ui/newclass.ui
-    codegen/ui/overridevirtuals.ui
-    codegen/ui/licensechooser.ui
-    codegen/ui/outputlocation.ui
-    codegen/ui/templateselection.ui
-    codegen/ui/classmembers.ui
-    codegen/ui/testcases.ui
-)
-
-kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} )
-
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage
@@ -328,7 +305,6 @@ install(FILES
 
 install(FILES
     codegen/applychangeswidget.h
-    codegen/overridespage.h
     codegen/astchangeset.h
     codegen/duchainchangeset.h
     codegen/documentchangeset.h
@@ -336,20 +312,12 @@ install(FILES
     codegen/utilities.h
     codegen/templatesmodel.h
     codegen/multilevellistview.h
-    codegen/templateclassgenerator.h
-    codegen/templateclassassistant.h
-    codegen/codedescription.h
-    codegen/archivetemplateloader.h
-    codegen/templateoptionspage.h
-    codegen/templateselectionpage.h
-    codegen/classmemberspage.h
-    codegen/classidentifierpage.h
-    codegen/licensepage.h
-    codegen/outputpage.h
-    codegen/defaultcreateclasshelper.h
     codegen/templaterenderer.h
     codegen/sourcefiletemplate.h
-    codegen/testcasespage.h
+    codegen/templateclassgenerator.h
+    codegen/codedescription.h
+    codegen/sourcefiletemplate.h
+    codegen/archivetemplateloader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
@@ -382,9 +350,4 @@ install(FILES
     codegen/licenses/MIT\ X11
     codegen/licenses/Mozilla\ v1.1
     DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
-)
-
-install(FILES
-    codegen/kdevfiletemplates.knsrc
-    DESTINATION ${CONFIG_INSTALL_DIR}
 )

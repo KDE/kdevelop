@@ -19,11 +19,11 @@
 
 #include "templateselectionpage.h"
 #include "templateclassassistant.h"
-#include "templatesmodel.h"
 
-#include <interfaces/icreateclasshelper.h>
-#include <interfaces/ilanguagesupport.h>
-#include "interfaces/icore.h"
+#include <language/codegen/templatesmodel.h>
+#include <language/interfaces/icreateclasshelper.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/iproject.h>
@@ -31,7 +31,6 @@
 #include <interfaces/isession.h>
 
 #include "ui_templateselection.h"
-#include "ui_classmembers.h"
 
 #include <KNS3/DownloadDialog>
 #include <KNS3/KNewStuffButton>

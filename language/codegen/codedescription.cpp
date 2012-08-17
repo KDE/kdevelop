@@ -18,12 +18,12 @@
 */
 
 #include "codedescription.h"
-#include <duchain/duchainlock.h>
-#include <duchain/duchain.h>
-#include <duchain/declaration.h>
-#include <duchain/types/functiontype.h>
-#include <duchain/classfunctiondeclaration.h>
-#include <duchain/functiondeclaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondeclaration.h>
 
 #include <KLocalizedString>
 

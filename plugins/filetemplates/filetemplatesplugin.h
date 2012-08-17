@@ -22,6 +22,8 @@ public:
     virtual ~FileTemplatesPlugin();
     virtual void unload();
 
+    virtual KDevelop::ContextMenuExtension contextMenuExtension (KDevelop::Context* context);
+
     virtual QString name() const;
     virtual QIcon icon() const;
     virtual QAbstractItemModel* templatesModel() const;

@@ -17,48 +17,30 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_CLASSMEMBERSPAGE_H
-#define KDEVELOP_CLASSMEMBERSPAGE_H
+#ifndef KDEVELOP_DEFAULTCREATECLASSHELPER_H
+#define KDEVELOP_DEFAULTCREATECLASSHELPER_H
 
-#include <QWidget>
-
-#include "../languageexport.h"
-#include "codedescription.h"
-
-class QItemSelection;
-
-namespace KDevelop
-{
-
-class TemplateClassAssistant;
-class TemplateSelectionPage;
+#include <language/interfaces/icreateclasshelper.h>
 
 /**
- * Assistant dialog page for declaring data members of a new class
+ * A default class creation helper.
  *
+ * This is used when no custom helper is supplied by the language plugin.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassMembersPage : public QWidget
+class DefaultCreateClassHelper : public KDevelop::ICreateClassHelper
 {
-    Q_OBJECT
-    Q_PROPERTY(KDevelop::VariableDescriptionList members READ members WRITE setMembers)
-
 public:
-    explicit ClassMembersPage(QWidget* parent);
-    virtual ~ClassMembersPage();
+    DefaultCreateClassHelper();
+    virtual ~DefaultCreateClassHelper();
 
     /**
-     * @return The list of data members, as entered by the user.
+     * @return a new @c TemplateClassGenerator.
      */
-    VariableDescriptionList members() const;
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const KUrl& baseUrl);
     /**
-     * Set the list of data members to @p members.
+     * @return an empty list of methods.
      */
-    void setMembers(const VariableDescriptionList& members);
-
-private:
-    class ClassMembersPagePrivate* const d;
+    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
 };
 
-}
-
-#endif // KDEVELOP_CLASSMEMBERSPAGE_H
+#endif // KDEVELOP_DEFAULTCREATECLASSHELPER_H
