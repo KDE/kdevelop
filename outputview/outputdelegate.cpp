@@ -72,6 +72,8 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
                 opt.palette.setBrush( QPalette::Text, d->builtBrush.brush( option.palette ) );
                 opt.font.setBold( true );
                 break;
+            default:
+                break;
         }
     }
     QItemDelegate::paint(painter, opt, index);
