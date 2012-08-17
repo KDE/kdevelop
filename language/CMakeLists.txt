@@ -110,8 +110,6 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/normaldeclarationcompletionitem.cpp
 
     codegen/applychangeswidget.cpp
-    #codegen/createclass.cpp
-    #codegen/codegenerator.cpp
     codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
@@ -127,7 +125,6 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/templateoptionspage.cpp
     codegen/templateselectionpage.cpp
     codegen/classmemberspage.cpp
-    #codegen/classgenerator.cpp
     codegen/classidentifierpage.cpp
     codegen/licensepage.cpp
     codegen/outputpage.cpp
@@ -331,11 +328,9 @@ install(FILES
 
 install(FILES
     codegen/applychangeswidget.h
-    codegen/createclass.h
     codegen/overridespage.h
     codegen/astchangeset.h
     codegen/duchainchangeset.h
-    #codegen/codegenerator.h
     codegen/documentchangeset.h
     codegen/coderepresentation.h
     codegen/utilities.h
@@ -348,7 +343,6 @@ install(FILES
     codegen/templateoptionspage.h
     codegen/templateselectionpage.h
     codegen/classmemberspage.h
-    codegen/classgenerator.h
     codegen/classidentifierpage.h
     codegen/licensepage.h
     codegen/outputpage.h

@@ -19,7 +19,6 @@
 #include "outputpage.h"
 #include "ui_outputlocation.h"
 
-#include "createclass.h"
 #include "sourcefiletemplate.h"
 #include "templaterenderer.h"
 

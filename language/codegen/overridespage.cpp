@@ -17,12 +17,7 @@
 */
 
 #include "overridespage.h"
-#include "createclass.h"
-#include "classgenerator.h"
-
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QHeaderView>
+#include "ui_overridevirtuals.h"
 
 #include "../duchain/duchain.h"
 #include "../duchain/persistentsymboltable.h"
@@ -33,7 +28,9 @@
 #include "../duchain/duchainutils.h"
 #include "../duchain/classfunctiondeclaration.h"
 
-#include "ui_overridevirtuals.h"
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QHeaderView>
 
 using namespace KDevelop;
 
