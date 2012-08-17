@@ -41,8 +41,7 @@
 
 using namespace KDevelop;
 
-CppClassHelper::CppClassHelper(KDevelop::TemplateClassAssistant* assistant)
-: m_assistant(assistant)
+CppClassHelper::CppClassHelper()
 {
 
 }
@@ -52,15 +51,14 @@ CppClassHelper::~CppClassHelper()
 
 }
 
-TemplateClassGenerator* CppClassHelper::createGenerator()
+TemplateClassGenerator* CppClassHelper::createGenerator(const KUrl& baseUrl)
 {
-    KUrl url = m_assistant->baseUrl();
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(baseUrl);
     ProjectBaseItem* item = 0;
 
     if (project)
     {
-        QList<ProjectBaseItem*> items = project->itemsForUrl(url);
+        QList<ProjectBaseItem*> items = project->itemsForUrl(baseUrl);
 
         if (!items.isEmpty())
         {

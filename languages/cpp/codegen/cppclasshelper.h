@@ -25,7 +25,6 @@
 
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/codegen/templateclassgenerator.h>
-#include <language/codegen/templateclassassistant.h>
 
 #include "cpptypes.h"
 
@@ -38,14 +37,11 @@ class CppClassHelper : public KDevelop::ICreateClassHelper
 {
 
 public:
-    CppClassHelper(KDevelop::TemplateClassAssistant* assistant);
+    CppClassHelper();
     virtual ~CppClassHelper();
 
-    virtual KDevelop::TemplateClassGenerator* createGenerator();
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const KUrl& baseUrl);
     virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
-
-private:
-    KDevelop::TemplateClassAssistant* m_assistant;
 };
 
 /**

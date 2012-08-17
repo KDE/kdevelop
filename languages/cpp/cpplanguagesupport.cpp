@@ -423,9 +423,9 @@ KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
     return m_highlights;
 }
 
-ICreateClassHelper* CppLanguageSupport::createClassHelper (TemplateClassAssistant* assistant) const
+ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 {
-    return new CppClassHelper(assistant);
+    return new CppClassHelper;
 }
 
 
