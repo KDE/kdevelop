@@ -236,11 +236,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         action->setIcon(KIcon("document-new"));
         connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
-
-        action = new KAction( i18n( "Create from Template" ), this );
-        action->setIcon(KIcon("code-class"));
-        connect( action, SIGNAL(triggered()), this, SLOT(createFromTemplateFromContextMenu()) );
-        menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
         KAction* action = new KAction( i18n( "Create Folder" ), this );
