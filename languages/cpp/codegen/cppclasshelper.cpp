@@ -322,12 +322,3 @@ void CppTemplateNewClass::addBaseClass(const QString& base)
   //Call base function with the access specifier
   TemplateClassGenerator::addBaseClass(splitBase.join(" "));
 }
-
-void CppTemplateNewClass::setIdentifier(const QString& identifier)
-{
-  QStringList list = identifier.split("::");
-  setName(list.takeLast());
-  setNamespaces(list);
-}
-
-

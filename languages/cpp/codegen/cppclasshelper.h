@@ -85,8 +85,6 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 
     void addBaseClass(const QString& base);
 
-    virtual void setIdentifier(const QString& identifier);
-
   private:
     KDevelop::ProjectBaseItem* m_parentItem;
 };
