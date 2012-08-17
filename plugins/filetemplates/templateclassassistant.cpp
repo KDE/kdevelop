@@ -110,6 +110,8 @@ TemplateClassAssistantPrivate::~TemplateClassAssistantPrivate()
     }
     else
     {
+        // if we got a generator, it should keep ownership of the renderer
+        // otherwise, we created a templaterenderer on our own
         delete renderer;
     }
 }
