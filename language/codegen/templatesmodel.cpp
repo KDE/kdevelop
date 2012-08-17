@@ -158,14 +158,14 @@ void TemplatesModel::extractTemplateDescriptions()
     {
         kDebug() << "processing template" << archName;
 
-        KArchive* templateArchive;
+        QScopedPointer<KArchive> templateArchive;
         if (QFileInfo(archName).completeSuffix() == "zip")
         {
-            templateArchive = new KZip(archName);
+            templateArchive.reset(new KZip(archName));
         }
         else
         {
-            templateArchive = new KTar(archName);
+            templateArchive.reset(new KTar(archName));
         }
 
         if (templateArchive->open(QIODevice::ReadOnly))
