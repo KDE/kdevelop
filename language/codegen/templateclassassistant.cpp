@@ -143,7 +143,14 @@ TemplateClassAssistant::~TemplateClassAssistant()
 
 void TemplateClassAssistant::setup()
 {
-    setWindowTitle(i18n("Create from Template in <filename>%1</filename>", baseUrl().prettyUrl()));
+    if (d->baseUrl.isValid())
+    {
+        setWindowTitle(i18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+    }
+    else
+    {
+        setWindowTitle(i18n("Create Files from Template"));
+    }
 
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
     connect(this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
@@ -169,7 +176,16 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     kDebug() << "Selected template" << templateDescription << "of type" << d->type;
     removePage(d->dummyPage);
 
-    setWindowTitle(i18n("Create from Template <filename>%1</filename> in <filename>%2</filename>", d->fileTemplate.name(), baseUrl().prettyUrl()));
+    if (d->baseUrl.isValid())
+    {
+        setWindowTitle(i18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
+                            d->fileTemplate.name(),
+                            d->baseUrl.prettyUrl()));
+    }
+    else
+    {
+        setWindowTitle(i18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
+    }
 
     if (d->type == "Class")
     {
@@ -354,7 +370,14 @@ void TemplateClassAssistant::back()
         d->helper = 0;
         d->generator = 0;
 
-        setWindowTitle(i18n("Create from Template in <filename>%1</filename>", baseUrl().prettyUrl()));
+        if (d->baseUrl.isValid())
+        {
+            setWindowTitle(i18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+        }
+        else
+        {
+            setWindowTitle(i18n("Create Files from Template"));
+        }
         d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
     }
 }
