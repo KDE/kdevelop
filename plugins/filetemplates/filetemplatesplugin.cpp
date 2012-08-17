@@ -111,6 +111,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
     {
         KAction* action = new KAction(i18n("Create from Template"), this);
         action->setIcon(KIcon("code-class"));
+        action->setData(url);
         connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
         ext.addAction(ContextMenuExtension::FileGroup, action);
     }
@@ -164,6 +165,6 @@ void FileTemplatesPlugin::createFromTemplate()
     {
         baseUrl = action->data().value<KUrl>();
     }
-    TemplateClassAssistant assistant(QApplication::activeWindow());
+    TemplateClassAssistant assistant(QApplication::activeWindow(), baseUrl);
     assistant.exec();
 }
