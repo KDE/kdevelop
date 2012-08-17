@@ -140,7 +140,11 @@ void OutputModel::activate( const QModelIndex& index )
         kDebug() << "activating:" << item.lineNo << item.url;
         KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
-        docCtrl->openDocument( item.url, range );
+        KUrl url = item.url;
+        if(url.isRelative()) {
+            url = KUrl(d->m_buildDir, url.path());
+        }
+        docCtrl->openDocument( url, range );
     } else {
         kDebug() << "not an activateable item";
     }
