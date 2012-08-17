@@ -53,7 +53,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     
     m_listView = new KDevelop::MultiLevelListView(this);
     m_listView->setLevels(2);
-    m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type") << i18n("Template"));
+    m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
     m_listView->setModel(templatesModel);
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));

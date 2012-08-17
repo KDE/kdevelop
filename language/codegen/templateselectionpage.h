@@ -62,7 +62,6 @@ private:
     class TemplateSelectionPagePrivate* const d;
 
     Q_PRIVATE_SLOT(d, void currentTemplateChanged(const QModelIndex& index))
-    Q_PRIVATE_SLOT(d, void currentLanguageChanged(const QModelIndex& index))
     Q_PRIVATE_SLOT(d, void getMoreClicked())
     Q_PRIVATE_SLOT(d, void loadFileClicked())
 };

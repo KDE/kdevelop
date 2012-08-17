@@ -31,6 +31,9 @@
 #include <grantlee/engine.h>
 #include <grantlee/metatype.h>
 
+#include <grantlee/grantlee_version.h>
+#include <kdeversion.h>
+
 #include <KComponentData>
 #include <KStandardDirs>
 #include <KUrl>
@@ -85,7 +88,9 @@ TemplateRenderer::TemplateRenderer()
     : d(new TemplateRendererPrivate)
 {
     d->emptyLinesPolicy = KeepEmptyLines;
+#if KDE_MAKE_VERSION(GRANTLEE_VERSION_MAJOR, GRANTLEE_VERSION_MINOR, GRANTLEE_VERSION_PATCH) >= 0x020000
     d->engine.setSmartTrimEnabled(true);
+#endif
 
     addTemplateDirectories(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
 
