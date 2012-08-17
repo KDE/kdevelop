@@ -42,6 +42,8 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
     d->ui->setupUi(this);
 
     d->ui->testCasesLabel->setBuddy(d->ui->keditlistwidget->lineEdit());
+
+    connect(d->ui->identifierLineEdit, SIGNAL(textChanged(QString)), SLOT(identifierChanged(QString)));
 }
 
 TestCasesPage::~TestCasesPage()
@@ -63,4 +65,9 @@ void TestCasesPage::setTestCases(const QStringList& testCases)
 QStringList TestCasesPage::testCases() const
 {
     return d->ui->keditlistwidget->items();
+}
+
+void TestCasesPage::identifierChanged(const QString& identifier)
+{
+    emit isValid(!identifier.isEmpty());
 }

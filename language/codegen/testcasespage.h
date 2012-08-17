@@ -57,8 +57,14 @@ public:
      */
     void setTestCases(const QStringList& testCases);
 
+Q_SIGNALS:
+    void isValid(bool valid);
+
 private:
     class TestCasesPagePrivate* const d;
+
+private Q_SLOTS:
+    void identifierChanged(const QString& identifier);
 };
 
 }

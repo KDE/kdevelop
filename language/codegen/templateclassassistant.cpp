@@ -206,7 +206,8 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     {
         d->testCasesPageWidget = new TestCasesPage(this);
         d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
-        setValid(d->testCasesPage, true);
+        connect(d->testCasesPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+        setValid(d->testCasesPage, false);
 
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
