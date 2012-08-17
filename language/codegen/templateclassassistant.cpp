@@ -106,11 +106,17 @@ TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& base
     ZERO_PAGE(testCases)
     d->dummyPage = 0;
 
+    d->helper = 0;
+    d->generator = 0;
+    d->renderer = 0;
+
     setup();
 }
 
 TemplateClassAssistant::~TemplateClassAssistant()
 {
+    delete d->generator;
+    delete d->helper;
     delete d;
 }
 
