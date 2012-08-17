@@ -58,33 +58,17 @@ public:
     TemplatesModel* model;
 
     void currentTemplateChanged(const QModelIndex& index);
-    void currentLanguageChanged(const QModelIndex& index);
     void getMoreClicked();
     void loadFileClicked();
 };
 
-void TemplateSelectionPagePrivate::currentLanguageChanged(const QModelIndex& index)
-{
-    ui->templateView->setRootIndex(index);
-    ui->templateView->expandAll();
-
-    QModelIndex templateIndex = index;
-    while (templateIndex.child(0, 0).isValid())
-    {
-        templateIndex = templateIndex.child(0, 0);
-    }
-    ui->templateView->setCurrentIndex(templateIndex);
-}
-
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
-    if (!index.isValid() || model->index(0, 0, index).isValid())
+    if (!index.isValid() || index.child(0, 0).isValid())
     {
-        // This index is invalid or has a child, so it is not a template
+        // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
-    }
-    else
-    {
+    } else {
         selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
         assistant->setValid(assistant->currentPage(), true);
     }
@@ -107,8 +91,7 @@ void TemplateSelectionPagePrivate::loadFileClicked()
         int n = indexes.size();
         if (n > 1)
         {
-            ui->languageView->setCurrentIndex(indexes[1]);
-            ui->templateView->setCurrentIndex(indexes.last());
+            ui->view->setCurrentIndex(indexes[1]);
         }
     }
 }
@@ -144,20 +127,14 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->model->setDescriptionResourceType("filetemplate_descriptions");
     d->model->refresh();
 
-    d->ui->languageView->setLevels(2);
-    d->ui->languageView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Language") << i18n("Template"));
-    d->ui->languageView->setModel(d->model);
+    d->ui->view->setLevels(3);
+    d->ui->view->setHeaderLabels(QStringList() << i18n("Category") << i18n("Language") << i18n("Template"));
+    d->ui->view->setModel(d->model);
 
-    d->ui->templateView->setModel(d->model);
+    connect(d->ui->view, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
+            SLOT(currentTemplateChanged(QModelIndex)));
 
-    connect (d->ui->languageView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
-             SLOT(currentLanguageChanged(QModelIndex)));
-
-    connect (d->ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             SLOT(currentTemplateChanged(QModelIndex)));
-
-    QModelIndex categoryIndex = d->model->index(0, 0);
-    QModelIndex templateIndex = categoryIndex;
+    QModelIndex templateIndex = d->model->index(0, 0);
 
     while (templateIndex.child(0, 0).isValid())
     {
@@ -184,24 +161,17 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
         templateIndex = indexes.first();
     }
 
-    categoryIndex = templateIndex;
-    while (categoryIndex.parent().isValid() && categoryIndex.parent().parent().isValid())
-    {
-        categoryIndex = categoryIndex.parent();
-    }
+    d->ui->view->setCurrentIndex(templateIndex);
 
-    d->ui->languageView->setCurrentIndex(categoryIndex);
-    d->ui->templateView->setCurrentIndex(templateIndex);
-
-    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevclassassistant.knsrc", d->ui->languageView);
+    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevclassassistant.knsrc", d->ui->view);
     connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
-    d->ui->languageView->addWidget(0, getMoreButton);
+    d->ui->view->addWidget(0, getMoreButton);
 
-    KPushButton* loadButton = new KPushButton(KIcon("application-x-archive"), i18n("Load Template From File"), d->ui->languageView);
+    KPushButton* loadButton = new KPushButton(KIcon("application-x-archive"), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));
-    d->ui->languageView->addWidget(0, loadButton);
+    d->ui->view->addWidget(0, loadButton);
 
-    d->ui->languageView->setContentsMargins(0, 0, 0, 0);
+    d->ui->view->setContentsMargins(0, 0, 0, 0);
 }
 
 TemplateSelectionPage::~TemplateSelectionPage()

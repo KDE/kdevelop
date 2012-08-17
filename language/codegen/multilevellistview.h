@@ -23,9 +23,8 @@
 #include <QtGui/QWidget>
 #include "../languageexport.h"
 
-class QListView;
+class QTreeView;
 class QModelIndex;
-class QListView;
 class QAbstractItemModel;
 
 namespace KDevelop
@@ -80,12 +79,12 @@ public:
      */
     void setModel(QAbstractItemModel* model);
     /**
-     * Provides access to the QListView objects used internally.
+     * Provides access to the QTreeView objects used internally.
      * Returns the view for level @p level of the tree structure.
      *
      * @param level the level of the tree structure shown by the returned view
      */
-    QListView* viewForLevel(int level) const;
+    QTreeView* viewForLevel(int level) const;
 
     /**
      * The current index of the view.
@@ -133,8 +132,12 @@ public slots:
     void setCurrentIndex(const QModelIndex& index);
 
 private:
+    friend class MultiLevelListViewPrivate;
     class MultiLevelListViewPrivate* const d;
-    Q_PRIVATE_SLOT(d, void currentChanged(int i))
+    Q_PRIVATE_SLOT(d, void viewSelectionChanged(const QModelIndex& current,
+                                                const QModelIndex& previous))
+    Q_PRIVATE_SLOT(d, void lastViewsContentsChanged())
+    Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView* view))
 };
 
 }
