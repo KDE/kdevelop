@@ -125,7 +125,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
     menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
-    menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
+    menu->addAction(i18n("Revision Graph..."), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;

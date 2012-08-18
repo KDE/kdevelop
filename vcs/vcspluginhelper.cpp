@@ -436,7 +436,7 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
         menu->addAction(d->diffForRevAction);
         menu->addAction(d->diffForRevGlobalAction);
         menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision History..."), new HistoryFunction(this, rev), menu));
+        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
     }
 }
 
