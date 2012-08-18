@@ -45,9 +45,7 @@ private slots:
 
 private:
     CTestSuite* m_suite;
-    KProcess* m_process;
     QStringList m_pendingFiles;
-    
 };
 
 #endif // CTESTFINDJOB_H

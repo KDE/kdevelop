@@ -31,7 +31,6 @@
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
-, m_process(0)
 {
     kDebug() << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
