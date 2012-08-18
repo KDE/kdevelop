@@ -42,6 +42,8 @@
 #include <KConfigGroup>
 #include <QFile>
 
+#define WITH_SMART_TRIM KDE_MAKE_VERSION(GRANTLEE_VERSION_MAJOR, GRANTLEE_VERSION_MINOR, GRANTLEE_VERSION_PATCH) >= 0x000200
+
 using namespace KDevelop;
 using namespace Grantlee;
 
@@ -88,7 +90,7 @@ TemplateRenderer::TemplateRenderer()
     : d(new TemplateRendererPrivate)
 {
     d->emptyLinesPolicy = KeepEmptyLines;
-#if KDE_MAKE_VERSION(GRANTLEE_VERSION_MAJOR, GRANTLEE_VERSION_MINOR, GRANTLEE_VERSION_PATCH) >= 0x000200
+#if WITH_SMART_TRIM
     d->engine.setSmartTrimEnabled(true);
 #endif
 
@@ -152,7 +154,36 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
 {
     kDebug() << d->context.stackHash(0);
 
+#if WITH_SMART_TRIM
     Template t = d->engine.newTemplate(content, name);
+#else
+    const QStringList lines = content.split('\n');
+
+    QStringList trimmedLines;
+    trimmedLines << QString();
+
+    for (QStringList::const_iterator it = lines.constBegin(); it != lines.constEnd(); ++it)
+    {
+        QString s = (*it);
+        const QString t = s.trimmed();
+        if ( (t.startsWith("{%") && t.endsWith("%}") && t.count('{') == 1 && t.count('}') == 1)
+            || (t.startsWith("{{") && t.endsWith("}}") && t.count('{') == 2 && t.count('}') == 2)
+            || (t.startsWith("{#") && t.endsWith("#}") && t.count('{') == 1 && t.count('}') == 1) )
+        {
+            trimmedLines.last() += t;
+        }
+        else
+        {
+            trimmedLines << (*it);
+        }
+    }
+
+    if (trimmedLines.first().isEmpty())
+    {
+        trimmedLines.removeFirst();
+    }
+    Template t = d->engine.newTemplate(trimmedLines.join("\n"), name);
+#endif
     QString output;
 
     QTextStream textStream(&output);
