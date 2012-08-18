@@ -157,6 +157,11 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
 #if WITH_SMART_TRIM
     Template t = d->engine.newTemplate(content, name);
 #else
+    /*
+     * This code re-implements the functionality of Grantlee's smart trim feature, which was added in 0.1.8
+     * It follows the description from http://www.grantlee.org/apidox/classGrantlee_1_1Engine.html#smart_trim
+     * and passes the unit tests.
+     */
     const QStringList lines = content.split('\n');
 
     QStringList trimmedLines;
