@@ -1046,14 +1046,14 @@ for (typename Triangulation::active_cell_iterator
 </sect1>
 </chapter>
 <chapter id="code-generation-with-templates"><title>Code generation with templates</title>
-<para>&kdevelop; uses templates for generating source code files and to aviod writing repeatable code.
+<para>&kdevelop; uses templates for generating source code files and to avoid writing repeatable code.
 </para>
 <sect1 id="creating-a-new-class"><title>Creating a new class</title>
 <para>The most common use for code generation is probably writing new classes. To create a new class in an existing project, right click on a project folder and choose <guilabel>Create from Template</guilabel>. Choose <filename>Class</filename> in the category selection view, and the desired language and template in the other two views. After you have selected a class template, you will have to specify the details of the new class.
 </para>
-<para>First you have to specify an identifier for the new class. This can be a simple name (like <varname>Bus</varname>) or a complete identifier with namespaces (like <varname>Transportation::Bus</varname>). In the latter case, &kdevelop; will parse the identifier and correctly separate the namespaces from the actual name. On the same page, you can add base classes for the new class. You may notice that some templates choose a base class on their own, you are free to remove it and/or add other bases. You should write the full inheritance statement here, which is language-dependant, such as <varname>public QObject</varname> for C++, <varname>extends SomeClass</varname> for PHP or simply the name of the class for Python.
+<para>First you have to specify an identifier for the new class. This can be a simple name (like <varname>Bus</varname>) or a complete identifier with namespaces (like <varname>Transportation::Bus</varname>). In the latter case, &kdevelop; will parse the identifier and correctly separate the namespaces from the actual name. On the same page, you can add base classes for the new class. You may notice that some templates choose a base class on their own, you are free to remove it and/or add other bases. You should write the full inheritance statement here, which is language-dependent, such as <varname>public QObject</varname> for C++, <varname>extends SomeClass</varname> for PHP or simply the name of the class for Python.
 </para>
-<para>In the next page, you are offered a selection of virtual methods from all inherited classes, as well as some default constructors, destructors and operators. Cheking the check box next to a method signature will implement this method in the new class.
+<para>In the next page, you are offered a selection of virtual methods from all inherited classes, as well as some default constructors, destructors and operators. Checking the check box next to a method signature will implement this method in the new class.
 </para>
 <para>Clicking <guilabel>Next</guilabel> brings up a page where you can add members to a class. Depending on the selected template, these may appear in the new class as member variables, or the template may create properties with setters and getters for them. In a language where variable types have to be declared, such as C++, you have to specify both the type and the name of the member, such as <varname>int number</varname> or <varname>QString name</varname>. In other languages, you may leave out the type, but it is good practice to enter it anyway, because the selected template could still make some use of it.
 </para>
