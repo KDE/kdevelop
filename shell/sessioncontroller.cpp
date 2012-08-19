@@ -1249,8 +1249,8 @@ void SessionChooserDialog::deleteButtonPressed()
 
     const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
     const QString caption = i18nc("@title", "Delete Session");
-    const KGuiItem deleteItem(i18nc("@action:button", "Delete"), KIcon("edit-delete"));
-    const KGuiItem cancelItem(i18nc("@action:button", "Cancel"), KIcon("dialog-cancel"));
+    const KGuiItem deleteItem = KStandardGuiItem::del();
+    const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
         QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
