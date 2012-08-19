@@ -1085,9 +1085,27 @@ for (typename Triangulation::active_cell_iterator
 </para>
 </sect1>
 <sect1 id="managing-templates"><title>Managing templates</title>
-<para>From the <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template</guimenuitem></menuchoice> assistant, you can also download additional file templates by clicking the <guilabel>Get more Templates...</guilabel> button. This opens a Get Hot New Stuff dialog, where you can install additional templates, as well as update or remove them.
+<para>From the <menuchoice><guimenu>File</guimenu><guimenuitem>New from Template</guimenuitem></menuchoice> assistant, you can also download additional file templates by clicking the <guilabel>Get more Templates...</guilabel> button. This opens a Get Hot New Stuff dialog, where you can install additional templates, as well as update or remove them. There is also a configuration module for templates, which can be reached by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure &kdevelop;</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>. From there, you can manage both file templates (explained above) and project templates (used for creating new projects).
 </para>
-<para>Of course, if none of the available template suit your project, you can always create new ones. The easiest way is probably to copy and modify an existing template, while a short <ulink url="http://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template">tutorial</ulink> and a longer <ulink url="http://techbase.kde.org/Projects/KDevelop4/File_template_specification">specification document</ulink> are there to help you. You can also start with a sample C++ class template by <link linkend="creating-projects-from-scratch">creating a new project</link> and selecting the <filename>C++ Class Template</filename> project in category <filename>KDevelop</filename>.
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kdevelop-template-manager.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>Of course, if none of the available template suit your project, you can always create new ones. The easiest way is probably to copy and modify an existing template, while a short <ulink url="http://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template">tutorial</ulink> and a longer <ulink url="http://techbase.kde.org/Projects/KDevelop4/File_template_specification">specification document</ulink> are there to help you. To copy an installed template, open the template manager by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop...</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>, select the template you wish to copy, then click the <guilabel>Extract Template</guilabel> button. Select a destination folder, then click <guilabel>OK</guilabel>, and the contents of the template will be extracted into the selected folder. Now you can edit the template by opening the extracted files and modifying them. After you are done, you can import your new
+template into &kdevelop; by opening the template manager, activating the appropriate tab (either <guilabel>Project Templates</guilabel> or <guilabel>File Templates</guilabel>) and clicking <guilabel>Load Template</guilabel>. Open the template description file, which is the one with the suffix either <varname>.kdevtemplate</varname> or <varname>.desktop</varname>. &kdevelop; will compress the files into a template archive and import the template.
+</para>
+<para><note><para>When copying an existing template, make sure you rename it before importing it again. Otherwise, you will either overwrite the old template, or will end up with two templates with identical names. To rename a template, rename the description file to something unique (but keep the suffix), and change the <filename>Name</filename> entry in the description file. </para></note>
+</para>
+<para>If you want to write a template from scratch, you can start with a sample C++ class template by <link linkend="creating-projects-from-scratch">creating a new project</link> and selecting the <filename>C++ Class Template</filename> project in category <filename>KDevelop</filename>.
 </para>
 </sect1>
 </chapter>
