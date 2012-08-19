@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class QModelIndex;
 namespace KDevelop
 {
 class ITemplateProvider;
@@ -24,6 +25,8 @@ private slots:
     void loadFromFile();
     void getMoreTemplates();
     void shareTemplates();
+    void currentIndexChanged(const QModelIndex& index);
+    void extractTemplate();
 
 private:
     KDevelop::ITemplateProvider* m_provider;

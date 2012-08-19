@@ -45,6 +45,22 @@ public:
 
     QMap<QString, QStandardItem*> templateItems;
     KComponentData componentData;
+
+    /**
+     * Extracts description files from all available template archives and saves them to a location
+     * determined by descriptionResourceType().
+     **/
+    void extractTemplateDescriptions();
+
+    /**
+     * Creates a model item for the template @p name in category @p category
+     *
+     * @param name the name of the new template
+     * @param category the category of the new template
+     * @param parent the parent item
+     * @return the created item
+     **/
+    QStandardItem *createItem(const QString& name, const QString& category, QStandardItem* parent);
 };
 
 TemplatesModelPrivate::TemplatesModelPrivate(const KComponentData& componentData)
@@ -67,52 +83,53 @@ TemplatesModel::~TemplatesModel()
 }
 
 
-bool TemplatesModel::templateExists(const QString& descriptionName) const
-{
-    QFileInfo fi(descriptionName);
-    foreach( const QString& templatename, d->componentData.dirs()->findAllResources(d->templateResourceType) )
-    {
-        if( QFileInfo(templatename).baseName() == fi.baseName() ) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void TemplatesModel::refresh()
 {
     clear();
     d->templateItems.clear();
     d->templateItems[""] = invisibleRootItem();
-    extractTemplateDescriptions();
+    d->extractTemplateDescriptions();
 
     KStandardDirs *dirs = d->componentData.dirs();
     const QStringList templateDescriptions = dirs->findAllResources(d->descriptionResourceType);
+    const QStringList templateArchives = dirs->findAllResources(d->templateResourceType);
     foreach (const QString &templateDescription, templateDescriptions)
     {
-        if( templateExists( templateDescription ) ) {
-            KConfig templateConfig(templateDescription);
-            KConfigGroup general(&templateConfig, "General");
-            QString name = general.readEntry("Name");
-            QString category = general.readEntry("Category");
-            QString comment = general.readEntry("Comment");
-
-            QStandardItem *templateItem = createItem(name, category);
-            templateItem->setData(templateDescription, DescriptionFileRole);
-            templateItem->setData(comment, CommentRole);
-
-            if (!d->previewResourceType.isEmpty() && general.hasKey("Icon"))
+        QFileInfo fi(templateDescription);
+        bool archiveFound = false;
+        foreach( const QString& templateArchive, templateArchives )
+        {
+            if( QFileInfo(templateArchive).baseName() == fi.baseName() )
             {
-                foreach (const QString& icon, dirs->findAllResources(d->previewResourceType))
+                archiveFound = true;
+
+                KConfig templateConfig(templateDescription);
+                KConfigGroup general(&templateConfig, "General");
+                QString name = general.readEntry("Name");
+                QString category = general.readEntry("Category");
+                QString comment = general.readEntry("Comment");
+
+                QStandardItem *templateItem = d->createItem(name, category, invisibleRootItem());
+                templateItem->setData(templateDescription, DescriptionFileRole);
+                templateItem->setData(templateArchive, ArchiveFileRole);
+                templateItem->setData(comment, CommentRole);
+
+                if (!d->previewResourceType.isEmpty() && general.hasKey("Icon"))
                 {
-                    if (QFileInfo(icon).baseName() == QFileInfo(templateDescription).baseName())
+                    foreach (const QString& icon, dirs->findAllResources(d->previewResourceType))
                     {
-                        templateItem->setData(icon, IconNameRole);
-                        break;
+                        if (QFileInfo(icon).baseName() == fi.baseName())
+                        {
+                            templateItem->setData(icon, IconNameRole);
+                            break;
+                        }
                     }
                 }
             }
-        } else {
+        }
+
+        if (!archiveFound)
+        {
             // Template file doesn't exist anymore, so remove the description
             // saves us the extra lookups for templateExists on the next run
             QFile(templateDescription).remove();
@@ -120,23 +137,22 @@ void TemplatesModel::refresh()
     }
 }
 
-QStandardItem *TemplatesModel::createItem(const QString& name, const QString& category)
+QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
 {
     QStringList path = category.split('/');
 
-    QStandardItem *parent = invisibleRootItem();
     QStringList currentPath;
     foreach (const QString& entry, path)
     {
         currentPath << entry;
-        if (!d->templateItems.contains(currentPath.join("/"))) {
+        if (!templateItems.contains(currentPath.join("/"))) {
             QStandardItem *item = new QStandardItem(entry);
             item->setEditable(false);
             parent->appendRow(item);
-            d->templateItems[currentPath.join("/")] = item;
+            templateItems[currentPath.join("/")] = item;
             parent = item;
         } else {
-            parent = d->templateItems[currentPath.join("/")];
+            parent = templateItems[currentPath.join("/")];
         }
     }
 
@@ -146,13 +162,13 @@ QStandardItem *TemplatesModel::createItem(const QString& name, const QString& ca
     return templateItem;
 }
 
-void TemplatesModel::extractTemplateDescriptions()
+void TemplatesModelPrivate::extractTemplateDescriptions()
 {
-    KStandardDirs *dirs = d->componentData.dirs();
-    QStringList templateArchives = dirs->findAllResources(d->templateResourceType);
+    KStandardDirs *dirs = componentData.dirs();
+    QStringList templateArchives = dirs->findAllResources(templateResourceType);
 
-    kDebug() << d->descriptionResourceType;
-    QString localDescriptionsDir = dirs->saveLocation(d->descriptionResourceType);
+    kDebug() << descriptionResourceType;
+    QString localDescriptionsDir = dirs->saveLocation(descriptionResourceType);
 
     foreach (const QString &archName, templateArchives)
     {
@@ -237,7 +253,7 @@ void TemplatesModel::extractTemplateDescriptions()
             QString destinationName = localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix();
             QFile::rename(descriptionInfo.absoluteFilePath(), destinationName);
 
-            if (!d->previewResourceType.isEmpty())
+            if (!previewResourceType.isEmpty())
             {
                 KConfig config(destinationName);
                 KConfigGroup group(&config, "General");
@@ -246,9 +262,8 @@ void TemplatesModel::extractTemplateDescriptions()
                     const KArchiveEntry* iconEntry = templateArchive->directory()->entry(group.readEntry("Icon"));
                     if (iconEntry && iconEntry->isFile())
                     {
-                        kDebug() << "copy template preview" << iconEntry->name() << "to" << dirs->saveLocation(d->previewResourceType);
                         const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
-                        QString saveDir = dirs->saveLocation(d->previewResourceType);
+                        QString saveDir = dirs->saveLocation(previewResourceType);
                         iconFile->copyTo(saveDir);
                         QFileInfo iconInfo(saveDir + templateEntry->name());
                         QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());
@@ -257,7 +272,9 @@ void TemplatesModel::extractTemplateDescriptions()
             }
         }
         else
+        {
             kDebug() << "could not open template" << archName;
+        }
     }
 }
 
