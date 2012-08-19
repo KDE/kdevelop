@@ -1018,7 +1018,7 @@ for (typename Triangulation::active_cell_iterator
   </mediaobject>
 </screenshot>
 </para>
-<para>First you have to specify an identifier for the new class. This can be a simple name (like <varname>Bus</varname>) or a complete identifier with namespaces (like <varname>Transportation::Bus</varname>). In the latter case, <application>KDevelop</application> will parse the identifier and correctly separate the namespaces from the actual name. On the same page, you can add base classes for the new class. You may notice that some templates choose a base class on their own, you are free to remove it and/or add other bases. You should write the full inheritance statement here, which is language-dependent, such as <varname>public QObject</varname> for C++, <varname>extends SomeClass</varname> for PHP or simply the name of the class for Python.
+<para>First you have to specify an identifier for the new class. This can be a simple name (like <varname>Bus</varname>) or a complete identifier with namespaces (like <varname>Transportation::Bus</varname>). In the latter case, &kdevelop; will parse the identifier and correctly separate the namespaces from the actual name. On the same page, you can add base classes for the new class. You may notice that some templates choose a base class on their own, you are free to remove it and/or add other bases. You should write the full inheritance statement here, which is language-dependent, such as <varname>public QObject</varname> for C++, <varname>extends SomeClass</varname> for PHP or simply the name of the class for Python.
 </para>
 <para>
 <screenshot>
@@ -1073,9 +1073,9 @@ for (typename Triangulation::active_cell_iterator
 </para>
 </sect1>
 <sect1 id="creating-a-new-unit-test"><title>Creating a new unit test</title>
-<para>Even though most testing frameworks require each test to also be a class, <application>KDevelop</application> includes a method to simplify the creation of unit tests. To create a new test, right click on a project folder and choose <guilabel>Create from Template</guilabel>. In the template selection page, choose <filename>Test</filename> as the category, then choose your programming language and template and click <guilabel>Next</guilabel>.
+<para>Even though most testing frameworks require each test to also be a class, &kdevelop; includes a method to simplify the creation of unit tests. To create a new test, right click on a project folder and choose <guilabel>Create from Template</guilabel>. In the template selection page, choose <filename>Test</filename> as the category, then choose your programming language and template and click <guilabel>Next</guilabel>.
 </para>
-<para>You will be prompted for the test name and a list of test cases. For the test cases, you only have to specify a list of names. Some unit testing frameworks, such as PyUnit and PHPUnit, require that test cases start with a special prefix. In <application>KDevelop</application>, the template is responsible for adding the prefix, so you do not have to prefix the test cases here. After clicking <guilabel>Next</guilabel>, specify the license and output locations for the generated files, and the test will be created.
+<para>You will be prompted for the test name and a list of test cases. For the test cases, you only have to specify a list of names. Some unit testing frameworks, such as PyUnit and PHPUnit, require that test cases start with a special prefix. In &kdevelop;, the template is responsible for adding the prefix, so you do not have to prefix the test cases here. After clicking <guilabel>Next</guilabel>, specify the license and output locations for the generated files, and the test will be created.
 </para>
 <para>Unit tests created this way will not be added to any target automatically. If you are using CTest or some other testing framework, make sure to add the new files to a target.
 </para>
