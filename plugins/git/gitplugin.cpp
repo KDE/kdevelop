@@ -1233,7 +1233,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
     QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
@@ -1241,10 +1241,10 @@ void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* e
     // the memory. 1Mb seems to be good value since it's rather strange to have so huge commit
     // message.
     static const qint64 maxMergeMsgFileSize = 1024*1024;
-    if (!mergeMsgFile.exists() || mergeMsgFile.size() > maxMergeMsgFileSize)
+    if (mergeMsgFile.size() > maxMergeMsgFileSize || !mergeMsgFile.open(QIODevice::ReadOnly))
         return;
-    mergeMsgFile.open(QIODevice::ReadOnly);
-    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.readAll());
+    
+    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.read(maxMergeMsgFileSize));
     editor->setPlainText(mergeMsg);
 }
 
