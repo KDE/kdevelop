@@ -1578,11 +1578,7 @@ ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem
         if(KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
             KUrl newCMakeLists(folder);
             newCMakeLists.addPath("CMakeLists.txt");
-            
-            QFile f(newCMakeLists.toLocalFile());
-            f.open(QIODevice::WriteOnly | QIODevice::Text);
-            QTextStream out(&f);
-            out << "\n";
+            KDevelop::createFile( newCMakeLists );
         } else
             KMessageBox::error(0, i18n("Could not save the change."),
                                   DIALOG_CAPTION);
