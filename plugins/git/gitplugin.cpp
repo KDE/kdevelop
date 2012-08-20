@@ -1233,7 +1233,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
     QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
