@@ -29,6 +29,7 @@
 #include "vcsdiff.h"
 #include <interfaces/iplugincontroller.h>
 #include <KComboBox>
+#include <KTextEdit>
 #include <interfaces/isession.h>
 #include <interfaces/ibasicversioncontrol.h>
 
@@ -43,7 +44,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     m_commitMessageWidget = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
 
-    m_commitMessageEdit = new QTextEdit;
+    m_commitMessageEdit = new KTextEdit;
     m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
     m_vcs->setupCommitMessageEditor(m_base, m_commitMessageEdit.data());

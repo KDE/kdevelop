@@ -30,7 +30,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
-#include <QtGui/QTextEdit>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -50,6 +49,7 @@
 #include "stashmanagerdialog.h"
 #include <KMessageBox>
 #include <KStandardDirs>
+#include <KTextEdit>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
@@ -1233,7 +1233,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
     QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
