@@ -29,7 +29,8 @@ set( custom_kcm_SRCS
         includesmodel.cpp
         configwidget.cpp
         custombuildsystemconfigwidget.cpp
-        kcm_custombuildsystem.cpp 
+        kcm_custombuildsystem.cpp
+        debugarea.cpp
    )
 kde4_add_ui_files( custom_kcm_SRCS configwidget.ui custombuildsystemconfigwidget.ui )
 kde4_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )

@@ -1,5 +1,6 @@
 set( custombuildsystemplugintest_SRCS
      custombuildsystemplugintest.cpp
+     ../debugarea.cpp
    )
 
 add_definitions( "-DPROJECTS_SOURCE_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/projects\\\"" )
@@ -20,6 +21,7 @@ set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../includesmodel.cpp
                      ../definesmodel.cpp
                      ../projectpathsmodel.cpp
+                     ../debugarea.cpp
    )
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 kde4_add_ui_files( kcm_uitest_SRCS ../configwidget.ui ../custombuildsystemconfigwidget.ui )
