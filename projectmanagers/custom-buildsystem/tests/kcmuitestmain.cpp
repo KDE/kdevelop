@@ -25,7 +25,10 @@
 #include <ktempdir.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qdir.h>
 #include <kpushbutton.h>
+#include <kdebug.h>
+#include <kstandarddirs.h>
 
 #include <tests/testproject.h>
 
@@ -69,6 +72,8 @@ private:
     KDevelop::IProject* project;
 };
 
+extern int cbsDebugArea(); // from debugarea.cpp
+
 int main(int argc, char **argv)
 {
     KAboutData about("kcm_uitest", 0, ki18n("kcm_uitest"), version, ki18n(description),
@@ -80,15 +85,26 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-    KTempDir tempdir("kdev-custom-uitest");
+    KTempDir tempdir(KStandardDirs::locateLocal("tmp", "kdev-custom-uitest"));
+
+    kDebug(cbsDebugArea()) << "created tempdir:" << tempdir.name();
 
     KConfig projkcfg( tempdir.name() + "/kdev-custom-uitest.kdev4" );
+
+    QDir projdir(tempdir.name());
+    projdir.mkdir("includedir");
+    projdir.mkdir("subtree");
+    projdir.mkpath("subtree/includedir");
+    projdir.mkpath("subtree/deeptree");
+    projdir.mkpath("subtree/deeptree/includedir");
+
+    kDebug(cbsDebugArea()) << "project config:" << projkcfg.name();
 
     KDialog dlg;
     dlg.setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel );
 
     KDevelop::TestProject proj;
-    proj.set_projectFileUrl( KUrl(tempdir.name()));
+    proj.set_projectFileUrl( KUrl(projkcfg.name()));
     
     CustomBuildSystemConfigWidget widget(0, &proj);
     widget.loadFrom(&projkcfg);
