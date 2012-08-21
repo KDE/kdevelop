@@ -778,12 +778,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     parent=0;
 
                 CMakeFolderItem* a = 0;
-                if(ProjectFolderItem* ff = folder->folderNamed(subf.name))
+                ProjectFolderItem* ff = folder->folderNamed(subf.name);
+                if(ff)
                 {
                     if(ff->type()!=ProjectBaseItem::BuildFolder)
                         deleteItemLater(ff);
-                    else
+                    else {
                         a = static_cast<CMakeFolderItem*>(ff);
+                        m_cleanupItems.removeAll(ff);
+                    }
                     
                 }
                 if(!a)
@@ -857,7 +860,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 resolvedPath=resolveSystemDirs(folder->project(), QStringList(path)).first();
             
             KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
-            if (!targetItem)
+            if (!targetItem) {
                 switch(t.type)
                 {
                     case Target::Library:
@@ -873,6 +876,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                                                                 folder, t.declaration, outputName );
                         break;
                 }
+            } else
+                m_cleanupItems.removeAll(targetItem);
             
             DefinesAttached* defAtt = dynamic_cast<DefinesAttached*>(targetItem);
             if(defAtt)
@@ -928,13 +933,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     return folderList;
 }
 
-bool containsFile(const KUrl& file, const QList<ProjectFileItem*>& tfiles)
+ProjectFileItem* containsFile(const KUrl& file, const QList<ProjectFileItem*>& tfiles)
 {
     foreach(ProjectFileItem* f, tfiles) {
         if(f->url()==file)
-            return true;
+            return f;
     }
-    return false;
+    return 0;
 }
 
 void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& files)
@@ -947,8 +952,11 @@ void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& f
     
     tfiles = target->fileList(); //We need to recreate the list without the removed items
     foreach(const KUrl& file, files) {
-        if(!containsFile(file, tfiles))
-            new KDevelop::ProjectFileItem( target->project(), file, target );   
+        ProjectFileItem* f = containsFile(file, tfiles);
+        if(f)
+            m_cleanupItems.removeAll(f);
+        else
+            new KDevelop::ProjectFileItem( target->project(), file, target );
     }
 }
 
@@ -1282,7 +1290,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         KUrl fileurl = folderurl;
         fileurl.addPath( entry );
 
-        if(item->hasFileOrFolder( entry ))
+        if(m_cleanupItems.contains(item) || item->hasFileOrFolder( entry ))
             continue;
 
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
@@ -1744,8 +1752,6 @@ void CMakeManager::projectClosing(IProject* p)
 void CMakeManager::addDeleteItem(ProjectBaseItem* item)
 {
     if(item->parent() && item->model() && item->model()->thread()!=QThread::currentThread()) {
-        KDevelop::ProjectBaseItem* it = item->parent();
-        it->takeRow(item->row());
         m_cleanupItems += item;
     } else 
         delete item;
