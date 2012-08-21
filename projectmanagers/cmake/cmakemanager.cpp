@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QQueue>
 #include <QThread>
+#include <QFileSystemWatcher>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -646,12 +647,11 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         }
         cachefile.addPath("CMakeCache.txt");
         
-        KDirWatch* w = new KDirWatch(project);
+        QFileSystemWatcher* w = new QFileSystemWatcher(project);
         w->setObjectName(project->name()+"_ProjectWatcher");
-        w->addFile(cachefile.toLocalFile());
-        connect(w, SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
-        connect(w, SIGNAL(created(QString)), this, SLOT(dirtyFile(QString)));
-        connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
+        w->addPath(cachefile.toLocalFile());
+        connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
+        connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
         cfg->sync();
@@ -663,7 +663,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file,
                                                         KDevelop::IProject * project, const QString& dir, ReferencedTopDUContext parent)
 {
-    m_watchers[project]->addFile(file);
+    m_watchers[project]->addPath(file);
     QString profile = CMake::currentEnvironment(project);
     const KDevelop::EnvironmentGroupList env( KGlobal::config() );
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
@@ -716,7 +716,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
     {
         QMutexLocker locker(&m_dirWatchersMutex);
-        m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
+        m_watchers[item->project()]->addPath(item->url().toLocalFile());
     }
     
     KUrl cmakeListsPath(item->url());
@@ -1171,6 +1171,26 @@ void CMakeManager::deletedWatched(const QString& path)
         m_toDelete += path;
 }
 
+void CMakeManager::directoryChanged(const QString& _dir)
+{
+    KUrl dir(_dir);
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
+    if(!p || isReloading(p))
+        return;
+    
+    QList< ProjectBaseItem* > items = p->itemsForUrl(dir);
+    QStringList files;
+    foreach(ProjectBaseItem* it, items) {
+        files.append(it->url().toLocalFile());
+    }
+    foreach(const QString& file, files) {
+        if(!QFile::exists(file))
+            deletedWatched(file);
+        else
+            dirtyFile(file);
+    }
+}
+
 void CMakeManager::dirtyFile(const QString & dirty)
 {
     const KUrl dirtyFile(dirty);
@@ -1224,7 +1244,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
-            if(m_watchers[project]->contains(dirty))
+            if(m_watchers[project]->files().contains(dirty))
                 project->reloadModel();
         }
     }
@@ -1306,7 +1326,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
                 reloadFiles(it);
                 {
                     QMutexLocker locker(&m_dirWatchersMutex);
-                    m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
+                    m_watchers[item->project()]->addPath(fileurl.toLocalFile());
                 }
                 newItems += it;
             }

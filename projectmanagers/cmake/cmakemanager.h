@@ -26,8 +26,6 @@
 #include <QString>
 #include <QtCore/QVariant>
 
-#include <KDirWatch>
-
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
@@ -39,6 +37,7 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
 class QDir;
@@ -134,6 +133,7 @@ private slots:
     void reimportDone(KJob* job);
     
     void deletedWatched(const QString& directory);
+    void directoryChanged(const QString& dir);
 
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
@@ -156,7 +156,7 @@ private:
     void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
-    QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
