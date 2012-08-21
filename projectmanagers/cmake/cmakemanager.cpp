@@ -1591,12 +1591,16 @@ ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem
     return 0;
 }
 
-//This is being called from ::parse() so we shouldn't make it block the ui
 KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
 {
     KDevelop::ProjectFileItem* created = 0;
-    if ( KDevelop::createFile(url) )
-        created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+    if ( KDevelop::createFile(url) ) {
+        QList< ProjectFileItem* > files = parent->project()->filesForUrl(url);
+        if(!files.isEmpty())
+            created = files.first();
+        else
+            created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+    }
     return created;
 }
 
