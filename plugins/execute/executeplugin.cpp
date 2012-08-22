@@ -129,6 +129,11 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
             {
                 items << item;
             }
+            else
+            {
+                KMessageBox::error(core()->uiController()->activeMainWindow(),
+                                   i18n("Couldn't resolve the dependency: %1", dep.toString()));
+            }
         }
         KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
         if( depAction == "Build" )
