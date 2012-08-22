@@ -980,8 +980,6 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
             return parent->child( index.row() );
         }
     }
-    if(!index.isValid())
-        return d->rootItem;
     return 0;
 }
 
