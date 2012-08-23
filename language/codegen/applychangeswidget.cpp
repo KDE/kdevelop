@@ -146,7 +146,7 @@ bool ApplyChangesWidget::applyAllChanges()
     bool ret = true;
     for(int i = 0; i < d->m_files.size(); ++i )
         if(d->m_editParts[i]->saveAs(d->m_files[i].toUrl())) {
-            IDocument* doc = ICore::self()->documentController()->documentForUrl();
+            IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_files[i].toUrl());
             if(doc && doc->state()==IDocument::Dirty)
                 doc->reload();
         } else
