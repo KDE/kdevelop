@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[cs]=Vlastní systém pro sestavení
 Name[de]=Eigenes Build-System
 Name[es]=Sistema de construcción personalizado
 Name[hu]=Egyéni fordítórendszer

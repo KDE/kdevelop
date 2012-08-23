@@ -10,6 +10,7 @@ X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[cs]=Vlastní systém pro sestavení
 Name[de]=Eigenes Build-System
 Name[es]=Sistema de construcción personalizado
 Name[hu]=Egyéni fordítórendszer
