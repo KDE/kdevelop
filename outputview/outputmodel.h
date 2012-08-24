@@ -74,6 +74,7 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
+    void removeLastLines(int l);
 
 public Q_SLOTS:
     void appendLine( const QString& );

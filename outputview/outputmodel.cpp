@@ -279,6 +279,22 @@ void OutputModel::addLineBatch()
     }
 }
 
+void OutputModel::removeLastLines(int l)
+{
+    for(; l>0 && !d->m_lineBuffer.isEmpty(); --l) {
+        d->m_lineBuffer.removeLast();
+    }
+    
+    if(l<=0)
+        return;
+    
+    beginRemoveRows(QModelIndex(), d->m_lineBuffer.size()-l, d->m_lineBuffer.size()-1);
+    for(; l>0 && !d->m_filteredItems.isEmpty(); --l) {
+        d->m_filteredItems.removeLast();
+    }
+    endRemoveColumns();
+}
+
 }
 
 #include "outputmodel.moc"
