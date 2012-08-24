@@ -27,6 +27,7 @@
 
 NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent)
     : OutputJob(parent, Verbose)
+    , m_lastLine(false)
 {
     Q_ASSERT(!dir.isRelative() && !dir.isEmpty());
     setToolTitle("Ninja");
@@ -45,9 +46,9 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     m_model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
 
     connect(m_process, SIGNAL(receivedStandardError(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            SLOT(appendLines(QStringList)) );
     connect(m_process, SIGNAL(receivedStandardOutput(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            SLOT(appendLines(QStringList)) );
     
     connect( m_process, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_process, SIGNAL(completed()), this, SLOT(slotCompleted()) );
@@ -82,4 +83,25 @@ void NinjaJob::slotFailed(QProcess::ProcessError error)
     setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
     m_model->appendLine( i18n("*** Failed ***") );
     emitResult();
+}
+
+void NinjaJob::appendLines(const QStringList& lines)
+{
+    if(lines.isEmpty())
+        return;
+    
+    QStringList ret(lines);
+    bool prev = false;
+    for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
+        --it;
+        bool curr = it->startsWith('[');
+        if(prev && curr)
+            it = ret.erase(it);
+        prev = curr;
+    }
+    
+    if(m_lastLine && ret.first().startsWith('['))
+        m_model->removeLastLines(1);
+    m_lastLine = ret.last().startsWith('[');
+    m_model->appendLines(ret);
 }

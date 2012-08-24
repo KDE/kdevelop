@@ -42,13 +42,15 @@ class NinjaJob : public KDevelop::OutputJob
         virtual void start();
         virtual bool doKill();
 
-    public slots:
+    private slots:
         void slotFailed(QProcess::ProcessError error);
         void slotCompleted();
+        void appendLines(const QStringList& lines);
 
     private:
         KDevelop::CommandExecutor* m_process;
         KDevelop::OutputModel* m_model;
+        bool m_lastLine;
 };
 
 #endif // NINJAJOB_H
