@@ -373,7 +373,7 @@ uint BreakpointModel::breakpointType(Breakpoint *breakpoint)
     uint type = BreakpointMark;
     if (!breakpoint->enabled()) {
         type = DisabledBreakpointMark;
-    } else if (breakpoint->hitCount()) {
+    } else if (breakpoint->hitCount() > 0) {
         type = ReachedBreakpointMark;
     } else if (breakpoint->state() == Breakpoint::PendingState) {
         type = PendingBreakpointMark;
