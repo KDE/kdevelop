@@ -25,6 +25,7 @@
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
+#include <assert.h>
 
 #include "ui_projectpathswidget.h"
 #include "projectpathsmodel.h"
@@ -103,7 +104,10 @@ void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
 
 void ProjectPathsWidget::projectPathSelected( int index )
 {
-    kDebug(cbsDebugArea()) << "project path selected:" << index;
+    assert(index >= 0);
+    const QModelIndex midx = pathsModel->index( index, 0 );
+    ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
+    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).toHash() );
     updateEnablements();
 }
 
