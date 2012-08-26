@@ -83,6 +83,7 @@ private Q_SLOTS:
     void testBreakpointDisabledOnStart();
     void testCatchpoint();
     void parseBug304730();
+    void testMultipleLocationsBreakpoint();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,

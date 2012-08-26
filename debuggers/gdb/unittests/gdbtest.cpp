@@ -1594,6 +1594,28 @@ void GdbTest::parseBug304730()
     QVERIFY(!record.isNull());
 }
 
+void GdbTest::testMultipleLocationsBreakpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg(findExecutable("debugeemultilocbreakpoint"));
+
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("aPlusB");
+
+    //TODO check if the additional location breakpoint is added
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 19);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 23);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
