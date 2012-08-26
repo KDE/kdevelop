@@ -122,14 +122,11 @@ void ProjectPathsWidget::clear()
 
 void ProjectPathsWidget::addProjectPath()
 {
-    kDebug(cbsDebugArea()) << "enabling project path editing" << pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>();
     KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
     dlg.setMode( KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
-    kDebug(cbsDebugArea()) << "adding url:" << dlg.selectedUrl();
     pathsModel->addPath(dlg.selectedUrl());
     ui->projectPaths->setCurrentIndex(pathsModel->rowCount() - 1);
-    kDebug(cbsDebugArea()) << "added url:" << pathsModel->rowCount();
     updateEnablements();
 }
 
@@ -154,7 +151,6 @@ void ProjectPathsWidget::deleteProjectPath()
 }
 void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 {
-    kDebug(cbsDebugArea()) << "setting project:" << w_project->projectFileUrl() << w_project->folder();
     pathsModel->setProject( w_project );
     ui->includesWidget->setProject( w_project );
 }
