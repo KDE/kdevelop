@@ -36,7 +36,6 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
 {
     ui->setupUi( this );
-    ui->projectPaths->layout()->setMargin( 0 );
     KDevelop::EnvironmentGroupList l( KGlobal::config() );
     ui->actionEnvironment->addItems( l.groups() );
 
