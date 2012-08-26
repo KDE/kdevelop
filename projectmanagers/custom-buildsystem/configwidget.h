@@ -23,7 +23,6 @@
 #include <QWidget>
 
 #include "custombuildsystemconfig.h"
-#include <qabstractitemmodel.h>
 
 namespace Ui
 {
@@ -34,11 +33,6 @@ namespace KDevelop
 {
     class IProject;
 }
-
-class ProjectPathsModel;
-class IncludesModel;
-class DefinesModel;
-class QItemSelection;
 
 class ConfigWidget : public QWidget
 {
@@ -51,7 +45,6 @@ public:
     void clear();
 signals:
     void changed();
-    void deleteLanguageParametersEntry();
 private slots:
     void changeAction( int );
     void toggleActionEnablement( bool );
@@ -59,34 +52,10 @@ private slots:
     void actionEnvironmentChanged( int );
     void actionExecutableChanged( const KUrl& );
     void actionExecutableChanged( const QString& );
-    void languageParametersTabSelected( int index );
-    void languageParametersItemsChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
-    void projectPathSelected( int index );
-    void projectPathEdited();
-    void includePathSelected( const QModelIndex& selected );
-    void includePathEdited();
-    void includesChanged();
-    void definesChanged();
-    void deleteDefine();
-    void addIncludePath();
-    void deleteIncludePath();
-    void saveIncludePath();
-    void addProjectPath();
-    void deleteProjectPath();
-    void saveProjectPath();
-    void verify();
 private:
     Ui::ConfigWidget* ui;
-    ProjectPathsModel* pathsModel;
-    IncludesModel* includesModel;
-    DefinesModel* definesModel;
     QVector<CustomBuildSystemTool> m_tools;
     void setTool( const CustomBuildSystemTool& tool );
-    QModelIndex currentPathIndex();
-
-    void commitProjectPathRequester( bool add = false );
-    void commitIncludePathRequester( bool add = false );
-    void configureItemRemoveButton( const QAbstractItemModel* model );
 };
 
 #endif

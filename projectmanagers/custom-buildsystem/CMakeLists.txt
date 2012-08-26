@@ -28,11 +28,12 @@ set( custom_kcm_SRCS
         definesmodel.cpp
         includesmodel.cpp
         configwidget.cpp
+        projectpathswidget.cpp
         custombuildsystemconfigwidget.cpp
         kcm_custombuildsystem.cpp
         debugarea.cpp
    )
-kde4_add_ui_files( custom_kcm_SRCS configwidget.ui custombuildsystemconfigwidget.ui )
+kde4_add_ui_files( custom_kcm_SRCS projectpathswidget.ui configwidget.ui custombuildsystemconfigwidget.ui )
 kde4_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
 kde4_add_plugin( kcm_kdevcustombuildsystem ${custom_kcm_SRCS} )
 target_link_libraries( kcm_kdevcustombuildsystem ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
