@@ -64,6 +64,7 @@ private slots:
 private:
     Ui::IncludesWidget* ui;
     IncludesModel* includesModel;
+    QString makeIncludeDirAbsolute( const KUrl& url ) const;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

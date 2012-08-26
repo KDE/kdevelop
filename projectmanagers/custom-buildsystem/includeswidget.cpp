@@ -25,6 +25,7 @@
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include "ui_includeswidget.h"
 #include "includesmodel.h"
@@ -102,20 +103,28 @@ void IncludesWidget::clear()
 void IncludesWidget::addIncludePath()
 {
     kDebug(cbsDebugArea()) << "adding include path" << ui->includePathRequester->url();
+    includesModel->addInclude( makeIncludeDirAbsolute(ui->includePathRequester->url()) );
+    ui->includePathRequester->clear();
     updateEnablements();
 }
 
 void IncludesWidget::deleteIncludePath()
 {
     kDebug(cbsDebugArea()) << "deleting include path" << ui->includePaths->currentIndex();
+    const QModelIndex curidx = ui->includePaths->currentIndex();
+    if( curidx.isValid() ) {
+        if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the selected include path '%1'?", includesModel->data(curidx, Qt::DisplayRole).toString() ), i18n("Delete Include Path") ) == KMessageBox::Yes ) {
+            includesModel->removeRows( curidx.row(), 1 );
+        }
+    }
     updateEnablements();
 }
 
 void IncludesWidget::includePathUrlSelected(const KUrl& url)
 {
-    kDebug(cbsDebugArea()) << "include path url selected" << url;
     updateEnablements();
 }
+
 void IncludesWidget::setProject(KDevelop::IProject* w_project)
 {
     ui->includePathRequester->setStartDir( w_project->folder() );
@@ -123,7 +132,19 @@ void IncludesWidget::setProject(KDevelop::IProject* w_project)
 
 void IncludesWidget::updateEnablements() {
     // Disable removal of the project root entry which is always first in the list
+    ui->addIncludePath->setEnabled( QFileInfo(makeIncludeDirAbsolute(ui->includePathRequester->url())).exists() && !ui->includePathRequester->text().isEmpty() );
     ui->removeIncludePath->setEnabled( ui->includePaths->currentIndex().isValid() );
+}
+
+QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
+{
+    KUrl path = ui->includePathRequester->url();
+    QString localFile = path.toLocalFile();
+    if( path.isRelative() ) {
+        // Relative, make absolute based on startDir of the requester
+        localFile = ui->includePathRequester->startDir().toLocalFile( KUrl::AddTrailingSlash ) + path.path();
+    }
+    return localFile;
 }
 
 #include "includeswidget.moc"
