@@ -52,6 +52,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
     connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
+
+    connect( ui->projectPaths, SIGNAL(changed()), SIGNAL(changed()) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
