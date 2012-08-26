@@ -25,6 +25,7 @@
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include <assert.h>
 
 #include "ui_projectpathswidget.h"
@@ -145,7 +146,10 @@ void ProjectPathsWidget::replaceProjectPath()
 
 void ProjectPathsWidget::deleteProjectPath()
 {
-    kDebug(cbsDebugArea()) << "deleting project path" << ui->projectPaths->currentIndex();
+    const QModelIndex idx = pathsModel->index( ui->projectPaths->currentIndex(), 0 );
+    if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the configuration for the path '%1'?", pathsModel->data( idx, Qt::DisplayRole ).toString() ), "Remove Path Configuration" ) == KMessageBox::Yes ) {
+        pathsModel->removeRows( ui->projectPaths->currentIndex(), 1 );
+    }
     updateEnablements();
 }
 void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
