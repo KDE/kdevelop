@@ -28,8 +28,6 @@
 
 #include "ui_projectpathswidget.h"
 #include "projectpathsmodel.h"
-#include "includesmodel.h"
-#include "definesmodel.h"
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
@@ -38,8 +36,6 @@ extern int cbsDebugArea(); // from debugarea.cpp
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ProjectPathsWidget )
     , pathsModel( new ProjectPathsModel( this ) )
-    , includesModel( new IncludesModel( this ) )
-    , definesModel( new DefinesModel( this ) )
 {
     ui->setupUi( this );
 
@@ -48,48 +44,15 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     ui->addPath->setIcon(KIcon("list-add"));
     ui->replacePath->setIcon(KIcon("document-edit"));
     ui->removePath->setIcon(KIcon("list-remove"));
-    ui->addIncludePath->setIcon(KIcon("list-add"));
-    ui->removeIncludePath->setIcon(KIcon("list-remove"));
     connect( ui->addPath, SIGNAL(clicked(bool)), SLOT(addProjectPath()) );
     connect( ui->replacePath, SIGNAL(clicked(bool)), SLOT(replaceProjectPath()) );
     connect( ui->removePath, SIGNAL(clicked(bool)), SLOT(deleteProjectPath()) );
-    
-    connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
-    connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
-
-    ui->includePathRequester->setMode( KFile::Directory );
 
     ui->projectPaths->setModel( pathsModel );
     connect( ui->projectPaths, SIGNAL(currentIndexChanged(int)), SLOT(projectPathSelected(int)) );
     connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
-
-    ui->includePaths->setModel( includesModel );
-    connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
-    connect( ui->includePathRequester, SIGNAL(textChanged(QString)), SLOT(includePathEdited()) );
-    connect( ui->includePathRequester, SIGNAL(urlSelected(KUrl)), SLOT(includePathUrlSelected(KUrl)) );
-    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
-    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
-    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
-
-    ui->defines->setModel( definesModel );
-    ui->defines->horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
-
-    KAction* delIncAction = new KAction( i18n("Delete Include Path"), this );
-    delIncAction->setShortcut( KShortcut( "Del" ) );
-    delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->includePaths->addAction( delIncAction );
-    connect( delIncAction, SIGNAL(triggered()), SLOT(deleteIncludePath()) );
-
-    KAction* delDefAction = new KAction( i18n("Delete Define"), this );
-    delDefAction->setShortcut( KShortcut( "Del" ) );
-    delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->defines->addAction( delDefAction );
-    connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
 }
 
 QList<CustomBuildSystemProjectPathConfig> ProjectPathsWidget::paths() const
@@ -109,16 +72,16 @@ void ProjectPathsWidget::setPaths( const QList<CustomBuildSystemProjectPathConfi
     updateEnablements();
 }
 
-void ProjectPathsWidget::definesChanged()
+void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
     kDebug(cbsDebugArea()) << "defines changed";
-    updatePathsModel( definesModel->defines(), ProjectPathsModel::DefinesDataRole );
+    updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
 }
 
-void ProjectPathsWidget::includesChanged()
+void ProjectPathsWidget::includesChanged( const QStringList& includes )
 {
     kDebug(cbsDebugArea()) << "includes changed";
-    updatePathsModel( includesModel->includes(), ProjectPathsModel::IncludesDataRole );
+    updatePathsModel( includes, ProjectPathsModel::IncludesDataRole );
 }
 
 void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
@@ -132,18 +95,6 @@ void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
     }
 }
 
-void ProjectPathsWidget::includePathSelected( const QModelIndex& selected )
-{
-    kDebug(cbsDebugArea()) << "include path list entry selected:" << selected;
-    updateEnablements();
-}
-
-void ProjectPathsWidget::includePathEdited()
-{
-    kDebug(cbsDebugArea()) << "include path edited:" << ui->includePathRequester->url();
-    updateEnablements();
-}
-
 void ProjectPathsWidget::projectPathSelected( int index )
 {
     kDebug(cbsDebugArea()) << "project path selected:" << index;
@@ -153,36 +104,8 @@ void ProjectPathsWidget::projectPathSelected( int index )
 void ProjectPathsWidget::clear()  
 {
     pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
-    includesModel->setIncludes( QStringList() );
-    definesModel->setDefines( QHash<QString,QVariant>() );
-    updateEnablements();
-}
-
-void ProjectPathsWidget::deleteDefine()
-{
-    kDebug(cbsDebugArea()) << "Deleting defines";
-    QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
-    foreach( const QModelIndex& row, selection ) {
-        definesModel->removeRow( row.row() );
-    }
-    updateEnablements();
-}
-
-void ProjectPathsWidget::addIncludePath()
-{
-    kDebug(cbsDebugArea()) << "adding include path" << ui->includePathRequester->url();
-    updateEnablements();
-}
-
-void ProjectPathsWidget::deleteIncludePath()
-{
-    kDebug(cbsDebugArea()) << "deleting include path" << ui->includePaths->currentIndex();
-    updateEnablements();
-}
-
-void ProjectPathsWidget::includePathUrlSelected(const KUrl& url)
-{
-    kDebug(cbsDebugArea()) << "include path url selected" << url;
+    ui->includesWidget->clear();
+    ui->definesWidget->clear();
     updateEnablements();
 }
 
@@ -219,14 +142,13 @@ void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 {
     kDebug(cbsDebugArea()) << "setting project:" << w_project->projectFileUrl() << w_project->folder();
     pathsModel->setProject( w_project );
-    ui->includePathRequester->setStartDir( w_project->folder() );
+    ui->includesWidget->setProject( w_project );
 }
 
 void ProjectPathsWidget::updateEnablements() {
     // Disable removal of the project root entry which is always first in the list
     ui->removePath->setEnabled( ui->projectPaths->currentIndex() > 0 );
     ui->replacePath->setEnabled( ui->projectPaths->currentIndex() > 0 );
-    ui->removeIncludePath->setEnabled( ui->includePaths->currentIndex().isValid() );
 }
 
 #include "projectpathswidget.moc"

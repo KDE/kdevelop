@@ -17,19 +17,19 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
-#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
 
 #include <QWidget>
 
-#include "custombuildsystemconfig.h"
 #include <qabstractitemmodel.h>
+#include "custombuildsystemconfig.h"
 
 class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {
-class ProjectPathsWidget;
+class DefinesWidget;
 }
 
 namespace KDevelop
@@ -37,39 +37,27 @@ namespace KDevelop
     class IProject;
 }
 
-class ProjectPathsModel;
+class DefinesModel;
 class QItemSelection;
 
-class ProjectPathsWidget : public QWidget
+class DefinesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ProjectPathsWidget( QWidget* parent = 0 );
-    void setProject(KDevelop::IProject* w_project);
-    void setPaths( const QList<CustomBuildSystemProjectPathConfig>& );
-    QList<CustomBuildSystemProjectPathConfig> paths() const;
+    DefinesWidget( QWidget* parent = 0 );
+    void setDefines( const Defines& );
     void clear();
 signals:
-    void changed();
+    void definesChanged( const Defines& );
 private slots:
-    // Handling of project-path combobox, add and remove buttons
-    void projectPathSelected( int index );
-    void addProjectPath();
-    void replaceProjectPath();
-    void deleteProjectPath();
+    // Forward defines model changes
+    void definesChanged();
 
-    // Forward includes model changes into the pathsModel
-    void includesChanged( const QStringList& includes );
-
-    // Forward defines model changes into the pathsModel
-    void definesChanged( const Defines& defines );
+    // Handle Del key in defines list
+    void deleteDefine();
 private:
-    Ui::ProjectPathsWidget* ui;
-    ProjectPathsModel* pathsModel;
-    KFileDialog* m_projectPathFileDialog;
-    // Enables/Disables widgets based on UI state/selection
-    void updateEnablements();
-    void updatePathsModel( const QVariant& newData, int role );
+    Ui::DefinesWidget* ui;
+    DefinesModel* definesModel;
 };
 
 #endif

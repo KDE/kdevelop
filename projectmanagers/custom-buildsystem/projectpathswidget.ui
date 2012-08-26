@@ -85,66 +85,17 @@
          <attribute name="title">
           <string>Includes/Imports</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QVBoxLayout" name="includesLayout">
           <property name="margin">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="KUrlRequester" name="includePathRequester">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adds the currently displayed url to the list of includes if its not in the list yet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="clickMessage">
-               <string>A new include path to use for parsing files under given directory</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KPushButton" name="addIncludePath">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new include path entry from this URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Add</string>
-              </property>
-              <property name="icon">
-               <iconset theme="list-add"/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KPushButton" name="removeIncludePath">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete current include path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Remove</string>
-              </property>
-              <property name="icon">
-               <iconset theme="list-remove"/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <widget class="QListView" name="includePaths">
+          <item>
+           <widget class="IncludesWidget" name="includesWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>8</verstretch>
              </sizepolicy>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
             </property>
            </widget>
           </item>
@@ -154,20 +105,17 @@
          <attribute name="title">
           <string>Defines</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QVBoxLayout" name="gridLayout_2">
           <property name="margin">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QTableView" name="defines">
+          <item>
+           <widget class="DefinesWidget" name="definesWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>8</verstretch>
              </sizepolicy>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
             </property>
            </widget>
           </item>
@@ -189,9 +137,14 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>DefinesWidget</class>
+   <extends>QWidget</extends>
+   <header>defineswidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>IncludesWidget</class>
+   <extends>QWidget</extends>
+   <header>includeswidget.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>

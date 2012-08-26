@@ -17,56 +17,53 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
-#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
 
 #include <QWidget>
 
-#include "custombuildsystemconfig.h"
 #include <qabstractitemmodel.h>
 
 class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {
-class ProjectPathsWidget;
+class IncludesWidget;
 }
 
 namespace KDevelop
 {
     class IProject;
 }
-
+class KUrl;
 class ProjectPathsModel;
+class IncludesModel;
 class QItemSelection;
 
-class ProjectPathsWidget : public QWidget
+class IncludesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ProjectPathsWidget( QWidget* parent = 0 );
+    IncludesWidget( QWidget* parent = 0 );
     void setProject(KDevelop::IProject* w_project);
-    void setPaths( const QList<CustomBuildSystemProjectPathConfig>& );
-    QList<CustomBuildSystemProjectPathConfig> paths() const;
+    void setIncludes( const QStringList& );
     void clear();
 signals:
-    void changed();
+    void includesChanged( const QStringList& );
 private slots:
-    // Handling of project-path combobox, add and remove buttons
-    void projectPathSelected( int index );
-    void addProjectPath();
-    void replaceProjectPath();
-    void deleteProjectPath();
+    // Handling of include-path url-requester, add and remove buttons
+    void includePathSelected( const QModelIndex& selected );
+    void includePathEdited();
+    void includePathUrlSelected(const KUrl&);
+    void addIncludePath();
+    // Handles action and also Del-key in list
+    void deleteIncludePath();
 
-    // Forward includes model changes into the pathsModel
-    void includesChanged( const QStringList& includes );
-
-    // Forward defines model changes into the pathsModel
-    void definesChanged( const Defines& defines );
+    // Forward includes model changes
+    void includesChanged();
 private:
-    Ui::ProjectPathsWidget* ui;
-    ProjectPathsModel* pathsModel;
-    KFileDialog* m_projectPathFileDialog;
+    Ui::IncludesWidget* ui;
+    IncludesModel* includesModel;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );
