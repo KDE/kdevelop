@@ -126,7 +126,7 @@ void ProjectPathsWidget::clear()
 void ProjectPathsWidget::addProjectPath()
 {
     KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
-    dlg.setMode( KFile::ExistingOnly | KFile::File | KFile::Directory );
+    dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
     pathsModel->addPath(dlg.selectedUrl());
     ui->projectPaths->setCurrentIndex(pathsModel->rowCount() - 1);
@@ -136,7 +136,7 @@ void ProjectPathsWidget::addProjectPath()
 void ProjectPathsWidget::replaceProjectPath()
 {
     KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
-    dlg.setMode( KFile::ExistingOnly | KFile::File | KFile::Directory );
+    dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
     kDebug(cbsDebugArea()) << "adding url:" << dlg.selectedUrl();
     pathsModel->setData( pathsModel->index( ui->projectPaths->currentIndex(), 0 ), QVariant::fromValue<KUrl>(dlg.selectedUrl()), ProjectPathsModel::FullUrlDataRole );
