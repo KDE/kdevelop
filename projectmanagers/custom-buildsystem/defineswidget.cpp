@@ -45,7 +45,9 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     KAction* delDefAction = new KAction( i18n("Delete Define"), this );
     delDefAction->setShortcut( KShortcut( "Del" ) );
     delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    delDefAction->setIcon( KIcon("list-remove") );
     ui->defines->addAction( delDefAction );
+    ui->defines->setContextMenuPolicy( Qt::ActionsContextMenu );
     connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
 }
 
