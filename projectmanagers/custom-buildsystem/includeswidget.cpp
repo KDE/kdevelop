@@ -43,6 +43,10 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     ui->addIncludePath->setIcon(KIcon("list-add"));
     ui->removeIncludePath->setIcon(KIcon("list-remove"));
 
+    // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
+    ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
+    ui->removeIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
+
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
 

@@ -55,6 +55,10 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, K
     ui->addConfig->setIcon(KIcon( "list-add" ));
     ui->removeConfig->setIcon(KIcon( "list-remove" ));
 
+    // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
+    ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
+    ui->removeConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
+
     connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
     connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
 

@@ -44,6 +44,12 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     ui->addPath->setIcon(KIcon("list-add"));
     ui->replacePath->setIcon(KIcon("document-edit"));
     ui->removePath->setIcon(KIcon("list-remove"));
+
+    // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
+    ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
+    ui->removePath->setFixedHeight( ui->projectPaths->sizeHint().height() );
+    ui->replacePath->setFixedHeight( ui->projectPaths->sizeHint().height() );
+
     connect( ui->addPath, SIGNAL(clicked(bool)), SLOT(addProjectPath()) );
     connect( ui->replacePath, SIGNAL(clicked(bool)), SLOT(replaceProjectPath()) );
     connect( ui->removePath, SIGNAL(clicked(bool)), SLOT(deleteProjectPath()) );
