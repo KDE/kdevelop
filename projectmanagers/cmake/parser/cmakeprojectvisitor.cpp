@@ -570,8 +570,9 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             //FIXME: Put here the error.
             kDebug(9042) << "Include. Parsing error.";
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        Q_ASSERT(m_vars->value("CMAKE_CURRENT_LIST_FILE")==QStringList(path));
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -689,8 +690,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insertGlobal(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
         
         if(isConfig)
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
@@ -1191,14 +1192,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             i=1;
             foreach(const QString& name, code.knownArgs)
             {
-                m_vars->take(QString("ARGV%1").arg(i));
-                m_vars->take(name);
+                m_vars->removeMulti(QString("ARGV%1").arg(i));
+                m_vars->removeMulti(name);
                 i++;
             }
 
-            m_vars->take("ARGV");
-            m_vars->take("ARGC");
-            m_vars->take("ARGN");
+            m_vars->removeMulti("ARGV");
+            m_vars->removeMulti("ARGC");
+            m_vars->removeMulti("ARGN");
 
         }
     }
@@ -1733,7 +1734,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->remove(fea->loopVar());
+                m_vars->removeMulti(fea->loopVar());
                 if(m_hitBreak)
                     break;
             }
