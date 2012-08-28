@@ -21,6 +21,7 @@
 #include "cmakebuilder.h"
 
 #include <config.h>
+#include <cmakebuilderconfig.h>
 
 #include <project/projectmodel.h>
 
@@ -57,15 +58,15 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
 
-    addBuilder("Makefile", core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder"));
-    addBuilder("build.ninja", core()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder"));
+    addBuilder("Makefile", QStringList("Unix Makefiles") << "NMake Makefiles", core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder"));
+    addBuilder("build.ninja", QStringList("Ninja"), core()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder"));
 }
 
 CMakeBuilder::~CMakeBuilder()
 {
 }
 
-void CMakeBuilder::addBuilder(const QString& neededfile, KDevelop::IPlugin* i)
+void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& generators, KDevelop::IPlugin* i)
 {
     if( i )
     {
@@ -73,6 +74,9 @@ void CMakeBuilder::addBuilder(const QString& neededfile, KDevelop::IPlugin* i)
         if( b )
         {
             m_builders[neededfile] = b;
+            foreach(const QString& gen, generators) {
+                m_buildersForGenerator[gen] = b;
+            }
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             
@@ -248,10 +252,9 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
         if(QFile::exists(builddir+'/'+it.key()))
             return it.value();
     }
-    kWarning() << "Couldn't find a builder for "<< builddir;
-    //We return makefile because sometimes we just want to configure
-    //TODO: polish this further in the future
-    return m_builders["Makefile"];
+    //It means that it still has to be generated, so use the builder for
+    //the generator we use
+    return m_buildersForGenerator[CMakeBuilderSettings::self()->generator()];
 }
 
 #include "cmakebuilder.moc"
