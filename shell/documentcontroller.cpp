@@ -892,7 +892,8 @@ void DocumentController::reloadAllDocuments()
             return;
 
         foreach (IDocument* doc, views)
-            doc->reload();
+            if(!isEmptyDocumentUrl(doc->url()))
+                doc->reload();
     }
 }
 
