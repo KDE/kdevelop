@@ -22,11 +22,6 @@
 
 #include <config.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
@@ -34,27 +29,19 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <outputview/ioutputview.h>
-#include <outputview/outputmodel.h>
-#include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kparts/mainwindow.h>
 #include <kio/deletejob.h>
 #include <kaboutdata.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KProcess>
 #include <kjob.h>
 #include <kurl.h>
-#include <kconfig.h>
 
 #include "configureandbuildjob.h"
 #include "cmakejob.h"
