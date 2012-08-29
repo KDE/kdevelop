@@ -97,3 +97,14 @@ void VariableMap::popScope()
         remove(var);
     }
 }
+
+int VariableMap::removeMulti(const QString& varName)
+{
+    iterator it = find(varName);
+    if(it==end())
+        return 0;
+    else {
+        erase(it);
+        return 1;
+    }
+}

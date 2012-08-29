@@ -74,7 +74,7 @@ private:
     friend struct UpdateHandler;
     friend struct DeletedHandler;
     
-    QMap<KDevelop::Breakpoint*, int> m_ids;
+    QMap<KDevelop::Breakpoint*, QString> m_ids;
     bool m_interrupted;
 };
 

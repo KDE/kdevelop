@@ -2173,6 +2173,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 return false;
             
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             int i=0;
             foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
@@ -2209,6 +2210,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()<3)
                 return false;
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             
             QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+2, itEnd=func.arguments.constEnd();
             for(; it!=itEnd; ++it)
@@ -2220,6 +2222,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()<3)
                 return false;
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             int i=0;
             foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
@@ -2237,6 +2240,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case Reverse:
         case RemoveDuplicates:
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             if(func.arguments.count()>2)
                 return false;
             break;
