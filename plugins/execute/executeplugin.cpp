@@ -141,7 +141,6 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
             job->addItems( KDevelop::BuilderJob::Build, items );
         } else if( depAction == "Install" )
         {
-            job->addItems( KDevelop::BuilderJob::Build, items );
             job->addItems( KDevelop::BuilderJob::Install, items );
         }
         return job;
