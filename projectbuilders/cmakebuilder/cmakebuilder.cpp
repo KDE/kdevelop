@@ -30,6 +30,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <util/sequentiallyrunjobs.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -44,7 +45,6 @@
 #include <kjob.h>
 #include <kurl.h>
 
-#include "configureandbuildjob.h"
 #include "cmakejob.h"
 #include "cmakeutils.h"
 #include <cmakemodelitems.h>
@@ -136,7 +136,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( configure ) 
         {
             kDebug() << "creating composite job";
-            build = new ConfigureAndBuildJob( configure, build );
+            build = new SequentiallyRunJobs( configure, build );
         }
         return build;
     }
@@ -166,7 +166,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         kDebug(9032) << "Cleaning with make";
         KJob* clean = builder->clean(item);
         if( configure ) {
-            clean = new ConfigureAndBuildJob( configure, clean );
+            clean = new SequentiallyRunJobs( configure, clean );
         }
         return clean;
     }
@@ -197,7 +197,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         kDebug(9032) << "Installing with make";
         KJob* install = builder->install(item);
         if( configure ) {
-            install = new ConfigureAndBuildJob( configure, install );
+            install = new SequentiallyRunJobs( configure, install );
         }
         return install;
 

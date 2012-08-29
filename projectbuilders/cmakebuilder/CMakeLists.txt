@@ -11,7 +11,6 @@ include_directories(
 set(cmakebuilder_LIB_SRCS
     cmakebuilder.cpp
     cmakejob.cpp
-    configureandbuildjob.cpp
 )
 
 kde4_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
