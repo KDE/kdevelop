@@ -26,14 +26,16 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KDebug>
+#include <KCompositeJob>
+#include <util/sequentiallyrunjobs.h>
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
-
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
@@ -58,7 +60,16 @@ KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 
 KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 {
-    return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
+    KSharedConfig::Ptr configPtr = dom->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+    bool installAsRoot = builderGroup.readEntry("Install As Root", false);
+    if(installAsRoot) {
+        SequentiallyRunJobs* composite = new SequentiallyRunJobs(build(dom),
+                                                                 runMake( dom, MakeJob::InstallCommand, QStringList("install") ));
+        composite->setObjectName(i18n("Build, then install as root"));
+        return composite;
+    } else
+        return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
 }
 
 void MakeBuilder::jobFinished(KJob* job)
@@ -128,5 +139,3 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     return job;
 }
-
-#include "makebuilder.moc"
