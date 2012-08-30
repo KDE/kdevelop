@@ -87,6 +87,25 @@ public:
     }
 };
 
+/// Tries to find a session identified by @p data in @p sessions.
+/// The @p data may be either a session's name or a string-representation of its UUID.
+/// @return pointer to the session or NULL if nothing appropriate has been found
+const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& sessions, const QString& data )
+{
+    // We won't search a session without input data, since that could lead to false-positives
+    // with unnamed sessions
+    if( data.isEmpty() )
+        return 0;
+
+    for( QList<KDevelop::SessionInfo>::const_iterator it = sessions.constBegin(); it != sessions.constEnd(); ++it ) {
+        if ( ( it->name == data ) || ( it->uuid.toString() == data ) ) {
+            const KDevelop::SessionInfo& sessionRef = *it;
+            return &sessionRef;
+        }
+    }
+    return 0;
+}
+
 int main( int argc, char *argv[] )
 {
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
@@ -314,68 +333,41 @@ int main( int argc, char *argv[] )
         }
     }
 
-    QString sessionId = session;
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo()) {
-        if ( si.name == session ) {
-            sessionId = si.uuid.toString();
-            break;
+    QList<KDevelop::SessionInfo> sessions = KDevelop::SessionController::availableSessionInfo();
+    const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
+
+    if(args->isSet("pid")) {
+        if( !sessionData ) {
+            kError() << "session not given or does not exist";
+            return 5;
+        }
+
+        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
+        if(state.success) {
+            kError() << session << sessionData->name << "is not running";
+            return 5;
+        } else {
+            // Print the PID and we're ready
+            std::cout << state.holderPid << std::endl;
+            return 0;
         }
     }
 
-    forever {
-        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession(sessionId);
-        
-        if(args->isSet("pid"))
-        {
-            if(state.success)
-            {
-                kError() << session << sessionId << "is not running";
-                return 5;
-            }
-            if(args->isSet("pid"))
-            {
-                // Print the PID and we're ready
-                std::cout << state.holderPid << std::endl;
-                return 0;
-            }
-        }
-        
-        if(!state) {
-            QDBusInterface interface(QString("org.kdevelop.kdevelop-%1").arg(state.holderPid),
-                                     "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
-                                     QDBusConnection::sessionBus());
-            if (interface.isValid()) {
-                QDBusReply<void> reply = interface.call("ensureVisible");
-                if (reply.isValid()) {
-                    qDebug() << i18n("made running kdevelop instance (PID: %1) visible", state.holderPid);
-                    return 0;
-                }
-            }
-
-            QString errmsg = i18n("<p>Failed to lock the session <em>%1</em>, "
-                                  "already locked by %2 (PID %4) on %3.<br>"
-                                  "The given application did not respond to a DBUS call, "
-                                  "it may have crashed or is hanging.</p>"
-                                  "<p>Do you want to remove the lock file and force a new KDevelop instance?<br/>"
-                                  "<strong>Beware:</strong> Only do this if you are sure there is no running"
-                                  " KDevelop process using this session.</p>",
-                                  session, state.holderApp, state.holderHostname, state.holderPid );
-
-            KGuiItem overwrite = KStandardGuiItem::cont();
-            overwrite.setText(i18n("Remove lock file"));
-            KGuiItem cancel = KStandardGuiItem::quit();
-            int ret = KMessageBox::warningYesNo(0, errmsg, i18n("Failed to Lock Session %1", session),
-                                                overwrite, cancel, QString() );
-            if (ret == KMessageBox::Yes) {
-                if (!QFile::remove(state.lockFile)) {
-                    KMessageBox::error(0, i18n("Failed to remove lock file %1.", state.lockFile));
-                    return 1;
-                }
+    // If the session to load is known by this point,
+    // try to do the same iterative lock-check as in SessionController::loadDefaultSession().
+    KDevelop::SessionController::LockSessionState state;
+    if( sessionData ) {
+        do {
+            state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
+            if( state ) {
+                break;
             } else {
-                return 1;
+                session = KDevelop::SessionController::handleLockedSession( sessionData->name, sessionData->uuid.toString(), state );
+                sessionData = findSessionInList( sessions, session );
             }
-        } else {
-            break;
+        } while( sessionData );
+        if( !state ) {
+            return 1;
         }
     }
 
