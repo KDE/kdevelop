@@ -25,6 +25,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iproject.h>
+#include <QFile>
 
 K_PLUGIN_FACTORY(NinjaBuilderFactory, registerPlugin<KDevNinjaBuilderPlugin>(); )
 K_EXPORT_PLUGIN(NinjaBuilderFactory(KAboutData("kdevninja", "kdevninja", ki18n("Ninja Builder"), "0.1", ki18n("Support for building Ninja projects"), KAboutData::License_GPL)))
@@ -56,7 +57,8 @@ static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
 
 static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 {
-    if(!item->parent())
+    if(!item->parent() &&
+        QFile::exists(item->project()->buildSystemManager()->buildDirectory(item->project()->projectItem()).toLocalFile()))
       return QStringList();
 
     switch(item->type()) {
