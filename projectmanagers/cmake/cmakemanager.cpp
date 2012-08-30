@@ -28,6 +28,7 @@
 #include <QQueue>
 #include <QThread>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -464,6 +465,11 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
     
     connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), SLOT(projectClosing(KDevelop::IProject*)));
+
+    m_fileSystemChangeTimer = new QTimer(this);
+    m_fileSystemChangeTimer->setSingleShot(true);
+    m_fileSystemChangeTimer->setInterval(100);
+    connect(m_fileSystemChangeTimer,SIGNAL(timeout()),SLOT(filesystemBuffererTimeout()));
 }
 
 CMakeManager::~CMakeManager()
@@ -1171,7 +1177,21 @@ void CMakeManager::deletedWatched(const QString& path)
         m_toDelete += path;
 }
 
-void CMakeManager::directoryChanged(const QString& _dir)
+void CMakeManager::directoryChanged(const QString& dir)
+{
+    m_fileSystemChangedBuffer << dir;
+    m_fileSystemChangeTimer->start();
+}
+
+void CMakeManager::filesystemBuffererTimeout()
+{
+    Q_FOREACH(const QString& file, m_fileSystemChangedBuffer) {
+        realDirectoryChanged(file);
+    }
+    m_fileSystemChangedBuffer.clear();
+}
+
+void CMakeManager::realDirectoryChanged(const QString& _dir)
 {
     KUrl dir(_dir);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);

@@ -134,6 +134,7 @@ private slots:
     
     void deletedWatched(const QString& directory);
     void directoryChanged(const QString& dir);
+    void filesystemBuffererTimeout();
 
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
@@ -167,6 +168,10 @@ private:
     QSet<QString> m_toDelete;
     QHash<KUrl, KUrl> m_renamed;
     QList<KDevelop::ProjectBaseItem*> m_cleanupItems;
+
+    QTimer* m_fileSystemChangeTimer;
+    QSet<QString> m_fileSystemChangedBuffer;
+    void realDirectoryChanged(const QString& dir);
 };
 
 #endif
