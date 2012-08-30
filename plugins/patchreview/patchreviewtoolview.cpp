@@ -219,13 +219,13 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.baseDir->setMode( KFile::Directory );
 
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( slotEditCommandChanged() ) );
+    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
 //   connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
 
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( slotEditCommandChanged() ) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
 //     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
     connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
