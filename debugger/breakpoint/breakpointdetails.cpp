@@ -140,7 +140,9 @@ void BreakpointDetails::setItem(Breakpoint *b)
                 break;
         }
 
-        if (b->hitCount())
+        if (b->hitCount() == -1)
+            hits_->setText("");
+        else if (b->hitCount())
             hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
         else
             hits_->setText(i18n("Not hit yet"));

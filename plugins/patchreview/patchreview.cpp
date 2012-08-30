@@ -439,8 +439,7 @@ void PatchReviewPlugin::updateReview() {
     }
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-    IDocument* doc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
-    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( doc->textDocument() );
+    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
