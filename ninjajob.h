@@ -25,6 +25,7 @@
 namespace KDevelop {
     class CommandExecutor;
     class OutputModel;
+    class ProjectBaseItem;
 }
 
 class KProcess;
@@ -38,19 +39,23 @@ class NinjaJob : public KDevelop::OutputJob
         Failed
     };
     public:
-        NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent = 0);
+        NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent);
         virtual void start();
         virtual bool doKill();
+        void signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item);
 
     private slots:
         void slotFailed(QProcess::ProcessError error);
         void slotCompleted();
         void appendLines(const QStringList& lines);
+        void emitProjectBuilderSignal(KJob* job);
 
     private:
         KDevelop::CommandExecutor* m_process;
         KDevelop::OutputModel* m_model;
         bool m_lastLine;
+        KDevelop::ProjectBaseItem* m_item;
+        QByteArray m_signal;
 };
 
 #endif // NINJAJOB_H

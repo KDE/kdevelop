@@ -28,6 +28,7 @@
 NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent)
     : OutputJob(parent, Verbose)
     , m_lastLine(false)
+    , m_item(0)
 {
     Q_ASSERT(!dir.isRelative() && !dir.isEmpty());
     setToolTitle("Ninja");
@@ -52,6 +53,22 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     
     connect( m_process, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_process, SIGNAL(completed()), this, SLOT(slotCompleted()) );
+}
+
+void NinjaJob::signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item)
+{
+    m_signal = signal;
+    m_item = item;
+    connect(this, SIGNAL(finished(KJob*)), SLOT(emitProjectBuilderSignal(KJob*)));
+}
+
+void NinjaJob::emitProjectBuilderSignal(KJob* job)
+{
+    Q_ASSERT(!m_signal.isEmpty());
+    if(job->error()==0)
+        QMetaObject::invokeMethod(parent(), m_signal, Q_ARG(KDevelop::ProjectBaseItem*, m_item));
+    else
+        QMetaObject::invokeMethod(parent(), "failed", Q_ARG(KDevelop::ProjectBaseItem*, m_item));
 }
 
 void NinjaJob::start()

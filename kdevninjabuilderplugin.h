@@ -21,8 +21,10 @@
 
 #include <interfaces/iplugin.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <KUrl>
 #include <QVariantList>
 
+class NinjaJob;
 
 class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuilder
 {
@@ -35,6 +37,15 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
         virtual KJob* build(KDevelop::ProjectBaseItem* item);
         virtual KJob* clean(KDevelop::ProjectBaseItem* item);
         virtual KJob* install(KDevelop::ProjectBaseItem* item);
+        
+        KUrl findNinjaFile(KDevelop::IProject* p);
+        NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
+
+    Q_SIGNALS:
+        void built( KDevelop::ProjectBaseItem* item);
+        void failed( KDevelop::ProjectBaseItem* item);
+        void installed(KDevelop::ProjectBaseItem* item);
+        void cleaned(KDevelop::ProjectBaseItem* item);
 };
 
 #endif // KDEVNINJABUILDERPLUGIN_H

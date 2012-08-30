@@ -75,20 +75,38 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
     return QStringList();
 }
 
+KUrl KDevNinjaBuilderPlugin::findNinjaFile(KDevelop::IProject* p)
+{
+    KUrl ret = p->buildSystemManager()->buildDirectory(p->projectItem());
+    while(!QFile::exists(ret.toLocalFile(KUrl::AddTrailingSlash)+"build.ninja")) {
+        ret = ret.upUrl();
+    }
+    
+    if(ret.isEmpty()) {
+        ret = p->buildSystemManager()->buildDirectory(p->projectItem());
+    }
+    
+    return ret;
+}
+
+NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal)
+{
+    NinjaJob* job = new NinjaJob(findNinjaFile(item->project()), args, this);
+    job->signalWhenFinished(signal, item);
+    return job;
+}
+
 KJob* KDevNinjaBuilderPlugin::build(KDevelop::ProjectBaseItem* item)
 {
-    KDevelop::IProject* p = item->project();
-    return new NinjaJob(p->buildSystemManager()->buildDirectory(p->projectItem()), argumentsForItem(item), this);
+    return runNinja(item, argumentsForItem(item), "built");
 }
 
 KJob* KDevNinjaBuilderPlugin::clean(KDevelop::ProjectBaseItem* item)
 {
-    KDevelop::IProject* p = item->project();
-    return new NinjaJob(p->buildSystemManager()->buildDirectory(p->projectItem()), QStringList("-t") << "clean", this);
+    return runNinja(item, QStringList("-t") << "clean", "cleaned");
 }
 
 KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
 {
-    KDevelop::IProject* p = item->project();
-    return new NinjaJob(p->buildSystemManager()->buildDirectory(p->projectItem()), QStringList("install"), this);
+    return runNinja(item, QStringList("install"), "installed");
 }
