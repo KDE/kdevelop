@@ -747,7 +747,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
     #endif
 
+        data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), folder->project(), item->url().toLocalFile(), curr);
+        data.vm.popScope();
         folder->setTopDUContext(ctx);
        /*{
         kDebug() << "dumpiiiiiing" << folder->url();
