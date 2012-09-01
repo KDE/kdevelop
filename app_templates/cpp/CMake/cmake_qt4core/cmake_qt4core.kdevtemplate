@@ -55,4 +55,4 @@ Comment[x-test]=xxQt4 CMake Core application. Generate a CMake/Qt4 based applica
 Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台兼容)
 Comment[zh_TW]=Qt4 CMake Core 應用程式。產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
-Category=KDE/Terminal
+Category=Qt/Terminal

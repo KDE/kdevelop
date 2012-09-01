@@ -53,4 +53,4 @@ Comment[x-test]=xxQt4 CMake Gui application. Generate a CMake/Qt4 based GUI appl
 Comment[zh_CN]=生成基于 CMake/Qt4 的图形应用程序(跨平台兼容)
 Comment[zh_TW]=Qt4 CMake 使用者介面應用程式。產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
-Category=KDE/Graphical
+Category=Qt/Graphical
