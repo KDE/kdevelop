@@ -123,14 +123,21 @@ class TestFrameStackModel : public KDevelop::GdbFrameStackModel
 {
 public:
     
-    TestFrameStackModel(DebugSession* session) 
-    : GdbFrameStackModel(session), fetchFramesCalled(0) {}
-    
+    TestFrameStackModel(DebugSession* session)
+        : GdbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
+
     int fetchFramesCalled;
+    int fetchThreadsCalled;
     virtual void fetchFrames(int threadNumber, int from, int to)
     {
         fetchFramesCalled++;
         GdbFrameStackModel::fetchFrames(threadNumber, from, to);
+    }
+
+    virtual void fetchThreads()
+    {
+        fetchThreadsCalled++;
+        GdbFrameStackModel::fetchThreads();
     }
 };
 
@@ -1566,6 +1573,27 @@ void GdbTest::testCatchpoint()
 
 }
 
+void GdbTest::testThreadAndFrameInfo()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
+    QString fileName = findSourceFile("debugeethreads.cpp");
+    QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
+
+    breakpoints()->addCodeBreakpoint(fileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    session->frameStackModel()->fetchThreads();
+    session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
+
+    QVERIFY(outputSpy.count() == 2);
+    QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::parseBug304730()
 {
     FileSymbol file;
@@ -1652,3 +1680,4 @@ QTEST_KDEMAIN(GDBDebugger::GdbTest, GUI)
 
 #include "gdbtest.moc"
 #include "moc_gdbtest.cpp"
+

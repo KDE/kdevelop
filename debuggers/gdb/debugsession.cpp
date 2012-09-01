@@ -555,6 +555,10 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     if (stateReloadInProgress_)
         cmd->setStateReloading(true);
 
+    commandQueue_->enqueue(cmd, queue_where);
+
+    kDebug(9012) << "QUEUE: " << cmd->initialString() << (stateReloadInProgress_ ? "(state reloading)" : "");
+
     bool varCommandWithContext= (cmd->type() >= GDBMI::VarAssign
                                  && cmd->type() <= GDBMI::VarUpdate
                                  && cmd->type() != GDBMI::VarDelete);
@@ -564,19 +568,12 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
 
     if (varCommandWithContext || stackCommandWithContext)
     {
-        // Most var commands should be executed in the context
-        // of the selected thread and frame.
         if (cmd->thread() == -1)
-            cmd->setThread(frameStackModel()->currentThread());
+            kDebug(9012) << "\t--thread will be added on execution";
 
         if (cmd->frame() == -1)
-            cmd->setFrame(frameStackModel()->currentFrame());
+            kDebug(9012) << "\t--frame will be added on execution";
     }
-
-    commandQueue_->enqueue(cmd, queue_where);
-
-    kDebug(9012) << "QUEUE: " << cmd->initialString()
-                  << (stateReloadInProgress_ ? "(state reloading)" : "");
 
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_busy);
@@ -594,6 +591,24 @@ bool DebugSession::executeCmd()
     GDBCommand* currentCmd = commandQueue_->nextCommand();
     if (!currentCmd)
         return false;
+
+    bool varCommandWithContext= (currentCmd->type() >= GDBMI::VarAssign
+                                 && currentCmd->type() <= GDBMI::VarUpdate
+                                 && currentCmd->type() != GDBMI::VarDelete);
+
+    bool stackCommandWithContext = (currentCmd->type() >= GDBMI::StackInfoDepth
+                                    && currentCmd->type() <= GDBMI::StackListLocals);
+
+    if (varCommandWithContext || stackCommandWithContext)
+    {
+        // Most var commands should be executed in the context
+        // of the selected thread and frame.
+        if (currentCmd->thread() == -1)
+            currentCmd->setThread(frameStackModel()->currentThread());
+
+        if (currentCmd->frame() == -1)
+            currentCmd->setFrame(frameStackModel()->currentFrame());
+    }
 
     QString commandText = currentCmd->cmdToSend();
     bool bad_command = false;
