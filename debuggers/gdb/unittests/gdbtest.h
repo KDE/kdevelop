@@ -85,6 +85,7 @@ private Q_SLOTS:
     void testThreadAndFrameInfo();
     void parseBug304730();
     void testMultipleLocationsBreakpoint();
+    void testBug301287();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,
