@@ -79,7 +79,7 @@ void QMakeJob::start()
             model(), SLOT(appendLines(const QStringList&) ) );
     m_cmd->setWorkingDirectory( m_project->folder().toLocalFile() );
     connect( m_cmd, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
-    connect( m_cmd, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
+    connect( m_cmd, SIGNAL( completed(int) ), this, SLOT( slotCompleted(int) ) );
     m_cmd->start();
 }
 
@@ -101,8 +101,11 @@ void QMakeJob::slotFailed()
     emitResult();
 }
 
-void QMakeJob::slotCompleted()
+void QMakeJob::slotCompleted(int code)
 {
+    if( code != 0 ) {
+        setError( FailedShownError );
+    }
     emitResult();
 }
 

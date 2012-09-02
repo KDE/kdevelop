@@ -56,7 +56,7 @@ protected:
 
 private Q_SLOTS:
     void slotFailed();
-    void slotCompleted();
+    void slotCompleted(int);
     
 private:
     KDevelop::IProject* m_project;
