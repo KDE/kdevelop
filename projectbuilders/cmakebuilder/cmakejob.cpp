@@ -93,7 +93,7 @@ void CMakeJob::start()
     m_executor->setArguments( cmakeArguments( m_project ) );
     m_executor->setEnvironment(buildEnvironment());
     connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
+    connect( m_executor, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)) );
     kDebug() << "Executing" << m_executor->command() << buildDirUrl.toLocalFile() << m_executor->arguments();
     model->appendLine( buildDirUrl.toLocalFile() + "> " + m_executor->command() + " " + m_executor->arguments().join(" "));
     m_executor->start();
@@ -110,9 +110,13 @@ void CMakeJob::slotFailed( QProcess::ProcessError )
     emitResult();
 }
 
-void CMakeJob::slotCompleted()
+void CMakeJob::slotCompleted(int code)
 {
     kDebug() << "job completed";
+    if( code != 0 ) {
+        // Error is already visible in the output view
+        setError(FailedShownError);
+    }
     emitResult();
 }
 

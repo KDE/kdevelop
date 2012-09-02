@@ -51,7 +51,7 @@ public:
     virtual void start();
     virtual bool doKill();
 private slots:
-    void procFinished();
+    void procFinished(int);
     void procError( QProcess::ProcessError );
 private:
     KDevelop::OutputModel* model();

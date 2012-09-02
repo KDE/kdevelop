@@ -113,7 +113,7 @@ void CustomBuildJob::start()
         exec->setWorkingDirectory( builddir );
 
         
-        connect( exec, SIGNAL(completed()), SLOT(procFinished()) );
+        connect( exec, SIGNAL(completed(int)), SLOT(procFinished(int)) );
         connect( exec, SIGNAL(failed( QProcess::ProcessError )), SLOT(procError( QProcess::ProcessError )) );
 
         connect( exec, SIGNAL(receivedStandardError(QStringList)), model, SLOT(appendLines(QStringList)) );
@@ -153,9 +153,16 @@ KDevelop::OutputModel* CustomBuildJob::model()
     return qobject_cast<KDevelop::OutputModel*>( OutputJob::model() );
 }
 
-void CustomBuildJob::procFinished()
+void CustomBuildJob::procFinished(int code)
 {
-    model()->appendLine( i18n( "*** Finished ***" ) );
+    //TODO: Make this configurable when the first report comes in from a tool
+    //      where non-zero does not indicate error status
+    if( code != 0 ) {
+        setError( FailedShownError );
+        model()->appendLine( i18n( "*** Failed ***" ) );
+    } else {
+        model()->appendLine( i18n( "*** Finished ***" ) );
+    }
     emitResult();
 }
 
