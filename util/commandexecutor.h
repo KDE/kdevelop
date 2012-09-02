@@ -31,7 +31,11 @@ namespace KDevelop
  * Simplifying the exeuction of a Command through (QK)Process.
  *
  * This class emits only very basic signals when the process writes something
- * to stdout or stderr and for signaling completed and failed status.
+ * to stdout or stderr and for signaling completed and failed status of running 
+ * the process. This means that a process that is executed without a crash or so
+ * is considered to be completed, even if it indicates an error during execution
+ * using a non-zero return value. This needs to be handled by the user of the class
+ * using the argument in the completed signal
  *
  * If you need more fine-grained control use (QK)Process directly and also
  * check whether you can use \ref KDevelop::ProcessLineMaker to use properly
@@ -117,8 +121,16 @@ public:
 Q_SIGNALS:
     void receivedStandardError( const QStringList& );
     void receivedStandardOutput( const QStringList& );
+    /**
+     * Emitted when there was a severe problem executing the process, for example it
+     * could not be started or crashed during execution.
+     */
     void failed( QProcess::ProcessError );
-    void completed();
+    /**
+     * Emitted when the process was successfully started and finished without crashing
+     * The @p code parameter indicates the return value from executing the process
+     */
+    void completed(int code);
 private:
     Q_PRIVATE_SLOT( d, void procError( QProcess::ProcessError ) )
     Q_PRIVATE_SLOT( d, void procFinished( int, QProcess::ExitStatus ) )

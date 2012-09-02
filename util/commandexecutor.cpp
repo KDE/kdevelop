@@ -52,10 +52,9 @@ public:
     }
     void procFinished( int code, QProcess::ExitStatus status )
     {
-        Q_UNUSED(code)
         m_lineMaker->flushBuffers();
         if( status == QProcess::NormalExit )
-            emit m_exec->completed();
+            emit m_exec->completed(code);
     }
 };
 
