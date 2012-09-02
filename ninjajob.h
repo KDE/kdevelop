@@ -46,7 +46,7 @@ class NinjaJob : public KDevelop::OutputJob
 
     private slots:
         void slotFailed(QProcess::ProcessError error);
-        void slotCompleted();
+        void slotCompleted(int);
         void appendLines(const QStringList& lines);
         void emitProjectBuilderSignal(KJob* job);
 

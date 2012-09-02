@@ -52,7 +52,7 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
             SLOT(appendLines(QStringList)) );
     
     connect( m_process, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_process, SIGNAL(completed()), this, SLOT(slotCompleted()) );
+    connect( m_process, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)) );
 }
 
 void NinjaJob::signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item)
@@ -86,10 +86,15 @@ bool NinjaJob::doKill()
     return true;
 }
 
-void NinjaJob::slotCompleted()
+void NinjaJob::slotCompleted(int code)
 {
+    if( code != 0 ) {
+        setError( FailedShownError );
+        m_model->appendLine( i18n("*** Failed ***") );
+    } else {
+        m_model->appendLine( i18n("*** Finished ***") );
+    }
     emitResult();
-    m_model->appendLine( i18n("*** Finished ***") );
 }
 
 void NinjaJob::slotFailed(QProcess::ProcessError error)
