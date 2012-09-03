@@ -47,6 +47,7 @@ class ReviewPatchDialog : public KDialog
         /** @returns the selected base directory for the patch */
         QString baseDir() const;
         QString repository() const;
+        QString repositoryName() const;
         
         void setRepository(const QString& repo);
         

@@ -86,7 +86,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
                 versionedConfig.writeEntry("server", url);
                 versionedConfig.writeEntry("username", d.server().userName());
                 versionedConfig.writeEntry("baseDir", d.baseDir());
-                versionedConfig.writeEntry("repository", d.repository());
+                versionedConfig.writeEntry("repository", d.repositoryName());
             }
         } else {
             KMessageBox::error(0, job->errorText());
