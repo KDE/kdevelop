@@ -22,6 +22,7 @@
 #include <QDebug>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
+#include <KDebug>
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     : KDialog(parent)
@@ -102,8 +103,12 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     
     if(!m_preferredRepository.isEmpty()) {
         QList< QListWidgetItem* > items = m_ui->repositories->findItems(m_preferredRepository, Qt::MatchExactly);
-        if(!items.isEmpty())
-            items.first()->setSelected(true);
+        if(!items.isEmpty()) {
+            QListWidgetItem* it = items.first();
+            it->setSelected(true);
+            m_ui->repositories->scrollToItem(it);
+        } else
+            kDebug() << "no repository called" << m_preferredRepository;
     }
 }
 
@@ -116,4 +121,9 @@ QString ReviewPatchDialog::repository() const
 void ReviewPatchDialog::repositoryChanged(QListWidgetItem* newItem)
 {
     enableButtonOk(newItem);
+}
+
+QString ReviewPatchDialog::repositoryName() const
+{
+    return m_ui->repositories->currentItem()->text();
 }
