@@ -839,13 +839,15 @@ void TestDUChain::testAuto()
     "const auto a4 = i;\n"
     "const auto& a5 = i;\n"
     "const auto&& a6 = i;\n"
+    "auto a7(1.1d);\n"
+    "auto a8(i);\n"
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 7);
+  QCOMPARE(top->localDeclarations().count(), 9);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -881,6 +883,15 @@ void TestDUChain::testAuto()
   QVERIFY(dec->type<ReferenceType>()->isRValue());
   QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
   QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(7);
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
+
+  dec = top->localDeclarations().at(8);
+  QVERIFY(dec->type<IntegralType>());
+  QEXPECT_FAIL("", "a8 is detected as a function declaration which is only work-arounded in DeclarationBuilder::visitInitDeclarator but no actual initializer is created... thus no type is found here", Abort);
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
 }
 
 void TestDUChain::testNoexcept()
