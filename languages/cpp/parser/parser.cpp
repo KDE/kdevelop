@@ -1952,7 +1952,7 @@ bool Parser::parseStorageClassSpecifier(const ListNode<uint> *&node)
 
   int tk;
   while (0 != (tk = session->token_stream->lookAhead())
-         && (tk == Token_friend || tk == Token_auto
+         && (tk == Token_friend
              || tk == Token_register || tk == Token_static
              || tk == Token_extern || tk == Token_mutable || tk == Token_thread_local
              || tk == Token_constexpr))

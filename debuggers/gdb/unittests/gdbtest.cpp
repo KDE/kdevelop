@@ -1644,6 +1644,47 @@ void GdbTest::testMultipleLocationsBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testBug301287()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+
+    TestLaunchConfiguration cfg;
+
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    variableCollection()->watches()->add("argc");
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "argc");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    //start second debug session (same cfg)
+    session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QTest::qWait(300);
+
+    i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "argc");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
