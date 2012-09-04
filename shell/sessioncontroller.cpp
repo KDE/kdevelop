@@ -50,6 +50,7 @@ Boston, MA 02110-1301, USA.
 #include <KApplication>
 #include <QLineEdit>
 #include <KMessageBox>
+#include <KAboutData>
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QTimer>
@@ -63,6 +64,8 @@ Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QLayout>
 #include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 
 #include <kdeversion.h>
@@ -218,24 +221,23 @@ public:
     bool loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        if( !SessionController::tryLockSession(s->id().toString()) )
-        {
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("The selected session is already active in another running instance"));
-            return false;
-        }else{
-            KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
-            return true;
-        }
+        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
+        return true;
     }
     
     void activateSession( Session* s )
     {
         Q_ASSERT( s );
 
+        activeSession = s;
+        if( !lockSession() ) {
+            activeSession = 0;
+            return;
+        }
+
         KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
         grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
-        activeSession = s;
         if (Core::self()->setupFlags() & Core::NoUi) return;
 
         QHash<Session*,QAction*>::iterator it = sessionActions.find(s);
@@ -287,6 +289,7 @@ public:
     QActionGroup* grp;
     
     KLockFile::Ptr sessionLock;
+    SessionController::LockSessionState sessionLockState;
     
     // Whether this process owns the recovery directory
     bool recoveryDirectoryIsOwn;
@@ -294,18 +297,57 @@ public:
     QTimer recoveryTimer;
     QMap<KUrl, QStringList > currentRecoveryFiles;
 
+    static QString sessionBaseDirectory()
+    {
+        return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName() + "/sessions/", true );
+    }
+
+    static QString sessionDirectory( const QString& id )
+    {
+        return sessionBaseDirectory() + id;
+    }
+
+    static QString lockFileForSession( const QString& id )
+    {
+        return sessionDirectory( id ) + "/lock";
+    }
+
+    static QString DBusServiceNameForSession( const QString& id )
+    {
+        // We remove starting "{" and ending "}" from the string UUID representation
+        // as D-Bus apparently doesn't allow them in service names
+        return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
+    }
+
+    QString ownDBusServiceName()
+    {
+        Q_ASSERT(activeSession);
+        return DBusServiceNameForSession( activeSession->id() );
+    }
     
     QString ownSessionDirectory() const
     {
         Q_ASSERT(activeSession);
-        return SessionController::sessionDirectory() + '/' + activeSession->id().toString();
+        return sessionDirectory( activeSession->id().toString() );
     }
-    
+
+    QString ownLockFile()
+    {
+        Q_ASSERT(activeSession);
+        return lockFileForSession( activeSession->id().toString() );
+    }
+
     void clearRecoveryDirectory()
     {
         removeDirectory(ownSessionDirectory() + "/recovery");
     }
     
+    bool lockSession()
+    {
+        sessionLockState = SessionController::tryLockSession( activeSession->id(), true );
+        return sessionLockState;
+    }
+
 public slots:
     void documentSavedOrClosed( KDevelop::IDocument* document )
     {
@@ -537,13 +579,6 @@ private slots:
     }
 };
 
-bool SessionController::lockSession()
-{
-    d->sessionLock = new KLockFile(d->ownSessionDirectory() + "/lock");
-    KLockFile::LockResult result = d->sessionLock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
-    
-    return result == KLockFile::LockOK;
-}
 
 void SessionController::updateSessionDescriptions()
 {
@@ -723,12 +758,20 @@ void SessionController::loadDefaultSession( const QString& session )
         load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
 
-    Session* s = this->session( load );
-    if( !s )
+    // Iteratively try to load the session, asking user what to do in case of failure
+    // If showForceOpenDialog() returns empty string, stop trying
+    Session* s;
+    do
     {
-        s = createSession( load );
-    }
-    d->activateSession( s );
+        s = this->session( load );
+        if( !s ) {
+            s = createSession( load );
+        }
+        d->activateSession( s );
+        if( activeSession() )
+            break;
+        load = handleLockedSession( s->name(), s->id().toString(), d->sessionLockState );
+    } while( !load.isEmpty() );
 }
 
 Session* SessionController::session( const QString& nameOrId ) const
@@ -745,8 +788,8 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Session* origSession = session( nameOrid );
     qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
-                             KUrl( sessionDirectory() + '/' + id.toString() ), 
+    KIO::NetAccess::dircopy( SessionControllerPrivate::sessionDirectory( origSession->id().toString() ),
+                             SessionControllerPrivate::sessionDirectory( id.toString() ),
                              Core::self()->uiController()->activeMainWindow() );
     Session* newSession = new Session( id );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
@@ -800,32 +843,67 @@ QList< SessionInfo > SessionController::availableSessionInfo()
 
 QString SessionController::sessionDirectory()
 {
-    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+    return SessionControllerPrivate::sessionBaseDirectory();
 }
 
-QString SessionController::sessionDir()
+SessionController::LockSessionState SessionController::tryLockSession(QString id, bool doLocking)
 {
-    return sessionDirectory() + '/' + activeSession()->id().toString();
-}
-
-SessionController::LockSessionState SessionController::tryLockSession(QString id)
-{
+    /*
+     * We've got two locking mechanisms here: D-Bus unique service name (based on the session id)
+     * and a plain lockfile (KLockFile).
+     * The latter is required to get the appname/pid of the locking instance
+     * in case if it's stale/hanging/crashed (to make user know which PID he needs to kill).
+     * D-Bus mechanism is the primary one.
+     *
+     * Since there is a kind of "logic tree", the code is a bit hard.
+     */
     LockSessionState ret;
-    
-    ret.lockFile = sessionDirectory() + '/' + id + "/lock";
+    ret.sessionId = id;
 
-    if(!QFileInfo(ret.lockFile).exists())
-    {
-        // Maybe the session doesn't exist yet
-        ret.success = true;
-        return ret;
+    QString service = SessionControllerPrivate::DBusServiceNameForSession( id );
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    QDBusInterface rootInterface( service, "/", QString(), connection );
+    ret.DBusService = service;
+
+    ret.lockFilename = SessionControllerPrivate::lockFileForSession( id );
+    ret.lockFile = new KLockFile( ret.lockFilename );
+
+    bool canLockDBus = !rootInterface.isValid();
+    bool lockedDBus = false;
+
+    // Lock D-Bus if we can and we need to
+    if( doLocking && canLockDBus ) {
+        lockedDBus = connection.registerService( service );
     }
-    
-    KLockFile::Ptr lock(new KLockFile(ret.lockFile));
-    ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
-    if(!ret.success) {
-        lock->getLockInfo(ret.holderPid, ret.holderHostname, ret.holderApp);
+
+    // Attempt to lock file, despite the possibility to do so and presence of the request (doLocking)
+    // This is required as KLockFile::getLockInfo() works only after KLockFile::lock() is called
+    ret.attemptRelock();
+    if( ret.lockResult == KLockFile::LockOK ) {
+        // Unlock immediately if we shouldn't have locked it
+        if( !lockedDBus ) {
+            ret.lockFile->unlock();
+        }
+    } else {
+        // If locking failed, retrieve the lock's metadata
+        ret.lockFile->getLockInfo( ret.holderPid, ret.holderHostname, ret.holderApp );
+
+        if( lockedDBus ) {
+            // Since the lock-file is secondary, try to force-lock it if D-Bus locking succeeded
+            ret.forceRemoveLockfile();
+            ret.attemptRelock();
+
+            // Finally, if removing didn't help, cancel D-Bus locking altogether.
+            if( ret.lockResult != KLockFile::LockOK ) {
+                connection.unregisterService( service );
+                // do not set lockedDBus to false: ret.success will be then set to
+                // lockedDBus, and we want it true to indicate that the D-Bus name is free
+            }
+        }
     }
+
+    // Set the result by D-Bus status
+    ret.success = doLocking ? lockedDBus : canLockDBus;
     return ret;
 }
 
@@ -1002,6 +1080,121 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     return QString();
 }
 
+QString SessionController::handleLockedSession( const QString& sessionName, const QString& sessionId,
+                                                const SessionController::LockSessionState& state )
+{
+    if( state ) {
+        return sessionId;
+    }
+
+    // Set to true if lock-file is not free
+    bool lockFileOwned = state.lockResult != KLockFile::LockOK;
+
+    // Set the locking problem description.
+    QString problemDescription;
+    if( state.success ) {
+        // Do not try to call D-Bus if the D-Bus service is free (unregistered).
+        switch( state.lockResult ) {
+            case KLockFile::LockStale:
+                problemDescription = i18nc("@info", "The session lock-file is stale.");
+                break;
+
+            case KLockFile::LockError:
+                problemDescription = i18nc("@info", "Error while taking the session lock-file.");
+                break;
+
+            case KLockFile::LockFail:
+                problemDescription = i18nc("@info", "The session lock-file is owned.");
+                break;
+
+            case KLockFile::LockOK:
+            default:
+                // We shouldn't have both D-Bus service name and lockfile free by now.
+                Q_ASSERT( false );
+                break;
+        }
+    } else {
+        QDBusInterface interface(state.DBusService,
+                                 "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
+                                 QDBusConnection::sessionBus());
+        if (interface.isValid()) {
+            QDBusReply<void> reply = interface.call("ensureVisible");
+            if (reply.isValid()) {
+                kDebug() << i18nc("@info:shell", "made running %1 instance (PID: %2) visible", state.holderApp, state.holderPid);
+                return QString();
+            }
+        }
+
+        problemDescription = i18nc("@info",
+                                   "The given application did not respond to a DBUS call, "
+                                   "it may have crashed or is hanging.");
+    }
+
+    QString problemHeader;
+    if( lockFileOwned ) {
+        problemHeader = i18nc("@info", "Failed to lock the session <em>%1</em>, "
+                              "already locked by %2 on %3 (PID %4).",
+                              sessionName, state.holderApp, state.holderHostname, state.holderPid);
+    } else {
+        problemHeader = i18nc("@info", "Failed to lock the session <em>%1</em> (lock-file unavailable).",
+                              sessionName);
+    }
+
+    QString problemResolution;
+    if( state.success ) {
+        problemResolution = i18nc("@info",
+                                  "<p>Do you want to remove the lock file and force a new %1 instance?<br/>"
+                                  "<strong>Beware:</strong> Only do this if you are sure there is no running"
+                                  " process using this session.</p>"
+                                  "<p>Otherwise, close the offending application instance "
+                                  "or choose another session to launch.</p>",
+                                  KCmdLineArgs::aboutData()->programName());
+    } else {
+        problemResolution = i18nc("@info",
+                                  "<p>Please, close the offending application instance "
+                                  "or choose another session to launch.</p>");
+    }
+
+    QString errmsg = "<p>"
+                     + problemHeader
+                     + "<br>"
+                     + problemDescription
+                     + "</p>"
+                     + problemResolution;
+
+    KGuiItem retry = KStandardGuiItem::cont();
+    if( state.success ) {
+        retry.setText(i18nc("@action:button", "Remove lock file"));
+    } else {
+        retry.setText(i18nc("@action:button", "Retry startup"));
+    }
+    KGuiItem choose = KStandardGuiItem::configure();
+    choose.setText(i18nc("@action:button", "Choose another session"));
+    KGuiItem cancel = KStandardGuiItem::quit();
+    int ret = KMessageBox::warningYesNoCancel(0, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName),
+                                              retry, choose, cancel);
+    switch( ret ) {
+    case KMessageBox::Yes:
+        if( state.success ) {
+            state.forceRemoveLockfile();
+        }
+        return sessionId;
+        break;
+
+    case KMessageBox::No: {
+        QString errmsg = i18nc("@info", "The session %1 is already active in another running instance.",
+                               sessionName);
+        return showSessionChooserDialog(errmsg);
+        break;
+    }
+
+    case KMessageBox::Cancel:
+    default:
+        return QString();
+        break;
+    }
+}
+
 void SessionChooserDialog::itemEntered(const QModelIndex& index)
 {
     // The last row says "Create new session", we don't want to delete that
@@ -1064,6 +1257,12 @@ void SessionChooserDialog::deleteButtonPressed()
     }
 }
 
+QString SessionController::sessionDir()
+{
+    if( !activeSession() )
+        return QString();
+    return d->ownSessionDirectory();
+}
 
 QString SessionController::sessionName()
 {

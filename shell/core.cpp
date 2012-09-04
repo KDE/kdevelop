@@ -216,26 +216,9 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     
     kDebug() << "initializing ui controller";
-    
-    if( !session.isEmpty() && !SessionController::tryLockSession(session) && !(mode & Core::NoUi) )
-    {
-        QString errmsg = i18n("The session %1 is already active in another running instance. Choose another session or close the running instance.", session );
-        session = SessionController::showSessionChooserDialog(errmsg);
-        if(session.isEmpty())
-            return false;
-    }
-    
-    sessionController.data()->initialize( session );
 
-    if(!sessionController.data()->lockSession())
-    {
-        QString errmsg = i18n("Failed to lock the session %1, probably it is already active in another running instance", session );
-        if( mode & Core::NoUi ) {
-            QTextStream qerr(stderr);
-            qerr << endl << errmsg << endl;
-        } else {
-            KMessageBox::error(0, errmsg);
-        }
+    sessionController.data()->initialize( session );
+    if( !sessionController.data()->activeSession() ) {
         return false;
     }
 

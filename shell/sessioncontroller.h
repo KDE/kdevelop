@@ -60,28 +60,46 @@ public:
     struct LockSessionState {
         LockSessionState()
          : success(true),
-           holderPid(-1)
+           holderPid(-1),
+           lockResult( KLockFile::LockOK )
         {
         }
         operator bool() const {
-            return success;
+            return success && ( lockResult == KLockFile::LockOK );
         }
         bool success;
         QString holderApp;
         QString holderHostname;
         int holderPid;
-        QString lockFile;
+        QString lockFilename;
+        KLockFile::Ptr lockFile;
+        KLockFile::LockResult lockResult;
+        QString sessionId;
+        QString DBusService;
+
+        /// Tries to own the lock-file; stores its status in @ref lockResult
+        void attemptRelock()
+        {
+            lockResult = lockFile->lock( KLockFile::ForceFlag | KLockFile::NoBlockFlag );
+        }
+
+        /// Force-removes the lock-file.
+        void forceRemoveLockfile() const
+        {
+            if( QFile::exists( lockFilename ) ) {
+                QFile::remove( lockFilename );
+            }
+        }
     };
-    
-    /// Returns whether the given session can be locked
-    static LockSessionState tryLockSession(QString id);
-    
+
+    /// Returns whether the given session can be locked (i. e., is not locked currently).
+    /// @param doLocking whether to really lock the session or just "dry-run" the locking process
+    static LockSessionState tryLockSession(QString id, bool doLocking = false);
+
     /// The application should call this on startup to tell the
     /// session-controller about the received arguments.
     /// Some of them may need to be passed to newly opened sessions.
     static void setArguments(int argc, char** argv);
-    
-    bool lockSession();
 
     ///Finds a session by its name or by its UUID
     Session* session( const QString& nameOrId ) const;
@@ -108,7 +126,20 @@ public:
     /// @param headerText an additional text that will be shown at the top in a label
     /// @param onlyRunning whether only currently running sessions should be shown
     static QString showSessionChooserDialog(QString headerText = QString(), bool onlyRunning = false);
-    
+
+    /// Should be called if session to be opened is locked.
+    /// It attempts to bring existing instance's window up via a DBus call; if that succeeds, empty string is returned.
+    /// Otherwise (if the app did not respond) it shows a dialog where the user may choose
+    /// 1) to force-remove the lockfile and continue,
+    /// 2) to select another session via \ref showSessionChooserDialog,
+    /// 3) to quit the current (starting-up) instance.
+    /// @param sessionName session name (for the message)
+    /// @param sessionId current session GUID (to return if user chooses force-removal)
+    /// @param state session lock state
+    /// @return new session GUID to try or an empty string if application startup shall be aborted
+    static QString handleLockedSession( const QString& sessionName, const QString& sessionId,
+                                        const SessionController::LockSessionState& state );
+
     void plugActions();
     
     void emitQuitSession()
