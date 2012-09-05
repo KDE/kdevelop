@@ -26,12 +26,7 @@
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/codegen/templateclassgenerator.h>
 
-#include "cpptypes.h"
-
-namespace KDevelop
-{
-class ProjectBaseItem;
-}
+#include <KUrl>
 
 class CppClassHelper : public KDevelop::ICreateClassHelper
 {
@@ -56,7 +51,7 @@ public:
 class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 {
   public:
-    CppTemplateNewClass(KDevelop::ProjectBaseItem* parentItem);
+    CppTemplateNewClass(const KUrl& url);
     virtual ~CppTemplateNewClass();
 
     virtual KDevelop::DocumentChangeSet generate();
@@ -80,9 +75,6 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
     QVariantHash extraVariables();
 
     void addBaseClass(const QString& base);
-
-  private:
-    KDevelop::ProjectBaseItem* m_parentItem;
 };
 
 #endif // CPPCLASSHELPER_H

@@ -25,14 +25,7 @@
 
 #include <language/codegen/templateclassassistant.h>
 #include <language/codegen/documentchangeset.h>
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <project/projectmodel.h>
-#include <project/interfaces/iprojectfilemanager.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 
-#include <KLocalizedString>
 #include <KTemporaryFile>
 #include <QMessageBox>
 #include <QVBoxLayout>
@@ -53,20 +46,7 @@ CppClassHelper::~CppClassHelper()
 
 TemplateClassGenerator* CppClassHelper::createGenerator(const KUrl& baseUrl)
 {
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(baseUrl);
-    ProjectBaseItem* item = 0;
-
-    if (project)
-    {
-        QList<ProjectBaseItem*> items = project->itemsForUrl(baseUrl);
-
-        if (!items.isEmpty())
-        {
-            item = items.first();
-        }
-    }
-
-    return new CppTemplateNewClass(item);
+    return new CppTemplateNewClass(baseUrl);
 }
 
 QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) const
@@ -107,9 +87,8 @@ QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) co
     return methods;
 }
 
-CppTemplateNewClass::CppTemplateNewClass(ProjectBaseItem* parentItem)
-: TemplateClassGenerator(parentItem ? parentItem->url() : KUrl())
-, m_parentItem(parentItem)
+CppTemplateNewClass::CppTemplateNewClass(const KUrl& url)
+: TemplateClassGenerator(url)
 {
 
 }
@@ -197,11 +176,8 @@ QVariantHash CppTemplateNewClass::extraVariables()
     }
     else
     {
-        if (m_parentItem)
-        {
-            sourceUrl = m_parentItem->url();
-        }
         // includeDirectiveFromUrl() expects a header URL
+        sourceUrl = baseUrl();
         sourceUrl.addPath(name().toLower() + ".h");
     }
 
@@ -228,83 +204,7 @@ QVariantHash CppTemplateNewClass::extraVariables()
 DocumentChangeSet CppTemplateNewClass::generate()
 {
   addVariables(extraVariables());
-  DocumentChangeSet changes = TemplateClassGenerator::generate();
-
-  if (!m_parentItem) {
-    // happens when we don't select anything in the project view
-    // and create a new class from the code menu
-    return changes;
-  }
-
-  //Pick the folder Item that should contain the new class
-  IProject* p=m_parentItem->project();
-  ProjectFolderItem* folder=m_parentItem->folder();
-  ProjectTargetItem* target=m_parentItem->target();
-
-  if(target) {
-    folder=static_cast<ProjectFolderItem*>(m_parentItem->target()->parent());
-    Q_ASSERT(folder->folder());
-  }else if(!folder) {
-    QHash<QString,KUrl> urls = fileUrls();
-    Q_ASSERT(!urls.isEmpty());
-    if(urls.isEmpty())
-      return changes;
-    QList<ProjectFolderItem*> folderList = p->foldersForUrl(urls.values().first().upUrl());
-    if(folderList.isEmpty())
-      return changes;
-    folder = folderList.first();
-  }
-
-  // find target to add created class to
-  if(!target && folder && p->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets ) {
-    QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
-    for(ProjectBaseItem* it=folder; it && t.isEmpty(); it=it->parent()) {
-      t=it->targetList();
-    }
-
-    if(t.count()==1) { //Just choose this one
-      target=t.first();
-    } else if(t.count() > 1) {
-      KDialog d;
-      QWidget *w=new QWidget(&d);
-      w->setLayout(new QVBoxLayout);
-      w->layout()->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
-      QListWidget* targetsWidget=new QListWidget(w);
-      targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-      foreach(ProjectTargetItem* it, t) {
-        targetsWidget->addItem(it->text());
-      }
-      w->layout()->addWidget(targetsWidget);
-
-      targetsWidget->setCurrentRow(0);
-      d.setButtons( KDialog::Ok | KDialog::Cancel);
-      d.enableButtonOk(true);
-      d.setMainWidget(w);
-
-      if(d.exec()==QDialog::Accepted) {
-        if(targetsWidget->selectedItems().isEmpty()) {
-          QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
-        } else {
-          target= t[targetsWidget->currentRow()];
-        }
-      }
-    }
-  }
-
-  if(target && p->buildSystemManager()) {
-    QList<ProjectFileItem*> itemsToAdd;
-    foreach (const KUrl& url, fileUrls())
-    {
-      if (ProjectFileItem* file = p->projectFileManager()->addFile(url, folder))
-      {
-        itemsToAdd << file;
-      }
-    }
-
-    p->buildSystemManager()->addFilesToTarget(itemsToAdd, target);
-  }
-
-  return changes;
+  return TemplateClassGenerator::generate();
 }
 
 void CppTemplateNewClass::addBaseClass(const QString& base)
