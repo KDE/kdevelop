@@ -40,9 +40,18 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include <KLocalizedString>
 #include <KConfig>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPointer>
 
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
@@ -63,6 +72,8 @@ class KDevelop::TemplateClassAssistantPrivate
 public:
     TemplateClassAssistantPrivate(const KUrl& baseUrl);
     ~TemplateClassAssistantPrivate();
+
+    void addFilesToTarget (const QHash<QString, KUrl>& fileUrls);
 
     KPageWidgetItem* templateSelectionPage;
     KPageWidgetItem* classIdentifierPage;
@@ -114,6 +125,128 @@ TemplateClassAssistantPrivate::~TemplateClassAssistantPrivate()
         // otherwise, we created a templaterenderer on our own
         delete renderer;
     }
+}
+
+void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl >& fileUrls)
+{
+    // Add the generated files to a target, if one is found
+    KUrl url = baseUrl;
+    if (!url.isValid())
+    {
+        // This was probably not launched from the project manager view
+        // Still, we try to find the common URL where the generated files are located
+
+        if (!fileUrls.isEmpty())
+        {
+            url = fileUrls.constBegin().value().upUrl();
+        }
+    }
+    kDebug() << "Searching for targets with URL" << url.prettyUrl();
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    if (!project || !project->buildSystemManager())
+    {
+        kDebug() << "No suitable project found";
+        return;
+    }
+
+    QList<ProjectBaseItem*> items = project->itemsForUrl(url);
+    if (items.isEmpty())
+    {
+        kDebug() << "No suitable project items found";
+        return;
+    }
+
+    QList<ProjectTargetItem*> targets;
+    ProjectTargetItem* target = 0;
+
+    foreach (ProjectBaseItem* item, items)
+    {
+        if (ProjectTargetItem* target = item->target())
+        {
+            targets << target;
+        }
+    }
+
+    if (targets.isEmpty())
+    {
+        // If no target was explicitely found yet, try all the targets in the current folder
+        foreach (ProjectBaseItem* item, items)
+        {
+            targets << item->targetList();
+        }
+    }
+
+    if (targets.isEmpty())
+    {
+        // If still no targets, we traverse the tree up to the first directory with targets
+        ProjectBaseItem* item = items.first()->parent();
+        while (targets.isEmpty() && item)
+        {
+            targets = item->targetList();
+            item = item->parent();
+        }
+    }
+
+    if (targets.size() == 1)
+    {
+        kDebug() << "Only one candidate target," << targets.first()->text() << ", using it";
+        target = targets.first();
+    }
+    else if (targets.size() > 1)
+    {
+        // More than one candidate target, show the chooser dialog
+        QPointer<KDialog> d = new KDialog;
+        QWidget* w = new QWidget(d);
+        w->setLayout(new QVBoxLayout);
+        w->layout()->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
+        QListWidget* targetsWidget = new QListWidget(w);
+        targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        foreach(ProjectTargetItem* target, targets) {
+            targetsWidget->addItem(target->text());
+        }
+        w->layout()->addWidget(targetsWidget);
+
+        targetsWidget->setCurrentRow(0);
+        d->setButtons( KDialog::Ok | KDialog::Cancel);
+        d->enableButtonOk(true);
+        d->setMainWidget(w);
+
+        if(d->exec() == QDialog::Accepted)
+        {
+            if (!targetsWidget->selectedItems().isEmpty())
+            {
+                target = targets[targetsWidget->currentRow()];
+            }
+            else
+            {
+                kDebug() << "Did not select anything, not adding to a target";
+            }
+        }
+    }
+    else
+    {
+        // No target, not doing anything
+        kDebug() << "No possible targets for URL" << url;
+        return;
+    }
+
+    Q_ASSERT(target);
+
+    QList<ProjectFileItem*> fileItems;
+    foreach (const KUrl& fileUrl, fileUrls)
+    {
+        foreach (ProjectBaseItem* item, project->itemsForUrl(fileUrl.upUrl()))
+        {
+            if (ProjectFolderItem* folder = item->folder())
+            {
+                fileItems << project->projectFileManager()->addFile(fileUrl, folder);
+                break;
+            }
+        }
+    }
+
+    project->buildSystemManager()->addFilesToTarget(fileItems, target);
+
 }
 
 TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& baseUrl)
@@ -413,8 +546,11 @@ void TemplateClassAssistant::accept()
     {
         changes = d->renderer->renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls);
     }
+
+    d->addFilesToTarget(fileUrls);
     changes.applyAllChanges();
 
+    // Open the generated files in the editor
     foreach (const KUrl& url, fileUrls)
     {
         ICore::self()->documentController()->openDocument(url);

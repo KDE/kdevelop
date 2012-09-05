@@ -111,10 +111,7 @@ void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fi
 
 DocumentChangeSet TemplateClassGenerator::generate()
 {
-    DocumentChangeSet changes = d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
-
-    addToTarget();
-    return changes;
+    return d->renderer.renderFileTemplate(d->fileTemplate, d->baseUrl, fileUrls());
 }
 
 QHash<QString, QString> TemplateClassGenerator::fileLabels() const
@@ -247,102 +244,6 @@ void TemplateClassGenerator::setLicense(const QString& license)
 QString TemplateClassGenerator::license() const
 {
     return d->license;
-}
-
-
-void TemplateClassGenerator::addToTarget()
-{
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(d->baseUrl);
-    if (!project)
-    {
-        return;
-    }
-
-    QList<ProjectBaseItem*> items = project->itemsForUrl(d->baseUrl);
-    if (items.isEmpty())
-    {
-        return;
-    }
-
-    ProjectBaseItem* baseItem = items.first();
-
-    //Pick the folder Item that should contain the new class
-    ProjectFolderItem* folder = baseItem->folder();
-    ProjectTargetItem* target = baseItem->target();
-    if (target)
-    {
-        folder = target->parent()->folder();
-    }
-    else if (!folder)
-    {
-        folder = baseItem->parent()->folder();
-    }
-
-    // find target to add created class to
-    if(!target && folder && project->projectFileManager()->features() & IProjectFileManager::Targets )
-    {
-        /*
-         * NOTE: This requires linking agains KDevPlatformProject
-         */
-
-        /*
-         *       QList<KDevelop::ProjectTargetItem*> t = folder->targetList();
-         *       for(ProjectBaseItem* it = folder; it && t.isEmpty(); it = it->parent()) {
-         *           t = it->targetList();
-         }
-
-         if (t.count() == 1)
-         { //Just choose this one
-         target = t.first();
-    }
-    else if (t.count() > 1)
-    {
-        QPointer<KDialog> dialog = new KDialog;
-        QWidget* widget = new QWidget(dialog);
-        widget->setLayout(new QVBoxLayout);
-        widget->layout()->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
-        QListWidget* targetsWidget = new QListWidget(widget);
-        targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        foreach(ProjectTargetItem* it, t) {
-            targetsWidget->addItem(it->text());
-    }
-    widget->layout()->addWidget(targetsWidget);
-
-    targetsWidget->setCurrentRow(0);
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel);
-    dialog->enableButtonOk(true);
-    dialog->setMainWidget(widget);
-
-    if(dialog->exec() == QDialog::Accepted)
-    {
-        if (targetsWidget->selectedItems().isEmpty())
-        {
-            kDebug() << "Did not select anything, not adding to target";
-            // This warning only annoys the user
-            // QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
-    }
-    else
-    {
-        target = t[targetsWidget->currentRow()];
-    }
-    }
-    }
-    */
-    }
-
-    if (target && project->buildSystemManager())
-    {
-        QList<ProjectFileItem*> itemsToAdd;
-        foreach (const KUrl& url, fileUrls())
-        {
-            ProjectFileItem* item = project->projectFileManager()->addFile(url, folder);
-            if (item)
-            {
-                itemsToAdd << item;
-            }
-        }
-        project->buildSystemManager()->addFilesToTarget(itemsToAdd, target);
-    }
 }
 
 void TemplateClassGenerator::setDescription(const ClassDescription& description)

@@ -133,7 +133,6 @@ public:
     ClassDescription description() const;
 
     virtual DocumentChangeSet generate();
-    virtual void addToTarget();
 
     QHash<QString,QString> fileLabels() const;
 
