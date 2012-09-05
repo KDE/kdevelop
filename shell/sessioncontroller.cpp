@@ -668,12 +668,12 @@ void SessionController::initialize( const QString& session )
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
-            && (session.isEmpty() || (ses->id().toString() != session && ses->name() != session)) )
-        {
-            ///@todo Think about when we can do this. Another instance might still be using this session.
-//             session->deleteFromDisk();
+            && (session.isEmpty() || (ses->id().toString() != session && ses->name() != session)) ) {
+            if( tryLockSession(s) ) {
+                ses->deleteFromDisk();
+            }
             delete ses;
-        }else{
+        } else {
             d->addSession( ses );
         }
     }
@@ -1247,17 +1247,32 @@ void SessionChooserDialog::deleteButtonPressed()
     if(m_deleteCandidateRow == -1)
         return;
 
+    QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
+    QStandardItem* item = m_model->itemFromIndex(index);
+    const QString uuid = item->text();
+
+    {
+        SessionController::LockSessionState state = SessionController::tryLockSession( uuid );
+        if( !state ) {
+            const QString errCaption = i18nc("@title", "Cannot Delete Session");
+            QString errText = i18nc("@info", "<p>Cannot delete a locked session.");
+
+            if( state.lockResult != KLockFile::LockOK ) {
+                errText += i18nc("@info", "<p>The session is locked by %1 on %2 (PID %3).",
+                                 state.holderApp, state.holderHostname, state.holderPid);
+            }
+
+            KMessageBox::error( this, errText, errCaption );
+            return;
+        }
+    }
+
     const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
     const QString caption = i18nc("@title", "Delete Session");
     const KGuiItem deleteItem = KStandardGuiItem::del();
     const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
-        QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-        QStandardItem *item = m_model->itemFromIndex(index);
-        const QString uuid = item->text();
-
-        //FIXME: What about running sessions?
         KDevelop::Session session( uuid );
         session.deleteFromDisk();
 
