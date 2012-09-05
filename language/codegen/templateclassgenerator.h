@@ -136,6 +136,7 @@ public:
 
     QHash<QString,QString> fileLabels() const;
 
+    KUrl baseUrl() const;
     UrlHash fileUrls() const;
 
     void setFileUrl(const QString& outputFile, const KUrl& url);

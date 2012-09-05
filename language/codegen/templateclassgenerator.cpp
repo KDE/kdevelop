@@ -143,6 +143,11 @@ TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
     return d->fileUrls;
 }
 
+KUrl TemplateClassGenerator::baseUrl() const
+{
+    return d->baseUrl;
+}
+
 KUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 {
     return fileUrls().value(outputFile);
