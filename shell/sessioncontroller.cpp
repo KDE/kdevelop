@@ -811,33 +811,10 @@ QString SessionController::cfgActiveSessionEntry() { return "Active Session ID";
 QList< SessionInfo > SessionController::availableSessionInfo()
 {
     QList< SessionInfo > available;
-
-    QDir sessiondir( SessionController::sessionDirectory() );
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
-    {
-        QUuid id( s );
-        if( id.isNull() )
-            continue;
-        // TODO: Refactor the code here and in session.cpp so its shared
-        SessionInfo si;
-        si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + '/' + s +"/sessionrc" );
-
-        QString desc = config->group( "" ).readEntry( "SessionName", "" );
-        si.name = desc;
-
-        si.projects = config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
-
-        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
-
-        if(!prettyContents.isEmpty())
-        {
-            if(!desc.isEmpty())
-                desc += ":  ";
-            desc += prettyContents;
+    foreach( const QString& sessionId, QDir( SessionController::sessionDirectory() ).entryList( QDir::AllDirs ) ) {
+        if( !QUuid( sessionId ).isNull() ) {
+            available << Session::parse( sessionId );
         }
-        si.description = desc;
-        available << si;
     }
     return available;
 }

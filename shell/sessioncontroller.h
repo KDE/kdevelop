@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #define SESSIONCONTROLLER_H
 
 #include "shellexport.h"
+#include "session.h"
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
 #include <QtCore/QUuid>
@@ -35,18 +36,6 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-
-
-class Session;
-class ISession;
-
-struct SessionInfo
-{
-    QString name;
-    QUuid uuid;
-    QString description;
-    KUrl::List projects;
-};
 
 class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
 {
