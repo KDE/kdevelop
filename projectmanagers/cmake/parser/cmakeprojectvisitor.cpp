@@ -2028,35 +2028,49 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
-    kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
-    if(setp->type()==GlobalProperty)
-        m_props[GlobalProperty][QString()][setp->name()]=setp->values();
-    else
-    {
-        CategoryType& cm=m_props[setp->type()];
-        if(setp->append()) {
-            foreach(const QString &it, setp->args()) {
-                cm[it][setp->name()].append(setp->values());
-            }
-        } else {
-            foreach(const QString &it, setp->args())
-                cm[it].insert(setp->name(), setp->values());
+    QStringList args = setp->args();
+    switch(setp->type()) {
+        case GlobalProperty:
+            args = QStringList() << QString();
+            break;
+        case DirectoryProperty:
+            args = m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
+            break;
+        default:
+            break;
+    }
+    kDebug() << "setprops" << setp->type() << args << setp->name() << setp->values();
+    
+    CategoryType& cm=m_props[setp->type()];
+    if(setp->append()) {
+        foreach(const QString &it, args) {
+            cm[it][setp->name()].append(setp->values());
         }
+    } else {
+        foreach(const QString &it, args)
+            cm[it].insert(setp->name(), setp->values());
     }
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
 {
-    kDebug() << "getprops";
-    QStringList retv;
     QString catn;
-    if(getp->type()!=GlobalProperty)
-    {
-        catn=getp->typeName();
+    switch(getp->type()) {
+        case GlobalProperty:
+            break;
+        case DirectoryProperty:
+            catn = getp->typeName();
+            if(catn.isEmpty())
+                catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+            break;
+        default:
+            catn = getp->typeName();
+            break;
     }
-    retv=m_props[getp->type()][catn][getp->name()];
+    QStringList retv=m_props[getp->type()][catn][getp->name()];
     m_vars->insert(getp->outputVariable(), retv);
+    kDebug() << "getprops" << getp->type() << catn << getp->name() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 
