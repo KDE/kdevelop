@@ -3754,6 +3754,7 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     m_outputVariable=it->value;
+    addOutputArgument(*it);
     ++it;
     
     PropertyType t;
