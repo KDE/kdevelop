@@ -87,9 +87,6 @@
        <verstretch>8</verstretch>
       </sizepolicy>
      </property>
-     <property name="tabPosition">
-      <enum>QTabWidget::West</enum>
-     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
