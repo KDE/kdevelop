@@ -367,6 +367,7 @@ void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, QList<
 {
     BuilderJob* builder = new BuilderJob;
     builder->addItems( type, items );
+    builder->updateJobName();
     ICore::self()->runController()->registerJob( builder );
 }
 
