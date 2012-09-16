@@ -3,6 +3,7 @@
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
     Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
     Copyright 2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2012 Ivan Shapovalov <intelfx100@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -23,7 +24,7 @@
 #ifndef MAKEJOB_H
 #define MAKEJOB_H
 
-#include <outputview/outputjob.h>
+#include <outputview/outputexecutejob.h>
 
 #include <QString>
 #include <QProcess>
@@ -40,7 +41,7 @@ class KUrl;
 class KProcess;
 class MakeBuilder;
 
-class MakeJob: public KDevelop::OutputJob
+class MakeJob: public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
 
@@ -57,7 +58,6 @@ public:
     {
         IncorrectItemError = UserDefinedError,
         ItemNoLongerValidError,
-        InvalidBuildDirectoryError,
         BuildCommandError,
         FailedError = FailedShownError
     };
@@ -73,33 +73,26 @@ public:
     CommandType commandType();
     QStringList customTargets() const;
 
-    KDevelop::OutputModel* model() const;
-
     void setItem( KDevelop::ProjectBaseItem* item );
 
-public slots:
-    void addStandardOutput( const QStringList& );
-protected:
-    bool doKill();
+    // This returns the build directory for registered item.
+    virtual KUrl workingDirectory() const;
 
-private Q_SLOTS:
-    void procError( QProcess::ProcessError error );
-    void procFinished( int code, QProcess::ExitStatus status );
+    // This returns the "make" command line.
+    virtual QStringList commandLine() const;
+
+    // This returns the configured privileged execution command (if specified by user).
+    virtual QStringList privilegedExecutionCommand() const;
+
+    // This returns the configured global environment profile.
+    virtual QString environmentProfile() const;
 
 private:
-    QStringList computeBuildCommand() const;
-    KUrl computeBuildDir(KDevelop::ProjectBaseItem* item) const;
-    QStringList environmentVars() const;
-
     MakeBuilder* m_builder;
     KDevelop::ProjectBaseItem* m_item;
     CommandType m_command;
     QStringList m_overrideTargets;
     MakeVariables m_variables;
-    KDevelop::ProcessLineMaker* m_lineMaker;
-    KProcess* m_process;
-    bool m_killed;
-    bool firstError;
 };
 
 #endif // MAKEJOB_H
