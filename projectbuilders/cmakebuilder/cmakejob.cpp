@@ -22,39 +22,34 @@
 
 #include "cmakejob.h"
 
-#include <config.h>
 #include <cmakebuilderconfig.h>
 
-#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
 #include <QtCore/QDir>
 
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
-#include <interfaces/iplugincontroller.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <outputview/ioutputview.h>
-#include <outputview/outputmodel.h>
-#include <util/commandexecutor.h>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <kshell.h>
 #include <kdebug.h>
 #include <kjob.h>
+#include <klocalizedstring.h>
 
 #include "cmakeutils.h"
-#include <util/environmentgrouplist.h>
 
 using namespace KDevelop;
 
 CMakeJob::CMakeJob(QObject* parent)
-    : OutputJob(parent)
+    : OutputExecuteJob(parent)
     , m_project(0)
-    , m_executor(0)
-    , m_killed(false)
 {
-    setCapabilities(Killable);
+    setCapabilities( Killable );
+    setFilteringStrategy( OutputModel::CompilerFilter );
+    setProperties( NeedWorkingDirectory );
+    setProperties( PortableMessages );
+    setProperties( DisplayStderr );
+    setToolTitle( i18n("CMake") );
 }
 
 void CMakeJob::start()
@@ -72,59 +67,8 @@ void CMakeJob::start()
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    KDevelop::OutputModel* model = new KDevelop::OutputModel;
-    setModel( model );
-    startOutput();
 
-    QString cmd = cmakeBinary( m_project );
-    m_executor = new KDevelop::CommandExecutor(cmd, this);
-    connect(m_executor, SIGNAL(receivedStandardError(QStringList)),
-            model, SLOT(appendLines(QStringList)) );
-    connect(m_executor, SIGNAL(receivedStandardOutput(QStringList)),
-            model, SLOT(appendLines(QStringList)) );
-    KUrl buildDirUrl = KUrl(QFileInfo(buildDir( m_project ).toLocalFile()).absoluteFilePath());
-    if( !QFileInfo(buildDirUrl.toLocalFile()).exists() )
-    {
-        kDebug() << "creating" << buildDirUrl.fileName() << "in" << buildDirUrl.directory();
-        QDir d(buildDirUrl.directory());
-        d.mkpath( buildDirUrl.fileName() );
-    }
-    m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
-    m_executor->setArguments( cmakeArguments( m_project ) );
-    m_executor->setEnvironment(buildEnvironment());
-    connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_executor, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)) );
-    kDebug() << "Executing" << m_executor->command() << buildDirUrl.toLocalFile() << m_executor->arguments();
-    model->appendLine( buildDirUrl.toLocalFile() + "> " + m_executor->command() + " " + m_executor->arguments().join(" "));
-    m_executor->start();
-}
-
-void CMakeJob::slotFailed( QProcess::ProcessError )
-{
-    kDebug() << "job failed!";
-    if (!m_killed) {
-        setError(FailedError);
-        // FIXME need more detail
-        setErrorText(i18n("Job failed"));
-    }
-    emitResult();
-}
-
-void CMakeJob::slotCompleted(int code)
-{
-    kDebug() << "job completed";
-    if( code != 0 ) {
-        // Error is already visible in the output view
-        setError(FailedShownError);
-    }
-    emitResult();
-}
-
-bool CMakeJob::doKill()
-{
-    m_killed = true;
-    m_executor->kill();
-    return true;
+    OutputExecuteJob::start();
 }
 
 QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
@@ -132,35 +76,42 @@ QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
     return CMake::currentCMakeBinary( project ).toLocalFile();
 }
 
-KUrl CMakeJob::buildDir( KDevelop::IProject* project )
+KUrl CMakeJob::workingDirectory() const
 {
-    KUrl url = CMake::currentBuildDir( project );
+    KUrl url = CMake::currentBuildDir( m_project );
     kDebug(9042) << "builddir: " << url;
     Q_ASSERT(!url.isEmpty() && !url.isRelative()); //We cannot get the project folder as a build directory!
+
+    if( !QFile::exists( url.toLocalFile() ) ) {
+        kDebug() << "creating" << url.fileName() << "in" << url.directory();
+        QDir( url.directory() ).mkdir( url.fileName() );
+    }
     return url;
 }
 
-QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
+QStringList CMakeJob::commandLine() const
 {
     QStringList args;
-    QString installDir = CMake::currentInstallDir(project).toLocalFile();
+    args << CMake::currentCMakeBinary( m_project ).toLocalFile();
+
+    QString installDir = CMake::currentInstallDir( m_project ).toLocalFile();
     if( !installDir.isEmpty() )
     {
         args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(installDir);
     }
-    QString buildType = CMake::currentBuildType(project);
+    QString buildType = CMake::currentBuildType( m_project );
     if( !buildType.isEmpty() )
     {
         args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
     
     //if we are creating a new build directory, we'll want to specify the generator
-    QDir builddir(CMake::currentBuildDir(project).toLocalFile());
+    QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
     if(!builddir.exists() || builddir.count()==2) {
         CMakeBuilderSettings::self()->readConfig();
         args << QString("-G") << CMakeBuilderSettings::self()->generator();
     }
-    QString cmakeargs = CMake::currentExtraArguments(project);
+    QString cmakeargs = CMake::currentExtraArguments( m_project );
     if( !cmakeargs.isEmpty() ) {
         KShell::Errors err;
         QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
@@ -175,9 +126,14 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
             }
         }
     }
-    args << CMake::projectRoot(project).toLocalFile();
+    args << CMake::projectRoot( m_project ).toLocalFile();
 
     return args;
+}
+
+QString CMakeJob::environmentProfile() const
+{
+    return CMake::currentEnvironment( m_project );
 }
 
 void CMakeJob::setProject(KDevelop::IProject* project)
@@ -185,17 +141,7 @@ void CMakeJob::setProject(KDevelop::IProject* project)
     m_project = project;
     
     if (m_project)
-        setObjectName(i18n("CMake: %1", m_project->name()));
-}
-
-QStringList CMakeJob::buildEnvironment()
-{
-    QString profile = CMake::currentEnvironment(m_project);
-
-    const KDevelop::EnvironmentGroupList l(KGlobal::config());
-    QStringList env = QProcess::systemEnvironment();
-    env.append( "LC_MESSAGES=C" );
-    return l.createEnvironment( profile, env );
+        setJobName( i18n("CMake: %1", m_project->name()) );
 }
 
 #include "cmakejob.moc"
