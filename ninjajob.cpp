@@ -21,38 +21,52 @@
 #include <KUrl>
 #include <KDebug>
 #include <KLocalizedString>
+#include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
-#include <outputview/outputdelegate.h>
-#include <util/commandexecutor.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectmodel.h>
+#include <QFile>
 
-NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent)
-    : OutputJob(parent, Verbose)
+NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent)
+    : OutputExecuteJob(parent)
     , m_lastLine(false)
-    , m_item(0)
+    , m_item(item)
 {
-    Q_ASSERT(!dir.isRelative() && !dir.isEmpty());
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    setObjectName("ninja "+arguments.join(" "));
-    setDelegate(new KDevelop::OutputDelegate);
- 
-    m_process = new KDevelop::CommandExecutor("ninja", this);
-    m_process->setArguments( arguments );
-    m_process->setWorkingDirectory(dir.toLocalFile(KUrl::RemoveTrailingSlash));
-    
-    m_model = new KDevelop::OutputModel(dir, this);
-    setModel( m_model );
-    m_model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
+    setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
+    setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput );
 
-    connect(m_process, SIGNAL(receivedStandardError(QStringList)),
-            SLOT(appendLines(QStringList)) );
-    connect(m_process, SIGNAL(receivedStandardOutput(QStringList)),
-            SLOT(appendLines(QStringList)) );
-    
-    connect( m_process, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_process, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)) );
+    *this << "ninja";
+    *this << arguments;
+
+    QStringList targets;
+    foreach( const QString& arg, arguments ) {
+        if( !arg.startsWith( '-' ) ) {
+            targets << arg;
+        }
+    }
+    QString title;
+    if( !targets.isEmpty() )
+        title = i18n("Ninja (%1): %2", m_item->text(), targets.join(" "));
+    else
+        title = i18n("Ninja (%1)", m_item->text());
+    setJobName( title );
+}
+
+KUrl NinjaJob::workingDirectory() const
+{
+    KUrl workingDir = m_item->project()->buildSystemManager()->buildDirectory( m_item );
+    while( !QFile::exists( workingDir.toLocalFile( KUrl::AddTrailingSlash ) + "build.ninja" ) ) {
+        KUrl upWorkingDir = workingDir.upUrl();
+        if( upWorkingDir.isEmpty() || upWorkingDir == workingDir ) {
+            return m_item->project()->buildSystemManager()->buildDirectory( m_item->project()->projectItem() );
+        }
+        workingDir = upWorkingDir;
+    }
+    return workingDir;
 }
 
 void NinjaJob::signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item)
@@ -71,40 +85,14 @@ void NinjaJob::emitProjectBuilderSignal(KJob* job)
         QMetaObject::invokeMethod(parent(), "failed", Q_ARG(KDevelop::ProjectBaseItem*, m_item));
 }
 
-void NinjaJob::start()
+void NinjaJob::postProcessStderr( const QStringList& lines )
 {
-    startOutput();
-    kDebug() << "Executing ninja" << m_process->arguments();
-    m_model->appendLine( m_process->workingDirectory() + "> " + m_process->command() + " " + m_process->arguments().join(" ") );
-    m_process->start();
+    appendLines( lines );
 }
 
-bool NinjaJob::doKill()
+void NinjaJob::postProcessStdout( const QStringList& lines )
 {
-    m_process->kill();
-    m_model->appendLine( i18n("*** Aborted ***") );
-    return true;
-}
-
-void NinjaJob::slotCompleted(int code)
-{
-    if( code != 0 ) {
-        setError( FailedShownError );
-        m_model->appendLine( i18n("*** Failed ***") );
-    } else {
-        m_model->appendLine( i18n("*** Finished ***") );
-    }
-    emitResult();
-}
-
-void NinjaJob::slotFailed(QProcess::ProcessError error)
-{
-    Q_UNUSED( error )
-    setError(Failed);
-    // FIXME need more detail
-    setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
-    m_model->appendLine( i18n("*** Failed ***") );
-    emitResult();
+    appendLines( lines );
 }
 
 void NinjaJob::appendLines(const QStringList& lines)
@@ -123,7 +111,7 @@ void NinjaJob::appendLines(const QStringList& lines)
     }
     
     if(m_lastLine && ret.first().startsWith('['))
-        m_model->removeLastLines(1);
+        model()->removeLastLines(1);
     m_lastLine = ret.last().startsWith('[');
-    m_model->appendLines(ret);
+    model()->appendLines(ret);
 }

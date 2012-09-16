@@ -38,7 +38,6 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
         virtual KJob* clean(KDevelop::ProjectBaseItem* item);
         virtual KJob* install(KDevelop::ProjectBaseItem* item);
         
-        KUrl findNinjaFile(KDevelop::IProject* p);
         NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
 
     Q_SIGNALS:

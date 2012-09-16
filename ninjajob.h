@@ -19,11 +19,9 @@
 #ifndef NINJAJOB_H
 #define NINJAJOB_H
 
-#include <outputview/outputjob.h>
-#include <QProcess>
+#include <outputview/outputexecutejob.h>
 
 namespace KDevelop {
-    class CommandExecutor;
     class OutputModel;
     class ProjectBaseItem;
 }
@@ -31,7 +29,7 @@ namespace KDevelop {
 class KProcess;
 class KUrl;
 
-class NinjaJob : public KDevelop::OutputJob
+class NinjaJob : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
     enum ErrorTypes {
@@ -39,23 +37,24 @@ class NinjaJob : public KDevelop::OutputJob
         Failed
     };
     public:
-        NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* parent);
-        virtual void start();
-        virtual bool doKill();
+        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent );
         void signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item);
 
+        virtual KUrl workingDirectory() const;
+
+    protected slots:
+        virtual void postProcessStdout( const QStringList& lines );
+        virtual void postProcessStderr( const QStringList& lines );
+
     private slots:
-        void slotFailed(QProcess::ProcessError error);
-        void slotCompleted(int);
-        void appendLines(const QStringList& lines);
         void emitProjectBuilderSignal(KJob* job);
 
     private:
-        KDevelop::CommandExecutor* m_process;
-        KDevelop::OutputModel* m_model;
         bool m_lastLine;
         KDevelop::ProjectBaseItem* m_item;
         QByteArray m_signal;
+
+        void appendLines( const QStringList& lines );
 };
 
 #endif // NINJAJOB_H

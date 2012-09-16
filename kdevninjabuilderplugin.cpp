@@ -75,23 +75,9 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
     return QStringList();
 }
 
-KUrl KDevNinjaBuilderPlugin::findNinjaFile(KDevelop::IProject* p)
-{
-    KUrl ret = p->buildSystemManager()->buildDirectory(p->projectItem());
-    while(!QFile::exists(ret.toLocalFile(KUrl::AddTrailingSlash)+"build.ninja") && ret!=ret.upUrl()) {
-        ret = ret.upUrl();
-    }
-    
-    if(ret.isEmpty()) {
-        ret = p->buildSystemManager()->buildDirectory(p->projectItem());
-    }
-    
-    return ret;
-}
-
 NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal)
 {
-    NinjaJob* job = new NinjaJob(findNinjaFile(item->project()), args, this);
+    NinjaJob* job = new NinjaJob(item, args, this);
     job->signalWhenFinished(signal, item);
     return job;
 }
