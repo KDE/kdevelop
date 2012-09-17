@@ -395,6 +395,7 @@ QProcessEnvironment OutputExecuteJob::effectiveEnvironment() const
     mergeEnvironment( environment, environmentGroup.variables( environmentProfile() ) );
     mergeEnvironment( environment, m_environmentOverrides );
     if( m_properties.testFlag( PortableMessages ) ) {
+        environment.remove( "LC_ALL" );
         environment.insert( "LC_MESSAGES", "C" );
     }
     return environment;
