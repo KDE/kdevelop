@@ -217,19 +217,22 @@ void OutputExecuteJob::start()
 
 bool OutputExecuteJob::doKill()
 {
+    const int terminateKillTimeout = 1000; // msecs
+
     if( m_status != JobRunning )
         return true;
     m_status = JobCanceled;
 
     m_process->terminate();
-    bool terminated = m_process->waitForFinished( 3000 );
+    bool terminated = m_process->waitForFinished( terminateKillTimeout );
     if( !terminated ) {
         m_process->kill();
-        terminated = m_process->waitForFinished();
+        terminated = m_process->waitForFinished( terminateKillTimeout );
     }
     m_lineMaker->flushBuffers();
-    model()->appendLine( i18n("*** Aborted ***") );
-    if( !terminated ) {
+    if( terminated ) {
+        model()->appendLine( i18n( "*** Aborted ***" ) );
+    } else {
         // It survived SIGKILL, leave it alone...
         model()->appendLine( i18n( "*** Warning: could not kill the process ***" ) );
     }
