@@ -25,13 +25,14 @@
 
 #include <ktemporaryfile.h>
 #include <qtextstream.h>
-#include <qtextedit.h>
+#include <QSharedPointer>
 #include <kdebug.h>
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
 
 #include "../vcsexport.h"
 
+class KTextEdit;
 class KComboBox;
 namespace KDevelop {
 class VcsCommitDialog;
@@ -94,7 +95,7 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
     Q_OBJECT
     public:
     /// The ownership of the updater is taken
-    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& base, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
     ~VCSCommitDiffPatchSource() ;
     
     QStringList oldMessages() const;
@@ -116,7 +117,7 @@ Q_SIGNALS:
     void reviewCancelled(QString message);
 public:
     QWeakPointer<QWidget> m_commitMessageWidget;
-    QWeakPointer<QTextEdit> m_commitMessageEdit;
+    QWeakPointer<KTextEdit> m_commitMessageEdit;
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
 public slots:

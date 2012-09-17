@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QDir>
 #include <project/projectmodel.h>
+#include <KAction>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)
@@ -34,6 +35,7 @@ DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
     
     setPreferredToolBoxPlugin(Plasma::Containment::CustomContainment, "org.kde.nettoolbox");
     
+    connect(this, SIGNAL(containmentAdded(Plasma::Containment*)), SLOT(containmentAddedToCorona(Plasma::Containment*)));
 }
 
 KDevelop::IProject* DashboardCorona::project() const
@@ -65,4 +67,17 @@ void DashboardCorona::loadDefaultLayout()
             c->addApplet("plasma_kdev_projectfileelement", QVariantList() << "TODO");
         
     }
+}
+
+void DashboardCorona::containmentAddedToCorona(Plasma::Containment* c)
+{
+    QAction* shareAction =  new QAction(KIcon("document-export"), i18n("Share"), this);
+    connect(shareAction, SIGNAL(triggered(bool)), SLOT(saveToProject()));
+    c->addToolBoxAction(shareAction);
+    c->removeToolBoxAction(c->action("expand widgets"));
+}
+
+void DashboardCorona::saveToProject()
+{
+    saveLayout(m_project->projectFileUrl().toLocalFile());
 }

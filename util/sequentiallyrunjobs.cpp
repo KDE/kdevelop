@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,64 +19,42 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "toolviewdata.h"
+#include "sequentiallyrunjobs.h"
 
-#include <QAbstractItemModel>
-#include <QAbstractItemDelegate>
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
+#include <KLocalizedString>
 
-#include <kdebug.h>
-
-OutputData::OutputData( ToolViewData* tv )
-: QObject( tv )
-, delegate(0)
-, model(0)
-, toolView(tv)
-, id(-1)
+SequentiallyRunJobs::SequentiallyRunJobs( KJob* a, KJob* b )
 {
+    a->setParent(this);
+    b->setParent(this);
+    addSubjob( a );
+    addSubjob( b );
+    setObjectName(i18n("'%1' + '%2'", a->objectName(), b->objectName()));
+    kDebug() << "added job" << hasSubjobs();
 }
 
-void OutputData::setModel( QAbstractItemModel* model_ )
+void SequentiallyRunJobs::start()
 {
-    model = model_;
+    if(hasSubjobs())
+        KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+    else
+        emitResult();
+}
 
-    if (model) {
-        model->setParent(this);
+void SequentiallyRunJobs::slotResult( KJob* job )
+{
+    //call parent implementation for default behaviour
+    KCompositeJob::slotResult( job );
+    if( !error() && hasSubjobs() )
+    {
+        // start next build;
+        KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+    } else
+    {
+        emitResult();
     }
-
-    emit modelChanged( id );
 }
-
-void OutputData::setDelegate( QAbstractItemDelegate* del )
-{
-    delegate = del;
-
-    if (delegate) {
-        delegate->setParent(this);
-    }
-
-    emit delegateChanged( id );
-}
-
-ToolViewData::ToolViewData( QObject* parent )
-    : QObject( parent ), plugin(0), toolViewId(-1)
-{
-}
-
-ToolViewData::~ToolViewData()
-{
-}
-
-OutputData* ToolViewData::addOutput( int id, const QString& title,
-                                     KDevelop::IOutputView::Behaviours behave )
-{
-    OutputData* d = new OutputData( this );
-    d->id = id;
-    d->title = title;
-    d->behaviour = behave;
-    d->toolView = this;
-    outputdata.insert( id, d );
-    emit outputAdded( id );
-    return d;
-}
-
-#include "toolviewdata.moc"

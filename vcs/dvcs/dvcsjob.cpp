@@ -67,8 +67,8 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
-    d->model = new OutputModel( this );
-    setModel(d->model, IOutputView::TakeOwnership);
+    d->model = new OutputModel;
+    setModel(d->model);
     
     connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotProcessExited(int,QProcess::ExitStatus)));

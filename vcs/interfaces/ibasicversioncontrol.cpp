@@ -18,8 +18,10 @@
  * 02110-1301, USA.
  */
 #include "ibasicversioncontrol.h"
+#include <KTextEdit>
 
 /// Default empty implementation
-void KDevelop::IBasicVersionControl::setupCommitMessageEditor(const KUrl&, QTextEdit*) const
+void KDevelop::IBasicVersionControl::setupCommitMessageEditor(const KUrl&, KTextEdit* edit) const
 {
+    edit->setCheckSpellingEnabled(true);
 }

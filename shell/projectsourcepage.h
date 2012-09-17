@@ -30,7 +30,8 @@ class ProjectSourcePage : public QWidget
     Q_OBJECT
     public:
         ProjectSourcePage(const KUrl& initial, QWidget* parent = 0);
-        
+        virtual ~ProjectSourcePage();
+
         KUrl workingDir() const;
         
     private slots:

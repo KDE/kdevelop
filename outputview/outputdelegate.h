@@ -43,7 +43,7 @@ struct OutputDelegatePrivate
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 {
 public:
-    OutputDelegate( QObject* );
+    OutputDelegate( QObject* parent = 0 );
     virtual ~OutputDelegate();
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const;
 

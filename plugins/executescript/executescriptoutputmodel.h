@@ -32,7 +32,7 @@ class ExecuteScriptOutputModel : public OutputModel
 {
     Q_OBJECT
 public:
-    ExecuteScriptOutputModel(QObject* parent);
+    ExecuteScriptOutputModel(QObject* parent = 0);
     virtual void activate(const QModelIndex& index);
     virtual QModelIndex nextHighlightIndex(const QModelIndex& currentIndex);
     virtual QModelIndex previousHighlightIndex(const QModelIndex& currentIndex);

@@ -201,10 +201,6 @@ void PatchReviewPlugin::notifyPatchChanged() {
     m_updateKompareTimer->start( 500 );
 }
 
-void PatchReviewPlugin::showPatch() {
-    startReview( m_patch, OpenAndRaise );
-}
-
 void PatchReviewPlugin::forceUpdate() {
     if( m_patch ) {
         m_patch->update();
@@ -254,14 +250,7 @@ void PatchReviewPlugin::updateKompareModel() {
         m_modelList->slotKompareInfo( m_kompareInfo.get() );
 
         try {
-            if ( !m_modelList->openDirAndDiff() )
-            {
-#if 0
-                // Don't error out on empty files, as those are valid diffs too
-                if( QFileInfo( m_patch->file().toLocalFile() ).size() != 0 )
-                    throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
-#endif
-            }
+            m_modelList->openDirAndDiff();
         } catch ( const QString & str ) {
             throw;
         } catch ( ... ) {
@@ -343,43 +332,6 @@ void PatchReviewPlugin::clearPatch( QObject* _patch ) {
             setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
     }
 }
-
-#if 0
-#ifdef HAVE_KOMPARE
-void showDiff( const KDevelop::VcsDiff& d ) {
-    ICore::self()->uiController()->switchToArea( "review", KDevelop::IUiController::ThisWindow );
-    foreach( const VcsLocation& l, d.leftTexts().keys() )
-    {
-        KUrl to;
-        if( d.rightTexts().contains( l ) )
-        {
-            KTemporaryFile temp2;
-            temp2.setSuffix( "2.patch" );
-            //FIXME: don't leak
-            temp2.setAutoRemove( false );
-            temp2.open();
-            QTextStream t2( &temp2 );
-            t2 << d.rightTexts()[l];
-            temp2.close();
-            to = temp2.fileName();
-        }
-        else
-            to = l.localUrl();
-
-        KUrl fakeUrl( to );
-        fakeUrl.setScheme( "kdevpatch" );
-
-        IDocumentFactory* docf = ICore::self()->documentController()->factory( "text/x-patch" );
-        IDocument* doc = docf->create( fakeUrl, ICore::self() );
-        IPatchDocument* pdoc = dynamic_cast<IPatchDocument*>( doc );
-
-        Q_ASSERT( pdoc );
-        ICore::self()->documentController()->openDocument( doc );
-        pdoc->setDiff( d.leftTexts()[l], to );
-    }
-}
-#endif
-#endif
 
 void PatchReviewPlugin::closeReview()
 {
@@ -475,23 +427,11 @@ void PatchReviewPlugin::updateReview() {
 
     IDocument* futureActiveDoc = 0;
     //Open the diff itself
-#ifdef HAVE_KOMPARE
-    KUrl fakeUrl( m_patch->file() );
-    fakeUrl.setScheme( "kdevpatch" );
-    IDocumentFactory* docf = ICore::self()->documentController()->factory( "text/x-patch" );
-    IDocument* doc = docf->create( fakeUrl, ICore::self() );
-    IPatchDocument* pdoc = dynamic_cast<IPatchDocument*>( doc );
-
-    Q_ASSERT( pdoc );
-    futureActiveDoc = ICore::self()->documentController()->openDocument( doc );
-    //TODO: close kompare doc if available
-#else
     if ( !documents.contains( m_patch->file() ) ) {
         futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
     } else {
         futureActiveDoc = documents.take( m_patch->file() );
     }
-#endif
     if ( !futureActiveDoc || !futureActiveDoc->textDocument() ) {
         // might happen if e.g. openDocument dialog was cancelled by user
         // or under the theoretic possibility of a non-text document getting opened
@@ -499,8 +439,7 @@ void PatchReviewPlugin::updateReview() {
     }
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-    IDocument* doc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
-    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( doc->textDocument() );
+    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
@@ -619,70 +558,6 @@ void PatchReviewPlugin::exporterSelected( QAction* action ) {
     }
 }
 
-#if 0
-void PatchReviewPlugin::determineState() {
-    LocalPatchSourcePointer lpatch = m_patch;
-    if ( !lpatch ) {
-        kDebug() <<"determineState(..) could not lock patch";
-    }
-    try {
-        if ( lpatch->filename.isEmpty() )
-            throw "state can only be determined for file-patches";
-
-        KUrl fileUrl = lpatch->filename;
-
-        {
-            K3Process proc;
-            ///Try to apply, if it works, the patch is not applied
-            QString cmd =  "patch --dry-run -s -f -i " + fileUrl.toLocalFile();
-            proc << splitArgs( cmd );
-
-            kDebug() << "calling " << cmd;
-
-            if ( !proc.start( K3Process::Block ) )
-                throw "could not start process";
-
-            if ( !proc.normalExit() )
-                throw "process did not exit normally";
-
-            kDebug() << "exit-status:" << proc.exitStatus();
-
-            if ( proc.exitStatus() == 0 ) {
-//                 lpatch->state = LocalPatchSource::NotApplied;
-                return;
-            }
-        }
-
-        {
-            ///Try to revert, of it works, the patch is applied
-            K3Process proc;
-            QString cmd =  "patch --dry-run -s -f -i --reverse " + fileUrl.toLocalFile();
-            proc << splitArgs( cmd );
-
-            kDebug() << "calling " << cmd;
-
-            if ( !proc.start( K3Process::Block ) )
-                throw "could not start process";
-
-            if ( !proc.normalExit() )
-                throw "process did not exit normally";
-
-            kDebug() << "exit-status:" << proc.exitStatus();
-
-            if ( proc.exitStatus() == 0 ) {
-//                 lpatch->state = LocalPatchSource::Applied;
-                return;
-            }
-        }
-    } catch ( const QString& str ) {
-        kWarning() <<"Error:" << str;
-    } catch ( const char* str ) {
-        kWarning() << "Error:" << str;
-    }
-
-//     lpatch->state = LocalPatchSource::Unknown;
-}
-#endif
 #include "patchreview.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

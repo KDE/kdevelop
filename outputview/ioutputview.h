@@ -117,32 +117,22 @@ public:
 
     virtual void scrollOutputTo( int outputId, const QModelIndex& ) = 0;
 
-    enum Ownership {
-        KeepOwnership,
-        TakeOwnership
-    };
-
     /**
-     * Sets the model of the registered output identified by id to model
-     * Does nothing if the id doesn't exist
+     * Sets the model of the registered output identified by @p outputId to @p model.
      *
-     * \param takeOwnership If true, the output view plugin takes ownership of the model,
-     *                      and deletes it when the view is removed.  If false, the ownership
-     *                      remains with the caller.
+     * Does nothing if the id doesn't exist. The output view takes ownership of the model.
      *
+     * NOTE: Do not reuse the same model for different views.
      */
-    virtual void setModel( int outputId, QAbstractItemModel* model, Ownership takeOwnership = KeepOwnership ) = 0;
-
+    virtual void setModel( int outputId, QAbstractItemModel* model ) = 0;
     /**
-     * Sets the item delegate of the registered output identified by id to @p delegate
-     * Does nothing if the id doesn't exist
+     * Sets the item delegate of the registered output identified by @p outputId to @p delegate.
      *
-     * \param takeOwnership If true, the output view plugin takes ownership of the model,
-     *                      and deletes it when the view is removed.  If false, the ownership
-     *                      remains with the caller.
+     * Does nothing if the id doesn't exist. The output view takes ownership of the delegate.
      *
+     * NOTE: Do not reuse the same delegate for different views.
      */
-    virtual void setDelegate( int outputId, QAbstractItemDelegate* model, Ownership takeOwnership = KeepOwnership ) = 0;
+    virtual void setDelegate( int outputId, QAbstractItemDelegate* model ) = 0;
 
     /**
      * remove a toolview, don't forget to emit toolViewRemoved when you implement this

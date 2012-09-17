@@ -327,7 +327,7 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::PausedState) {
-        setCurrentFrame(0);
+        setCurrentFrame(-1);
         m_updateCurrentFrameOnNextFetch = true;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         setThreads(QList<FrameStackModel::ThreadItem>());

@@ -49,7 +49,7 @@ macro(kdevplatform_create_template_archive _templateName)
 
     if(WIN32)
         add_custom_command(OUTPUT ${_template}
-            COMMAND zip ARGS -r -x .svn _svn .kdev_ignore ${_template} .
+            COMMAND zip ARGS -r ${_template} . -x .svn _svn .kdev_ignore
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
             DEPENDS ${_deps}
         )
@@ -61,7 +61,6 @@ macro(kdevplatform_create_template_archive _templateName)
             DEPENDS ${_deps}
         )
     endif(WIN32)
-
 endmacro(kdevplatform_create_template_archive _templateName)
 
 # package and install the given directory as a template archive

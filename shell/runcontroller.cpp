@@ -556,6 +556,7 @@ void KDevelop::RunController::registerJob(KJob * job)
         d->jobs.insert(job, stopJobAction);
 
         connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
+        connect( job, SIGNAL(destroyed(QObject*)), SLOT(jobDestroyed(QObject*)) );
 
         IRunController::registerJob(job);
 
@@ -639,6 +640,15 @@ void KDevelop::RunController::finished(KJob * job)
 
         default:
             KMessageBox::error(qApp->activeWindow(), job->errorString(), i18n("Process Error"));
+    }
+}
+
+void RunController::jobDestroyed(QObject* job)
+{
+    KJob* kjob = static_cast<KJob*>(job);
+    if (d->jobs.contains(kjob)) {
+        kWarning() << "job destroyed without emitting finished signal!";
+        unregisterJob(kjob);
     }
 }
 

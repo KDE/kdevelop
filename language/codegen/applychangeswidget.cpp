@@ -37,6 +37,8 @@
 #include <QDebug>
 #include <KPushButton>
 #include "coderepresentation.h"
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <KTemporaryFile>
 #include <KActionCollection>
 #include <QAction>
@@ -143,7 +145,11 @@ bool ApplyChangesWidget::applyAllChanges()
     
     bool ret = true;
     for(int i = 0; i < d->m_files.size(); ++i )
-        if(!d->m_editParts[i]->saveAs(d->m_files[i].toUrl()))
+        if(d->m_editParts[i]->saveAs(d->m_files[i].toUrl())) {
+            IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_files[i].toUrl());
+            if(doc && doc->state()==IDocument::Dirty)
+                doc->reload();
+        } else
             ret = false;
         
     return ret;

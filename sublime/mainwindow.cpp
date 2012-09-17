@@ -143,10 +143,9 @@ void MainWindow::setArea(Area *area)
     if (d->autoAreaSettingsSave && differentArea)
         saveSettings();
 
+    HoldUpdates hu(this);
     if (d->area)
         clearArea();
-
-    HoldUpdates hu(this);
     d->area = area;
     d->reconstruct();
     

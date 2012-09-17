@@ -27,7 +27,7 @@
 #include "../vcsdiff.h"
 
 class QString;
-class QTextEdit;
+class KTextEdit;
 
 namespace KDevelop
 {
@@ -255,7 +255,7 @@ public:
      * Overwrite this to set e.g. a default commit message or to setup highlighting or validation.
      * The default implementation does nothing.
      */
-    virtual void setupCommitMessageEditor(const KUrl& localLocation, QTextEdit *editor) const;
+    virtual void setupCommitMessageEditor(const KUrl&, KTextEdit* edit) const;
 };
 
 }

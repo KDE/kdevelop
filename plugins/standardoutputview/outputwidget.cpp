@@ -181,10 +181,11 @@ void OutputWidget::setCurrentWidget( QTreeView* view )
 
 void OutputWidget::changeDelegate( int id )
 {
-    if( data->outputdata.contains( id ) && views.contains( id ) )
+    if( data->outputdata.contains( id ) && views.contains( id ) ) {
         views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
-    else
+    } else {
         addOutput(id);
+    }
 }
 
 void OutputWidget::changeModel( int id )

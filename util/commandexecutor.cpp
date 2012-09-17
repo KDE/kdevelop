@@ -52,10 +52,9 @@ public:
     }
     void procFinished( int code, QProcess::ExitStatus status )
     {
-        Q_UNUSED(code)
         m_lineMaker->flushBuffers();
         if( status == QProcess::NormalExit )
-            emit m_exec->completed();
+            emit m_exec->completed(code);
     }
 };
 
@@ -146,6 +145,21 @@ void CommandExecutor::setCommand( const QString& command )
 void CommandExecutor::kill()
 {
     d->m_process->close();
+}
+
+QString CommandExecutor::command() const
+{
+    return d->m_command;
+}
+
+QStringList CommandExecutor::arguments() const
+{
+    return d->m_args;
+}
+
+QString CommandExecutor::workingDirectory() const
+{
+    return d->m_workDir;
 }
 
 }

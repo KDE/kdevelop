@@ -92,7 +92,6 @@ public Q_SLOTS :
     void notifyPatchChanged();
     void highlightPatch();
     void updateKompareModel();
-    void showPatch();
     void forceUpdate();
 
 private Q_SLOTS :

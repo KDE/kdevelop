@@ -143,10 +143,7 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
 
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
-    m_editPatch.tabWidget->setVisible( lpatch );
-    m_editPatch.baseDir->setVisible( lpatch );
-    m_editPatch.label->setVisible( lpatch );
-    m_editPatch.applied->setVisible( lpatch );
+    m_editPatch.localPatchOptions->setVisible( lpatch );
     if( !lpatch )
         return;
 
@@ -175,16 +172,6 @@ void PatchReviewToolView::slotAppliedChanged( int newState ) {
     }
 }
 
-void PatchReviewToolView::slotEditCommandChanged() {
-//     m_editPatch.filename->lineEdit()->setText( "" );
-    updatePatchFromEdit();
-}
-
-void PatchReviewToolView::slotEditFileNameChanged() {
-//     m_editPatch.command->setText( "" );
-    updatePatchFromEdit();
-}
-
 void PatchReviewToolView::showEditDialog() {
     m_editPatch.setupUi( this );
 
@@ -200,6 +187,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
+    m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -226,25 +214,25 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( slotAppliedChanged( int ) ) );
-    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( slotEditFileNameChanged() ) );
+    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
 
     m_editPatch.baseDir->setMode( KFile::Directory );
 
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( slotEditCommandChanged() ) );
+    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
 //   connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
 
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( slotEditFileNameChanged() ) );
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( slotEditCommandChanged() ) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
 //     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
     connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
 
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
-    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( showPatch() ) );
+    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
@@ -280,14 +268,32 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     delete menu;
 }
 
-void PatchReviewToolView::nextHunk() {
-//   updateKompareModel();
-    m_plugin->seekHunk( true );
+void PatchReviewToolView::nextHunk()
+{
+    IDocument* current = ICore::self()->documentController()->activeDocument();
+    if(current->url() == m_plugin->patch()->file())
+        fileDoubleClicked( m_fileModel->index(0,0) );
+    else if(!current->textDocument())
+    {
+        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
+        fileDoubleClicked( idx.sibling(idx.row()+1 % m_fileModel->rowCount(), 0) );
+    }
+    else
+        m_plugin->seekHunk( true );
 }
 
-void PatchReviewToolView::prevHunk() {
-//   updateKompareModel();
-    m_plugin->seekHunk( false );
+void PatchReviewToolView::prevHunk()
+{
+    IDocument* current = ICore::self()->documentController()->activeDocument();
+    if(current->url() == m_plugin->patch()->file())
+        fileDoubleClicked( m_fileModel->index(m_fileModel->rowCount()-1,0) );
+    else if(!current->textDocument())
+    {
+        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
+        fileDoubleClicked( idx.sibling(idx.row()-1 % m_fileModel->rowCount(), 0) );
+    }
+    else
+        m_plugin->seekHunk( false );
 }
 
 void PatchReviewToolView::finishReview() {

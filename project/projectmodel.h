@@ -364,7 +364,6 @@ public:
     virtual QModelIndex parent( const QModelIndex& child ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());

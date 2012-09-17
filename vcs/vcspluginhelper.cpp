@@ -436,7 +436,7 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
         menu->addAction(d->diffForRevAction);
         menu->addAction(d->diffForRevGlobalAction);
         menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("Revision History..."), new HistoryFunction(this, rev), menu));
+        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
     }
 }
 
@@ -463,7 +463,7 @@ void VcsPluginHelper::commit()
     KUrl url = d->ctxUrls.first();
     
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url), url, d->vcs);
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url));
     
     bool ret = showVcsDiff(patchSource);
 

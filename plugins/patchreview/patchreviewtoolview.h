@@ -49,9 +49,6 @@ private slots:
 
     void updatePatchFromEdit();
 
-    void slotEditCommandChanged();
-
-    void slotEditFileNameChanged();
     void slotAppliedChanged( int newState );
 
     void finishReview();

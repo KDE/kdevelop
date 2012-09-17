@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2009 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,64 +19,21 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "toolviewdata.h"
+#ifndef SEQUENTIALLYRUNJOBS_H
+#define SEQUENTIALLYRUNJOBS_H
 
-#include <QAbstractItemModel>
-#include <QAbstractItemDelegate>
+#include <kcompositejob.h>
+#include "utilexport.h"
 
-#include <kdebug.h>
-
-OutputData::OutputData( ToolViewData* tv )
-: QObject( tv )
-, delegate(0)
-, model(0)
-, toolView(tv)
-, id(-1)
+class KDEVPLATFORMUTIL_EXPORT SequentiallyRunJobs : public KCompositeJob
 {
-}
+    Q_OBJECT
+public:
+    SequentiallyRunJobs( KJob* a, KJob* b );
+    void start();
+private:
+    void slotResult( KJob* );
+};
 
-void OutputData::setModel( QAbstractItemModel* model_ )
-{
-    model = model_;
+#endif
 
-    if (model) {
-        model->setParent(this);
-    }
-
-    emit modelChanged( id );
-}
-
-void OutputData::setDelegate( QAbstractItemDelegate* del )
-{
-    delegate = del;
-
-    if (delegate) {
-        delegate->setParent(this);
-    }
-
-    emit delegateChanged( id );
-}
-
-ToolViewData::ToolViewData( QObject* parent )
-    : QObject( parent ), plugin(0), toolViewId(-1)
-{
-}
-
-ToolViewData::~ToolViewData()
-{
-}
-
-OutputData* ToolViewData::addOutput( int id, const QString& title,
-                                     KDevelop::IOutputView::Behaviours behave )
-{
-    OutputData* d = new OutputData( this );
-    d->id = id;
-    d->title = title;
-    d->behaviour = behave;
-    d->toolView = this;
-    outputdata.insert( id, d );
-    emit outputAdded( id );
-    return d;
-}
-
-#include "toolviewdata.moc"

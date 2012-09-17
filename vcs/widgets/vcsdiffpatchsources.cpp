@@ -29,24 +29,25 @@
 #include "vcsdiff.h"
 #include <interfaces/iplugincontroller.h>
 #include <KComboBox>
+#include <KTextEdit>
 #include <interfaces/isession.h>
 #include <interfaces/ibasicversioncontrol.h>
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& url, IBasicVersionControl* vcs)
-    : VCSDiffPatchSource(updater), m_vcs(vcs)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
+    : VCSDiffPatchSource(updater), m_vcs(updater->vcs())
 {
     Q_ASSERT(m_vcs);
-    m_base = url;
+    m_base = updater->url();
     
     m_commitMessageWidget = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
 
-    m_commitMessageEdit = new QTextEdit;
+    m_commitMessageEdit = new KTextEdit;
     m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
-    m_vcs->setupCommitMessageEditor(url, m_commitMessageEdit.data());
+    m_vcs->setupCommitMessageEditor(m_base, m_commitMessageEdit.data());
     
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));

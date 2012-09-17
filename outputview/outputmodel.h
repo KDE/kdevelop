@@ -40,21 +40,7 @@ namespace KDevelop
 {
 
 class FilteredItem;
-
-struct OutputModelPrivate
-{
-    OutputModelPrivate();
-    OutputModelPrivate( const KUrl& builddir );
-    ~OutputModelPrivate();
-    bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
-    QList<FilteredItem> m_filteredItems;
-    // We use std::set because that is ordered
-    std::set<int> m_activateableItems; // Indices of all items that we want to move to using previous and next 
-    KUrl m_buildDir;
-
-    QQueue<QString> m_lineBuffer;
-    QSharedPointer<IFilterStrategy> m_filter;
-};
+class OutputModelPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
@@ -74,7 +60,7 @@ public:
     };
 
     explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
-    OutputModel( QObject* parent );
+    OutputModel( QObject* parent = 0 );
     virtual ~OutputModel();
 
     /// IOutputViewModel interfaces
@@ -88,6 +74,7 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
+    void removeLastLines(int l);
 
 public Q_SLOTS:
     void appendLine( const QString& );

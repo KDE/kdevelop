@@ -26,6 +26,7 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QRegExp>
+#include <QSet>
 
 namespace KDevelop {
 class ProjectModel;
@@ -39,17 +40,31 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
         bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
 
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
+        // Returns zero for items which do not correspond to project items (eg. the "... X Filtered" item)
         KDevelop::ProjectBaseItem* itemFromProxyIndex( const QModelIndex& ) const;
         
         void setFilterString(const QString &filters);
+        
+        // Used to expand "... X filtered" items
+        void itemClicked ( const QModelIndex& item );
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-
+        
     private:
         KDevelop::ProjectModel* projectModel() const;
         bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
         QList<QSharedPointer<QRegExp> > mFilenameFilters; 
         QList<QSharedPointer<QRegExp> > mFilenameExcludeFilters;
+        
+        struct FilterCacheEntry {
+            FilterCacheEntry() : visible(true), visibleChildren(0), filteredChildren(0) {}
+            bool visible;
+            unsigned int visibleChildren;
+            unsigned int filteredChildren;
+        };
+        
+        mutable QMap<KDevelop::ProjectBaseItem*, FilterCacheEntry> mFilterCache;
+        QMap<KDevelop::ProjectBaseItem*, int> mExpandedFilters;
 };
 
 #endif

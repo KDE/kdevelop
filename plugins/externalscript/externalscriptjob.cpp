@@ -61,11 +61,12 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   setCapabilities( Killable );
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-  ExternalScriptOutputModel* model = new ExternalScriptOutputModel( this );
 
+  ExternalScriptOutputModel* model = new ExternalScriptOutputModel;
   model->setFilteringStrategy(static_cast<KDevelop::OutputModel::OutputFilterStrategy>(m_filterMode));
-  setModel( model, KDevelop::IOutputView::TakeOwnership );
-  setDelegate( m_plugin->delegate() );
+  setModel( model );
+
+  setDelegate( new KDevelop::OutputDelegate );
 
   // also merge when error mode "equals" output mode
   if ( (m_outputMode == ExternalScriptItem::OutputInsertAtCursor
