@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <KProcess>
 #include <KGlobal>
 #include <KLocalizedString>
+#include <KShell>
 #include <QFileInfo>
 
 namespace KDevelop
@@ -86,12 +87,16 @@ QStringList OutputExecuteJob::commandLine() const
 OutputExecuteJob& OutputExecuteJob::operator<<( const QString& argument )
 {
     m_arguments << argument;
+    updateCommandLine();
+    updateJobName();
     return *this;
 }
 
 OutputExecuteJob& OutputExecuteJob::operator<<( const QStringList& arguments )
 {
     m_arguments << arguments;
+    updateCommandLine();
+    updateJobName();
     return *this;
 }
 
@@ -194,12 +199,11 @@ void OutputExecuteJob::start()
         startOutput();
     }
 
-    const QString joinedCommandLine = joinCommandLine();
     QString headerLine;
     if( !effectiveWorkingDirectory.isEmpty() ) {
-        headerLine = effectiveWorkingDirectory.toLocalFile( KUrl::RemoveTrailingSlash ) + "> " + joinedCommandLine;
+        headerLine = effectiveWorkingDirectory.toLocalFile( KUrl::RemoveTrailingSlash ) + "> " + m_joinedCommandLine;
     } else {
-        headerLine = joinedCommandLine;
+        headerLine = m_joinedCommandLine;
     }
     model()->appendLine( headerLine );
 
@@ -393,16 +397,9 @@ QProcessEnvironment OutputExecuteJob::effectiveEnvironment() const
     return environment;
 }
 
-QString OutputExecuteJob::joinCommandLine() const
+void OutputExecuteJob::updateCommandLine()
 {
-    QStringList commandLine = effectiveCommandLine();
-    for( QStringList::iterator it = commandLine.begin(); it != commandLine.end(); ++it ) {
-        // If an argument contains spaces, enclose it with quote signs.
-        if( it->contains( QRegExp("[[:space:]]") ) ) {
-            it->prepend('"').append('"');
-        }
-    }
-    return commandLine.join(" ");
+    m_joinedCommandLine = KShell::joinArgs( effectiveCommandLine() );
 }
 
 QStringList OutputExecuteJob::effectiveCommandLine() const
@@ -419,13 +416,12 @@ QStringList OutputExecuteJob::effectiveCommandLine() const
 
 void OutputExecuteJob::updateJobName()
 {
-    const QString joinedCommandLine = joinCommandLine();
     QString jobName;
     if( m_properties.testFlag( AppendProcessString ) ) {
         if( !m_jobName.isEmpty() ) {
-            jobName = m_jobName + ": " + joinedCommandLine;
+            jobName = m_jobName + ": " + m_joinedCommandLine;
         } else {
-            jobName = joinedCommandLine;
+            jobName = m_joinedCommandLine;
         }
     } else {
         jobName = m_jobName;

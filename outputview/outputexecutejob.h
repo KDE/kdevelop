@@ -148,9 +148,6 @@ public:
      *
      * Calls \ref setTitle() and \ref setObjectName().
      *
-     * @note If you need the command-line to be appended to the job name,
-     * make sure that it is already configured upon calling this function.
-     *
      * @param name The name to set; empty string to use default (process string).
      */
     void setJobName( const QString& name );
@@ -239,7 +236,7 @@ private slots:
     void childProcessStderr();
 
 private:
-    QString joinCommandLine() const;
+    void updateCommandLine();
     void updateJobName();
 
     static void mergeEnvironment( QProcessEnvironment& dest, const QMap<QString, QString>& src );
@@ -258,6 +255,9 @@ private:
     QMap<QString, QString> m_environmentOverrides;
     QString m_jobName;
     bool m_outputStarted;
+
+    // Just a cache.
+    QString m_joinedCommandLine;
 
     QByteArray m_processStdout;
     QByteArray m_processStderr;
