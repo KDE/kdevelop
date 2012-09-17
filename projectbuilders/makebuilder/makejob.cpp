@@ -114,8 +114,7 @@ KUrl MakeJob::workingDirectory() const
     else
     {
         // Just build in-source, where the build directory equals the one with particular target/source.
-        ProjectBaseItem* item = m_item;
-        forever {
+        for( ProjectBaseItem* item = m_item; item; item = item->parent() ) {
             switch( item->type() ) {
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
@@ -123,10 +122,10 @@ KUrl MakeJob::workingDirectory() const
                 break;
             case KDevelop::ProjectBaseItem::Target:
             case KDevelop::ProjectBaseItem::File:
-                item = item->parent();
                 break;
             }
         }
+        return KUrl();
     }
 }
 
