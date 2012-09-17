@@ -250,11 +250,11 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
     QString errorValue;
     switch( processError ) {
         case QProcess::FailedToStart:
-            errorValue = i18n("Process had failed to start");
+            errorValue = i18n("%1 has failed to start", m_arguments.first());
             break;
 
         case QProcess::Crashed:
-            errorValue = i18n("Process had crashed");
+            errorValue = i18n("%1 has crashed", m_arguments.first());
             break;
 
         case QProcess::ReadError:
@@ -266,7 +266,7 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
             break;
 
         case QProcess::Timedout:
-            errorValue = i18n("Waiting for the process had timed out");
+            errorValue = i18n("Waiting for the process has timed out");
             break;
 
         default:
