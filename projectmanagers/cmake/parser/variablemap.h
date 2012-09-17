@@ -40,6 +40,7 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
         QStringList value(const QString& varName) const;
 //         QStringList take(const QString& varName);
 //         int remove(const QString& varName);
+        int removeMulti(const QString& varName);
 // 
 //         int size() const { return QHash<QString, QStringList>::size(); }
 //         QStringList keys() const { return QHash<QString, QStringList>::keys(); }

@@ -161,17 +161,23 @@ bool MIParser::parseResultRecord(Record *&record)
 
 bool MIParser::parseResult(Result *&result)
 {
-    MATCH(Token_identifier);
-    QString variable = m_lex->currentTokenText();
-    m_lex->nextToken();
+    // be less strict about the format, see e.g.:
+    // https://bugs.kde.org/show_bug.cgi?id=304730
+    // http://sourceware.org/bugzilla/show_bug.cgi?id=9659
 
     std::auto_ptr<Result> res(new Result);
-    res->variable = variable;
 
-    if (m_lex->lookAhead() != '=')
-        return true;
+    if (m_lex->lookAhead() == Token_identifier) {
+        res->variable = m_lex->currentTokenText();
+        m_lex->nextToken();
 
-    m_lex->nextToken();
+        if (m_lex->lookAhead() != '=') {
+            result = res.release();
+            return true;
+        }
+
+        m_lex->nextToken();
+    }
 
     Value *value = 0;
     if (!parseValue(value))

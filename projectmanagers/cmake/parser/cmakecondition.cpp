@@ -293,7 +293,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 
-                if(m_vars->contains(strA))
+                if(strA!=strB && m_vars->contains(strA))
                     strA=m_vars->value(strA).join(";");
                 last= (strA==strB);
                 

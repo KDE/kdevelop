@@ -46,6 +46,8 @@
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include "gdbframestackmodel.h"
+#include <mi/milexer.h>
+#include <mi/miparser.h>
 
 using KDevelop::AutoTestShell;
 
@@ -121,14 +123,21 @@ class TestFrameStackModel : public KDevelop::GdbFrameStackModel
 {
 public:
     
-    TestFrameStackModel(DebugSession* session) 
-    : GdbFrameStackModel(session), fetchFramesCalled(0) {}
-    
+    TestFrameStackModel(DebugSession* session)
+        : GdbFrameStackModel(session), fetchFramesCalled(0), fetchThreadsCalled(0) {}
+
     int fetchFramesCalled;
+    int fetchThreadsCalled;
     virtual void fetchFrames(int threadNumber, int from, int to)
     {
         fetchFramesCalled++;
         GdbFrameStackModel::fetchFrames(threadNumber, from, to);
+    }
+
+    virtual void fetchThreads()
+    {
+        fetchThreadsCalled++;
+        GdbFrameStackModel::fetchThreads();
     }
 };
 
@@ -1564,6 +1573,118 @@ void GdbTest::testCatchpoint()
 
 }
 
+void GdbTest::testThreadAndFrameInfo()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
+    QString fileName = findSourceFile("debugeethreads.cpp");
+    QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
+
+    breakpoints()->addCodeBreakpoint(fileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    session->frameStackModel()->fetchThreads();
+    session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
+
+    QVERIFY(outputSpy.count() == 2);
+    QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::parseBug304730()
+{
+    FileSymbol file;
+    file.contents = QByteArray("^done,bkpt={"
+        "number=\"1\",type=\"breakpoint\",disp=\"keep\",enabled=\"y\",addr=\"<MULTIPLE>\",times=\"0\","
+        "original-location=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp:231\"},"
+        "{number=\"1.1\",enabled=\"y\",addr=\"0x081d84aa\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<ForwardPropagationNeighbors>(ForwardPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"},"
+        "{number=\"1.2\",enabled=\"y\",addr=\"0x081d8ae2\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<BackwardPropagationNeighbors>(BackwardPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"},"
+        "{number=\"1.3\",enabled=\"y\",addr=\"0x081d911a\","
+        "func=\"PatchMatch<itk::Image<itk::CovariantVector<unsigned char, 3u>, 2u> >"
+        "::Propagation<AllowedPropagationNeighbors>(AllowedPropagationNeighbors)\","
+        "file=\"/media/portable/Projects/BDSInpainting/Drivers/../PatchMatch/PatchMatch.hpp\","
+        "fullname=\"/media/portable/Projects/BDSInpainting/PatchMatch/PatchMatch.hpp\",line=\"231\"}");
+
+    MIParser parser;
+
+    QScopedPointer<GDBMI::Record> record(parser.parse(&file));
+    QVERIFY(!record.isNull());
+}
+
+void GdbTest::testMultipleLocationsBreakpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg(findExecutable("debugeemultilocbreakpoint"));
+
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("aPlusB");
+
+    //TODO check if the additional location breakpoint is added
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 19);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 23);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testBug301287()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+
+    TestLaunchConfiguration cfg;
+
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    variableCollection()->watches()->add("argc");
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "argc");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+
+    //start second debug session (same cfg)
+    session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+
+    session->startProgram(&cfg);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QTest::qWait(300);
+
+    i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "argc");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
@@ -1600,3 +1721,4 @@ QTEST_KDEMAIN(GDBDebugger::GdbTest, GUI)
 
 #include "gdbtest.moc"
 #include "moc_gdbtest.cpp"
+

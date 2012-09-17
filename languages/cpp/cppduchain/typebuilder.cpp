@@ -420,8 +420,17 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
     }
   }
 
+  ExpressionAST* expression = 0;
+  if (node->initializer_clause && node->initializer_clause->expression) {
+    // auto foo = ...;
+    expression = node->initializer_clause->expression;
+  } else {
+    // auto foo(...);
+    expression = node->expression;
+  }
+
   if(integral && (integral->modifiers() & AbstractType::ConstModifier || m_lastTypeWasAuto)
-      && node->initializer_clause && node->initializer_clause->expression)
+      && expression)
   {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
     Cpp::ExpressionParser parser;
@@ -433,8 +442,8 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
     ///@todo This is nearly a copy of visitEnumerator and parts of visitSimpleTypeSpecifier, merge it
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
-      node->initializer_clause->expression->ducontext = currentContext();
-      res = parser.evaluateType( node->initializer_clause->expression, editor()->parseSession() );
+      expression->ducontext = currentContext();
+      res = parser.evaluateType( expression, editor()->parseSession() );
 
       //Delay the type-resolution of template-parameters
       if( res.allDeclarations.size() ) {
@@ -462,11 +471,10 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
       }
     }
     if( delay || !openedType ) {
-      QString str;
       ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
-      str += stringFromSessionTokens( editor()->parseSession(), node->initializer_clause->expression->start_token, node->initializer_clause->expression->end_token );
+      QString str = stringFromSessionTokens( editor()->parseSession(), expression->start_token, expression->end_token ).trimmed();
 
-      QualifiedIdentifier id( str.trimmed(), true );
+      QualifiedIdentifier id( str, true );
 
       openDelayedType(IndexedTypeIdentifier(id), node, DelayedType::Delayed);
       openedType = true;

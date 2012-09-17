@@ -32,7 +32,6 @@
 class QStringList;
 class QSignalMapper;
 class KDialog;
-class IMakeBuilder;
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;
@@ -69,8 +68,11 @@ Q_SIGNALS:
     void pruned(KDevelop::IProject*);
 
 private:
-    IMakeBuilder* m_builder;
+    void addBuilder(const QString& neededfile, const QStringList& generator, KDevelop::IPlugin* i);
+    KDevelop::IProjectBuilder* builderForProject(KDevelop::IProject* p);
+    QMap<QString, KDevelop::IProjectBuilder*> m_builders;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
+    QMap<QString, IProjectBuilder*> m_buildersForGenerator;
 };
 
 #endif // CMAKEBUILDER_H

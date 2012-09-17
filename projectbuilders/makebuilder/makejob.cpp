@@ -124,9 +124,9 @@ void MakeJob::start()
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
-    setModel(new KDevelop::OutputModel(buildDir), IOutputView::TakeOwnership);
+    setModel(new KDevelop::OutputModel(buildDir));
     model()->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
-    setDelegate(m_builder->delegate());
+    setDelegate(new OutputDelegate);
 
     startOutput();
 

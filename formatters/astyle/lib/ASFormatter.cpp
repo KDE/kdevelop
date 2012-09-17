@@ -2057,7 +2057,9 @@ bool ASFormatter::isPointerOrReference() const
 	        || previousNonWSChar == '('
 	        || previousNonWSChar == '['
 	        || currentHeader == &AS_CATCH
-	        || isCharImmediatelyPostReturn)
+	        || isCharImmediatelyPostReturn
+	        // see: https://git.reviewboard.kde.org/r/106032
+	        || currentHeader == &AS_FOREACH)
 		return true;
 
 	// get the last legal word (may be a number)

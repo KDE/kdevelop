@@ -317,8 +317,6 @@ void pp::handle_define (Stream& input)
 
     skip_blanks (++input, devnull()); // skip '('
     uint formal = skip_identifier(input);
-    if (formal)
-      macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
 
     skip_blanks(input, devnull());
 
@@ -330,14 +328,15 @@ void pp::handle_define (Stream& input)
 
       } while (input == '.');
     }
+    if (formal && !macro->variadics)
+      macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
+
 
     while (!input.atEnd() && input == ',')
     {
       skip_blanks(++input, devnull());
 
       uint formal = skip_identifier(input);
-      if (formal)
-        macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
 
       skip_blanks (input, devnull());
 
@@ -349,6 +348,9 @@ void pp::handle_define (Stream& input)
 
         } while (input == '.');
       }
+
+      if (formal && !macro->variadics)
+        macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
     }
 
     RETURN_ON_FAIL(input == ')');

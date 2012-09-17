@@ -233,6 +233,12 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
 	headers->push_back(&AS_TRY);
 	headers->push_back(&AS_CATCH);
 
+	if (fileType == C_TYPE)
+	{
+		// see: https://git.reviewboard.kde.org/r/106032
+		headers->push_back(&AS_FOREACH);
+	}
+
 	if (fileType == JAVA_TYPE)
 	{
 		headers->push_back(&AS_FINALLY);

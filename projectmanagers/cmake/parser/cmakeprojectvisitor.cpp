@@ -584,8 +584,9 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             //FIXME: Put here the error.
             kDebug(9042) << "Include. Parsing error.";
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        Q_ASSERT(m_vars->value("CMAKE_CURRENT_LIST_FILE")==QStringList(path));
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -703,8 +704,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insertGlobal(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
         
         if(isConfig)
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
@@ -1205,14 +1206,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             i=1;
             foreach(const QString& name, code.knownArgs)
             {
-                m_vars->take(QString("ARGV%1").arg(i));
-                m_vars->take(name);
+                m_vars->removeMulti(QString("ARGV%1").arg(i));
+                m_vars->removeMulti(name);
                 i++;
             }
 
-            m_vars->take("ARGV");
-            m_vars->take("ARGC");
-            m_vars->take("ARGN");
+            m_vars->removeMulti("ARGV");
+            m_vars->removeMulti("ARGC");
+            m_vars->removeMulti("ARGN");
 
         }
     }
@@ -1747,7 +1748,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->remove(fea->loopVar());
+                m_vars->removeMulti(fea->loopVar());
                 if(m_hitBreak)
                     break;
             }
@@ -2041,35 +2042,49 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
-    kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
-    if(setp->type()==GlobalProperty)
-        m_props[GlobalProperty][QString()][setp->name()]=setp->values();
-    else
-    {
-        CategoryType& cm=m_props[setp->type()];
-        if(setp->append()) {
-            foreach(const QString &it, setp->args()) {
-                cm[it][setp->name()].append(setp->values());
-            }
-        } else {
-            foreach(const QString &it, setp->args())
-                cm[it].insert(setp->name(), setp->values());
+    QStringList args = setp->args();
+    switch(setp->type()) {
+        case GlobalProperty:
+            args = QStringList() << QString();
+            break;
+        case DirectoryProperty:
+            args = m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
+            break;
+        default:
+            break;
+    }
+    kDebug() << "setprops" << setp->type() << args << setp->name() << setp->values();
+    
+    CategoryType& cm=m_props[setp->type()];
+    if(setp->append()) {
+        foreach(const QString &it, args) {
+            cm[it][setp->name()].append(setp->values());
         }
+    } else {
+        foreach(const QString &it, args)
+            cm[it].insert(setp->name(), setp->values());
     }
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
 {
-    kDebug() << "getprops";
-    QStringList retv;
     QString catn;
-    if(getp->type()!=GlobalProperty)
-    {
-        catn=getp->typeName();
+    switch(getp->type()) {
+        case GlobalProperty:
+            break;
+        case DirectoryProperty:
+            catn = getp->typeName();
+            if(catn.isEmpty())
+                catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+            break;
+        default:
+            catn = getp->typeName();
+            break;
     }
-    retv=m_props[getp->type()][catn][getp->name()];
+    QStringList retv=m_props[getp->type()][catn][getp->name()];
     m_vars->insert(getp->outputVariable(), retv);
+    kDebug() << "getprops" << getp->type() << catn << getp->name() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 

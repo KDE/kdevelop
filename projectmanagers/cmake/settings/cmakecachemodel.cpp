@@ -30,6 +30,21 @@
 CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     : QStandardItemModel(parent), m_filePath(path)
 {
+    read();
+}
+
+void CMakeCacheModel::reset()
+{
+    emit beginResetModel();
+    clear();
+    m_internal.clear();
+    read();
+    emit endResetModel();
+}
+
+void CMakeCacheModel::read()
+{
+    // Set headers
     QStringList labels;
     labels.append(i18n("Name"));
     labels.append(i18n("Type"));
@@ -37,19 +52,7 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
     labels.append(i18n("Comment"));
     labels.append(i18n("Advanced"));
     setHorizontalHeaderLabels(labels);
-    
-    read();
-}
 
-void CMakeCacheModel::reset()
-{
-    clear();
-    m_internal.clear();
-    read();
-}
-
-void CMakeCacheModel::read()
-{
     QFile file(m_filePath.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
