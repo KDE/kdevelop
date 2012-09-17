@@ -64,6 +64,7 @@ public:
         AccumulateStderr,      /**< Whether to save process' stderr to the internal byte-array buffer for further consumption */
         NoSilentOutput,        /**< Whether to call \ref startOutput() only if verbosity is \ref OutputJob::Verbose */
         PostProcessOutput,     /**< Whether to connect line maker's signals to \ref postProcessStdout() and \ref postProcessStderr() */
+        IsBuilderHint,         /**< Whether to use builder-specific messages to talk to user (e. g. "build directory" instead of "working directory" */
     };
     Q_FLAGS(JobProperty)
     Q_DECLARE_FLAGS(JobProperties, JobProperty)

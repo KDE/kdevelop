@@ -126,11 +126,17 @@ void OutputExecuteJob::start()
     Q_ASSERT( m_status == JobNotStarted );
     m_status = JobRunning;
 
+    const bool isBuilder = m_properties.testFlag( IsBuilderHint );
+
     const KUrl effectiveWorkingDirectory = workingDirectory();
     if( effectiveWorkingDirectory.isEmpty() ) {
         if( m_properties.testFlag( NeedWorkingDirectory ) ) { // a directory is not given, but we need it
             setError( InvalidWorkingDirectoryError );
-            setErrorText( i18n( "No working directory specified for a process." ) );
+            if( isBuilder ) {
+                setErrorText( i18n( "No build directory specified for a builder job." ) );
+            } else {
+                setErrorText( i18n( "No working directory specified for a process." ) );
+            }
             return emitResult();
         }
 
@@ -138,15 +144,27 @@ void OutputExecuteJob::start()
     } else if( m_properties.testFlag( CheckWorkingDirectory ) ) { // a directory is given and we need to check it
         if( !effectiveWorkingDirectory.isValid() ) {
             setError( InvalidWorkingDirectoryError );
-            setErrorText( i18n( "Invalid working directory '%1'", effectiveWorkingDirectory.prettyUrl() ) );
+            if( isBuilder ) {
+                setErrorText( i18n( "Invalid build directory '%1'", effectiveWorkingDirectory.prettyUrl() ) );
+            } else {
+                setErrorText( i18n( "Invalid working directory '%1'", effectiveWorkingDirectory.prettyUrl() ) );
+            }
             return emitResult();
         } else if( !effectiveWorkingDirectory.isLocalFile() ) {
             setError( InvalidWorkingDirectoryError );
-            setErrorText( i18n( "'%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
+            if( isBuilder ) {
+                setErrorText( i18n( "Build directory '%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
+            } else {
+                setErrorText( i18n( "Working directory '%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
+            }
             return emitResult();
         } else if( !QFileInfo( effectiveWorkingDirectory.toLocalFile() ).isDir() ) {
             setError( InvalidWorkingDirectoryError );
-            setErrorText( i18n( "'%1' is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+            if( isBuilder ) {
+                setErrorText( i18n( "Build directory '%1' is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+            } else {
+                setErrorText( i18n( "Working directory '%1' is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+            }
             return emitResult();
         }
 
