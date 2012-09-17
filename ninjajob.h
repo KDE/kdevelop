@@ -39,8 +39,10 @@ class NinjaJob : public KDevelop::OutputExecuteJob
     public:
         NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent );
         void signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item);
+        void setIsInstalling( bool isInstalling );
 
         virtual KUrl workingDirectory() const;
+        virtual QStringList privilegedExecutionCommand() const;
 
     protected slots:
         virtual void postProcessStdout( const QStringList& lines );
@@ -51,6 +53,7 @@ class NinjaJob : public KDevelop::OutputExecuteJob
 
     private:
         bool m_lastLine;
+        bool m_isInstalling;
         KDevelop::ProjectBaseItem* m_item;
         QByteArray m_signal;
 

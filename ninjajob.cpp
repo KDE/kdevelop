@@ -21,15 +21,18 @@
 #include <KUrl>
 #include <KDebug>
 #include <KLocalizedString>
+#include <KConfigGroup>
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <interfaces/iproject.h>
 #include <QFile>
 
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent)
     : OutputExecuteJob(parent)
     , m_lastLine(false)
+    , m_isInstalling(false)
     , m_item(item)
 {
     setToolTitle(i18n("Ninja"));
@@ -56,6 +59,11 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     setJobName( title );
 }
 
+void NinjaJob::setIsInstalling( bool isInstalling )
+{
+    m_isInstalling = isInstalling;
+}
+
 KUrl NinjaJob::workingDirectory() const
 {
     KUrl workingDir = m_item->project()->buildSystemManager()->buildDirectory( m_item );
@@ -67,6 +75,31 @@ KUrl NinjaJob::workingDirectory() const
         workingDir = upWorkingDir;
     }
     return workingDir;
+}
+
+QStringList NinjaJob::privilegedExecutionCommand() const
+{
+    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
+
+    bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
+    if ( runAsRoot && m_isInstalling )
+    {
+        int suCommand = builderGroup.readEntry( "Su Command", 0 );
+        QStringList arguments;
+        QString suCommandName;
+        switch( suCommand ) {
+            case 1:
+                return QStringList() << "kdesudo" << "-t";
+
+            case 2:
+                return QStringList() << "sudo";
+
+            default:
+                return QStringList() << "kdesu" << "-t";
+        }
+    }
+    return QStringList();
 }
 
 void NinjaJob::signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item)

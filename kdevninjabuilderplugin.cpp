@@ -22,8 +22,11 @@
 #include <KPluginFactory>
 #include <KStandardDirs>
 #include <KDebug>
+#include <KConfigGroup>
+#include <KShell>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/builderjob.h>
 #include <interfaces/iproject.h>
 #include <QFile>
 
@@ -77,7 +80,36 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 
 NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal)
 {
-    NinjaJob* job = new NinjaJob(item, args, this);
+    // Build arguments using data from KCM
+    QStringList jobArguments;
+    KSharedConfig::Ptr config = item->project()->projectConfiguration();
+    KConfigGroup group = config->group( "NinjaBuilder" );
+
+    if( !group.readEntry( "Abort on First Error", true ) ) {
+        jobArguments << "-k";
+    }
+    if( group.readEntry( "Override Number Of Jobs", false ) ) {
+        int jobCount = group.readEntry( "Number Of Jobs", 1 );
+        if( jobCount > 0 ) {
+            jobArguments << QString( "-j%1" ).arg( jobCount );
+        }
+    }
+    int errorCount = group.readEntry( "Number Of Errors", 1 );
+    if( errorCount > 1 ) {
+        jobArguments << QString( "-k%1" ).arg( errorCount );
+    }
+    if( group.readEntry( "Display Only", false ) ) {
+        jobArguments << "-n";
+    }
+    QString extraOptions = group.readEntry( "Additional Options", QString() );
+    if( !extraOptions.isEmpty() ) {
+        foreach(const QString& option, KShell::splitArgs( extraOptions ) ) {
+            jobArguments << option;
+        }
+    }
+    jobArguments << args;
+
+    NinjaJob* job = new NinjaJob(item, jobArguments, this);
     job->signalWhenFinished(signal, item);
     return job;
 }
@@ -94,5 +126,19 @@ KJob* KDevNinjaBuilderPlugin::clean(KDevelop::ProjectBaseItem* item)
 
 KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
 {
-    return runNinja(item, QStringList("install"), "installed");
+    NinjaJob* installJob = runNinja( item, QStringList( "install" ), "installed" );
+    installJob->setIsInstalling( true );
+
+    KSharedConfig::Ptr configPtr = item->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
+    bool installAsRoot = builderGroup.readEntry("Install As Root", false);
+    if(installAsRoot) {
+        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        job->addCustomJob( KDevelop::BuilderJob::Build, build( item ), item );
+        job->addCustomJob( KDevelop::BuilderJob::Install, installJob, item );
+        job->updateJobName();
+        return job;
+    } else {
+        return installJob;
+    }
 }

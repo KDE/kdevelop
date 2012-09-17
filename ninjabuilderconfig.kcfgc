@@ -1,0 +1,5 @@
+File=ninjabuilderconfig.kcfg
+ClassName=NinjaBuilderSettings
+Singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=project/projectconfigskeleton.h
