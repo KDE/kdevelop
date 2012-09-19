@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <KShell>
 #include <QFileInfo>
+#include <QDir>
 
 namespace KDevelop
 {
@@ -135,7 +136,8 @@ void OutputExecuteJob::start()
 
     const KUrl effectiveWorkingDirectory = workingDirectory();
     if( effectiveWorkingDirectory.isEmpty() ) {
-        if( m_properties.testFlag( NeedWorkingDirectory ) ) { // a directory is not given, but we need it
+        if( m_properties.testFlag( NeedWorkingDirectory ) ) {
+            // A directory is not given, but we need it.
             setError( InvalidWorkingDirectoryError );
             if( isBuilder ) {
                 setErrorText( i18n( "No build directory specified for a builder job." ) );
@@ -146,7 +148,8 @@ void OutputExecuteJob::start()
         }
 
         setModel( new OutputModel );
-    } else if( m_properties.testFlag( CheckWorkingDirectory ) ) { // a directory is given and we need to check it
+    } else {
+        // Basic sanity checks.
         if( !effectiveWorkingDirectory.isValid() ) {
             setError( InvalidWorkingDirectoryError );
             if( isBuilder ) {
@@ -163,14 +166,27 @@ void OutputExecuteJob::start()
                 setErrorText( i18n( "Working directory '%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
             }
             return emitResult();
-        } else if( !QFileInfo( effectiveWorkingDirectory.toLocalFile() ).isDir() ) {
-            setError( InvalidWorkingDirectoryError );
-            if( isBuilder ) {
-                setErrorText( i18n( "Build directory '%1' is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
-            } else {
-                setErrorText( i18n( "Working directory '%1' is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+        }
+
+        QFileInfo workingDirInfo( effectiveWorkingDirectory.toLocalFile() );
+        if( !workingDirInfo.isDir() ) {
+            // If a working directory does not actually exist, either bail out or create it empty,
+            // depending on what we need by properties.
+            // We use a dedicated bool variable since !isDir() may also mean that it exists,
+            // but is not a directory, or a symlink to an inexistent object.
+            bool successfullyCreated = false;
+            if( !m_properties.testFlag( CheckWorkingDirectory ) ) {
+                successfullyCreated = QDir( effectiveWorkingDirectory.directory() ).mkdir( effectiveWorkingDirectory.fileName() );
             }
-            return emitResult();
+            if( !successfullyCreated ) {
+                setError( InvalidWorkingDirectoryError );
+                if( isBuilder ) {
+                    setErrorText( i18n( "Build directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+                } else {
+                    setErrorText( i18n( "Working directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+                }
+                return emitResult();
+            }
         }
 
         setModel( new OutputModel( effectiveWorkingDirectory ) );

@@ -56,7 +56,7 @@ public:
     {
         AppendProcessString,   /**< Whether to append a process string to the user-specified job name */
         NeedWorkingDirectory,  /**< Whether to require a non-empty working directory to be provided */
-        CheckWorkingDirectory, /**< Whether to verify the working directory (exists, is a directory, etc.) */
+        CheckWorkingDirectory, /**< Whether to check that the working directory actually exists (and not to create it if needed) */
         PortableMessages,      /**< Whether to set LC_MESSAGES=C in the process' environment */
         DisplayStdout,         /**< Whether to pass process' stdout to the output model */
         AccumulateStdout,      /**< Whether to save process' stdout to the internal byte-array buffer for further consumption */
