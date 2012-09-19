@@ -37,7 +37,7 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
     m_process( new KProcess( this ) ),
     m_lineMaker( new ProcessLineMaker( this ) ), // do not assign process to the line maker as we'll feed it data ourselves
     m_status( JobNotStarted ),
-    m_properties( CheckWorkingDirectory | DisplayStdout ),
+    m_properties( DisplayStdout ),
     m_filteringStrategy( OutputModel::NoFilter ),
     m_arguments(),
     m_privilegedExecutionCommand(),

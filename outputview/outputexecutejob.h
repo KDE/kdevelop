@@ -163,7 +163,7 @@ public:
     /**
      * Get the current properties of the job.
      *
-     * @note Default-set properties are: \ref CheckWorkingDirectory | \ref DisplayStdout.
+     * @note Default-set properties are: \ref DisplayStdout.
      */
     virtual JobProperties properties() const;
 
