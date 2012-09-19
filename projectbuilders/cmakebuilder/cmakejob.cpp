@@ -46,9 +46,7 @@ CMakeJob::CMakeJob(QObject* parent)
 {
     setCapabilities( Killable );
     setFilteringStrategy( OutputModel::CompilerFilter );
-    setProperties( NeedWorkingDirectory );
-    setProperties( PortableMessages );
-    setProperties( DisplayStderr );
+    setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
     setToolTitle( i18n("CMake") );
 }
 
