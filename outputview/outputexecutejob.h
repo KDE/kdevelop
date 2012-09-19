@@ -66,7 +66,7 @@ public:
         PostProcessOutput,     /**< Whether to connect line maker's signals to \ref postProcessStdout() and \ref postProcessStderr() */
         IsBuilderHint,         /**< Whether to use builder-specific messages to talk to user (e. g. "build directory" instead of "working directory" */
     };
-    Q_FLAGS(JobProperty)
+    Q_FLAGS(JobProperty JobProperties)
     Q_DECLARE_FLAGS(JobProperties, JobProperty)
 
     OutputExecuteJob( QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose );
@@ -264,5 +264,7 @@ private:
 };
 
 } // namespace KDevelop
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties);
 
 #endif // OUTPUTEXECUTEJOB_H
