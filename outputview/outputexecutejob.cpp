@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <KProcess>
 #include <KGlobal>
 #include <KLocalizedString>
+#include <KShell>
 #include <QFileInfo>
 #include <QDir>
 
@@ -415,14 +416,7 @@ QProcessEnvironment OutputExecuteJob::effectiveEnvironment() const
 
 QString OutputExecuteJob::joinCommandLine() const
 {
-    QStringList commandLine = effectiveCommandLine();
-    for( QStringList::iterator it = commandLine.begin(); it != commandLine.end(); ++it ) {
-        // If an argument contains spaces, enclose it with quote signs.
-        if( it->contains( QRegExp("[[:space:]]") ) ) {
-            it->prepend('"').append('"');
-        }
-    }
-    return commandLine.join(" ");
+    return KShell::joinArgs( effectiveCommandLine() );
 }
 
 QStringList OutputExecuteJob::effectiveCommandLine() const
