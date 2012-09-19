@@ -52,9 +52,7 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item,
 {
     setCapabilities( Killable );
     setFilteringStrategy( OutputModel::CompilerFilter );
-    setProperties( NeedWorkingDirectory );
-    setProperties( PortableMessages );
-    setProperties( DisplayStderr );
+    setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
 
     QString title;
     if( !m_overrideTargets.isEmpty() )
