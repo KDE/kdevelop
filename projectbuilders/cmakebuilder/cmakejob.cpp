@@ -81,11 +81,6 @@ KUrl CMakeJob::workingDirectory() const
     KUrl url = CMake::currentBuildDir( m_project );
     kDebug(9042) << "builddir: " << url;
     Q_ASSERT(!url.isEmpty() && !url.isRelative()); //We cannot get the project folder as a build directory!
-
-    if( !QFile::exists( url.toLocalFile() ) ) {
-        kDebug() << "creating" << url.fileName() << "in" << url.directory();
-        QDir( url.directory() ).mkdir( url.fileName() );
-    }
     return url;
 }
 
