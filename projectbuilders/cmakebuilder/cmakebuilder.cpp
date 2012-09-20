@@ -244,7 +244,7 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
     return KIO::del( urls );
 }
 
-KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p)
+KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p) const
 {
     QString builddir = CMake::currentBuildDir( p ).toLocalFile();
     QMap<QString, IProjectBuilder*>::const_iterator it = m_builders.constBegin(), itEnd = m_builders.constEnd();
@@ -255,6 +255,11 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
     //It means that it still has to be generated, so use the builder for
     //the generator we use
     return m_buildersForGenerator[CMakeBuilderSettings::self()->generator()];
+}
+
+QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
+{
+	return QList< KDevelop::IProjectBuilder* >() << builderForProject( project );
 }
 
 #include "cmakebuilder.moc"
