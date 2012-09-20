@@ -127,10 +127,6 @@ public:
         if( !proj )
             return;
 
-        //@FIXME: compute a blacklist, based on a query for all KDevelop
-        //plugins implementing IProjectManager, removing from that the
-        //plugin that manages this project. Set this as blacklist on the
-        //dialog
         //@FIXME: Currently it is important to set a parentApp on the kcms
         //that's different from the component name of the application, else
         //the plugin will show up on all projects settings dialogs.
@@ -166,10 +162,25 @@ public:
         group.sync();
     }
 
+    // Recursively collects builder dependencies for a project.
+    static void collectBuilders( QList< IProjectBuilder* >& destination, IProjectBuilder* topBuilder, IProject* project )
+    {
+        QList< IProjectBuilder* > auxBuilders = topBuilder->additionalBuilderPlugins( project );
+        destination.append( auxBuilders );
+        foreach( IProjectBuilder* auxBuilder, auxBuilders ) {
+            collectBuilders( destination, auxBuilder, project );
+        }
+    }
+
     QStringList findPluginsForProject( IProject* project )
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
+        QList< IProjectBuilder* > buildersForKcm;
+        if( IBuildSystemManager* buildSystemManager = project->buildSystemManager() ) {
+            collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
+        }
+
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
@@ -183,34 +194,9 @@ public:
                 continue;
             }
             IProjectBuilder* builder = plugin->extension<KDevelop::IProjectBuilder>();
-            if (builder)
+            if ( builder && !buildersForKcm.contains( builder ) )
             {
-                // hide builder plugins that are not required
-                if(!project->buildSystemManager())
-                {
-                    // current plugin is a builder yet the project cannot be build - skip
-                    continue;
-                }
-                if (builder && builder != project->buildSystemManager()->builder())
-                {
-                    const KPluginInfo builderInfo = m_core->pluginController()->pluginInfo(
-                        dynamic_cast<IPlugin*>(project->buildSystemManager()->builder()) );
-                    bool shouldBeHidden = true;
-                    // hide if this plugin does not implement an interface that is required by the builder
-                    // i.e. makebuilder should be shown for cmake projects
-                    const QStringList dependencies = builderInfo.property("X-KDevelop-IRequired").toStringList();
-                    foreach(const QString& interface, info.property("X-KDevelop-Interfaces").toStringList()) {
-                        if (dependencies.contains(interface))
-                        {
-                            shouldBeHidden = false;
-                            break;
-                        }
-                    }
-                    if (shouldBeHidden)
-                    {
-                        continue;
-                    }
-                }
+                continue;
             }
             pluginnames << info.pluginName();
         }
