@@ -784,20 +784,10 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
    identifierForNode(name, id);
    Identifier localId = id.last(); //This also copies the template arguments
    if(id.count() > 1) {
-     //Merge the scope of the declaration, and put them tog. Add semicolons instead of the ::, so you can see it's not a qualified identifier.
-     //Else the declarations could be confused with global functions.
+     //Merge the scope of the declaration, else the declarations could be confused with global functions.
      //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
-
-     QString newId = id.last().identifier().str();
-     for(int a = id.count()-2; a >= 0; --a)
-       newId = id.at(a).identifier().str() + "::" + newId;
-
-     localId.setIdentifier(newId);
-
-     FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
-     DUChainWriteLocker lock(DUChain::lock());
-     ret->setDeclaration(0);
-     return ret;
+     //FIXME: Can we do without this?
+     localId.setIdentifier(id.left(-1).toString() + "::" + localId.identifier().str());
    }
 
   if(currentContext()->type() == DUContext::Class) {

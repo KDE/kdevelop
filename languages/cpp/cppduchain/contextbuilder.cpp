@@ -546,7 +546,7 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
+  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body || node->defaultDeleted != FunctionDefinitionAST::NotDefaultOrDeleted);
 
   QualifiedIdentifier functionName;
   if (compilingContexts() && node->declarator && node->declarator->id) {

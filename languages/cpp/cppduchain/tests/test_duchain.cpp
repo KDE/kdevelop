@@ -3057,6 +3057,34 @@ void TestDUChain::testFunctionDefinition6() {
   QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 }
 
+void TestDUChain::testFunctionDefinition7() {
+  QByteArray text("class ClassA {};\n\
+template<typename E_T1>\n\
+class ClassE\n\
+{\n\
+public:\n\
+  template<typename E_A_T1>\n\
+  void E_FuncA(E_A_T1)\n\
+  {\n\
+  }\n\
+};\n\
+template<typename E_T1>\n\
+ClassE<E_T1>::~ClassE() = default;\n\
+template<>\n\
+template<>\n\
+void ClassE<ClassA>::E_FuncA<ClassA>(ClassA);\n\
+template<>\n\
+template<>\n\
+void ClassE<ClassA>::E_FuncA<ClassA>(ClassA)\n\
+{\n\
+}");
+  LockedTopDUContext top = parse(text, DumpNone);
+  QCOMPARE(top->localDeclarations().count(), 5);
+  QVERIFY(dynamic_cast<FunctionDefinition*>(top->localDeclarations()[2]));
+  QVERIFY(!dynamic_cast<FunctionDefinition*>(top->localDeclarations()[3]));
+  QVERIFY(dynamic_cast<FunctionDefinition*>(top->localDeclarations()[4]));
+}
+
 void TestDUChain::testLoopNamespaceImport() {
   QByteArray text("namespace A {int i;} namespace B { using namespace A; } namespace A{ using namespace B; }; using namespace B; void test() { i += 5; }");
   LockedTopDUContext top = parse(text, DumpNone);
@@ -4270,6 +4298,262 @@ void TestDUChain::testTemplateReference() {
   QCOMPARE(type->toString().remove(' '), QString("CC<constA>"));
   QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[5]->abstractType(), top).remove(' '), QString("CC<constA>"));
 }
+
+typedef QList<QList<Declaration*> > ClassInstantiations;
+struct DeclarationTestData
+{
+  DeclarationTestData() : useCount(0), specializedFrom(0) {};
+
+  //Declaration
+  int useCount;
+
+  //TemplateDeclaration
+  ClassInstantiations instantiations;
+  QList<DeclarationTestData> instantiationsTestData;
+  Declaration* specializedFrom;
+  QList<Declaration*> specializations;
+};
+InstantiationInformation instantiationInfoForDeclarations(const QList<Declaration*> &templateParams)
+{
+  InstantiationInformation info;
+  int paramCount = templateParams.size();
+  for(int i = 0; i < paramCount; ++i)
+  {
+    if (templateParams[i])
+      info.addTemplateParameter(templateParams[i]->abstractType());
+    else
+    {
+      //Null param signifies the end of the template declarations for a given scope
+      InstantiationInformation topInfo = instantiationInfoForDeclarations(templateParams.mid(i+1));
+      topInfo.previousInstantiationInformation = info.indexed();
+      return topInfo;
+    }
+  }
+  qDebug() << info.toString();
+  return info;
+}
+bool validDeclaration(Declaration *decl, DeclarationTestData testData)
+{
+  qDebug() << "Validating Declaration:" << decl->toString();
+  bool ret = true;
+  if (decl->uses().size() != testData.useCount)
+  {
+    qDebug() << "Declaration use count doesn't match test data";
+    qDebug() << "Actual:" << decl->uses().size() << "| Test data:" << testData.useCount;
+    ret = false;
+  }
+
+  if (TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(decl))
+  {
+    if (templateDecl->specializedFrom().data() != testData.specializedFrom)
+    {
+      qDebug() << "Declaration's specializedFrom doesn't match test data";
+      qDebug() << "Actual:" << templateDecl->specializedFrom().data() << "| Test data:" << testData.specializedFrom;
+      ret = false;
+    }
+
+    if (templateDecl->specializationsSize() != (uint)testData.specializations.size())
+    {
+      qDebug() << "Declaration's number of specializations doesn't match test data";
+      qDebug() << "Actual:" << templateDecl->specializationsSize() << "| Test data:" << testData.specializations.size();
+      ret = false;
+    }
+    for (uint i = 0; i < templateDecl->specializationsSize(); ++i)
+    {
+      if (!testData.specializations.contains(templateDecl->specializations()[i].data()))
+      {
+        qDebug() << "Declaration had specialization not found in test data";
+        qDebug() << "Specialization not found:" << templateDecl->specializations()[i].data();
+        ret = false;
+      }
+    }
+
+    TemplateDeclaration::InstantiationsHash actualInstantiations = templateDecl->instantiations();
+    TemplateDeclaration::InstantiationsHash::iterator it;
+    if (actualInstantiations.size() != testData.instantiations.size())
+    {
+      qDebug() << "Declaration's number of instantiations doesn't match test data";
+      qDebug() << "Actual:" << templateDecl->specializationsSize() << "| Test data:" << testData.specializations.size();
+      ret = false;
+    }
+    for(int i = 0; i < testData.instantiations.size(); ++i)
+    {
+      IndexedInstantiationInformation testInfo = instantiationInfoForDeclarations(testData.instantiations[i]).indexed();
+      if (!actualInstantiations.contains(testInfo))
+      {
+        qDebug() << "Declaration had instantiation not found in test data";
+        qDebug() << "Instantiation not found:" << testInfo.information().toString();
+        ret = false;
+      }
+      TemplateDeclaration *instantiation = actualInstantiations[testInfo];
+      if (!instantiation)
+      {
+        qDebug() << "Invalid declaration for instantiation:" << testInfo.information().toString();
+        ret = false;
+      }
+      else if (testData.instantiationsTestData.size())
+      {
+        if (!validDeclaration(dynamic_cast<Declaration*>(instantiation), testData.instantiationsTestData[i]))
+        {
+          qDebug() << "Instantiated declaration did not pass validation";
+          qDebug() << "Invalid declaration:" << instantiation;
+          ret = false;
+        }
+      }
+    }
+  }
+  return ret;
+}
+
+void TestDUChain::testTemplatesSuper()
+{
+  QByteArray test = "\
+class ClassA {}; //Decl 0, Ctxt 0\n\
+class ClassB {};\n\
+class ClassC {};\n\
+class ClassD {};\n\
+template<typename E_T1, typename E_T2>\n\
+class ClassE\n\
+{\n\
+public:\n\
+  template<typename E_A_T1, typename E_A_T2>\n\
+  void E_FuncA(E_A_T1, E_A_T2)\n\
+  {\n\
+  }\n\
+  void E_FuncB(E_T1, E_T2)\n\
+  {\n\
+  }\n\
+};\n\
+template<>\n\
+template<>\n\
+void ClassE<ClassA, ClassB>::E_FuncA<ClassA, ClassA>(ClassA, ClassA);\n\
+template<>\n\
+template<>\n\
+void ClassE<ClassA, ClassB>::E_FuncA<ClassA, ClassA>(ClassA, ClassA)\n\
+{\n\
+}\n\
+template<>\n\
+void ClassE<ClassA, ClassB>::E_FuncB(ClassA, ClassB);\n\
+template<>\n\
+void ClassE<ClassA, ClassB>::E_FuncB(ClassA, ClassB)\n\
+{\n\
+}\n\
+int main()\n\
+{\n\
+  ClassE<ClassA, ClassB> foo;\n\
+  foo.E_FuncA(ClassA(), ClassA());\n\
+  foo.E_FuncB(ClassA(), ClassB());\n\
+  ClassE<ClassC, ClassD> foo2;\n\
+  foo2.E_FuncA(ClassA(), ClassA());\n\
+  foo2.E_FuncB(ClassC(), ClassD());\n\
+}";
+  LockedTopDUContext top = parse(test, DumpNone);
+  int currentTopDecl = 0;
+  //First gather all the visible declarations
+  Declaration *ClassA = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<ClassDeclaration*>(ClassA));
+  Declaration *ClassB = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<ClassDeclaration*>(ClassB));
+  Declaration *ClassC = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<ClassDeclaration*>(ClassC));
+  Declaration *ClassD = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<ClassDeclaration*>(ClassD));
+  Declaration *ClassE = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<ClassDeclaration*>(ClassE));
+  Q_ASSERT(dynamic_cast<TemplateDeclaration*>(ClassE));
+    //Declarations in ClassE context
+    int currentClassEDecl = 0;
+    Declaration *E_FuncA = ClassE->internalContext()->localDeclarations()[currentClassEDecl++];
+    Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_FuncA));
+    Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(E_FuncA));
+    Declaration *E_FuncB = ClassE->internalContext()->localDeclarations()[currentClassEDecl++];
+    Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_FuncB));
+    Q_ASSERT(dynamic_cast<ClassFunctionDeclaration*>(E_FuncB));
+  Declaration *E_A_B_FuncA_A_A_Decl = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_A_B_FuncA_A_A_Decl));
+  Q_ASSERT(dynamic_cast<FunctionDeclaration*>(E_A_B_FuncA_A_A_Decl));
+  Declaration *E_A_B_FuncA_A_A = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_A_B_FuncA_A_A));
+  Q_ASSERT(dynamic_cast<FunctionDeclaration*>(E_A_B_FuncA_A_A));
+  Q_ASSERT(dynamic_cast<FunctionDefinition*>(E_A_B_FuncA_A_A));
+  Declaration *E_A_B_FuncBDecl = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_A_B_FuncBDecl));
+  Declaration *E_A_B_FuncB = top->localDeclarations()[currentTopDecl++];
+  Q_ASSERT(dynamic_cast<TemplateDeclaration*>(E_A_B_FuncB));
+
+  Declaration *FuncMain = top->localDeclarations()[currentTopDecl++];
+  QVERIFY(FuncMain);
+
+
+  //Test for ClassE DUChain correctness
+  DeclarationTestData ClassE_A_B_testData; ClassE_A_B_testData.useCount = 1;
+  DeclarationTestData ClassE_C_D_testData; ClassE_C_D_testData.useCount = 1;
+  DeclarationTestData ClassE_testData;
+  ClassE_testData.useCount = 0;
+  ClassE_testData.instantiations << (QList<Declaration*>() << ClassA << ClassB)
+                                 << (QList<Declaration*>() << ClassC << ClassD);
+  ClassE_testData.instantiationsTestData << ClassE_A_B_testData
+                                         << ClassE_C_D_testData;
+  QVERIFY(validDeclaration(ClassE, ClassE_testData));
+
+  //Test for ClassE<ClassA::ClassB>::E_FuncA<ClassA::ClassA> explicit specialization forward-declaration
+  //FIXME: FunctionDeclarations that aren't FunctionDefinitions are actually forward declarations, but aren't treated as such
+  //According to the current (incorrect) model this decl should be the Declaration of E_A_B_FuncADef
+  //However, it shouldn't be tested, as that's not technically correct anyhow
+  //To be correct, E_A_B_FuncA_A_A_Decl should have a function to attempt to resolve it to E_A_B_FuncA_A_A_Def
+  //and E_A_B_FuncA_A_A_Def needn't directly know of E_A_B_FuncA_A_A_Decl
+  //This is because there could be multiple declarations or even no declarations for E_A_B_FuncA_A_A_Def
+  DeclarationTestData E_A_B_FuncA_A_A_Decl_testData;
+  QVERIFY(validDeclaration(E_A_B_FuncA_A_A_Decl, E_A_B_FuncA_A_A_Decl_testData));
+
+  //Test for ClassE::E_FuncA
+  DeclarationTestData E_A_B_FuncA_A_A_testData;
+  E_A_B_FuncA_A_A_testData.useCount = 1;
+  E_A_B_FuncA_A_A_testData.specializedFrom = E_FuncA;
+  DeclarationTestData E_C_D_FuncA_A_A_testData;
+  E_C_D_FuncA_A_A_testData.useCount = 1;
+  DeclarationTestData E_C_D_FuncA_testData;
+  DeclarationTestData E_A_B_FuncA_testData;
+  DeclarationTestData E_FuncA_testData;
+  E_FuncA_testData.specializations << E_A_B_FuncA_A_A;
+  E_FuncA_testData.instantiations << (QList<Declaration*>() << ClassA << ClassB << 0 << ClassA << ClassA)
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0 << ClassA << ClassA)
+                                  << (QList<Declaration*>() << ClassA << ClassB << 0) //FIXME: technically correct?
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0); //FIXME: technically correct?
+  E_FuncA_testData.instantiationsTestData << E_A_B_FuncA_A_A_testData
+                                          << E_C_D_FuncA_A_A_testData
+                                          << E_A_B_FuncA_testData
+                                          << E_C_D_FuncA_testData;
+  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
+  QVERIFY(validDeclaration(E_FuncA, E_FuncA_testData));
+  //Test for ClassE<ClassA::ClassB>::E_FuncA<ClassA::ClassA> explicit specialization definition specifically
+  //even though it is automatically tested above... just because
+  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
+  QVERIFY(validDeclaration(E_A_B_FuncA_A_A, E_A_B_FuncA_A_A_testData));
+
+  DeclarationTestData E_A_B_FuncBDecl_testData;
+  QVERIFY(validDeclaration(E_A_B_FuncBDecl, E_A_B_FuncBDecl_testData));
+
+  //Test for ClassE::FuncA
+  DeclarationTestData E_A_B_FuncB_testData;
+  E_A_B_FuncB_testData.useCount = 1;
+  E_A_B_FuncB_testData.specializedFrom = E_FuncB;
+  DeclarationTestData E_C_D_FuncB_testData;
+  E_C_D_FuncB_testData.useCount = 1;
+  DeclarationTestData E_FuncB_testData;
+  E_FuncB_testData.specializations << E_A_B_FuncB;
+  E_FuncB_testData.instantiations << (QList<Declaration*>() << ClassA << ClassB << 0)
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0);
+  E_FuncB_testData.instantiationsTestData << E_A_B_FuncB_testData
+                                          << E_C_D_FuncB_testData;
+  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
+  QVERIFY(validDeclaration(E_FuncB, E_FuncB_testData));
+  //Test for ClassE<ClassA::ClassB>::E_FuncB explicit specialization definition specifically
+  //even though it is automatically tested above... just because
+  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
+  QVERIFY(validDeclaration(E_A_B_FuncB, E_A_B_FuncB_testData));
+}
+
 
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
