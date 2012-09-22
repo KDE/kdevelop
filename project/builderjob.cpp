@@ -120,7 +120,7 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
 {
     if( BuilderJob* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
         // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
-        QList< BuilderJob::SubJobData > subjobs = builderJob->takeJobList();
+        QVector< BuilderJob::SubJobData > subjobs = builderJob->takeJobList();
         builderJob->deleteLater();
         foreach( const BuilderJob::SubJobData& subjob, subjobs ) {
             addSubjob( subjob.job );
@@ -137,9 +137,9 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
     }
 }
 
-QList< BuilderJob::SubJobData > BuilderJob::takeJobList()
+QVector< BuilderJob::SubJobData > BuilderJob::takeJobList()
 {
-    QList< SubJobData > ret = m_metadata;
+    QVector< SubJobData > ret = m_metadata;
     m_metadata.clear();
     clearSubjobs();
     setObjectName( QString() );

@@ -21,7 +21,7 @@
 #ifndef BUILDERJOB_H
 #define BUILDERJOB_H
 
-#include <QtCore/QList>
+#include <QtCore/QVector>
 
 #include <kcompositejob.h>
 
@@ -144,12 +144,12 @@ private:
         KJob* job;
         ProjectBaseItem* item;
     };
-    QList<SubJobData> m_metadata;
+    QVector<SubJobData> m_metadata;
 
     /**
      * @internal get the subjob list and clear this composite job
      */
-    QList<SubJobData> takeJobList();
+    QVector<SubJobData> takeJobList();
 
 };
 
