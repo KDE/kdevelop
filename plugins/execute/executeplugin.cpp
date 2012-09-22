@@ -143,6 +143,7 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
         {
             job->addItems( KDevelop::BuilderJob::Install, items );
         }
+        job->updateJobName();
         return job;
     }
     return 0;

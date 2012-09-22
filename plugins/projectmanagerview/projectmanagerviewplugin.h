@@ -86,7 +86,9 @@ protected Q_SLOTS:
     void updateFromBuildSetChange();
 private:
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
-    void runBuilderJob( KDevelop::BuilderJob::BuildType );
+    QList<KDevelop::ProjectBaseItem*> collectItems();
+    QList<KDevelop::ProjectBaseItem*> collectAllProjects();
+    void runBuilderJob( KDevelop::BuilderJob::BuildType type, QList<KDevelop::ProjectBaseItem*> items );
     class ProjectManagerViewPluginPrivate* const d;
 };
 
