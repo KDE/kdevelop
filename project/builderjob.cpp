@@ -151,17 +151,20 @@ void BuilderJob::updateJobName()
     // Which items are mentioned in the set
     // Make it a list to preserve ordering; search overhead (n^2) isn't too big
     QList< ProjectBaseItem* > registeredItems;
+    // Which build types are mentioned in the set
+    // (Same rationale applies)
+    QList< BuildType > buildTypes;
     // Whether there are jobs without any specific item
     bool hasNullItems = false;
-    // Which build types are mentioned in the set
-    QSet< BuildType >  buildTypes;
 
     foreach( const SubJobData& subjob, m_metadata ) {
         if( subjob.item ) {
             if( !registeredItems.contains( subjob.item ) ) {
                 registeredItems.append( subjob.item );
             }
-            buildTypes.insert( subjob.type );
+            if( !buildTypes.contains( subjob.type ) ) {
+                buildTypes.append( subjob.type );
+            }
         } else {
             hasNullItems = true;
         }
