@@ -346,9 +346,13 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
     QList<BuildItem> buildItems = ICore::self()->projectController()->buildSetModel()->items();
     if( !buildItems.isEmpty() )
     {
-        foreach( const BuildItem& buildIitem, buildItems )
-            if( ProjectBaseItem* item = buildIitem.findItem() )
+        foreach( const BuildItem& buildItem, buildItems )
+        {
+            if( ProjectBaseItem* item = buildItem.findItem() )
+            {
                 items << item;
+            }
+        }
 
     } else
     {
