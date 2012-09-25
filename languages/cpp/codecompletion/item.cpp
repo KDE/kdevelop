@@ -148,9 +148,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       } // scan loop
 
       // User-friendliness: do not touch any trailing space.
-      while( QChar( suffixText.at( --position ) ).isSpace() )
-      { /* no-op */ }
-      ++position;
+      for( ;
+           position > 0 && QChar( suffixText.at( position - 1 ) ).isSpace();
+           --position )
+        { /* no-op */ }
 
       // Now "position" points to the first character that should _not_ be removed.
       // Calculate its line and column.
