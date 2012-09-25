@@ -1135,6 +1135,102 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     release(context);
 }
 
+void TestCppCodeCompletion::testSignalSlotExecution()
+{
+    // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
+    addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
+    addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
+
+    QByteArray test("#include \"QObject.h\""
+                    "\nclass A : public QObject { public slots: void slot1(); void slot2(void*);"
+                                                        "signals: void signal1(void*, char); void signal2(void*); "
+                    "\nvoid test() { connect( this, SIGNAL(signal2(void*)), SLOT() ); } };");
+
+    TopDUContext* top = parse( test, DumpNone );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 6);
+    QVERIFY(top->problems().isEmpty());
+
+    DUContext* context = top->childContexts()[0]->childContexts()[5];
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+
+    doc->setText(test);
+    doc->startEditing();
+    KTextEditor::View* v = doc->createView(0);
+
+    // Test 1: SIGNAL(<here>signal2(void*)) parens balancing
+    {
+        KTextEditor::Cursor c( 2, 36 );
+        v->setCursorPosition( c );
+
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(", "", CursorInRevision( c.line(), c.column() ) );
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "signal1" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
+
+        doc->endEditing();
+    }
+
+    // Test 2: SLOT(<here>) parens balancing
+    {
+        KTextEditor::Cursor c( 2, 58 );
+        v->setCursorPosition( c );
+
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "", CursorInRevision( c.line(), c.column() ) );
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "slot2" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
+
+        doc->endEditing();
+    }
+    // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
+    {
+        KTextEditor::Cursor c( 2, 58 );
+        v->setCursorPosition( c );
+
+        lock.unlock();
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "slot3", CursorInRevision( c.line(), c.column() ) );
+        qDebug() << "TEST3 names: " << complCtx.names;
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "slot3" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        lock.lock();
+        QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
+
+        doc->endEditing();
+    }
+
+    release(top);
+
+    delete v;
+    delete doc;
+}
 
 void TestCppCodeCompletion::testAssistant() {
   {
