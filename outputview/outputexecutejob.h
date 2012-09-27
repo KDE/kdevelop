@@ -31,6 +31,7 @@ namespace KDevelop
 {
 
 class ProcessLineMaker;
+class OutputExecuteJobPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputExecuteJob : public OutputJob
 {
@@ -232,35 +233,14 @@ protected slots:
     virtual void postProcessStdout( const QStringList& lines );
     virtual void postProcessStderr( const QStringList& lines );
 
+private:
+    OutputExecuteJobPrivate* d;
+
 private slots:
     void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
     void childProcessError( QProcess::ProcessError processError );
     void childProcessStdout();
     void childProcessStderr();
-
-private:
-    QString joinCommandLine() const;
-    void updateJobName();
-
-    static void mergeEnvironment( QProcessEnvironment& dest, const QMap<QString, QString>& src );
-    QProcessEnvironment effectiveEnvironment() const;
-    QStringList effectiveCommandLine() const;
-
-    KProcess* m_process;
-    ProcessLineMaker* m_lineMaker;
-    JobStatus m_status;
-    JobProperties m_properties;
-    OutputModel::OutputFilterStrategy m_filteringStrategy;
-    QStringList m_arguments;
-    QStringList m_privilegedExecutionCommand;
-    KUrl m_workingDirectory;
-    QString m_environmentProfile;
-    QMap<QString, QString> m_environmentOverrides;
-    QString m_jobName;
-    bool m_outputStarted;
-
-    QByteArray m_processStdout;
-    QByteArray m_processStderr;
 };
 
 } // namespace KDevelop
