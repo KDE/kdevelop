@@ -898,7 +898,7 @@ void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseA
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   QualifiedIdentifier id;
-  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
+  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && !node->declarator->parameter_declaration_clause) {
     //Build a prefix-context for external variable-definitions
     CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);

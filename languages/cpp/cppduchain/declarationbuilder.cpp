@@ -29,6 +29,8 @@
 
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
+#include "parser/parser.h"
+#include "parser/control.h"
 
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/duchain.h>
@@ -203,9 +205,11 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     (node->initializer && node->initializer->initializer_clause && node->initializer->initializer_clause->expression)
       ? AbstractFunction : NoFunctionFlag);
 
+  bool parameter_is_initializer = false;
+
   if(currentContext()->type() == DUContext::Other) {
     //Cannot declare a a function within a code-context
-    node->declarator->parameter_is_initializer = true;
+    parameter_is_initializer = true;
   }else if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
@@ -222,11 +226,9 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     
     DUContext* tempContext = currentContext();
     if (currentContext()->type() != DUContext::Class)
-      node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
+      parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
     closePrefixContext(id);
-    
-    
-    
+
     if(tempContext != previous) {
       
       //We remove all of its traces from the AST using ClearDUContextVisitor.
@@ -244,7 +246,13 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     }
     Q_ASSERT(currentContext() == previous);
   }
-  
+
+  if (parameter_is_initializer && node->declarator->parameter_declaration_clause && !node->initializer) {
+    Control control;
+    Parser parser(&control);
+    parser.fixupInitializerFromParameter(node, m_editor.parseSession());
+  }
+
   DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
@@ -427,13 +435,11 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     DeclarationBuilderBase::visitDeclarator(node);
     return;
   }
-  //need to make backup because we may temporarily change it
-  ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
 
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
   m_qtFunctionSignature = QByteArray();
   
-  if (node->parameter_declaration_clause && !node->parameter_is_initializer) {
+  if (node->parameter_declaration_clause) {
 
     if(m_collectQtFunctionSignature) //We need to do this just to collect the signature
       checkParameterDeclarationClause(node->parameter_declaration_clause);
@@ -458,7 +464,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     applyFunctionSpecifiers();
   } else {
     openDefinition(node->id, node, node->id == 0);
-    node->parameter_declaration_clause = 0;
   }
 
   m_collectQtFunctionSignature = false;
@@ -537,8 +542,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   }
 
   closeDeclaration();
-
-  node->parameter_declaration_clause = parameter_declaration_clause_backup;
 }
 
 ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)
@@ -1677,6 +1680,12 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     if(!clause || !clause->parameter_declarations)
       return true;
     AbstractType::Ptr oldLastType = lastType();
+    bool oldLastTypeWasAuto = lastTypeWasAuto();
+    bool oldLastTypeWasInstance = lastTypeWasInstance();
+
+    // type builder must do all its work here
+    bool oldComputeSimplified = m_onlyComputeSimplified;
+    setComputeSimplified(false);
 
     const ListNode<ParameterDeclarationAST*> *start = clause->parameter_declarations->toFront();
 
@@ -1730,6 +1739,9 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     } while (it != start);
 
     setLastType(oldLastType);
+    setLastTypeWasAuto(oldLastTypeWasAuto);
+    setLastTypeWasInstance(oldLastTypeWasInstance);
+    setComputeSimplified(oldComputeSimplified);
 
     return ret;
 }

@@ -210,9 +210,19 @@ bool TypeBuilder::lastTypeWasInstance() const
   return m_lastTypeWasInstance;
 }
 
+void TypeBuilder::setLastTypeWasInstance(bool wasInstance)
+{
+  m_lastTypeWasInstance = wasInstance;
+}
+
 bool TypeBuilder::lastTypeWasAuto() const
 {
   return m_lastTypeWasAuto;
+}
+
+void TypeBuilder::setLastTypeWasAuto(bool wasAuto)
+{
+  m_lastTypeWasAuto = wasAuto;
 }
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)

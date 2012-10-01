@@ -1498,9 +1498,9 @@ void TestDUChain::testVariableDeclaration()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A{}; int c, q;\n"
                       "A instance1(c); A instance2(2, 3); A instance3(q);\n"
-                      "void bla() {int* i = new A(c); }");
+                      "void bla() {int* i = new A(c); }\n");
 
-  LockedTopDUContext top = parse(method, DumpNone);
+  LockedTopDUContext top = parse(method, DumpAll);
 
   QVERIFY(!top->parentContext());
   QVERIFY(top->localScopeIdentifier().isEmpty());
