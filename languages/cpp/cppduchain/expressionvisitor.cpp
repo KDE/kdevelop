@@ -1196,12 +1196,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               declarations << DeclarationPointer(dec);
             }
           }
+        } else if (!node->initializer->expression && !node->initializer->initializer_clause) {
+          // ctor without parameters, i.e.: foo();
+          token = node->initializer->start_token;
+          fail = false;
         }
-      }
-      else if(node->declarator->parameter_is_initializer && node->declarator->parameter_declaration_clause)
-      {
-        token = node->declarator->parameter_declaration_clause->start_token-1;
-        fail = !buildParametersFromDeclaration(node->declarator->parameter_declaration_clause);
       }
 
       if(fail || !constructedType) {

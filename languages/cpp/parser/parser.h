@@ -96,6 +96,15 @@ public:
   /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
 
+  /**
+   * Fixup an InitDeclaratorAST @p node, which was misinterpreted to contain a
+   * parameter-declaration-clause while that is actually an initializer.
+   *
+   * This function will create a proper initializer and assign it to @p node
+   * and unsets the association to the parameter-declaration-clause.
+   */
+  void fixupInitializerFromParameter(InitDeclaratorAST* node, ParseSession* session);
+
 private:
   /**Convenience method to report problems. Constructs the problem
   using the information about the current line and column in the buffer

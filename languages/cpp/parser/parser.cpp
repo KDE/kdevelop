@@ -247,6 +247,34 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   return ast;
 }
 
+void Parser::fixupInitializerFromParameter(InitDeclaratorAST* node, ParseSession* _session)
+{
+  clear();
+  session = _session;
+
+  Q_ASSERT(session->token_stream);
+
+  Q_ASSERT(!node->initializer);
+  Q_ASSERT(node->declarator);
+  Q_ASSERT(node->declarator->parameter_declaration_clause);
+
+  // include the '(', which is not included in the parameter_declaration_clause, thus: -1
+  rewind(node->declarator->parameter_declaration_clause->start_token - 1);
+
+  InitializerAST* initializer = 0;
+  if (!parseInitializer(initializer)) {
+    // note: this can happen when we encounter unresolved types, since then
+    // DeclarationBuilder::checkParameterDeclarationClause will think this is an initializer
+    // we handle this gracefully and just exit
+    return;
+  }
+
+  // fixup AST
+  node->initializer = initializer;
+  // note: this is not leaking, as the AST is managed by a memory pool
+  node->declarator->parameter_declaration_clause = 0;
+}
+
 
 void Parser::clear()
 {

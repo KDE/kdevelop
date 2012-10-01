@@ -1496,24 +1496,37 @@ void TestDUChain::testVariableDeclaration()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); }");
+    QByteArray method("struct A{}; int c, q;\n"
+                      "A instance1(c); A instance2(2, 3); A instance3(q);\n"
+                      "void bla() {int* i = new A(c); }\n");
 
-  LockedTopDUContext top = parse(method, DumpNone);
+  LockedTopDUContext top = parse(method, DumpAll);
 
   QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 2);
-  QCOMPARE(top->localDeclarations().count(), 5);
-  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 7);
 
-//   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(top->localDeclarations()[1]->abstractType().data());
-//   QVERIFY(idType);
-//   QCOMPARE( idType->identifier(), QualifiedIdentifier("A") );
-//
-//   Declaration* defStructA = top->localDeclarations().first();
-//   QCOMPARE(defStructA->identifier(), Identifier("A"));
+  // struct A
+  Declaration* defStructA = top->localDeclarations().first();
+  QCOMPARE(defStructA->identifier(), Identifier("A"));
 
+  // int c;
+  Declaration* defIntC = top->localDeclarations().at(1);
+  QCOMPARE(defIntC->uses().count(), 1);
+  QCOMPARE(defIntC->uses().begin()->count(), 2);
+
+  // instances
+  for(int i = 3; i < 6; ++i) {
+    Declaration* inst = top->localDeclarations().at(i);
+    QVERIFY(!inst->isFunctionDeclaration());
+    StructureType::Ptr idType = inst->abstractType().cast<StructureType>();
+    QVERIFY(idType);
+    QCOMPARE( idType->qualifiedIdentifier(), QualifiedIdentifier("A") );
+  }
+
+  // bla
+  QVERIFY(top->localDeclarations().at(6)->isFunctionDeclaration());
 }
 
 void TestDUChain::testDeclareClass()
