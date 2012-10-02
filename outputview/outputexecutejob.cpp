@@ -37,6 +37,9 @@ class OutputExecuteJobPrivate
 public:
     OutputExecuteJobPrivate( KDevelop::OutputExecuteJob* owner );
 
+    void childProcessStdout();
+    void childProcessStderr();
+
     QString joinCommandLine() const;
     QString getJobName();
 
@@ -358,25 +361,25 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
     }
 }
 
-void OutputExecuteJob::childProcessStdout()
+void OutputExecuteJobPrivate::childProcessStdout()
 {
-    QByteArray out = d->m_process->readAllStandardOutput();
-    if( d->m_properties.testFlag( AccumulateStdout ) ) {
-        d->m_processStdout += out;
+    QByteArray out = m_process->readAllStandardOutput();
+    if( m_properties.testFlag( OutputExecuteJob::AccumulateStdout ) ) {
+        m_processStdout += out;
     }
-    if( d->m_properties.testFlag( DisplayStdout ) ) {
-        d->m_lineMaker->slotReceivedStdout( out );
+    if( m_properties.testFlag( OutputExecuteJob::DisplayStdout ) ) {
+        m_lineMaker->slotReceivedStdout( out );
     }
 }
 
-void OutputExecuteJob::childProcessStderr()
+void OutputExecuteJobPrivate::childProcessStderr()
 {
-    QByteArray err = d->m_process->readAllStandardError();
-    if( d->m_properties.testFlag( AccumulateStderr ) ) {
-        d->m_processStderr += err;
+    QByteArray err = m_process->readAllStandardError();
+    if( m_properties.testFlag( OutputExecuteJob::AccumulateStderr ) ) {
+        m_processStderr += err;
     }
-    if( d->m_properties.testFlag( DisplayStderr ) ) {
-        d->m_lineMaker->slotReceivedStderr( err );
+    if( m_properties.testFlag( OutputExecuteJob::DisplayStderr ) ) {
+        m_lineMaker->slotReceivedStderr( err );
     }
 }
 

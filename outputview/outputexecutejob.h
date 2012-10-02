@@ -233,14 +233,16 @@ protected slots:
     virtual void postProcessStdout( const QStringList& lines );
     virtual void postProcessStderr( const QStringList& lines );
 
+    // Redefine these functions if you want to handle process' exit codes in a special manner.
+    // One possible usage is in "cvs diff" job which returns 1 on success.
+    virtual void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
+    virtual void childProcessError( QProcess::ProcessError processError );
+
 private:
     OutputExecuteJobPrivate* d;
 
-private slots:
-    void childProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
-    void childProcessError( QProcess::ProcessError processError );
-    void childProcessStdout();
-    void childProcessStderr();
+    Q_PRIVATE_SLOT(d, void childProcessStdout());
+    Q_PRIVATE_SLOT(d, void childProcessStderr());
 };
 
 } // namespace KDevelop
