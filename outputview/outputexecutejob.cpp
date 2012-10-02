@@ -43,7 +43,8 @@ public:
     QString joinCommandLine() const;
     QString getJobName();
 
-    static void mergeEnvironment( QProcessEnvironment& dest, const QMap<QString, QString>& src );
+    template< typename T >
+    static void mergeEnvironment( QProcessEnvironment& dest, const T& src );
     QProcessEnvironment effectiveEnvironment() const;
     QStringList effectiveCommandLine() const;
 
@@ -58,7 +59,7 @@ public:
     QStringList m_privilegedExecutionCommand;
     KUrl m_workingDirectory;
     QString m_environmentProfile;
-    QMap<QString, QString> m_environmentOverrides;
+    QHash<QString, QString> m_environmentOverrides;
     QString m_jobName;
     bool m_outputStarted;
 
@@ -437,9 +438,10 @@ void OutputExecuteJob::removeEnvironmentOverride( const QString& name )
     d->m_environmentOverrides.remove( name );
 }
 
-void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const QMap<QString, QString>& src )
+template< typename T >
+void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const T& src )
 {
-    for( QMap<QString, QString>::const_iterator it = src.begin(); it != src.end(); ++it ) {
+    for( typename T::const_iterator it = src.begin(); it != src.end(); ++it ) {
         dest.insert( it.key(), it.value() );
     }
 }
