@@ -148,7 +148,7 @@ private:
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
     QMutex m_dirWatchersMutex;
-    KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project);
+    KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);

@@ -66,6 +66,7 @@ class KDEVCMAKECOMMON_EXPORT DefinesAttached
         virtual ~DefinesAttached();
         CMakeDefinitions definitions(CMakeFolderItem* parent) const;
         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
+        void addDefinitions(const CMakeDefinitions& defs) { m_defines.unite(defs); }
         void defineVariables(const QStringList& vars);
     private:
         CMakeDefinitions m_defines;
@@ -77,6 +78,7 @@ class KDEVCMAKECOMMON_EXPORT IncludesAttached
         // Required, and must be non-inline, for dynamic_cast to work
         virtual ~IncludesAttached();
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
+        void addIncludeDirectories(const QStringList& l) { m_includeList+=l; }
         QStringList includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const;
     private:
         QStringList m_includeList;
