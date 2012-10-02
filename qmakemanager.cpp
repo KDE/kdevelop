@@ -485,29 +485,27 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
 
     QHash<QString,QString> hash;
     KProcess p;
-    QStringList queryVariables;
-    queryVariables << "QMAKE_MKSPECS" << "QMAKE_VERSION" <<
-            "QT_INSTALL_BINS" << "QT_INSTALL_CONFIGURATION" <<
-            "QT_INSTALL_DATA" << "QT_INSTALL_DEMOS" << "QT_INSTALL_DOCS" <<
-            "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
-            "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
-            "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
-    foreach( const QString& var, queryVariables)
-    {
-        p.clearProgram();
-        p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-        p.setWorkingDirectory( project->folder().toLocalFile() );
-        //To be implemented when there's an API to fetch Env from Project
-        //p.setEnv();
-        p << QMakeConfig::qmakeBinary( project ) << "-query" << var;
-        int execed = p.execute();
-        Q_ASSERT(!execed);
-        Q_UNUSED(execed);
-        QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
-        if( result != "**Unknown**")
-            hash[var] = result;
+    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    p.setWorkingDirectory( project->folder().toLocalFile() );
+    p << QMakeConfig::qmakeBinary( project ) << "-query";
+    int execed = p.execute();
+    Q_ASSERT_X(!execed, Q_FUNC_INFO, qPrintable(p.program().join(" ")));
+    Q_UNUSED(execed);
+
+    foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
+        const int colon = line.indexOf(':');
+        if (colon == -1) {
+            continue;
+        }
+        const QByteArray key = line.left(colon);
+        const QByteArray value = line.mid(colon + 1);
+        hash.insert(key, value);
     }
-    kDebug(9024) << "Ran qmake (" << QMakeConfig::qmakeBinary( project ) << "), found:" << hash;
+    if (!hash.contains("QMAKE_MKSPECS") && hash.contains("QT_INSTALL_PREFIX")) {
+        // qt5 doesn't have the MKSPECS anymore
+        hash.insert("QMAKE_MKSPECS", hash["QT_INSTALL_PREFIX"] + "/mkspecs");
+    }
+    kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
     return hash;
 }
 
