@@ -89,14 +89,14 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
     d->m_process->setTextModeEnabled( true );
 
-    connect( d->m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             SLOT( childProcessExited( int, QProcess::ExitStatus ) ) );
-    connect( d->m_process, SIGNAL( error( QProcess::ProcessError ) ),
-             SLOT( childProcessError( QProcess::ProcessError ) ) );
-    connect( d->m_process, SIGNAL( readyReadStandardOutput() ),
-             SLOT( childProcessStdout() ) );
-    connect( d->m_process, SIGNAL( readyReadStandardError() ),
-             SLOT( childProcessStderr() ) );
+    connect( d->m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             SLOT(childProcessExited(int,QProcess::ExitStatus)) );
+    connect( d->m_process, SIGNAL(error(QProcess::ProcessError)),
+             SLOT(childProcessError(QProcess::ProcessError)) );
+    connect( d->m_process, SIGNAL(readyReadStandardOutput()),
+             SLOT(childProcessStdout()) );
+    connect( d->m_process, SIGNAL(readyReadStandardError()),
+             SLOT(childProcessStderr()) );
 }
 
 OutputExecuteJob::~OutputExecuteJob()
@@ -235,14 +235,14 @@ void OutputExecuteJob::start()
     // Slots hasRawStdout() and hasRawStderr() are responsible
     // for feeding raw data to the line maker; so property-based channel filtering is implemented there.
     if( d->m_properties.testFlag( PostProcessOutput ) ) {
-        connect( d->m_lineMaker, SIGNAL( receivedStdoutLines( QStringList ) ),
-                 SLOT( postProcessStdout( QStringList ) ) );
-        connect( d->m_lineMaker, SIGNAL( receivedStderrLines( QStringList ) ),
-                 SLOT( postProcessStderr( QStringList ) ) );
+        connect( d->m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+                 SLOT(postProcessStdout(QStringList)) );
+        connect( d->m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
+                 SLOT(postProcessStderr(QStringList)) );
     } else {
-        connect( d->m_lineMaker, SIGNAL( receivedStdoutLines( QStringList ) ), model(),
+        connect( d->m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(),
                  SLOT(appendLines(QStringList)) );
-        connect( d->m_lineMaker, SIGNAL( receivedStderrLines( QStringList ) ), model(),
+        connect( d->m_lineMaker, SIGNAL(receivedStderrLines(QStringList)), model(),
                  SLOT(appendLines(QStringList)) );
     }
 
