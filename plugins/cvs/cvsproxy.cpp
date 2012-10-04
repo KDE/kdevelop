@@ -171,11 +171,11 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
 CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
-    if (!info.isFile())
-        return 0;
+    // parent folder path for files, otherwise the folder path itself
+    const QString repo = info.isFile() ? info.absolutePath() : info.absoluteFilePath();
 
     CvsLogJob* job = new CvsLogJob(vcsplugin);
-    if ( prepareJob(job, info.absolutePath()) ) {
+    if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "log";
 
@@ -185,7 +185,9 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
             *job << convRev;
         }
 
-        *job << KShell::quoteArg(info.fileName());
+        if (info.isFile()) {
+            *job << KShell::quoteArg(info.fileName());
+        }
 
         return job;
     }
