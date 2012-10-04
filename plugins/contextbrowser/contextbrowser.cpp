@@ -1126,7 +1126,7 @@ void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KDe
     if(m_outlineLine->isVisible())
         updateDeclarationListBox(context);
     
-    if(!context && !context->owner() && !force) {
+    if(!context || (!context->owner() && !force)) {
         return; //Only add history-entries for contexts that have owners, which in practice should be functions and classes
                 //This keeps the history cleaner
     }
