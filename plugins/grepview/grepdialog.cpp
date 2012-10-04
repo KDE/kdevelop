@@ -80,7 +80,7 @@ const QStringList repl_template = QStringList()
     << "%s->\\1(";
 
 const QStringList filepatterns = QStringList()
-    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*y,*ypp,*yxx,*y++,*l"
+    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l"
     << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
     << "*.adb"
