@@ -1,4 +1,4 @@
-/*
+/* This file is part of KDevelop
    Copyright 2012 Olivier de Gaalon <olivier.jg@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -16,32 +16,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CPP_RENAMEACTION_H
-#define CPP_RENAMEACTION_H
+#ifndef TestCppAssistants_H
+#define TestCppAssistants_H
 
-#include <interfaces/iassistant.h>
-#include <language/duchain/identifier.h>
-#include <language/editor/rangeinrevision.h>
-#include <ktexteditor/view.h>
+#include <QObject>
 
-using namespace KDevelop;
-namespace Cpp {
-
-typedef QMap<IndexedString, QList <RangeInRevision> > UsesList;
-
-class RenameAction : public IAssistantAction {
-public:
-  RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName, const UsesList &oldDeclarationUses);
-  virtual QString description() const;
-  virtual QString newDeclarationName() const;
-  virtual QString oldDeclarationName() const;
-  virtual void execute();
-private:
-  Identifier m_oldDeclarationName;
-  QString m_newDeclarationName;
-  UsesList m_oldDeclarationUses;
+class TestCppAssistants : public QObject
+{
+  Q_OBJECT
+private slots:
+  void initTestCase();
+  void cleanupTestCase();
+  void testRenameAssistant_data();
+  void testRenameAssistant();
+  void testSignatureAssistant_data();
+  void testSignatureAssistant();
 };
-
-}
 
 #endif

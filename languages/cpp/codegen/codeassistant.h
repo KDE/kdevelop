@@ -54,6 +54,7 @@ class StaticCodeAssistant : public QObject {
   Q_OBJECT
   public:
     StaticCodeAssistant();
+    KSharedPtr<KDevelop::IAssistant> activeAssistant() { return m_activeAssistant; }
 
   private slots:
     void assistantHide();

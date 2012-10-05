@@ -38,6 +38,16 @@ QString RenameAction::description() const {
   return i18n("Rename \"%1\" to \"%2\"", m_oldDeclarationName.toString(), m_newDeclarationName);
 }
 
+QString RenameAction::newDeclarationName() const
+{
+  return m_newDeclarationName;
+}
+
+QString RenameAction::oldDeclarationName() const
+{
+  return m_oldDeclarationName.toString();
+}
+
 void RenameAction::execute() {
   UsesList::iterator it;
   DocumentChangeSet changes;
