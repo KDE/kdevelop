@@ -946,21 +946,25 @@ IDocument* DocumentController::activeDocument() const
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
-QString DocumentController::activeDocumentPath( bool selectionFallback ) const
+QString DocumentController::activeDocumentPath( QString target ) const
 {
-    IDocument* doc = activeDocument();
-    if(!doc)
-    {
-        if(selectionFallback)
-        {
-            Context* selection = ICore::self()->selectionController()->currentSelection();
-            if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
-            {
-                QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
-                if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
-                    ret += "/.";
-                return  ret;
+    if(target.size()) {
+        foreach(IProject* project, Core::self()->projectController()->projects()) {
+            if(project->name().toLower() == target.toLower()) {
+                return project->folder().pathOrUrl() + "/.";
             }
+        }
+    }
+    IDocument* doc = activeDocument();
+    if(!doc || target == "[selection]")
+    {
+        Context* selection = ICore::self()->selectionController()->currentSelection();
+        if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
+        {
+            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+            if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
+                ret += "/.";
+            return  ret;
         }
         return QString();
     }
