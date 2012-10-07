@@ -709,8 +709,7 @@ void TemplateDeclaration::deleteAllInstantiations()
 {
   if(m_instantiations.isEmpty() && m_defaultParameterInstantiations.isEmpty())
     return;
-  ENSURE_CHAIN_WRITE_LOCKED
-  
+
   InstantiationsHash instantiations;
   {
     QMutexLocker l(&instantiationsMutex);
