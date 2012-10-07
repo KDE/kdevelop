@@ -307,6 +307,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 
         int position = 0;
         bool hadActiveView = false;
+        Sublime::View* activeView = d->activeView;
         
         foreach (View *view, index->views())
         {
@@ -320,11 +321,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->viewContainers[view] = container;
                     d->widgetToView[widget] = view;
                 }
-                if(d->activeView == view)
+                if(activeView == view)
                 {
                     hadActiveView = true;
                     container->setCurrentWidget(widget);
-                }else if(topViews.contains(view))
+                }else if(topViews.contains(view) && !hadActiveView)
                     container->setCurrentWidget(widget);
             }
             position++;
