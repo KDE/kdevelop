@@ -124,9 +124,28 @@ MainWindow::~MainWindow()
     delete d;
 }
 
-void MainWindow::reconstructViews()
+void MainWindow::reconstructViews(QList<View*> topViews)
 {
-    d->reconstructViews();
+    d->reconstructViews(topViews);
+}
+
+QList<View*> MainWindow::getTopViews() const
+{
+    QList<View*> topViews;
+    foreach(View* view, d->area->views())
+    {
+        if(view->hasWidget())
+        {
+            QWidget* widget = view->widget();
+            if(widget->parent() && widget->parent()->parent())
+            {
+                Container* container = qobject_cast<Container*>(widget->parent()->parent());
+                if(container->currentWidget() == widget)
+                    topViews << view;
+            }
+        }
+    }
+    return topViews;
 }
 
 void MainWindow::setArea(Area *area)

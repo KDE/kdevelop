@@ -118,7 +118,7 @@ void AreaIndex::remove(View *view)
         d->parent->unsplit(this);
 }
 
-void Sublime::AreaIndex::split(Qt::Orientation orientation, bool moveViewsToSecond)
+void AreaIndex::split(Qt::Orientation orientation, bool moveViewsToSecond)
 {
     //we can not split areas that have already been split
     if (d->isSplit())

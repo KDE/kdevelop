@@ -1041,6 +1041,8 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
     Sublime::AreaIndex* areaIndex = area->rootIndex();
 
+    QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->getTopViews();
+    
     if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
         areaIndex = area->indexOf(activeView);
 
@@ -1054,7 +1056,7 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     
     // Required because sublime sometimes doesn't update correctly when the area-index contents has been changed
     // (especially when views have been moved to other indices, through unsplit, split, etc.)
-    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews();
+    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews(topViews);
     
     return ret;
 }
