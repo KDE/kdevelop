@@ -180,7 +180,7 @@ void TestCppAssistants::testRenameAssistant_data()
 {
   QTest::addColumn<QString>("fileContents");
   QTest::addColumn<QString>("oldDeclarationName");
-  QTest::addColumn<QList<StateChange>>("stateChanges");
+  QTest::addColumn<QList<StateChange> >("stateChanges");
   QTest::addColumn<QString>("finalFileContents");
 
   QTest::newRow("Prepend Text")
@@ -270,7 +270,7 @@ void TestCppAssistants::testSignatureAssistant_data()
 {
   QTest::addColumn<QString>("headerContents");
   QTest::addColumn<QString>("cppContents");
-  QTest::addColumn<QList<StateChange>>("stateChanges");
+  QTest::addColumn<QList<StateChange> >("stateChanges");
   QTest::addColumn<QString>("finalHeaderContents");
   QTest::addColumn<QString>("finalCppContents");
 
