@@ -1160,11 +1160,11 @@ void TestCppCodeCompletion::testSignalSlotExecution()
     QVERIFY(doc);
 
     doc->setText(test);
-    doc->startEditing();
     KTextEditor::View* v = doc->createView(0);
 
     // Test 1: SIGNAL(<here>signal2(void*)) parens balancing
     {
+        doc->startEditing();
         KTextEditor::Cursor c( 2, 36 );
         v->setCursorPosition( c );
 
@@ -1185,6 +1185,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
     // Test 2: SLOT(<here>) parens balancing
     {
+        doc->startEditing();
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
@@ -1204,6 +1205,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
     }
     // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
     {
+        doc->startEditing();
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
