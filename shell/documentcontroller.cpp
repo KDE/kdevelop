@@ -46,6 +46,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iselectioncontroller.h>
+#include <interfaces/context.h>
 #include <project/projectmodel.h>
 
 #include "core.h"
@@ -944,11 +946,24 @@ IDocument* DocumentController::activeDocument() const
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
-QString DocumentController::activeDocumentPath() const
+QString DocumentController::activeDocumentPath( bool selectionFallback ) const
 {
     IDocument* doc = activeDocument();
     if(!doc)
+    {
+        if(selectionFallback)
+        {
+            Context* selection = ICore::self()->selectionController()->currentSelection();
+            if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
+            {
+                QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+                if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
+                    ret += "/.";
+                return  ret;
+            }
+        }
         return QString();
+    }
     return doc->url().pathOrUrl();
 }
 

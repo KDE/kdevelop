@@ -146,7 +146,7 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
     
     // Returns the currently active document
-    Q_SCRIPTABLE QString activeDocumentPath() const;
+    Q_SCRIPTABLE QString activeDocumentPath(bool selectionFallback=true) const;
 
     // Returns all open documents in the current area
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;
