@@ -125,12 +125,16 @@ function help! {
 
     if [ "$1" == "sync" ]; then
     echo "Extended syncing:"
-    echo "sync! [[projectname]]               - If no project-name is given, then the sync! command synchronizes to the currently active document."
+    echo "sync!    [[project-name]]           - If no project-name is given, then the sync! command synchronizes to the currently active document."
     echo "                                      If no document is active, then it synchronizes to the currently selected item in the project tree-view."
-    echo "                                      If a project name is given, then it synchronizes to the base folder of that project."
-    echo "syncsel!                            - Synchronizes to the currently selected item in the project tree-view, independent of the active document."
+    echo "                                      If a case-insensitive project name prefix is given, then it synchronizes to the base folder of the matching project."
+    echo "syncsel!                            - Synchronizes to the currently selected item in the project tree-view, independently of the active document."
+    echo "project! [[project-name]]           - Map from a path within the build directory to the corresponding path in the source directory."
+    echo "                                      If we're already in the source directory, map to the root of the surrounding project."
+    echo "bdir!    [[project-name]]           - Map from a path within the source directory to the corresponding path in the build directory."
+    echo "                                      If we're already in the build directory, map to the root of the build directory."
     echo ""
-    echo "Short forms: s! = sync!, ss! = syncsel!"
+    echo "Short forms: s! = sync!, ss! = syncsel!, p! = project!, b! = bdir!"
     fi
 
     if [ "$1" == "remote" ]; then
@@ -161,7 +165,6 @@ function help! {
       echo ""
       echo "Short forms: sev! = setenv!, ee! = editenv!, shenv! = showenv!"
     fi
-    
     echo ""
 }
 
@@ -181,6 +184,20 @@ function ss! {
 
 function syncsel! {
     sync! '[selection]'
+}
+
+function p! {
+    if [ "$@" ]; then
+        s! $@
+    fi
+    project!
+}
+
+function b! {
+    if [ "$@" ]; then
+        s! $@
+    fi
+    bdir!
 }
 
 function o! {
@@ -293,6 +310,24 @@ function raise! {
     qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
+function bdir! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
+    if [ "$TARG" ]; then
+        cd $TARG
+    else
+        echo "Got no path"
+    fi
+}
+
+function project! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
+    if [ "$TARG" ]; then
+        cd $TARG
+    else
+        echo "Got no path"
+    fi
+}
+
 
 # Main functions:
 
@@ -344,8 +379,9 @@ function sync! {
                 return
             fi
         fi
-        
-        cd $(dirname $P)
+
+        [ -d "$P" ] || P=$(dirname "$P")
+        cd "$P"
     else
         echo "Got no path"
     fi

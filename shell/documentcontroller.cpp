@@ -950,7 +950,7 @@ QString DocumentController::activeDocumentPath( QString target ) const
 {
     if(target.size()) {
         foreach(IProject* project, Core::self()->projectController()->projects()) {
-            if(project->name().toLower() == target.toLower()) {
+            if(project->name().startsWith(target, Qt::CaseInsensitive)) {
                 return project->folder().pathOrUrl() + "/.";
             }
         }

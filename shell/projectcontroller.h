@@ -61,6 +61,7 @@ public Q_SLOTS:
 class KDEVPLATFORMSHELL_EXPORT ProjectController : public IProjectController
 {
     Q_OBJECT
+    Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.ProjectController" )
     friend class Core;
     friend class CorePrivate;
     friend class ProjectPreferences;
@@ -104,6 +105,12 @@ public Q_SLOTS:
 //     void changeCurrentProject( ProjectBaseItem* );
     void openProjects(const KUrl::List& projects);
     void commitCurrentProject();
+
+    // Maps the given path from the source to the equivalent path within the build directory
+    // of the corresponding project. If the path is already in the build directory and fallbackRoot is true,
+    // then it is mapped to the root of the build directory.
+    // If reverse is true, maps the opposite direction, from build to source. [ Used in kdevplatform_shell_environment.sh ]
+    Q_SCRIPTABLE QString mapSourceBuild( const QString& path, bool reverse = false, bool fallbackRoot = true ) const;
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

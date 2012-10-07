@@ -78,6 +78,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QApplication>
+#include <QDBusConnection>
 #include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -470,6 +471,9 @@ ProjectController::ProjectController( Core* core )
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatformproject"), 
                                               this, 
                                               "notifyProjectConfigurationChanged" );
+
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
+        this, QDBusConnection::ExportScriptableSlots );
 }
 
 void ProjectController::setupActions()
@@ -1033,6 +1037,62 @@ void ProjectController::commitCurrentProject()
             }
         }
     }
+}
+
+QString ProjectController::mapSourceBuild( const QString& path, bool reverse, bool fallbackRoot ) const
+{
+    KUrl url(path);
+    IProject* sourceDirProject = 0, *buildDirProject = 0;
+    Q_FOREACH(IProject* proj, d->m_projects)
+    {
+        if(proj->folder().isParentOf(url))
+            sourceDirProject = proj;
+        if(proj->buildSystemManager())
+        {
+            KUrl buildDir = proj->buildSystemManager()->buildDirectory(proj->projectItem());
+            if(buildDir.isValid() && buildDir.isParentOf(url))
+                buildDirProject = proj;
+        }
+    }
+    
+    if(!reverse)
+    {
+        // Map-target is the build directory
+        if(sourceDirProject && sourceDirProject->buildSystemManager())
+        {
+            // We're in the source, map into the build directory
+            QString relativePath = KUrl::relativeUrl(sourceDirProject->folder(), url);
+            
+            KUrl build = sourceDirProject->buildSystemManager()->buildDirectory(sourceDirProject->projectItem());
+            build.addPath(relativePath);
+            while(!QFile::exists(build.path()))
+                build = build.upUrl();
+            return build.pathOrUrl();
+        }else if(buildDirProject && fallbackRoot)
+        {
+            // We're in the build directory, map to the build directory root
+            return buildDirProject->buildSystemManager()->buildDirectory(buildDirProject->projectItem()).pathOrUrl();
+        }
+    }else{
+        // Map-target is the source directory
+        if(buildDirProject)
+        {
+            KUrl build = buildDirProject->buildSystemManager()->buildDirectory(buildDirProject->projectItem());
+            // We're in the source, map into the build directory
+            QString relativePath = KUrl::relativeUrl(build, url);
+            
+            KUrl source = buildDirProject->folder();
+            source.addPath(relativePath);
+            while(!QFile::exists(source.path()))
+                source = source.upUrl();
+            return source.pathOrUrl();
+        }else if(sourceDirProject && fallbackRoot)
+        {
+            // We're in the source directory, map to the root
+            return sourceDirProject->folder().pathOrUrl();
+        }
+    }
+    return QString();
 }
 
 }
