@@ -60,6 +60,11 @@ public:
 
   void setDefaultParameter(const KDevelop::QualifiedIdentifier& str);
 
+  /**
+   * @return true if this template parameter has a default value, false otherwise.
+   */
+  bool hasDefaultParameter() const;
+
   enum {
     Identity = 18
   };
