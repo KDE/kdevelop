@@ -1190,9 +1190,10 @@ QString SessionController::handleLockedSession( const QString& sessionName, cons
 
     case KMessageBox::Cancel:
     default:
-        return QString();
         break;
     }
+
+    return QString();
 }
 
 void SessionChooserDialog::itemEntered(const QModelIndex& index)
