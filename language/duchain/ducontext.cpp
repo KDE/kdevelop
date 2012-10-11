@@ -639,7 +639,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
           {
             return 0;
           }
-          if( declaration->kind() == Declaration::Alias && ! m_flags & DontResolveAliases ) {
+          if( declaration->kind() == Declaration::Alias && !(m_flags & DontResolveAliases) ) {
             //Apply alias declarations
             AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
             if(alias->aliasedDeclaration().isValid()) {
