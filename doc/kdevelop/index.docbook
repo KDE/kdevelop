@@ -5,7 +5,7 @@
   <!ENTITY % English "INCLUDE">
 ]>
 <book id="kdevelop" lang="&language;">
-<book id="kdevelop"info>
+<bookinfo>
 <title>&kdevelop; Handbook</title>
 <authorgroup>
 <author>
