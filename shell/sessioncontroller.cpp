@@ -64,6 +64,7 @@ Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QLayout>
 #include <QDBusConnection>
+#include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QDBusReply>
 
@@ -862,13 +863,13 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
 
     QString service = SessionControllerPrivate::DBusServiceNameForSession( id );
     QDBusConnection connection = QDBusConnection::sessionBus();
-    QDBusInterface rootInterface( service, "/", QString(), connection );
+    QDBusConnectionInterface* connectionInterface = connection.interface();
     ret.DBusService = service;
 
     ret.lockFilename = SessionControllerPrivate::lockFileForSession( id );
     ret.lockFile = new KLockFile( ret.lockFilename );
 
-    bool canLockDBus = !rootInterface.isValid();
+    bool canLockDBus = !connectionInterface->isServiceRegistered( service );
     bool lockedDBus = false;
 
     // Lock D-Bus if we can and we need to
@@ -1114,15 +1115,22 @@ QString SessionController::handleLockedSession( const QString& sessionName, cons
                 break;
         }
     } else {
-        QDBusInterface interface(state.DBusService,
-                                 "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
-                                 QDBusConnection::sessionBus());
-        if (interface.isValid()) {
-            QDBusReply<void> reply = interface.call("ensureVisible");
-            if (reply.isValid()) {
-                kDebug() << i18nc("@info:shell", "made running %1 instance (PID: %2) visible", state.holderApp, state.holderPid);
-                return QString();
-            }
+        // The timeout for "ensureVisible" call
+        // Leave it sufficiently low to avoid waiting for hung instances.
+        static const int timeout_ms = 1000;
+
+        QDBusMessage message = QDBusMessage::createMethodCall( state.DBusService,
+                                                               "/kdevelop/MainWindow",
+                                                               "org.kdevelop.MainWindow",
+                                                               "ensureVisible" );
+        QDBusMessage reply = QDBusConnection::sessionBus().call( message,
+                                                                 QDBus::Block,
+                                                                 timeout_ms );
+        if( reply.type() == QDBusMessage::ReplyMessage ) {
+            kDebug() << i18nc( "@info:shell", "made running %1 instance (PID: %2) visible", state.holderApp, state.holderPid );
+            return QString();
+        } else {
+            kDebug() << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", state.holderApp, state.holderPid);
         }
 
         problemDescription = i18nc("@info",
