@@ -65,7 +65,7 @@ public:
         {
         }
         operator bool() const {
-            return success && ( lockResult == KLockFile::LockOK );
+            return success;
         }
         bool success;
         QString holderApp;
