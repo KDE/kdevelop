@@ -4,8 +4,8 @@
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
 ]>
-<book lang="&language;">
-<bookinfo>
+<book id="kdevelop" lang="&language;">
+<book id="kdevelop"info>
 <title>&kdevelop; Handbook</title>
 <authorgroup>
 <author>
