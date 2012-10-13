@@ -160,7 +160,20 @@ struct ThreadLocalData {
   // recursion counter for alias type resolution
   uint aliasDepth;
 };
+
+#if (QT_VERSION >= 0x040801)
 QThreadStorage<ThreadLocalData> threadData;
+inline ThreadLocalData& threadDataLocal() {
+  return threadData.localData();
+}
+#else
+QThreadStorage<ThreadLocalData*> threadData;
+inline ThreadLocalData& threadDataLocal() {
+  if(!threadData.localData())
+    threadData.setLocalData(new ThreadLocalData());
+  return *threadData.localData();
+}
+#endif
 
 /**
  * RAII class to push/pop a type overload for a given identifier.
@@ -170,16 +183,18 @@ struct PushTypeOverload
   PushTypeOverload(const IndexedQualifiedIdentifier& qid_, const IndexedType& type_)
   : qid(qid_)
   , type(type_)
+  , data(threadDataLocal())
   {
-    threadData.localData().typeOverloads.insert(qid, type);
+    data.typeOverloads.insert(qid, type);
   }
   ~PushTypeOverload()
   {
-    threadData.localData().typeOverloads.remove(qid, type);
+    data.typeOverloads.remove(qid, type);
   }
 private:
   IndexedQualifiedIdentifier qid;
   IndexedType type;
+  ThreadLocalData& data;
 };
 
 /**
@@ -202,7 +217,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
 
   virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
   {
-    ThreadLocalData& data = threadData.localData();
+    ThreadLocalData& data = threadDataLocal();
     PushValue<uint> inc(data.delayedDepth, +1);
     if( data.delayedDepth > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
@@ -616,8 +631,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
         ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
         if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
-          PushValue<uint> safety(threadData.localData().aliasDepth, +1);
-          if(threadData.localData().aliasDepth > 30) {
+          ThreadLocalData& data = threadDataLocal();
+          PushValue<uint> safety(data.aliasDepth, +1);
+          if(data.aliasDepth > 30) {
             kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
             ///For alias declaration, we resolve the declaration that is aliased instead of a type.
