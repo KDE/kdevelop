@@ -173,6 +173,7 @@ int main( int argc, char *argv[] )
     //so lookup the --debug switch and eat everything behind by decrementing argc
     //debugArgs is filled with args after --debug <debuger>
     QStringList debugArgs;
+    QString debugeeName;
     {
         bool debugFound = false;
         int c = argc;
@@ -296,14 +297,11 @@ int main( int argc, char *argv[] )
     if ( args->isSet("debug") ) {
         if ( debugArgs.isEmpty() ) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
+            qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
             return 1;
         }
-        QString binary = debugArgs.first();
-        if ( binary.contains('/') ) {
-            binary = binary.right(binary.lastIndexOf('/'));
-        }
-        session = i18n("Debug")+" "+binary;
+        debugeeName = i18n("Debug %1", KUrl( debugArgs.first() ).fileName());
+        session = debugeeName;
     } else if ( args->isSet("cs") || args->isSet("new-session") )
     {
         session = args->isSet("cs") ? args->getOption("cs") : args->getOption("new-session");
@@ -413,16 +411,8 @@ int main( int argc, char *argv[] )
     }
 
     if ( args->isSet("debug") ) {
-        if ( debugArgs.isEmpty() ) {
-            QTextStream qerr(stderr);
-            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
-            return 1;
-        }
-        QString binary = debugArgs.first();
-        if ( binary.contains('/') ) {
-            binary = binary.right(binary.lastIndexOf('/'));
-        }
-        QString launchName = i18n("Debug")+' '+binary;
+        Q_ASSERT( !debugeeName.isEmpty() );
+        QString launchName = debugeeName;
 
         KDevelop::LaunchConfiguration* launch = 0;
         kDebug() << launchName;
@@ -493,10 +483,12 @@ int main( int argc, char *argv[] )
                 }
             }
 
+            KUrl f;
             if( QFileInfo(file).isRelative() ) {
-                file = QDir::currentPath() + QDir::separator() + file;
+                f = KUrl( QDir::currentPath(), file );
+            } else {
+                f = file;
             }
-            KUrl f( "file://"+file );
 
             if(!core->documentController()->openDocument(f, line))
                 kWarning() << i18n("Could not open %1") << args->arg(i);
