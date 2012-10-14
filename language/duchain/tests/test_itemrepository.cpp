@@ -97,6 +97,9 @@ class TestItemRepository : public QObject {
       KDevelop::TestCore* core = new KDevelop::TestCore();
       core->initialize(KDevelop::Core::NoUi);
     }
+    void cleanupTestCase() {
+        KDevelop::TestCore::shutdown();
+    }
     void testItemRepository() {
       KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
       uint itemId = 0;
