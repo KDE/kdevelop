@@ -116,6 +116,56 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
   return 0;
 }
 
+void TestExpressionParser::testTemplateSpecialization()
+{
+  QByteArray method(//Boring class Foo has a function (myFoo) with a template argument
+                    "class Foo { template<class T> Foo& myFoo ( T& value ) { } };\n"
+                    //Boring class Foo defines a specialization of myFoo for use with ints
+                    "template<> Foo& Foo::myFoo <int> ( int& value ) { }\n"
+                    //Global function bar takes a template argument
+                    "template<class T> T& bar( T& value ) { }\n"
+                    //Global function bar has specialized definition for use with ints
+                    "template<> int& bar( int& value ) { }\n"
+                    //Class A takes two template arguments, and has a function (foo) that depends on them
+                    "template<class T, class U> class A { T foo(U value); };\n"
+                    //Class A defines its foo function as expected
+                    "template<class T, class U> T A<T,U>::foo(U value) {};\n"
+                    //Class A has a partially specialized form for when param U is an int
+                    "template<class T> class A<T, int> { T foo(int value); };\n"
+                    //Partially specialized class A defines its foo function as expected
+                    "template<class T> T A<T, int>::foo(int value) {};\n"
+                    //Class A also defines a fully specialized foo for params <char,int>
+                    "template<> char A<char, int>::foo(int value) {};\n");
+
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  Declaration* defFooFooOpT = top->childContexts()[0]->localDeclarations()[0];
+  TemplateDeclaration* defFooFooOpint = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[1]);
+  QCOMPARE(defFooFooOpint->specializedFrom().data(), defFooFooOpT);
+
+  Declaration* defTBarT = top->localDeclarations()[2];
+  TemplateDeclaration* defintbarint = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[3]);
+  QCOMPARE(defintbarint->specializedFrom().data(), defTBarT);
+
+  Declaration* defTUA = top->localDeclarations()[4];
+  TemplateDeclaration* defTintA = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[6]);
+  QCOMPARE(defTintA->specializedFrom().data(), defTUA);
+
+  TemplateDeclaration* defTAfooU = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[5]);
+  QVERIFY(!defTAfooU->specializedFrom().data()); //Not a specialization
+
+  TemplateDeclaration* defTAfooint = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[7]);
+  QVERIFY(!defTAfooint->specializedFrom().data()); //Not a specialization
+
+  Declaration* decTAfooInt = dynamic_cast<Declaration*>(defTintA)->internalContext()->localDeclarations()[0];
+  TemplateDeclaration* defcharAfooint = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[8]);
+  QCOMPARE(defcharAfooint->specializedFrom().data(), decTAfooInt);
+
+  release(top);
+}
+
 void TestExpressionParser::testIntegralType() {
   DUContext* top = parse(" ", DumpNone);
   Cpp::ExpressionParser parser(true,true);

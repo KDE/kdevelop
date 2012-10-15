@@ -744,7 +744,14 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       }
 
       ///Step 2: Find the type of "this" from the function-declaration
-      DUContext* classContext = functionDeclaration->context();
+      DUContext* classContext = 0;
+
+      if (TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(functionDeclaration))
+        if (templateDecl->specializedFrom().data())
+          classContext = templateDecl->specializedFrom().data()->context();
+
+      if (!classContext)
+        classContext = functionDeclaration->context();
 
       //Take the type from the classContext
       if( classContext && classContext->type() == DUContext::Class && classContext->owner() )

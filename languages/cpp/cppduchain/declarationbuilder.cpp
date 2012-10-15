@@ -570,6 +570,63 @@ KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
   return hasTemplateContext( context->importedParentContexts(), context->topContext() ).context(context->topContext());
 }
 
+bool isSpecialization(TemplateDeclaration *templDecl)
+{
+  //A class specialization or partial specialization will have template identifiers in its identifier
+  if (ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(templDecl))
+  {
+    if (classDecl->identifier().templateIdentifiersCount())
+      return true;
+  }
+  //A function specialization may or may not have template identifiers, but at least has "template<>"
+  //FIXME: what about function partial specializations?
+  if (dynamic_cast<FunctionDeclaration*>(templDecl))
+  {
+    DUContext *specFromCtxt = templDecl->templateParameterContext();
+    if (specFromCtxt && !specFromCtxt->localDeclarations().size())
+      return true;
+  }
+  return false;
+}
+
+DUContext* functionClassContext(Declaration* functionDecl, DUContext *functionCtxt)
+{
+  //FIXME: needed as long as functions have their QID merged into their id
+  QualifiedIdentifier currentScope = functionCtxt->scopeIdentifier(true);
+  QualifiedIdentifier className = currentScope + QualifiedIdentifier(functionDecl->identifier().toString());
+  className.pop(); //Pop off the function name at the end, leaving the class QID
+  className.setExplicitlyGlobal(true);
+  QList<Declaration*> classDeclarations = functionCtxt->findDeclarations(className);
+  if (classDeclarations.size())
+    return classDeclarations.first()->internalContext();
+
+  return 0;
+}
+
+TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specializedDeclaration)
+{
+  Identifier searchForIdentifier;
+  if (dynamic_cast<FunctionDeclaration*>(specializedDeclaration))
+    searchForIdentifier = QualifiedIdentifier(specializedDeclaration->identifier().toString()).last();
+  else
+    searchForIdentifier = specializedDeclaration->identifier();
+  searchForIdentifier.clearTemplateIdentifiers();
+
+  DUContext* searchInContext = 0;
+  if (dynamic_cast<AbstractFunctionDeclaration*>(specializedDeclaration))
+    searchInContext = functionClassContext(specializedDeclaration, currentContext());
+  if (!searchInContext)
+    searchInContext = currentContext();
+
+  QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
+  foreach(Declaration * possibleSpec, specFromDecls)
+  {
+    if (possibleSpec != specializedDeclaration)
+      return dynamic_cast<TemplateDeclaration*>(possibleSpec);
+  }
+  return 0;
+}
+
 template<class T>
 T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd)
 {
@@ -582,6 +639,18 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
   if( templateCtx || m_templateDeclarationDepth ) {
     Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
     ret->setTemplateParameterContext(templateCtx);
+    //FIXME: A FunctionDeclaration w/o a definition should actually be a kind of forward declaration (ie, there can be more than one)
+    if( isSpecialization(ret) && ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
+    {
+      TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
+      if( TemplateDeclaration *specializedFrom = findSpecializedFrom(currentDeclaration()) )
+      {
+        templateDecl->setSpecializedFrom(specializedFrom);
+        IndexedInstantiationInformation specializedWith = createSpecializationInformation(name, templateCtx);
+        dynamic_cast<TemplateDeclaration*>(ret)->setSpecializedWith(specializedWith);
+      }
+      //TODO: else problem
+    }
     return ret;
   } else{
     return openDeclarationReal<T>( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
@@ -692,35 +761,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     funDecl->clearDefaultParameters();
 
   declaration->setDeclarationIsDefinition(false); //May be set later
-
   declaration->setIsTypeAlias(m_inTypedef);
-
-  if( localId.templateIdentifiersCount() ) {
-    TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
-    if( declaration && templateDecl ) {
-      ///This is a template-specialization. Find the class it is specialized from.
-      localId.clearTemplateIdentifiers();
-
-      ///@todo Make sure the searched class is in the same namespace
-      QList<Declaration*> decls = currentContext()->findDeclarations(QualifiedIdentifier(localId), editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge) );
-
-      if( !decls.isEmpty() )
-      {
-        foreach( Declaration* decl, decls )
-          if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) ) {
-            templateDecl->setSpecializedFrom(baseTemplateDecl);
-            break;
-          }
-
-        if( !templateDecl->specializedFrom().isValid() )
-          kDebug(9007) << "Could not find valid specialization-base" << localId.toString() << "for" << declaration->toString();
-      }
-    } else {
-      kDebug(9007) << "Specialization of non-template class" << declaration->toString();
-    }
-
-  }
-
   declaration->setComment(comment());
   clearComment();
 
@@ -886,8 +927,16 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     }
   }
 
-  if(lastContext() && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration()))
-    eventuallyAssignInternalContext();
+  if (lastContext())
+  {
+    if (lastContext()->type() == DUContext::Function && currentDeclaration()->isFunctionDeclaration())
+      currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
+
+    if(lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration())
+      eventuallyAssignInternalContext();
+  }
+
+  Q_ASSERT(!currentDeclaration()->isFunctionDeclaration() || currentDeclaration<AbstractFunctionDeclaration>()->internalFunctionContext());
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
@@ -1102,10 +1151,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   if( node->name ) {
     identifierForNode(node->name, id);
     openPrefixContext(node, id, pos);
-    DUChainReadLocker lock(DUChain::lock());
-    if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext())) {
-      specializedWith = createSpecializationInformation(node->name, templateContext);
-    }
   }
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
@@ -1166,12 +1211,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   }//node-name
 
-  TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration());
-  
-  if(tempDecl) {
-    DUChainWriteLocker lock(DUChain::lock());
-    tempDecl->setSpecializedWith(specializedWith);
-  }
   closeDeclaration();
   
   ///Create mappings iff the AST feature is specified

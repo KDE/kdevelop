@@ -4342,7 +4342,6 @@ InstantiationInformation instantiationInfoForDeclarations(const QList<Declaratio
       return topInfo;
     }
   }
-  qDebug() << info.toString();
   return info;
 }
 bool validDeclaration(Declaration *decl, DeclarationTestData testData)
@@ -4386,7 +4385,7 @@ bool validDeclaration(Declaration *decl, DeclarationTestData testData)
     if (actualInstantiations.size() != testData.instantiations.size())
     {
       qDebug() << "Declaration's number of instantiations doesn't match test data";
-      qDebug() << "Actual:" << templateDecl->specializationsSize() << "| Test data:" << testData.specializations.size();
+      qDebug() << "Actual:" << actualInstantiations.size() << "| Test data:" << testData.instantiations.size();
       ret = false;
     }
     for(int i = 0; i < testData.instantiations.size(); ++i)
@@ -4541,7 +4540,6 @@ int main()\n\
   QVERIFY(validDeclaration(E_FuncA, E_FuncA_testData));
   //Test for ClassE<ClassA::ClassB>::E_FuncA<ClassA::ClassA> explicit specialization definition specifically
   //even though it is automatically tested above... just because
-  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
   QVERIFY(validDeclaration(E_A_B_FuncA_A_A, E_A_B_FuncA_A_A_testData));
 
   DeclarationTestData E_A_B_FuncBDecl_testData;
@@ -4563,7 +4561,6 @@ int main()\n\
   QVERIFY(validDeclaration(E_FuncB, E_FuncB_testData));
   //Test for ClassE<ClassA::ClassB>::E_FuncB explicit specialization definition specifically
   //even though it is automatically tested above... just because
-  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
   QVERIFY(validDeclaration(E_A_B_FuncB, E_A_B_FuncB_testData));
 }
 
