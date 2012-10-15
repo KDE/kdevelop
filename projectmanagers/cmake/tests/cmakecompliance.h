@@ -29,7 +29,7 @@ class CMakeCompliance : public QObject
     Q_OBJECT
     public:
         CMakeCompliance();
-        virtual ~CMakeCompliance() {}
+        virtual ~CMakeCompliance();
         static void addOutput(const QString& msg);
 
     private slots:

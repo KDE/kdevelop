@@ -172,4 +172,8 @@ CMakeCompliance::CMakeCompliance() {
     KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
 }
 
+CMakeCompliance::~CMakeCompliance() {
+    KDevelop::Core::self()->shutdown();
+}
+
 #include "cmakecompliance.moc"

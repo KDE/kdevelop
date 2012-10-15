@@ -98,6 +98,7 @@ void TestExpressionParser::initTestCase()
 
 void TestExpressionParser::cleanupTestCase()
 {
+    TestCore::shutdown();
 }
 
 Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)

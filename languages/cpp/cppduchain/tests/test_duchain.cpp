@@ -62,6 +62,7 @@
 #include <typeinfo>
 
 #include <tests/testhelpers.h>
+#include <tests/testcore.h>
 
 using namespace KTextEditor;
 using namespace TypeUtils;
@@ -129,6 +130,8 @@ void TestDUChain::cleanupTestCase()
   //EditorIntegrator::releaseTopRange(topContext->textRangePtr());
   topContext->deleteSelf();
   }
+
+  TestCore::shutdown();
 }
 
 Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)
