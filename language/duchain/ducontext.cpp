@@ -42,6 +42,7 @@
 #include "topducontextdynamicdata.h"
 #include "importers.h"
 #include "uses.h"
+#include "abstractfunctiondeclaration.h"
 
 ///It is fine to use one global static mutex here
 
@@ -1682,7 +1683,14 @@ DUContext::Import::Import(const DeclarationId& id, const CursorInRevision& _posi
 DUContext* DUContext::Import::context(const TopDUContext* topContext, bool instantiateIfRequired) const {
   if(m_declaration.isValid()) {
     Declaration* decl = m_declaration.getDeclaration(topContext, instantiateIfRequired);
-    if(decl)
+    //This first case rests on the assumption that no context will ever import a function's expression context
+    //More accurately, that no specialized or cross-topContext imports will, but if the former assumption fails the latter will too
+    if (AbstractFunctionDeclaration *functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl))
+    {
+      Q_ASSERT(functionDecl->internalFunctionContext());
+      return functionDecl->internalFunctionContext();
+    }
+    else if(decl)
       return decl->logicalInternalContext(topContext);
     else
       return 0;
