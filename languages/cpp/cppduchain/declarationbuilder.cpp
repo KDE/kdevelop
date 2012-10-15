@@ -929,14 +929,15 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 
   if (lastContext())
   {
-    if (lastContext()->type() == DUContext::Function && currentDeclaration()->isFunctionDeclaration())
+    if (!m_onlyComputeSimplified && currentDeclaration()->isFunctionDeclaration())
       currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
 
     if(lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration())
       eventuallyAssignInternalContext();
   }
 
-  Q_ASSERT(!currentDeclaration()->isFunctionDeclaration() || currentDeclaration<AbstractFunctionDeclaration>()->internalFunctionContext());
+  Q_ASSERT(m_onlyComputeSimplified || !currentDeclaration()->isFunctionDeclaration() ||
+           currentDeclaration<AbstractFunctionDeclaration>()->internalFunctionContext());
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
