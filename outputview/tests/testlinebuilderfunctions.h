@@ -49,6 +49,28 @@ QString buildKrazyErrorLine()
     return outputline;
 }
 
+QString buildKrazyErrorLine2()
+{
+    /// Use existing directory with one file
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    /// Test krazy2 output
+    QString outputline("\t");
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp: missing tags: email address line#2  (1)");
+    return outputline;
+}
+
+QString buildKrazyErrorLine3()
+{
+    /// Use existing directory with one file
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    /// Test krazy2 output
+    QString outputline("\t");
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp: non-const ref iterator line#451 (1)");
+    return outputline;
+}
+
 QString buildKrazyErrorLineNoLineInfo()
 {
     /// Use existing directory with one file
@@ -101,6 +123,7 @@ QString buildCppCheckInformationLine()
     files found. But the results will probably be more accurate if all the include files are found. Please check your project's \
     include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config.");
 }
+
 
 }
 
