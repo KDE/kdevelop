@@ -445,7 +445,9 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
 void VcsPluginHelper::annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible)
 {
-    
+    Q_UNUSED(view);
+    Q_UNUSED(menu);
+    Q_UNUSED(visible);
 }
 
 void VcsPluginHelper::update()
