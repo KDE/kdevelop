@@ -178,6 +178,10 @@ public:
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
         QList< IProjectBuilder* > buildersForKcm;
+        // Important to also include the "top" builder for the project, so
+        // projects with only one such builder are kept working. Otherwise the project config
+        // dialog is empty for such cases.
+        buildersForKcm << project->buildSystemManager()->builder();
         if( IBuildSystemManager* buildSystemManager = project->buildSystemManager() ) {
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
