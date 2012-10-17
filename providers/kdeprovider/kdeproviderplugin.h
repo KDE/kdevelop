@@ -33,6 +33,7 @@ class KDEProviderPlugin : public KDevelop::IPlugin, KDevelop::IProjectProvider
         virtual ~KDEProviderPlugin();
         
         virtual QString name() const;
+        virtual bool isCorrect() const { return true; }
         virtual KDevelop::IProjectProviderWidget* providerWidget(QWidget* parent);
         
 };
