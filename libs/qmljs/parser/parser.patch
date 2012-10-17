@@ -1,0 +1,82 @@
+diff --git a/src/libs/qmljs/parser/qmljs.g b/src/libs/qmljs/parser/qmljs.g
+index 069be3c..9cbdc23 100644
+--- a/src/libs/qmljs/parser/qmljs.g
++++ b/src/libs/qmljs/parser/qmljs.g
+@@ -111,7 +111,7 @@ double integerFromString(const QString &str, int radix)
+ 
+ 
+ Engine::Engine()
+-    : _lexer(0)
++    : _lexer(0), _directives(0)
+ { }
+ 
+ Engine::~Engine()
+@@ -132,6 +132,12 @@ Lexer *Engine::lexer() const
+ void Engine::setLexer(Lexer *lexer)
+ { _lexer = lexer; }
+ 
++void Engine::setDirectives(Directives *directives)
++{ _directives = directives; }
++
++Directives *Engine::directives() const
++{ return _directives; }
++
+ MemoryPool *Engine::pool()
+ { return &_pool; }
+ 
+diff --git b/src/libs/qmljs/parser/qmljsengine_p.h a/src/libs/qmljs/parser/qmljsengine_p.h
+index 5057ea0..487619e 100644
+--- b/src/libs/qmljs/parser/qmljsengine_p.h
++++ a/src/libs/qmljs/parser/qmljsengine_p.h
+@@ -54,6 +54,7 @@ QT_QML_BEGIN_NAMESPACE
+ namespace QmlJS {
+ 
+ class Lexer;
++class Directives;
+ class MemoryPool;
+ 
+ class QML_PARSER_EXPORT DiagnosticMessage
+@@ -81,6 +82,7 @@ public:
+ class QML_PARSER_EXPORT Engine
+ {
+     Lexer *_lexer;
++    Directives *_directives;
+     MemoryPool _pool;
+     QList<AST::SourceLocation> _comments;
+     QString _extraCode;
+@@ -98,6 +100,9 @@ public:
+     Lexer *lexer() const;
+     void setLexer(Lexer *lexer);
+ 
++    void setDirectives(Directives *directives);
++    Directives *directives() const;
++
+     MemoryPool *pool();
+ 
+     inline QStringRef midRef(int position, int size) { return _code.midRef(position, size); }
+diff --git b/src/libs/qmljs/parser/qmljsparser.cpp a/src/libs/qmljs/parser/qmljsparser.cpp
+index a731c1a..e986534 100644
+--- b/src/libs/qmljs/parser/qmljsparser.cpp
++++ a/src/libs/qmljs/parser/qmljsparser.cpp
+@@ -137,7 +137,20 @@ bool Parser::parse(int startToken)
+ 
+     token_buffer[0].token = startToken;
+     first_token = &token_buffer[0];
+-    last_token = &token_buffer[1];
++    if (startToken == T_FEED_JS_PROGRAM) {
++        Directives ignoreDirectives;
++        Directives *directives = driver->directives();
++        if (!directives)
++            directives = &ignoreDirectives;
++        lexer->scanDirectives(directives);
++        token_buffer[1].token = lexer->tokenKind();
++        token_buffer[1].dval = lexer->tokenValue();
++        token_buffer[1].loc = location(lexer);
++        token_buffer[1].spell = lexer->tokenSpell();
++        last_token = &token_buffer[2];
++    } else {
++        last_token = &token_buffer[1];
++    }
+ 
+     tos = -1;
+     program = 0;
