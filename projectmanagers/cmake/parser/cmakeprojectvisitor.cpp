@@ -2175,6 +2175,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
     
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
+    url.cleanPath();
     
     if(!m_topctx || m_topctx->url().toUrl()!=url)
     {
