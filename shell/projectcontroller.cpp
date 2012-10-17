@@ -767,18 +767,16 @@ void ProjectController::projectImportingFinished( IProject* project )
         KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
         ICore::self()->runController()->registerJob(parseProjectJob);
     }
-    
-    KUrl::List parseList;
+
     // Add all currently open files that belong to the project to the background-parser,
     // since more information may be available for parsing them now(Like include-paths).
     foreach(IDocument* document, Core::self()->documentController()->openDocuments())
     {
         if(!project->filesForUrl(document->url()).isEmpty())
         {
-            parseList.append(document->url());
+            Core::self()->languageController()->backgroundParser()->addDocument( IndexedString(document->url()), TopDUContext::AllDeclarationsContextsAndUses, 10 );
         }
     }
-    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::AllDeclarationsContextsAndUses, 10 );
 }
 
 // helper method for closeProject()

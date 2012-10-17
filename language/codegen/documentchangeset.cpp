@@ -432,28 +432,29 @@ void DocumentChangeSetPrivate::updateFiles()
     if(updatePolicy != DocumentChangeSet::NoUpdate && ICore::self())
     {
         // The active document should be updated first, so that the user sees the results instantly
-        if(ICore::self()->documentController()->activeDocument())
-            ICore::self()->languageController()->backgroundParser()->addDocument(ICore::self()->documentController()->activeDocument()->url());
-        
+        if(IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
+            ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(activeDoc->url()));
+        }
+
         // If there are currently open documents that now need an update, update them too
         foreach(const IndexedString& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
             DUChainReadLocker lock(DUChain::lock());
             TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl(), true);
             if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
                 lock.unlock();
-                ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
+                ICore::self()->languageController()->backgroundParser()->addDocument(doc);
             }
         }
-        
+
         // Eventually update _all_ affected files
         foreach(const IndexedString &file, changes.keys())
         {
-                if(!file.toUrl().isValid()) {
-                    kWarning() << "Trying to apply changes to an invalid document";
-                    continue;
-                }
-                
-                ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
+            if(!file.toUrl().isValid()) {
+                kWarning() << "Trying to apply changes to an invalid document";
+                continue;
+            }
+
+            ICore::self()->languageController()->backgroundParser()->addDocument(file);
         }
     }
 }
