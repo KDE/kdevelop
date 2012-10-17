@@ -579,7 +579,6 @@ bool isSpecialization(TemplateDeclaration *templDecl)
       return true;
   }
   //A function specialization may or may not have template identifiers, but at least has "template<>"
-  //FIXME: what about function partial specializations?
   if (dynamic_cast<FunctionDeclaration*>(templDecl))
   {
     DUContext *specFromCtxt = templDecl->templateParameterContext();
@@ -640,8 +639,10 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
     Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
     ret->setTemplateParameterContext(templateCtx);
     //FIXME: A FunctionDeclaration w/o a definition should actually be a kind of forward declaration (ie, there can be more than one)
-    if( isSpecialization(ret) && ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
+    if( !m_onlyComputeSimplified && isSpecialization(ret) &&
+        ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
     {
+      Q_ASSERT(templateCtx);
       TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
       if( TemplateDeclaration *specializedFrom = findSpecializedFrom(currentDeclaration()) )
       {
