@@ -1,6 +1,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 #include <language/duchain/repositories/itemrepository.h>
+#include <language/duchain/indexedstring.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -193,6 +194,19 @@ class TestItemRepository : public QObject {
       }
       qDeleteAll(items);
       items.clear();
+    }
+    void testStringSharing()
+    {
+      QString qString;
+        qString.fill('.', 1000);
+      KDevelop::IndexedString indexedString(qString);
+      const int repeat = 10000;
+      QVector<QString> strings;
+      strings.resize(repeat);
+      for(int i = 0; i < repeat; ++i) {
+        strings[i] = indexedString.str();
+        QCOMPARE(qString, strings[i]);
+      }
     }
 };
 
