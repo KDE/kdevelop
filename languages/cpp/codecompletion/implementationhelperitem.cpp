@@ -442,7 +442,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       return;
     }
 
-    ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
+    ICore::self()->languageController()->backgroundParser()->addDocument(doc);
     executeSignalSlotCompletionItem( document, word, false, slotName, slotSignature );
   }else{
     //this code assumes (safely for now) that the "word" range is on one line

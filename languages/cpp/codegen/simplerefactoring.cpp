@@ -215,10 +215,11 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       return;
     }
 
+    const IndexedString indexedTargetUrl = IndexedString(targetUrl);
     
     lock.unlock();
     KDevelop::ReferencedTopDUContext top = DUChain::self()->waitForUpdate(url, KDevelop::TopDUContext::AllDeclarationsAndContexts);
-    KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(IndexedString(targetUrl), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+    KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(indexedTargetUrl, KDevelop::TopDUContext::AllDeclarationsAndContexts);
     lock.lock();
     
     if(!targetTopContext) {
@@ -274,8 +275,8 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
         }
         
         doc->textDocument()->replaceText(range, QString(";"));
-        ICore::self()->languageController()->backgroundParser()->addDocument(url.toUrl());
-        ICore::self()->languageController()->backgroundParser()->addDocument(targetUrl);
+        ICore::self()->languageController()->backgroundParser()->addDocument(url);
+        ICore::self()->languageController()->backgroundParser()->addDocument(indexedTargetUrl);
         
       }else{
         lock.unlock();
