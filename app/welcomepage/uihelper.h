@@ -32,7 +32,7 @@ class UiHelper : public QObject
         
     public slots:
         QAction* retrieveMenuAction(const QString& name);
-        QList<QObject*> recentProjects();
+        void showMenu(const QString& name);
         void setArea(const QString& name);
         void raiseToolView(const QString& id);
 };

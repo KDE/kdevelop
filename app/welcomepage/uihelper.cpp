@@ -61,20 +61,6 @@ QAction* UiHelper::retrieveMenuAction(const QString& menuPath)
     return a;
 }
 
-QList< QObject* > UiHelper::recentProjects()
-{
-    QAction* a=retrieveMenuAction("project/project_open_recent");
-    
-    QList<QObject*> ret;
-    if(a) {
-        foreach(QAction* a, a->menu()->actions())
-            if(a->text().contains('['))
-                ret+=a;
-    }
-    
-    return ret;
-}
-
 void UiHelper::setArea(const QString& name)
 {
     ICore::self()->uiController()->switchToArea(name, IUiController::ThisWindow);
@@ -88,4 +74,13 @@ void UiHelper::raiseToolView(const QString& id)
         if(w && id==w->objectName())
             ICore::self()->uiController()->raiseToolView(w);
     }
+}
+
+void UiHelper::showMenu(const QString& name)
+{
+    QAction* action = retrieveMenuAction(name);
+    Q_ASSERT(action);
+    Q_ASSERT(action->menu());
+    
+    action->menu()->popup(QCursor::pos());
 }
