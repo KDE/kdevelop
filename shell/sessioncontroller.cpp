@@ -51,6 +51,7 @@ Boston, MA 02110-1301, USA.
 #include <QLineEdit>
 #include <KMessageBox>
 #include <KAboutData>
+#include <KLineEdit>
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QTimer>
@@ -63,6 +64,8 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <QLabel>
 #include <QLayout>
+#include <QSortFilterProxyModel>
+#include <QKeyEvent>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
@@ -889,12 +892,13 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
 class SessionChooserDialog : public KDialog {
     Q_OBJECT
 public:
-    SessionChooserDialog(QListView* view, QStandardItemModel* model);
+    SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter);
     bool eventFilter(QObject* object, QEvent* event);
 
 public Q_SLOTS:
     void updateState();
     void doubleClicked(QModelIndex);
+    void filterTextChanged(QString);
 
 private Q_SLOTS:
     void deleteButtonPressed();
@@ -903,7 +907,8 @@ private Q_SLOTS:
 
 private:
     QListView* m_view;
-    QStandardItemModel* m_model;
+    QAbstractItemModel* m_model;
+    KLineEdit* m_filter;
     QTimer m_updateStateTimer;
 
     QPushButton* m_deleteButton;
@@ -911,8 +916,8 @@ private:
     int m_deleteCandidateRow;
 };
 
-SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* model)
-    : m_view(view), m_model(model), m_deleteCandidateRow(-1)
+SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter)
+    : m_view(view), m_model(model), m_filter(filter), m_deleteCandidateRow(-1)
 {
     m_updateStateTimer.setInterval(5000);
     m_updateStateTimer.setSingleShot(false);
@@ -933,12 +938,18 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* 
 
     view->setMouseTracking(true);
     view->installEventFilter(this);
+    filter->installEventFilter(this);
+    connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged(QString)));
+}
+
+void SessionChooserDialog::filterTextChanged(QString)
+{
+    m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
 {
-    QStandardItem* item = m_model->itemFromIndex(index);
-    if(item && item->isEnabled())
+    if(m_model->flags(index) & Qt::ItemIsEnabled)
         accept();
 }
 
@@ -948,8 +959,8 @@ void SessionChooserDialog::updateState() {
     for(int row = 0; row < m_model->rowCount(); ++row)
     {
         QString session = m_model->index(row, 0).data().toString();
-        
-        if(session == i18n("Create New Session"))
+
+        if(session.isEmpty()) //create new session
             continue;
         
         QString state, tooltip;
@@ -960,11 +971,9 @@ void SessionChooserDialog::updateState() {
             state = i18n("Running");
         }
         
-        if(m_model->item(row, 2)) {
-            m_model->item(row, 1)->setIcon(lockState ? KIcon("") : KIcon("media-playback-start"));
-            m_model->item(row, 1)->setToolTip(tooltip);
-            m_model->item(row, 2)->setText(state);
-        }
+        m_model->setData(m_model->index(row, 1), lockState ? KIcon("") : KIcon("media-playback-start"), Qt::DecorationRole);
+        m_model->setData(m_model->index(row, 1), tooltip, Qt::ToolTipRole);
+        m_model->setData(m_model->index(row, 2), state, Qt::DisplayRole);
     }
     
     m_updateStateTimer.start();
@@ -976,8 +985,19 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     KGlobal::locale()->insertCatalog("kdevplatform");
 
     QListView* view = new QListView;
+    KLineEdit* filter = new KLineEdit;
+    filter->setClearButtonShown( true );
+    filter->setClickMessage(i18n("Search"));
+
     QStandardItemModel* model = new QStandardItemModel(view);
-    SessionChooserDialog dialog(view, model);
+
+    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(model);
+    proxy->setSourceModel(model);
+    proxy->setFilterKeyColumn( 1 );
+    proxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    connect(filter, SIGNAL(textChanged(QString)), proxy, SLOT(setFilterFixedString(QString)));
+
+    SessionChooserDialog dialog(view, proxy, filter);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QVBoxLayout layout(dialog.mainWidget());
@@ -988,10 +1008,17 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
     model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
     model->setHeaderData(2, Qt::Horizontal,i18n("State"));
-    view->setModel(model);
+
+    view->setModel(proxy);
     view->setModelColumn(1);
+
+    QHBoxLayout* filterLayout = new QHBoxLayout();
+    filterLayout->addWidget(new QLabel(i18n("Filter:")));
+    filterLayout->addWidget(filter);
+    layout.addLayout(filterLayout);
     layout.addWidget(view);
-    
+    filter->setFocus();
+
     int row = 0;
     int defaultRow = 0;
     
@@ -1031,7 +1058,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     dialog.updateState();
     dialog.mainWidget()->layout()->setContentsMargins(0,0,0,0);
     
-    view->selectionModel()->setCurrentIndex(model->index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    view->selectionModel()->setCurrentIndex(proxy->mapFromSource(model->index(defaultRow, 0)), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
     dialog.setInitialSize(QSize(900, 600));
@@ -1214,6 +1241,30 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
         m_deleteButtonTimer.stop();
         m_deleteButton->hide();
     }
+    if(object == m_filter && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
+            QModelIndex currentIndex = m_view->selectionModel()->currentIndex();
+            int selectRow = -1;
+            if(keyEvent->key() == Qt::Key_Up) {
+                if(!currentIndex.isValid()) {
+                    selectRow = m_model->rowCount()-1;
+                } else if(currentIndex.row()-1 >= 0) {
+                    selectRow = currentIndex.row()-1;
+                }
+            } else if(keyEvent->key() == Qt::Key_Down) {
+                if(!currentIndex.isValid()) {
+                    selectRow = 0;
+                } else if(currentIndex.row()+1 < m_model->rowCount()) {
+                    selectRow = currentIndex.row()+1;
+                }
+            }
+            if (selectRow != -1) {
+                    m_view->selectionModel()->setCurrentIndex(m_model->index(selectRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+            }
+            return true;
+        }
+    }
 
     return false;
 }
@@ -1250,6 +1301,10 @@ void SessionChooserDialog::deleteButtonPressed()
     const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
+        QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
+        const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
+
+        //FIXME: What about running sessions?
         KDevelop::Session session( uuid );
         session.deleteFromDisk();
 
