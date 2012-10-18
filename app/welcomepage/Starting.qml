@@ -55,7 +55,7 @@ StandardPage
             
             Link {
                 iconSource: "document-open-recent"
-                text: i18n("Recent Projects:")
+                text: i18n("Recent Projects")
                 onClicked: kdev.showMenu("project/project_open_recent")
             }
         }
