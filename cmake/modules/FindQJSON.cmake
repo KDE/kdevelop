@@ -5,42 +5,33 @@
 #  QJSON_LIBRARIES - the qjson library
 #  QJSON_INCLUDE_DIR - the include path of the qjson library
 #
+# Copyright (C) 2012 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
+# QJSON v0.7.2+ provides a QJSONConfig.cmake, which should be used if found.
+find_package(QJSON QUIET NO_MODULE)
 
-  # Already in cache
-  set (QJSON_FOUND TRUE)
+if (QJSON_FOUND)
+    set(REQUIRED_LIBS QJSON_CONFIG)
+else (QJSON_FOUND)
+    find_package(PkgConfig)
+    pkg_check_modules(PC_QJSON QJson>=0.5)
 
-else (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
-# 
-#   if (NOT WIN32)
-#     # use pkg-config to get the values of QJSON_INCLUDE_DIRS
-#     # and QJSON_LIBRARY_DIRS to add as hints to the find commands.
-#     include (FindPkgConfig)
-#     pkg_check_modules (QJSON REQUIRED QJson>=0.5)
-#   endif (NOT WIN32)
+    find_library(QJSON_LIBRARIES
+        NAMES qjson
+        HINTS ${PC_QJSON_LIBDIR} ${PC_QJSON_LIBRARY_DIRS}
+    )
 
-  find_library (QJSON_LIBRARIES
-    NAMES
-    qjson
-    PATHS
-    ${QJSON_LIBRARY_DIRS}
-    ${LIB_INSTALL_DIR}
-    ${KDE4_LIB_DIR}
-  )
+    find_path(QJSON_INCLUDE_DIR
+        NAMES qjson/parser.h
+        HINTS ${PC_QJSON_INCLUDEDIR} ${PC_QJSON_INCLUDE_DIRS}
+    )
 
-  find_path (QJSON_INCLUDE_DIR
-    NAMES
-    parser.h
-    PATH_SUFFIXES
-    qjson
-    PATHS
-    ${QJSON_INCLUDE_DIRS}
-    ${INCLUDE_INSTALL_DIR}
-    ${KDE4_INCLUDE_DIR}
-  )
+    set(REQUIRED_LIBS QJSON_LIBRARIES QJSON_INCLUDE_DIR)
+endif (QJSON_FOUND)
 
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(QJSON DEFAULT_MSG QJSON_LIBRARIES QJSON_INCLUDE_DIR)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(QJSON DEFAULT_MSG ${REQUIRED_LIBS})
 
-endif (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
