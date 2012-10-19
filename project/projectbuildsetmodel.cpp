@@ -105,6 +105,137 @@ ProjectBuildSetModel::ProjectBuildSetModel( QObject* parent )
 {
 }
 
+void ProjectBuildSetModel::loadFromSession( ISession* session )
+{
+    // Load the item ordering cache
+    KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
+    QVariantList sessionBuildItems = KDevelop::stringToQVariant( sessionBuildSetConfig.readEntry( "BuildItems", QString() ) ).toList();
+    foreach( const QVariant& item, sessionBuildItems ) {
+        m_orderingCache.append( item.toStringList() );
+    }
+}
+
+void ProjectBuildSetModel::storeToSession( ISession* session )
+{
+    // Store the item ordering cache
+    QVariantList sessionBuildItems;
+    foreach( const QStringList& item, m_orderingCache) {
+        sessionBuildItems.append( item );
+    }
+    KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
+    sessionBuildSetConfig.writeEntry("BuildItems", KDevelop::qvariantToString( QVariant( sessionBuildItems ) ));
+    sessionBuildSetConfig.sync();
+}
+
+
+int ProjectBuildSetModel::findInsertionPlace( const QStringList& itemPath )
+{
+    /*
+     * The ordering cache list is a superset of the build set, and must be ordered in the same way.
+     * Example:
+     * (m_items)         A - B ----- D --------- G
+     * (m_orderingCache) A - B - C - D - E - F - G
+     *
+     * We scan m_orderingCache until we find the required item (absent in m_items: say, F).
+     * In process of scanning we synchronize position in m_orderingCache with position in m_items;
+     * so, when we reach F, we have D as last synchronization point and hence return it
+     * as the insertion place (actually, we return the next item's index - here, index of G).
+     *
+     * If an item cannot be found in the ordering list, we append it to the list.
+     */
+
+    int insertionIndex = 0;
+    bool found = false;
+    QList<QStringList>::iterator orderingCacheIterator = m_orderingCache.begin();
+    // Points to the item which is next to last synchronization point.
+    QList<BuildItem>::iterator nextItemIterator = m_items.begin();
+
+    while( orderingCacheIterator != m_orderingCache.end() ) {
+
+        if( itemPath == *orderingCacheIterator ) {
+            found = true;
+            break;
+        }
+        if( nextItemIterator != m_items.end() &&
+            nextItemIterator->itemPath() == *orderingCacheIterator ) {
+            ++insertionIndex;
+            ++nextItemIterator;
+        }
+        ++orderingCacheIterator;
+
+    } // while
+
+    if( !found ) {
+        m_orderingCache.append( itemPath );
+    }
+    Q_ASSERT( insertionIndex >= 0 && insertionIndex <= m_items.size() );
+    return insertionIndex;
+}
+
+void ProjectBuildSetModel::removeItemsWithCache( const QList<int>& itemIndices )
+{
+    /*
+     * Removes the items with given indices from both the build set and the ordering cache.
+     * List is given since removing many items together is more efficient than by one.
+     * 
+     * Indices in the list shall be sorted.
+     */
+
+    QList<int> itemIndicesCopy = itemIndices;
+
+    beginRemoveRows( QModelIndex(), itemIndices.first(), itemIndices.last() );
+    for( QList<QStringList>::iterator cacheIterator = m_orderingCache.end() - 1;
+         cacheIterator >= m_orderingCache.begin() && !itemIndicesCopy.isEmpty(); ) {
+
+        int index = itemIndicesCopy.back();
+        Q_ASSERT( index >= 0 && index < m_items.size() );
+        if( *cacheIterator == m_items.at( index ).itemPath() ) {
+            m_orderingCache.erase( cacheIterator-- );
+            m_items.removeAt( index );
+            itemIndicesCopy.removeLast();
+        } else {
+            --cacheIterator;
+        }
+
+    } // for
+    endRemoveRows();
+
+    Q_ASSERT( itemIndicesCopy.isEmpty() );
+}
+
+void ProjectBuildSetModel::insertItemWithCache( const BuildItem& item )
+{
+    int insertionPlace = findInsertionPlace( item.itemPath() );
+    beginInsertRows( QModelIndex(), insertionPlace, insertionPlace );
+    m_items.insert( insertionPlace, item );
+    endInsertRows();
+}
+
+void ProjectBuildSetModel::insertItemsOverrideCache( int index, const QList< BuildItem >& items )
+{
+    Q_ASSERT( index >= 0 && index <= m_items.size() );
+
+    if( index == m_items.size() ) {
+        beginInsertRows( QModelIndex(), index, index + items.size() - 1 );
+        m_items.append( items );
+        foreach( const BuildItem& item, items ) {
+            m_orderingCache.append( item.itemPath() );
+        }
+        endInsertRows();
+    } else {
+        int indexInCache = m_orderingCache.indexOf( m_items.at( index ).itemPath() );
+        Q_ASSERT( indexInCache >= 0 );
+
+        beginInsertRows( QModelIndex(), index, index + items.size() - 1 );
+        for( int i = 0; i < items.size(); ++i ) {
+            const BuildItem& item = items.at( i );
+            m_items.insert( index + i, item );
+            m_orderingCache.insert( indexInCache + i, item.itemPath() );
+        }
+        endInsertRows();
+    }
+}
+
 QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
 {
     if( !idx.isValid() || idx.row() < 0 || idx.column() < 0
@@ -166,11 +297,11 @@ int ProjectBuildSetModel::columnCount( const QModelIndex& parent ) const
 
 void ProjectBuildSetModel::addProjectItem( KDevelop::ProjectBaseItem* item )
 {
-    if( m_items.contains( BuildItem(item) ) )
+    BuildItem buildItem( item );
+    if( m_items.contains( buildItem ) )
         return;
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-    m_items.append(BuildItem(item));
-    endInsertRows();
+
+    insertItemWithCache( buildItem );
 }
 
 bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& parent )
@@ -178,12 +309,12 @@ bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& pa
     if( parent.isValid() || row > rowCount() || row < 0 || (row+count) > rowCount() || count <= 0 )
         return false;
 
-    beginRemoveRows( QModelIndex(), row, row+count-1 );
+    QList<int> itemsToRemove;
     for( int i = row; i < row+count; i++ )
     {
-        m_items.removeAt( row );
+        itemsToRemove.append( i );
     }
-    endRemoveRows();
+    removeItemsWithCache( itemsToRemove );
     return true;
 }
 
@@ -226,9 +357,7 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 
         foreach(const QVariant& path, items)
         {
-            beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-            m_items.append( BuildItem( path.toStringList() ) );
-            endInsertRows();
+            insertItemWithCache( BuildItem( path.toStringList() ) );
         }
     } else {
         // Add project to buildset, but only if there is no configuration for this project yet.
@@ -240,45 +369,28 @@ void ProjectBuildSetModel::moveRowsDown(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), row+1, row+count );
-    for( int i = 0; i < count; i++ )
-    {
-        m_items.insert( row+1+i, items.at( i ) ); 
-    }
-    endInsertRows();
+    insertItemsOverrideCache( row + 1, items );
 }
 
 void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), rowCount(), rowCount()+count-1 );
-    m_items += items;
-    endInsertRows();
+    insertItemsOverrideCache( rowCount(), items );
 }
 
 void ProjectBuildSetModel::moveRowsUp(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), row-1, row-2+count );
-    for( int i = 0; i < count; i++ )
-    {
-        m_items.insert( row-1+i, items.at( i ) ); 
-    }
-    endInsertRows();
+    insertItemsOverrideCache( row - 1, items );
 }
 
 void ProjectBuildSetModel::moveRowsToTop(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), 0, count-1 );
-    for( int i = 0; i < count; i++ )
-    {
-        m_items.insert( 0+i, items.at( i ) ); 
-    }
-    endInsertRows();
+    insertItemsOverrideCache( 0, items );
 }
 
 }
