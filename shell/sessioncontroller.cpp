@@ -1276,8 +1276,7 @@ void SessionChooserDialog::deleteButtonPressed()
         return;
 
     QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-    QStandardItem* item = m_model->itemFromIndex(index);
-    const QString uuid = item->text();
+    const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
 
     {
         SessionController::LockSessionState state = SessionController::tryLockSession( uuid );
