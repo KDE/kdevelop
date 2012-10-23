@@ -187,6 +187,12 @@ bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
             } else if (keyEvent->key() == Qt::Key_F2) {
                 m_plugin->renameItems(selectedItems());
                 return true;
+            } else if (keyEvent->key() == Qt::Key_C && keyEvent->modifiers() == Qt::ControlModifier) {
+                m_plugin->copyFromContextMenu();
+                return true;
+            } else if (keyEvent->key() == Qt::Key_V && keyEvent->modifiers() == Qt::ControlModifier) {
+                m_plugin->pasteFromContextMenu();
+                return true;
             }
         }
     }

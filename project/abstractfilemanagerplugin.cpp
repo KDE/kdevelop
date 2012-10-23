@@ -577,21 +577,20 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
     return success;
 }
 
-bool AbstractFileManagerPlugin::copyFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent)
+bool AbstractFileManagerPlugin::copyFilesAndFolders(const QList< KUrl >& items, ProjectFolderItem* newParent)
 {
     bool success = true;
     foreach(ProjectBaseItem* item, items)
     {
         Q_ASSERT(item->folder() || item->file());
 
-        ProjectFolderItem* oldParent = getParentFolder(item);
         d->stopWatcher(newParent);
 
         KUrl oldUrl = item->url();
         KUrl newUrl = newParent->url();
         newUrl.addPath(item->baseName());
 
-        success &= copyUrl(oldParent->project(), oldUrl, newUrl);
+        success &= copyUrl(newParent->project(), oldUrl, newUrl);
         if ( success ) {
             if (item->file()) {
                 ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );

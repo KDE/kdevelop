@@ -20,8 +20,10 @@
 #include "projectmanagerviewplugin.h"
 
 #include <QtCore/QList>
+#include <QMimeData>
 #include <QtGui/QInputDialog>
 #include <QtGui/QApplication>
+#include <QClipboard>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -241,6 +243,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
+
     if ( needsBuildItems ) {
         KAction* action = new KAction( i18nc( "@action", "Build" ), this );
         action->setIcon(KIcon("run-build"));
@@ -258,6 +261,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
+
     if ( needsCloseProjects ) {
         KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
         close->setIcon(KIcon("project-development-close"));
@@ -286,6 +290,19 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( remove, SIGNAL(triggered()), this, SLOT(removeTargetFilesFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
+
+    {
+        KAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
+        copy->setShortcutContext(Qt::WidgetShortcut);
+        connect( copy, SIGNAL(triggered()), this, SLOT(copyFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, copy );
+
+        KAction* paste = KStandardAction::paste(this, SLOT(copyFromContextMenu()), this);
+        paste->setShortcutContext(Qt::WidgetShortcut);
+        connect( paste, SIGNAL(triggered()), this, SLOT(pasteFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, paste );
+    }
+
     return menuExt;
 }
 
@@ -624,6 +641,34 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
         }
     }
 }
+
+void ProjectManagerViewPlugin::copyFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    QList<QUrl> urls;
+    foreach (ProjectBaseItem* item, ctx->items()) {
+        if (item->folder() || item->file()) {
+            urls << item->url();
+        }
+    }
+    kDebug() << urls;
+    if (!urls.isEmpty()) {
+        QMimeData *data = new QMimeData;
+        data->setUrls(urls);
+        qApp->clipboard()->setMimeData(data);
+    }
+}
+
+void ProjectManagerViewPlugin::pasteFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    if (ctx->items().count() != 1) return; //do nothing if multiple or none items are selected
+    ProjectBaseItem* destItem = ctx->items().first();
+    const QMimeData* data = qApp->clipboard()->mimeData();
+    kDebug() << data->urls();
+    destItem->project()->projectFileManager()->copyFilesAndFolders(KUrl::List(data->urls()), destItem);
+}
+
 
 #include "projectmanagerviewplugin.moc"
 
