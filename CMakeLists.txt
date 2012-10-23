@@ -19,3 +19,6 @@ add_subdirectory(libs)
 kde4_add_plugin(kdev-qmljsplugin duchain/contextbuilder.cpp duchain/typebuilder.cpp duchain/declarationbuilder.cpp parseqmljsjob.cpp kdevqmljsplugin.cpp)
 target_link_libraries(kdev-qmljsplugin qtc-qmlsupport
     ${QT_QTCORE_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_THREADWEAVER_LIBS})
+
+install(FILES kdevqmljssupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kdev-qmljsplugin DESTINATION ${PLUGIN_INSTALL_DIR})
