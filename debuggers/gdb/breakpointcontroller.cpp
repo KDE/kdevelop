@@ -164,7 +164,6 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
          case IDebugSession::program_state_changed:
             if (m_interrupted) {
                 m_interrupted = false;
-                debugSession()->addCommand(ExecContinue);
             } else {
                 debugSession()->addCommand(
                     new GDBCommand(GDBMI::BreakList,
@@ -353,6 +352,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             kDebug() << "dbg is busy, interrupting";
             m_interrupted = true;
             debugSession()->interruptDebugger();
+            debugSession()->addCommand(ExecContinue); //continue right after interrupting, if other breakpoint related commands queue up they get inserted before continue (as addCommandToFront is used)
         }
     }
 }
