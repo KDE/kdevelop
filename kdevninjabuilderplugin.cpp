@@ -78,7 +78,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 KUrl KDevNinjaBuilderPlugin::findNinjaFile(KDevelop::IProject* p)
 {
     KUrl ret = p->buildSystemManager()->buildDirectory(p->projectItem());
-    while(!QFile::exists(ret.toLocalFile(KUrl::AddTrailingSlash)+"build.ninja")) {
+    while(!QFile::exists(ret.toLocalFile(KUrl::AddTrailingSlash)+"build.ninja") && ret!=ret.upUrl()) {
         ret = ret.upUrl();
     }
     
