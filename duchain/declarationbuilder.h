@@ -31,6 +31,9 @@ class DeclarationBuilder : public KDevelop::AbstractDeclarationBuilder<QmlJS::AS
         
         virtual KDevelop::QualifiedIdentifier identifierForNode(QmlJS::AST::IdentifierPropertyName* node);
         virtual KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode);
+
+    private:
+        QmlJS::Document::MutablePtr m_doc;
 };
 
 #endif // DECLARATIONBUILDER_H

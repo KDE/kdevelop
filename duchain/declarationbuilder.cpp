@@ -18,3 +18,20 @@
 
 #include "declarationbuilder.h"
 
+KDevelop::SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location);
+
+DeclarationBuilder::DeclarationBuilder(QmlJS::Document::MutablePtr ptr)
+    : m_doc(ptr)
+{}
+
+KDevelop::RangeInRevision DeclarationBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
+{
+    return KDevelop::RangeInRevision::castFromSimpleRange(KDevelop::SimpleRange(
+        locationToSimpleRange(fromNode->lastSourceLocation()).end, 
+        locationToSimpleRange(toNode->firstSourceLocation()).start));
+}
+
+KDevelop::QualifiedIdentifier DeclarationBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
+{
+    return KDevelop::QualifiedIdentifier(node->id.toString());
+}
