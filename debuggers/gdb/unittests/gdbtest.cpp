@@ -1626,7 +1626,7 @@ void GdbTest::testMultipleLocationsBreakpoint()
 
     TestLaunchConfiguration cfg(findExecutable("debugeemultilocbreakpoint"));
 
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("aPlusB");
+    breakpoints()->addCodeBreakpoint("aPlusB");
 
     //TODO check if the additional location breakpoint is added
 
@@ -1649,7 +1649,7 @@ void GdbTest::testBug301287()
 
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
