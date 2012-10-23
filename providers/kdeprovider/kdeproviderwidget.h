@@ -34,6 +34,7 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         KDEProviderWidget(QWidget* parent = 0);
         
         virtual KDevelop::VcsJob* createWorkingCopy(const KUrl& destinationDirectory);
+        virtual bool isCorrect() const;
         
     private slots:
         void showSettings();

@@ -130,6 +130,7 @@ private slots:
   void testCompletionBehindTypedeffedConstructor();
   void testSubClassVisibility();
   void testSignalSlotCompletion();
+  void testSignalSlotExecution();
   void testStringProblem();
   void testArgumentList();
   void testStaticMethods();

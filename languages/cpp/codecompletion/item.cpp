@@ -47,68 +47,133 @@
 #include <memory>
 using namespace KDevelop;
 
+namespace {
+QString linePrefix( KTextEditor::Document* document, const KTextEditor::Range& word )
+{
+    KTextEditor::Range linePrefixRange( word.start().line(), 0, word.start().line(), word.start().column() );
+    return document->text( linePrefixRange );
+}
+
+QString lineSuffix( KTextEditor::Document* document, const KTextEditor::Range& word )
+{
+    int endLineLength = document->lineLength( word.end().line() );
+    KTextEditor::Range lineSuffixRange( word.end().line(), word.end().column(), word.end().line(), endLineLength );
+    return document->text( lineSuffixRange );
+}
+
+QString lineSuffixAndWord( KTextEditor::Document* document, const KTextEditor::Range& word )
+{
+    int endLineLength = document->lineLength( word.end().line() );
+    KTextEditor::Range lineSuffixRange( word.start().line(), word.start().column(), word.end().line(), endLineLength );
+    return document->text( lineSuffixRange );
+}
+} // anonymous namespace
+
 namespace Cpp {
 
+void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
+                                      bool isSignal, const QString& name, const QString& signature )
+{
+  QString newText;
+  KTextEditor::Range word( enteredWord );
 
+  // Find out whether user has already entered SIGNAL/SLOT
+  // If yes, we remove that word and re-insert it.
+  // This is needed to compensate for a possible mistake when one types SIGNAL instead of SLOT or vice versa.
+  // NOTE: we do not scan for Q_SIGNAL or Q_SLOT, as these words (with "Q_" in beginning)
+  // also match ones without "Q_"; thus we keep the user's preference of typing "Q_" or not.
+  {
+    QString prefixText = linePrefix( document, word );
+    // We match SIGNAL or SLOT, followed by spaces, then (maybe) an opening bracket and spaces, then EOL.
+    // Thus we ensure that cursor is positioned like "SIGNAL( <here>", not "SIGNAL( something <here>".
+    // That is, we match only those SIGNAL/SLOT statements, for which we shall suggest a complete method signature.
+    QRegExp signalSlotRegExp( "(SIGNAL|SLOT)\\s*(\\(\\s*)$" );
+    int signalSlotAt = signalSlotRegExp.lastIndexIn( prefixText );
+    if( signalSlotAt >= 0 ) {
+      word.start().setColumn( signalSlotAt );
+    }
+  }
+
+  // Compute the replacement text
+  {
+    if( isSignal ) {
+      newText += "SIGNAL(";
+    } else {
+      newText += "SLOT(";
+    }
+    newText += name + '(' + signature + "))";
+  }
+
+  // Try to remove the leftovers at the suffix, like when one types
+  // "SIGNAL( <here> someOtherSignal(args))"
+  // or "<here> SIGNAL(someOtherSignal(args))".
+  // Implement this by deleting everything to the next statement delimiter or end of last line
+  // (if a delimiter is absent), because a SIGNAL/SLOT macro can apparently be used only as an initializer/parameter.
+  // Also, take brackets (nesting) into account. Start with zero level at the beginning of the matched word
+  // (why beginning: if we've got a SIGNAL/SLOT word and a bracket in prefix, then count for it too),
+  // skip all characters when "nesting > 0" (they are arguments) and stop when "nesting < 0"
+  // (i. e., when we encounter connect()'s closing bracket).
+  {
+    QString suffixText = lineSuffixAndWord( document, word );
+    int nesting = 0, position = 0;
+    for( ; position < suffixText.size(); ++position ) {
+      QChar c = suffixText.at( position );
+      char ascii = c.toAscii();
+      bool isDelimiter = false;
+
+      switch( ascii ) {
+      case '(' : ++nesting; break;
+      case ')' : --nesting; break;
+      case ',' :
+      case ';' : isDelimiter = true; break;
+      default  : break;
+      }
+
+      if( ( nesting <  0 ) ||
+          ( ( nesting == 0 ) && isDelimiter ) ) {
+        break;
+      }
+    } // scan loop
+
+    // User-friendliness: do not touch any trailing space.
+    for( ;
+         position > 0 && QChar( suffixText.at( position - 1 ) ).isSpace();
+         --position )
+      { /* no-op */ }
+
+    // Now "position" points to the first character that should _not_ be removed.
+    // Calculate its line and column.
+    // This is a great place for off-by-one bugs...
+    // NOTE: a word can span multiple lines. As the suffix text is by definition at the last line of word,
+    // the found char is at the last line of the range.
+    // Now translate position to column, but using distance from position to suffix text end (rather than to its beginning).
+    int lastLineLength = document->lineLength( word.end().line() );
+    int distanceToTextEnd = suffixText.length() - position;
+    int characterColumn = lastLineLength - distanceToTextEnd;
+    word.end().setColumn( characterColumn );
+  }
+
+  document->replaceText( word, newText );
+  return;
+}
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
-  KTextEditor::Range word(_word);
-
   if(m_isQtSignalSlotCompletion) {
-    bool addSignalSlot = true;
-    {
-      //Check whether we need to add SLOT( or SIGNAL(
-      QString prefixText = document->text(KTextEditor::Range(word.start().line(), 0, word.start().line(), word.start().column()));
-      kDebug() << "prefix" << prefixText;
-      QRegExp signalSlotRegExp("(Q_)?(SIGNAL|SLOT)\\s*\\(");
-      int signalSlotAt = signalSlotRegExp.lastIndexIn(prefixText);
-      kDebug() << "signalSlotRegExp found at" << signalSlotAt;
-      if(signalSlotAt != -1 && prefixText.mid(signalSlotAt + signalSlotRegExp.matchedLength()).trimmed().isEmpty())
-        addSignalSlot = false;
+    KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+    Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>( m_declaration.data() );
+    if( !classFun ) {
+      kWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
+      return;
     }
-
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    QString functionSignature;
-    Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
-    if(classFun && classFun->type<FunctionType>() && (classFun->isSignal() || classFun->isSlot())) {
-      ///@todo Replace previous signal/slot specifications
-      functionSignature = classFun->identifier().toString();
-      functionSignature += '(' + classFun->normalizedSignature().str() + ')';
-      if(addSignalSlot) {
-        if(classFun->isSignal())
-          functionSignature = "SIGNAL("+functionSignature+')';
-        else
-          functionSignature = "SLOT("+functionSignature+')';
-      }else{
-        //Only add a closing )
-        functionSignature += ')';
-      }
-    }
-    lock.unlock();
-
-    int extendRange = 0;
-    {
-      //Check whether we need to remove existing stuff
-      //note: it might be that the identifier (e.g. Q_SIGNAL) is already included in
-      //the word, so be pretty forgiving in the regexp
-      const QString line = document->text(KTextEditor::Range(word.end().line(), word.end().column(),
-                                                       word.end().line(), document->lineLength(word.end().line())));
-      QRegExp existingRegExp("^\\s*((Q_)?(SIGNAL|SLOT)\\s*)?\\([^\\)]*\\s*\\)\\s*\\)");
-      int from = line.indexOf(existingRegExp);
-      if (from != -1) {
-          extendRange = existingRegExp.matchedLength();
-      }
-    }
-
-    document->replaceText(KTextEditor::Range(word.start().line(), word.start().column(),
-                                             word.end().line(), word.end().column() + extendRange),
-                          functionSignature);
+    executeSignalSlotCompletionItem( document, _word, classFun->isSignal(),
+                                     classFun->identifier().toString(), classFun->normalizedSignature().str() );
     return;
   }
-  
+
+  KTextEditor::Range word(_word);
   QString newText;
 
   if(!useAlternativeText) {

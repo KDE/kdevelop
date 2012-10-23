@@ -31,6 +31,7 @@
 namespace Cpp
 {
 class QPropertyDeclaration;
+class TemplateDeclaration;
 }
 
 namespace KDevelop
@@ -111,6 +112,8 @@ private:
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::CursorInRevision& position);
+
+  Cpp::TemplateDeclaration* findSpecializedFrom(KDevelop::Declaration *templDecl);
 
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**

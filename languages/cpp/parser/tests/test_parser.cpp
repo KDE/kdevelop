@@ -62,6 +62,11 @@ void TestParser::initTestCase()
   core->initialize(KDevelop::Core::NoUi);
 }
 
+void TestParser::cleanupTestCase()
+{
+  KDevelop::TestCore::shutdown();
+}
+
 void TestParser::testSymbolTable()
 {
   NameTable table;

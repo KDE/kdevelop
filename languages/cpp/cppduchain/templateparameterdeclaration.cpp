@@ -41,6 +41,11 @@ QualifiedIdentifier TemplateParameterDeclaration::defaultParameter() const {
   return d_func()->m_defaultParameter.identifier();
 }
 
+bool TemplateParameterDeclaration::hasDefaultParameter() const
+{
+  return d_func()->m_defaultParameter.isValid();
+}
+
 void TemplateParameterDeclaration::setDefaultParameter(const QualifiedIdentifier& str) {
   d_func_dynamic()->m_defaultParameter = str;
 }

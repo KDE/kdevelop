@@ -47,14 +47,14 @@ Declaration *getDeclarationAtCursor(const SimpleCursor &cursor, const KUrl &docu
   return functionDecl;
 }
 
-Signature getDeclarationSignature(const Declaration *functionDecl, const DUContext *functionCtxt)
+Signature getDeclarationSignature(const Declaration *functionDecl, const DUContext *functionCtxt, bool includeDefaults)
 {
   ENSURE_CHAIN_READ_LOCKED
   int pos = 0;
   Signature signature;
   const AbstractFunctionDeclaration* abstractFunDecl = dynamic_cast<const AbstractFunctionDeclaration*>(functionDecl);
   foreach(Declaration* parameter, functionCtxt->localDeclarations()) {
-    signature.defaultParams << abstractFunDecl->defaultParameterForArgument(pos).str();
+    signature.defaultParams << (includeDefaults ? abstractFunDecl->defaultParameterForArgument(pos).str() : "");
     signature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
     ++pos;
   }
@@ -106,7 +106,7 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   m_declarationName = funDecl->identifier();
   m_otherSideId = otherSide->id();
   m_otherSideTopContext = ReferencedTopDUContext(otherSide->topContext());
-  m_oldSignature = getDeclarationSignature(otherSide, m_otherSideContext.data());
+  m_oldSignature = getDeclarationSignature(otherSide, m_otherSideContext.data(), true);
 
   connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
                                                                     SLOT(parseJobFinished(KDevelop::ParseJob*)));
@@ -212,7 +212,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
   if (!functionCtxt)
     return;
   //ParseJob having finished, get the signature that was modified
-  Signature newSignature = getDeclarationSignature(functionDecl, functionCtxt);
+  Signature newSignature = getDeclarationSignature(functionDecl, functionCtxt, false);
 
   //Check for changes between m_oldSignature and newSignature, use oldPositions to store old<->new param index mapping
   QList<int> oldPositions;

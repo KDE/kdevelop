@@ -101,7 +101,7 @@ void Cpp::AddCustomIncludePathAction::execute() {
   CppTools::IncludePathResolver::clearCache();
   
   //Trigger an update, so the user sees the progress
-  KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(m_url.toUrl());
+  KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(m_url);
 }
 
 

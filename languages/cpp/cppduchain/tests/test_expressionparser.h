@@ -52,6 +52,7 @@ public:
 
 private slots:
   void initTestCase();
+  void testTemplateSpecialization();
   void testIntegralType();
   void testSimpleExpression();
   void testAutoTemplate();

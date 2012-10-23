@@ -103,6 +103,11 @@ private slots:
     core->initialize(KDevelop::Core::NoUi);
   }
 
+  void cleanupTestCase()
+  {
+    KDevelop::TestCore::shutdown();
+  }
+
   void testIf()
   {
     parse(QByteArray("void test() { if (i == 0) { foo(); } else { foo2(); } }"));

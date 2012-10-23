@@ -69,6 +69,32 @@ target_link_libraries(cppspecialcompletion
 
 ########### next target ###############
 
+set(cppassistantstest_SRCS
+  ${test_common_SRCS}
+
+  test_cppassistants.cpp
+  ../codegen/renameassistant.cpp
+  ../codegen/renameaction.cpp
+  ../codegen/codeassistant.cpp
+  ../codegen/signatureassistant.cpp
+  ../codegen/adaptsignatureaction.cpp
+)
+
+kde4_add_unit_test(cppassistantstest ${cppassistantstest_SRCS})
+target_link_libraries(cppassistantstest ${QT_QTTEST_LIBRARY}
+    kdev4cppduchain
+    kdev4cpprpp
+    kdev4cppparser
+    kdevcpplanguagesupport
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDE4_THREADWEAVER_LIBRARIES}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+)
+
 add_definitions(-DTEST_COMPLETION)
 
 set(cppcodecompletiontest_SRCS

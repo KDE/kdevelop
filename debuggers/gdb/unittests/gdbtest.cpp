@@ -1503,8 +1503,6 @@ void GdbTest::testBreakpointWithSpaceInPath()
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE_FAIL(session, DebugSession::PausedState);
-    //see upstream bugreport: http://sourceware.org/bugzilla/show_bug.cgi?id=13798
-    QEXPECT_FAIL("", "this does not work in gdb 7.4", Abort);
     QCOMPARE(session->line(), 20);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1628,7 +1626,7 @@ void GdbTest::testMultipleLocationsBreakpoint()
 
     TestLaunchConfiguration cfg(findExecutable("debugeemultilocbreakpoint"));
 
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("aPlusB");
+    breakpoints()->addCodeBreakpoint("aPlusB");
 
     //TODO check if the additional location breakpoint is added
 
@@ -1651,7 +1649,7 @@ void GdbTest::testBug301287()
 
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
 
     session->startProgram(&cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);

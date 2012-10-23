@@ -103,7 +103,10 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     addTool( uiController, new Kasten::ByteTableToolViewFactory(), new Kasten::ByteTableToolFactory() );
     addTool( uiController, new Kasten::InfoToolViewFactory(), new Kasten::InfoToolFactory() );
     addTool( uiController, new Kasten::PodDecoderToolViewFactory(), new Kasten::PodDecoderToolFactory() );
+// disable Okteta Structures tool on big-endian as it's disable in kdesdk
+#ifndef BIG_ENDIAN
     addTool( uiController, new Kasten::StructuresToolViewFactory(), new Kasten::StructuresToolFactory() );
+#endif
     addTool( uiController, new Kasten::BookmarksToolViewFactory, new Kasten::BookmarksToolFactory() );
 
     KDevelop::IDocumentController* documentController = core()->documentController();

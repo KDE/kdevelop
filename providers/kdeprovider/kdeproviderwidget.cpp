@@ -101,6 +101,11 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
     return ret;
 }
 
+bool KDEProviderWidget::isCorrect() const
+{
+    return m_projects->currentIndex().isValid();
+}
+
 void KDEProviderWidget::showSettings()
 {
     if(KConfigDialog::showDialog("kdesettings"))

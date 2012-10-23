@@ -30,7 +30,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <util/sequentiallyrunjobs.h>
+#include <project/builderjob.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -136,7 +136,11 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( configure ) 
         {
             kDebug() << "creating composite job";
-            build = new SequentiallyRunJobs( configure, build );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, builditem );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, builditem );
+            builderJob->updateJobName();
+            build = builderJob;
         }
         return build;
     }
@@ -166,7 +170,11 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         kDebug(9032) << "Cleaning with make";
         KJob* clean = builder->clean(item);
         if( configure ) {
-            clean = new SequentiallyRunJobs( configure, clean );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Clean, clean, item );
+            builderJob->updateJobName();
+            clean = builderJob;
         }
         return clean;
     }
@@ -197,7 +205,11 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         kDebug(9032) << "Installing with make";
         KJob* install = builder->install(item);
         if( configure ) {
-            install = new SequentiallyRunJobs( configure, install );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Install, install, item );
+            builderJob->updateJobName();
+            install = builderJob;
         }
         return install;
 
@@ -244,7 +256,7 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
     return KIO::del( urls );
 }
 
-KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p)
+KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p) const
 {
     QString builddir = CMake::currentBuildDir( p ).toLocalFile();
     QMap<QString, IProjectBuilder*>::const_iterator it = m_builders.constBegin(), itEnd = m_builders.constEnd();
@@ -255,6 +267,11 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
     //It means that it still has to be generated, so use the builder for
     //the generator we use
     return m_buildersForGenerator[CMakeBuilderSettings::self()->generator()];
+}
+
+QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
+{
+	return QList< KDevelop::IProjectBuilder* >() << builderForProject( project );
 }
 
 #include "cmakebuilder.moc"

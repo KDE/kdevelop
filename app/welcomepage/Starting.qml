@@ -34,7 +34,7 @@ StandardPage
         }
         tools: Row {
             spacing: 50
-
+            
             Link {
                 iconSource: "project-development-new-template"
                 text: i18n("New Project")
@@ -52,6 +52,12 @@ StandardPage
                 text: i18n("Fetch project")
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
+            
+            Link {
+                iconSource: "document-open-recent"
+                text: i18n("Recent Projects")
+                onClicked: kdev.showMenu("project/project_open_recent")
+            }
         }
     }
 
@@ -61,7 +67,7 @@ StandardPage
             left: parent.left
             top: toolBar.bottom
             bottom: parent.bottom
-            right: projectsView.left
+            right: parent.right
             margins: 30
         }
 
@@ -87,42 +93,6 @@ StandardPage
         header: Label {
             font.pointSize: theme.defaultFont.pointSize*1.5
             text: i18n("Sessions:")
-        }
-    }
-
-    ListView {
-        id: projectsView
-        anchors {
-            top: toolBar.bottom
-            bottom: parent.bottom
-            right: parent.right
-            margins: 30
-        }
-        
-        width: parent.width/3
-
-        delegate: ListItem {
-                    enabled: true
-                    function justName(str) {
-                        var idx = str.indexOf(" [")
-                        
-                        return str.substr(0, idx).replace("&", "").replace(/.kdev4/g, "");
-                    }
-                    width: projectsView.width
-                    height: 30
-                    
-                    Label {
-                        anchors.fill: parent
-                        text: justName(modelData["text"])
-                    }
-                    onClicked: modelData.trigger()
-                }
-
-        model: kdev.recentProjects()
-        
-        header: Label {
-            font.pointSize: theme.defaultFont.pointSize*1.5
-            text: i18n("Recent Projects:")
         }
     }
 }

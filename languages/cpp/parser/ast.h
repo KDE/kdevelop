@@ -464,7 +464,6 @@ public:
   ExpressionAST *bit_expression;
   const ListNode<ExpressionAST*> *array_dimensions;
 
-  bool parameter_is_initializer; //Used by the declaration-builder to mark a parameter-declaration clause as a mis-parsed initializer
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;

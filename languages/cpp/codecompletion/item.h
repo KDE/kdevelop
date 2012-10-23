@@ -52,6 +52,9 @@ namespace Cpp {
 
 void setStaticMatchContext(QList<KDevelop::IndexedType> types);
 
+void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
+                                      bool isSignal, const QString& name, const QString& signature );
+
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::NormalDeclarationCompletionItem {
 public:

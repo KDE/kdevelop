@@ -490,8 +490,9 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     return ret;
 }
 
-KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project)
+KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem* rootFolder)
 {
+    KDevelop::IProject* project = rootFolder->project();
     QMutexLocker locker(&m_reparsingMutex);
     KUrl baseUrl=CMake::projectRoot(project);
     
@@ -567,6 +568,9 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
             
             ref = includeScript(script.toLocalFile(), project, currentDir.toLocalFile(), ref);
             Q_ASSERT(ref);
+            rootFolder->addIncludeDirectories(data->includeDirectories);
+//             kDebug(9042) << "setting include directories: " << rootFolder->url() << data->includeDirectories << "result: " << includeDirectories(rootFolder);
+            rootFolder->addDefinitions(data->definitions);
             
             foreach(const Subdirectory& s, data->subdirectories) {
                 KUrl candidate = currentDir;
@@ -734,7 +738,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         
         KDevelop::ReferencedTopDUContext curr;
         if(item==item->project()->projectItem())
-            curr=initializeProject(item->project());
+            curr=initializeProject(folder);
         else
             curr=folder->formerParent()->topDUContext();
         
@@ -827,9 +831,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         directories += resolvePaths(folder->url(), data.includeDirectories);
         directories.removeDuplicates();
         directories.removeAll(QString());
-        folder->setIncludeDirectories(directories);
+        folder->addIncludeDirectories(directories);
 //             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << includeDirectories(folder);
-        folder->setDefinitions(data.definitions);
+        folder->addDefinitions(data.definitions);
 
         deleteAllLater(castToBase(folder->cleanupTargets(data.targets)));
         foreach ( const Target& t, data.targets)
@@ -1001,7 +1005,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 {
     DefinesAttached* att=0;
     ProjectBaseItem* it=item;
-    kDebug(9042) << "Querying defines for " << item << dynamic_cast<ProjectTargetItem*>(item);
+//     kDebug(9042) << "Querying defines for " << item << dynamic_cast<ProjectTargetItem*>(item);
     while(!att && item)
     {
         att = dynamic_cast<DefinesAttached*>( item );

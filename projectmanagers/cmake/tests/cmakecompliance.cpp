@@ -31,6 +31,7 @@
 #include <cmakeparserutils.h>
 #include <language/duchain/duchain.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <cmakeprojectdata.h>
 
 using namespace KDevelop;
@@ -169,7 +170,11 @@ void CMakeCompliance::addOutput(const QString& msg)
 
 CMakeCompliance::CMakeCompliance() {
     AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+    KDevelop::TestCore::initialize( Core::NoUi );
+}
+
+CMakeCompliance::~CMakeCompliance() {
+    KDevelop::TestCore::shutdown();
 }
 
 #include "cmakecompliance.moc"

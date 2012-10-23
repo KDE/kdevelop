@@ -546,7 +546,7 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
+  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body || node->defaultDeleted != FunctionDefinitionAST::NotDefaultOrDeleted);
 
   QualifiedIdentifier functionName;
   if (compilingContexts() && node->declarator && node->declarator->id) {
@@ -898,7 +898,7 @@ void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseA
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   QualifiedIdentifier id;
-  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
+  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && !node->declarator->parameter_declaration_clause) {
     //Build a prefix-context for external variable-definitions
     CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);

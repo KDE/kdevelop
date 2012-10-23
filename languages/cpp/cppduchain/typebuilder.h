@@ -143,9 +143,11 @@ protected:
   /// Returns whether the last type was referenced as part of an instance
   /// (in contrast to a type-declaration like a class-declaration or a typedef)
   bool lastTypeWasInstance() const;
+  void setLastTypeWasInstance(bool wasInstance);
 
   /// Returns true when last type was an auto-type
   bool lastTypeWasAuto() const;
+  void setLastTypeWasAuto(bool wasAuto);
 
   // Use PushValue<bool> to manipulate this.
   bool m_inTypedef;
