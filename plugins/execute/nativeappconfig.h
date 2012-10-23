@@ -94,6 +94,7 @@ private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 public slots:
     void suggestionTriggered();
+    virtual void createEmptyLauncher();
 };
 #endif
 

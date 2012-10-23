@@ -75,7 +75,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->setUniformRowHeights( true );
     tree->setItemDelegate( new LaunchConfigurationModelDelegate() );
     
-    connect( addConfig, SIGNAL(clicked()), this, SLOT(createConfiguration()));
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
     connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
     connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
@@ -149,6 +148,13 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         } else {
             break;
         }
+    }
+    if(!m->isEmpty())
+        m->addSeparator();
+    foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes()) {
+        QAction* action = m->addAction(type->icon(), type->name());
+        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        connect(action, SIGNAL(triggered(bool)), type, SLOT(createEmptyLauncher()));
     }
     addConfig->setMenu(m);
 
@@ -342,7 +348,7 @@ void LaunchConfigurationDialog::addConfiguration(ILaunchConfiguration* _launch)
 {
     LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>(_launch);
     Q_ASSERT(launch);
-    int row = model->findItemForProject(launch->project())->row;
+    int row = launch->project() ? model->findItemForProject(launch->project())->row : 0;
     QModelIndex idx  = model->index(row, 0);
     
     model->addConfiguration(launch, idx);
@@ -838,7 +844,7 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
         }
         return box;
     }
-    return QItemDelegate::createEditor ( parent, option, index );
+    return QStyledItemDelegate::createEditor ( parent, option, index );
 }
 
 LaunchConfigurationModelDelegate::LaunchConfigurationModelDelegate()
@@ -856,7 +862,7 @@ void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QM
     }
     else
     {
-        QItemDelegate::setEditorData ( editor, index );
+        QStyledItemDelegate::setEditorData ( editor, index );
     }
 }
 
@@ -871,7 +877,7 @@ void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstract
     }
     else
     {
-        QItemDelegate::setModelData ( editor, model, index );
+        QStyledItemDelegate::setModelData ( editor, model, index );
     }
 }
 

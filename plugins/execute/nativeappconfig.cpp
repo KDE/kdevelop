@@ -462,4 +462,14 @@ void NativeAppConfigType::suggestionTriggered()
     }
 }
 
+void NativeAppConfigType::createEmptyLauncher()
+{
+    QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
+    KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher);
+    KConfigGroup cfg = config->config();
+    cfg.sync();
+    
+    emit signalAddLaunchConfiguration(config);
+}
+
 #include "nativeappconfig.moc"

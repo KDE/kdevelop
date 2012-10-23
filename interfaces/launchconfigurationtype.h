@@ -138,6 +138,9 @@ public:
      */
     virtual QMenu* launcherSuggestions() { return 0; }
     
+public slots:
+    virtual void createEmptyLauncher() = 0;
+
 signals:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
     

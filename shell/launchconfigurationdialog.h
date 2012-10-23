@@ -30,7 +30,7 @@
 #include <qitemeditorfactory.h>
 
 #include "ui_launchconfigurationdialog.h"
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 class QTreeView;
 class QStackedWidget;
@@ -55,7 +55,7 @@ class LaunchConfigurationPage;
 class ILaunchConfiguration;
 class IProject;
 
-class LaunchConfigurationModelDelegate : public QItemDelegate
+class LaunchConfigurationModelDelegate : public QStyledItemDelegate
 {
 public:
     LaunchConfigurationModelDelegate();
