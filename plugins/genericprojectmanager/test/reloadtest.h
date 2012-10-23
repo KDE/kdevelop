@@ -37,6 +37,7 @@ private slots:
   void init();
 
   void addRemoveFiles();
+  void removeDirRecursive();
   void addLotsOfFiles();
   void addMultipleJobs();
 

@@ -98,6 +98,7 @@ struct AbstractFileManagerPlugin::Private {
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
     QSet<QString> importFileNameFilter;
+    QVector<QString> m_stoppedFolders;
 };
 
 void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
@@ -295,6 +296,12 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path)
         // stopDirScan...
         return;
     }
+    // ensure that the path is not inside a stopped folder
+    foreach(const QString& folder, m_stoppedFolders) {
+        if (path.startsWith(folder)) {
+            return;
+        }
+    }
     kDebug(9517) << "deleted:" << path;
 
     KUrl url = KUrl(path);
@@ -365,7 +372,9 @@ void AbstractFileManagerPlugin::Private::stopWatcher(ProjectFolderItem* folder)
         return;
     }
     Q_ASSERT(m_watchers.contains(folder->project()));
-    m_watchers[folder->project()]->stopDirScan(folder->url().toLocalFile());
+    const QString path = folder->url().toLocalFile();
+    m_watchers[folder->project()]->stopDirScan(path);
+    m_stoppedFolders.insert(path);
 }
 
 void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* folder)
@@ -374,7 +383,9 @@ void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* fold
         return;
     }
     Q_ASSERT(m_watchers.contains(folder->project()));
-    m_watchers[folder->project()]->restartDirScan(folder->url().toLocalFile());
+    const QString path = folder->url().toLocalFile();
+    m_watchers[folder->project()]->restartDirScan(path);
+    m_stoppedFolders.remove(path);
 }
 
 bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
