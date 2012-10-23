@@ -374,7 +374,7 @@ void AbstractFileManagerPlugin::Private::stopWatcher(ProjectFolderItem* folder)
     Q_ASSERT(m_watchers.contains(folder->project()));
     const QString path = folder->url().toLocalFile();
     m_watchers[folder->project()]->stopDirScan(path);
-    m_stoppedFolders.insert(path);
+    m_stoppedFolders.append(path);
 }
 
 void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* folder)
@@ -385,7 +385,10 @@ void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* fold
     Q_ASSERT(m_watchers.contains(folder->project()));
     const QString path = folder->url().toLocalFile();
     m_watchers[folder->project()]->restartDirScan(path);
-    m_stoppedFolders.remove(path);
+    const int idx = m_stoppedFolders.indexOf(path);
+    if (idx != -1) {
+        m_stoppedFolders.remove(idx);
+    }
 }
 
 bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
