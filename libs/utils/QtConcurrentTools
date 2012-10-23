@@ -27,17 +27,5 @@
 **
 ****************************************************************************/
 
-#ifndef QMLJS_GLOBAL_H
-#define QMLJS_GLOBAL_H
-
-#include <qglobal.h>
-
-#if defined(QMLJS_BUILD_DIR)
-#  define QMLJS_EXPORT Q_DECL_EXPORT
-#elif QML_BUILD_STATIC_LIB==1
-#  define QMLJS_EXPORT
-#else
-#  define QMLJS_EXPORT Q_DECL_IMPORT
-#endif
-
-#endif // QMLJS_GLOBAL_H
+#include "multitask.h"
+#include "runextensions.h"

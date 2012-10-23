@@ -1,8 +1,5 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
-add_definitions(-DQT_CREATOR) # :D
-add_definitions(-DQML_BUILD_STATIC_LIB=1)
-
 kde4_add_ui_files(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui
