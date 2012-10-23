@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -35,20 +35,20 @@ bool ParseProjectJob::doKill() {
 }
 
 ParseProjectJob::~ParseProjectJob() {
-    KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
+    ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 
     if(ICore::self()->runController()->currentJobs().contains(this))
         ICore::self()->runController()->unregisterJob(this);
 }
 
-ParseProjectJob::ParseProjectJob(KDevelop::IProject* project) {
+ParseProjectJob::ParseProjectJob(IProject* project) {
     connect(project, SIGNAL(destroyed(QObject*)), SLOT(deleteNow()));
     m_project = project;
     m_updated = 0;
     m_totalFiles = project->fileSet().size();
-    
+
     setCapabilities(Killable);
-    
+
     setObjectName(i18np("Process 1 file in %2","Process %1 files in %2", m_totalFiles, m_project->name()));
 }
 
@@ -57,22 +57,22 @@ void ParseProjectJob::deleteNow() {
 }
 
 void ParseProjectJob::updateProgress() {
-    
+
 }
 
-void ParseProjectJob::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+void ParseProjectJob::updateReady(const IndexedString& url, ReferencedTopDUContext topContext) {
     Q_UNUSED(url);
     Q_UNUSED(topContext);
     ++m_updated;
     if(m_updated % ((m_totalFiles / 100)+1) == 0)
         updateProgress();
-    
+
     if(m_updated >= m_totalFiles)
         deleteLater();
 }
 
 void ParseProjectJob::start() {
-    if (KDevelop::ICore::self()->shuttingDown()) {
+    if (ICore::self()->shuttingDown()) {
         return;
     }
 
@@ -80,14 +80,14 @@ void ParseProjectJob::start() {
     QSet< IndexedString > files = m_project->fileSet();
 
     TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
-                                    KDevelop::TopDUContext::VisibleDeclarationsAndContexts : KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+                                    TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
 
     // prevent UI-lockup by processing events after some files
     // esp. noticeable when dealing with huge projects
     const int processAfter = 1000;
     int processed = 0;
-    foreach(const KDevelop::IndexedString& url, files) {
-        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, BackgroundParser::WorstPriority, this );
+    foreach(const IndexedString& url, files) {
+        ICore::self()->languageController()->backgroundParser()->addDocument( url, processingLevel, BackgroundParser::WorstPriority, this );
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();

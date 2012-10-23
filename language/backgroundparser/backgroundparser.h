@@ -29,8 +29,6 @@
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 
-#include <KDE/KUrl>
-
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
@@ -55,6 +53,12 @@ class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
+/**
+ * This class handles the creation of parse jobs for given file URLs.
+ *
+ * For performance reasons you must always use clean, canonical URLs. If you do not do that,
+ * issues might arise (and the debug build will assert).
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
 {
     Q_OBJECT
@@ -72,7 +76,7 @@ public:
                                 ///There is an additional parsing-thread reserved for jobs with this and better priority, to improve responsiveness.
         WorstPriority = 100000  ///Worst possible job-priority.
     };
-    
+
     /**
      * Abort or dequeue all current running jobs with the specified @p parent.
      */
@@ -86,7 +90,7 @@ public:
      * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
      * function.
      */
-    Q_SCRIPTABLE ParseJob* parseJobForDocument(const KUrl& document) const;
+    Q_SCRIPTABLE ParseJob* parseJobForDocument(const IndexedString& document) const;
 
     /**
      * The dependency policy which applies to all jobs (it is applied automatically).
@@ -144,7 +148,7 @@ public Q_SLOTS:
      * Suspends execution of the background parser
      */
     void suspend();
-    
+
     /**
      * Resumes execution of the background parser
      */
@@ -153,7 +157,7 @@ public Q_SLOTS:
     ///Reverts all requests that were made for the given notification-target.
     ///priorities and requested features will be reverted as well.
     void revertAllRequests(QObject* notifyWhenReady);
-    
+
     /**
      * Queues up the @p url to be parsed.
      * @p features The minimum features that should be computed for this top-context
@@ -163,20 +167,14 @@ public Q_SLOTS:
      *                    The notification is guaranteed to be called once for each call to addDocument. The given top-context
      *                    may be invalid if the update failed.
      */
-    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
-
-    /**
-     * Queues up the list of @p urls to be parsed.
-     * @p features The minimum features that should be computed for these top-contexts
-     * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
-     */
-    void addDocumentList(const KUrl::List& urls, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0);
+    void addDocument(const IndexedString& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0, ParseJob::SequentialProcessingFlags flags = ParseJob::IgnoresSequentialProcessing);
 
     /**
      * Removes the @p url that is registered for the given notification from the url.
-     * @param notifyWhenReady Notifier the document was added with
+     *
+     * @param notifyWhenReady Notifier the document was added with.
      */
-    void removeDocument(const KUrl& url, QObject* notifyWhenReady = 0);
+    void removeDocument(const IndexedString& url, QObject* notifyWhenReady = 0);
 
     /**
      * Forces the current queue to be parsed.
@@ -195,17 +193,17 @@ public Q_SLOTS:
     void disableProcessing();
     ///Enables all processing of new jobs, equivalent to setNeededPriority(WorstPriority)
     void enableProcessing();
-    
+
     ///Returns true if the given url is queued for parsing
-    bool isQueued(KUrl url) const;
+    bool isQueued(const IndexedString& url) const;
 
     ///Retrieve the current priority for the given URL.
     ///You need to check whether @param url is queued before calling this function.
-    int priorityForDocument(const KUrl& url) const;
+    int priorityForDocument(const IndexedString& url) const;
 
     ///Returns the number of currently active or queued jobs
     int queuedCount() const;
-    
+
     void documentClosed(KDevelop::IDocument*);
     void documentLoaded(KDevelop::IDocument*);
     void documentUrlChanged(KDevelop::IDocument*);

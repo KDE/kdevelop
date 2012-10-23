@@ -347,7 +347,10 @@ void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
     KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
-    
+    if (!job) {
+        return;
+    }
+
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
@@ -442,7 +445,9 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
 
 void VcsPluginHelper::annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible)
 {
-    
+    Q_UNUSED(view);
+    Q_UNUSED(menu);
+    Q_UNUSED(visible);
 }
 
 void VcsPluginHelper::update()

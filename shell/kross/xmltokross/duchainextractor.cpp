@@ -86,7 +86,7 @@ void DUChainExtractor::start(const KUrl& _input, const KUrl& builddir,
     DumbProject* project = new DumbProject();
     project->setManagerPlugin(m_manager);
     Core::self()->projectControllerInternal()->addProject(project);
-    Core::self()->languageController()->backgroundParser()->addDocument(input);
+    Core::self()->languageController()->backgroundParser()->addDocument(IndexedString(input));
 }
 
 void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)

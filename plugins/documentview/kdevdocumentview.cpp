@@ -165,7 +165,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     if (!m_selectedDocs.isEmpty())
     {
         KMenu* ctxMenu = new KMenu(this);
-        
+
         KDevelop::FileContext context(m_selectedDocs);
         QList<KDevelop::ContextMenuExtension> extensions =
             m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
@@ -233,18 +233,15 @@ void KDevDocumentView::updateSelectedDocs()
     m_selectedDocs.clear();
     m_unselectedDocs.clear();
 
-    for (int i = 0; i < m_documentModel->rowCount(); i++)
+    QList<QStandardItem*> allItems = m_documentModel->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+    foreach (QStandardItem* item, allItems)
     {
-        QList<QStandardItem*> allItems = m_documentModel->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
-        foreach (QStandardItem* item, allItems)
+        if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())
         {
-            if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())
-            {
-                if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))
-                    m_selectedDocs << fileItem->url();
-                else
-                    m_unselectedDocs << fileItem->url();
-            }
+            if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))
+                m_selectedDocs << fileItem->url();
+            else
+                m_unselectedDocs << fileItem->url();
         }
     }
 }

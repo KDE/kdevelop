@@ -145,8 +145,12 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE bool openDocumentsSimple( QStringList urls );
     virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );
     
-    // Returns the currently active document
-    Q_SCRIPTABLE QString activeDocumentPath() const;
+    // If 'target' is empty, returns the currently active document, or
+    // the currently selected project-item if no document is active.
+    // If 'target' is "[selection]", returns the path of the currently active selection.
+    // If 'target' is the name of a project, returns the root-path of that project.
+    // Whenever the returned path corresponds to a directory, a '/.' suffix is appended.
+    Q_SCRIPTABLE QString activeDocumentPath(QString target="") const;
 
     // Returns all open documents in the current area
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;

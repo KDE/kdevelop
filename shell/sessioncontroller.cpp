@@ -50,6 +50,8 @@ Boston, MA 02110-1301, USA.
 #include <KApplication>
 #include <QLineEdit>
 #include <KMessageBox>
+#include <KAboutData>
+#include <KLineEdit>
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QTimer>
@@ -62,7 +64,12 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <QLabel>
 #include <QLayout>
+#include <QSortFilterProxyModel>
+#include <QKeyEvent>
 #include <QDBusConnection>
+#include <QDBusConnectionInterface>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 
 #include <kdeversion.h>
@@ -218,24 +225,23 @@ public:
     bool loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        if( !SessionController::tryLockSession(s->id().toString()) )
-        {
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("The selected session is already active in another running instance"));
-            return false;
-        }else{
-            KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
-            return true;
-        }
+        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
+        return true;
     }
     
     void activateSession( Session* s )
     {
         Q_ASSERT( s );
 
+        activeSession = s;
+        if( !lockSession() ) {
+            activeSession = 0;
+            return;
+        }
+
         KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
         grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
-        activeSession = s;
         if (Core::self()->setupFlags() & Core::NoUi) return;
 
         QHash<Session*,QAction*>::iterator it = sessionActions.find(s);
@@ -287,6 +293,7 @@ public:
     QActionGroup* grp;
     
     KLockFile::Ptr sessionLock;
+    SessionController::LockSessionState sessionLockState;
     
     // Whether this process owns the recovery directory
     bool recoveryDirectoryIsOwn;
@@ -294,18 +301,57 @@ public:
     QTimer recoveryTimer;
     QMap<KUrl, QStringList > currentRecoveryFiles;
 
+    static QString sessionBaseDirectory()
+    {
+        return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName() + "/sessions/", true );
+    }
+
+    static QString sessionDirectory( const QString& id )
+    {
+        return sessionBaseDirectory() + id;
+    }
+
+    static QString lockFileForSession( const QString& id )
+    {
+        return sessionDirectory( id ) + "/lock";
+    }
+
+    static QString DBusServiceNameForSession( const QString& id )
+    {
+        // We remove starting "{" and ending "}" from the string UUID representation
+        // as D-Bus apparently doesn't allow them in service names
+        return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
+    }
+
+    QString ownDBusServiceName()
+    {
+        Q_ASSERT(activeSession);
+        return DBusServiceNameForSession( activeSession->id() );
+    }
     
     QString ownSessionDirectory() const
     {
         Q_ASSERT(activeSession);
-        return SessionController::sessionDirectory() + '/' + activeSession->id().toString();
+        return sessionDirectory( activeSession->id().toString() );
     }
-    
+
+    QString ownLockFile()
+    {
+        Q_ASSERT(activeSession);
+        return lockFileForSession( activeSession->id().toString() );
+    }
+
     void clearRecoveryDirectory()
     {
         removeDirectory(ownSessionDirectory() + "/recovery");
     }
     
+    bool lockSession()
+    {
+        sessionLockState = SessionController::tryLockSession( activeSession->id(), true );
+        return sessionLockState;
+    }
+
 public slots:
     void documentSavedOrClosed( KDevelop::IDocument* document )
     {
@@ -537,13 +583,6 @@ private slots:
     }
 };
 
-bool SessionController::lockSession()
-{
-    d->sessionLock = new KLockFile(d->ownSessionDirectory() + "/lock");
-    KLockFile::LockResult result = d->sessionLock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
-    
-    return result == KLockFile::LockOK;
-}
 
 void SessionController::updateSessionDescriptions()
 {
@@ -632,12 +671,12 @@ void SessionController::initialize( const QString& session )
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
-            && (session.isEmpty() || (ses->id().toString() != session && ses->name() != session)) )
-        {
-            ///@todo Think about when we can do this. Another instance might still be using this session.
-//             session->deleteFromDisk();
+            && (session.isEmpty() || (ses->id().toString() != session && ses->name() != session)) ) {
+            if( tryLockSession(s) ) {
+                ses->deleteFromDisk();
+            }
             delete ses;
-        }else{
+        } else {
             d->addSession( ses );
         }
     }
@@ -723,12 +762,20 @@ void SessionController::loadDefaultSession( const QString& session )
         load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
 
-    Session* s = this->session( load );
-    if( !s )
+    // Iteratively try to load the session, asking user what to do in case of failure
+    // If showForceOpenDialog() returns empty string, stop trying
+    Session* s;
+    do
     {
-        s = createSession( load );
-    }
-    d->activateSession( s );
+        s = this->session( load );
+        if( !s ) {
+            s = createSession( load );
+        }
+        d->activateSession( s );
+        if( activeSession() )
+            break;
+        load = handleLockedSession( s->name(), s->id().toString(), d->sessionLockState );
+    } while( !load.isEmpty() );
 }
 
 Session* SessionController::session( const QString& nameOrId ) const
@@ -745,8 +792,8 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Session* origSession = session( nameOrid );
     qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
-                             KUrl( sessionDirectory() + '/' + id.toString() ), 
+    KIO::NetAccess::dircopy( SessionControllerPrivate::sessionDirectory( origSession->id().toString() ),
+                             SessionControllerPrivate::sessionDirectory( id.toString() ),
                              Core::self()->uiController()->activeMainWindow() );
     Session* newSession = new Session( id );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
@@ -767,65 +814,77 @@ QString SessionController::cfgActiveSessionEntry() { return "Active Session ID";
 QList< SessionInfo > SessionController::availableSessionInfo()
 {
     QList< SessionInfo > available;
-
-    QDir sessiondir( SessionController::sessionDirectory() );
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
-    {
-        QUuid id( s );
-        if( id.isNull() )
-            continue;
-        // TODO: Refactor the code here and in session.cpp so its shared
-        SessionInfo si;
-        si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + '/' + s +"/sessionrc" );
-
-        QString desc = config->group( "" ).readEntry( "SessionName", "" );
-        si.name = desc;
-
-        si.projects = config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
-
-        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
-
-        if(!prettyContents.isEmpty())
-        {
-            if(!desc.isEmpty())
-                desc += ":  ";
-            desc += prettyContents;
+    foreach( const QString& sessionId, QDir( SessionController::sessionDirectory() ).entryList( QDir::AllDirs ) ) {
+        if( !QUuid( sessionId ).isNull() ) {
+            available << Session::parse( sessionId );
         }
-        si.description = desc;
-        available << si;
     }
     return available;
 }
 
 QString SessionController::sessionDirectory()
 {
-    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+    return SessionControllerPrivate::sessionBaseDirectory();
 }
 
-QString SessionController::sessionDir()
+SessionController::LockSessionState SessionController::tryLockSession(QString id, bool doLocking)
 {
-    return sessionDirectory() + '/' + activeSession()->id().toString();
-}
-
-SessionController::LockSessionState SessionController::tryLockSession(QString id)
-{
+    /*
+     * We've got two locking mechanisms here: D-Bus unique service name (based on the session id)
+     * and a plain lockfile (KLockFile).
+     * The latter is required to get the appname/pid of the locking instance
+     * in case if it's stale/hanging/crashed (to make user know which PID he needs to kill).
+     * D-Bus mechanism is the primary one.
+     *
+     * Since there is a kind of "logic tree", the code is a bit hard.
+     */
     LockSessionState ret;
-    
-    ret.lockFile = sessionDirectory() + '/' + id + "/lock";
+    ret.sessionId = id;
 
-    if(!QFileInfo(ret.lockFile).exists())
-    {
-        // Maybe the session doesn't exist yet
-        ret.success = true;
-        return ret;
+    QString service = SessionControllerPrivate::DBusServiceNameForSession( id );
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    QDBusConnectionInterface* connectionInterface = connection.interface();
+    ret.DBusService = service;
+
+    ret.lockFilename = SessionControllerPrivate::lockFileForSession( id );
+    ret.lockFile = new KLockFile( ret.lockFilename );
+
+    bool canLockDBus = !connectionInterface->isServiceRegistered( service );
+    bool lockedDBus = false;
+
+    // Lock D-Bus if we can and we need to
+    if( doLocking && canLockDBus ) {
+        lockedDBus = connection.registerService( service );
     }
-    
-    KLockFile::Ptr lock(new KLockFile(ret.lockFile));
-    ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
-    if(!ret.success) {
-        lock->getLockInfo(ret.holderPid, ret.holderHostname, ret.holderApp);
+
+    // Attempt to lock file, despite the possibility to do so and presence of the request (doLocking)
+    // This is required as KLockFile::getLockInfo() works only after KLockFile::lock() is called
+    ret.attemptRelock();
+    if( ret.lockResult == KLockFile::LockOK ) {
+        // Unlock immediately if we shouldn't have locked it
+        if( !lockedDBus ) {
+            ret.lockFile->unlock();
+        }
+    } else {
+        // If locking failed, retrieve the lock's metadata
+        ret.lockFile->getLockInfo( ret.holderPid, ret.holderHostname, ret.holderApp );
+
+        if( lockedDBus ) {
+            // Since the lock-file is secondary, try to force-lock it if D-Bus locking succeeded
+            ret.forceRemoveLockfile();
+            ret.attemptRelock();
+
+            // Finally, if removing didn't help, cancel D-Bus locking altogether.
+            if( ret.lockResult != KLockFile::LockOK ) {
+                connection.unregisterService( service );
+                // do not set lockedDBus to false: ret.success will be then set to
+                // lockedDBus, and we want it true to indicate that the D-Bus name is free
+            }
+        }
     }
+
+    // Set the result by D-Bus status
+    ret.success = doLocking ? lockedDBus : canLockDBus;
     return ret;
 }
 
@@ -833,12 +892,13 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
 class SessionChooserDialog : public KDialog {
     Q_OBJECT
 public:
-    SessionChooserDialog(QListView* view, QStandardItemModel* model);
+    SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter);
     bool eventFilter(QObject* object, QEvent* event);
 
 public Q_SLOTS:
     void updateState();
     void doubleClicked(QModelIndex);
+    void filterTextChanged(QString);
 
 private Q_SLOTS:
     void deleteButtonPressed();
@@ -847,7 +907,8 @@ private Q_SLOTS:
 
 private:
     QListView* m_view;
-    QStandardItemModel* m_model;
+    QAbstractItemModel* m_model;
+    KLineEdit* m_filter;
     QTimer m_updateStateTimer;
 
     QPushButton* m_deleteButton;
@@ -855,8 +916,8 @@ private:
     int m_deleteCandidateRow;
 };
 
-SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* model)
-    : m_view(view), m_model(model), m_deleteCandidateRow(-1)
+SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter)
+    : m_view(view), m_model(model), m_filter(filter), m_deleteCandidateRow(-1)
 {
     m_updateStateTimer.setInterval(5000);
     m_updateStateTimer.setSingleShot(false);
@@ -877,12 +938,18 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QStandardItemModel* 
 
     view->setMouseTracking(true);
     view->installEventFilter(this);
+    filter->installEventFilter(this);
+    connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged(QString)));
+}
+
+void SessionChooserDialog::filterTextChanged(QString)
+{
+    m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
 {
-    QStandardItem* item = m_model->itemFromIndex(index);
-    if(item && item->isEnabled())
+    if(m_model->flags(index) & Qt::ItemIsEnabled)
         accept();
 }
 
@@ -892,8 +959,8 @@ void SessionChooserDialog::updateState() {
     for(int row = 0; row < m_model->rowCount(); ++row)
     {
         QString session = m_model->index(row, 0).data().toString();
-        
-        if(session == i18n("Create New Session"))
+
+        if(session.isEmpty()) //create new session
             continue;
         
         QString state, tooltip;
@@ -904,11 +971,9 @@ void SessionChooserDialog::updateState() {
             state = i18n("Running");
         }
         
-        if(m_model->item(row, 2)) {
-            m_model->item(row, 1)->setIcon(lockState ? KIcon("") : KIcon("media-playback-start"));
-            m_model->item(row, 1)->setToolTip(tooltip);
-            m_model->item(row, 2)->setText(state);
-        }
+        m_model->setData(m_model->index(row, 1), lockState ? KIcon("") : KIcon("media-playback-start"), Qt::DecorationRole);
+        m_model->setData(m_model->index(row, 1), tooltip, Qt::ToolTipRole);
+        m_model->setData(m_model->index(row, 2), state, Qt::DisplayRole);
     }
     
     m_updateStateTimer.start();
@@ -920,8 +985,19 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     KGlobal::locale()->insertCatalog("kdevplatform");
 
     QListView* view = new QListView;
+    KLineEdit* filter = new KLineEdit;
+    filter->setClearButtonShown( true );
+    filter->setClickMessage(i18n("Search"));
+
     QStandardItemModel* model = new QStandardItemModel(view);
-    SessionChooserDialog dialog(view, model);
+
+    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(model);
+    proxy->setSourceModel(model);
+    proxy->setFilterKeyColumn( 1 );
+    proxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    connect(filter, SIGNAL(textChanged(QString)), proxy, SLOT(setFilterFixedString(QString)));
+
+    SessionChooserDialog dialog(view, proxy, filter);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QVBoxLayout layout(dialog.mainWidget());
@@ -932,10 +1008,17 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
     model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
     model->setHeaderData(2, Qt::Horizontal,i18n("State"));
-    view->setModel(model);
+
+    view->setModel(proxy);
     view->setModelColumn(1);
+
+    QHBoxLayout* filterLayout = new QHBoxLayout();
+    filterLayout->addWidget(new QLabel(i18n("Filter:")));
+    filterLayout->addWidget(filter);
+    layout.addLayout(filterLayout);
     layout.addWidget(view);
-    
+    filter->setFocus();
+
     int row = 0;
     int defaultRow = 0;
     
@@ -975,7 +1058,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     dialog.updateState();
     dialog.mainWidget()->layout()->setContentsMargins(0,0,0,0);
     
-    view->selectionModel()->setCurrentIndex(model->index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    view->selectionModel()->setCurrentIndex(proxy->mapFromSource(model->index(defaultRow, 0)), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
     dialog.setInitialSize(QSize(900, 600));
@@ -997,6 +1080,129 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
             ret = selected.data().toString();
         }
         return ret;
+    }
+
+    return QString();
+}
+
+QString SessionController::handleLockedSession( const QString& sessionName, const QString& sessionId,
+                                                const SessionController::LockSessionState& state )
+{
+    if( state ) {
+        return sessionId;
+    }
+
+    // Set to true if lock-file is not free
+    bool lockFileOwned = state.lockResult != KLockFile::LockOK;
+
+    // Set the locking problem description.
+    QString problemDescription;
+    if( state.success ) {
+        // Do not try to call D-Bus if the D-Bus service is free (unregistered).
+        switch( state.lockResult ) {
+            case KLockFile::LockStale:
+                problemDescription = i18nc("@info", "The session lock-file is stale.");
+                break;
+
+            case KLockFile::LockError:
+                problemDescription = i18nc("@info", "Error while taking the session lock-file.");
+                break;
+
+            case KLockFile::LockFail:
+                problemDescription = i18nc("@info", "The session lock-file is owned.");
+                break;
+
+            case KLockFile::LockOK:
+            default:
+                // We shouldn't have both D-Bus service name and lockfile free by now.
+                Q_ASSERT( false );
+                break;
+        }
+    } else {
+        // The timeout for "ensureVisible" call
+        // Leave it sufficiently low to avoid waiting for hung instances.
+        static const int timeout_ms = 1000;
+
+        QDBusMessage message = QDBusMessage::createMethodCall( state.DBusService,
+                                                               "/kdevelop/MainWindow",
+                                                               "org.kdevelop.MainWindow",
+                                                               "ensureVisible" );
+        QDBusMessage reply = QDBusConnection::sessionBus().call( message,
+                                                                 QDBus::Block,
+                                                                 timeout_ms );
+        if( reply.type() == QDBusMessage::ReplyMessage ) {
+            kDebug() << i18nc( "@info:shell", "made running %1 instance (PID: %2) visible", state.holderApp, state.holderPid );
+            return QString();
+        } else {
+            kDebug() << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", state.holderApp, state.holderPid);
+        }
+
+        problemDescription = i18nc("@info",
+                                   "The given application did not respond to a DBUS call, "
+                                   "it may have crashed or is hanging.");
+    }
+
+    QString problemHeader;
+    if( lockFileOwned ) {
+        problemHeader = i18nc("@info", "Failed to lock the session <em>%1</em>, "
+                              "already locked by %2 on %3 (PID %4).",
+                              sessionName, state.holderApp, state.holderHostname, state.holderPid);
+    } else {
+        problemHeader = i18nc("@info", "Failed to lock the session <em>%1</em> (lock-file unavailable).",
+                              sessionName);
+    }
+
+    QString problemResolution;
+    if( state.success ) {
+        problemResolution = i18nc("@info",
+                                  "<p>Do you want to remove the lock file and force a new %1 instance?<br/>"
+                                  "<strong>Beware:</strong> Only do this if you are sure there is no running"
+                                  " process using this session.</p>"
+                                  "<p>Otherwise, close the offending application instance "
+                                  "or choose another session to launch.</p>",
+                                  KCmdLineArgs::aboutData()->programName());
+    } else {
+        problemResolution = i18nc("@info",
+                                  "<p>Please, close the offending application instance "
+                                  "or choose another session to launch.</p>");
+    }
+
+    QString errmsg = "<p>"
+                     + problemHeader
+                     + "<br>"
+                     + problemDescription
+                     + "</p>"
+                     + problemResolution;
+
+    KGuiItem retry = KStandardGuiItem::cont();
+    if( state.success ) {
+        retry.setText(i18nc("@action:button", "Remove lock file"));
+    } else {
+        retry.setText(i18nc("@action:button", "Retry startup"));
+    }
+    KGuiItem choose = KStandardGuiItem::configure();
+    choose.setText(i18nc("@action:button", "Choose another session"));
+    KGuiItem cancel = KStandardGuiItem::quit();
+    int ret = KMessageBox::warningYesNoCancel(0, errmsg, i18nc("@title:window", "Failed to Lock Session %1", sessionName),
+                                              retry, choose, cancel);
+    switch( ret ) {
+    case KMessageBox::Yes:
+        if( state.success ) {
+            state.forceRemoveLockfile();
+        }
+        return sessionId;
+        break;
+
+    case KMessageBox::No: {
+        QString errmsg = i18nc("@info", "The session %1 is already active in another running instance.",
+                               sessionName);
+        return showSessionChooserDialog(errmsg);
+        break;
+    }
+
+    case KMessageBox::Cancel:
+    default:
+        break;
     }
 
     return QString();
@@ -1035,6 +1241,30 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
         m_deleteButtonTimer.stop();
         m_deleteButton->hide();
     }
+    if(object == m_filter && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
+            QModelIndex currentIndex = m_view->selectionModel()->currentIndex();
+            int selectRow = -1;
+            if(keyEvent->key() == Qt::Key_Up) {
+                if(!currentIndex.isValid()) {
+                    selectRow = m_model->rowCount()-1;
+                } else if(currentIndex.row()-1 >= 0) {
+                    selectRow = currentIndex.row()-1;
+                }
+            } else if(keyEvent->key() == Qt::Key_Down) {
+                if(!currentIndex.isValid()) {
+                    selectRow = 0;
+                } else if(currentIndex.row()+1 < m_model->rowCount()) {
+                    selectRow = currentIndex.row()+1;
+                }
+            }
+            if (selectRow != -1) {
+                    m_view->selectionModel()->setCurrentIndex(m_model->index(selectRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+            }
+            return true;
+        }
+    }
 
     return false;
 }
@@ -1045,15 +1275,33 @@ void SessionChooserDialog::deleteButtonPressed()
     if(m_deleteCandidateRow == -1)
         return;
 
+    QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
+    const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
+
+    {
+        SessionController::LockSessionState state = SessionController::tryLockSession( uuid );
+        if( !state ) {
+            const QString errCaption = i18nc("@title", "Cannot Delete Session");
+            QString errText = i18nc("@info", "<p>Cannot delete a locked session.");
+
+            if( state.lockResult != KLockFile::LockOK ) {
+                errText += i18nc("@info", "<p>The session is locked by %1 on %2 (PID %3).",
+                                 state.holderApp, state.holderHostname, state.holderPid);
+            }
+
+            KMessageBox::error( this, errText, errCaption );
+            return;
+        }
+    }
+
     const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
     const QString caption = i18nc("@title", "Delete Session");
-    const KGuiItem deleteItem(i18nc("@action:button", "Delete"), KIcon("edit-delete"));
-    const KGuiItem cancelItem(i18nc("@action:button", "Cancel"), KIcon("dialog-cancel"));
+    const KGuiItem deleteItem = KStandardGuiItem::del();
+    const KGuiItem cancelItem = KStandardGuiItem::cancel();
 
     if(KMessageBox::warningYesNo(this, text, caption, deleteItem, cancelItem) == KMessageBox::Yes) {
         QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-        QStandardItem *item = m_model->itemFromIndex(index);
-        const QString uuid = item->text();
+        const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
 
         //FIXME: What about running sessions?
         KDevelop::Session session( uuid );
@@ -1064,6 +1312,12 @@ void SessionChooserDialog::deleteButtonPressed()
     }
 }
 
+QString SessionController::sessionDir()
+{
+    if( !activeSession() )
+        return QString();
+    return d->ownSessionDirectory();
+}
 
 QString SessionController::sessionName()
 {

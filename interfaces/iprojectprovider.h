@@ -20,6 +20,7 @@
 
 #ifndef IPROJECTPROVIDER_H
 #define IPROJECTPROVIDER_H
+
 #include <QString>
 #include <QWidget>
 #include "interfacesexport.h"
@@ -38,14 +39,17 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
     Q_OBJECT
     public:
         IProjectProviderWidget(QWidget* parent = 0);
-        
+
         /**
          * @returns a job that will create a working copy given the current state of the widget.
-         * 
+         *
          * @param destinationDirectory where the project will be downloaded.
          */
         virtual VcsJob* createWorkingCopy(const KUrl & destinationDirectory) = 0;
-        
+
+        /** @returns whether we have a correct location in the widget. */
+        virtual bool isCorrect() const = 0;
+
     signals:
         void changed(const QString& name);
 };
@@ -54,9 +58,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProvider
 {
     public:
         virtual ~IProjectProvider();
-        
+
         virtual QString name() const = 0;
-        
+
         virtual IProjectProviderWidget* providerWidget(QWidget* parent) = 0;
 };
 

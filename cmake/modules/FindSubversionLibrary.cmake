@@ -10,6 +10,13 @@
 #  SUBVERSION_FOUND - system has subversion libraries
 #  SUBVERSION_INCLUDE_DIRS - the include directories to link to subversion
 #  SUBVERSION_LIBRARIES - The libraries needed to link to subversion
+#  Copyright (c) 2009      Lambert CLARA <lambert.clara@yahoo.fr>
+#  Copyright (c) 2009      Bernhard Rosenkraenzer <ber@arklinux.org>
+#  Copyright (c) 2007-2009 Andreas Pakulat <apaku@gmx.de>
+#
+#  Redistribution AND use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 IF(SUBVERSION_INCLUDE_DIRS AND SUBVERSION_LIBRARIES)
     # Already in cache, be silent

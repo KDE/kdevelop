@@ -29,13 +29,23 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+struct SessionInfo
+{
+    QString name;
+    QUuid uuid;
+    QString description;
+    KUrl::List projects;
+    KUrl path;
+    KSharedConfig::Ptr config;
+};
+
 class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {
     Q_OBJECT
 public:
     static const QString cfgSessionNameEntry;
     static const QString cfgSessionPrettyContentsEntry;
-    Session( const QUuid&, QObject * parent = 0 );
+    Session( const QString& id, QObject * parent = 0 );
     virtual ~Session();
 
     virtual KUrl pluginDataArea( const IPlugin* );
@@ -54,6 +64,24 @@ public:
 
     virtual void setTemporary(bool temp);
     virtual bool isTemporary() const;
+
+    /**
+     * Generates session's pretty contents from project list in @p info.
+     * @return session's pretty contents
+     */
+    static QString generatePrettyContents( const SessionInfo& info );
+
+    /**
+     * Generates session's description field using provided pretty contents.
+     * @return session's description field
+     */
+    static QString generateDescription( const KDevelop::SessionInfo& info, const QString& prettyContents );
+
+    /**
+     * Generates a @ref SessionInfo by a session @p id.
+     * @param mkdir Whether to create a session directory if one does not exist.
+     */
+    static SessionInfo parse( const QString& id, bool mkdir = false );
 
 Q_SIGNALS:
     void nameChanged( const QString& newname, const QString& oldname );

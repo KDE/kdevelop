@@ -283,6 +283,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
+            kDebug() << "deleting" << widget;
             widget->setParent(0);
             delete widget;
         }
@@ -305,9 +306,13 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         container->show();
 
         int position = 0;
+        bool hadActiveView = false;
+        Sublime::View* activeView = d->activeView;
+        
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
+            
             if (widget)
             {
                 if(!container->hasWidget(widget))
@@ -316,7 +321,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->viewContainers[view] = container;
                     d->widgetToView[widget] = view;
                 }
-                if(d->activeView == view)
+                if(activeView == view)
+                {
+                    hadActiveView = true;
+                    container->setCurrentWidget(widget);
+                }else if(topViews.contains(view) && !hadActiveView)
                     container->setCurrentWidget(widget);
             }
             position++;
@@ -325,9 +334,9 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     return Area::ContinueWalker;
 }
 
-void MainWindowPrivate::reconstructViews()
+void MainWindowPrivate::reconstructViews(QList<View*> topViews)
 {
-    ViewCreator viewCreator(this);
+    ViewCreator viewCreator(this, topViews);
     area->walkViews(viewCreator, area->rootIndex());
     setBackgroundVisible(area->views().isEmpty());
 }

@@ -21,6 +21,7 @@
 #include "builderjob.h"
 
 #include <kconfiggroup.h>
+#include <KLocalizedString>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -86,7 +87,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseIt
     }
     if( j )
     {
-        q->addSubjob( j );
+        q->addCustomJob( t, j, item );
     }
 }
 BuilderJob::BuilderJob() 
@@ -113,6 +114,100 @@ void BuilderJob::addProjects( BuildType t, const QList<KDevelop::IProject*>& pro
 void BuilderJob::addItem( BuildType t, ProjectBaseItem* item )
 {
     d->addJob( t, item );
+}
+
+void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBaseItem* item )
+{
+    if( BuilderJob* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
+        // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
+        QVector< BuilderJob::SubJobData > subjobs = builderJob->takeJobList();
+        builderJob->deleteLater();
+        foreach( const BuilderJob::SubJobData& subjob, subjobs ) {
+            addSubjob( subjob.job );
+        }
+        m_metadata << subjobs;
+    } else {
+        addSubjob( job );
+
+        SubJobData data;
+        data.type = type;
+        data.job = job;
+        data.item = item;
+        m_metadata << data;
+    }
+}
+
+QVector< BuilderJob::SubJobData > BuilderJob::takeJobList()
+{
+    QVector< SubJobData > ret = m_metadata;
+    m_metadata.clear();
+    clearSubjobs();
+    setObjectName( QString() );
+    return ret;
+}
+
+void BuilderJob::updateJobName()
+{
+    // Which items are mentioned in the set
+    // Make it a list to preserve ordering; search overhead (n^2) isn't too big
+    QList< ProjectBaseItem* > registeredItems;
+    // Which build types are mentioned in the set
+    // (Same rationale applies)
+    QList< BuildType > buildTypes;
+    // Whether there are jobs without any specific item
+    bool hasNullItems = false;
+
+    foreach( const SubJobData& subjob, m_metadata ) {
+        if( subjob.item ) {
+            if( !registeredItems.contains( subjob.item ) ) {
+                registeredItems.append( subjob.item );
+            }
+            if( !buildTypes.contains( subjob.type ) ) {
+                buildTypes.append( subjob.type );
+            }
+        } else {
+            hasNullItems = true;
+        }
+    }
+
+    QString itemNames;
+    if( !hasNullItems ) {
+        QStringList itemNamesList;
+        foreach( ProjectBaseItem* item, registeredItems ) {
+            itemNamesList << item->text();
+        }
+        itemNames = itemNamesList.join(", ");
+    } else {
+        itemNames = i18nc( "Unspecified set of build items (e. g. projects, targets)", "Various items" );
+    }
+
+    QString methodNames;
+    QStringList methodNamesList;
+    foreach( BuildType type, buildTypes ) {
+        methodNamesList << buildTypeToString( type );
+    }
+    methodNames = methodNamesList.join( ", " );
+
+    QString jobName = QString( "%1: %2" ).arg( itemNames ).arg( methodNames );
+    setObjectName( jobName );
+}
+
+QString BuilderJob::buildTypeToString( BuilderJob::BuildType type )
+{
+    switch( type ) {
+        case Build:
+            return i18nc( "@info:status", "build" );
+        case Clean:
+            return i18nc( "@info:status", "clean" );
+        case Configure:
+            return i18nc( "@info:status", "configure" );
+        case Install:
+            return i18nc( "@info:status", "install" );
+        case Prune:
+            return i18nc( "@info:status", "prune" );
+        default:
+            return QString();
+    }
 }
 
 void BuilderJob::start()

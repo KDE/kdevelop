@@ -26,8 +26,13 @@ private:
 
 private slots:
     void initTestCase();
-    void testInitAndImport();
     void cleanupTestCase();
+
+    void init();
+    void cleanup();
+
+    void testInitAndImport();
+    void testLogFolder();
 
 private:
     CvsProxy* m_proxy;

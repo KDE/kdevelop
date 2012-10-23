@@ -70,7 +70,8 @@ ProjectSourcePage::~ProjectSourcePage()
 
 void ProjectSourcePage::sourceChanged(int index)
 {
-    m_locationWidget=0;
+    m_locationWidget = 0;
+    m_providerWidget = 0;
     QLayout* remoteWidgetLayout = m_ui->remoteWidget->layout();
     QLayoutItem *child;
     while ((child = remoteWidgetLayout->takeAt(0)) != 0) {
@@ -189,7 +190,9 @@ void ProjectSourcePage::reevaluateCorrection()
     emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
     
     QDir d(cwd.toLocalFile());
-    bool validToCheckout=correct && (!m_locationWidget || m_locationWidget->isCorrect()); //To checkout, if it exists, it should be an empty dir
+    bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
+                       (m_providerWidget && m_providerWidget->isCorrect()));
+    bool validToCheckout = correct && validWidget; //To checkout, if it exists, it should be an empty dir
     if(correct && cwd.isLocalFile() && d.exists()) {
         validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }

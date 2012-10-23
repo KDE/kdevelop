@@ -53,6 +53,8 @@ namespace DUChainUtils {
     * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain.
     * NOTE: The DUChain needs to be read or write locked when you call this.
     * @param proxyContext Whether the returned context should be a proxy context. When no proxy-context is found, a normal context is returned.
+    *
+    * FIXME: this should operate on IndexedString
     */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url, bool preferProxyContext = false);
   /**

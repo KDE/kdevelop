@@ -46,6 +46,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iselectioncontroller.h>
+#include <interfaces/context.h>
 #include <project/projectmodel.h>
 
 #include "core.h"
@@ -944,11 +946,28 @@ IDocument* DocumentController::activeDocument() const
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
-QString DocumentController::activeDocumentPath() const
+QString DocumentController::activeDocumentPath( QString target ) const
 {
+    if(target.size()) {
+        foreach(IProject* project, Core::self()->projectController()->projects()) {
+            if(project->name().startsWith(target, Qt::CaseInsensitive)) {
+                return project->folder().pathOrUrl() + "/.";
+            }
+        }
+    }
     IDocument* doc = activeDocument();
-    if(!doc)
+    if(!doc || target == "[selection]")
+    {
+        Context* selection = ICore::self()->selectionController()->currentSelection();
+        if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
+        {
+            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+            if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
+                ret += "/.";
+            return  ret;
+        }
         return QString();
+    }
     return doc->url().pathOrUrl();
 }
 
@@ -1022,6 +1041,8 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
     Sublime::AreaIndex* areaIndex = area->rootIndex();
 
+    QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->getTopViews();
+    
     if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
         areaIndex = area->indexOf(activeView);
 
@@ -1035,7 +1056,7 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     
     // Required because sublime sometimes doesn't update correctly when the area-index contents has been changed
     // (especially when views have been moved to other indices, through unsplit, split, etc.)
-    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews();
+    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews(topViews);
     
     return ret;
 }

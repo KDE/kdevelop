@@ -47,7 +47,6 @@
 #include <interfaces/iselectioncontroller.h>
 
 #include "projectmanagerview.h"
-#include "builditembuilderjob.h"
 
 using namespace KDevelop;
 
@@ -311,68 +310,91 @@ void ProjectManagerViewPlugin::closeProjects()
 
 void ProjectManagerViewPlugin::installItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Install, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Install, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::cleanItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Clean, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Clean, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Build, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Build, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPlugin::buildAllProjects()
+QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectAllProjects()
 {
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
         items << project->projectItem();
     }
-    ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Build, items ) );
+    return items;
 }
 
-void ProjectManagerViewPlugin::runBuilderJob( KDevelop::BuilderJob::BuildType t )
+void ProjectManagerViewPlugin::buildAllProjects()
+{
+    runBuilderJob( BuilderJob::Build, collectAllProjects() );
+}
+
+QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 {
     QList<ProjectBaseItem*> items;
-    if( !ICore::self()->projectController()->buildSetModel()->items().isEmpty() )
+    QList<BuildItem> buildItems = ICore::self()->projectController()->buildSetModel()->items();
+    if( !buildItems.isEmpty() )
     {
-        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, ICore::self()->projectController()->buildSetModel()->items() ) );
+        foreach( const BuildItem& buildItem, buildItems )
+        {
+            if( ProjectBaseItem* item = buildItem.findItem() )
+            {
+                items << item;
+            }
+        }
+
     } else
     {
         KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, ctx->items() ) );
+        items = ctx->items();
     }
+
+    return items;
+}
+
+void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, QList<ProjectBaseItem*> items )
+{
+    BuilderJob* builder = new BuilderJob;
+    builder->addItems( type, items );
+    builder->updateJobName();
+    ICore::self()->runController()->registerJob( builder );
 }
 
 void ProjectManagerViewPlugin::installProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Install );
+    runBuilderJob( KDevelop::BuilderJob::Install, collectItems() );
 }
 
 void ProjectManagerViewPlugin::pruneProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Prune );
+    runBuilderJob( KDevelop::BuilderJob::Prune, collectItems() );
 }
 
 void ProjectManagerViewPlugin::configureProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Configure );
+    runBuilderJob( KDevelop::BuilderJob::Configure, collectItems() );
 }
 
 void ProjectManagerViewPlugin::cleanProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Clean );
+    runBuilderJob( KDevelop::BuilderJob::Clean, collectItems() );
 }
 
 void ProjectManagerViewPlugin::buildProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Build );
+    runBuilderJob( KDevelop::BuilderJob::Build, collectItems() );
 }
 
 void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )

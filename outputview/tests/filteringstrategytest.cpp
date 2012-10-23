@@ -136,6 +136,10 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
     << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("krazy2-error-line")
     << buildKrazyErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("krazy2-error-line-two-colons")
+    << buildKrazyErrorLine2() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("krazy2-error-line-error-description")
+    << buildKrazyErrorLine3() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("krazy2-error-line-wo-line-info")
     << buildKrazyErrorLineNoLineInfo() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-line")
@@ -150,11 +154,16 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
 {
+    // Test that url's are extracted correctly as well
+    QString referencePath( PROJECTS_SOURCE_DIR"/onefileproject/main.cpp" ); 
+
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
     StaticAnalysisFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
+    QString extractedPath = item1.url.toLocalFile();
+    QVERIFY((item1.type != FilteredItem::ErrorItem) || ( extractedPath == referencePath));
     QVERIFY(item1.type == expectedError);
     item1 = testee.actionInLine(line);
     QVERIFY(item1.type == expectedAction);

@@ -23,6 +23,7 @@
 #include <QtCore/QString>
 #include "../languageexport.h"
 #include "indexedstring.h"
+#include "indexedducontext.h"
 
 namespace KDevelop
 {
@@ -33,6 +34,7 @@ class AbstractFunctionDeclarationData
 public:
   AbstractFunctionDeclarationData() : m_isVirtual(false), m_isInline(false), m_isExplicit(false) {
   }
+  IndexedDUContext m_functionContext;
   bool m_isVirtual: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
   bool m_isInline: 1;
   bool m_isExplicit: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
@@ -67,11 +69,11 @@ public:
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
   
-  ///Conveniency function, returns the context of type DUContext::Function that is attached to this declaration
-  ///This does not equal internalContext(), because internalContext() may point to the function body
-  ///May return zero if no function context is attached
+  ///Return the DUContext::Function type ducontext (the function parameter context) of this function
+  ///Same as internalContext if the function has no definition
   DUContext* internalFunctionContext() const;
-  
+  void setInternalFunctionContext(DUContext *context);
+
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
    * argument of the function, but the returned vector will only contain default-values for those
