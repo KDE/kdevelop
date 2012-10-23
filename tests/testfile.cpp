@@ -28,6 +28,9 @@
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 using namespace KDevelop;
 
@@ -91,6 +94,7 @@ void TestFile::parse (TopDUContext::Features features, int priority)
 {
     d->ready = false;
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
+    ICore::self()->languageController()->backgroundParser()->parseDocuments();
 }
 
 bool TestFile::waitForParsed(int timeout)
