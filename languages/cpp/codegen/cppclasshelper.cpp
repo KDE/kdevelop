@@ -23,8 +23,8 @@
 #include "cppclasshelper.h"
 #include <codecompletion/missingincludeitem.h>
 
-#include <language/codegen/templateclassassistant.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/codegen/codedescription.h>
 
 #include <KTemporaryFile>
 #include <QMessageBox>
