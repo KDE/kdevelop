@@ -77,7 +77,9 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->setUniformRowHeights( true );
     tree->setItemDelegate( new LaunchConfigurationModelDelegate() );
     tree->setColumnHidden(1, true);
-    tree->expandAll();
+    for(int row=0; row<model->rowCount(); row++) {
+        tree->setExpanded(model->index(row, 0), true);
+    }
     
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
     connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
