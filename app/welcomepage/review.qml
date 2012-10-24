@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1
 
 StandardBackground
 {
@@ -60,6 +61,8 @@ StandardBackground
                     }
                 }
             }
+            
+            Heading { text: i18n("Review Area") }
             
             Label {
                 width: parent.width

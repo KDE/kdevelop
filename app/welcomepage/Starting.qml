@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1
 import org.kdevelop.welcomepage 4.3
 
 StandardPage
@@ -61,6 +62,7 @@ StandardPage
 
     ListView {
         id: sessionsView
+        clip: true
         anchors {
             left: parent.left
             top: toolBar.bottom
@@ -88,8 +90,7 @@ StandardPage
 
         model: SessionsModel { id: sessions }
         
-        header: Label {
-            font.pointSize: theme.defaultFont.pointSize*1.5
+        header: Heading {
             text: i18n("Sessions:")
         }
     }

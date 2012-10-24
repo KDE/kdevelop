@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1
 
 StandardBackground
 {
@@ -56,6 +57,7 @@ StandardBackground
                     Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
                 }
             }
+            Heading { text: i18n("Debug Area") }
             Label {
                 width: parent.width
                 text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
