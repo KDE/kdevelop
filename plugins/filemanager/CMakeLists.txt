@@ -5,6 +5,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9516 )
 set(kdevfilemanager_PART_SRCS
     kdevfilemanagerplugin.cpp
     filemanager.cpp
+    bookmarkhandler.cpp
 )
 
 kde4_add_plugin(kdevfilemanager ${kdevfilemanager_PART_SRCS})
