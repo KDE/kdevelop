@@ -56,6 +56,7 @@ private slots:
     void revHistory();
     void testAnnotation();
     void testRemoveEmptyFolder();
+    void testRemoveEmptyFolderInFolder();
     void testRemoveUnindexedFile();
     void testRemoveFolderContainingUnversionedFiles();
 

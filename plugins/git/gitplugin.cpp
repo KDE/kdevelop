@@ -412,6 +412,19 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
     }
 }
 
+bool isEmptyDirStructure(const QDir &dir)
+{
+    foreach (const QFileInfo &i, dir.entryInfoList()) {
+        if (i.fileName() == "." || i.fileName() == "..") continue;
+        if (i.isDir()) {
+            if (!isEmptyDirStructure(QDir(i.filePath()))) return false;
+        } else if (i.isFile()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
     if (files.isEmpty())
@@ -421,7 +434,6 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 
     KUrl::List files_(files);
 
-    //removing empty folders manually, git doesn't do that
     QMutableListIterator<KUrl> i(files_);
     while (i.hasNext()) {
         KUrl file = i.next();
@@ -443,10 +455,11 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         }
 
         if (fileInfo.isDir()) {
-            QDir dir(file.toLocalFile());
-            if (dir.entryList(QDir::NoDotAndDotDot).isEmpty()) {
-                kDebug() << "empty folder, removing manually" << file;
+            if (isEmptyDirStructure(QDir(file.toLocalFile()))) {
+                //remove empty folders, git doesn't do that
+                kDebug() << "empty folder, removing" << file;
                 KIO::NetAccess::synchronousRun(KIO::trash(file), 0);
+                //we already deleted it, don't use git rm on it
                 i.remove();
             }
         }

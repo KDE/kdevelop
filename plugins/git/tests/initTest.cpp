@@ -380,6 +380,22 @@ void GitInitTest::testRemoveEmptyFolder()
     QVERIFY(!d.exists("emptydir"));
 }
 
+void GitInitTest::testRemoveEmptyFolderInFolder()
+{
+    repoInit();
+
+    QDir d(gitTest_BaseDir);
+    d.mkdir("dir");
+
+    QDir d2(gitTest_BaseDir+"dir");
+    d2.mkdir("emptydir");
+
+    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"dir/")));
+    if (j) VERIFYJOB(j);
+
+    QVERIFY(!d.exists("dir"));
+}
+
 void GitInitTest::testRemoveUnindexedFile()
 {
     repoInit();
