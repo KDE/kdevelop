@@ -49,6 +49,11 @@
 
 namespace KDevelop
 {
+    
+bool launchConfigGreaterThan(KDevelop::LaunchConfigurationType* a, KDevelop::LaunchConfigurationType* b)
+{
+    return a->name()>b->name();
+}
 
 //TODO: Maybe use KPageDialog instead, might make the model stuff easier and the default-size stuff as well
 LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(parent), currentPageChanged( false )
@@ -137,7 +142,9 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->setColumnWidth( 0, width );
 
     QMenu* m = new QMenu(this);
-    foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
+    QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
+    qSort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
+    foreach(LaunchConfigurationType* type, types)
     {
         connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
         QMenu* suggestionsMenu = type->launcherSuggestions();
@@ -159,6 +166,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         m->addSeparator();
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes()) {
         QAction* action = m->addAction(type->icon(), type->name());
+    foreach(LaunchConfigurationType* type, types) {
         action->setProperty("configtype", qVariantFromValue<QObject*>(type));
         connect(action, SIGNAL(triggered(bool)), SLOT(createEmptyLauncher()));
     }
