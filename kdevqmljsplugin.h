@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -26,11 +27,11 @@ class KDevQmlJsPlugin : public KDevelop::IPlugin, public KDevelop::ILanguageSupp
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::ILanguageSupport )
-    public:
-        explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
-        
-        virtual KDevelop::ParseJob* createParseJob(const KUrl& url);
-        virtual QString name() const;
+public:
+    explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
+
+    virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url);
+    virtual QString name() const;
 };
 
 #endif // KDEVQMLJSPLUGIN_H

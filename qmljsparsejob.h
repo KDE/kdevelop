@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -21,17 +22,14 @@
 
 #include <language/backgroundparser/parsejob.h>
 
-class KDevQmlJsPlugin;
-class ParseQmlJsJob : KDevelop::ParseJob
+class QmlJsParseJob : public KDevelop::ParseJob
 {
-    public:
-        ParseQmlJsJob(const KUrl& url, KDevQmlJsPlugin* lang);
-        
-        virtual void run();
-        
-    private:
-        KDevQmlJsPlugin* qmljs() { return m_lang; }
-        KDevQmlJsPlugin* m_lang;
+public:
+    QmlJsParseJob(const KDevelop::IndexedString& url,
+                  KDevelop::ILanguageSupport* languageSupport);
+
+protected:
+    virtual void run();
 };
 
 #endif // PARSEQMLJSJOB_H

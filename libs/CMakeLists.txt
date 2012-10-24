@@ -7,7 +7,7 @@ kde4_add_ui_files(uifiles_SRCS
 	utils/newclasswidget.ui
 )
 
-kde4_add_library(qtc-qmlsupport SHARED
+kde4_add_library(kdevqtc-qmlsupport SHARED
 	${uifiles_SRCS}
 	languageutils/componentversion.cpp
 	languageutils/fakemetaobject.cpp
@@ -115,4 +115,6 @@ kde4_add_library(qtc-qmlsupport SHARED
 # 	utils/unixutils.cpp
 # 	utils/wizard.cpp
 )
-target_link_libraries(qtc-qmlsupport ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+target_link_libraries(kdevqtc-qmlsupport ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+
+install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS} )

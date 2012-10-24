@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -16,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "parseqmljsjob.h"
+#include "qmljsparsejob.h"
 #include <language/backgroundparser/urlparselock.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchainlock.h>
@@ -35,95 +36,62 @@
 
 using namespace KDevelop;
 
-ParseQmlJsJob::ParseQmlJsJob(const KUrl& url, KDevQmlJsPlugin* lang)
-    : ParseJob(url)
-    , m_lang(lang)
+QmlJsParseJob::QmlJsParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
+: ParseJob(url, languageSupport)
 {}
 
-KDevelop::SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location)
+SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location)
 {
     return SimpleRange(location.startLine, location.startColumn, location.startLine, location.length);
 }
 
-void ParseQmlJsJob::run()
+void QmlJsParseJob::run()
 {
-    KDevelop::UrlParseLock urlLock(document());
-    if ( !(minimumFeatures() & TopDUContext::ForceUpdate) ) {
-        DUChainReadLocker lock;
-        static const IndexedString langString("qml/js");
-        foreach(const ParsingEnvironmentFilePointer &file, DUChain::self()->allEnvironmentFiles(document())) {
-            if (file->language() != langString) {
-                continue;
-            }
-            if (!file->needsUpdate() && file->featuresSatisfied(minimumFeatures())) {
-                kDebug() << "Already up to date" << document().str();
-                setDuChain(file->topContext());
-                if (qmljs() && qmljs()->codeHighlighting()
-                    && ICore::self()->languageController()->backgroundParser()->trackerForUrl(document()))
-                {
-                    lock.unlock();
-                    qmljs()->codeHighlighting()->highlightDUChain(duChain());
-                }
-                return;
-            }
-            break;
-        }
+    UrlParseLock urlLock(document());
+    static const IndexedString langString("qml/js");
+    if (abortRequested() || !isUpdateRequired(langString)) {
+        return;
     }
 
     kDebug() << "parsing" << document().str();
 
-    KDevelop::ProblemPointer p = readContents();
+    ProblemPointer p = readContents();
     if (p) {
         //TODO: associate problem with topducontext
         return abortJob();
     }
 
-    KUrl url = document().toUrl();
-    Q_ASSERT(url.isLocalFile() && "TODO: pull them if they're remote");
-    QString path(url.toLocalFile());
-
-    QmlJS::Document::MutablePtr doc = QmlJS::Document::create(path, QmlJS::Document::guessLanguageFromSuffix(path));
+    const QString url = document().str();
+    QmlJS::Document::MutablePtr doc = QmlJS::Document::create(url, QmlJS::Document::guessLanguageFromSuffix(url));
+    doc->setSource(contents().contents);
     // 2) parse
-    bool matched = doc->isParsedCorrectly();
+    const bool successfullyParsed = doc->parse();
 
     if (abortRequested() || ICore::self()->shuttingDown()) {
         return abortJob();
     }
 
-    KDevelop::ReferencedTopDUContext toUpdate;
+    ReferencedTopDUContext toUpdate;
     {
-        KDevelop::DUChainReadLocker duchainlock(KDevelop::DUChain::lock());
-        toUpdate = KDevelop::DUChainUtils::standardContextForUrl(document().toUrl());
+        DUChainReadLocker duchainlock(DUChain::lock());
+        toUpdate = DUChainUtils::standardContextForUrl(document().toUrl());
     }
 
-    KDevelop::TopDUContext::Features newFeatures = minimumFeatures();
-    if (toUpdate)
-        newFeatures = (KDevelop::TopDUContext::Features)(newFeatures | toUpdate->features());
-
-    //Remove update-flags like 'Recursive' or 'ForceUpdate'
-    newFeatures = static_cast<KDevelop::TopDUContext::Features>(newFeatures & KDevelop::TopDUContext::AllDeclarationsContextsUsesAndAST);
-
-    if (matched) {
-        if (abortRequested() || !qmljs() || !qmljs()->language()) {
+    if (successfullyParsed) {
+        if (abortRequested()) {
             return abortJob();
         }
 
-        QReadLocker parseLock(qmljs()->language()->parseLock());
+        QReadLocker parseLock(languageSupport()->language()->parseLock());
 
         DeclarationBuilder builder(doc);
-        KDevelop::ReferencedTopDUContext chain = builder.build(document(), doc->ast(), toUpdate);
+        ReferencedTopDUContext chain = builder.build(document(), doc->ast(), toUpdate);
 
         if (abortRequested()) {
             return abortJob();
         }
 
         setDuChain(chain);
-
-//         if ( newFeatures & TopDUContext::AllDeclarationsContextsAndUses )
-//         {
-//             UseBuilder useBuilder(doc);
-//             useBuilder.buildUses(ast);
-//         }
 
         if (abortRequested()) {
             return abortJob();
@@ -133,23 +101,19 @@ void ParseQmlJsJob::run()
             DUChainWriteLocker lock(DUChain::lock());
 
             foreach(const QmlJS::DiagnosticMessage& msg, doc->diagnosticMessages()) {
-                KDevelop::ProblemPointer p(new KDevelop::Problem);
+                ProblemPointer p(new Problem);
                 p->setDescription(msg.message);
                 p->setFinalLocation(DocumentRange(IndexedString(doc->fileName()), locationToSimpleRange(msg.loc)));
                 chain->addProblem(p);
             }
 
-            chain->setFeatures(newFeatures);
+            chain->setFeatures(minimumFeatures());
             ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
             file->setModificationRevision(contents().modification);
             DUChain::self()->updateContextEnvironment( chain->topContext(), file.data() );
         }
 
-        if (qmljs() && qmljs()->codeHighlighting()
-            && ICore::self()->languageController()->backgroundParser()->trackerForUrl(document()))
-        {
-            qmljs()->codeHighlighting()->highlightDUChain(chain);
-        }
+        highlightDUChain();
     } else {
         ReferencedTopDUContext top;
         DUChainWriteLocker lock;
@@ -170,7 +134,7 @@ void ParseQmlJsJob::run()
             DUChain::self()->addDocumentChain(top);
         }
         foreach(const QmlJS::DiagnosticMessage& msg, doc->diagnosticMessages()) {
-            KDevelop::ProblemPointer p(new KDevelop::Problem);
+            ProblemPointer p(new Problem);
             p->setDescription(msg.message);
             p->setFinalLocation(DocumentRange(IndexedString(doc->fileName()), locationToSimpleRange(msg.loc)));
             top->addProblem(p);

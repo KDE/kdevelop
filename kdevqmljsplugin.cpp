@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -20,17 +21,25 @@
 #include <KPluginFactory>
 #include <KAboutData>
 
+#include "qmljsparsejob.h"
+
 K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
-K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(KAboutData("kdevqmljsplugin","kdevqmljs", ki18n("QML/JS Support"), "0.1", ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
+    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), "0.1",
+    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
+
+using namespace KDevelop;
 
 KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-     : KDevelop::IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
-     , KDevelop::ILanguageSupport()
-{}
-
-KDevelop::ParseJob* KDevQmlJsPlugin::createParseJob(const KUrl& url)
+     : IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
+     , ILanguageSupport()
 {
-    return 0;
+    KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
+}
+
+ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
+{
+    return new QmlJsParseJob(url, this);
 }
 
 QString KDevQmlJsPlugin::name() const
