@@ -210,12 +210,11 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
     m_urls = urls;
     
     QDir dir=urlDir(urls);
-    bool modif = hasModifications(dotGitDirectory(urls.first()));
-    bool canApply = !modif && hasStashes(dir);
+    bool hasSt = hasStashes(dir);
     menu->addSeparator()->setText(i18n("Git Stashes"));
-    menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(canApply);
-    menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()))->setEnabled(modif);
-    menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(canApply);
+    menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(hasSt);
+    menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()));
+    menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(hasSt);
 }
 
 void GitPlugin::ctxPushStash()
