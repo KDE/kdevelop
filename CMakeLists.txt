@@ -15,6 +15,7 @@ add_definitions(-DQT_CREATOR) # :D
 add_definitions(-DQML_BUILD_STATIC_LIB=0 -DQMLJS_BUILD_DIR)
 
 add_subdirectory(libs)
+add_subdirectory(tests)
 
 kde4_add_plugin(kdev-qmljsplugin duchain/contextbuilder.cpp duchain/typebuilder.cpp duchain/declarationbuilder.cpp parseqmljsjob.cpp kdevqmljsplugin.cpp)
 target_link_libraries(kdev-qmljsplugin qtc-qmlsupport
