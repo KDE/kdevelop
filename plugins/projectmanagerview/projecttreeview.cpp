@@ -150,7 +150,11 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
         {
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
-            destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+            if (event->dropAction() == Qt::CopyAction) {
+                destItem->project()->projectFileManager()->copyFilesAndFolders(usefulItems, folder);
+            } else {
+                destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+            }
         }
         else if (destItem->target() && destItem->project()->buildSystemManager())
         {

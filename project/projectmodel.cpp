@@ -460,7 +460,7 @@ Qt::ItemFlags ProjectBaseItem::flags()
 
 Qt::DropActions ProjectModel::supportedDropActions() const
 {
-    return (Qt::DropActions)(Qt::MoveAction);
+    return (Qt::DropActions)(Qt::MoveAction | Qt::CopyAction);
 }
 
 void ProjectBaseItem::setFlags(Qt::ItemFlags flags)

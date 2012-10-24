@@ -51,6 +51,12 @@ bool KDEVPLATFORMPROJECT_EXPORT createFolder(const KUrl& folder);
  * @return whether it got renamed or not
  */
 bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname);
+
+/**
+ * Copies anything at @p source to @p target
+ * @return whether it got copied or not
+ */
+bool KDEVPLATFORMPROJECT_EXPORT copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target);
 }
 
 #endif // KDEVPROJECTHELPER_H

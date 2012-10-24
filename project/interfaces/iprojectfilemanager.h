@@ -132,6 +132,16 @@ public:
     virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent) = 0;
 
     /**
+     * Copy files and folders within a given project
+     *
+     * Copies the files or folders specified by @p items to @p newParent and
+     * modifies the underlying build system as needed
+     *
+     * Note: Do not attempt to copy subitems along with their parents
+     */
+    virtual bool copyFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent) = 0;
+
+    /**
      * Rename a file in the project
      *
      * Renames the file specified by @p oldFile to @p newFile
