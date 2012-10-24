@@ -587,7 +587,6 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
         d->stopWatcher(newParent);
 
         KUrl newUrl = newParent->url();
-        newUrl.addPath(item.fileName());
 
         success &= copyUrl(newParent->project(), item, newUrl);
         if ( success ) {
