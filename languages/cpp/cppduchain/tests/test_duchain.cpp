@@ -2441,7 +2441,7 @@ void TestDUChain::testUsingDeclarationInTemplate()
 
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<T>::i; };");
+  QByteArray method("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<Q>::i; };");
 
   LockedTopDUContext top = parse(method, DumpNone);
 
@@ -4532,9 +4532,7 @@ int main()\n\
   DeclarationTestData E_FuncA_testData;
   E_FuncA_testData.specializations << E_A_B_FuncA_A_A;
   E_FuncA_testData.instantiations << (QList<Declaration*>() << ClassA << ClassB << 0 << ClassA << ClassA)
-                                  << (QList<Declaration*>() << ClassC << ClassD << 0 << ClassA << ClassA)
-                                  << (QList<Declaration*>() << ClassA << ClassB << 0) //FIXME: technically correct?
-                                  << (QList<Declaration*>() << ClassC << ClassD << 0); //FIXME: technically correct?
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0 << ClassA << ClassA);
   E_FuncA_testData.instantiationsTestData << E_A_B_FuncA_A_A_testData
                                           << E_C_D_FuncA_A_A_testData
                                           << E_A_B_FuncA_testData
@@ -4882,7 +4880,7 @@ void TestDUChain::testTemplates2() {
 }
 
 void TestDUChain::testTemplatesRebind() {
-  QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; T::Value value; }; };");
+  QByteArray method("struct A {}; struct S {typedef A Value;} ; template<class TT> class Base { template<class T> struct rebind { typedef Base<T> other; }; typedef TT Type; }; template<class T> class Class { typedef Base<T>::rebind<T>::other::Type MemberType; MemberType member; Base<T>::template rebind<T>::other::Type member2; T::Value value; };");
 
   LockedTopDUContext top = parse(method, DumpNone);
 
@@ -4925,7 +4923,7 @@ void TestDUChain::testTemplatesRebind() {
 }
 
 void TestDUChain::testTemplatesRebind2() {
-  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { Test(); }; template<class T> class Class { typedef T::Value Value; T::Value value; typedef Test<Value> ValueClass; Test<const Value> ValueClass2;}; };");
+  QByteArray method("struct A {}; struct S {typedef A Value;} ;template<class T> class Test { Test(); }; template<class T> class Class { typedef typename T::Value Value; typename T::Value value; typedef Test<Value> ValueClass; Test<const Value> ValueClass2;};");
 
   LockedTopDUContext top = parse(method, DumpNone);
 
@@ -4956,9 +4954,9 @@ void TestDUChain::testTemplatesRebind2() {
 
   Declaration* member5Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass2"));
   QVERIFY(member5Decl);
-  QVERIFY(unAliasedType(member5Decl->abstractType()));
   AbstractType::Ptr type = unAliasedType(member5Decl->abstractType());
-  QCOMPARE(unAliasedType(member5Decl->abstractType())->toString(), QString("Test< S::Value >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
+  QVERIFY(type);
+  QCOMPARE(type->toString(), QString("Test< S::Value >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
 
   Declaration* member4Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass"));
   QVERIFY(member4Decl);
@@ -5888,12 +5886,13 @@ void TestDUChain::testBug269352()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=269352
   QByteArray code(
+    "class X {}; class Y {};\n"
     "template <typename> class A;\n"
     "template <typename, typename> struct B;\n"
-    "template <typename T1, typename T2>\n"
-    "struct B<T1, T2> : B<A<T1>, T2> {};\n"
+    "template <typename T1>\n"
+    "struct B<T1, Y> : B<A<T1>, X> {};\n"
     // crucial: same typename like class above above
-    "template <typename A> struct B<A, true> {};\n"
+    "template <typename A> struct B<A, X> {};\n"
   );
 
   LockedTopDUContext top = parse(code, DumpNone);
