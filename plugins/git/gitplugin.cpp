@@ -414,8 +414,7 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
 
 bool isEmptyDirStructure(const QDir &dir)
 {
-    foreach (const QFileInfo &i, dir.entryInfoList()) {
-        if (i.fileName() == "." || i.fileName() == "..") continue;
+    foreach (const QFileInfo &i, dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot)) {
         if (i.isDir()) {
             if (!isEmptyDirStructure(QDir(i.filePath()))) return false;
         } else if (i.isFile()) {
