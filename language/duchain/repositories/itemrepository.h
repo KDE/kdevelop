@@ -1435,7 +1435,7 @@ class ItemRepository : public AbstractItemRepository {
       }
 
       ENSURE_REACHABLE(useBucket);
-      Q_ASSERT(!bucketPtr->findIndex(request));
+      Q_ASSERT_X(!bucketPtr->findIndex(request), Q_FUNC_INFO, "found item in unexpected bucket, ensure your ItemRequest::equals method is correct. Note: For custom AbstractType's e.g. ensure you have a proper equals() override");
 
       unsigned short indexInBucket = bucketPtr->index(request, size);
 
