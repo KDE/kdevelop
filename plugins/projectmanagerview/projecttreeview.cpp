@@ -26,6 +26,7 @@
 #include <QtGui/QAbstractProxyModel>
 #include <QtCore/QDebug>
 #include <QtGui/QMouseEvent>
+#include <QApplication>
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
@@ -149,15 +150,36 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
         if (ProjectFolderItem *folder = destItem->folder())
         {
             KMenu dropMenu(this);
-            KAction *copy = new KAction(KIcon("edit-copy"), i18n("Copy Here"), &dropMenu);
-            dropMenu.addAction(copy);
-            KAction *move = new KAction(KIcon("go-jump"), i18n("Move Here"), &dropMenu);
+
+            QString seq = QKeySequence( Qt::ShiftModifier ).toString();
+            seq.chop(1); // chop superfluous '+'
+            QAction* move = new QAction(i18n( "&Move Here" ) + '\t' + seq, &dropMenu);
+            move->setIcon(KIcon("go-jump"));
             dropMenu.addAction(move);
+
+            seq = QKeySequence( Qt::ControlModifier ).toString();
+            seq.chop(1);
+            QAction* copy = new QAction(i18n( "&Copy Here" ) + '\t' + seq, &dropMenu);
+            copy->setIcon(KIcon("edit-copy"));
+            dropMenu.addAction(copy);
+
             dropMenu.addSeparator();
-            KAction *cancel = new KAction(KIcon("process-stop"), i18n("Cancel"), &dropMenu);
+
+            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            cancel->setIcon(KIcon("process-stop"));
             dropMenu.addAction(cancel);
 
-            QAction *executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            QAction *executedAction = 0;
+
+            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+            if (modifiers == Qt::ControlModifier) {
+                executedAction = copy;
+            } else if (modifiers == Qt::ShiftModifier) {
+                executedAction = move;
+            } else {
+                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            }
+
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
             if (executedAction == copy) {
@@ -173,13 +195,27 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
         else if (destItem->target() && destItem->project()->buildSystemManager())
         {
             KMenu dropMenu(this);
-            KAction *addToTarget = new KAction(KIcon("edit-link"), i18n("Add to Target"), &dropMenu);
+
+            QString seq = QKeySequence( Qt::ControlModifier ).toString();
+            seq.chop(1);
+            QAction* addToTarget = new QAction(i18n( "&Add to Target" ) + '\t' + seq, &dropMenu);
+            addToTarget->setIcon(KIcon("edit-link"));
             dropMenu.addAction(addToTarget);
+
             dropMenu.addSeparator();
-            KAction *cancel = new KAction(KIcon("process-stop"), i18n("Cancel"), &dropMenu);
+
+            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            cancel->setIcon(KIcon("process-stop"));
             dropMenu.addAction(cancel);
 
-            QAction *executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            QAction *executedAction = 0;
+
+            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+            if (modifiers == Qt::ControlModifier) {
+                executedAction = addToTarget;
+            } else {
+                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            }
             if (executedAction == addToTarget) {
                 QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
                 filterDroppedItems(usefulItems, destItem);
