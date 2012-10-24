@@ -95,12 +95,14 @@ void TestFile::parse(TopDUContext::Features features, int priority)
 {
     d->ready = false;
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
-    // optimize: we don't want to wait the usual timeout before parsing documents here
-    ICore::self()->languageController()->backgroundParser()->parseDocuments();
 }
 
 bool TestFile::waitForParsed(int timeout)
 {
+    if (!d->ready) {
+        // optimize: we don't want to wait the usual timeout before parsing documents here
+        ICore::self()->languageController()->backgroundParser()->parseDocuments();
+    }
     QTime t;
     t.start();
     while (!d->ready && t.elapsed() < timeout) {
