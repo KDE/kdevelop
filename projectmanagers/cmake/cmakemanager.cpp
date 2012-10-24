@@ -1386,7 +1386,7 @@ QString CMakeManager::name() const
     return "CMake";
 }
 
-KDevelop::ParseJob * CMakeManager::createParseJob(const KUrl &)
+KDevelop::ParseJob * CMakeManager::createParseJob(const IndexedString &/*url*/)
 {
     return 0;
 }

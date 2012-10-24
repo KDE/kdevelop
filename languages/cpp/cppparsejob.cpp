@@ -108,9 +108,9 @@ void CPPParseJob::setNeedUpdateEverything(bool need) {
   m_needUpdateEverything = need;
 }
 
-CPPParseJob::CPPParseJob( const KUrl &url,
+CPPParseJob::CPPParseJob( const IndexedString& url, ILanguageSupport* languageSupport,
                     PreprocessJob* parentPreprocessor )
-        : KDevelop::ParseJob( url ),
+        : KDevelop::ParseJob( url, languageSupport ),
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
