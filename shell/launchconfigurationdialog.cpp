@@ -145,7 +145,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     // Simplify menu structure to get rid of 1-entry levels
     while (m->actions().count() == 1) {
         QMenu* subMenu = m->actions().first()->menu();
-        if (subMenu) {
+        if (subMenu && subMenu->isEnabled()) {
             m = subMenu;
         } else {
             break;
