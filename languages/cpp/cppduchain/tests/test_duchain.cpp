@@ -5898,7 +5898,24 @@ void TestDUChain::testBug269352()
   LockedTopDUContext top = parse(code, DumpNone);
   QVERIFY(top);
   QVERIFY(top->problems().isEmpty());
-  // do not hang
+  Declaration *structB = top->localDeclarations()[3];
+  TemplateDeclaration *structBTemplate = dynamic_cast<TemplateDeclaration*>(structB);
+  QVERIFY(structBTemplate);
+  QEXPECT_FAIL("", "There should be zero instantiations, only the specializations", Continue);
+  QVERIFY(structBTemplate->instantiations().size() == 0);
+  //For now, at least there shouldn't be more than 1
+  QVERIFY(structBTemplate->instantiations().size() < 2);
+  QVERIFY(structBTemplate->specializationsSize() == 2);
+  Declaration *structBSpec = top->localDeclarations()[4];
+  TemplateDeclaration *structBSpecTemplate = dynamic_cast<TemplateDeclaration*>(structBSpec);
+  QVERIFY(structBSpecTemplate);
+  QVERIFY(structBSpecTemplate->instantiations().size() == 0);
+  QVERIFY(structBSpecTemplate->specializationsSize() == 0);
+  Declaration *structBSpec2 = top->localDeclarations()[5];
+  TemplateDeclaration *structBSpecTemplate2 = dynamic_cast<TemplateDeclaration*>(structBSpec2);
+  QVERIFY(structBSpecTemplate2);
+  QVERIFY(structBSpecTemplate2->instantiations().size() == 0);
+  QVERIFY(structBSpecTemplate2->specializationsSize() == 0);
 }
 
 void TestDUChain::testRenameClass()

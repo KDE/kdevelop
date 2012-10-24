@@ -449,10 +449,14 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
 
   if ( identifiedArgument && identifiedParameter )
   {
-    TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>( identifiedArgument->declaration( m_topContext.data() ) );
-    TemplateDeclaration* parameterTemplateDeclaration = dynamic_cast<TemplateDeclaration*>( identifiedParameter->declaration( m_topContext.data() ) );
+    Declaration* argumentDeclaration = identifiedArgument->declaration( m_topContext.data() );
+    Declaration* parameterDeclaration = identifiedParameter->declaration( m_topContext.data() );
+    TemplateDeclaration* argumentTemplateDeclaration = dynamic_cast<TemplateDeclaration*>( argumentDeclaration );
+    TemplateDeclaration* parameterTemplateDeclaration = dynamic_cast<TemplateDeclaration*>( parameterDeclaration );
     if ( !argumentTemplateDeclaration || !parameterTemplateDeclaration )
-      return 1;
+    {
+      return (int)(argumentDeclaration == parameterDeclaration);
+    }
 
     if ( argumentTemplateDeclaration->instantiatedFrom() == parameterTemplateDeclaration->instantiatedFrom() && argumentTemplateDeclaration->instantiatedFrom() )
     {

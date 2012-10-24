@@ -1172,7 +1172,10 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
 
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id.last(), pos);
+    ///We need to clear the template identifiers, or else it'll try to instantiate
+    Identifier searchId = id.last();
+    searchId.clearTemplateIdentifiers();
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
 
     foreach( Declaration* decl, declarations ) {
       if( decl->abstractType()) {

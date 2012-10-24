@@ -916,6 +916,9 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   if( m_instantiatedFrom && !forceLocal)
     return m_instantiatedFrom->instantiate( templateArguments, source );
 
+  if ( specializedFrom().data() && !forceLocal )
+    return dynamic_cast<TemplateDeclaration*>(specializedFrom().declaration())->instantiate(templateArguments, source);
+
   {
     QMutexLocker l(&instantiationsMutex);
     {
