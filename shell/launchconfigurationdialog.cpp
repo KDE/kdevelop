@@ -133,11 +133,11 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     QMenu* m = new QMenu(this);
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
     {
+        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
         QMenu* suggestionsMenu = type->launcherSuggestions();
         
         if(suggestionsMenu) {
             m->addMenu(suggestionsMenu);
-            connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
         }
     }
     // Simplify menu structure to get rid of 1-entry levels
@@ -153,7 +153,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         m->addSeparator();
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes()) {
         QAction* action = m->addAction(type->icon(), type->name());
-        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
         connect(action, SIGNAL(triggered(bool)), type, SLOT(createEmptyLauncher()));
     }
     addConfig->setMenu(m);
