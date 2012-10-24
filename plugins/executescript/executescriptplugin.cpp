@@ -99,20 +99,7 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     }
     KConfigGroup grp = cfg->config();
 
-    if( grp.readEntry(ExecuteScriptPlugin::isExecutableEntry, false ) )
-    {
-        script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
-    } else
-    {
-        QStringList prjitem = grp.readEntry( ExecuteScriptPlugin::projectTargetEntry, QStringList() );
-        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( model->itemFromIndex(
-        model->pathToIndex(prjitem) ) );
-        if( item && item->file() )
-        {
-            script = item->file()->url();
-        }
-    }
+    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
