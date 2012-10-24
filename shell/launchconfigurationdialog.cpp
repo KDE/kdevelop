@@ -74,6 +74,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->setSelectionMode( QAbstractItemView::SingleSelection );
     tree->setUniformRowHeights( true );
     tree->setItemDelegate( new LaunchConfigurationModelDelegate() );
+    tree->setColumnHidden(1, true);
+    tree->expandAll();
     
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
     connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
