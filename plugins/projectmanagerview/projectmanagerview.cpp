@@ -92,6 +92,17 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
 
 //END ProjectManagerFilterAction
 
+ProjectManagerViewItemContext::ProjectManagerViewItemContext(const QList< ProjectBaseItem* >& items, ProjectManagerView* view)
+    : ProjectItemContext(items), m_view(view)
+{
+}
+
+ProjectManagerView *ProjectManagerViewItemContext::view() const
+{
+    return m_view;
+}
+
+
 static const char* sessionConfigGroup = "ProjectManagerView";
 static const char* splitterStateConfigKey = "splitterState";
 static const char* filterConfigKey = "filter";
@@ -208,7 +219,7 @@ void ProjectManagerView::selectionChanged()
         selected << m_modelFilter->itemFromProxyIndex( idx );
     }
     selected.removeAll(0);
-    KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectItemContext( selected ) );
+    KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectManagerViewItemContext( selected, this ) );
 }
 
 void ProjectManagerView::updateSyncAction()
@@ -237,6 +248,22 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
             kDebug(9511) << "adding an unknown item";
     }
     return items;
+}
+
+void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
+{
+    QItemSelection selection;
+    foreach (ProjectBaseItem *item, items) {
+        QModelIndex indx = m_modelFilter->mapFromSource(item->model()->indexFromItem(item));
+        selection.append(QItemSelectionRange(indx, indx));
+        m_ui->projectTreeView->setCurrentIndex(indx);
+    }
+    m_ui->projectTreeView->selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
+}
+
+void ProjectManagerView::expandItem(ProjectBaseItem* item)
+{
+    m_ui->projectTreeView->expand( m_modelFilter->mapFromSource(item->model()->indexFromItem(item)));
 }
 
 void ProjectManagerView::locateCurrentDocument()

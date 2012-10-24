@@ -669,7 +669,31 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
     const QMimeData* data = qApp->clipboard()->mimeData();
     kDebug() << data->urls();
     KUrl::List urls(data->urls());
-    destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
+    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
+
+    if (success) {
+        ProjectManagerViewItemContext* viewCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
+        if (viewCtx) {
+
+            //expand target folder
+            viewCtx->view()->expandItem(destItem);
+
+            //and select new items
+            QList<ProjectBaseItem*> newItems;
+            foreach (const KUrl &url, urls) {
+                KUrl targetUrl = destItem->url();
+                targetUrl.addPath(url.fileName());
+                foreach (ProjectBaseItem *item, destItem->children()) {
+                    KUrl itemUrl = item->url();
+                    itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
+                    if (itemUrl == targetUrl) {
+                        newItems << item;
+                    }
+                }
+            }
+            viewCtx->view()->selectItems(newItems);
+        }
+    }
 }
 
 
