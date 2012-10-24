@@ -156,19 +156,27 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     // Simplify menu structure to get rid of 1-entry levels
     while (m->actions().count() == 1) {
         QMenu* subMenu = m->actions().first()->menu();
-        if (subMenu && subMenu->isEnabled()) {
+        if (subMenu && subMenu->isEnabled() && subMenu->actions().count()<5) {
             m = subMenu;
         } else {
             break;
         }
     }
-    if(!m->isEmpty())
-        m->addSeparator();
-    foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes()) {
-        QAction* action = m->addAction(type->icon(), type->name());
+    if(!m->isEmpty()) {
+        QAction* separator = new QAction(m);
+        separator->setSeparator(true);
+        m->insertAction(m->actions().first(), separator);
+    }
+    
     foreach(LaunchConfigurationType* type, types) {
+        QAction* action = new QAction(type->icon(), type->name(), m);
         action->setProperty("configtype", qVariantFromValue<QObject*>(type));
         connect(action, SIGNAL(triggered(bool)), SLOT(createEmptyLauncher()));
+        
+        if(!m->actions().isEmpty())
+            m->insertAction(m->actions().first(), action);
+        else
+            m->addAction(action);
     }
     addConfig->setMenu(m);
 
