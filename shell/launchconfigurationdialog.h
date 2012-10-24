@@ -143,6 +143,7 @@ class LaunchConfigurationDialog : public KDialog, public Ui::LaunchConfiguration
 Q_OBJECT
 public:
     LaunchConfigurationDialog(QWidget* parent = 0 );
+    virtual QSize sizeHint() const;
 
 private slots:
     void deleteConfiguration();

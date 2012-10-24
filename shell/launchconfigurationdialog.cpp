@@ -45,6 +45,7 @@
 #include <interfaces/ilaunchmode.h>
 #include <QLayout>
 #include <QMenu>
+#include <QLabel>
 
 namespace KDevelop
 {
@@ -59,6 +60,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     setupUi( mainWidget() );
     mainWidget()->layout()->setContentsMargins( 0, 0, 0, 0 );
+    splitter->setSizes(QList<int>() << 260 << 620);
     
     addConfig->setIcon( KIcon("list-add") );
     addConfig->setEnabled( false );
@@ -166,6 +168,12 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
+QSize LaunchConfigurationDialog::sizeHint() const
+{
+    QSize s = KDialog::sizeHint();
+    return s.expandedTo(QSize(880, 520));
+}
+
 void LaunchConfigurationDialog::createEmptyLauncher()
 {
     QAction* action = qobject_cast<QAction*>(sender());
@@ -182,6 +190,13 @@ void LaunchConfigurationDialog::createEmptyLauncher()
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
 {
+    for( int i = 1; i < stack->count(); i++ )
+    {
+        QWidget* w = stack->widget(i);
+        stack->removeWidget(w);
+        delete w;
+    }
+
     if( !deselected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
@@ -264,6 +279,11 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             addConfig->setEnabled( true );
             deleteConfig->setEnabled( false );
             stack->setCurrentIndex( 0 );
+            QLabel* l = new QLabel(i18n("<i>Select a configuration to edit from the left,<br>"
+                                        "or click the \"Add new\" button to add a new one.</i>"), stack);
+            l->setAlignment(Qt::AlignCenter);
+            stack->addWidget(l);
+            stack->setCurrentWidget(l);
         }
     } else 
     {
