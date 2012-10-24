@@ -132,7 +132,7 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
 
 QString ScriptAppConfigPage::title() const
 {
-    return i18n("Configure Native Application");
+    return i18n("Configure Script Application");
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > ScriptAppLauncher::configPages() const
@@ -142,7 +142,7 @@ QList< KDevelop::LaunchConfigurationPageFactory* > ScriptAppLauncher::configPage
 
 QString ScriptAppLauncher::description() const
 {
-    return "Executes Script Applications";
+    return i18n("Executes Script Applications");
 }
 
 QString ScriptAppLauncher::id()
