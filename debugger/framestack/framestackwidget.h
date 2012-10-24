@@ -27,7 +27,7 @@
 #include <QSplitter>
 
 #include "../debuggerexport.h"
-#include <interfaces/idebugsession.h>
+#include <debugger/interfaces/idebugsession.h>
 
 class QMenu;
 class QTreeView;
