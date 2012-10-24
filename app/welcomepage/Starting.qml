@@ -32,9 +32,7 @@ StandardPage
             right: parent.right
             margins: 25
         }
-        tools: Row {
-            spacing: 50
-            
+        tools: Flow {
             Link {
                 iconSource: "project-development-new-template"
                 text: i18n("New Project")

@@ -50,7 +50,7 @@ StandardBackground
             spacing: 30
             
             ToolBar {
-                tools: Row {
+                tools: Flow {
                     Link {
                         iconSource: "kompare"
                         text: i18n("Review a Patch")
