@@ -1538,6 +1538,17 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
     return true;
 }
 
+bool CMakeManager::copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* toFolder)
+{
+    IProject* project = toFolder->project();
+    foreach(const KUrl& url, items) {
+        if (!KDevelop::copyUrl(project, url, toFolder->url()))
+            return false;
+    }
+
+    return true;
+}
+
 bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
 {
     //First do CMakeLists changes

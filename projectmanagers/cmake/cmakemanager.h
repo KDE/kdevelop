@@ -96,6 +96,7 @@ public:
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
     virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
+    virtual bool copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* newParent);
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
