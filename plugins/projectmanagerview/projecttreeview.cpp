@@ -182,14 +182,39 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
+            QList<KUrl> urls;
+            foreach (ProjectBaseItem* i, usefulItems) {
+                urls << i->url();
+            }
+            bool success = false;
             if (executedAction == copy) {
-                QList<KUrl> urls;
-                foreach (ProjectBaseItem* i, usefulItems) {
-                    urls << i->url();
-                }
-                destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
+                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
             } else if (executedAction == move) {
-                destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+                success =~ destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+            }
+
+            if (success) {
+                QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+
+                //expand target folder
+                expand( proxy->mapFromSource(projectModel()->indexFromItem(folder)));
+
+                //and select new items
+                QItemSelection selection;
+                foreach (const KUrl &url, urls) {
+                    KUrl targetUrl = folder->url();
+                    targetUrl.addPath(url.fileName());
+                    foreach (ProjectBaseItem *item, folder->children()) {
+                        KUrl itemUrl = item->url();
+                        itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
+                        if (itemUrl == targetUrl) {
+                            QModelIndex indx = proxy->mapFromSource( projectModel()->indexFromItem( item ) );
+                            selection.append(QItemSelectionRange(indx, indx));
+                            setCurrentIndex(indx);
+                        }
+                    }
+                }
+                selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
             }
         }
         else if (destItem->target() && destItem->project()->buildSystemManager())
