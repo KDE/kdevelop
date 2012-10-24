@@ -17,36 +17,12 @@
       <string>Script</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Interpreter command:</string>
         </property>
        </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Script file:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="KUrlRequester" name="executablePath">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="clickMessage" stdset="0">
-           <string>Enter the absolute path to the script to run</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="interpreter">
@@ -80,6 +56,23 @@
         </item>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Script file:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KUrlRequester" name="executablePath">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="clickMessage">
+         <string>Enter the absolute path to the script to run</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -107,7 +100,7 @@
         <property name="placeholderText">
          <string/>
         </property>
-        <property name="clickMessage" stdset="0">
+        <property name="clickMessage">
          <string>Enter arguments to give to the executable</string>
         </property>
        </widget>
@@ -127,7 +120,7 @@
         <property name="toolTip">
          <string>Select a working directory for the executable</string>
         </property>
-        <property name="clickMessage" stdset="0">
+        <property name="clickMessage">
          <string>Select a working directory for the executable</string>
         </property>
        </widget>
@@ -201,20 +194,20 @@
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
       </property>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="remoteHostCheckbox">
+        <property name="text">
+         <string>Remote Host (ssh):</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="KLineEdit" name="remoteHost">
         <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="clickMessage" stdset="0">
+        <property name="clickMessage">
          <string>Enter a remote host (user@example.com)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="remoteHostCheckbox">
-        <property name="text">
-         <string>Remote Host (ssh):</string>
         </property>
        </widget>
       </item>
@@ -260,12 +253,14 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>interpreter</tabstop>
   <tabstop>executablePath</tabstop>
-  <tabstop>remoteHostCheckbox</tabstop>
-  <tabstop>remoteHost</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
+  <tabstop>outputFilteringMode</tabstop>
+  <tabstop>remoteHostCheckbox</tabstop>
+  <tabstop>remoteHost</tabstop>
  </tabstops>
  <resources/>
  <connections/>
