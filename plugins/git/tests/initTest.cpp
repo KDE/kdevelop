@@ -50,7 +50,7 @@ const QString gitTest_FileName3("bar");
 
 using namespace KDevelop;
 
-void GitInitTest::initTestCase()
+void GitInitTest::init()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
@@ -64,7 +64,7 @@ void GitInitTest::initTestCase()
     tmpdir.mkdir(gitTest_BaseDir2);
 }
 
-void GitInitTest::cleanupTestCase()
+void GitInitTest::cleanup()
 {
     delete m_plugin;
     TestCore::shutdown();
@@ -74,6 +74,7 @@ void GitInitTest::cleanupTestCase()
     if (QFileInfo(gitTest_BaseDir2).exists())
         KIO::NetAccess::del(KUrl(gitTest_BaseDir2), 0);
 }
+
 
 void GitInitTest::repoInit()
 {
@@ -265,16 +266,23 @@ void GitInitTest::testInit()
 
 void GitInitTest::testAdd()
 {
+    repoInit();
     addFiles();
 }
 
 void GitInitTest::testCommit()
 {
+    repoInit();
+    addFiles();
     commitFiles();
 }
 
 void GitInitTest::testBranching()
 {
+    repoInit();
+    addFiles();
+    commitFiles();
+
     VcsJob* j = m_plugin->branches(KUrl(gitTest_BaseDir));
     VERIFYJOB(j);
 
@@ -299,6 +307,10 @@ void GitInitTest::testBranching()
 
 void GitInitTest::revHistory()
 {
+    repoInit();
+    addFiles();
+    commitFiles();
+
     QList<DVcsEvent> commits = m_plugin->getAllCommits(gitTest_BaseDir);
     QVERIFY(!commits.isEmpty());
     QStringList logMessages;
@@ -325,6 +337,10 @@ void GitInitTest::revHistory()
 
 void GitInitTest::testAnnotation()
 {
+    repoInit();
+    addFiles();
+    commitFiles();
+
     // called after commitFiles
     QFile f(gitTest_BaseDir + gitTest_FileName);
     QVERIFY(f.open(QIODevice::Append));

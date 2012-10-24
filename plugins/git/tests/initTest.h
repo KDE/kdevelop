@@ -47,14 +47,14 @@ private:
 //     void checkoutTestData();
 
 private slots:
-    void initTestCase();
+    void init();
+    void cleanup();
     void testInit();
     void testAdd();
     void testCommit();
     void testBranching();
     void revHistory();
     void testAnnotation();
-    void cleanupTestCase();
 
 private:
     GitPlugin* m_plugin;
