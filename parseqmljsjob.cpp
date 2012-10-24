@@ -47,10 +47,6 @@ KDevelop::SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location)
 
 void ParseQmlJsJob::run()
 {
-    KUrl url = document().toUrl();
-    Q_ASSERT(url.isLocalFile() && "TODO: pull them if they're remote");
-    QString path(url.toLocalFile());
-    
     KDevelop::UrlParseLock urlLock(document());
     if ( !(minimumFeatures() & TopDUContext::ForceUpdate) ) {
         DUChainReadLocker lock;
@@ -81,6 +77,10 @@ void ParseQmlJsJob::run()
         //TODO: associate problem with topducontext
         return abortJob();
     }
+
+    KUrl url = document().toUrl();
+    Q_ASSERT(url.isLocalFile() && "TODO: pull them if they're remote");
+    QString path(url.toLocalFile());
 
     QmlJS::Document::MutablePtr doc = QmlJS::Document::create(path, QmlJS::Document::guessLanguageFromSuffix(path));
     // 2) parse
