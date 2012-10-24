@@ -810,6 +810,28 @@ void RunController::setDefaultLaunch(ILaunchConfiguration* l)
     }
 }
 
+bool launcherNameExists(const QString& name)
+{
+    foreach(ILaunchConfiguration* config, Core::self()->runControllerInternal()->launchConfigurations()) {
+        if(config->name()==name)
+            return true;
+    }
+    return false;
+}
+
+QString makeUnique(const QString& name)
+{
+    if(launcherNameExists(name)) {
+        for(int i=2; ; i++) {
+            QString proposed = QString("%1 (%2)").arg(name).arg(i);
+            if(!launcherNameExists(proposed)) {
+                return proposed;
+            }
+        }
+    }
+    return name;
+}
+
 ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type,
                                                                  const QPair<QString,QString>& launcher,
                                                                  IProject* project, const QString& name )
@@ -836,8 +858,10 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     QString cfgName = name;
     if( name.isEmpty() )
     {
-        cfgName = i18n("New %1 Configuration", type->name() );
+        cfgName = i18n("New %1 Launcher", type->name() );
+        cfgName = makeUnique(cfgName);
     }
+    
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, cfgName );
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
     launchConfigGroup.sync();
