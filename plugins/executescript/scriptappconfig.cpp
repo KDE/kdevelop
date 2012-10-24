@@ -220,7 +220,7 @@ QString ScriptAppConfigType::id() const
 
 KIcon ScriptAppConfigType::icon() const
 {
-    return KIcon("system-run");
+    return KIcon("application-x-executable-script");
 }
 
 bool ScriptAppConfigType::canLaunch(const KUrl& /*file*/) const

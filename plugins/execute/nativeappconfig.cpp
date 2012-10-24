@@ -366,7 +366,7 @@ QString NativeAppConfigType::id() const
 
 KIcon NativeAppConfigType::icon() const
 {
-    return KIcon("system-run");
+    return KIcon("application-x-executable");
 }
 
 bool NativeAppConfigType::canLaunch ( KDevelop::ProjectBaseItem* item ) const
