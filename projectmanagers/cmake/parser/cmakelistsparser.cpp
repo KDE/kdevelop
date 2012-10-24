@@ -157,7 +157,6 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
     }
 
     // Arguments.
-    unsigned long lastLine = cmListFileLexer_GetCurrentLine(lexer);
     int parenthesis=1;
     while((token = cmListFileLexer_Scan(lexer)))
     {
@@ -190,7 +189,6 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
             default:
                 return false;
         }
-        lastLine = cmListFileLexer_GetCurrentLine(lexer);
     }
 
     return false;
