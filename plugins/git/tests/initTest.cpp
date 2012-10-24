@@ -37,7 +37,7 @@
 #include "../gitplugin.h"
 
 #define VERIFYJOB(j) \
-QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded)
+do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
 
 const QString tempDir = QDir::tempPath();
 const QString gitTest_BaseDir(tempDir + "/kdevGit_testdir/");
@@ -366,6 +366,70 @@ void GitInitTest::testAnnotation()
     QCOMPARE(annotation.lineNumber(), 1);
     QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit3"));
 }
+
+void GitInitTest::testRemoveEmptyFolder()
+{
+    repoInit();
+
+    QDir d(gitTest_BaseDir);
+    d.mkdir("emptydir");
+
+    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"emptydir/")));
+    if (j) VERIFYJOB(j);
+
+    QVERIFY(!d.exists("emptydir"));
+}
+
+void GitInitTest::testRemoveUnindexedFile()
+{
+    repoInit();
+
+    QFile f(gitTest_BaseDir + gitTest_FileName);
+    QVERIFY(f.open(QIODevice::Append));
+    QTextStream input(&f);
+    input << "An appended line";
+    f.close();
+
+    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName)));
+    if (j) VERIFYJOB(j);
+
+    QVERIFY(!QFile::exists(gitTest_BaseDir + gitTest_FileName));
+}
+
+void GitInitTest::testRemoveFolderContainingUnversionedFiles()
+{
+    repoInit();
+
+    QDir d(gitTest_BaseDir);
+    d.mkdir("dir");
+
+    {
+        QFile f(gitTest_BaseDir + "dir/foo");
+        QVERIFY(f.open(QIODevice::Append));
+        QTextStream input(&f);
+        input << "An appended line";
+        f.close();
+    }
+    VcsJob* j = m_plugin->add(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"dir")));
+    VERIFYJOB(j);
+    j = m_plugin->commit("initial commit", KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir)));
+    VERIFYJOB(j);
+
+    {
+        QFile f(gitTest_BaseDir + "dir/bar");
+        QVERIFY(f.open(QIODevice::Append));
+        QTextStream input(&f);
+        input << "An appended line";
+        f.close();
+    }
+
+    j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir + "dir")));
+    if (j) VERIFYJOB(j);
+
+    QVERIFY(!QFile::exists(gitTest_BaseDir + "dir"));
+
+}
+
 
 void GitInitTest::removeTempDirs()
 {

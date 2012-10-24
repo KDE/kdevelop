@@ -42,6 +42,7 @@
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <KIO/CopyJob>
+#include <KIO/NetAccess>
 #include "gitclonejob.h"
 #include <interfaces/contextmenuextension.h>
 #include <QMenu>
@@ -415,17 +416,38 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
     if (files.isEmpty())
         return errorsFound(i18n("No files to remove"));
-    QDir dir = dotGitDirectory(files.front());
+    QDir dotGitDir = dotGitDirectory(files.front());
 
-    QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << files.front().toLocalFile(), KDevelop::OutputJob::Silent);
+
+    KUrl::List files_(files);
+
+    //removing empty folders manually, git doesn't do that
+    QMutableListIterator<KUrl> i(files_);
+    while (i.hasNext()) {
+        KUrl file = i.next();
+        QFileInfo fileInfo(file.toLocalFile());
+        if (fileInfo.isDir()) {
+            QDir dir(file.toLocalFile());
+            if (dir.entryList(QDir::NoDotAndDotDot).isEmpty()) {
+                kDebug() << "empty folder, removing manually" << file;
+                KIO::NetAccess::synchronousRun(KIO::trash(file), 0);
+                i.remove();
+            }
+        }
+    }
+
+    if (files_.isEmpty()) return 0;
+
+    QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << files_.front().toLocalFile(), KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
-        DVcsJob* job = new GitJob(dir, this);
+        DVcsJob* job = new GitJob(dotGitDir, this);
         job->setType(VcsJob::Remove);
         *job << "git" << "rm" << "-r";
-        *job << "--" << files;
+        *job << "--" << files_;
         return job;
     } else {
-        return new StandardJob(this, KIO::trash(files), KDevelop::OutputJob::Silent);
+        kDebug() << "non versioned file, removing manually";
+        return new StandardJob(this, KIO::trash(files_), KDevelop::OutputJob::Silent);
     }
 }
 

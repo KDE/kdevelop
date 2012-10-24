@@ -55,6 +55,9 @@ private slots:
     void testBranching();
     void revHistory();
     void testAnnotation();
+    void testRemoveEmptyFolder();
+    void testRemoveUnindexedFile();
+    void testRemoveFolderContainingUnversionedFiles();
 
 private:
     GitPlugin* m_plugin;
