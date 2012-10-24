@@ -35,6 +35,20 @@
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
+        
+QDebug operator<<(QDebug dbg, const CMakeFunctionDesc &func)
+{
+    dbg.nospace() << func.name << "(" << func.arguments << ")";
+
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const CMakeFunctionArgument &arg)
+{
+    dbg.nospace() << arg.value;
+
+    return dbg.space();
+}
 
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
@@ -3014,25 +3028,25 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(m_only) i++;
         if(func.arguments.count()>i) m_escapeQuotes = func.arguments[i].value=="ESCAPE_QUOTES";
     }
-    else if(stringType=="TOUPPER")
+    else if(stringType=="TOUPPER" && func.arguments.count()==3)
     {
         m_type=ToUpper;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
+        addOutputArgument(func.arguments[2]);
     }
-    else if(stringType=="TOLOWER")
+    else if(stringType=="TOLOWER" && func.arguments.count()==3)
     {
         m_type=ToLower;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
         addOutputArgument(func.arguments[2]);
     }
-    else if(stringType=="LENGTH")
+    else if(stringType=="LENGTH" && func.arguments.count()==3)
     {
         m_type=Length;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
-        
         addOutputArgument(func.arguments[2]);
     }
     else if(stringType=="SUBSTRING")
