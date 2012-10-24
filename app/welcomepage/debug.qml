@@ -51,8 +51,8 @@ StandardBackground
             
             ToolBar {
                 tools: Flow {
-                    Link { iconSource: "configure"; text: i18n("Configure a new Target"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
-                    Link { iconSource: "system-run"; text: i18n("Execute your program"); onClicked: kdev.retrieveMenuAction("run/run_execute").trigger() }
+                    Link { iconSource: "configure"; text: i18n("Configure a new Launcher"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
+                    Link { iconSource: "audio-input-line"; text: i18n("Attach to Process"); onClicked: kdev.retrieveMenuAction("run/debug_attach").trigger() }
                     Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
                 }
             }
