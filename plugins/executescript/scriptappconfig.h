@@ -81,7 +81,6 @@ public:
     virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
-    virtual void createEmptyLauncher(KDevelop::IProject* p=0);
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;

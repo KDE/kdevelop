@@ -174,7 +174,10 @@ void LaunchConfigurationDialog::createEmptyLauncher()
     LaunchConfigurationType* type = qobject_cast<LaunchConfigurationType*>(action->property("configtype").value<QObject*>());
     Q_ASSERT(type);
     
-    type->createEmptyLauncher(model->projectForIndex(tree->currentIndex()));
+    IProject* p = model->projectForIndex(tree->currentIndex());
+    QPair< QString, QString > launcher( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
+    ILaunchConfiguration* l = ICore::self()->runController()->createLaunchConfiguration(type, launcher, p);
+    addConfiguration(l);
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )

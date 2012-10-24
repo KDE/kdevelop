@@ -95,7 +95,6 @@ private:
 
 public slots:
     void suggestionTriggered();
-    virtual void createEmptyLauncher(KDevelop::IProject* p);
 };
 #endif
 
