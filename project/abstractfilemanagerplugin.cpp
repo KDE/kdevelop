@@ -565,6 +565,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
                 emit folderRemoved(item->folder());
                 ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
                 emit folderAdded(created);
+                d->eventuallyReadFolder(created);
             }
             oldParent->removeRow( item->row() );
         }
