@@ -31,7 +31,7 @@ NinjaJob::NinjaJob(const KUrl& dir, const QStringList& arguments, QObject* paren
     , m_item(0)
 {
     Q_ASSERT(!dir.isRelative() && !dir.isEmpty());
-    setToolTitle("Ninja");
+    setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
