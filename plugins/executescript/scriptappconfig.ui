@@ -42,7 +42,7 @@
            <bool>true</bool>
           </property>
           <property name="clickMessage" stdset="0">
-           <string/>
+           <string>Enter the absolute path to the script to run</string>
           </property>
          </widget>
         </item>
@@ -75,7 +75,7 @@
         </item>
         <item>
          <property name="text">
-          <string>php -e</string>
+          <string>php</string>
          </property>
         </item>
        </widget>

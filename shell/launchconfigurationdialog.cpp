@@ -190,13 +190,6 @@ void LaunchConfigurationDialog::createEmptyLauncher()
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
 {
-    for( int i = 1; i < stack->count(); i++ )
-    {
-        QWidget* w = stack->widget(i);
-        stack->removeWidget(w);
-        delete w;
-    }
-
     if( !deselected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
@@ -218,6 +211,14 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         }
     }
     updateNameLabel(0);
+    
+    for( int i = 1; i < stack->count(); i++ )
+    {
+        QWidget* w = stack->widget(i);
+        stack->removeWidget(w);
+        delete w;
+    }
+    
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
