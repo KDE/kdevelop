@@ -122,6 +122,8 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
         connect(session->frameStackModel(), SIGNAL(currentFrameChanged(int)),
                 SLOT(currentFrameChanged(int)));
         currentFrameChanged(session->frameStackModel()->currentFrame());
+        connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+                SLOT(sessionStateChanged(KDevelop::IDebugSession::DebuggerState)));
     }
 
     if (isVisible()) {
@@ -216,6 +218,12 @@ void FramestackWidget::copySelection()
 void FramestackWidget::selectAll()
 {
     m_frames->selectAll();
+}
+
+void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerState state)
+{
+    m_frames->setEnabled(state == IDebugSession::PausedState);
+    m_threads->setEnabled(state == IDebugSession::PausedState);
 }
 
 }

@@ -27,6 +27,7 @@
 #include <QSplitter>
 
 #include "../debuggerexport.h"
+#include <interfaces/idebugsession.h>
 
 class QMenu;
 class QTreeView;
@@ -34,7 +35,6 @@ class QModelIndex;
 class QListView;
 
 namespace KDevelop {
-class IDebugSession;
 class IDebugController;
 
 class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
@@ -59,6 +59,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
         void frameContextMenuRequested(const QPoint &pos);
         void copySelection();
         void selectAll();
+        void sessionStateChanged(KDevelop::IDebugSession::DebuggerState state);
 
     private:
         IDebugSession *m_session;
