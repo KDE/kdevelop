@@ -3726,17 +3726,14 @@ void CMakeAstTest::testStringGoodParse_data()
     
     foreach(const QString& acase, cases)
     {
-        QStringList splitted=acase.split(" ");
-        CMakeFunctionDesc func;
-        func.name = splitted.takeFirst();
-        func.addArguments(splitted);
+        QStringList splitted = acase.split(" ");
+        CMakeFunctionDesc func(splitted.takeFirst(), splitted);
         QTest::newRow( qPrintable(acase) ) << func;
     }
 }
 
 void CMakeAstTest::testStringBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("string");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -3745,6 +3742,8 @@ void CMakeAstTest::testStringBadParse()
 
 void CMakeAstTest::testStringBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "few arguments" ) << CMakeFunctionDesc("string", QString("TOLOWER PROJECT_PRODUCT_DIR").split(" "));
 }
 
 

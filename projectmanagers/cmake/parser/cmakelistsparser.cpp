@@ -195,6 +195,15 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
 
 }
 
+CMakeFunctionDesc::CMakeFunctionDesc(const QString& name, const QStringList& args)
+    : name(name)
+{
+    addArguments(args);
+}
+
+CMakeFunctionDesc::CMakeFunctionDesc()
+{}
+
 bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
 {
     if(other.arguments.count()!=arguments.count() || name!=other.name)
