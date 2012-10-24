@@ -156,7 +156,6 @@ private slots:
     void createEmptyLauncher();
 
 private:
-    void updateNameLabel( const QString& name, const QString& project, const QString& type );
     void saveConfig( const QModelIndex& );
     LaunchConfigurationsModel* model;
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;

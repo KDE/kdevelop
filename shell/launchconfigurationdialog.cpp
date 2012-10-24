@@ -202,7 +202,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             }
         }
     }
-    updateNameLabel("", "", "");
+    updateNameLabel(0);
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
@@ -323,24 +323,12 @@ void LaunchConfigurationDialog::updateNameLabel( LaunchConfiguration* l )
 {
     if( l )
     {
-        updateNameLabel( l->name(), l->project() ? l->project()->name() : "", l->type()->name() );
+        configName->setText( i18n("Editing %2: <b>%1</b>", l->name(), l->type()->name() ) );
     } else
     {
-        updateNameLabel( "", "", "" );
+        configName->clear();
     }
 }
-
-void LaunchConfigurationDialog::updateNameLabel( const QString& name, const QString& project, const QString& type )
-{
-    if( project.isEmpty() )
-    {
-        configName->setText( i18n("Launcher name: <b>%1</b> as %2", name, type ) );
-    } else
-    {
-        configName->setText( i18n("Launcher name: <b>%1</b> (%2) as %3", name, project, type ) );
-    }
-}
-
 
 void LaunchConfigurationDialog::createConfiguration()
 {

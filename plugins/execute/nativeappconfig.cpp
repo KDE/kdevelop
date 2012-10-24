@@ -350,7 +350,7 @@ NativeAppConfigType::~NativeAppConfigType()
 
 QString NativeAppConfigType::name() const
 {
-    return i18n("Native Application");
+    return i18n("Application");
 }
 
 
