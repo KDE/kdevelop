@@ -207,11 +207,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool needsFolderItems = true;
     bool needsRemoveAndRename = true;
     bool needsRemoveTargetFiles = true;
+    bool needsPaste = true;
 
     //needsCreateFile if there is one item and it's a folder or target
     needsCreateFile &= (items.count() == 1) && (items.first()->folder() || items.first()->target());
     //needsCreateFolder if there is one item and it's a folder
     needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
+    needsPaste = needsCreateFolder;
     
     foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item;
@@ -294,12 +296,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     {
         KAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
         copy->setShortcutContext(Qt::WidgetShortcut);
-        connect( copy, SIGNAL(triggered()), this, SLOT(copyFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, copy );
-
-        KAction* paste = KStandardAction::paste(this, SLOT(copyFromContextMenu()), this);
+    }
+    if (needsPaste) {
+        KAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), this);
         paste->setShortcutContext(Qt::WidgetShortcut);
-        connect( paste, SIGNAL(triggered()), this, SLOT(pasteFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, paste );
     }
 
@@ -664,9 +665,11 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
     if (ctx->items().count() != 1) return; //do nothing if multiple or none items are selected
     ProjectBaseItem* destItem = ctx->items().first();
+    Q_ASSERT(destItem->folder());
     const QMimeData* data = qApp->clipboard()->mimeData();
     kDebug() << data->urls();
-    destItem->project()->projectFileManager()->copyFilesAndFolders(KUrl::List(data->urls()), destItem);
+    KUrl::List urls(data->urls());
+    destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
 }
 
 

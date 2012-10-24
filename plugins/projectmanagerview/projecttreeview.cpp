@@ -151,7 +151,11 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
             if (event->dropAction() == Qt::CopyAction) {
-                destItem->project()->projectFileManager()->copyFilesAndFolders(usefulItems, folder);
+                QList<KUrl> urls;
+                foreach (ProjectBaseItem* i, usefulItems) {
+                    urls << i->url();
+                }
+                destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
             } else {
                 destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
             }

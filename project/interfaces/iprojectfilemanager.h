@@ -139,7 +139,7 @@ public:
      *
      * Note: Do not attempt to copy subitems along with their parents
      */
-    virtual bool copyFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent) = 0;
+    virtual bool copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* newParent) = 0;
 
     /**
      * Rename a file in the project
