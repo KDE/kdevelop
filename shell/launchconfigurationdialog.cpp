@@ -153,7 +153,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         m->addSeparator();
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes()) {
         QAction* action = m->addAction(type->icon(), type->name());
-        connect(action, SIGNAL(triggered(bool)), type, SLOT(createEmptyLauncher()));
+        action->setProperty("configtype", qVariantFromValue<QObject*>(type));
+        connect(action, SIGNAL(triggered(bool)), SLOT(createEmptyLauncher()));
     }
     addConfig->setMenu(m);
 
@@ -161,6 +162,17 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
 
     setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
+}
+
+void LaunchConfigurationDialog::createEmptyLauncher()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    Q_ASSERT(action);
+    
+    LaunchConfigurationType* type = qobject_cast<LaunchConfigurationType*>(action->property("configtype").value<QObject*>());
+    Q_ASSERT(type);
+    
+    type->createEmptyLauncher(model->projectForIndex(tree->currentIndex()));
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
@@ -185,7 +197,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             }
         }
     }
-    updateNameLabel("", "");
+    updateNameLabel("", "", "");
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
@@ -306,21 +318,21 @@ void LaunchConfigurationDialog::updateNameLabel( LaunchConfiguration* l )
 {
     if( l )
     {
-        updateNameLabel( l->name(), l->project() ? l->project()->name() : "" );
+        updateNameLabel( l->name(), l->project() ? l->project()->name() : "", l->type()->name() );
     } else
     {
-        updateNameLabel( "", "" );
+        updateNameLabel( "", "", "" );
     }
 }
 
-void LaunchConfigurationDialog::updateNameLabel( const QString& name, const QString& project )
+void LaunchConfigurationDialog::updateNameLabel( const QString& name, const QString& project, const QString& type )
 {
     if( project.isEmpty() )
     {
-        configName->setText( i18n("<b>%1</b>", name ) );
+        configName->setText( i18n("Launcher name: <b>%1</b> as %2", name, type ) );
     } else
     {
-        configName->setText( i18n("<b>%1</b> (%2)", name, project ) );
+        configName->setText( i18n("Launcher name: <b>%1</b> (%2) as %3", name, project, type ) );
     }
 }
 
@@ -764,6 +776,16 @@ void LaunchConfigurationsModel::addConfiguration(ILaunchConfiguration* l, const 
     {
         delete l;
         Q_ASSERT(false && "could not add the configuration");
+    }
+}
+
+IProject* LaunchConfigurationsModel::projectForIndex(const QModelIndex& idx)
+{
+    if(idx.parent().isValid()) {
+        return projectForIndex(idx.parent());
+    } else {
+        const ProjectItem* item = dynamic_cast<const ProjectItem*>(topItems[idx.row()]);
+        return item ? item->project : 0;
     }
 }
 

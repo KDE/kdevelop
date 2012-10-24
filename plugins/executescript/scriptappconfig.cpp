@@ -241,12 +241,10 @@ void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*con
 {
 }
 
-void ScriptAppConfigType::createEmptyLauncher()
+void ScriptAppConfigType::createEmptyLauncher(KDevelop::IProject* p)
 {
     QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
-    KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher);
-    KConfigGroup cfg = config->config();
-    cfg.sync();
+    KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p);
     
     emit signalAddLaunchConfiguration(config);
 }

@@ -92,9 +92,10 @@ public:
     QMenu* launcherSuggestions();
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
+
 public slots:
     void suggestionTriggered();
-    virtual void createEmptyLauncher();
+    virtual void createEmptyLauncher(KDevelop::IProject* p);
 };
 #endif
 

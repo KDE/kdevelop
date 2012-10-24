@@ -84,6 +84,7 @@ public:
     ILaunchMode* modeForIndex( const QModelIndex& idx ) const;
     QModelIndex indexForConfig( LaunchConfiguration* ) const;
     void addConfiguration(KDevelop::ILaunchConfiguration* launch, const QModelIndex& idx);
+    KDevelop::IProject* projectForIndex(const QModelIndex& idx);
     
 private:
     class TreeItem
@@ -152,8 +153,10 @@ private slots:
     void pageChanged();
     void saveConfig();
     void updateNameLabel( LaunchConfiguration* l );
+    void createEmptyLauncher();
+
 private:
-    void updateNameLabel( const QString&, const QString& );
+    void updateNameLabel( const QString& name, const QString& project, const QString& type );
     void saveConfig( const QModelIndex& );
     LaunchConfigurationsModel* model;
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;

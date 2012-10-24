@@ -32,6 +32,7 @@ class KConfigGroup;
 
 namespace KDevelop
 {
+class IProject;
 class ILaunchConfiguration;
 class ProjectBaseItem;
 class ILauncher;
@@ -139,7 +140,7 @@ public:
     virtual QMenu* launcherSuggestions() { return 0; }
     
 public slots:
-    virtual void createEmptyLauncher() = 0;
+    virtual void createEmptyLauncher(KDevelop::IProject* p) = 0;
 
 signals:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
