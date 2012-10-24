@@ -74,7 +74,7 @@ struct AbstractFileManagerPlugin::Private {
     AbstractFileManagerPlugin* q;
 
     /// @p forceRecursion if true, existing folders will be re-read no matter what
-    KJob* eventuallyReadFolder( ProjectFolderItem* item,
+    KIO::Job* eventuallyReadFolder( ProjectFolderItem* item,
                                 const bool forceRecursion = false );
     void addJobItems(FileManagerListJob* job,
                      ProjectFolderItem* baseItem,
@@ -115,7 +115,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
     delete m_watchers.take(project);
 }
 
-KJob* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item,
+KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item,
                                                                 const bool forceRecursion )
 {
     FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
@@ -560,15 +560,12 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
         if ( success ) {
             if (item->file()) {
                 emit fileRemoved(item->file());
-                ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );
-                emit fileAdded(created);
             } else {
                 emit folderRemoved(item->folder());
-                ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
-                emit folderAdded(created);
-                d->eventuallyReadFolder(created);
             }
             oldParent->removeRow( item->row() );
+            KIO::Job *readJob = d->eventuallyReadFolder(newParent);
+            KIO::NetAccess::synchronousRun(readJob, 0); //reload first level synchronously, deeper levels will run async (required for code that expects the new item to exist after this method finished)
         }
 
         d->continueWatcher(oldParent);
@@ -590,17 +587,8 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
 
         success &= copyUrl(newParent->project(), item, newUrl);
         if ( success ) {
-            KIO::StatJob* statJob = KIO::stat(newUrl, KIO::StatJob::SourceSide, 0);
-            if ( KIO::NetAccess::synchronousRun(statJob, 0) ) {
-                if ( !statJob->statResult().isDir() ) {
-                    ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );
-                    emit fileAdded(created);
-                } else {
-                    ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
-                    emit folderAdded(created);
-                    d->eventuallyReadFolder(created);
-                }
-            }
+            KIO::Job *readJob = d->eventuallyReadFolder(newParent);
+            KIO::NetAccess::synchronousRun(readJob, 0); //reload first level synchronously, deeper levels will run async (required for code that expects the new item to exist after this method finished)
         }
 
         d->continueWatcher(newParent);
