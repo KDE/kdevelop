@@ -20,8 +20,10 @@
 #include "projectmanagerviewplugin.h"
 
 #include <QtCore/QList>
+#include <QMimeData>
 #include <QtGui/QInputDialog>
 #include <QtGui/QApplication>
+#include <QClipboard>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -205,11 +207,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool needsFolderItems = true;
     bool needsRemoveAndRename = true;
     bool needsRemoveTargetFiles = true;
+    bool needsPaste = true;
 
     //needsCreateFile if there is one item and it's a folder or target
     needsCreateFile &= (items.count() == 1) && (items.first()->folder() || items.first()->target());
     //needsCreateFolder if there is one item and it's a folder
     needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
+    needsPaste = needsCreateFolder;
     
     foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item;
@@ -241,6 +245,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
+
     if ( needsBuildItems ) {
         KAction* action = new KAction( i18nc( "@action", "Build" ), this );
         action->setIcon(KIcon("run-build"));
@@ -258,6 +263,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
+
     if ( needsCloseProjects ) {
         KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
         close->setIcon(KIcon("project-development-close"));
@@ -286,6 +292,18 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( remove, SIGNAL(triggered()), this, SLOT(removeTargetFilesFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
+
+    {
+        KAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
+        copy->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, copy );
+    }
+    if (needsPaste) {
+        KAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), this);
+        paste->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, paste );
+    }
+
     return menuExt;
 }
 
@@ -624,6 +642,60 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
         }
     }
 }
+
+void ProjectManagerViewPlugin::copyFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    QList<QUrl> urls;
+    foreach (ProjectBaseItem* item, ctx->items()) {
+        if (item->folder() || item->file()) {
+            urls << item->url();
+        }
+    }
+    kDebug() << urls;
+    if (!urls.isEmpty()) {
+        QMimeData *data = new QMimeData;
+        data->setUrls(urls);
+        qApp->clipboard()->setMimeData(data);
+    }
+}
+
+void ProjectManagerViewPlugin::pasteFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    if (ctx->items().count() != 1) return; //do nothing if multiple or none items are selected
+    ProjectBaseItem* destItem = ctx->items().first();
+    Q_ASSERT(destItem->folder());
+    const QMimeData* data = qApp->clipboard()->mimeData();
+    kDebug() << data->urls();
+    KUrl::List urls(data->urls());
+    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
+
+    if (success) {
+        ProjectManagerViewItemContext* viewCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
+        if (viewCtx) {
+
+            //expand target folder
+            viewCtx->view()->expandItem(destItem);
+
+            //and select new items
+            QList<ProjectBaseItem*> newItems;
+            foreach (const KUrl &url, urls) {
+                KUrl targetUrl = destItem->url();
+                targetUrl.addPath(url.fileName());
+                foreach (ProjectBaseItem *item, destItem->children()) {
+                    KUrl itemUrl = item->url();
+                    itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
+                    if (itemUrl == targetUrl) {
+                        newItems << item;
+                    }
+                }
+            }
+            viewCtx->view()->selectItems(newItems);
+        }
+    }
+}
+
 
 #include "projectmanagerviewplugin.moc"
 

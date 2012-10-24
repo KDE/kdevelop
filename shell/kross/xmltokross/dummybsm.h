@@ -55,6 +55,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
         bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
         bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* >&, KDevelop::ProjectFolderItem* ) { return false; };
+        bool copyFilesAndFolders( const KUrl::List &, KDevelop::ProjectFolderItem* ) { return false; };
         QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const { return QHash<QString, QString>(); }
         Features features() const { return Targets | Files | Folders; }
         

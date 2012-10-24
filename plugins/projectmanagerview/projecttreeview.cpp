@@ -26,6 +26,7 @@
 #include <QtGui/QAbstractProxyModel>
 #include <QtCore/QDebug>
 #include <QtGui/QMouseEvent>
+#include <QApplication>
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
@@ -148,15 +149,103 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
     {
         if (ProjectFolderItem *folder = destItem->folder())
         {
+            KMenu dropMenu(this);
+
+            QString seq = QKeySequence( Qt::ShiftModifier ).toString();
+            seq.chop(1); // chop superfluous '+'
+            QAction* move = new QAction(i18n( "&Move Here" ) + '\t' + seq, &dropMenu);
+            move->setIcon(KIcon("go-jump"));
+            dropMenu.addAction(move);
+
+            seq = QKeySequence( Qt::ControlModifier ).toString();
+            seq.chop(1);
+            QAction* copy = new QAction(i18n( "&Copy Here" ) + '\t' + seq, &dropMenu);
+            copy->setIcon(KIcon("edit-copy"));
+            dropMenu.addAction(copy);
+
+            dropMenu.addSeparator();
+
+            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            cancel->setIcon(KIcon("process-stop"));
+            dropMenu.addAction(cancel);
+
+            QAction *executedAction = 0;
+
+            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+            if (modifiers == Qt::ControlModifier) {
+                executedAction = copy;
+            } else if (modifiers == Qt::ShiftModifier) {
+                executedAction = move;
+            } else {
+                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            }
+
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
-            destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+            QList<KUrl> urls;
+            foreach (ProjectBaseItem* i, usefulItems) {
+                urls << i->url();
+            }
+            bool success = false;
+            if (executedAction == copy) {
+                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
+            } else if (executedAction == move) {
+                success =~ destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
+            }
+
+            if (success) {
+                QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+
+                //expand target folder
+                expand( proxy->mapFromSource(projectModel()->indexFromItem(folder)));
+
+                //and select new items
+                QItemSelection selection;
+                foreach (const KUrl &url, urls) {
+                    KUrl targetUrl = folder->url();
+                    targetUrl.addPath(url.fileName());
+                    foreach (ProjectBaseItem *item, folder->children()) {
+                        KUrl itemUrl = item->url();
+                        itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
+                        if (itemUrl == targetUrl) {
+                            QModelIndex indx = proxy->mapFromSource( projectModel()->indexFromItem( item ) );
+                            selection.append(QItemSelectionRange(indx, indx));
+                            setCurrentIndex(indx);
+                        }
+                    }
+                }
+                selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
+            }
         }
         else if (destItem->target() && destItem->project()->buildSystemManager())
         {
-            QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
-            filterDroppedItems(usefulItems, destItem);
-            destItem->project()->buildSystemManager()->addFilesToTarget(usefulItems, destItem->target());
+            KMenu dropMenu(this);
+
+            QString seq = QKeySequence( Qt::ControlModifier ).toString();
+            seq.chop(1);
+            QAction* addToTarget = new QAction(i18n( "&Add to Target" ) + '\t' + seq, &dropMenu);
+            addToTarget->setIcon(KIcon("edit-link"));
+            dropMenu.addAction(addToTarget);
+
+            dropMenu.addSeparator();
+
+            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            cancel->setIcon(KIcon("process-stop"));
+            dropMenu.addAction(cancel);
+
+            QAction *executedAction = 0;
+
+            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+            if (modifiers == Qt::ControlModifier) {
+                executedAction = addToTarget;
+            } else {
+                executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            }
+            if (executedAction == addToTarget) {
+                QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
+                filterDroppedItems(usefulItems, destItem);
+                destItem->project()->buildSystemManager()->addFilesToTarget(usefulItems, destItem->target());
+            }
         }
     }
     event->accept();
