@@ -55,7 +55,8 @@ struct TestFile::TestFilePrivate {
     TestProject* project;
 };
 
-TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project, const QString& dir)
+TestFile::TestFile(const QString& contents, const QString& fileExtension,
+                   TestProject* project, const QString& dir)
 : d(new TestFilePrivate())
 {
     d->file.setSuffix('.' + fileExtension);
@@ -90,10 +91,11 @@ IndexedString TestFile::url() const
     return d->url;
 }
 
-void TestFile::parse (TopDUContext::Features features, int priority)
+void TestFile::parse(TopDUContext::Features features, int priority)
 {
     d->ready = false;
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
+    // optimize: we don't want to wait the usual timeout before parsing documents here
     ICore::self()->languageController()->backgroundParser()->parseDocuments();
 }
 

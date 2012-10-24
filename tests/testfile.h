@@ -54,10 +54,18 @@ public:
     /**
      * Create a temporary file from @p contents with file extension @p extension.
      *
+     * @param fileExtension the file extension without the dot.
      * @param project this file will be added to the project's fileset and gets
      *                removed from there on destruction
      * @param dir optional path to a (sub-) directory in which this file should
      *            be created. The directory must exist.
+     *
+     * Example:
+     * @code
+     * TestFile file("int i = 0;", "cpp");
+     * file.parse(...);
+     * file.topContext()->...
+     * @endcode
      */
     TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = 0,
              const QString& dir = QString());
