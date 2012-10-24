@@ -51,6 +51,7 @@
 #include <codegen/coderepresentation.h>
 #include <duchain/declaration.h>
 #include <duchain/use.h>
+#include <interfaces/icodehighlighting.h>
 
 
 using namespace KTextEditor;
@@ -65,10 +66,9 @@ class ParseJobPrivate
 {
 public:
 
-    ParseJobPrivate(const KUrl& url) :
-          document( IndexedString(url.pathOrUrl()) )
-        , backgroundParser( 0 )
-        , abortMutex(new QMutex)
+    ParseJobPrivate(const IndexedString& url_, ILanguageSupport* languageSupport_) :
+          url( url_ )
+        , languageSupport( languageSupport_ )
         , hasReadContents( false )
         , abortRequested( false )
         , aborted( false )
@@ -80,19 +80,17 @@ public:
 
     ~ParseJobPrivate()
     {
-        delete abortMutex;
     }
 
     ReferencedTopDUContext duContext;
 
-    KDevelop::IndexedString document;
-    QString errorMessage;
-    BackgroundParser* backgroundParser;
+    IndexedString url;
+    ILanguageSupport* languageSupport;
 
-    QMutex* abortMutex;
+    QMutex abortMutex;
 
     ParseJob::Contents contents;
-    
+
     bool hasReadContents : 1;
     volatile bool abortRequested : 1;
     bool aborted : 1;
@@ -106,19 +104,26 @@ public:
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
 };
 
-ParseJob::ParseJob( const KUrl &url )
+ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* languageSupport )
         : ThreadWeaver::JobSequence(),
-        d(new ParseJobPrivate(url))
+        d(new ParseJobPrivate(url, languageSupport))
 {}
 
 ParseJob::~ParseJob()
 {
     typedef QWeakPointer<QObject> QObjectPointer;
-    foreach(const QObjectPointer &p, d->notify)
-        if(p)
-            QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
+    foreach(const QObjectPointer &p, d->notify) {
+        if(p) {
+            QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->url), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
+        }
+    }
 
     delete d;
+}
+
+ILanguageSupport* ParseJob::languageSupport() const
+{
+    return d->languageSupport;
 }
 
 void ParseJob::setParsePriority(int priority)
@@ -148,7 +153,7 @@ void ParseJob::setSequentialProcessingFlags(SequentialProcessingFlags flags)
 
 IndexedString ParseJob::document() const
 {
-    return d->document;
+    return d->url;
 }
 
 bool ParseJob::success() const
@@ -167,22 +172,21 @@ bool ParseJob::hasStaticMinimumFeatures()
     return ::staticMinimumFeatures.size();
 }
 
-TopDUContext::Features ParseJob::staticMinimumFeatures(IndexedString url)
+TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
 {
     QMutexLocker lock(&minimumFeaturesMutex);
     TopDUContext::Features features = (TopDUContext::Features)0;
-    
+
     if(::staticMinimumFeatures.contains(url))
         foreach(const TopDUContext::Features &f, ::staticMinimumFeatures[url])
             features = (TopDUContext::Features)(features | f);
-    
+
     return features;
 }
 
 TopDUContext::Features ParseJob::minimumFeatures() const
 {
-    
-    return (TopDUContext::Features)(d->features | staticMinimumFeatures(d->document));
+    return (TopDUContext::Features)(d->features | staticMinimumFeatures(d->url));
 }
 
 void ParseJob::setDuChain(ReferencedTopDUContext duChain)
@@ -197,14 +201,14 @@ ReferencedTopDUContext ParseJob::duChain() const
 
 bool ParseJob::abortRequested() const
 {
-    QMutexLocker lock(d->abortMutex);
+    QMutexLocker lock(&d->abortMutex);
 
     return d->abortRequested;
 }
 
 void ParseJob::requestAbort()
 {
-    QMutexLocker lock(d->abortMutex);
+    QMutexLocker lock(&d->abortMutex);
 
     d->abortRequested = true;
 }
@@ -215,17 +219,17 @@ void ParseJob::abortJob()
     setFinished(true);
 }
 
-void ParseJob::setNotifyWhenReady(QList< QWeakPointer< QObject > > notify
+void ParseJob::setNotifyWhenReady(const QList< QWeakPointer< QObject > >& notify
 ) {
     d->notify = notify;
 }
 
-void ParseJob::setStaticMinimumFeatures(IndexedString url, TopDUContext::Features features) {
+void ParseJob::setStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features) {
     QMutexLocker lock(&minimumFeaturesMutex);
     ::staticMinimumFeatures[url].append(features);
 }
 
-void ParseJob::unsetStaticMinimumFeatures(IndexedString url, TopDUContext::Features features) {
+void ParseJob::unsetStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features) {
     QMutexLocker lock(&minimumFeaturesMutex);
     ::staticMinimumFeatures[url].removeOne(features);
     if(::staticMinimumFeatures[url].isEmpty())
@@ -236,7 +240,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
 {
     Q_ASSERT(!d->hasReadContents);
     d->hasReadContents = true;
-    
+
     QString localFile(document().toUrl().toLocalFile());
     QFileInfo fileInfo( localFile );
 
@@ -263,10 +267,10 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
             t->reset(); // Reset the tracker to the current revision
             Q_ASSERT(t->revisionAtLastReset());
-            
+
             d->contents.contents = t->textAtLastReset().toUtf8();
             d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
-            
+
             d->revision = t->acquireRevision(d->contents.modification.revision);
             hadTracker = true;
         }
@@ -308,15 +312,15 @@ KDevelop::ProblemPointer ParseJob::readContents()
                   break;
             }
             p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
-            
+
             kWarning( 9007 ) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
-            
+
             return p;
         }
-        
+
         d->contents.contents = file.readAll(); ///@todo Convert from local encoding to utf-8 if they don't match
         d->contents.modification = KDevelop::ModificationRevision(lastModified);
-        
+
         file.close();
     }
 
@@ -325,7 +329,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
     d->contents.contents.push_back((char)0);
     d->contents.contents.push_back((char)0);
     d->contents.contents.push_back((char)0);
-    
+
     return KDevelop::ProblemPointer();
 }
 
@@ -339,7 +343,7 @@ struct MovingRangeTranslator : public DUChainVisitor
 {
     MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source), target(_target), moving(_moving) {
     }
-    
+
     virtual void visit(DUContext* context) {
         translateRange(context);
         ///@todo Also map import-positions
@@ -352,11 +356,11 @@ struct MovingRangeTranslator : public DUChainVisitor
             context->changeUseRange(u, r);
         }
     }
-    
+
     virtual void visit(Declaration* declaration) {
         translateRange(declaration);
     }
-    
+
     void translateRange(DUChainBase* object)
     {
         RangeInRevision r = object->range();
@@ -385,36 +389,36 @@ struct MovingRangeTranslator : public DUChainVisitor
 void ParseJob::translateDUChainToRevision(TopDUContext* context)
 {
     qint64 targetRevision = d->contents.modification.revision;
-    
+
     if(targetRevision == -1)
     {
         kDebug() << "invalid target revision" << targetRevision;
         return;
     }
-    
+
     qint64 sourceRevision;
 
     {
         DUChainReadLocker duChainLock;
-        
+
         Q_ASSERT(context->parsingEnvironmentFile());
-        
+
         // Cannot map if there is no source revision
         sourceRevision = context->parsingEnvironmentFile()->modificationRevision().revision;
-        
+
         if(sourceRevision == -1)
         {
             kDebug() << "invalid source revision" << sourceRevision;
             return;
         }
     }
-    
+
     if(sourceRevision > targetRevision)
     {
         kDebug() << "for document" << document().str() << ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
         return;
     }
-    
+
     ForegroundLock lock;
     if(DocumentChangeTracker* t = d->tracker.data())
     {
@@ -429,18 +433,18 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
             kDebug() << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
             return;
         }
-        
+
         if(!t->holdingRevision(sourceRevision) || !t->holdingRevision(targetRevision))
         {
             kDebug() << "lost one of the translation revisions, not doing the map";
             return;
         }
-        
+
         // Perform translation
         MovingInterface* moving = t->documentMovingInterface();
-        
+
         DUChainWriteLocker wLock;
-        
+
         MovingRangeTranslator translator(sourceRevision, targetRevision, moving);
         context->visit(translator);
 
@@ -451,11 +455,53 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
             translator.translateRange(r);
             (*problem)->setRange(r);
         }
-        
+
         // Update the modification revision in the meta-data
         ModificationRevision modRev = context->parsingEnvironmentFile()->modificationRevision();
         modRev.revision = targetRevision;
         context->parsingEnvironmentFile()->setModificationRevision(modRev);
+    }
+}
+
+bool ParseJob::isUpdateRequired(const IndexedString& languageString)
+{
+    if (abortRequested()) {
+        return false;
+    }
+
+    if (minimumFeatures() & TopDUContext::ForceUpdate) {
+        return true;
+    }
+
+    DUChainReadLocker lock;
+    if (abortRequested()) {
+        return false;
+    }
+    foreach(const ParsingEnvironmentFilePointer &file, DUChain::self()->allEnvironmentFiles(document())) {
+        if (file->language() != languageString) {
+            continue;
+        }
+        if (!file->needsUpdate() && file->featuresSatisfied(minimumFeatures())) {
+            kDebug() << "Already up to date" << document().str();
+            setDuChain(file->topContext());
+            lock.unlock();
+            highlightDUChain();
+            return false;
+        }
+        break;
+    }
+    return !abortRequested();
+}
+
+void ParseJob::highlightDUChain()
+{
+    ENSURE_CHAIN_NOT_LOCKED
+    if (!d->languageSupport->codeHighlighting() || !duChain() || abortRequested()) {
+        // language doesn't support highlighting
+        return;
+    }
+    if (d->tracker) {
+        d->languageSupport->codeHighlighting()->highlightDUChain(duChain());
     }
 }
 

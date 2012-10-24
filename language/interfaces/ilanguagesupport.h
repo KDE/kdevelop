@@ -26,6 +26,7 @@
 
 namespace KDevelop {
 
+class IndexedString;
 class ParseJob;
 class ILanguage;
 class TopDUContext;
@@ -42,7 +43,7 @@ public:
     /** @return the name of the language.*/
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
-    virtual ParseJob *createParseJob(const KUrl &url) = 0;
+    virtual ParseJob *createParseJob(const IndexedString &url) = 0;
     /** @return the language for this support.*/
     virtual ILanguage *language();
     /**

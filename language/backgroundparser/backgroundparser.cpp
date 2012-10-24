@@ -244,7 +244,7 @@ public:
                 kWarning() << "language has no language support assigned:" << language->name();
                 continue;
             }
-            ParseJob* job = language->languageSupport()->createParseJob(kUrl);
+            ParseJob* job = language->languageSupport()->createParseJob(url);
             if (!job) {
                 continue; // Language part did not produce a valid ParseJob.
             }
