@@ -50,7 +50,8 @@ public:
     KUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
-        KUrl url( info.path, name );
+        KUrl url( info.path );
+        url.addPath( name );
         if( !QFile::exists( url.toLocalFile() ) ) {
             QDir( info.path.toLocalFile() ).mkdir( name );
         }
