@@ -148,23 +148,43 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
     {
         if (ProjectFolderItem *folder = destItem->folder())
         {
+            KMenu dropMenu(this);
+            KAction *copy = new KAction(KIcon("edit-copy"), i18n("Copy Here"), &dropMenu);
+            dropMenu.addAction(copy);
+            KAction *move = new KAction(KIcon("go-jump"), i18n("Move Here"), &dropMenu);
+            dropMenu.addAction(move);
+            dropMenu.addSeparator();
+            KAction *cancel = new KAction(KIcon("process-stop"), i18n("Cancel"), &dropMenu);
+            dropMenu.addAction(cancel);
+
+            QAction *executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
-            if (event->dropAction() == Qt::CopyAction) {
+            if (executedAction == copy) {
                 QList<KUrl> urls;
                 foreach (ProjectBaseItem* i, usefulItems) {
                     urls << i->url();
                 }
                 destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
-            } else {
+            } else if (executedAction == move) {
                 destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
             }
         }
         else if (destItem->target() && destItem->project()->buildSystemManager())
         {
-            QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
-            filterDroppedItems(usefulItems, destItem);
-            destItem->project()->buildSystemManager()->addFilesToTarget(usefulItems, destItem->target());
+            KMenu dropMenu(this);
+            KAction *addToTarget = new KAction(KIcon("edit-link"), i18n("Add to Target"), &dropMenu);
+            dropMenu.addAction(addToTarget);
+            dropMenu.addSeparator();
+            KAction *cancel = new KAction(KIcon("process-stop"), i18n("Cancel"), &dropMenu);
+            dropMenu.addAction(cancel);
+
+            QAction *executedAction = dropMenu.exec(this->mapToGlobal(event->pos()));
+            if (executedAction == addToTarget) {
+                QList<ProjectFileItem*> usefulItems = fileItemsWithin(selectionCtxt->items());
+                filterDroppedItems(usefulItems, destItem);
+                destItem->project()->buildSystemManager()->addFilesToTarget(usefulItems, destItem->target());
+            }
         }
     }
     event->accept();
