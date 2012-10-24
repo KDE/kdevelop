@@ -419,7 +419,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     {
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
         item->factory = it.key();
-        if (toolViewPresent(it.value(), mw->area())) {
+        if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
             // Disable item if the toolview is already present.
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }

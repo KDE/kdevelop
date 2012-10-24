@@ -64,6 +64,11 @@ public:
         return "org.kdevelop.FileManagerView";
     }
 
+    virtual bool allowMultiple() const
+    {
+        return true;
+    }
+
 private:
     KDevFileManagerPlugin *m_plugin;
 };
