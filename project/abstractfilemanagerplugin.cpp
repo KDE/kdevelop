@@ -31,6 +31,7 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDirWatch>
+#include <KIO/NetAccess>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -589,17 +590,19 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
         newUrl.addPath(item.fileName());
 
         success &= copyUrl(newParent->project(), item, newUrl);
-        /*
         if ( success ) {
-            if ( QFileInfo(item).isFile() ) {
-                ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );
-                emit fileAdded(created);
-            } else {
-                ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
-                emit folderAdded(created);
+            KIO::StatJob* statJob = KIO::stat(newUrl, KIO::StatJob::SourceSide, 0);
+            if ( KIO::NetAccess::synchronousRun(statJob, 0) ) {
+                if ( !statJob->statResult().isDir() ) {
+                    ProjectFileItem *created = createFileItem( newParent->project(), newUrl, newParent );
+                    emit fileAdded(created);
+                } else {
+                    ProjectFolderItem *created = createFolderItem( newParent->project(), newUrl, newParent );
+                    emit folderAdded(created);
+                    d->eventuallyReadFolder(created);
+                }
             }
         }
-        */
 
         d->continueWatcher(newParent);
         if ( !success )
