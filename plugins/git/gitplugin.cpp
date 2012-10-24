@@ -426,6 +426,22 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     while (i.hasNext()) {
         KUrl file = i.next();
         QFileInfo fileInfo(file.toLocalFile());
+
+        QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << file.toLocalFile(), KDevelop::OutputJob::Silent);
+        kDebug() << "other files" << otherStr;
+        if(!otherStr.isEmpty()) {
+            //remove files not under version control
+            KUrl::List otherFiles;
+            foreach(const QString &f, otherStr) {
+                otherFiles << KUrl::fromLocalFile(dotGitDir.path()+'/'+f);
+            }
+            if (fileInfo.isFile()) {
+                //if it's an unversioned file we are done, don't use git rm on it
+                i.remove();
+            }
+            KIO::NetAccess::synchronousRun(KIO::trash(otherFiles), 0);
+        }
+
         if (fileInfo.isDir()) {
             QDir dir(file.toLocalFile());
             if (dir.entryList(QDir::NoDotAndDotDot).isEmpty()) {
@@ -438,17 +454,11 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 
     if (files_.isEmpty()) return 0;
 
-    QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << files_.front().toLocalFile(), KDevelop::OutputJob::Silent);
-    if(otherStr.isEmpty()) {
-        DVcsJob* job = new GitJob(dotGitDir, this);
-        job->setType(VcsJob::Remove);
-        *job << "git" << "rm" << "-r";
-        *job << "--" << files_;
-        return job;
-    } else {
-        kDebug() << "non versioned file, removing manually";
-        return new StandardJob(this, KIO::trash(files_), KDevelop::OutputJob::Silent);
-    }
+    DVcsJob* job = new GitJob(dotGitDir, this);
+    job->setType(VcsJob::Remove);
+    *job << "git" << "rm" << "-r";
+    *job << "--" << files_;
+    return job;
 }
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
