@@ -168,7 +168,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
             this, SLOT(filterChanged(QString)));
     addAction(filterAction);
 
-    connect( m_ui->projectTreeView, SIGNAL(clicked(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(selectionChanged()) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)),
@@ -310,40 +309,10 @@ void ProjectManagerView::openUrl( const KUrl& url )
     IOpenWith::openFiles(KUrl::List() << url);
 }
 
-void ProjectManagerView::itemClicked(QModelIndex index)
-{
-    m_modelFilter->itemClicked(index);
-}
-
 void ProjectManagerView::filterChanged(const QString &text)
 {
     m_filterString = text;
     m_modelFilter->setFilterString(text);
-
-    // Auto-expand to fill the view
-    if(text.size())
-    {
-        int depth = 0;
-        while(m_ui->projectTreeView->sizeHint().height() < m_ui->projectTreeView->height() && depth < 10)
-        {
-            depth += 1;
-            m_ui->projectTreeView->expandToDepth(depth);
-        }
-    }
-    
-    // Auto-expand if only exactly one folder survived filtering
-//     QModelIndex parent = QModelIndex();
-//     while(m_modelFilter->rowCount(parent))
-//     {
-//         kDebug() << "row-count " << m_modelFilter->rowCount(parent);
-//         m_ui->projectTreeView->expand(parent);
-//         if(m_modelFilter->rowCount(parent) == 1)
-//         {
-//             parent = m_modelFilter->index(0, 0, parent);
-//         }else{
-//             break;
-//         }
-//     }
 }
 
 #include "projectmanagerview.moc"

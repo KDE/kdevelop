@@ -90,7 +90,6 @@ private slots:
     void updateSyncAction();
     void openUrl( const KUrl& );
     void filterChanged(const QString&);
-    void itemClicked( QModelIndex );
 
 private:
     QAction* m_syncAction;
