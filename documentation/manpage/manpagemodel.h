@@ -100,6 +100,4 @@ private:
     int m_nbSectionLoaded;
 };
 
-Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )
-
 #endif // MANPAGEMODEL_H

@@ -46,7 +46,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include "cppnewclass.h"
+//#include "cppnewclass.h"
 //#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
 #include "../cpputils.h"
@@ -140,54 +140,6 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
       }
     }
   }
-  if(ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context)) {
-    //Actions on project-items
-    if(projectContext->items().count() == 1) {
-      ProjectBaseItem* item = projectContext->items().first();
-      if(item->folder() || item->target()) {
-        //Allow creating a class in the folder
-        QAction* action = new QAction(i18n  ("Create Class"), this);
-        action->setData(QVariant::fromValue<ProjectBaseItem*>(item));
-//         action->setIcon(KIcon("edit-rename"));
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(executeNewClassAction()));
-
-        extension.addAction(ContextMenuExtension::FileGroup, action);
-      }
-    }
-  }
-}
-
-void SimpleRefactoring::executeNewClassAction() {
-  QAction* action = qobject_cast<QAction*>(sender());
-  if(action) {
-    ProjectBaseItem* item = action->data().value<ProjectBaseItem*>();
-    createNewClass(item);
-  }else{
-    kWarning() << "strange problem";
-  }
-}
-
-void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
-{
-  ///TODO: refactor and put this also into the CppNewClassAssistant
-  KUrl u;
-  
-  //Pick a folder to guess Possible URL for new class
-  if(item) {
-    ProjectFolderItem* ff = item->folder();
-    if(!ff && item->target())
-      ff=static_cast<ProjectBaseItem*>(item->parent())->folder();
-    
-    if(ff)
-      u=ff->url();
-  }
-  else
-    u = folderFromSelection();
-
-  //Run assistant
-  CppNewClass newClassGenerator(item);
-  CppNewClassAssistant newClassAssistant(qApp->activeWindow(), &newClassGenerator, u);
-  newClassAssistant.exec();
 }
 
 void SimpleRefactoring::executeMoveIntoSourceAction() {

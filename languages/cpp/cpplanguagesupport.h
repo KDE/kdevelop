@@ -90,6 +90,7 @@ public:
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KDevelop::IndexedString &url );
     //KDevelop::AstRepresentationPtr  generateAst(const KDevelop::TopDUContext & topContext);
+    KDevelop::ICreateClassHelper* createClassHelper() const;
     
     static CppLanguageSupport* self();
 
@@ -121,8 +122,6 @@ public slots:
 
     ///UI:
     void switchDefinitionDeclaration();
-
-    void newClassAssistant();
 
 private:
 

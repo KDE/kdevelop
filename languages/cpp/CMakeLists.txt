@@ -35,7 +35,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/implementationhelperitem.cpp
     codecompletion/missingincludemodel.cpp
 
-    codegen/cppnewclass.cpp
+#    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
@@ -44,6 +44,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/renameassistant.cpp
     codegen/renameaction.cpp
     codegen/unresolvedincludeassistant.cpp
+    codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
 

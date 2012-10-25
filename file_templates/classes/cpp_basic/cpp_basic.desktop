@@ -1,0 +1,15 @@
+[General]
+Name=Basic
+Comment=Basic C++ Class
+Category=Class/C++/Basic
+Files=Header,Implementation
+
+[Header]
+Name=Header
+File=class.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
