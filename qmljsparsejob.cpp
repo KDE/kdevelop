@@ -52,20 +52,20 @@ void QmlJsParseJob::run()
     ProblemPointer p = readContents();
     if (p) {
         //TODO: associate problem with topducontext
-        return abortJob();
+        return;
     }
 
     ParseSession session(document(), contents().contents);
     // 2) parse
-    const bool successfullyParsed = session.ast();
+    const bool successfullyParsed = session.isParsedCorrectly();
 
-    if (abortRequested() || ICore::self()->shuttingDown()) {
-        return abortJob();
+    if (abortRequested()) {
+        return;
     }
 
     ReferencedTopDUContext toUpdate;
     {
-        DUChainReadLocker duchainlock(DUChain::lock());
+        DUChainReadLocker lock;
         toUpdate = DUChainUtils::standardContextForUrl(document().toUrl());
     }
 
@@ -104,28 +104,21 @@ void QmlJsParseJob::run()
 
         highlightDUChain();
     } else {
-        ReferencedTopDUContext top;
         DUChainWriteLocker lock;
-        {
-            top = DUChain::self()->chainForDocument(document());
-        }
-        if (top) {
-            ///NOTE: if we clear the imported parent contexts, autocompletion of built-in PHP stuff won't work!
-            //top->clearImportedParentContexts();
-            top->parsingEnvironmentFile()->clearModificationRevisions();
-            top->clearProblems();
+        if (toUpdate) {
+            toUpdate->clearImportedParentContexts();
+            toUpdate->parsingEnvironmentFile()->clearModificationRevisions();
+            toUpdate->clearProblems();
         } else {
             ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
-            /// Indexed string for 'Php', identifies environment files from this language plugin
-            static const IndexedString qmljsLangString("qml/js");
-            file->setLanguage(qmljsLangString);
-            top = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-            DUChain::self()->addDocumentChain(top);
+            file->setLanguage(ParseSession::languageString());
+            toUpdate = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+            DUChain::self()->addDocumentChain(toUpdate);
         }
-        foreach(const ProblemPointer& p, session.problems()) {
-            top->addProblem(p);
+        foreach(const ProblemPointer& problem, session.problems()) {
+            toUpdate->addProblem(problem);
         }
-        setDuChain(top);
+        setDuChain(toUpdate);
         kDebug() << "===Failed===" << document().str();
     }
 }

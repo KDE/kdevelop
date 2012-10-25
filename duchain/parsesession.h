@@ -65,6 +65,11 @@ public:
     KDevelop::IndexedString url() const;
 
     /**
+     * @return true if the document was properly parsed, false otherwise.
+     */
+    bool isParsedCorrectly() const;
+
+    /**
      * @return the root AST node or null if it failed to parse.
      */
     QmlJS::AST::Node* ast() const;

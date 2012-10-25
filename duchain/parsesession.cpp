@@ -52,6 +52,11 @@ ParseSession::ParseSession(const IndexedString& url, const QString& contents)
     m_doc->parse();
 }
 
+bool ParseSession::isParsedCorrectly() const
+{
+    return m_doc->isParsedCorrectly();
+}
+
 QmlJS::AST::Node* ParseSession::ast() const
 {
     return m_doc->ast();
@@ -69,6 +74,7 @@ QVector<ProblemPointer> ParseSession::problems() const
         ProblemPointer p(new Problem);
         p->setDescription(msg.message);
         p->setFinalLocation(DocumentRange(m_url, locationToSimpleRange(msg.loc)));
+        problems << p;
     }
     return problems;
 }
