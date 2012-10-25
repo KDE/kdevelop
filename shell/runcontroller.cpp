@@ -906,7 +906,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                             hasLauncher = true;
                         }
                     }
-                    if( type->canLaunch(itm) && hasLauncher )
+                    if( hasLauncher && type->canLaunch(itm) )
                     {
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
                         KAction* act = new KAction( d->launchAsMapper );
