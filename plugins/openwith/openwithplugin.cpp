@@ -208,7 +208,7 @@ void OpenWithPlugin::open( const QString& storageid )
     if (storageid != config.readEntry(m_mimeType, QString())) {
         int setDefault = KMessageBox::questionYesNo(
             qApp->activeWindow(),
-            i18n("Do you want to open %1 files by default with %2?",
+            i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
                  m_mimeType, svc->name() ),
             i18n("Set as default?"),
             KStandardGuiItem::yes(), KStandardGuiItem::no(),
