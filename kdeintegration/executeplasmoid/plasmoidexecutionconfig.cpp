@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <project/projectmodel.h>
 
 KIcon PlasmoidExecutionConfig::icon() const
 {
@@ -140,18 +141,27 @@ KIcon PlasmoidExecutionConfigType::icon() const
     return KIcon("plasma");
 }
 
-bool PlasmoidExecutionConfigType::canLaunch(const KUrl& /*file*/) const
+//don't bother, nobody uses this interface
+bool PlasmoidExecutionConfigType::canLaunch(const KUrl& ) const
 {
     return false;
 }
 
-bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* /*item*/) const
+bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
+    KDevelop::ProjectFolderItem* folder = item->folder();
+    if(folder && folder->hasFileOrFolder("metadata.desktop")) {
+        KConfig cfg(KUrl(folder->url(), "metadata.desktop").toLocalFile(), KConfig::SimpleConfig);
+        KConfigGroup group(&cfg, "Desktop Entry");
+        return group.readEntry("ServiceTypes", QString()) == "Plasma/Applet";
+    }
     return false;
 }
 
-void PlasmoidExecutionConfigType::configureLaunchFromItem(KConfigGroup /*config*/, KDevelop::ProjectBaseItem* /*item*/) const
-{}
+void PlasmoidExecutionConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
+{
+    config.writeEntry("PlasmoidIdentifier", item->url().toLocalFile());
+}
 
 void PlasmoidExecutionConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
 {}
