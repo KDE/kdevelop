@@ -19,6 +19,8 @@
  */
 
 #include "openwithplugin.h"
+#include "openwithconfig.h"
+
 #include <QVariantList>
 
 #include <kpluginfactory.h>
@@ -95,6 +97,9 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
         KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
         if(!mimetype->is("inode/directory")){
             m_mimeType = mimetype->name();
+
+            configWidget = new OpenWithConfig( this, m_mimeType );
+
             KService::List apps = KMimeTypeTrader::self()->query( m_mimeType );
             KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( m_mimeType );
             KService::List parts = KMimeTypeTrader::self()->query( m_mimeType, "KParts/ReadOnlyPart" );
@@ -107,6 +112,13 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
 
             menu->addActions( actionsForServices( parts, preferredpart ) );
             menu->addActions( actionsForServices( apps, preferredapp ) );
+            menu->addSeparator();
+
+            KAction *act_config = new KAction( i18n( "Configure" ), this );
+            act_config->setIcon( SmallIcon( "configure" ) );
+            connect( act_config, SIGNAL( triggered() ), configWidget, SLOT( show() ) );
+
+            menu->addAction( act_config );
 
             KAction* openAction = new KAction( i18n( "Open" ), this );
             openAction->setIcon( SmallIcon( "document-open" ) );
@@ -125,6 +137,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
 QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& list, KService::Ptr pref )
 {
     QList<QAction*> openactions;
+
     foreach( KService::Ptr svc, list )
     {
         KAction* act = new KAction( svc->name(), this );
@@ -138,6 +151,8 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
         {
             openactions.append( act );
         }
+
+        configWidget->addItem( svc );
     }
     return openactions;
 }

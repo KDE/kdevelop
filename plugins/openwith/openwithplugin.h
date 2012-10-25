@@ -28,6 +28,8 @@
 #include "iopenwith.h"
 
 class QSignalMapper;
+class OpenWithConfig;
+
 namespace KDevelop
 {
 class ContextMenuExtension;
@@ -47,9 +49,11 @@ protected:
 private slots:
     void open( const QString& );
     void openDefault();
+
 private:
     QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref );
     QSignalMapper* m_actionMap;
+    OpenWithConfig* configWidget;
     KUrl::List m_urls;
     QString m_mimeType;
 };
