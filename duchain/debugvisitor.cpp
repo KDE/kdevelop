@@ -139,7 +139,7 @@ void DebugVisitor::startVisiting(QmlJS::AST::Node* node)
 
 bool DebugVisitor::preVisit(QmlJS::AST::Node* node)
 {
-    qout << indent() << stringForAstKind(node->kind) << " \"" << m_session->stringForLocation(node->firstSourceLocation()) << "\"" << endl;
+    printNode(node, Start);
     ++m_depth;
     return true;
 }
@@ -148,10 +148,23 @@ void DebugVisitor::postVisit(QmlJS::AST::Node* node)
 {
     Q_ASSERT(m_depth);
     --m_depth;
-    qout << indent() << stringForAstKind(node->kind) << " \"" << m_session->stringForLocation(node->lastSourceLocation()) << "\"" << endl;
+    printNode(node, End);
 }
 
 QString DebugVisitor::indent() const
 {
     return QString().fill(' ', m_depth * 2);
 }
+
+void DebugVisitor::printNode(QmlJS::AST::Node* node, Position position)
+{
+    const QmlJS::AST::SourceLocation start = node->firstSourceLocation();
+    const QmlJS::AST::SourceLocation end = node->lastSourceLocation();
+    const QmlJS::AST::SourceLocation location = position == Start ? start : end;
+
+    qout << indent() << stringForAstKind(node->kind)
+         << " [(" << start.startLine << ", " << start.startColumn << "), "
+         << "(" << end.startLine << ", " << (end.startColumn + end.length) << ")]"
+         << " \"" << m_session->symbolAt(location) << "\"" << endl;
+}
+

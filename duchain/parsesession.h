@@ -82,8 +82,7 @@ public:
     /**
      * @return the string representation of @p location.
      */
-    QString stringForLocation(const QmlJS::AST::SourceLocation& location) const;
-
+    QString symbolAt(const QmlJS::AST::SourceLocation& location) const;
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;

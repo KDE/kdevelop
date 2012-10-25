@@ -40,6 +40,11 @@ protected:
 
 private:
     QString indent() const;
+    enum Position {
+        Start,
+        End
+    };
+    void printNode(QmlJS::AST::Node* node, Position position);
 
     ParseSession* m_session;
     uint m_depth;

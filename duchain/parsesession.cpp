@@ -80,7 +80,7 @@ QList<ProblemPointer> ParseSession::problems() const
     return problems;
 }
 
-QString ParseSession::stringForLocation(const QmlJS::AST::SourceLocation& location) const
+QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
 {
     return m_doc->source().mid(location.offset, location.length);
 }
