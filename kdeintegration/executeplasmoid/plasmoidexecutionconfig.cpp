@@ -27,8 +27,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
+#include <project/builderjob.h>
 #include <language/duchain/indexedstring.h>
+#include <util/kdevstringhandler.h>
+#include <util/executecompositejob.h>
+#include <KMessageBox>
+#include <KParts/MainWindow>
 #include <QMenu>
 #include <QLineEdit>
 
@@ -37,22 +43,6 @@ Q_DECLARE_METATYPE(KDevelop::IProject*);
 KIcon PlasmoidExecutionConfig::icon() const
 {
     return KIcon("system-run");
-}
-
-void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* )
-{
-    bool b = blockSignals( true );
-    identifier->lineEdit()->setText(cfg.readEntry("PlasmoidIdentifier", ""));
-    blockSignals( b );
-    
-    QStringList arguments = cfg.readEntry("Arguments", QStringList());
-    int idxFormFactor = arguments.indexOf("--formfactor")+1;
-    if(idxFormFactor>0)
-        formFactor->setCurrentIndex(formFactor->findText(arguments[idxFormFactor]));
-    
-    int idxTheme = arguments.indexOf("--theme")+1;
-    if(idxTheme>0)
-        themes->setCurrentIndex(themes->findText(arguments[idxTheme]));
 }
 
 QStringList readProcess(QProcess* p)
@@ -90,6 +80,24 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     foreach(const QString& theme, readProcess(&pThemes)) {
         themes->addItem(theme);
     }
+    
+    addDependency->setIcon( KIcon("list-add") );
+    removeDependency->setIcon( KIcon("list-remove") );
+    moveDepUp->setIcon( KIcon("go-up") );
+    moveDepDown->setIcon( KIcon("go-down") );
+    browseProject->setIcon(KIcon("folder-document"));
+    
+    connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( moveDepDown, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( moveDepUp, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
+    connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
+    connect( removeDependency, SIGNAL(clicked(bool)), SLOT(removeDep()) );
+    connect( moveDepDown, SIGNAL(clicked(bool)), SLOT(moveDependencyDown()) );
+    connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
+    connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
+    connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
 }
 
 void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -104,6 +112,43 @@ void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::I
         args += themes->currentText();
     }
     cfg.writeEntry("Arguments", args);
+    
+    QVariantList deps;
+    for( int i = 0; i < dependencies->count(); i++ )
+    {
+        deps << dependencies->item( i )->data( Qt::UserRole );
+    }
+    cfg.writeEntry( "Dependencies", KDevelop::qvariantToString( QVariant( deps ) ) );
+}
+
+void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* )
+{
+    bool b = blockSignals( true );
+    identifier->lineEdit()->setText(cfg.readEntry("PlasmoidIdentifier", ""));
+    blockSignals( b );
+    
+    QStringList arguments = cfg.readEntry("Arguments", QStringList());
+    int idxFormFactor = arguments.indexOf("--formfactor")+1;
+    if(idxFormFactor>0)
+        formFactor->setCurrentIndex(formFactor->findText(arguments[idxFormFactor]));
+    
+    int idxTheme = arguments.indexOf("--theme")+1;
+    if(idxTheme>0)
+        themes->setCurrentIndex(themes->findText(arguments[idxTheme]));
+    
+    QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( "Dependencies", QString() ) ).toList();
+    QStringList strDeps;
+    foreach( const QVariant& dep, deps ) {
+        QStringList deplist = dep.toStringList();
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        KDevelop::ProjectBaseItem* pitem=model->itemFromIndex(model->pathToIndex(deplist));
+        KIcon icon;
+        if(pitem)
+            icon=KIcon(pitem->iconName());
+        
+        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
+        item->setData( Qt::UserRole, dep );
+    }
 }
 
 QString PlasmoidExecutionConfig::title() const
@@ -146,9 +191,43 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
     
     if( launchMode == "execute" )
     {
-        return new PlasmoidExecutionJob(m_plugin, cfg);
+        KJob* depsJob = dependencies(cfg);
+        QList<KJob*> jobs;
+        if(depsJob)
+            jobs << depsJob;
+        jobs << new PlasmoidExecutionJob(m_plugin, cfg);
+
+        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    return 0;
+}
+
+KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
+{
+    QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( "Dependencies", QString() ) ).toList();
+    if( !deps.isEmpty() ) 
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        QList<KDevelop::ProjectBaseItem*> items;
+        foreach( const QVariant& dep, deps )
+        {
+            KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex( dep.toStringList() ) );
+            if( item )
+            {
+                items << item;
+            }
+            else
+            {
+                KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                                   i18n("Couldn't resolve the dependency: %1", dep.toString()));
+            }
+        }
+        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        job->addItems( KDevelop::BuilderJob::Install, items );
+        job->updateJobName();
+        return job;
+    }
     return 0;
 }
 
@@ -267,4 +346,94 @@ void PlasmoidExecutionConfigType::suggestionTriggered()
     KConfigGroup cfg = config->config();
     cfg.writeEntry("PlasmoidIdentifier", relUrl);
     emit signalAddLaunchConfiguration(config);
+}
+
+///// slightly copied from nativeapp
+
+void PlasmoidExecutionConfig::depEdited(const QString& str)
+{
+    int pos;
+    QString tmp = str;
+    kDebug() << str << targetDependency->validator();
+    addDependency->setEnabled( !str.isEmpty()
+                               && ( !targetDependency->validator()
+                               || targetDependency->validator()->validate( tmp, pos ) == QValidator::Acceptable ) );
+}
+
+void PlasmoidExecutionConfig::addDep()
+{
+    KIcon icon;
+    KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
+    if(pitem)
+        icon= KIcon(pitem->iconName());
+
+    QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
+    item->setData( Qt::UserRole, targetDependency->itemPath() );
+    targetDependency->setText("");
+    addDependency->setEnabled( false );
+    dependencies->selectionModel()->clearSelection();
+    item->setSelected(true);
+//     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+}
+
+void PlasmoidExecutionConfig::removeDep()
+{
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        int row = dependencies->row( list.at(0) );
+        delete dependencies->takeItem( row );
+        
+        dependencies->selectionModel()->select( dependencies->model()->index( row - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
+}
+
+void PlasmoidExecutionConfig::checkActions(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED( deselected );
+    kDebug() << "checkActions";
+    if( !selected.indexes().isEmpty() )
+    {
+        kDebug() << "have selection";
+        Q_ASSERT( selected.indexes().count() == 1 );
+        QModelIndex idx = selected.indexes().at( 0 );
+        kDebug() << "index" << idx;
+        moveDepUp->setEnabled( idx.row() > 0 );
+        moveDepDown->setEnabled( idx.row() < dependencies->count() - 1 );
+        removeDependency->setEnabled( true );
+    } else 
+    {
+        removeDependency->setEnabled( false );
+        moveDepUp->setEnabled( false );
+        moveDepDown->setEnabled( false );
+    }
+}
+
+void PlasmoidExecutionConfig::moveDependencyDown()
+{
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        QListWidgetItem* item = list.at( 0 );
+        int row = dependencies->row( item );
+        dependencies->takeItem( row );
+        dependencies->insertItem( row+1, item );
+        dependencies->selectionModel()->select( dependencies->model()->index( row+1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
+}
+
+void PlasmoidExecutionConfig::moveDependencyUp()
+{
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        QListWidgetItem* item = list.at( 0 );
+        int row = dependencies->row( item );
+        dependencies->takeItem( row );
+        dependencies->insertItem( row-1, item );
+        dependencies->selectionModel()->select( dependencies->model()->index( row-1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
 }

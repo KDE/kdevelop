@@ -39,6 +39,14 @@ public:
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
     QString title() const;
     KIcon icon() const;
+
+private slots:
+    void addDep();
+    void removeDep();
+    void moveDependencyDown();
+    void moveDependencyUp();
+    void checkActions(const QItemSelection & selected, const QItemSelection& deselected);
+    void depEdited(const QString& newtext);
 };
 
 class PlasmoidLauncher : public KDevelop::ILauncher
@@ -50,6 +58,7 @@ public:
     virtual QString id();
     virtual QString name() const;
     virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
+    virtual KJob* dependencies(KDevelop::ILaunchConfiguration* cfg);
     virtual QStringList supportedModes() const;
 private:
     ExecutePlasmoidPlugin* m_plugin;
