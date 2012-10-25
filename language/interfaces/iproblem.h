@@ -149,6 +149,11 @@ public:
         Identity = 15
     };
     
+    /**
+     * Returns a string representation of this problem, useful for debugging.
+     */
+    QString toString() const;
+
     private:
     Problem(const Problem& other);
     Problem& operator=(const Problem& rhs);
@@ -160,5 +165,8 @@ public:
 typedef KSharedPtr<Problem> ProblemPointer;
 
 }
+
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Problem& problem);
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::ProblemPointer& problem);
 
 #endif // I_PROBLEM_H

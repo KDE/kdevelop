@@ -148,7 +148,27 @@ QString Problem::sourceString() const
     }
 }
 
-/*
-  public QSharedData
-  QSharedDataPointer<Data> d;
-*/
+QString Problem::toString() const
+{
+    return QString("%1:%2 in %3:[(%4,%5),(%6,%7)] %8")
+        .arg(description())
+        .arg(sourceString())
+        .arg(url().str())
+        .arg(range().start.line)
+        .arg(range().start.column)
+        .arg(range().end.line)
+        .arg(range().end.column)
+        .arg(explanation());
+}
+
+QDebug operator<<(QDebug s, const Problem& problem)
+{
+    s.nospace() << problem.toString();
+    return s.space();
+}
+
+QDebug operator<<(QDebug s, const ProblemPointer& problem)
+{
+    s.nospace() << problem->toString();
+    return s.space();
+}
