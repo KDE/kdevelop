@@ -412,7 +412,7 @@ void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
     for (int i = 0; i < d->levels; ++i)
     {
         QTreeView* view = d->views.at(i);
-        if (indexes.size() < i) {
+        if (indexes.size() <= i) {
             // select first item by default
             view->setCurrentIndex(view->model()->index(0, 0));
             continue;

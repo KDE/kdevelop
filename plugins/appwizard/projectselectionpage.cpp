@@ -304,21 +304,26 @@ void ProjectSelectionPage::loadFileClicked()
 
 void ProjectSelectionPage::templatesDownloaded (const KNS3::Entry::List& entries)
 {
+    if (entries.isEmpty()) {
+        return;
+    }
+
     m_templatesModel->refresh();
     bool updated = false;
-    
+
     foreach (const KNS3::Entry& entry, entries)
     {
         if (!entry.installedFiles().isEmpty())
         {
             updated = true;
             setCurrentTemplate(entry.installedFiles().first());
+            break;
         }
     }
-    
+
     if (!updated)
     {
-        m_listView->setCurrentIndex(m_templatesModel->index(0, 0));
+        m_listView->setCurrentIndex(QModelIndex());
     }
 }
 
