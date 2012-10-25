@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -20,11 +21,15 @@
 #define TYPEBUILDER_H
 
 #include <language/duchain/builders/abstracttypebuilder.h>
-#include <qmljs/parser/qmljsast_p.h>
+
 #include "contextbuilder.h"
 
-class TypeBuilder : public KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder>
+typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilderBase;
+
+class TypeBuilder : public TypeBuilderBase
 {
+public:
+    TypeBuilder();
 };
 
 #endif // TYPEBUILDER_H

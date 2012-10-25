@@ -17,7 +17,15 @@ add_definitions(-DQML_BUILD_STATIC_LIB=0 -DQMLJS_BUILD_DIR)
 add_subdirectory(libs)
 add_subdirectory(tests)
 
-kde4_add_plugin(kdevqmljslanguagesupport duchain/contextbuilder.cpp duchain/typebuilder.cpp duchain/declarationbuilder.cpp qmljsparsejob.cpp kdevqmljsplugin.cpp)
+kde4_add_plugin(kdevqmljslanguagesupport
+
+duchain/contextbuilder.cpp
+duchain/typebuilder.cpp
+duchain/declarationbuilder.cpp
+duchain/parsesession.cpp
+
+qmljsparsejob.cpp
+kdevqmljsplugin.cpp)
 target_link_libraries(kdevqmljslanguagesupport kdevqtc-qmlsupport
     ${QT_QTCORE_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_THREADWEAVER_LIBS})
 

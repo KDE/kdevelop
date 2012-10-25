@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -17,21 +18,19 @@
  *************************************************************************************/
 
 #include "declarationbuilder.h"
+#include "parsesession.h"
 
-KDevelop::SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location);
-
-DeclarationBuilder::DeclarationBuilder(QmlJS::Document::MutablePtr ptr)
-    : m_doc(ptr)
-{}
-
-KDevelop::RangeInRevision DeclarationBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
+DeclarationBuilder::DeclarationBuilder(ParseSession* session)
 {
-    return KDevelop::RangeInRevision::castFromSimpleRange(KDevelop::SimpleRange(
-        locationToSimpleRange(fromNode->lastSourceLocation()).end, 
-        locationToSimpleRange(toNode->firstSourceLocation()).start));
+    m_session = session;
 }
 
-KDevelop::QualifiedIdentifier DeclarationBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
+KDevelop::ReferencedTopDUContext DeclarationBuilder::build(const KDevelop::IndexedString& url,
+                                                           QmlJS::AST::Node* node,
+                                                           KDevelop::ReferencedTopDUContext updateContext)
 {
-    return KDevelop::QualifiedIdentifier(node->id.toString());
+    ///TODO: cleanup
+    Q_ASSERT(m_session->url() == url);
+    return DeclarationBuilderBase::build(url, node, updateContext);
 }
+

@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -18,3 +19,10 @@
 
 #include "typebuilder.h"
 
+using namespace KDevelop;
+
+TypeBuilder::TypeBuilder()
+: TypeBuilderBase()
+{
+
+}

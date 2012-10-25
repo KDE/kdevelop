@@ -1,5 +1,6 @@
 /*************************************************************************************
 *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+*  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
 *                                                                                   *
 *  This program is free software; you can redistribute it and/or                    *
 *  modify it under the terms of the GNU General Public License                      *
@@ -20,20 +21,19 @@
 #define DECLARATIONBUILDER_H
 
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
-#include <qmljs/parser/qmljsast_p.h>
-#include <qmljs/qmljsdocument.h>
+
 #include "typebuilder.h"
 
-class DeclarationBuilder : public KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder>
-{
-    public:
-        DeclarationBuilder(QmlJS::Document::MutablePtr ptr);
-        
-        virtual KDevelop::QualifiedIdentifier identifierForNode(QmlJS::AST::IdentifierPropertyName* node);
-        virtual KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode);
+typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
 
-    private:
-        QmlJS::Document::MutablePtr m_doc;
+class DeclarationBuilder : public DeclarationBuilderBase
+{
+public:
+    DeclarationBuilder(ParseSession* session);
+
+    virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
+                                                   QmlJS::AST::Node* node,
+                                                   KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext());
 };
 
 #endif // DECLARATIONBUILDER_H

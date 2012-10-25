@@ -36,6 +36,10 @@ public:
     void parseFile( const QString &fileName )
     {
         m_document = QmlJS::Document::create(fileName, QmlJS::Document::guessLanguageFromSuffix(fileName));
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly);
+        m_document->setSource(file.readAll());
+        runSession();
     }
 
     /// parse code directly
@@ -72,7 +76,7 @@ private:
         if (!m_document->diagnosticMessages().isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
             foreach(const QmlJS::DiagnosticMessage& msg, m_document->diagnosticMessages()) {
-                qerr << msg.message << msg.loc.startLine << msg.loc.startColumn << msg.loc.length << msg.loc.offset << msg.kind;
+                qerr << msg.message << " in [" << msg.loc.startLine << ", " << msg.loc.startColumn << "] (length:" << msg.loc.length << ", offset: " << msg.loc.offset << ", kind: " << msg.kind << ")" << endl;
             }
         } else {
             qout << "no problems encountered during parsing" << endl;

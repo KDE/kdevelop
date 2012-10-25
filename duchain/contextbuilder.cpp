@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -18,17 +19,47 @@
 
 #include "contextbuilder.h"
 
-KDevelop::DUContext* ContextBuilder::contextFromNode(QmlJS::AST::Node* node)
+#include "parsesession.h"
+
+using namespace KDevelop;
+
+ContextBuilder::ContextBuilder()
+: ContextBuilderBase()
+, m_session(0)
 {
-    return 0;
 }
 
-void ContextBuilder::setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context)
+RangeInRevision ContextBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
 {
+    return m_session->editorFindRange(fromNode, toNode);
+}
 
+QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
+{
+    return QualifiedIdentifier(node->id.toString());
+}
+
+void ContextBuilder::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
+{
+    m_astToContext.insert(node, context);
+}
+
+DUContext* ContextBuilder::contextFromNode(QmlJS::AST::Node* node)
+{
+    return m_astToContext.value(node, 0);
 }
 
 void ContextBuilder::startVisiting(QmlJS::AST::Node* node)
 {
+    QmlJS::AST::Node::accept(node, this);
+}
 
+TopDUContext* ContextBuilder::newTopContext(const RangeInRevision& range, ParsingEnvironmentFile* file)
+{
+    if (!file) {
+        file = new ParsingEnvironmentFile(m_session->url());
+        /// Indexed string for 'Php', identifies environment files from this language plugin
+        file->setLanguage(m_session->languageString());
+    }
+    return ContextBuilderBase::newTopContext(range, file);
 }

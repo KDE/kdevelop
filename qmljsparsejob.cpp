@@ -28,9 +28,9 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <qmljs/qmljsdocument.h>
-#include "kdevqmljsplugin.h"
+
 #include "duchain/declarationbuilder.h"
+#include "duchain/parsesession.h"
 
 #include <QReadLocker>
 
@@ -40,16 +40,10 @@ QmlJsParseJob::QmlJsParseJob(const IndexedString& url, ILanguageSupport* languag
 : ParseJob(url, languageSupport)
 {}
 
-SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location)
-{
-    return SimpleRange(location.startLine, location.startColumn, location.startLine, location.length);
-}
-
 void QmlJsParseJob::run()
 {
     UrlParseLock urlLock(document());
-    static const IndexedString langString("qml/js");
-    if (abortRequested() || !isUpdateRequired(langString)) {
+    if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
         return;
     }
 
@@ -61,11 +55,9 @@ void QmlJsParseJob::run()
         return abortJob();
     }
 
-    const QString url = document().str();
-    QmlJS::Document::MutablePtr doc = QmlJS::Document::create(url, QmlJS::Document::guessLanguageFromSuffix(url));
-    doc->setSource(contents().contents);
+    ParseSession session(document(), contents().contents);
     // 2) parse
-    const bool successfullyParsed = doc->parse();
+    const bool successfullyParsed = session.ast();
 
     if (abortRequested() || ICore::self()->shuttingDown()) {
         return abortJob();
@@ -84,8 +76,8 @@ void QmlJsParseJob::run()
 
         QReadLocker parseLock(languageSupport()->language()->parseLock());
 
-        DeclarationBuilder builder(doc);
-        ReferencedTopDUContext chain = builder.build(document(), doc->ast(), toUpdate);
+        DeclarationBuilder builder(&session);
+        ReferencedTopDUContext chain = builder.build(document(), session.ast(), toUpdate);
 
         if (abortRequested()) {
             return abortJob();
@@ -100,11 +92,8 @@ void QmlJsParseJob::run()
         {
             DUChainWriteLocker lock(DUChain::lock());
 
-            foreach(const QmlJS::DiagnosticMessage& msg, doc->diagnosticMessages()) {
-                ProblemPointer p(new Problem);
-                p->setDescription(msg.message);
-                p->setFinalLocation(DocumentRange(IndexedString(doc->fileName()), locationToSimpleRange(msg.loc)));
-                chain->addProblem(p);
+            foreach(const ProblemPointer& problem, session.problems()) {
+                chain->addProblem(problem);
             }
 
             chain->setFeatures(minimumFeatures());
@@ -133,10 +122,7 @@ void QmlJsParseJob::run()
             top = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
             DUChain::self()->addDocumentChain(top);
         }
-        foreach(const QmlJS::DiagnosticMessage& msg, doc->diagnosticMessages()) {
-            ProblemPointer p(new Problem);
-            p->setDescription(msg.message);
-            p->setFinalLocation(DocumentRange(IndexedString(doc->fileName()), locationToSimpleRange(msg.loc)));
+        foreach(const ProblemPointer& p, session.problems()) {
             top->addProblem(p);
         }
         setDuChain(top);

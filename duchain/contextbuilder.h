@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -21,14 +22,29 @@
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
 #include <qmljs/parser/qmljsast_p.h>
+#include <qmljs/qmljsdocument.h>
 
-class ContextBuilder : public KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName>
-                     , public QmlJS::AST::Visitor
+class ParseSession;
+
+typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName> ContextBuilderBase;
+
+class ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
 {
-    public:
-        virtual KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node);
-        virtual void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
-        virtual void startVisiting(QmlJS::AST::Node* node);
+public:
+    ContextBuilder();
+
+    virtual void startVisiting(QmlJS::AST::Node* node);
+    virtual KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode);
+    virtual KDevelop::QualifiedIdentifier identifierForNode(QmlJS::AST::IdentifierPropertyName* node);
+
+    virtual void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
+    virtual KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node);
+
+    virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
+                                                  KDevelop::ParsingEnvironmentFile* file = 0);
+protected:
+    ParseSession* m_session;
+    QHash<QmlJS::AST::Node*, KDevelop::DUContext*> m_astToContext;
 };
 
 #endif // CONTEXTBUILDER_H
