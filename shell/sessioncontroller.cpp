@@ -1048,6 +1048,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         
         ++row;
     }
+    model->sort(1);
 
     int cnsRow = row;
     if(!onlyRunning) {
