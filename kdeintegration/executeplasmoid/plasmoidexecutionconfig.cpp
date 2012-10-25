@@ -44,6 +44,28 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
     bool b = blockSignals( true );
     identifier->lineEdit()->setText(cfg.readEntry("PlasmoidIdentifier", ""));
     blockSignals( b );
+    
+    QStringList arguments = cfg.readEntry("Arguments", QStringList());
+    int idxFormFactor = arguments.indexOf("--formfactor")+1;
+    if(idxFormFactor>0)
+        formFactor->setCurrentIndex(formFactor->findText(arguments[idxFormFactor]));
+    
+    int idxTheme = arguments.indexOf("--theme")+1;
+    if(idxTheme>0)
+        themes->setCurrentIndex(themes->findText(arguments[idxTheme]));
+}
+
+QStringList readProcess(QProcess* p)
+{
+    QStringList ret;
+    while(!p->atEnd()) {
+        QByteArray line = p->readLine();
+        int nameEnd=line.indexOf(' ');
+        if(nameEnd>0) {
+            ret += line.left(nameEnd);
+        }
+    }
+    return ret;
 }
 
 PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
@@ -52,16 +74,21 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     setupUi(this);
     connect( identifier->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     
-    QProcess p;
-    p.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
-    p.waitForFinished();
+    QProcess pPlasmoids;
+    pPlasmoids.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
     
-    while(!p.atEnd()) {
-        QByteArray line = p.readLine();
-        int nameEnd=line.indexOf(' ');
-        if(nameEnd>0) {
-            identifier->addItem(line.left(nameEnd));
-        }
+    QProcess pThemes;
+    pThemes.start("plasmoidviewer", QStringList("--list-themes"), QIODevice::ReadOnly);
+    pThemes.waitForFinished();
+    pPlasmoids.waitForFinished();
+    
+    foreach(const QString& plasmoid, readProcess(&pPlasmoids)) {
+        identifier->addItem(plasmoid);
+    }
+    
+    themes->addItem(QString());
+    foreach(const QString& theme, readProcess(&pThemes)) {
+        themes->addItem(theme);
     }
 }
 
@@ -69,6 +96,14 @@ void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::I
 {
     Q_UNUSED( project );
     cfg.writeEntry("PlasmoidIdentifier", identifier->lineEdit()->text());
+    QStringList args;
+    args += "--formfactor";
+    args += formFactor->currentText();
+    if(!themes->currentText().isEmpty()) {
+        args += "--theme";
+        args += themes->currentText();
+    }
+    cfg.writeEntry("Arguments", args);
 }
 
 QString PlasmoidExecutionConfig::title() const

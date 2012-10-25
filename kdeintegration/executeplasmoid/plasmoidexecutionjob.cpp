@@ -49,6 +49,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, KDevelo
     : KDevelop::OutputJob( iface )
 {
     QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
+    QStringList arguments = cfg->config().readEntry("Arguments", QStringList());
     
     Q_ASSERT(!identifier.isEmpty());
     setToolTitle(i18n("Plasmoid Viewer"));
@@ -58,7 +59,6 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, KDevelo
     setObjectName("plasmoidviewer "+identifier);
     setDelegate(new KDevelop::OutputDelegate);
  
-    QStringList arguments;
     QString workingDirectory;
     
     QString possiblePath = KUrl(cfg->project()->folder(), identifier).toLocalFile();
@@ -66,7 +66,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, KDevelo
         workingDirectory = possiblePath;
     } else {
         workingDirectory = cfg->project()->folder().toLocalFile();
-        arguments = QStringList(identifier);
+        arguments += identifier;
     }
     
     m_process = new KDevelop::CommandExecutor("plasmoidviewer", this);
