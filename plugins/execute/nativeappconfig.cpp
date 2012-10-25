@@ -426,9 +426,11 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             QMenu* projectMenu = ret->addMenu(project->name());
             foreach(KDevelop::ProjectTargetItem* target, targets) {
                 if(target->executable()) {
-                    QString path = KDevelop::joinWithEscaping(model->pathFromIndex(target->index()),'/','\\');
-                    QAction* act = projectMenu->addAction(path);
-                    act->setData(path);
+                    QStringList path = model->pathFromIndex(target->index());
+                    QAction* act = projectMenu->addAction(QString());
+                    act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
+                    path.removeFirst();
+                    act->setText(path.join("/"));
                     connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
                 }
             }
