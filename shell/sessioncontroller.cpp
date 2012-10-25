@@ -942,6 +942,9 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged(QString)));
     
     setCaption(i18n("Pick a session"));
+    setButtons(KDialog::Ok | KDialog::Close);
+    button(Ok)->setText(i18n("Run"));
+    button(Ok)->setIcon(KIcon("media-playback-start"));
 }
 
 void SessionChooserDialog::filterTextChanged(QString)
