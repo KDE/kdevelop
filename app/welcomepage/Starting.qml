@@ -68,7 +68,9 @@ StandardPage
             top: toolBar.bottom
             bottom: parent.bottom
             right: parent.right
-            margins: 30
+            bottomMargin: 30
+            leftMargin: 30
+            rightMargin: 30
         }
 
         delegate: ListItem {
@@ -92,6 +94,7 @@ StandardPage
         
         header: Heading {
             text: i18n("Sessions:")
+            height: implicitHeight*2
         }
     }
 }
