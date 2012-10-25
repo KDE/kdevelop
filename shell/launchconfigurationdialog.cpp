@@ -712,7 +712,7 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
             LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( static_cast<TreeItem*>( index.internalPointer() ) );
             if( lmi )
             {
-                if( index.column() == 1 )
+                if( index.column() == 1 && index.data(Qt::EditRole)!=value)
                 {
                     LaunchConfiguration* l = configForIndex( index );
                     l->setLauncherForMode( lmi->mode->id(), value.toString() );
