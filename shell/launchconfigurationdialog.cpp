@@ -958,7 +958,7 @@ void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstract
 void LaunchConfigurationDialog::launchModeChanged(int item)
 {
     QModelIndex index = tree->currentIndex();
-    if(debugger->isVisible())
+    if(debugger->isVisible() && item>=0)
         tree->model()->setData(index.sibling(index.row(), 1), debugger->itemData(item), Qt::EditRole);
 }
 
