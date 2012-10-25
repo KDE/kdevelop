@@ -354,7 +354,6 @@ void PlasmoidExecutionConfig::depEdited(const QString& str)
 {
     int pos;
     QString tmp = str;
-    kDebug() << str << targetDependency->validator();
     addDependency->setEnabled( !str.isEmpty()
                                && ( !targetDependency->validator()
                                || targetDependency->validator()->validate( tmp, pos ) == QValidator::Acceptable ) );
