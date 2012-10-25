@@ -136,7 +136,11 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     QStringList program;
     if (!remoteHost.isEmpty()) {
         program << "ssh";
-        program << remoteHost;
+        QStringList parts = remoteHost.split(":");
+        program << parts.first();
+        if (parts.length() > 1) {
+            program << "-p "+parts.at(1);
+        }
     }
     program << interpreter;
     program << script.toLocalFile();
