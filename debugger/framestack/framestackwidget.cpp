@@ -222,8 +222,9 @@ void FramestackWidget::selectAll()
 
 void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerState state)
 {
-    m_frames->setEnabled(state == IDebugSession::PausedState);
-    m_threads->setEnabled(state == IDebugSession::PausedState);
+    bool enable = state == IDebugSession::PausedState || state == IDebugSession::StoppedState;
+    m_frames->setEnabled(enable);
+    m_threads->setEnabled(enable);
 }
 
 }
