@@ -1512,17 +1512,19 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
+
+  const IndexedString url(doc->url());
   DUChainWriteLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
-  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  QList<TopDUContext*> chains = chainsForDocument(url);
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
-    Q_ASSERT((standardContext->url().toUrl() == doc->url()));
+    Q_ASSERT((standardContext->url() == url));
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 
