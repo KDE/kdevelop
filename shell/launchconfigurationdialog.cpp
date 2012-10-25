@@ -275,12 +275,27 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                     LaunchConfigPagesContainer* tab = launcherWidgets.value( launcher );
                     if(!tab)
                     {
-                        tab = new LaunchConfigPagesContainer( launcher->configPages(), stack );
-                        connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
-                        stack->addWidget( tab );
+                        QList<KDevelop::LaunchConfigurationPageFactory*> pages = launcher->configPages();
+                        if(!pages.isEmpty()) {
+                            tab = new LaunchConfigPagesContainer( launcher->configPages(), stack );
+                            connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
+                            stack->addWidget( tab );
+                        }
                     }
-                    tab->setLaunchConfiguration( l );
-                    stack->setCurrentWidget( tab );
+                    
+                    if(tab) {
+                        tab->setLaunchConfiguration( l );
+                        stack->setCurrentWidget( tab );
+                    } else {
+                        QLabel* label = new QLabel(i18n("No configuration is needed for '%1'", launcher->name()), stack);
+                        label->setAlignment(Qt::AlignCenter);
+                        QFont font = label->font();
+                        font.setItalic(true);
+                        label->setFont(font);
+                        stack->addWidget(label);
+                        stack->setCurrentWidget(label);
+                    }
+                    
                     updateNameLabel( l );
                     addConfig->setEnabled( false );
                     deleteConfig->setEnabled( false );
@@ -294,11 +309,8 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             {
                 //TODO: enable removal button
                 LaunchConfigurationType* type = l->type();
-                LaunchConfigPagesContainer* tab;
-                if( typeWidgets.contains( type ) )
-                {
-                    tab = typeWidgets.value( type );
-                } else
+                LaunchConfigPagesContainer* tab = typeWidgets.value( type );
+                if( !tab )
                 {
                     tab = new LaunchConfigPagesContainer( type->configPages(), stack );
                     connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
