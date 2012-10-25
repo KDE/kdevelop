@@ -92,6 +92,15 @@ public:
             return QVariant();
         }
     }
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const
+    {
+        Qt::ItemFlags ret = KSelectionProxyModel::flags(index);
+        if (filterBehavior() == KSelectionProxyModel::SubTreesWithoutRoots && hasChildren(index)) {
+            // we want to select child items
+            ret &= ~Qt::ItemIsSelectable;
+        }
+        return ret;
+    }
 };
 
 using namespace KDevelop;
