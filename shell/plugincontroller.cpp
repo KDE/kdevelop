@@ -463,7 +463,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         else
         {
             kWarning() << "Loading plugin '" << pluginId
-                << "' failed, KPluginLoader reported error: '" << endl <<
+                << "' failed, KServiceTypeTrader reported error: '" << endl <<
                 str_error << "'";
         }
     }
