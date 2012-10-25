@@ -52,11 +52,10 @@ K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
 K_EXPORT_PLUGIN(KDevOpenWithFactory(KAboutData("kdevopenwith","kdevopenwith", ki18n("Open With"), "0.1", ki18n("Open files with external applications."), KAboutData::License_GPL)))
 
 
-OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& ) 
+OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( KDevOpenWithFactory::componentData(), parent ),
     m_actionMap( 0 )
 {
-//    setXMLFile( "kdevopenwithui.rc" );
     KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
 }
 
@@ -64,97 +63,92 @@ OpenWithPlugin::~OpenWithPlugin()
 {
 }
 
-KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::Context* context )
+KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::Context* context )
 {
-    if( m_actionMap )
-    {
-        delete m_actionMap;
-        m_actionMap = 0;
-    }
-    m_urls = QList<KUrl>();
+    m_urls.clear();
+    m_actionMap.reset();
+    m_services.clear();
+
     FileContext* filectx = dynamic_cast<FileContext*>( context );
     ProjectItemContext* projctx = dynamic_cast<ProjectItemContext*>( context );
-    if( filectx && filectx->urls().count() > 0 )
-    {
+    if ( filectx && filectx->urls().count() > 0 ) {
         m_urls = filectx->urls();
-    } else if ( projctx && projctx->items().count() > 0 )
-    {
-        foreach( ProjectBaseItem* item, projctx->items() )
-        {
-            if( item->file() )
-            {
+    } else if ( projctx && projctx->items().count() > 0 ) {
+        foreach( ProjectBaseItem* item, projctx->items() ) {
+            if( item->file() ) {
                 m_urls << item->file()->url();
             }
         }
     }
-    if( !m_urls.isEmpty() )
-    {
-        m_actionMap = new QSignalMapper( this );
-        connect( m_actionMap, SIGNAL(mapped(QString)), SLOT(open(QString)) );
 
-        // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
-        // TODO: Think about possible alternatives to using the mimetype of the first url.
-        KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-        if(!mimetype->is("inode/directory")){
-            m_mimeType = mimetype->name();
-
-            configWidget = new OpenWithConfig( this, m_mimeType );
-
-            KService::List apps = KMimeTypeTrader::self()->query( m_mimeType );
-            KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( m_mimeType );
-            KService::List parts = KMimeTypeTrader::self()->query( m_mimeType, "KParts/ReadOnlyPart" );
-            KService::Ptr preferredpart = KMimeTypeTrader::self()->preferredService( m_mimeType,
-                                                                                     "KParts/ReadOnlyPart" );
-
-            // Now setup a menu with actions for each part and app
-            KMenu* menu = new KMenu( i18n("Open With" ) );
-            menu->setIcon( SmallIcon( "document-open" ) );
-
-            menu->addActions( actionsForServices( parts, preferredpart ) );
-            menu->addActions( actionsForServices( apps, preferredapp ) );
-            menu->addSeparator();
-
-            KAction *act_config = new KAction( i18n( "Configure" ), this );
-            act_config->setIcon( SmallIcon( "configure" ) );
-            connect( act_config, SIGNAL( triggered() ), configWidget, SLOT( show() ) );
-
-            menu->addAction( act_config );
-
-            KAction* openAction = new KAction( i18n( "Open" ), this );
-            openAction->setIcon( SmallIcon( "document-open" ) );
-            connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
-
-            KDevelop::ContextMenuExtension ext;
-            ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
-            ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
-            return ext;
-        }
+    if (m_urls.isEmpty()) {
+        return KDevelop::ContextMenuExtension();
     }
-    return KDevelop::IPlugin::contextMenuExtension ( context );
+
+    m_actionMap.reset(new QSignalMapper( this ));
+    connect( m_actionMap.data(), SIGNAL(mapped(QString)), SLOT(open(QString)) );
+
+    // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
+    // TODO: Think about possible alternatives to using the mimetype of the first url.
+    KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
+    if (mimetype->is("inode/directory")) {
+        return KDevelop::ContextMenuExtension();
+    }
+
+    m_mimeType = mimetype->name();
+
+    QList<QAction*> appActions = actionsForServiceType("Application");
+    QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
+
+    // Now setup a menu with actions for each part and app
+    KMenu* menu = new KMenu( i18n("Open With" ) );
+    menu->setIcon( SmallIcon( "document-open" ) );
+
+    KAction *act_config = new KAction( i18n( "Configure" ), this );
+    act_config->setIcon( SmallIcon( "configure" ) );
+    connect( act_config, SIGNAL( triggered() ), SLOT( showConfig() ) );
+
+    menu->addActions( partActions );
+    menu->addSeparator();
+    menu->addActions( appActions );
+    menu->addSeparator();
+    menu->addAction( act_config );
+
+    KAction* openAction = new KAction( i18n( "Open" ), this );
+    openAction->setIcon( SmallIcon( "document-open" ) );
+    connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
+
+    KDevelop::ContextMenuExtension ext;
+    ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+    ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
+    return ext;
 }
 
-
-QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& list, KService::Ptr pref )
+bool sortActions(QAction* left, QAction* right)
 {
-    QList<QAction*> openactions;
+    return left->text() < right->text();
+}
 
-    foreach( KService::Ptr svc, list )
-    {
+QList< QAction* > OpenWithPlugin::actionsForServiceType( const QString& serviceType )
+{
+    KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
+    KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
+
+    m_services += list;
+    QList<QAction*> actions;
+    foreach( KService::Ptr svc, list ) {
         KAction* act = new KAction( svc->name(), this );
         act->setIcon( SmallIcon( svc->icon() ) );
-        connect(act, SIGNAL(triggered()), m_actionMap, SLOT(map()));
+        connect(act, SIGNAL(triggered()), m_actionMap.data(), SLOT(map()));
         m_actionMap->setMapping( act, svc->storageId() );
-        if( svc->storageId() == pref->storageId() )
-        {
-            openactions.prepend( act );
-        } else
-        {
-            openactions.append( act );
+        if ( svc->storageId() == pref->storageId() ) {
+            actions.prepend( act );
+        } else {
+            actions.append( act );
         }
-
-        configWidget->addItem( svc );
     }
-    return openactions;
+    qSort(actions.begin(), actions.end(), sortActions);
+    return actions;
 }
 
 void OpenWithPlugin::openDefault()
@@ -172,24 +166,20 @@ void OpenWithPlugin::openDefault()
     }
 }
 
-void OpenWithPlugin::open ( const QString& storageid )
+void OpenWithPlugin::open( const QString& storageid )
 {
     KService::Ptr svc = KService::serviceByStorageId( storageid );
-    if( svc->isApplication() )
-    {
+    if( svc->isApplication() ) {
         KRun::run( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
-    } else 
-    {
+    } else {
         QString prefName = svc->desktopEntryName();
-        if( svc->serviceTypes().contains( "KTextEditor/Document" ) )
-        {
+        if( svc->serviceTypes().contains( "KTextEditor/Document" ) ) {
             // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of 
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController
             prefName = "";
         }
-        foreach( const KUrl& u, m_urls )
-        {
+        foreach( const KUrl& u, m_urls ) {
             ICore::self()->documentController()->openDocument( u, prefName );
         }
     }
@@ -219,4 +209,14 @@ void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
     m_urls = files;
     m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
     openDefault();
+}
+
+void OpenWithPlugin::showConfig()
+{
+    OpenWithConfig* dialog = new OpenWithConfig(m_mimeType);
+    connect(dialog, SIGNAL(finished()), dialog, SLOT(deleteLater()));
+    foreach(const KService::Ptr& service, m_services) {
+        dialog->addItem(service);
+    }
+    dialog->show();
 }
