@@ -32,6 +32,11 @@ public:
 
     virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url);
     virtual QString name() const;
+
+    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
+
+private:
+    KDevelop::ICodeHighlighting* m_highlighting;
 };
 
 #endif // KDEVQMLJSPLUGIN_H

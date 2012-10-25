@@ -18,10 +18,13 @@
  *************************************************************************************/
 
 #include "kdevqmljsplugin.h"
+
+#include "qmljsparsejob.h"
+
 #include <KPluginFactory>
 #include <KAboutData>
 
-#include "qmljsparsejob.h"
+#include <language/highlighting/codehighlighting.h>
 
 K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
 K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
@@ -31,8 +34,9 @@ K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
 using namespace KDevelop;
 
 KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-     : IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
-     , ILanguageSupport()
+: IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
+, ILanguageSupport()
+, m_highlighting(new CodeHighlighting(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 }
@@ -45,4 +49,9 @@ ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
 QString KDevQmlJsPlugin::name() const
 {
     return "qml/js";
+}
+
+ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const
+{
+    return m_highlighting;
 }
