@@ -179,6 +179,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
             m->addAction(action);
     }
     addConfig->setMenu(m);
+    
+    connect(debugger, SIGNAL(currentIndexChanged(int)), SLOT(launchModeChanged(int)));
 
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
@@ -237,10 +239,13 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         delete w;
     }
     
+    debugger->clear();
     if( !selected.indexes().isEmpty() )
     {
-        LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
-        ILaunchMode* lm = model->modeForIndex( selected.indexes().first() );
+        QModelIndex idx = selected.indexes().first();
+        LaunchConfiguration* l = model->configForIndex( idx );
+        ILaunchMode* lm = model->modeForIndex( idx );
+        
         if( l )
         {
             updateNameLabel( l );
@@ -248,14 +253,24 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(updateNameLabel(LaunchConfiguration*)) );
             if( lm )
             {
-                ILauncher* launcher = l->type()->launcherForId( l->launcherForMode( lm->id() ) );
+                QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
+                QList<ILauncher*> launchers = l->type()->launchers();
+                for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
+                {
+                    if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
+                        debugger->addItem( (*it)->name(), (*it)->id() );
+                    }
+                }
+                debugger->setCurrentIndex(debugger->findData(currentLaunchMode));
+                
+                debugger->setVisible(debugger->count()>0);
+                debugLabel->setVisible(debugger->count()>0);
+                
+                ILauncher* launcher = l->type()->launcherForId( currentLaunchMode.toString() );
                 if( launcher )
                 {
-                    LaunchConfigPagesContainer* tab;
-                    if( launcherWidgets.contains( launcher ) )
-                    {
-                        tab = launcherWidgets.value( launcher );
-                    } else
+                    LaunchConfigPagesContainer* tab = launcherWidgets.value( launcher );
+                    if(!tab)
                     {
                         tab = new LaunchConfigPagesContainer( launcher->configPages(), stack );
                         connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
@@ -292,6 +307,8 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 
                 addConfig->setEnabled( true );
                 deleteConfig->setEnabled( true );
+                debugger->setVisible( false );
+                debugLabel->setVisible( false );
             }
         } else 
         {
@@ -303,9 +320,13 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             l->setAlignment(Qt::AlignCenter);
             stack->addWidget(l);
             stack->setCurrentWidget(l);
+            debugger->setVisible( false );
+            debugLabel->setVisible( false );
         }
     } else 
     {
+        debugger->setVisible( false );
+        debugLabel->setVisible( false );
         addConfig->setEnabled( false );
         deleteConfig->setEnabled( false );
         stack->setCurrentIndex( 0 );
@@ -934,6 +955,12 @@ void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstract
     }
 }
 
+void LaunchConfigurationDialog::launchModeChanged(int item)
+{
+    QModelIndex index = tree->currentIndex();
+    if(debugger->isVisible())
+        tree->model()->setData(index.sibling(index.row(), 1), debugger->itemData(item), Qt::EditRole);
+}
 
 }
 

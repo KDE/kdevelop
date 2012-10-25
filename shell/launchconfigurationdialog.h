@@ -155,6 +155,7 @@ private slots:
     void saveConfig();
     void updateNameLabel( LaunchConfiguration* l );
     void createEmptyLauncher();
+    void launchModeChanged(int index);
 
 private:
     void saveConfig( const QModelIndex& );
