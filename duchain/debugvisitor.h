@@ -32,6 +32,8 @@ public:
 
     void startVisiting(QmlJS::AST::Node* node);
 
+    static QString stringForAstKind(int kind);
+
 protected:
     virtual void postVisit(QmlJS::AST::Node* node);
     virtual bool preVisit(QmlJS::AST::Node* node);

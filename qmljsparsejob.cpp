@@ -101,7 +101,6 @@ void QmlJsParseJob::run()
         file->setModificationRevision(contents().modification);
         DUChain::self()->updateContextEnvironment( context->topContext(), file.data() );
     }
-
     highlightDUChain();
 
     if (session.isParsedCorrectly()) {
