@@ -611,11 +611,11 @@ SessionController::SessionController( QObject *parent )
     action->setIcon(KIcon("window-new"));
 
     action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
-    action->setText( i18n("Rename Session...") );
+    action->setText( i18n("Rename Current Session...") );
     action->setIcon(KIcon("edit-rename"));
 
     action = actionCollection()->addAction( "delete_session", this, SLOT(deleteSession()) );
-    action->setText( i18n("Delete Session...") );
+    action->setText( i18n("Delete Current Session...") );
     action->setIcon(KIcon("edit-delete"));
 
     action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
