@@ -70,9 +70,9 @@ QString MacroNavigationContext::html(bool shorten)
 
   modifyHtml() += (m_macro->function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro->name.str()) + " " + args +  "<br />";
 
-  KUrl u(m_macro->file.str());
-  NavigationAction action(u, KTextEditor::Cursor(m_macro->sourceLine,0));
-  QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
+  const KUrl url = m_macro->file.toUrl();
+  NavigationAction action(url, KTextEditor::Cursor(m_macro->sourceLine,0));
+  QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(m_macro->file);
 
   if(!shorten) {
     modifyHtml() += "<br />";
@@ -90,7 +90,8 @@ QString MacroNavigationContext::html(bool shorten)
     modifyHtml() += "<br />";
   }
 
-  makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
+  const QString path = url.pathOrUrl();
+  makeLink(path, path, action);
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();

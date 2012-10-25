@@ -223,8 +223,9 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     }
     else
     {
+        const IndexedString idxLists(lists);
         KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(lists);
+        KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(idxLists);
         QList<Declaration*> decls;
         for(int i=0; i<topctx->usesCount(); i++)
         {
@@ -235,7 +236,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
 
             Declaration* d=u.usedDeclaration(topctx);
 
-            if(d && d->topContext()->url().toUrl()==lists)
+            if(d && d->topContext()->url()==idxLists)
                 decls += d;
         }
 

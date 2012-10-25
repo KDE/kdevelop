@@ -726,8 +726,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux,
                                                                     int endl ,int endc, bool isClean)
 {
+    const IndexedString idxpath(path);
     DUChainWriteLocker lock(DUChain::lock());
-    KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
+    KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(idxpath);
     
     if(topctx)
     {
@@ -743,13 +744,12 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     }
     else
     {
-        IndexedString idxpath(path);
         ParsingEnvironmentFile* env = new ParsingEnvironmentFile(idxpath);
         env->setLanguage(IndexedString("cmake"));
         topctx=new TopDUContext(idxpath, RangeInRevision(0,0, endl, endc), env);
         DUChain::self()->addDocumentChain(topctx);
 
-        Q_ASSERT(DUChain::self()->chainForDocument(path));
+        Q_ASSERT(DUChain::self()->chainForDocument(idxpath));
     }
     
     //Clean the re-used top-context. This is problematic since it may affect independent projects, but it's better then letting things accumulate.
