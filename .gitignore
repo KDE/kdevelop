@@ -1,0 +1,6 @@
+apidocs
+.kdev4
+*~
+doxygen.log
+build
+.*
