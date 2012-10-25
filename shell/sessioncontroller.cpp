@@ -940,11 +940,16 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     view->installEventFilter(this);
     filter->installEventFilter(this);
     connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged(QString)));
+    
+    setCaption(i18n("Pick a session"));
 }
 
 void SessionChooserDialog::filterTextChanged(QString)
 {
     m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    bool enabled = m_view->model()->rowCount(QModelIndex())>0;
+    button(KDialog::Ok)->setEnabled(enabled);
+    m_deleteButton->setVisible(enabled);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
@@ -1001,8 +1006,13 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QVBoxLayout layout(dialog.mainWidget());
-    if(!headerText.isEmpty())
-        layout.addWidget(new QLabel(headerText));
+    if(!headerText.isEmpty()) {
+        QLabel* heading = new QLabel(headerText);
+        QFont font = heading->font();
+        font.setBold(true);
+        heading->setFont(font);
+        layout.addWidget(heading);
+    }
     
     model->setColumnCount(3);
     model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
