@@ -394,7 +394,7 @@ CppLanguageSupport::~CppLanguageSupport()
 
     delete m_quickOpenDataProvider;
 
-    // Remove any documents waiting to be parsed from the background paser.
+    // Remove any documents waiting to be parsed from the background parser.
     core()->languageController()->backgroundParser()->clear(this);
 
 
