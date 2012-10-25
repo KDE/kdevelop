@@ -289,7 +289,7 @@ int main( int argc, char *argv[] )
     if(args->isSet("ps"))
     {
         bool onlyRunning = args->isSet("pid");
-        session = KDevelop::SessionController::showSessionChooserDialog(QString(), onlyRunning);
+        session = KDevelop::SessionController::showSessionChooserDialog(i18n("Select the session you would like to use"), onlyRunning);
         if(session.isEmpty())
             return 1;
     }
