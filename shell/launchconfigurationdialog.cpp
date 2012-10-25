@@ -253,7 +253,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(updateNameLabel(LaunchConfiguration*)) );
             if( lm )
             {
-                QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
+                bool b = debugger->blockSignals(true);
                 QList<ILauncher*> launchers = l->type()->launchers();
                 for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
                 {
@@ -261,10 +261,13 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                         debugger->addItem( (*it)->name(), (*it)->id() );
                     }
                 }
-                debugger->setCurrentIndex(debugger->findData(currentLaunchMode));
+                debugger->blockSignals(b);
                 
                 debugger->setVisible(debugger->count()>0);
                 debugLabel->setVisible(debugger->count()>0);
+                
+                QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
+                debugger->setCurrentIndex(debugger->findData(currentLaunchMode));
                 
                 ILauncher* launcher = l->type()->launcherForId( currentLaunchMode.toString() );
                 if( launcher )
