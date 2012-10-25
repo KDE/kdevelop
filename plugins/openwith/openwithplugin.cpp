@@ -128,43 +128,58 @@ bool isTextEditor(const KService::Ptr& service)
     return service->serviceTypes().contains( "KTextEditor/Document" );
 }
 
-QList< QAction* > OpenWithPlugin::actionsForServiceType( const QString& serviceType )
+QString defaultForMimeType(const QString& mimeType)
+{
+    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    if (config.hasKey(mimeType)) {
+        QString storageId = config.readEntry(mimeType, QString());
+        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
+            return storageId;
+        }
+    }
+    return QString();
+}
+
+QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceType )
 {
     KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
     KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
 
     m_services += list;
     QList<QAction*> actions;
-    QAction* defaultAction = 0;
+    QAction* standardAction = 0;
+    const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
         KAction* act = new KAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
         act->setIcon( SmallIcon( svc->icon() ) );
+        if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
+            QFont font = act->font();
+            font.setBold(true);
+            act->setFont(font);
+        }
         connect(act, SIGNAL(triggered()), m_actionMap.data(), SLOT(map()));
         m_actionMap->setMapping( act, svc->storageId() );
         actions << act;
         if ( isTextEditor(svc) ) {
-            defaultAction = act;
+            standardAction = act;
         } else if ( svc->storageId() == pref->storageId() ) {
-            defaultAction = act;
+            standardAction = act;
         }
     }
     qSort(actions.begin(), actions.end(), sortActions);
-    if (defaultAction) {
-        actions.removeOne(defaultAction);
-        actions.prepend(defaultAction);
+    if (standardAction) {
+        actions.removeOne(standardAction);
+        actions.prepend(standardAction);
     }
     return actions;
 }
 
 void OpenWithPlugin::openDefault()
 {
-    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
-    if (config.hasKey(m_mimeType)) {
-        QString storageId = config.readEntry(m_mimeType, QString());
-        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
-            open(storageId);
-            return;
-        }
+    const QString defaultId = defaultForMimeType(m_mimeType);
+    if (!defaultId.isEmpty()) {
+        open(defaultId);
+        return;
     }
     foreach( const KUrl& u, m_urls ) {
         ICore::self()->documentController()->openDocument( u );
