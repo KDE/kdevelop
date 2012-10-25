@@ -18,19 +18,19 @@
  *************************************************************************************/
 
 #include "qmljsparsejob.h"
+
 #include <language/backgroundparser/urlparselock.h>
-#include <language/backgroundparser/backgroundparser.h>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
-#include <language/interfaces/icodehighlighting.h>
 #include <interfaces/ilanguage.h>
-#include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
 
 #include "duchain/declarationbuilder.h"
 #include "duchain/parsesession.h"
+
+#include "debug.h"
 
 #include <QReadLocker>
 
@@ -47,7 +47,7 @@ void QmlJsParseJob::run()
         return;
     }
 
-    kDebug() << "parsing" << document().str();
+    debug() << "parsing" << document().str();
 
     ProblemPointer p = readContents();
     if (p) {
@@ -90,8 +90,8 @@ void QmlJsParseJob::run()
         }
 
         {
-            DUChainWriteLocker lock(DUChain::lock());
-
+            DUChainWriteLocker lock;
+            chain->clearProblems();
             foreach(const ProblemPointer& problem, session.problems()) {
                 chain->addProblem(problem);
             }
@@ -102,6 +102,7 @@ void QmlJsParseJob::run()
             DUChain::self()->updateContextEnvironment( chain->topContext(), file.data() );
         }
 
+        debug() << "===Success===" << document().str();
         highlightDUChain();
     } else {
         DUChainWriteLocker lock;
@@ -115,11 +116,14 @@ void QmlJsParseJob::run()
             toUpdate = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
             DUChain::self()->addDocumentChain(toUpdate);
         }
+        toUpdate->parsingEnvironmentFile()->setModificationRevision(contents().modification);
         foreach(const ProblemPointer& problem, session.problems()) {
             toUpdate->addProblem(problem);
         }
         setDuChain(toUpdate);
-        kDebug() << "===Failed===" << document().str();
+        lock.unlock();
+        highlightDUChain();
+        debug() << "===Failed===" << document().str();
     }
 }
 
