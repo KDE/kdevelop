@@ -28,7 +28,6 @@
 #include "iopenwith.h"
 
 class QSignalMapper;
-class OpenWithConfig;
 
 namespace KDevelop
 {
@@ -51,7 +50,6 @@ protected:
 private slots:
     void open( const QString& );
     void openDefault();
-    void showConfig();
 
 private:
     QList<QAction*> actionsForServiceType( const QString& serviceType );

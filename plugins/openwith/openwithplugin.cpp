@@ -19,7 +19,6 @@
  */
 
 #include "openwithplugin.h"
-#include "openwithconfig.h"
 
 #include <QVariantList>
 
@@ -104,16 +103,10 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     KMenu* menu = new KMenu( i18n("Open With" ) );
     menu->setIcon( SmallIcon( "document-open" ) );
 
-    KAction *act_config = new KAction( i18n( "Configure" ), this );
-    act_config->setIcon( SmallIcon( "configure" ) );
-    connect( act_config, SIGNAL( triggered() ), SLOT( showConfig() ) );
-
     menu->addTitle(i18n("Embedded Editors"));
     menu->addActions( partActions );
     menu->addTitle(i18n("External Applications"));
     menu->addActions( appActions );
-    menu->addSeparator();
-    menu->addAction( act_config );
 
     KAction* openAction = new KAction( i18n( "Open" ), this );
     openAction->setIcon( SmallIcon( "document-open" ) );
@@ -130,6 +123,11 @@ bool sortActions(QAction* left, QAction* right)
     return left->text() < right->text();
 }
 
+bool isTextEditor(const KService::Ptr& service)
+{
+    return service->serviceTypes().contains( "KTextEditor/Document" );
+}
+
 QList< QAction* > OpenWithPlugin::actionsForServiceType( const QString& serviceType )
 {
     KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
@@ -137,18 +135,24 @@ QList< QAction* > OpenWithPlugin::actionsForServiceType( const QString& serviceT
 
     m_services += list;
     QList<QAction*> actions;
+    QAction* defaultAction = 0;
     foreach( KService::Ptr svc, list ) {
-        KAction* act = new KAction( svc->name(), this );
+        KAction* act = new KAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
         act->setIcon( SmallIcon( svc->icon() ) );
         connect(act, SIGNAL(triggered()), m_actionMap.data(), SLOT(map()));
         m_actionMap->setMapping( act, svc->storageId() );
-        if ( svc->storageId() == pref->storageId() ) {
-            actions.prepend( act );
-        } else {
-            actions.append( act );
+        actions << act;
+        if ( isTextEditor(svc) ) {
+            defaultAction = act;
+        } else if ( svc->storageId() == pref->storageId() ) {
+            defaultAction = act;
         }
     }
     qSort(actions.begin(), actions.end(), sortActions);
+    if (defaultAction) {
+        actions.removeOne(defaultAction);
+        actions.prepend(defaultAction);
+    }
     return actions;
 }
 
@@ -174,7 +178,7 @@ void OpenWithPlugin::open( const QString& storageid )
         KRun::run( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
     } else {
         QString prefName = svc->desktopEntryName();
-        if( svc->serviceTypes().contains( "KTextEditor/Document" ) ) {
+        if ( isTextEditor(svc) ) {
             // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of 
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController
@@ -210,14 +214,4 @@ void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
     m_urls = files;
     m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
     openDefault();
-}
-
-void OpenWithPlugin::showConfig()
-{
-    OpenWithConfig* dialog = new OpenWithConfig(m_mimeType);
-    connect(dialog, SIGNAL(finished()), dialog, SLOT(deleteLater()));
-    foreach(const KService::Ptr& service, m_services) {
-        dialog->addItem(service);
-    }
-    dialog->show();
 }
