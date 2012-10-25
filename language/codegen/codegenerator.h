@@ -81,13 +81,13 @@ public:
     /**
      * Do final condition checking and perform the code generation.
      *
-     * \returns true if code generation was successful, false otherwise. Use setErrorText to 
+     * \returns true if code generation was successful, false otherwise. Use setErrorText to
      * specify the nature of the Error.
      */
     virtual bool process() = 0;
-    
+
     const QString & errorText() const;
-    
+
     // Implementation from kJob
     bool execute();
 
@@ -96,16 +96,16 @@ public:
      * Most probable scenarios are: Testing, and a generator that is being used by another one
      * @param context If not NULL, the custom context to use, instead of user selection
      * @param position If not NULL, the cursom range to use instead of user selection
-     * @note If this function is called, then gather information will not be called. Derived classes should provide 
-     * an alternative way of setting up the generator.
+     * @note If this function is called, then gather information will not be called.
+     *       Derived classes should provide an alternative way of setting up the generator.
      */
     void autoGenerate(DUContext * context, const DocumentRange * range);
-    
+
     /**
      * \return The Document Change set to add a single Change, it is more addicient than creating a local DocumentChangeSet and merging it
      */
     DocumentChangeSet & documentChangeSet();
-    
+
 
 protected:
 
@@ -116,19 +116,19 @@ protected:
      * You may call this method multiple times to edit different files.
      */
     void addChangeSet(DUChainChangeSet* duChainChange);
-    
+
     void addChangeSet(DocumentChangeSet & docChangeSet);
-    
+
     /**
      * Accessor for KJob's KJob::setErrorText.
      */
     void setErrorText(const QString & error);
-    
+
     /**
      * Inform the derived class if this generation is being performed without user interaction
      */
     bool autoGeneration() const;
-    
+
     /**
      * Clean up all the change sets that this generator is in charge of
      */
@@ -136,7 +136,7 @@ protected:
 
 private:
     class CodeGeneratorPrivate * const d;
-    
+
     bool displayChanges();
 };
 
@@ -158,13 +158,13 @@ public:
     {
         clearChangeSets();
     }
-    
+
 protected:
-    
+
     /// Convenience definition of the TopAstNode that is contained by this AstContainer
     typedef typename AstContainer::TopAstNode TopAstNode;
     typedef AstChangeSet<TopAstNode> LanguageChangeSet;
-    
+
     /**
      * Query an AST of a particular file
      */
@@ -172,32 +172,32 @@ protected:
     {
         return astContainer(file)->topAstNode();
     }
-    
+
     TopAstNode * ast(const TopDUContext & context)
     {
         return astContainer(context)->topAstNode();
     }
-    
+
     typename AstContainer::Ptr astContainer(const IndexedString & file)
     {
         if(!m_AstContainers.contains(file))
         {
             kDebug() << "Ast requested for: " << file.str();
-            
+
             TopDUContext * context = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AST).data();
-            
+
             Q_ASSERT(context);
             m_AstContainers[file] = AstContainer::Ptr::template staticCast<IAstContainer>( context->ast() );
         }
-        
+
         return m_AstContainers[file];
     }
-    
+
     typename AstContainer::Ptr astContainer(const TopDUContext & context)
     {
         return astContainer(context.url());
     }
-    
+
     /**
      * Generate text edits from duchain / ast change set.
      *
@@ -207,24 +207,24 @@ protected:
     {
         CodeGeneratorBase::addChangeSet(duChainChange);
     }
-    
+
     void addChangeSet(DocumentChangeSet & doc)
     {
         CodeGeneratorBase::addChangeSet(doc);
     }
-    
+
     /**
      * Generate text edits from duchain / ast change set.
      *
      * You may call this method multiple times to edit different files.
      */
     void addChangeSet(LanguageChangeSet * astChange);
-    
+
     void clearChangeSets()
     {
         CodeGeneratorBase::clearChangeSets();
     }
-    
+
     /**
      * Inform the derived class if this generation is being performed without user interaction
      */
@@ -232,7 +232,7 @@ protected:
     {
         return CodeGeneratorBase::autoGeneration();
     }
-    
+
     /**
      * Accessor for KJob's KJob::setErrorText.
      */
@@ -240,7 +240,7 @@ protected:
     {
         CodeGeneratorBase::setErrorText(error);
     }
-    
+
 private:
     typedef QMap<IndexedString, typename AstContainer::Ptr> AstContainerMap;
     AstContainerMap m_AstContainers;

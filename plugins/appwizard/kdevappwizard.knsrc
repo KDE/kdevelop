@@ -1,0 +1,4 @@
+[KNewStuff3]
+Categories=KDE App Template
+TargetDir=kdevappwizard/templates
+Uncompress=never

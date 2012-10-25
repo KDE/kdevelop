@@ -108,6 +108,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
+
     d->m_build = new KAction( i18n("Build Selection"), this );
     d->m_build->setIconText( i18n("Build") );
     d->m_build->setShortcut( Qt::Key_F8 );

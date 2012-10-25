@@ -16,6 +16,7 @@ set(KDEVPLATFORM_LIB_VERSION 7.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 7)
 
 find_package(ZLIB REQUIRED)
+find_package(Grantlee REQUIRED)
 
 include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
@@ -89,6 +90,7 @@ add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
+add_subdirectory(template)
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

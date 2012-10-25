@@ -3,6 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
 add_subdirectory(backgroundparser/tests)
+add_subdirectory(codegen/tests)
 
 set(kdevplatformlanguage_LIB_SRCS
     editor/persistentmovingrangeprivate.cpp
@@ -97,6 +98,7 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/iquickopen.cpp
     interfaces/editorcontext.cpp
     interfaces/codecontext.cpp
+    interfaces/icreateclasshelper.cpp
 
     codecompletion/codecompletion.cpp
     codecompletion/codecompletionworker.cpp
@@ -108,14 +110,18 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/normaldeclarationcompletionitem.cpp
 
     codegen/applychangeswidget.cpp
-    codegen/createclass.cpp
-    #codegen/codegenerator.cpp
     codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
     codegen/komparesupport.cpp
-    codegen/overridespage.cpp
     codegen/utilities.cpp
+    codegen/templatesmodel.cpp
+    codegen/multilevellistview.cpp
+    codegen/templateclassgenerator.cpp
+    codegen/codedescription.cpp
+    codegen/sourcefiletemplate.cpp
+    codegen/templaterenderer.cpp
+    codegen/archivetemplateloader.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -126,26 +132,19 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/codehighlighting.cpp
 )
 
-set( kdevplatformlanguage_LIB_UI
-    codegen/ui/newclass.ui
-    codegen/ui/overridevirtuals.ui
-    codegen/ui/licensechooser.ui
-    codegen/ui/outputlocation.ui
-)
-
-kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} )
-
-
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage
         ${KDE4_KPARTS_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES}
+        ${KDE4_KNEWSTUFF3_LIBS}
         kdevplatforminterfaces
-        kdevplatformutil)
+        kdevplatformutil
+        ${Grantlee_CORE_LIBRARIES})
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
 target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
-        kdevplatforminterfaces)
+        kdevplatforminterfaces
+        ${Grantlee_CORE_LIBRARIES})
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -166,6 +165,7 @@ install(FILES
     interfaces/codecontext.h
     interfaces/editorcontext.h
     interfaces/iastcontainer.h
+    interfaces/icreateclasshelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
@@ -305,14 +305,19 @@ install(FILES
 
 install(FILES
     codegen/applychangeswidget.h
-    codegen/createclass.h
-    codegen/overridespage.h
     codegen/astchangeset.h
     codegen/duchainchangeset.h
-    #codegen/codegenerator.h
     codegen/documentchangeset.h
     codegen/coderepresentation.h
     codegen/utilities.h
+    codegen/templatesmodel.h
+    codegen/multilevellistview.h
+    codegen/templaterenderer.h
+    codegen/sourcefiletemplate.h
+    codegen/templateclassgenerator.h
+    codegen/codedescription.h
+    codegen/sourcefiletemplate.h
+    codegen/archivetemplateloader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
@@ -333,16 +338,4 @@ install(FILES
     highlighting/colorcache.h
     highlighting/configurablecolors.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
-)
-
-install(FILES
-    codegen/licenses/GPL\ v2
-    codegen/licenses/GPL\ v3
-    codegen/licenses/LGPL\ v2
-    codegen/licenses/Apache\ v2
-    codegen/licenses/BSD
-    codegen/licenses/Boost
-    codegen/licenses/MIT\ X11
-    codegen/licenses/Mozilla\ v1.1
-    DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
 )

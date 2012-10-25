@@ -6,6 +6,8 @@ set(kdevcodeutils_PART_SRCS
     codeutilsplugin.cpp
 )
 
+include_directories(CMAKE_CURRENT_BINARY_DIR)
+
 kde4_add_plugin(kdevcodeutils ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
@@ -19,6 +21,8 @@ target_link_libraries(kdevcodeutils
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
+add_subdirectory(doc_templates)
+add_subdirectory(tests)
 
 install(TARGETS kdevcodeutils DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Icon=code-class
+Exec=blubb
+Comment=Manages templates for source files
+Name=File Templates Configuration
+GenericName=Manages templates for source files
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevfiletemplates
+X-KDE-PluginInfo-Name=kdevfiletemplates
+X-KDE-PluginInfo-Author=Alexander Dymo
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Core
+X-KDevelop-Interfaces=org.kdevelop.ITemplateProvider
+X-KDevelop-Category=Global
+X-KDevelop-Version=15
+X-KDevelop-Mode=GUI

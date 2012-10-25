@@ -24,7 +24,8 @@ target_link_libraries(kdevappwizard
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
-    kdevplatforminterfaces kdevplatformvcs)
+    ${KDE4_KNEWSTUFF3_LIBS}
+    kdevplatforminterfaces kdevplatformvcs kdevplatformlanguage)
 
 install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 
@@ -34,3 +35,4 @@ install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevappwizard.rc DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
 install( FILES default-kdevelop.png DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard/template_previews )
+install( FILES kdevappwizard.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

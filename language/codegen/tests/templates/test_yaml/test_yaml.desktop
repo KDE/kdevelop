@@ -1,0 +1,11 @@
+[General]
+Name=Testing YAML template
+Comment=Describes a class using YAML syntax
+Category=Class/Testing/YAML
+Files=Description
+OptionsFile=options.kcfg
+
+[Description]
+Name=Description
+File=class.yaml
+OutputFile={{ name }}.yaml
