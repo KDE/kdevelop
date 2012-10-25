@@ -20,12 +20,9 @@
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
 #include <KDebug>
-#include <KLocalizedString>
 #include <qfileinfo.h>
 #include <kmimetype.h>
 #include <kicon.h>
-#include <QPalette>
-#include <QApplication>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
@@ -42,8 +39,6 @@ KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
 bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & right) const
 {
     KDevelop::ProjectBaseItem *iLeft=projectModel()->itemFromIndex(left), *iRight=projectModel()->itemFromIndex(right);
-    if(!iLeft && iRight) // "... filtered" should be the first item
-        return true;
     if(!iLeft || !iRight) return false;
 
     return( iLeft->lessThan( iRight ) );
@@ -59,47 +54,8 @@ KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIn
     return static_cast<KDevelop::ProjectBaseItem*>( projectModel()->itemFromIndex( mapToSource( idx ) ) );
 }
 
-void ProjectProxyModel::itemClicked( const QModelIndex& index )
-{
-    QModelIndex sourceIndex = mapToSource(index);
-    if(sourceIndex.row() == projectModel()->rowCount(sourceIndex.parent())-1)
-    {
-        KDevelop::ProjectBaseItem *parentItem = projectModel()->itemFromIndex(sourceIndex.parent());
-        if(parentItem)
-        {
-            if(mExpandedFilters.contains(parentItem))
-                mExpandedFilters.remove(parentItem);
-            else
-                mExpandedFilters.insert(parentItem, mFilterCache[parentItem].filteredChildren);
-            mFilterCache.clear();
-            invalidateFilter();
-        }
-    }
-}
-
 QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
 {
-    QModelIndex sourceIndex = mapToSource(index);
-
-    if(sourceIndex.row() == projectModel()->rowCount(sourceIndex.parent())-1)
-    {
-        if (role == Qt::DecorationRole)
-            return KIcon("view-filter");
-        if (role == Qt::DisplayRole)
-        {
-            int filteredCount = 0;
-            KDevelop::ProjectBaseItem *parentItem = projectModel()->itemFromIndex(sourceIndex.parent());
-            if(mExpandedFilters.contains(parentItem))
-                return i18n("... hide %1 filtered", mExpandedFilters[parentItem]);
-            if(parentItem && mFilterCache.contains(parentItem))
-                filteredCount = mFilterCache[parentItem].filteredChildren;
-            return i18np("... %1 filtered", "... %1 filtered", filteredCount);
-        }
-        if (role == Qt::ForegroundRole)
-            return QApplication::palette().brush(QPalette::Disabled, QPalette::Foreground);
-            
-        return QVariant();
-    }
     if( role == Qt::DecorationRole && index.isValid() ) {
         return KIcon( QSortFilterProxyModel::data(index, role).toString() );
     }
@@ -108,55 +64,20 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
 
 bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const
 {
-    KDevelop::ProjectBaseItem *parentItem = projectModel()->itemFromIndex(source_parent);
-    if (source_row == sourceModel()->rowCount(source_parent)-1)
-    {
-        if(mExpandedFilters.contains(parentItem))
-            return true;
-        // We're dealing with the "... X filtered" item
-        // First call filterAcceptsRow on the parent, to make sure that mFilterCache contains the item
-        filterAcceptsRow(source_parent.row(), source_parent.parent());
-        
-        if(parentItem && mFilterCache.contains(parentItem))
-        {
-            return (bool) mFilterCache[parentItem].filteredChildren;
-        }else{
-            return false;
-        }
-    }
-    
     if (mFilenameFilters.isEmpty() && mFilenameExcludeFilters.empty()) {
         return true;
     }
-    
+
     bool retval = true; // Show all items by default
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
 
     KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex(index);
-        
-    {
-        QMap<KDevelop::ProjectBaseItem*, FilterCacheEntry>::iterator cacheIt = mFilterCache.find(item);
-        if(cacheIt != mFilterCache.end())
-            return cacheIt->visible;
-    }
 
     if (item) {
-        int nRows = sourceModel()->rowCount(index);
-        int visibleChildren = 0;
-        int filteredChildren = 0;
-        for (int row = 0; row < nRows-1; ++row)
-        {
-            if (filterAcceptsRow(row, index))
-                visibleChildren += 1;
-            else
-                filteredChildren += 1;
-        }
-        mFilterCache[item].filteredChildren = filteredChildren;
-        mFilterCache[item].visibleChildren = visibleChildren;
-        
         if (item->type() != KDevelop::ProjectBaseItem::Folder &&
             item->type() != KDevelop::ProjectBaseItem::BuildFolder)
         {
+
             if (mFilenameFilters.isEmpty() && !mFilenameExcludeFilters.isEmpty()) {
                 // Exclude filter is specified only -> show all by default
                 retval = true;
@@ -181,21 +102,14 @@ bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & s
                     }
                 }
             }
-        }else{
-            retval = (bool)visibleChildren;
+
         }
     }
-    
-    if(mExpandedFilters.contains(parentItem))
-        retval = true;
-
-    mFilterCache[item].visible = retval;
     return retval;
 }
 
 void ProjectProxyModel::setFilterString(const QString &filters)
 {
-    mExpandedFilters.clear();
     QStringList patterns(filters.split(QRegExp("[; ]"), QString::SkipEmptyParts));
 
     QString pattern;
@@ -223,6 +137,5 @@ void ProjectProxyModel::setFilterString(const QString &filters)
         }
     }
 
-    mFilterCache.clear();
     invalidateFilter();
 };
