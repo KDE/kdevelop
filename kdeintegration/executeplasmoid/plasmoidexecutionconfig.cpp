@@ -30,6 +30,7 @@
 #include <project/projectmodel.h>
 #include <language/duchain/indexedstring.h>
 #include <QMenu>
+#include <QLineEdit>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -41,7 +42,7 @@ KIcon PlasmoidExecutionConfig::icon() const
 void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* )
 {
     bool b = blockSignals( true );
-    identifier->setText(cfg.readEntry("PlasmoidIdentifier", ""));
+    identifier->lineEdit()->setText(cfg.readEntry("PlasmoidIdentifier", ""));
     blockSignals( b );
 }
 
@@ -49,13 +50,25 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
     setupUi(this);
-    connect( identifier, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( identifier->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    
+    QProcess p;
+    p.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
+    p.waitForFinished();
+    
+    while(!p.atEnd()) {
+        QByteArray line = p.readLine();
+        int nameEnd=line.indexOf(' ');
+        if(nameEnd>0) {
+            identifier->addItem(line.left(nameEnd));
+        }
+    }
 }
 
 void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
 {
     Q_UNUSED( project );
-    cfg.writeEntry("PlasmoidIdentifier", identifier->text());
+    cfg.writeEntry("PlasmoidIdentifier", identifier->lineEdit()->text());
 }
 
 QString PlasmoidExecutionConfig::title() const
@@ -189,7 +202,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
             if(url.fileName()=="metadata.desktop" && canLaunchMetadataFile(url)) {
                 url = url.upUrl();
                 KUrl relUrl = p->relativeUrl(url);
-                QAction* action = new QAction(relUrl.prettyUrl(), this);
+                QAction* action = new QAction(relUrl.prettyUrl(KUrl::RemoveTrailingSlash), this);
                 action->setProperty("url", relUrl.toLocalFile(KUrl::RemoveTrailingSlash));
                 action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
                 connect(action, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
