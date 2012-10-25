@@ -666,9 +666,12 @@ TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(ne
 }
 
 TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
+: DUContext(*new TopDUContextData(url), range)
+, m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+, m_dynamicData(new TopDUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
+  setType(Global);
 
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d->m_features = VisibleDeclarationsAndContexts;
