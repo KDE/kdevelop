@@ -20,6 +20,7 @@
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
 #include <KDebug>
+#include <KLocalizedString>
 #include <qfileinfo.h>
 #include <kmimetype.h>
 #include <kicon.h>
@@ -56,8 +57,18 @@ KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIn
 
 QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
 {
-    if( role == Qt::DecorationRole && index.isValid() ) {
-        return KIcon( QSortFilterProxyModel::data(index, role).toString() );
+    switch(role) {
+        case Qt::DecorationRole:
+            if( index.isValid() ) {
+                return KIcon( QSortFilterProxyModel::data(index, role).toString() );
+            }
+            break;
+        case Qt::DisplayRole:
+            if(index.isValid() && hasChildren(index) && (!mFilenameFilters.isEmpty() || !mFilenameExcludeFilters.isEmpty())) {
+                QString text = QSortFilterProxyModel::data(index, role).toString();
+                return i18n("%1 (%2 Filtered)", text, rowCount(index));
+            }
+            break;
     }
     return QSortFilterProxyModel::data(index, role);
 }
@@ -138,4 +149,16 @@ void ProjectProxyModel::setFilterString(const QString &filters)
     }
 
     invalidateFilter();
+    recursivelyEmitParentsChanged(QModelIndex());
 };
+
+void ProjectProxyModel::recursivelyEmitParentsChanged(const QModelIndex& idx)
+{
+    if(!hasChildren(idx))
+        return;
+    
+    for(int i=0; i<rowCount(idx); i++) {
+        recursivelyEmitParentsChanged(index(i, 0, idx));
+    }
+    emit dataChanged(idx, idx);
+}
