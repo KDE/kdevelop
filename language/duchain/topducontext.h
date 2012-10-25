@@ -168,16 +168,31 @@ public:
 
   /**
    * Add a parsing-problem to this context.
+   *
+   * \note you must be holding a write lock when you access this function.
    * */
   void addProblem(const ProblemPointer& problem);
 
   /**
    * Remove a parsing-problem from this context.
+   *
+   * \note you must be holding a write lock when you access this function.
    * */
   void removeProblem(const ProblemPointer& problem);
 
-  /// Clear the list of problems
+  /**
+   * Clear the list of problems
+   *
+   * \note you must be holding a write lock when you access this function.
+   */
   void clearProblems();
+
+  /**
+   * Set the list of problems, replacing all existing ones.
+   *
+   * \note you must be holding a write lock when you access this function.
+   */
+  void setProblems(const QList<ProblemPointer>& pointers);
 
   /**
    * Determine if this chain imports another chain recursively.

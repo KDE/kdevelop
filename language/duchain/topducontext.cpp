@@ -1090,6 +1090,12 @@ QList<ProblemPointer> TopDUContext::problems() const
     return m_local->m_problems;
 }
 
+void TopDUContext::setProblems(const QList<ProblemPointer>& problems)
+{
+  ENSURE_CAN_WRITE
+  m_local->m_problems = problems;
+}
+
 void TopDUContext::addProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
