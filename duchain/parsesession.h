@@ -79,6 +79,11 @@ public:
      */
     QList<KDevelop::ProblemPointer> problems() const;
 
+    /**
+     * @return the string representation of @p location.
+     */
+    QString stringForLocation(const QmlJS::AST::SourceLocation& location) const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;

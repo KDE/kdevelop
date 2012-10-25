@@ -21,8 +21,11 @@
 #include <KAboutData>
 
 #include <language/util/debuglanguageparserhelper.h>
-#include <qmljs/qmljsdocument.h>
 
+#include "../duchain/debugvisitor.h"
+#include "../duchain/parsesession.h"
+
+using namespace KDevelop;
 using namespace KDevelopUtils;
 
 class QmlParser {
@@ -35,18 +38,16 @@ public:
     /// parse contents of a file
     void parseFile( const QString &fileName )
     {
-        m_document = QmlJS::Document::create(fileName, QmlJS::Document::guessLanguageFromSuffix(fileName));
         QFile file(fileName);
         file.open(QIODevice::ReadOnly);
-        m_document->setSource(file.readAll());
+        m_session.reset(new ParseSession(IndexedString(fileName), file.readAll()));
         runSession();
     }
 
     /// parse code directly
     void parseCode( const QString &code )
     {
-        m_document = QmlJS::Document::create("-", QmlJS::Document::QmlLanguage);
-        m_document->setSource(code);
+        m_session.reset(new ParseSession(IndexedString("-"), code));
         runSession();
     }
 
@@ -56,38 +57,38 @@ private:
      */
     void runSession()
     {
-        if (!m_document->parse()) {
+        if (!m_session->isParsedCorrectly()) {
             qerr << "failed to parse code" << endl;
         }
         if (m_printTokens) {
             qerr << "token cannot be printed for qml/js source..." << endl;
         }
 
-        if (!m_document->ast()) {
+        if (!m_session->ast()) {
             qerr << "no AST tree could be generated" << endl;
         } else {
             qout << "AST tree successfully generated" << endl;
             if (m_printAst) {
                 ///FIXME:
-//                 DumpTree dumper;
-//                 dumper.dump(ast, m_session.token_stream, true);
+                DebugVisitor visitor(m_session.data());
+                visitor.startVisiting(m_session->ast());
             }
         }
-        if (!m_document->diagnosticMessages().isEmpty()) {
+        if (!m_session->problems().isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
-            foreach(const QmlJS::DiagnosticMessage& msg, m_document->diagnosticMessages()) {
-                qerr << msg.message << " in [" << msg.loc.startLine << ", " << msg.loc.startColumn << "] (length:" << msg.loc.length << ", offset: " << msg.loc.offset << ", kind: " << msg.kind << ")" << endl;
+            foreach(const ProblemPointer problem, m_session->problems()) {
+                qerr << problem->toString();
             }
         } else {
             qout << "no problems encountered during parsing" << endl;
         }
 
-        if (!m_document->ast()) {
+        if (!m_session->ast()) {
             exit(255);
         }
     }
 
-    QmlJS::Document::MutablePtr m_document;
+    QScopedPointer<ParseSession> m_session;
     const bool m_printAst;
     const bool m_printTokens;
 };
