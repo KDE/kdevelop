@@ -26,6 +26,12 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="interpreter">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -82,6 +88,9 @@
       <string>Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -253,7 +262,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>interpreter</tabstop>
   <tabstop>executablePath</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
