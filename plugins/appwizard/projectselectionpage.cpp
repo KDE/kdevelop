@@ -122,7 +122,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
     } else {
         ui->preview->setPixmap( QPixmap( picPath ) );
     }
-    QString text = QString("<strong>%1</strong><br /><p>%2</p>")
+    QString text = QString("<h1><center>%1</center></h1><br /><p>%2</p>")
                     .arg(current.data().toString())
                     .arg(current.data(KDevelop::TemplatesModel::CommentRole ).toString() );
     ui->description->setText( text );
