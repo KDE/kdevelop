@@ -97,8 +97,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     m_mimeType = mimetype->name();
 
-    QList<QAction*> appActions = actionsForServiceType("Application");
     QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
+    QList<QAction*> appActions = actionsForServiceType("Application");
 
     // Now setup a menu with actions for each part and app
     KMenu* menu = new KMenu( i18n("Open With" ) );
@@ -108,8 +108,9 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     act_config->setIcon( SmallIcon( "configure" ) );
     connect( act_config, SIGNAL( triggered() ), SLOT( showConfig() ) );
 
+    menu->addTitle(i18n("Embedded Editors"));
     menu->addActions( partActions );
-    menu->addSeparator();
+    menu->addTitle(i18n("External Applications"));
     menu->addActions( appActions );
     menu->addSeparator();
     menu->addAction( act_config );
