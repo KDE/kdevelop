@@ -23,10 +23,11 @@
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
 
 #include "typebuilder.h"
+#include "duchainexport.h"
 
 typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
 
-class DeclarationBuilder : public DeclarationBuilderBase
+class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase
 {
 public:
     DeclarationBuilder(ParseSession* session);

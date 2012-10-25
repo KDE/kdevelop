@@ -24,7 +24,7 @@
 
 using namespace KDevelop;
 
-SimpleRange ParseSession::locationToSimpleRange(QmlJS::AST::SourceLocation location)
+SimpleRange ParseSession::locationToSimpleRange(const QmlJS::AST::SourceLocation& location)
 {
     return SimpleRange(location.startLine - 1, location.startColumn - 1,
                        location.startLine - 1, location.startColumn - 1 + location.length);

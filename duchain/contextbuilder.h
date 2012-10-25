@@ -24,11 +24,13 @@
 #include <qmljs/parser/qmljsast_p.h>
 #include <qmljs/qmljsdocument.h>
 
+#include "duchainexport.h"
+
 class ParseSession;
 
 typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName> ContextBuilderBase;
 
-class ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
+class KDEVQMLJSDUCHAIN_EXPORT ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
 {
 public:
     ContextBuilder();

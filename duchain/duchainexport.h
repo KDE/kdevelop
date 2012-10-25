@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2012 Milian Wolff <mail@milianw.de>                         *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -18,38 +18,19 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef DEBUGVISITOR_H
-#define DEBUGVISITOR_H
+#ifndef kdevqmljsduchainexport_H
+#define kdevqmljsduchainexport_H
 
-#include <qmljs/parser/qmljsastvisitor_p.h>
+/* needed for KDE_EXPORT macros */
+#include <kdemacros.h>
 
-#include "duchainexport.h"
+#ifndef KDEVQMLJSDUCHAIN_EXPORT
+# ifdef MAKE_KDEVQMLJSDUCHAIN_LIB
+#  define KDEVQMLJSDUCHAIN_EXPORT KDE_EXPORT
+# else
+#  define KDEVQMLJSDUCHAIN_EXPORT KDE_IMPORT
+# endif
+#endif
 
-class ParseSession;
+#endif // kdevqmljsduchainexport_H
 
-class KDEVQMLJSDUCHAIN_EXPORT DebugVisitor : public QmlJS::AST::Visitor
-{
-public:
-    DebugVisitor(ParseSession* session);
-
-    void startVisiting(QmlJS::AST::Node* node);
-
-    static QString stringForAstKind(int kind);
-
-protected:
-    virtual void postVisit(QmlJS::AST::Node* node);
-    virtual bool preVisit(QmlJS::AST::Node* node);
-
-private:
-    QString indent() const;
-    enum Position {
-        Start,
-        End
-    };
-    void printNode(QmlJS::AST::Node* node, Position position);
-
-    ParseSession* m_session;
-    uint m_depth;
-};
-
-#endif // DEBUGVISITOR_H

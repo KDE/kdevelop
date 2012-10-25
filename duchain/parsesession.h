@@ -20,25 +20,29 @@
 #define PARSESESSION_H
 
 #include <qmljs/qmljsdocument.h>
+
 #include <language/duchain/indexedstring.h>
-#include <language/duchain/topducontext.h>
+#include <language/interfaces/iproblem.h>
+
+#include "duchainexport.h"
 
 namespace KDevelop
 {
 class SimpleRange;
+class RangeInRevision;
 }
 
 /**
  * This class wraps the qmljs parser and offers some helper functions
  * that make it simpler to use the parser in KDevelop.
  */
-class ParseSession
+class KDEVQMLJSDUCHAIN_EXPORT ParseSession
 {
 public:
     /**
      * Convert @p location to a KDevelop::SimpleRange and return that.
      */
-    static KDevelop::SimpleRange locationToSimpleRange(QmlJS::AST::SourceLocation location);
+    static KDevelop::SimpleRange locationToSimpleRange(const QmlJS::AST::SourceLocation& location);
 
     /**
      * @return a range that spans @p fromNode and @p toNode.
@@ -83,6 +87,7 @@ public:
      * @return the string representation of @p location.
      */
     QString symbolAt(const QmlJS::AST::SourceLocation& location) const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;

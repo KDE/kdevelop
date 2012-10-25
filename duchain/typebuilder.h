@@ -23,10 +23,11 @@
 #include <language/duchain/builders/abstracttypebuilder.h>
 
 #include "contextbuilder.h"
+#include "duchainexport.h"
 
 typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilderBase;
 
-class TypeBuilder : public TypeBuilderBase
+class KDEVQMLJSDUCHAIN_EXPORT TypeBuilder : public TypeBuilderBase
 {
 public:
     TypeBuilder();
