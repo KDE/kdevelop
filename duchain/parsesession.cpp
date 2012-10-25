@@ -68,9 +68,9 @@ IndexedString ParseSession::url() const
     return m_url;
 }
 
-QVector<ProblemPointer> ParseSession::problems() const
+QList<ProblemPointer> ParseSession::problems() const
 {
-    QVector<ProblemPointer> problems;
+    QList<ProblemPointer> problems;
     foreach(const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
         ProblemPointer p(new Problem);
         p->setDescription(msg.message);

@@ -77,7 +77,7 @@ public:
     /**
      * @return the problems encountered during parsing.
      */
-    QVector<KDevelop::ProblemPointer> problems() const;
+    QList<KDevelop::ProblemPointer> problems() const;
 
 private:
     KDevelop::IndexedString m_url;

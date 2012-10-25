@@ -56,73 +56,57 @@ void QmlJsParseJob::run()
     }
 
     ParseSession session(document(), contents().contents);
-    // 2) parse
-    const bool successfullyParsed = session.isParsedCorrectly();
 
     if (abortRequested()) {
         return;
     }
 
-    ReferencedTopDUContext toUpdate;
+    ReferencedTopDUContext context;
     {
         DUChainReadLocker lock;
-        toUpdate = DUChainUtils::standardContextForUrl(document().toUrl());
+        context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
 
-    if (successfullyParsed) {
-        if (abortRequested()) {
-            return abortJob();
-        }
-
+    if (session.ast()) {
         QReadLocker parseLock(languageSupport()->language()->parseLock());
 
+        if (abortRequested()) {
+            return abortJob();
+        }
+
         DeclarationBuilder builder(&session);
-        ReferencedTopDUContext chain = builder.build(document(), session.ast(), toUpdate);
+        context = builder.build(document(), session.ast(), context);
+    }
 
-        if (abortRequested()) {
-            return abortJob();
-        }
+    if (abortRequested()) {
+        return abortJob();
+    }
 
-        setDuChain(chain);
-
-        if (abortRequested()) {
-            return abortJob();
-        }
-
-        {
-            DUChainWriteLocker lock;
-            chain->clearProblems();
-            foreach(const ProblemPointer& problem, session.problems()) {
-                chain->addProblem(problem);
-            }
-
-            chain->setFeatures(minimumFeatures());
-            ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
-            file->setModificationRevision(contents().modification);
-            DUChain::self()->updateContextEnvironment( chain->topContext(), file.data() );
-        }
-
-        debug() << "===Success===" << document().str();
-        highlightDUChain();
-    } else {
+    if (!context) {
         DUChainWriteLocker lock;
-        if (toUpdate) {
-            toUpdate->clearImportedParentContexts();
-            toUpdate->parsingEnvironmentFile()->clearModificationRevisions();
-            toUpdate->clearProblems();
-        } else {
-            ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
-            file->setLanguage(ParseSession::languageString());
-            toUpdate = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-            DUChain::self()->addDocumentChain(toUpdate);
-        }
-        toUpdate->parsingEnvironmentFile()->setModificationRevision(contents().modification);
-        foreach(const ProblemPointer& problem, session.problems()) {
-            toUpdate->addProblem(problem);
-        }
-        setDuChain(toUpdate);
-        lock.unlock();
-        highlightDUChain();
+        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
+        file->setLanguage(ParseSession::languageString());
+        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+        DUChain::self()->addDocumentChain(context);
+    }
+
+    setDuChain(context);
+    {
+        DUChainWriteLocker lock;
+        context->setProblems(session.problems());
+
+        context->setFeatures(minimumFeatures());
+        ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
+        Q_ASSERT(file);
+        file->setModificationRevision(contents().modification);
+        DUChain::self()->updateContextEnvironment( context->topContext(), file.data() );
+    }
+
+    highlightDUChain();
+
+    if (session.isParsedCorrectly()) {
+        debug() << "===Success===" << document().str();
+    } else {
         debug() << "===Failed===" << document().str();
     }
 }
