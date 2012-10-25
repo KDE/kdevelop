@@ -1459,6 +1459,18 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
+QList<IndexedString> DUChain::indexedDocuments() const
+{
+  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+
+  QList<IndexedString> ret;
+  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl.values()) {
+    ret << top->url();
+  }
+
+  return ret;
+}
+
 /*Q_SCRIPTABLE bool DUChain::updateContext(TopDUContext* topContext, TopDUContext::Features minFeatures, QObject* notifyReady) const
 {
   if( (topContext->features() & minFeatures) != minFeatures || (topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->needsUpdate()) ) {
