@@ -113,13 +113,13 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     removeDependency->setIcon( KIcon("list-remove") );
     moveDepUp->setIcon( KIcon("go-up") );
     moveDepDown->setIcon( KIcon("go-down") );
+    browseProject->setIcon(KIcon("folder-document"));
     
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
     environment->addItems( env.groups() );
-    browseProject->setIcon(KIcon("folder-document"));
 
     configureEnvironment->setSelectionWidget(environment);
 
@@ -221,9 +221,8 @@ void NativeAppConfigPage::moveDependencyUp()
 
 void NativeAppConfigPage::addDep()
 {
-    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     KIcon icon;
-    KDevelop::ProjectBaseItem* pitem = itemForPath(KDevelop::splitWithEscaping(targetDependency->text(),'/', '\\'), model);
+    KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
     if(pitem)
         icon= KIcon(pitem->iconName());
 
