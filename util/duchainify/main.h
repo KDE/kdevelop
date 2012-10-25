@@ -46,6 +46,7 @@ class Manager : public QObject {
         // delay init into event loop so the DUChain can always shutdown gracefully
         void init();
         void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
+        void finish();
 };
 
 #endif
