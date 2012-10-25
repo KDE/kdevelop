@@ -26,13 +26,16 @@ class SessionsModel : public QAbstractListModel
 {
     Q_OBJECT
     public:
-        enum Roles { Uuid = Qt::UserRole+1, Projects, ProjectNames };
+        enum Roles { Uuid = Qt::UserRole+1, Projects, ProjectNames, VisibleIdentifier };
         explicit SessionsModel(QObject* parent = 0);
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         Q_SCRIPTABLE void loadSession(const QString& nameOrId) const;
     private:
         QList<KDevelop::SessionInfo> m_sessions;
+
+    private slots:
+        void sessionDeleted(const QString& id);
 };
 
 #endif // SESSIONSMODEL_H

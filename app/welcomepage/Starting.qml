@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.extras 0.1
 import org.kdevelop.welcomepage 4.3
 
@@ -90,10 +91,14 @@ StandardPage
                     }
                 }
 
-        model: SessionsModel { id: sessions }
+        model: PlasmaCore.SortFilterModel {
+            sourceModel: SessionsModel { id: sessions }
+            sortRole: "identifier"
+            sortOrder: Qt.AscendingOrder
+        }
         
         header: Heading {
-            text: i18n("Sessions:")
+            text: i18n("Sessions")
             height: implicitHeight*2
         }
     }
