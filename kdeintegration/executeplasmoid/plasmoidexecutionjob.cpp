@@ -119,7 +119,6 @@ void PlasmoidExecutionJob::slotCompleted(int code)
 
 void PlasmoidExecutionJob::slotFailed(QProcess::ProcessError error)
 {
-    Q_UNUSED( error )
     setError(error);
     // FIXME need more detail
     setErrorText(i18n("Ninja failed to compile %1", m_process->workingDirectory()));
