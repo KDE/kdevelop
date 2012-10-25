@@ -222,10 +222,6 @@ private:
 PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
 {
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
-    QLabel *label = new QLabel(this);
-    label->setText(i18n("Path Mappings"));
-
-    verticalLayout->addWidget(label);
 
     m_pathMappingTable = new QTableView(this);
     m_pathMappingTable->setSelectionBehavior(QAbstractItemView::SelectRows);
