@@ -116,7 +116,6 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/komparesupport.cpp
     codegen/utilities.cpp
     codegen/templatesmodel.cpp
-    codegen/multilevellistview.cpp
     codegen/templateclassgenerator.cpp
     codegen/codedescription.cpp
     codegen/sourcefiletemplate.cpp
@@ -311,7 +310,6 @@ install(FILES
     codegen/coderepresentation.h
     codegen/utilities.h
     codegen/templatesmodel.h
-    codegen/multilevellistview.h
     codegen/templaterenderer.h
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h

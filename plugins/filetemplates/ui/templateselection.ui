@@ -23,7 +23,7 @@
   <customwidget>
    <class>KDevelop::MultiLevelListView</class>
    <extends>QWidget</extends>
-   <header>language/codegen/multilevellistview.h</header>
+   <header>util/multilevellistview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

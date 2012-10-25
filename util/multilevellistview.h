@@ -21,7 +21,7 @@
 #define KDEVELOP_MULTILEVELLISTVIEW_H
 
 #include <QtGui/QWidget>
-#include "../languageexport.h"
+#include "utilexport.h"
 
 class QTreeView;
 class QModelIndex;
@@ -39,7 +39,7 @@ namespace KDevelop
  * For compatibility and convenience, this class has methods and signals similar to those of
  * QAbstractItemView, such as setModel(), setRootIndex() and currentIndexChanged().
  */
-class KDEVPLATFORMLANGUAGE_EXPORT MultiLevelListView : public QWidget
+class KDEVPLATFORMUTIL_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
 public:

@@ -17,6 +17,7 @@ set(kdevplatformutil_LIB_SRCS
     executecompositejob.cpp
     fileutils.cpp
     sequentiallyrunjobs.cpp
+    multilevellistview.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -72,6 +73,7 @@ install( FILES
     spinlock.h
     fileutils.h
     sequentiallyrunjobs.h
+    multilevellistview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES

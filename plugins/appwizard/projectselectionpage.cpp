@@ -21,9 +21,10 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
+#include <util/multilevellistview.h>
+
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
-#include <language/codegen/multilevellistview.h>
 #include <KColorScheme>
 #include <KFileDialog>
 #include <KNS3/KNewStuffButton>
