@@ -24,7 +24,14 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <language/duchain/indexedstring.h>
+#include <QMenu>
+
+Q_DECLARE_METATYPE(KDevelop::IProject*);
 
 KIcon PlasmoidExecutionConfig::icon() const
 {
@@ -141,6 +148,13 @@ KIcon PlasmoidExecutionConfigType::icon() const
     return KIcon("plasma");
 }
 
+bool canLaunchMetadataFile(const KUrl& url)
+{
+    KConfig cfg(url.toLocalFile(), KConfig::SimpleConfig);
+    KConfigGroup group(&cfg, "Desktop Entry");
+    return group.readEntry("ServiceTypes", QString()) == "Plasma/Applet";
+}
+
 //don't bother, nobody uses this interface
 bool PlasmoidExecutionConfigType::canLaunch(const KUrl& ) const
 {
@@ -151,9 +165,7 @@ bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* item) con
 {
     KDevelop::ProjectFolderItem* folder = item->folder();
     if(folder && folder->hasFileOrFolder("metadata.desktop")) {
-        KConfig cfg(KUrl(folder->url(), "metadata.desktop").toLocalFile(), KConfig::SimpleConfig);
-        KConfigGroup group(&cfg, "Desktop Entry");
-        return group.readEntry("ServiceTypes", QString()) == "Plasma/Applet";
+        return canLaunchMetadataFile(KUrl(folder->url(), "metadata.desktop"));
     }
     return false;
 }
@@ -165,3 +177,46 @@ void PlasmoidExecutionConfigType::configureLaunchFromItem(KConfigGroup config, K
 
 void PlasmoidExecutionConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
 {}
+
+QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
+{
+    QList<QAction*> found;
+    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    foreach(KDevelop::IProject* p, projects) {
+        QSet<KDevelop::IndexedString> files = p->fileSet();
+        foreach(const KDevelop::IndexedString& file, files) {
+            KUrl url = file.toUrl();
+            if(url.fileName()=="metadata.desktop" && canLaunchMetadataFile(url)) {
+                url = url.upUrl();
+                KUrl relUrl = p->relativeUrl(url);
+                QAction* action = new QAction(relUrl.prettyUrl(), this);
+                action->setProperty("url", relUrl.toLocalFile(KUrl::RemoveTrailingSlash));
+                action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
+                connect(action, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                found.append(action);
+            }
+        }
+    }
+    
+    QMenu *m = 0;
+    if(!found.isEmpty()) {
+        m = new QMenu(i18n("Plasmoids"));
+        m->addActions(found);
+    }
+    return m;
+}
+
+void PlasmoidExecutionConfigType::suggestionTriggered()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    KDevelop::IProject* p = action->property("project").value<KDevelop::IProject*>();
+    QString relUrl = action->property("url").toString();
+    
+    QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
+    
+    QString name = relUrl.mid(relUrl.lastIndexOf('/')+1);
+    KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, name);
+    KConfigGroup cfg = config->config();
+    cfg.writeEntry("PlasmoidIdentifier", relUrl);
+    emit signalAddLaunchConfiguration(config);
+}

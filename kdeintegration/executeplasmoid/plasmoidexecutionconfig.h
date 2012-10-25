@@ -69,6 +69,7 @@ public:
  */
 class PlasmoidExecutionConfigType : public KDevelop::LaunchConfigurationType
 {
+Q_OBJECT
 public:
     PlasmoidExecutionConfigType();
     virtual ~PlasmoidExecutionConfigType();
@@ -81,9 +82,14 @@ public:
     virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
+    
+    virtual QMenu* launcherSuggestions();
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
+
+public slots:
+    void suggestionTriggered();
 };
 #endif
 
