@@ -116,12 +116,16 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
     KStandardDirs* dirs = KDevelop::ICore::self()->componentData().dirs();
     QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
-    if( picPath.isEmpty() ) 
-    {
-        picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
+    if( picPath.isEmpty() ) {
+        KIcon icon("kdevelop");
+        ui->preview->setPixmap(icon.pixmap(100, 100));
+    } else {
+        ui->preview->setPixmap( QPixmap( picPath ) );
     }
-    ui->preview->setPixmap( QPixmap( picPath ) );
-    ui->description->setText( current.data( Qt::UserRole+4 ).toString()+'\n'+current.data( Qt::UserRole+3 ).toString() );
+    QString text = QString("<strong>%1</strong><br /><p>%2</p>")
+                    .arg(current.data().toString())
+                    .arg(current.data(KDevelop::TemplatesModel::CommentRole ).toString() );
+    ui->description->setText( text );
     validateData();
     
     ui->propertiesBox->setEnabled(true);
