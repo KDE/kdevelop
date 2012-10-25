@@ -749,7 +749,7 @@ void SessionController::deleteSession( const QString& nameOrId )
         plugActionList( "available_sessions", d->grp->actions() );
     }
     s->deleteFromDisk();
-    emit sessionDeleted( s->name() );
+    emit sessionDeleted( s->id().toString() );
     d->sessionActions.remove(s);
     s->deleteLater();
 }

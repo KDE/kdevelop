@@ -156,6 +156,7 @@ void SessionControllerTest::deleteSession()
     const QString sessionName = "TestSession3";
     int sessionCount = m_sessionCtrl->sessionNames().count();
     Session* s = m_sessionCtrl->createSession( sessionName );
+    QString sessionId = s->id().toString();
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
@@ -166,7 +167,7 @@ void SessionControllerTest::deleteSession()
     QList<QVariant> arguments = spy.takeFirst();
 
     QString emittedSession = arguments.at(0).toString();
-    QCOMPARE( sessionName, emittedSession );
+    QCOMPARE( sessionId, emittedSession );
 
     verifySessionDir( s, false );
 }

@@ -144,7 +144,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void sessionLoaded( ISession* );
-    void sessionDeleted( const QString& );
+    void sessionDeleted( const QString& id);
     void quitSession();
 private slots:
     void updateSessionDescriptions();
