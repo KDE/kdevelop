@@ -1322,10 +1322,9 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         QString current=it->text();
         KUrl fileurl = folderurl;
         fileurl.addPath(current);
-        m_toDelete.remove(fileurl.toLocalFile());
         
         if(!entries.contains(current))
-            deleteAllLater(item->project()->itemsForUrl(fileurl));
+            m_toDelete.insert(fileurl.toLocalFile());
         else if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash))
             it->setUrl(fileurl);
     }
@@ -1340,6 +1339,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         if(m_cleanupItems.contains(item) || item->hasFileOrFolder( entry ))
             continue;
 
+        m_toDelete.remove(fileurl.toLocalFile());
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
