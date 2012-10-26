@@ -96,15 +96,16 @@ void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
         kDebug() << "Index with no model";
         return;
     }
-    bool hasChildren = idx.model()->rowCount(idx)>0;
+    bool hasChildren = idx.model()->rowCount(idx) > 0;
+    ui->templateType->setVisible(hasChildren);
     if(hasChildren) {
         ui->templateType->setModel(m_templatesModel);
         ui->templateType->setRootModelIndex(idx);
         ui->templateType->setCurrentIndex(0);
-    } else
+        itemChanged(idx.child(0, 0));
+    } else {
         itemChanged(idx);
-    
-    ui->templateType->setVisible(hasChildren);
+    }
 }
 
 void ProjectSelectionPage::templateChanged(int current)
