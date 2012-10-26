@@ -33,27 +33,27 @@ class ProcessLineMaker;
 }
 
 
-class CTestRunJob : public KDevelop::OutputJob
+class CTestRunJob : public KJob
 {
     Q_OBJECT
 public:
-    CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJobVerbosity verbosity, QObject* parent = 0);
+    CTestRunJob(CTestSuite* suite, const QStringList& cases, KDevelop::OutputJob::OutputJobVerbosity verbosity, QObject* parent = 0);
     virtual void start();
 
 protected:
     virtual bool doKill();
     
 private slots:
-    void processFinished(int exitCode);
-    void processError();
-    void receivedLines(const QStringList& lines);
+    void processFinished(KJob* job);
+    void rowsInserted(const QModelIndex &parent, int startRow, int endRow);
 
 private:
     CTestSuite* m_suite;
     QStringList m_cases;
-    KProcess* m_process;
-    KDevelop::ProcessLineMaker* m_lineMaker;
     QHash<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
+    KJob* m_job;
+    KDevelop::OutputJob* m_outputJob;
+    KDevelop::OutputJob::OutputJobVerbosity m_verbosity;
 };
 
 #endif // CTESTRUNJOB_H

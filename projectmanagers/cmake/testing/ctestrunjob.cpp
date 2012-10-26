@@ -25,21 +25,30 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/ilauncher.h>
+#include <interfaces/launchconfigurationtype.h>
+#include <interfaces/ilaunchmode.h>
+#include <interfaces/iprojectcontroller.h>
 #include <util/processlinemaker.h>
+#include <util/executecompositejob.h>
 #include <outputview/outputmodel.h>
 
 #include <KConfigGroup>
 #include <KProcess>
 #include <KDebug>
+#include <KLocalizedString>
+#include <KCompositeJob>
 
 using namespace KDevelop;
 
 CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
-: OutputJob(parent, verbosity)
+: KJob(parent)
 , m_suite(suite)
 , m_cases(cases)
-, m_process(0)
-, m_lineMaker(0)
+, m_job(0)
+, m_outputJob(0)
+, m_verbosity(verbosity)
 {
     foreach (const QString& testCase, cases)
     {
@@ -48,18 +57,56 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 }
 
 
+KJob* createTestJob(QString launchModeId, QStringList arguments )
+{
+    LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( "Native Application" );
+    ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
+
+    kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
+    Q_ASSERT(type && mode);
+
+    ILauncher* launcher = 0;
+    foreach (ILauncher *l, type->launchers())
+    {
+        //kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
+        if (l->supportedModes().contains(mode->id())) {
+            launcher = l;
+            break;
+        }
+    }
+    Q_ASSERT(launcher);
+
+    ILaunchConfiguration* ilaunch = 0;
+    QList<ILaunchConfiguration*> launchConfigurations = ICore::self()->runController()->launchConfigurations();
+    foreach (ILaunchConfiguration *l, launchConfigurations) {
+        if (l->type() == type && l->config().readEntry("ConfiguredByCTest", false)) {
+            ilaunch = l;
+            break;
+        }
+    }
+    if (!ilaunch) {
+        ilaunch = ICore::self()->runController()->createLaunchConfiguration( type,
+                                                qMakePair( mode->id(), launcher->id() ),
+                                                0, //TODO add project
+                                                i18n("CTest") );
+        ilaunch->config().writeEntry("ConfiguredByCTest", true);
+        //kDebug() << "created config, launching";
+    } else {
+        //kDebug() << "reusing generated config, launching";
+    }
+    type->configureLaunchFromCmdLineArguments( ilaunch->config(), arguments );
+    return ICore::self()->runController()->execute(launchModeId, ilaunch);
+}
 
 void CTestRunJob::start()
 {
-    CTestOutputModel* outputModel = new CTestOutputModel(m_suite);
-    setModel( outputModel, KDevelop::IOutputView::TakeOwnership );
-    if (!m_suite->cases().isEmpty())
-    {
+//     if (!m_suite->cases().isEmpty())
+//     {
         // TODO: Find a better way of determining whether QTestLib is used by this test
-        kDebug() << "Setting a QtTestDelegate";
-        setDelegate(new QtTestDelegate, KDevelop::IOutputView::TakeOwnership);
-    }
-    setStandardToolView(IOutputView::TestView);
+//         kDebug() << "Setting a QtTestDelegate";
+//         setDelegate(new QtTestDelegate);
+//     }
+//     setStandardToolView(IOutputView::RunView);
 
     QStringList arguments = m_cases;
     if (m_cases.isEmpty() && !m_suite->arguments().isEmpty())
@@ -67,69 +114,55 @@ void CTestRunJob::start()
         arguments = m_suite->arguments();
     }
 
-    m_process = new KProcess(this);
-    m_process->setProgram(m_suite->executable().toLocalFile(), arguments);
-    m_process->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+    arguments.prepend(m_suite->executable().toLocalFile());
+    m_job = createTestJob("execute", arguments);
 
-    kDebug() << m_process->program();
-
-    m_lineMaker = new ProcessLineMaker(m_process, this);
-    startOutput();
-    connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)), SLOT(receivedLines(QStringList)));
-    connect(m_process, SIGNAL(finished(int)), this, SLOT(processFinished(int)));
-    connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processError()));
-    m_process->start();
+    if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
+        m_outputJob = qobject_cast<OutputJob*>(cjob->subjobs().last());
+        Q_ASSERT(m_outputJob);
+        m_outputJob->setVerbosity(m_verbosity);
+        connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
+    }
+    connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
 }
 
 bool CTestRunJob::doKill()
 {
-    if (m_process)
+    if (m_job)
     {
-        m_process->kill();
+        m_job->kill();
     }
     return true;
 }
 
-void CTestRunJob::processFinished(int exitCode)
+void CTestRunJob::processFinished(KJob* job)
 {
-    QString line = QString("*** Test process exited with exit code %1 ***").arg(exitCode);
-
+    if(OutputModel* model = qobject_cast<OutputModel*>(m_outputJob->model())) {
+        model->flushLineBuffer();
+    }
+    
     TestResult result;
     result.testCaseResults = m_caseResults;
-    if (m_process->exitStatus() == QProcess::CrashExit)
-    {
+    if (job->error() == 1) {
+        result.suiteResult = TestResult::Failed;
+    } else if (job->error() == 0) {
+        result.suiteResult = TestResult::Passed;
+    } else {
         result.suiteResult = TestResult::Error;
     }
-    else if (exitCode != 0)
-    {
-        result.suiteResult = TestResult::Failed;
-    }
-    else
-    {
-        result.suiteResult = TestResult::Passed;
-    }
+    setError(job->error());
+    setErrorText(job->errorText());
 
+    kDebug() << result.suiteResult << result.testCaseResults;
     ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
     emitResult();
 }
 
-void CTestRunJob::processError()
+void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
-    setErrorText(m_process->errorString());
-    
-    TestResult result;
-    result.suiteResult = TestResult::Error;
-    ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
-    
-    emitResult();
-}
-
-void CTestRunJob::receivedLines(const QStringList& lines)
-{
-    foreach (const QString& line, lines )
+    for (int row = startRow; row <= endRow; ++row)
     {
-        // TODO: Highlight parts of the line
-        qobject_cast<OutputModel*>(model())->appendLine(line);
+        QString line = m_outputJob->model()->data(m_outputJob->model()->index(row, 0, parent), Qt::DisplayRole).toString();
 
         if (!line.contains("()"))
         {
