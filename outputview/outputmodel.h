@@ -76,6 +76,8 @@ public:
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
     void removeLastLines(int l);
 
+    void flushLineBuffer();
+
 public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );

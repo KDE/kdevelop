@@ -279,6 +279,26 @@ void OutputModel::addLineBatch()
     }
 }
 
+void OutputModel::flushLineBuffer()
+{
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + d->m_lineBuffer.size() -  1);
+
+    for(; !d->m_lineBuffer.isEmpty();) {
+        const QString line = d->m_lineBuffer.dequeue();
+        FilteredItem item = d->m_filter->errorInLine(line);
+        if( item.type == FilteredItem::InvalidItem ) {
+            item = d->m_filter->actionInLine(line);
+        }
+        if( item.type == FilteredItem::ErrorItem ) {
+            d->m_errorItems.insert(d->m_filteredItems.size());
+        }
+
+        d->m_filteredItems << item;
+    }
+
+    endInsertRows();
+}
+
 void OutputModel::removeLastLines(int l)
 {
     for(; l>0 && !d->m_lineBuffer.isEmpty(); --l) {
