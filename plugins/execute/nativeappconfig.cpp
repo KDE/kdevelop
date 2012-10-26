@@ -50,6 +50,7 @@
 
 #include <KCModuleProxy>
 #include <KConfigDialog>
+#include <KShell>
 #include <kcmoduleinfo.h>
 
 KIcon NativeAppConfigPage::icon() const
@@ -395,7 +396,7 @@ void NativeAppConfigType::configureLaunchFromCmdLineArguments ( KConfigGroup cfg
     cfg.writeEntry( ExecutePlugin::executableEntry, args.first() );
     QStringList a(args);
     a.removeFirst();
-    cfg.writeEntry( ExecutePlugin::argumentsEntry, a);
+    cfg.writeEntry( ExecutePlugin::argumentsEntry, KShell::joinArgs(a) );
     cfg.sync();
 }
 
