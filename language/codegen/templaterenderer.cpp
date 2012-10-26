@@ -21,6 +21,7 @@
 #include "templaterenderer.h"
 #include "archivetemplateloader.h"
 #include "codedescription.h"
+#include "codedescriptionmetatypes.h"
 #include "documentchangeset.h"
 #include "sourcefiletemplate.h"
 #include <language/editor/simplecursor.h>
@@ -110,11 +111,6 @@ TemplateRenderer::TemplateRenderer()
 TemplateRenderer::~TemplateRenderer()
 {
     delete d;
-}
-
-Grantlee::Engine* TemplateRenderer::engine() const
-{
-    return &(d->engine);
 }
 
 void TemplateRenderer::addTemplateDirectories(const QStringList& directories)

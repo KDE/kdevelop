@@ -26,11 +26,6 @@
 
 #include "../languageexport.h"
 
-namespace Grantlee
-{
-class Engine;
-}
-
 class KUrl;
 class KArchiveDirectory;
 
@@ -95,12 +90,6 @@ public:
 
     TemplateRenderer();
     virtual ~TemplateRenderer();
-
-    /**
-     * Provides access to the encapsulated Grantlee::Engine.
-     *
-     **/
-    Grantlee::Engine* engine() const;
 
     /**
      * Adds @p directories to the list of directories searched for templates

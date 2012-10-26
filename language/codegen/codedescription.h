@@ -23,16 +23,14 @@
 #include "../languageexport.h"
 #include <language/duchain/duchainpointer.h>
 
-#include <grantlee/metatype.h>
-
 #include <QString>
 #include <QAbstractItemModel>
+#include <QVector>
 
-#define GRANTLEE_LOOKUP_PROPERTY(name)          \
-if (property == #name) return QVariant::fromValue(object.name);
-
-#define GRANTLEE_LOOKUP_LIST_PROPERTY(name)     \
-if (property == #name) return QVariant::fromValue(KDevelop::CodeDescription::toVariantList(object.name));
+/**
+ * NOTE: changes in this file will quite probably also require changes
+ *       in codedescriptionmetatype.h!
+ */
 
 namespace KDevelop
 {
@@ -268,39 +266,5 @@ Q_DECLARE_METATYPE(KDevelop::FunctionDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::VariableDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(type)
-    GRANTLEE_LOOKUP_PROPERTY(access)
-    GRANTLEE_LOOKUP_PROPERTY(value)
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_PROPERTY(access)
-    GRANTLEE_LOOKUP_LIST_PROPERTY(arguments)
-    GRANTLEE_LOOKUP_LIST_PROPERTY(returnArguments)
-    GRANTLEE_LOOKUP_PROPERTY(isConstructor)
-    GRANTLEE_LOOKUP_PROPERTY(isDestructor)
-    GRANTLEE_LOOKUP_PROPERTY(isVirtual)
-    GRANTLEE_LOOKUP_PROPERTY(isStatic)
-    if (property == "returnType")
-    {
-        return object.returnType();
-    }
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::InheritanceDescription)
-    GRANTLEE_LOOKUP_PROPERTY(inheritanceMode)
-    GRANTLEE_LOOKUP_PROPERTY(baseType)
-GRANTLEE_END_LOOKUP
-
-GRANTLEE_BEGIN_LOOKUP(KDevelop::ClassDescription)
-    GRANTLEE_LOOKUP_PROPERTY(name)
-    GRANTLEE_LOOKUP_LIST_PROPERTY(baseClasses)
-    GRANTLEE_LOOKUP_LIST_PROPERTY(members)
-    GRANTLEE_LOOKUP_LIST_PROPERTY(methods)
-GRANTLEE_END_LOOKUP
 
 #endif // KDEVELOP_CODEDESCRIPTION_H
