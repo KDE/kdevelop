@@ -237,7 +237,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                     }
                 } else {
                     ///FIXME: share code with project manager for the error code string representation
-                    return ChangeResult(i18n("Couldn't rename '%1' to '%2'", url.pathOrUrl(), it.value().str()));
+                    return ChangeResult(i18n("Could not rename '%1' to '%2'", url.pathOrUrl(), it.value().str()));
                 }
             } else {
                 //TODO: do it outside the project management?
