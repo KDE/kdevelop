@@ -117,6 +117,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
     FunctionDescription(const DeclarationPointer& declaration);
 
     /**
+     * Convenience method, returns the type of the first variable in returnArguments
+     * or an empty string if this function has no return arguments
+     */
+    QString returnType() const;
+
+    /**
      * The name of this function
      **/
     QString name;
@@ -138,37 +144,31 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
     /**
      * Specifies whether this function is a class constructor
      **/
-    bool isConstructor;
+    bool isConstructor : 1;
     /**
      * Specifies whether this function is a class destructor
      */
-    bool isDestructor;
+    bool isDestructor : 1;
     /**
      * Specifies whether this function is virtual and can be overridden by subclasses
      **/
-    bool isVirtual;
+    bool isVirtual : 1;
     /**
      * Specifies whether this function is static and can be called without a class instance
      **/
-    bool isStatic;
+    bool isStatic : 1;
     /**
      * Specifies whether this function is a slot
      **/
-    bool isSlot;
+    bool isSlot : 1;
     /**
      * Specifies whether this function is a signal
      **/
-    bool isSignal;
+    bool isSignal : 1;
     /**
      * Specifies whether this function is constant
      **/
-    bool isConst;
-
-    /**
-     * Convenience method, returns the type of the first variable in returnArguments
-     * or an empty string if this function has no return arguments
-     */
-    QString returnType() const;
+    bool isConst : 1;
 };
 
 /**
