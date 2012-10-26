@@ -26,7 +26,7 @@
      <item>
       <widget class="KPushButton" name="loadButton">
        <property name="text">
-        <string>Load Template</string>
+        <string>Load Template From File</string>
        </property>
        <property name="icon">
         <iconset theme="application-x-archive">
@@ -62,7 +62,7 @@
      <item>
       <widget class="KPushButton" name="extractButton">
        <property name="text">
-        <string>Extract Template</string>
+        <string>Clone Template</string>
        </property>
        <property name="icon">
         <iconset theme="archive-extract"/>
