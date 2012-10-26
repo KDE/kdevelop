@@ -297,6 +297,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         {
             exe.chop(4);
         }
+        t.executable = exe;
         exe = exe.split('/').last();
         if (m_targetForId.contains(exe))
         {
