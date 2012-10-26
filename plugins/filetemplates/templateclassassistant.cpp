@@ -220,7 +220,12 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
             else
             {
                 kDebug() << "Did not select anything, not adding to a target";
+                return;
             }
+        }
+        else {
+            kDebug() << "Canceled select target dialog, not adding to a target";
+            return;
         }
     }
     else
