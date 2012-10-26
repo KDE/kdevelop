@@ -31,6 +31,8 @@
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
 #include <KLocalizedString>
 #include <algorithm>
 
@@ -44,6 +46,7 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::ActivationPolicy activationPolicy;
     
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
+    QHash< IndexedString, IndexedString> documentsRename;
     
     DocumentChangeSet::ChangeResult addChange(DocumentChangePointer change);
     DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
@@ -111,6 +114,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePoint
     return d->addChange(change);
 }
 
+DocumentChangeSet::ChangeResult DocumentChangeSet::addDocumentRenameChange(const IndexedString& oldFile, const IndexedString& newname)
+{
+    if(d->documentsRename.value(oldFile)!=newname) {
+        return DocumentChangeSet::ChangeResult(i18n("Couldn't rename '%1' to '%2'", oldFile.toUrl().prettyUrl(), newname.str()));
+    }
+    d->documentsRename.insert(oldFile, newname);
+    return true;
+}
+
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(DocumentChangePointer change) {
     if(change->m_range.start.line != change->m_range.end.line)
     {
@@ -173,7 +185,33 @@ QMap< IndexedString, InsertArtificialCodeRepresentationPointer > DocumentChangeS
     return ret;
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
+{
+    for(QHash<IndexedString, IndexedString>::const_iterator it = d->documentsRename.constBegin(); it != d->documentsRename.constEnd(); ++it) {
+        KUrl url = it.key().toUrl();
+        IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
+        if(p) {
+            QList<ProjectFileItem*> files = p->filesForUrl(url);
+            if(!files.isEmpty()) {
+                ProjectBaseItem::RenameStatus renamed = files.first()->rename(it.value().str());
+                if(renamed == ProjectBaseItem::RenameOk) {
+                    IndexedString idxNewDoc(KUrl(url.upUrl(), it.value().str()));
+
+                    QMap<IndexedString, QList<DocumentChangePointer> >::const_iterator iter = d->changes.constFind(it.key());
+                    if(iter!=d->changes.constEnd()) {
+                        QList<DocumentChangePointer> value = iter.value();
+                        for(QList<DocumentChangePointer>::iterator itChange=value.begin(), itEnd=value.end(); itChange!=itEnd; ++itChange) {
+                            (*itChange)->m_document = idxNewDoc;
+                        }
+                        d->changes[idxNewDoc] = value;
+                    }
+                }
+            } else {
+                //TODO: do it outside the project management?
+            }
+        }
+    }
+
     QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;

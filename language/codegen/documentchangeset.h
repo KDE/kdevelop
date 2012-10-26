@@ -85,6 +85,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     ChangeResult addChange(const DocumentChange& change);
     ChangeResult addChange(DocumentChangePointer change);
     
+    ///given a file @old, rename it to the @newname
+    ChangeResult addDocumentRenameChange(const KDevelop::IndexedString& oldFile, const KDevelop::IndexedString& newname);
+
     enum ReplacementPolicy {
         IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
         WarnOnFailedChange,///If this is given to applyAllChanges, a warning is given when a change could not be applied,
