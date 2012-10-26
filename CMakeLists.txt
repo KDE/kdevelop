@@ -16,7 +16,7 @@ set(KDEVPLATFORM_LIB_VERSION 7.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 7)
 
 find_package(ZLIB REQUIRED)
-find_package(Grantlee REQUIRED)
+find_package(Grantlee 0.1.7 REQUIRED)
 
 include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
