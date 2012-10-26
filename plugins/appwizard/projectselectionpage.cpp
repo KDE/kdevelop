@@ -56,6 +56,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->setLevels(2);
     m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
     m_listView->setModel(templatesModel);
+    m_listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
     m_listView->setContentsMargins(0, 0, 0, 0);
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
     ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
@@ -118,16 +119,21 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
     QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
     if( picPath.isEmpty() ) {
         KIcon icon("kdevelop");
-        ui->preview->setPixmap(icon.pixmap(100, 100));
+        ui->icon->setPixmap(icon.pixmap(128, 128));
+        ui->icon->setFixedHeight(128);
     } else {
-        ui->preview->setPixmap( QPixmap( picPath ) );
+        QPixmap pixmap( picPath );
+        ui->icon->setPixmap( pixmap );
+        ui->icon->setFixedHeight( pixmap.height() );
     }
-    QString text = QString("<h1><center>%1</center></h1><br /><p>%2</p>")
-                    .arg(current.data().toString())
-                    .arg(current.data(KDevelop::TemplatesModel::CommentRole ).toString() );
-    ui->description->setText( text );
+    // header name is either from this index directly or the parents if we show the combo box
+    const QVariant headerData = ui->templateType->isVisible()
+                                    ? current.parent().data()
+                                    : current.data();
+    ui->header->setText(QString("<h1>%1</h1>").arg(headerData.toString().trimmed()));
+    ui->description->setText(current.data(KDevelop::TemplatesModel::CommentRole).toString());
     validateData();
-    
+
     ui->propertiesBox->setEnabled(true);
 }
 

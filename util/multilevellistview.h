@@ -21,6 +21,7 @@
 #define KDEVELOP_MULTILEVELLISTVIEW_H
 
 #include <QtGui/QWidget>
+#include <KSelectionProxyModel>
 #include "utilexport.h"
 
 class QTreeView;
@@ -106,6 +107,11 @@ public:
 
     void setHeaderLabels(const QStringList& labels);
 
+    /**
+     * Set the filter behavior of the last model. By default, SubTreesWithoutRoots
+     * is used and only leafs are selectable in the view for that model.
+     */
+    void setLastModelsFilterBehavior(KSelectionProxyModel::FilterBehavior filter);
 signals:
     /**
      * Notified that the current index has changed from @p previous to @p current

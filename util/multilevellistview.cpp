@@ -447,6 +447,14 @@ void MultiLevelListView::setHeaderLabels(const QStringList& labels)
     }
 }
 
+void MultiLevelListView::setLastModelsFilterBehavior(KSelectionProxyModel::FilterBehavior filter)
+{
+    if (d->proxies.isEmpty()) {
+        return;
+    }
+    dynamic_cast<KSelectionProxyModel*>(d->proxies.last())->setFilterBehavior(filter);
+}
+
 
 #include "multilevellistview.moc"
 #include "moc_multilevellistview.cpp"

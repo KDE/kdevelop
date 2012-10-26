@@ -67,7 +67,7 @@
      <property name="minimumSize">
       <size>
        <width>300</width>
-       <height>0</height>
+       <height>400</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -99,31 +99,12 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLabel" name="preview">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>150</height>
-            </size>
-           </property>
+          <widget class="QLabel" name="header">
            <property name="text">
-            <string/>
+            <string notr="true"/>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="description">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>150</height>
-            </size>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            <set>Qt::AlignHCenter|Qt::AlignTop</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -132,6 +113,32 @@
          </item>
          <item>
           <widget class="QComboBox" name="templateType"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="icon">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignHCenter|Qt::AlignTop</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="description">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
