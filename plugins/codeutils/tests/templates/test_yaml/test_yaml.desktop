@@ -8,4 +8,4 @@ Files=Implementation
 Name=Implementation
 File=class.yaml
 OutputFile={{ name }}.yaml
- 
+

@@ -13,4 +13,4 @@ OutputFile={{ name }}.h
 Name=Implementation
 File=class.cpp
 OutputFile={{ name }}.cpp
- 
+
