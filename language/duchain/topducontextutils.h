@@ -34,7 +34,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
   const TopDUContext* top;
   const TopDUContextData* topDFunc;
   const CursorInRevision& position;
-  const AbstractType::Ptr& dataType;
+  const AbstractType::Ptr dataType;
   DUContext::SearchFlags flags;
 };
 

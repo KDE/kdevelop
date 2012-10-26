@@ -664,7 +664,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
        }
 
        SearchFlags m_flags;
-       const AbstractType::Ptr& m_dataType;
+       const AbstractType::Ptr m_dataType;
        const CursorInRevision& m_position;
        DUContext::ContextType m_ownType;
      };
