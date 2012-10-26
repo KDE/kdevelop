@@ -34,6 +34,7 @@ m_provider(provider)
     provider->reload();
 
     ui->treeView->setModel(provider->templatesModel());
+    ui->treeView->expandAll();
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(currentIndexChanged(QModelIndex)));
 }
 
