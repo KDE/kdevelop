@@ -22,14 +22,12 @@
 
 #include <grantlee/templateloader.h>
 
-#include "../languageexport.h"
-
 class KArchiveDirectory;
 
 namespace KDevelop
 {
 
-class KDEVPLATFORMLANGUAGE_EXPORT ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
+class ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
 {
 public:
     ArchiveTemplateLoader(const KArchiveDirectory* directory);
