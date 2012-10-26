@@ -106,7 +106,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
      * @param arguments a list of variables that are passed to this function as arguments
      * @param returnArguments a list of variables that this function returns
      **/
-    FunctionDescription(const QString& name, const VariableDescriptionList& arguments, const VariableDescriptionList& returnArguments);
+    FunctionDescription(const QString& name,
+                        const VariableDescriptionList& arguments,
+                        const VariableDescriptionList& returnArguments);
     /**
      * Creates a function and determines its properties from the @p declaration
      *
