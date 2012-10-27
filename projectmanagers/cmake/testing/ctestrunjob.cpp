@@ -20,7 +20,6 @@
 #include "ctestrunjob.h"
 #include "ctestsuite.h"
 #include "qttestdelegate.h"
-#include "ctestoutputmodel.h"
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>

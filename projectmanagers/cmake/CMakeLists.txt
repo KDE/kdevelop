@@ -42,7 +42,6 @@ set( cmakemanager_SRCS
   testing/ctestfindjob.cpp
   testing/ctestrunjob.cpp
   testing/ctestsuite.cpp
-  testing/ctestoutputmodel.cpp
   testing/qttestdelegate.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
