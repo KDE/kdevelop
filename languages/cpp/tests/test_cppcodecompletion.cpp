@@ -3178,42 +3178,46 @@ void TestCppCodeCompletion::testStringInComment()
 
 void TestCppCodeCompletion::testProperties()
 {
-  QByteArray code("struct A{\n__qt_property__(bool myProp READ prop); function foo() {}\n}; A aStack; A* aHeap = new A;");
+  QByteArray code(
+    "class A{\n"
+    "  __qt_property__(int myProp READ myProp WRITE setMyProp);\n"
+    "public:\n"
+    "  int myProp() const;\n" // actual getter
+    "  void setMyProp(int);\n" // actual setter
+    "};\n"
+    " A aStack; A* aHeap = new A; int main() {}");
   TopDUContext* top = parse(code, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
+  DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
-  QCOMPARE(top->findDeclarations(QualifiedIdentifier("A::myProp")).count(), 1);
-  QVERIFY(dynamic_cast<Cpp::QPropertyDeclaration*>(top->findDeclarations(QualifiedIdentifier("A::myProp")).first()));
+  QVector<Declaration*> declarations = top->childContexts().first()->localDeclarations();
+  QCOMPARE(declarations.count(), 3);
+  Cpp::QPropertyDeclaration* property = dynamic_cast<Cpp::QPropertyDeclaration*>(declarations.first());
+  QVERIFY(property);
+  Declaration* getter = declarations.at(1);
+  QVERIFY(getter->isFunctionDeclaration());
+  Declaration* setter = declarations.last();
+  QVERIFY(getter->isFunctionDeclaration());
+
+  DUContext* ctx = top->childContexts().last();
+  QCOMPARE(ctx->type(), DUContext::Other);
 
   {
-  CompletionItemTester complCtx(top, "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top, "aStack.");
+  CompletionItemTester complCtx(ctx, "aStack.");
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
+  QVERIFY(!complCtx.containsDeclaration(property));
+  QVERIFY(complCtx.containsDeclaration(getter));
+  QVERIFY(complCtx.containsDeclaration(setter));
   }
   {
-  CompletionItemTester complCtx(top, "aHeap->");
+  CompletionItemTester complCtx(ctx, "aHeap->");
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top->childContexts().first(), "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
+  QVERIFY(!complCtx.containsDeclaration(property));
+  QVERIFY(complCtx.containsDeclaration(getter));
+  QVERIFY(complCtx.containsDeclaration(setter));
   }
 
   release(top);
