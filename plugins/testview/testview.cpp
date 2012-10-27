@@ -190,7 +190,7 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
     switch (result)
     {
         case TestResult::NotRun:
-            return KIcon();
+            return KIcon("code-function");
 
         case TestResult::Skipped:
             return KIcon("task-delegate");
@@ -212,7 +212,7 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
             return KIcon("dialog-cancel");
 
         default:
-            return KIcon();
+            return KIcon("");
     }
 }
 
@@ -358,7 +358,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (QString caseName, suite->cases())
     {
-        QStandardItem* caseItem = new QStandardItem(caseName);
+        QStandardItem* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
         caseItem->setData(caseName, CaseRole);
         suiteItem->appendRow(caseItem);
     }
