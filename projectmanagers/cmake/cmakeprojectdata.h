@@ -11,6 +11,7 @@ struct CMakeProjectData
     QStringList includeDirectories;
     CMakeDefinitions definitions;
     QList<Target> targets;
+    QList<Test> testSuites;
     
     VariableMap vm;
     MacroMap mm;

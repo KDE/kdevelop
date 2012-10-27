@@ -1,0 +1,115 @@
+/* KDevelop CMake Support
+ *
+ * Copyright 2012 Miha Čančula <miha@noughmad.eu>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+#include "ctestfindsuitestest.h"
+#include "cmake-test-paths.h"
+
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
+#include <interfaces/itestcontroller.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/iprojectcontroller.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
+#include <qtest_kde.h>
+
+#define WAIT_FOR_SUITES(n, max)    \
+int i = 0; while(ICore::self()->testController()->testSuitesForProject(project).size() < n && i < max*10) { QTest::qWait(100); ++i; }
+
+QTEST_KDEMAIN( CTestFindSuitesTest, GUI )
+
+using namespace KDevelop;
+
+void CTestFindSuitesTest::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore::initialize();
+    DUChain::self()->disablePersistentStorage();
+}
+
+void CTestFindSuitesTest::cleanupTestCase()
+{
+    Core::self()->shutdown();
+}
+
+void CTestFindSuitesTest::testCTestSuite()
+{
+    IProject* project = parseProject( "unit_tests" );
+    QVERIFY2(project, "Project was not opened");
+    WAIT_FOR_SUITES(5, 10)
+    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
+    
+    QCOMPARE(suites.size(), 5);
+    
+    DUChainReadLocker locker(DUChain::lock());
+    
+    foreach (ITestSuite* suite, suites)
+    {
+        QCOMPARE(suite->cases(), QStringList());
+        QVERIFY(!suite->declaration().isValid());
+    }
+}
+
+void CTestFindSuitesTest::testQtTestSuite()
+{
+    IProject* project = parseProject( "unit_tests_kde" );
+    QVERIFY2(project, "Project was not opened");
+    WAIT_FOR_SUITES(1, 10)
+    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
+    
+    QCOMPARE(suites.size(), 1);
+    ITestSuite* suite = suites.first();
+    QCOMPARE(suite->cases().size(), 5);
+
+    DUChainReadLocker locker(DUChain::lock());
+    QVERIFY(suite->declaration().isValid());
+    
+    foreach (const QString& testCase, suite->cases())
+    {
+        QVERIFY(suite->caseDeclaration(testCase).isValid());
+    }
+}
+
+IProject* CTestFindSuitesTest::parseProject( const QString& name)
+{
+    KUrl url(CMAKE_TESTS_PROJECTS_DIR);
+    url.addPath(name);
+    url.addPath(name + ".kdev4");
+    ICore::self()->projectController()->openProject(url);
+    
+    kDebug() << name << url;
+    
+    IProject* project = ICore::self()->projectController()->findProjectByName(name);
+    int t = 0;
+    const int timeout = 100;
+    while (!project && t < 30000)
+    {
+        t += timeout;
+        QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), timeout);
+        project = ICore::self()->projectController()->findProjectByName(name);
+    }
+        
+    return project;
+}
+
+#include "ctestfindsuitestest.moc"
+

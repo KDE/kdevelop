@@ -50,6 +50,12 @@ using namespace KDevelop;
 
 void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
 
+
+bool isGenerated(const QString& name)
+{
+    return name.indexOf("#[")>=0;
+}
+
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
@@ -270,7 +276,38 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
-    Q_UNUSED(test);
+    Test t;
+    t.name = test->testName();
+    t.executable = test->exeName();
+    t.arguments = test->testArgs();
+
+    if (m_targetForId.contains(t.executable))
+    {
+        t.files = m_targetForId[t.executable].files;
+    }
+    else 
+    {
+        // Strip the extensions and full path added by kde4_add_unit_test
+        QString exe = t.executable;
+        if (exe.endsWith(".shell"))
+        {
+            exe.chop(6);
+        }
+        else if (exe.endsWith(".bat"))
+        {
+            exe.chop(4);
+        }
+        t.executable = exe;
+        exe = exe.split('/').last();
+        if (m_targetForId.contains(exe))
+        {
+            t.files = m_targetForId[exe].files;
+        }
+    }
+    t.files.removeAll("TEST"); // Added by kde4_add_unit_test
+    
+    kDebug(9042) << "AddTestAst" << t.executable << t.files;
+    m_testSuites << t;
     return 1;
 }
 
@@ -2332,11 +2369,6 @@ void CMakeProjectVisitor::setCacheValues( CacheValues* cache)
 void CMakeProjectVisitor::setVariableMap(VariableMap * vars)
 {
     m_vars=vars;
-}
-
-bool isGenerated(const QString& name)
-{
-    return name.indexOf("#[")>=0;
 }
 
 QStringList CMakeProjectVisitor::dependees(const QString& s) const

@@ -209,6 +209,9 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     word.end() = cursor;
   }
   
+  KTextEditor::Range nextToken = KTextEditor::Range(_word.end(), KTextEditor::Cursor(_word.end().line(), _word.end().column() + 2));
+  bool followingColon = document->text(nextToken) == "::";
+  
   document->replaceText(word, newText);
   
   KTextEditor::Cursor end = word.start();
@@ -235,8 +238,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     
     if(m_declaration.data()->kind() == Declaration::Namespace) {
       lock.unlock();
-      document->insertText(end, "::");
-      end.setColumn(end.column() + 2);
+      if ( ! followingColon ) {
+        document->insertText(end, "::");
+        end.setColumn(end.column() + 2);
+      }
       lock.lock();
     }
       
