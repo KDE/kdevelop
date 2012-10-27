@@ -157,8 +157,6 @@ public Q_SLOTS:
     
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);
-    void slotProjectOpened(KDevelop::IProject* p);
-    void slotFileRenamed(const KUrl& oldname, KDevelop::ProjectFileItem* newitem);
     void notifyDocumentClosed(Sublime::Document* doc);
 
 private:

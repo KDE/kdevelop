@@ -25,6 +25,7 @@
 #include <kio/copyjob.h>
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <KTextEditor/Document>
 #include <kparts/mainwindow.h>
 
 #include <QApplication>
@@ -34,6 +35,7 @@
 #include <vcs/vcsjob.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder)
 {
@@ -96,21 +98,41 @@ bool KDevelop::createFolder(const KUrl& folder)
 
 bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname)
 {
-    IPlugin* vcsplugin=project->versionControlPlugin();
-    if(vcsplugin) {
-        IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
+    bool wasVcsMoved = false;
+    IPlugin* vcsplugin = project->versionControlPlugin();
+    if (vcsplugin) {
+        IBasicVersionControl* vcs = vcsplugin->extension<IBasicVersionControl>();
 
         // We have a vcs and the file/folder is controller, need to make the rename through vcs
-        if(vcs->isVersionControlled(oldname)) {
-            VcsJob* job=vcs->move(oldname, newname);
-            if(job) {
-                return job->exec();
+        if (vcs->isVersionControlled(oldname)) {
+            VcsJob* job = vcs->move(oldname, newname);
+            if (job && !job->exec()) {
+                return false;
             }
+            wasVcsMoved = true;
         }
     }
     // Fallback for the case of no vcs, or not-vcs-managed file/folder
-    KIO::CopyJob* job=KIO::move(oldname, newname);
-    return KIO::NetAccess::synchronousRun(job, 0);
+
+    // try to save-as the text document, so users can directly continue to work
+    // on the renamed url as well as keeping the undo-stack intact
+    IDocument* document = ICore::self()->documentController()->documentForUrl(oldname);
+    if (document && document->textDocument()) {
+        if (!document->textDocument()->saveAs(newname)) {
+            return false;
+        }
+        if (!wasVcsMoved) {
+            // unlink the old file
+            removeUrl(project, oldname, false);
+        }
+        return true;
+    } else if (!wasVcsMoved) {
+        // fallback for non-textdocuments (also folders e.g.)
+        KIO::CopyJob* job = KIO::move(oldname, newname);
+        return KIO::NetAccess::synchronousRun(job, 0);
+    } else {
+        return true;
+    }
 }
 
 bool KDevelop::copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target)
