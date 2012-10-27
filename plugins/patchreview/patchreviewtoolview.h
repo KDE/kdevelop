@@ -21,6 +21,7 @@
 
 namespace KDevelop {
 class IDocument;
+class ITestSuite;
 }
 
 class LocalPatchSource;
@@ -53,6 +54,8 @@ private slots:
 
     void finishReview();
 
+    void runTests();
+
 private:
     void kompareModelChanged();
 
@@ -61,6 +64,8 @@ private:
     void fillEditFromPatch();
     /// Retrieve the patch from plugin and perform all necessary casts
     LocalPatchSource* GetLocalPatchSource();
+
+    QList<KDevelop::ITestSuite*> testSuites();
 
     Ui_EditPatch m_editPatch;
 

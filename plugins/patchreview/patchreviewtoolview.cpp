@@ -21,8 +21,13 @@
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/itestcontroller.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/iprojectcontroller.h>
+#include <util/executecompositejob.h>
 #include <KLineEdit>
 #include <QMenu>
 
@@ -188,6 +193,13 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
+
+    if (testSuites().isEmpty()) {
+      m_editPatch.testsButton->hide();
+    } else {
+      m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
+      connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
+    }
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -374,3 +386,45 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
     }
 }
 
+void PatchReviewToolView::runTests()
+{
+    QList<KJob*> jobs;
+    foreach (ITestSuite* suite, testSuites()) {
+        KJob* job = suite->launchAllCases();
+        if (job) {
+            jobs << job;
+        }
+    }
+    ICore::self()->runController()->registerJob(new ExecuteCompositeJob(this, jobs));
+}
+
+QList< ITestSuite* > PatchReviewToolView::testSuites()
+{
+    QList<ITestSuite*> ret;
+    QList<KUrl> urls = m_plugin->patch()->additionalSelectableFiles().keys();
+    if (urls.isEmpty()) {
+        kDebug() << "No urls";
+        return ret;
+    }
+
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(urls.first());
+    if (!project) {
+        kDebug() << "No project for" << urls;
+        return ret;
+    }
+
+    IPlugin* testPlugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ITestController");
+    if (!testPlugin) {
+        kDebug() << "No plugin";
+        return ret;
+    }
+
+    ITestController* tc = testPlugin->extension<ITestController>();
+    if (!tc) {
+        kDebug() << "No test controller";
+        return ret;
+    }
+
+    kDebug() << "Everything ok, returning test suites";
+    return tc->testSuitesForProject(project);
+}

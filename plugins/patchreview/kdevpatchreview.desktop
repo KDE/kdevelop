@@ -100,6 +100,7 @@ X-KDE-Library=kdevpatchreview
 X-KDevelop-Version=15
 X-KDevelop-Category=Global
 X-KDevelop-Interfaces=org.kdevelop.IPatchReview
+X-KDevelop-IOptional=org.kdevelop.ITestController
 X-KDE-PluginInfo-Name=kdevpatchreview
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
