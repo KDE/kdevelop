@@ -126,14 +126,14 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_contextMenuActions << runSelected;
 
     addAction(plugin->actionCollection()->action("run_all_tests"));
-    
+
     QString filterText;
     KConfigGroup config(ICore::self()->activeSession()->config(), sessionConfigGroup);
     if (config.hasKey(filterConfigKey))
     {
         filterText = config.readEntry(filterConfigKey, QString());
     }
-    
+
     TestViewFilterAction* filterAction = new TestViewFilterAction(filterText, this);
     connect(filterAction, SIGNAL(filterChanged(QString)),
             m_filter, SLOT(setFilterFixedString(QString)));
@@ -170,9 +170,9 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
     }
 
     kDebug() << "Updating test suite" << suite->name();
-    
+
     item->setIcon(iconForTestResult(result.suiteResult));
-    
+
     for (int i = 0; i < item->rowCount(); ++i)
     {
         kDebug() << "Found a test case" << item->child(i)->text();
@@ -211,7 +211,7 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 
         case TestResult::Error:
             return KIcon("dialog-cancel");
-            
+
         default:
             return KIcon();
     }
@@ -236,7 +236,7 @@ QStandardItem* TestView::itemForProject(IProject* project)
     {
         return item;
     }
-    
+
     return addProject(project);
 }
 
@@ -251,15 +251,15 @@ void TestView::runSelectedTests()
 
     QList<KJob*> jobs;
     ITestController* tc = ICore::self()->testController();
-    
-    /* 
-     * NOTE: If a test suite or a single test case was selected, 
-     * the job is launched in Verbose mode with raised output window. 
-     * If a project is selected, it is launched silently. 
-     * 
-     * This is the somewhat-intuitive approach. Maybe a configuration should be offered. 
+
+    /*
+     * NOTE: If a test suite or a single test case was selected,
+     * the job is launched in Verbose mode with raised output window.
+     * If a project is selected, it is launched silently.
+     *
+     * This is the somewhat-intuitive approach. Maybe a configuration should be offered.
      */
-    
+
     foreach (const QModelIndex& idx, indexes)
     {
         QModelIndex index = m_filter->mapToSource(idx);

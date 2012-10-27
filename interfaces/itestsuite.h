@@ -39,12 +39,12 @@ class KDEVPLATFORMINTERFACES_EXPORT ITestSuite
 {
 
 public:
-    
+
     /**
      * Specifies how much output a test job should produce
      **/
     enum TestJobVerbosity
-    { 
+    {
         Silent, ///< No toolview is raised by the job
         Verbose ///< The job raises an output toolview
     };

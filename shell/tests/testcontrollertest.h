@@ -32,22 +32,22 @@ class TestController;
 class TestControllerTest : public QObject
 {
     Q_OBJECT
-    
+
 private slots:
     void initTestCase();
-    
+
     void addSuite();
     void removeSuite();
     void replaceSuite();
-    
+
     void findByProject();
     void testResults();
-    
+
     void cleanupTestCase();
-    
+
 private:
     void emitTestResult(ITestSuite* suite, TestResult::TestCaseResult caseResult);
-    
+
     TestController* m_testController;
     IProject* m_project;
 };

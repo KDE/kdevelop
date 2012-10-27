@@ -59,12 +59,12 @@ struct KDEVPLATFORMINTERFACES_EXPORT TestResult
      * The individual results of all test cases.
      **/
     QHash<QString, TestCaseResult> testCaseResults;
-    
+
     /**
-     * The total result of the entire suite. 
-     * 
-     * This is usually the worst outcome of the individual test cases, 
-     * but can be different especially when dealing with errors. 
+     * The total result of the entire suite.
+     *
+     * This is usually the worst outcome of the individual test cases,
+     * but can be different especially when dealing with errors.
      */
     TestCaseResult suiteResult;
 };
@@ -80,8 +80,8 @@ public:
      * Add a new test suite.
      *
      * No ownership is taken, the caller stays responsible for the suite.
-     * 
-     * If a suite with the same project and same name exists, the old one will be removed and deleted. 
+     *
+     * If a suite with the same project and same name exists, the old one will be removed and deleted.
      */
     virtual void addTestSuite(ITestSuite* suite) = 0;
     /**

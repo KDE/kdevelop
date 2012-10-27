@@ -66,7 +66,7 @@ public slots:
     QStandardItem* addProject(KDevelop::IProject* project);
     void removeProject(KDevelop::IProject* project);
     void doubleClicked(const QModelIndex& index);
-    
+
     QList<QAction*> contextMenuActions();
 
 private:

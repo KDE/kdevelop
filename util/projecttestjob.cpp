@@ -32,10 +32,10 @@ ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent): KJob(parent)
 {
     setCapabilities(Killable);
     setObjectName(i18n("Run all tests in %1", project->name()));
-    
+
     m_suites = ICore::self()->testController()->testSuitesForProject(project);
     connect (ICore::self()->testController(), SIGNAL(testRunFinished(KDevelop::ITestSuite*,KDevelop::TestResult)), SLOT(gotResult(KDevelop::ITestSuite*,KDevelop::TestResult)));
-    
+
     m_result.error = 0;
     m_result.failed = 0;
     m_result.passed = 0;
@@ -86,19 +86,19 @@ void ProjectTestJob::gotResult(ITestSuite* suite, const TestResult& result)
             case TestResult::Passed:
                 m_result.passed++;
                 break;
-                
+
             case TestResult::Failed:
                 m_result.failed++;
                 break;
-                
+
             case TestResult::Error:
                 m_result.error++;
                 break;
-                
+
             default:
                 break;
         }
-        
+
         if (m_suites.isEmpty())
         {
             emitResult();
