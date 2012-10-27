@@ -208,6 +208,11 @@ QHash<IndexedString, InsertArtificialCodeRepresentationPointer> DocumentChangeSe
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 {
+    KUrl oldActiveDoc;
+    if (IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
+        oldActiveDoc = activeDoc->url();
+    }
+
     // rename files
     QHash<IndexedString, IndexedString>::const_iterator it = d->documentsRename.constBegin();
     for(; it != d->documentsRename.constEnd(); ++it) {
@@ -218,7 +223,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
             if(!files.isEmpty()) {
                 ProjectBaseItem::RenameStatus renamed = files.first()->rename(it.value().str());
                 if(renamed == ProjectBaseItem::RenameOk) {
-                    IndexedString idxNewDoc(KUrl(url.upUrl(), it.value().str()));
+                    const KUrl newUrl(url.upUrl(), it.value().str());
+                    if (url == oldActiveDoc) {
+                        oldActiveDoc = newUrl;
+                    }
+                    IndexedString idxNewDoc(newUrl);
 
                     // ensure changes operate on new file name
                     ChangesHash::iterator iter = d->changes.find(it.key());
@@ -300,6 +309,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         foreach(const IndexedString& file, files) {
             ICore::self()->documentController()->openDocument(file.toUrl());
         }
+    }
+
+    // ensure the old document is still activated
+    if (oldActiveDoc.isValid()) {
+        ICore::self()->documentController()->openDocument(oldActiveDoc);
     }
 
     return result;
