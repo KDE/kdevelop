@@ -130,9 +130,9 @@ Q_SIGNALS:
     /** Emitted when the initialization of the core components has been completed */
     void initializationCompleted();
     /**
-        * Emitted immediately before tearing down the session and UI.  Useful when performing any last minute
-        * preparations such as saving settings.
-        */
+     * Emitted immediately before tearing down the session and UI.  Useful when performing any last minute
+     * preparations such as saving settings.
+     */
     void aboutToShutdown();
 
 protected:
