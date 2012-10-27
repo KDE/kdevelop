@@ -26,7 +26,6 @@
 #include <util/kdevvarlengtharray.h>
 
 #include <ksharedptr.h>
-#include <kdebug.h>
 
 #include "../languageexport.h"
 #include "referencecounting.h"
@@ -171,14 +170,6 @@ public:
   ///If the identifier isn't in the repository yet, it is added to the repository.
   uint index() const;
 
-  /**
-    * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
-    */
-  inline friend kdbgstream& operator<< (kdbgstream& s, const Identifier& identifier) {
-    s << identifier.toString();
-    return s;
-  }
-
 private:
   void makeConstant() const;
   void prepareWrite();
@@ -281,14 +272,6 @@ public:
    */
   bool inRepository() const;
 
-  /**
-    * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.
-    */
-  inline friend kdbgstream& operator<< (kdbgstream& s, const QualifiedIdentifier& identifier) {
-    s << identifier.toString();
-    return s;
-  }
-
   typedef uint HashType;
 
   ///The hash does not respect explicitlyGlobal, only the real scope.
@@ -376,6 +359,17 @@ KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedQualifiedIdentifier, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::IndexedIdentifier, Q_MOVABLE_TYPE);
+
+
+/**
+ * {q,k}Debug() stream operator: Writes the Identifier to the debug output.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Identifier& identifier);
+
+/**
+ * {q,k}Debug() stream operator: Writes the QualifiedIdentifier to the debug output.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::QualifiedIdentifier& identifier);
 
 #endif // IDENTIFIER_H
 
