@@ -5,6 +5,7 @@
     <file>UseKDevelop.qml</file>
     <file>Link.qml</file>
     <file>StandardPage.qml</file>
+    <file>Heading.qml</file>
     <file>StandardBackground.qml</file>
 
     <!-- areas  -->
