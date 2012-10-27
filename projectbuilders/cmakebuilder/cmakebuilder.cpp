@@ -271,7 +271,11 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
 
 QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
 {
-	return QList< KDevelop::IProjectBuilder* >() << builderForProject( project );
+    IProjectBuilder* b = builderForProject( project );
+    QList< KDevelop::IProjectBuilder* > ret;
+    if(b)
+        ret << b;
+    return ret;
 }
 
 #include "cmakebuilder.moc"
