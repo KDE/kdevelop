@@ -137,9 +137,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
 DocumentChangeSet::ChangeResult DocumentChangeSet::addDocumentRenameChange(const IndexedString& oldFile,
                                                                            const IndexedString& newname)
 {
-    if (d->documentsRename.value(oldFile) != newname) {
-        return ChangeResult(i18n("Couldn't rename '%1' to '%2'", oldFile.toUrl().pathOrUrl(), newname.str()));
-    }
     d->documentsRename.insert(oldFile, newname);
     return true;
 }
@@ -211,6 +208,7 @@ QHash<IndexedString, InsertArtificialCodeRepresentationPointer> DocumentChangeSe
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 {
+    // rename files
     QHash<IndexedString, IndexedString>::const_iterator it = d->documentsRename.constBegin();
     for(; it != d->documentsRename.constEnd(); ++it) {
         KUrl url = it.key().toUrl();
@@ -222,10 +220,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                 if(renamed == ProjectBaseItem::RenameOk) {
                     IndexedString idxNewDoc(KUrl(url.upUrl(), it.value().str()));
 
-                    ChangesHash::const_iterator iter = d->changes.constFind(it.key());
-                    if (iter != d->changes.constEnd()) {
-                        // note: cannot use const version, want to have a mutable pointer
+                    // ensure changes operate on new file name
+                    ChangesHash::iterator iter = d->changes.find(it.key());
+                    if (iter != d->changes.end()) {
+                        // copy changes
                         ChangesList value = iter.value();
+                        // remove old entry
+                        d->changes.erase(iter);
+                        // adapt to new url
                         ChangesList::iterator itChange = value.begin();
                         ChangesList::iterator itEnd = value.end();
                         for(; itChange != itEnd; ++itChange) {
@@ -233,10 +235,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                         }
                         d->changes[idxNewDoc] = value;
                     }
+                } else {
+                    ///FIXME: share code with project manager for the error code string representation
+                    return ChangeResult(i18n("Couldn't rename '%1' to '%2'", url.pathOrUrl(), it.value().str()));
                 }
             } else {
                 //TODO: do it outside the project management?
+                kWarning() << "tried to rename file not tracked by project - not implemented";
             }
+        } else {
+            kWarning() << "tried to rename a file outside of a project - not implemented";
         }
     }
 
