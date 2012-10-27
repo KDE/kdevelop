@@ -148,6 +148,7 @@ private slots:
   void testExecuteKeepWord();
   void testAfterVisibility_data();
   void testAfterVisibility();
+  void testNoQuadrupleColon();
 public:
   enum DumpArea {
     DumpNone = 0,

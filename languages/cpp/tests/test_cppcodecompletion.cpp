@@ -3448,4 +3448,47 @@ void TestCppCodeCompletion::testAfterVisibility()
   release(top);
 }
 
+void TestCppCodeCompletion::testNoQuadrupleColon()
+{
+  QByteArray code("namespace Foobar { static int var; }\n main() { Foobar::var; }");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+  
+  CompletionItemTester tester(top->childContexts().last());
+  QVERIFY(tester.completionContext->isValid());
+  KSharedPtr<CompletionTreeItem> item;
+  for( int i = 0; i < tester.items.length(); ++i ) {
+      if( tester.itemData( i ).toString() == "Foobar" ) {
+          item = tester.items.at( i );
+      }
+  }
+  QVERIFY( !item.isNull() );
+  
+  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  QVERIFY(editor);
+  KTextEditor::Document* doc = editor->createDocument(this);
+  QVERIFY(doc);
+
+  // verify it adds the "::" when the doc is empty
+  doc->setText("");
+  KTextEditor::View* v = doc->createView(0);
+  
+  doc->startEditing();
+  KTextEditor::Cursor c( 0, 0 );
+  v->setCursorPosition( c );
+
+  item->execute( doc, Range( c, 0 ) );
+  QCOMPARE( doc->line( 0 ), QString("Foobar::") );
+
+  // verify it doesn't when there's already a "::"
+  doc->setText("::var;");
+  v->setCursorPosition( c );
+
+  item->execute( doc, Range( c, 0 ) );
+  QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
+
+  doc->endEditing();
+}
+
 #include "test_cppcodecompletion.moc"
