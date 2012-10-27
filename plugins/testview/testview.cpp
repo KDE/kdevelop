@@ -109,8 +109,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_tree->setSelectionBehavior(QTreeView::SelectRows);
     m_tree->setSelectionMode(QTreeView::SingleSelection);
     m_tree->setExpandsOnDoubleClick(false);
-    connect(m_tree, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(doubleClicked(QModelIndex)));
+    connect(m_tree, SIGNAL(activated(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
 
     m_model = new QStandardItemModel(this);
     m_filter->setSourceModel(m_model);
