@@ -19,14 +19,9 @@
  */
 
 #include "cmakebuilder.h"
-#include "imakebuilder.h"
 
 #include <config.h>
-
-#include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
+#include <cmakebuilderconfig.h>
 
 #include <project/projectmodel.h>
 
@@ -35,29 +30,21 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <outputview/ioutputview.h>
-#include <outputview/outputmodel.h>
-#include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
+#include <project/builderjob.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kparts/mainwindow.h>
 #include <kio/deletejob.h>
 #include <kaboutdata.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KProcess>
 #include <kjob.h>
 #include <kurl.h>
-#include <kconfig.h>
 
-#include "configureandbuildjob.h"
 #include "cmakejob.h"
 #include "cmakeutils.h"
 #include <cmakemodelitems.h>
@@ -67,17 +54,29 @@ K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuil
                                                "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
-      m_dirty(true), m_builder( 0 )
+    : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
 
-    IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
+    addBuilder("Makefile", QStringList("Unix Makefiles") << "NMake Makefiles", core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder"));
+    addBuilder("build.ninja", QStringList("Ninja"), core()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder"));
+}
+
+CMakeBuilder::~CMakeBuilder()
+{
+}
+
+void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& generators, KDevelop::IPlugin* i)
+{
     if( i )
     {
-        m_builder = i->extension<IMakeBuilder>();
-        if( m_builder )
+        IProjectBuilder* b = i->extension<KDevelop::IProjectBuilder>();
+        if( b )
         {
+            m_builders[neededfile] = b;
+            foreach(const QString& gen, generators) {
+                m_buildersForGenerator[gen] = b;
+            }
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
             
@@ -85,12 +84,12 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(installed(KDevelop::ProjectBaseItem*)), this, SIGNAL(installed(KDevelop::ProjectBaseItem*)));
-        }
-    }
-}
 
-CMakeBuilder::~CMakeBuilder()
-{
+            kDebug() << "Added builder " << i->metaObject()->className() << "for" << neededfile;
+        }
+        else
+            kWarning() << "Couldn't add " << i->metaObject()->className() << i->extensions();
+    }
 }
 
 void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
@@ -104,7 +103,8 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     KDevelop::ProjectBaseItem* builditem = dom;
     KDevelop::IProject* p = dom->project();
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(p);
+    if( builder )
     {
         if(dom->file())
         {
@@ -117,7 +117,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             fldr->appendRow(it);
              
             builditem=it;
-            m_deleteWhenDone << fldr << it;
+            m_deleteWhenDone << it;
         }
         KJob* configure = 0;
         if( CMake::checkForNeedingConfigure(dom) )
@@ -132,11 +132,15 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Building with make";
-        KJob* build = m_builder->build(builditem);
+        KJob* build = builder->build(builditem);
         if( configure ) 
         {
             kDebug() << "creating composite job";
-            build = new ConfigureAndBuildJob( configure, build );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, builditem );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, builditem );
+            builderJob->updateJobName();
+            build = builderJob;
         }
         return build;
     }
@@ -145,9 +149,10 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
-    KDevelop::ProjectBaseItem* item = dom;
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(dom->project());
+    if( builder )
     {
+        KDevelop::ProjectBaseItem* item = dom;
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
@@ -163,9 +168,13 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Cleaning with make";
-        KJob* clean = m_builder->clean(item);
+        KJob* clean = builder->clean(item);
         if( configure ) {
-            clean = new ConfigureAndBuildJob( configure, clean );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Clean, clean, item );
+            builderJob->updateJobName();
+            clean = builderJob;
         }
         return clean;
     }
@@ -174,9 +183,10 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 
 KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
-    KDevelop::ProjectBaseItem* item = dom;
-    if( m_builder )
+    IProjectBuilder* builder = builderForProject(dom->project());
+    if( builder )
     {
+        KDevelop::ProjectBaseItem* item = dom;
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
@@ -193,9 +203,13 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Installing with make";
-        KJob* install = m_builder->install(item);
+        KJob* install = builder->install(item);
         if( configure ) {
-            install = new ConfigureAndBuildJob( configure, install );
+            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Install, install, item );
+            builderJob->updateJobName();
+            install = builderJob;
         }
         return install;
 
@@ -240,6 +254,24 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
         urls << tmp;
     }
     return KIO::del( urls );
+}
+
+KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p) const
+{
+    QString builddir = CMake::currentBuildDir( p ).toLocalFile();
+    QMap<QString, IProjectBuilder*>::const_iterator it = m_builders.constBegin(), itEnd = m_builders.constEnd();
+    for(; it!=itEnd; ++it) {
+        if(QFile::exists(builddir+'/'+it.key()))
+            return it.value();
+    }
+    //It means that it still has to be generated, so use the builder for
+    //the generator we use
+    return m_buildersForGenerator[CMakeBuilderSettings::self()->generator()];
+}
+
+QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
+{
+	return QList< KDevelop::IProjectBuilder* >() << builderForProject( project );
 }
 
 #include "cmakebuilder.moc"

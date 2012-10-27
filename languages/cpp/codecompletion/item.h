@@ -52,11 +52,14 @@ namespace Cpp {
 
 void setStaticMatchContext(QList<KDevelop::IndexedType> types);
 
+void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
+                                      bool isSignal, const QString& name, const QString& signature );
+
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::NormalDeclarationCompletionItem {
 public:
   NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<KDevelop::CodeCompletionContext> context=KSharedPtr<KDevelop::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0)
-    : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
+    : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), prependScopePrefix(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
@@ -75,6 +78,9 @@ public:
   //If this is true, alternativeText will be shown in the list, and will be inserted on execution.
   //Also the scope will be set to LocalScope when this attribute is true.
   bool useAlternativeText;
+
+  //If this is true, scope prefix will be prepended to text inserted on execution.
+  bool prependScopePrefix;
 
   int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
 

@@ -442,6 +442,8 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
+
+    ///FIXME: use IndexedStrings
     QPair<KUrl, KUrl> included = CppUtils::findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
@@ -567,7 +569,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
-            CPPParseJob* slaveJob = new CPPParseJob(includedFile, this);
+            CPPParseJob* slaveJob = new CPPParseJob(IndexedString(includedFile), parentJob()->cpp(), this);
             
             slaveJob->setMinimumFeatures(slaveMinimumFeatures);
 

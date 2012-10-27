@@ -22,37 +22,25 @@
 
 #include "cmakejob.h"
 
-#include "imakebuilder.h"
-
 #include <config.h>
+#include <cmakebuilderconfig.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-#include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
-#include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
 #include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kshell.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdialog.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kdebug.h>
-#include <KProcess>
 #include <kjob.h>
 
 #include "cmakeutils.h"
@@ -76,21 +64,24 @@ void CMakeJob::start()
     if( !m_project ) {
         setError(NoProjectError);
         setErrorText("Internal error: no project specified to configure.");
-        return emitResult();
+        emitResult();
+        return;
     }
+
+    CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    KDevelop::OutputModel* m_model = new KDevelop::OutputModel(this);
-    setModel( m_model, KDevelop::IOutputView::TakeOwnership );
+    KDevelop::OutputModel* model = new KDevelop::OutputModel;
+    setModel( model );
     startOutput();
 
     QString cmd = cmakeBinary( m_project );
     m_executor = new KDevelop::CommandExecutor(cmd, this);
     connect(m_executor, SIGNAL(receivedStandardError(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            model, SLOT(appendLines(QStringList)) );
     connect(m_executor, SIGNAL(receivedStandardOutput(QStringList)),
-            model(), SLOT(appendLines(QStringList)) );
+            model, SLOT(appendLines(QStringList)) );
     KUrl buildDirUrl = KUrl(QFileInfo(buildDir( m_project ).toLocalFile()).absoluteFilePath());
     if( !QFileInfo(buildDirUrl.toLocalFile()).exists() )
     {
@@ -102,9 +93,9 @@ void CMakeJob::start()
     m_executor->setArguments( cmakeArguments( m_project ) );
     m_executor->setEnvironment(buildEnvironment());
     connect( m_executor, SIGNAL(failed(QProcess::ProcessError)), this, SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_executor, SIGNAL(completed()), this, SLOT(slotCompleted()) );
-    kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
-    m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
+    connect( m_executor, SIGNAL(completed(int)), this, SLOT(slotCompleted(int)) );
+    kDebug() << "Executing" << m_executor->command() << buildDirUrl.toLocalFile() << m_executor->arguments();
+    model->appendLine( buildDirUrl.toLocalFile() + "> " + m_executor->command() + " " + m_executor->arguments().join(" "));
     m_executor->start();
 }
 
@@ -119,9 +110,13 @@ void CMakeJob::slotFailed( QProcess::ProcessError )
     emitResult();
 }
 
-void CMakeJob::slotCompleted()
+void CMakeJob::slotCompleted(int code)
 {
     kDebug() << "job completed";
+    if( code != 0 ) {
+        // Error is already visible in the output view
+        setError(FailedShownError);
+    }
     emitResult();
 }
 
@@ -148,24 +143,26 @@ KUrl CMakeJob::buildDir( KDevelop::IProject* project )
 QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
 {
     QStringList args;
-    KUrl cmakecache = buildDir( project );
-    cmakecache.addPath("CMakeCache.txt");
-    if( !CMake::currentInstallDir(project).toLocalFile().isEmpty() ) 
+    QString installDir = CMake::currentInstallDir(project).toLocalFile();
+    if( !installDir.isEmpty() )
     {
-        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
+        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(installDir);
     }
-    if( !CMake::currentBuildType(project).isEmpty() )
+    QString buildType = CMake::currentBuildType(project);
+    if( !buildType.isEmpty() )
     {
-        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
+        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
-#ifdef Q_OS_WIN
-    // Visual Studio solution is the standard generator under windows, but we dont want to use
-    // the VS IDE, so we need nmake makefiles
-    args << QString("-G") << QString("NMake Makefiles");
-#endif
-    if( !CMake::currentExtraArguments(project).isEmpty() ) {
+    
+    //if we are creating a new build directory, we'll want to specify the generator
+    QDir builddir(CMake::currentBuildDir(project).toLocalFile());
+    if(!builddir.exists() || builddir.count()==2) {
+        CMakeBuilderSettings::self()->readConfig();
+        args << QString("-G") << CMakeBuilderSettings::self()->generator();
+    }
+    QString cmakeargs = CMake::currentExtraArguments(project);
+    if( !cmakeargs.isEmpty() ) {
         KShell::Errors err;
-        QString cmakeargs = CMake::currentExtraArguments(project);
         QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
         if( err == KShell::NoError ) {
             args += tmp;

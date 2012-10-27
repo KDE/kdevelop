@@ -46,21 +46,22 @@ static KDevelop::ProjectBaseItem* getRealCMakeParent(KDevelop::ProjectBaseItem* 
 
 QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const
 {
-    if (!placeInHierarchy) return m_includeList;
+    QStringList ret(m_includeList);
+    if (!placeInHierarchy)
+        return ret;
 
     placeInHierarchy = getRealCMakeParent(placeInHierarchy);
     while(placeInHierarchy)
     {
         IncludesAttached* includer = dynamic_cast<IncludesAttached*>( placeInHierarchy );
         if(includer) {
-            QStringList includes(m_includeList);
-            includes += includer->includeDirectories(placeInHierarchy);
-            return includes;
+            ret += includer->includeDirectories(placeInHierarchy);
+            return ret;
         }
 
         placeInHierarchy = getRealCMakeParent(placeInHierarchy);
     }
-    return m_includeList;
+    return ret;
 }
 
 CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) const

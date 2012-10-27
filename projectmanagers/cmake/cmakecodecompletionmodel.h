@@ -39,7 +39,7 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
         void executeCompletionItem(KTextEditor::Document* document, const KTextEditor::Range& word, int row) const;
     private:
         const CMakeDocumentation* doc() const;
-        enum Type { Command, Variable, Macro, Path };
+        enum Type { Command, Variable, Macro, Path, Target };
         Type indexType(int row) const;
         static QStringList s_commands;
         QList< KDevelop::IndexedDeclaration > m_declarations;

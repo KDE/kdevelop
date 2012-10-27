@@ -1,0 +1,10 @@
+[General]
+Name=Basic
+Comment=Basic Python Class
+Category=Class/Python/Basic
+Files=Definition
+
+[Definition]
+Name=Definition
+File=class.py
+OutputFile={{ name }}.py

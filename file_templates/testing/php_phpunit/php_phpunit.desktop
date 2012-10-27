@@ -1,0 +1,11 @@
+[General]
+Name=PhpUnit
+Comment=A unit test using the PhpUnit framework
+Category=Test/Php
+Files=Implementation
+
+[Implementation]
+Name=Implementation
+File=class.php
+OutputFile={{ name }}.php
+ 

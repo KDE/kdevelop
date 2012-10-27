@@ -83,7 +83,6 @@
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
 #include "codegen/codeassistant.h"
-#include "codegen/cppnewclass.h"
 #include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
 
@@ -92,6 +91,7 @@
 #include "quickopen.h"
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
+#include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
 
@@ -215,10 +215,6 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
-    KAction* newClassAction = actions.addAction("code_new_class");
-    newClassAction->setText( i18n("Create &New Class") );
-    connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassAssistant()));
-    
 //    KAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
 //    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
@@ -398,7 +394,7 @@ CppLanguageSupport::~CppLanguageSupport()
 
     delete m_quickOpenDataProvider;
 
-    // Remove any documents waiting to be parsed from the background paser.
+    // Remove any documents waiting to be parsed from the background parser.
     core()->languageController()->backgroundParser()->clear(this);
 
 
@@ -417,15 +413,21 @@ CppLanguageSupport* CppLanguageSupport::self() {
     return m_self;
 }
 
-KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
+KDevelop::ParseJob *CppLanguageSupport::createParseJob( const IndexedString &url )
 {
-    return new CPPParseJob( url );
+    return new CPPParseJob( url, this );
 }
 
 KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }
+
+ICreateClassHelper* CppLanguageSupport::createClassHelper() const
+{
+    return new CppClassHelper;
+}
+
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
 {
@@ -741,12 +743,6 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     }
 
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
-}
-
-void CppLanguageSupport::newClassAssistant()
-{
-  //TODO: Should give some hint on where it should be added
-  SimpleRefactoring::self().createNewClass(0);
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {

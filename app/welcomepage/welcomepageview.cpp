@@ -33,6 +33,8 @@
 #include <sublime/mainwindow.h>
 
 #include <kdeclarative.h>
+#include <KDebug>
+#include <Plasma/Theme>
 #include <qdeclarative.h>
 
 using namespace KDevelop;
@@ -44,6 +46,10 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
+    
+    QPalette p = palette();
+    p.setColor(QPalette::Active, QPalette::Text, QColor(Qt::black));
+    setPalette(p);
 
     //setup kdeclarative library
     KDeclarative kdeclarative;
@@ -51,9 +57,6 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     kdeclarative.initialize();
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
-
-    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
-            this, SLOT(areaChanged(Sublime::Area*)));
 
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
@@ -63,6 +66,12 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     areaChanged(ICore::self()->uiController()->activeArea());
 
     setSource(QUrl("qrc:/main.qml"));
+    if(!errors().isEmpty()) {
+        kWarning() << "welcomepage errors:" << errors();
+    }
+    areaChanged(Core::self()->uiControllerInternal()->activeSublimeWindow()->area());
+    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
+        this, SLOT(areaChanged(Sublime::Area*)));
 }
 
 void WelcomePageView::areaChanged(Sublime::Area* area)
@@ -76,9 +85,10 @@ void trySetupWelcomePageView()
 
     // make sure plasma component is available
     QDeclarativeComponent component(v->engine());
-    component.setData("import org.kde.plasma.components 0.1\nText { text: \"Hello world!\" }", QUrl());
+    component.setData("import org.kde.plasma.components 0.1\nimport QtQuick 1.0\nText { text: \"Hello world!\" }", QUrl());
 
     if (component.isError()) {
+        kWarning() << "Welcome Page not supported. errors: " << component.errors();
         delete v;
     } else {
         Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(v);

@@ -37,6 +37,7 @@
 #include "cppducontext.h"
 #include <language/duchain/use.h>
 #include "templateparameterdeclaration.h"
+#include "qpropertydeclaration.h"
 #include <language/duchain/classdeclaration.h>
 
 
@@ -141,6 +142,10 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
 
   typedef QPair<Declaration*, int> Pair;
   foreach(  const Pair& decl, declarations ) {
+    // FIXME: this is hackish but we must hide properties here...
+    if (dynamic_cast<QPropertyDeclaration*>(decl.first)) {
+      continue;
+    }
     depthHash[decl.first] = decl.second;
 
     QHash<Identifier, Declaration*>::iterator it = nearestDeclaration.find(decl.first->identifier());
@@ -734,9 +739,11 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 {
 
   bool isReference = false;
+  bool isRValue = false;
   if(ReferenceType::Ptr refType = type.cast<ReferenceType>()) {
     isReference = true;
     type = refType->baseType();
+    isRValue = refType->isRValue();
   }
 
   type = shortenTypeForViewing(type);
@@ -754,6 +761,8 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 
   if(isReference)
     identifier.setIsReference(true);
+  if(isRValue)
+    identifier.setIsRValue(true);
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);

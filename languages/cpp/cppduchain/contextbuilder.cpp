@@ -546,7 +546,7 @@ void ContextBuilder::visitTypedef (TypedefAST *node)
 
 void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 {
-  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body);
+  PushValue<bool> push(m_inFunctionDefinition, (bool)node->function_body || node->defaultDeleted != FunctionDefinitionAST::NotDefaultOrDeleted);
 
   QualifiedIdentifier functionName;
   if (compilingContexts() && node->declarator && node->declarator->id) {
@@ -842,8 +842,7 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
     // in range-based for we first visit the expression
     // since it might define the type for cases like
     // for(auto i : foo)
-    visit(node->expression);
-    visit(node->range_declaration);
+    handleRangeBasedFor(node->expression, node->range_declaration);
     Q_ASSERT(!node->init_statement);
     Q_ASSERT(!node->condition);
   } else {
@@ -865,6 +864,12 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
 
   // Didn't get claimed if it was still set
   m_importedParentContexts.clear();
+}
+
+void ContextBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
+{
+  visit(container);
+  visit(iterator);
 }
 
 void ContextBuilder::createTypeForInitializer(InitializerAST* /*node*/) {
@@ -893,7 +898,7 @@ void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseA
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   QualifiedIdentifier id;
-  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
+  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && !node->declarator->parameter_declaration_clause) {
     //Build a prefix-context for external variable-definitions
     CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);

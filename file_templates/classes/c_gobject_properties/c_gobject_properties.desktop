@@ -1,0 +1,15 @@
+[General]
+Name=GObject with properties
+Comment=A GObject subclass with a private pointer and properties
+Category=Class/C/GLib
+Files=Header,Implementation
+
+[Header]
+Name=Header
+File=class.h
+OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=class.c
+OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.c

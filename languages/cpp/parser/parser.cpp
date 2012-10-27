@@ -247,10 +247,40 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   return ast;
 }
 
+void Parser::fixupInitializerFromParameter(InitDeclaratorAST* node, ParseSession* _session)
+{
+  clear();
+  session = _session;
+
+  Q_ASSERT(session->token_stream);
+
+  Q_ASSERT(!node->initializer);
+  Q_ASSERT(node->declarator);
+  Q_ASSERT(node->declarator->parameter_declaration_clause);
+
+  // include the '(', which is not included in the parameter_declaration_clause, thus: -1
+  rewind(node->declarator->parameter_declaration_clause->start_token - 1);
+
+  InitializerAST* initializer = 0;
+  if (!parseInitializer(initializer)) {
+    // note: this can happen when we encounter unresolved types, since then
+    // DeclarationBuilder::checkParameterDeclarationClause will think this is an initializer
+    // we handle this gracefully and just exit
+    return;
+  }
+
+  // fixup AST
+  node->initializer = initializer;
+  // note: this is not leaking, as the AST is managed by a memory pool
+  node->declarator->parameter_declaration_clause = 0;
+}
+
 
 void Parser::clear()
 {
   _M_hold_errors = false;
+  _M_problem_count = 0;
+  _M_hadMismatchingCompoundTokens = false;
   m_tokenMarkers.clear();
 }
 
@@ -628,8 +658,7 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
 
 bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 {
-  _M_problem_count = 0;
-  _M_hadMismatchingCompoundTokens = false;
+  clear();
 
 /*  kDebug() << "tokens:";
   for(uint a = 0; a < session->token_stream->size(); ++a)
@@ -1951,7 +1980,7 @@ bool Parser::parseStorageClassSpecifier(const ListNode<uint> *&node)
 
   int tk;
   while (0 != (tk = session->token_stream->lookAhead())
-         && (tk == Token_friend || tk == Token_auto
+         && (tk == Token_friend
              || tk == Token_register || tk == Token_static
              || tk == Token_extern || tk == Token_mutable || tk == Token_thread_local
              || tk == Token_constexpr))
@@ -2641,16 +2670,24 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
       return false;
     }
 
-  ADVANCE('(', "(");
   ExpressionAST *expr = 0;
-  parseExpressionList(expr);
   bool expressionIsVariadic = false;
-  if (session->token_stream->lookAhead() == Token_ellipsis)
+
+  if (session->token_stream->lookAhead() == '(')
     {
       advance();
-      expressionIsVariadic = true;
+      parseExpressionList(expr);
+      if (session->token_stream->lookAhead() == Token_ellipsis)
+        {
+          advance();
+          expressionIsVariadic = true;
+        }
+      ADVANCE(')', ")");
     }
-  ADVANCE(')', ")");
+  else
+    {
+      parseBracedInitList(expr);
+    }
 
   bool initializerIsVariadic = false;
   if (session->token_stream->lookAhead() == Token_ellipsis)

@@ -126,26 +126,6 @@ namespace Cpp {
 
 typedef QPair<Declaration*, int> DeclarationDepthPair;
 
-IndexedType switchExpressionType(DUContextPointer caseContext)
-{
-#ifndef TEST_COMPLETION
-  //Test thread has DUChain locked
-  ENSURE_CHAIN_NOT_LOCKED;
-#endif
-  ForegroundLock foregroundLock;
-  LOCKDUCHAIN;
-  if (!caseContext)
-    return IndexedType();
-  DUContext* switchContext = 0;
-  if (caseContext->importedParentContexts().size() == 1)
-    switchContext = caseContext->importedParentContexts().first().context(caseContext->topContext());
-  if (!switchContext)
-    return IndexedType();
-  QString switchExpression = switchContext->createRangeMoving()->text();
-  ExpressionParser expressionParser;
-  return expressionParser.evaluateType(switchExpression.toUtf8(), DUContextPointer(switchContext)).type;
-}
-
 //Search for a copy-constructor within class
 //*DUChain must be locked*
 bool hasCopyConstructor(CppClassType::Ptr classType, TopDUContext* topContext)
@@ -966,6 +946,9 @@ CodeCompletionContext::OnlyShow CodeCompletionContext::findOnlyShow(const QStrin
   if ( parentContext() && parentContext()->accessType() == TemplateAccess )
     return ShowTypes;
 
+  if ( parentContext() && parentContext()->accessType() == CaseAccess )
+    return ShowIntegralConstants;
+
   //Only ShowTypes in these DUContexts unless initializing a declaration
   //ie, m_expressionIsTypePrefix == true
   if (m_duContext->type() == DUContext::Class ||
@@ -1384,7 +1367,26 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItem
 {
   QList<CompletionTreeItemPointer> items;
 
-  IndexedType switchExprType = switchExpressionType(m_duContext);
+  {
+#ifndef TEST_COMPLETION
+    // Test thread has DUChain locked
+    // This is essential here - a ForegroundLock must be acquired _before_ locking DUChain
+    ENSURE_CHAIN_NOT_LOCKED;
+#endif
+
+    ForegroundLock foregroundLock;
+    LOCKDUCHAIN;
+
+    if( m_duContext && m_duContext->importedParentContexts().size() == 1 )
+    {
+      DUContext* switchContext = m_duContext->importedParentContexts().first().context( m_duContext->topContext() );
+      ExpressionParser expressionParser;
+      m_expression = switchContext->createRangeMoving()->text();
+      m_expressionResult = expressionParser.evaluateExpression( m_expression.toUtf8(), DUContextPointer( switchContext ) );
+    }
+  }
+
+  IndexedType switchExprType = m_expressionResult.type;
 
   LOCKDUCHAIN; if (!m_duContext) return items;
 
@@ -1687,8 +1689,14 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
-  foreach( const DeclarationDepthPair& decl, decls )
-    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second ) );
+  foreach( const DeclarationDepthPair& decl, decls ) {
+    NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second );
+
+    if( m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl.first, false) )
+      item->m_fixedMatchQuality = 0;
+
+    items << CompletionTreeItemPointer(item);
+  }
 
   ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();
@@ -1704,7 +1712,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
         }
       }
     }
-    else if (parent->accessType() == BinaryOpFunctionCallAccess)
+    else if (parent->accessType() == BinaryOpFunctionCallAccess || parent->accessType() == CaseAccess)
     {
       items += specialItemsForArgumentType(parent->m_expressionResult.type.abstractType());
     }
@@ -1788,6 +1796,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
     if(!m_valid)
       return items;
 
+    // Call parent context before adding our items because if parent is CaseAccess, this call
+    // will make it compute its expression type (which we need in standardAccessCompletionItems())
+    if(shouldAddParentItems(fullCompletion))
+      items = parentContext()->completionItems( shouldAbort, fullCompletion );
+
     switch(m_accessType) {
       case MemberAccess:
       case ArrowMemberAccess:
@@ -1821,7 +1834,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
           break;
       default:
-        if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes))
+        if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes || m_onlyShow == ShowIntegralConstants))
         {
           items += standardAccessCompletionItems();
           LOCKDUCHAIN; if (!m_duContext) return items;
@@ -1832,9 +1845,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         }
         break;
     }
-
-    if(shouldAddParentItems(fullCompletion))
-      items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0)
     {
@@ -1909,39 +1919,20 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   return ret;
 }
 
-QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) const {
-  QualifiedIdentifier worstCase = decl->context()->scopeIdentifier(true);
-  if(!m_duContext)
-    return worstCase;
-  QualifiedIdentifier currentPrefix;
-
-  while(1) {
-    QList<Declaration*> found = m_duContext->findDeclarations( currentPrefix + decl->identifier() );
-    if(found.contains(decl))
-      return currentPrefix;
-
-    if(currentPrefix.count() >= worstCase.count()) {
-      return worstCase;
-    }else {
-      currentPrefix.push(worstCase.at(currentPrefix.count()));
-    }
-  }
-}
-
 QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::specialItemsForArgumentType(TypePtr< KDevelop::AbstractType > type) {
   QList< KSharedPtr< KDevelop::CompletionTreeItem > > items;
   if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
     Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
     if(enumDecl && enumDecl->internalContext()) {
 
-      QualifiedIdentifier prefix = requiredPrefix(enumDecl);
+      // This is necessary to avoid duplication of locally visible enumerators, which also get added by standardAccessCompletionItems().
+      if( visibleFromWithin( enumDecl, m_duContext.data() ) )
+        return items;
 
       DUContext* enumInternal = enumDecl->internalContext();
       foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
-        QualifiedIdentifier id = prefix + enumerator->identifier();
         items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), KDevelop::CodeCompletionContext::Ptr(this), 0 ));
-        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
-        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
+        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->prependScopePrefix = true;
       }
     }
   }
@@ -1955,6 +1946,52 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
     return true;
   
   return visibleFromWithin(decl, currentContext->parentContext());
+}
+
+bool CodeCompletionContext::isIntegralConstant(Declaration* decl, bool acceptHelperItems) {
+
+    // Usability issue: if we're matching for integral constants,
+    // types and functions are also allowed (see filterDeclaration()),
+    // but shall not pollute "best matches" as one rarely would need them.
+    // So introduce "acceptHelperItems" to distinguish between filtering items and demoting them to zero match quality.
+    // (see standardAccessCompletionItems())
+
+    switch (decl->kind()) {
+      case Declaration::Namespace:
+      case Declaration::NamespaceAlias:
+      case Declaration::Type:
+        // Type-names and namespace-names in general may be used for completing constants either as:
+        // "IntegralType(42)"
+        // "EnumName::someEnumerator" (that's valid C++11)
+        // "ClassName::someStaticConstantField"
+        // "NamespaceName::see_everything_above"
+        return acceptHelperItems;
+
+      case Declaration::Instance: {
+        FunctionType::Ptr funType;
+        IntegralType::Ptr integralType;
+
+        // If a declaration is a known integer compile-time constant, it's valid.
+        // NOTE: are there any chances of missing a compile-time constant due to our parser's shortcomings?
+        if (ConstantIntegralType::Ptr constantIntegralType = decl->type<ConstantIntegralType>())
+          integralType = constantIntegralType.cast<IntegralType>();
+
+        // If a declaration is a constexpr function returning integral type, it's valid.
+        // TODO: change this when constexpr becomes parsed:
+        // - add check for constexpr-ness after (funType = ...)
+        // - remove (acceptHelperItems) since that will be a true match - eligible for "best matches"
+        else if (acceptHelperItems && (funType = decl->type<FunctionType>()))
+          integralType = funType->returnType().cast<IntegralType>();
+
+        // Finally, check if retrieved type is integer.
+        return (integralType && TypeUtils::isIntegerType(integralType));
+      }
+
+      case Declaration::Alias:
+      case Declaration::Import:
+      default:
+        return false;
+    }
 }
 
 /**
@@ -2006,6 +2043,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
       return false;
     }
   }
+
+  if(m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl, true))
+    return false;
 
   if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
      && decl->kind() != Declaration::NamespaceAlias )

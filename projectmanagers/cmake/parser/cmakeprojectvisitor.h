@@ -31,6 +31,7 @@
 #include "cmakelistsparser.h"
 #include "cmaketypes.h"
 #include <language/duchain/topducontext.h>
+
 class CMakeFunctionDesc;
 
 namespace KDevelop
@@ -91,6 +92,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const GetPropertyAst* );
         virtual int visit( const RemoveDefinitionsAst * );
         virtual int visit( const SeparateArgumentsAst * );
+        virtual int visit( const UnsetAst * );
         virtual int visit( const WhileAst * );
         virtual int visit( const CMakeAst * );
         

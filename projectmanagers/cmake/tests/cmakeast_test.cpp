@@ -1577,7 +1577,6 @@ void CMakeAstTest::testFileBadParse_data()
 
 void CMakeAstTest::testFindFileGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("find_file");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -1586,6 +1585,13 @@ void CMakeAstTest::testFindFileGoodParse()
 
 void CMakeAstTest::testFindFileGoodParse_data()
 {
+
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "find_file";
+    l.addArguments(QString("_SOPRANO_MACRO_FILE NAMES SopranoAddOntology.cmake HINTS /home/kde-devel/kde/share/soprano/cmake").split(' '));
+    QTest::newRow("find file") << l;
 }
 
 void CMakeAstTest::testFindFileBadParse()
@@ -1661,7 +1667,6 @@ void CMakeAstTest::testFindLibraryBadParse_data()
 
 void CMakeAstTest::testFindPackageGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("find_package");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -1670,6 +1675,12 @@ void CMakeAstTest::testFindPackageGoodParse()
 
 void CMakeAstTest::testFindPackageGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    
+    CMakeFunctionDesc l;
+    l.name = "find_package";
+    l.addArguments(QString("PolkitQt-1 0.99.0 QUIET NO_MODULE PATHS /home/kde-devel/kde/lib/PolkitQt-1/cmake").split(' '));
+    QTest::newRow("complex") << l;
 }
 
 void CMakeAstTest::testFindPackageBadParse()
@@ -3715,17 +3726,14 @@ void CMakeAstTest::testStringGoodParse_data()
     
     foreach(const QString& acase, cases)
     {
-        QStringList splitted=acase.split(" ");
-        CMakeFunctionDesc func;
-        func.name = splitted.takeFirst();
-        func.addArguments(splitted);
+        QStringList splitted = acase.split(" ");
+        CMakeFunctionDesc func(splitted.takeFirst(), splitted);
         QTest::newRow( qPrintable(acase) ) << func;
     }
 }
 
 void CMakeAstTest::testStringBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("string");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -3734,6 +3742,8 @@ void CMakeAstTest::testStringBadParse()
 
 void CMakeAstTest::testStringBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "few arguments" ) << CMakeFunctionDesc("string", QString("TOLOWER PROJECT_PRODUCT_DIR").split(" "));
 }
 
 
@@ -3966,6 +3976,55 @@ void CMakeAstTest::testTryRunBadParse()
 }
 
 void CMakeAstTest::testTryRunBadParse_data()
+{
+}
+
+
+
+
+
+
+
+
+
+
+void CMakeAstTest::testUnsetGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("unset");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testUnsetGoodParse_data()
+{
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc l;
+    l.name = "unset";
+    l.addArguments(QStringList("HOLA"));
+    QTest::newRow("a") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "HOLA" << "CACHE");
+    QTest::newRow("a cache") << l;
+
+    l.arguments.clear();
+    l.addArguments(QStringList() << "ENV{HOLA}");
+    QTest::newRow("env{a}") << l;
+}
+
+void CMakeAstTest::testUnsetBadParse()
+{
+    TDD_TODO;
+    QFETCH( CMakeFunctionDesc, function );
+    UnsetAst* ast = (UnsetAst*) AstFactory::self()->createAst("unset");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    QVERIFY( QRegExp("[A-Z]*").exactMatch(ast->variableName()) );
+    delete ast;
+}
+
+void CMakeAstTest::testUnsetBadParse_data()
 {
 }
 

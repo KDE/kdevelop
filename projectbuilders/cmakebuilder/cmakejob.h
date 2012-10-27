@@ -56,7 +56,7 @@ protected:
 
 private Q_SLOTS:
     void slotFailed( QProcess::ProcessError );
-    void slotCompleted();
+    void slotCompleted(int);
 
 private:
     QStringList buildEnvironment();

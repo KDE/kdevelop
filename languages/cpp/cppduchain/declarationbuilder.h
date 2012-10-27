@@ -31,6 +31,7 @@
 namespace Cpp
 {
 class QPropertyDeclaration;
+class TemplateDeclaration;
 }
 
 namespace KDevelop
@@ -97,7 +98,7 @@ protected:
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
-  virtual void visitForRangeDeclaration(ForRangeDeclarationAst *node);
+  virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
   virtual void visitAliasDeclaration(AliasDeclarationAST* );
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
@@ -111,6 +112,8 @@ private:
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::CursorInRevision& position);
+
+  Cpp::TemplateDeclaration* findSpecializedFrom(KDevelop::Declaration *templDecl);
 
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**

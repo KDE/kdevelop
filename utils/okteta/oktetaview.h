@@ -29,6 +29,7 @@
 #include <sublime/view.h>
 
 namespace KASTEN_NAMESPACE {
+class ByteArrayViewProfileSynchronizer;
 class ByteArrayView;
 }
 
@@ -43,8 +44,11 @@ class OktetaView : public Sublime::View
   Q_OBJECT
 
   public:
+#if KASTEN_VERSION == 2
+    OktetaView( OktetaDocument* document, Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer );
+#else
     explicit OktetaView( OktetaDocument* document );
-
+#endif
     virtual ~OktetaView();
 
   public:

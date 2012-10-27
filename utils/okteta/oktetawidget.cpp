@@ -39,6 +39,10 @@
 #include <viewconfigcontroller.h>
 #include <viewmodecontroller.h>
 #include <viewstatuscontroller.h>
+#if KASTEN_VERSION == 2
+#include <viewprofilecontroller.h>
+#include <viewprofilesmanagecontroller.h>
+#endif
 // Kasten
 #include <readonlycontroller.h>
 // #include <document/readonly/readonlybarcontroller.h>
@@ -54,6 +58,7 @@
 // KDevelop
 #include <sublime/view.h>
 // KDE
+#include <KLocale>
 #include <KAction>
 #include <KStandardAction>
 #include <KActionCollection>
@@ -73,7 +78,7 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     setComponentData( plugin->componentData() );
     setXMLFile( "kdevokteta.rc" );
 
-    setupActions();
+    setupActions(plugin);
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
@@ -82,7 +87,7 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     setFocusProxy( widget );
 }
 
-void OktetaWidget::setupActions()
+void OktetaWidget::setupActions(OktetaPlugin* plugin)
 {
     mControllers.append( new Kasten::VersionController(this) );
     mControllers.append( new Kasten::ReadOnlyController(this) );
@@ -103,6 +108,15 @@ void OktetaWidget::setupActions()
     mControllers.append( new Kasten::PrintController( this ) );
     mControllers.append( new Kasten::ViewConfigController(this) );
     mControllers.append( new Kasten::ViewModeController(this) );
+#if KASTEN_VERSION == 2
+    Kasten::ByteArrayViewProfileManager* viewProfileManager = plugin->viewProfileManager();
+    mControllers.append( new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this) );
+    mControllers.append( new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()) );
+    // update the text of the viewprofiles_manage action, to make clear this is just for byte arrays
+    QAction* viewprofilesManageAction = actionCollection()->action(QLatin1String("settings_viewprofiles_manage"));
+    viewprofilesManageAction->setText( i18nc("@action:inmenu",
+                                             "Manage Byte Array View Profiles...") );
+#endif
 
 //     Kasten::StatusBar* bottomBar = static_cast<Kasten::StatusBar*>( statusBar() );
 //     mControllers.append( new ViewStatusController(bottomBar) );
@@ -111,7 +125,6 @@ void OktetaWidget::setupActions()
 
     foreach( Kasten::AbstractXmlGuiController* controller, mControllers )
         controller->setTargetModel( mByteArrayView );
-
 #if 0
     QDesignerFormWindowManagerInterface* manager = mDocument->form()->core()->formWindowManager();
     KActionCollection* ac = actionCollection();

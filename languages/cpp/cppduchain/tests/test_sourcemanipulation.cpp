@@ -21,6 +21,7 @@
 #include "test_sourcemanipulation.h"
 
 #include <QtTest>
+#include <tests/testcore.h>
 
 #include "sourcemanipulation.h"
 
@@ -32,6 +33,11 @@ using namespace Cpp;
 void TestSourceManipulation::initTestCase()
 {
   initShell();
+}
+
+void TestSourceManipulation::cleanupTestCase()
+{
+  TestCore::shutdown();
 }
 
 void TestSourceManipulation::testFirstValidCodeLineBefore_data()

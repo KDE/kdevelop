@@ -22,25 +22,23 @@
 #include "makebuilder.h"
 
 #include <project/projectmodel.h>
+#include <project/builderjob.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KDebug>
-
-#include "makeoutputmodel.h"
-#include "makeoutputdelegate.h"
+#include <KCompositeJob>
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
 
-
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
-    , m_delegate(new MakeOutputDelegate(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
@@ -62,7 +60,17 @@ KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 
 KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 {
-    return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
+    KSharedConfig::Ptr configPtr = dom->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+    bool installAsRoot = builderGroup.readEntry("Install As Root", false);
+    if(installAsRoot) {
+        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        job->addCustomJob( KDevelop::BuilderJob::Build, build(dom), dom );
+        job->addCustomJob( KDevelop::BuilderJob::Install, runMake( dom, MakeJob::InstallCommand, QStringList("install") ), dom );
+        job->updateJobName();
+        return job;
+    } else
+        return runMake( dom, MakeJob::InstallCommand, QStringList("install") );
 }
 
 void MakeBuilder::jobFinished(KJob* job)
@@ -132,10 +140,3 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     return job;
 }
-
-MakeOutputDelegate * MakeBuilder::delegate() const
-{
-    return m_delegate;
-}
-
-#include "makebuilder.moc"

@@ -20,31 +20,7 @@
 
 import QtQuick 1.0
 
-Rectangle
-{
-    id: root
-    width: 360
-    height: 360
-    property Item current
-    
-    function areasComponent(area)
-    {
-        var component = Qt.createComponent(":/"+area+".qml")
-        console.log(component)
-        if (component.status == Component.Ready) {
-            console.log(component)
-            return component.createObject(root);
-        } else
-            throw("Error loading component "+component.errorString());
-    }
-    
-    state: area
-    onStateChanged: {
-        if(current)
-            current.visible=false
-        
-        try { current = areasComponent(area) }
-        catch(e) { console.log(e); }
-        current.anchors.fill=root
-    }
+Loader {
+    source: ":/"+area+".qml"
+    anchors.fill: parent
 }

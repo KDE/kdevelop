@@ -23,6 +23,8 @@
 #ifndef OKTETAPLUGIN_H
 #define OKTETAPLUGIN_H
 
+// Plugin
+#include "oktetaglobal.h"
 // KDev
 #include <interfaces/iplugin.h>
 // Qt
@@ -30,6 +32,10 @@
 
 class KUrl;
 
+namespace KASTEN_NAMESPACE
+{
+class ByteArrayViewProfileManager;
+}
 
 namespace KDevelop
 {
@@ -48,11 +54,19 @@ class OktetaPlugin: public IPlugin
   public: // KDevelop::IPlugin API
     virtual ContextMenuExtension contextMenuExtension( Context* context );
 
+#if KASTEN_VERSION == 2
+  public:
+    Kasten::ByteArrayViewProfileManager* viewProfileManager() const { return mViewProfileManager; }
+#endif
+
   private Q_SLOTS:
     void onOpenTriggered();
 
   protected:
     OktetaDocumentFactory* mDocumentFactory;
+#if KASTEN_VERSION == 2
+    Kasten::ByteArrayViewProfileManager* const mViewProfileManager;
+#endif
     QList<KUrl> mContextUrls;
 };
 

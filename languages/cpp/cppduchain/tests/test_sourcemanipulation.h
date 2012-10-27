@@ -31,6 +31,7 @@ class TestSourceManipulation : public QObject, public Cpp::TestHelper
 
 private slots:
   void initTestCase();
+  void cleanupTestCase();
 
   void testFirstValidCodeLineBefore_data();
   void testFirstValidCodeLineBefore();

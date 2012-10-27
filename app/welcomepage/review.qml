@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1
 
 StandardBackground
 {
@@ -50,7 +51,7 @@ StandardBackground
             spacing: 30
             
             ToolBar {
-                tools: Row {
+                tools: Flow {
                     Link {
                         iconSource: "kompare"
                         text: i18n("Review a Patch")
@@ -61,10 +62,12 @@ StandardBackground
                 }
             }
             
+            Heading { text: i18n("Review Area") }
+            
             Label {
                 width: parent.width
                 text: i18n("On the <em>Review</em> area you will be able to find the tools you need "+
-                      "to review changes in your projects, either the ones you made or some external patch.<p/> Also it will help you send "+
+                      "to review changes in your projects, either the ones you made or some external patch.<br/> Also it will help you send "+
                       "the changes to the community you're contributing to, either by committing the changes, sending them by e-mail or "+
                       "putting them on a ReviewBoard service.")
                 wrapMode: Text.WordWrap

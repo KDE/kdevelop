@@ -20,6 +20,8 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.extras 0.1
 import org.kdevelop.welcomepage 4.3
 
 StandardPage
@@ -32,9 +34,7 @@ StandardPage
             right: parent.right
             margins: 25
         }
-        tools: Row {
-            spacing: 50
-
+        tools: Flow {
             Link {
                 iconSource: "project-development-new-template"
                 text: i18n("New Project")
@@ -43,20 +43,35 @@ StandardPage
 
             Link {
                 iconSource: "project-development-open"
-                text: i18n("Import project")
+                text: i18n("Open project")
                 onClicked: ICore.projectController().openProject()
+            }
+
+            Link {
+                iconSource: "download"
+                text: i18n("Fetch project")
+                onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
+            }
+            
+            Link {
+                iconSource: "document-open-recent"
+                text: i18n("Recent Projects")
+                onClicked: kdev.showMenu("project/project_open_recent")
             }
         }
     }
 
     ListView {
         id: sessionsView
+        clip: true
         anchors {
             left: parent.left
             top: toolBar.bottom
             bottom: parent.bottom
-            right: projectsView.left
-            margins: 30
+            right: parent.right
+            bottomMargin: 30
+            leftMargin: 30
+            rightMargin: 30
         }
 
         delegate: ListItem {
@@ -68,52 +83,23 @@ StandardPage
                     
                     Label {
                         width: parent.width
-                        text: (display=="" ? projectNames.join(", ") : i18n("%1: %2", display, projectNames.join(", ")))
+                        text: (display=="" ?
+                                    projectNames.join(", ").replace(/.kdev4/g, "")
+                                  :
+                                  i18n("%1: %2", display, projectNames.join(", ").replace(/.kdev4/g, "")))
                         elide: Text.ElideRight
                     }
                 }
 
-        model: SessionsModel { id: sessions }
-        
-        header: Label {
-            font.pointSize: theme.defaultFont.pointSize*1.5
-            text: i18n("Sessions:")
-        }
-    }
-
-    ListView {
-        id: projectsView
-        anchors {
-            top: toolBar.bottom
-            bottom: parent.bottom
-            right: parent.right
-            margins: 30
+        model: PlasmaCore.SortFilterModel {
+            sourceModel: SessionsModel { id: sessions }
+            sortRole: "identifier"
+            sortOrder: Qt.AscendingOrder
         }
         
-        width: parent.width/3
-
-        delegate: ListItem {
-                    enabled: true
-                    function justName(str) {
-                        var idx = str.indexOf(" [")
-                        
-                        return str.substr(0, idx);
-                    }
-                    width: projectsView.width
-                    height: 30
-                    
-                    Label {
-                        anchors.fill: parent
-                        text: justName(modelData["text"])
-                    }
-                    onClicked: modelData.trigger()
-                }
-
-        model: kdev.recentProjects()
-        
-        header: Label {
-            font.pointSize: theme.defaultFont.pointSize*1.5
-            text: i18n("Recent Projects:")
+        header: Heading {
+            text: i18n("Sessions")
+            height: implicitHeight*2
         }
     }
 }

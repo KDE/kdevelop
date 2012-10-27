@@ -6,8 +6,8 @@ macro_log_feature( LIBOKTETAKASTEN_FOUND
 )
 
 if( LIBOKTETAKASTEN_FOUND )
-set( LIBOKTETA_FIND_VERSION ${LIBOKTETAKASTEN_VERSION} )
-set( LIBKASTEN_FIND_VERSION ${LIBOKTETAKASTEN_VERSION} )
+set( LIBOKTETA_FIND_VERSION ${LIBOKTETAKASTEN_NEEDS_OKTETA_VERSION} )
+set( LIBKASTEN_FIND_VERSION ${LIBOKTETAKASTEN_NEEDS_KASTEN_VERSION} )
 macro_optional_find_package( LibOkteta )
 macro_optional_find_package( LibKasten )
 
@@ -16,7 +16,7 @@ macro_log_feature( LIBOKTETA_FOUND
   "" "Required for building Okteta KDevelop plugin."
 )
 macro_log_feature( LIBKASTEN_FOUND
-  "libkasten v${LIBKASTEN_FIND_VERSION}" "Kasten libraries" "kdesk/okteta/libs" FALSE
+  "libkasten v${LIBKASTEN_FIND_VERSION}" "Kasten libraries" "kdesk/okteta/libs/kasten" FALSE
   "" "Required for building Okteta KDevelop plugin."
 )
 endif( LIBOKTETAKASTEN_FOUND )

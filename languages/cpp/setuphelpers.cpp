@@ -158,7 +158,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.function_like = true;
       m.formalsList().append(IndexedString("TYPE"));
       m.formalsList().append(IndexedString("MEMBER"));
-      m.setDefinitionText("(size_t)((void)TYPE::MEMBER)");
+      m.setDefinitionText("(size_t)((void)(TYPE)::MEMBER)");
       insertMacro( macros, m );
     }
 

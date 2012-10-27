@@ -57,6 +57,11 @@ DocWidget::DocWidget()
     connect( ui->search, SIGNAL(returnPressed()), SLOT(searchForIdentifier()) );
 }
 
+DocWidget::~DocWidget()
+{
+    delete ui;
+}
+
 void DocWidget::searchForIdentifier()
 {
     QMap<QString,QUrl> links = engine->linksForIdentifier( ui->search->text() );

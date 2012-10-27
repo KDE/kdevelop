@@ -44,7 +44,7 @@ void MissingIncludeCompletionModel::startCompletionAfterParsing(const KDevelop::
 }
 
 void MissingIncludeCompletionModel::parseJobFinished(KDevelop::ParseJob* job) {
-  if(job->document() == startCompletionAfterParsingUrl && !KDevelop::ICore::self()->languageController()->backgroundParser()->isQueued(job->document().toUrl())) {
+  if(job->document() == startCompletionAfterParsingUrl && !KDevelop::ICore::self()->languageController()->backgroundParser()->isQueued(job->document())) {
     startCompletionAfterParsingUrl = KDevelop::IndexedString();
     KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->documentForUrl(job->document().toUrl());
     if(doc && doc->textDocument() && doc->textDocument()->activeView() && doc->textDocument()->activeView()->hasFocus()) {

@@ -87,6 +87,25 @@ public:
     }
 };
 
+/// Tries to find a session identified by @p data in @p sessions.
+/// The @p data may be either a session's name or a string-representation of its UUID.
+/// @return pointer to the session or NULL if nothing appropriate has been found
+const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& sessions, const QString& data )
+{
+    // We won't search a session without input data, since that could lead to false-positives
+    // with unnamed sessions
+    if( data.isEmpty() )
+        return 0;
+
+    for( QList<KDevelop::SessionInfo>::const_iterator it = sessions.constBegin(); it != sessions.constEnd(); ++it ) {
+        if ( ( it->name == data ) || ( it->uuid.toString() == data ) ) {
+            const KDevelop::SessionInfo& sessionRef = *it;
+            return &sessionRef;
+        }
+    }
+    return 0;
+}
+
 int main( int argc, char *argv[] )
 {
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
@@ -154,6 +173,7 @@ int main( int argc, char *argv[] )
     //so lookup the --debug switch and eat everything behind by decrementing argc
     //debugArgs is filled with args after --debug <debuger>
     QStringList debugArgs;
+    QString debugeeName;
     {
         bool debugFound = false;
         int c = argc;
@@ -183,6 +203,7 @@ int main( int argc, char *argv[] )
            .add("open-session <session>", ki18n("Open KDevelop with the given session.\n"
                                            "You can pass either hash or the name of the session." ));
     options.add("ps").add("pick-session", ki18n("Shows all available sessions and lets you select one to open." ));
+    options.add("pss").add("pick-session-shell", ki18n("List all available sessions on shell and lets you select one to open." ));
     options.add("l")
            .add("list-sessions", ki18n( "List available sessions and quit." ));
     options.add("p")
@@ -231,10 +252,44 @@ int main( int argc, char *argv[] )
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
     
+    if(args->isSet("pss"))
+    {
+        QTextStream qerr(stderr);
+        QList<KDevelop::SessionInfo> candidates;
+        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+            if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
+                (!args->isSet("pid") || !KDevelop::SessionController::tryLockSession(si.uuid.toString())))
+                candidates << si;
+        
+        if(candidates.size() == 0)
+        {
+            qerr << "no session available" << endl;
+            return 1;
+        }
+        
+        if(candidates.size() == 1 && args->isSet("pid"))
+        {
+            session = candidates[0].uuid.toString();
+        }else{
+            for(int i = 0; i < candidates.size(); ++i)
+                qerr << "[" << i << "]: " << candidates[i].description << endl;
+            
+            int chosen;
+            std::cin >> chosen;
+            if(chosen >= 0 && chosen < candidates.size())
+            {
+                session = candidates[chosen].uuid.toString();
+            }else{
+                qerr << "bad pick" << endl;
+                return 1;
+            }
+        }
+    }
+    
     if(args->isSet("ps"))
     {
         bool onlyRunning = args->isSet("pid");
-        session = KDevelop::SessionController::showSessionChooserDialog(QString(), onlyRunning);
+        session = KDevelop::SessionController::showSessionChooserDialog(i18n("Select the session you would like to use"), onlyRunning);
         if(session.isEmpty())
             return 1;
     }
@@ -242,14 +297,11 @@ int main( int argc, char *argv[] )
     if ( args->isSet("debug") ) {
         if ( debugArgs.isEmpty() ) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
+            qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
             return 1;
         }
-        QString binary = debugArgs.first();
-        if ( binary.contains('/') ) {
-            binary = binary.right(binary.lastIndexOf('/'));
-        }
-        session = i18n("Debug")+" "+binary;
+        debugeeName = i18n("Debug %1", KUrl( debugArgs.first() ).fileName());
+        session = debugeeName;
     } else if ( args->isSet("cs") || args->isSet("new-session") )
     {
         session = args->isSet("cs") ? args->getOption("cs") : args->getOption("new-session");
@@ -279,68 +331,41 @@ int main( int argc, char *argv[] )
         }
     }
 
-    QString sessionId = session;
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo()) {
-        if ( si.name == session ) {
-            sessionId = si.uuid.toString();
-            break;
+    QList<KDevelop::SessionInfo> sessions = KDevelop::SessionController::availableSessionInfo();
+    const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
+
+    if(args->isSet("pid")) {
+        if( !sessionData ) {
+            kError() << "session not given or does not exist";
+            return 5;
+        }
+
+        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
+        if(state.success) {
+            kError() << session << sessionData->name << "is not running";
+            return 5;
+        } else {
+            // Print the PID and we're ready
+            std::cout << state.holderPid << std::endl;
+            return 0;
         }
     }
 
-    forever {
-        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession(sessionId);
-        
-        if(args->isSet("pid"))
-        {
-            if(state.success)
-            {
-                kError() << session << sessionId << "is not running";
-                return 5;
-            }
-            if(args->isSet("pid"))
-            {
-                // Print the PID and we're ready
-                std::cout << state.holderPid << std::endl;
-                return 0;
-            }
-        }
-        
-        if(!state) {
-            QDBusInterface interface(QString("org.kdevelop.kdevelop-%1").arg(state.holderPid),
-                                     "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
-                                     QDBusConnection::sessionBus());
-            if (interface.isValid()) {
-                QDBusReply<void> reply = interface.call("ensureVisible");
-                if (reply.isValid()) {
-                    qDebug() << i18n("made running kdevelop instance (PID: %1) visible", state.holderPid);
-                    return 0;
-                }
-            }
-
-            QString errmsg = i18n("<p>Failed to lock the session <em>%1</em>, "
-                                  "already locked by %2 (PID %4) on %3.<br>"
-                                  "The given application did not respond to a DBUS call, "
-                                  "it may have crashed or is hanging.</p>"
-                                  "<p>Do you want to remove the lock file and force a new KDevelop instance?<br/>"
-                                  "<strong>Beware:</strong> Only do this if you are sure there is no running"
-                                  " KDevelop process using this session.</p>",
-                                  session, state.holderApp, state.holderHostname, state.holderPid );
-
-            KGuiItem overwrite = KStandardGuiItem::cont();
-            overwrite.setText(i18n("Remove lock file"));
-            KGuiItem cancel = KStandardGuiItem::quit();
-            int ret = KMessageBox::warningYesNo(0, errmsg, i18n("Failed to Lock Session %1", session),
-                                                overwrite, cancel, QString() );
-            if (ret == KMessageBox::Yes) {
-                if (!QFile::remove(state.lockFile)) {
-                    KMessageBox::error(0, i18n("Failed to remove lock file %1.", state.lockFile));
-                    return 1;
-                }
+    // If the session to load is known by this point,
+    // try to do the same iterative lock-check as in SessionController::loadDefaultSession().
+    KDevelop::SessionController::LockSessionState state;
+    if( sessionData ) {
+        do {
+            state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
+            if( state ) {
+                break;
             } else {
-                return 1;
+                session = KDevelop::SessionController::handleLockedSession( sessionData->name, sessionData->uuid.toString(), state );
+                sessionData = findSessionInList( sessions, session );
             }
-        } else {
-            break;
+        } while( sessionData );
+        if( !state ) {
+            return 1;
         }
     }
 
@@ -386,16 +411,8 @@ int main( int argc, char *argv[] )
     }
 
     if ( args->isSet("debug") ) {
-        if ( debugArgs.isEmpty() ) {
-            QTextStream qerr(stderr);
-            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
-            return 1;
-        }
-        QString binary = debugArgs.first();
-        if ( binary.contains('/') ) {
-            binary = binary.right(binary.lastIndexOf('/'));
-        }
-        QString launchName = i18n("Debug")+' '+binary;
+        Q_ASSERT( !debugeeName.isEmpty() );
+        QString launchName = debugeeName;
 
         KDevelop::LaunchConfiguration* launch = 0;
         kDebug() << launchName;
@@ -466,10 +483,12 @@ int main( int argc, char *argv[] )
                 }
             }
 
+            KUrl f;
             if( QFileInfo(file).isRelative() ) {
-                file = QDir::currentPath() + QDir::separator() + file;
+                f = KUrl( QDir::currentPath(), file );
+            } else {
+                f = file;
             }
-            KUrl f( "file://"+file );
 
             if(!core->documentController()->openDocument(f, line))
                 kWarning() << i18n("Could not open %1") << args->arg(i);

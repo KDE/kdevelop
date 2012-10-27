@@ -102,8 +102,6 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
           DUContext* container = useContainer();
           
           if(searchFrom && container) {
-            KUrl localUrl = searchFrom->url().toUrl();
-            KUrl changeUrl = container->url().toUrl();
             Cpp::SourceCodeInsertion ins(container->topContext());
             ins.setContext(container);
             ins.setAccess(m_access);
@@ -149,6 +147,8 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
             
             ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::WarnOnFailedChange);
             ins.changes().applyAllChanges();
+            const IndexedString localUrl = searchFrom->url();
+            const IndexedString changeUrl = container->url();
             if(changeUrl != localUrl) {
               ICore::self()->languageController()->backgroundParser()->addDocument(changeUrl);
               ICore::self()->languageController()->backgroundParser()->addDocument(localUrl);

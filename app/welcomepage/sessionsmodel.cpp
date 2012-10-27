@@ -27,7 +27,10 @@ SessionsModel::SessionsModel(QObject* parent)
     roles.insert(Uuid, "uuid");
     roles.insert(Projects, "projects");
     roles.insert(ProjectNames, "projectNames");
+    roles.insert(VisibleIdentifier, "identifier");
     setRoleNames(roles);
+    
+    connect(KDevelop::Core::self()->sessionController(), SIGNAL(sessionDeleted(QString)), SLOT(sessionDeleted(QString)));
 }
 
 QVariant SessionsModel::data(const QModelIndex& index, int role) const
@@ -45,6 +48,10 @@ QVariant SessionsModel::data(const QModelIndex& index, int role) const
             return m_sessions[index.row()].uuid.toString();
         case Projects:
             return m_sessions[index.row()].projects;
+        case VisibleIdentifier: {
+            const KDevelop::SessionInfo& s = m_sessions[index.row()];
+            return s.name.isEmpty() && !s.projects.isEmpty() ? s.projects.first().fileName() : s.name;
+        }
         case ProjectNames: {
             QVariantList ret;
             foreach(const KUrl& project, m_sessions[index.row()].projects) {
@@ -64,4 +71,16 @@ int SessionsModel::rowCount(const QModelIndex& parent) const
 void SessionsModel::loadSession(const QString& nameOrId) const
 {
     KDevelop::Core::self()->sessionController()->loadSession(nameOrId);
+}
+
+void SessionsModel::sessionDeleted(const QString& id)
+{
+    for(int i=0; i<m_sessions.size(); i++) {
+        if(m_sessions[i].uuid.toString()==id) {
+            beginRemoveRows(QModelIndex(), i, i);
+            m_sessions.removeAt(i);
+            endRemoveRows();
+            break;
+        }
+    }
 }

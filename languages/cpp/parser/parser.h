@@ -20,6 +20,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "config.h"
+
 #include "ast.h"
 #include "lexer.h"
 #include "commentparser.h"
@@ -30,18 +32,18 @@
 #include <cppparserexport.h>
 #include "commentformatter.h"
 
-#ifdef Q_CC_MSVC
-#include <hash_map>
-using namespace stdext;
-
-#elif defined GXX_LT_4_3
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-
-#else // CXX-0
+#if defined(HAVE_UNORDERED_MAP) // CXX-0
 #include <unordered_map>
 template <class Key, class Data>
 class  hash_map : public std::unordered_map<Key, Data> { };
+
+#elif defined(HAVE_EXT_HASH_MAP)
+#include <ext/hash_map>
+using namespace __gnu_cxx;
+
+#elif defined(Q_CC_MSVC)
+#include <hash_map>
+using namespace stdext;
 #endif
 
 class TokenStream;
@@ -93,6 +95,15 @@ public:
   AST *parseTypeOrExpression(ParseSession* session, bool forceExpression = false);
   /**@return the problem count.*/
   int problemCount() const { return _M_problem_count; }
+
+  /**
+   * Fixup an InitDeclaratorAST @p node, which was misinterpreted to contain a
+   * parameter-declaration-clause while that is actually an initializer.
+   *
+   * This function will create a proper initializer and assign it to @p node
+   * and unsets the association to the parameter-declaration-clause.
+   */
+  void fixupInitializerFromParameter(InitDeclaratorAST* node, ParseSession* session);
 
 private:
   /**Convenience method to report problems. Constructs the problem

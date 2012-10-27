@@ -20,6 +20,7 @@
 
 import QtQuick 1.0
 import org.kde.plasma.components 0.1
+import org.kde.plasma.extras 0.1
 
 StandardBackground
 {
@@ -50,17 +51,17 @@ StandardBackground
             spacing: 30
             
             ToolBar {
-                tools: Row {
-                    spacing: 20
-                    Link { iconSource: "configure"; text: i18n("Configure a new Target"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
-                    Link { iconSource: "system-run"; text: i18n("Execute your program"); onClicked: kdev.retrieveMenuAction("run/run_execute").trigger() }
+                tools: Flow {
+                    Link { iconSource: "configure"; text: i18n("Configure a new Launcher"); onClicked: kdev.retrieveMenuAction("run/configure_launches").trigger() }
+                    Link { iconSource: "audio-input-line"; text: i18n("Attach to Process"); onClicked: kdev.retrieveMenuAction("run/debug_attach").trigger() }
                     Link { iconSource: "debug-run"; text: i18n("Debug your program"); onClicked: kdev.retrieveMenuAction("run/run_debug").trigger() }
                 }
             }
+            Heading { text: i18n("Debug Area") }
             Label {
                 width: parent.width
                 text: i18n("On the <em>Debug</em> area you will be able to see and analyze how your program works on execution. "+
-                      "On the <em>Run</em> menu you will find all the possible options.<p/><p/>"+
+                      "On the <em>Run</em> menu you will find all the possible options.<br/><br/>"+
                       "As you can see, here you can just execute your application or debug it if you need "+
                       "further runtime information. You can select what is going to be run by configuring "+
                       "the launches and selecting the one you want to use in the <em>Current Launch Configuration</em> sub-menu.")

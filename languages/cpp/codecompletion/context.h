@@ -173,6 +173,7 @@ namespace Cpp {
 #endif
       enum OnlyShow {
         ShowAll,
+        ShowIntegralConstants, // compile-time integral constants and related items (scopes, ...)
         ShowTypes,
         ShowSignals,
         ShowSlots,
@@ -261,17 +262,16 @@ namespace Cpp {
       ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
       void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
       
-      ///Returns the required prefix that is needed in order to find the givne declaration from the current context.
-      ///In worst case, it is the scope prefix of the declaration.
-      ///*DUChain must be locked*
-      QualifiedIdentifier requiredPrefix(Declaration* decl) const;
-
       ///@param type The type of the argument the items are matched to.
       ///*DUChain must be locked*
       QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
       
       ///Returns whether the declaration is directly visible from within the current context
       bool visibleFromWithin(Declaration* decl, DUContext* currentContext);
+
+      ///Returns whether the declaration can be considered an integral constant
+      ///@param acceptHelperItems whether we check for filtering (true) or for marking match quality (false)
+      bool isIntegralConstant(Declaration* decl, bool acceptHelperItems);
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();

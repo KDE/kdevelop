@@ -5,7 +5,7 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 4 )
-set( KDEVELOP_VERSION_MINOR 3 )
+set( KDEVELOP_VERSION_MINOR 4 )
 set( KDEVELOP_VERSION_PATCH 60 )
 
 set(KDE_MIN_VERSION "4.5.0")
@@ -25,7 +25,7 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-find_package(KDevPlatform 1.3.60 REQUIRED)
+find_package(KDevPlatform 1.4.60 REQUIRED)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
@@ -34,8 +34,26 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} )
 
+# TODO: Remove when LTS for g++ < 4.3 has ended.
+#       See also: languages/cpp/parser/parser.h
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # unordered_map depends on the -std=c++0x parameter, so add it temporarily here
+    set(oldFlags ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c++0x)
+    include(CheckIncludeFileCXX)
+    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
+    # reset CMAKE_REQUIRED_FLAGS again
+    set(CMAKE_REQUIRED_FLAGS ${oldFlags})
+
+    if(HAVE_UNORDERED_MAP)
+        message(STATUS "Enabling c++0x support for unordered map")
+        add_definitions( -std=c++0x ) # For unordered_map
+    else(HAVE_UNORDERED_MAP)
+        check_include_file_cxx(ext/hash_map HAVE_EXT_HASH_MAP)
+    endif(HAVE_UNORDERED_MAP)
+endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
 # create config.h
-include (ConfigureChecks.cmake)
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 add_subdirectory(cmake)
@@ -48,9 +66,10 @@ add_subdirectory(projectmanagers)
 add_subdirectory(debuggers)
 add_subdirectory(app_templates)
 add_subdirectory(documentation)
-add_subdirectory(providers)
+add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(doc)
+add_subdirectory(file_templates)
 #macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()

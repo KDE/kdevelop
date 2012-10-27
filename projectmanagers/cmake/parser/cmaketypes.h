@@ -21,7 +21,8 @@
 
 #include "cmakelistsparser.h"
 #include "variablemap.h"
-namespace KDevelop { class Declaration; }
+
+#include <language/duchain/indexeddeclaration.h>
 
 struct Macro
 {
@@ -42,7 +43,7 @@ struct Target
 {
     typedef QMap<QString, QString> Properties;
     enum Type { Library, Executable, Custom };
-    KDevelop::Declaration* declaration;
+    KDevelop::IndexedDeclaration declaration;
     QStringList files;
     Type type;
     CMakeFunctionDesc desc;

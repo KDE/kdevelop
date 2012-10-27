@@ -1,0 +1,3 @@
+{% with method.arguments as arguments %}
+{% if not method.isConstructor and not method.isDestructor %}{{ method.returnType|default:"void" }} {% endif %}{{ name }}::{% if method.isConstructor %}{{ name }}{% else %}{{ method.name }}{% endif %}({% include "arguments_types_names.txt" %}){% if method.isConst %} const{% endif %}
+{% endwith %}

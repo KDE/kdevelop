@@ -33,6 +33,8 @@ class RenameAction : public IAssistantAction {
 public:
   RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName, const UsesList &oldDeclarationUses);
   virtual QString description() const;
+  virtual QString newDeclarationName() const;
+  virtual QString oldDeclarationName() const;
   virtual void execute();
 private:
   Identifier m_oldDeclarationName;

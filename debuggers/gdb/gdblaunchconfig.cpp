@@ -73,6 +73,11 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
     ui->kcfg_startWith->setItemData(2, "FrameStack" );
 }
 
+GdbConfigPage::~GdbConfigPage()
+{
+    delete ui;
+}
+
 KIcon GdbConfigPage::icon() const
 {
     return KIcon();

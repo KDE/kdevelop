@@ -45,6 +45,10 @@
 #include <bookmarkstoolfactory.h>
 #include <structurestoolviewfactory.h>
 #include <structurestoolfactory.h>
+// Okteta Kasten
+#if KASTEN_VERSION == 2
+#include <bytearrayviewprofilemanager.h>
+#endif
 // KDev
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
@@ -77,15 +81,20 @@ void addTool( IUiController* uiController,
 
 
 OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
-  : IPlugin( OktetaPluginFactory::componentData(), parent ),
-    mDocumentFactory( new OktetaDocumentFactory(this) )
+  : IPlugin( OktetaPluginFactory::componentData(), parent )
+  , mDocumentFactory( new OktetaDocumentFactory(this) )
+#if KASTEN_VERSION == 2
+  , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
+#endif
 {
     Q_UNUSED(args)
 
+#if KASTEN_VERSION == 0 || KASTEN_VERSION == 1
     KLocale* globalLocale = KGlobal::locale();
     globalLocale->insertCatalog( QString::fromLatin1("liboktetacore") );
     globalLocale->insertCatalog( QString::fromLatin1("libkasten") );
     globalLocale->insertCatalog( QString::fromLatin1("liboktetakasten") );
+#endif
 
     IUiController* uiController = core()->uiController();
     addTool( uiController, new Kasten::ChecksumToolViewFactory(), new Kasten::ChecksumToolFactory() );
@@ -94,7 +103,10 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     addTool( uiController, new Kasten::ByteTableToolViewFactory(), new Kasten::ByteTableToolFactory() );
     addTool( uiController, new Kasten::InfoToolViewFactory(), new Kasten::InfoToolFactory() );
     addTool( uiController, new Kasten::PodDecoderToolViewFactory(), new Kasten::PodDecoderToolFactory() );
+// disable Okteta Structures tool on big-endian as it's disable in kdesdk
+#ifndef BIG_ENDIAN
     addTool( uiController, new Kasten::StructuresToolViewFactory(), new Kasten::StructuresToolFactory() );
+#endif
     addTool( uiController, new Kasten::BookmarksToolViewFactory, new Kasten::BookmarksToolFactory() );
 
     KDevelop::IDocumentController* documentController = core()->documentController();

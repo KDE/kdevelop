@@ -23,6 +23,7 @@
 
 #include <QtTest/QtTest>
 
+class CMakeProjectData;
 class CMakeProjectVisitor;
 class CMakeAst;
 
@@ -45,7 +46,7 @@ private slots:
     void testSmallQt4Project();
     void testSmallKDE4Project();
 private:
-    CMakeProjectVisitor parseProject( const QString& sourcedir );
+    CMakeProjectData parseProject( const QString& sourcedir );
 };
 
 #endif

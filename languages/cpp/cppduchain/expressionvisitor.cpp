@@ -746,7 +746,14 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       }
 
       ///Step 2: Find the type of "this" from the function-declaration
-      DUContext* classContext = functionDeclaration->context();
+      DUContext* classContext = 0;
+
+      if (TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(functionDeclaration))
+        if (templateDecl->specializedFrom().data())
+          classContext = templateDecl->specializedFrom().data()->context();
+
+      if (!classContext)
+        classContext = functionDeclaration->context();
 
       //Take the type from the classContext
       if( classContext && classContext->type() == DUContext::Class && classContext->owner() )
@@ -1201,12 +1208,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               declarations << DeclarationPointer(dec);
             }
           }
+        } else if (!node->initializer->expression && !node->initializer->initializer_clause) {
+          // ctor without parameters, i.e.: foo();
+          token = node->initializer->start_token;
+          fail = false;
         }
-      }
-      else if(node->declarator->parameter_is_initializer && node->declarator->parameter_declaration_clause)
-      {
-        token = node->declarator->parameter_declaration_clause->start_token-1;
-        fail = !buildParametersFromDeclaration(node->declarator->parameter_declaration_clause);
       }
 
       if(fail || !constructedType) {

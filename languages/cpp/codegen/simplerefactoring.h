@@ -36,11 +36,9 @@ public:
   void doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
 
   void startInteractiveRename(KDevelop::IndexedDeclaration decl);
-  void createNewClass(KDevelop::ProjectBaseItem* item);
   
 public slots:
   void executeRenameAction();
-  void executeNewClassAction();
   void executeMoveIntoSourceAction();
 
 private:

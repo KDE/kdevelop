@@ -20,7 +20,7 @@
 
 #include "templatedeclaration.h"
 
-#include <qatomic.h>
+#include <QThreadStorage>
 #include <kglobal.h>
 
 #include <language/duchain/declaration.h>
@@ -73,19 +73,6 @@ namespace Cpp {
   DEFINE_LIST_MEMBER_HASH(SpecialTemplateDeclarationData, m_specializations, IndexedDeclaration)
   DEFINE_LIST_MEMBER_HASH(SpecialTemplateDeclarationData, m_specializedWith, IndexedType)
 }
-
-struct AtomicIncrementer {
-  typedef QBasicAtomicInt Int;
-  AtomicIncrementer( Int *cnt ) : c(cnt) {
-    c->ref();
-  }
-
-  ~AtomicIncrementer() {
-    c->deref();
-  }
-
-  Int* c;
-};
 
 AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::IndexedTypeIdentifier& id ) {
   AbstractType::Ptr ret = ptr;
@@ -157,21 +144,82 @@ TypePtr<DelayedType> containsDelayedType(AbstractType::Ptr type)
 }
 }
 
-///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
-struct DelayedTypeResolver : public KDevelop::TypeExchanger {
-  const KDevelop::DUContext* searchContext;
+/**
+ * Thread-local data to ensure recursion limits are not exceeded.
+ * Also holds the implementation data to support defaulte template parameters.
+ */
+struct ThreadLocalData {
+  ThreadLocalData()
+  : delayedDepth(0)
+  , aliasDepth(0)
+  {}
+  // used to apply default template parameters
+  QMultiHash<IndexedQualifiedIdentifier, IndexedType> typeOverloads;
+  // recursion counter for delayed type resolution
+  uint delayedDepth;
+  // recursion counter for alias type resolution
+  uint aliasDepth;
+};
 
+#if (QT_VERSION >= 0x040801)
+QThreadStorage<ThreadLocalData> threadData;
+inline ThreadLocalData& threadDataLocal() {
+  return threadData.localData();
+}
+#else
+QThreadStorage<ThreadLocalData*> threadData;
+inline ThreadLocalData& threadDataLocal() {
+  if(!threadData.localData())
+    threadData.setLocalData(new ThreadLocalData());
+  return *threadData.localData();
+}
+#endif
+
+/**
+ * RAII class to push/pop a type overload for a given identifier.
+ */
+struct PushTypeOverload
+{
+  PushTypeOverload(const IndexedQualifiedIdentifier& qid_, const IndexedType& type_)
+  : qid(qid_)
+  , type(type_)
+  , data(threadDataLocal())
+  {
+    data.typeOverloads.insert(qid, type);
+  }
+  ~PushTypeOverload()
+  {
+    data.typeOverloads.remove(qid, type);
+  }
+private:
+  IndexedQualifiedIdentifier qid;
+  IndexedType type;
+  ThreadLocalData& data;
+};
+
+/**
+ * Replaces any DelayedTypes in interesting positions with their resolved versions,
+ * if they can be resolved.
+ */
+struct DelayedTypeResolver : public KDevelop::TypeExchanger
+{
+  const KDevelop::DUContext* searchContext;
   const KDevelop::TopDUContext* source;
-  static AtomicIncrementer::Int depth_counter;
   KDevelop::DUContext::SearchFlags searchFlags;
 
-  DelayedTypeResolver(const KDevelop::DUContext* _searchContext, const KDevelop::TopDUContext* _source, KDevelop::DUContext::SearchFlags _searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams) : searchContext(_searchContext), source(_source), searchFlags(_searchFlags) {
-  }
+  DelayedTypeResolver(const DUContext* _searchContext,
+                      const TopDUContext* _source,
+                      DUContext::SearchFlags _searchFlags = DUContext::NoUndefinedTemplateParams)
+  : searchContext(_searchContext)
+  , source(_source)
+  , searchFlags(_searchFlags)
+  { }
 
   virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
   {
-    AtomicIncrementer inc(&depth_counter);
-    if( depth_counter > 30 ) {
+    ThreadLocalData& data = threadDataLocal();
+    PushValue<uint> inc(data.delayedDepth, +1);
+    if( data.delayedDepth > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return type;
     }
@@ -180,15 +228,23 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
       QualifiedIdentifier qid = delayedType->identifier().identifier().identifier();
       if( !qid.isExpression() ) {
-        DUContext::SearchItem::PtrList identifiers;
-        identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(qid) );
-        DUContext::DeclarationList decls;
-        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags, 0 ) )
-          return type;
-        
+        // look for default template parameters
+        IndexedType indexedType = data.typeOverloads.value(qid);
+        if(!indexedType) {
+          // fall back to normal DUContext search
+          DUContext::SearchItem::PtrList identifiers;
+          identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(qid) );
+          DUContext::DeclarationList decls;
+          if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags, 0 ) )
+            return type;
 
-        if( !decls.isEmpty() ) {
-          return applyPointerReference(decls[0]->abstractType(), delayedType->identifier());
+          if( !decls.isEmpty() ) {
+            indexedType = decls[0]->indexedType();
+          }
+        }
+
+        if( indexedType.isValid() ) {
+          return applyPointerReference(indexedType.abstractType(), delayedType->identifier());
         }
       }
       ///Resolution as type has failed, or is not appropriate.
@@ -230,9 +286,6 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   private:
     AbstractType::Ptr keepAlive;
 };
-
-AtomicIncrementer::Int DelayedTypeResolver::depth_counter = Q_BASIC_ATOMIC_INITIALIZER(0);
-AtomicIncrementer::Int alias_depth_counter = Q_BASIC_ATOMIC_INITIALIZER(0);
 
 // bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
 //  return left.type == right.type && left.isInstance == right.isInstance;
@@ -435,38 +488,6 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
   return (bool)dynamic_cast<const TemplateDeclaration*>(decl);
 }
 
-///Applies the default-parameters from basicDeclaration. This must be called AFTER basicDeclaration was instantiated, so the
-///template-parameters are already replaced with their instantiated types
-// InstantiationInformation applyDefaultParameters( const InstantiationInformation& information, Declaration* basicDeclaration )
-// {
-//   DUContext* templateCtx = getTemplateContext(basicDeclaration);
-//   if( !templateCtx )
-//     return information;
-//
-//   if( information.templateParametersSize() >= templateCtx->localDeclarations().count() )
-//     return information;
-//
-//   InstantiationInformation ret(information);
-//
-//   for( int a = information.templateParameters.count(); a < templateCtx->localDeclarations().count(); a++ ) {
-//     TemplateParameterDeclaration* decl = dynamic_cast<TemplateParameterDeclaration*>(templateCtx->localDeclarations()[a]);
-//     if( decl ) {
-//       if( !decl->defaultParameter().isEmpty() ) {
-//         ExpressionEvaluationResult res;
-//         res.type = decl->abstractType();
-//
-//         ret.templateParametersList.append(res.indexed());
-//       }else{
-//         //kDebug(9007) << "missing needed default template-parameter";
-//       }
-//     } else {
-//       kDebug(9007) << "Warning: non template-parameter in template context";
-//     }
-//   }
-//
-//   return ret;
-// }
-
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
 CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom, bool doNotRegister )
 {
@@ -610,8 +631,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
         ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
         if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
-          AtomicIncrementer safety(&alias_depth_counter);
-          if(alias_depth_counter > 30) {
+          ThreadLocalData& data = threadDataLocal();
+          PushValue<uint> safety(data.aliasDepth, +1);
+          if(data.aliasDepth > 30) {
             kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
             ///For alias declaration, we resolve the declaration that is aliased instead of a type.
@@ -709,8 +731,7 @@ void TemplateDeclaration::deleteAllInstantiations()
 {
   if(m_instantiations.isEmpty() && m_defaultParameterInstantiations.isEmpty())
     return;
-  ENSURE_CHAIN_WRITE_LOCKED
-  
+
   InstantiationsHash instantiations;
   {
     QMutexLocker l(&instantiationsMutex);
@@ -824,6 +845,68 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   return qMakePair((unsigned int)(info.templateParametersSize() - templateContext->localDeclarations().count())*1000 + matchDepth, instantiated);
 }
 
+void applyDefaultParameters(const DUContext* templateContext, const TopDUContext* source,
+                            const DUContext* surroundingContext,
+                            InstantiationInformation* templateArguments)
+{
+  Q_ASSERT(templateContext);
+  Q_ASSERT(templateContext->type() == DUContext::Template);
+  Q_ASSERT(source);
+  Q_ASSERT(surroundingContext);
+
+  const int totalParameters = templateContext->localDeclarations().count();
+  KDevVarLengthArray<IndexedType, 10> explicitParameters = templateArguments->templateParametersList();
+
+  if(totalParameters <= explicitParameters.size()
+     //TODO: why is this required?
+     && (explicitParameters.size() != 1 || explicitParameters.at(0).isValid()))
+  {
+    // nothing to do
+    return;
+  }
+
+  KDevVarLengthArray<IndexedType, 10> appliedParameters;
+  int currentArgument = 0;
+
+  QVector<PushTypeOverload*> typeOverloads;
+  foreach(Declaration* decl, templateContext->localDeclarations()) {
+    TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
+    Q_ASSERT(templateDecl); //Only template-parameter declarations are allowed in template-contexts
+
+    IndexedType type = decl->indexedType();
+    Q_ASSERT(type.isValid());
+    if( currentArgument < explicitParameters.size()
+        && explicitParameters.at(currentArgument).isValid() )
+    {
+      // use explicit parameter
+      type = explicitParameters.at(currentArgument);
+      Q_ASSERT(type);
+    } else if(templateDecl->hasDefaultParameter()) {
+      // Apply default-parameter
+      Q_ASSERT(!templateDecl->defaultParameter().isEmpty());
+      DelayedType::Ptr delayed( new DelayedType() );
+      delayed->setIdentifier( IndexedTypeIdentifier(templateDecl->defaultParameter()) );
+      type = resolveDelayedTypes( delayed.cast<AbstractType>(), surroundingContext, source)->indexed();
+    } // else the parameter is missing
+
+    //TODO: why is this neccessary?
+    if(type.abstractType().cast<CppTemplateParameterType>()) {
+      ++currentArgument;
+      continue;
+    }
+
+    appliedParameters << type;
+    if(type != decl->indexedType()) {
+      // add type overload
+      typeOverloads << new PushTypeOverload(decl->qualifiedIdentifier(), type);
+    }
+    ++currentArgument;
+  }
+
+  qDeleteAll(typeOverloads);
+  templateArguments->templateParametersList() = appliedParameters;
+}
+
 Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _templateArguments, const TopDUContext* source, bool forceLocal )
 {
   InstantiationInformation templateArguments(_templateArguments);
@@ -832,6 +915,9 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   }*/
   if( m_instantiatedFrom && !forceLocal)
     return m_instantiatedFrom->instantiate( templateArguments, source );
+
+  if ( specializedFrom().data() && !forceLocal )
+    return dynamic_cast<TemplateDeclaration*>(specializedFrom().declaration())->instantiate(templateArguments, source);
 
   {
     QMutexLocker l(&instantiationsMutex);
@@ -882,23 +968,8 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 //   kDebug() << decl->qualifiedIdentifier().toString() << "got template-context" << templateContext << templateArguments.toString();
 
   if(!forceLocal) {
-    ///Apply default-parameters
-    if(templateContext && (static_cast<uint>(templateContext->localDeclarations().count()) > templateArguments.templateParametersSize() || (templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1))) {
-      //Do a little fake instantiation so all the default-parameters are correctly applied right here. Then, they can be used
-      //during specialization-matching.
-      DUContext* newTemplateContext = instantiateDeclarationAndContext( surroundingContext, source, templateContext, templateArguments, 0, 0, true );
-      
-      templateArguments.templateParametersList().clear();
-  //     kDebug() << "count in copied:" << newTemplateContext->localDeclarations().count();
-      foreach(Declaration* decl, newTemplateContext->localDeclarations())
-        if(!decl->type<CppTemplateParameterType>()) {
-  //         kDebug() << "inserting" << decl->abstractType()->toString();
-          templateArguments.addTemplateParameter(decl->abstractType());
-        }else{
-  //         kDebug() << "not inserting";
-        }
-      
-      delete newTemplateContext;
+    if(templateContext) {
+      applyDefaultParameters(templateContext, source, surroundingContext, &templateArguments);
     }
 
     ///Check whether there is type-aliases in the parameters that need to be resolved

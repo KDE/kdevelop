@@ -3,17 +3,16 @@ add_subdirectory(plasma)
 ########### next target ###############
 
 find_package(SharedMimeInfo REQUIRED)
-find_package(KDeclarative)
+macro_optional_find_package(KDeclarative)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp)
 if(KDECLARATIVE_FOUND)
     set(kdevelop_SRCS ${kdevelop_SRCS}
                    welcomepage/sessionsmodel.cpp welcomepage/welcomepageview.cpp welcomepage/uihelper.cpp)
     add_definitions(-DWITH_WELCOMEPAGE)
+	qt4_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
 endif(KDECLARATIVE_FOUND)
 kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
-
-qt4_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
 
 kde4_add_executable(kdevelop ${kdevelop_SRCS} )
 
@@ -36,7 +35,7 @@ endif(KDECLARATIVE_FOUND)
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install(FILES kdevelop_attach DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
 kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 

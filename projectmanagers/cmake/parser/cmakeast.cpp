@@ -35,6 +35,20 @@
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
+        
+QDebug operator<<(QDebug dbg, const CMakeFunctionDesc &func)
+{
+    dbg.nospace() << func.name << "(" << func.arguments << ")";
+
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const CMakeFunctionArgument &arg)
+{
+    dbg.nospace() << arg.value;
+
+    return dbg.space();
+}
 
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
@@ -113,6 +127,7 @@ CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
 CMAKE_REGISTER_AST( UseMangledMesaAst, use_mangled_mesa )
 CMAKE_REGISTER_AST( UtilitySourceAst, utility_source )
+CMAKE_REGISTER_AST( UnsetAst, unset )
 CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
 CMAKE_REGISTER_AST( WhileAst, while)
 CMAKE_REGISTER_AST( WriteFileAst, write_file)
@@ -1003,7 +1018,7 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FileAst::FileAst()
-    : m_newlineConsume(false), m_noHexConversion(false)
+    : m_isFollowingSymlinks(false), m_newlineConsume(false), m_noHexConversion(false)
 {
 }
 
@@ -1264,6 +1279,8 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1281,7 +1298,7 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return !m_filenames.isEmpty() && !m_path.isEmpty();
+    return !m_filenames.isEmpty();
 }
 
 
@@ -1402,7 +1419,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.constEnd();
 
     bool ret=true;
-    enum State { None, Components };
+    enum State { None, Components, Paths };
     State s=None;
     for(; it!=itEnd; ++it)
     {
@@ -1413,8 +1430,11 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_MODULE") m_noModule=true;
         else if(it->value=="REQUIRED") { m_isRequired=true; s=Components; }
         else if(it->value=="COMPONENTS") s=Components;
+        else if(it->value=="PATHS") s=Paths;
         else if(s==Components)
             m_components.append(it->value);
+        else if(s==Paths)
+            m_paths.append(it->value);
         else
             ret=false;
     }
@@ -1662,6 +1682,8 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type=Commands;
     else if(type=="MACROS")
         m_type=Macros;
+    else if(type=="COMPONENTS")
+        m_type=Components;
     else
         return false;
     return true;
@@ -2165,6 +2187,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 return false;
             
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             int i=0;
             foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
@@ -2201,6 +2224,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()<3)
                 return false;
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             
             QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+2, itEnd=func.arguments.constEnd();
             for(; it!=itEnd; ++it)
@@ -2212,6 +2236,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if(func.arguments.count()<3)
                 return false;
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             int i=0;
             foreach(const CMakeFunctionArgument& arg, func.arguments)
             {
@@ -2229,6 +2254,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case Reverse:
         case RemoveDuplicates:
             addOutputArgument(func.arguments[1]);
+            m_output = func.arguments[1].value;
             if(func.arguments.count()>2)
                 return false;
             break;
@@ -3003,25 +3029,25 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(m_only) i++;
         if(func.arguments.count()>i) m_escapeQuotes = func.arguments[i].value=="ESCAPE_QUOTES";
     }
-    else if(stringType=="TOUPPER")
+    else if(stringType=="TOUPPER" && func.arguments.count()==3)
     {
         m_type=ToUpper;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
+        addOutputArgument(func.arguments[2]);
     }
-    else if(stringType=="TOLOWER")
+    else if(stringType=="TOLOWER" && func.arguments.count()==3)
     {
         m_type=ToLower;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
         addOutputArgument(func.arguments[2]);
     }
-    else if(stringType=="LENGTH")
+    else if(stringType=="LENGTH" && func.arguments.count()==3)
     {
         m_type=Length;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
-        
         addOutputArgument(func.arguments[2]);
     }
     else if(stringType=="SUBSTRING")
@@ -3365,6 +3391,29 @@ bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_fileList.append(arg.value);
     }
     return true;
+}
+
+UnsetAst::UnsetAst()
+{
+}
+
+UnsetAst::~UnsetAst()
+{
+}
+
+
+bool UnsetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="unset" || func.arguments.count()<1 || func.arguments.count()>2)
+        return false;
+    m_variableName = func.arguments.first().value;
+    addOutputArgument(func.arguments.first());
+    m_cache = func.arguments.count()==2 && func.arguments.last().value=="CACHE";
+    m_env = m_variableName.startsWith("ENV{");
+    if(m_env) {
+        m_variableName = m_variableName.mid(4, -2);
+    }
+    return func.arguments.count()==1 || (m_cache && !m_env);
 }
 
 VariableRequiresAst::VariableRequiresAst()
@@ -3719,6 +3768,7 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     m_outputVariable=it->value;
+    addOutputArgument(*it);
     ++it;
     
     PropertyType t;

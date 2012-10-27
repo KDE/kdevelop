@@ -204,23 +204,20 @@ void TestCppCodeCompletion::testExpressionBefore()
 
 void TestCppCodeCompletion::testSpecialItems()
 {
-  //Special items are (at this time) just all the enum members given duplicate values that qualify for "Best Match" status
-  //If reasonably possible, it would be nice to not duplicate while still having best matches
-  //See Also: context.cpp's CodeCompletionContext::specialItemsForArgumentType function
   QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester test(top->childContexts()[ctxt], "c = ");
-  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test2(top->childContexts()[ctxt], "test(");
-  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
-  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
-  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
-  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << "Red" << "Green" << "Blue");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
   release(top);
 }
 
@@ -433,6 +430,15 @@ void TestCppCodeCompletion::testParentContexts()
   release(top);
 }
 
+/*
+ * A comment on expect-fails in following 3 tests:
+ * "case" statement completion uses DUChainBase::createRangeMoving()->text() to get the switch'd expression
+ * and parse its type. Unfortunately, PersistentRangeMoving class itself is not yet completed and doesn't work without an editor.
+ * Hence the expression type cannot be resolved, which leads to 2 problems:
+ * 1) best matches are not selected, so all items have match quality of 0;
+ * 2) specialItemsForArgumentType() which is responsible for fetching enumerators from different scopes doesn't work either.
+ */
+
 void TestCppCodeCompletion::testCaseContext()
 {
   QByteArray method = "enum testEnum { foo, bar }; void test() { switch( testEnum ) { } }";
@@ -441,9 +447,91 @@ void TestCppCodeCompletion::testCaseContext()
   int sctxt = 1;
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
-  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "test" << "foo" << "bar");
+  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "foo" << "bar");
   QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("bar",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
   release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextComplexExpression()
+{
+  QByteArray method = "enum testEnum { foo, bar }; struct testStruct { testEnum e; }; void test(testStruct s) { switch (s.e) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 3;
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
+  QCOMPARE(caseContext.names, QStringList() << "testEnum" << "testStruct" << "foo" << "bar");
+  QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QCOMPARE(caseContext.itemData("testEnum",   KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QCOMPARE(caseContext.itemData("testStruct", KDevelop::CodeCompletionModel::MatchQuality).toInt(), 0);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("foo",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.itemData("bar",        KDevelop::CodeCompletionModel::MatchQuality).toInt(), 10);
+  release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextDifferentScope()
+{
+  QByteArray method = "struct testStruct { enum testEnum { foo, bar } e; }; void test(testStruct s) { switch (s.e) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int ctxt = 2;
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts()[ctxt]->childContexts()[sctxt], "case ");
+  QCOMPARE(caseContext.completionContext->parentContext()->accessType(), Cpp::CodeCompletionContext::CaseAccess);
+  QEXPECT_FAIL("", "PersistentRangeMoving needs to be fixed", Continue);
+  QCOMPARE(caseContext.names, QStringList() << "testStruct" << "testStruct::foo" << "testStruct::bar");
+  release(top);
+}
+
+void TestCppCodeCompletion::testCaseContextConstants()
+{
+  QByteArray method = "enum testEnum { foo, bar };"
+                      "testEnum enum_nc; const testEnum enum_c; const testEnum enum_cc = foo;"
+                      "int int_nc; const int int_c; const int int_cc = 0;"
+                      "float float_nc; const float float_c; const float float_cc = 0.0;"
+                      "testEnum func_enum(); constexpr testEnum func_enum_cc();"
+                      "int func_int(); constexpr int func_int_cc();"
+                      "void func_void(); float func_float(); constexpr float func_float_cc();"
+                      "void testcase() { switch (enum_nc) { } }";
+  TopDUContext* top = parse(method, DumpNone);
+  int sctxt = 1;
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester caseContext(top->childContexts().last()->childContexts()[sctxt], "case ");
+  QStringList names = caseContext.names;
+  QVERIFY(names.contains("testEnum"));
+
+  QVERIFY(!names.contains("enum_nc"));
+  QVERIFY(!names.contains("enum_c"));
+  QVERIFY( names.contains("enum_cc"));
+
+  QVERIFY(!names.contains("int_nc"));
+  QVERIFY(!names.contains("int_c"));
+  QVERIFY( names.contains("int_cc"));
+
+  QVERIFY(!names.contains("float_nc"));
+  QVERIFY(!names.contains("float_c"));
+  QVERIFY(!names.contains("float_cc"));
+
+  QVERIFY(!names.contains("func_void"));
+  QVERIFY(!names.contains("func_float"));
+  QVERIFY(!names.contains("func_float_cc"));
+
+  QEXPECT_FAIL("", "constexpr needs to be handled", Continue);
+  QVERIFY(!names.contains("func_enum"));
+  QVERIFY(names.contains("func_enum_cc"));
+
+  QEXPECT_FAIL("", "constexpr needs to be handled", Continue);
+  QVERIFY(!names.contains("func_int"));
+  QVERIFY(names.contains("func_int_cc"));
+
+  release (top);
 }
 
 void TestCppCodeCompletion::testUnaryOperators()
@@ -748,10 +836,10 @@ void TestCppCodeCompletion::testKeywords() {
   QCOMPARE(testQEmit.names, QStringList() << "a" << "Values" << "v" << "test");
   CompletionItemTester testCase(context->childContexts()[ctxt], "switch (a) { case ");
   QVERIFY(testCase.completionContext->isValid());
-  QCOMPARE(testCase.names, QStringList() << "a" << "Values" << "v" << "test");
+  QCOMPARE(testCase.names, QStringList() << "Values" << "test");
   CompletionItemTester testCase2(context->childContexts()[ctxt], "switch (a) { case v.");
   QVERIFY(testCase2.completionContext->isValid());
-  QCOMPARE(testCase2.names, QStringList() << "Value1" << "Value2");
+  QCOMPARE(testCase2.names, QStringList());
   CompletionItemTester testReturn(context->childContexts()[ctxt], "return ");
   QVERIFY(testReturn.completionContext->isValid());
   QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "v" << "test");
@@ -1047,6 +1135,104 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     release(context);
 }
 
+void TestCppCodeCompletion::testSignalSlotExecution()
+{
+    // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
+    addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
+    addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
+
+    QByteArray test("#include \"QObject.h\""
+                    "\nclass A : public QObject { public slots: void slot1(); void slot2(void*);"
+                                                        "signals: void signal1(void*, char); void signal2(void*); "
+                    "\nvoid test() { connect( this, SIGNAL(signal2(void*)), SLOT() ); } };");
+
+    TopDUContext* top = parse( test, DumpNone );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 6);
+    QVERIFY(top->problems().isEmpty());
+
+    DUContext* context = top->childContexts()[0]->childContexts()[5];
+
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+
+    doc->setText(test);
+    KTextEditor::View* v = doc->createView(0);
+
+    // Test 1: SIGNAL(<here>signal2(void*)) parens balancing
+    {
+        doc->startEditing();
+        KTextEditor::Cursor c( 2, 36 );
+        v->setCursorPosition( c );
+
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(", "", CursorInRevision( c.line(), c.column() ) );
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "signal1" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
+
+        doc->endEditing();
+    }
+
+    // Test 2: SLOT(<here>) parens balancing
+    {
+        doc->startEditing();
+        KTextEditor::Cursor c( 2, 58 );
+        v->setCursorPosition( c );
+
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "", CursorInRevision( c.line(), c.column() ) );
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "slot2" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
+
+        doc->endEditing();
+    }
+    // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
+    {
+        doc->startEditing();
+        KTextEditor::Cursor c( 2, 58 );
+        v->setCursorPosition( c );
+
+        lock.unlock();
+        CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "slot3", CursorInRevision( c.line(), c.column() ) );
+        qDebug() << "TEST3 names: " << complCtx.names;
+        KSharedPtr<CompletionTreeItem> item;
+        for( int i = 0; i < complCtx.items.length(); ++i ) {
+            if( complCtx.itemData( i ).toString() == "slot3" ) {
+                item = complCtx.items.at( i );
+            }
+        }
+        QVERIFY( !item.isNull() );
+
+        item->execute( doc, Range( c, 0 ) );
+        lock.lock();
+        QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
+        QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
+
+        doc->endEditing();
+    }
+
+    release(top);
+
+    delete v;
+    delete doc;
+}
 
 void TestCppCodeCompletion::testAssistant() {
   {
@@ -2882,6 +3068,16 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("boHallo"));
   }
+  {//Test __builtin_offsetof
+    TopDUContext* top = parse(QByteArray("typedef struct a { int i; } t_a; int o = __builtin_offsetof(t_a, i);"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+  }
+  {//Test __builtin_offsetof with a struct type (make sure spaces are handled correctly by the macro)
+    TopDUContext* top = parse(QByteArray("struct a { int i; }; int o = __builtin_offsetof(struct a, i);"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+  }
 }
 
 void TestCppCodeCompletion::testArgumentList()
@@ -2982,42 +3178,46 @@ void TestCppCodeCompletion::testStringInComment()
 
 void TestCppCodeCompletion::testProperties()
 {
-  QByteArray code("struct A{\n__qt_property__(bool myProp READ prop); function foo() {}\n}; A aStack; A* aHeap = new A;");
+  QByteArray code(
+    "class A{\n"
+    "  __qt_property__(int myProp READ myProp WRITE setMyProp);\n"
+    "public:\n"
+    "  int myProp() const;\n" // actual getter
+    "  void setMyProp(int);\n" // actual setter
+    "};\n"
+    " A aStack; A* aHeap = new A; int main() {}");
   TopDUContext* top = parse(code, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
+  DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
-  QCOMPARE(top->findDeclarations(QualifiedIdentifier("A::myProp")).count(), 1);
-  QVERIFY(dynamic_cast<Cpp::QPropertyDeclaration*>(top->findDeclarations(QualifiedIdentifier("A::myProp")).first()));
+  QVector<Declaration*> declarations = top->childContexts().first()->localDeclarations();
+  QCOMPARE(declarations.count(), 3);
+  Cpp::QPropertyDeclaration* property = dynamic_cast<Cpp::QPropertyDeclaration*>(declarations.first());
+  QVERIFY(property);
+  Declaration* getter = declarations.at(1);
+  QVERIFY(getter->isFunctionDeclaration());
+  Declaration* setter = declarations.last();
+  QVERIFY(getter->isFunctionDeclaration());
+
+  DUContext* ctx = top->childContexts().last();
+  QCOMPARE(ctx->type(), DUContext::Other);
 
   {
-  CompletionItemTester complCtx(top, "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top, "aStack.");
+  CompletionItemTester complCtx(ctx, "aStack.");
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
+  QVERIFY(!complCtx.containsDeclaration(property));
+  QVERIFY(complCtx.containsDeclaration(getter));
+  QVERIFY(complCtx.containsDeclaration(setter));
   }
   {
-  CompletionItemTester complCtx(top, "aHeap->");
+  CompletionItemTester complCtx(ctx, "aHeap->");
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top->childContexts().first(), "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
-  }
-  {
-  CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "");
-  QVERIFY(complCtx.completionContext->isValid());
-  QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::NoMemberAccess);
-  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
+  QVERIFY(!complCtx.containsDeclaration(property));
+  QVERIFY(complCtx.containsDeclaration(getter));
+  QVERIFY(complCtx.containsDeclaration(setter));
   }
 
   release(top);

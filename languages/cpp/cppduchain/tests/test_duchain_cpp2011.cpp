@@ -35,6 +35,7 @@
 
 #include "typeutils.h"
 #include "templatedeclaration.h"
+#include "cppduchain.h""
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -126,14 +127,76 @@ void TestDUChain::testRangeBasedForClass() {
   decls = ctx->childContexts().at(0)->localDeclarations();
   QCOMPARE(decls.size(), 1);
   QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QVERIFY(decls.at(0)->abstractType());
   QCOMPARE(decls.at(0)->abstractType()->toString(), QString("MyType"));
   QCOMPARE(decls.at(0)->range().start.line, 10);
 
   decls = ctx->childContexts().at(2)->localDeclarations();
   QCOMPARE(decls.size(), 1);
   QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QVERIFY(decls.at(0)->abstractType());
   QCOMPARE(decls.at(0)->abstractType()->toString(), QString("MyType"));
   QCOMPARE(decls.at(0)->range().start.line, 12);
+}
+
+void TestDUChain::testRangeBasedForClass2() {
+  // see: https://bugs.kde.org/show_bug.cgi?id=299310
+  // see: 24.6.5 in the c++11 standard: range access [iterator.range]
+  //                                         1         2         3
+  //                                123456789012345678901234567890
+  LockedTopDUContext top = parse(  "template<typename T> struct list{"
+                                 "\n  T*& begin();"
+                                 "\n  const T* const& begin() const;"
+                                 "\n};"
+                                 "\nnamespace std{"
+                                 "\n  template<class C> auto begin(C& c) -> decltype(c.begin());"
+                                 "\n  template<class C> auto begin(const C& c) -> decltype(c.begin());"
+                                 "\n}"
+                                 "\nint main() {"
+                                 "\n  list<double> l1;"
+                                 "\n  int a = 0;" // make sure lastType is bogus
+                                 "\n  for(auto i : l1) { }"
+                                 "\n  const list<float> l2;"
+                                 "\n  int b = 0;" // make sure lastType is bogus
+                                 "\n  for(auto i : l2) { }"
+                                 "\n}"
+                                 "\n", DumpNone
+                           );
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->childContexts().size(), 5);
+  QCOMPARE(top->localDeclarations().size(), 3);
+  DUContext* ctx = top->childContexts().last();
+  QVector< Declaration* > decls = ctx->localDeclarations();
+  QCOMPARE(decls.size(), 4);
+
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("l1"));
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("list< double >"));
+  QCOMPARE(decls.at(0)->uses().constBegin()->size(), 1);
+  QCOMPARE(decls.at(0)->uses().constBegin()->first().start.line, 11);
+
+  QCOMPARE(decls.at(2)->identifier().toString(), QString("l2"));
+  QCOMPARE(decls.at(2)->abstractType()->toString(), QString("const list< float >"));
+  QCOMPARE(decls.at(2)->uses().constBegin()->size(), 1);
+  QCOMPARE(decls.at(2)->uses().constBegin()->first().start.line, 14);
+
+  QCOMPARE(ctx->childContexts().size(), 4);
+  decls = ctx->childContexts().at(0)->localDeclarations();
+  QCOMPARE(decls.size(), 1);
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QVERIFY(decls.at(0)->abstractType());
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("double"));
+  QCOMPARE(decls.at(0)->range().start.line, 11);
+
+  // note: auto e = begin(const list<>&) will return a *non* const type
+  // this is expected as per definition of the auto functionality
+  decls = ctx->childContexts().at(2)->localDeclarations();
+  QCOMPARE(decls.size(), 1);
+  QCOMPARE(decls.at(0)->identifier().toString(), QString("i"));
+  QVERIFY(decls.at(0)->abstractType());
+  QCOMPARE(decls.at(0)->abstractType()->toString(), QString("float"));
+  QCOMPARE(decls.at(0)->range().start.line, 14);
 }
 
 void TestDUChain::testRValueReference() {
@@ -717,6 +780,7 @@ void TestDUChain::testTemplateSpecializeRValue()
   QVERIFY(specParam.cast<ReferenceType>());
   QVERIFY(specParam.cast<ReferenceType>()->isRValue());
   QCOMPARE(specParam->toString(), QString("T&&"));
+  QCOMPARE(Cpp::simplifiedTypeString(specParam, top), QString("T&&"));
 
   QCOMPARE(top->childContexts().last()->localDeclarations().size(), 2);
   QCOMPARE(top->childContexts().last()->localDeclarations().at(0)->abstractType()->toString(),
@@ -775,13 +839,16 @@ void TestDUChain::testAuto()
     "const auto a4 = i;\n"
     "const auto& a5 = i;\n"
     "const auto&& a6 = i;\n"
+    "auto a7(1.1d);\n"
+    "auto a8(i);\n"
+    "auto a9 /** test **/ (i);\n"
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 7);
+  QCOMPARE(top->localDeclarations().count(), 10);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -817,6 +884,18 @@ void TestDUChain::testAuto()
   QVERIFY(dec->type<ReferenceType>()->isRValue());
   QVERIFY(dec->type<ReferenceType>()->baseType().cast<IntegralType>());
   QCOMPARE(dec->type<ReferenceType>()->baseType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(7);
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
+
+  dec = top->localDeclarations().at(8);
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+
+  dec = top->localDeclarations().at(9);
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
 }
 
 void TestDUChain::testNoexcept()

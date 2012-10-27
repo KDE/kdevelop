@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="132" name="kdevelop" >
+<kpartgui version="133" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -155,6 +155,8 @@
 
 <ToolBar name="mainToolBar" position="Top" noMerge="1">
   <text>Main Toolbar</text>
+  <Action name="area_switcher"/>
+  <Separator/>
   <DefineGroup append="build_operations" name="build_operations"/>
   <DefineGroup append="run_operations" name="run_operations"/>
   <Action name="run_execute" group="run_operations"/>

@@ -73,6 +73,9 @@ private slots:
   void testMemberAccess();
   void testParentContexts();
   void testCaseContext();
+  void testCaseContextComplexExpression();
+  void testCaseContextDifferentScope();
+  void testCaseContextConstants();
   void testUnaryOperators();
   void testBinaryOperators();
   void testDeclarationIsInitialization();
@@ -127,6 +130,7 @@ private slots:
   void testCompletionBehindTypedeffedConstructor();
   void testSubClassVisibility();
   void testSignalSlotCompletion();
+  void testSignalSlotExecution();
   void testStringProblem();
   void testArgumentList();
   void testStaticMethods();

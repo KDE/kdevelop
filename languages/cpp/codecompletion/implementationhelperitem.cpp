@@ -428,7 +428,8 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     if(slotName.isEmpty())
       slotName = completionContext()->m_connectedSignalIdentifier.toString();
 
-    insertion.insertSlot(slotName, QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
+    QString slotSignature = QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature);
+    insertion.insertSlot(slotName, slotSignature);
 
     QString name = completionContext()->followingText();
     if(name.isEmpty() && m_declaration)
@@ -441,10 +442,8 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       return;
     }
 
-    ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
-
-    QString localText = "SLOT("+name+"("+QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature)+")));";
-    document->replaceText(word, localText);
+    ICore::self()->languageController()->backgroundParser()->addDocument(doc);
+    executeSignalSlotCompletionItem( document, word, false, slotName, slotSignature );
   }else{
     //this code assumes (safely for now) that the "word" range is on one line
     KTextEditor::Range rangeToReplace(word.start().line(), 0, word.end().line(), word.end().column());

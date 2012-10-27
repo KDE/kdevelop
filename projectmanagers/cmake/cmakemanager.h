@@ -26,8 +26,6 @@
 #include <QString>
 #include <QtCore/QVariant>
 
-#include <KDirWatch>
-
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
@@ -39,6 +37,7 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
 class QDir;
@@ -97,6 +96,7 @@ public:
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
     virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
+    virtual bool copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* newParent);
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
@@ -112,7 +112,7 @@ public:
     
     //LanguageSupport
     virtual QString name() const;
-    virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
+    virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
     virtual KDevelop::ILanguage *language();
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
@@ -134,6 +134,8 @@ private slots:
     void reimportDone(KJob* job);
     
     void deletedWatched(const QString& directory);
+    void directoryChanged(const QString& dir);
+    void filesystemBuffererTimeout();
 
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
@@ -147,7 +149,7 @@ private:
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
     QMutex m_dirWatchersMutex;
-    KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project);
+    KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
@@ -156,7 +158,7 @@ private:
     void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
-    QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
@@ -167,6 +169,10 @@ private:
     QSet<QString> m_toDelete;
     QHash<KUrl, KUrl> m_renamed;
     QList<KDevelop::ProjectBaseItem*> m_cleanupItems;
+
+    QTimer* m_fileSystemChangeTimer;
+    QSet<QString> m_fileSystemChangedBuffer;
+    void realDirectoryChanged(const QString& dir);
 };
 
 #endif

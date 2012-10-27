@@ -32,7 +32,6 @@
 class QStringList;
 class QSignalMapper;
 class KDialog;
-class IMakeBuilder;
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;
@@ -57,6 +56,8 @@ public:
     virtual KJob* configure(KDevelop::IProject*);
     virtual KJob* prune(KDevelop::IProject*);
 
+	virtual QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const;
+
 //     bool updateConfig( KDevelop::IProject* project );
 private Q_SLOTS:
     void buildFinished(KDevelop::ProjectBaseItem*);
@@ -69,9 +70,11 @@ Q_SIGNALS:
     void pruned(KDevelop::IProject*);
 
 private:
-    bool m_dirty;
-    IMakeBuilder* m_builder;
+    void addBuilder(const QString& neededfile, const QStringList& generator, KDevelop::IPlugin* i);
+    KDevelop::IProjectBuilder* builderForProject(KDevelop::IProject* p) const;
+    QMap<QString, KDevelop::IProjectBuilder*> m_builders;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
+    QMap<QString, IProjectBuilder*> m_buildersForGenerator;
 };
 
 #endif // CMAKEBUILDER_H

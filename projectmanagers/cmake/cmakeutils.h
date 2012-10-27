@@ -32,6 +32,7 @@ namespace KDevelop
 
 class KUrl;
 class ICMakeDocumentation;
+class CMakeCacheModel;
 
 namespace CMake
 {
@@ -115,7 +116,7 @@ namespace CMake
      * Sets the current extra arguments for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentExtraArguments( KDevelop::IProject* project, const QString& args );
-    
+
     /**
      * Obtains a cmake documentation instance if it exists
      */
@@ -125,6 +126,75 @@ namespace CMake
      * Retrieves the configured build directories for @p project.
      */
     KDEVCMAKECOMMON_EXPORT QStringList allBuildDirs(KDevelop::IProject* project);
+
+    /**
+     * Returns current CMake modules directory for @p project.
+     */
+    KDEVCMAKECOMMON_EXPORT KUrl cmakeDirectory( KDevelop::IProject* project );
+
+    /**
+     * Sets current CMake modules directory for @p project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCmakeDirectory( KDevelop::IProject* project, const KUrl& url );
+
+    /**
+     * Attempts to migrate the CMake configuration to per-builddir format.
+     * Silently returns if the migration has already been performed.
+     */
+    KDEVCMAKECOMMON_EXPORT void attemptMigrate( KDevelop::IProject* project );
+
+    /**
+     * Attempts to update CMake configuration keys from the cache data.
+     *
+     * @param model The CMake cache model to load data from. If NULL, the model is created based on build directory path for the given index.
+     */
+    KDEVCMAKECOMMON_EXPORT void updateConfig( KDevelop::IProject* project, int buildDirectory, CMakeCacheModel* model = 0 );
+
+    /**
+     * Returns the current build directory count.
+     */
+    KDEVCMAKECOMMON_EXPORT int buildDirCount( KDevelop::IProject* project );
+
+    /**
+     * Sets the build directory count (equivalent to adding a new build directory).
+     */
+    KDEVCMAKECOMMON_EXPORT void setBuildDirCount( KDevelop::IProject* project, int count );
+
+    /**
+     * @returns the current builddir index for the given project or -1 if none
+     * has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT int currentBuildDirIndex( KDevelop::IProject *project );
+
+    /**
+     * Sets the current build dir index for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex );
+
+    /**
+     * A hack to avoid adding an optional "build directory index" parameter to all functions here.
+     * This function sets an alternate build directory index key that overrides regular build directory index.
+     */
+    KDEVCMAKECOMMON_EXPORT void setOverrideBuildDirIndex( KDevelop::IProject* project, int overrideBuildDirIndex );
+
+    /**
+     * This removes build directory override key (\ref setOverrideBuildDirIndex).
+     * Silently returns if there is no override.
+     *
+     * @param writeToMainIndex Whether the overridden index should be saved to regular
+     */
+    KDEVCMAKECOMMON_EXPORT void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainIndex = false );
+
+    /**
+     * Sets the environment configuration for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment );
+
+    /**
+     * Removes current build directory (overridden or not) from the project configuration.
+     * Override is then cleared and index set to -1.
+     */
+    KDEVCMAKECOMMON_EXPORT void removeBuildDirConfig( KDevelop::IProject* project );
 }
 
 #endif

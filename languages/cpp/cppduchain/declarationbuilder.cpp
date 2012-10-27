@@ -29,6 +29,8 @@
 
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
+#include "parser/parser.h"
+#include "parser/control.h"
 
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/duchain.h>
@@ -203,9 +205,11 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     (node->initializer && node->initializer->initializer_clause && node->initializer->initializer_clause->expression)
       ? AbstractFunction : NoFunctionFlag);
 
+  bool parameter_is_initializer = false;
+
   if(currentContext()->type() == DUContext::Other) {
     //Cannot declare a a function within a code-context
-    node->declarator->parameter_is_initializer = true;
+    parameter_is_initializer = true;
   }else if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
@@ -222,11 +226,9 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     
     DUContext* tempContext = currentContext();
     if (currentContext()->type() != DUContext::Class)
-      node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
+      parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
     closePrefixContext(id);
-    
-    
-    
+
     if(tempContext != previous) {
       
       //We remove all of its traces from the AST using ClearDUContextVisitor.
@@ -244,7 +246,13 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     }
     Q_ASSERT(currentContext() == previous);
   }
-  
+
+  if (parameter_is_initializer && node->declarator->parameter_declaration_clause && !node->initializer) {
+    Control control;
+    Parser parser(&control);
+    parser.fixupInitializerFromParameter(node, m_editor.parseSession());
+  }
+
   DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
@@ -269,14 +277,33 @@ void DeclarationBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node
   m_pendingPropertyDeclarations.insert(currentContext(), qMakePair(decl, node));
 }
 
-void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
+void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
 {
-  AbstractType::Ptr listType = lastType();
+  ContextBuilder::handleRangeBasedFor(container, iterator);
 
-  DefaultVisitor::visitForRangeDeclaration(node);
+  if (!container || !iterator) {
+    return;
+  }
 
-  if (lastTypeWasAuto() && listType && m_lastDeclaration) {
+  if (lastTypeWasAuto() && m_lastDeclaration) {
     // auto support for range-based for
+    AbstractType::Ptr listType;
+
+    {
+      DUChainReadLocker lock;
+      container->ducontext = currentContext();
+      Cpp::ExpressionParser parser;
+      Cpp::ExpressionEvaluationResult res = parser.evaluateType( container, editor()->parseSession() );
+      listType = res.type.abstractType();
+    }
+
+    if (!listType) {
+      // invalid type
+      DUChainWriteLocker lock;
+      m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
+      return;
+    }
+
     AbstractType::Ptr realListType = TypeUtils::realType(listType);
     // step 1: find type of elements in list
     AbstractType::Ptr elementType;
@@ -287,11 +314,24 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
       // case b: look for begin(listType) function using ADL
       DUChainReadLocker lock;
       OverloadResolutionHelper helper = OverloadResolutionHelper( DUContextPointer(currentContext()), TopDUContextPointer(topContext()) );
+      helper.setKnownParameters(OverloadResolver::ParameterList(listType, false));
+      // first try begin in current context
       static const QualifiedIdentifier begin("begin");
       helper.setFunctionNameForADL(begin);
-      helper.setKnownParameters(OverloadResolver::ParameterList(listType, false));
-      helper.setFunctions( currentContext()->findDeclarations(begin, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions) );
+      helper.setFunctions( currentContext()->findDeclarations(begin, CursorInRevision::invalid(),
+                                                              AbstractType::Ptr(), 0,
+                                                              DUContext::OnlyFunctions) );
       ViableFunction func = helper.resolve();
+      if (!func.isValid()) {
+        // not valid, fall-back to std, it's an associated namespace,
+        // see also: spec, 6.5.4
+        static const QualifiedIdentifier stdBegin("::std::begin");
+        helper.setFunctionNameForADL(stdBegin);
+        helper.setFunctions( currentContext()->findDeclarations(stdBegin, CursorInRevision::invalid(),
+                                                                AbstractType::Ptr(), 0,
+                                                                DUContext::OnlyFunctions) );
+        func = helper.resolve();
+      }
       if (func.isValid()) {
         AbstractType::Ptr type = func.declaration()->type<FunctionType>()->returnType();
         // see spec: for-range-declaration = *__begin;
@@ -300,8 +340,8 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
     }
 
     // step 2: set last type, but keep const&
+    DUChainWriteLocker lock;
     if (elementType) {
-      DUChainWriteLocker lock;
       AbstractType::Ptr type = m_lastDeclaration->abstractType();
       elementType->setModifiers(type->modifiers());
       if (ReferenceType::Ptr ref = type.cast<ReferenceType>()) {
@@ -310,6 +350,9 @@ void DeclarationBuilder::visitForRangeDeclaration(ForRangeDeclarationAst* node)
         type = elementType;
       }
       m_lastDeclaration->setAbstractType(type);
+    } else {
+      // invalid type
+      m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
     }
   }
 }
@@ -392,13 +435,11 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     DeclarationBuilderBase::visitDeclarator(node);
     return;
   }
-  //need to make backup because we may temporarily change it
-  ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
 
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
   m_qtFunctionSignature = QByteArray();
   
-  if (node->parameter_declaration_clause && !node->parameter_is_initializer) {
+  if (node->parameter_declaration_clause) {
 
     if(m_collectQtFunctionSignature) //We need to do this just to collect the signature
       checkParameterDeclarationClause(node->parameter_declaration_clause);
@@ -423,7 +464,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     applyFunctionSpecifiers();
   } else {
     openDefinition(node->id, node, node->id == 0);
-    node->parameter_declaration_clause = 0;
   }
 
   m_collectQtFunctionSignature = false;
@@ -502,8 +542,6 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   }
 
   closeDeclaration();
-
-  node->parameter_declaration_clause = parameter_declaration_clause_backup;
 }
 
 ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, AST * range)
@@ -532,6 +570,62 @@ KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
   return hasTemplateContext( context->importedParentContexts(), context->topContext() ).context(context->topContext());
 }
 
+bool isSpecialization(TemplateDeclaration *templDecl)
+{
+  //A class specialization or partial specialization will have template identifiers in its identifier
+  if (ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(templDecl))
+  {
+    if (classDecl->identifier().templateIdentifiersCount())
+      return true;
+  }
+  //A function specialization may or may not have template identifiers, but at least has "template<>"
+  if (dynamic_cast<FunctionDeclaration*>(templDecl))
+  {
+    DUContext *specFromCtxt = templDecl->templateParameterContext();
+    if (specFromCtxt && !specFromCtxt->localDeclarations().size())
+      return true;
+  }
+  return false;
+}
+
+DUContext* functionClassContext(Declaration* functionDecl, DUContext *functionCtxt)
+{
+  //FIXME: needed as long as functions have their QID merged into their id
+  QualifiedIdentifier currentScope = functionCtxt->scopeIdentifier(true);
+  QualifiedIdentifier className = currentScope + QualifiedIdentifier(functionDecl->identifier().toString());
+  className.pop(); //Pop off the function name at the end, leaving the class QID
+  className.setExplicitlyGlobal(true);
+  QList<Declaration*> classDeclarations = functionCtxt->findDeclarations(className);
+  if (classDeclarations.size())
+    return classDeclarations.first()->internalContext();
+
+  return 0;
+}
+
+TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specializedDeclaration)
+{
+  Identifier searchForIdentifier;
+  if (dynamic_cast<FunctionDeclaration*>(specializedDeclaration))
+    searchForIdentifier = QualifiedIdentifier(specializedDeclaration->identifier().toString()).last();
+  else
+    searchForIdentifier = specializedDeclaration->identifier();
+  searchForIdentifier.clearTemplateIdentifiers();
+
+  DUContext* searchInContext = 0;
+  if (dynamic_cast<AbstractFunctionDeclaration*>(specializedDeclaration))
+    searchInContext = functionClassContext(specializedDeclaration, currentContext());
+  if (!searchInContext)
+    searchInContext = currentContext();
+
+  QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
+  foreach(Declaration * possibleSpec, specFromDecls)
+  {
+    if (possibleSpec != specializedDeclaration)
+      return dynamic_cast<TemplateDeclaration*>(possibleSpec);
+  }
+  return 0;
+}
+
 template<class T>
 T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd)
 {
@@ -544,6 +638,19 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
   if( templateCtx || m_templateDeclarationDepth ) {
     Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
     ret->setTemplateParameterContext(templateCtx);
+    //FIXME: A FunctionDeclaration w/o a definition should actually be a kind of forward declaration (ie, there can be more than one)
+    if( templateCtx && !m_onlyComputeSimplified && isSpecialization(ret) &&
+        ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
+    {
+      TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
+      if( TemplateDeclaration *specializedFrom = findSpecializedFrom(currentDeclaration()) )
+      {
+        templateDecl->setSpecializedFrom(specializedFrom);
+        IndexedInstantiationInformation specializedWith = createSpecializationInformation(name, templateCtx);
+        dynamic_cast<TemplateDeclaration*>(ret)->setSpecializedWith(specializedWith);
+      }
+      //TODO: else problem
+    }
     return ret;
   } else{
     return openDeclarationReal<T>( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
@@ -654,35 +761,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     funDecl->clearDefaultParameters();
 
   declaration->setDeclarationIsDefinition(false); //May be set later
-
   declaration->setIsTypeAlias(m_inTypedef);
-
-  if( localId.templateIdentifiersCount() ) {
-    TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
-    if( declaration && templateDecl ) {
-      ///This is a template-specialization. Find the class it is specialized from.
-      localId.clearTemplateIdentifiers();
-
-      ///@todo Make sure the searched class is in the same namespace
-      QList<Declaration*> decls = currentContext()->findDeclarations(QualifiedIdentifier(localId), editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge) );
-
-      if( !decls.isEmpty() )
-      {
-        foreach( Declaration* decl, decls )
-          if( TemplateDeclaration* baseTemplateDecl = dynamic_cast<TemplateDeclaration*>(decl) ) {
-            templateDecl->setSpecializedFrom(baseTemplateDecl);
-            break;
-          }
-
-        if( !templateDecl->specializedFrom().isValid() )
-          kDebug(9007) << "Could not find valid specialization-base" << localId.toString() << "for" << declaration->toString();
-      }
-    } else {
-      kDebug(9007) << "Specialization of non-template class" << declaration->toString();
-    }
-
-  }
-
   declaration->setComment(comment());
   clearComment();
 
@@ -749,20 +828,10 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
    identifierForNode(name, id);
    Identifier localId = id.last(); //This also copies the template arguments
    if(id.count() > 1) {
-     //Merge the scope of the declaration, and put them tog. Add semicolons instead of the ::, so you can see it's not a qualified identifier.
-     //Else the declarations could be confused with global functions.
+     //Merge the scope of the declaration, else the declarations could be confused with global functions.
      //This is done before the actual search, so there are no name-clashes while searching the class for a constructor.
-
-     QString newId = id.last().identifier().str();
-     for(int a = id.count()-2; a >= 0; --a)
-       newId = id.at(a).identifier().str() + "::" + newId;
-
-     localId.setIdentifier(newId);
-
-     FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
-     DUChainWriteLocker lock(DUChain::lock());
-     ret->setDeclaration(0);
-     return ret;
+     //FIXME: Can we do without this?
+     localId.setIdentifier(id.left(-1).toString() + "::" + localId.identifier().str());
    }
 
   if(currentContext()->type() == DUContext::Class) {
@@ -858,8 +927,17 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     }
   }
 
-  if(lastContext() && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration()))
-    eventuallyAssignInternalContext();
+  if (lastContext())
+  {
+    if (!m_onlyComputeSimplified && currentDeclaration()->isFunctionDeclaration())
+      currentDeclaration<AbstractFunctionDeclaration>()->setInternalFunctionContext(lastContext());
+
+    if(lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration())
+      eventuallyAssignInternalContext();
+  }
+
+  Q_ASSERT(m_onlyComputeSimplified || !currentDeclaration()->isFunctionDeclaration() ||
+           currentDeclaration<AbstractFunctionDeclaration>()->internalFunctionContext());
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
@@ -1074,10 +1152,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   if( node->name ) {
     identifierForNode(node->name, id);
     openPrefixContext(node, id, pos);
-    DUChainReadLocker lock(DUChain::lock());
-    if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext())) {
-      specializedWith = createSpecializationInformation(node->name, templateContext);
-    }
   }
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
@@ -1097,7 +1171,10 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
 
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), id.last(), pos);
+    ///We need to clear the template identifiers, or else it'll try to instantiate
+    Identifier searchId = id.last();
+    searchId.clearTemplateIdentifiers();
+    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
 
     foreach( Declaration* decl, declarations ) {
       if( decl->abstractType()) {
@@ -1138,12 +1215,6 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   }//node-name
 
-  TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration());
-  
-  if(tempDecl) {
-    DUChainWriteLocker lock(DUChain::lock());
-    tempDecl->setSpecializedWith(specializedWith);
-  }
   closeDeclaration();
   
   ///Create mappings iff the AST feature is specified
@@ -1642,6 +1713,12 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     if(!clause || !clause->parameter_declarations)
       return true;
     AbstractType::Ptr oldLastType = lastType();
+    bool oldLastTypeWasAuto = lastTypeWasAuto();
+    bool oldLastTypeWasInstance = lastTypeWasInstance();
+
+    // type builder must do all its work here
+    bool oldComputeSimplified = m_onlyComputeSimplified;
+    setComputeSimplified(false);
 
     const ListNode<ParameterDeclarationAST*> *start = clause->parameter_declarations->toFront();
 
@@ -1695,6 +1772,9 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     } while (it != start);
 
     setLastType(oldLastType);
+    setLastTypeWasAuto(oldLastTypeWasAuto);
+    setLastTypeWasInstance(oldLastTypeWasInstance);
+    setComputeSimplified(oldComputeSimplified);
 
     return ret;
 }

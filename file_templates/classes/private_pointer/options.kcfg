@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="Private Class">
+    <entry name="private_class_name" type="String">
+      <label>Private class name</label>
+      <default>{{ name }}Private</default>
+    </entry>
+    <entry name="private_member_name" type="String">
+      <label>Private member name</label>
+      <default>d</default>
+    </entry>
+  </group>
+</kcfg>

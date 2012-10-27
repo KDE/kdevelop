@@ -78,6 +78,10 @@ Q_DECLARE_METATYPE( CMakeFunctionArgument )
 class KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 {
 public:
+    CMakeFunctionDesc();
+    
+    ///useful when writing unit tests mostly
+    CMakeFunctionDesc(const QString& name, const QStringList& args);
 
     QString name;
     QList<CMakeFunctionArgument> arguments;

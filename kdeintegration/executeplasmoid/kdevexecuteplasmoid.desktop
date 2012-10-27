@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Lets you view a plasmoid
+Name=Plasmoid Launcher
+GenericName=Plasmoid Launcher Support
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevexecuteplasmoid
+X-KDevelop-Version=15
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevexecuteplasmoid
+X-KDE-PluginInfo-Author=Aleix Pol Gonzalez
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Mode=NoGUI

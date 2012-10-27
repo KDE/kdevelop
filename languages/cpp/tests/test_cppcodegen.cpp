@@ -23,7 +23,7 @@
 #include "parsesession.h"
 #include "ast.h"
 #include "astutilities.h"
-#include "codegen/cppnewclass.h"
+//#include "codegen/cppnewclass.h"
 //#include "codegen/makeimplementationprivate.h"
 
 #include <language/backgroundparser/backgroundparser.h>
@@ -194,6 +194,16 @@ void TestCppCodegen::testUpdateIndices()
 
 void TestCppCodegen::testSimplifiedUpdating()
 {
+  {
+    InsertIntoDUChain code1("duchaintest_1.h", "template <typename T> struct test{};"
+                                               "template <> struct test<int> {};");
+    code1.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST);
+
+    DUChainReadLocker lock;
+    //No specializations are handled in simplified parsing
+    Cpp::TemplateDeclaration *specClassDecl = dynamic_cast<Cpp::TemplateDeclaration*>(code1->localDeclarations()[1]);
+    QVERIFY(!specClassDecl->specializedFrom().data());
+  }
   {
     InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member2; struct Member1; };");
     InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_1.h>\n struct C : public A { Member1 m1; Member2 m2; };");

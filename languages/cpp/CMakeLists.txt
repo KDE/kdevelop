@@ -9,22 +9,6 @@ include_directories(
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  # TODO: Remove when LTS for g++ < 4.3 has ended.
-  #       See also: languages/cpp/parser/parser.h
-  macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
-  if (GCC_IS_NEWER_THAN_4_3)
-    message(STATUS "Enabling c++0x support for unordered map")
-    add_definitions( -std=c++0x ) # For unordered_map
-  else(GCC_IS_NEWER_THAN_4_3)
-    add_definitions( -DGXX_LT_4_3 )
-  endif (GCC_IS_NEWER_THAN_4_3)
-endif(CMAKE_COMPILER_IS_GNUCXX)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  # TODO: version check?
-  add_definitions( -std=c++0x )
-endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
 add_subdirectory(tests)
@@ -51,7 +35,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/implementationhelperitem.cpp
     codecompletion/missingincludemodel.cpp
 
-    codegen/cppnewclass.cpp
+#    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
@@ -60,6 +44,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/renameassistant.cpp
     codegen/renameaction.cpp
     codegen/unresolvedincludeassistant.cpp
+    codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
 

@@ -23,9 +23,15 @@
 #include "oktetadocument.h"
 
 // plugin
+#include "oktetaplugin.h"
 #include "oktetaview.h"
 // Okteta
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+#include <kasten2/okteta1/bytearrayviewprofilemanager.h>
+#include <kasten2/okteta1/bytearrayviewprofilesynchronizer.h>
+#include <kasten2/okteta1/bytearrayrawfilesynchronizerfactory.h>
+#include <kasten2/okteta1/bytearraydocument.h>
+#elif KASTEN_VERSION == 1
 #include <kasten1/okteta1/bytearrayrawfilesynchronizerfactory.h>
 #include <kasten1/okteta1/bytearraydocument.h>
 #else
@@ -33,7 +39,13 @@
 #include <kasten/bytearraydocument.h>
 #endif
 // Kasten
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+#include <Kasten2/JobManager>
+#include <Kasten2/AbstractLoadJob>
+#include <Kasten2/AbstractSyncToRemoteJob>
+#include <Kasten2/AbstractSyncFromRemoteJob>
+#include <Kasten2/AbstractModelSynchronizer>
+#elif KASTEN_VERSION == 1
 #include <Kasten1/JobManager>
 #include <Kasten1/AbstractLoadJob>
 #include <Kasten1/AbstractSyncToRemoteJob>
@@ -86,7 +98,11 @@ KTextEditor::Cursor OktetaDocument::cursorPosition() const { return KTextEditor:
 IDocument::DocumentState OktetaDocument::state() const
 {
     return mByteArrayDocument ?
+#if KASTEN_VERSION == 2
+               ( mByteArrayDocument->synchronizer()->localSyncState() == Kasten::LocalHasChanges ?
+#else
                ( mByteArrayDocument->localSyncState() == Kasten::LocalHasChanges ?
+#endif
                    IDocument::Modified :
                    IDocument::Clean ) :
                IDocument::Clean;
@@ -105,7 +121,7 @@ bool OktetaDocument::save( IDocument::DocumentSaveMode mode )
 
     Kasten::AbstractSyncToRemoteJob* syncJob = synchronizer->startSyncToRemote();
     const bool syncSucceeded =
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 1 || KASTEN_VERSION == 2
         Kasten::JobManager::executeJob( syncJob );
 #else
         Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
@@ -127,7 +143,7 @@ void OktetaDocument::reload()
 
     Kasten::AbstractSyncFromRemoteJob* syncJob = synchronizer->startSyncFromRemote();
     const bool syncSucceeded =
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 1 || KASTEN_VERSION == 2
         Kasten::JobManager::executeJob( syncJob );
 #else
         Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
@@ -227,7 +243,10 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         Kasten::AbstractModelSynchronizer* synchronizer = synchronizerFactory->createSynchronizer();
 
         Kasten::AbstractLoadJob* loadJob = synchronizer->startLoad( url() );
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+        connect( loadJob, SIGNAL(documentLoaded(Kasten2::AbstractDocument*)),
+                 SLOT(onByteArrayDocumentLoaded(Kasten2::AbstractDocument*)) );
+#elif KASTEN_VERSION == 1
         connect( loadJob, SIGNAL(documentLoaded(Kasten1::AbstractDocument*)),
                  SLOT(onByteArrayDocumentLoaded(Kasten1::AbstractDocument*)) );
 #else
@@ -235,7 +254,7 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
                  SLOT(onByteArrayDocumentLoaded(Kasten::AbstractDocument*)) );
 #endif
     const bool syncSucceeded =
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 1 || KASTEN_VERSION == 2
         Kasten::JobManager::executeJob( loadJob );
 #else
         Kasten::JobManager::executeJob( loadJob, qApp->activeWindow() );
@@ -244,7 +263,15 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
         delete synchronizerFactory;
     }
 
+#if KASTEN_VERSION == 2
+    Kasten::ByteArrayViewProfileManager* const viewProfileManager = mPlugin->viewProfileManager();
+    Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer =
+        new Kasten::ByteArrayViewProfileSynchronizer( viewProfileManager );
+    viewProfileSynchronizer->setViewProfileId( viewProfileManager->defaultViewProfileId() );
+    return new OktetaView( this, viewProfileSynchronizer );
+#else
     return new OktetaView( this );
+#endif
 }
 
 bool OktetaDocument::closeDocument(bool silent)
@@ -257,7 +284,9 @@ void OktetaDocument::onByteArrayDocumentLoaded( Kasten::AbstractDocument* docume
     if( document )
     {
         mByteArrayDocument = static_cast<Kasten::ByteArrayDocument*>( document );
-#if KASTEN_VERSION == 1
+#if KASTEN_VERSION == 2
+        connect( mByteArrayDocument->synchronizer(), SIGNAL(localSyncStateChanged(Kasten2::LocalSyncState)),
+#elif KASTEN_VERSION == 1
         connect( mByteArrayDocument, SIGNAL(localSyncStateChanged(Kasten1::LocalSyncState)),
 #else
         connect( mByteArrayDocument, SIGNAL(localSyncStateChanged(Kasten::LocalSyncState)),

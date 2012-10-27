@@ -22,6 +22,7 @@
 #include "cmakeast.h"
 #include "cmakecondition.h"
 #include "astfactory.h"
+#include "cmakeduchaintypes.h"
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
@@ -409,11 +410,13 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         DUChainWriteLocker lock(DUChain::lock());
         d= new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
         d->setIdentifier( Identifier(id) );
+        AbstractType::Ptr targetType(new TargetType);
+        d->setAbstractType(targetType);
     }
     
     Target target;
     target.name=id.isEmpty() ? "<wrong-target>" : id;
-    target.declaration=d;
+    target.declaration=IndexedDeclaration(d);
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
@@ -470,6 +473,20 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
     
     kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope() /*<< "to" << values*/;
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const UnsetAst* unset)
+{
+    if(unset->env()) {
+        qDebug() << "error! can't unset the env var: " << unset->variableName();
+    } else {
+        m_vars->remove(unset->variableName());
+        if(unset->cache()) {
+            qDebug() << "error! can't unset the cached var: " << unset->variableName();
+        }
+    }
+    kDebug(9042) << "unset variable:" << unset->variableName();
     return 1;
 }
 
@@ -567,8 +584,9 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             //FIXME: Put here the error.
             kDebug(9042) << "Include. Parsing error.";
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        Q_ASSERT(m_vars->value("CMAKE_CURRENT_LIST_FILE")==QStringList(path));
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -606,7 +624,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possibleModuleNames += possib;
     }
 
-    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath + pack->paths();
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
@@ -686,8 +704,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insertGlobal(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
-        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
-        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
+        m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
         
         if(isConfig)
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
@@ -708,8 +726,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux,
                                                                     int endl ,int endc, bool isClean)
 {
+    const IndexedString idxpath(path);
     DUChainWriteLocker lock(DUChain::lock());
-    KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
+    KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(idxpath);
     
     if(topctx)
     {
@@ -725,13 +744,12 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     }
     else
     {
-        IndexedString idxpath(path);
         ParsingEnvironmentFile* env = new ParsingEnvironmentFile(idxpath);
         env->setLanguage(IndexedString("cmake"));
         topctx=new TopDUContext(idxpath, RangeInRevision(0,0, endl, endc), env);
         DUChain::self()->addDocumentChain(topctx);
 
-        Q_ASSERT(DUChain::self()->chainForDocument(path));
+        Q_ASSERT(DUChain::self()->chainForDocument(idxpath));
     }
     
     //Clean the re-used top-context. This is problematic since it may affect independent projects, but it's better then letting things accumulate.
@@ -1037,11 +1055,10 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     QString id=def.arguments.first().value.toLower();
     
     Identifier identifier(id);
-    DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
-    int idx;
+    DUChainWriteLocker lock;
+    QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
     
     //Only consider declarations in a CMake file
     IndexedString cmakeName("cmake");
@@ -1051,7 +1068,8 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         else
             it = decls.erase(it);
     }
-    
+
+    int idx;
     if(!decls.isEmpty())
     {
         idx=m_topctx->indexForUsedDeclaration(decls.first());
@@ -1136,7 +1154,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         else
         {
             {
-                DUChainWriteLocker lock(DUChain::lock());
+                DUChainWriteLocker lock;
                 QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name().toLower()));
 
                 if(!decls.isEmpty())
@@ -1188,14 +1206,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             i=1;
             foreach(const QString& name, code.knownArgs)
             {
-                m_vars->take(QString("ARGV%1").arg(i));
-                m_vars->take(name);
+                m_vars->removeMulti(QString("ARGV%1").arg(i));
+                m_vars->removeMulti(name);
                 i++;
             }
 
-            m_vars->take("ARGV");
-            m_vars->take("ARGC");
-            m_vars->take("ARGN");
+            m_vars->removeMulti("ARGV");
+            m_vars->removeMulti("ARGC");
+            m_vars->removeMulti("ARGN");
 
         }
     }
@@ -1216,8 +1234,9 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
     //We define the uses for the used variable without ${}
     foreach(int use, args)
     {
-        DUChainWriteLocker lock(DUChain::lock());
         QString var=names[use];
+
+        DUChainWriteLocker lock;
         QList<Declaration*> decls=topctx->findDeclarations(Identifier(var));
 
         if(!decls.isEmpty() && func.arguments.count() > use)
@@ -1729,7 +1748,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
-                m_vars->remove(fea->loopVar());
+                m_vars->removeMulti(fea->loopVar());
                 if(m_hitBreak)
                     break;
             }
@@ -1888,7 +1907,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
         case StringAst::Strip:
-            m_vars->insert(sast->outputVariable(), QStringList(CMakeFunctionArgument::unescapeValue( sast->string() )));
+            m_vars->insert(sast->outputVariable(), QStringList( sast->string().trimmed() ));
             break;
         case StringAst::Random: {
             QString alphabet=sast->string(), result;
@@ -1917,8 +1936,9 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
         case GetCMakePropertyAst::CacheVariables:
             output = m_cache->keys();
             break;
-        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands yet
-            output = QStringList();
+        case GetCMakePropertyAst::Components:
+        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands or components yet
+            output = QStringList("NOTFOUND");
             break;
         case GetCMakePropertyAst::Macros:
             output = m_macros->keys();
@@ -2022,35 +2042,49 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
-    kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
-    if(setp->type()==GlobalProperty)
-        m_props[GlobalProperty][QString()][setp->name()]=setp->values();
-    else
-    {
-        CategoryType& cm=m_props[setp->type()];
-        if(setp->append()) {
-            foreach(const QString &it, setp->args()) {
-                cm[it][setp->name()].append(setp->values());
-            }
-        } else {
-            foreach(const QString &it, setp->args())
-                cm[it].insert(setp->name(), setp->values());
+    QStringList args = setp->args();
+    switch(setp->type()) {
+        case GlobalProperty:
+            args = QStringList() << QString();
+            break;
+        case DirectoryProperty:
+            args = m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
+            break;
+        default:
+            break;
+    }
+    kDebug() << "setprops" << setp->type() << args << setp->name() << setp->values();
+    
+    CategoryType& cm=m_props[setp->type()];
+    if(setp->append()) {
+        foreach(const QString &it, args) {
+            cm[it][setp->name()].append(setp->values());
         }
+    } else {
+        foreach(const QString &it, args)
+            cm[it].insert(setp->name(), setp->values());
     }
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
 {
-    kDebug() << "getprops";
-    QStringList retv;
     QString catn;
-    if(getp->type()!=GlobalProperty)
-    {
-        catn=getp->typeName();
+    switch(getp->type()) {
+        case GlobalProperty:
+            break;
+        case DirectoryProperty:
+            catn = getp->typeName();
+            if(catn.isEmpty())
+                catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+            break;
+        default:
+            catn = getp->typeName();
+            break;
     }
-    retv=m_props[getp->type()][catn][getp->name()];
+    QStringList retv=m_props[getp->type()][catn][getp->name()];
     m_vars->insert(getp->outputVariable(), retv);
+    kDebug() << "getprops" << getp->type() << catn << getp->name() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 
@@ -2141,6 +2175,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
     
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
+    url.cleanPath();
     
     if(!m_topctx || m_topctx->url().toUrl()!=url)
     {
@@ -2239,14 +2274,16 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 {
     if(!m_topctx)
         return;
-    DUChainWriteLocker lock(DUChain::lock());
+    
     foreach(const CMakeFunctionArgument &arg, ast->outputArguments())
     {
         if(!arg.isCorrect())
             continue;
         Identifier id(arg.value);
-        
+
+        DUChainWriteLocker lock;
         QList<Declaration*> decls=m_topctx->findDeclarations(id);
+
         if(decls.isEmpty())
         {
             Declaration *d = new Declaration(arg.range(), m_topctx);
@@ -2264,7 +2301,6 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 {
     if(!m_topctx)
         return;
-    DUChainWriteLocker lock(DUChain::lock());
     foreach(const CMakeFunctionArgument &arg, desc.arguments)
     {
         if(!arg.isCorrect() || !arg.value.contains('$'))
@@ -2275,6 +2311,8 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         for(it=var.constBegin(); it!=itEnd; ++it)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
+            
+            DUChainWriteLocker lock;
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
             
             if(!decls.isEmpty())
