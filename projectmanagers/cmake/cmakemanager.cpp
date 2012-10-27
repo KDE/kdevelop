@@ -1719,13 +1719,7 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
 
     bool ret = KDevelop::renameUrl(project, oldUrl, newUrl);
     if(ret) {
-        if(changedCMakeLists)
-            m_renamed[newUrl] = oldUrl;
-        else if(ProjectFolderItem* folder=item->folder()) {
-            emit folderRenamed(oldUrl, folder);
-        } else if(KDevelop::ProjectFileItem *file = item->file()) {
-            emit fileRenamed(oldUrl, file);
-        }
+        m_renamed[newUrl] = oldUrl;
     } else
         item->setUrl(oldUrl);
     
