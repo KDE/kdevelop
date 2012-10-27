@@ -75,6 +75,7 @@ set(cppassistantstest_SRCS
   test_cppassistants.cpp
   ../codegen/renameassistant.cpp
   ../codegen/renameaction.cpp
+  ../codegen/renamefileaction.cpp
   ../codegen/codeassistant.cpp
   ../codegen/signatureassistant.cpp
   ../codegen/adaptsignatureaction.cpp

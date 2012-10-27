@@ -40,14 +40,16 @@ public:
 
 private:
   void reset();
-  KDevelop::Declaration* getValidDeclarationForChangedRange(KTextEditor::Range changed);
+  KDevelop::Declaration* getDeclarationForChangedRange(const KTextEditor::Range& changed) const;
+  bool shouldRenameUses(KDevelop::Declaration* declaration) const;
 
   KDevelop::Identifier m_oldDeclarationName;
   QString m_newDeclarationName;
   KDevelop::PersistentMovingRange::Ptr m_newDeclarationRange;
   QMap <KDevelop::IndexedString, QList <KDevelop::RangeInRevision > > m_oldDeclarationUses;
   KDevelop::IndexedString m_documentUrl;
-  bool m_isUseful;
+  bool m_isUseful : 1;
+  bool m_renameFile : 1;
   KTextEditor::View *m_view;
 };
 

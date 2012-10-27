@@ -43,6 +43,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/adaptsignatureaction.cpp
     codegen/renameassistant.cpp
     codegen/renameaction.cpp
+    codegen/renamefileaction.cpp
     codegen/unresolvedincludeassistant.cpp
     codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
