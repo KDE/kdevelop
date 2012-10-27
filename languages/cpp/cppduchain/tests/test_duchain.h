@@ -111,6 +111,8 @@ private slots:
   void testTemplates2();
   void testTemplates3();
   void testTemplates4();
+  void testSpecializationSelection();
+  void testSpecializationSelection2();
   void testTemplatesRebind();
   void testTemplatesRebind2();
   void testTemplateDefaultParameters();

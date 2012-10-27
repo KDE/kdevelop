@@ -4363,6 +4363,9 @@ bool validDeclaration(Declaration *decl, DeclarationTestData testData)
     if (templateDecl->specializedFrom().data() != testData.specializedFrom)
     {
       qDebug() << "Declaration's specializedFrom doesn't match test data";
+      qDebug() << "The declaration" << decl->toString();
+      if (templateDecl->specializedFrom().declaration())
+        qDebug() << "specializedFrom" <<  templateDecl->specializedFrom().declaration()->toString();
       qDebug() << "Actual:" << templateDecl->specializedFrom().data() << "| Test data:" << testData.specializedFrom;
       ret = false;
     }
@@ -4384,7 +4387,6 @@ bool validDeclaration(Declaration *decl, DeclarationTestData testData)
     }
 
     TemplateDeclaration::InstantiationsHash actualInstantiations = templateDecl->instantiations();
-    TemplateDeclaration::InstantiationsHash::iterator it;
     if (actualInstantiations.size() != testData.instantiations.size())
     {
       qDebug() << "Declaration's number of instantiations doesn't match test data";
@@ -4396,8 +4398,8 @@ bool validDeclaration(Declaration *decl, DeclarationTestData testData)
       IndexedInstantiationInformation testInfo = instantiationInfoForDeclarations(testData.instantiations[i]).indexed();
       if (!actualInstantiations.contains(testInfo))
       {
-        qDebug() << "Declaration had instantiation not found in test data";
-        qDebug() << "Instantiation not found:" << testInfo.information().toString();
+        qDebug() << "Declaration did not have an instantiation found in test data";
+        qDebug() << "Instantiation not found in declaration:" << testInfo.information().toString();
         ret = false;
       }
       TemplateDeclaration *instantiation = actualInstantiations[testInfo];
@@ -4532,12 +4534,14 @@ int main()\n\
   DeclarationTestData E_FuncA_testData;
   E_FuncA_testData.specializations << E_A_B_FuncA_A_A;
   E_FuncA_testData.instantiations << (QList<Declaration*>() << ClassA << ClassB << 0 << ClassA << ClassA)
-                                  << (QList<Declaration*>() << ClassC << ClassD << 0 << ClassA << ClassA);
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0 << ClassA << ClassA)
+                                  //These two instantiations shouldn't exist technically
+                                  << (QList<Declaration*>() << ClassA << ClassB << 0)
+                                  << (QList<Declaration*>() << ClassC << ClassD << 0);
   E_FuncA_testData.instantiationsTestData << E_A_B_FuncA_A_A_testData
                                           << E_C_D_FuncA_A_A_testData
                                           << E_A_B_FuncA_testData
                                           << E_C_D_FuncA_testData;
-  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
   QVERIFY(validDeclaration(E_FuncA, E_FuncA_testData));
   //Test for ClassE<ClassA::ClassB>::E_FuncA<ClassA::ClassA> explicit specialization definition specifically
   //even though it is automatically tested above... just because
@@ -4558,7 +4562,6 @@ int main()\n\
                                   << (QList<Declaration*>() << ClassC << ClassD << 0);
   E_FuncB_testData.instantiationsTestData << E_A_B_FuncB_testData
                                           << E_C_D_FuncB_testData;
-  QEXPECT_FAIL("", "Function template specialization is broken", Continue);
   QVERIFY(validDeclaration(E_FuncB, E_FuncB_testData));
   //Test for ClassE<ClassA::ClassB>::E_FuncB explicit specialization definition specifically
   //even though it is automatically tested above... just because
@@ -4877,6 +4880,53 @@ void TestDUChain::testTemplates2() {
   QVERIFY(unAliasedType(memberDecl->abstractType()));
   QCOMPARE(unAliasedType(memberDecl->abstractType())->toString(), QString("S*&"));
 
+}
+
+void TestDUChain::testSpecializationSelection()
+{
+  QByteArray method("template<class T1> struct Foo { void normal() {} };\n"
+                    "template<class T1> struct Foo<const T1> { void typeIsConst() {} };\n"
+                    "template<class T1> struct Foo<T1*> { void typeIsPtr() {} };\n"
+                    "template<class T1> struct Foo<T1**> { void typeIsPtrPtr() {} };\n"
+                    "template<class T1> struct Foo<const T1*> { void typeIsConstPtr() {} };\n"
+                    "template<class T1> struct Foo<const T1**> { void typeIsConstPtrPtr() {} };\n"
+                    "template<class T1> struct Foo<T1&&> { void typeIsRValue() {} };\n"
+                    "template<class T1> struct Foo<const T1&&> { void typeIsConstRValue() {} };\n"
+                    "template<class T1> struct Foo<T1[]> { void typeIsArray() {} };\n"
+                    "template<class T1> struct Foo<const T1[]> { void typeIsConstArray() {} };\n"
+                    "template<class T1> struct Foo<const T1*&&> { void typeIsConstPtrRValue() {} };\n"
+                    "template<class T1> struct Foo<const T1* const &&> { void typeIsConstPtrConstRValue() {} };\n");
+  LockedTopDUContext top = parse(method, DumpNone);
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int>::normal")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int>::typeIsConst")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int*>::typeIsPtr")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int*>::typeIsConstPtr")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int&&>::typeIsRValue")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int&&>::typeIsConstRValue")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int***>::typeIsPtrPtr")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int**>::typeIsConstPtrPtr")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int[]>::typeIsArray")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int[]>::typeIsConstArray")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int*&&>::typeIsConstPtrRValue")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int*const&&>::typeIsConstPtrConstRValue")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<Foo<int>>::normal")));
+}
+
+void TestDUChain::testSpecializationSelection2()
+{
+  QByteArray method("template<class T1> struct Simple {};\n"
+                    "template<class T1> struct Simple<T1&> {};\n"
+                    "template<class T1, class T2> struct Foo { void normal() {} };\n"
+                    "template<class T1> struct Foo<int, T1> { void normal2() {} };\n"
+                    "template<class T1> struct Foo<T1&, int> { void normal3() {} };\n"
+                    "template<class T1> struct Foo<Simple<T1>, int> { void normal4() {} };\n"
+                    "template<class T1> struct Foo<int, Simple<T1&>> { void normal5() {} };\n");
+  LockedTopDUContext top = parse(method, DumpNone);
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<char, int>::normal")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int, int>::normal2")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int&, int>::normal3")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<Simple<int>, int>::normal4")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int, Simple<int&>>::normal5")));
 }
 
 void TestDUChain::testTemplatesRebind() {

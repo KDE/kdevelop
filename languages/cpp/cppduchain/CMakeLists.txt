@@ -41,6 +41,7 @@ set(kdevcppduchain_LIB_SRCS
     expressionvisitor.cpp
     typeconversion.cpp
     overloadresolution.cpp
+    templateresolver.cpp
     viablefunctions.cpp
     overloadresolutionhelper.cpp
     name_visitor.cpp

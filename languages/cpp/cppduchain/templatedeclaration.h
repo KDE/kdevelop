@@ -134,9 +134,11 @@ namespace Cpp {
       virtual IndexedInstantiationInformation specializedWith() const = 0;
       
     protected:
-      //Matches the given instantiation-information to this declarations local specialization information
-      QPair<unsigned int, TemplateDeclaration*> matchTemplateParameters(const InstantiationInformation& info,
-                                                                        const TopDUContext* source);
+      //If the given info matches a specialization, returns the instantiated specialization
+      TemplateDeclaration *instantiateSpecialization(const InstantiationInformation& info, const TopDUContext *source);
+      //Matches the given instantiation-information to this declaration's specialization information and returns a score
+      uint matchInstantiation(IndexedInstantiationInformation indexedInfo, const TopDUContext* topCtxt,
+                              InstantiationInformation& instantiateWith, bool& instantiationRequired) const;
       
       virtual TemplateDeclarationData* dynamicTemplateData() = 0;
       virtual const TemplateDeclarationData* templateData() const = 0;

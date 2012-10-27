@@ -642,12 +642,12 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
     if( templateCtx && !m_onlyComputeSimplified && isSpecialization(ret) &&
         ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
     {
-      TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
-      if( TemplateDeclaration *specializedFrom = findSpecializedFrom(currentDeclaration()) )
+      if( TemplateDeclaration *specializedFrom = findSpecializedFrom(ret) )
       {
+        TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
+         IndexedInstantiationInformation specializedWith = createSpecializationInformation(name, templateCtx);
         templateDecl->setSpecializedFrom(specializedFrom);
-        IndexedInstantiationInformation specializedWith = createSpecializationInformation(name, templateCtx);
-        dynamic_cast<TemplateDeclaration*>(ret)->setSpecializedWith(specializedWith);
+        templateDecl->setSpecializedWith(specializedWith);
       }
       //TODO: else problem
     }
