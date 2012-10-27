@@ -39,6 +39,7 @@
 #include <util/executecompositejob.h>
 #include <kparts/mainwindow.h>
 #include <KFileDialog>
+#include <KShell>
 #include <interfaces/iplugincontroller.h>
 
 #include "executescriptplugin.h"
@@ -215,8 +216,13 @@ void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup /*config*/, KDeve
 {
 }
 
-void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
+void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, const QStringList &args) const
 {
+    QStringList a(args);
+    cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, a.takeFirst() );
+    cfg.writeEntry( ExecuteScriptPlugin::executableEntry, a.takeFirst() );
+    cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, KShell::joinArgs(a) );
+    cfg.sync();
 }
 
 #include "scriptappconfig.moc"
