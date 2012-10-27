@@ -58,6 +58,14 @@ struct Subdirectory
     QString build_dir;
 };
 
+struct Test
+{
+    QString name;
+    QString executable;
+    QStringList arguments;
+    QStringList files;
+};
+
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
 typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
@@ -65,5 +73,7 @@ typedef QMap<PropertyType, CategoryType > CMakeProperties;
 typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> CMakeDefinitions;
 typedef QHash<QString, CacheEntry> CacheValues;
+
+Q_DECLARE_METATYPE(QList<Test>)
 
 #endif

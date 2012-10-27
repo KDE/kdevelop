@@ -149,7 +149,7 @@ namespace CMakeParserUtils
     }
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent,
-                                                   CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env)
+                    CMakeProjectData* data, const QString& sourcedir, const QMap<QString,QString>& env)
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
@@ -181,6 +181,7 @@ namespace CMakeParserUtils
         data->includeDirectories=v.includeDirectories();
         data->targets=v.targets();
         data->properties=v.properties();
+        data->testSuites=v.testSuites();
         
         //printSubdirectories(data->subdirectories);
         

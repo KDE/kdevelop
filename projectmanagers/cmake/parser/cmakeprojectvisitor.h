@@ -38,6 +38,7 @@ namespace KDevelop
 {
     class TopDUContext;
     class Declaration;
+class ITestController;
 }
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
@@ -115,6 +116,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QList<Target> targets() const { return m_targetForId.values(); }
         QStringList resolveDependencies(const QStringList& target) const;
         QStringList includeDirectories() const { return m_includeDirectories; }
+        QList<Test> testSuites() const { return m_testSuites; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
         
@@ -202,6 +204,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         KDevelop::ReferencedTopDUContext m_parentCtx;
         bool m_hitBreak;
         QMap<QString, QString> m_environmentProfile;
+
+        QList<Test> m_testSuites;
 };
 
 #endif

@@ -1,0 +1,4 @@
+[Project]
+Name=unit_tests_kde
+Manager=KDevCMakeManager
+VersionControl=
