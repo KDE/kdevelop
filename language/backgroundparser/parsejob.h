@@ -172,11 +172,11 @@ public:
     
     ///Returns a structure containing information about data accesses in the parsed file.
     /// It's up to the caller to remove the returned instance
-    virtual KDevelop::DataAccessRepository* dataAccessInformation() = 0;
+    virtual KDevelop::DataAccessRepository* dataAccessInformation();
     
     ///Returns a control flow graph for the code in the parsed file.
     /// It's up to the caller to remove the returned instance
-    virtual KDevelop::ControlFlowGraph* controlFlowGraph() = 0;
+    virtual KDevelop::ControlFlowGraph* controlFlowGraph();
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%

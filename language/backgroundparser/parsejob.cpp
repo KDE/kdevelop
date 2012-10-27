@@ -505,7 +505,17 @@ void ParseJob::highlightDUChain()
     }
 }
 
+ControlFlowGraph* ParseJob::controlFlowGraph()
+{
+    return 0;
+}
+
+DataAccessRepository* ParseJob::dataAccessInformation()
+{
+    return 0;
+}
+
+
 }
 
 #include "parsejob.moc"
-
