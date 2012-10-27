@@ -19,7 +19,6 @@ set(kdevexecutescript_PART_SRCS
     executescriptplugin.cpp
     scriptappconfig.cpp
     scriptappjob.cpp
-    executescriptoutputmodel.cpp
 )
 
 kde4_add_ui_files( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )

@@ -42,8 +42,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 
-#include <executescriptoutputmodel.h>
-
 #include "iexecutescriptplugin.h"
 
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
@@ -114,8 +112,9 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::ExecuteScriptOutputModel );
-    model()->setFilteringStrategy(currentFilterMode);
+    KDevelop::OutputModel* m = new KDevelop::OutputModel;
+    m->setFilteringStrategy(currentFilterMode);
+    setModel( m );
     setDelegate( new KDevelop::OutputDelegate );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
