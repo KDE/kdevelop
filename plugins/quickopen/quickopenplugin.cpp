@@ -1472,8 +1472,12 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
     widgetGeometry.setWidth(700); ///@todo Waste less space
     QRect screenGeom = QApplication::desktop()->screenGeometry(this);
-    if (widgetGeometry.right() > screenGeom.right())
-        widgetGeometry.moveRight(screenGeom.right());
+    if (widgetGeometry.right() > screenGeom.right()) {
+      widgetGeometry.moveRight(screenGeom.right());
+    }
+    if (widgetGeometry.bottom() > screenGeom.bottom()) {
+      widgetGeometry.moveBottom(mapToGlobal(QPoint(0, 0)).y());
+    }
     m_widget->setGeometry(widgetGeometry);
     m_widget->show();
     
