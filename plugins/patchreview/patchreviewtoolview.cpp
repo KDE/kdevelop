@@ -27,6 +27,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <util/projecttestjob.h>
 #include <KLineEdit>
 #include <QMenu>
