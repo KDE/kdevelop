@@ -34,12 +34,13 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-RenameAssistant::RenameAssistant(KTextEditor::View *view) :
-m_documentUrl(IndexedString(view->document()->url())),
-m_isUseful(false),
-m_renameFile(false),
-m_view(view)
-{}
+RenameAssistant::RenameAssistant(KTextEditor::View *view)
+: m_view(view)
+, m_isUseful(false)
+, m_renameFile(false)
+{
+
+}
 
 void RenameAssistant::reset() {
   m_oldDeclarationName = Identifier();
@@ -61,12 +62,12 @@ Declaration* RenameAssistant::getDeclarationForChangedRange(const KTextEditor::R
 {
   SimpleCursor cursor(changed.start());
 
-  Declaration* declaration = DUChainUtils::itemUnderCursor(m_documentUrl.toUrl(), cursor);
+  Declaration* declaration = DUChainUtils::itemUnderCursor(m_view->document()->url(), cursor);
 
   //If it's null we could be appending, but there's a case where appending gives a wrong decl
   //and not a null declaration ... "type var(init)", so check for that too
   if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision().textRange(), changed))
-    declaration = DUChainUtils::itemUnderCursor(m_documentUrl.toUrl(), SimpleCursor(cursor.line, --cursor.column));
+    declaration = DUChainUtils::itemUnderCursor(m_view->document()->url(), SimpleCursor(cursor.line, --cursor.column));
 
   //In this case, we may either not have a decl at the cursor, or we got a decl, but are editing its use.
   //In either of those cases, give up and return 0
@@ -88,7 +89,7 @@ bool RenameAssistant::shouldRenameUses(Declaration* declaration) const
   return true;
 }
 
-void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString removedText) {
+void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, const QString& removedText) {
   clearActions();
 
   if (!m_view)
@@ -101,7 +102,8 @@ void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString re
     return;
   }
 
-  KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+  const IndexedString indexedUrl(m_view->document()->url());
+  DUChainReadLocker lock;
 
   //If we've stopped editing m_newDeclarationRange, reset and see if there's another declaration being edited
   if (!m_newDeclarationRange.data() || !rangesConnect(m_newDeclarationRange->range().textRange(), invocationRange)) {
@@ -137,25 +139,32 @@ void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString re
 
     m_oldDeclarationName = declAtCursor->identifier();
     KTextEditor::Range newRange = declAtCursor->rangeInCurrentRevision().textRange();
-    if (removedText.isEmpty() && newRange.intersect(invocationRange).isEmpty())
+    if (removedText.isEmpty() && newRange.intersect(invocationRange).isEmpty()) {
       newRange = newRange.encompass(invocationRange); //if text was added to the ends, encompass it
+    }
 
-    m_newDeclarationRange.attach(new PersistentMovingRange(newRange, m_documentUrl, true));
+    m_newDeclarationRange.attach(new PersistentMovingRange(newRange, indexedUrl, true));
   }
 
   //Unfortunately this happens when you make a selection including one end of the decl's range and replace it
-  if (removedText.isEmpty() && m_newDeclarationRange->range().textRange().intersect(invocationRange).isEmpty())
+  if (removedText.isEmpty() && m_newDeclarationRange->range().textRange().intersect(invocationRange).isEmpty()) {
     m_newDeclarationRange.attach( new PersistentMovingRange(
-        m_newDeclarationRange->range().textRange().encompass(invocationRange), m_documentUrl, true) );
+        m_newDeclarationRange->range().textRange().encompass(invocationRange), indexedUrl, true) );
+  }
 
   m_newDeclarationName = m_view->document()->text(m_newDeclarationRange->range().textRange());
 
-  if (m_newDeclarationName == m_oldDeclarationName.toString())
+  if (m_newDeclarationName == m_oldDeclarationName.toString()) {
     return;
+  }
+
+  if (m_renameFile && SimpleRefactoring::newFileName(m_view->document()->url(), m_newDeclarationName) == m_view->document()->url().fileName()) {
+    return;
+  }
 
   m_isUseful = true;
   if (m_renameFile) {
-    addAction(IAssistantAction::Ptr(new RenameFileAction(m_documentUrl.toUrl(), m_newDeclarationName)));
+    addAction(IAssistantAction::Ptr(new RenameFileAction(m_view->document()->url(), m_newDeclarationName)));
   } else {
     addAction(IAssistantAction::Ptr(new RenameAction(m_oldDeclarationName, m_newDeclarationName,
                                                      m_oldDeclarationUses)));

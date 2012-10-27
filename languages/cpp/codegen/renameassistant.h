@@ -31,11 +31,14 @@ class ParseJob;
 }
 namespace Cpp {
 
-class RenameAssistant : public KDevelop::IAssistant {
+class RenameAssistant : public KDevelop::IAssistant
+{
 Q_OBJECT
+
 public:
   RenameAssistant(KTextEditor::View *view);
-  void textChanged(KTextEditor::Range invocationRange, QString removedText = QString());
+
+  void textChanged(const KTextEditor::Range& invocationRange, const QString& removedText = QString());
   bool isUseful() { return m_isUseful; }
 
 private:
@@ -47,10 +50,9 @@ private:
   QString m_newDeclarationName;
   KDevelop::PersistentMovingRange::Ptr m_newDeclarationRange;
   QMap <KDevelop::IndexedString, QList <KDevelop::RangeInRevision > > m_oldDeclarationUses;
-  KDevelop::IndexedString m_documentUrl;
+  KTextEditor::View *m_view;
   bool m_isUseful : 1;
   bool m_renameFile : 1;
-  KTextEditor::View *m_view;
 };
 
 }
