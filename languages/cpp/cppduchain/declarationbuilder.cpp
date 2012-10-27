@@ -639,10 +639,9 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
     Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
     ret->setTemplateParameterContext(templateCtx);
     //FIXME: A FunctionDeclaration w/o a definition should actually be a kind of forward declaration (ie, there can be more than one)
-    if( !m_onlyComputeSimplified && isSpecialization(ret) &&
+    if( templateCtx && !m_onlyComputeSimplified && isSpecialization(ret) &&
         ( dynamic_cast<FunctionDefinition*>(ret) || !dynamic_cast<FunctionDeclaration*>(ret) ) )
     {
-      Q_ASSERT(templateCtx);
       TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(ret);
       if( TemplateDeclaration *specializedFrom = findSpecializedFrom(currentDeclaration()) )
       {
