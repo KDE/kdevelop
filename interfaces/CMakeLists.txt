@@ -45,6 +45,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     itemplateprovider.cpp
     itestsuite.cpp
     itestcontroller.cpp
+    ilanguagecheck.cpp
+    ilanguagecheckprovider.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
