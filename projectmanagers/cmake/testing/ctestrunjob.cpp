@@ -145,6 +145,7 @@ void CTestRunJob::receivedLines(const QStringList& lines)
         {
             testCase = testCase.split(' ').last();
         }
+        testCase = testCase.left(testCase.indexOf('('));
 
         if (m_suite->cases().contains(testCase))
         {
