@@ -89,30 +89,30 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
 
 void CMakeLoadProjectTest::testSmallProjectWithTests()
 {
-    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests");
-    QCOMPARE(v.testSuites().count(), 5);
-    QCOMPARE(v.projectName(), QString("unittests"));
+    CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests");
+    QCOMPARE(v.testSuites.count(), 5);
+    QCOMPARE(v.projectName, QString("unittests"));
     
-    QCOMPARE(v.testSuites().at(0).files, QStringList() << "success.cpp");
-    QCOMPARE(v.testSuites().at(0).name, QString("success"));
-    QCOMPARE(v.testSuites().at(0).arguments.count(), 0);
+    QCOMPARE(v.testSuites.at(0).files, QStringList() << "success.cpp");
+    QCOMPARE(v.testSuites.at(0).name, QString("success"));
+    QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
     
-    QCOMPARE(v.testSuites().at(3).files, QStringList() << "math_test.cpp");
-    QCOMPARE(v.testSuites().at(3).name, QString("test_four"));
-    QCOMPARE(v.testSuites().at(3).arguments.count(), 1);
-    QCOMPARE(v.testSuites().at(3).arguments.at(0), QString("4"));
+    QCOMPARE(v.testSuites.at(3).files, QStringList() << "math_test.cpp");
+    QCOMPARE(v.testSuites.at(3).name, QString("test_four"));
+    QCOMPARE(v.testSuites.at(3).arguments.count(), 1);
+    QCOMPARE(v.testSuites.at(3).arguments.at(0), QString("4"));
 }
 
 void CMakeLoadProjectTest::testKDE4ProjectWithTests()
 {
-    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests_kde");
-    QCOMPARE(v.testSuites().count(), 1);
-    QCOMPARE(v.projectName(), QString("unittestskde"));
+    CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests_kde");
+    QCOMPARE(v.testSuites.count(), 1);
+    QCOMPARE(v.projectName, QString("unittestskde"));
     
-    QCOMPARE(v.testSuites().at(0).files, QStringList() << "test.cpp");
-    QCOMPARE(v.testSuites().at(0).name, QString("cmake-test-unittestskde"));
-    QCOMPARE(v.testSuites().at(0).arguments.count(), 0);
-    QVERIFY(!KUrl(v.testSuites().at(0).executable).isRelative());
+    QCOMPARE(v.testSuites.at(0).files, QStringList() << "test.cpp");
+    QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
+    QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
+    QVERIFY(!KUrl(v.testSuites.at(0).executable).isRelative());
 }
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
@@ -151,6 +151,7 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     data.includeDirectories=v.includeDirectories();
     data.targets=v.targets();
     data.properties=v.properties();
+    data.testSuites=v.testSuites();
     
     //printSubdirectories(data->subdirectories);
     
