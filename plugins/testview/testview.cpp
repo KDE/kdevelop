@@ -93,7 +93,6 @@ static const char* filterConfigKey = "filter";
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)
 , m_plugin(plugin)
-, m_model(new QStandardItemModel(this))
 , m_tree(new QTreeView(this))
 , m_filter(new KRecursiveFilterProxyModel(this))
 {
