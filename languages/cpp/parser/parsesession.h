@@ -153,14 +153,16 @@ private:
   TranslationUnitAST * m_topAstNode;
 
   //AST-DUChain Mappings
-  QMap<AST *, KDevelop::DeclarationPointer> m_AstToDuchain;
-  QMap<KDevelop::DeclarationPointer, AST *> m_DuchainToAst;
+  QHash<AST *, KDevelop::DeclarationPointer> m_AstToDuchain;
+  QHash<KDevelop::DeclarationPointer, AST *> m_DuchainToAst;
 
+  //TODO: look into removing these two
   QMap<AST *, SimpleUse> m_AstToUse;
   QMap<SimpleUse, AST *> m_UseToAst;
 
+  //TODO: look into removing this astToParent
   QMap<AST *, AST *> m_AstToParent;
-  QMap<AST*, KDevelop::FunctionType::Ptr> m_AstToType;
+  QHash<AST*, KDevelop::FunctionType::Ptr> m_AstToType;
 };
 
 #endif
