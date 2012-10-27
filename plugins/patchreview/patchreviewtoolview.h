@@ -83,8 +83,8 @@ public slots:
     void documentActivated( KDevelop::IDocument* );
     void patchSelectionChanged( int );
     void customContextMenuRequested(const QPoint& p);
-    void projectTestFinished(KJob* job);
-    void testRunPercent(KJob* job, ulong percent);
+    void testJobResult(KJob* job);
+    void testJobPercent(KJob* job, ulong percent);
 };
 
 #endif // PATCHREVIEWTOOLVIEW_H

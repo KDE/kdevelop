@@ -27,11 +27,9 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
-#include <util/executecompositejob.h>
 #include <util/projecttestjob.h>
 #include <KLineEdit>
 #include <QMenu>
-#include <QProgressBar>
 
 using namespace KDevelop;
 
@@ -150,16 +148,17 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
 
     bool showTests = false;
-    foreach (const KUrl& url, m_plugin->patch()->additionalSelectableFiles().keys()) {
-        if (IProject* project = ICore::self()->projectController()->findProjectForUrl(url)) {
-            if (!ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
-                showTests = true;
-                break;
-            }
+    IProject* project = 0;
+    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+
+    for (; it != files.constEnd(); ++it) {
+        project = ICore::self()->projectController()->findProjectForUrl(it.key());
+        if (project && !ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
+            showTests = true;
+            break;
         }
     }
-
-    kDebug() << "Show tests:" << showTests;
 
     m_editPatch.testsButton->setVisible(showTests);
     m_editPatch.testProgressBar->hide();
@@ -210,6 +209,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
+    m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -256,8 +256,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 
-    m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
-    connect( m_editPatch.testsButton, SIGNAL( clicked(bool) ), this, SLOT( runTests() ) );
+    connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
@@ -401,46 +400,43 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
 
 void PatchReviewToolView::runTests()
 {
+    IPatchSource::Ptr ipatch = m_plugin->patch();
+    if ( !ipatch ) {
+        return;
+    }
+
     IProject* project = 0;
-    foreach (const KUrl& url, m_plugin->patch()->additionalSelectableFiles().keys()) {
-        if (IProject* p = ICore::self()->projectController()->findProjectForUrl(url)) {
-            if (!ICore::self()->testController()->testSuitesForProject(p).isEmpty()) {
-                project = p;
-                break;
-            }
+    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+
+    for (; it != files.constEnd(); ++it) {
+        project = ICore::self()->projectController()->findProjectForUrl(it.key());
+        if (project) {
+           break;
         }
     }
 
     if (!project) {
-        kDebug() << "No project for";
         return;
     }
 
-    m_editPatch.testProgressBar->show();
     m_editPatch.testProgressBar->setFormat(i18n("Running tests: %p%"));
+    m_editPatch.testProgressBar->setValue(0);
+    m_editPatch.testProgressBar->show();
 
     ProjectTestJob* job = new ProjectTestJob(project, this);
-    connect (job, SIGNAL(finished(KJob*)), SLOT(projectTestFinished(KJob*)));
-    connect (job, SIGNAL(percent(KJob*,ulong)), SLOT(testRunPercent(KJob*,ulong)));
+    connect (job, SIGNAL(finished(KJob*)), SLOT(testJobResult(KJob*)));
+    connect (job, SIGNAL(percent(KJob*,ulong)), SLOT(testJobPercent(KJob*,ulong)));
     ICore::self()->runController()->registerJob(job);
-
-    QList<KJob*> jobs;
-    foreach (ITestSuite* suite, testSuites()) {
-        KJob* job = suite->launchAllCases();
-        if (job) {
-            jobs << job;
-        }
-    }
-    ICore::self()->runController()->registerJob(new ExecuteCompositeJob(this, jobs));
 }
 
-void PatchReviewToolView::testRunPercent(KJob* job, ulong percent)
+void PatchReviewToolView::testJobPercent(KJob* job, ulong percent)
 {
     Q_UNUSED(job);
     m_editPatch.testProgressBar->setValue(percent);
 }
 
-void PatchReviewToolView::projectTestFinished(KJob* job)
+void PatchReviewToolView::testJobResult(KJob* job)
 {
     ProjectTestJob* testJob = qobject_cast<ProjectTestJob*>(job);
     if (!testJob) {

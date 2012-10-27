@@ -111,7 +111,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="localPatchOptions">
      <property name="title">
       <string>Patch</string>
