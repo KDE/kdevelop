@@ -43,6 +43,7 @@ public:
      * @note This should be preferred over using setText()
      */
     void setItemPath( const QStringList& path );
+    
     /**
      * Generates a path from the content of the lineedit, including
      * the base item if present
@@ -61,6 +62,8 @@ public:
      * @returns the currently used base item
      */
     KDevelop::ProjectBaseItem* baseItem() const;
+    
+    KDevelop::ProjectBaseItem* currentItem() const;
     
 public slots:
     void selectItemDialog();

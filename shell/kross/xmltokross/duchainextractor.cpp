@@ -86,7 +86,7 @@ void DUChainExtractor::start(const KUrl& _input, const KUrl& builddir,
     DumbProject* project = new DumbProject();
     project->setManagerPlugin(m_manager);
     Core::self()->projectControllerInternal()->addProject(project);
-    Core::self()->languageController()->backgroundParser()->addDocument(input);
+    Core::self()->languageController()->backgroundParser()->addDocument(IndexedString(input));
 }
 
 void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)
@@ -135,7 +135,7 @@ void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)
         
         QFile implFile(m_directory+'/'+m_filename+"impl.h");
         if(!implFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qDebug() << "error. can't write the impl: " << m_writeImpl+".h";
+            qDebug() << "error. can't write the impl: " << m_writeImpl << ".h";
             qApp->quit();
         }
         

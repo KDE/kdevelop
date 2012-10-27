@@ -22,8 +22,8 @@
 #include "testparsejob.h"
 #include <QTest>
 
-TestParseJob::TestParseJob(const KUrl& url)
-: ParseJob(url)
+TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
+: ParseJob(url, languageSupport)
 , duration_ms(0)
 {
 }

@@ -54,6 +54,8 @@
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
+#include "testcontroller.h"
+
 #include <KMessageBox>
 
 #include <KTextEditor/Document>
@@ -122,6 +124,16 @@ KAboutData aboutData()
 CorePrivate::CorePrivate(Core *core):
     m_componentData( aboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
 {
+    /*
+     * WARNING: This is probably not the best place for registering resource locations
+     * However, I think it's better if these directories are stored in the core componentData
+     * rather than every user having to provide its own
+     */
+    
+    KStandardDirs *dirs = m_componentData.dirs();
+    dirs->addResourceType("filetemplates", "data", "kdevfiletemplates/templates/");
+    dirs->addResourceType("filetemplate_descriptions","data", "kdevfiletemplates/template_descriptions/");
+    dirs->addResourceType("filetemplate_previews","data", "kdevfiletemplates/template_previews/");
 }
 
 bool CorePrivate::initialize(Core::Setup mode, QString session )
@@ -204,7 +216,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         selectionController = new SelectionController(m_core);
     }
-    
+
     if( !documentationController && !(mode & Core::NoUi) )
     {
         documentationController = new DocumentationController(m_core);
@@ -214,28 +226,16 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         debugController = new DebugController(m_core);
     }
-    
-    kDebug() << "initializing ui controller";
-    
-    if( !session.isEmpty() && !SessionController::tryLockSession(session) && !(mode & Core::NoUi) )
-    {
-        QString errmsg = i18n("The session %1 is already active in another running instance. Choose another session or close the running instance.", session );
-        session = SessionController::showSessionChooserDialog(errmsg);
-        if(session.isEmpty())
-            return false;
-    }
-    
-    sessionController.data()->initialize( session );
 
-    if(!sessionController.data()->lockSession())
+    if( !testController )
     {
-        QString errmsg = i18n("Failed to lock the session %1, probably it is already active in another running instance", session );
-        if( mode & Core::NoUi ) {
-            QTextStream qerr(stderr);
-            qerr << endl << errmsg << endl;
-        } else {
-            KMessageBox::error(0, errmsg);
-        }
+        testController = new TestController(m_core);
+    }
+
+    kDebug() << "initializing ui controller";
+
+    sessionController.data()->initialize( session );
+    if( !sessionController.data()->activeSession() ) {
         return false;
     }
 
@@ -276,6 +276,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         documentationController.data()->initialize();
     }
     debugController.data()->initialize();
+    testController.data()->initialize();
 
     installSignalHandler();
 
@@ -296,6 +297,7 @@ CorePrivate::~CorePrivate()
     delete documentationController.data();
     delete debugController.data();
     delete workingSetController.data();
+    delete testController.data();
 
     selectionController.clear();
     projectController.clear();
@@ -310,6 +312,7 @@ CorePrivate::~CorePrivate()
     documentationController.clear();
     debugController.clear();
     workingSetController.clear();
+    testController.clear();
 }
 
 
@@ -398,7 +401,9 @@ void Core::cleanup()
         d->sourceFormatterController.data()->cleanup();
         d->pluginController.data()->cleanup();
         d->sessionController.data()->cleanup();
-        
+
+        d->testController.data()->cleanup();
+
         //Disable the functionality of the language controller
         d->languageController.data()->cleanup();
     }
@@ -530,6 +535,16 @@ IDebugController* Core::debugController()
 DebugController* Core::debugControllerInternal()
 {
     return d->debugController.data();
+}
+
+ITestController* Core::testController()
+{
+    return d->testController.data();
+}
+
+TestController* Core::testControllerInternal()
+{
+    return d->testController.data();
 }
 
 WorkingSetController* Core::workingSetControllerInternal()

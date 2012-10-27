@@ -37,14 +37,7 @@ void CvsTest::initTestCase()
 
     // If the basedir for this cvs test exists from a 
     // previous run; remove it...
-    if ( QFileInfo(CVSTEST_BASEDIR).exists() )
-        KIO::NetAccess::del(KUrl(QString(CVSTEST_BASEDIR)), 0);
-
-    // Now create the basic directory structure
-    QDir tmpdir("/tmp");
-    tmpdir.mkdir(CVSTEST_BASEDIR);
-    tmpdir.mkdir(CVS_REPO);
-    tmpdir.mkdir(CVS_IMPORT);
+    cleanup();
 }
 
 void CvsTest::cleanupTestCase()
@@ -52,7 +45,19 @@ void CvsTest::cleanupTestCase()
     KDevelop::TestCore::shutdown();
 
     delete m_proxy;
+}
 
+void CvsTest::init()
+{
+    // Now create the basic directory structure
+    QDir tmpdir("/tmp");
+    tmpdir.mkdir(CVSTEST_BASEDIR);
+    tmpdir.mkdir(CVS_REPO);
+    tmpdir.mkdir(CVS_IMPORT);
+}
+
+void CvsTest::cleanup()
+{
     if ( QFileInfo(CVSTEST_BASEDIR).exists() )
         KIO::NetAccess::del(KUrl(QString(CVSTEST_BASEDIR)), 0);
 }
@@ -124,6 +129,17 @@ void CvsTest::testInitAndImport()
     repoInit();
     importTestData();
     checkoutTestData();
+}
+
+void CvsTest::testLogFolder()
+{
+    repoInit();
+    importTestData();
+    checkoutTestData();
+    QString testdir(CVS_CHECKOUT);
+    KDevelop::VcsRevision rev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head);
+    CvsJob* job = m_proxy->log(KUrl(testdir), rev);
+    QVERIFY(job);
 }
 
 QTEST_KDEMAIN(CvsTest, GUI)

@@ -147,6 +147,11 @@ void ProjectControllerTest::initTestCase()
     m_scratchDir.cd("prjctrltest");
 }
 
+void ProjectControllerTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void ProjectControllerTest::init()
 {
     m_projName = "foo";

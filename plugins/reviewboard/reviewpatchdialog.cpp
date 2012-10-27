@@ -22,6 +22,7 @@
 #include <QDebug>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
+#include <KDebug>
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     : KDialog(parent)
@@ -31,8 +32,17 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     m_ui->setupUi(w);
     m_ui->repositoriesFilter->setListWidget(m_ui->repositories);
     setMainWidget(w);
-    
+
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
+    connect(m_ui->repositories, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(repositoryChanged(QListWidgetItem*)));
+
+    repositoryChanged(0);
+}
+
+ReviewPatchDialog::~ReviewPatchDialog()
+{
+    delete m_ui;
 }
 
 void ReviewPatchDialog::setBaseDir(const QString& repo)
@@ -48,6 +58,11 @@ void ReviewPatchDialog::setServer(const KUrl& server)
 void ReviewPatchDialog::setUsername(const QString& user)
 {
     m_ui->username->setText(user);
+}
+
+void ReviewPatchDialog::setRepository(const QString& repo)
+{
+    m_preferredRepository = repo;
 }
 
 QString ReviewPatchDialog::baseDir() const
@@ -85,10 +100,30 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     
     m_ui->repositories->sortItems(Qt::AscendingOrder);
     m_ui->repositoriesBox->setEnabled(job->error()==0);
+    
+    if(!m_preferredRepository.isEmpty()) {
+        QList< QListWidgetItem* > items = m_ui->repositories->findItems(m_preferredRepository, Qt::MatchExactly);
+        if(!items.isEmpty()) {
+            QListWidgetItem* it = items.first();
+            it->setSelected(true);
+            m_ui->repositories->scrollToItem(it);
+        } else
+            kDebug() << "no repository called" << m_preferredRepository;
+    }
 }
 
 QString ReviewPatchDialog::repository() const
 {
     Q_ASSERT(m_ui->repositories->currentIndex().isValid());
     return m_ui->repositories->currentItem()->data(Qt::UserRole).toString();
+}
+
+void ReviewPatchDialog::repositoryChanged(QListWidgetItem* newItem)
+{
+    enableButtonOk(newItem);
+}
+
+QString ReviewPatchDialog::repositoryName() const
+{
+    return m_ui->repositories->currentItem()->text();
 }

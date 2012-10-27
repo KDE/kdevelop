@@ -23,6 +23,7 @@
 
 #include <QtGui/QWidget>
 #include <KAction>
+#include <interfaces/context.h>
 
 class QModelIndex;
 
@@ -56,6 +57,18 @@ protected:
     QString m_intialFilter;
 };
 
+class ProjectManagerView;
+
+//own subclass to the current view can be passed from ProjectManagetView to ProjectManagerViewPlugin
+class ProjectManagerViewItemContext : public KDevelop::ProjectItemContext
+{
+public:
+    ProjectManagerViewItemContext(const QList< KDevelop::ProjectBaseItem* >& items, ProjectManagerView *view);
+    ProjectManagerView *view() const;
+private:
+    ProjectManagerView *m_view;
+};
+
 class ProjectManagerView: public QWidget
 {
     Q_OBJECT
@@ -65,6 +78,8 @@ public:
 
     ProjectManagerViewPlugin* plugin() const { return m_plugin; }
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
+    void selectItems(const QList<KDevelop::ProjectBaseItem*> &items);
+    void expandItem(KDevelop::ProjectBaseItem *item);
 
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event);

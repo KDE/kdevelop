@@ -2,6 +2,7 @@
  *   This file is part of KDevelop                                         *
  *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
+ *   Copyright (C) 2012  Morten Danielsen Volden mvolden2@gmail.com        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,81 +21,298 @@
  ***************************************************************************/
 
 #include "outputmodel.h"
+#include "filtereditem.h"
+#include "outputfilteringstrategies.h"
+
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
+#include <KDebug>
 #include <kglobalsettings.h>
+
+#include <QFont>
 
 namespace KDevelop
 {
 
 struct OutputModelPrivate
 {
-    QTimer* timer;
-    QVector<QStandardItem*> pending;
-    
-    static const int MAX_SIZE_PENDING;
-    static const int INTERVAL_MS;
-    static const int MAX_SIZE;
+    OutputModelPrivate();
+    OutputModelPrivate( const KUrl& builddir );
+    ~OutputModelPrivate();
+    bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
+    QList<FilteredItem> m_filteredItems;
+    // We use std::set because that is ordered
+    std::set<int> m_errorItems; // Indices of all items that we want to move to using previous and next
+    KUrl m_buildDir;
+
+    QQueue<QString> m_lineBuffer;
+    QSharedPointer<IFilterStrategy> m_filter;
 };
 
-const int OutputModelPrivate::MAX_SIZE_PENDING=10000;
-const int OutputModelPrivate::INTERVAL_MS=50;
+OutputModelPrivate::OutputModelPrivate()
+: m_filter( new NoFilterStrategy )
+{
+}
 
-const int OutputModelPrivate::MAX_SIZE=50000;
+OutputModelPrivate::OutputModelPrivate(const KUrl& builddir)
+: m_buildDir( builddir )
+, m_filter( new NoFilterStrategy )
+{
+}
+
+bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
+{
+    return ( idx.isValid() && idx.row() >= 0 && idx.row() < currentRowCount && idx.column() == 0 );
+}
+
+
+OutputModelPrivate::~OutputModelPrivate()
+{
+}
+
+OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
+: QAbstractListModel(parent)
+, d( new OutputModelPrivate( builddir ) )
+{
+}
 
 OutputModel::OutputModel( QObject* parent )
-    : QStandardItemModel( parent ), d(new OutputModelPrivate)
+    : QAbstractListModel(parent)
+, d( new OutputModelPrivate )
 {
-    d->timer = new QTimer(this);
-    d->timer->setInterval(OutputModelPrivate::INTERVAL_MS);
-    d->timer->setSingleShot(true);
-    
-    d->pending.reserve(OutputModelPrivate::MAX_SIZE_PENDING);
-    
-    connect(d->timer, SIGNAL(timeout()), SLOT(addPending()));
 }
 
 OutputModel::~OutputModel()
 {
-    addPending();
     delete d;
 }
 
-void OutputModel::appendLine( const QString& line )
+QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 {
-    QStandardItem* item = new QStandardItem( line );
-    item->setFont( KGlobalSettings::fixedFont() );
-    
-    d->pending.append(item);
-    if(d->pending.size()<OutputModelPrivate::MAX_SIZE_PENDING)
-        d->timer->start();
-    else
-        addPending();
-}
-
-void OutputModel::appendLines( const QStringList& lines)
-{
-    Q_FOREACH( const QString& s, lines )
+    if( d->isValidIndex(idx, rowCount()) )
     {
-        appendLine( s );
+        switch( role )
+        {
+            case Qt::DisplayRole:
+                return d->m_filteredItems.at( idx.row() ).shortenedText;
+                break;
+            case OutputModel::OutputItemTypeRole:
+                return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
+                break;
+            case Qt::FontRole:
+                return KGlobalSettings::fixedFont();
+                break;
+            default:
+                break;
+        }
+    }
+    return QVariant();
+}
+
+int OutputModel::rowCount( const QModelIndex& parent ) const
+{
+    if( !parent.isValid() )
+        return d->m_filteredItems.count();
+    return 0;
+}
+
+QVariant OutputModel::headerData( int, Qt::Orientation, int ) const
+{
+    return QVariant();
+}
+
+void OutputModel::activate( const QModelIndex& index )
+{
+    if( index.model() != this || !d->isValidIndex(index, rowCount()) )
+    {
+        return;
+    }
+    kDebug() << "Model activated" << index.row();
+
+
+    FilteredItem item = d->m_filteredItems.at( index.row() );
+    if( item.isActivatable )
+    {
+        kDebug() << "activating:" << item.lineNo << item.url;
+        KTextEditor::Cursor range( item.lineNo, item.columnNo );
+        KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
+        KUrl url = item.url;
+        if(url.isRelative()) {
+            url = KUrl(d->m_buildDir, url.path());
+        }
+        docCtrl->openDocument( url, range );
+    } else {
+        kDebug() << "not an activateable item";
     }
 }
 
-void OutputModel::addPending()
+QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
-    if(!d->pending.isEmpty()) {
-        const int aboutToAdd = d->pending.size();
-        if (aboutToAdd + invisibleRootItem()->rowCount() > OutputModelPrivate::MAX_SIZE) {
-            // https://bugs.kde.org/show_bug.cgi?id=263050
-            // make sure we don't add too many items
-            invisibleRootItem()->removeRows(0, aboutToAdd + invisibleRootItem()->rowCount() - OutputModelPrivate::MAX_SIZE);
-        }
-        invisibleRootItem()->appendRows(d->pending.toList());
+    int startrow = d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() + 1 : 0;
+
+    if( !d->m_errorItems.empty() )
+    {
+        kDebug() << "searching next error";
+        // Jump to the next error item
+        std::set< int >::const_iterator next = d->m_errorItems.lower_bound( startrow );
+        if( next == d->m_errorItems.end() )
+            next = d->m_errorItems.begin();
+
+        return index( *next, 0, QModelIndex() );
     }
 
-    d->pending.clear();
+    for( int row = 0; row < rowCount(); ++row ) 
+    {
+        int currow = (startrow + row) % rowCount();
+        if( d->m_filteredItems.at( currow ).isActivatable )
+        {
+            return index( currow, 0, QModelIndex() );
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
+{
+    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
+    int startrow = rowCount() + (d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() : rowCount()) - 1;
+
+    if(!d->m_errorItems.empty())
+    {
+        kDebug() << "searching previous error";
+
+        // Jump to the previous error item
+        std::set< int >::const_iterator previous = d->m_errorItems.lower_bound( currentIdx.row() );
+
+        if( previous == d->m_errorItems.begin() )
+            previous = d->m_errorItems.end();
+
+        --previous;
+
+        return index( *previous, 0, QModelIndex() );
+    }
+
+    for ( int row = 0; row < rowCount(); ++row )
+    {
+        int currow = (startrow - row) % rowCount();
+        if( d->m_filteredItems.at( currow ).isActivatable )
+        {
+            return index( currow, 0, QModelIndex() );
+        }
+    }
+    return QModelIndex();
+}
+
+void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
+{
+    //kDebug() << "set filtering strategy was called";
+    switch( currentStrategy )
+    {
+        case NoFilter:
+            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            break;
+        case CompilerFilter:
+            d->m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy( d->m_buildDir ) );
+            break;
+        case ScriptErrorFilter:
+            d->m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
+            break;
+        case StaticAnalysisFilter:
+            d->m_filter = QSharedPointer<IFilterStrategy>( new StaticAnalysisFilterStrategy );
+            break;
+        default:
+            // assert(false);
+            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            break;
+    }
+}
+
+void OutputModel::appendLines( const QStringList& lines )
+{
+    if( lines.isEmpty() )
+        return;
+
+    d->m_lineBuffer << lines;
+    QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+}
+
+void OutputModel::appendLine( const QString& l )
+{
+    appendLines( QStringList() << l );
+}
+
+
+void OutputModel::addLineBatch()
+{
+     // only add this many lines in one batch, then return to the event loop
+    // this prevents overly long UI lockup and is simple enough to implement
+    const int maxLines = 50;
+    const int linesInBatch = qMin(d->m_lineBuffer.count(), maxLines);
+
+    // If there is nothing to insert we are done.
+    if ( linesInBatch == 0 )
+            return;
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
+
+    for(int i = 0; i < linesInBatch; ++i) {
+        const QString line = d->m_lineBuffer.dequeue();
+        FilteredItem item = d->m_filter->errorInLine(line);
+        if( item.type == FilteredItem::InvalidItem ) {
+            item = d->m_filter->actionInLine(line);
+        }
+        if( item.type == FilteredItem::ErrorItem ) {
+            d->m_errorItems.insert(d->m_filteredItems.size());
+        }
+
+        d->m_filteredItems << item;
+    }
+
+    endInsertRows();
+
+    if (!d->m_lineBuffer.isEmpty()) {
+        QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+    }
+}
+
+void OutputModel::flushLineBuffer()
+{
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() + d->m_lineBuffer.size() -  1);
+
+    for(; !d->m_lineBuffer.isEmpty();) {
+        const QString line = d->m_lineBuffer.dequeue();
+        FilteredItem item = d->m_filter->errorInLine(line);
+        if( item.type == FilteredItem::InvalidItem ) {
+            item = d->m_filter->actionInLine(line);
+        }
+        if( item.type == FilteredItem::ErrorItem ) {
+            d->m_errorItems.insert(d->m_filteredItems.size());
+        }
+
+        d->m_filteredItems << item;
+    }
+
+    endInsertRows();
+}
+
+void OutputModel::removeLastLines(int l)
+{
+    for(; l>0 && !d->m_lineBuffer.isEmpty(); --l) {
+        d->m_lineBuffer.removeLast();
+    }
+    
+    if(l<=0)
+        return;
+    
+    beginRemoveRows(QModelIndex(), d->m_lineBuffer.size()-l, d->m_lineBuffer.size()-1);
+    for(; l>0 && !d->m_filteredItems.isEmpty(); --l) {
+        d->m_filteredItems.removeLast();
+    }
+    endRemoveColumns();
 }
 
 }

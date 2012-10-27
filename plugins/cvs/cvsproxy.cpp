@@ -36,17 +36,39 @@ CvsProxy::~CvsProxy()
 {
 }
 
-bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
+bool CvsProxy::isValidDirectory(KUrl dirPath) const
 {
-    QString path = dirPath.toLocalFile();
-    QFileInfo fsObject(path);
-    if (fsObject.isFile())
-        path = fsObject.path() + QDir::separator() + "CVS";
-    else
-        path = path + QDir::separator() + "CVS";
-    fsObject.setFile(path);
+    QFileInfo fsObject( dirPath.toLocalFile() );
+    if( !fsObject.isDir() )
+        dirPath.setFileName( QString() );
+
+    dirPath.addPath( "CVS" );
+    fsObject.setFile( dirPath.toLocalFile() );
     return fsObject.exists();
 }
+
+bool CvsProxy::isVersionControlled(KUrl filePath) const
+{
+    QFileInfo fsObject( filePath.toLocalFile() );
+    if( !fsObject.isDir() )
+        filePath.setFileName( QString() );
+
+    filePath.addPath( "CVS" );
+    QFileInfo cvsObject( filePath.toLocalFile() );
+    if( !cvsObject.exists() )
+        return false;
+
+    if( fsObject.isDir() )
+        return true;
+
+    filePath.addPath( "Entries" );
+    QFile cvsEntries( filePath.toLocalFile() );
+    cvsEntries.open( QIODevice::ReadOnly );
+    QString cvsEntriesData = cvsEntries.readAll();
+    cvsEntries.close();
+    return ( cvsEntriesData.indexOf( fsObject.fileName() ) != -1 );
+}
+
 
 bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum RequestedOperation op)
 {
@@ -149,11 +171,11 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
 CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
-    if (!info.isFile())
-        return 0;
+    // parent folder path for files, otherwise the folder path itself
+    const QString repo = info.isFile() ? info.absolutePath() : info.absoluteFilePath();
 
     CvsLogJob* job = new CvsLogJob(vcsplugin);
-    if ( prepareJob(job, info.absolutePath()) ) {
+    if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "log";
 
@@ -163,7 +185,9 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
             *job << convRev;
         }
 
-        *job << KShell::quoteArg(info.fileName());
+        if (info.isFile()) {
+            *job << KShell::quoteArg(info.fileName());
+        }
 
         return job;
     }

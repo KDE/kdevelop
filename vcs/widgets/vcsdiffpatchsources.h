@@ -25,13 +25,14 @@
 
 #include <ktemporaryfile.h>
 #include <qtextstream.h>
-#include <qtextedit.h>
+#include <QSharedPointer>
 #include <kdebug.h>
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
 
 #include "../vcsexport.h"
 
+class KTextEdit;
 class KComboBox;
 namespace KDevelop {
 class VcsCommitDialog;
@@ -45,6 +46,8 @@ class VCSDiffUpdater {
 public:
     virtual ~VCSDiffUpdater();
     virtual KDevelop::VcsDiff update() const = 0;
+    virtual KDevelop::IBasicVersionControl* vcs() const = 0;
+    virtual KUrl url() const = 0;
 };
 
 class KDEVPLATFORMVCS_EXPORT VCSStandardDiffUpdater : public VCSDiffUpdater {
@@ -52,6 +55,8 @@ public:
     VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, KUrl url);
     virtual ~VCSStandardDiffUpdater();
     virtual KDevelop::VcsDiff update() const;
+    virtual KDevelop::IBasicVersionControl* vcs() const { return m_vcs; }
+    virtual KUrl url() const { return m_url; }
 private:
     KDevelop::IBasicVersionControl* m_vcs;
     KUrl m_url;
@@ -75,9 +80,13 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     
     virtual bool isAlreadyApplied() const { return true; }
     
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
+    
     KUrl m_base, m_file;
     QString m_name;
     VCSDiffUpdater* m_updater;
+    QList<KDevelop::VcsStatusInfo> m_infos;
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     private:
     void updateFromDiff(KDevelop::VcsDiff diff);
 };
@@ -86,14 +95,12 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
     Q_OBJECT
     public:
     /// The ownership of the updater is taken
-    VCSCommitDiffPatchSource(VCSDiffUpdater* updater, const KUrl& base, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
     ~VCSCommitDiffPatchSource() ;
     
     QStringList oldMessages() const;
     
     virtual bool canSelectFiles() const ;
-    
-    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
     
     virtual QWidget* customWidget() const ;
     
@@ -110,12 +117,11 @@ Q_SIGNALS:
     void reviewCancelled(QString message);
 public:
     QWeakPointer<QWidget> m_commitMessageWidget;
-    QWeakPointer<QTextEdit> m_commitMessageEdit;
-    QList<KDevelop::VcsStatusInfo> m_infos;
-    QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
+    QWeakPointer<KTextEdit> m_commitMessageEdit;
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
 public slots:
+    void addMessageToHistory(const QString& message);
     void oldMessageChanged(QString);
 };
 

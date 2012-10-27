@@ -1459,6 +1459,18 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
+QList<IndexedString> DUChain::indexedDocuments() const
+{
+  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+
+  QList<IndexedString> ret;
+  foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl.values()) {
+    ret << top->url();
+  }
+
+  return ret;
+}
+
 /*Q_SCRIPTABLE bool DUChain::updateContext(TopDUContext* topContext, TopDUContext::Features minFeatures, QObject* notifyReady) const
 {
   if( (topContext->features() & minFeatures) != minFeatures || (topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->needsUpdate()) ) {
@@ -1481,7 +1493,7 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url(), true);
   if(ctx && ctx->parsingEnvironmentFile())
     if(ctx->parsingEnvironmentFile()->needsUpdate())
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
+      ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()));
 }
 
 void DUChain::documentClosed(IDocument* document)
@@ -1500,17 +1512,19 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
+
+  const IndexedString url(doc->url());
   DUChainWriteLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
-  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  QList<TopDUContext*> chains = chainsForDocument(url);
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
-    Q_ASSERT((standardContext->url().toUrl() == doc->url()));
+    Q_ASSERT((standardContext->url() == url));
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 
@@ -1541,13 +1555,13 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
     }
     
     if(needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
+      ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
       return;
     }
   }
     
   //Add for highlighting etc.
-  ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
+  ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()), TopDUContext::AllDeclarationsContextsAndUses);
 }
 
 void DUChain::documentRenamed(KDevelop::IDocument* doc)
@@ -1559,7 +1573,7 @@ void DUChain::documentRenamed(KDevelop::IDocument* doc)
     ///Maybe this happens when a file was deleted?
     kWarning() << "Strange, url of renamed document is invalid!";
   }else{
-    ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
+    ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
   }
 }
 
@@ -1669,6 +1683,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
+    QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");
     QApplication::processEvents();
     usleep(1000);
   }
@@ -1690,7 +1705,7 @@ void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::F
     QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, document), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
   }else{
     ///Start a parse-job for the given document
-    ICore::self()->languageController()->backgroundParser()->addDocument(document.toUrl(), minFeatures, priority, notifyReady);
+    ICore::self()->languageController()->backgroundParser()->addDocument(document, minFeatures, priority, notifyReady);
   }
 }
 

@@ -38,6 +38,8 @@
 #include <interfaces/iuicontroller.h>
 #include <util/executecompositejob.h>
 #include <kparts/mainwindow.h>
+#include <KFileDialog>
+#include <KShell>
 #include <interfaces/iplugincontroller.h>
 
 #include "executescriptplugin.h"
@@ -53,31 +55,19 @@ KIcon ScriptAppConfigPage::icon() const
 void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
 {
     bool b = blockSignals( true );
-    interpreter->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry, "" ) );
-    if( cfg.readEntry( ExecuteScriptPlugin::isExecutableEntry, false ) ) 
+    if( project )
     {
-        executableRadio->setChecked( true );
-        executablePath->setUrl( cfg.readEntry( ExecuteScriptPlugin::executableEntry, KUrl() ) );
-    } else 
-    {
-        if( project )
-        {
-            projectTarget->setBaseItem( project->projectItem() );
-        } else {
-            projectTarget->setBaseItem( 0 );
-        }
-        projectTargetRadio->setChecked( true );
-        projectTarget->setItemPath( cfg.readEntry( ExecuteScriptPlugin::projectTargetEntry, QStringList() ) );
+        executablePath->setStartDir( project->folder() );
     }
-    if( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) ) {
-        remoteHostRadio->setChecked( true );
-    } else {
-        localHostRadio->setChecked( true );
-    }
+    
+    interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry, "" ) );
+    executablePath->setUrl( cfg.readEntry( ExecuteScriptPlugin::executableEntry, "" ) );
+    remoteHostCheckbox->setChecked( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) );
     remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, "default" ) );
+    outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
     blockSignals( b );
 }
@@ -86,6 +76,7 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
     setupUi(this);
+    interpreter->lineEdit()->setPlaceholderText(i18n("Type or select an interpreter"));
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -95,44 +86,34 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
 
 
     //connect signals to changed signal
-    connect( interpreter, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( projectTarget, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( interpreter->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( executablePath, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
+    connect( remoteHostCheckbox, SIGNAL(toggled(bool)), remoteHost, SLOT(setEnabled(bool)));
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
 void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
 {
     Q_UNUSED( project );
-    cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, interpreter->text() );
-    cfg.writeEntry( ExecuteScriptPlugin::isExecutableEntry, executableRadio->isChecked() );
-    if( executableRadio-> isChecked() )
-    {
-        cfg.writeEntry( ExecuteScriptPlugin::executableEntry, executablePath->url() );
-        cfg.deleteEntry( ExecuteScriptPlugin::projectTargetEntry );
-    } else
-    {
-        cfg.writeEntry( ExecuteScriptPlugin::projectTargetEntry, projectTarget->itemPath() );
-        cfg.deleteEntry( ExecuteScriptPlugin::executableEntry );
-    }
-    cfg.writeEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, remoteHostRadio->isChecked() );
+    cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, interpreter->lineEdit()->text() );
+    cfg.writeEntry( ExecuteScriptPlugin::executableEntry, executablePath->url() );
+    cfg.writeEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, remoteHostCheckbox->isChecked() );
     cfg.writeEntry( ExecuteScriptPlugin::remoteHostEntry, remoteHost->text() );
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecuteScriptPlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecuteScriptPlugin::environmentGroupEntry, environment->currentProfile() );
+    cfg.writeEntry( ExecuteScriptPlugin::outputFilteringEntry, outputFilteringMode->currentIndex() );
     //cfg.writeEntry( ExecuteScriptPlugin::useTerminalEntry, runInTerminal->isChecked() );
 }
 
 QString ScriptAppConfigPage::title() const
 {
-    return i18n("Configure Native Application");
+    return i18n("Configure Script Application");
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > ScriptAppLauncher::configPages() const
@@ -142,7 +123,7 @@ QList< KDevelop::LaunchConfigurationPageFactory* > ScriptAppLauncher::configPage
 
 QString ScriptAppLauncher::description() const
 {
-    return "Executes Script Applications";
+    return i18n("Executes Script Applications");
 }
 
 QString ScriptAppLauncher::id()
@@ -155,7 +136,8 @@ QString ScriptAppLauncher::name() const
     return i18n("Script Application");
 }
 
-ScriptAppLauncher::ScriptAppLauncher()
+ScriptAppLauncher::ScriptAppLauncher(ExecuteScriptPlugin* plugin)
+: m_plugin( plugin )
 {
 }
 
@@ -168,8 +150,7 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        return new ScriptAppJob( KDevelop::ICore::self()->runController(), cfg );
-        
+        return new ScriptAppJob( m_plugin, cfg);
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
@@ -218,7 +199,7 @@ QString ScriptAppConfigType::id() const
 
 KIcon ScriptAppConfigType::icon() const
 {
-    return KIcon("system-run");
+    return KIcon("preferences-plugin-script");
 }
 
 bool ScriptAppConfigType::canLaunch(const KUrl& /*file*/) const
@@ -235,8 +216,13 @@ void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup /*config*/, KDeve
 {
 }
 
-void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
+void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, const QStringList &args) const
 {
+    QStringList a(args);
+    cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, a.takeFirst() );
+    cfg.writeEntry( ExecuteScriptPlugin::executableEntry, a.takeFirst() );
+    cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, KShell::joinArgs(a) );
+    cfg.sync();
 }
 
 #include "scriptappconfig.moc"

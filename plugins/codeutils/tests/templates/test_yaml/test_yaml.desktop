@@ -1,0 +1,11 @@
+[General]
+Name=Testing YAML Template
+Comment=A test description in YAML
+Category=Test/Test/YAML
+Files=Implementation
+
+[Implementation]
+Name=Implementation
+File=class.yaml
+OutputFile={{ name }}.yaml
+

@@ -56,12 +56,12 @@ public Q_SLOTS:
     void history(const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ));
     void annotation();
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
+    void annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible);
     void diffToBase();
     void diffForRev();
     void diffForRevGlobal();
     void update();
     void diffJobFinished(KJob* job);
-    void commitReviewed(QString);
     
     void revertDone(KJob* job);
     void delayedModificationWarningOn();
@@ -69,9 +69,6 @@ private:
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;
 };
-
-QStringList retrieveOldCommitMessages();
-void addOldCommitMessage(QString);
 
 } // namespace KDevelop
 

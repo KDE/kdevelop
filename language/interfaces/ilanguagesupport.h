@@ -26,6 +26,7 @@
 
 namespace KDevelop {
 
+class IndexedString;
 class ParseJob;
 class ILanguage;
 class TopDUContext;
@@ -34,6 +35,7 @@ class SimpleCursor;
 class SimpleRange;
 class ICodeHighlighting;
 class DocumentChangeTracker;
+class ICreateClassHelper;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
 public:
@@ -42,7 +44,7 @@ public:
     /** @return the name of the language.*/
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
-    virtual ParseJob *createParseJob(const KUrl &url) = 0;
+    virtual ParseJob *createParseJob(const IndexedString &url) = 0;
     /** @return the language for this support.*/
     virtual ILanguage *language();
     /**
@@ -71,7 +73,15 @@ public:
      * Should return a document change-tracker for this language that tracks the changes in the given document 
      * */
     virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
-    
+
+    /**
+     * Should return a class creating helper for this language, or zero.
+     *
+     * If zero is returned, a default class helper will be created.
+     * Reimplementing this method is therefore not necessary to have classes created in this language.
+     * */
+    virtual ICreateClassHelper* createClassHelper() const;
+
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
      * In C++, they are used to allow highlighting and navigation of macro-uses.

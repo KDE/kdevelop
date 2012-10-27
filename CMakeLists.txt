@@ -7,15 +7,16 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
 set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 3)
+set(KDEVPLATFORM_VERSION_MINOR 4)
 set(KDEVPLATFORM_VERSION_PATCH 60)
 
 set(KDE_MIN_VERSION "4.5.0")
 find_package(KDE4 4.5.0 REQUIRED)
-set(KDEVPLATFORM_LIB_VERSION 6.0.0)
-set(KDEVPLATFORM_LIB_SOVERSION 6)
+set(KDEVPLATFORM_LIB_VERSION 7.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 7)
 
 find_package(ZLIB REQUIRED)
+find_package(Grantlee 0.1.7 REQUIRED)
 
 include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
@@ -37,29 +38,33 @@ macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
 #macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
 #                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
 #                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
-if(CMAKE_COMPILER_IS_GNUCXX)
-  # TODO: Remove when LTS for g++ < 4.3 has ended.
-  #       See also: languages/cpp/parser/parser.h
-  macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
-  if (GCC_IS_NEWER_THAN_4_3)
-    message(STATUS "Enabling c++0x support for unordered map")
-    add_definitions( -std=c++0x ) # For unordered_map
-  else(GCC_IS_NEWER_THAN_4_3)
-    add_definitions( -DGXX_LT_4_3 )
-  endif (GCC_IS_NEWER_THAN_4_3)
-endif(CMAKE_COMPILER_IS_GNUCXX)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  # TODO: version check?
-  add_definitions( -std=c++0x )
-endif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+# TODO: Remove when LTS for g++ < 4.3 has ended.
+#       See also: languages/cpp/parser/parser.h in KDevelop
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    include(CheckIncludeFileCXX)
+    set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
+    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
+    set(CMAKE_REQUIRED_FLAGS "")
+
+    if(HAVE_UNORDERED_MAP)
+        message(STATUS "Enabling c++0x support for unordered map")
+        add_definitions( -std=c++0x )
+    else(HAVE_UNORDERED_MAP)
+        message(STATUS "Using ext/hash_map")
+        check_include_file_cxx(ext/hash_map HAVE_EXT_HASH_MAP)
+    endif(HAVE_UNORDERED_MAP)
+endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
+include_directories(${Grantlee_INCLUDE_DIRS})
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
 set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
@@ -86,6 +91,7 @@ add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
+add_subdirectory(template)
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

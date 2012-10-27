@@ -30,7 +30,7 @@ class TestParseJob : public KDevelop::ParseJob
 {
 Q_OBJECT
 public:
-    TestParseJob(const KUrl& url);
+    TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport);
     virtual void run();
     virtual ControlFlowGraph* controlFlowGraph();
     virtual DataAccessRepository* dataAccessInformation();

@@ -57,6 +57,7 @@ class SessionDialog : public KDialog
     Q_OBJECT
 public:
     SessionDialog( QWidget* = 0 );
+    virtual ~SessionDialog();
 private Q_SLOTS:
     void createSession();
     void deleteSession();

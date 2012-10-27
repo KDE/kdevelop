@@ -30,7 +30,7 @@
 #include <qitemeditorfactory.h>
 
 #include "ui_launchconfigurationdialog.h"
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 class QTreeView;
 class QStackedWidget;
@@ -55,7 +55,7 @@ class LaunchConfigurationPage;
 class ILaunchConfiguration;
 class IProject;
 
-class LaunchConfigurationModelDelegate : public QItemDelegate
+class LaunchConfigurationModelDelegate : public QStyledItemDelegate
 {
 public:
     LaunchConfigurationModelDelegate();
@@ -84,6 +84,7 @@ public:
     ILaunchMode* modeForIndex( const QModelIndex& idx ) const;
     QModelIndex indexForConfig( LaunchConfiguration* ) const;
     void addConfiguration(KDevelop::ILaunchConfiguration* launch, const QModelIndex& idx);
+    KDevelop::IProject* projectForIndex(const QModelIndex& idx);
     
 private:
     class TreeItem
@@ -142,6 +143,7 @@ class LaunchConfigurationDialog : public KDialog, public Ui::LaunchConfiguration
 Q_OBJECT
 public:
     LaunchConfigurationDialog(QWidget* parent = 0 );
+    virtual QSize sizeHint() const;
 
 private slots:
     void deleteConfiguration();
@@ -152,13 +154,18 @@ private slots:
     void pageChanged();
     void saveConfig();
     void updateNameLabel( LaunchConfiguration* l );
+    void createEmptyLauncher();
+    void launchModeChanged(int index);
+
 private:
-    void updateNameLabel( const QString&, const QString& );
     void saveConfig( const QModelIndex& );
     LaunchConfigurationsModel* model;
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;
     QMap<ILauncher*, LaunchConfigPagesContainer*> launcherWidgets;
     bool currentPageChanged;
+private slots:
+    void doTreeContextMenu(QPoint point);
+    void renameSelected();
 };
 
 }

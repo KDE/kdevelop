@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QTreeView>
 #include <QMenu>
+#include <QApplication>
+#include <QClipboard>
 
 #include <KAction>
 #include <KStandardAction>
@@ -39,12 +41,10 @@
 #include <KIcon>
 #include <KTextEditor/Cursor>
 
-#include "../../interfaces/icore.h"
-#include "../../interfaces/idebugcontroller.h"
-#include "../../interfaces/idocumentcontroller.h"
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include "framestackmodel.h"
-#include <QApplication>
-#include <QClipboard>
 
 namespace KDevelop {
 
@@ -122,6 +122,8 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
         connect(session->frameStackModel(), SIGNAL(currentFrameChanged(int)),
                 SLOT(currentFrameChanged(int)));
         currentFrameChanged(session->frameStackModel()->currentFrame());
+        connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+                SLOT(sessionStateChanged(KDevelop::IDebugSession::DebuggerState)));
     }
 
     if (isVisible()) {
@@ -161,14 +163,10 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
         IFrameStackModel* model = m_session->frameStackModel();
         QModelIndex idx = model->currentThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        m_threadsWidget->setVisible(model->rowCount() > 1);
         m_frames->setModel(m_session->frameStackModel());
         m_frames->setRootIndex(idx);
-
-        if (model->rowCount() <= 1) {
-            m_threadsWidget->hide();
-        } else {
-            m_threadsWidget->show();
-        }
+        m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
     } else {
         m_threadsWidget->hide();
         m_threads->selectionModel()->clear();
@@ -220,6 +218,13 @@ void FramestackWidget::copySelection()
 void FramestackWidget::selectAll()
 {
     m_frames->selectAll();
+}
+
+void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerState state)
+{
+    bool enable = state == IDebugSession::PausedState || state == IDebugSession::StoppedState;
+    m_frames->setEnabled(enable);
+    m_threads->setEnabled(enable);
 }
 
 }

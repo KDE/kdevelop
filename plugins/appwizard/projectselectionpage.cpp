@@ -21,10 +21,15 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
+#include <util/multilevellistview.h>
+
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
-#include "appwizardplugin.h"
 #include <KColorScheme>
+#include <KFileDialog>
+#include <KNS3/KNewStuffButton>
+#include <KTar>
+#include <KZip>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
@@ -34,8 +39,6 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     setContentsMargins(0,0,0,0);
     ui->descriptionContent->setBackgroundRole(QPalette::Base);
     ui->descriptionContent->setForegroundRole(QPalette::Text);
-    ui->templateView->setModel(templatesModel);
-    ui->templateView->setFocus();
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
@@ -49,13 +52,30 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
              this, SLOT(nameChanged()) );
     
+    m_listView = new KDevelop::MultiLevelListView(this);
+    m_listView->setLevels(2);
+    m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
+    m_listView->setModel(templatesModel);
+    m_listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
+    m_listView->setContentsMargins(0, 0, 0, 0);
+    connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
+    ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
+    typeChanged(m_listView->currentIndex());
     
-    connect( ui->templateView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(templateFamilyChanged(QModelIndex,QModelIndex)) );
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
+    
+    KNS3::Button* knsButton = new KNS3::Button(i18n("Get More Templates"), "kdevappwizard.knsrc", m_listView);
+    connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), 
+             this, SLOT(templatesDownloaded(KNS3::Entry::List)));
+    m_listView->addWidget(0, knsButton);
+    
+    KPushButton* loadButton = new KPushButton(m_listView);
+    loadButton->setText(i18n("Load Template From File"));
+    loadButton->setIcon(KIcon("application-x-archive"));
+    connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
+    m_listView->addWidget(0, loadButton);
 }
-
 
 void ProjectSelectionPage::nameChanged()
 {
@@ -69,28 +89,24 @@ ProjectSelectionPage::~ProjectSelectionPage()
     delete ui;
 }
 
-void ProjectSelectionPage::templateFamilyChanged(const QModelIndex& current, const QModelIndex& )
-{
-    ui->templatesIconView->setModel(m_templatesModel);
-    ui->templatesIconView->setRootIndex(current);
-
-    connect( ui->templatesIconView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(typeChanged(QModelIndex)) );
-
-    ui->templatesIconView->setCurrentIndex(m_templatesModel->index(0,0, current));
-}
-
 void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
 {
-    bool hasChildren = idx.model()->rowCount(idx)>0;
-    if(hasChildren) {
+    if (!idx.model())
+    {
+        kDebug() << "Index with no model";
+        return;
+    }
+    int children = idx.model()->rowCount(idx);
+    ui->templateType->setVisible(children);
+    ui->templateType->setEnabled(children > 1);
+    if (children) {
         ui->templateType->setModel(m_templatesModel);
         ui->templateType->setRootModelIndex(idx);
         ui->templateType->setCurrentIndex(0);
-    } else
+        itemChanged(idx.child(0, 0));
+    } else {
         itemChanged(idx);
-    
-    ui->templateType->setVisible(hasChildren);
+    }
 }
 
 void ProjectSelectionPage::templateChanged(int current)
@@ -101,16 +117,25 @@ void ProjectSelectionPage::templateChanged(int current)
 
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
-    KStandardDirs* dirs = m_templatesModel->plugin()->componentData().dirs();
-    QString picPath = dirs->findResource("apptemplate_previews", current.data( Qt::UserRole+2 ).toString() );
-    if( picPath.isEmpty() ) 
-    {
-        picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
+    KStandardDirs* dirs = KDevelop::ICore::self()->componentData().dirs();
+    QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
+    if( picPath.isEmpty() ) {
+        KIcon icon("kdevelop");
+        ui->icon->setPixmap(icon.pixmap(128, 128));
+        ui->icon->setFixedHeight(128);
+    } else {
+        QPixmap pixmap( picPath );
+        ui->icon->setPixmap( pixmap );
+        ui->icon->setFixedHeight( pixmap.height() );
     }
-    ui->preview->setPixmap( QPixmap( picPath ) );
-    ui->description->setText( current.data( Qt::UserRole+4 ).toString()+'\n'+current.data( Qt::UserRole+3 ).toString() );
+    // header name is either from this index directly or the parents if we show the combo box
+    const QVariant headerData = ui->templateType->isVisible()
+                                    ? current.parent().data()
+                                    : current.data();
+    ui->header->setText(QString("<h1>%1</h1>").arg(headerData.toString().trimmed()));
+    ui->description->setText(current.data(KDevelop::TemplatesModel::CommentRole).toString());
     validateData();
-    
+
     ui->propertiesBox->setEnabled(true);
 }
 
@@ -246,9 +271,7 @@ QString ProjectSelectionPage::pathUp(const QString& aPath)
 
 QStandardItem* ProjectSelectionPage::getCurrentItem() const
 {
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
-    if ( item && item->hasChildren() )
-        item = m_templatesModel->itemFromIndex( ui->templatesIconView->currentIndex() );
+    QStandardItem* item = m_templatesModel->itemFromIndex( m_listView->currentIndex() );
     if ( item && item->hasChildren() )
     {
         const int currect = ui->templateType->currentIndex();
@@ -272,6 +295,61 @@ bool ProjectSelectionPage::shouldContinue()
         }
     }
     return true;
+}
+
+void ProjectSelectionPage::loadFileClicked()
+{
+    QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
+    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevapptemplate"), filter, this);
+
+    if (!fileName.isEmpty())
+    {
+        QString destination = m_templatesModel->loadTemplateFile(fileName);
+        QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
+        if (indexes.size() > 2)
+        {
+            m_listView->setCurrentIndex(indexes.at(1));
+            ui->templateType->setCurrentIndex(indexes.at(2).row());
+        }
+    }
+}
+
+void ProjectSelectionPage::templatesDownloaded (const KNS3::Entry::List& entries)
+{
+    if (entries.isEmpty()) {
+        return;
+    }
+
+    m_templatesModel->refresh();
+    bool updated = false;
+
+    foreach (const KNS3::Entry& entry, entries)
+    {
+        if (!entry.installedFiles().isEmpty())
+        {
+            updated = true;
+            setCurrentTemplate(entry.installedFiles().first());
+            break;
+        }
+    }
+
+    if (!updated)
+    {
+        m_listView->setCurrentIndex(QModelIndex());
+    }
+}
+
+void ProjectSelectionPage::setCurrentTemplate (const QString& fileName)
+{
+    QModelIndexList indexes = m_templatesModel->templateIndexes(fileName);
+    if (indexes.size() > 1)
+    {
+        m_listView->setCurrentIndex(indexes.at(1));
+    }
+    if (indexes.size() > 2)
+    {
+        ui->templateType->setCurrentIndex(indexes.at(2).row());
+    }
 }
 
 #include "projectselectionpage.moc"

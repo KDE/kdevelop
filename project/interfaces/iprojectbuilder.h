@@ -82,6 +82,13 @@ public:
      */
     virtual KJob* prune(IProject*);
 
+    /**
+     * Provide access to the builders related to this one.
+     * The list returned by this method is used to select the appropriate KCMs for a project.
+     * This method may safely return an empty list, as does the default implementation.
+     */
+    virtual QList<IProjectBuilder*> additionalBuilderPlugins( IProject* project ) const;
+
 Q_SIGNALS:
     /**
      * Emitted when the build for the given item was finished

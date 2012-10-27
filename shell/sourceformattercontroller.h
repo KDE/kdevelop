@@ -85,6 +85,9 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 
 		void settingsChanged();
 		
+		virtual void disableSourceFormatting(bool disable);
+		virtual bool sourceFormattingEnabled();
+
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
 		void beautifySource();
@@ -110,6 +113,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		KAction* m_formatLine;
 		QList<KDevelop::ProjectBaseItem*> m_prjItems;
 		KUrl::List m_urls;
+		bool m_enabled;
 };
 
 }

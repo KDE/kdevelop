@@ -97,7 +97,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Behaviour</string>
+      <string>Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
@@ -171,19 +171,42 @@
        </layout>
       </item>
       <item row="3" column="0">
-       <widget class="QCheckBox" name="runInTerminal">
-        <property name="toolTip">
-         <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
-        </property>
-        <property name="text">
-         <string>Use External Terminal</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>12</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="runInTerminal">
+          <property name="toolTip">
+           <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
+          </property>
+          <property name="text">
+           <string>Use External Terminal:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="3" column="1">
        <widget class="KComboBox" name="terminal">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="toolTip">
          <string>&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;

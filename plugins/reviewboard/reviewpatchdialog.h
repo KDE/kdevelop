@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ * Copyright 2010-2012 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -22,7 +22,10 @@
 #define REVIEWPATCHDIALOG_H
 #include <KDialog>
 
+class QListWidgetItem;
+
 class KJob;
+
 namespace Ui {
     class ReviewPatch;
 }
@@ -32,6 +35,7 @@ class ReviewPatchDialog : public KDialog
     Q_OBJECT
     public:
         ReviewPatchDialog(QWidget* parent = 0);
+        virtual ~ReviewPatchDialog();
         
         void setBaseDir(const QString& dir);
         void setServer(const KUrl& server);
@@ -43,6 +47,9 @@ class ReviewPatchDialog : public KDialog
         /** @returns the selected base directory for the patch */
         QString baseDir() const;
         QString repository() const;
+        QString repositoryName() const;
+        
+        void setRepository(const QString& repo);
         
     private slots:
         void serverChanged();
@@ -50,6 +57,10 @@ class ReviewPatchDialog : public KDialog
         
     private:
         Ui::ReviewPatch* m_ui;
+        QString m_preferredRepository;
+
+    private slots:
+        void repositoryChanged(QListWidgetItem* newItem);
 };
 
 #endif

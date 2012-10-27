@@ -214,7 +214,7 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
     
     if(needUpdate())
-        ICore::self()->languageController()->backgroundParser()->addDocument(m_url.toUrl(), TopDUContext::AllDeclarationsContextsAndUses);
+        ICore::self()->languageController()->backgroundParser()->addDocument(m_url, TopDUContext::AllDeclarationsContextsAndUses);
 }
 
 void DocumentChangeTracker::textInserted( Document* document, Range range )

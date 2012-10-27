@@ -157,6 +157,50 @@ void ProjectLoadTest::addRemoveFiles()
     QCOMPARE(project->fileCount(), 1);
 }
 
+void ProjectLoadTest::removeDirRecursive()
+{
+    const TestProject p = makeProject();
+
+    {
+        QFile f(p.dir->name()+"/sdf");
+        f.open(QIODevice::WriteOnly);
+        f.close();
+    }
+    {
+        QDir(p.dir->name()).mkdir("blub");
+        for (int i=0; i<10; ++i) {
+            QFile f(p.dir->name()+"/blub/file"+QString::number(i));
+            f.open(QIODevice::WriteOnly);
+            f.close();
+        }
+    }
+
+    //close previously opened projects
+    QTest::qWait(1000); //wait for projects to load
+    foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
+        KDevelop::ICore::self()->projectController()->closeProject(p);
+        QTest::qWait(100);
+    }
+    QVERIFY(KDevelop::ICore::self()->projectController()->projects().isEmpty());
+
+    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 20000));
+    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFileUrl(), p.file);
+
+    for (int i=0; i<1; ++i) {
+        KUrl url(p.dir->name()+"/blub");
+        url.cleanPath();
+        QCOMPARE(project->foldersForUrl(url).count(), 1);
+
+        KDevelop::ProjectFolderItem* file = project->foldersForUrl(url).first();
+        project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file );
+    }
+
+    QTest::qWait(2000);
+    QCOMPARE(project->fileCount(), 1);
+}
+
 void createFile(const QString& path)
 {
     QFile f(path);

@@ -21,7 +21,7 @@
 #ifndef BUILDERJOB_H
 #define BUILDERJOB_H
 
-#include <QtCore/QList>
+#include <QtCore/QVector>
 
 #include <kcompositejob.h>
 
@@ -85,7 +85,25 @@ public:
      * @param type The build method to be used for the item
      */
     void addItem( BuildType type, ProjectBaseItem* item );
-    
+
+    /**
+     * Allows to add a custom @p job to the end of the list. The build method specified by @p type
+     * and (optionally) an item specified by @p item are needed to create a human-readable job name.
+     *
+     * @param type The build method which is represented by the @p job
+     * @param job The job to add to the list
+     * @param item The item which is build by the @p job
+     */
+    void addCustomJob( BuildType type, KJob* job, ProjectBaseItem* item = 0 );
+
+    /**
+     * Updates the job's name.
+     *
+     * Shall be called before registering this job in the run controller, but after
+     * adding all required tasks to the job.
+     */
+    void updateJobName();
+
     /**
      * Allows to choose between stopping and failing the composite job
      * when the first item could not be built, or building all items
@@ -114,6 +132,25 @@ protected Q_SLOTS:
 private:
     class BuilderJobPrivate* const d;
     friend class BuilderJobPrivate;
+
+    QString buildTypeToString( BuildType type );
+
+    /**
+     * @internal a structure to keep metadata of all registered jobs
+     */
+    struct SubJobData
+    {
+        BuildType type;
+        KJob* job;
+        ProjectBaseItem* item;
+    };
+    QVector<SubJobData> m_metadata;
+
+    /**
+     * @internal get the subjob list and clear this composite job
+     */
+    QVector<SubJobData> takeJobList();
+
 };
 
 }

@@ -84,11 +84,14 @@ public:
     /**
      * Reconstruct the view structure. This is required after significant untracked changes to the
      * area-index structure.
+     * Views listed in topViews will be on top of their view stacks.
      * */
-    void reconstructViews();
+    void reconstructViews(QList<View*> topViews = QList<View*>());
     
-    /**Returns the view that is closest to the given global position, or zero.
-      * */
+    /**Returns a list of all views which are on top of their corresponding view stacks*/
+    QList<View*> getTopViews() const;
+    
+    /**Returns the view that is closest to the given global position, or zero.*/
     View* viewForPosition(QPoint globalPos) const;
     
     /**Returns true if this main-window contains this view*/
@@ -150,6 +153,8 @@ public: // FIXME?
     /**Reimplement this to add custom buttons into the area switchers. The default-implementation returns zero, which means that no button is added
       *The returned button is owned by the caller, and deleted at will. */
     virtual QWidget* customButtonForAreaSwitcher ( Area* area );
+
+    QWidget* areaSwitcher() const;
 
 private:
     

@@ -44,44 +44,31 @@ const QString Session::cfgSessionPrettyContentsEntry = "SessionPrettyContents";
 class SessionPrivate
 {
 public:
-    QUuid id;
-    KSharedConfig::Ptr config;
-    QString sessionDirectory;
+    SessionInfo info;
     bool isTemporary;
 
     KUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
-        QFileInfo fi( sessionDirectory + '/' + name );
-        if( !fi.exists() )
-        {
-            QDir d( sessionDirectory );
-            d.mkdir( name );
+        KUrl url( info.path );
+        url.addPath( name );
+        if( !QFile::exists( url.toLocalFile() ) ) {
+            QDir( info.path.toLocalFile() ).mkdir( name );
         }
-        kDebug() << fi.absolutePath();
-        return KUrl( fi.absolutePath() );
+        return url;
     }
 
-    void initialize()
+    SessionPrivate( const QString& id )
+        : info( Session::parse( id, true ) )
+        , isTemporary( false )
     {
-        sessionDirectory = SessionController::sessionDirectory() + '/' + id.toString();
-        kDebug() << "got dir:" << sessionDirectory;
-        if( !QFileInfo( sessionDirectory ).exists() )
-        {
-            kDebug() << "creating dir";
-            QDir( SessionController::sessionDirectory() ).mkdir( id.toString() );
-        }
-        config = KSharedConfig::openConfig( sessionDirectory+"/sessionrc" );
-        isTemporary = false;
     }
 };
 
-Session::Session( const QUuid& id, QObject* parent )
+Session::Session( const QString& id, QObject* parent )
         : ISession(parent)
-        , d( new SessionPrivate )
+        , d( new SessionPrivate( id ) )
 {
-    d->id = id;
-    d->initialize();
 }
 
 Session::~Session()
@@ -91,61 +78,26 @@ Session::~Session()
 
 QString Session::name() const
 {
-    return d->config->group("").readEntry( cfgSessionNameEntry, "" );
+    return d->info.name;
 }
 
 KUrl::List Session::containedProjects() const
 {
-    return d->config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+    return d->info.projects;
 }
 
 void Session::updateDescription()
 {
-    KUrl::List openProjects = containedProjects();
+    QString prettyContents = generatePrettyContents( d->info );
+    d->info.description = generateDescription( d->info, prettyContents );
 
-    QString prettyContents;
-    
-    if(!openProjects.isEmpty()) {
-        
-        QStringList projectNames;
-        
-        foreach(const KUrl& url, openProjects)
-        {
-            IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-            if(project) {
-                projectNames << project->name();
-            }else{
-                QString projectName = url.fileName();
-                if(projectName.endsWith(".kdev4"))
-                    projectName = projectName.left(projectName.size()-6);
-                projectNames << projectName;
-            }
-        }
-        
-        prettyContents = projectNames.join(", ");
-    }
-
-    if ( prettyContents.isEmpty() ) {
-        prettyContents = i18n("(no projects)");
-    }
-    
-    d->config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
-    d->config->group("").sync();
+    d->info.config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
+    d->info.config->group("").sync();
 }
 
 QString Session::description() const
 {
-    QString ret = name();
-    
-    QString prettyContents = d->config->group("").readEntry( cfgSessionPrettyContentsEntry, "" );
-    
-    if(!prettyContents.isEmpty())
-    {
-        if(!ret.isEmpty())
-            ret += ":  ";
-        ret += prettyContents;
-    }
-    return ret;
+    return d->info.description;
 }
 
 KUrl Session::pluginDataArea( const IPlugin* p )
@@ -155,25 +107,27 @@ KUrl Session::pluginDataArea( const IPlugin* p )
 
 KSharedConfig::Ptr Session::config()
 {
-    return d->config;
+    return d->info.config;
 }
 
 QUuid Session::id() const
 {
-    return d->id;
+    return d->info.uuid;
 }
 
 void Session::deleteFromDisk()
 {
-    removeDirectory(d->sessionDirectory);
+    removeDirectory( d->info.path.toLocalFile() );
 }
 
 void Session::setName( const QString& newname )
 {
-    QString oldname = name();
-    d->config->group("").writeEntry( cfgSessionNameEntry, newname );
-    d->config->sync();
+    QString oldname = d->info.name;
+    d->info.name = newname;
     emit nameChanged( newname, oldname );
+
+    d->info.config->group("").writeEntry( cfgSessionNameEntry, newname );
+    d->info.config->sync();
 }
 
 void Session::setTemporary(bool temp)
@@ -184,6 +138,70 @@ void Session::setTemporary(bool temp)
 bool Session::isTemporary() const
 {
     return d->isTemporary;
+}
+
+QString Session::generatePrettyContents( const SessionInfo& info )
+{
+    if( info.projects.isEmpty() )
+        return QString();
+
+    QStringList projectNames;
+    foreach( const KUrl& url, info.projects ) {
+        IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+        if(project) {
+            projectNames << project->name();
+        } else {
+            QString projectName = url.fileName();
+            projectName.remove( QRegExp( "\\.kdev4$", Qt::CaseInsensitive ) );
+            projectNames << projectName;
+        }
+    }
+    return projectNames.join( ", " );
+}
+
+QString Session::generateDescription( const SessionInfo& info, const QString& prettyContents )
+{
+    QString prettyContentsFormatted;
+    if( prettyContents.isEmpty() ) {
+        prettyContentsFormatted = i18n("(no projects)");
+    } else {
+        prettyContentsFormatted = prettyContents;
+    }
+
+    QString description;
+    if( info.name.isEmpty() ) {
+        description = prettyContentsFormatted;
+    } else {
+        description = info.name + ":  " + prettyContentsFormatted;
+    }
+    return description;
+}
+
+SessionInfo Session::parse( const QString& id, bool mkdir )
+{
+    SessionInfo ret;
+    KUrl sessionPath = SessionController::sessionDirectory();
+    sessionPath.addPath( id );
+
+    QDir sessionDir( sessionPath.toLocalFile( KUrl::AddTrailingSlash ) );
+    if( !sessionDir.exists() ) {
+        if( mkdir ) {
+            QDir( SessionController::sessionDirectory() ).mkdir( id );
+            Q_ASSERT( sessionDir.exists() );
+        } else {
+            return ret;
+        }
+    }
+
+    ret.uuid = id;
+    ret.path = sessionPath;
+    sessionPath.addPath( "sessionrc" );
+
+    ret.config = KSharedConfig::openConfig( sessionPath.toLocalFile() );
+    ret.name = ret.config->group( QString() ).readEntry( cfgSessionNameEntry, QString() );
+    ret.projects = ret.config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+    ret.description = generateDescription( ret, ret.config->group( QString() ).readEntry( "SessionPrettyContents", QString() ) );
+    return ret;
 }
 
 }

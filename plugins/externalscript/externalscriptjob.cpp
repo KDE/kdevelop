@@ -23,6 +23,7 @@
 #include "externalscriptitem.h"
 #include "externalscriptoutputmodel.h"
 #include "externalscriptdebug.h"
+#include "externalscriptplugin.h"
 
 #include <QFileInfo>
 #include <QApplication>
@@ -36,6 +37,7 @@
 #include <KTextEditor/View>
 
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 
 #include <interfaces/icore.h>
@@ -45,11 +47,12 @@
 #include <interfaces/iproject.h>
 
 
-ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
+ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
+    m_plugin( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
     m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
-    m_errorMode( item->errorMode() ),
+    m_errorMode( item->errorMode() ), m_filterMode( item->filterMode() ),
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
@@ -58,8 +61,12 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   setCapabilities( Killable );
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+
   ExternalScriptOutputModel* model = new ExternalScriptOutputModel;
-  setModel( model, KDevelop::IOutputView::TakeOwnership );
+  model->setFilteringStrategy(static_cast<KDevelop::OutputModel::OutputFilterStrategy>(m_filterMode));
+  setModel( model );
+
+  setDelegate( new KDevelop::OutputDelegate );
 
   // also merge when error mode "equals" output mode
   if ( (m_outputMode == ExternalScriptItem::OutputInsertAtCursor
@@ -240,7 +247,6 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
 
     ExternalScriptOutputModel* model = dynamic_cast<ExternalScriptOutputModel*>(OutputJob::model());
     Q_ASSERT(model);
-    model->addPending();
 
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
       QStringList lines = model->stdOut();

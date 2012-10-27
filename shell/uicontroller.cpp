@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kmenubar.h>
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
@@ -172,6 +173,34 @@ public:
     IToolViewFactory *factory;
 };
 
+
+class NewToolViewListWidget: public QListWidget {
+    Q_OBJECT
+
+public:
+    NewToolViewListWidget(MainWindow *mw, QWidget* parent = 0)
+        :QListWidget(parent), m_mw(mw)
+    {
+        connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNewToolViewByDoubleClick(QModelIndex)));
+    }
+
+Q_SIGNALS:
+    void addNewToolView(MainWindow *mw, QListWidgetItem *item);
+
+private Q_SLOTS:
+    void addNewToolViewByDoubleClick(QModelIndex index)
+    {
+        QListWidgetItem *item = itemFromIndex(index);
+        // Disable item so that the toolview can not be added again.
+        item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        emit addNewToolView(m_mw, item);
+    }
+
+private:
+    MainWindow *m_mw;
+};
+
+
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
@@ -184,11 +213,29 @@ UiController::UiController(Core *core)
     connect( QApplication::instance(),
              SIGNAL(focusChanged(QWidget*,QWidget*)),
             this, SLOT(widgetChanged(QWidget*,QWidget*)) );
+
+    setupActions();
 }
 
 UiController::~UiController()
 {
     delete d;
+}
+
+void UiController::setupActions()
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
+    if (d->defaultMainWindow->menuBar()->isNativeMenuBar()) {
+        KActionCollection* ac = d->defaultMainWindow->actionCollection();
+
+        // When running on an appmenu-enabled system, one cannot add widgets in the
+        // menubar corner. In this case, move area switcher to main toolbar.
+        KAction* switcherAction = new KAction(this);
+        switcherAction->setText(i18n("Area Switcher")); // For the toolbar edit dialog
+        switcherAction->setDefaultWidget(d->defaultMainWindow->areaSwitcher());
+        ac->addAction("area_switcher", switcherAction);
+    }
+#endif
 }
 
 void UiController::mainWindowDeleted(MainWindow* mw)
@@ -356,36 +403,50 @@ void UiController::cleanup()
     saveAllAreas(KGlobal::config());
 }
 
-void UiController::addNewToolView(MainWindow *mw)
+void UiController::selectNewToolViewToAdd(MainWindow *mw)
 {
     if (!mw || !mw->area())
         return;
     KDialog *dia = new KDialog(mw);
     dia->setCaption(i18n("Select Tool View to Add"));
     dia->setButtons(KDialog::Ok | KDialog::Cancel);
-    QListWidget *list = new QListWidget(dia);
+    NewToolViewListWidget *list = new NewToolViewListWidget(mw, dia);
 
+    list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     list->setSortingEnabled(true);
     for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
         it != d->factoryDocuments.constEnd(); ++it)
     {
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
         item->factory = it.key();
+        if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
+            // Disable item if the toolview is already present.
+            item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        }
         list->addItem(item);
     }
 
     list->setFocus();
+    connect(list, SIGNAL(addNewToolView(MainWindow*,QListWidgetItem*)), this, SLOT(addNewToolView(MainWindow*,QListWidgetItem*)));
     dia->setMainWidget(list);
-    if (dia->exec() == QDialog::Accepted && list->currentItem())
+    if (dia->exec() == QDialog::Accepted)
     {
-        ViewSelectorItem *current = static_cast<ViewSelectorItem*>(list->currentItem());
-        Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
-        Sublime::View *view = doc->createView();
-        mw->area()->addToolView(view,
-            Sublime::dockAreaToPosition(current->factory->defaultPosition()));
-        current->factory->viewCreated(view);
+        foreach (QListWidgetItem* item, list->selectedItems())
+        {
+            addNewToolView(mw, item);
+        }
     }
     delete dia;
+}
+
+void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
+{
+    ViewSelectorItem *current = static_cast<ViewSelectorItem*>(item);
+    Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
+    Sublime::View *view = doc->createView();
+    mw->area()->addToolView(view,
+        Sublime::dockAreaToPosition(current->factory->defaultPosition()));
+    current->factory->viewCreated(view);
 }
 
 void UiController::showSettingsDialog()
@@ -543,14 +604,18 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
-void UiController::addToolViewToDockArea(const QString& /*name*/,
-                                         IToolViewFactory* factory,
-                                         Qt::DockWidgetArea area)
+void UiController::addToolViewToDockArea(IToolViewFactory* factory, Qt::DockWidgetArea area)
 {
-    ///TODO: we should probably add a bool forcePosition member to
-    /// Area::addToolView(), to force adding at the given position.
-    Sublime::View* view = addToolViewToArea(factory, d->factoryDocuments[factory], activeArea());
-    activeArea()->moveToolView(view, Sublime::dockAreaToPosition(area));
+    addToolViewToArea(factory, d->factoryDocuments[factory], activeArea(), Sublime::dockAreaToPosition(area));
+}
+
+bool UiController::toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area)
+{
+    foreach (Sublime::View *view, doc->views()) {
+        if( area->toolViews().contains( view ) )
+            return true;
+    }
+    return false;
 }
 
 void UiController::addToolViewIfWanted(IToolViewFactory* factory,
@@ -565,12 +630,12 @@ void UiController::addToolViewIfWanted(IToolViewFactory* factory,
 
 Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
                                      Sublime::ToolDocument* doc,
-                                     Sublime::Area* area)
+                                     Sublime::Area* area, Sublime::Position p)
 {
     Sublime::View* view = doc->createView();
     area->addToolView(
         view,
-        Sublime::dockAreaToPosition(factory->defaultPosition()));
+        p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, SIGNAL(raise(Sublime::View*)),
             SLOT(raiseToolView(Sublime::View*)));
@@ -652,7 +717,5 @@ void UiController::assistantActionsChanged() {
 }
 
 
-
-
-
 #include "uicontroller.moc"
+#include "moc_uicontroller.cpp"

@@ -158,8 +158,9 @@ void VcsChangesView::setModel(QAbstractItemModel* model)
     QTreeView::setModel(model);
 }
 
-void VcsChangesView::openSelected(const QModelIndex& idx)
+void VcsChangesView::openSelected(const QModelIndex& index)
 {
+    QModelIndex idx = index.sibling(index.row(), 0);
     VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
     KUrl url = info.url();
     

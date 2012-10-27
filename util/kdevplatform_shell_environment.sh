@@ -18,7 +18,10 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-source ~/.bashrc
+if [ -e ~/.bashrc ]; then
+    # Since this runs as a replacement for the init-file, we need to chain in the 'real' bash-rc
+    source ~/.bashrc
+fi
 
 if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
@@ -84,7 +87,7 @@ function help! {
     if [ "$1" == "" ]; then
     echo "Standard commands:"
     echo "raise!                                 - Raise the window."
-    echo "sync!                                  - Synchronize the working directory with the currently open document."
+    echo "sync!                                  - Synchronize the working directory with the currently open document. See \"help! sync\""
     echo "open!   [file] ...                     - Open the file(s) within the attached application. See \"help! open\""
     echo "eopen!  [file] ...                     - Open the file(s) within an external application using kde-open."
     echo "create!  [file] [[text]]               - Create and open a new file."
@@ -93,10 +96,12 @@ function help! {
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive. See \"help! remote\""
     echo ""
     echo "help!                                  - Show help."
-    echo "help! remote                           - Show help about remote shell-integration through ssh."
-    echo "help! env                              - Show help about the environment."
+    echo "help! open                             - Show extended help about file opening commands."
+    echo "help! sync                             - Show extended help about path synchronization commands."
+    echo "help! remote                           - Show extended help about remote shell-integration through ssh."
+    echo "help! env                              - Show extended help about the environment."
     echo ""
-    echo "Commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
+    echo "Most commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
     fi
 
     if [ "$1" == "open" ]; then
@@ -114,8 +119,24 @@ function help! {
     echo "                                      file1 is opened in the left view, file2 in the right upper view, and file3 in the right lower view."
     echo "open! / file1                       - The active view is split horizontally."
     echo "                                    - The active document is kept in the left split-view, and file1 is opened in the right split-view."
+    echo ""
+    echo "Short forms: o! = open!, eo! = eopen!, c! = create!"
     fi
-    
+
+    if [ "$1" == "sync" ]; then
+    echo "Extended syncing:"
+    echo "sync!    [[project-name]]           - If no project-name is given, then the sync! command synchronizes to the currently active document."
+    echo "                                      If no document is active, then it synchronizes to the currently selected item in the project tree-view."
+    echo "                                      If a case-insensitive project name prefix is given, then it synchronizes to the base folder of the matching project."
+    echo "syncsel!                            - Synchronizes to the currently selected item in the project tree-view, independently of the active document."
+    echo "project! [[project-name]]           - Map from a path within the build directory to the corresponding path in the source directory."
+    echo "                                      If we're already in the source directory, map to the root of the surrounding project."
+    echo "bdir!    [[project-name]]           - Map from a path within the source directory to the corresponding path in the build directory."
+    echo "                                      If we're already in the build directory, map to the root of the build directory."
+    echo ""
+    echo "Short forms: s! = sync!, ss! = syncsel!, p! = project!, b! = bdir!"
+    fi
+
     if [ "$1" == "remote" ]; then
     echo "Extended remote commands:"
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
@@ -127,15 +148,23 @@ function help! {
     echo "                                       - The files will be COPIED to the client machine if required."
     echo "copytohost! [client path] [host path]  - Copy a file/directory through the fish protocol from the client machine th the host machine."
     echo "copytoclient! [host path] [client path]- Copy a file/directory through the fish protocol from the host machine to the client machine."
+    echo ""
+    echo "Short forms: e! = exec!, ce! = cexec!, cth! = copytohost!, ctc! = copytoclient!"
     fi
     
     if [ "$1" == "env" ]; then
+      echo "Environment management:"
+      echo "The environment can be used to store session-specific macros and generally manipulate the shell environment"
+      echo "for embedded shell sessions. The environment is sourced into the shell when the shell is initialized, and"
+      echo "whenever setenv! is called."
+      echo ""
       echo "env!                                 - List all available shell environment-ids for this session."
       echo "setenv! [id]                         - Set the shell environmnet-id for this session to the given id, or update the current one."
-      echo "showenv! [id]                        - Show the current shell environment or the one with the optionally given id."
       echo "editenv! [id]                        - Edit the current shell environment or the one with the optionally given id."
+      echo "showenv! [id]                        - Show the current shell environment or the one with the optionally given id."
+      echo ""
+      echo "Short forms: sev! = setenv!, ee! = editenv!, shenv! = showenv!"
     fi
-    
     echo ""
 }
 
@@ -147,6 +176,28 @@ function r! {
 
 function s! {
     sync! $@
+}
+
+function ss! {
+    syncsel!
+}
+
+function syncsel! {
+    sync! '[selection]'
+}
+
+function p! {
+    if [ "$@" ]; then
+        s! $@
+    fi
+    project!
+}
+
+function b! {
+    if [ "$@" ]; then
+        s! $@
+    fi
+    bdir!
 }
 
 function o! {
@@ -197,6 +248,10 @@ function ee! {
     editenv! $@
 }
 
+function shev! {
+    showenv! $@
+}
+
 # Internals:
 
 # Opens a document in internally in the application
@@ -244,7 +299,7 @@ function executeInAppSync {
 # Getter functions:
 
 function getActiveDocument {
-    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath
+    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath $@
 }
 
 function getOpenDocuments {
@@ -255,6 +310,24 @@ function raise! {
     qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
+function bdir! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
+    if [ "$TARG" ]; then
+        cd $TARG
+    else
+        echo "Got no path"
+    fi
+}
+
+function project! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
+    if [ "$TARG" ]; then
+        cd $TARG
+    else
+        echo "Got no path"
+    fi
+}
+
 
 # Main functions:
 
@@ -263,7 +336,7 @@ function raise! {
 }
 
 function sync! {
-    local P=$(getActiveDocument)
+    local P=$(getActiveDocument $@)
     if [ "$P" ]; then
         
         if [[ "$P" == fish://* ]]; then
@@ -306,8 +379,9 @@ function sync! {
                 return
             fi
         fi
-        
-        cd $(dirname $P)
+
+        [ -d "$P" ] || P=$(dirname "$P")
+        cd "$P"
     else
         echo "Got no path"
     fi
@@ -515,10 +589,6 @@ DBUS_SOCKET_TRANSFORMER=$KDEV_BASEDIR/kdev_dbus_socket_transformer
 # This configures the shell to kill background jobs when it is terminated
 shopt -s huponexit
 
-# TODO: This random number can lead to conflicts, but since only ssh notices these conflicts
-#       during forwarding, it is very hard to deal with them.
-export DBUS_FORWARDING_TCP_TARGET_PORT=$((5000+($RANDOM%50000)))
-
 export DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH=/tmp/dbus-forwarded-$USER-$APPLICATION_HOST
 
 export DBUS_FORWARDING_TCP_LOCAL_PORT=9000
@@ -622,7 +692,8 @@ function keepForwardingDBusFromTCPSocket {
 
 function ssh! {
     keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
-    
+    DBUS_FORWARDING_TCP_TARGET_PORT=$((5000+($RANDOM%50000)))
+
     ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
          " APPLICATION=$APPLICATION \
            KDEV_BASEDIR=$KDEV_BASEDIR \

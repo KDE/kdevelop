@@ -216,7 +216,12 @@ void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)
 KDevelop::ProjectBaseItem* ProjectItemLineEdit::baseItem() const
 {
     return m_base;
-    
+}
+
+KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
+{
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    return model->itemFromIndex(model->pathToIndex(KDevelop::splitWithEscaping(text(),'/', '\\')));
 }
 
 #include "projectitemlineedit.moc"

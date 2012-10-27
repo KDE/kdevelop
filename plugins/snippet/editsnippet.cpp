@@ -127,6 +127,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
 
 EditSnippet::~EditSnippet()
 {
+    delete m_ui;
 }
 
 void EditSnippet::setSnippetText( const QString& text )

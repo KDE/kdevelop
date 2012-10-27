@@ -22,6 +22,7 @@
 
 #include <QtGui/QWidget>
 
+class KActionCollection;
 class KDirOperator;
 class KUrlNavigator;
 class KFileItem;
@@ -30,12 +31,17 @@ class QString;
 class QMenu;
 class KUrl;
 class KDevFileManagerPlugin;
+class BookmarkHandler;
 
 class FileManager: public QWidget {
     Q_OBJECT
 public:
     FileManager(KDevFileManagerPlugin *plugin, QWidget* parent);
     QList<QAction*> toolBarActions() const;
+    KActionCollection* actionCollection() const;
+    KDirOperator* dirOperator() const;
+    KDevFileManagerPlugin* plugin() const;
+
 private slots:
     void openFile(const KFileItem&);
     void gotoUrl(const KUrl&);
@@ -43,6 +49,7 @@ private slots:
     void syncCurrentDocumentDirectory();
     void fillContextMenu(KFileItem item, QMenu *menu);
     void createNewFile();
+
 private:
     void setupActions();
     QList<QAction*> tbActions;
@@ -50,6 +57,9 @@ private:
     QList<QAction*> contextActions;
     KDirOperator* dirop;
     KUrlNavigator* urlnav;
+    BookmarkHandler *m_bookmarkHandler;
+    KActionCollection *m_actionCollection;
+    KDevFileManagerPlugin *m_plugin;
 };
 
 #endif

@@ -61,7 +61,7 @@ const QString SourceFormatterController::styleContentKey = "Content";
 const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
-		: ISourceFormatterController(parent)
+		: ISourceFormatterController(parent), m_enabled(true)
 {
 	setObjectName("SourceFormatterController");
 	setComponentData(KComponentData("kdevsourceformatter"));
@@ -152,7 +152,7 @@ static ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mi
 
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
 {
-	if( !isMimeTypeSupported( mime ) ) {
+	if( !m_enabled || !isMimeTypeSupported( mime ) ) {
 		return 0;
 	}
 	QString formatter = configuration().readEntry( mime->name(), "" );
@@ -570,6 +570,16 @@ SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeTyp
 		return s;
 	}
 	return SourceFormatterStyle();
+}
+
+void SourceFormatterController::disableSourceFormatting(bool disable)
+{
+	m_enabled = !disable;
+}
+
+bool SourceFormatterController::sourceFormattingEnabled()
+{
+	return m_enabled;
 }
 
 /*

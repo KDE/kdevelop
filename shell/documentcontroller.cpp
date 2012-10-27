@@ -46,6 +46,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iselectioncontroller.h>
+#include <interfaces/context.h>
 #include <project/projectmodel.h>
 
 #include "core.h"
@@ -60,7 +62,7 @@ Boston, MA 02110-1301, USA.
 
 #include <config-kdevplatform.h>
 
-#if HAVE_KOMPARE
+#ifdef HAVE_KOMPARE
     #include "patchdocument.h"
 #endif
 
@@ -245,7 +247,7 @@ struct DocumentControllerPrivate {
             else
             {
                 //make sure the URL exists
-                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ) )
                 {
                     kDebug() << "cannot find URL:" << url.url();
                     return 0;
@@ -565,7 +567,7 @@ DocumentController::DocumentController( QObject *parent )
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
-#if HAVE_KOMPARE    
+#ifdef HAVE_KOMPARE
     registerDocumentForMimetype("text/x-patch", new PatchDocumentFactory);
 #endif
 }
@@ -802,7 +804,7 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
 {
     if (mode & IDocument::Silent) {
         foreach (IDocument* doc, modifiedDocuments(list)) {
-            if( !doc->save(mode) )
+            if( !DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save(mode) )
             {
                 if( doc )
                     qWarning() << "!! Could not save document:" << doc->url();
@@ -892,7 +894,8 @@ void DocumentController::reloadAllDocuments()
             return;
 
         foreach (IDocument* doc, views)
-            doc->reload();
+            if(!isEmptyDocumentUrl(doc->url()))
+                doc->reload();
     }
 }
 
@@ -943,11 +946,28 @@ IDocument* DocumentController::activeDocument() const
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 
-QString DocumentController::activeDocumentPath() const
+QString DocumentController::activeDocumentPath( QString target ) const
 {
+    if(target.size()) {
+        foreach(IProject* project, Core::self()->projectController()->projects()) {
+            if(project->name().startsWith(target, Qt::CaseInsensitive)) {
+                return project->folder().pathOrUrl() + "/.";
+            }
+        }
+    }
     IDocument* doc = activeDocument();
-    if(!doc)
+    if(!doc || target == "[selection]")
+    {
+        Context* selection = ICore::self()->selectionController()->currentSelection();
+        if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
+        {
+            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+            if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
+                ret += "/.";
+            return  ret;
+        }
         return QString();
+    }
     return doc->url().pathOrUrl();
 }
 
@@ -1021,6 +1041,8 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
     Sublime::AreaIndex* areaIndex = area->rootIndex();
 
+    QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->getTopViews();
+    
     if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
         areaIndex = area->indexOf(activeView);
 
@@ -1034,7 +1056,7 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     
     // Required because sublime sometimes doesn't update correctly when the area-index contents has been changed
     // (especially when views have been moved to other indices, through unsplit, split, etc.)
-    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews();
+    static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews(topViews);
     
     return ret;
 }
@@ -1096,7 +1118,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             foreach(QStringList group, groups)
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
         }else{
-            while(index->isSplitted())
+            while(index->isSplit())
                 index = index->first();
             // Simply open the document into the area index
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
@@ -1139,13 +1161,13 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     
     Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == "/" ? Qt::Horizontal : Qt::Vertical;
     
-    if(!index->isSplitted())
+    if(!index->isSplit())
     {
         kDebug() << "splitting " << index << "orientation" << orientation << "to second" << activeViewToSecondChild;
         index->split(orientation, activeViewToSecondChild);
     }else{
         index->setOrientation(orientation);
-        kDebug() << "WARNING: Area is already splitted (shouldn't be)" << urlsWithSeparators;
+        kDebug() << "WARNING: Area is already split (shouldn't be)" << urlsWithSeparators;
     }
     
     openDocumentsWithSplitSeparators( index->first(), urlsWithSeparators.mid(0, pickSeparator) , isFirstView );
@@ -1154,12 +1176,12 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     
     // Clean up the child-indices, because document-loading may fail
     
-    if(!index->first()->viewCount() && !index->first()->isSplitted())
+    if(!index->first()->viewCount() && !index->first()->isSplit())
     {
         kDebug() << "unsplitting first";
         index->unsplit(index->first());
     }
-    else if(!index->second()->viewCount() && !index->second()->isSplitted())
+    else if(!index->second()->viewCount() && !index->second()->isSplit())
     {
         kDebug() << "unsplitting second";
         index->unsplit(index->second());

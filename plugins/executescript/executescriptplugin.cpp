@@ -58,6 +58,7 @@ QString ExecuteScriptPlugin::environmentGroupEntry = "EnvironmentGroup";
 //QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
 QString ExecuteScriptPlugin::userIdToRunEntry = "User Id to Run";
 QString ExecuteScriptPlugin::projectTargetEntry = "Project Target";
+QString ExecuteScriptPlugin::outputFilteringEntry = "Output Filtering Mode";
 
 using namespace KDevelop;
 
@@ -71,7 +72,7 @@ ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
-    m_configType->addLauncher( new ScriptAppLauncher() );
+    m_configType->addLauncher( new ScriptAppLauncher( this ) );
     kDebug() << "adding script launch config";
     core()->runController()->addConfigurationType( m_configType );
 }
@@ -98,20 +99,7 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     }
     KConfigGroup grp = cfg->config();
 
-    if( grp.readEntry(ExecuteScriptPlugin::isExecutableEntry, false ) )
-    {
-        script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
-    } else
-    {
-        QStringList prjitem = grp.readEntry( ExecuteScriptPlugin::projectTargetEntry, QStringList() );
-        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( model->itemFromIndex(
-        model->pathToIndex(prjitem) ) );
-        if( item && item->file() )
-        {
-            script = item->file()->url();
-        }
-    }
+    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
@@ -192,6 +180,17 @@ QString ExecuteScriptPlugin::environmentGroup( KDevelop::ILaunchConfiguration* c
     
     return cfg->config().readEntry( ExecuteScriptPlugin::environmentGroupEntry, "" );
 }
+
+int ExecuteScriptPlugin::outputFilterModeId( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return 0;
+    }
+
+    return cfg->config().readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0 );
+}
+
 
 
 QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, QString& err ) const

@@ -10,7 +10,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     ipatchexporter.cpp
     iassistant.cpp
     context.cpp
-	ipatchdocument.cpp
+    ipatchdocument.cpp
     iplugin.cpp
     idocument.cpp
     icore.cpp
@@ -37,14 +37,14 @@ set(kdevplatforminterfaces_LIB_SRCS
     ipartcontroller.cpp
     launchconfigurationpage.cpp
     launchconfigurationtype.cpp
-	ilauncher.cpp
-	ilaunchconfiguration.cpp
-	ilaunchmode.cpp
-	iprojectprovider.cpp
-	
-	ilanguagecheck.cpp
-	ilanguagecheckprovider.cpp
-	ibuddydocumentfinder.cpp
+    ilauncher.cpp
+    ilaunchconfiguration.cpp
+    ilaunchmode.cpp
+    iprojectprovider.cpp
+    ibuddydocumentfinder.cpp
+    itemplateprovider.cpp
+    itestsuite.cpp
+    itestcontroller.cpp
 )
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
@@ -112,6 +112,9 @@ install(FILES
     ilanguagecheck.h
     ilanguagecheckprovider.h
     ibuddydocumentfinder.h
+    itemplateprovider.h
+    itestsuite.h
+    itestcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

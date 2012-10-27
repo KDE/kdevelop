@@ -32,6 +32,7 @@ class KConfigGroup;
 
 namespace KDevelop
 {
+class IProject;
 class ILaunchConfiguration;
 class ProjectBaseItem;
 class ILauncher;

@@ -19,6 +19,7 @@
 */
 
 #include "scriptappjob.h"
+#include "executescriptplugin.h"
 
 #include <QFileInfo>
 
@@ -31,6 +32,7 @@
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
@@ -44,7 +46,7 @@
 
 #include "iexecutescriptplugin.h"
 
-ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
+ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputJob( parent ), proc(0)
 {
     kDebug() << "creating script app job";
@@ -104,13 +106,17 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         return;
     }
 
+    KDevelop::OutputModel::OutputFilterStrategy currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
+
     proc = new KProcess( this );
     
     lineMaker = new KDevelop::ProcessLineMaker( proc, this );
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::ExecuteScriptOutputModel(), KDevelop::IOutputView::TakeOwnership );
+    setModel( new KDevelop::ExecuteScriptOutputModel );
+    model()->setFilteringStrategy(currentFilterMode);
+    setDelegate( new KDevelop::OutputDelegate );
     
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
@@ -130,7 +136,11 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     QStringList program;
     if (!remoteHost.isEmpty()) {
         program << "ssh";
-        program << remoteHost;
+        QStringList parts = remoteHost.split(":");
+        program << parts.first();
+        if (parts.length() > 1) {
+            program << "-p "+parts.at(1);
+        }
     }
     program << interpreter;
     program << script.toLocalFile();
@@ -175,16 +185,19 @@ bool ScriptAppJob::doKill()
 void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 {
     lineMaker->flushBuffers();
-    if (exitCode == 0 && status == QProcess::NormalExit)
+
+    if (exitCode == 0 && status == QProcess::NormalExit) {
         appendLine( i18n("*** Exited normally ***") );
-    else
-        if (status == QProcess::NormalExit)
-            appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
-        else 
-            if (error() == KJob::KilledJobError)
-                appendLine( i18n("*** Process aborted ***") );
-            else
-                appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
+    } else if (status == QProcess::NormalExit) {
+        appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
+        setError(1);
+    } else if (error() == KJob::KilledJobError) {
+        appendLine( i18n("*** Process aborted ***") );
+        setError(2);
+    } else {
+        appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
+        setError(3);
+    }
     kDebug() << "Process done";
     emitResult();
 }

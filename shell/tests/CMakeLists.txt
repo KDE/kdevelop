@@ -44,3 +44,7 @@ target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KD
 #set( plugincontrollertest_SRCS plugincontrollertest.cpp )
 #kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
 #target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+
+set( testcontrollertest_SRCS testcontrollertest.cpp )
+kde4_add_unit_test(shell-testcontrollertest ${testcontrollertest_SRCS})
+target_link_libraries(shell-testcontrollertest ${QT_QTTEST_LIBRARY} kdevplatformtests)

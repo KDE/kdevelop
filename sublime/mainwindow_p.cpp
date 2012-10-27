@@ -47,6 +47,40 @@
 #include <KSelectAction>
 #include <ktoggleaction.h>
 
+class IdealToolBar : public QToolBar
+{
+    Q_OBJECT
+    public:
+        explicit IdealToolBar(const QString& title, Sublime::IdealButtonBarWidget* buttons, QMainWindow* parent)
+            : QToolBar(title, parent), m_buttons(buttons)
+        {
+            setMovable(false);
+            setFloatable(false);
+            setObjectName(title);
+            layout()->setMargin(0);
+            
+            addWidget(m_buttons);
+        }
+
+        void hideWhenEmpty()
+        {
+            refresh();
+            connect(this, SIGNAL(visibilityChanged(bool)), SLOT(refresh()));
+            connect(m_buttons, SIGNAL(emptyChanged()), SLOT(refresh()));
+        }
+
+    public slots:
+        void refresh()
+        {
+            if(m_buttons->isEmpty()==isVisible()) {
+                setVisible(!m_buttons->isEmpty());
+            }
+        }
+
+    private:
+        Sublime::IdealButtonBarWidget* m_buttons;
+};
+
 namespace Sublime {
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
@@ -98,31 +132,13 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     idealController = new IdealController(m_mainWindow);
 
-    QToolBar *leftToolBar = new QToolBar(i18n("Left Button Bar"), m_mainWindow);
-    leftToolBar->setObjectName("left_button_bar");
-    leftToolBar->setMovable(false);
-    leftToolBar->setFloatable(false);
-    leftToolBar->layout()->setMargin(0);
-    leftToolBar->addWidget(idealController->leftBarWidget);
-    idealController->leftBarWidget->show();
+    IdealToolBar* leftToolBar = new IdealToolBar(i18n("Left Button Bar"), idealController->leftBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
 
-    QToolBar *rightToolBar = new QToolBar(i18n("Right Button Bar"), m_mainWindow);
-    rightToolBar->setObjectName("right_button_bar");
-    rightToolBar->setMovable(false);
-    rightToolBar->setFloatable(false);
-    rightToolBar->layout()->setMargin(0);
-    rightToolBar->addWidget(idealController->rightBarWidget);
-    idealController->rightBarWidget->show();
+    IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
 
-    QToolBar *bottomToolBar = new QToolBar(i18n("Bottom Button Bar"), m_mainWindow);
-    bottomToolBar->setObjectName("bottom_button_bar");
-    bottomToolBar->setMovable(false);
-    bottomToolBar->setFloatable(false);
-    bottomToolBar->layout()->setMargin(0);
-    bottomToolBar->addWidget(idealController->bottomBarWidget);
-    idealController->bottomBarWidget->show();
+    IdealToolBar* bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
     m_mainWindow->addToolBar(Qt::BottomToolBarArea, bottomToolBar);
 
     // adymo: intentionally do not add a toolbar for top buttonbar
@@ -257,7 +273,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         Q_ASSERT(splitter);
     }
 
-    if (index->isSplitted()) //this is a visible splitter
+    if (index->isSplit()) //this is a visible splitter
         splitter->setOrientation(index->orientation());
     else
     {
@@ -267,6 +283,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
+            kDebug() << "deleting" << widget;
             widget->setParent(0);
             delete widget;
         }
@@ -289,9 +306,13 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         container->show();
 
         int position = 0;
+        bool hadActiveView = false;
+        Sublime::View* activeView = d->activeView;
+        
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
+            
             if (widget)
             {
                 if(!container->hasWidget(widget))
@@ -300,7 +321,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->viewContainers[view] = container;
                     d->widgetToView[widget] = view;
                 }
-                if(d->activeView == view)
+                if(activeView == view)
+                {
+                    hadActiveView = true;
+                    container->setCurrentWidget(widget);
+                }else if(topViews.contains(view) && !hadActiveView)
                     container->setCurrentWidget(widget);
             }
             position++;
@@ -309,9 +334,9 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     return Area::ContinueWalker;
 }
 
-void MainWindowPrivate::reconstructViews()
+void MainWindowPrivate::reconstructViews(QList<View*> topViews)
 {
-    ViewCreator viewCreator(this);
+    ViewCreator viewCreator(this, topViews);
     area->walkViews(viewCreator, area->rootIndex());
     setBackgroundVisible(area->views().isEmpty());
 }
@@ -442,7 +467,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         for(Sublime::AreaIndex* current = index; current; current = current->parent())
         {
         QSplitter *splitter = m_indexSplitters[current];
-        if (current->isSplitted() && splitter)
+        if (current->isSplit() && splitter)
         {
             // Also update the orientation
             splitter->setOrientation(current->orientation());
@@ -750,12 +775,16 @@ void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
 }
 
 QSize AreaTabWidget::sizeHint() const {
+    QMenuBar* menuBar = qobject_cast<QMenuBar*>(parent());
+    if ( !menuBar ) {
+        return QWidget::sizeHint();
+    }
     //Resize to hold the whole length up to the menu
     static bool zeroSizeHint = false;
     if ( zeroSizeHint )
         return QSize();
     zeroSizeHint = true;
-    int available = bar()->parentWidget()->width() - bar()->sizeHint().width() - 10;
+    int available = menuBar->parentWidget()->width() - menuBar->sizeHint().width() - 10;
     zeroSizeHint = false;
     QSize orig = tabBar->sizeHint();
     int addFade = available - orig.width();
@@ -774,7 +803,7 @@ QSize AreaTabWidget::sizeHint() const {
     return orig;
 }
 
-AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ), areaSideWidget(0) {
+AreaTabWidget::AreaTabWidget ( QWidget* parent ) : QWidget ( parent ), areaSideWidget(0) {
     m_layout = new QHBoxLayout ( this );
     m_layout->setAlignment ( Qt::AlignRight );
     tabBar = new AreaTabBar ( this );
@@ -819,6 +848,7 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     setExpanding ( false );
     setLayoutDirection ( Qt::RightToLeft );
     setDrawBase ( false );
+    setUsesScrollButtons ( false );
     setFocusPolicy( Qt::NoFocus );
     QPalette pal = palette();
 }
@@ -855,7 +885,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
     
     AreaIndex* putToIndex = area->rootIndex();
     QSplitter* splitter = m_indexSplitters[putToIndex];
-    while(putToIndex->isSplitted()) {
+    while(putToIndex->isSplit()) {
         putToIndex = putToIndex->first();
         splitter = m_indexSplitters[putToIndex];
     }
@@ -876,4 +906,5 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 }
 
 #include "mainwindow_p.moc"
+#include "moc_mainwindow_p.cpp"
 

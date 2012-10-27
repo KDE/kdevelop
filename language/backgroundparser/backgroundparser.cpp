@@ -61,6 +61,25 @@
 
 const bool separateThreadForHighPriority = true;
 
+namespace {
+/**
+ * @return true if @p url is non-empty, valid and has a clean path, false otherwise.
+ */
+inline bool isValidURL(const KDevelop::IndexedString& url)
+{
+    if (url.isEmpty()) {
+        return false;
+    }
+    KUrl original = url.toUrl();
+    if (!original.isValid()) {
+        return false;
+    }
+    KUrl cleaned = original;
+    cleaned.cleanPath();
+    return original == cleaned;
+}
+}
+
 namespace KDevelop
 {
 
@@ -97,7 +116,7 @@ public:
         m_weaver.finish();
 
         // Release dequeued jobs
-        QHashIterator<KUrl, ParseJob*> it = m_parseJobs;
+        QHashIterator<IndexedString, ParseJob*> it = m_parseJobs;
         while (it.hasNext()) {
             it.next();
             delete it.value();
@@ -123,14 +142,14 @@ public:
         }
 
         bool done = false;
-        for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
+        for (QMap<int, QSet<IndexedString> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
 
             if(it1.key() > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
-            for(QSet<KUrl>::Iterator it = it1.value().begin(); it != it1.value().end();) {
+            for(QSet<IndexedString>::Iterator it = it1.value().begin(); it != it1.value().end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
                 if(m_parseJobs.count() >= m_threads+1 || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority) )
                     break;
@@ -156,7 +175,7 @@ public:
                     continue;
                 }
 
-                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                kDebug(9505) << "creating parse-job" << it->toUrl() << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
@@ -211,12 +230,14 @@ public:
         }
     }
 
-    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
+    ParseJob* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
-        QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
+        ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
+        KUrl kUrl = url.toUrl();
+        QList<ILanguage*> languages = m_languageController->languagesForUrl(kUrl);
         foreach (ILanguage* language, languages) {
             if(!language) {
-                kWarning() << "got zero language for" << url;
+                kWarning() << "got zero language for" << kUrl;
                 continue;
             }
             if(!language->languageSupport()) {
@@ -248,15 +269,15 @@ public:
         }
 
         if(languages.isEmpty())
-            kDebug() << "found no languages for url" << url;
+            kDebug() << "found no languages for url" << kUrl;
         else
-            kDebug() << "could not create parse-job for url" << url;
+            kDebug() << "could not create parse-job for url" << kUrl;
 
         //Notify that we failed
         typedef QWeakPointer<QObject> Notify;
         foreach(const Notify& n, notifyWhenReady)
             if(n)
-                QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
+                QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
         return 0;
     }
@@ -378,11 +399,11 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         }
     };
     // A list of documents that are planned to be parsed, and their priority
-    QHash<KUrl, DocumentParsePlan > m_documents;
+    QHash<IndexedString, DocumentParsePlan > m_documents;
     // The documents ordered by priority
-    QMap<int, QSet<KUrl> > m_documentsForPriority;
+    QMap<int, QSet<IndexedString> > m_documentsForPriority;
     // Currently running parse jobs
-    QHash<KUrl, ParseJob*> m_parseJobs;
+    QHash<IndexedString, ParseJob*> m_parseJobs;
     // A change tracker for each managed document
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
     // The url for each managed document. Those may temporarily differ from the real url.
@@ -444,7 +465,7 @@ void BackgroundParser::clear(QObject* parent)
 {
     QMutexLocker lock(&d->m_mutex);
 
-    QHashIterator<KUrl, ParseJob*> it = d->m_parseJobs;
+    QHashIterator<IndexedString, ParseJob*> it = d->m_parseJobs;
     while (it.hasNext()) {
         it.next();
         if (it.value()->parent() == parent) {
@@ -468,7 +489,7 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
     QMutexLocker lock(&d->m_mutex);
-    for(QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
+    for(QHash<IndexedString, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
 
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
@@ -492,33 +513,30 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     }
 }
 
-void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags)
+void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags)
 {
-//     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
-    KUrl cleanedUrl = url;
-    cleanedUrl.cleanPath();
+//     kDebug(9505) << "BackgroundParser::addDocument" << url.toUrl();
+    Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     {
-        Q_ASSERT(cleanedUrl.isValid());
-
         BackgroundParserPrivate::DocumentParseTarget target;
         target.priority = priority;
         target.features = features;
         target.sequentialProcessingFlags = flags;
         target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
 
-        QHash<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(cleanedUrl);
+        QHash<IndexedString, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
 
-            d->m_documentsForPriority[it.value().priority()].remove(cleanedUrl);
+            d->m_documentsForPriority[it.value().priority()].remove(url);
             it.value().targets << target;
-            d->m_documentsForPriority[it.value().priority()].insert(cleanedUrl);
+            d->m_documentsForPriority[it.value().priority()].insert(url);
         }else{
 //             kDebug(9505) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
-            d->m_documents[cleanedUrl].targets << target;
-            d->m_documentsForPriority[d->m_documents[cleanedUrl].priority()].insert(cleanedUrl);
+            d->m_documents[url].targets << target;
+            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         }
 
@@ -526,22 +544,16 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
     }
 }
 
-void BackgroundParser::addDocumentList(const KUrl::List &urls, TopDUContext::Features features, int priority)
+void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyWhenReady)
 {
-    foreach (const KUrl &url, urls)
-        addDocument(url, features, priority);
-}
+    Q_ASSERT(isValidURL(url));
 
-void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
-{
     QMutexLocker lock(&d->m_mutex);
 
-    Q_ASSERT(url.isValid());
-
     if(d->m_documents.contains(url)) {
-        
+
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
-        
+
         foreach(const BackgroundParserPrivate::DocumentParseTarget& target, d->m_documents[url].targets) {
             if(target.notifyWhenReady.data() == notifyWhenReady) {
                 d->m_documents[url].targets.removeAll(target);
@@ -578,11 +590,11 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         {
             {
                 QMutexLocker lock(&d->m_mutex);
-    
-                d->m_parseJobs.remove(parseJob->document().str());
-    
+
+                d->m_parseJobs.remove(parseJob->document());
+
                 d->m_jobProgress.remove(parseJob);
-    
+
                 ++d->m_doneParseJobs;
                 updateProgressBar();
             }
@@ -605,12 +617,16 @@ void BackgroundParser::enableProcessing()
     setNeededPriority(WorstPriority);
 }
 
-int BackgroundParser::priorityForDocument(const KUrl& url) const {
+int BackgroundParser::priorityForDocument(const IndexedString& url) const
+{
+    Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents[url].priority();
 }
 
-bool BackgroundParser::isQueued(KUrl url) const {
+bool BackgroundParser::isQueued(const IndexedString& url) const
+{
+    Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents.contains(url);
 }
@@ -664,15 +680,12 @@ ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
     return &d->m_dependencyPolicy;
 }
 
-ParseJob* BackgroundParser::parseJobForDocument(const KUrl& document) const
+ParseJob* BackgroundParser::parseJobForDocument(const IndexedString& document) const
 {
+    Q_ASSERT(isValidURL(document));
+
     QMutexLocker lock(&d->m_mutex);
-
-    if (d->m_parseJobs.contains(document)) {
-        return d->m_parseJobs[document];
-    }
-
-    return 0;
+    return d->m_parseJobs.value(document, 0);
 }
 
 void BackgroundParser::setThreadCount(int threadCount)
@@ -705,8 +718,15 @@ QList< IndexedString > BackgroundParser::managedDocuments()
 
 DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedString& url) const
 {
+    if (url.isEmpty()) {
+        // this happens e.g. when setting the final location of a problem that is not
+        // yet associated with a top ctx.
+        return 0;
+    }
+    Q_ASSERT(isValidURL(url));
+
     QMutexLocker l(&d->m_mutex);
-    
+
     QHash< IndexedString, DocumentChangeTracker* >::iterator it = d->m_managed.find(url);
     if(it != d->m_managed.end())
         return *it;
@@ -714,22 +734,22 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
         return 0;
 }
 
-void BackgroundParser::documentClosed ( IDocument* document )
+void BackgroundParser::documentClosed(IDocument* document)
 {
     QMutexLocker l(&d->m_mutex);
-    
+
     if(document->textDocument())
     {
         KTextEditor::Document* textDocument = document->textDocument();
-        
+
         if(!d->m_managedTextDocumentUrls.contains(textDocument))
             return; // Probably the document had an invalid url, and thus it wasn't added to the background parser
-        
+
         Q_ASSERT(d->m_managedTextDocumentUrls.contains(textDocument));
-        
+
         IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
         Q_ASSERT(d->m_managed.contains(url));
-        
+
         kDebug() << "removing" << url.str() << "from background parser";
         delete d->m_managed[url];
         d->m_managedTextDocumentUrls.remove(textDocument);

@@ -79,6 +79,7 @@ K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki1
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile("kdevappwizard.rc");
 
     m_newFromTemplate = actionCollection()->addAction("project_new");
@@ -223,10 +224,13 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QString templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".zip");
-    if( templateArchive.isEmpty() )
+    QString templateArchive;
+    foreach (const QString& archive, componentData().dirs()->findAllResources("apptemplates"))
     {
-        templateArchive = componentData().dirs()->findResource("apptemplates", templateName + ".tar.bz2");
+        if (QFileInfo(archive).baseName() == templateName)
+        {
+            templateArchive = archive;
+        }
     }
 
     kDebug() << "Using archive:" << templateArchive;
@@ -392,7 +396,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            QString newdest = dest + '/' + file->name();
+            QString newdest = dest + '/' + KMacroExpander::expandMacros(file->name(), m_variables);
             if( !QFileInfo( newdest ).exists() )
             {
                 QDir::root().mkdir( newdest  );
@@ -467,5 +471,45 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     ext.addAction(KDevelop::ContextMenuExtension::ProjectGroup, m_newFromTemplate);
     return ext;
 }
+
+QAbstractItemModel* AppWizardPlugin::templatesModel() const
+{
+    return m_templatesModel;
+}
+
+QString AppWizardPlugin::knsConfigurationFile() const
+{
+    return "kdevappwizard.knsrc";
+}
+
+QStringList AppWizardPlugin::supportedMimeTypes() const
+{
+    QStringList types;
+    types << "application/x-desktop";
+    types << "application/x-bzip-compressed-tar";
+    types << "application/zip";
+    return types;
+}
+
+QIcon AppWizardPlugin::icon() const
+{
+    return KIcon("project-development-new-template");
+}
+
+QString AppWizardPlugin::name() const
+{
+    return i18n("Project Templates");
+}
+
+void AppWizardPlugin::loadTemplate(const QString& fileName)
+{
+    m_templatesModel->loadTemplateFile(fileName);
+}
+
+void AppWizardPlugin::reload()
+{
+    m_templatesModel->refresh();
+}
+
 
 #include "appwizardplugin.moc"

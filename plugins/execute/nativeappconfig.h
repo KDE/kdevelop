@@ -92,6 +92,7 @@ public:
     QMenu* launcherSuggestions();
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
+
 public slots:
     void suggestionTriggered();
 };

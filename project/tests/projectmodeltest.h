@@ -23,6 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QModelIndex>
 
+class ProjectProxyModel;
 namespace KDevelop
 {
 class ProjectModel;
@@ -51,12 +52,14 @@ private slots:
     void testAddItemInThread();
     void testItemsForUrl();
     void testItemsForUrl_data();
+    void testProjectProxyModel();
 
     // benchmarking
     void testDeleteLots();
 private:
     KDevelop::ProjectModel* model;
     ModelTest* modelTest;
+    ProjectProxyModel* proxy;
 };
 
 Q_DECLARE_METATYPE( QModelIndex )

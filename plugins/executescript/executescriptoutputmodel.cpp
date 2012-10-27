@@ -27,7 +27,7 @@
 
 namespace KDevelop {
 
-ExecuteScriptOutputModel::ExecuteScriptOutputModel(): OutputModel()
+ExecuteScriptOutputModel::ExecuteScriptOutputModel(QObject* parent): OutputModel(parent)
 {
     kDebug() << "Creating script output model";
 

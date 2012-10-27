@@ -29,6 +29,7 @@
 
 #include <KDE/KTextEditor/Document>
 #include <KDE/KTextEditor/View>
+#include <KLocalizedString>
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
@@ -204,7 +205,7 @@ public:
 
     VariablesRoot* root() const { return universe_; }
     Watches* watches() const { return universe_->watches(); }
-    Locals* locals(const QString &name = "Locals") const { return universe_->locals(name); }
+    Locals* locals(const QString &name = i18n("Locals")) const { return universe_->locals(name); }
     QHash<QString, Locals*> allLocals() const { return universe_->allLocals(); }
 
 public Q_SLOTS:

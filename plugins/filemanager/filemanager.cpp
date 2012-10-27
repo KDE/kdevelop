@@ -38,6 +38,7 @@
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
+#include <KActionMenu>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -49,11 +50,11 @@
 #include "../openwith/iopenwith.h"
 
 #include "kdevfilemanagerplugin.h"
+#include "bookmarkhandler.h"
 
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
-    :QWidget(parent)
+    : QWidget(parent), m_plugin(plugin)
 {
-    Q_UNUSED( plugin );
     setObjectName("FileManager");
     setWindowIcon(SmallIcon("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));
@@ -75,7 +76,16 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
     connect( dirop, SIGNAL(fileSelected(KFileItem)), this, SLOT(openFile(KFileItem)) );
 
+
+    // includes some actions, but not hooked into the shortcut dialog atm
+    m_actionCollection = new KActionCollection(this);
+    m_actionCollection->addAssociatedWidget(this);
+
     setupActions();
+
+    // Connect the bookmark handler
+    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(gotoUrl(KUrl)));
+    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(updateNav(KUrl)));
 }
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
@@ -116,6 +126,11 @@ void FileManager::updateNav( const KUrl& url )
 
 void FileManager::setupActions()
 {
+    KActionMenu *acmBookmarks = new KActionMenu(KIcon("bookmarks"), i18n("Bookmarks"), this);
+    acmBookmarks->setDelayed(false);
+    m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
+    acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
     KAction* action = new KAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
@@ -126,6 +141,7 @@ void FileManager::setupActions()
     tbActions << (dirop->actionCollection()->action("home"));
     tbActions << (dirop->actionCollection()->action("forward"));
     tbActions << (dirop->actionCollection()->action("reload"));
+    tbActions << acmBookmarks;
     tbActions << action;
     tbActions << (dirop->actionCollection()->action("sorting menu"));
     tbActions << (dirop->actionCollection()->action("show hidden"));
@@ -172,5 +188,23 @@ QList<QAction*> FileManager::toolBarActions() const
 {
     return tbActions;
 }
+
+KActionCollection* FileManager::actionCollection() const
+{
+    return m_actionCollection;
+}
+
+KDirOperator* FileManager::dirOperator() const
+{
+    return dirop;
+}
+
+KDevFileManagerPlugin* FileManager::plugin() const
+{
+    return m_plugin;
+}
+
+
+
 
 #include "filemanager.moc"

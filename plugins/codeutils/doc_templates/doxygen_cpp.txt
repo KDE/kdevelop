@@ -1,0 +1,10 @@
+/**
+ * @brief ${% templatetag openbrace %}{{ brief }}{% templatetag closebrace %}
+ * 
+{% for arg in function.arguments %}
+ * @param {{ arg.name }} ${p_{{arg.name}}:...}{% if arg.value %} Defaults to {{ arg.value }}.{% endif %}
+{% endfor %}
+{% if function.returnType %}
+ * @return {{ function.returnType }}
+{% endif %}
+ */

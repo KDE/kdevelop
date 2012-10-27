@@ -64,9 +64,9 @@ public:
                                     = KDevelop::IOutputView::AllowUserClose );
 
     void raiseOutput( int id );
-    void setModel( int id, QAbstractItemModel*, Ownership takeOwnership );
 
-    void setDelegate( int id, QAbstractItemDelegate*, Ownership takeOwnership );
+    void setModel( int outputId, QAbstractItemModel* model );
+    void setDelegate( int outputId, QAbstractItemDelegate* delegate );
 
     OutputWidget* outputWidgetForId( int outputId ) const;
 

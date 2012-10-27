@@ -54,6 +54,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		virtual bool isMimeTypeSupported(const KMimeType::Ptr &mime) = 0;
 
 		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime ) = 0;
+
+		///Set whether or not source formatting is disabled with \arg disable
+		virtual void disableSourceFormatting(bool disable) = 0;
+		///\return Whether or not source formatting is enabled
+		virtual bool sourceFormattingEnabled() = 0;
 };
 
 }

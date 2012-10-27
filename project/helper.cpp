@@ -112,3 +112,22 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname,
     KIO::CopyJob* job=KIO::move(oldname, newname);
     return KIO::NetAccess::synchronousRun(job, 0);
 }
+
+bool KDevelop::copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target)
+{
+    IPlugin* vcsplugin=project->versionControlPlugin();
+    if(vcsplugin) {
+        IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
+
+        // We have a vcs and the file/folder is controller, need to make the rename through vcs
+        if(vcs->isVersionControlled(source)) {
+            VcsJob* job=vcs->copy(source, target);
+            if(job) {
+                return job->exec();
+            }
+        }
+    }
+    // Fallback for the case of no vcs, or not-vcs-managed file/folder
+    KIO::CopyJob* job=KIO::copy(source, target);
+    return KIO::NetAccess::synchronousRun(job, 0);
+}

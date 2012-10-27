@@ -329,3 +329,9 @@ uint IndexedString::indexForString(const QString& str, uint hash) {
 }
 
 }
+
+QDebug operator<<(QDebug s, const KDevelop::IndexedString& string)
+{
+  s.nospace() << string.str();
+  return s.space();
+}

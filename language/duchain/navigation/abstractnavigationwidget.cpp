@@ -63,6 +63,9 @@ QSize AbstractNavigationWidget::sizeHint() const
   if(m_browser) {
     updateIdealSize();
     QSize ret = QSize(qMin(m_idealTextSize.width(), maxNavigationWidgetWidth), qMin(m_idealTextSize.height(), 300));
+    if(m_idealTextSize.height()>=300) { //make space for the scrollbar in case it's not fitting
+      ret.rwidth() += 17; //m_browser->verticalScrollBar()->width() returns 100, for some reason
+    }
     
     if(m_currentWidget) {
       ret.setHeight( ret.height() + m_currentWidget->sizeHint().height() );

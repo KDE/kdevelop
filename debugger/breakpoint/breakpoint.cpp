@@ -256,7 +256,7 @@ int Breakpoint::hitCount() const
     if (session) {
         return session->breakpointController()->breakpointHitCount(this);
     } else {
-        return 0;
+        return -1;
     }
 }
 

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Sergey Vidyuk <sir.vestnik@gmail.com>                  *
+ *   Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -31,16 +32,17 @@ static const int summaryHardLimit = 65;
 /// Recommended line kength from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 static const int lineLenLimit = 72;
 
-static inline
-void applyErrorFormat(QTextCharFormat* format, bool warning, const QString& tooltip)
+void GitMessageHighlighter::applyErrorFormat(GitMessageHighlighter* text, bool warning, const QString& tooltip, int startPos, int endPos)
 {
-    format->setFontUnderline(true);
-    format->setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-    format->setUnderlineColor(warning ? Qt::yellow : Qt::red);
-    format->setToolTip(tooltip);
+    QTextCharFormat format;
+    format.setFontUnderline(true);
+    format.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
+    format.setUnderlineColor(warning ? Qt::yellow : Qt::red);
+    format.setToolTip(tooltip);
+    text->setFormat(startPos, endPos, format);
 }
 
-GitMessageHighlighter::GitMessageHighlighter(QTextEdit* parent): QSyntaxHighlighter(parent)
+GitMessageHighlighter::GitMessageHighlighter(QTextEdit* parent): Sonnet::Highlighter(parent)
 {
 }
 
@@ -64,43 +66,48 @@ void GitMessageHighlighter::highlightBlock(const QString& text)
         endPos = text.indexOf('\n', startPos);
         if (endPos < 0)
             endPos = textLength;
-        QTextCharFormat format;
         const int lineLength = endPos - startPos;
+        
+        Highlighter::highlightBlock( text );
         switch (blockState)
         {
             case Summary:
-                format.setFontWeight(QFont::Bold);
                 if (lineLength > summarySoftLimit)
                 {
-                    applyErrorFormat(
-                        &format,
+                    applyErrorFormat(this,
                         lineLength <= summaryHardLimit,
-                        i18n("Try to keep summary length below %1 characters.", summarySoftLimit)
+                        i18n("Try to keep summary length below %1 characters.", summarySoftLimit),
+                        startPos, endPos
                     );
+                } else {
+                    for(int i=startPos; i<endPos; i++) {
+                        QTextCharFormat f = format(i);
+                        f.setFontWeight(QFont::Bold);
+                        setFormat(i, 1, f);
+                    }
                 }
                 break;
             case SummarySeparator:
                 if (lineLength != 0)
                 {
-                    applyErrorFormat(
-                        &format,
+                    applyErrorFormat(this,
                         false,
-                        i18n("Separate summary from details with one empty line.")
+                        i18n("Separate summary from details with one empty line."),
+                        startPos, endPos
                     );
                 }
                 break;
             default:
                 if (lineLength > lineLenLimit)
                 {
-                    applyErrorFormat(
-                        &format,
+                    applyErrorFormat(this,
                         false,
-                        i18n("Try to keep line length below %1 characters.", lineLenLimit)
+                        i18n("Try to keep line length below %1 characters.", lineLenLimit),
+                        startPos+lineLenLimit, endPos
                     );
                 }
                 break;
         }
-        setFormat(startPos, endPos, format);
         startPos = endPos;
     }
     setCurrentBlockState(blockState);

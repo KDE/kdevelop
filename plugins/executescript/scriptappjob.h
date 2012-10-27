@@ -24,6 +24,8 @@
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
 
+class ExecuteScriptPlugin;
+
 namespace KDevelop
 {
 class ILaunchConfiguration;
@@ -37,7 +39,7 @@ class ScriptAppJob : public KDevelop::OutputJob
 {
 Q_OBJECT
 public:
-    ScriptAppJob( QObject* parent, KDevelop::ILaunchConfiguration* cfg );
+    ScriptAppJob( ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg );
     virtual void start();
     virtual bool doKill();
     KDevelop::OutputModel* model();

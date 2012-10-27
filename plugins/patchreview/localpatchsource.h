@@ -42,12 +42,14 @@ public:
     }
 
     virtual void update();
+    virtual QIcon icon() const;
 
-    KUrl m_filename;
-    KUrl m_baseDir;
-    uint m_depth;
-    QString m_command;
+    void setFilename(const KUrl& filename) { m_filename = filename; }
+    void setBaseDir(const KUrl& dir) { m_baseDir = dir; }
+    void setCommand(const QString& cmd) { m_command = cmd; }
 
+    QString command() const { return m_command; }
+    
     virtual bool isAlreadyApplied() const { return m_applied; }
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
@@ -57,7 +59,11 @@ public:
     virtual ~LocalPatchSource();
 
 private:
+    KUrl m_filename;
+    KUrl m_baseDir;
+    QString m_command;
     bool m_applied;
+    uint m_depth;
 };
 
 #endif // LOCALPATCHSOURCE_H

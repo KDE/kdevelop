@@ -26,23 +26,33 @@
 #include <kdebug.h>
 
 OutputData::OutputData( ToolViewData* tv )
-    : QObject( tv ), delegate(0), ownsDelegate(false), model(0), ownsModel(false), toolView(tv), id(-1)
+: QObject( tv )
+, delegate(0)
+, model(0)
+, toolView(tv)
+, id(-1)
 {
 }
 
-void OutputData::setModel( QAbstractItemModel* model, bool takeOwnership )
+void OutputData::setModel( QAbstractItemModel* model_ )
 {
-    this->model = model;
-    if (takeOwnership)
+    model = model_;
+
+    if (model) {
         model->setParent(this);
+    }
+
     emit modelChanged( id );
 }
 
-void OutputData::setDelegate( QAbstractItemDelegate* del, bool takeOwnership )
+void OutputData::setDelegate( QAbstractItemDelegate* del )
 {
     delegate = del;
-    if (takeOwnership)
+
+    if (delegate) {
         delegate->setParent(this);
+    }
+
     emit delegateChanged( id );
 }
 

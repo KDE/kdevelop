@@ -30,7 +30,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
-#include <QtGui/QTextEdit>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -43,6 +42,7 @@
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <KIO/CopyJob>
+#include <KIO/NetAccess>
 #include "gitclonejob.h"
 #include <interfaces/contextmenuextension.h>
 #include <QMenu>
@@ -50,6 +50,7 @@
 #include "stashmanagerdialog.h"
 #include <KMessageBox>
 #include <KStandardDirs>
+#include <KTextEdit>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
@@ -210,12 +211,11 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
     m_urls = urls;
     
     QDir dir=urlDir(urls);
-    bool modif = hasModifications(dotGitDirectory(urls.first()));
-    bool canApply = !modif && hasStashes(dir);
+    bool hasSt = hasStashes(dir);
     menu->addSeparator()->setText(i18n("Git Stashes"));
-    menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(canApply);
-    menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()))->setEnabled(modif);
-    menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(canApply);
+    menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(hasSt);
+    menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()));
+    menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(hasSt);
 }
 
 void GitPlugin::ctxPushStash()
@@ -411,22 +411,65 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
     }
 }
 
+bool isEmptyDirStructure(const QDir &dir)
+{
+    foreach (const QFileInfo &i, dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot)) {
+        if (i.isDir()) {
+            if (!isEmptyDirStructure(QDir(i.filePath()))) return false;
+        } else if (i.isFile()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
     if (files.isEmpty())
         return errorsFound(i18n("No files to remove"));
-    QDir dir = dotGitDirectory(files.front());
+    QDir dotGitDir = dotGitDirectory(files.front());
 
-    QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << files.front().toLocalFile(), KDevelop::OutputJob::Silent);
-    if(otherStr.isEmpty()) {
-        DVcsJob* job = new GitJob(dir, this);
-        job->setType(VcsJob::Remove);
-        *job << "git" << "rm" << "-r";
-        *job << "--" << files;
-        return job;
-    } else {
-        return new StandardJob(this, KIO::trash(files), KDevelop::OutputJob::Silent);
+
+    KUrl::List files_(files);
+
+    QMutableListIterator<KUrl> i(files_);
+    while (i.hasNext()) {
+        KUrl file = i.next();
+        QFileInfo fileInfo(file.toLocalFile());
+
+        QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << file.toLocalFile(), KDevelop::OutputJob::Silent);
+        kDebug() << "other files" << otherStr;
+        if(!otherStr.isEmpty()) {
+            //remove files not under version control
+            KUrl::List otherFiles;
+            foreach(const QString &f, otherStr) {
+                otherFiles << KUrl::fromLocalFile(dotGitDir.path()+'/'+f);
+            }
+            if (fileInfo.isFile()) {
+                //if it's an unversioned file we are done, don't use git rm on it
+                i.remove();
+            }
+            KIO::NetAccess::synchronousRun(KIO::trash(otherFiles), 0);
+        }
+
+        if (fileInfo.isDir()) {
+            if (isEmptyDirStructure(QDir(file.toLocalFile()))) {
+                //remove empty folders, git doesn't do that
+                kDebug() << "empty folder, removing" << file;
+                KIO::NetAccess::synchronousRun(KIO::trash(file), 0);
+                //we already deleted it, don't use git rm on it
+                i.remove();
+            }
+        }
     }
+
+    if (files_.isEmpty()) return 0;
+
+    DVcsJob* job = new GitJob(dotGitDir, this);
+    job->setType(VcsJob::Remove);
+    *job << "git" << "rm" << "-r";
+    *job << "--" << files_;
+    return job;
 }
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
@@ -622,6 +665,11 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
     QStringList branchList;
     foreach(QString branch, branchListDirty)
     {
+        // Skip pointers to another branches (one example of this is "origin/HEAD -> origin/master");
+        // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
+        if (branch.contains("->"))
+            continue;
+        
         if (branch.startsWith('*'))
             branch = branch.right(branch.size()-2);
         
@@ -1228,7 +1276,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
     QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
@@ -1236,10 +1284,10 @@ void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, QTextEdit* e
     // the memory. 1Mb seems to be good value since it's rather strange to have so huge commit
     // message.
     static const qint64 maxMergeMsgFileSize = 1024*1024;
-    if (!mergeMsgFile.exists() || mergeMsgFile.size() > maxMergeMsgFileSize)
+    if (mergeMsgFile.size() > maxMergeMsgFileSize || !mergeMsgFile.open(QIODevice::ReadOnly))
         return;
-    mergeMsgFile.open(QIODevice::ReadOnly);
-    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.readAll());
+    
+    QString mergeMsg = QString::fromLocal8Bit(mergeMsgFile.read(maxMergeMsgFileSize));
     editor->setPlainText(mergeMsg);
 }
 

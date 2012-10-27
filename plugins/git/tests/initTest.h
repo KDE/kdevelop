@@ -47,14 +47,18 @@ private:
 //     void checkoutTestData();
 
 private slots:
-    void initTestCase();
+    void init();
+    void cleanup();
     void testInit();
     void testAdd();
     void testCommit();
     void testBranching();
     void revHistory();
     void testAnnotation();
-    void cleanupTestCase();
+    void testRemoveEmptyFolder();
+    void testRemoveEmptyFolderInFolder();
+    void testRemoveUnindexedFile();
+    void testRemoveFolderContainingUnversionedFiles();
 
 private:
     GitPlugin* m_plugin;

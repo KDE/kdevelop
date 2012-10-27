@@ -78,6 +78,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QApplication>
+#include <QDBusConnection>
 #include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -127,10 +128,6 @@ public:
         if( !proj )
             return;
 
-        //@FIXME: compute a blacklist, based on a query for all KDevelop
-        //plugins implementing IProjectManager, removing from that the
-        //plugin that manages this project. Set this as blacklist on the
-        //dialog
         //@FIXME: Currently it is important to set a parentApp on the kcms
         //that's different from the component name of the application, else
         //the plugin will show up on all projects settings dialogs.
@@ -166,10 +163,25 @@ public:
         group.sync();
     }
 
+    // Recursively collects builder dependencies for a project.
+    static void collectBuilders( QList< IProjectBuilder* >& destination, IProjectBuilder* topBuilder, IProject* project )
+    {
+        QList< IProjectBuilder* > auxBuilders = topBuilder->additionalBuilderPlugins( project );
+        destination.append( auxBuilders );
+        foreach( IProjectBuilder* auxBuilder, auxBuilders ) {
+            collectBuilders( destination, auxBuilder, project );
+        }
+    }
+
     QStringList findPluginsForProject( IProject* project )
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
+        QList< IProjectBuilder* > buildersForKcm;
+        if( IBuildSystemManager* buildSystemManager = project->buildSystemManager() ) {
+            collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
+        }
+
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
@@ -183,34 +195,9 @@ public:
                 continue;
             }
             IProjectBuilder* builder = plugin->extension<KDevelop::IProjectBuilder>();
-            if (builder)
+            if ( builder && !buildersForKcm.contains( builder ) )
             {
-                // hide builder plugins that are not required
-                if(!project->buildSystemManager())
-                {
-                    // current plugin is a builder yet the project cannot be build - skip
-                    continue;
-                }
-                if (builder && builder != project->buildSystemManager()->builder())
-                {
-                    const KPluginInfo builderInfo = m_core->pluginController()->pluginInfo(
-                        dynamic_cast<IPlugin*>(project->buildSystemManager()->builder()) );
-                    bool shouldBeHidden = true;
-                    // hide if this plugin does not implement an interface that is required by the builder
-                    // i.e. makebuilder should be shown for cmake projects
-                    const QStringList dependencies = builderInfo.property("X-KDevelop-IRequired").toStringList();
-                    foreach(const QString& interface, info.property("X-KDevelop-Interfaces").toStringList()) {
-                        if (dependencies.contains(interface))
-                        {
-                            shouldBeHidden = false;
-                            break;
-                        }
-                    }
-                    if (shouldBeHidden)
-                    {
-                        continue;
-                    }
-                }
+                continue;
             }
             pluginnames << info.pluginName();
         }
@@ -484,6 +471,9 @@ ProjectController::ProjectController( Core* core )
     KSettings::Dispatcher::registerComponent( KComponentData("kdevplatformproject"), 
                                               this, 
                                               "notifyProjectConfigurationChanged" );
+
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
+        this, QDBusConnection::ExportScriptableSlots );
 }
 
 void ProjectController::setupActions()
@@ -530,6 +520,7 @@ void ProjectController::setupActions()
     action = ac->addAction( "commit_current_project" );
     connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
     action->setText( i18n( "Commit Current Project..." ) );
+    action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
 
     KSharedConfig * config = KGlobal::config().data();
@@ -776,18 +767,16 @@ void ProjectController::projectImportingFinished( IProject* project )
         KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
         ICore::self()->runController()->registerJob(parseProjectJob);
     }
-    
-    KUrl::List parseList;
+
     // Add all currently open files that belong to the project to the background-parser,
     // since more information may be available for parsing them now(Like include-paths).
     foreach(IDocument* document, Core::self()->documentController()->openDocuments())
     {
         if(!project->filesForUrl(document->url()).isEmpty())
         {
-            parseList.append(document->url());
+            Core::self()->languageController()->backgroundParser()->addDocument( IndexedString(document->url()), TopDUContext::AllDeclarationsContextsAndUses, 10 );
         }
     }
-    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::AllDeclarationsContextsAndUses, 10 );
 }
 
 // helper method for closeProject()
@@ -1035,7 +1024,7 @@ void ProjectController::commitCurrentProject()
         if(vcs) {
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
-            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl), baseUrl, vcs);
+            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl));
 
             bool ret = showVcsDiff(patchSource);
 
@@ -1046,6 +1035,62 @@ void ProjectController::commitCurrentProject()
             }
         }
     }
+}
+
+QString ProjectController::mapSourceBuild( const QString& path, bool reverse, bool fallbackRoot ) const
+{
+    KUrl url(path);
+    IProject* sourceDirProject = 0, *buildDirProject = 0;
+    Q_FOREACH(IProject* proj, d->m_projects)
+    {
+        if(proj->folder().isParentOf(url))
+            sourceDirProject = proj;
+        if(proj->buildSystemManager())
+        {
+            KUrl buildDir = proj->buildSystemManager()->buildDirectory(proj->projectItem());
+            if(buildDir.isValid() && buildDir.isParentOf(url))
+                buildDirProject = proj;
+        }
+    }
+    
+    if(!reverse)
+    {
+        // Map-target is the build directory
+        if(sourceDirProject && sourceDirProject->buildSystemManager())
+        {
+            // We're in the source, map into the build directory
+            QString relativePath = KUrl::relativeUrl(sourceDirProject->folder(), url);
+            
+            KUrl build = sourceDirProject->buildSystemManager()->buildDirectory(sourceDirProject->projectItem());
+            build.addPath(relativePath);
+            while(!QFile::exists(build.path()))
+                build = build.upUrl();
+            return build.pathOrUrl();
+        }else if(buildDirProject && fallbackRoot)
+        {
+            // We're in the build directory, map to the build directory root
+            return buildDirProject->buildSystemManager()->buildDirectory(buildDirProject->projectItem()).pathOrUrl();
+        }
+    }else{
+        // Map-target is the source directory
+        if(buildDirProject)
+        {
+            KUrl build = buildDirProject->buildSystemManager()->buildDirectory(buildDirProject->projectItem());
+            // We're in the source, map into the build directory
+            QString relativePath = KUrl::relativeUrl(build, url);
+            
+            KUrl source = buildDirProject->folder();
+            source.addPath(relativePath);
+            while(!QFile::exists(source.path()))
+                source = source.upUrl();
+            return source.pathOrUrl();
+        }else if(sourceDirProject && fallbackRoot)
+        {
+            // We're in the source directory, map to the root
+            return sourceDirProject->folder().pathOrUrl();
+        }
+    }
+    return QString();
 }
 
 }

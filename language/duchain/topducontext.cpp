@@ -666,9 +666,12 @@ TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(ne
 }
 
 TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file)
-  : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
+: DUContext(*new TopDUContextData(url), range)
+, m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+, m_dynamicData(new TopDUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
+  setType(Global);
 
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d->m_features = VisibleDeclarationsAndContexts;
@@ -1087,6 +1090,12 @@ QList<ProblemPointer> TopDUContext::problems() const
     return m_local->m_problems;
 }
 
+void TopDUContext::setProblems(const QList<ProblemPointer>& problems)
+{
+  ENSURE_CAN_WRITE
+  m_local->m_problems = problems;
+}
+
 void TopDUContext::addProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
@@ -1262,8 +1271,9 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
     ENSURE_CAN_READ
   }
 
-if(!declaration)
-  return std::numeric_limits<int>::max();
+  if(!declaration) {
+    return std::numeric_limits<int>::max();
+  }
 
   if(declaration->topContext() == this && !declaration->inSymbolTable() && !m_dynamicData->isTemporaryDeclarationIndex(declaration->ownIndex())) {
     uint index = declaration->ownIndex();

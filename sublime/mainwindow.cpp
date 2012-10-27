@@ -113,15 +113,39 @@ void MainWindow::setupAreaSelector() {
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
 }
 
+QWidget* MainWindow::areaSwitcher() const
+{
+    return d->areaSwitcher;
+}
+
 MainWindow::~MainWindow()
 {
     kDebug() << "destroying mainwindow";
     delete d;
 }
 
-void MainWindow::reconstructViews()
+void MainWindow::reconstructViews(QList<View*> topViews)
 {
-    d->reconstructViews();
+    d->reconstructViews(topViews);
+}
+
+QList<View*> MainWindow::getTopViews() const
+{
+    QList<View*> topViews;
+    foreach(View* view, d->area->views())
+    {
+        if(view->hasWidget())
+        {
+            QWidget* widget = view->widget();
+            if(widget->parent() && widget->parent()->parent())
+            {
+                Container* container = qobject_cast<Container*>(widget->parent()->parent());
+                if(container->currentWidget() == widget)
+                    topViews << view;
+            }
+        }
+    }
+    return topViews;
 }
 
 void MainWindow::setArea(Area *area)
@@ -138,10 +162,9 @@ void MainWindow::setArea(Area *area)
     if (d->autoAreaSettingsSave && differentArea)
         saveSettings();
 
+    HoldUpdates hu(this);
     if (d->area)
         clearArea();
-
-    HoldUpdates hu(this);
     d->area = area;
     d->reconstruct();
     

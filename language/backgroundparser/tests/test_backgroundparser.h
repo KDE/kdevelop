@@ -49,7 +49,7 @@ public:
     {
         Q_ASSERT(url.isValid());
     }
-    KUrl m_url;
+    IndexedString m_url;
     int m_priority;
     int m_duration;
     ParseJob::SequentialProcessingFlags m_flags;
@@ -72,7 +72,7 @@ public:
 
     void clear();
 
-    JobPrototype jobForUrl(const KUrl& url);
+    JobPrototype jobForUrl(const IndexedString& url);
 
 private slots:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
@@ -80,8 +80,8 @@ private slots:
 
 private:
     QVector<JobPrototype> m_jobs;
-    QVector<KUrl> m_finishedJobs;
-    QVector<KUrl> m_createdJobs;
+    QVector<IndexedString> m_finishedJobs;
+    QVector<IndexedString> m_createdJobs;
 };
 
 class TestBackgroundparser : public QObject

@@ -122,7 +122,6 @@ void DocumentSwitcherPlugin::walkForward()
 void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
     model->clear();
-    QList<QStandardItem*> views;
     foreach( Sublime::View* v, documentLists[window][window->area()] )
     {
         QString txt = v->document()->title();

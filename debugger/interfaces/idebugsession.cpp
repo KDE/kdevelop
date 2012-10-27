@@ -26,6 +26,7 @@
 #include <QWidget>
 
 #include <KWindowSystem>
+#include <KDebug>
 
 namespace KDevelop {
 
@@ -89,7 +90,8 @@ QPair<KUrl, int> IDebugSession::convertToRemoteUrl(const QPair<KUrl, int>& local
 }
 
 void IDebugSession::clearCurrentPosition()
-{ 
+{
+    kDebug();
     m_url.clear();
     m_addr = "";
     m_line = -1;
@@ -98,6 +100,7 @@ void IDebugSession::clearCurrentPosition()
 
 void IDebugSession::setCurrentPosition(const KUrl& url, int line, const QString& addr)
 {
+    kDebug() << url << line << addr;
     if (url.isEmpty()) { // if source file is unknown there's not much we can do in debugger
         clearCurrentPosition();
     } else {

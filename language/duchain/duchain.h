@@ -193,6 +193,10 @@ public:
   /// Only used for debugging at the moment
   Q_SCRIPTABLE QList<KUrl> documents() const;
 
+  /// Only used for debugging at the moment
+  /// Prefer that over the KUrl version for performance reasons
+  Q_SCRIPTABLE QList<IndexedString> indexedDocuments() const;
+
   /**
    * Registers a new definition-use \a chain for the given \a document.
    */

@@ -64,6 +64,8 @@ public Q_SLOTS:
     void buildProjectItems();
     void installProjectItems();
     void cleanProjectItems();
+    void copyFromContextMenu();
+    void pasteFromContextMenu();
 
 protected Q_SLOTS:
     void closeProjects();
@@ -84,9 +86,12 @@ protected Q_SLOTS:
     void renameItemFromContextMenu();
     void updateActionState( KDevelop::Context* ctx );
     void updateFromBuildSetChange();
+
 private:
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
-    void runBuilderJob( KDevelop::BuilderJob::BuildType );
+    QList<KDevelop::ProjectBaseItem*> collectItems();
+    QList<KDevelop::ProjectBaseItem*> collectAllProjects();
+    void runBuilderJob( KDevelop::BuilderJob::BuildType type, QList<KDevelop::ProjectBaseItem*> items );
     class ProjectManagerViewPluginPrivate* const d;
 };
 

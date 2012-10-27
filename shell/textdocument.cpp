@@ -427,7 +427,14 @@ void TextDocument::reload()
     if (!d->document)
         return;
 
+    KTextEditor::ModificationInterface* modif=0;
+    if(d->state==Dirty) {
+        modif = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
+        modif->setModifiedOnDiskWarning(false);
+    }
     d->document->documentReload();
+    if(modif)
+        modif->setModifiedOnDiskWarning(true);
 }
 
 bool TextDocument::save(DocumentSaveMode mode)

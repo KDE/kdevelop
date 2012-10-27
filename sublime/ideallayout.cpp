@@ -163,6 +163,7 @@ void IdealButtonBarLayout::setGeometry(const QRect &rect)
 void IdealButtonBarLayout::addItem(QLayoutItem *item)
 {
     _items.append(item);
+    invalidate();
 }
 
 QLayoutItem* IdealButtonBarLayout::itemAt(int index) const
@@ -174,6 +175,7 @@ QLayoutItem* IdealButtonBarLayout::takeAt(int index)
 {
     if (index >= 0 && index < _items.count())
         return _items.takeAt(index);
+    invalidate();
     return 0;
 }
 

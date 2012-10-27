@@ -40,6 +40,7 @@ DashboardView::~DashboardView()
 
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
+    Q_UNUSED(parent);
     KUrl originalUrl=m_project->projectFileUrl().toLocalFile();
     KUrl customUrl=originalUrl.upUrl();
     customUrl.addPath(".kdev4/_custom.kdev4");

@@ -75,11 +75,10 @@ void JobPlan::parseJobCreated(ParseJob* job)
     TestParseJob* testJob = dynamic_cast<TestParseJob*>(job);
     Q_ASSERT(testJob);
 
-    const KUrl url = testJob->document().toUrl();
-    kDebug() << "assigning propierties for created job" << url;
-    testJob->duration_ms = jobForUrl(url).m_duration;
+    kDebug() << "assigning propierties for created job" << testJob->document().toUrl();
+    testJob->duration_ms = jobForUrl(testJob->document()).m_duration;
 
-    m_createdJobs.append(url);
+    m_createdJobs.append(testJob->document());
 }
 
 bool JobPlan::runJobs(int timeoutMS)
@@ -106,7 +105,7 @@ bool JobPlan::runJobs(int timeoutMS)
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
-    foreach ( const KUrl& url, m_createdJobs ) {
+    foreach ( const IndexedString& url, m_createdJobs ) {
         const JobPrototype p = jobForUrl(url);
         QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
         currentBestPriority = p.m_priority;
@@ -115,7 +114,7 @@ bool JobPlan::runJobs(int timeoutMS)
     return true;
 }
 
-JobPrototype JobPlan::jobForUrl(const KUrl& url)
+JobPrototype JobPlan::jobForUrl(const IndexedString& url)
 {
     foreach(const JobPrototype& job, m_jobs) {
         if (job.m_url == url) {
@@ -129,8 +128,8 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
 {
     kDebug() << "update ready on " << url.toUrl();
 
-    const JobPrototype job = jobForUrl(url.toUrl());
-    QVERIFY(job.m_url.isValid());
+    const JobPrototype job = jobForUrl(url);
+    QVERIFY(job.m_url.toUrl().isValid());
 
     if (job.m_flags & ParseJob::RequiresSequentialProcessing) {
         // ensure that all jobs that respect sequential processing
@@ -248,14 +247,14 @@ void TestBackgroundparser::benchmark()
 {
     const int jobs = 10000;
 
-    QVector<KUrl> jobUrls;
+    QVector<IndexedString> jobUrls;
     jobUrls.reserve(jobs);
     for ( int i = 0; i < jobs; ++i ) {
-        jobUrls << KUrl("test" + QString::number(i) + ".txt");
+        jobUrls << IndexedString("test" + QString::number(i) + ".txt");
     }
 
     QBENCHMARK {
-        foreach ( const KUrl& url, jobUrls ) {
+        foreach ( const IndexedString& url, jobUrls ) {
             ICore::self()->languageController()->backgroundParser()->addDocument(url);
         }
 

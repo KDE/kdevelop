@@ -22,6 +22,7 @@
 #include <QUuid>
 #include <QApplication>
 #include <QTextStream>
+#include <QProcessEnvironment>
 
 #include <KStandardDirs>
 #include <KComponentData>
@@ -42,7 +43,7 @@ const int crashesBeforeCleanup = 2;
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 71;
+  return 72;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
@@ -74,7 +75,8 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
   QString repoPath;
   
    KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
-    QString baseDir = QDir::homePath() + "/.kdevduchain";
+    QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
+    QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
     KStandardDirs::makeDir(baseDir);
 
     Q_ASSERT( ICore::self() );

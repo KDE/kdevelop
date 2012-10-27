@@ -109,15 +109,11 @@ class AreaTabBar : public QTabBar {
 
 class AreaTabWidget : public QWidget {
     public:
-    AreaTabWidget(QMenuBar* parent) ;
+    AreaTabWidget(QWidget* parent = 0) ;
     
     virtual QSize sizeHint() const ;
     
     virtual void paintEvent(QPaintEvent *ev);
-    
-    QMenuBar* bar() const {
-        return static_cast<QMenuBar*>(parent());
-    }
     
     ///The widget is owned by this tab-widget
     void setTabSideWidget(QWidget* widget) {
@@ -152,16 +148,17 @@ public:
     /**Use this to create views for an area.*/
     class ViewCreator {
     public:
-        ViewCreator(MainWindowPrivate *_d): d(_d) {}
+        ViewCreator(MainWindowPrivate *_d, QList<View*> _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
         Area::WalkerMode operator() (AreaIndex *index);
     private:
         MainWindowPrivate *d;
+        QSet<View*> topViews;
     };
 
     /**Reconstructs the mainwindow according to the current area.*/
     void reconstruct();
     /**Reconstructs the views according to the current area index.*/
-    void reconstructViews();    
+    void reconstructViews(QList<View*> topViews = QList<View*>());    
     /**Clears the area leaving mainwindow empty.*/
     void clearArea();
     

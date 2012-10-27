@@ -27,10 +27,10 @@
 
 using namespace KDevelop;
 
-ParseJob* TestLanguageSupport::createParseJob(const KUrl& url)
+ParseJob* TestLanguageSupport::createParseJob(const IndexedString& url)
 {
     kDebug() << "creating test language support parse job";
-    TestParseJob* job = new TestParseJob(url);
+    TestParseJob* job = new TestParseJob(url, this);
     emit parseJobCreated(job);
     return job;
 }

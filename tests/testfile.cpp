@@ -28,6 +28,9 @@
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 using namespace KDevelop;
 
@@ -52,7 +55,8 @@ struct TestFile::TestFilePrivate {
     TestProject* project;
 };
 
-TestFile::TestFile (const QString& contents, const QString& fileExtension, TestProject* project, const QString& dir)
+TestFile::TestFile(const QString& contents, const QString& fileExtension,
+                   TestProject* project, const QString& dir)
 : d(new TestFilePrivate())
 {
     d->file.setSuffix('.' + fileExtension);
@@ -87,7 +91,7 @@ IndexedString TestFile::url() const
     return d->url;
 }
 
-void TestFile::parse (TopDUContext::Features features, int priority)
+void TestFile::parse(TopDUContext::Features features, int priority)
 {
     d->ready = false;
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
@@ -95,6 +99,10 @@ void TestFile::parse (TopDUContext::Features features, int priority)
 
 bool TestFile::waitForParsed(int timeout)
 {
+    if (!d->ready) {
+        // optimize: we don't want to wait the usual timeout before parsing documents here
+        ICore::self()->languageController()->backgroundParser()->parseDocuments();
+    }
     QTime t;
     t.start();
     while (!d->ready && t.elapsed() < timeout) {

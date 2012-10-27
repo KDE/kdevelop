@@ -218,7 +218,7 @@ QVariant Variable::data(int column, int role) const
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(0)
 {
-    setData(QVector<QVariant>() << "Auto" << QString());
+    setData(QVector<QVariant>() << i18n("Auto") << QString());
 }
 
 Variable* Watches::add(const QString& expression)

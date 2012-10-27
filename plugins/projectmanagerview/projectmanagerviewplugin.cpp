@@ -20,8 +20,10 @@
 #include "projectmanagerviewplugin.h"
 
 #include <QtCore/QList>
+#include <QMimeData>
 #include <QtGui/QInputDialog>
 #include <QtGui/QApplication>
+#include <QClipboard>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -47,7 +49,6 @@
 #include <interfaces/iselectioncontroller.h>
 
 #include "projectmanagerview.h"
-#include "builditembuilderjob.h"
 
 using namespace KDevelop;
 
@@ -107,28 +108,34 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
+
     d->m_build = new KAction( i18n("Build Selection"), this );
+    d->m_build->setIconText( i18n("Build") );
     d->m_build->setShortcut( Qt::Key_F8 );
     d->m_build->setIcon(KIcon("run-build"));
     d->m_build->setEnabled( false );
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
     d->m_install = new KAction( i18n("Install Selection"), this );
+    d->m_install->setIconText( i18n("Install") );
     d->m_install->setIcon(KIcon("run-build-install"));
     d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );
     d->m_clean = new KAction( i18n("Clean Selection"), this );
+    d->m_clean->setIconText( i18n("Clean") );
     d->m_clean->setIcon(KIcon("run-build-clean"));
     d->m_clean->setEnabled( false );
     connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
     actionCollection()->addAction( "project_clean", d->m_clean );
     d->m_configure = new KAction( i18n("Configure Selection"), this );
+    d->m_configure->setIconText( i18n("Configure") );
     d->m_configure->setIcon(KIcon("run-build-configure"));
     d->m_configure->setEnabled( false );
     connect( d->m_configure, SIGNAL(triggered()), this, SLOT(configureProjectItems()) );
     actionCollection()->addAction( "project_configure", d->m_configure );
     d->m_prune = new KAction( i18n("Prune Selection"), this );
+    d->m_prune->setIconText( i18n("Prune") );
     d->m_prune->setIcon(KIcon("run-build-prune"));
     d->m_prune->setEnabled( false );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
@@ -201,11 +208,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool needsFolderItems = true;
     bool needsRemoveAndRename = true;
     bool needsRemoveTargetFiles = true;
+    bool needsPaste = true;
 
     //needsCreateFile if there is one item and it's a folder or target
     needsCreateFile &= (items.count() == 1) && (items.first()->folder() || items.first()->target());
     //needsCreateFolder if there is one item and it's a folder
     needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
+    needsPaste = needsCreateFolder;
     
     foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item;
@@ -237,6 +246,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
+
     if ( needsBuildItems ) {
         KAction* action = new KAction( i18nc( "@action", "Build" ), this );
         action->setIcon(KIcon("run-build"));
@@ -254,6 +264,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
+
     if ( needsCloseProjects ) {
         KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
         close->setIcon(KIcon("project-development-close"));
@@ -282,6 +293,18 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( remove, SIGNAL(triggered()), this, SLOT(removeTargetFilesFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
+
+    {
+        KAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
+        copy->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, copy );
+    }
+    if (needsPaste) {
+        KAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), this);
+        paste->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, paste );
+    }
+
     return menuExt;
 }
 
@@ -305,68 +328,91 @@ void ProjectManagerViewPlugin::closeProjects()
 
 void ProjectManagerViewPlugin::installItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Install, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Install, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::cleanItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Clean, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Clean, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 {
-     ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Build, d->ctxProjectItemList ) );
+    runBuilderJob( BuilderJob::Build, d->ctxProjectItemList );
     d->ctxProjectItemList.clear();
 }
 
-void ProjectManagerViewPlugin::buildAllProjects()
+QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectAllProjects()
 {
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
         items << project->projectItem();
     }
-    ICore::self()->runController()->registerJob( new BuildItemBuilderJob( KDevelop::BuilderJob::Build, items ) );
+    return items;
 }
 
-void ProjectManagerViewPlugin::runBuilderJob( KDevelop::BuilderJob::BuildType t )
+void ProjectManagerViewPlugin::buildAllProjects()
+{
+    runBuilderJob( BuilderJob::Build, collectAllProjects() );
+}
+
+QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 {
     QList<ProjectBaseItem*> items;
-    if( !ICore::self()->projectController()->buildSetModel()->items().isEmpty() )
+    QList<BuildItem> buildItems = ICore::self()->projectController()->buildSetModel()->items();
+    if( !buildItems.isEmpty() )
     {
-        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, ICore::self()->projectController()->buildSetModel()->items() ) );
+        foreach( const BuildItem& buildItem, buildItems )
+        {
+            if( ProjectBaseItem* item = buildItem.findItem() )
+            {
+                items << item;
+            }
+        }
+
     } else
     {
         KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, ctx->items() ) );
+        items = ctx->items();
     }
+
+    return items;
+}
+
+void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, QList<ProjectBaseItem*> items )
+{
+    BuilderJob* builder = new BuilderJob;
+    builder->addItems( type, items );
+    builder->updateJobName();
+    ICore::self()->runController()->registerJob( builder );
 }
 
 void ProjectManagerViewPlugin::installProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Install );
+    runBuilderJob( KDevelop::BuilderJob::Install, collectItems() );
 }
 
 void ProjectManagerViewPlugin::pruneProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Prune );
+    runBuilderJob( KDevelop::BuilderJob::Prune, collectItems() );
 }
 
 void ProjectManagerViewPlugin::configureProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Configure );
+    runBuilderJob( KDevelop::BuilderJob::Configure, collectItems() );
 }
 
 void ProjectManagerViewPlugin::cleanProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Clean );
+    runBuilderJob( KDevelop::BuilderJob::Clean, collectItems() );
 }
 
 void ProjectManagerViewPlugin::buildProjectItems()
 {
-    runBuilderJob( KDevelop::BuilderJob::Build );
+    runBuilderJob( KDevelop::BuilderJob::Build, collectItems() );
 }
 
 void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
@@ -597,6 +643,60 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
         }
     }
 }
+
+void ProjectManagerViewPlugin::copyFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    QList<QUrl> urls;
+    foreach (ProjectBaseItem* item, ctx->items()) {
+        if (item->folder() || item->file()) {
+            urls << item->url();
+        }
+    }
+    kDebug() << urls;
+    if (!urls.isEmpty()) {
+        QMimeData *data = new QMimeData;
+        data->setUrls(urls);
+        qApp->clipboard()->setMimeData(data);
+    }
+}
+
+void ProjectManagerViewPlugin::pasteFromContextMenu()
+{
+    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    if (ctx->items().count() != 1) return; //do nothing if multiple or none items are selected
+    ProjectBaseItem* destItem = ctx->items().first();
+    Q_ASSERT(destItem->folder());
+    const QMimeData* data = qApp->clipboard()->mimeData();
+    kDebug() << data->urls();
+    KUrl::List urls(data->urls());
+    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
+
+    if (success) {
+        ProjectManagerViewItemContext* viewCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
+        if (viewCtx) {
+
+            //expand target folder
+            viewCtx->view()->expandItem(destItem);
+
+            //and select new items
+            QList<ProjectBaseItem*> newItems;
+            foreach (const KUrl &url, urls) {
+                KUrl targetUrl = destItem->url();
+                targetUrl.addPath(url.fileName());
+                foreach (ProjectBaseItem *item, destItem->children()) {
+                    KUrl itemUrl = item->url();
+                    itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
+                    if (itemUrl == targetUrl) {
+                        newItems << item;
+                    }
+                }
+            }
+            viewCtx->view()->selectItems(newItems);
+        }
+    }
+}
+
 
 #include "projectmanagerviewplugin.moc"
 

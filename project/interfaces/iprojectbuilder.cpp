@@ -36,5 +36,11 @@ KJob* IProjectBuilder::prune(IProject*)
     return 0;
 }
 
+QList< IProjectBuilder* > IProjectBuilder::additionalBuilderPlugins( IProject* project ) const
+{
+    Q_UNUSED( project )
+    return QList< IProjectBuilder* >();
+}
+
 }
 

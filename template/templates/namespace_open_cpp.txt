@@ -1,0 +1,3 @@
+{% for ns in namespaces %}
+namespace {{ ns }} {% templatetag openbrace %}
+{% endfor %}

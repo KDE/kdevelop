@@ -38,12 +38,12 @@ public:
     virtual ~ParseProjectJob();
     virtual void start();
     virtual bool doKill();
-    
+
 private Q_SLOTS:
     void deleteNow();
-    void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);        
-    
-    private:
+    void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext);
+
+private:
     int m_updated;
     int m_totalFiles;
     KDevelop::IProject* m_project;

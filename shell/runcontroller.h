@@ -125,9 +125,7 @@ public:
 
 public Q_SLOTS:
     virtual void stopAllProcesses();
-    
 
-    
 protected Q_SLOTS:
     virtual void finished(KJob *job);
     virtual void suspended(KJob *job);
@@ -142,6 +140,7 @@ private Q_SLOTS:
     void slotProjectClosing(KDevelop::IProject* project);
     void slotKillJob();
     void launchChanged(LaunchConfiguration*);
+    void jobDestroyed(QObject* job);
 
 private:
     void setupActions();

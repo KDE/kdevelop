@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2011 Sergey Vidyuk <sir.vestnik@gmail.com>                  *
+ *   Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -20,11 +21,9 @@
 #ifndef GITMESSAGEHIGHLIGHTER_H
 #define GITMESSAGEHIGHLIGHTER_H
 
-#include <QtGui/QSyntaxHighlighter>
+#include <sonnet/highlighter.h>
 
-class QTextEdit;
-
-class GitMessageHighlighter : public QSyntaxHighlighter
+class GitMessageHighlighter : public Sonnet::Highlighter
 {
     Q_OBJECT
 public:
@@ -35,6 +34,8 @@ protected:
     virtual void highlightBlock(const QString& text);
 
 private:
+    void applyErrorFormat(GitMessageHighlighter* text, bool warning, const QString& tooltip, int startPos, int endPos);
+    
     enum BlockState {
         NoState = -1,
         Summary,

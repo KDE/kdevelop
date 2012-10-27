@@ -52,7 +52,7 @@ struct AreaIndexPrivate {
         second = p.second ? new AreaIndex(*(p.second)) : 0;
     }
 
-    bool isSplitted() const
+    bool isSplit() const
     {
         return first || second;
     }
@@ -98,8 +98,8 @@ AreaIndex::~AreaIndex()
 
 void AreaIndex::add(View *view, View *after)
 {
-    //we can not add views to the areas that have already been splitted
-    if (d->isSplitted())
+    //we can not add views to the areas that have already been split
+    if (d->isSplit())
         return;
 
     if (after)
@@ -110,7 +110,7 @@ void AreaIndex::add(View *view, View *after)
 
 void AreaIndex::remove(View *view)
 {
-    if (d->isSplitted())
+    if (d->isSplit())
         return;
 
     d->views.removeAll(view);
@@ -118,10 +118,10 @@ void AreaIndex::remove(View *view)
         d->parent->unsplit(this);
 }
 
-void Sublime::AreaIndex::split(Qt::Orientation orientation, bool moveViewsToSecond)
+void AreaIndex::split(Qt::Orientation orientation, bool moveViewsToSecond)
 {
-    //we can not split areas that have already been splitted
-    if (d->isSplitted())
+    //we can not split areas that have already been split
+    if (d->isSplit())
         return;
 
     d->first = new AreaIndex(this);
@@ -144,7 +144,7 @@ void AreaIndex::split(View *newView, Qt::Orientation orientation)
 
 void AreaIndex::unsplit(AreaIndex *childToRemove)
 {
-    if (!d->isSplitted())
+    if (!d->isSplit())
         return;
 
     AreaIndex *other = d->first == childToRemove ? d->second : d->first;
@@ -222,9 +222,9 @@ Qt::Orientation AreaIndex::orientation() const
     return d->orientation;
 }
 
-bool Sublime::AreaIndex::isSplitted() const
+bool Sublime::AreaIndex::isSplit() const
 {
-    return d->isSplitted();
+    return d->isSplit();
 }
 
 void Sublime::AreaIndex::setOrientation(Qt::Orientation orientation) const
@@ -241,7 +241,7 @@ RootAreaIndex::RootAreaIndex()
 
 QString AreaIndex::print() const
 {
-    if(isSplitted())
+    if(isSplit())
         return " [ " + first()->print() + (orientation() == Qt::Horizontal ? " / " : " - ") + second()->print() + " ] ";
     QStringList ret;
     foreach(Sublime::View* view, views())

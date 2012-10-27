@@ -89,14 +89,13 @@ QList<QVariant> ProjectFileData::highlighting() const {
 }
     
 QWidget* ProjectFileData::expandingWidget() const {
+  KDevelop::DUChainReadLocker lock;;
+
   ///Find a du-chain for the document
-  KUrl u( totalUrl() );
+  QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(m_file.m_url);
 
   ///Pick a non-proxy context
   KDevelop::TopDUContext* chosen = 0;
-  KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  
-  QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(u);
   foreach( KDevelop::TopDUContext* ctx, contexts )
     if( !(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()) )
       chosen = ctx;

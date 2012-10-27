@@ -459,6 +459,9 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         {
             QAction* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
             action->setIcon(it.value()->statusIcon());
+            if (!it.key()->allowMultiple() && Core::self()->uiControllerInternal()->toolViewPresent(it.value(), m_mainWindow->area())) {
+                action->setDisabled(true);
+            }
             actionToFactory.insert(action, it.key());
             actionMap[action->text()] = action;
         }
@@ -470,7 +473,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         return;
     }
     Core::self()->uiControllerInternal()->addToolViewToDockArea(
-        triggered->text(), actionToFactory[triggered],
+        actionToFactory[triggered],
         area
     );
 }

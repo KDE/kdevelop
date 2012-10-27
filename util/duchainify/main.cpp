@@ -133,6 +133,13 @@ void Manager::init()
         }
     }
 
+    // quit when everything is done
+    // background parser emits hideProgress() signal in two situations:
+    // when everything is done and when bgparser is suspended
+    // later doesn't happen in duchain, so just rely on hideProgress()
+    // and quit when it's emitted
+    connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(hideProgress(KDevelop::IStatus*)), this, SLOT(finish()));
+
     for(int i=0; i<m_args->count(); i++)
     {
         addToBackgroundParser(m_args->arg(i), (TopDUContext::Features)features);
@@ -144,10 +151,6 @@ void Manager::init()
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
         const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
         std::cout << "parsing with " << threads << " threads" << std::endl;
-        if (m_waiting.isEmpty()) {
-            std::cout << "ready" << std::endl;
-            QApplication::quit();
-        }
     } else {
         std::cout << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);
@@ -171,11 +174,6 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
                         << " (" << p->finalLocation().end.line << ", " << p->finalLocation().end.column << ")]" << std::endl;
             }
         }
-    }
-    if(m_waiting.isEmpty() && m_allFilesAdded)
-    {
-        std::cout << "ready" << std::endl;
-        QApplication::quit();
     }
 }
 
@@ -208,6 +206,12 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
 QSet< KUrl > Manager::waiting()
 {
     return m_waiting;
+}
+
+void Manager::finish()
+{
+    std::cout << "ready" << std::endl;
+    QApplication::quit();
 }
 
 using namespace KDevelop;

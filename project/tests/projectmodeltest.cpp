@@ -24,8 +24,10 @@
 #include <qtest_kde.h>
 
 #include <projectmodel.h>
+#include <projectproxymodel.h>
 #include <tests/modeltest.h>
 #include "dummyproject.h"
+#include <projectproxymodel.h>
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -85,6 +87,15 @@ private:
     ProjectModel* model;
 };
 
+void debugItemModel(QAbstractItemModel* m, const QModelIndex& parent=QModelIndex(), int depth=0)
+{
+    Q_ASSERT(m);
+    qDebug() << QByteArray(depth*2, '-') << m->data(parent).toString();
+    for(int i=0; i<m->rowCount(parent); i++) {
+        debugItemModel(m, m->index(i, 0, parent), depth+1);
+    }
+}
+
 void ProjectModelTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
@@ -93,6 +104,9 @@ void ProjectModelTest::initTestCase()
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
     modelTest = new ModelTest( model, this );
+    proxy = new ProjectProxyModel( model );
+    proxy->setSourceModel(model);
+    ModelTest(proxy, proxy);
 }
 
 void ProjectModelTest::init()
@@ -538,6 +552,29 @@ void ProjectModelTest::testItemsForUrl_data()
         Q_UNUSED(file2);
         QTest::newRow("find two") << file->url() << static_cast<ProjectBaseItem*>(root) << 2;
     }
+}
+
+void ProjectModelTest::testProjectProxyModel()
+{
+    ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
+    new ProjectFileItem(0, KUrl("file:///tmp/a1/"), root);
+    new ProjectFileItem(0, KUrl("file:///tmp/b1/"), root);
+    new ProjectFileItem(0, KUrl("file:///tmp/c1/"), root);
+    new ProjectFileItem(0, KUrl("file:///tmp/d1/"), root);
+    model->appendRow(root);
+    
+    QModelIndex proxyRoot = proxy->mapFromSource(root->index());
+    QCOMPARE(model->rowCount(root->index()), 4);
+    QCOMPARE(proxy->rowCount(proxyRoot), 4);
+    
+    proxy->setFilterString("*1");
+    QCOMPARE(proxy->rowCount(proxyRoot), 4);
+    
+    proxy->setFilterString("a*");
+    debugItemModel(proxy);
+    QCOMPARE(proxy->rowCount(proxyRoot), 1);
+    
+    model->clear();
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)

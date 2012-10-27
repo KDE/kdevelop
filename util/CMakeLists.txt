@@ -16,6 +16,9 @@ set(kdevplatformutil_LIB_SRCS
     activetooltip.cpp
     executecompositejob.cpp
     fileutils.cpp
+    sequentiallyrunjobs.cpp
+    multilevellistview.cpp
+    projecttestjob.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -70,6 +73,9 @@ install( FILES
     convenientfreelist.h
     spinlock.h
     fileutils.h
+    sequentiallyrunjobs.h
+    multilevellistview.h
+    projecttestjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES

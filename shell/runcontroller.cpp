@@ -185,8 +185,8 @@ public:
                 ILaunchConfiguration* ilaunch = 0;
                 foreach (LaunchConfiguration *l, launchConfigurations) {
                     QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
-                    if (path == itemPath) {
-                        //kDebug() << "allready generated ilaunch" << ilaunch;
+                    if (l->type() == type && path == itemPath) {
+                        kDebug() << "allready generated ilaunch" << path;
                         ilaunch = l;
                         break;
                     }
@@ -556,6 +556,7 @@ void KDevelop::RunController::registerJob(KJob * job)
         d->jobs.insert(job, stopJobAction);
 
         connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
+        connect( job, SIGNAL(destroyed(QObject*)), SLOT(jobDestroyed(QObject*)) );
 
         IRunController::registerJob(job);
 
@@ -639,6 +640,15 @@ void KDevelop::RunController::finished(KJob * job)
 
         default:
             KMessageBox::error(qApp->activeWindow(), job->errorString(), i18n("Process Error"));
+    }
+}
+
+void RunController::jobDestroyed(QObject* job)
+{
+    KJob* kjob = static_cast<KJob*>(job);
+    if (d->jobs.contains(kjob)) {
+        kWarning() << "job destroyed without emitting finished signal!";
+        unregisterJob(kjob);
     }
 }
 
@@ -800,6 +810,28 @@ void RunController::setDefaultLaunch(ILaunchConfiguration* l)
     }
 }
 
+bool launcherNameExists(const QString& name)
+{
+    foreach(ILaunchConfiguration* config, Core::self()->runControllerInternal()->launchConfigurations()) {
+        if(config->name()==name)
+            return true;
+    }
+    return false;
+}
+
+QString makeUnique(const QString& name)
+{
+    if(launcherNameExists(name)) {
+        for(int i=2; ; i++) {
+            QString proposed = QString("%1 (%2)").arg(name).arg(i);
+            if(!launcherNameExists(proposed)) {
+                return proposed;
+            }
+        }
+    }
+    return name;
+}
+
 ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type,
                                                                  const QPair<QString,QString>& launcher,
                                                                  IProject* project, const QString& name )
@@ -826,8 +858,10 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     QString cfgName = name;
     if( name.isEmpty() )
     {
-        cfgName = i18n("New %1 Configuration", type->name() );
+        cfgName = i18n("New %1 Launcher", type->name() );
+        cfgName = makeUnique(cfgName);
     }
+    
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, cfgName );
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
     launchConfigGroup.sync();
@@ -872,7 +906,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                             hasLauncher = true;
                         }
                     }
-                    if( type->canLaunch(itm) && hasLauncher )
+                    if( hasLauncher && type->canLaunch(itm) )
                     {
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
                         KAction* act = new KAction( d->launchAsMapper );

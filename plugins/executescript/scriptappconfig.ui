@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>390</height>
+    <width>600</width>
+    <height>418</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -16,118 +16,66 @@
      <property name="title">
       <string>Script</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QRadioButton" name="executableRadio">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KUrlRequester" name="executablePath">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="clickMessage">
-           <string>Enter the absolute path to a script file</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="projectTargetRadio">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="ProjectItemLineEdit" name="projectTarget">
-          <property name="clickMessage">
-           <string>Enter a project target as path in the tree</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Script:</string>
-        </property>
-        <property name="buddy">
-         <cstring>executableRadio</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Project Target:</string>
-        </property>
-        <property name="buddy">
-         <cstring>projectTargetRadio</cstring>
-        </property>
-       </widget>
-      </item>
+     <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Interpreter:</string>
-        </property>
-        <property name="buddy">
-         <cstring>interpreter</cstring>
+         <string>Interpreter command:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="interpreter"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>Execute on Host</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0" colspan="2">
-       <widget class="QRadioButton" name="localHostRadio">
-        <property name="text">
-         <string>Local Host</string>
+       <widget class="QComboBox" name="interpreter">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="checked">
+        <property name="editable">
          <bool>true</bool>
         </property>
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>python</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>ruby</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bash</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>php</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="remoteHostRadio">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Remote Host (ssh):</string>
+         <string>Script file:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="remoteHost">
+       <widget class="KUrlRequester" name="executablePath">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="clickMessage">
-         <string>Enter a remote host (user@example.com)</string>
+         <string>Enter the absolute path to the script to run</string>
         </property>
        </widget>
       </item>
@@ -139,7 +87,10 @@
      <property name="title">
       <string>Behavior</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -154,6 +105,9 @@
        <widget class="KLineEdit" name="arguments">
         <property name="toolTip">
          <string>Enter arguments to give to the executable</string>
+        </property>
+        <property name="placeholderText">
+         <string/>
         </property>
         <property name="clickMessage">
          <string>Enter arguments to give to the executable</string>
@@ -197,8 +151,90 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Output filter:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="outputFilteringMode">
+        <property name="toolTip">
+         <string>Select the filter to applied to the output. E.g. to mark errors with red text</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>no filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>compiler filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>script error filter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>static analysis filter</string>
+         </property>
+        </item>
+       </widget>
+      </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Execute on Host</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="remoteHostCheckbox">
+        <property name="text">
+         <string>Remote Host (ssh):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KLineEdit" name="remoteHost">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="clickMessage">
+         <string>Enter a remote host (user@example.com)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -217,112 +253,23 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
    <header>util/environmentselectionwidget.h</header>
   </customwidget>
-  <customwidget>
-   <class>ProjectItemLineEdit</class>
-   <extends>KLineEdit</extends>
-   <header>project/projectitemlineedit.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>interpreter</tabstop>
-  <tabstop>projectTargetRadio</tabstop>
-  <tabstop>projectTarget</tabstop>
-  <tabstop>executableRadio</tabstop>
   <tabstop>executablePath</tabstop>
-  <tabstop>localHostRadio</tabstop>
-  <tabstop>remoteHostRadio</tabstop>
-  <tabstop>remoteHost</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
+  <tabstop>outputFilteringMode</tabstop>
+  <tabstop>remoteHostCheckbox</tabstop>
+  <tabstop>remoteHost</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>projectTargetRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>projectTarget</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>82</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>485</x>
-     <y>87</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>projectTargetRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>executablePath</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>82</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>490</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>executableRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>projectTarget</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>112</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>490</x>
-     <y>87</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>executableRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>executablePath</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>140</x>
-     <y>112</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>490</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>remoteHostRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>remoteHost</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>205</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>213</x>
-     <y>206</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

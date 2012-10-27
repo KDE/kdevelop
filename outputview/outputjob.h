@@ -49,8 +49,10 @@ public:
     void startOutput();
 
     OutputJobVerbosity verbosity() const;
-    
+
     void setVerbosity(OutputJobVerbosity verbosity);
+
+    QAbstractItemModel* model() const;
 
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
@@ -62,9 +64,25 @@ protected:
     void setBehaviours(IOutputView::Behaviours behaviours);
     void setKillJobOnOutputClose(bool killJobOnOutputClose);
 
-    QAbstractItemModel* model() const;
-    void setModel(QAbstractItemModel* model, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
-    void setDelegate(QAbstractItemDelegate* delegate, IOutputView::Ownership takeOwnership = IOutputView::KeepOwnership);
+    /**
+     * Sets the model for the view that shows this jobs output.
+     *
+     * The view takes ownership of the model, but it is safe to
+     * use the model while the job is running.
+     *
+     * NOTE: Do not reuse the same model for different jobs.
+     */
+    void setModel(QAbstractItemModel* model);
+
+    /**
+     * Sets the delegate for the view that shows this jobs output.
+     *
+     * The view takes ownership of the delegate, but it is safe to
+     * use the delegate while the job is running.
+     *
+     * NOTE: Do not reuse the same delegate for different jobs.
+     */
+    void setDelegate(QAbstractItemDelegate* delegate);
 
     int outputId() const;
 
@@ -81,9 +99,7 @@ private:
     OutputJobVerbosity m_verbosity;
     int m_outputId;
     QPointer<QAbstractItemModel> m_outputModel;
-    IOutputView::Ownership m_modelOwnership;
     QAbstractItemDelegate* m_outputDelegate;
-    IOutputView::Ownership m_delegateOwnership;
 };
 
 }
