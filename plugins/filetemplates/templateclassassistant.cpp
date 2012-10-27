@@ -244,13 +244,17 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
         {
             if (ProjectFolderItem* folder = item->folder())
             {
-                fileItems << project->projectFileManager()->addFile(fileUrl, folder);
-                break;
+                if (ProjectFileItem* file = project->projectFileManager()->addFile(fileUrl, folder)) {
+                    fileItems << file;
+                    break;
+                }
             }
         }
     }
 
-    project->buildSystemManager()->addFilesToTarget(fileItems, target);
+    if (!fileItems.isEmpty()) {
+        project->buildSystemManager()->addFilesToTarget(fileItems, target);
+    }
 
 }
 
