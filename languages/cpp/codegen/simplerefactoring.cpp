@@ -57,6 +57,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <kparts/mainwindow.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/classdeclaration.h>
 #include <dumptree.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
@@ -273,24 +274,67 @@ class SimpleRefactoringCollector : public KDevelop::UsesWidget::UsesWidgetCollec
   QVector<IndexedTopDUContext> m_allUsingContexts;
 };
 
-DocumentChangeSet::ChangeResult applyChangesToDeclarations(QString oldName, QString newName, DocumentChangeSet& changes, QList<IndexedDeclaration> declarations) {
+/**
+ * @return indexed string of the new file name in @p old replaced with @p newBase up to the file extension
+ */
+IndexedString rename(const KUrl& old, const QString& newBase)
+{
+  const QString fileExtension = old.fileName().mid(old.fileName().indexOf('.'));
+  return IndexedString(newBase + fileExtension);
+}
+
+DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName,
+                                                           const QString& newName,
+                                                           DocumentChangeSet& changes,
+                                                           const QList<IndexedDeclaration>& declarations)
+{
   foreach(const IndexedDeclaration &decl, declarations) {
-    if(!decl.data())
+    Declaration* declaration = decl.data();
+    if(!declaration) {
       continue;
-    TopDUContext* top = decl.data()->topContext();
-    if(decl.data()->range().isEmpty()) {
+    }
+    if (declaration->range().isEmpty()) {
       kDebug() << "found empty declaration";
     }
-    if(ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl.data())) {
-      if(classFun->isDestructor()) {
-        //Our C++, destructors only have the range of the text behind the "~"
-//         newName = destructorForName(Identifier(newName)).identifier().str();
-//         oldName = destructorForName(Identifier(oldName)).identifier().str();
+    TopDUContext* top = declaration->topContext();
+    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
+    if (!result) {
+      return result;
+    }
+
+    ///TODO: extract into assistant as well
+    // only try to rename files when we renamed a class/struct
+    if (!dynamic_cast<ClassDeclaration*>(declaration)) {
+      continue;
+    }
+    const KUrl currUrl = top->url().toUrl();
+    QString filename = currUrl.fileName();
+    // check whether we renamed something that is called like the document it lives in
+    QString newFileBase;
+    if (filename.startsWith(oldName+'.')) {
+      newFileBase = newName;
+    } else if (filename.startsWith(oldName.toLower()+'.')) {
+      newFileBase = newName.toLower();
+    } else {
+      // don't do anything
+      continue;
+    }
+
+    // ok, then rename the file
+    result = changes.addDocumentRenameChange(top->url(), rename(currUrl, newFileBase));
+    if (!result) {
+      return result;
+    }
+
+    // check implementation
+    const KUrl otherFile = CppUtils::sourceOrHeaderCandidate(currUrl);
+    if (otherFile.isValid()) {
+      // also rename this other file
+      result = changes.addDocumentRenameChange(IndexedString(otherFile), rename(otherFile, newFileBase));
+      if(!result) {
+        return result;
       }
     }
-    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), decl.data()->rangeInCurrentRevision(), oldName, newName));
-    if(!result)
-      return result;
   }
   return DocumentChangeSet::ChangeResult(true);
 }
@@ -364,64 +408,67 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
   SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(declaration);
-
-  QDialog dialog;
-
-  QTabWidget tabWidget;
-
-  UsesWidget uses(declaration, collector);
+  UsesWidget* uses = new UsesWidget(declaration, collector);
 
   QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration);
   AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
 
   if(abstractNavigationWidget) { //So the context-links work
-    connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
+    connect(uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),
+            abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
 //     connect(uses, SIGNAL(navigateDeclaration(IndexedDeclaration)), tabWidget, SLOT(setCurrentIndex(...)));
 ///@todo Switch the tab in the tab-widget, so the user will notice that the declaration is being shown
   }
 
-  QVBoxLayout verticalLayout;
-  QHBoxLayout actionsLayout;
-  dialog.setLayout(&verticalLayout);
-  dialog.setWindowTitle(i18n("Rename %1", declaration->toString()));
+  QScopedPointer<QDialog> dialog(new QDialog);
+  dialog->setWindowTitle(i18n("Rename %1", declaration->toString()));
 
-  QLabel newNameLabel(i18n("New name:"));
-  actionsLayout.addWidget(&newNameLabel);
+  QVBoxLayout* verticalLayout = new QVBoxLayout;
+  dialog->setLayout(verticalLayout);
 
-  QLineEdit edit(declaration->identifier().identifier().str());
-  newNameLabel.setBuddy(&edit);
+  QHBoxLayout* actionsLayout = new QHBoxLayout;
 
-  actionsLayout.addWidget(&edit);
-  edit.setText(originalName);
-  edit.setFocus();
-  edit.selectAll();
-  QPushButton goButton(i18n("Rename"));
-  goButton.setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
-  actionsLayout.addWidget(&goButton);
-  connect(&goButton, SIGNAL(clicked(bool)), &dialog, SLOT(accept()));
+  QLabel* newNameLabel = new QLabel(i18n("New name:"));
+  actionsLayout->addWidget(newNameLabel);
 
-  QPushButton cancelButton(i18n("Cancel"));
-  actionsLayout.addWidget(&cancelButton);
-  verticalLayout.addLayout(&actionsLayout);
-
-  tabWidget.addTab(&uses, i18n("Uses"));
-  if(navigationWidget)
-    tabWidget.addTab(navigationWidget, i18n("Declaration Info"));
-
-  verticalLayout.addWidget(&tabWidget);
-
-  connect(&cancelButton, SIGNAL(clicked(bool)), &dialog, SLOT(reject()));
+  QLineEdit* edit = new QLineEdit(declaration->identifier().toString());
 
   lock.unlock();
-  dialog.resize( 750, 550 );
+  ///NOTE: do not access declaration anymore now!
 
-  if(dialog.exec() != QDialog::Accepted) {
+  newNameLabel->setBuddy(edit);
+  edit->setText(originalName);
+  edit->setFocus();
+  edit->selectAll();
+  actionsLayout->addWidget(edit);
+
+  QPushButton* goButton = new QPushButton(i18n("Rename"));
+  goButton->setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
+  actionsLayout->addWidget(goButton);
+  connect(goButton, SIGNAL(clicked(bool)), dialog.data(), SLOT(accept()));
+
+  QPushButton* cancelButton = new QPushButton(i18n("Cancel"));
+  actionsLayout->addWidget(cancelButton);
+  verticalLayout->addLayout(actionsLayout);
+
+  QTabWidget* tabWidget = new QTabWidget;
+  verticalLayout->addWidget(tabWidget);
+  tabWidget->addTab(uses, i18n("Uses"));
+  if (navigationWidget) {
+    tabWidget->addTab(navigationWidget, i18n("Declaration Info"));
+  }
+
+  connect(cancelButton, SIGNAL(clicked(bool)), dialog.data(), SLOT(reject()));
+
+  dialog->resize( 750, 550 );
+
+  if(dialog->exec() != QDialog::Accepted) {
     kDebug() << "stopped";
     return;
   }
   //It would be nicer to scope this, but then "uses" would not survive
 
-  replacementName = edit.text();
+  replacementName = edit->text();
 
 
   if(replacementName == originalName || replacementName.isEmpty())
@@ -460,13 +507,22 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
     return;
   }
 
+  lock.unlock();
   ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
   changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
   changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
-  result = changes.applyAllChanges();
+
+  m_pendingChanges = changes;
+  ///NOTE: this is required, otherwise, if you rename a file it will crash...
+  QMetaObject::invokeMethod(this, "applyChangesDelayed", Qt::QueuedConnection);
+}
+
+void SimpleRefactoring::applyChangesDelayed()
+{
+  DocumentChangeSet::ChangeResult result = m_pendingChanges.applyAllChanges();
+  m_pendingChanges = DocumentChangeSet();
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
-      return;
   }
 }
 

@@ -23,9 +23,10 @@
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
+#include <language/codegen/documentchangeset.h>
 
 namespace KDevelop {
-  class IndexedDeclaration;
+class IndexedDeclaration;
 }
 
 class SimpleRefactoring : public QObject {
@@ -36,15 +37,20 @@ public:
   void doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
 
   void startInteractiveRename(KDevelop::IndexedDeclaration decl);
-  
+
 public slots:
   void executeRenameAction();
   void executeMoveIntoSourceAction();
+
+private slots:
+  void applyChangesDelayed();
 
 private:
   ///Duchain does not need to be read-locked
   ///If @p allowUse is false, a declaration that is declared in the current line is returned(if one exists)
   KDevelop::IndexedDeclaration declarationUnderCursor(bool allowUse = true);
+
+  KDevelop::DocumentChangeSet m_pendingChanges;
 };
 
 #endif
