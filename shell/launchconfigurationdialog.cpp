@@ -196,14 +196,14 @@ void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
         QModelIndex selected = tree->selectionModel()->selectedRows().first();
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
-            QMenu* menu = new QMenu;
-            QAction* rename = new QAction(KIcon("edit-rename"), i18n("Rename configuration"), menu);
-            QAction* delete_ = new QAction(KIcon("edit-delete"), i18n("Delete configuration"), menu);
+            QMenu menu;
+            QAction* rename = new QAction(KIcon("edit-rename"), i18n("Rename configuration"), &menu);
+            QAction* delete_ = new QAction(KIcon("edit-delete"), i18n("Delete configuration"), &menu);
             connect(rename, SIGNAL(triggered(bool)), this, SLOT(renameSelected()));
             connect(delete_, SIGNAL(triggered(bool)), this, SLOT(deleteConfiguration()));
-            menu->addAction(rename);
-            menu->addAction(delete_);
-            menu->exec(tree->mapToGlobal(point));
+            menu.addAction(rename);
+            menu.addAction(delete_);
+            menu.exec(tree->mapToGlobal(point));
         }
     }
 }
