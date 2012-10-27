@@ -61,4 +61,5 @@ void RenameFileAction::execute()
   if(!result) {
     KMessageBox::error(0, i18n("Failed to apply changes: %1", result.m_failureReason));
   }
+  emit executed(this);
 }

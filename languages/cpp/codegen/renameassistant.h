@@ -41,8 +41,10 @@ public:
   void textChanged(const KTextEditor::Range& invocationRange, const QString& removedText = QString());
   bool isUseful() { return m_isUseful; }
 
-private:
+private slots:
   void reset();
+
+private:
   KDevelop::Declaration* getDeclarationForChangedRange(const KTextEditor::Range& changed) const;
   bool shouldRenameUses(KDevelop::Declaration* declaration) const;
 

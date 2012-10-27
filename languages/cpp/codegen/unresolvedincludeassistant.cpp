@@ -92,6 +92,8 @@ void Cpp::AddCustomIncludePathAction::execute() {
       oldSettings.storagePath = o.storageDirectory->url().toLocalFile();
       if(!oldSettings.write()) {
         KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Failed to save custom include paths in directory: %1", oldSettings.storagePath));
+      } else {
+        emit executed(this);
       }
     }
   }else{
@@ -115,6 +117,7 @@ Cpp::OpenProjectForFileAssistant::OpenProjectForFileAssistant(KUrl url) : m_url(
 
 void Cpp::OpenProjectForFileAssistant::execute() {
   KDevelop::ICore::self()->projectController()->openProjectForUrl(m_url);
+  emit executed(this);
 }
 
 QString Cpp::OpenProjectForFileAssistant::description() const {

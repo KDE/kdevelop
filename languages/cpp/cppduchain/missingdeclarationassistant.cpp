@@ -59,6 +59,7 @@ class CreateLocalDeclarationAction : public MissingDeclarationAction {
             
             changes.setReplacementPolicy(KDevelop::DocumentChangeSet::WarnOnFailedChange);
             changes.applyAllChanges();
+            emit executed(this);
           }
         }
         virtual QString description() const {
@@ -153,6 +154,7 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
               ICore::self()->languageController()->backgroundParser()->addDocument(changeUrl);
               ICore::self()->languageController()->backgroundParser()->addDocument(localUrl);
             }
+            emit executed(this);
           }
         }
         virtual QString description() const {

@@ -102,7 +102,8 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
     return;
   }
 
-  const IndexedString indexedUrl(m_view->document()->url());
+  const KUrl url = m_view->document()->url();
+  const IndexedString indexedUrl(url);
   DUChainReadLocker lock;
 
   //If we've stopped editing m_newDeclarationRange, reset and see if there's another declaration being edited
@@ -158,17 +159,23 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
     return;
   }
 
-  if (m_renameFile && SimpleRefactoring::newFileName(m_view->document()->url(), m_newDeclarationName) == m_view->document()->url().fileName()) {
+  if (m_renameFile && SimpleRefactoring::newFileName(url, m_newDeclarationName) == url.fileName()) {
+    // no change, don't do anything
     return;
   }
 
   m_isUseful = true;
+
+  IAssistantAction::Ptr action;
+
   if (m_renameFile) {
-    addAction(IAssistantAction::Ptr(new RenameFileAction(m_view->document()->url(), m_newDeclarationName)));
+    action.attach(new RenameFileAction(url, m_newDeclarationName));
   } else {
-    addAction(IAssistantAction::Ptr(new RenameAction(m_oldDeclarationName, m_newDeclarationName,
-                                                     m_oldDeclarationUses)));
+    action.attach(new RenameAction(m_oldDeclarationName, m_newDeclarationName,
+                                                     m_oldDeclarationUses));
   }
+  connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
+  addAction(action);
   emit actionsChanged();
 }
 
