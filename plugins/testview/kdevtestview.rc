@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="kdevtestview" library="libkdevtestview" version="7">
+<MenuBar>
+ <Menu name="run">
+  <Text context="@title:menu">Run</Text>
+  <Action name="run_all_tests"
+	  group="run_operations"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>

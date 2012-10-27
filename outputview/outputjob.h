@@ -52,6 +52,8 @@ public:
 
     void setVerbosity(OutputJobVerbosity verbosity);
 
+    QAbstractItemModel* model() const;
+
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
     void setToolTitle(const QString& title);
@@ -61,8 +63,6 @@ protected:
     void setViewType(IOutputView::ViewType type);
     void setBehaviours(IOutputView::Behaviours behaviours);
     void setKillJobOnOutputClose(bool killJobOnOutputClose);
-
-    QAbstractItemModel* model() const;
 
     /**
      * Sets the model for the view that shows this jobs output.

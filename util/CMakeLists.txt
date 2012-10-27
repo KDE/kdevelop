@@ -18,6 +18,7 @@ set(kdevplatformutil_LIB_SRCS
     fileutils.cpp
     sequentiallyrunjobs.cpp
     multilevellistview.cpp
+    projecttestjob.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -74,6 +75,7 @@ install( FILES
     fileutils.h
     sequentiallyrunjobs.h
     multilevellistview.h
+    projecttestjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES

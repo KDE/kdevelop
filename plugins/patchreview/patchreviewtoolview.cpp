@@ -21,8 +21,14 @@
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/itestcontroller.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
+#include <util/projecttestjob.h>
 #include <KLineEdit>
 #include <QMenu>
 
@@ -142,6 +148,22 @@ void PatchReviewToolView::fillEditFromPatch() {
         kDebug() << "got custom widget";
     }
 
+    bool showTests = false;
+    IProject* project = 0;
+    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+
+    for (; it != files.constEnd(); ++it) {
+        project = ICore::self()->projectController()->findProjectForUrl(it.key());
+        if (project && !ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
+            showTests = true;
+            break;
+        }
+    }
+
+    m_editPatch.testsButton->setVisible(showTests);
+    m_editPatch.testProgressBar->hide();
+
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
     m_editPatch.localPatchOptions->setVisible( lpatch );
     if( !lpatch )
@@ -188,6 +210,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
+    m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -233,6 +256,8 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
     connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
+
+    connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
@@ -374,3 +399,64 @@ void PatchReviewToolView::documentActivated( IDocument* doc ) {
     }
 }
 
+void PatchReviewToolView::runTests()
+{
+    IPatchSource::Ptr ipatch = m_plugin->patch();
+    if ( !ipatch ) {
+        return;
+    }
+
+    IProject* project = 0;
+    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+
+    for (; it != files.constEnd(); ++it) {
+        project = ICore::self()->projectController()->findProjectForUrl(it.key());
+        if (project) {
+           break;
+        }
+    }
+
+    if (!project) {
+        return;
+    }
+
+    m_editPatch.testProgressBar->setFormat(i18n("Running tests: %p%"));
+    m_editPatch.testProgressBar->setValue(0);
+    m_editPatch.testProgressBar->show();
+
+    ProjectTestJob* job = new ProjectTestJob(project, this);
+    connect (job, SIGNAL(finished(KJob*)), SLOT(testJobResult(KJob*)));
+    connect (job, SIGNAL(percent(KJob*,ulong)), SLOT(testJobPercent(KJob*,ulong)));
+    ICore::self()->runController()->registerJob(job);
+}
+
+void PatchReviewToolView::testJobPercent(KJob* job, ulong percent)
+{
+    Q_UNUSED(job);
+    m_editPatch.testProgressBar->setValue(percent);
+}
+
+void PatchReviewToolView::testJobResult(KJob* job)
+{
+    ProjectTestJob* testJob = qobject_cast<ProjectTestJob*>(job);
+    if (!testJob) {
+        return;
+    }
+
+    ProjectTestResult result = testJob->testResult();
+
+    QString format;
+    if (result.passed > 0 && result.failed == 0 && result.error == 0)
+    {
+        format = i18np("Test passed", "All %1 tests passed", result.passed);
+    }
+    else
+    {
+        format = i18n("Test results: %1 passed, %2 failed, %3 errors", result.passed, result.failed, result.error);
+    }
+    m_editPatch.testProgressBar->setFormat(format);
+
+    // Needed because some test jobs may raise their own output views
+    ICore::self()->uiController()->raiseToolView(this);
+}

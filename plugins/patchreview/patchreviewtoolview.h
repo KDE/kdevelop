@@ -19,6 +19,7 @@
 #include <QTime>
 #include <ui_patchreview.h>
 
+class KJob;
 namespace KDevelop {
 class IDocument;
 }
@@ -53,6 +54,8 @@ private slots:
 
     void finishReview();
 
+    void runTests();
+
 private:
     void kompareModelChanged();
 
@@ -80,6 +83,8 @@ public slots:
     void documentActivated( KDevelop::IDocument* );
     void patchSelectionChanged( int );
     void customContextMenuRequested(const QPoint& p);
+    void testJobResult(KJob* job);
+    void testJobPercent(KJob* job, ulong percent);
 };
 
 #endif // PATCHREVIEWTOOLVIEW_H

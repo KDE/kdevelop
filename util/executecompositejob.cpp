@@ -90,6 +90,11 @@ bool ExecuteCompositeJob::doKill()
     return true;
 }
 
+const QList< KJob* >& ExecuteCompositeJob::subjobs() const
+{
+    return KCompositeJob::subjobs();
+}
+
 }
 
 #include "executecompositejob.moc"

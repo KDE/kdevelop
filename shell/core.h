@@ -43,6 +43,7 @@ class SelectionController;
 class DocumentationController;
 class DebugController;
 class WorkingSetController;
+class TestController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore
 {
@@ -97,13 +98,16 @@ public:
 
     /** @copydoc ICore::selectionController() */
     virtual ISelectionController* selectionController();
-    
+
     /** @copydoc ICore::documentationController() */
     virtual IDocumentationController* documentationController();
 
     /** @copydoc ICore::debugController() */
     virtual IDebugController* debugController();
-    
+
+    /** @copydoc ICore::testController() */
+    virtual ITestController* testController();
+
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
 
@@ -144,6 +148,9 @@ public:
     /** @return the real source formatter controller */
     SourceFormatterController* sourceFormatterControllerInternal();
 
+    /** @return test controller */
+    TestController* testControllerInternal();
+
     /**
      * @return session controller
      * @internal
@@ -157,8 +164,8 @@ public:
 
     void cleanup();
 
-    virtual bool shuttingDown() const;    
-    
+    virtual bool shuttingDown() const;
+
     Core::Setup setupFlags() const;
 
 public slots:
