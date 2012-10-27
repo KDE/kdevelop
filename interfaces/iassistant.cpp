@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -31,72 +31,76 @@ static QString removeHtmlFromString(QString string)
     return QTextEdit(string).toPlainText();
 }
 
-KAction* KDevelop::IAssistantAction::toKAction() const {
+KAction* IAssistantAction::toKAction() const
+{
     KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
     qRegisterMetaType<KSharedPtr<IAssistantAction> >("KSharedPtr<IAssistantAction>()");
-    
+
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
     ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
-    
+
     connect(ret, SIGNAL(triggered(bool)), SLOT(execute()), Qt::QueuedConnection);
     return ret;
 }
 
-KDevelop::IAssistant::~IAssistant() {
+IAssistant::~IAssistant()
+{
 }
 
-KDevelop::IAssistantAction::IAssistantAction() : KSharedObject(*(QObject*)this) {
+IAssistantAction::IAssistantAction()
+: KSharedObject(*(QObject*)this)
+{
 }
 
-KDevelop::IAssistantAction::~IAssistantAction() {
+IAssistantAction::~IAssistantAction()
+{
 }
 
-QIcon KDevelop::IAssistantAction::icon() const {
+QIcon IAssistantAction::icon() const
+{
     return QIcon();
 }
 
-QString KDevelop::IAssistantAction::toolTip() const {
+QString IAssistantAction::toolTip() const
+{
     return QString();
 }
 
-KDevelop::IAssistant::IAssistant() : KSharedObject(*(QObject*)this) {
+IAssistant::IAssistant()
+: KSharedObject(*(QObject*)this)
+{
 }
 
 
-QIcon KDevelop::IAssistant::icon() const {
+QIcon IAssistant::icon() const
+{
     return QIcon();
 }
 
-QString KDevelop::IAssistant::title() const {
+QString IAssistant::title() const
+{
     return QString();
 }
 
-void KDevelop::IAssistant::doHide() {
+void IAssistant::doHide()
+{
     emit hide();
 }
 
-QList< KDevelop::IAssistantAction::Ptr > KDevelop::IAssistant::actions() const {
+QList< IAssistantAction::Ptr > IAssistant::actions() const
+{
     return m_actions;
 }
 
-void KDevelop::IAssistant::addAction(KDevelop::IAssistantAction::Ptr action) {
+void IAssistant::addAction(const IAssistantAction::Ptr& action)
+{
     m_actions << action;
 }
 
-void KDevelop::IAssistant::clearActions() {
+void IAssistant::clearActions()
+{
     m_actions.clear();
 }
-
-QString KDevelop::DummyAssistantAction::description() const {
-    return m_description;
-}
-
-KDevelop::DummyAssistantAction::DummyAssistantAction(QString desc) : m_description(desc) {
-}
-
-void KDevelop::DummyAssistantAction::execute() {
-}
-
 
 #include "iassistant.moc"
