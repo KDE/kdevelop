@@ -210,7 +210,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
 }
 
 ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source,
-                                     bool strict, bool propagateConstness)
+                                     bool strict, bool propagateConstness, bool mapAst)
 : m_strict(strict)
 , m_memberAccess(false)
 , m_skipLastNamePart(false)
@@ -222,6 +222,7 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopD
 , m_topContext(0)
 , m_reportRealProblems(false)
 , m_propagateConstness(propagateConstness)
+, m_mapAst(mapAst)
 {
 }
 
@@ -398,7 +399,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
             clearLast();
             return;
           }
-          session()->mapCallAstToType(node, m_lastType.cast<FunctionType>());
+          if(m_mapAst) session()->mapCallAstToType(node, m_lastType.cast<FunctionType>());
 
           if( !m_lastDeclarations.isEmpty() ) {
             DeclarationPointer decl(m_lastDeclarations.first());
@@ -766,7 +767,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         m_lastType = thisPointer.cast<AbstractType>();
         m_lastInstance = Instance(true);
-        session()->mapCallAstToType(node, cppFunction);
+        if(m_mapAst) session()->mapCallAstToType(node, cppFunction);
       }else{
         if( context->owner() && context->owner()->abstractType() )
           problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(context->owner()->abstractType()->toString()));
@@ -1083,7 +1084,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             lock.unlock();
             newUse( node, node->op, node->op+1, viable.declaration() );
 
-            session()->mapCallAstToType(node, function);
+            if(m_mapAst) session()->mapCallAstToType(node, function);
           }else{
             //Do not complain here, because we do not check for builtin operators
             //problem(node, "No fitting operator. found" );
@@ -1234,7 +1235,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       if(chosenFunction) {
         newUse( node , token, token+1, chosenFunction );
-        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
+        if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }else{
       DefaultVisitor::visitInitDeclarator(node);
@@ -1502,7 +1503,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       if(chosenFunction) {
         newUse( node , token, token+1, chosenFunction );
-        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
+        if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }
 
@@ -1715,7 +1716,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               lock.unlock();
 
               newUse( node, node->op, node->op+1, viable.declaration() );
-              session()->mapCallAstToType(node, function);
+              if(m_mapAst) session()->mapCallAstToType(node, function);
             }else{
               problem(node, QString("Found no viable function"));
             }
@@ -2038,7 +2039,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
     
     if(chosenFunction)
-      session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
+      if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
 
     static IndexedString functionCallOperatorIdentifier("operator()");
 
@@ -2197,7 +2198,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( function ) {
         m_lastType = function->returnType();
         m_lastInstance = Instance(true);
-        session()->mapCallAstToType(node, function);
+        if(m_mapAst) session()->mapCallAstToType(node, function);
       }else{
         clearLast();
         problem(node, QString("Found no subscript-function"));
@@ -2291,7 +2292,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           if( viable.isViable() && function ) {
             m_lastType = function->returnType();
             m_lastInstance = Instance(true);
-            session()->mapCallAstToType(node, function);
+            if(m_mapAst) session()->mapCallAstToType(node, function);
           }else{
             problem(node, QString("Found no viable function"));
           }
@@ -2391,7 +2392,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         uint token = node->initializer_id->end_token;
         newUse( node , token, token+1, chosenFunction );
 
-        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
+        if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }
 

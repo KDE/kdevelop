@@ -302,7 +302,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         }
 
     node->expression->ducontext = currentContext();
-    ExpressionParser parser(false, false, isDecltypeInParen);
+    ExpressionParser parser(false, false, isDecltypeInParen, m_mapAst);
     ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession(), topContext());
     AbstractType::Ptr type = result.type.abstractType();
     // make reference for decltype in additional parens - but only if it's not already a reference

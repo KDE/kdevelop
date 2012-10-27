@@ -54,7 +54,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      *                           'const A* a; decltype((a->x)) b;', here b should be const
      * */
 
-    explicit ExpressionParser( bool strict = false, bool debug = false, bool propagateConstness = false );
+    explicit ExpressionParser( bool strict = false, bool debug = false, bool propagateConstness = false, bool mapAst = false );
     /**
      * Evaluates the type of an expression given as a string within a given context.
      * The expression can either be a simple type-id, or a valid C++ expression.
@@ -101,6 +101,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
     bool m_strict;
     bool m_debug;
     bool m_propagateConstness;
+    bool m_mapAst;
 };
 
 }

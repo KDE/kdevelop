@@ -44,7 +44,7 @@ void CodeAnalysisTest::testUseReadWrite()
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpNone, 0, true);
   
   DataAccessRepository* repo = &m_modifications;
   

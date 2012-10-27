@@ -139,6 +139,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   }
 
   UseBuilder useBuilder(session.data());
+  useBuilder.setMapAst(keepAst);
   useBuilder.buildUses(ast);
   
   UseDecoratorVisitor visit(session.data(), &m_modifications);

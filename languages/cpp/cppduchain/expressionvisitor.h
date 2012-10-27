@@ -58,7 +58,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      *                           'const A* a; decltype((a->x)) b;', here b should be const
      * */
     explicit ExpressionVisitor( ParseSession* session, const KDevelop::TopDUContext* source = 0,
-                                bool strict = false, bool propagateConstness = false );
+                                bool strict = false, bool propagateConstness = false, bool mapAst = false );
     ~ExpressionVisitor();
 
     struct Instance {
@@ -152,7 +152,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
   private:
 
-    bool m_strict, m_memberAccess, m_skipLastNamePart;
+    bool m_strict, m_memberAccess, m_skipLastNamePart, m_mapAst;
     AbstractType::Ptr m_lastType;
     bool m_hadMemberAccess; // Whether during last call to findName() a class-member was accessed
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration

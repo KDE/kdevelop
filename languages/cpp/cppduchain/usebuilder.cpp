@@ -118,7 +118,8 @@ void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
 
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
-  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
+  UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false, bool mapAst = false)
+    : Cpp::ExpressionVisitor(session, 0, false, false, mapAst), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
     reportRealProblems(true);
   }
   ~UseExpressionVisitor() {
@@ -163,7 +164,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 
 void UseBuilder::visitExpression(AST* node) {
 
-  UseExpressionVisitor visitor( editor()->parseSession(), this );
+  UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
   if( !node->ducontext )
     node->ducontext = currentContext();
   
@@ -182,7 +183,7 @@ void UseBuilder::visitUsingDirective(UsingDirectiveAST* node) {
 
 void UseBuilder::buildUsesForName(NameAST* name) {
   if(name) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if(name) {
       if( !name->ducontext )
         name->ducontext = currentContext();
@@ -201,7 +202,7 @@ void UseBuilder::visitMemInitializer(MemInitializerAST * node)
   if( !node->ducontext )
     node->ducontext = currentContext();
   
-  UseExpressionVisitor visitor( editor()->parseSession(), this );
+  UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     
   visitor.parse( node );
 }
@@ -211,7 +212,7 @@ void UseBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
   UseBuilderBase::visitElaboratedTypeSpecifier(node);
   
   if(!node->isDeclaration) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->ducontext ) {
       if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
         node->ducontext = lastContext();//Use the template-context so we can build uses for the template-parameters of template functions
@@ -230,7 +231,7 @@ void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   if(node->init_declarators && node->type_specifier && node->type_specifier->kind != AST::Kind_ClassSpecifier)
   {
     //Overridden so we can build uses for constructors like "A a(3);"
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->ducontext ) {
       if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
         node->ducontext = lastContext();//Use the template-context so we can build uses for the template-parameters of template functions
@@ -249,7 +250,7 @@ void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
       InitDeclaratorAST* initDecl = it->element;
       if(initDecl->declarator && initDecl->declarator->id)
       {
-        UseExpressionVisitor visitor( editor()->parseSession(), this );
+        UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
         initDecl->declarator->id->ducontext = currentContext();
         visitor.parseNamePrefix(initDecl->declarator->id);
       }
@@ -264,7 +265,7 @@ void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   UseBuilderBase::visitSimpleTypeSpecifier(node);
   
-  UseExpressionVisitor visitor( editor()->parseSession(), this );
+  UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
   if( !node->ducontext ) {
     if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
       node->ducontext = lastContext();//Use the template-context so we can build uses for the template-parameters of template functions
@@ -278,7 +279,7 @@ void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 void UseBuilder::visitDeclarator(DeclaratorAST* node)
 {
   if(node->id) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->id->ducontext )
       node->id->ducontext = currentContext();
     visitor.parseNamePrefix(node->id);
@@ -290,7 +291,7 @@ void UseBuilder::visitDeclarator(DeclaratorAST* node)
 void UseBuilder::visitClassSpecifier(ClassSpecifierAST* node)
 {
   if(node->name) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->name->ducontext )
       node->name->ducontext = currentContext();
 
@@ -302,7 +303,7 @@ void UseBuilder::visitClassSpecifier(ClassSpecifierAST* node)
 
 void UseBuilder::visitTypeId(TypeIdAST* node) {
   {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->ducontext )
       node->ducontext = currentContext();
 
@@ -315,7 +316,7 @@ void UseBuilder::visitTypeId(TypeIdAST* node) {
 void UseBuilder::visitUsing(UsingAST *node)
 {
   if(node->name) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->name->ducontext )
       node->name->ducontext = currentContext();
 
