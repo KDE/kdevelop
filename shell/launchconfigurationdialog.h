@@ -163,6 +163,9 @@ private:
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;
     QMap<ILauncher*, LaunchConfigPagesContainer*> launcherWidgets;
     bool currentPageChanged;
+private slots:
+    void doTreeContextMenu(QPoint point);
+    void renameSelected();
 };
 
 }

@@ -86,6 +86,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         tree->setExpanded(model->index(row, 0), true);
     }
     
+    tree->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(doTreeContextMenu(QPoint)) );
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
     connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
     connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
@@ -184,8 +186,40 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
 
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
-
+    
     setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
+}
+
+void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
+{
+    if ( ! tree->selectionModel()->selectedRows().isEmpty() ) {
+        QModelIndex selected = tree->selectionModel()->selectedRows().first();
+        if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
+            // only display the menu if a launch config is clicked
+            QMenu* menu = new QMenu;
+            QAction* rename = new QAction(KIcon("edit-rename"), i18n("Rename configuration"), menu);
+            QAction* delete_ = new QAction(KIcon("edit-delete"), i18n("Delete configuration"), menu);
+            connect(rename, SIGNAL(triggered(bool)), this, SLOT(renameSelected()));
+            connect(delete_, SIGNAL(triggered(bool)), this, SLOT(deleteConfiguration()));
+            menu->addAction(rename);
+            menu->addAction(delete_);
+            menu->exec(tree->mapToGlobal(point));
+        }
+    }
+}
+
+void LaunchConfigurationDialog::renameSelected()
+{
+    if( !tree->selectionModel()->selectedRows().isEmpty() )
+    {
+        QModelIndex parent = tree->selectionModel()->selectedRows().first();
+        if( parent.parent().isValid() )
+        {
+            parent = parent.parent();
+        }
+        QModelIndex index = model->index(tree->selectionModel()->selectedRows().first().row(), 0, parent);
+        tree->edit( index );
+    }
 }
 
 QSize LaunchConfigurationDialog::sizeHint() const
