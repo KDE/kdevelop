@@ -78,7 +78,7 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
     if (funcType) {
       if (IntegralType::Ptr type = funcType->returnType().cast<IntegralType>()) {
         if (type->dataType() == IntegralType::TypeVoid) {
-          const QChar nextChar = document->character(jumpPos);
+          const QChar nextChar = document->character(pos);
           if (nextChar != ';' && nextChar != ')' && nextChar != ',') {
             closingParen += ';';
           }
