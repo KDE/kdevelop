@@ -191,4 +191,6 @@ private:
     QString m_errorDescription;
 };
 
+QVariant runSynchronously(KDevelop::VcsJob* job);
+
 #endif

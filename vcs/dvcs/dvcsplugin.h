@@ -104,12 +104,6 @@ public Q_SLOTS:
 
     // slots for menu
     void slotInit();
-    
-    ///synchronous currentBranch call
-    QString curBranch(const KUrl& repo);
-    
-    ///synchronous listBranches call
-    QStringList listBranches(const KUrl& repo);
 
 Q_SIGNALS:
     /**

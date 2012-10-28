@@ -59,6 +59,16 @@ K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1"
 
 using namespace KDevelop;
 
+QVariant runSynchronously(KDevelop::VcsJob* job)
+{
+    QVariant ret;
+    if(job->exec() && job->status()==KDevelop::VcsJob::JobSucceeded) {
+        ret = job->fetchResults();
+    }
+    delete job;
+    return ret;
+}
+
 namespace
 {
     
@@ -866,11 +876,11 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 
 void GitPlugin::initBranchHash(const QString &repo)
 {
-    QStringList branches = listBranches(KUrl(repo));
-    kDebug() << "BRANCHES: " << branches;
+    QStringList gitBranches = runSynchronously(branches(KUrl(repo))).toStringList();
+    kDebug() << "BRANCHES: " << gitBranches;
     //Now root branch is the current branch. In future it should be the longest branch
     //other commitLists are got with git-rev-lits branch ^br1 ^ br2
-    QString root = GitPlugin::curBranch(repo);
+    QString root = runSynchronously(currentBranch(repo)).toString();
     QScopedPointer<DVcsJob> job(gitRevList(repo, QStringList(root)));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
@@ -878,12 +888,12 @@ void GitPlugin::initBranchHash(const QString &repo)
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //     kDebug() << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
-    foreach(const QString &branch, branches)
+    foreach(const QString &branch, gitBranches)
     {
         if (branch == root)
             continue;
         QStringList args(branch);
-        foreach(const QString &branch_arg, branches)
+        foreach(const QString &branch_arg, gitBranches)
         {
             if (branch_arg != branch)
                 //man gitRevList for '^'

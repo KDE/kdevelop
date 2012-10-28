@@ -286,7 +286,7 @@ void GitInitTest::testBranching()
     VcsJob* j = m_plugin->branches(KUrl(gitTest_BaseDir));
     VERIFYJOB(j);
 
-    QString curBranch = m_plugin->curBranch(gitTest_BaseDir);
+    QString curBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
     QCOMPARE(curBranch, QString("master"));
 
     QString newBranch("new");
@@ -294,15 +294,15 @@ void GitInitTest::testBranching()
     rev.setRevisionValue("master", KDevelop::VcsRevision::GlobalNumber);
     j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
     VERIFYJOB(j);
-    QVERIFY(m_plugin->listBranches(KUrl(gitTest_BaseDir)).contains(newBranch));
+    QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
 
     j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
     VERIFYJOB(j);
-    QCOMPARE(m_plugin->curBranch(KUrl(gitTest_BaseDir)), newBranch);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
 
     j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), "master");
     VERIFYJOB(j);
-    QVERIFY(!m_plugin->listBranches(KUrl(gitTest_BaseDir)).contains("master"));
+    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains("master"));
 }
 
 void GitInitTest::revHistory()
