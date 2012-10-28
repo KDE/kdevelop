@@ -1,5 +1,9 @@
-This code here is copied from Qt Creator, see LICENSE.LGPL and LGPLG_EXCEPTION.TXT
-for license information.
+This code here is copied from Qt Creator:
+
+http://qt.gitorious.org/qt-creator/qt-creator
+
+This contents of this folder can be found in src/libs/. For license information see
+LICENSE.LGPL and LGPLG_EXCEPTION.TXT.
 
 NOTE: This is *not* a fork! Do *not* touch anything beside the CMake build files.
 Everything else *must* stay in sync. If you find a bug or have an improvement,
