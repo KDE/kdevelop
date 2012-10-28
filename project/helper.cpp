@@ -41,7 +41,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
 {
     QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
 
-    if ( !KIO::NetAccess::exists(url, true, window) ) {
+    if ( !KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, window) ) {
         kWarning() << "tried to remove non-existing url:" << url << project << isFolder;
         return true;
     }
