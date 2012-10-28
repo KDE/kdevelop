@@ -29,6 +29,7 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
+#include <KTextEditor/ContainerInterface>
 
 #include "core.h"
 
@@ -49,10 +50,12 @@ class Editor;
 namespace KDevelop
 {
 
-class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
+class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController, public KTextEditor::MdiContainer
 {
     friend class CorePrivate;
     Q_OBJECT
+    Q_INTERFACES( KTextEditor::MdiContainer )
+
 public:
     PartController(Core *core, QWidget *toplevel);
     virtual ~PartController();
@@ -76,6 +79,15 @@ public:
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
 
     bool isTextType( KMimeType::Ptr mimeType );
+
+
+    //KTextEditor::MdiContainer implementation
+    virtual void setActiveView( KTextEditor::View * view );
+    virtual KTextEditor::View * activeView();
+    virtual KTextEditor::Document * createDocument();
+    virtual bool closeDocument( KTextEditor::Document * doc );
+    virtual KTextEditor::View * createView( KTextEditor::Document * doc );
+    virtual bool closeView( KTextEditor::View * view );
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );

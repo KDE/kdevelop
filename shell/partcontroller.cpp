@@ -43,8 +43,14 @@
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/factory.h>
+#include <ktexteditor/containerinterface.h>
 
 #include "core.h"
+#include "textdocument.h"
+#include <interfaces/isession.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <sublime/area.h>
 
 namespace KDevelop
 {
@@ -120,6 +126,13 @@ KTextEditor::Editor* PartController::editorPart() const
         }
 
         d->m_textEditor = editorFactory->editor();
+
+        KTextEditor::ContainerInterface * iface = qobject_cast<KTextEditor::ContainerInterface *>( d->m_textEditor );
+        if (iface) {
+            iface->setContainer( const_cast<PartController*>(this) );
+        } else {
+            // the kpart does not support ContainerInterface.
+        }
     }
     return d->m_textEditor;
 }
@@ -233,6 +246,55 @@ void PartController::initialize()
 
 void PartController::cleanup()
 {}
+
+//BEGIN KTextEditor::MdiContainer
+void PartController::setActiveView(KTextEditor::View *view)
+{
+  Q_UNUSED(view)
+  // NOTE: not implemented
+}
+
+KTextEditor::View *PartController::activeView()
+{
+    TextView* textView = dynamic_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
+    if (textView) {
+        return textView->textView();
+    }
+    return 0;
+}
+
+KTextEditor::Document *PartController::createDocument()
+{
+  // NOTE: not implemented
+  kWarning() << "WARNING: interface call not implemented";
+  return 0;
+}
+
+bool PartController::closeDocument(KTextEditor::Document *doc)
+{
+  Q_UNUSED(doc)
+  // NOTE: not implemented
+  kWarning() << "WARNING: interface call not implemented";
+  return false;
+}
+
+KTextEditor::View *PartController::createView(KTextEditor::Document *doc)
+{
+  Q_UNUSED(doc)
+  // NOTE: not implemented
+  kWarning() << "WARNING: interface call not implemented";
+  return 0;
+}
+
+bool PartController::closeView(KTextEditor::View *view)
+{
+  Q_UNUSED(view)
+  // NOTE: not implemented
+  kWarning() << "WARNING: interface call not implemented";
+  return false;
+}
+//END KTextEditor::MdiContainer
+
 
 }
 #include "partcontroller.moc"
