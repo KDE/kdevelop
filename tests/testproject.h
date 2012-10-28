@@ -84,8 +84,10 @@ public:
     int projectCount() const { return m_projects.count(); }
     QList<IProject*> projects() const { return m_projects; }
 public:
-    void addProject(IProject* p) { p->setParent(this); m_projects << p; }
-    void clearProjects() { qDeleteAll(m_projects); m_projects.clear(); }
+    void addProject(IProject* p);
+    void takeProject(IProject* p);
+    void clearProjects();
+    virtual void closeProject(IProject* p);
 
 private:
     QList<IProject*> m_projects;

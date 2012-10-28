@@ -230,7 +230,7 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
             m_items.append( BuildItem( path.toStringList() ) );
             endInsertRows();
         }
-    } else {
+    } else if (project->projectItem()) { // can happen in unit tests
         // Add project to buildset, but only if there is no configuration for this project yet.
         addProjectItem( project->projectItem() );
     }

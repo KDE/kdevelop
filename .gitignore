@@ -3,3 +3,5 @@ apidocs
 *~
 doxygen.log
 build
+*.patch
+*.diff
