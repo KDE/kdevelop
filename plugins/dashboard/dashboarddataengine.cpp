@@ -34,8 +34,6 @@ void DashboardDataEngine::addConnection(const QString& containmentId, IProject* 
     setData(containmentId, "projectFileUrl", project->projectFileUrl());
     setData(containmentId, "projectName", project->projectItem()->text());
     setData(containmentId, "projectFiles", qVariantFromValue<QObject*>(new ProjectFiles(project, this)));
-    
-    qDebug() << "wiiii" << this << sources();
 }
 
 QString ProjectFiles::fileContents(const QString& fileName)
