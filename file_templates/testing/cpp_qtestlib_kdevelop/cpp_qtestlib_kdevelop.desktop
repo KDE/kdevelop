@@ -1,16 +1,43 @@
 [General]
 Name=A test for KDevPlatform
+Name[el]=ένα τεστ για το KDevPlatform
+Name[nl]=Een test voor KDevPlatform
+Name[pt]=Um teste do KDevPlatform
+Name[pt_BR]=Teste do KDevPlatform
+Name[uk]=Перевірка для KDevPlatform
+Name[x-test]=xxA test for KDevPlatformxx
 Comment=A unit test using the QTest library with KDevPlatform test helpers
+Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest και βοηθητικά για KDevPlatform test
+Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek met testhelpers van KDevPlatform
+Comment[pt]=Um teste unitário, usando a biblioteca QTest, com os auxiliares de testes da plataforma KDevPlatform
+Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com os auxiliares de testes do KDevPlatform
+Comment[sv]=En enhetstest som använder biblioteket QTest med testhjälp från KDevPlatform
+Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з допоміжними програмами перевірки KDevPlatform
+Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test helpersxx
 Category=Test/C++
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[el]=Header
+Name[nl]=Kop
+Name[pt]=Inclusão
+Name[pt_BR]=Cabeçalho
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
+Name[el]=Υλοποίηση
+Name[nl]=Implementatie
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[sv]=Implementering
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
- 
+

@@ -1,21 +1,53 @@
 [General]
 Name=Private Pointer
+Name[el]=Private Pointer
+Name[nl]=Private pointer
+Name[pt]=Ponteiro Privado
+Name[pt_BR]=Ponteiro privado
+Name[uk]=Закритий (private) вказівник
+Name[x-test]=xxPrivate Pointerxx
 Comment=C++ Class with a private D-pointer
+Comment[el]=C++ Class με private D-pointer
+Comment[nl]=C++ klasse met een private D-pointer
+Comment[pt]=Classe em C++ com um ponteiro-D privado
+Comment[pt_BR]=Classe em C++ com um ponteiro-D privado
+Comment[uk]=Клас C++ з закритим (private) D-вказівником
+Comment[x-test]=xxC++ Class with a private D-pointerxx
 Category=Class/C++/Basic
 Files=Header,PrivateHeader,Implementation
 OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[el]=Public Header
+Name[nl]=Publieke kop
+Name[pt]=Inclusão Pública
+Name[pt_BR]=Inclusão pública
+Name[uk]=Відкрийти (public) заголовок
+Name[x-test]=xxPublic Headerxx
 File=class.h
 OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[el]=Private Header
+Name[nl]=Private kop
+Name[pt]=Inclusão Privada
+Name[pt_BR]=Inclusão privada
+Name[uk]=Закритий (private) заголовок
+Name[x-test]=xxPrivate Headerxx
 File=class_p.h
 OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
+Name[el]=Υλοποίηση
+Name[nl]=Implementatie
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[sv]=Implementering
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp

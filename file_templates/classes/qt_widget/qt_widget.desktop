@@ -1,21 +1,53 @@
 [General]
 Name=Widget with a UI File
+Name[el]=Γραφικό συστατικό με UI αρχείο
+Name[nl]=Widget met een UI-bestand
+Name[pt]=Item Gráfico com um Ficheiro UI
+Name[pt_BR]=Widget com um arquivo UI
+Name[uk]=Віджет з файлом інтерфейсу користувача
+Name[x-test]=xxWidget with a UI Filexx
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[el]=QWidget subclass με χωριστό Qt Designer αρχείο
+Comment[nl]=Subklasse QWidget met een aparte Qt-designer bestand
+Comment[pt]=Sub-classe de QWidget com um ficheiro separado do Qt Designer
+Comment[pt_BR]=Subclasse de QWidget com um arquivo Qt Designer separado
+Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
+Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Category=Class/C++/Qt
 BaseClasses=public QWidget
 Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[el]=Public Header
+Name[nl]=Publieke kop
+Name[pt]=Inclusão Pública
+Name[pt_BR]=Inclusão pública
+Name[uk]=Відкрийти (public) заголовок
+Name[x-test]=xxPublic Headerxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
+Name[el]=Υλοποίηση
+Name[nl]=Implementatie
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[sv]=Implementering
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[el]=Περιβάλλον χρήστη
+Name[nl]=Gebruikersinterface
+Name[pt]=Interface do Utilizador
+Name[pt_BR]=Interface do usuário
+Name[uk]=Інтерфейс користувача
+Name[x-test]=xxUser Interfacexx
 File=class.ui
 OutputFile={{ name }}.ui

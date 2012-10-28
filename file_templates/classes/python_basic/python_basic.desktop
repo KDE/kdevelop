@@ -1,10 +1,28 @@
 [General]
 Name=Basic
+Name[el]=Βασική
+Name[nl]=Basis
+Name[pt]=Básico
+Name[pt_BR]=Básico
+Name[uk]=Базовий
+Name[x-test]=xxBasicxx
 Comment=Basic Python Class
+Comment[el]=Βασική Python Class
+Comment[nl]=Basis Python klasse
+Comment[pt]=Classe Básica em Python
+Comment[pt_BR]=Classe básica em Python
+Comment[uk]=Базовий клас Python
+Comment[x-test]=xxBasic Python Classxx
 Category=Class/Python/Basic
 Files=Definition
 
 [Definition]
 Name=Definition
+Name[el]=Ορισμός
+Name[nl]=Definitie
+Name[pt]=Definição
+Name[pt_BR]=Definição
+Name[uk]=Визначення
+Name[x-test]=xxDefinitionxx
 File=class.py
 OutputFile={{ name }}.py
