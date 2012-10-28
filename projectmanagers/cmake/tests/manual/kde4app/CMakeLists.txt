@@ -21,7 +21,7 @@ target_link_libraries(kde4app ${KDE4_KDEUI_LIBS} )
 
 install(TARGETS kde4app ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-kde4_add_unit_test(test kde4app.cpp)
+kde4_add_unit_test(testkde4app kde4app.cpp)
 
 ########### install files ###############
 
