@@ -460,6 +460,7 @@ void UiController::showSettingsDialog()
     kDebug() << "blacklist" << blacklist;
     KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
                                         activeMainWindow() );
+    cfgDlg.setMinimumSize( 550, 300 );
     cfgDlg.setComponentBlacklist( blacklist );
     cfgDlg.exec();
 }
