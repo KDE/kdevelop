@@ -28,11 +28,8 @@
 #include <kconfiggroup.h>
 #include <kurl.h>
 #include <kparts/mainwindow.h>
-#include <kdialog.h>
 #include <kdebug.h>
-#include <kprocess.h>
 #include <kstandarddirs.h>
-#include <KMessageBox>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
