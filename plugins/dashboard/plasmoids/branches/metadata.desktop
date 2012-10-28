@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Project Branches
+Comment=Displays the branches inthe current project
+Type=Service
+ServiceTypes=Plasma/Applet
+Icon=kdevelop
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=qml/main.qml
+X-KDE-PluginInfo-Author=Aleix Pol Gonzalez
+X-KDE-PluginInfo-Email=aleixpol@kde.org
+X-KDE-PluginInfo-Name=org.kdevelop.branches
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=http://kdevelop.org/
+X-KDE-PluginInfo-Category=Examples
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-ParentApp=KDevelop
