@@ -25,9 +25,7 @@ add_subdirectory(templatemanager)
 add_subdirectory(filetemplates)
 add_subdirectory(testview)
 
-if(${KDE_VERSION} VERSION_GREATER 4.6)
-    macro_optional_add_subdirectory(dashboard)
-endif(${KDE_VERSION} VERSION_GREATER 4.6)
+macro_optional_add_subdirectory(dashboard)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
