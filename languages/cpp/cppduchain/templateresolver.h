@@ -52,24 +52,29 @@ class KDEVCPPDUCHAIN_EXPORT TemplateResolver {
 
     struct TemplateMatchType
     {
+      TemplateMatchType():
+        valid(true), constMatch(false), referenceMatch(false), arrayMatch(false),
+        templateArgsMatch(false), pointerMatchDepth(0)
+      {
+      }
       //Whether or not the match is at all valid
-      bool valid = true;
+      bool valid;
       //Given a const argument, is the parameter also const?
       //A non-const argument against a const parameter is not valid
       // !!!A "const type pointer" argument with a "const type pointer" parameter is NOT valid unless the pointerMatchDepth is the same
       // !!!Otherwise a "const type pointer" argument will match the closest "type pointer" depth
-      bool constMatch = false;
+      bool constMatch;
       //Given a reference/RValue argument, is the parameter also a reference/RValue?
       //A non-reference/RValue argument against a reference/RValue parameter is not valid
-      bool referenceMatch = false;
+      bool referenceMatch;
       //Given a reference argument, is the parameter also a reference?
       //A non-reference argument against a reference parameter is not valid
-      bool arrayMatch = false;
+      bool arrayMatch;
       //Given a template declaration argument, do it and its arguments match the parameter and its parameters?
-      bool templateArgsMatch = false;
+      bool templateArgsMatch;
       //How many of the argument's pointers are matched by the parameter?
       //An argument with less pointer depth than the parameter is not valid
-      uint pointerMatchDepth = 0;
+      uint pointerMatchDepth;
 
       uint toUint()
       {
