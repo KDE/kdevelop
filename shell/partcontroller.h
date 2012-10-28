@@ -30,6 +30,7 @@
 #include <kurl.h>
 #include <kmimetype.h>
 #include <KTextEditor/ContainerInterface>
+#include <KSharedConfig>
 
 #include "core.h"
 
@@ -46,6 +47,8 @@ namespace KTextEditor
 class Document;
 class Editor;
 }
+
+Q_DECLARE_METATYPE(KSharedConfig::Ptr)
 
 namespace KDevelop
 {
