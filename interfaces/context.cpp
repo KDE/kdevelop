@@ -107,5 +107,39 @@ QList<ProjectBaseItem*> ProjectItemContext::items() const
     return d->m_items;
 }
 
+class OpenWithContextPrivate
+{
+public:
+    OpenWithContextPrivate(const KUrl::List& urls, const KMimeType::Ptr& mimeType)
+    : m_urls( urls )
+    , m_mimeType( mimeType )
+    {}
+
+    KUrl::List m_urls;
+    KMimeType::Ptr m_mimeType;
+};
+
+OpenWithContext::OpenWithContext(const KUrl::List& urls, const KMimeType::Ptr& mimeType)
+: Context()
+, d(new OpenWithContextPrivate(urls, mimeType))
+{
+
+}
+
+int OpenWithContext::type() const
+{
+    return Context::OpenWithContext;
+}
+
+KUrl::List OpenWithContext::urls() const
+{
+    return d->m_urls;
+}
+
+KMimeType::Ptr OpenWithContext::mimeType() const
+{
+    return d->m_mimeType;
+}
+
 }
 

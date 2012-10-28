@@ -55,6 +55,10 @@ public:
     static const QString VcsGroup;
     /** menu group to contain project actions */
     static const QString ProjectGroup;
+    /** menu group to contain open in embedded editor actions */
+    static const QString OpenEmbeddedGroup;
+    /** menu group to contain open with external application actions */
+    static const QString OpenExternalGroup;
 
     /** menu group that can contain any extension menu.
       * Actions for this extension will always be at the end

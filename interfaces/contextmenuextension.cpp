@@ -38,6 +38,8 @@ const QString ContextMenuExtension::DebugGroup    = "DebugGroup";
 const QString ContextMenuExtension::EditGroup     = "EditGroup";
 const QString ContextMenuExtension::VcsGroup      = "VcsGroup";
 const QString ContextMenuExtension::ProjectGroup  = "ProjectGroup";
+const QString ContextMenuExtension::OpenEmbeddedGroup  = "OpenEmbeddedGroup";
+const QString ContextMenuExtension::OpenExternalGroup  = "OpenExternalGroup";
 const QString ContextMenuExtension::ExtensionGroup  = "ExtensionGroup";
 
 

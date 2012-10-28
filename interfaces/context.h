@@ -36,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QStringList>
 
 #include <KDE/KUrl>
+#include <KDE/KMimeType>
 #include <KDE/KTextEditor/Cursor>
 #include <KDE/KTextEditor/View>
 
@@ -97,7 +98,8 @@ public:
         FileContext,                 /**<File menu.*/
         CodeContext,                 /**<Code context menu(DeclarationContext or DUContextContext)*/
         EditorContext,               /**<Editor menu.*/
-        ProjectItemContext           /**<ProjectItem context menu.*/
+        ProjectItemContext,          /**<ProjectItem context menu.*/
+        OpenWithContext              /**<Open With context menu.*/
     };
 
     /**Implement this in the context so we can provide rtti.*/
@@ -165,6 +167,38 @@ private:
 
     ProjectItemContext( const ProjectItemContext & );
     ProjectItemContext &operator=( const ProjectItemContext & );
+};
+
+/**
+ * Context menu to open files with custom applications.
+ */
+class KDEVPLATFORMINTERFACES_EXPORT OpenWithContext : public Context
+{
+public:
+    /**
+     * @p url The files to open.
+     * @p mimeType The mime type of said file.
+     */
+    OpenWithContext(const KUrl::List& urls, const KMimeType::Ptr& mimeType);
+
+    /**
+     * @return Context::OpenWithContext
+     */
+    virtual int type() const;
+
+    /**
+     * @return The files to open.
+     */
+    KUrl::List urls() const;
+
+    /**
+     * @return The mimetype of the url to open.
+     */
+    KMimeType::Ptr mimeType() const;
+
+private:
+    class OpenWithContextPrivate* const d;
+    Q_DISABLE_COPY(OpenWithContext)
 };
 
 }

@@ -99,6 +99,13 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
     QList<QAction*> appActions = actionsForServiceType("Application");
 
+    OpenWithContext subContext(m_urls, mimetype);
+    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext );
+    foreach( const ContextMenuExtension& ext, extensions ) {
+        appActions += ext.actions(ContextMenuExtension::OpenExternalGroup);
+        partActions += ext.actions(ContextMenuExtension::OpenEmbeddedGroup);
+    }
+
     // Now setup a menu with actions for each part and app
     KMenu* menu = new KMenu( i18n("Open With" ) );
     menu->setIcon( SmallIcon( "document-open" ) );

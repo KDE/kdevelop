@@ -25,7 +25,6 @@
 #include <QtCore/QPointer>
 
 class KUrl;
-class QMenu;
 class QAction;
 class QItemSelectionModel;
 class QMouseEvent;

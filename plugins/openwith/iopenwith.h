@@ -26,6 +26,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/context.h>
 
 namespace KDevelop {
 
