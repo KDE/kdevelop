@@ -25,6 +25,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>&lt;p&gt;Enables or disables the background parser.&lt;br&gt;If unsure, leave it enabled. Disabling the background parser will disable large parts of KDevelop's functionality.&lt;/p&gt;</string>
+     </property>
      <property name="title">
       <string>Enable Background Parser</string>
      </property>
@@ -40,6 +43,9 @@
       </property>
       <item row="1" column="0">
        <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>The time to wait before the document is re-analyzed when you edit it.</string>
+        </property>
         <property name="text">
          <string>Delay</string>
         </property>
@@ -52,6 +58,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>The time to wait before the document is re-analyzed when you edit it.</string>
         </property>
         <property name="suffix">
          <string> ms</string>
@@ -66,6 +75,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="toolTip">
+         <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
+        </property>
         <property name="text">
          <string>Maximum Number of Threads</string>
         </property>
@@ -78,6 +90,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
         </property>
         <property name="suffix">
          <string> threads</string>

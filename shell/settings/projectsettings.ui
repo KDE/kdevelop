@@ -15,6 +15,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label_3">
+       <property name="toolTip">
+        <string>Select the base directory where new projects are to be created.</string>
+       </property>
        <property name="text">
         <string>Projects Base Directory:</string>
        </property>
@@ -47,6 +50,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="kcfg_saveDocuments">
+     <property name="toolTip">
+      <string>Save all modified documents when the &quot;build&quot; action is triggered.</string>
+     </property>
      <property name="text">
       <string>Save all documents before building</string>
      </property>

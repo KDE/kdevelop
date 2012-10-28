@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
+    <width>599</width>
     <height>592</height>
    </rect>
   </property>
@@ -19,6 +19,9 @@
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="1">
        <widget class="QCheckBox" name="kcfg_automaticInvocation">
+        <property name="toolTip">
+         <string>If disabled, the code completion widget will never show automatically.</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -26,6 +29,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
+        <property name="toolTip">
+         <string>Choose whether to display additional information for the currently selected codecompletion item.</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -34,7 +40,7 @@
       <item row="3" column="1">
        <widget class="QComboBox" name="completionDetail">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The code completion UI has a minimal mode and a detailed mode. Choose in what cases full code completion will be displayed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
         </property>
         <item>
          <property name="text">
@@ -55,6 +61,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label">
+        <property name="toolTip">
+         <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Detailed Completion:</string>
         </property>
@@ -62,6 +71,9 @@
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
+        <property name="toolTip">
+         <string>If disabled, the code completion widget will never show automatically.</string>
+        </property>
         <property name="text">
          <string>Enable Automatic Invocation</string>
         </property>
@@ -69,6 +81,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
+        <property name="toolTip">
+         <string>Choose whether to display additional information for the currently selected codecompletion item.</string>
+        </property>
         <property name="text">
          <string>Additional Information For Current Item</string>
         </property>
@@ -89,7 +104,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="localColorizationLabel">
         <property name="toolTip">
-         <string>This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.</string>
+         <string>&lt;p&gt;This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Local Colorization Intensity</string>
@@ -101,6 +116,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QSlider" name="kcfg_localColorization">
+        <property name="toolTip">
+         <string>&lt;p&gt;This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.&lt;/p&gt;</string>
+        </property>
         <property name="maximum">
          <number>255</number>
         </property>
@@ -120,6 +138,9 @@
       </item>
       <item row="9" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="toolTip">
+         <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Highlight Semantic Problems</string>
         </property>
@@ -128,7 +149,7 @@
       <item row="9" column="1">
        <widget class="QCheckBox" name="kcfg_highlightSemanticProblems">
         <property name="toolTip">
-         <string>Highlight semantic problems, such as non-existent or inaccessible declarations.</string>
+         <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string/>
@@ -137,6 +158,9 @@
       </item>
       <item row="11" column="0">
        <widget class="QLabel" name="label_5">
+        <property name="toolTip">
+         <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Highlight Problematic Lines</string>
         </property>
@@ -145,7 +169,7 @@
       <item row="11" column="1">
        <widget class="QCheckBox" name="kcfg_highlightProblematicLines">
         <property name="toolTip">
-         <string>When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.</string>
+         <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string/>
@@ -154,6 +178,9 @@
       </item>
       <item row="13" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="toolTip">
+         <string>Space-separated list of words that make a comment represent a TODO item</string>
+        </property>
         <property name="text">
          <string>TODO Marker Words:</string>
         </property>
@@ -162,7 +189,7 @@
       <item row="13" column="1">
        <widget class="QLineEdit" name="todoMarkerWords">
         <property name="toolTip">
-         <string>Space-separated list of words that make a comment represent a TODO item</string>
+         <string>Space-separated list of words that make a comment represent a TODO item.</string>
         </property>
         <property name="placeholderText">
          <string/>
@@ -171,6 +198,9 @@
       </item>
       <item row="8" column="1">
        <widget class="QSlider" name="kcfg_globalColorization">
+        <property name="toolTip">
+         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+        </property>
         <property name="maximum">
          <number>255</number>
         </property>
@@ -191,7 +221,7 @@
       <item row="8" column="0">
        <widget class="QLabel" name="globalColorizationLabel">
         <property name="toolTip">
-         <string>This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.</string>
+         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
         </property>
         <property name="text">
          <string>Global Colorization Intensity</string>
@@ -225,6 +255,10 @@
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
+        <property name="toolTip">
+         <string>&lt;p&gt;When a project contains more files than this number, the project will be
+parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Minimum project size for simplified parsing</string>
         </property>
@@ -245,8 +279,8 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>When a project contains more files than this number, the project will be
-parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.</string>
+         <string>&lt;p&gt;When a project contains more files than this number, the project will be
+parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.&lt;/p&gt;</string>
         </property>
         <property name="suffix">
          <string> files</string>

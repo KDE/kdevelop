@@ -22,6 +22,9 @@
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom left corner is occuped by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Bottom left corner occupied by:</string>
         </property>
@@ -29,6 +32,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom right corner is occuped by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
         <property name="text">
          <string>Bottom right corner occupied by:</string>
         </property>
@@ -41,6 +47,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom left corner is occuped by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
         <item>
          <property name="text">
@@ -61,6 +70,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom right corner is occuped by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
         <item>
          <property name="text">
@@ -98,6 +110,9 @@
      <layout class="QGridLayout" name="gridLayout_1">
       <item row="0" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarVisibility">
+        <property name="toolTip">
+         <string>Enables or disables the display of the tab bar at the top of the editor window.</string>
+        </property>
         <property name="text">
          <string>Show tabs</string>
         </property>
@@ -108,6 +123,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarOpenAfterCurrent">
+        <property name="toolTip">
+         <string>Controls whether to open new tabs next to the active one.</string>
+        </property>
         <property name="text">
          <string>Open new tab after current</string>
         </property>
@@ -133,5 +151,38 @@ For example, a header file will be opened next to the implementation file.</stri
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>kcfg_TabBarVisibility</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_TabBarOpenAfterCurrent</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_TabBarVisibility</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_TabBarArrangeBuddies</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
