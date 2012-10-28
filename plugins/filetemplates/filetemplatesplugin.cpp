@@ -165,6 +165,7 @@ void FileTemplatesPlugin::createFromTemplate()
     {
         baseUrl = action->data().value<KUrl>();
     }
-    TemplateClassAssistant assistant(QApplication::activeWindow(), baseUrl);
-    assistant.exec();
+    TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
+    assistant->setAttribute(Qt::WA_DeleteOnClose);
+    assistant->show();
 }
