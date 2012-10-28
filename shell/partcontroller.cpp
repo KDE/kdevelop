@@ -126,6 +126,9 @@ KTextEditor::Editor* PartController::editorPart() const
         }
 
         d->m_textEditor = editorFactory->editor();
+        qRegisterMetaType<KSharedConfig::Ptr>("KSharedConfig::Ptr");
+        Q_ASSERT(ICore::self()->activeSession());
+        d->m_textEditor->setProperty("sessionConfig", QVariant(ICore::self()->activeSession()->config()));
 
         KTextEditor::ContainerInterface * iface = qobject_cast<KTextEditor::ContainerInterface *>( d->m_textEditor );
         if (iface) {
