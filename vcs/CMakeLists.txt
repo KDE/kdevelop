@@ -37,6 +37,7 @@ set(kdevplatformvcs_LIB_SRCS
     models/vcsfilechangesmodel.cpp
     models/vcsitemeventmodel.cpp
     models/projectchangesmodel.cpp
+    models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
     dvcs/ui/dvcsmainview.cpp

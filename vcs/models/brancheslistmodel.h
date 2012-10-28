@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2012 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -18,48 +19,39 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef BRANCH_MANAGER_H
-#define BRANCH_MANAGER_H
+#ifndef BRANCHESLISTMODEL_H
+#define BRANCHESLISTMODEL_H
 
-#include <QtGui/QStringListModel>
-#include <KDE/KDialog>
 #include <QStandardItemModel>
+#include <KUrl>
 
-class BranchesListModel;
-class KJob;
-namespace Ui { class BranchDialogBase; }
+namespace KDevelop {
+class IBranchingVersionControl;}
 
-namespace KDevelop
-{
-    class DistributedVersionControlPlugin;
-class IBranchingVersionControl;
-}
-
-class BranchManager : public KDialog
+class BranchesListModel : public QStandardItemModel
 {
     Q_OBJECT
-public:
-    BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
-    ~BranchManager();
-    
-    bool isValid() const { return m_valid; }
-
-signals:
-    void checkedOut(KJob*);
-
-private slots:
-    void createBranch();
-    void delBranch();
-    void checkoutBranch();
-
-private:
-    QString repo;
-    KDevelop::DistributedVersionControlPlugin* d;
-
-    Ui::BranchDialogBase* m_ui;
-    BranchesListModel* m_model;
-    bool m_valid;
-    
+    public:
+        BranchesListModel(QObject* parent = 0);
+        void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const KUrl& repo);
+        
+        void createBranch(const QString& baseBranch, const QString& newBranch);
+        void removeBranch(const QString& branch);
+        
+        KUrl repository() const { return repo; }
+        KDevelop::IBranchingVersionControl* interface();
+        void refresh();
+        QString currentBranch() const;
+        
+    public slots:
+        void resetCurrent();
+        
+    private:
+        QString curBranch();
+        
+        KDevelop::IBranchingVersionControl* dvcsplugin;
+        KUrl repo;
+        QString m_currentBranch;
 };
 
-#endif
+#endif // BRANCHESLISTMODEL_H
