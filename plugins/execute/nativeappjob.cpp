@@ -164,13 +164,13 @@ void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
         appendLine( i18n("*** Exited normally ***") );
     } else if (status == QProcess::NormalExit) {
         appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
-        setError(1);
+        setError(OutputJob::FailedShownError);
     } else if (error() == KJob::KilledJobError) {
         appendLine( i18n("*** Process aborted ***") );
-        setError(2);
+        setError(KJob::KilledJobError);
     } else {
         appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
-        setError(3);
+        setError(OutputJob::FailedShownError);
     }
     kDebug() << "Process done";
     emitResult();
