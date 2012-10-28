@@ -67,6 +67,20 @@ QString lineSuffixAndWord( KTextEditor::Document* document, const KTextEditor::R
     KTextEditor::Range lineSuffixRange( word.start().line(), word.start().column(), word.end().line(), endLineLength );
     return document->text( lineSuffixRange );
 }
+bool declarationNeedsTemplateParameters(const Declaration* decl) {
+  const Cpp::TemplateDeclaration* asTemplate = dynamic_cast<const Cpp::TemplateDeclaration*>(decl);
+  //TODO: It'd be nice to have comma separated blanks for CppTemplateParameterTypes in specializations, with the cursor placed in the first one
+  if(asTemplate && !asTemplate->specializedWith().isValid()) {
+    DUContext* templateContext = asTemplate->templateContext(decl->topContext());
+    if(templateContext) {
+      foreach(Declaration* decl, templateContext->localDeclarations()) {
+        if(decl->type<CppTemplateParameterType>())
+          return true;
+      }
+    }
+  }
+  return false;
+}
 } // anonymous namespace
 
 namespace Cpp {
@@ -223,17 +237,13 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   
   if(m_declaration.data())
   {
-    Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
-    if(templateDecl) {
-      DUContext* context = templateDecl->templateContext(m_declaration->topContext());
-      if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
-        jumpForbidden = true;
-        lock.unlock();
-        document->insertText( end, "<>" );
-        end.setColumn(end.column() + 2);
-        document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
-        lock.lock();
-      }
+    if(declarationNeedsTemplateParameters(m_declaration.data())) {
+      jumpForbidden = true;
+      lock.unlock();
+      document->insertText( end, "<>" );
+      end.setColumn(end.column() + 2);
+      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
+      lock.lock();
     }
     
     if(m_declaration.data()->kind() == Declaration::Namespace) {
@@ -397,21 +407,6 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   }
   return p;
 }
-
-bool declarationNeedsTemplateParameters(const Declaration* decl) {
-  const Cpp::TemplateDeclaration* asTemplate = dynamic_cast<const Cpp::TemplateDeclaration*>(decl);
-  if(asTemplate) {
-    DUContext* templateContext = asTemplate->templateContext(decl->topContext());
-    if(templateContext) {
-      foreach(Declaration* decl, templateContext->localDeclarations()) {
-        if(decl->type<CppTemplateParameterType>())
-          return true;
-      }
-    }
-  }
-  return false;
-}
-
 
 bool NormalDeclarationCompletionItem::completingTemplateParameters() const
 {
