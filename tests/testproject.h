@@ -54,8 +54,8 @@ public:
     void reloadModel() { }
     KUrl projectFileUrl() const { return m_projectFileUrl; }
     KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
-    void addToFileSet( const IndexedString& file) { m_fileSet << file; }
-    void removeFromFileSet( const IndexedString& file) { m_fileSet.remove(file); }
+    void addToFileSet( const IndexedString& file);
+    void removeFromFileSet( const IndexedString& file);
     QSet<IndexedString> fileSet() const { return m_fileSet; }
     bool isReady() const { return true; }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }

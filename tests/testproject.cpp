@@ -23,6 +23,21 @@ bool KDevelop::TestProject::inProject(const KUrl& url) const
     return folder().isParentOf(url);
 }
 
+void KDevelop::TestProject::addToFileSet(const KDevelop::IndexedString& file)
+{
+    if (!m_fileSet.contains(file)) {
+        m_fileSet.insert(file);
+        emit fileAddedToSet(this, file);
+    }
+}
+
+void KDevelop::TestProject::removeFromFileSet(const KDevelop::IndexedString& file)
+{
+    if (m_fileSet.remove(file)) {
+        emit fileRemovedFromSet(this, file);
+    }
+}
+
 void KDevelop::TestProjectController::addProject(KDevelop::IProject* p)
 {
     emit projectAboutToBeOpened(p);
