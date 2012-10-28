@@ -472,8 +472,9 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
         Q_ASSERT(item->folder() || item->file());
         Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
-        if (item->folder() || item->file())
-        {
+        if (item->isProjectRoot()) {
+            continue;
+        } else if (item->folder() || item->file()) {
             //make sure no children of folders that will be deleted are listed
             if (lastFolder.isParentOf(item->url())) {
                 continue;
@@ -484,6 +485,10 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
             filteredItems[item->project()->projectFileManager()] << item;
             itemPaths << item->url().path();
         }
+    }
+
+    if (filteredItems.isEmpty()) {
+        return;
     }
 
     if (KMessageBox::warningYesNoList(
