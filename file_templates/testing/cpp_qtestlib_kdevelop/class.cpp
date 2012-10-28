@@ -24,7 +24,7 @@ using namespace KDevelop;
 void {{ name }}::initTestCase()
 {
     AutoTestShell::init();
-    TestCore::initialize(Core::NoUI);
+    TestCore::initialize(Core::NoUi);
 }
 
 
