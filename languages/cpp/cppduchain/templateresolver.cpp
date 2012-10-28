@@ -288,7 +288,10 @@ void TemplateResolver::matchTemplateParameterTypesInternal ( const AbstractType:
       //Should not be possible to have a CPPTemplateParameterType with template ids..?
       Q_ASSERT(decl->identifier().templateIdentifiersCount() == 0);
       IndexedString id = decl->identifier().identifier();
-      Q_ASSERT(instantiatedTypes[id].isNull());
+      //FIXME: Sometimes when matching templates within templates, delayedType will set the identifier first
+      //The other way around is also probably possible
+      //This needs more work to make sure the right type is set here
+      //Q_ASSERT(instantiatedTypes[id].isNull());
       instantiatedTypes[id] = argumentType;
       return;
     }
