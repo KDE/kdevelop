@@ -6,20 +6,20 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9521 )
 
 set(kdevsnippet_PART_SRCS
     snippetplugin.cpp
-    snippetview.cpp
-    snippetstore.cpp
-    snippetrepository.cpp
-    snippetfilterproxymodel.cpp
-    snippetcompletionmodel.cpp
-    snippetcompletionitem.cpp
-    snippet.cpp
-    editrepository.cpp
-    editsnippet.cpp
+    legacy/snippetview.cpp
+    legacy/snippetstore.cpp
+    legacy/snippetrepository.cpp
+    legacy/snippetfilterproxymodel.cpp
+    legacy/snippetcompletionmodel.cpp
+    legacy/snippetcompletionitem.cpp
+    legacy/snippet.cpp
+    legacy/editrepository.cpp
+    legacy/editsnippet.cpp
 )
 set(kdevsnippet_PART_UI
-    snippetview.ui
-    editrepository.ui
-    editsnippet.ui
+    legacy/snippetview.ui
+    legacy/editrepository.ui
+    legacy/editsnippet.ui
 )
 
 kde4_add_ui_files(kdevsnippet_PART_SRCS ${kdevsnippet_PART_UI})
@@ -30,4 +30,4 @@ install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 install( FILES kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevsnippet.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsnippet )
+install( FILES legacy/kdevsnippet.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsnippet )

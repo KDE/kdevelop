@@ -32,14 +32,14 @@
 #include <language/codecompletion/codecompletion.h>
 #include <language/interfaces/editorcontext.h>
 
-#include "snippetview.h"
-#include "snippetcompletionmodel.h"
-#include "snippetstore.h"
+#include "legacy/snippetview.h"
+#include "legacy/snippetcompletionmodel.h"
+#include "legacy/snippetstore.h"
 
-#include "snippet.h"
-#include "snippetrepository.h"
-#include "snippetcompletionitem.h"
-#include "editsnippet.h"
+#include "legacy/snippet.h"
+#include "legacy/snippetrepository.h"
+#include "legacy/snippetcompletionitem.h"
+#include "legacy/editsnippet.h"
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
 K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
