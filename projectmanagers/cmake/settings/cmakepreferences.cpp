@@ -151,6 +151,7 @@ void CMakePreferences::save()
             KMessageBox::error(this, i18n("Could not write CMake settings to file '%1'.\nCheck that you have write access to it", m_currentModel->filePath().pathOrUrl()));
             needReconfiguring = false;
         }
+        CMake::setCurrentInstallDir(m_project, m_currentModel->value("CMAKE_INSTALL_PREFIX"));
     }
     
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
