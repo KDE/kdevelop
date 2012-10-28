@@ -19,14 +19,19 @@
 
 #include "declarationlistquickopen.h"
 
-
 using namespace KDevelop;
 
-DeclarationListDataProvider::DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen, QList<DUChainItem> items, bool openDefinitions ) : DUChainItemDataProvider( quickopen, openDefinitions ), m_items(items) {
+DeclarationListDataProvider::DeclarationListDataProvider(IQuickOpen* quickopen,
+                                                         const QList<DUChainItem>& items,
+                                                         bool openDefinitions)
+: DUChainItemDataProvider( quickopen, openDefinitions )
+, m_items(items)
+{
   reset();
 }
 
-void DeclarationListDataProvider::reset() {
+void DeclarationListDataProvider::reset()
+{
   DUChainItemDataProvider::clearFilter();
   setItems(m_items);
 }

@@ -25,11 +25,15 @@ namespace KDevelop {
   class IQuickOpen;
 }
 
-class DeclarationListDataProvider : public DUChainItemDataProvider {
+class DeclarationListDataProvider : public DUChainItemDataProvider
+{
 public:
-  DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen, QList<DUChainItem> items, bool openDefinitions = false );
-  
+  DeclarationListDataProvider( KDevelop::IQuickOpen* quickopen,
+                               const QList<DUChainItem>& items,
+                               bool openDefinitions = false );
+
   virtual void reset();
+
 private:
   QList<DUChainItem> m_items;
 };
