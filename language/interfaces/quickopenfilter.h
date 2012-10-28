@@ -25,6 +25,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
 
+namespace KDevelop {
+
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.
  * You should use it when possible, because that way additional features(like regexp filtering) can
@@ -38,12 +40,12 @@
  *
  * YourType should be the type that holds all the information you need.
  * The filter will hold the data, and you can access it through "items()".
- * 
+ *
  * What you need to do to use it:
  *
  * Reimplement itemText(..) to provide the text filtering
  * should be performend on(This must be efficient).
- * 
+ *
  * Call setItems(..) when starting a new quickopen session, or when the content
  * changes, to initialize the filter with your data.
  *
@@ -51,65 +53,70 @@
  *
  * Use filteredItems() to provide data to quickopen.
  * */
-
-namespace KDevelop {
 template<class Item>
-class Filter {
-  public:
-    virtual ~Filter() {
+class Filter
+{
+public:
+    virtual ~Filter()
+    {
     }
     ///Clears the filter, but not the data.
-    void clearFilter() {
-      m_filtered = m_items;
-      m_oldFilterText.clear();
+    void clearFilter()
+    {
+        m_filtered = m_items;
+        m_oldFilterText.clear();
     }
 
     ///Clears the filter and sets new data. The filter-text will be lost.
-    void setItems( const QList<Item>& data ) {
-      m_items = data;
-      clearFilter();
+    void setItems( const QList<Item>& data )
+    {
+        m_items = data;
+        clearFilter();
     }
 
-    const QList<Item>& items() const {
-      return m_items;
+    const QList<Item>& items() const
+    {
+        return m_items;
     }
 
     ///Returns the data that is left after the filtering
-    const QList<Item>& filteredItems() const {
-      return m_filtered;
+    const QList<Item>& filteredItems() const
+    {
+        return m_filtered;
     }
 
     ///Changes the filter-text and refilters the data
     void setFilter( const QString& text )
     {
-      if (m_oldFilterText == text) {
-        return;
-      }
-      if (text.isEmpty()) {
-        clearFilter();
-        return;
-      }
+        if (m_oldFilterText == text) {
+            return;
+        }
+        if (text.isEmpty()) {
+            clearFilter();
+            return;
+        }
 
-      QList<Item> filterBase = m_filtered;
-      if( !text.startsWith( m_oldFilterText ) )
-        filterBase = m_items; //Start filtering based on the whole data
+        QList<Item> filterBase = m_filtered;
+        if( !text.startsWith( m_oldFilterText ) ) {
+            filterBase = m_items; //Start filtering based on the whole data
+        }
 
-      //QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
+        m_filtered.clear();
 
-      m_filtered.clear();
+        foreach( const Item& data, filterBase ) {
+            if( itemText( data ).contains(text, Qt::CaseInsensitive) ) {
+                m_filtered << data;
+            }
+        }
 
-      foreach( const Item& data, filterBase )
-        if( itemText( data ).contains(text, Qt::CaseInsensitive) )
-          m_filtered << data;
-      
-      m_oldFilterText = text;
+        m_oldFilterText = text;
     }
-    
-  protected:
+
+protected:
     ///Should return the text an item should be filtered by.
     virtual QString itemText( const Item& data ) const = 0;
-    
-  private:
+
+private:
     QString m_oldFilterText;
     QList<Item> m_filtered;
     QList<Item> m_items;
@@ -118,29 +125,35 @@ class Filter {
 
 namespace KDevelop {
 template<class Item>
-class FilterWithSeparator {
-  public:
-    virtual ~FilterWithSeparator() {
+class FilterWithSeparator
+{
+public:
+    virtual ~FilterWithSeparator()
+    {
     }
     ///Clears the filter, but not the data.
-    void clearFilter() {
-      m_filtered = m_items;
-      m_oldFilterText.clear();
+    void clearFilter()
+    {
+        m_filtered = m_items;
+        m_oldFilterText.clear();
     }
 
     ///Clears the filter and sets new data. The filter-text will be lost.
-    void setItems( const QList<Item>& data ) {
-      m_items = data;
-      clearFilter();
+    void setItems( const QList<Item>& data )
+    {
+        m_items = data;
+        clearFilter();
     }
 
-    const QList<Item>& items() const {
-      return m_items;
+    const QList<Item>& items() const
+    {
+        return m_items;
     }
 
     ///Returns the data that is left after the filtering
-    const QList<Item>& filteredItems() const {
-      return m_filtered;
+    const QList<Item>& filteredItems() const
+    {
+        return m_filtered;
     }
 
     ///Changes the filter-text and refilters the data
@@ -148,88 +161,91 @@ class FilterWithSeparator {
     template<class SeparatorType>
     void setFilter( const QStringList& text, const SeparatorType& separator )
     {
-      if (m_oldFilterText == text) {
-        return;
-      }
-      if (text.isEmpty()) {
-        clearFilter();
-        return;
-      }
+        if (m_oldFilterText == text) {
+            return;
+        }
+        if (text.isEmpty()) {
+            clearFilter();
+            return;
+        }
 
-      QList<Item> filterBase = m_filtered;
-      
-      if(text.isEmpty() || m_oldFilterText.isEmpty()) {
-          filterBase = m_items;
-      } else if(m_oldFilterText.mid(0, m_oldFilterText.count()-1) == text.mid(0, text.count()-1) && text.last().startsWith(m_oldFilterText.last())) {
-        //Good, the prefix is the same, and the last item has been extended
-      }else if(m_oldFilterText.size() == text.size()-1 && m_oldFilterText == text.mid(0, text.size()-1)) {
-        //Good, an item has been added
-      }else{
-        //Start filtering based on the whole data, there was a big change to the filter
-        filterBase = m_items;
-      }
-      
-      //QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
+        QList<Item> filterBase = m_filtered;
 
-      m_filtered.clear();
+        if (text.isEmpty() || m_oldFilterText.isEmpty()) {
+            filterBase = m_items;
+        } else if (m_oldFilterText.mid(0, m_oldFilterText.count() - 1) == text.mid(0, text.count() - 1)
+                   && text.last().startsWith(m_oldFilterText.last())) {
+            //Good, the prefix is the same, and the last item has been extended
+        } else if (m_oldFilterText.size() == text.size() - 1 && m_oldFilterText == text.mid(0, text.size() - 1)) {
+            //Good, an item has been added
+        } else {
+            //Start filtering based on the whole data, there was a big change to the filter
+            filterBase = m_items;
+        }
 
-      QString exactNeedle;
-      if (!text.isEmpty()) {
-          exactNeedle = separator + text.join(separator);
-      }
+        m_filtered.clear();
 
-      // filterBase is correctly sorted, to keep it that way we add
-      // exact matches to this list in sorted way and then prepend the whole list in one go.
-      QList<Item> exactMatches;
-      foreach( const Item& data, filterBase ) {
-          QString toFilter = itemText(data);
+        QString exactNeedle;
+        if (!text.isEmpty()) {
+            exactNeedle = separator + text.join(separator);
+        }
 
-          if (!exactNeedle.isEmpty() && toFilter.endsWith(exactNeedle)) {
-              // put exact matches up front
-              exactMatches << data;
-              continue;
-          }
+        // filterBase is correctly sorted, to keep it that way we add
+        // exact matches to this list in sorted way and then prepend the whole list in one go.
+        QList<Item> exactMatches;
+        foreach( const Item& data, filterBase ) {
+            QString toFilter = itemText(data);
 
-          int searchStart = 0;
-          for(QStringList::const_iterator it = text.constBegin(); it != text.constEnd(); ++it) {
-              if(searchStart != 0) {
-                  searchStart = toFilter.indexOf(separator, searchStart);
-                  if(searchStart == -1)
-                      break;
-                  ++searchStart;
-              }
-              
-              searchStart = toFilter.indexOf(*it, searchStart, Qt::CaseInsensitive);
-              if(searchStart == -1)
-                  break;
-              
-              ++searchStart;
-          }
-          
-          if(searchStart == -1)
-              continue;
+            if (!exactNeedle.isEmpty() && toFilter.endsWith(exactNeedle)) {
+                // put exact matches up front
+                exactMatches << data;
+                continue;
+            }
 
-          m_filtered << data;
-      }
+            int searchStart = 0;
+            for(QStringList::const_iterator it = text.constBegin(); it != text.constEnd(); ++it) {
+                if (searchStart != 0) {
+                    searchStart = toFilter.indexOf(separator, searchStart);
+                    if (searchStart == -1) {
+                        break;
+                    }
+                    ++searchStart;
+                }
 
-      if (!exactMatches.isEmpty()) {
-          for(int i = exactMatches.size() - 1; i >= 0; --i ) {
-              m_filtered.prepend(exactMatches.at(i));
-          }
-      }
-      
-      m_oldFilterText = text;
+                searchStart = toFilter.indexOf(*it, searchStart, Qt::CaseInsensitive);
+                if (searchStart == -1) {
+                    break;
+                }
+
+                ++searchStart;
+            }
+
+            if(searchStart == -1) {
+                continue;
+            }
+
+            m_filtered << data;
+        }
+
+        if (!exactMatches.isEmpty()) {
+            for(int i = exactMatches.size() - 1; i >= 0; --i ) {
+                m_filtered.prepend(exactMatches.at(i));
+            }
+        }
+
+        m_oldFilterText = text;
     }
-    
-  protected:
+
+protected:
     ///Should return the text an item should be filtered by.
     virtual QString itemText( const Item& data ) const = 0;
-    
-  private:
+
+private:
     QStringList m_oldFilterText;
     QList<Item> m_filtered;
     QList<Item> m_items;
 };
+
 }
 
 #endif
