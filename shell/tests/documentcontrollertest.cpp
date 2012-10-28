@@ -82,7 +82,7 @@ void DocumentControllerTest::cleanupTestCase()
 
 void DocumentControllerTest::testSetEncoding()
 {
-    QString encoding("UTF-8");
+    QString encoding("latin1");
     m_subject->setEncoding(encoding);
     QCOMPARE(m_subject->encoding(), encoding);
 }
