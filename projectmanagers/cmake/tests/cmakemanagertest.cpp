@@ -18,11 +18,9 @@
 */
 
 #include "cmakemanagertest.h"
+#include "testhelpers.h"
 #include "cmakemodelitems.h"
-#include "cmake-test-paths.h"
-
 #include <icmakemanager.h>
-#include <cmakebuilddirchooser.h>
 
 #include <qtest.h>
 #include <qtest_kde.h>
