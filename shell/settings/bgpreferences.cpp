@@ -49,9 +49,6 @@ BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
     preferencesDialog = new Ui::BGSettings;
     preferencesDialog->setupUi( w );
 
-    preferencesDialog->kcfg_delay->setRange( 0, 5000, true );
-    preferencesDialog->kcfg_threads->setRange( 1, 32, true );
-
     l->addWidget( w );
 
     addConfig( BGSettings::self(), w );

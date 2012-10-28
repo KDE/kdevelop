@@ -6,237 +6,263 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>556</height>
+    <width>598</width>
+    <height>592</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Code Completion</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="1">
        <widget class="QCheckBox" name="kcfg_automaticInvocation">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="completionDetail">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The code completion UI has a minimal mode and a detailed mode. Choose in what cases full code completion will be displayed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Never</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>When invoked manually</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Always</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Detailed Completion:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Enable Automatic Invocation</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
+       <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Additional Information For Current Item</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QGroupBox" name="completionLevelGroup">
-        <property name="title">
-         <string>Level</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="kcfg_minimalAutomaticCompletion">
-           <property name="toolTip">
-            <string>Use minimal completion when the completion is automatic, and full completion when it is triggered manually</string>
-           </property>
-           <property name="text">
-            <string>Minimal Automatic Completion</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="kcfg_alwaysFullCompletion">
-           <property name="acceptDrops">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>When this is enabled, the completion-box will always show full type-information and argument-hints</string>
-           </property>
-           <property name="text">
-            <string>Always Full Completion</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="kcfg_alwaysMinimalCompletion">
-           <property name="toolTip">
-            <string>Do not show type-information or argument-hints</string>
-           </property>
-           <property name="text">
-            <string>Always Minimal Completion</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Semantic Code Highlighting</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="localColorizationLayout">
-        <item>
-         <widget class="QLabel" name="localColorizationLabel">
-          <property name="toolTip">
-           <string>This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.</string>
-          </property>
-          <property name="text">
-           <string>Local Colorization Intensity</string>
-          </property>
-          <property name="buddy">
-           <cstring>kcfg_localColorization</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="kcfg_localColorization">
-          <property name="maximum">
-           <number>255</number>
-          </property>
-          <property name="singleStep">
-           <number>3</number>
-          </property>
-          <property name="pageStep">
-           <number>25</number>
-          </property>
-          <property name="value">
-           <number>170</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
       <item row="1" column="0">
-       <layout class="QHBoxLayout" name="globalColorizationLayout">
-        <item>
-         <widget class="QLabel" name="globalColorizationLabel">
-          <property name="toolTip">
-           <string>This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.</string>
-          </property>
-          <property name="text">
-           <string>Global Colorization Intensity</string>
-          </property>
-          <property name="buddy">
-           <cstring>kcfg_localColorization</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="kcfg_globalColorization">
-          <property name="maximum">
-           <number>255</number>
-          </property>
-          <property name="singleStep">
-           <number>3</number>
-          </property>
-          <property name="pageStep">
-           <number>25</number>
-          </property>
-          <property name="value">
-           <number>255</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="kcfg_highlightSemanticProblems">
+       <widget class="QLabel" name="localColorizationLabel">
         <property name="toolTip">
-         <string>Highlight semantic problems, such as non-existent or inaccessible declarations.</string>
+         <string>This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.</string>
         </property>
+        <property name="text">
+         <string>Local Colorization Intensity</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_localColorization</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSlider" name="kcfg_localColorization">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="singleStep">
+         <number>3</number>
+        </property>
+        <property name="pageStep">
+         <number>25</number>
+        </property>
+        <property name="value">
+         <number>170</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Highlight Semantic Problems</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="kcfg_highlightProblematicLines">
+      <item row="9" column="1">
+       <widget class="QCheckBox" name="kcfg_highlightSemanticProblems">
         <property name="toolTip">
-         <string>When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.</string>
+         <string>Highlight semantic problems, such as non-existent or inaccessible declarations.</string>
         </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Highlight Problematic Lines</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="KEditListBox" name="kcfg_todoMarkerWords">
-        <property name="title">
-         <string>Todo marker words</string>
+      <item row="11" column="1">
+       <widget class="QCheckBox" name="kcfg_highlightProblematicLines">
+        <property name="toolTip">
+         <string>When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.</string>
         </property>
-        <property name="buttons">
-         <set>KEditListBox::Add|KEditListBox::Remove</set>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>TODO Marker Words:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="1">
+       <widget class="QLineEdit" name="todoMarkerWords">
+        <property name="toolTip">
+         <string>Space-separated list of words that make a comment represent a TODO item</string>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QSlider" name="kcfg_globalColorization">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="singleStep">
+         <number>3</number>
+        </property>
+        <property name="pageStep">
+         <number>25</number>
+        </property>
+        <property name="value">
+         <number>255</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="globalColorizationLabel">
+        <property name="toolTip">
+         <string>This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.</string>
+        </property>
+        <property name="text">
+         <string>Global Colorization Intensity</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_localColorization</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>kcfg_localColorization</zorder>
+     <zorder>label_4</zorder>
+     <zorder>kcfg_highlightSemanticProblems</zorder>
+     <zorder>label_5</zorder>
+     <zorder>kcfg_highlightProblematicLines</zorder>
+     <zorder>label_3</zorder>
+     <zorder>todoMarkerWords</zorder>
+     <zorder>kcfg_globalColorization</zorder>
+     <zorder>globalColorizationLabel</zorder>
+     <zorder>localColorizationLabel</zorder>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Project Parsing</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Minimum project size for simplified parsing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="kcfg_minFilesForSimplifiedParsing">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>When a project contains more files than this number, the project will be
+parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.</string>
+        </property>
+        <property name="suffix">
+         <string> files</string>
+        </property>
+        <property name="maximum">
+         <number>99999999</number>
+        </property>
+        <property name="singleStep">
+         <number>1000</number>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>Project Parsing</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Minimum project size for simplified parsing</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="kcfg_minFilesForSimplifiedParsing">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="sizeIncrement">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>When a project contains more files than this number, the project will be
-parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.</string>
-          </property>
-          <property name="suffix">
-           <string> files</string>
-          </property>
-          <property name="maximum">
-           <number>99999999</number>
-          </property>
-          <property name="singleStep">
-           <number>1000</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -251,13 +277,6 @@ parsed in simplified mode, increasing the efficiency by gathering less informati
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KEditListBox</class>
-   <extends>QGroupBox</extends>
-   <header>keditlistbox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
