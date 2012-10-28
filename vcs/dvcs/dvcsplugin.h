@@ -58,7 +58,7 @@ struct DistributedVersionControlPluginPrivate;
 class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl, public IBranchingVersionControl
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
+    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl KDevelop::IBranchingVersionControl)
 public:
 
     DistributedVersionControlPlugin(QObject *parent, KComponentData compData);

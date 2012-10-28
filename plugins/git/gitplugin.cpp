@@ -183,6 +183,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBranchingVersionControl )
 
     m_hasError = false;
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
