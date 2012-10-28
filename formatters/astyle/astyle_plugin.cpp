@@ -194,6 +194,7 @@ QString AStylePlugin::formattingSample()
     "}\n"
     "namespace A {\n"
     "namespace B {\n"
+    "class someClass {\n"
     "void foo() {\n"
     "  if (true) {\n"
     "    func();\n"
@@ -201,6 +202,7 @@ QString AStylePlugin::formattingSample()
     "    // bla\n"
     "  }\n"
     "}\n"
+    "};\n"
     "}\n"
     "}\n";
 }
@@ -254,7 +256,8 @@ QString AStylePlugin::indentingSample()
     "\tdarkblue};\n"
     "fooFunction(barArg1,\n"
     "\tbarArg2,\n"
-    "\tbarArg3);\n";
+    "\tbarArg3);\n"
+    "struct foo{ int bar() {} };\n";
 }
 
 #include "astyle_plugin.moc"
