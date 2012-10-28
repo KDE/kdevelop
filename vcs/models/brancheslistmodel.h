@@ -25,13 +25,21 @@
 #include <QStandardItemModel>
 #include <KUrl>
 
-namespace KDevelop {
-class IBranchingVersionControl;}
+#include "../vcsexport.h"
 
-class BranchesListModel : public QStandardItemModel
+namespace KDevelop {
+class IBranchingVersionControl;
+class IProject;
+}
+
+class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
     Q_OBJECT
+    Q_PROPERTY(KDevelop::IProject* project READ project WRITE setProject)
+    Q_PROPERTY(QString currentBranch READ currentBranch WRITE setCurrentBranch NOTIFY currentBranchChanged)
     public:
+        enum Roles { CurrentRole = Qt::UserRole+1 };
+        
         BranchesListModel(QObject* parent = 0);
         void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const KUrl& repo);
         
@@ -42,16 +50,20 @@ class BranchesListModel : public QStandardItemModel
         KDevelop::IBranchingVersionControl* interface();
         void refresh();
         QString currentBranch() const;
+        void setCurrentBranch(const QString& branch);
+        
+        KDevelop::IProject* project() const;
+        void setProject(KDevelop::IProject* p);
         
     public slots:
         void resetCurrent();
         
-    private:
-        QString curBranch();
+    signals:
+        void currentBranchChanged();
         
+    private:
         KDevelop::IBranchingVersionControl* dvcsplugin;
         KUrl repo;
-        QString m_currentBranch;
 };
 
 #endif // BRANCHESLISTMODEL_H

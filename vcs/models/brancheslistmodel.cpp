@@ -23,6 +23,11 @@
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iruncontroller.h>
 #include <KIcon>
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -42,6 +47,7 @@ class BranchItem : public QStandardItem
         
         void setCurrent(bool current)
         {
+            setData(current, BranchesListModel::CurrentRole);
             setIcon(KIcon( current ? "arrow-right" : ""));
         }
         
@@ -87,7 +93,11 @@ static QVariant runSynchronously(KDevelop::VcsJob* job)
 
 BranchesListModel::BranchesListModel(QObject* parent)
     : QStandardItemModel(parent), dvcsplugin(dvcsplugin)
-{}
+{
+    QHash< int, QByteArray > roles = roleNames();
+    roles.insert(CurrentRole, "isCurrent");
+    setRoleNames(roles);
+}
 
 void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)
 {
@@ -136,10 +146,37 @@ void BranchesListModel::refresh()
 
 void BranchesListModel::resetCurrent()
 {
-    resetCurrent();
+    refresh();
+    emit currentBranchChanged();
 }
 
 QString BranchesListModel::currentBranch() const
 {
     return runSynchronously(dvcsplugin->currentBranch(repo)).toString();
+}
+
+KDevelop::IProject* BranchesListModel::project() const
+{
+    return KDevelop::ICore::self()->projectController()->findProjectForUrl(repo);
+}
+
+void BranchesListModel::setProject(KDevelop::IProject* p)
+{
+    if(!p || !p->versionControlPlugin()) {
+        qDebug() << "null or invalid project" << p;
+        return;
+    }
+
+    KDevelop::IBranchingVersionControl* branching = p->versionControlPlugin()->extension<KDevelop::IBranchingVersionControl>();
+    if(branching) {
+        initialize(branching, p->folder());
+    } else
+        qDebug() << "not a branching vcs project" << p->name();
+}
+
+void BranchesListModel::setCurrentBranch(const QString& branch)
+{
+    KDevelop::VcsJob* job = dvcsplugin->switchBranch(repo, branch);
+    connect(job, SIGNAL(finished(KJob*)), SIGNAL(currentBranchChanged()));
+    KDevelop::ICore::self()->runController()->registerJob(job);
 }
