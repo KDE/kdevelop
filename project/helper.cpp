@@ -39,6 +39,13 @@
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder)
 {
+    QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+
+    if ( !KIO::NetAccess::exists(url, true, window) ) {
+        kWarning() << "tried to remove non-existing url:" << url << project << isFolder;
+        return true;
+    }
+
     IPlugin* vcsplugin=project->versionControlPlugin();
     if(vcsplugin) {
         IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
@@ -53,7 +60,6 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
     }
 
     //if we didn't find a VCS, we remove using KIO
-    QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
     if ( !KIO::NetAccess::del( url, window ) ) {
         KMessageBox::error( window,
             isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )
