@@ -1,11 +1,29 @@
 [General]
 Name=Testing YAML Template
+Name[el]=Δοκιμή προτύπου YAML
+Name[nl]=YAML-sjabloon testen
+Name[pt]=Modelo de Testes em YAML
+Name[pt_BR]=Testando o modelo em YAML
+Name[uk]=Тестовий шаблон YAML
+Name[x-test]=xxTesting YAML Templatexx
 Comment=A test description in YAML
+Comment[el]=Μια περιγραφή δοκιμής σε YAML
+Comment[nl]=Een beschrijving van een in test in YAML
+Comment[pt]=Uma descrição de testes em YAML
+Comment[pt_BR]=Descrição de testes em YAML
+Comment[uk]=Опис перевірки у форматі YAML
+Comment[x-test]=xxA test description in YAMLxx
 Category=Test/Test/YAML
 Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[el]=Υλοποίηση
+Name[nl]=Implementatie
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.yaml
 OutputFile={{ name }}.yaml
 

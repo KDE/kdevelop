@@ -1,15 +1,39 @@
 [General]
 Name=Basic
+Name[el]=Βασική
+Name[nl]=Basis
+Name[pt]=Básico
+Name[pt_BR]=Básico
+Name[uk]=Базовий
+Name[x-test]=xxBasicxx
 Comment=Basic C++ Class
+Comment[el]=Βασική C++ Class
+Comment[nl]=Basis C++ klasse
+Comment[pt]=Classe Básica em C++
+Comment[pt_BR]=Classe básica em C++
+Comment[uk]=Базовий клас C++
+Comment[x-test]=xxBasic C++ Classxx
 Category=Class/Testing/C++
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[el]=Header
+Name[nl]=Kop
+Name[pt]=Inclusão
+Name[pt_BR]=Cabeçalho
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[el]=Υλοποίηση
+Name[nl]=Implementatie
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
