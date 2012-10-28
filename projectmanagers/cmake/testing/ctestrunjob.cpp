@@ -149,8 +149,6 @@ void CTestRunJob::processFinished(KJob* job)
     } else {
         result.suiteResult = TestResult::Error;
     }
-    setError(job->error());
-    setErrorText(job->errorText());
 
     kDebug() << result.suiteResult << result.testCaseResults;
     ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
