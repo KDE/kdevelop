@@ -74,6 +74,8 @@ QList<ProblemPointer> ParseSession::problems() const
     foreach(const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
         ProblemPointer p(new Problem);
         p->setDescription(msg.message);
+        p->setSeverity(ProblemData::Error);
+        p->setSource(ProblemData::Parser);
         p->setFinalLocation(DocumentRange(m_url, locationToSimpleRange(msg.loc)));
         problems << p;
     }
