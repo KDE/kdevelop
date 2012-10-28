@@ -124,6 +124,20 @@ private:
 }
 
 namespace KDevelop {
+
+///Return the length of the separator
+template<class SeparatorType>
+inline int separatorLength(const SeparatorType& separator)
+{
+    return separator.length();
+}
+///Specialization for QChar (always length of 1)
+template<>
+inline int separatorLength(const QChar& /*separator*/)
+{
+    return 1;
+}
+
 template<class Item>
 class FilterWithSeparator
 {
@@ -183,8 +197,6 @@ public:
             filterBase = m_items;
         }
 
-        m_filtered.clear();
-
         QString exactNeedle;
         if (!text.isEmpty()) {
             exactNeedle = separator + text.join(separator);
@@ -193,6 +205,10 @@ public:
         // filterBase is correctly sorted, to keep it that way we add
         // exact matches to this list in sorted way and then prepend the whole list in one go.
         QList<Item> exactMatches;
+        // similar for starting matches
+        QList<Item> startMatches;
+        // all other matches
+        QList<Item> otherMatches;
         foreach( const Item& data, filterBase ) {
             QString toFilter = itemText(data);
 
@@ -220,19 +236,20 @@ public:
                 ++searchStart;
             }
 
-            if(searchStart == -1) {
+            if (searchStart == -1) {
                 continue;
             }
 
-            m_filtered << data;
-        }
-
-        if (!exactMatches.isEmpty()) {
-            for(int i = exactMatches.size() - 1; i >= 0; --i ) {
-                m_filtered.prepend(exactMatches.at(i));
+            // prefer matches whose last element starts with the filter
+            int lastSeparator = toFilter.lastIndexOf(separator);
+            if (lastSeparator + 1 + separatorLength(separator) == searchStart) {
+                startMatches << data;
+            } else {
+                otherMatches << data;
             }
         }
 
+        m_filtered = exactMatches + startMatches + otherMatches;
         m_oldFilterText = text;
     }
 
