@@ -114,6 +114,12 @@ void pp::handle_directive(uint directive, Stream& input, Stream& output)
   static const uint includeNextDirective = KDevelop::IndexedString("include_next").index();
 
   skip_blanks (input, output);
+  while (!input.atEnd() && input != '\n' && input == '/' && input.peekNextCharacter() == '*')
+  {
+    skip_comment_or_divop(input, output);
+    skip_blanks (input, output);
+  }
+
   if(!(directive == ifndefDirective)) {
     hadGuardCandidate = true; //Too late, the guard must be the first directive
   }
