@@ -19,6 +19,7 @@
  */
 
 #include "ctestfindsuitestest.h"
+#include "testhelpers.h"
 #include "cmake-test-paths.h"
 
 #include <language/duchain/duchainlock.h>
@@ -27,6 +28,7 @@
 #include <interfaces/itestcontroller.h>
 #include <interfaces/itestsuite.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -91,12 +93,10 @@ void CTestFindSuitesTest::testQtTestSuite()
 
 IProject* CTestFindSuitesTest::parseProject( const QString& name)
 {
-    KUrl url(CMAKE_TESTS_PROJECTS_DIR);
-    url.addPath(name);
-    url.addPath(name + ".kdev4");
-    ICore::self()->projectController()->openProject(url);
+    const TestProjectPaths paths = projectPaths(name);
+    defaultConfigure(paths);
     
-    kDebug() << name << url;
+    ICore::self()->projectController()->openProject(paths.projectFile);
     
     IProject* project = ICore::self()->projectController()->findProjectByName(name);
     int t = 0;
