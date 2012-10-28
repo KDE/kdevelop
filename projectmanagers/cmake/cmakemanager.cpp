@@ -1139,38 +1139,39 @@ void CMakeManager::cleanupToDelete(IProject* p)
     Q_ASSERT(isReloading(p));
     
     for(QSet<QString>::iterator it=m_toDelete.begin(), itEnd=m_toDelete.end(); it!=itEnd; ) {
-        IndexedString url(*it);
-        if(p->fileSet().contains(url)) {
-            deleteAllLater(castToBase(p->itemsForUrl(url.toUrl())));
+        QList<ProjectBaseItem*> items = p->itemsForUrl(*it);
+        if(!items.isEmpty()) {
+            deleteAllLater(items);
             it=m_toDelete.erase(it);
         } else 
             ++it;
     }
     
-    QHash<KUrl, KUrl>::const_iterator it=m_renamed.constBegin(), itEnd=m_renamed.constEnd();
-    for(; it!=itEnd; ++it) {
+    for(QHash<KUrl, KUrl>::iterator it=m_renamed.begin(), itEnd=m_renamed.end(); it!=itEnd; ++it) {
         QList<ProjectBaseItem*> items=p->itemsForUrl(it.key());
-        foreach(ProjectBaseItem* item, items) {
-            if(item->file())
-                emit fileRenamed(it.value(), item->file());
-            else
-                emit folderRenamed(it.value(), item->folder());
+        if(!items.isEmpty()) {
+            foreach(ProjectBaseItem* item, items) {
+                if(item->file())
+                    emit fileRenamed(it.value(), item->file());
+                else
+                    emit folderRenamed(it.value(), item->folder());
+            }
+            it = m_renamed.erase(it);
+        } else {
+            ++it;
         }
     }
 }
 
 void CMakeManager::deletedWatched(const QString& path)
 {
-    KUrl dirurl(path);
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
+    KUrl url(path);
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(url);
     
     if(p && !isReloading(p)) {
-        dirurl.adjustPath(KUrl::AddTrailingSlash);
-        if(p->folder()==dirurl) {
+        if(p->folder().equals(url, KUrl::CompareWithoutTrailingSlash)) {
             ICore::self()->projectController()->closeProject(p);
         } else {
-            KUrl url(path);
-            
             if(url.fileName()=="CMakeLists.txt") {
                 QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
                 foreach(ProjectFolderItem* folder, folders) 
@@ -1206,24 +1207,21 @@ void CMakeManager::filesystemBuffererTimeout()
     m_fileSystemChangedBuffer.clear();
 }
 
-void CMakeManager::realDirectoryChanged(const QString& _dir)
+QString addTrailingSlash(const QString& path)
 {
-    KUrl dir(_dir);
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
+    return (path.isEmpty() || path.endsWith('/')) ? path : path+'/';
+}
+
+void CMakeManager::realDirectoryChanged(const QString& dir)
+{
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(KUrl(dir));
     if(!p || isReloading(p))
         return;
     
-    QList< ProjectBaseItem* > items = p->itemsForUrl(dir);
-    QStringList files;
-    foreach(ProjectBaseItem* it, items) {
-        files.append(it->url().toLocalFile());
-    }
-    foreach(const QString& file, files) {
-        if(!QFile::exists(file))
-            deletedWatched(file);
-        else
-            dirtyFile(file);
-    }
+    if(!QFile::exists(dir))
+        deletedWatched(addTrailingSlash(dir));
+    else
+        dirtyFile(dir);
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
