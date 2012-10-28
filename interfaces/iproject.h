@@ -60,6 +60,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IProject : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
+    Q_PROPERTY(QString projectName READ name CONSTANT)
 public:
     /**
      * Constructs a project.
@@ -151,7 +152,7 @@ public Q_SLOTS:
     virtual Q_SCRIPTABLE const KUrl folder() const = 0;
 
     /** Returns the name of the project. */
-    virtual Q_SCRIPTABLE QString name() const = 0;
+    virtual QString name() const = 0;
 
     /**
      * Find the url relative to the project directory equivalent to @a absoluteUrl.

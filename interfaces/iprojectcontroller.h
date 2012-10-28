@@ -71,7 +71,7 @@ public:
      * @param name the name of the project to be found
      * @returns the project or null if no project with that name is open
      */
-    Q_SCRIPTABLE virtual IProject* findProjectByName( const QString& name ) = 0;
+    Q_SCRIPTABLE virtual KDevelop::IProject* findProjectByName( const QString& name ) = 0;
 
     /**
      * Finding an open project for a given file or folder in the project
