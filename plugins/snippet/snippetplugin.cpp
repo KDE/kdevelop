@@ -23,6 +23,7 @@
 #include <KAction>
 
 #include <KTextEditor/HighlightInterface>
+#include <KTextEditor/Editor>
 
 #include <interfaces/ipartcontroller.h>
 #include <interfaces/icore.h>
@@ -51,8 +52,18 @@ public:
 
     virtual QWidget* create(QWidget *parent = 0)
     {
-        Q_UNUSED(parent)
-        return new SnippetView( m_plugin, parent);
+        KTextEditor::Editor *editor = KDevelop::ICore::self()->partController()->editorPart();
+        // use snippets widget provided by editor component, if any
+        if (QWidget *snippets = editor->property("snippetWidget").value<QWidget*>()) {
+            // add snippets widget
+            snippets->setParent (parent);
+
+            return snippets;
+        } else {
+            // else use own implementation
+            // TODO: remove own implementation
+            return new SnippetView( m_plugin, parent);
+        }
     }
 
     virtual Qt::DockWidgetArea defaultPosition()
@@ -75,17 +86,22 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
 {
     Q_ASSERT(!m_self);
     m_self = this;
+    
+    KTextEditor::Editor *editor = KDevelop::ICore::self()->partController()->editorPart();
+    if (editor->metaObject()->indexOfProperty("snippetWidget") == -1) {
 
-    SnippetStore::init(this);
+        SnippetStore::init(this);
 
-    m_model = new SnippetCompletionModel;
-    new KDevelop::CodeCompletion(this, m_model, QString());
+        m_model = new SnippetCompletionModel;
+        new KDevelop::CodeCompletion(this, m_model, QString());
 
-    setXMLFile( "kdevsnippet.rc" );
+        setXMLFile( "kdevsnippet.rc" );
+
+        connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
+    }
 
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
-    connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
 }
 
 SnippetPlugin::~SnippetPlugin()
@@ -151,6 +167,12 @@ void SnippetPlugin::documentLoaded( KParts::Part* part )
 KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+
+    KTextEditor::Editor *editor = KDevelop::ICore::self()->partController()->editorPart();
+    if (editor->metaObject()->indexOfProperty("snippetWidget") != -1) {
+        //context menu gets added by KatePart
+        return extension;
+    }
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
