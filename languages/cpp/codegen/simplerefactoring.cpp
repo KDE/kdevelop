@@ -292,7 +292,6 @@ bool SimpleRefactoring::shouldRenameFile(Declaration* declaration)
   const KUrl currUrl = declaration->topContext()->url().toUrl();
   const QString fileName = currUrl.fileName();
   const QPair<QString, QString> nameExtensionPair = splitFileAtExtension(fileName);
-  qDebug() << nameExtensionPair << declaration->identifier().toString();
   // check whether we renamed something that is called like the document it lives in
   return nameExtensionPair.first.compare(declaration->identifier().toString(), Qt::CaseInsensitive) == 0;
 }
