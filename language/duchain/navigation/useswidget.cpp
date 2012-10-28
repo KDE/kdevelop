@@ -99,7 +99,12 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
 
   Q_ASSERT(range.start.column >= 0 && range.end.column <= line.length());
 
-  return Qt::escape(line.left(range.start.column)) + "<span style=\"background-color:yellow\">" + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column)) + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) ;
+  //TODO: share code with context browser
+  // mixing (255, 255, 0, 100) with white yields this:
+  const QColor background(251, 250, 150);
+  const QColor foreground(0, 0, 0);
+
+  return Qt::escape(line.left(range.start.column)) + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">" + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column)) + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) ;
 }
 
 OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
