@@ -41,6 +41,8 @@
 #include <language/editor/documentcursor.h>
 #include <KTextEditor/Document>
 
+#include <language/interfaces/icontextbrowser.h>
+
 namespace Sublime {
   class MainWindow;
 }
@@ -80,9 +82,10 @@ struct ViewHighlights
   QList<PersistentMovingRange::Ptr> highlights;
 };
 
-class ContextBrowserPlugin : public KDevelop::IPlugin
+class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContextBrowser
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IContextBrowser )
   public:
     ContextBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ContextBrowserPlugin();
@@ -104,7 +107,10 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     void updateDeclarationListBox(KDevelop::DUContext* context);
     void setAllowBrowsing(bool allow);
 
+    virtual void showUses(const DeclarationPointer& declaration);
+
   public Q_SLOTS:
+    void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
     void previousContextShortcut();
     void nextContextShortcut();
     

@@ -40,7 +40,6 @@
 #include "abstractnavigationcontext.h"
 #include "abstractdeclarationnavigationcontext.h"
 #include "navigationaction.h"
-#include "useswidget.h"
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
 #include <qapplication.h>
@@ -216,17 +215,6 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
   NavigationContextPointer nextContext = m_context->acceptLink(url.toString());
-  
-  if(thisPtr)
-    setContext( nextContext );
-}
-
-void AbstractNavigationWidget::executeContextAction(QString action) {
-  DUChainReadLocker lock( DUChain::lock() );
-  //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
-  QPointer<AbstractNavigationWidget> thisPtr(this);
-  NavigationContextPointer oldContext = m_context;
-  NavigationContextPointer nextContext = m_context->executeLink(action);
   
   if(thisPtr)
     setContext( nextContext );

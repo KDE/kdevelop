@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include "abstractdeclarationnavigationcontext.h"
+#include "abstractnavigationwidget.h"
 #include "usesnavigationcontext.h"
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
@@ -37,7 +38,9 @@
 #include "../types/enumerationtype.h"
 #include "../types/referencetype.h"
 #include "../types/pointertype.h"
+#include <interfaces/icontextbrowser.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 
 namespace KDevelop {
@@ -145,7 +148,7 @@ NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key
   return NavigationContextPointer(this);
 }
 
-NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& action)
+NavigationContextPointer AbstractNavigationContext::execute(const NavigationAction& action)
 {
   if(action.targetContext)
     return NavigationContextPointer(action.targetContext);
@@ -175,6 +178,15 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
       return AbstractNavigationContext::registerChild(action.decl);
     } break;
     case NavigationAction::NavigateUses:
+    {
+      IContextBrowser* browser = ICore::self()->pluginController()->extensionForPlugin<IContextBrowser>();
+      if (browser) {
+        browser->showUses(action.decl);
+        return NavigationContextPointer(this);
+      }
+      // fall-through
+    }
+    case NavigationAction::ShowUses:
       return registerChild(new UsesNavigationContext(action.decl.data(), this));
     case NavigationAction::JumpToSource:
       {

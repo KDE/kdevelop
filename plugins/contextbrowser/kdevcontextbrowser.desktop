@@ -105,4 +105,5 @@ X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Core
 X-KDevelop-IRequired=org.kdevelop.IQuickOpen
+X-KDevelop-Interfaces=org.kdevelop.IContextBrowser
 X-KDevelop-Mode=GUI

@@ -267,6 +267,8 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     , m_viewFactory(new ContextBrowserViewFactory(this))
     , m_nextHistoryIndex(0)
 {
+  KDEV_USE_EXTENSION_INTERFACE( IContextBrowser )
+
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
   connect( core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)) );
@@ -324,25 +326,47 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
   return menuExt;
 }
 
+void ContextBrowserPlugin::showUses(const DeclarationPointer& declaration)
+{
+  QMetaObject::invokeMethod(this, "showUsesDelayed", Qt::QueuedConnection,
+                            Q_ARG(KDevelop::DeclarationPointer, declaration));
+}
+
+void ContextBrowserPlugin::showUsesDelayed(const DeclarationPointer& declaration)
+{
+  DUChainReadLocker lock;
+
+  Declaration* decl = declaration.data();
+  if(!decl) {
+    return;
+  }
+  QWidget* toolView = ICore::self()->uiController()->findToolView(i18n("Code Browser"), m_viewFactory, KDevelop::IUiController::CreateAndRaise);
+  if(!toolView) {
+    return;
+  }
+  ContextBrowserView* view = dynamic_cast<ContextBrowserView*>(toolView);
+  Q_ASSERT(view);
+  view->allowLockedUpdate();
+  view->setDeclaration(decl, decl->topContext(), true);
+  //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
+  QPointer<AbstractNavigationWidget> widget = dynamic_cast<AbstractNavigationWidget*>(view->navigationWidget());
+  if(widget && widget->context()) {
+    NavigationContextPointer nextContext = widget->context()->execute(
+      NavigationAction(declaration, KDevelop::NavigationAction::ShowUses));
+
+    if(widget) {
+      widget->setContext( nextContext );
+    }
+  }
+}
+
 void ContextBrowserPlugin::findUses()
 {
   QAction* action = qobject_cast<QAction*>(sender());
   Q_ASSERT(action);
-  DUChainReadLocker lock(DUChain::lock());
   
   KDevelop::IndexedDeclaration decl = action->data().value<KDevelop::IndexedDeclaration>();
-  if(!decl.data())
-    return;
-  QWidget* widget = ICore::self()->uiController()->findToolView(i18n("Code Browser"), m_viewFactory, KDevelop::IUiController::CreateAndRaise);
-  if(!widget)
-    return;
-  ContextBrowserView* view = dynamic_cast<ContextBrowserView*>(widget);
-  Q_ASSERT(view);
-  view->allowLockedUpdate();
-  view->setDeclaration(decl.data(), decl.data()->topContext(), true);
-  KDevelop::AbstractNavigationWidget* navigationWidget = dynamic_cast<KDevelop::AbstractNavigationWidget*>(view->navigationWidget());
-  if(navigationWidget)
-    navigationWidget->executeContextAction("show_uses");
+  showUses(DeclarationPointer(decl.declaration()));
 }
 
 void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, QString&) {
@@ -1303,7 +1327,5 @@ void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KDevelop::Simpl
         relativeCursorPosition.line -= context.data()->range().start.line;
     }
 }
-
-#include "contextbrowser.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -100,7 +100,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     TopDUContextPointer topContext() const;
 
     NavigationContextPointer executeLink(QString link);
-    
+
+    NavigationContextPointer execute(const NavigationAction& action);
+
   protected:
     
     /// Returns the html font-size prefix (aka. <small> or similar) for the given mode
@@ -133,8 +135,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 
     //Clears the computed html and links
     void clear();
-    
-    NavigationContextPointer execute(NavigationAction& action);
 
     void addExternalHtml( const QString& text );
 

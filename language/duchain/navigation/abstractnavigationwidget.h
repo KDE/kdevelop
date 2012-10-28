@@ -34,8 +34,6 @@ class QWidget;
 class QTextBrowser;
 
 namespace KDevelop {
-  class UsesWidget;
-
   /**
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * The duchain must be read-locked for most operations
@@ -75,10 +73,6 @@ namespace KDevelop {
       
       NavigationContextPointer context();
 
-      ///Execute an action within the current navigation context
-      ///"show_uses" shows the uses for a declaration context.
-      void executeContextAction(QString action);
-      
     Q_SIGNALS:
       void sizeHintChanged();
       /// Emitted whenever the current navigation-context has changed

@@ -56,6 +56,7 @@
 #include <qapplication.h>
 #include <language/interfaces/codecontext.h>
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
+#include <language/duchain/navigation/useswidget.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugincontroller.h>
 
