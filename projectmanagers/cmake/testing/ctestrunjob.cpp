@@ -144,7 +144,7 @@ void CTestRunJob::processFinished(KJob* job)
     result.testCaseResults = m_caseResults;
     if (job->error() == 1) {
         result.suiteResult = TestResult::Failed;
-    } else if (job->error() == 0) {
+    } else if (job->error() == KJob::NoError) {
         result.suiteResult = TestResult::Passed;
     } else {
         result.suiteResult = TestResult::Error;
