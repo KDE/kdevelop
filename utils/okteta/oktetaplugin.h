@@ -67,7 +67,6 @@ class OktetaPlugin: public IPlugin
 #if KASTEN_VERSION == 2
     Kasten::ByteArrayViewProfileManager* const mViewProfileManager;
 #endif
-    QList<KUrl> mContextUrls;
 };
 
 }

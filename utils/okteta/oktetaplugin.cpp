@@ -115,37 +115,17 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 
 ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 {
-    mContextUrls.clear();
+    OpenWithContext* openWithContext = dynamic_cast<OpenWithContext*>( context );
 
-    FileContext* fileContext = dynamic_cast<FileContext*>( context );
-    ProjectItemContext* projectItemContext = dynamic_cast<ProjectItemContext*>( context );
-    if( fileContext ) {
-        foreach( KUrl url, fileContext->urls() )
-        {
-            KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
-            if(!mimetype->is("inode/directory")){
-                mContextUrls << url;
-            }
-        }
-    }
-    else if( projectItemContext ) 
+    if( openWithContext && !openWithContext->mimeType()->is("inode/directory"))
     {
-        foreach( ProjectBaseItem* item, projectItemContext->items() )
-        {
-            ProjectFileItem* file = item->file();
-            if( file )
-                mContextUrls << file->url();
-        }
-    }
-
-    if( ! mContextUrls.isEmpty() )
-    {
-        KAction* openAction = new KAction( i18n("Open As Byte Array"), this );
+        KAction* openAction = new KAction( i18n("Hex Editor"), this );
         openAction->setIcon( KIcon("document-open") );
+        openAction->setData( openWithContext->urls() );
         connect( openAction, SIGNAL(triggered()), SLOT(onOpenTriggered()) );
 
         KDevelop::ContextMenuExtension contextMenuExtension;
-        contextMenuExtension.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+        contextMenuExtension.addAction( KDevelop::ContextMenuExtension::OpenEmbeddedGroup, openAction );
         return contextMenuExtension;
     }
 
@@ -154,10 +134,13 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 
 void OktetaPlugin::onOpenTriggered()
 {
+    KAction* action = qobject_cast<KAction*>(sender());
+    Q_ASSERT(action);
+
     KDevelop::ICore* core = KDevelop::ICore::self();
     IDocumentController* documentController = core->documentController();
 
-    foreach( const KUrl& url, mContextUrls )
+    foreach( const KUrl& url, action->data().value<KUrl::List>() )
     {
         IDocument* existingDocument = documentController->documentForUrl(url);
         if( existingDocument )
