@@ -1,6 +1,7 @@
 [General]
 Name=Testing C++ Template
 Name[el]=Δοκιμή C++ Template
+Name[es]=Prueba de plantilla C++
 Name[nl]=C++-sjabloon testen
 Name[pt]=Modelo de Testes em C++
 Name[pt_BR]=Modelo de testes em C++
@@ -8,8 +9,9 @@ Name[uk]=Тестовий шаблон C++
 Name[x-test]=xxTesting C++ Templatexx
 Comment=A unit test using the QTest library without a graphical user interface
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest χωρίς γραφικό περιβάλλον χρήστη
+Comment[es]=Una prueba unitaria que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek zonder een grafisch gebruikersinterface
-Comment[pt]=Um teste unitário que usa a biblioteca QTest sem uma interface gráfica
+Comment[pt]=Um teste unitário, com a biblioteca QTest, sem uma interface gráfica do utilizador
 Comment[pt_BR]=Teste unitário que usa a biblioteca QTest sem uma interface gráfica do usuário
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
 Comment[x-test]=xxA unit test using the QTest library without a graphical user interfacexx
@@ -19,6 +21,7 @@ Files=Header,Implementation
 [Header]
 Name=Header
 Name[el]=Header
+Name[es]=Cabecera
 Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Cabeçalho
@@ -30,6 +33,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação

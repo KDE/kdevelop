@@ -1,6 +1,7 @@
 [General]
 Name=Testing YAML template
 Name[el]=Δοκιμή προτύπου YAML
+Name[es]=Prueba de plantilla YAML
 Name[nl]=YAML-sjabloon testen
 Name[pt]=A testar o modelo em YAML
 Name[pt_BR]=Testando o modelo em YAML
@@ -8,6 +9,7 @@ Name[uk]=Тестовий шаблон YAML
 Name[x-test]=xxTesting YAML templatexx
 Comment=Describes a class using YAML syntax
 Comment[el]=Περιγράφει μια class με χρήση σύνταξης YAML
+Comment[es]=Describe una clase usando la sintaxis YAML
 Comment[nl]=Beschrijft een klasse met gebruik van YAML-syntaxis
 Comment[pt]=Descreve uma classe com uma sintaxe em YAML
 Comment[pt_BR]=Descreve uma classe que usa a sintaxe em YAML
@@ -20,6 +22,7 @@ OptionsFile=options.kcfg
 [Description]
 Name=Description
 Name[el]=Περιγραφή
+Name[es]=Descripción
 Name[nl]=Beschrijving
 Name[pt]=Descrição
 Name[pt_BR]=Descrição
