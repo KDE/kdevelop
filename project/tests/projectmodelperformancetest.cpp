@@ -24,6 +24,9 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QApplication>
 #include <projectmodel.h>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+#include <tests/testplugincontroller.h>
 #include <QTimer>
 #include <kdebug.h>
 
@@ -82,7 +85,15 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     l->addWidget( b, 0, 4 );
     
     l->addWidget( view, 1, 0, 1, 6 );
-    
+}
+
+void ProjectModelPerformanceTest::init()
+{
+    KDevelop::AutoTestShell::init();
+    KDevelop::TestCore* core = new KDevelop::TestCore;
+    core->setPluginController(new KDevelop::TestPluginController(core));
+    core->initialize();
+
     model = new KDevelop::ProjectModel( this );
     
     for( int i = 0; i < INIT_WIDTH; i++ ) {
@@ -92,6 +103,11 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     }
     
     view->setModel( model );
+}
+
+ProjectModelPerformanceTest::~ProjectModelPerformanceTest()
+{
+    KDevelop::TestCore::shutdown();
 }
 
 void ProjectModelPerformanceTest::addBigTree()
@@ -162,7 +178,9 @@ int main( int argc, char** argv )
     QApplication a( argc, argv );
     ProjectModelPerformanceTest w;
     w.show();
-    a.exec();
+
+    QMetaObject::invokeMethod(&w, "init");
+    return a.exec();
 }
 
 #include "projectmodelperformancetest.moc"

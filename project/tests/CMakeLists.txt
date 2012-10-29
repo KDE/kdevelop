@@ -32,5 +32,7 @@ target_link_libraries(projectmodelperformancetest
     ${QT_QTGUI_LIBRARY}
     kdevplatforminterfaces
     kdevplatformproject
+    kdevplatformlanguage
+    kdevplatformtests
 )
 
