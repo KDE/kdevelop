@@ -1,6 +1,7 @@
 [General]
 Name=Qt Object
 Name[el]=Qt Object
+Name[es]=Objeto Qt
 Name[nl]=Qt-object
 Name[pt]=Objecto do Qt
 Name[pt_BR]=Qt Object
@@ -8,6 +9,7 @@ Name[uk]=Об’єкт Qt
 Name[x-test]=xxQt Objectxx
 Comment=QObject subclass with properties and private member
 Comment[el]=QObject subclass με ιδιότητες και private member
+Comment[es]=Subclase de QObject con propiedades y miembro privado
 Comment[nl]=Subklasse QObject met eigenschappen en private member
 Comment[pt]=Sub-classe de QObject com propriedades e um membro privado
 Comment[pt_BR]=Subclasse de QObject com propriedades e membro privado
@@ -20,6 +22,7 @@ Files=Header,Implementation
 [Header]
 Name=Public Header
 Name[el]=Public Header
+Name[es]=Cabecera pública
 Name[nl]=Publieke kop
 Name[pt]=Inclusão Pública
 Name[pt_BR]=Inclusão pública
@@ -32,6 +35,7 @@ OutputFile={{ name }}.h
 Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação

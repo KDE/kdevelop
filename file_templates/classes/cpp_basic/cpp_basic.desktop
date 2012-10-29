@@ -1,6 +1,7 @@
 [General]
 Name=Basic
 Name[el]=Βασική
+Name[es]=Básica
 Name[nl]=Basis
 Name[pt]=Básico
 Name[pt_BR]=Básico
@@ -8,6 +9,7 @@ Name[uk]=Базовий
 Name[x-test]=xxBasicxx
 Comment=Basic C++ Class
 Comment[el]=Βασική C++ Class
+Comment[es]=Clase de C++ básica
 Comment[nl]=Basis C++ klasse
 Comment[pt]=Classe Básica em C++
 Comment[pt_BR]=Classe básica em C++
@@ -19,6 +21,7 @@ Files=Header,Implementation
 [Header]
 Name=Header
 Name[el]=Header
+Name[es]=Cabecera
 Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Cabeçalho
@@ -31,6 +34,7 @@ OutputFile={{ name }}.h
 Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação

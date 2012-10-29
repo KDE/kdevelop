@@ -1,6 +1,7 @@
 [General]
 Name=PyUnit
 Name[el]=PyUnit
+Name[es]=PyUnit
 Name[nl]=PyUnit
 Name[pt]=PyUnit
 Name[pt_BR]=PyUnit
@@ -9,6 +10,7 @@ Name[uk]=PyUnit
 Name[x-test]=xxPyUnitxx
 Comment=A unit test using the PyUnit framework
 Comment[el]=Ένα unit test με χρήση του PyUnit framework
+Comment[es]=Una prueba unitaria que usa la infraestructura PyUnit
 Comment[nl]=Een test van een eenheid met gebruik van het framework PyUnit
 Comment[pt]=Um teste unitário que usa a plataforma PyUnit
 Comment[pt_BR]=Teste unitário que usa a plataforma PyUnit
@@ -22,6 +24,7 @@ Files=Implementation
 Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação

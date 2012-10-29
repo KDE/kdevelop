@@ -1,6 +1,7 @@
 [General]
 Name=CMake Module with pkg-config
 Name[el]=CMake άρθρωμα με pkg-config
+Name[es]=Módulo de CMake con pkg-config
 Name[nl]=CMake-module met pkg-config
 Name[pt]=Módulo do CMake com o 'pkg-config'
 Name[pt_BR]=Módulo do CMake com o pkg-config
@@ -8,6 +9,7 @@ Name[uk]=Модуль CMake з pkg-config
 Name[x-test]=xxCMake Module with pkg-configxx
 Comment=CMake module for finding a library using pkg-config
 Comment[el]=CMake άρθρωμα για εύρεση βιβλιοθήκης με χρήση pkg-config
+Comment[es]=Módulo de CMake para encontrar una biblioteca usando pkg-config
 Comment[nl]=CMake-module voor zoeken van een bibliotheek met gebruik van pkg-config
 Comment[pt]=Módulo do CMake para descobrir uma biblioteca com o 'pkg-config'
 Comment[pt_BR]=Módulo do CMake para descobrir uma biblioteca com o pkg-config
@@ -20,6 +22,7 @@ OptionsFile=options.kcfg
 [Module]
 Name=Module
 Name[el]=Άρθρωμα
+Name[es]=Módulo
 Name[nl]=Module
 Name[pt]=Módulo
 Name[pt_BR]=Módulo

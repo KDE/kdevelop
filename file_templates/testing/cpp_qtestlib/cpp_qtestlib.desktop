@@ -1,6 +1,7 @@
 [General]
 Name=QTestLib
 Name[el]=QTestLib
+Name[es]=QTestLib
 Name[nl]=QTestLib
 Name[pt]=QTestLib
 Name[pt_BR]=QTestLib
@@ -8,6 +9,7 @@ Name[uk]=QTestLib
 Name[x-test]=xxQTestLibxx
 Comment=A unit test using the QTest library without a graphical user interface
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest χωρίς γραφικό περιβάλλον χρήστη
+Comment[es]=Una prueba unitaria que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek zonder een grafisch gebruikersinterface
 Comment[pt]=Um teste unitário, com a biblioteca QTest, sem uma interface gráfica do utilizador
 Comment[pt_BR]=Teste unitário que usa a biblioteca QTest sem uma interface gráfica do usuário
@@ -19,6 +21,7 @@ Files=Header,Implementation
 [Header]
 Name=Header
 Name[el]=Header
+Name[es]=Cabecera
 Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Cabeçalho
@@ -31,6 +34,7 @@ OutputFile={{ name }}.h
 Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação

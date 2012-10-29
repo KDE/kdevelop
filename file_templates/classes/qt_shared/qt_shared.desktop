@@ -1,6 +1,7 @@
 [General]
 Name=Implicitly shared class
 Name[el]=Σιωπηρά διαμοιραζόμενη class
+Name[es]=Clase compartida implícitamente
 Name[nl]=Impliciet gedeelde klasse
 Name[pt]=Classe partilhada implicitamente
 Name[pt_BR]=Classe compartilhada implicitamente
@@ -8,6 +9,7 @@ Name[uk]=Клас з неявним спільним використанням
 Name[x-test]=xxImplicitly shared classxx
 Comment=Class with a private QSharedData member
 Comment[el]=Class με private QSharedData member
+Comment[es]=Clase con un miembro QSharedData privado
 Comment[nl]=Klasse met een private QSharedData member
 Comment[pt]=Classe com um membro QSharedData privado
 Comment[pt_BR]=Classe com um membro QSharedData privado
@@ -19,6 +21,7 @@ Files=Header,Implementation
 [Header]
 Name=Public Header
 Name[el]=Public Header
+Name[es]=Cabecera pública
 Name[nl]=Publieke kop
 Name[pt]=Inclusão Pública
 Name[pt_BR]=Inclusão pública
@@ -31,6 +34,7 @@ OutputFile={{ name }}.h
 Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
+Name[es]=Implementación
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
