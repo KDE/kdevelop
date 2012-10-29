@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
-Comment=Displays the branches inthe current project
+Comment=Displays the branches in the current project
 Type=Service
 ServiceTypes=Plasma/Applet
 Icon=kdevelop
