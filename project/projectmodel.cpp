@@ -689,11 +689,6 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( file );
-    // Need to this manually here as setUrl() is virtual and hence the above
-    // only calls the version in ProjectBaseItem and not ours
-    if( project && d_ptr->m_urlIndex ) {
-        project->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
-    }
 }
 
 ProjectFileItem::~ProjectFileItem()
