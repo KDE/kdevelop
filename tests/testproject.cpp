@@ -57,13 +57,15 @@ void KDevelop::TestProjectController::closeProject(KDevelop::IProject* p)
 {
     emit projectClosing(p);
     delete p;
-    emit projectClosed(p);
     m_projects.removeOne(p);
+    emit projectClosed(p);
 }
 
 void KDevelop::TestProjectController::takeProject(KDevelop::IProject* p)
 {
+    emit projectClosing(p);
     m_projects.removeOne(p);
+    emit projectClosed(p);
 }
 
 #include "testproject.moc"
