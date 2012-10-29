@@ -30,7 +30,7 @@
       <item row="1" column="1">
        <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
         <property name="toolTip">
-         <string>Choose whether to display additional information for the currently selected codecompletion item.</string>
+         <string>Choose whether to display additional information for the currently selected code completion item.</string>
         </property>
         <property name="text">
          <string/>
