@@ -331,6 +331,12 @@ public:
     virtual void setUrl( const KUrl& );
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
+
+    /**
+     * Get the indexed URL, which is often required for performant lookups
+     * or memory efficient storage.
+     */
+    IndexedString indexedUrl() const;
 };
 
 /**

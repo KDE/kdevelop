@@ -694,8 +694,13 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
 ProjectFileItem::~ProjectFileItem()
 {
     if( project() && d_ptr->m_urlIndex ) {
-        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
+        project()->removeFromFileSet( indexedUrl() );
     }
+}
+
+IndexedString ProjectFileItem::indexedUrl() const
+{
+    return IndexedString::fromIndex( d_ptr->m_urlIndex );
 }
 
 QString ProjectFileItem::iconName() const
@@ -809,14 +814,14 @@ void ProjectFileItem::setUrl( const KUrl& url )
 
     if( project() && d_ptr->m_urlIndex ) {
         // remove from fileset if we are in there
-        project()->removeFromFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
+        project()->removeFromFileSet( indexedUrl() );
     }
 
     ProjectBaseItem::setUrl( url );
 
     if( project() && d_ptr->m_urlIndex ) {
         // add to fileset with new url index
-        project()->addToFileSet( IndexedString::fromIndex( d_ptr->m_urlIndex ) );
+        project()->addToFileSet( indexedUrl() );
     }
 
     d_ptr->iconName = s_cache->iconNameForUrl( url, d_ptr->text );
