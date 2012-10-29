@@ -107,8 +107,8 @@ void ProjectModelTest::initTestCase()
     model = new ProjectModel( this );
     modelTest = new ModelTest( model, this );
     proxy = new ProjectProxyModel( model );
+    new ModelTest(proxy, proxy);
     proxy->setSourceModel(model);
-    ModelTest(proxy, proxy);
 }
 
 void ProjectModelTest::init()
