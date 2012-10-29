@@ -177,7 +177,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 void ProjectFileDataProvider::projectClosing( IProject* project )
 {
     foreach(const IndexedString& str, project->fileSet()) {
-        m_projectFiles.remove(str.byteArray());
+        fileRemovedFromSet(project, str);
     }
 }
 
