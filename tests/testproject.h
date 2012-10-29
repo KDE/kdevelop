@@ -41,7 +41,10 @@ class KDEVPLATFORMTESTS_EXPORT TestProject : public IProject
 {
     Q_OBJECT
 public:
-    TestProject(QObject* parent = 0);
+    /**
+     * @p url Path to project directory.
+     */
+    TestProject(const KUrl& url = KUrl(), QObject* parent = 0);
     virtual ~TestProject();
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }
@@ -63,7 +66,7 @@ public:
     bool isReady() const { return true; }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
 
-    void set_projectFileUrl(const KUrl& url);
+    void setProjectUrl(const KUrl& url);
 public Q_SLOTS:
     const KUrl folder() const;
     QString name() const { return "Test Project"; }

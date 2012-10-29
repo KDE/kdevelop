@@ -28,14 +28,22 @@
 
 using namespace KDevelop;
 
-TestProject::TestProject(QObject* parent)
+TestProject::TestProject(const KUrl& url, QObject* parent)
 : IProject(parent)
-, m_projectFileUrl(KUrl("file:///tmp/kdev-testproject/kdev-testproject.kdev4"))
-, m_folder(KUrl("file:///tmp/kdev-testproject"))
-, m_root(new ProjectFolderItem(this, m_folder))
+, m_root(0)
 , m_projectConfiguration(KGlobal::config())
 {
+    setProjectUrl(url.isValid() ? url : KUrl("file://tmp/kdev-testproject/"));
+    m_root = new ProjectFolderItem(this, m_folder);
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
+}
+
+void TestProject::setProjectUrl(const KUrl& url)
+{
+    m_folder = url;
+    if (m_root) {
+        m_root->setUrl(url);
+    }
 }
 
 TestProject::~TestProject()
@@ -54,19 +62,17 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
         ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
         m_root = 0;
         m_folder.clear();
-        m_projectFileUrl.clear();
     }
     if (item) {
         m_root = item;
         m_folder = item->url();
-        m_projectFileUrl = KUrl(m_folder, m_folder.fileName() + ".kdev4");
         ICore::self()->projectController()->projectModel()->appendRow( m_root );
     }
 }
 
 KUrl TestProject::projectFileUrl() const
 {
-    return m_projectFileUrl;
+    return KUrl(m_folder, m_folder.fileName() + ".kdev4");
 }
 
 const KUrl TestProject::folder() const

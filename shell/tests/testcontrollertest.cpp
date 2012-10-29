@@ -112,7 +112,7 @@ void TestControllerTest::initTestCase()
     TestCore::initialize( Core::NoUi );
 
     m_testController = Core::self()->testControllerInternal();
-    m_project = new TestProject(this);
+    m_project = new TestProject(KUrl(), this);
 
     qRegisterMetaType<KDevelop::ITestSuite*>("KDevelop::ITestSuite*");
     qRegisterMetaType<KDevelop::TestResult>("KDevelop::TestResult");
@@ -173,7 +173,7 @@ void TestControllerTest::replaceSuite()
 
 void TestControllerTest::findByProject()
 {
-    IProject* otherProject = new TestProject(this);
+    IProject* otherProject = new TestProject(KUrl(), this);
 
     ITestSuite* suiteOne = new FakeTestSuite(TestSuiteName, m_project);
     ITestSuite* suiteTwo = new FakeTestSuite(TestSuiteName, otherProject);
