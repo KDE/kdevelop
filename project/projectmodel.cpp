@@ -1038,6 +1038,16 @@ ProjectBaseItem* ProjectModel::takeRow( int row )
     return d->rootItem->takeRow( row );
 }
 
+ProjectBaseItem* ProjectModel::itemAt(int row) const
+{
+    return d->rootItem->child(row);
+}
+
+QList< ProjectBaseItem* > ProjectModel::topItems() const
+{
+    return d->rootItem->children();
+}
+
 Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
 {
     ProjectBaseItem* item = itemFromIndex( index );

@@ -359,6 +359,9 @@ public:
     void removeRow( int row );
     ProjectBaseItem* takeRow( int row );
 
+    ProjectBaseItem* itemAt( int row ) const;
+    QList<ProjectBaseItem*> topItems() const;
+
     QModelIndex pathToIndex(const QStringList& tofetch) const;
     QStringList pathFromIndex(const QModelIndex& index) const;
 
