@@ -10,6 +10,7 @@ set(kdevplatformtests_LIB_SRCS
     testfile.cpp
     testlanguagecontroller.cpp
     testhelpers.cpp
+    testplugincontroller.cpp
 )
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
@@ -30,5 +31,6 @@ install( FILES
          testlanguagecontroller.h
          kdevplatformtestsexport.h
          testhelpers.h
+         testplugincontroller.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/ 
          COMPONENT Devel )

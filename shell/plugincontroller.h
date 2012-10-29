@@ -168,7 +168,7 @@ private:
     void loadOptionalDependencies( const KPluginInfo& info );
 
     void cleanup();
-    void initialize();
+    virtual void initialize();
 
     bool isEnabled( const KPluginInfo& info );
 
