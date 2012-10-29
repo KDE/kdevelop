@@ -1,5 +1,5 @@
 [General]
-Name=PhpUnit
+Name=PHPUnit
 Name[el]=PhpUnit
 Name[es]=PhpUnit
 Name[nl]=PhpUnit
@@ -8,7 +8,7 @@ Name[pt_BR]=PhpUnit
 Name[sv]=PhpUnit
 Name[uk]=PhpUnit
 Name[x-test]=xxPhpUnitxx
-Comment=A unit test using the PhpUnit framework
+Comment=A unit test using the PHPUnit framework
 Comment[el]=Ένα unit test με χρήση του PhpUnit framework
 Comment[es]=Una prueba unitaria que usa la infraestructura PhpUnit
 Comment[nl]=Een test van een eenheid met gebruik van het framework PhpUnit
