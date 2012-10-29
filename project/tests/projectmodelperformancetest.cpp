@@ -123,6 +123,7 @@ void ProjectModelPerformanceTest::init()
 ProjectModelPerformanceTest::~ProjectModelPerformanceTest()
 {
     KDevelop::TestCore::shutdown();
+    QApplication::quit();
 }
 
 void ProjectModelPerformanceTest::addBigTree()
@@ -200,10 +201,11 @@ void ProjectModelPerformanceTest::addSmallTree()
 int main( int argc, char** argv )
 {
     QApplication a( argc, argv );
-    ProjectModelPerformanceTest w;
-    w.show();
+    ProjectModelPerformanceTest* w = new ProjectModelPerformanceTest;
+    w->show();
+    w->setAttribute(Qt::WA_DeleteOnClose);
 
-    QMetaObject::invokeMethod(&w, "init");
+    QMetaObject::invokeMethod(w, "init");
     return a.exec();
 }
 
