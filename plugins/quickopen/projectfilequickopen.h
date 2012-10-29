@@ -77,7 +77,6 @@ class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public 
     virtual uint unfilteredItemCount() const;
     virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
 
-  private:
     //Reimplemented from Base<..>
     virtual QString itemText( const ProjectFile& data ) const;
 };
