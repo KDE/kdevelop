@@ -104,8 +104,8 @@ void ProjectModelTest::initTestCase()
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
     qRegisterMetaType<QModelIndex>("QModelIndex");
-    model = new ProjectModel( this );
-    modelTest = new ModelTest( model, this );
+    model = KDevelop::ICore::self()->projectController()->projectModel();
+    new ModelTest( model, this );
     proxy = new ProjectProxyModel( model );
     new ModelTest(proxy, proxy);
     proxy->setSourceModel(model);
@@ -498,22 +498,6 @@ void ProjectModelTest::testAddItemInThread()
     t.start();
     QVERIFY(spy.wait( 10000 ));
     QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
-}
-
-void ProjectModelTest::testDeleteLots()
-{
-    delete modelTest;
-
-    const int items = 10000;
-    ProjectBaseItem* root = new ProjectBaseItem( 0, "root", 0 );
-    model->appendRow( root );
-    for ( int i = 0; i < items; ++i ) {
-        new ProjectBaseItem( 0, QString::number(i), root );
-    }
-    QCOMPARE(root->children().size(), items);
-    delete root;
-
-    modelTest = new ModelTest( model, this );
 }
 
 void ProjectModelTest::testItemsForUrl()

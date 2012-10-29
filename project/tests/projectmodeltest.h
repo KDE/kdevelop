@@ -54,12 +54,8 @@ private slots:
     void testItemsForUrl_data();
     void testProjectProxyModel();
     void testProjectFileSet();
-
-    // benchmarking
-    void testDeleteLots();
 private:
     KDevelop::ProjectModel* model;
-    ModelTest* modelTest;
     ProjectProxyModel* proxy;
 };
 
