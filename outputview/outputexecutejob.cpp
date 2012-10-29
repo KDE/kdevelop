@@ -450,7 +450,11 @@ QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
 {
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     const EnvironmentGroupList environmentGroup( KGlobal::config() );
-    OutputExecuteJobPrivate::mergeEnvironment( environment, environmentGroup.variables( m_owner->environmentProfile() ) );
+    QString environmentProfile = m_owner->environmentProfile();
+    if( environmentProfile.isEmpty() ) {
+        environmentProfile = environmentGroup.defaultGroup();
+    }
+    OutputExecuteJobPrivate::mergeEnvironment( environment, environmentGroup.variables( environmentProfile ) );
     OutputExecuteJobPrivate::mergeEnvironment( environment, m_environmentOverrides );
     if( m_properties.testFlag( OutputExecuteJob::PortableMessages ) ) {
         environment.remove( "LC_ALL" );
