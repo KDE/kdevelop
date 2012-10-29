@@ -116,13 +116,13 @@ protected:
     virtual void loadSettings( bool projectIsLoaded );
     virtual void saveSettings( bool projectIsLoaded );
 
+    virtual void initialize();
 
 private:
     //FIXME Do not load all of this just for the project being opened...
     //void legacyLoading();
     void setupActions();
     void cleanup();
-    void initialize();
 
     // helper methods for closeProject()
     void unloadUnusedProjectPlugins(IProject* proj);

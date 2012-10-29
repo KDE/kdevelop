@@ -26,7 +26,7 @@
 #include <projectmodel.h>
 #include <projectproxymodel.h>
 #include <tests/modeltest.h>
-#include "dummyproject.h"
+#include <tests/testproject.h>
 #include <projectproxymodel.h>
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
@@ -40,6 +40,8 @@ using KDevelop::ProjectExecutableTargetItem;
 using KDevelop::ProjectLibraryTargetItem;
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectBuildFolderItem;
+
+using KDevelop::TestProject;
 
 class AddItemThread : public QThread
 {
@@ -383,7 +385,7 @@ void ProjectModelTest::testRename()
     QFETCH( QString, expectedItemText );
     QFETCH( int, expectedRenameCode );
 
-    DummyProject* proj = new DummyProject( "DummyProject", 0 );
+    TestProject* proj = new TestProject;
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
     proj->setProjectItem( rootItem );
     model->appendRow( rootItem );
@@ -475,7 +477,7 @@ void ProjectModelTest::testRename_data()
 
 void ProjectModelTest::testWithProject()
 {
-    DummyProject* proj = new DummyProject( "DummyProject", 0 );
+    TestProject* proj = new TestProject();
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
     proj->setProjectItem( rootItem );
     model->appendRow( rootItem );
@@ -575,6 +577,20 @@ void ProjectModelTest::testProjectProxyModel()
     QCOMPARE(proxy->rowCount(proxyRoot), 1);
     
     model->clear();
+}
+
+void ProjectModelTest::testProjectFileSet()
+{
+    TestProject* project = new TestProject;
+
+    QVERIFY(project->fileSet().isEmpty());
+    KUrl url("file:///tmp/a");
+    ProjectFileItem* item = new ProjectFileItem(project, url, project->projectItem());
+    QCOMPARE(project->fileSet().size(), 1);
+    qDebug() << url << project->fileSet().begin()->toUrl();
+    QCOMPARE(project->fileSet().begin()->toUrl(), url);
+    delete item;
+    QVERIFY(project->fileSet().isEmpty());
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)

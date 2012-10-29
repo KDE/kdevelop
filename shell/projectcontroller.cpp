@@ -455,25 +455,6 @@ ProjectController::ProjectController( Core* core )
     setObjectName("ProjectController");
     d->m_core = core;
     d->model = new ProjectModel();
-    d->buildset = new ProjectBuildSetModel( this );
-    connect( this, SIGNAL(projectOpened(KDevelop::IProject*)),
-             d->buildset, SLOT(loadFromProject(KDevelop::IProject*)) );
-    connect( this, SIGNAL(projectClosing(KDevelop::IProject*)),
-             d->buildset, SLOT(saveToProject(KDevelop::IProject*)) );
-    connect( this, SIGNAL(projectClosed(KDevelop::IProject*)),
-             d->buildset, SLOT(projectClosed(KDevelop::IProject*)) );
-
-    d->selectionModel = new QItemSelectionModel(d->model);
-    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
-
-    loadSettings(false);
-    d->dialog = new ProjectDialogProvider(d);
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatformproject"), 
-                                              this, 
-                                              "notifyProjectConfigurationChanged" );
-
-    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
-        this, QDBusConnection::ExportScriptableSlots );
 }
 
 void ProjectController::setupActions()
@@ -563,6 +544,26 @@ void ProjectController::cleanup()
 
 void ProjectController::initialize()
 {
+    d->buildset = new ProjectBuildSetModel( this );
+    connect( this, SIGNAL(projectOpened(KDevelop::IProject*)),
+             d->buildset, SLOT(loadFromProject(KDevelop::IProject*)) );
+    connect( this, SIGNAL(projectClosing(KDevelop::IProject*)),
+             d->buildset, SLOT(saveToProject(KDevelop::IProject*)) );
+    connect( this, SIGNAL(projectClosed(KDevelop::IProject*)),
+             d->buildset, SLOT(projectClosed(KDevelop::IProject*)) );
+
+    d->selectionModel = new QItemSelectionModel(d->model);
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+
+    loadSettings(false);
+    d->dialog = new ProjectDialogProvider(d);
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatformproject"),
+                                              this,
+                                              "notifyProjectConfigurationChanged" );
+
+    QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
+        this, QDBusConnection::ExportScriptableSlots );
+
     KSharedConfig::Ptr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
     KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );

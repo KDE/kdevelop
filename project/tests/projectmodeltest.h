@@ -53,6 +53,7 @@ private slots:
     void testItemsForUrl();
     void testItemsForUrl_data();
     void testProjectProxyModel();
+    void testProjectFileSet();
 
     // benchmarking
     void testDeleteLots();

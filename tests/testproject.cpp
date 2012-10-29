@@ -1,29 +1,47 @@
 #include "testproject.h"
+#include <project/projectmodel.h>
 
-KDevelop::TestProject::TestProject(QObject* parent):
-    IProject(parent),
-    m_projectConfiguration(KGlobal::config())
+using namespace KDevelop;
+
+TestProject::TestProject(QObject* parent)
+: IProject(parent)
+, m_projectFileUrl(KUrl("file:///tmp/kdev-testproject/kdev-testproject.kdev4"))
+, m_folder(KUrl("file:///tmp/kdev-testproject"))
+, m_root(new ProjectFolderItem(this, m_folder))
+, m_projectConfiguration(KGlobal::config())
 {
-
 }
 
-void KDevelop::TestProject::set_projectFileUrl(const KUrl& url) {
-    m_projectFileUrl = url;
-}
-
-const KUrl KDevelop::TestProject::folder() const
+ProjectFolderItem* TestProject::projectItem() const
 {
-    KUrl ret = m_projectFileUrl.upUrl();
-    ret.adjustPath(KUrl::AddTrailingSlash);
-    return ret;
+    return m_root;
 }
 
-bool KDevelop::TestProject::inProject(const KUrl& url) const
+void TestProject::setProjectItem(ProjectFolderItem* item)
+{
+    Q_ASSERT(item);
+    delete m_root;
+    m_root = item;
+    m_folder = item->url();
+    m_projectFileUrl = KUrl(m_folder, m_folder.fileName() + ".kdev4");
+}
+
+KUrl TestProject::projectFileUrl() const
+{
+    return m_projectFileUrl;
+}
+
+const KUrl TestProject::folder() const
+{
+    return m_folder;
+}
+
+bool TestProject::inProject(const KUrl& url) const
 {
     return folder().isParentOf(url);
 }
 
-void KDevelop::TestProject::addToFileSet(const KDevelop::IndexedString& file)
+void TestProject::addToFileSet(const IndexedString& file)
 {
     if (!m_fileSet.contains(file)) {
         m_fileSet.insert(file);
@@ -31,14 +49,14 @@ void KDevelop::TestProject::addToFileSet(const KDevelop::IndexedString& file)
     }
 }
 
-void KDevelop::TestProject::removeFromFileSet(const KDevelop::IndexedString& file)
+void TestProject::removeFromFileSet(const IndexedString& file)
 {
     if (m_fileSet.remove(file)) {
         emit fileRemovedFromSet(this, file);
     }
 }
 
-void KDevelop::TestProjectController::addProject(KDevelop::IProject* p)
+void TestProjectController::addProject(IProject* p)
 {
     emit projectAboutToBeOpened(p);
     p->setParent(this);
@@ -46,14 +64,14 @@ void KDevelop::TestProjectController::addProject(KDevelop::IProject* p)
     emit projectOpened(p);
 }
 
-void KDevelop::TestProjectController::clearProjects()
+void TestProjectController::clearProjects()
 {
-    foreach(KDevelop::IProject* p, m_projects) {
+    foreach(IProject* p, m_projects) {
         closeProject(p);
     }
 }
 
-void KDevelop::TestProjectController::closeProject(KDevelop::IProject* p)
+void TestProjectController::closeProject(IProject* p)
 {
     emit projectClosing(p);
     delete p;
@@ -66,6 +84,10 @@ void KDevelop::TestProjectController::takeProject(KDevelop::IProject* p)
     emit projectClosing(p);
     m_projects.removeOne(p);
     emit projectClosed(p);
+}
+
+void TestProjectController::initialize()
+{
 }
 
 #include "testproject.moc"

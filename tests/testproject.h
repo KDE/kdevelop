@@ -45,14 +45,15 @@ public:
     IBuildSystemManager* buildSystemManager() const { return 0; }
     IPlugin* managerPlugin() const { return 0; }
     IPlugin* versionControlPlugin() const { return 0; }
-    ProjectFolderItem* projectItem() const { return 0; }
+    ProjectFolderItem* projectItem() const;
+    void setProjectItem(ProjectFolderItem* item);
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const { return QList<ProjectFileItem*>(); }
     QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
     QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
-    KUrl projectFileUrl() const { return m_projectFileUrl; }
+    KUrl projectFileUrl() const;
     KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
     void addToFileSet( const IndexedString& file);
     void removeFromFileSet( const IndexedString& file);
@@ -69,6 +70,8 @@ public Q_SLOTS:
 private:
     QSet<IndexedString> m_fileSet;
     KUrl m_projectFileUrl;
+    KUrl m_folder;
+    ProjectFolderItem* m_root;
     KSharedConfig::Ptr m_projectConfiguration;
 };
 
@@ -89,6 +92,7 @@ public:
     void clearProjects();
     virtual void closeProject(IProject* p);
 
+    virtual void initialize();
 private:
     QList<IProject*> m_projects;
 };
