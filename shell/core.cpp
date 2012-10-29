@@ -70,12 +70,17 @@ void shutdownGracefully(int sig)
     if ( !handlingSignal ) {
         handlingSignal = 1;
         qDebug() << "signal " << sig << " received, shutting down gracefully";
-        QCoreApplication::instance()->quit();
-    } else {
-        // re-raise signal with default handler and trigger program termination
-        std::signal(sig, SIG_DFL);
-        std::raise(sig);
+        QCoreApplication* app = QCoreApplication::instance();
+        if (QApplication* guiApp = qobject_cast<QApplication*>(app)) {
+            guiApp->closeAllWindows();
+        }
+        app->quit();
+        return;
     }
+
+    // re-raise signal with default handler and trigger program termination
+    std::signal(sig, SIG_DFL);
+    std::raise(sig);
 }
 
 void installSignalHandler()
