@@ -23,6 +23,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QGridLayout>
 #include <QtGui/QApplication>
+
 #include <projectmodel.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -89,20 +90,34 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
 
 void ProjectModelPerformanceTest::init()
 {
+    QElapsedTimer timer;
+    timer.start();
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore* core = new KDevelop::TestCore;
     core->setPluginController(new KDevelop::TestPluginController(core));
     core->initialize();
 
+    qDebug() << "init core" << timer.elapsed();
+    timer.start();
+
     model = new KDevelop::ProjectModel( this );
     
+    qDebug() << "create model" << timer.elapsed();
+    timer.start();
+
     for( int i = 0; i < INIT_WIDTH; i++ ) {
         ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
         generateChilds( item, INIT_WIDTH, INIT_DEPTH );
         model->appendRow( item );
     }
     
+    qDebug() << "init model" << timer.elapsed();
+    timer.start();
+
     view->setModel( model );
+    qDebug() << "set model" << timer.elapsed();
+    timer.start();
+
 }
 
 ProjectModelPerformanceTest::~ProjectModelPerformanceTest()
@@ -112,11 +127,14 @@ ProjectModelPerformanceTest::~ProjectModelPerformanceTest()
 
 void ProjectModelPerformanceTest::addBigTree()
 {
+    QElapsedTimer timer;
+    timer.start();
     for( int i = 0; i < BIG_WIDTH; i++ ) {
         ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
         generateChilds( item, BIG_WIDTH, BIG_DEPTH );
         model->appendRow( item );
     }
+    qDebug() << "addBigTree" << timer.elapsed();
 }
 
 void ProjectModelPerformanceTest::addBigTreeDelayed()
@@ -127,6 +145,8 @@ void ProjectModelPerformanceTest::addBigTreeDelayed()
 
 void ProjectModelPerformanceTest::addItemDelayed()
 {
+    QElapsedTimer timer;
+    timer.start();
     KUrl url;
     if( !currentParent.isEmpty() ) {
         url = currentParent.top()->url();
@@ -162,15 +182,19 @@ void ProjectModelPerformanceTest::addItemDelayed()
     if( ( currentParent.isEmpty() && ( model->rowCount() - originalWidth ) < BIG_WIDTH ) || !currentParent.isEmpty() ) {
         QTimer::singleShot( 0, this, SLOT(addItemDelayed()) );
     }
+    qDebug() << "addBigTreeDelayed" << timer.elapsed();
 }
 
 void ProjectModelPerformanceTest::addSmallTree()
 {
+    QElapsedTimer timer;
+    timer.start();
     for( int i = 0; i < SMALL_WIDTH; i++ ) {
         ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
         generateChilds( item, SMALL_WIDTH, SMALL_DEPTH );
         model->appendRow( item );
     }
+    qDebug() << "addSmallTree" << timer.elapsed();
 }
 
 int main( int argc, char** argv )
