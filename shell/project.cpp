@@ -667,11 +667,12 @@ void Project::addToFileSet( const IndexedString& file )
 
 void Project::removeFromFileSet( const IndexedString& file )
 {
-    if (!d->fileSet.contains(file)) {
+    QSet<IndexedString>::iterator it = d->fileSet.find(file);
+    if (it == d->fileSet.end()) {
         return;
     }
 
-    d->fileSet.remove( file );
+    d->fileSet.erase( it );
     emit fileRemovedFromSet( this, file );
 }
 
