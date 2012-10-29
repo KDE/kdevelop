@@ -34,6 +34,7 @@ class ProjectBaseItem;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
     public:
         ProjectProxyModel(QObject *parent);
         bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
