@@ -1,5 +1,30 @@
+/***************************************************************************
+ *   Copyright 2010 Niko Sams <niko.sams@gmail.com>                        *
+ *   Copyright 2012 Milian Wolff <mail@milianw.de>                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+ ***************************************************************************/
+
 #include "testproject.h"
+
+#include <KGlobal>
+
 #include <project/projectmodel.h>
+
+#include <interfaces/icore.h>
 
 using namespace KDevelop;
 
@@ -10,6 +35,12 @@ TestProject::TestProject(QObject* parent)
 , m_root(new ProjectFolderItem(this, m_folder))
 , m_projectConfiguration(KGlobal::config())
 {
+    ICore::self()->projectController()->projectModel()->appendRow( m_root );
+}
+
+TestProject::~TestProject()
+{
+    ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
 }
 
 ProjectFolderItem* TestProject::projectItem() const
@@ -19,11 +50,19 @@ ProjectFolderItem* TestProject::projectItem() const
 
 void TestProject::setProjectItem(ProjectFolderItem* item)
 {
-    Q_ASSERT(item);
-    delete m_root;
-    m_root = item;
-    m_folder = item->url();
-    m_projectFileUrl = KUrl(m_folder, m_folder.fileName() + ".kdev4");
+    if (m_root) {
+        ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
+        delete m_root;
+        m_root = 0;
+        m_folder.clear();
+        m_projectFileUrl.clear();
+    }
+    if (item) {
+        m_root = item;
+        m_folder = item->url();
+        m_projectFileUrl = KUrl(m_folder, m_folder.fileName() + ".kdev4");
+        ICore::self()->projectController()->projectModel()->appendRow( m_root );
+    }
 }
 
 KUrl TestProject::projectFileUrl() const

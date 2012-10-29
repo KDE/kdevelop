@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2010 Niko Sams <niko.sams@gmail.com>                        *
+ *   Copyright 2012 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -22,12 +23,12 @@
 
 #include <QSet>
 
-#include <KGlobal>
+#include <interfaces/iproject.h>
+
+#include <language/duchain/indexedstring.h>
+#include <shell/projectcontroller.h>
 
 #include "kdevplatformtestsexport.h"
-#include "../interfaces/iproject.h"
-#include "../shell/projectcontroller.h"
-#include "../language/duchain/indexedstring.h"
 
 namespace KDevelop {
 
@@ -41,6 +42,7 @@ class KDEVPLATFORMTESTS_EXPORT TestProject : public IProject
     Q_OBJECT
 public:
     TestProject(QObject* parent = 0);
+    virtual ~TestProject();
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }
     IPlugin* managerPlugin() const { return 0; }
