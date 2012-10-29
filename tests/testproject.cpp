@@ -52,7 +52,6 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
 {
     if (m_root) {
         ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
-        delete m_root;
         m_root = 0;
         m_folder.clear();
         m_projectFileUrl.clear();
