@@ -1065,13 +1065,18 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-QList< ProjectBaseItem* > ProjectModel::itemsForUrl ( const KUrl& url )
+QList< ProjectBaseItem* > ProjectModel::itemsForUrl ( const KUrl& url ) const
 {
     if (!url.isValid()) {
         return QList<ProjectBaseItem*>();
     }
 
     return d->urlLookupTable.values(indexForUrl(url));
+}
+
+ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
+{
+    return d->urlLookupTable.value(url.index());
 }
 
 void ProjectVisitor::visit ( IProject* prj )

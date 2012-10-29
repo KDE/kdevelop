@@ -381,7 +381,12 @@ public:
     /**
      * Returns all items for the given URL.
      */
-    QList<ProjectBaseItem*> itemsForUrl(const KUrl& url);
+    QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
+
+    /**
+     * Returns first item for the given indexed URL.
+     */
+    ProjectBaseItem* itemForUrl(const IndexedString& url) const;
 private:
     class ProjectModelPrivate* const d;
     friend class ProjectBaseItem;
