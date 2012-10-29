@@ -23,14 +23,15 @@
 
 #include "quickopentestbase.h"
 
-class QuickOpenTest : public QuickOpenTestBase
+class QuickOpenBench : public QuickOpenTestBase
 {
     Q_OBJECT
 private slots:
-    void testSorting();
-    void testSorting_data();
-
-    void testProjectFileFilter();
+    void benchProjectFileFilter();
+    void benchProjectFileFilter_data();
+    void benchProjectFileFilterReset();
+    void benchProjectFileFilterSetFilter();
+    void benchProjectFileProviderData();
 };
 
 #endif // QUICKOPENTEST_H
