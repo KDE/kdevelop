@@ -43,8 +43,12 @@ using namespace KDevelop;
 
 TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
+, ui(new Ui::TemplatePreview)
+, m_renderer(0)
+, m_currentDocument(0)
+, m_tmpFile(0)
+, m_document(0)
 {
-    ui = new Ui::TemplatePreview;
     ui->setupUi(this);
 
     m_renderer = new TemplateRenderer;
@@ -103,6 +107,7 @@ TemplatePreview::~TemplatePreview()
 {
     delete ui;
     delete m_renderer;
+    delete m_tmpFile;
 }
 
 void TemplatePreview::documentActivated (KDevelop::IDocument* document)
