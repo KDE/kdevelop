@@ -1,6 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
+Name[cs]=Větve projektu
+Name[es]=Ramas del proyecto
+Name[et]=Projekti harud
+Name[nl]=Projectbranches
+Name[pt]=Ramificações do Projecto
+Name[pt_BR]=Ramificações do projeto
+Name[uk]=Гілки проекту
+Name[x-test]=xxProject Branchesxx
 Comment=Displays the branches in the current project
 Type=Service
 ServiceTypes=Plasma/Applet
