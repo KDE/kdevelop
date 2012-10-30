@@ -1,22 +1,6 @@
 [General]
 Name=PHPUnit
-Name[el]=PhpUnit
-Name[es]=PhpUnit
-Name[nl]=PhpUnit
-Name[pt]=PhpUnit
-Name[pt_BR]=PhpUnit
-Name[sv]=PhpUnit
-Name[uk]=PhpUnit
-Name[x-test]=xxPhpUnitxx
 Comment=A unit test using the PHPUnit framework
-Comment[el]=Ένα unit test με χρήση του PhpUnit framework
-Comment[es]=Una prueba unitaria que usa la infraestructura PhpUnit
-Comment[nl]=Een test van een eenheid met gebruik van het framework PhpUnit
-Comment[pt]=Um teste unitário que usa a plataforma PhpUnit
-Comment[pt_BR]=Teste unitário que usa a plataforma PhpUnit
-Comment[sv]=En enhetstest som använder ramverket PhpUnit
-Comment[uk]=Перевірка модулів за допомогою комплексу PhpUnit
-Comment[x-test]=xxA unit test using the PhpUnit frameworkxx
 Category=Test/Php
 Files=Implementation
 
@@ -25,6 +9,7 @@ Name=Implementation
 Name[cs]=Implementace
 Name[el]=Υλοποίηση
 Name[es]=Implementación
+Name[et]=Teostus
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
