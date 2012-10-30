@@ -75,7 +75,7 @@ void TestSpecialCompletion::cleanup()
 
 void TestSpecialCompletion::testMissingInclude()
 {
-    TestProject* project = new TestProject(this);
+    TestProject* project = new TestProject;
     m_projects->addProject(project);
 
     TestFile include("class A {};", "h", project);
@@ -117,7 +117,7 @@ void TestSpecialCompletion::testMissingInclude()
 
 void TestSpecialCompletion::testIncludeDefine()
 {
-    TestProject* project = new TestProject(this);
+    TestProject* project = new TestProject;
     m_projects->addProject(project);
 
     TestFile include("class A {};", "h", project);
@@ -176,7 +176,7 @@ void TestSpecialCompletion::testIncludeDefine()
 
 void TestSpecialCompletion::testIncludeGrouping()
 {
-    TestProject* project = new TestProject(this);
+    TestProject* project = new TestProject;
     m_projects->addProject(project);
 
     KTempDir dir1;
@@ -252,7 +252,7 @@ void TestSpecialCompletion::testIncludeGrouping()
 
 void TestSpecialCompletion::testIncludeComment()
 {
-    TestProject* project = new TestProject(this);
+    TestProject* project = new TestProject;
     m_projects->addProject(project);
 
     TestFile include("class A {};", "h", project);
