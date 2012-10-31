@@ -185,6 +185,7 @@ void TemplatePreview::sourceTextChanged(const QString& text)
             {
                 errorString = i18n("The active document is not a <application>KDevelop</application> class template");
             }
+            m_preview->clear();
         }
         else
         {
