@@ -85,6 +85,7 @@ public:
     Engine engine;
     Context context;
     TemplateRenderer::EmptyLinesPolicy emptyLinesPolicy;
+    QString errorString;
 };
 
 TemplateRenderer::TemplateRenderer()
@@ -193,8 +194,11 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
 
     if (t->error() != Grantlee::NoError)
     {
-        output += "\n\nError: ";
-        output += t->errorString();
+        d->errorString = t->errorString();
+    }
+    else
+    {
+        d->errorString.clear();
     }
 
     if (d->emptyLinesPolicy == TrimEmptyLines && output.contains('\n'))
@@ -363,4 +367,9 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     }
 
     return changes;
+}
+
+QString TemplateRenderer::errorString() const
+{
+    return d->errorString;
 }

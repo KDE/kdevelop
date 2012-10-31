@@ -129,6 +129,9 @@ public:
     /**
      * @brief Renders a single template
      *
+     * Any rendering errors are reported by errorString().
+     * If there were no errors, errorString() will return an empty string.
+     *
      * @param content the template content
      * @param name (optional) the name of this template
      * @return the rendered template
@@ -137,6 +140,9 @@ public:
 
     /**
      * @brief Renders a single template from a file
+     *
+     * Any rendering errors are reported by errorString().
+     * If there were no errors, errorString() will return an empty string.
      *
      * @param url the URL of the file from which to load the template
      * @param name (optional) the name of this template
@@ -195,6 +201,14 @@ public:
      */
     DocumentChangeSet renderFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate,
                                          const KUrl& baseUrl, const QHash<QString, KUrl>& fileUrls);
+    
+    /**
+     * Returns the error string from the last call to render(), renderFile() or renderFileTemplate().
+     * If the last render was successful and produced no errors, this function returns an empty string. 
+     *
+     * @return the last error string
+     **/
+    QString errorString() const;
 
 private:
     class TemplateRendererPrivate* const d;

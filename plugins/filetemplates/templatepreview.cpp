@@ -50,6 +50,7 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 , m_preview(0)
 {
     ui->setupUi(this);
+    ui->messageWidget->hide();
 
     m_renderer = new TemplateRenderer;
 
@@ -58,7 +59,7 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     m_preview = editor->createDocument(this);
-    ui->verticalLayout->insertWidget(0, m_preview->createView(this));
+    ui->verticalLayout->insertWidget(1, m_preview->createView(this));
     if (m_original)
     {
         documentActivated(m_original);
@@ -154,28 +155,56 @@ void TemplatePreview::sourceTextChanged(const QString& text)
     m_preview->setReadWrite(true);
     if (text.isEmpty())
     {
-        m_preview->setText(i18n("No active document"));
+        ui->messageWidget->setMessageType(KMessageWidget::Information);
+        ui->messageWidget->setText(i18n("No active document"));
+        ui->messageWidget->animatedShow();
     }
     else
     {
         bool project = ui->projectRadioButton->isChecked();
-        QString rendered = project ? KMacroExpander::expandMacros(text, m_variables) : m_renderer->render(text);
+        QString rendered;
+        QString errorString;
+        bool error = false;
+        if (project)
+        {
+            rendered = KMacroExpander::expandMacros(text, m_variables);
+        }
+        else
+        {
+            rendered = m_renderer->render(text);
+            errorString = m_renderer->errorString();
+            error = !errorString.isEmpty();
+        }
+
         if (rendered.simplified() == text.simplified())
         {
+            error = false;
             // If the difference in only in whitespace, this is probably not a suitable template
             if (project)
             {
-                m_preview->setText(i18n("The active document is not a <application>KDevelop</application> project template"));
+                errorString = i18n("The active document is not a <application>KDevelop</application> project template");
             }
             else
             {
-                m_preview->setText(i18n("The active document is not a <application>KDevelop</application> class template"));
+                errorString = i18n("The active document is not a <application>KDevelop</application> class template");
             }
         }
         else
         {
             m_preview->setText(rendered);
         }
+
+        if (!errorString.isEmpty())
+        {
+            ui->messageWidget->setMessageType(error ? KMessageWidget::Error : KMessageWidget::Warning);
+            ui->messageWidget->setText(errorString);
+            ui->messageWidget->animatedShow();
+        }
+        else
+        {
+            ui->messageWidget->animatedHide();
+        }
+
     }
     m_preview->save();
     m_preview->setReadWrite(false);
