@@ -1,6 +1,12 @@
 [General]
 Name=PHPUnit
+Name[pt_BR]=PHPUnit
+Name[uk]=PHPUnit
+Name[x-test]=xxPHPUnitxx
 Comment=A unit test using the PHPUnit framework
+Comment[pt_BR]=Teste unitário que usa a plataforma PHPUnit
+Comment[uk]=Перевірка модулів за допомогою комплексу PHPUnit
+Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
 Category=Test/Php
 Files=Implementation
 
@@ -10,6 +16,7 @@ Name[cs]=Implementace
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus
+Name[hu]=Megvalósítás
 Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
