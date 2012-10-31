@@ -56,7 +56,6 @@ private:
     KDevelop::TemplateRenderer* m_renderer;
     QHash<QString,QString> m_variables;
     KTextEditor::Document* m_original;
-    KTemporaryFile* m_tmpFile;
     KTextEditor::Document* m_preview;
 
 private slots:

@@ -46,7 +46,6 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 , ui(new Ui::TemplatePreview)
 , m_renderer(0)
 , m_original(0)
-, m_tmpFile(0)
 , m_preview(0)
 {
     ui->setupUi(this);
@@ -110,23 +109,12 @@ TemplatePreview::~TemplatePreview()
 {
     delete ui;
     delete m_renderer;
-    delete m_tmpFile;
 }
 
 void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 {
     Q_ASSERT(document);
     kDebug() << document->url();
-
-    delete m_tmpFile;
-    m_tmpFile = new KTemporaryFile;
-    QFileInfo info(document->url().toLocalFile());
-    m_tmpFile->setSuffix('.' + info.suffix());
-
-    m_tmpFile->open();
-    KUrl tmpUrl = KUrl::fromLocalFile(m_tmpFile->fileName());
-    kDebug() << tmpUrl;
-    m_preview->openUrl(tmpUrl);
 
     if (m_original)
     {
@@ -215,7 +203,7 @@ void TemplatePreview::sourceTextChanged(const QString& text)
         }
 
     }
-    m_preview->save();
+    m_preview->setMode(m_original->mode());
     m_preview->setReadWrite(false);
 }
 
