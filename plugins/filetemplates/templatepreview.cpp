@@ -45,23 +45,23 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , ui(new Ui::TemplatePreview)
 , m_renderer(0)
-, m_currentDocument(0)
+, m_original(0)
 , m_tmpFile(0)
-, m_document(0)
+, m_preview(0)
 {
     ui->setupUi(this);
 
     m_renderer = new TemplateRenderer;
 
     IDocumentController* dc = ICore::self()->documentController();
-    m_currentDocument = dc->activeDocument();
+    m_original = dc->activeDocument();
 
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
-    m_document = editor->createDocument(this);
-    ui->verticalLayout->insertWidget(0, m_document->createView(this));
-    if (m_currentDocument)
+    m_preview = editor->createDocument(this);
+    ui->verticalLayout->insertWidget(0, m_preview->createView(this));
+    if (m_original)
     {
-        documentActivated(m_currentDocument);
+        documentActivated(m_original);
     }
 
     connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
@@ -123,15 +123,15 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
     m_tmpFile->open();
     KUrl tmpUrl = KUrl::fromLocalFile(m_tmpFile->fileName());
     kDebug() << tmpUrl;
-    m_document->openUrl(tmpUrl);
+    m_preview->openUrl(tmpUrl);
 
-    m_currentDocument = document;
+    m_original = document;
     documentChanged(document);
 }
 
 void TemplatePreview::documentChanged (IDocument* document)
 {
-    if (document != m_currentDocument || !document)
+    if (document != m_original || !document)
     {
         return;
     }
@@ -142,19 +142,19 @@ void TemplatePreview::documentChanged (IDocument* document)
 
 void TemplatePreview::documentClosed (IDocument* document)
 {
-    if (document == m_currentDocument)
+    if (document == m_original)
     {
-        m_currentDocument = 0;
+        m_original = 0;
     }
     sourceTextChanged(QString());
 }
 
 void TemplatePreview::sourceTextChanged(const QString& text)
 {
-    m_document->setReadWrite(true);
+    m_preview->setReadWrite(true);
     if (text.isEmpty())
     {
-        m_document->setText(i18n("No active document"));
+        m_preview->setText(i18n("No active document"));
     }
     else
     {
@@ -165,20 +165,20 @@ void TemplatePreview::sourceTextChanged(const QString& text)
             // If the difference in only in whitespace, this is probably not a suitable template
             if (project)
             {
-                m_document->setText(i18n("The active document is not a <application>KDevelop</application> project template"));
+                m_preview->setText(i18n("The active document is not a <application>KDevelop</application> project template"));
             }
             else
             {
-                m_document->setText(i18n("The active document is not a <application>KDevelop</application> class template"));
+                m_preview->setText(i18n("The active document is not a <application>KDevelop</application> class template"));
             }
         }
         else
         {
-            m_document->setText(rendered);
+            m_preview->setText(rendered);
         }
     }
-    m_document->save();
-    m_document->setReadWrite(false);
+    m_preview->save();
+    m_preview->setReadWrite(false);
 }
 
 void TemplatePreview::selectedRendererChanged()
@@ -202,5 +202,5 @@ void TemplatePreview::selectedRendererChanged()
         }
         m_renderer->setEmptyLinesPolicy(policy);
     }
-    documentChanged(m_currentDocument);
+    documentChanged(m_original);
 }

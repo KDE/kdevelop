@@ -55,9 +55,9 @@ private:
     Ui::TemplatePreview* ui;
     KDevelop::TemplateRenderer* m_renderer;
     QHash<QString,QString> m_variables;
-    KDevelop::IDocument* m_currentDocument;
+    KDevelop::IDocument* m_original;
     KTemporaryFile* m_tmpFile;
-    KTextEditor::Document* m_document;
+    KTextEditor::Document* m_preview;
 
 private slots:
     void sourceTextChanged(const QString& text);
