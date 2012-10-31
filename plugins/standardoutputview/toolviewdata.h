@@ -64,7 +64,8 @@ public:
     ~ToolViewData();
     OutputData* addOutput( int id, const QString& title, KDevelop::IOutputView::Behaviours behave );
     // If we would adhere to model-view-separation strictly, then this member would move into standardoutputview, but it is more convenient this way.
-    QList<Sublime::View*> views;
+    // TODO: move into standardoutputview
+    mutable QList<Sublime::View*> views;
     StandardOutputView* plugin;
     QMap<int, OutputData*> outputdata;
     KDevelop::IOutputView::ViewType type;

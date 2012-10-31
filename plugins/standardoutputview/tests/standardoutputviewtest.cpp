@@ -99,6 +99,9 @@ void StandardOutputViewTest::testRegisterAndRemoveToolView()
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView);
     QVERIFY(toolviewPointer(toolviewTitle));
 
+    // re-registering should return the same tool view instead of creating a new one
+    QCOMPARE(toolviewId, m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView));
+
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
 }
@@ -220,4 +223,23 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     // view deleted, hence model + delegate deleted
     QVERIFY(!checkModel.data());
     QVERIFY(!checkDelegate.data());
+}
+
+void StandardOutputViewTest::testStandardToolViews()
+{
+    QFETCH(KDevelop::IOutputView::StandardToolView, view);
+    int id = m_stdOutputView->standardToolView(view);
+    QVERIFY(id);
+    QCOMPARE(id, m_stdOutputView->standardToolView(view));
+}
+
+void StandardOutputViewTest::testStandardToolViews_data()
+{
+    QTest::addColumn<KDevelop::IOutputView::StandardToolView>("view");
+
+    QTest::newRow("build") << KDevelop::IOutputView::BuildView;
+    QTest::newRow("run") << KDevelop::IOutputView::RunView;
+    QTest::newRow("debug") << KDevelop::IOutputView::DebugView;
+    QTest::newRow("test") << KDevelop::IOutputView::TestView;
+    QTest::newRow("vcs") << KDevelop::IOutputView::VcsView;
 }

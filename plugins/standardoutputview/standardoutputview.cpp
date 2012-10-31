@@ -52,7 +52,7 @@ K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","k
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
-    OutputViewFactory(ToolViewData* data): m_data(data) {}
+    OutputViewFactory(const ToolViewData* data): m_data(data) {}
     virtual QWidget* create(QWidget *parent = 0)
     {
         return new OutputWidget( parent, m_data );
@@ -71,7 +71,7 @@ public:
         return "org.kdevelop.OutputView." + QString::number(m_data->toolViewId);
     }
 private:
-    ToolViewData *m_data;
+    const ToolViewData *m_data;
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
@@ -167,21 +167,17 @@ int StandardOutputView::registerToolView( const QString& title,
                                           const KIcon& icon, Options option,
                                           const QList<QAction*>& actionList )
 {
-    int newid = -1;
-    if( ids.isEmpty() )
-        newid = 0;
-    else
+    // try to reuse existing toolview
+    foreach( ToolViewData* d, toolviews )
     {
-#ifndef NDEBUG
-        //verify that the title stays unique
-        foreach( ToolViewData* d, toolviews )
-        {
-            Q_ASSERT(d->title != title );
+        if ( d->type == type && d->title == title ) {
+            return d->toolViewId;
         }
-#endif
-        newid = ids.last()+1;
     }
-    kDebug() << "Registering view" << title << "with type:" << type;
+
+    // register new tool view
+    const int newid = ids.isEmpty() ? 0 : (ids.last() + 1);
+    kDebug() << "Registering view" << title << "with type:" << type << "id:" << newid;
     ToolViewData* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
     tvdata->type = type;

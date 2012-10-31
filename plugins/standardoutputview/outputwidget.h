@@ -47,7 +47,7 @@ Q_OBJECT
     friend class StandardOutputViewTest;
 
 public:
-    OutputWidget(QWidget* parent, ToolViewData* data);
+    OutputWidget(QWidget* parent, const ToolViewData* data);
     void removeOutput( int id );
     void raiseOutput( int id );
 public Q_SLOTS:
@@ -84,7 +84,7 @@ private:
     QMap<int, QString> filters;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
-    ToolViewData* data;
+    const ToolViewData* data;
     QToolButton* m_closeButton;
     KAction* nextAction;
     KAction* previousAction;

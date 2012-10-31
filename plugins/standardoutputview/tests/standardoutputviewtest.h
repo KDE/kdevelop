@@ -57,6 +57,8 @@ private slots:
     void testActions();
     void testRegisterAndRemoveOutput();
     void testSetModelAndDelegate();
+    void testStandardToolViews();
+    void testStandardToolViews_data();
 };
 
 #endif // STANDARDOUTPUTVIEWTEST_H

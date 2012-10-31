@@ -21,6 +21,7 @@
 #ifndef KDEVIOUTPUTVIEW_H
 #define KDEVIOUTPUTVIEW_H
 
+#include <QtCore/QMetaType>
 #include <QtCore/QFlags>
 #include <KDE/KIcon>
 
@@ -169,6 +170,8 @@ Q_SIGNALS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Behaviours)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::IOutputView::Options)
+
+Q_DECLARE_METATYPE(KDevelop::IOutputView::StandardToolView)
 
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 

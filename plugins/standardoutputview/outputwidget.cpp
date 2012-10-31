@@ -50,7 +50,7 @@
 
 #include "toolviewdata.h"
 
-OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
+OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
     , tabwidget(0)
     , stackwidget(0)
