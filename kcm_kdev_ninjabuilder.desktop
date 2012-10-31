@@ -11,4 +11,10 @@ X-KDE-ParentComponents=KDevNinjaBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Ninja
+Name[pt_BR]=Ninja
+Name[uk]=Ninja
+Name[x-test]=xxNinjaxx
 Comment=Configure Ninja settings
+Comment[pt_BR]=Configurar as opções do Ninja
+Comment[uk]=Налаштувати параметри Ninja
+Comment[x-test]=xxConfigure Ninja settingsxx
