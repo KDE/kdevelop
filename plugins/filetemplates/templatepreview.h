@@ -55,7 +55,7 @@ private:
     Ui::TemplatePreview* ui;
     KDevelop::TemplateRenderer* m_renderer;
     QHash<QString,QString> m_variables;
-    KDevelop::IDocument* m_original;
+    KTextEditor::Document* m_original;
     KTemporaryFile* m_tmpFile;
     KTextEditor::Document* m_preview;
 
@@ -64,7 +64,7 @@ private slots:
 
 public slots:
     void documentActivated(KDevelop::IDocument* document);
-    void documentChanged(KDevelop::IDocument* document);
+    void documentChanged(KTextEditor::Document* textDocument);
     void documentClosed(KDevelop::IDocument* document);
     void selectedRendererChanged();
 };

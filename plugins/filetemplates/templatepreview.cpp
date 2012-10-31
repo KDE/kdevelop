@@ -55,14 +55,17 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     m_renderer = new TemplateRenderer;
 
     IDocumentController* dc = ICore::self()->documentController();
-    m_original = dc->activeDocument();
+    if (dc->activeDocument())
+    {
+        m_original = dc->activeDocument()->textDocument();
+    }
 
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     m_preview = editor->createDocument(this);
     ui->verticalLayout->insertWidget(1, m_preview->createView(this));
     if (m_original)
     {
-        documentActivated(m_original);
+        documentActivated(dc->activeDocument());
     }
 
     connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
@@ -101,7 +104,6 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
 
     connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     connect (dc, SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
-    connect (dc, SIGNAL(documentContentChanged(KDevelop::IDocument*)), SLOT(documentChanged(KDevelop::IDocument*)));
 }
 
 TemplatePreview::~TemplatePreview()
@@ -126,25 +128,32 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
     kDebug() << tmpUrl;
     m_preview->openUrl(tmpUrl);
 
-    m_original = document;
-    documentChanged(document);
+    if (m_original)
+    {
+        disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+    }
+    m_original = document->textDocument();
+    connect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+    documentChanged(m_original);
 }
 
-void TemplatePreview::documentChanged (IDocument* document)
+void TemplatePreview::documentChanged (KTextEditor::Document* document)
 {
-    if (document != m_original || !document)
+    if (document && document == m_original)
     {
-        return;
+        QString text = m_original->text();
+        sourceTextChanged(text);
     }
-
-    QString text = document->textDocument()->text();
-    sourceTextChanged(text);
 }
 
 void TemplatePreview::documentClosed (IDocument* document)
 {
-    if (document == m_original)
+    if (document && document->textDocument() == m_original)
     {
+        if (m_original)
+        {
+            disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+        }
         m_original = 0;
     }
     sourceTextChanged(QString());
