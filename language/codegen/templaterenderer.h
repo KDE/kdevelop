@@ -201,10 +201,10 @@ public:
      */
     DocumentChangeSet renderFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate,
                                          const KUrl& baseUrl, const QHash<QString, KUrl>& fileUrls);
-    
+
     /**
      * Returns the error string from the last call to render(), renderFile() or renderFileTemplate().
-     * If the last render was successful and produced no errors, this function returns an empty string. 
+     * If the last render was successful and produced no errors, this function returns an empty string.
      *
      * @return the last error string
      **/
