@@ -194,7 +194,7 @@ void TemplatePreview::sourceTextChanged(const QString& text)
 
         if (!errorString.isEmpty())
         {
-            ui->messageWidget->setMessageType(error ? KMessageWidget::Error : KMessageWidget::Warning);
+            ui->messageWidget->setMessageType(error ? KMessageWidget::Error : KMessageWidget::Information);
             ui->messageWidget->setText(errorString);
             ui->messageWidget->animatedShow();
         }
