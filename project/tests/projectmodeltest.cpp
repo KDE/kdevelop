@@ -478,7 +478,6 @@ void ProjectModelTest::testWithProject()
     TestProject* proj = new TestProject();
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
     proj->setProjectItem( rootItem );
-    model->appendRow( rootItem );
     ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
     QCOMPARE( item, rootItem );
     QCOMPARE( item->text(), proj->name() );
