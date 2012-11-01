@@ -83,7 +83,7 @@ public:
     /**
      * Set the checked urls
      * */
-    void setCheckedUrls(QList<KUrl> urls) const {
+    void setCheckedUrls(const QList<KUrl>& urls) const {
         return checkUrls(invisibleRootItem(), urls);
     }
 
@@ -141,7 +141,7 @@ protected:
     /**
      * Checks the given urls, unchecks all others.
      * */
-    void checkUrls(QStandardItem *parent, QList<KUrl> urls) const;
+    void checkUrls(QStandardItem *parent, const QList<KUrl>& urls) const;
     
     /**
      * Returns all urls

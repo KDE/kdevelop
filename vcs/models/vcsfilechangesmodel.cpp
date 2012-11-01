@@ -197,7 +197,7 @@ QList<KUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
     return ret;
 }
 
-void VcsFileChangesModel::checkUrls(QStandardItem *parent, QList<KUrl> urls) const
+void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<KUrl>& urls) const
 {
     QSet<KUrl> urlSet(urls.toSet());
 

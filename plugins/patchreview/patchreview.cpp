@@ -229,12 +229,12 @@ void PatchReviewPlugin::updateKompareModel() {
                 patchDoc->reload();
         }
         QString patchFile;
-        if(m_patch->file().isLocalFile())
-          patchFile = m_patch->file().toLocalFile();
-        else if(m_patch->file().isValid() && !m_patch->file().isEmpty()){
-          bool ret = KIO::NetAccess::download(m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow());
-          if(!ret)
-            kWarning() << "Problem while downloading: " << m_patch->file();
+        if( m_patch->file().isLocalFile() )
+            patchFile = m_patch->file().toLocalFile();
+        else if( m_patch->file().isValid() && !m_patch->file().isEmpty() ) {
+            bool ret = KIO::NetAccess::download( m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow() );
+            if( !ret )
+                kWarning() << "Problem while downloading: " << m_patch->file();
         }
 
         m_diffSettings = new DiffSettings( 0 );
@@ -447,7 +447,7 @@ void PatchReviewPlugin::updateReview() {
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
         //Open all relates files
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
-          KUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
+            KUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
             if( QFileInfo( absoluteUrl.path() ).exists() && absoluteUrl.path() != "/dev/null" )
             {

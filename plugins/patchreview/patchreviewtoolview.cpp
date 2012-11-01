@@ -386,7 +386,7 @@ void PatchReviewToolView::seekFile(bool forwards)
     }
 }
 
-void PatchReviewToolView::activate( KUrl url, IDocument* buddy ) const
+void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
 {
     kDebug() << "activating url" << url;
     // If the document is already open in this area, just re-activate it

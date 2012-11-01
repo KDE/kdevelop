@@ -69,7 +69,7 @@ private slots:
     void fileItemChanged( QStandardItem* item );
 
 private:
-    void activate( KUrl url, KDevelop::IDocument* buddy = 0 ) const;
+    void activate( const KUrl& url, KDevelop::IDocument* buddy = 0 ) const;
     
     void kompareModelChanged();
 
