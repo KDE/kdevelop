@@ -379,6 +379,7 @@ int main( int argc, char *argv[] )
         pm.load( splashFile );
         splash = new KSplashScreen( pm );
         splash->show();
+        splash->repaint();
     }
 
     if(!Core::initialize(splash, Core::Default, session))
