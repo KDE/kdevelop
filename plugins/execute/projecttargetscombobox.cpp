@@ -38,18 +38,14 @@ class ExecutablePathsVisitor
 {
     public:
         ExecutablePathsVisitor(bool exec) : m_onlyExecutables(exec) {}
+        using ProjectVisitor::visit;
         virtual void visit(ProjectExecutableTargetItem* eit) {
             if(!m_onlyExecutables || eit->type()==ProjectTargetItem::ExecutableTarget)
                 m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), '/', '\\');
         }
-        virtual void visit(IProject* p) { ProjectVisitor::visit(p); }
-        virtual void visit(ProjectBuildFolderItem* it) { ProjectVisitor::visit(it); }
-        virtual void visit(ProjectFolderItem* it) { ProjectVisitor::visit(it); }
-        virtual void visit(ProjectFileItem* it) { ProjectVisitor::visit(it); }
-        virtual void visit(ProjectLibraryTargetItem* it) { ProjectVisitor::visit(it); }
-        
+
         QStringList paths() const { return m_paths; }
-        
+
     private:
         bool m_onlyExecutables;
         QStringList m_paths;

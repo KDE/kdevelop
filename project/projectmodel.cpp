@@ -1090,11 +1090,18 @@ ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
     return d->urlLookupTable.value(url.index());
 }
 
+void ProjectVisitor::visit( ProjectModel* model )
+{
+    foreach( ProjectBaseItem* item, model->topItems() )
+    {
+        visit( item->project() );
+    }
+}
+
 void ProjectVisitor::visit ( IProject* prj )
 {
     visit( prj->projectItem() );
 }
-
 
 void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
 {

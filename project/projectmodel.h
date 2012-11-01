@@ -43,16 +43,46 @@ class ProjectLibraryTargetItem;
 class ProjectModel;
 class IndexedString;
 
+/**
+ * Base class to implement the visitor pattern for the project item tree.
+ *
+ * Feel free to subclass it and add overloads for the methods corresponding
+ * to the items you are interested in.
+ *
+ * Start visiting using one of the visit methods.
+ */
 class KDEVPLATFORMPROJECT_EXPORT ProjectVisitor
 {
 public:
     ProjectVisitor();
     virtual ~ProjectVisitor();
+    /**
+     * Visit the whole project model tree.
+     */
+    virtual void visit( ProjectModel* );
+    /**
+     * Visit the tree starting from the project root item.
+     */
     virtual void visit( IProject* );
-    virtual void visit( ProjectBuildFolderItem* );
-    virtual void visit( ProjectExecutableTargetItem* );
+    /**
+     * Visit the folder and anything it contains.
+     */
     virtual void visit( ProjectFolderItem* );
+    /**
+     * Visit the file.
+     */
     virtual void visit( ProjectFileItem* );
+    /**
+     * Visit the build folder and anything it contains.
+     */
+    virtual void visit( ProjectBuildFolderItem* );
+    /**
+     * Visit the target and all children it may contain.
+     */
+    virtual void visit( ProjectExecutableTargetItem* );
+    /**
+     * Visit the target and all children it may contain.
+     */
     virtual void visit( ProjectLibraryTargetItem* );
 };
 
