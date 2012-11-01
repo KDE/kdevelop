@@ -1,9 +1,13 @@
 [General]
 Name=PHPUnit
+Name[nl]=PHPUnit
+Name[pt]=PHPUnit
 Name[pt_BR]=PHPUnit
 Name[uk]=PHPUnit
 Name[x-test]=xxPHPUnitxx
 Comment=A unit test using the PHPUnit framework
+Comment[nl]=Een test van een eenheid met gebruik van het framework PHPUnit
+Comment[pt]=Um teste unitário que usa a plataforma PHPUnit
 Comment[pt_BR]=Teste unitário que usa a plataforma PHPUnit
 Comment[uk]=Перевірка модулів за допомогою комплексу PHPUnit
 Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
