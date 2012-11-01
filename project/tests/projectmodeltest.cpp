@@ -388,7 +388,6 @@ void ProjectModelTest::testRename()
     TestProject* proj = new TestProject;
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
     proj->setProjectItem( rootItem );
-    model->appendRow( rootItem );
 
     new ProjectFileItem(proj, KUrl("existing"), rootItem);
 

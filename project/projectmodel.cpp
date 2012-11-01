@@ -409,6 +409,7 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
         kWarning() << "Ignoring double insertion of item" << item;
         return;
     }
+    Q_ASSERT(!d->children.contains(item));
     int startrow,endrow;
     if( model() ) {
         startrow = endrow = d->children.count();
