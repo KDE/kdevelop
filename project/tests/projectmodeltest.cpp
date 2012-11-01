@@ -118,7 +118,6 @@ void ProjectModelTest::init()
 
 void ProjectModelTest::cleanupTestCase()
 {
-    delete model;
     KDevelop::TestCore::shutdown();
 }
 
