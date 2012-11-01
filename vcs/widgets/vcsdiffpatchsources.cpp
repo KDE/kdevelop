@@ -39,15 +39,13 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     : VCSDiffPatchSource(updater), m_vcs(updater->vcs())
 {
     Q_ASSERT(m_vcs);
-    m_base = updater->url();
-    
     m_commitMessageWidget = new QWidget;
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
 
     m_commitMessageEdit = new KTextEdit;
     m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
-    m_vcs->setupCommitMessageEditor(m_base, m_commitMessageEdit.data());
+    m_vcs->setupCommitMessageEditor(updater->url(), m_commitMessageEdit.data());
     
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
@@ -172,10 +170,11 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
         t2 << vcsdiff.diff();
     }
 
-    kDebug() << "using file" << m_file << vcsdiff.diff();
+    kDebug() << "using file" << m_file << vcsdiff.diff() << "base" << vcsdiff.baseDiff();
 
     m_name = "VCS Diff";
     m_base = vcsdiff.baseDiff();
+    m_base.addPath("/");
     
     emit patchChanged();
 }

@@ -18,7 +18,9 @@
 #include <QPointer>
 #include <QTime>
 #include <ui_patchreview.h>
+#include <interfaces/ipatchsource.h>
 
+class QStandardItem;
 class KJob;
 namespace KDevelop {
 class IDocument;
@@ -41,10 +43,15 @@ signals:
     void  stateChanged( PatchReviewToolView* );
 private slots:
 
+    void startingNewReview();
+    
     void fileDoubleClicked( const QModelIndex& i );
 
     void nextHunk();
     void prevHunk();
+    void prevFile();
+    void nextFile();
+    void seekFile(bool forwards);
 
     void patchChanged();
 
@@ -56,7 +63,14 @@ private slots:
 
     void runTests();
 
+    void selectAll();
+    void deselectAll();
+    
+    void fileItemChanged( QStandardItem* item );
+
 private:
+    void activate( KUrl url, KDevelop::IDocument* buddy = 0 ) const;
+    
     void kompareModelChanged();
 
     void showEditDialog();
@@ -72,12 +86,15 @@ private:
 
     QPointer< KParts::Part > m_konsolePart;
 
-    bool m_reversed;
+    /// Whether the set of checked URLs should be reset on the next update
+    bool m_resetCheckedUrls;
 
     PatchReviewPlugin* m_plugin;
 
     QPointer< QWidget > m_customWidget;
-
+    QAction* m_selectAllAction;
+    QAction* m_deselectAllAction;
+    
     class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated( KDevelop::IDocument* );

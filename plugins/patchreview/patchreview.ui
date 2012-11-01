@@ -17,6 +17,16 @@
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
+      <widget class="QToolButton" name="previousFile">
+       <property name="toolTip">
+        <string>Previous file</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="previousHunk">
        <property name="toolTip">
         <string>Previous difference</string>
@@ -30,6 +40,16 @@
       <widget class="QToolButton" name="nextHunk">
        <property name="toolTip">
         <string>Next difference</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="nextFile">
+       <property name="toolTip">
+        <string>Next file</string>
        </property>
        <property name="text">
         <string>...</string>

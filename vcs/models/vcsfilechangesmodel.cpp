@@ -161,6 +161,17 @@ QList<VcsStatusInfo> VcsFileChangesModel::checkedStatuses(QStandardItem *parent)
     return ret;
 }
 
+void VcsFileChangesModel::setAllChecked(bool checked)
+{
+    if(!d->allowSelection)
+        return;
+    QStandardItem* parent = invisibleRootItem();
+    for(int i = 0; i < parent->rowCount(); i++) {
+        QStandardItem* item = parent->child(i);
+        item->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+    }
+}
+
 QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
     QList<KUrl> ret;
@@ -176,6 +187,30 @@ QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
     }
 
     return ret;
+}
+
+QList<KUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
+{
+    QList<KUrl> ret;
+
+    for(int i = 0; i < parent->rowCount(); i++) {
+        ret << statusInfo(parent->child(i)).url();
+    }
+
+    return ret;
+}
+
+void VcsFileChangesModel::checkUrls(QStandardItem *parent, QList<KUrl> urls) const
+{
+    QSet<KUrl> urlSet(urls.toSet());
+
+    if(!d->allowSelection)
+        return;
+
+    for(int i = 0; i < parent->rowCount(); i++) {
+        QStandardItem* item = parent->child(i);
+        item->setCheckState(urlSet.contains(statusInfo(item).url()) ? Qt::Checked : Qt::Unchecked);
+    }
 }
 
 void VcsFileChangesModel::setIsCheckbable(bool checkable)

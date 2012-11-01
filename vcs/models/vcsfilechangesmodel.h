@@ -73,6 +73,24 @@ public:
         return checkedUrls(invisibleRootItem());
     }
 
+    /**
+     * Returns urls of all files
+     * */
+    QList<KUrl> urls() const {
+        return urls(invisibleRootItem());
+    }
+    
+    /**
+     * Set the checked urls
+     * */
+    void setCheckedUrls(QList<KUrl> urls) const {
+        return checkUrls(invisibleRootItem(), urls);
+    }
+
+    /**
+     * Changes the check-state of all files to the given state
+     * */
+    void setAllChecked(bool checked);
 
     /**
      * Simple helper to get VcsStatusInfo.
@@ -119,6 +137,16 @@ protected:
      * Returns list of currently checked urls.
      */
     QList<KUrl> checkedUrls(QStandardItem *parent) const;
+    
+    /**
+     * Checks the given urls, unchecks all others.
+     * */
+    void checkUrls(QStandardItem *parent, QList<KUrl> urls) const;
+    
+    /**
+     * Returns all urls
+     * */
+    QList<KUrl> urls(QStandardItem *parent) const;
 
 private:
     class VcsFileChangesModelPrivate *const d;

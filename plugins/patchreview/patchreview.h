@@ -81,6 +81,7 @@ public :
     KUrl urlForFileModel( const Diff2::DiffModel* model );
 
 Q_SIGNALS:
+    void startingNewReview();
     void patchChanged();
 
 public Q_SLOTS :

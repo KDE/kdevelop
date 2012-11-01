@@ -29,7 +29,11 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <util/projecttestjob.h>
+#include <sublime/area.h>
+#include <sublime/view.h>
+#include <sublime/document.h>
 #include <KLineEdit>
+#include <KTextEditor/Document>
 #include <QMenu>
 
 using namespace KDevelop;
@@ -70,12 +74,20 @@ private:
 };
 
 PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin )
-    : QWidget( parent ), m_reversed( false ), m_plugin( plugin ) {
+    : QWidget( parent ),
+    m_resetCheckedUrls( true ),
+    m_plugin( plugin ) {
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
+    connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
     connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
 
     showEditDialog();
     patchChanged();
+}
+
+void PatchReviewToolView::startingNewReview()
+{
+    m_resetCheckedUrls = true;
 }
 
 void PatchReviewToolView::patchChanged() {
@@ -201,12 +213,14 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setModel( m_fileModel );
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
-    m_editPatch.filesList->setSelectionMode(QAbstractItemView::NoSelection);
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_editPatch.filesList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customContextMenuRequested(QPoint)));
+    connect(m_fileModel, SIGNAL(itemChanged(QStandardItem*)), SLOT(fileItemChanged(QStandardItem*)));
 
+    m_editPatch.previousFile->setIcon( KIcon( "arrow-left" ) );
     m_editPatch.previousHunk->setIcon( KIcon( "arrow-up" ) );
     m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
+    m_editPatch.nextFile->setIcon( KIcon( "arrow-right" ) );
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
@@ -229,6 +243,8 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
+    connect( m_editPatch.previousFile, SIGNAL( clicked( bool ) ), this, SLOT( prevFile() ) );
+    connect( m_editPatch.nextFile, SIGNAL( clicked( bool ) ), this, SLOT( nextFile() ) );
     connect( m_editPatch.filesList, SIGNAL( activated ( QModelIndex ) ), this, SLOT( fileDoubleClicked( QModelIndex ) ) );
 
     connect( m_editPatch.cancelReview, SIGNAL( clicked( bool ) ), m_plugin, SLOT( cancelReview() ) );
@@ -258,6 +274,11 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
+    
+    m_selectAllAction = new QAction( KIcon("ok"), i18n("Select All"), this );
+    connect( m_selectAllAction, SIGNAL(triggered(bool)), SLOT(selectAll()) );
+    m_deselectAllAction = new QAction( KIcon("cancel"), i18n("Deselect All"), this );
+    connect( m_deselectAllAction, SIGNAL(triggered(bool)), SLOT(deselectAll()) );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
@@ -286,39 +307,147 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
     }
 
+    menu->addAction(m_selectAllAction);
+    menu->addAction(m_deselectAllAction);
     menu->addActions(vcsActions);
     if ( !menu->isEmpty() ) {
         menu->exec(QCursor::pos());
     }
+    
     delete menu;
 }
 
 void PatchReviewToolView::nextHunk()
 {
     IDocument* current = ICore::self()->documentController()->activeDocument();
-    if(current->url() == m_plugin->patch()->file())
-        fileDoubleClicked( m_fileModel->index(0,0) );
-    else if(!current->textDocument())
-    {
-        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
-        fileDoubleClicked( idx.sibling(idx.row()+1 % m_fileModel->rowCount(), 0) );
-    }
-    else
-        m_plugin->seekHunk( true );
+    if(current && current->textDocument())
+        m_plugin->seekHunk( true, current->textDocument()->url() );
 }
 
 void PatchReviewToolView::prevHunk()
 {
     IDocument* current = ICore::self()->documentController()->activeDocument();
-    if(current->url() == m_plugin->patch()->file())
-        fileDoubleClicked( m_fileModel->index(m_fileModel->rowCount()-1,0) );
-    else if(!current->textDocument())
+    if(current && current->textDocument())
+        m_plugin->seekHunk( false, current->textDocument()->url() );
+}
+
+void PatchReviewToolView::seekFile(bool forwards)
+{
+    if(!m_plugin->patch())
+        return;
+    QList<KUrl> checkedUrls = m_fileModel->checkedUrls();
+    QList<KUrl> allUrls = m_fileModel->urls();
+    IDocument* current = ICore::self()->documentController()->activeDocument();
+    if(!current || checkedUrls.empty())
+        return;
+    kDebug() << "seeking direction" << forwards;
+    int currentIndex = allUrls.indexOf(current->url());
+    KUrl newUrl;
+    if((forwards && current->url() == checkedUrls.back()) ||
+            (!forwards && current->url() == checkedUrls[0]))
     {
-        QModelIndex idx = m_fileModel->fileItemForUrl(current->url())->index();
-        fileDoubleClicked( idx.sibling(idx.row()-1 % m_fileModel->rowCount(), 0) );
+        newUrl = m_plugin->patch()->file();
+        kDebug() << "jumping to patch";
+    }
+    else if(current->url() == m_plugin->patch()->file() || currentIndex == -1)
+    {
+        if(forwards)
+            newUrl = checkedUrls[0];
+        else
+            newUrl = checkedUrls.back();
+        kDebug() << "jumping from patch";
     }
     else
-        m_plugin->seekHunk( false );
+    {
+        QSet<KUrl> checkedUrlsSet( checkedUrls.toSet() );
+        for(int offset = 1; offset < allUrls.size(); ++offset)
+        {
+            int pos;
+            if(forwards) {
+                pos = (currentIndex + offset) % allUrls.size();
+            }else{
+                pos = currentIndex - offset;
+                if(pos < 0)
+                    pos += allUrls.size();
+            }
+            if(checkedUrlsSet.contains(allUrls[pos]))
+            {
+                newUrl = allUrls[pos];
+                break;
+            }
+        }
+    }
+
+    if(newUrl.isValid())
+    {
+        activate( newUrl, forwards ? current : 0 );
+    }else{
+        kDebug() << "found no valid target url";
+    }
+}
+
+void PatchReviewToolView::activate( KUrl url, IDocument* buddy ) const
+{
+    kDebug() << "activating url" << url;
+    // If the document is already open in this area, just re-activate it
+    if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
+        foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
+        {
+            if(view->document() == dynamic_cast<Sublime::Document*>(doc))
+            {
+                ICore::self()->documentController()->activateDocument(doc);
+                return;
+            }
+        }
+    }
+    
+    // If the document is not open yet, open it in the correct order
+    IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, "", buddy);
+    if(newDoc && newDoc->textDocument()->activeView() && newDoc->textDocument()->activeView()->cursorPosition().line() == 0)
+        m_plugin->seekHunk( true, url );
+}
+
+void PatchReviewToolView::fileItemChanged( QStandardItem* item )
+{
+    KUrl url = m_fileModel->statusInfo(item).url();
+    if(item->checkState() == Qt::Unchecked)
+    {
+        // Eventually close the document
+        if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
+            if(doc->state() == IDocument::Clean)
+            {
+                foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
+                {
+                    if(view->document() == dynamic_cast<Sublime::Document*>(doc))
+                    {
+                        kDebug() << "closing view of" << url << "because the item was unchecked";
+                        ICore::self()->uiController()->activeArea()->closeView(view);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void PatchReviewToolView::nextFile()
+{
+    seekFile(true);
+}
+
+void PatchReviewToolView::prevFile()
+{
+    seekFile(false);
+}
+
+void PatchReviewToolView::deselectAll()
+{
+    m_fileModel->setAllChecked(false);
+}
+
+void PatchReviewToolView::selectAll()
+{
+    m_fileModel->setAllChecked(true);
 }
 
 void PatchReviewToolView::finishReview() {
@@ -331,11 +460,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx ) {
     QModelIndex i = idx.sibling(idx.row(), 0);
     KUrl file = m_fileModel->statusInfo( i ).url();
 
-    kDebug() << "opening" << file.toLocalFile();
-
-    ICore::self()->documentController()->openDocument( file, KTextEditor::Cursor() );
-
-    m_plugin->seekHunk( true, file );
+    activate( file );
 }
 
 KUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
@@ -348,8 +473,11 @@ KUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
 }
 
 void PatchReviewToolView::kompareModelChanged() {
+    
+    QList<KUrl> oldCheckedUrls = m_fileModel->checkedUrls();
+    
     m_fileModel->clear();
-
+    
     if ( !m_plugin->modelList() )
         return;
 
@@ -383,11 +511,22 @@ void PatchReviewToolView::kompareModelChanged() {
         status.setState( it.value() );
         m_fileModel->updateState( status );
     }
+    
+    if(!m_resetCheckedUrls)
+        m_fileModel->setCheckedUrls(oldCheckedUrls);
+    else
+        m_resetCheckedUrls = false;
 
     m_editPatch.filesList->resizeColumnToContents( 0 );
+    
+    // Eventually select the active document
+    documentActivated( ICore::self()->documentController()->activeDocument() );
 }
 
 void PatchReviewToolView::documentActivated( IDocument* doc ) {
+    if( !doc )
+        return;
+
     if ( !m_plugin->modelList() )
         return;
 

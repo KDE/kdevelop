@@ -70,6 +70,7 @@ Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
 void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
     try {
+        kDebug() << forwards << fileName << fileName.isEmpty();
         if ( !m_modelList.get() )
             throw "no model";
 
@@ -82,11 +83,10 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
 
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
-
+            
             IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
-
-            if ( doc && doc == ICore::self()->documentController()->activeDocument() && m_highlighters.contains( doc->url() ) && m_highlighters[doc->url()] ) {
-                ICore::self()->documentController()->activateDocument( doc );
+            
+            if ( doc && m_highlighters.contains( doc->url() ) && m_highlighters[doc->url()] ) {
                 if ( doc->textDocument() ) {
                     const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
 
@@ -108,7 +108,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                         if ( bestLine != -1 ) {
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return;
-                        } else {
+                        } else if(fileName.isEmpty()) {
                             int next = qBound(0, forwards ? a+1 : a-1, m_modelList->modelCount()-1);
                             ICore::self()->documentController()->openDocument(urlForFileModel(m_modelList->modelAt(next)));
                         }
@@ -222,8 +222,6 @@ void PatchReviewPlugin::updateKompareModel() {
         removeHighlighting();
         m_modelList.reset( 0 );
         delete m_diffSettings;
-
-        emit patchChanged();
 
         {
             IDocument* patchDoc = ICore::self()->documentController()->documentForUrl( m_patch->file() );
@@ -369,6 +367,7 @@ void PatchReviewPlugin::finishReview( QList<KUrl> selection ) {
 
 void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMode mode ) {
     Q_UNUSED( mode );
+    emit startingNewReview();
     setPatch( patch );
     QMetaObject::invokeMethod( this, "updateReview", Qt::QueuedConnection );
 }
@@ -439,17 +438,20 @@ void PatchReviewPlugin::updateReview() {
     }
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
+    
+    IDocument* buddyDoc = futureActiveDoc;
+    
     KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
         //Open all relates files
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
-            KUrl absoluteUrl( m_patch->baseDir(),  m_modelList->modelAt( a )->destination() );
+          KUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
             if( QFileInfo( absoluteUrl.path() ).exists() && absoluteUrl.path() != "/dev/null" )
             {
-                ICore::self()->documentController()->openDocument( absoluteUrl );
+                buddyDoc = ICore::self()->documentController()->openDocument( absoluteUrl, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate, "", buddyDoc );
                 documents.remove( absoluteUrl );
 
                 seekHunk( true, absoluteUrl ); //Jump to the first changed position
@@ -494,7 +496,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     m_patch = patch;
 
     if( m_patch ) {
-        kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
+        kDebug() << "setting new patch" << patch->name() << "with file" << patch->file() << "basedir" << patch->baseDir();
         registerPatch( patch );
 
         connect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
