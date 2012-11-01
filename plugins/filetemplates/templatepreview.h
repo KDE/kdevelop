@@ -61,6 +61,9 @@ private:
 private slots:
     void sourceTextChanged(const QString& text);
 
+protected:
+    virtual void showEvent(QShowEvent* event);
+
 public slots:
     void documentActivated(KDevelop::IDocument* document);
     void documentChanged(KTextEditor::Document* textDocument);

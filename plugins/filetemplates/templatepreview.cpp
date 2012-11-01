@@ -127,10 +127,17 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
 
 void TemplatePreview::documentChanged (KTextEditor::Document* document)
 {
-    if (document && document == m_original)
+    if (isVisible() && document && document == m_original)
     {
-        QString text = m_original->text();
-        sourceTextChanged(text);
+        sourceTextChanged(m_original->text());
+    }
+}
+
+void TemplatePreview::showEvent(QShowEvent* event)
+{
+    if (m_original)
+    {
+        sourceTextChanged(m_original->text());
     }
 }
 
@@ -149,6 +156,7 @@ void TemplatePreview::documentClosed (IDocument* document)
 
 void TemplatePreview::sourceTextChanged(const QString& text)
 {
+    kDebug();
     m_preview->setReadWrite(true);
     if (text.isEmpty())
     {
