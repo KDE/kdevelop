@@ -176,12 +176,9 @@ QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
     QList<KUrl> ret;
 
-    if(!d->allowSelection)
-        return ret;
-
     for(int i = 0; i < parent->rowCount(); i++) {
         QStandardItem* item = parent->child(i);
-        if(item->checkState() == Qt::Checked) {
+        if(!d->allowSelection || item->checkState() == Qt::Checked) {
             ret << statusInfo(item).url();
         }
     }
