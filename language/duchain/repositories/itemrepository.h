@@ -27,6 +27,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QAtomicInt>
+#include <kmessagebox.h>
+#include <klocalizedstring.h>
 #include <klockfile.h>
 #include <kdebug.h>
 #include "../../languageexport.h"
@@ -417,7 +419,12 @@ class Bucket {
       file->write((char*)&m_dirty, sizeof(bool));
       file->write(m_data, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
 
-      Q_ASSERT(static_cast<size_t>(file->pos()) == offset + (1+m_monsterBucketExtent)*DataSize);
+      if(static_cast<size_t>(file->pos()) != offset + (1+m_monsterBucketExtent)*DataSize)
+      {
+        KMessageBox::error(0, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
+        abort();
+      }
+      
       m_changed = false;
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
@@ -2331,7 +2338,11 @@ class ItemRepository : public AbstractItemRepository {
       m_file->write((char*)&m_currentBucket, sizeof(uint));
       m_file->write((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
       //We have completely initialized the file now
-      Q_ASSERT(m_file->pos() == BucketStartOffset);
+      if(m_file->pos() != BucketStartOffset)
+      {
+        KMessageBox::error(0, i18n("Failed writing to %1, probably the disk is full", m_file->fileName()));
+        abort();
+      }
 
       m_freeSpaceBucketsSize = 0;
       m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
