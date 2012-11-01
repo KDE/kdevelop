@@ -214,6 +214,7 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopD
 : m_strict(strict)
 , m_memberAccess(false)
 , m_skipLastNamePart(false)
+, m_mapAst(mapAst)
 , m_hadMemberAccess(false)
 , m_source(source)
 , m_ignore_uses(0)
@@ -222,7 +223,6 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopD
 , m_topContext(0)
 , m_reportRealProblems(false)
 , m_propagateConstness(propagateConstness)
-, m_mapAst(mapAst)
 {
 }
 
