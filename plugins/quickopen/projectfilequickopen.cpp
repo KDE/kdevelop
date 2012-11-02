@@ -43,14 +43,14 @@ ProjectFileData::ProjectFileData( const ProjectFile& file )
 
 QString ProjectFileData::text() const
 {
-    KUrl u(m_file.projectUrl.toUrl());
+    KUrl u(m_file.projectUrl);
     u.adjustPath(KUrl::AddTrailingSlash);
     return KUrl::relativeUrl( u, m_file.url.toUrl() );
 }
 
 QString ProjectFileData::htmlDescription() const
 {
-  return "<small><small>" + i18nc("%1: project name", "Project %1", m_file.project.str())  + "</small></small>";
+  return "<small><small>" + i18nc("%1: project name", "Project %1", m_file.project)  + "</small></small>";
 }
 
 bool ProjectFileData::execute( QString& filterText )
@@ -109,18 +109,17 @@ QWidget* ProjectFileData::expandingWidget() const
         }
     }
 
-
     if( chosen ) {
         return chosen->createNavigationWidget(0, 0,
             "<small><small>"
-            + i18nc("%1: project name", "Project %1", m_file.project.str())
+            + i18nc("%1: project name", "Project %1", m_file.project)
             + "</small></small>");
     } else {
         QTextBrowser* ret = new QTextBrowser();
         ret->resize(400, 100);
         ret->setText(
                 "<small><small>"
-                + i18nc("%1: project name", "Project %1", m_file.project.str())
+                + i18nc("%1: project name", "Project %1", m_file.project)
                 + "<br>" + i18n("Not parsed yet") + "</small></small>");
         return ret;
     }
@@ -226,8 +225,8 @@ void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedSt
 {
     ProjectFile f;
     f.url = url;
-    f.project = IndexedString(project->name());
-    f.projectUrl = IndexedString(project->folder());
+    f.project = project->name();
+    f.projectUrl = project->folder();
     m_projectFiles.insert(url.byteArray(), f);
 }
 
@@ -300,10 +299,10 @@ void OpenFilesDataProvider::reset()
         f.url = IndexedString(doc->url().pathOrUrl());
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
-            f.projectUrl = IndexedString(project->folder().pathOrUrl());
-            f.project = IndexedString(project->name());
+            f.projectUrl = project->folder().pathOrUrl();
+            f.project = project->name();
         } else {
-            f.project = IndexedString(i18n("none"));
+            f.project = i18n("none");
         }
         currentFiles << f;
     }

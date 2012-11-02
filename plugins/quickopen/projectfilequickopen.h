@@ -19,8 +19,7 @@
 #ifndef PROJECT_FILE_QUICKOPEN
 #define PROJECT_FILE_QUICKOPEN
 
-#include <KIcon>
-#include <KUrl>
+#include <QIcon>
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/indexedstring.h>
@@ -36,12 +35,16 @@ struct ProjectFile
 {
     // indexed file url
     KDevelop::IndexedString url;
-    // indexed project root folder url
-    KDevelop::IndexedString projectUrl;
-    // indexed project name
-    KDevelop::IndexedString project;
+    // project root folder url
+    // NOTE: this is using a QUrl to save memory
+    //       if you want a string representation of
+    //       this url, use the non-broken KUrl api via:
+    //       KUrl(QUrl).pathOrUrl() or similar.
+    QUrl projectUrl;
+    // project name
+    QString project;
     // file icon
-    KIcon icon;
+    QIcon icon;
 };
 
 Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
