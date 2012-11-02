@@ -1497,8 +1497,19 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
 {
   ENSURE_CAN_WRITE
 
-  foreach (Declaration* dec, localDeclarations()) {
-    if (!encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses()))
+  // It may happen that the deletion of one declaration triggers the deletion of another one
+  // Therefore we copy the list of indexed declarations and work on those. Indexed declarations
+  // will return zero for already deleted declarations.
+  KDevVarLengthArray<LocalIndexedDeclaration, 10> declarationsCopy; 
+  {
+    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+    declarationsCopy = d_func_dynamic()->m_localDeclarationsList();
+  }
+
+  FOREACH_ARRAY(const LocalIndexedDeclaration& indexedDec, declarationsCopy)
+  {
+    Declaration* dec = indexedDec.data(topContext());
+    if (dec && !encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses()))
       delete dec;
   }
     
