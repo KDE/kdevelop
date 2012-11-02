@@ -54,6 +54,7 @@ private slots:
     void testItemsForUrl_data();
     void testProjectProxyModel();
     void testProjectFileSet();
+    void testProjectFileIcon();
 private:
     KDevelop::ProjectModel* model;
     ProjectProxyModel* proxy;

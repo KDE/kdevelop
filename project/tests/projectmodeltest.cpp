@@ -22,6 +22,7 @@
 #include <QtGui/QSortFilterProxyModel>
 #include <QtCore/QThread>
 #include <qtest_kde.h>
+#include <KMimeType>
 
 #include <projectmodel.h>
 #include <projectproxymodel.h>
@@ -572,6 +573,16 @@ void ProjectModelTest::testProjectFileSet()
     QCOMPARE(project->fileSet().begin()->toUrl(), url);
     delete item;
     QVERIFY(project->fileSet().isEmpty());
+}
+
+void ProjectModelTest::testProjectFileIcon()
+{
+    ProjectFileItem* item = new ProjectFileItem(0, KUrl("/tmp/foo.txt"));
+    const QString txtIcon = KMimeType::iconNameForUrl(item->url());
+    QCOMPARE(item->iconName(), txtIcon);
+    item->setUrl(KUrl("/tmp/bar.cpp"));
+    QCOMPARE(item->iconName(), KMimeType::iconNameForUrl(item->url()));
+    QVERIFY(item->iconName() != txtIcon);
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
