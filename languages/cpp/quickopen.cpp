@@ -357,43 +357,32 @@ uint IncludeFileDataProvider::unfilteredItemCount() const
   return items().count();
 }
 
-QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end ) const
+QuickOpenDataPointer IncludeFileDataProvider::data( uint row ) const
 {
-  QList<QuickOpenDataPointer> ret;
-
   const QList<KDevelop::IncludeItem>& items( filteredItems() );
-  
-  if( end > (uint)items.count() )
-    end = items.count();
-  
+
   DUChainReadLocker lock( DUChain::lock() );
-  
-  for( uint a = start; a < end; a++ )
+  //Find out whether the url is included into the current file
+  bool isIncluded = false;
+
+  if( m_duContext )
   {
-    //Find out whether the url is included into the current file
-    bool isIncluded = false;
+    KUrl u = items[row].url();
 
-    if( m_duContext )
+    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+
+    foreach( TopDUContext* t, allChains )
     {
-      KUrl u = items[a].url();
-
-      QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
-
-      foreach( TopDUContext* t, allChains )
+      if( m_duContext.data()->imports( t, m_duContext->range().end ) )
       {
-        if( m_duContext.data()->imports( t, m_duContext->range().end ) )
-        {
-          isIncluded = true;
-          break;
-        }
+        isIncluded = true;
+        break;
       }
     }
-
-    //If it is an importer(marked by pathNumber -1), give m_duContext so we can search the inclusion-path later
-    ret << QuickOpenDataPointer( new IncludeFileData( items[a], ( isIncluded || items[a].pathNumber == -1 ) ? m_duContext : TopDUContextPointer() ) );
   }
-  
-  return ret;
+
+  //If it is an importer(marked by pathNumber -1), give m_duContext so we can search the inclusion-path later
+  return QuickOpenDataPointer( new IncludeFileData( items[row], ( isIncluded || items[row].pathNumber == -1 ) ? m_duContext : TopDUContextPointer() ) );
 }
 
 QString IncludeFileDataProvider::itemText( const KDevelop::IncludeItem& data ) const
