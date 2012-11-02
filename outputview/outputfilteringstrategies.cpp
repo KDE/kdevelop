@@ -123,7 +123,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
     << ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
     // match against Entering directory to update current build dir
-    << ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory '(.+)'", 1);
+    << ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2);
 
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const KUrl& buildDir)
