@@ -704,11 +704,6 @@ IndexedString ProjectFileItem::indexedUrl() const
     return IndexedString::fromIndex( d_ptr->m_urlIndex );
 }
 
-QString ProjectFileItem::iconName() const
-{
-    return d_ptr->iconName;
-}
-
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
 {
     KUrl dest = url().upUrl();
@@ -807,6 +802,18 @@ public:
 
 K_GLOBAL_STATIC(IconNameCache, s_cache);
 
+QString ProjectFileItem::iconName() const
+{
+    // think of d_ptr->iconName as mutable, possible since d_ptr is not const
+    if (d_ptr->iconName.isEmpty()) {
+        // lazy load implementation of icon lookup
+        d_ptr->iconName = s_cache->iconNameForUrl( d_ptr->m_url, d_ptr->text );
+        // we should always get *some* icon name back
+        Q_ASSERT(!d_ptr->iconName.isEmpty());
+    }
+    return d_ptr->iconName;
+}
+
 void ProjectFileItem::setUrl( const KUrl& url )
 {
     if (url == d_ptr->m_url) {
@@ -825,7 +832,8 @@ void ProjectFileItem::setUrl( const KUrl& url )
         project()->addToFileSet( indexedUrl() );
     }
 
-    d_ptr->iconName = s_cache->iconNameForUrl( url, d_ptr->text );
+    // invalidate icon name for future lazy-loaded updated
+    d_ptr->iconName.clear();
 }
 
 int ProjectFileItem::type() const
