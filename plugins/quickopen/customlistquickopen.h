@@ -70,7 +70,7 @@ class CustomItemDataProvider : public KDevelop::QuickOpenDataProviderBase, publi
     virtual void reset();
     virtual uint itemCount() const;
     virtual uint unfilteredItemCount() const;
-    virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+    virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
 
   private:
   

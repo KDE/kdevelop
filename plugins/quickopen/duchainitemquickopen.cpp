@@ -234,20 +234,9 @@ uint DUChainItemDataProvider::unfilteredItemCount() const
   return Base::items().count();
 }
 
-QList<KDevelop::QuickOpenDataPointer> DUChainItemDataProvider::data( uint start, uint end ) const
+QuickOpenDataPointer DUChainItemDataProvider::data( uint row ) const
 {
-  if( end > (uint)Base::filteredItems().count() ) {
-    end = Base::filteredItems().count();
-  }
-
-  QList<KDevelop::QuickOpenDataPointer> ret;
-
-  for( uint a = start; a < end; a++ ) {
-    DUChainItem f( Base::filteredItems()[a] );
-    ret << KDevelop::QuickOpenDataPointer( createData( Base::filteredItems()[a] ) );
-  }
-
-  return ret;
+  return KDevelop::QuickOpenDataPointer( createData( Base::filteredItems()[row] ) );
 }
 
 DUChainItemData* DUChainItemDataProvider::createData( const DUChainItem& item ) const

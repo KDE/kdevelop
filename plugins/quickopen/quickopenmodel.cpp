@@ -357,24 +357,19 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
     uint itemCount = provider.provider->itemCount();
     if( (uint)row < itemCount )
     {
-      QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
+      QuickOpenDataPointer item = provider.provider->data( row );
+      Q_ASSERT(item);
 
       if(!noReset && provider.provider->itemCount() != itemCount) {
           kDebug() << "item-count in provider has changed, resetting model";
           m_resetTimer->start(0);
           m_resetBehindRow = rowOffset + row; //Don't reset everything, only everything behind this position
       }
-      
-      if( items.isEmpty() )
-      {
-//         kWarning() << "Provider returned no item";
-        return QuickOpenDataPointer();
-      } else {
+
 #ifdef QUICKOPEN_USE_ITEM_CACHING
-        m_cachedData[row+rowOffset] = items.first();
+      m_cachedData[row+rowOffset] = item;
 #endif
-        return items.first();
-      }
+      return item;
     } else {
       row -= provider.provider->itemCount();
       rowOffset += provider.provider->itemCount();

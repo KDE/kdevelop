@@ -170,7 +170,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
     virtual uint unfilteredItemCount() const = 0;
 
     /**
-     * Returns the data-items for a given range.
+     * Returns the data-item for a given row.
+     *
      * Generally, the items must addressed alphabetically,
      * they will be displayed in the same order in the
      * quickopen list.
@@ -179,10 +180,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * create the QuickOpenDataBase items on demand, because only
      * those that will really be shown will be requested.
      *
-     * @param start First item to be returned
-     * @param end Return items until here. end <= itemCount()
+     * @param row Index of item to be returned.
      * */
-    virtual QList<QuickOpenDataPointer> data( uint start, uint end ) const = 0;
+    virtual QuickOpenDataPointer data( uint row ) const  = 0;
 
     /**
      * If the data-provider supports multiple different scopes/items, this will be called

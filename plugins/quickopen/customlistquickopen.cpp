@@ -75,18 +75,8 @@ uint CustomItemDataProvider::unfilteredItemCount() const
   return CustomItemDataProviderBase::items().count();
 }
 
-QList<KDevelop::QuickOpenDataPointer> CustomItemDataProvider::data( uint start, uint end ) const {
-  if( end > (uint)CustomItemDataProviderBase::filteredItems().count() )
-    end = CustomItemDataProviderBase::filteredItems().count();
-
-  QList<KDevelop::QuickOpenDataPointer> ret;
-  
-  for( uint a = start; a < end; a++ ) {
-    CustomItem f( CustomItemDataProviderBase::filteredItems()[a] );
-    ret << KDevelop::QuickOpenDataPointer( new CustomItemData( CustomItemDataProviderBase::filteredItems()[a] ) );
-  }
-
-  return ret;
+KDevelop::QuickOpenDataPointer CustomItemDataProvider::data( uint row ) const {
+  return KDevelop::QuickOpenDataPointer( new CustomItemData( CustomItemDataProviderBase::filteredItems()[row] ) );
 }
 
 QString CustomItemDataProvider::itemText( const CustomItem& data ) const {

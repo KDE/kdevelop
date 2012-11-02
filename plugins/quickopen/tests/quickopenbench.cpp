@@ -124,8 +124,8 @@ void QuickOpenBench::benchProjectFileFilter_providerData()
     QVERIFY(provider.itemCount());
     const int itemIdx = provider.itemCount() - 1;
     QBENCHMARK {
-        QList< QuickOpenDataPointer > data = provider.data(itemIdx, itemIdx+1);
-        data.first()->text();
+        QuickOpenDataPointer data = provider.data(itemIdx);
+        data->text();
     }
 }
 

@@ -165,21 +165,9 @@ uint BaseFileDataProvider::unfilteredItemCount() const
     return Base::items().count();
 }
 
-QList<QuickOpenDataPointer> BaseFileDataProvider::data( uint start, uint end ) const
+QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 {
-    if( end > (uint)Base::filteredItems().count() ) {
-        end = Base::filteredItems().count();
-    }
-
-    QList<QuickOpenDataPointer> ret;
-    ret.reserve(end - start);
-
-    for( uint a = start; a < end; a++ ) {
-        ProjectFile f( Base::filteredItems()[a] );
-        ret << QuickOpenDataPointer( new ProjectFileData( Base::filteredItems()[a] ) );
-    }
-
-    return ret;
+    return QuickOpenDataPointer(new ProjectFileData( Base::filteredItems().at(row) ));
 }
 
 QString BaseFileDataProvider::itemText( const ProjectFile& data ) const

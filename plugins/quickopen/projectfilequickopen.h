@@ -83,7 +83,7 @@ public:
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
     virtual uint unfilteredItemCount() const;
-    virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
+    virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
 
     //Reimplemented from Base<..>
     virtual QString itemText( const ProjectFile& data ) const;
