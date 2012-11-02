@@ -31,23 +31,7 @@ QuickOpenBench::QuickOpenBench(QObject* parent)
 {
 }
 
-void QuickOpenBench::benchProjectFileFilter()
-{
-    QFETCH(int, files);
-    QFETCH(QString, filter);
-
-    ProjectFileDataProvider provider;
-    QScopedPointer<TestProject> project(getProjectWithFiles(files));
-
-    QBENCHMARK {
-        projectController->addProject(project.data());
-        provider.reset();
-        provider.setFilterText(filter);
-        projectController->takeProject(project.data());
-    }
-}
-
-void QuickOpenBench::benchProjectFileFilter_data()
+void QuickOpenBench::getData()
 {
     QTest::addColumn<int>("files");
     QTest::addColumn<QString>("filter");
@@ -66,10 +50,33 @@ void QuickOpenBench::benchProjectFileFilter_data()
     QTest::newRow("5000-f/b") << 5000 << "f/b";
 }
 
-void QuickOpenBench::benchProjectFileFilterReset()
+void QuickOpenBench::benchProjectFileFilter_addRemoveProject()
 {
+    QFETCH(int, files);
+    QFETCH(QString, filter);
+
     ProjectFileDataProvider provider;
-    TestProject* project = getProjectWithFiles(10000);
+    QScopedPointer<TestProject> project(getProjectWithFiles(files));
+
+    QBENCHMARK {
+        projectController->addProject(project.data());
+        projectController->takeProject(project.data());
+    }
+}
+
+void QuickOpenBench::benchProjectFileFilter_addRemoveProject_data()
+{
+    getData();
+}
+
+void QuickOpenBench::benchProjectFileFilter_reset()
+{
+    QFETCH(int, files);
+    QFETCH(QString, filter);
+
+    ProjectFileDataProvider provider;
+    TestProject* project = getProjectWithFiles(files);
+    provider.setFilterText(filter);
 
     projectController->addProject(project);
     QBENCHMARK {
@@ -77,31 +84,54 @@ void QuickOpenBench::benchProjectFileFilterReset()
     }
 }
 
-void QuickOpenBench::benchProjectFileFilterSetFilter()
+void QuickOpenBench::benchProjectFileFilter_reset_data()
 {
+    getData();
+}
+
+void QuickOpenBench::benchProjectFileFilter_setFilter()
+{
+    QFETCH(int, files);
+    QFETCH(QString, filter);
+
     ProjectFileDataProvider provider;
-    TestProject* project = getProjectWithFiles(10000);
+    TestProject* project = getProjectWithFiles(files);
 
     projectController->addProject(project);
-    provider.reset();
+
     QBENCHMARK {
-        provider.setFilterText(QString("f/b"));
-        provider.setFilterText(QString(""));
+        provider.setFilterText(filter);
+        provider.reset();
     }
 }
 
-void QuickOpenBench::benchProjectFileProviderData()
+void QuickOpenBench::benchProjectFileFilter_setFilter_data()
 {
+    getData();
+}
+
+void QuickOpenBench::benchProjectFileFilter_providerData()
+{
+    QFETCH(int, files);
+    QFETCH(QString, filter);
+
     ProjectFileDataProvider provider;
-    TestProject* project = getProjectWithFiles(1000);
+    TestProject* project = getProjectWithFiles(files);
     projectController->addProject(project);
     provider.reset();
-    QCOMPARE(provider.itemCount(), 1000u);
+    QCOMPARE(provider.itemCount(), uint(files));
+    provider.setFilterText(filter);
+    QVERIFY(provider.itemCount());
+    const int itemIdx = provider.itemCount() - 1;
     QBENCHMARK {
-        QList< QuickOpenDataPointer > data = provider.data(10, 10+1);
-        QVERIFY(!data.isEmpty());
+        QList< QuickOpenDataPointer > data = provider.data(itemIdx, itemIdx+1);
         data.first()->text();
     }
+}
+
+void QuickOpenBench::benchProjectFileFilter_providerData_data()
+{
+    getData();
 }
 
 #include "quickopenbench.moc"

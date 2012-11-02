@@ -28,12 +28,17 @@ class QuickOpenBench : public QuickOpenTestBase
     Q_OBJECT
 public:
     explicit QuickOpenBench(QObject* parent = 0);
+private:
+    void getData();
 private slots:
-    void benchProjectFileFilter();
-    void benchProjectFileFilter_data();
-    void benchProjectFileFilterReset();
-    void benchProjectFileFilterSetFilter();
-    void benchProjectFileProviderData();
+    void benchProjectFileFilter_addRemoveProject();
+    void benchProjectFileFilter_addRemoveProject_data();
+    void benchProjectFileFilter_reset();
+    void benchProjectFileFilter_reset_data();
+    void benchProjectFileFilter_setFilter();
+    void benchProjectFileFilter_setFilter_data();
+    void benchProjectFileFilter_providerData();
+    void benchProjectFileFilter_providerData_data();
 };
 
 #endif // QUICKOPENTEST_H
