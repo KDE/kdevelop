@@ -26,6 +26,8 @@
 class QuickOpenBench : public QuickOpenTestBase
 {
     Q_OBJECT
+public:
+    explicit QuickOpenBench(QObject* parent = 0);
 private slots:
     void benchProjectFileFilter();
     void benchProjectFileFilter_data();

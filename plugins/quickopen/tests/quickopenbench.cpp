@@ -22,9 +22,14 @@
 
 #include <qtest_kde.h>
 
-QTEST_KDEMAIN(QuickOpenBench, GUI);
+QTEST_KDEMAIN(QuickOpenBench, NoGUI);
 
 using namespace KDevelop;
+
+QuickOpenBench::QuickOpenBench(QObject* parent)
+: QuickOpenTestBase(Core::NoUi, parent)
+{
+}
 
 void QuickOpenBench::benchProjectFileFilter()
 {
