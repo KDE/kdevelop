@@ -33,8 +33,9 @@ class IProject;
  */
 struct ProjectFile
 {
-    // indexed file url
-    KDevelop::IndexedString url;
+    // string representation of the url
+    // also stored (and shared) in the ProjectFileDataProvider's map
+    QString pathOrUrl;
     // project root folder url
     // NOTE: this is using a QUrl to save memory
     //       if you want a string representation of
@@ -112,7 +113,7 @@ private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    QMap<QByteArray, ProjectFile> m_projectFiles;
+    QMap<QString, ProjectFile> m_projectFiles;
 };
 
 /**

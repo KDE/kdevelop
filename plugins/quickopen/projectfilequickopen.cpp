@@ -45,7 +45,7 @@ QString ProjectFileData::text() const
 {
     KUrl u(m_file.projectUrl);
     u.adjustPath(KUrl::AddTrailingSlash);
-    return KUrl::relativeUrl( u, m_file.url.toUrl() );
+    return KUrl::relativeUrl( u, KUrl(m_file.pathOrUrl) );
 }
 
 QString ProjectFileData::htmlDescription() const
@@ -55,11 +55,12 @@ QString ProjectFileData::htmlDescription() const
 
 bool ProjectFileData::execute( QString& filterText )
 {
-    IOpenWith::openFiles(KUrl::List() << m_file.url.toUrl());
+    const KUrl url(m_file.pathOrUrl);
+    IOpenWith::openFiles(KUrl::List() << url);
     QString path;
     uint lineNumber;
     if (extractLineNumber(filterText, path, lineNumber)) {
-        IDocument* doc = ICore::self()->documentController()->documentForUrl(m_file.url.toUrl());
+        IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
         if (doc) {
             doc->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
         }
@@ -82,7 +83,7 @@ QList<QVariant> ProjectFileData::highlighting() const
 
     QList<QVariant> ret;
 
-    int fileNameLength = m_file.url.toUrl().fileName().length();
+    int fileNameLength = KUrl(m_file.pathOrUrl).fileName().length();
 
     ret << 0;
     ret << txt.length() - fileNameLength;
@@ -96,10 +97,11 @@ QList<QVariant> ProjectFileData::highlighting() const
 
 QWidget* ProjectFileData::expandingWidget() const
 {
+    const KUrl url(m_file.pathOrUrl);
     DUChainReadLocker lock;
 
     ///Find a du-chain for the document
-    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(m_file.url);
+    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(url);
 
     ///Pick a non-proxy context
     TopDUContext* chosen = 0;
@@ -172,7 +174,7 @@ QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 
 QString BaseFileDataProvider::itemText( const ProjectFile& data ) const
 {
-    return data.url.str();
+    return data.pathOrUrl;
 }
 
 ProjectFileDataProvider::ProjectFileDataProvider()
@@ -212,15 +214,15 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedString& url )
 {
     ProjectFile f;
-    f.url = url;
     f.project = project->name();
     f.projectUrl = project->folder();
-    m_projectFiles.insert(url.byteArray(), f);
+    f.pathOrUrl = url.str();
+    m_projectFiles.insert(f.pathOrUrl, f);
 }
 
 void ProjectFileDataProvider::fileRemovedFromSet( IProject*, const IndexedString& url )
 {
-    m_projectFiles.remove(url.byteArray());
+    m_projectFiles.remove(url.str());
 }
 
 namespace
@@ -233,6 +235,14 @@ QSet<IndexedString> openFiles()
     }
     return openFiles;
 }
+QSet<QString> openFilesPathsOrUrls()
+{
+    QSet<QString> openFiles;
+    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+        openFiles << doc->url().pathOrUrl();
+    }
+    return openFiles;
+}
 }
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
@@ -241,21 +251,21 @@ bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
     if ( left.project != right.project ) {
         return left.project < right.project;
     }
-    return left.url.byteArray() < right.url.byteArray();
+    return left.pathOrUrl < right.pathOrUrl;
 }
 
 void ProjectFileDataProvider::reset()
 {
     Base::clearFilter();
 
-    QSet<IndexedString> openFiles_ = openFiles();
+    QSet<QString> openFiles = openFilesPathsOrUrls();
     QList<ProjectFile> projectFiles;
     projectFiles.reserve(m_projectFiles.size());
 
-    for(QMap<QByteArray, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
+    for(QMap<QString, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
         it != m_projectFiles.constEnd(); ++it)
     {
-        if (!openFiles_.contains(it->url)) {
+        if (!openFiles.contains(it.key())) {
             projectFiles << *it;
         }
     }
@@ -284,7 +294,7 @@ void OpenFilesDataProvider::reset()
     foreach( IDocument* doc, docCtrl->openDocuments() ) {
         ProjectFile f;
         f.icon = icon;
-        f.url = IndexedString(doc->url().pathOrUrl());
+        f.pathOrUrl = doc->url().pathOrUrl();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
             f.projectUrl = project->folder().pathOrUrl();
