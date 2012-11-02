@@ -52,12 +52,14 @@ void QuickOpenBench::benchProjectFileFilter_data()
     QTest::addColumn<int>("files");
     QTest::addColumn<QString>("filter");
 
-    QTest::newRow("001000_bar") << 1000 << "bar";
-    QTest::newRow("010000_bar") << 10000 << "bar";
-    QTest::newRow("100000_bar") << 100000 << "bar";
-    QTest::newRow("001000_f/b") << 1000 << "f/b";
-    QTest::newRow("010000_f/b") << 10000 << "f/b";
-    QTest::newRow("100000_f/b") << 100000 << "f/b";
+    QTest::newRow("0100_bar") << 100 << "bar";
+    QTest::newRow("0500_bar") << 500 << "bar";
+    QTest::newRow("1000_bar") << 1000 << "bar";
+    QTest::newRow("5000_bar") << 5000 << "bar";
+    QTest::newRow("0100_f/b") << 100 << "f/b";
+    QTest::newRow("0500_f/b") << 500 << "f/b";
+    QTest::newRow("1000_f/b") << 1000 << "f/b";
+    QTest::newRow("5000_f/b") << 5000 << "f/b";
 }
 
 void QuickOpenBench::benchProjectFileFilterReset()
