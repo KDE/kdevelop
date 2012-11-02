@@ -48,7 +48,9 @@ void TestProject::setProjectUrl(const KUrl& url)
 
 TestProject::~TestProject()
 {
-    ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
+    if (m_root) {
+        delete m_root;
+    }
 }
 
 ProjectFolderItem* TestProject::projectItem() const
