@@ -212,7 +212,10 @@ void TemplatePreview::sourceTextChanged(const QString& text)
         }
 
     }
-    m_preview->setMode(m_original->mode());
+    if (m_original)
+    {
+        m_preview->setMode(m_original->mode());
+    }
     m_preview->setReadWrite(false);
 }
 
