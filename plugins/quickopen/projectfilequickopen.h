@@ -44,8 +44,9 @@ struct ProjectFile
     QUrl projectUrl;
     // project name
     QString project;
-    // file icon
-    QIcon icon;
+    // indexed url - only set for project files
+    // currently open documents don't use this!
+    KDevelop::IndexedString indexedUrl;
 };
 
 Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);

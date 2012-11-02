@@ -22,7 +22,7 @@
 
 #include <qtest_kde.h>
 
-QTEST_KDEMAIN(QuickOpenBench, NoGUI);
+QTEST_KDEMAIN(QuickOpenBench, GUI);
 
 using namespace KDevelop;
 
@@ -136,6 +136,30 @@ void QuickOpenBench::benchProjectFileFilter_providerData()
 }
 
 void QuickOpenBench::benchProjectFileFilter_providerData_data()
+{
+    getData();
+}
+
+void QuickOpenBench::benchProjectFileFilter_providerDataIcon()
+{
+    QFETCH(int, files);
+    QFETCH(QString, filter);
+
+    ProjectFileDataProvider provider;
+    TestProject* project = getProjectWithFiles(files);
+    projectController->addProject(project);
+    provider.reset();
+    QCOMPARE(provider.itemCount(), uint(files));
+    provider.setFilterText(filter);
+    QVERIFY(provider.itemCount());
+    const int itemIdx = provider.itemCount() - 1;
+    QBENCHMARK {
+        QuickOpenDataPointer data = provider.data(itemIdx);
+        data->icon();
+    }
+}
+
+void QuickOpenBench::benchProjectFileFilter_providerDataIcon_data()
 {
     getData();
 }

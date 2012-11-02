@@ -39,6 +39,8 @@ private slots:
     void benchProjectFileFilter_setFilter_data();
     void benchProjectFileFilter_providerData();
     void benchProjectFileFilter_providerData_data();
+    void benchProjectFileFilter_providerDataIcon();
+    void benchProjectFileFilter_providerDataIcon_data();
 };
 
 #endif // QUICKOPENTEST_H

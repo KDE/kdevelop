@@ -131,7 +131,15 @@ QWidget* ProjectFileData::expandingWidget() const
 
 QIcon ProjectFileData::icon() const
 {
-    return m_file.icon;
+    if (m_file.indexedUrl.isEmpty()) {
+        return KIcon("tab-duplicate");
+    } else {
+        ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForUrl(m_file.indexedUrl);
+        if (item) {
+            return KIcon(item->iconName());
+        }
+    }
+    return KIcon("unknown");
 }
 
 BaseFileDataProvider::BaseFileDataProvider()
@@ -217,6 +225,7 @@ void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedSt
     f.project = project->name();
     f.projectUrl = project->folder();
     f.pathOrUrl = url.str();
+    f.indexedUrl = url;
     m_projectFiles.insert(f.pathOrUrl, f);
 }
 
@@ -290,10 +299,8 @@ void OpenFilesDataProvider::reset()
     IProjectController* projCtrl = ICore::self()->projectController();
     IDocumentController* docCtrl = ICore::self()->documentController();
 
-    const KIcon icon("tab-duplicate");
     foreach( IDocument* doc, docCtrl->openDocuments() ) {
         ProjectFile f;
-        f.icon = icon;
         f.pathOrUrl = doc->url().pathOrUrl();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
