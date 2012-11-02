@@ -29,19 +29,31 @@ namespace KDevelop {
 class IProject;
 }
 
-struct ProjectFile {
-  KDevelop::IndexedString m_url;
-  KDevelop::IndexedString m_projectUrl;
-  KDevelop::IndexedString m_project;
-  KIcon m_icon;
+/**
+ * Internal data class for the BaseFileDataProvider and ProjectFileData.
+ */
+struct ProjectFile
+{
+    // indexed file url
+    KDevelop::IndexedString url;
+    // indexed project root folder url
+    KDevelop::IndexedString projectUrl;
+    // indexed project name
+    KDevelop::IndexedString project;
+    // file icon
+    KIcon icon;
 };
 
-Q_DECLARE_TYPEINFO(ProjectFile, Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
 
-class ProjectFileData : public KDevelop::QuickOpenDataBase {
-  public:
+/**
+ * The shared data class that is used by the quick open model.
+ */
+class ProjectFileData : public KDevelop::QuickOpenDataBase
+{
+public:
     ProjectFileData( const ProjectFile& file );
-    
+
     virtual QString text() const;
     virtual QString htmlDescription() const;
 
@@ -51,26 +63,19 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase {
     virtual QWidget* expandingWidget() const;
 
     virtual QIcon icon() const;
-    
+
     QList<QVariant> highlighting() const;
-    
-  private:
-    KUrl totalUrl() const;
-    
+
+private:
     ProjectFile m_file;
 };
-
-/**
- * A QuickOpenDataProvider for file-completion using project-files.
- * It provides all files from all open projects.
- * */
 
 typedef KDevelop::FilterWithSeparator<ProjectFile> Base;
 
 class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface
 {
     Q_OBJECT
-  public:
+public:
     BaseFileDataProvider();
     virtual void setFilterText( const QString& text );
     virtual uint itemCount() const;
@@ -81,27 +86,38 @@ class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public 
     virtual QString itemText( const ProjectFile& data ) const;
 };
 
+/**
+ * QuickOpen data provider for file-completion using project-files.
+ *
+ * It provides all files from all open projects except currently opened ones.
+ */
 class ProjectFileDataProvider : public BaseFileDataProvider
 {
     Q_OBJECT
-  public:
+public:
     ProjectFileDataProvider();
     virtual void reset();
     virtual QSet<KDevelop::IndexedString> files() const;
 
-  private slots:
+private slots:
     void projectClosing( KDevelop::IProject* );
     void projectOpened( KDevelop::IProject* );
     void fileAddedToSet( KDevelop::IProject*, const KDevelop::IndexedString& );
     void fileRemovedFromSet( KDevelop::IProject*, const KDevelop::IndexedString& );
 
-  private:
+private:
+    // project files sorted by their url
+    // this is done so we can limit ourselves to a relatively fast
+    // filtering without any expensive sorting in reset().
     QMap<QByteArray, ProjectFile> m_projectFiles;
 };
 
+/**
+ * Quick open data provider for currently opened documents.
+ */
 class OpenFilesDataProvider : public BaseFileDataProvider
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
     virtual void reset();
     virtual QSet<KDevelop::IndexedString> files() const;
