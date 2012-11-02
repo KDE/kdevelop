@@ -32,6 +32,7 @@ Name[hu]=Modul
 Name[nl]=Module
 Name[pt]=Módulo
 Name[pt_BR]=Módulo
+Name[sk]=Modul
 Name[uk]=Модуль
 Name[x-test]=xxModulexx
 File=output.cmake
