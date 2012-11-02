@@ -113,7 +113,7 @@ QString ProjectProgress::statusName() const
 
 void ProjectProgress::setBuzzy()
 {
-    kDebug() << "showing busy prorgess" << statusName();
+    kDebug() << "showing busy progress" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
     emit showMessage(this, i18nc("%1: Project name", "Loading %1", projectName));
