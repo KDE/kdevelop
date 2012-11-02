@@ -304,7 +304,7 @@ void OpenFilesDataProvider::reset()
         f.pathOrUrl = doc->url().pathOrUrl();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
-            f.projectUrl = project->folder().pathOrUrl();
+            f.projectUrl = project->folder();
             f.project = project->name();
         } else {
             f.project = i18n("none");
