@@ -38,7 +38,9 @@ QVariant DefinesModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 
-    if( index.row() == m_defines.count() && index.column() == 0 ) {
+    // Only show the hint for display, once the user goes into edit mode leave an empty line
+    // makes the setData check easier and follows common behaviour of this in lineedits etc.
+    if( index.row() == m_defines.count() && index.column() == 0 && role == Qt::DisplayRole ) {
         return i18n( "Double-Click here to insert a new define to be used for the path" );
     } else if( index.row() < m_defines.count() ) {
         switch( index.column() ) {
@@ -97,7 +99,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
     }
 
     if( index.row() == m_defines.count() ) {
-        if( index.column() == 0 && value != data(index) ) {
+        if( index.column() == 0 && !value.toString().isEmpty() ) {
             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
             m_defines << qMakePair<QString,QVariant>( value.toString(), "" );
             endInsertRows();
