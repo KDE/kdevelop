@@ -459,6 +459,13 @@ ProjectController::ProjectController( Core* core )
     setObjectName("ProjectController");
     d->m_core = core;
     d->model = new ProjectModel();
+
+    //NOTE: this is required to be called here, such that the
+    //      actions are available when the UI controller gets
+    //      initialized *before* the project controller
+    if (Core::self()->setupFlags() != Core::NoUi) {
+        setupActions();
+    }
 }
 
 void ProjectController::setupActions()
@@ -557,7 +564,6 @@ void ProjectController::initialize()
              d->buildset, SLOT(projectClosed(KDevelop::IProject*)) );
 
     d->selectionModel = new QItemSelectionModel(d->model);
-    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
