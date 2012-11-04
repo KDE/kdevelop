@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     dlg.setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel );
 
     KDevelop::TestProject proj;
-    proj.set_projectFileUrl( KUrl(projkcfg.name()));
+    proj.setProjectUrl( KUrl(projkcfg.name()));
     
     CustomBuildSystemConfigWidget widget(0, &proj);
     widget.loadFrom(&projkcfg);
