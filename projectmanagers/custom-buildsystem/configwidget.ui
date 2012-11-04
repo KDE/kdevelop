@@ -11,6 +11,15 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -135,128 +144,17 @@ If this is the same as the source directory you can leave it empty.</string>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Includes/Imports and Defines for Project Directories/Files</string>
+      <string>Path-specific language parameters</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Directories/Files:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QListView" name="projectPaths">
+      <item row="1" column="0">
+       <widget class="ProjectPathsWidget" name="projectPaths" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>3</verstretch>
+          <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip">
-         <string>A list of paths specifying project directories or files, for which includes and
-defines should be set up. &quot;/&quot; denotes the top level project directory. If the
-path identifies a directory the includes/defines are active for that directory
-and all sub (and sub-sub)directories.</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KComboBox" name="switchIncludeDefines">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>Switch between configuring Includes/Imports and Defines</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>Includes/Imports</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Defines</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QStackedWidget" name="stackedWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>8</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>List of include paths for the selected project item</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="page">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QListView" name="includePaths">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>8</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>A list of absolute include paths that the KDevelop parser should be using
-when parsing the project files in the given project path.</string>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_2">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QTableView" name="defines">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>8</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Specify a list of pre-processor defines and their values that the KDevelop parser should use when parsing the files in the given project path.</string>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
        </widget>
       </item>
      </layout>
@@ -266,19 +164,25 @@ when parsing the project files in the given project path.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>QComboBox</extends>
    <header>util/environmentselectionwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ProjectPathsWidget</class>
+   <extends>QWidget</extends>
+   <header>projectpathswidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -376,22 +280,6 @@ when parsing the project files in the given project path.</string>
     <hint type="destinationlabel">
      <x>34</x>
      <y>176</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>switchIncludeDefines</sender>
-   <signal>activated(int)</signal>
-   <receiver>stackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>226</x>
-     <y>459</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>685</x>
-     <y>479</y>
     </hint>
    </hints>
   </connection>

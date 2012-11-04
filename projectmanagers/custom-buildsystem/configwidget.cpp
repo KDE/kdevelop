@@ -19,26 +19,26 @@
 
 #include "configwidget.h"
 
+#include <QToolButton>
+#include <QLayout>
+
 #include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 
 #include "ui_configwidget.h"
-#include "projectpathsmodel.h"
-#include "includesmodel.h"
-#include "definesmodel.h"
 #include <util/environmentgrouplist.h>
+#include <interfaces/iproject.h>
 
+extern int cbsDebugArea(); // from debugarea.cpp
 
 ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
-    , pathsModel( new ProjectPathsModel( this ) )
-    , includesModel( new IncludesModel( this ) )
-    , definesModel( new DefinesModel( this ) )
 {
     ui->setupUi( this );
     KDevelop::EnvironmentGroupList l( KGlobal::config() );
     ui->actionEnvironment->addItems( l.groups() );
+
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );
@@ -53,43 +53,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
     connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
 
-    ui->projectPaths->setModel( pathsModel );
-    connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
-    connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
-    connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
-
-    ui->includePaths->setModel( includesModel );
-    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
-    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
-    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
-
-    ui->defines->setModel( definesModel );
-    ui->defines->horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
-
-    ui->switchIncludeDefines->setCurrentIndex( 0 );
-    ui->stackedWidget->setCurrentIndex( 0 );
-
-    KAction* delPathAction = new KAction( i18n("Delete Project Path"), this );
-    delPathAction->setShortcut( KShortcut( "Del" ) );
-    delPathAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->projectPaths->addAction( delPathAction );
-    connect( delPathAction, SIGNAL(triggered()), SLOT(deleteProjectPath()) );
-
-    KAction* delIncAction = new KAction( i18n("Delete Include Path"), this );
-    delIncAction->setShortcut( KShortcut( "Del" ) );
-    delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->includePaths->addAction( delIncAction );
-    connect( delIncAction, SIGNAL(triggered()), SLOT(deleteIncludePath()) );
-
-    KAction* delDefAction = new KAction( i18n("Delete Define"), this );
-    delDefAction->setShortcut( KShortcut( "Del" ) );
-    delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
-    ui->defines->addAction( delDefAction );
-    connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
+    connect( ui->projectPaths, SIGNAL(changed()), SIGNAL(changed()) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -97,17 +61,20 @@ CustomBuildSystemConfig ConfigWidget::config() const
     CustomBuildSystemConfig c;
     c.buildDir = ui->buildDir->url();
     c.tools = m_tools;
-    c.projectPaths = pathsModel->paths();
+    c.projectPaths = ui->projectPaths->paths();
     return c;
 }
 
 void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
 {
     bool b = blockSignals( true );
+    clear();
     ui->buildDir->setUrl( cfg.buildDir );
+    ui->projectPaths->setPaths( cfg.projectPaths );
     m_tools = cfg.tools;
-    pathsModel->setPaths( cfg.projectPaths );
     blockSignals( b );
+    changeAction( ui->buildAction->currentIndex() );
+    m_tools = cfg.tools;
 }
 
 void ConfigWidget::setTool(const CustomBuildSystemTool& tool)
@@ -170,70 +137,17 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
     emit changed();
 }
 
-void ConfigWidget::definesChanged()
+void ConfigWidget::clear()  
 {
-    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
-    if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), definesModel->defines(), ProjectPathsModel::DefinesDataRole );
-        if( b ) {
-            emit changed();
-        }
-    }
-}
-
-void ConfigWidget::includesChanged()
-{
-    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
-    if( !idx.isEmpty() ) {
-        bool b = pathsModel->setData( idx.first(), includesModel->includes(), ProjectPathsModel::IncludesDataRole );
-        if( b ) {
-            emit changed();
-        }
-    }
-}
-
-void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& )
-{
-    bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
-    ui->includePaths->setEnabled( enable );
-    ui->defines->setEnabled( enable );
-    ui->switchIncludeDefines->setEnabled( enable );
-
-    if( enable ) {
-        includesModel->setIncludes( pathsModel->data( selected.indexes().first(), ProjectPathsModel::IncludesDataRole ).toStringList() );
-        definesModel->setDefines( pathsModel->data( selected.indexes().first(), ProjectPathsModel::DefinesDataRole ).toHash() );
-    } else {
-        includesModel->setIncludes( QStringList() );
-        definesModel->setDefines( QHash<QString,QVariant>() );
-    }
-}
-
-void ConfigWidget::clear()
-{
-    pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
-    includesModel->setIncludes( QStringList() );
-    definesModel->setDefines( QHash<QString,QVariant>() );
+    ui->projectPaths->clear();
     ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
     changeAction( ui->buildAction->currentIndex() );
     ui->buildDir->setText("");
 }
 
-void ConfigWidget::deleteDefine()
+void ConfigWidget::setProject(KDevelop::IProject* w_project)
 {
-    QModelIndex idx = ui->defines->currentIndex();
-    definesModel->removeRows( idx.row(), 1, QModelIndex() );
-}
-
-void ConfigWidget::deleteIncludePath()
-{
-    QModelIndex idx = ui->includePaths->currentIndex();
-    includesModel->removeRows( idx.row(), 1, QModelIndex() );
-}
-
-void ConfigWidget::deleteProjectPath()
-{
-    QModelIndex idx = ui->projectPaths->currentIndex();
-    pathsModel->removeRows( idx.row(), 1, QModelIndex() );
+    ui->projectPaths->setProject( w_project );
 }
 
 #include "configwidget.moc"

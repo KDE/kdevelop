@@ -24,6 +24,8 @@
 
 #include "custombuildsystemconfigwidget.h"
 #include "kcfg_custombuildsystemconfig.h"
+#include <language/backgroundparser/parseprojectjob.h>
+#include <interfaces/iruncontroller.h>
 
 K_PLUGIN_FACTORY(CustomBuildSystemKCModuleFactory, registerPlugin<CustomBuildSystemKCModule>(); )
 K_EXPORT_PLUGIN(CustomBuildSystemKCModuleFactory("kcm_kdevcustombuildsystem", "kdevcustombuildsystem"))
@@ -32,7 +34,7 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVa
     : ProjectKCModule<CustomBuildSystemSettings>( CustomBuildSystemKCModuleFactory::componentData(), parent, args )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
-    configWidget = new CustomBuildSystemConfigWidget( this );
+    configWidget = new CustomBuildSystemConfigWidget( this, project() );
     connect( configWidget, SIGNAL(changed()), SLOT(dataChanged()) );
     layout->addWidget( configWidget );
 
@@ -59,6 +61,12 @@ void CustomBuildSystemKCModule::save()
 {
     configWidget->saveTo( CustomBuildSystemSettings::self()->config(), project() );
     KCModule::save();
+
+    // Do this once all saving is done. This makes the widget itself usable with very little from KDevPlatform
+    if ( KDevelop::IProjectController::parseAllProjectSources()) {
+        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project());
+        KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
+    }
 }
 
 void CustomBuildSystemKCModule::defaults()

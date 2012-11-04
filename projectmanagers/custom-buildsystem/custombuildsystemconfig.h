@@ -26,6 +26,8 @@
 #include <QStringList>
 #include <KUrl>
 
+typedef QHash<QString, QVariant> Defines;
+
 struct CustomBuildSystemTool
 {
     enum ActionType { Build = 0, Configure, Install, Clean, Prune, Undefined };
@@ -43,7 +45,9 @@ struct CustomBuildSystemProjectPathConfig
 {
     QString path;
     QStringList includes;
-    QHash<QString,QVariant> defines;
+    Defines defines;
+
+    CustomBuildSystemProjectPathConfig( const QString& c_path = QString() ) : path (c_path) {}
 };
 
 struct CustomBuildSystemConfig

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DefinesWidget</class>
+ <widget class="QWidget" name="DefinesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>685</width>
+    <height>627</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="widgetLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTableView" name="defines">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>8</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

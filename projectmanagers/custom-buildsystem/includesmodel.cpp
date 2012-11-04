@@ -38,19 +38,12 @@ QVariant IncludesModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 
-    if( index.row() == m_includes.count() ) {
-        return i18n( "Double-Click here to insert a new include path to be used for the path" );
-    } else {
-        return m_includes.at( index.row() );
-    }
+    return m_includes.at( index.row() );
 }
 
 int IncludesModel::rowCount( const QModelIndex& parent ) const
 {
-    if( parent.isValid() ) {
-        return 0;
-    }
-    return m_includes.count() + 1;
+    return parent.isValid() ? 0 : m_includes.count();
 }
 
 bool IncludesModel::setData( const QModelIndex& index, const QVariant& value, int role )
@@ -62,19 +55,9 @@ bool IncludesModel::setData( const QModelIndex& index, const QVariant& value, in
         return false;
     }
 
-    if( index.row() == m_includes.count() ) {
-        if( value.toString() != data( index ).toString() ) {
-            beginInsertRows( QModelIndex(), m_includes.count(), m_includes.count() );
-            m_includes << value.toString();
-            endInsertRows();
-        }
-    } else {
-        m_includes[index.row()] = value.toString();
-        emit dataChanged( index, index );
-        return true;
-    }
-
-    return false;
+    m_includes[index.row()] = value.toString();
+    emit dataChanged( index, index );
+    return true;
 }
 
 Qt::ItemFlags IncludesModel::flags( const QModelIndex& index ) const
@@ -94,7 +77,10 @@ QStringList IncludesModel::includes() const
 void IncludesModel::setIncludes(const QStringList& includes )
 {
     beginResetModel();
-    m_includes = includes;
+    m_includes.clear();
+    foreach( const QString includePath, includes ) {
+        addIncludeInternal( includePath );
+    }
     endResetModel();
 }
 
@@ -110,5 +96,27 @@ bool IncludesModel::removeRows( int row, int count, const QModelIndex& parent )
     }
     return false;
 }
+
+void IncludesModel::addInclude( const QString& includePath )
+{
+    if( !includePath.isEmpty() ) {
+        beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+        addIncludeInternal( includePath );
+        endInsertRows();
+    }
+}
+
+void IncludesModel::addIncludeInternal(const QString& includePath)
+{
+        // Do not allow duplicates
+        foreach( const QString & include, m_includes ) {
+            if( include == includePath ) {
+                return;
+            }
+        }
+
+        m_includes << includePath;
+}
+
 
 #include "includesmodel.moc"

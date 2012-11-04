@@ -17,16 +17,19 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef CONFIGWIDGET_H
-#define CONFIGWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
 
 #include <QWidget>
 
 #include "custombuildsystemconfig.h"
+#include <qabstractitemmodel.h>
 
+class KFileDialog;
+class KUrlRequester;
 namespace Ui
 {
-class ConfigWidget;
+class ProjectPathsWidget;
 }
 
 namespace KDevelop
@@ -34,28 +37,39 @@ namespace KDevelop
     class IProject;
 }
 
-class ConfigWidget : public QWidget
+class ProjectPathsModel;
+class QItemSelection;
+
+class ProjectPathsWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ConfigWidget( QWidget* parent = 0 );
+    ProjectPathsWidget( QWidget* parent = 0 );
     void setProject(KDevelop::IProject* w_project);
-    void loadConfig( CustomBuildSystemConfig cfg );
-    CustomBuildSystemConfig config() const;
+    void setPaths( const QList<CustomBuildSystemProjectPathConfig>& );
+    QList<CustomBuildSystemProjectPathConfig> paths() const;
     void clear();
 signals:
     void changed();
 private slots:
-    void changeAction( int );
-    void toggleActionEnablement( bool );
-    void actionArgumentsEdited( const QString& );
-    void actionEnvironmentChanged( int );
-    void actionExecutableChanged( const KUrl& );
-    void actionExecutableChanged( const QString& );
+    // Handling of project-path combobox, add and remove buttons
+    void projectPathSelected( int index );
+    void addProjectPath();
+    void replaceProjectPath();
+    void deleteProjectPath();
+
+    // Forward includes model changes into the pathsModel
+    void includesChanged( const QStringList& includes );
+
+    // Forward defines model changes into the pathsModel
+    void definesChanged( const Defines& defines );
 private:
-    Ui::ConfigWidget* ui;
-    QVector<CustomBuildSystemTool> m_tools;
-    void setTool( const CustomBuildSystemTool& tool );
+    Ui::ProjectPathsWidget* ui;
+    ProjectPathsModel* pathsModel;
+    KFileDialog* m_projectPathFileDialog;
+    // Enables/Disables widgets based on UI state/selection
+    void updateEnablements();
+    void updatePathsModel( const QVariant& newData, int role );
 };
 
 #endif

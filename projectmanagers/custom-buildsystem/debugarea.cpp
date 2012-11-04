@@ -16,46 +16,9 @@
  * You should have received a copy of the GNU General Public License    *
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
+#include <kdebug.h>
 
-#ifndef CONFIGWIDGET_H
-#define CONFIGWIDGET_H
-
-#include <QWidget>
-
-#include "custombuildsystemconfig.h"
-
-namespace Ui
-{
-class ConfigWidget;
+int cbsDebugArea() {
+    static int s_area = KDebug::registerArea("kdevelop (custom buildsystem)");
+    return s_area;
 }
-
-namespace KDevelop
-{
-    class IProject;
-}
-
-class ConfigWidget : public QWidget
-{
-Q_OBJECT
-public:
-    ConfigWidget( QWidget* parent = 0 );
-    void setProject(KDevelop::IProject* w_project);
-    void loadConfig( CustomBuildSystemConfig cfg );
-    CustomBuildSystemConfig config() const;
-    void clear();
-signals:
-    void changed();
-private slots:
-    void changeAction( int );
-    void toggleActionEnablement( bool );
-    void actionArgumentsEdited( const QString& );
-    void actionEnvironmentChanged( int );
-    void actionExecutableChanged( const KUrl& );
-    void actionExecutableChanged( const QString& );
-private:
-    Ui::ConfigWidget* ui;
-    QVector<CustomBuildSystemTool> m_tools;
-    void setTool( const CustomBuildSystemTool& tool );
-};
-
-#endif

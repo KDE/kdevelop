@@ -23,10 +23,6 @@
 
 #include "ui_custombuildsystemconfigwidget.h"
 #include "configconstants.h"
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iruncontroller.h>
-#include <language/backgroundparser/parseprojectjob.h>
 
 namespace
 {
@@ -50,13 +46,18 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
 
 }
 
-CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
-    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
+CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* w_project = 0 )
+    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget ), project( w_project )
 {
     ui->setupUi( this );
+    ui->configWidget->setProject(project);
 
     ui->addConfig->setIcon(KIcon( "list-add" ));
     ui->removeConfig->setIcon(KIcon( "list-remove" ));
+
+    // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
+    ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
+    ui->removeConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
 
     connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
     connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
@@ -74,7 +75,6 @@ void CustomBuildSystemConfigWidget::loadDefaults()
 
 void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 {
-    ui->configWidget->clear();
     ui->currentConfig->clear();
     QStringList groupNameList;
     KConfigGroup grp = cfg->group( ConfigConstants::customBuildSystemGroup );
@@ -179,11 +179,6 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* pr
         saveConfig( subgrp, configs[i], i );
     }
     cfg->sync();
-
-    if ( KDevelop::IProjectController::parseAllProjectSources()) {
-        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
-        KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
-    }
 }
 
 void CustomBuildSystemConfigWidget::configChanged()

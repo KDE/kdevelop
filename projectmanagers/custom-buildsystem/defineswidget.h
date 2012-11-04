@@ -17,16 +17,19 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef CONFIGWIDGET_H
-#define CONFIGWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
 
 #include <QWidget>
 
+#include <qabstractitemmodel.h>
 #include "custombuildsystemconfig.h"
 
+class KFileDialog;
+class KUrlRequester;
 namespace Ui
 {
-class ConfigWidget;
+class DefinesWidget;
 }
 
 namespace KDevelop
@@ -34,28 +37,27 @@ namespace KDevelop
     class IProject;
 }
 
-class ConfigWidget : public QWidget
+class DefinesModel;
+class QItemSelection;
+
+class DefinesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ConfigWidget( QWidget* parent = 0 );
-    void setProject(KDevelop::IProject* w_project);
-    void loadConfig( CustomBuildSystemConfig cfg );
-    CustomBuildSystemConfig config() const;
+    DefinesWidget( QWidget* parent = 0 );
+    void setDefines( const Defines& );
     void clear();
 signals:
-    void changed();
+    void definesChanged( const Defines& );
 private slots:
-    void changeAction( int );
-    void toggleActionEnablement( bool );
-    void actionArgumentsEdited( const QString& );
-    void actionEnvironmentChanged( int );
-    void actionExecutableChanged( const KUrl& );
-    void actionExecutableChanged( const QString& );
+    // Forward defines model changes
+    void definesChanged();
+
+    // Handle Del key in defines list
+    void deleteDefine();
 private:
-    Ui::ConfigWidget* ui;
-    QVector<CustomBuildSystemTool> m_tools;
-    void setTool( const CustomBuildSystemTool& tool );
+    Ui::DefinesWidget* ui;
+    DefinesModel* definesModel;
 };
 
 #endif
