@@ -100,6 +100,8 @@ private slots:
 
     void benchmark();
 
+    void benchmarkDocumentChanges();
+
 private:
     JobPlan m_jobPlan;
 };

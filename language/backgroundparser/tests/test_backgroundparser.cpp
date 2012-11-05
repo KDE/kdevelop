@@ -27,6 +27,8 @@
 #include <QApplication>
 
 #include <qtest_kde.h>
+#include <KTextEditor/EditorChooser>
+#include <KTextEditor/View>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -41,7 +43,7 @@
 #include "testlanguagesupport.h"
 #include "testparsejob.h"
 
-QTEST_KDEMAIN(TestBackgroundparser, NoGUI)
+QTEST_KDEMAIN(TestBackgroundparser, GUI)
 
 #define QVERIFY_RETURN(statement, retval) \
 do { if (!QTest::qVerify((statement), #statement, "", __FILE__, __LINE__)) return retval; } while (0)
@@ -264,6 +266,30 @@ void TestBackgroundparser::benchmark()
             QTest::qWait(50);
         }
     }
+}
+
+void TestBackgroundparser::benchmarkDocumentChanges()
+{
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    QVERIFY(editor);
+    KTextEditor::Document* doc = editor->createDocument(this);
+    QVERIFY(doc);
+    doc->saveAs(KUrl("/tmp/__kdevbackgroundparsertest_benchmark.txt"));
+    
+    DocumentChangeTracker tracker(doc);
+    
+    doc->setText("hello world");
+    KTextEditor::View* v = doc->createView(0);
+    QBENCHMARK {
+        for ( int i = 0; i < 5000; i++ ) {
+            doc->startEditing();
+            doc->insertText(KTextEditor::Cursor(0, 0), "This is a test line.\n");
+            doc->endEditing();
+            QApplication::processEvents();
+        }
+    }
+    doc->clear();
+    doc->save();
 }
 
 #include "test_backgroundparser.moc"
