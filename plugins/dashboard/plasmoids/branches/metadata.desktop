@@ -13,6 +13,7 @@ Name[sk]=Vetvy projektu
 Name[uk]=Гілки проекту
 Name[x-test]=xxProject Branchesxx
 Comment=Displays the branches in the current project
+Comment[el]=Εμφανίζει τους κλάδους στο τρέχον έργο
 Comment[es]=Muestra las ramas del proyecto actual
 Comment[hu]=Megjeleníti az ágakat a jelenlegi projektben
 Comment[nl]=Toont de branches in het huidige project
