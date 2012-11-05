@@ -29,7 +29,7 @@
      <item>
       <widget class="KPushButton" name="addPath">
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new sub-project path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Add a new sub-project path entry.</string>
        </property>
        <property name="text">
         <string>Add</string>
@@ -44,7 +44,7 @@
      <item>
       <widget class="KPushButton" name="replacePath">
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;lt;html&amp;gt;&amp;lt;head/&amp;gt;&amp;lt;body&amp;gt;&amp;lt;p&amp;gt;Replace the currently selected path with a new value keeping the includes and defines currently set for the selected path.&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Replace the currently selected path with a new value keeping the includes and defines currently set for the selected path.</string>
        </property>
        <property name="text">
         <string>Replace</string>
@@ -62,7 +62,7 @@
         <bool>false</bool>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete current sub-project path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Delete current sub-project path entry.</string>
        </property>
        <property name="text">
         <string>Remove</string>

@@ -19,7 +19,7 @@
      <item>
       <widget class="KUrlRequester" name="includePathRequester">
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adds the currently displayed url to the list of includes if its not in the list yet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Add the currently displayed URL to the list of includes if it is not in the list yet.</string>
        </property>
        <property name="clickMessage">
         <string>A new include path to use for parsing files under given directory</string>
@@ -32,7 +32,7 @@
         <bool>true</bool>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new include path entry from this URL.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Create a new include path entry from this URL.</string>
        </property>
        <property name="text">
         <string>Add</string>
@@ -50,7 +50,7 @@
         <bool>false</bool>
        </property>
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete current include path entry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>Delete current include path entry.</string>
        </property>
        <property name="text">
         <string>Remove</string>

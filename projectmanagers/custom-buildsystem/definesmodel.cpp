@@ -41,7 +41,7 @@ QVariant DefinesModel::data( const QModelIndex& index, int role ) const
     // Only show the hint for display, once the user goes into edit mode leave an empty line
     // makes the setData check easier and follows common behaviour of this in lineedits etc.
     if( index.row() == m_defines.count() && index.column() == 0 && role == Qt::DisplayRole ) {
-        return i18n( "Double-Click here to insert a new define to be used for the path" );
+        return i18n( "Double-click here to insert a new define to be used for the path" );
     } else if( index.row() < m_defines.count() ) {
         switch( index.column() ) {
         case 0:
