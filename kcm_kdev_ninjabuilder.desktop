@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Ninja
 Name[es]=Ninja
+Name[et]=Ninja
 Name[hu]=Ninja
 Name[nl]=Ninja
 Name[pt]=Ninja
@@ -21,6 +22,7 @@ Name[uk]=Ninja
 Name[x-test]=xxNinjaxx
 Comment=Configure Ninja settings
 Comment[es]=Configurar las preferencias de Ninja
+Comment[et]=Ninja seadistamine
 Comment[hu]=Ninja beállítások módosítása
 Comment[nl]=Ninja-instellingen configureren
 Comment[pt]=Configurar as definições do Ninja
