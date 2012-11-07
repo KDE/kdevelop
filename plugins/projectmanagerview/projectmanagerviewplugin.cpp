@@ -669,9 +669,13 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
 void ProjectManagerViewPlugin::pasteFromContextMenu()
 {
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    if (ctx->items().count() != 1) return; //do nothing if multiple or none items are selected
+    if (ctx->items().count() != 1)
+        return; //do nothing if multiple or none items are selected
+
     ProjectBaseItem* destItem = ctx->items().first();
-    Q_ASSERT(destItem->folder());
+    if (!destItem->folder())
+        return; //do nothing if the target is not a directory
+
     const QMimeData* data = qApp->clipboard()->mimeData();
     kDebug() << data->urls();
     KUrl::List urls(data->urls());
