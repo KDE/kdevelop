@@ -1137,8 +1137,8 @@ bool CMakeManager::isReloading(IProject* p)
 void CMakeManager::cleanupToDelete(IProject* p)
 {
     Q_ASSERT(isReloading(p));
-    
-    for(QSet<QString>::iterator it=m_toDelete.begin(), itEnd=m_toDelete.end(); it!=itEnd; ) {
+
+    for(QSet<QString>::iterator it=m_toDelete.begin(); it!=m_toDelete.end(); ) {
         QList<ProjectBaseItem*> items = p->itemsForUrl(*it);
         if(!items.isEmpty()) {
             deleteAllLater(items);
@@ -1146,8 +1146,8 @@ void CMakeManager::cleanupToDelete(IProject* p)
         } else 
             ++it;
     }
-    
-    for(QHash<KUrl, KUrl>::iterator it=m_renamed.begin(), itEnd=m_renamed.end(); it!=itEnd; ++it) {
+
+    for(QHash<KUrl, KUrl>::iterator it=m_renamed.begin(); it != m_renamed.end(); ) {
         QList<ProjectBaseItem*> items=p->itemsForUrl(it.key());
         if(!items.isEmpty()) {
             foreach(ProjectBaseItem* item, items) {
