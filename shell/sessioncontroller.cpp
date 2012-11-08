@@ -952,7 +952,7 @@ void SessionChooserDialog::filterTextChanged(QString)
     m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     bool enabled = m_view->model()->rowCount(QModelIndex())>0;
     button(KDialog::Ok)->setEnabled(enabled);
-    m_deleteButton->setVisible(enabled);
+    m_deleteButton->setVisible(false);
 }
 
 void SessionChooserDialog::doubleClicked(QModelIndex index)
