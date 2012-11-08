@@ -35,7 +35,7 @@
 
 #include "typeutils.h"
 #include "templatedeclaration.h"
-#include "cppduchain.h""
+#include "cppduchain.h"
 
 using namespace KDevelop;
 using namespace Cpp;
