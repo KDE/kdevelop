@@ -163,6 +163,27 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         pluginController = new PluginController(m_core);
     }
+    if( !partController && !(mode & Core::NoUi))
+    {
+        partController = new PartController(m_core, uiController.data()->defaultMainWindow());
+
+        {
+            // check features of kate and report to user if it does not fit
+            KTextEditor::Document* doc = partController.data()->createTextPart();
+
+            if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
+                KMessageBox::error(QApplication::activeWindow(),
+                                   i18n("The installed Kate version does not support the MovingInterface which is crucial for "
+                                        "KDevelop starting from version 4.2.\n\n"
+                                        "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is used instead "
+                                        "of the MovingInterface, you need KDevelop 4.1 or lower."));
+                delete doc;
+                return false;
+            }
+
+            delete doc;
+        }
+    }
 
     if( !projectController )
     {
@@ -221,28 +242,6 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     sessionController.data()->initialize( session );
     if( !sessionController.data()->activeSession() ) {
         return false;
-    }
-
-    if( !partController && !(mode & Core::NoUi))
-    {
-        partController = new PartController(m_core, uiController.data()->defaultMainWindow());
-
-        {
-            // check features of kate and report to user if it does not fit
-            KTextEditor::Document* doc = partController.data()->createTextPart();
-
-            if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
-                KMessageBox::error(QApplication::activeWindow(),
-                                   i18n("The installed Kate version does not support the MovingInterface which is crucial for "
-                                        "KDevelop starting from version 4.2.\n\n"
-                                        "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is used instead "
-                                        "of the MovingInterface, you need KDevelop 4.1 or lower."));
-                delete doc;
-                return false;
-            }
-
-            delete doc;
-        }
     }
 
     // TODO: Is this early enough, or should we put the loading of the session into
