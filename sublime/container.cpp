@@ -220,7 +220,7 @@ Container::Container(QWidget *parent)
     d->documentListButton->setMenu(d->documentListMenu);
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
-    d->documentListButton->setToolTip(i18n("Show sorted list of active documents"));
+    d->documentListButton->setToolTip(i18n("Show sorted list of opened documents"));
     d->documentListButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     m_tabBarLayout->addWidget(d->documentListButton);
     m_tabBarLayout->addWidget(d->statusCorner);
