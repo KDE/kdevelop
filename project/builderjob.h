@@ -45,7 +45,7 @@ public:
     /**
      * Defines what action to do on the Project builder
      */
-    enum BuildType 
+    enum BuildType
     {
         Build /**< Build the selected items */,
         Prune /**< Prune the selected items */,
@@ -53,8 +53,8 @@ public:
         Install /**< Install the selected items */,
         Clean /**< Clean the selected items */
     };
-    
-    /** 
+
+    /**
      * Creates a Builder job
      */
     BuilderJob();
@@ -78,7 +78,7 @@ public:
     void addProjects( BuildType type, const QList<KDevelop::IProject*>& projects );
 
     /**
-     * Allows to add a single @p item to the end of the list. The item will be 
+     * Allows to add a single @p item to the end of the list. The item will be
      * built using the method identified by @p type
      *
      * @param item The item to add to the list
@@ -108,11 +108,11 @@ public:
      * Allows to choose between stopping and failing the composite job
      * when the first item could not be built, or building all items
      * The default for this is true.
-     * @param stopOnFail if set to true this job will stop and fail when the first 
+     * @param stopOnFail if set to true this job will stop and fail when the first
      *                   item in the list cannot be build
      */
     void setStopOnFail( bool stopOnFail );
-    
+
     /**
      * Find out whether this builderjob stops building items on the first failed
      * item.
@@ -132,25 +132,6 @@ protected Q_SLOTS:
 private:
     class BuilderJobPrivate* const d;
     friend class BuilderJobPrivate;
-
-    QString buildTypeToString( BuildType type );
-
-    /**
-     * @internal a structure to keep metadata of all registered jobs
-     */
-    struct SubJobData
-    {
-        BuildType type;
-        KJob* job;
-        ProjectBaseItem* item;
-    };
-    QVector<SubJobData> m_metadata;
-
-    /**
-     * @internal get the subjob list and clear this composite job
-     */
-    QVector<SubJobData> takeJobList();
-
 };
 
 }

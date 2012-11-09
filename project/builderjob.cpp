@@ -33,9 +33,18 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+using namespace KDevelop;
+
+struct SubJobData
+{
+    BuilderJob::BuildType type;
+    KJob* job;
+    ProjectBaseItem* item;
+};
+Q_DECLARE_TYPEINFO(SubJobData, Q_MOVABLE_TYPE);
+
 namespace KDevelop
 {
-
 class BuilderJobPrivate
 {
 public:
@@ -44,12 +53,42 @@ public:
         failOnFirstError = true;
     }
     BuilderJob* q;
-    void addJob( BuilderJob::BuildType, KDevelop::ProjectBaseItem* );
+    void addJob( BuilderJob::BuildType, ProjectBaseItem* );
     bool failOnFirstError;
+
+    QString buildTypeToString( BuilderJob::BuildType type ) const;
+
+    /**
+     * a structure to keep metadata of all registered jobs
+     */
+    QVector<SubJobData> m_metadata;
+
+    /**
+     * get the subjob list and clear this composite job
+     */
+    QVector<SubJobData> takeJobList();
 };
+}
 
+QString BuilderJobPrivate::buildTypeToString(BuilderJob::BuildType type) const
+{
+    switch( type ) {
+        case BuilderJob::Build:
+            return i18nc( "@info:status", "build" );
+        case BuilderJob::Clean:
+            return i18nc( "@info:status", "clean" );
+        case BuilderJob::Configure:
+            return i18nc( "@info:status", "configure" );
+        case BuilderJob::Install:
+            return i18nc( "@info:status", "install" );
+        case BuilderJob::Prune:
+            return i18nc( "@info:status", "prune" );
+        default:
+            return QString();
+    }
+}
 
-void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseItem* item )
+void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
 {
     Q_ASSERT(item);
     kDebug() << "adding build job for item:" << item->text();
@@ -95,17 +134,17 @@ BuilderJob::BuilderJob()
 {
 }
 
-void BuilderJob::addItems( BuildType t, const QList<KDevelop::ProjectBaseItem*>& items )
+void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 {
-    foreach( KDevelop::ProjectBaseItem* item, items )
+    foreach( ProjectBaseItem* item, items )
     {
         d->addJob( t, item );
     }
 }
 
-void BuilderJob::addProjects( BuildType t, const QList<KDevelop::IProject*>& projects )
+void BuilderJob::addProjects( BuildType t, const QList<IProject*>& projects )
 {
-    foreach( KDevelop::IProject* project, projects )
+    foreach( IProject* project, projects )
     {
         d->addJob( t, project->projectItem() );
     }
@@ -120,12 +159,12 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
 {
     if( BuilderJob* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
         // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
-        QVector< BuilderJob::SubJobData > subjobs = builderJob->takeJobList();
+        QVector<SubJobData> subjobs = builderJob->d->takeJobList();
         builderJob->deleteLater();
-        foreach( const BuilderJob::SubJobData& subjob, subjobs ) {
+        foreach( const SubJobData& subjob, subjobs ) {
             addSubjob( subjob.job );
         }
-        m_metadata << subjobs;
+        d->m_metadata << subjobs;
     } else {
         addSubjob( job );
 
@@ -133,16 +172,16 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
         data.type = type;
         data.job = job;
         data.item = item;
-        m_metadata << data;
+        d->m_metadata << data;
     }
 }
 
-QVector< BuilderJob::SubJobData > BuilderJob::takeJobList()
+QVector< SubJobData > BuilderJobPrivate::takeJobList()
 {
     QVector< SubJobData > ret = m_metadata;
     m_metadata.clear();
-    clearSubjobs();
-    setObjectName( QString() );
+    q->clearSubjobs();
+    q->setObjectName( QString() );
     return ret;
 }
 
@@ -157,7 +196,7 @@ void BuilderJob::updateJobName()
     // Whether there are jobs without any specific item
     bool hasNullItems = false;
 
-    foreach( const SubJobData& subjob, m_metadata ) {
+    foreach( const SubJobData& subjob, d->m_metadata ) {
         if( subjob.item ) {
             if( !registeredItems.contains( subjob.item ) ) {
                 registeredItems.append( subjob.item );
@@ -184,7 +223,7 @@ void BuilderJob::updateJobName()
     QString methodNames;
     QStringList methodNamesList;
     foreach( BuildType type, buildTypes ) {
-        methodNamesList << buildTypeToString( type );
+        methodNamesList << d->buildTypeToString( type );
     }
     methodNames = methodNamesList.join( ", " );
 
@@ -192,30 +231,12 @@ void BuilderJob::updateJobName()
     setObjectName( jobName );
 }
 
-QString BuilderJob::buildTypeToString( BuilderJob::BuildType type )
-{
-    switch( type ) {
-        case Build:
-            return i18nc( "@info:status", "build" );
-        case Clean:
-            return i18nc( "@info:status", "clean" );
-        case Configure:
-            return i18nc( "@info:status", "configure" );
-        case Install:
-            return i18nc( "@info:status", "install" );
-        case Prune:
-            return i18nc( "@info:status", "prune" );
-        default:
-            return QString();
-    }
-}
-
 void BuilderJob::start()
 {
     #if 0
     ///Running the same builder twice may result in serious problems, so kill jobs already running on the same project
     QList<QPointer<KJob> > jobs;
-    foreach(KJob* job, KDevelop::ICore::self()->runController()->currentJobs()) {
+    foreach(KJob* job, ICore::self()->runController()->currentJobs()) {
         kDebug() << "running" << job;
         jobs << job;
     }
@@ -252,11 +273,11 @@ void BuilderJob::start()
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??
     if( ICore::self()->activeSession()->config()->group("Project Manager").readEntry( "Save All Documents Before Building", true ) ) 
     {
-        KDevelop::ICore::self()->documentController()->saveAllDocuments( KDevelop::IDocument::Silent );
+        ICore::self()->documentController()->saveAllDocuments( IDocument::Silent );
     }
 
     if(hasSubjobs())
-        KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+        ICore::self()->runController()->registerJob( subjobs().first() );
     else
         emitResult();
 }
@@ -268,7 +289,7 @@ void BuilderJob::slotResult( KJob* job )
     if( ( !error() || !d->failOnFirstError ) && hasSubjobs() ) 
     {
         // start next build;
-        KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+        ICore::self()->runController()->registerJob( subjobs().first() );
     } else 
     {
         emitResult();
@@ -283,8 +304,6 @@ void BuilderJob::setStopOnFail( bool stopOnFail )
 bool BuilderJob::stopOnFail() const
 {
     return d->failOnFirstError;
-}
-
 }
 
 #include "builderjob.moc"
