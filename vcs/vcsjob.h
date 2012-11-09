@@ -55,6 +55,7 @@ public:
      */
     enum JobType
     {
+        Unknown = -1    /**< Unknown job type (default)*/,
         Add = 0         /**< An add job */,
         Remove = 1      /**< A remove job */,
         Copy = 2        /**< A copy job */,

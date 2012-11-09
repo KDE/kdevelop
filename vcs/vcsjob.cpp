@@ -32,6 +32,7 @@ namespace KDevelop
     VcsJob::VcsJob( QObject* parent, OutputJobVerbosity verbosity )
         : OutputJob(parent, verbosity), d(new VcsJobPrivate)
     {
+        d->m_type = Unknown;
         setStandardToolView(IOutputView::VcsView);
         
         if(verbosity==Verbose)
