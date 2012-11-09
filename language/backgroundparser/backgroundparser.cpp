@@ -357,7 +357,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     };
 
     struct DocumentParsePlan {
-        QList<DocumentParseTarget> targets;
+        QSet<DocumentParseTarget> targets;
 
         ParseJob::SequentialProcessingFlags sequentialProcessingFlags() const {
             //Pick the strictest possible flags
@@ -420,6 +420,11 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     int m_doneParseJobs;
     QHash<KDevelop::ParseJob*, float> m_jobProgress;
     int m_neededPriority; //The minimum priority needed for processed jobs
+};
+
+inline uint qHash(const BackgroundParserPrivate::DocumentParseTarget& target) {
+    return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17 
+                               + reinterpret_cast<size_t>(target.notifyWhenReady.data());
 };
 
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
@@ -493,19 +498,17 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
-        int index = -1;
-        for(int a = 0; a < (*it).targets.size(); ++a)
-            if((*it).targets[a].notifyWhenReady.data() == notifyWhenReady)
-                index = a;
-
-        if(index != -1) {
-            (*it).targets.removeAt(index);
-            if((*it).targets.isEmpty()) {
-                it = d->m_documents.erase(it);
-                --d->m_maxParseJobs;
-
-                continue;
+        foreach ( const BackgroundParserPrivate::DocumentParseTarget& target, (*it).targets ) {
+            if ( target.notifyWhenReady.data() == notifyWhenReady ) {
+                (*it).targets.remove(target);
             }
+        }
+
+        if((*it).targets.isEmpty()) {
+            it = d->m_documents.erase(it);
+            --d->m_maxParseJobs;
+
+            continue;
         }
 
         d->m_documentsForPriority[it.value().priority()].insert(it.key());
@@ -556,7 +559,7 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
         foreach(const BackgroundParserPrivate::DocumentParseTarget& target, d->m_documents[url].targets) {
             if(target.notifyWhenReady.data() == notifyWhenReady) {
-                d->m_documents[url].targets.removeAll(target);
+                d->m_documents[url].targets.remove(target);
             }
         }
 
