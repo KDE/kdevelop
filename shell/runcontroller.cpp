@@ -639,7 +639,19 @@ void KDevelop::RunController::finished(KJob * job)
             break;
 
         default:
-            KMessageBox::error(qApp->activeWindow(), job->errorString(), i18n("Process Error"));
+        {
+            ///WARNING: do *not* use a nested event loop here, it might cause
+            ///         random crashes later on, see e.g.:
+            ///         https://bugs.kde.org/show_bug.cgi?id=309811
+            KDialog* dialog = new KDialog;
+            dialog->setAttribute(Qt::WA_DeleteOnClose);
+            dialog->setWindowTitle(i18n("Process Error"));
+            KMessageBox::createKMessageBox(dialog, QMessageBox::Warning,
+                                           job->errorString(), QStringList(),
+                                           QString(), 0, KMessageBox::NoExec
+            );
+            dialog->show();
+        }
     }
 }
 
