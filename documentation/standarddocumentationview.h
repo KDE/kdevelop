@@ -28,14 +28,20 @@
 namespace KDevelop
 {
 
+/**
+ * The standard documentation view, based on QWebView.
+ */
 class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWebView
 {
     Q_OBJECT
-    public:
-        explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+public:
+    explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = 0 );
 
-    public slots:
-        void search(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
+public slots:
+    /**
+     * Search for @p text in the documentation view.
+     */
+    void search(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
 };
 
 }

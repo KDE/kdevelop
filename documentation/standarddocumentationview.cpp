@@ -35,14 +35,14 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
 {
     //Highlighting has been commented because it doesn't let me jump arround all occurrences
 //     page()->findText(QString(), QWebPage::HighlightAllOccurrences);
-    
+
     QWebPage::FindFlags ff=QWebPage::FindWrapsAroundDocument /*| QWebPage::HighlightAllOccurrences*/;
     if(options & DocumentationFindWidget::Previous)
         ff |= QWebPage::FindBackward;
-    
+
     if(options & DocumentationFindWidget::MatchCase)
         ff |= QWebPage::FindCaseSensitively;
-    
+
     page()->findText(text, ff);
 }
 
