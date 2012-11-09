@@ -71,6 +71,11 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
+    // try not to crash, see: https://bugs.kde.org/show_bug.cgi?id=309715
+    if (KDevelop::ICore::self()->shuttingDown()) {
+        return;
+    }
+
     kDebug() << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(document.str());
