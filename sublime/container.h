@@ -92,6 +92,7 @@ private Q_SLOTS:
     void tabMoved(int from, int to);
     void wheelScroll(int);
     void contextMenu(int, const QPoint&);
+    void documentListActionTriggered(QAction*);
 
 private:
 

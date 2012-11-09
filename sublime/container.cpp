@@ -24,6 +24,7 @@
 #include <QtGui/QStylePainter>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QStyleOptionTabBarBase>
+#include <QtGui/QToolButton>
 #include <QtGui/qstyle.h>
 
 #include <kdebug.h>
@@ -81,6 +82,11 @@ class ContainerTabBar : public KTabBar {
     Container* m_container;
 };
 
+bool sortViews(const View* const lhs, const View* const rhs)
+{
+        return lhs->document()->title().compare(rhs->document()->title(), Qt::CaseInsensitive) < 0;
+}
+
 struct ContainerPrivate {
     QMap<QWidget*, View*> viewForWidget;
 
@@ -90,6 +96,40 @@ struct ContainerPrivate {
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
     QWeakPointer<QWidget> leftCornerWidget;
+    QToolButton* documentListButton;
+    QMenu* documentListMenu;
+
+    /**
+     * Updates the context menu which is shown when
+     * the document list button in the tab bar is clicked.
+     *
+     * It shall build a popup menu which contains all currently
+     * enabled views using the title their document provides.
+     */
+    void updateDocumentListPopupMenu()
+    {
+        qDeleteAll(documentListMenu->actions());
+        documentListMenu->clear();
+
+        // create a lexicographically sorted list
+        QVector<View*> views;
+        views.reserve(viewForWidget.size());
+
+        foreach(View* view, viewForWidget){ 
+            views << view;
+        }
+
+        qSort(views.begin(), views.end(), sortViews);
+
+        foreach(View* view, views) {
+            QAction* action = documentListMenu->addAction(view->document()->title());
+            action->setData(QVariant::fromValue(view));
+            ///FIXME: push this code somehow into shell, such that we can access the project model for
+            ///       icons and also get a neat, short path like the document switcher.
+            ///FIXME: update icon when document changed:
+            /// action->setIcon(view->document()->statusIcon());
+        }
+    }
 };
 
 class UnderlinedLabel: public KSqueezedTextLabel {
@@ -174,6 +214,15 @@ Container::Container(QWidget *parent)
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
     m_tabBarLayout->addWidget(d->fileNameCorner);
     d->statusCorner = new StatusLabel(d->tabBar, this);
+    d->documentListMenu = new QMenu(this);
+    d->documentListButton = new QToolButton(this);
+    d->documentListButton->setIcon(KIcon("format-list-unordered"));
+    d->documentListButton->setMenu(d->documentListMenu);
+    d->documentListButton->setPopupMode(QToolButton::InstantPopup);
+    d->documentListButton->setAutoRaise(true);
+    d->documentListButton->setToolTip(i18n("Show sorted list of active documents"));
+    d->documentListButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    m_tabBarLayout->addWidget(d->documentListButton);
     m_tabBarLayout->addWidget(d->statusCorner);
     l->addLayout(m_tabBarLayout);
 
@@ -186,6 +235,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
     connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(closeRequest(int)));
+    connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -275,7 +325,10 @@ void Container::addWidget(View *view, int position)
     // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
     // The problem could only be fixed by closing/opening another view.
     d->tabBar->setMinimumHeight(d->tabBar->sizeHint().height());
-    
+
+    // Update document list context menu
+    d->updateDocumentListPopupMenu();
+
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
     connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
@@ -329,6 +382,9 @@ void Container::documentTitleChanged(Sublime::Document* doc)
             break;
         }
     }
+
+    // Update document list popup
+    d->updateDocumentListPopupMenu();
 }
 
 int Container::count() const
@@ -395,6 +451,9 @@ void Sublime::Container::removeWidget(QWidget *w)
             disconnect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
             disconnect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
         }
+
+        // Update document list context menu
+        d->updateDocumentListPopupMenu();
     }
 }
 
@@ -489,6 +548,12 @@ QRect Container::tabRect(int tab) const
     return d->tabBar->tabRect(tab).translated(d->tabBar->mapToGlobal(QPoint(0, 0)));
 }
 
+void Container::documentListActionTriggered(QAction* action)
+{
+    QWidget* widget = action->data().value< QWidget* >();
+    Q_ASSERT(widget);
+    setCurrentWidget(widget);
+}
 
 
 }

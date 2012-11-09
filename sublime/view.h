@@ -20,6 +20,7 @@
 #define SUBLIMEVIEW_H
 
 #include <QtCore/QObject>
+#include <QtCore/QMetaType>
 
 #include "sublimeexport.h"
 
@@ -104,6 +105,8 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(Sublime::View*)
 
 #endif
 

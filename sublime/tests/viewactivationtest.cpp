@@ -51,8 +51,6 @@ public:
     }
 };
 
-Q_DECLARE_METATYPE(Sublime::View*)
-
 void ViewActivationTest::initTestCase()
 {
     qRegisterMetaType<View*>("View*");
