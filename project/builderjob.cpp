@@ -58,6 +58,16 @@ public:
 
     QString buildTypeToString( BuilderJob::BuildType type ) const;
 
+    bool hasJobForProject( BuilderJob::BuildType type, IProject* project ) const
+    {
+        foreach(const SubJobData& data, m_metadata) {
+            if (data.type == type && data.item->project() == project) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * a structure to keep metadata of all registered jobs
      */
@@ -116,10 +126,14 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
             j = item->project()->buildSystemManager()->builder()->install( item );
             break;
         case BuilderJob::Prune:
-            j = item->project()->buildSystemManager()->builder()->prune( item->project() );
+            if (!hasJobForProject(t, item->project())) {
+                j = item->project()->buildSystemManager()->builder()->prune( item->project() );
+            }
             break;
         case BuilderJob::Configure:
-            j = item->project()->buildSystemManager()->builder()->configure( item->project() );
+            if (!hasJobForProject(t, item->project())) {
+                j = item->project()->buildSystemManager()->builder()->configure( item->project() );
+            }
             break;
         default:
             break;
