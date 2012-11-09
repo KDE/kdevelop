@@ -113,7 +113,7 @@ public:
      *
      * @return the type of job
      */
-    JobType type();
+    JobType type() const;
 
     /**
      * Used to get at the version control plugin. The plugin
@@ -135,7 +135,7 @@ Q_SIGNALS:
      * results are ready, or several times.
      */
     void resultsReady( KDevelop::VcsJob* );
-    
+
 private Q_SLOTS:
     void delayedModelInitialize();
 

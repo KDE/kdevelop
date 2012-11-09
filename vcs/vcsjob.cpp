@@ -21,43 +21,45 @@
 
 //#include <klocale.h>
 
-namespace KDevelop
+namespace KDevelop {
+
+class VcsJobPrivate
 {
-    class VcsJobPrivate
-    {
-        public:
-            VcsJob::JobType m_type;
-    };
+public:
+    VcsJob::JobType m_type;
+};
 
-    VcsJob::VcsJob( QObject* parent, OutputJobVerbosity verbosity )
-        : OutputJob(parent, verbosity), d(new VcsJobPrivate)
-    {
-        d->m_type = Unknown;
-        setStandardToolView(IOutputView::VcsView);
-        
-        if(verbosity==Verbose)
-            QMetaObject::invokeMethod(this, "delayedModelInitialize", Qt::QueuedConnection);
-    }
-    
-    void VcsJob::delayedModelInitialize()
-    {
-        startOutput();
-    }
+VcsJob::VcsJob( QObject* parent, OutputJobVerbosity verbosity )
+    : OutputJob(parent, verbosity), d(new VcsJobPrivate)
+{
+    d->m_type = Unknown;
+    setStandardToolView(IOutputView::VcsView);
 
-    VcsJob::~VcsJob()
-    {
-        delete d;
+    if(verbosity == Verbose) {
+        QMetaObject::invokeMethod(this, "delayedModelInitialize", Qt::QueuedConnection);
     }
+}
 
-    VcsJob::JobType VcsJob::type()
-    {
-        return d->m_type;
-    }
+void VcsJob::delayedModelInitialize()
+{
+    startOutput();
+}
 
-    void VcsJob::setType( VcsJob::JobType t )
-    {
-        d->m_type = t;
-    }
+VcsJob::~VcsJob()
+{
+    delete d;
+}
+
+VcsJob::JobType VcsJob::type() const
+{
+    return d->m_type;
+}
+
+void VcsJob::setType( VcsJob::JobType t )
+{
+    d->m_type = t;
+}
+
 }
 
 #include "vcsjob.moc"
