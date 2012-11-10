@@ -1219,7 +1219,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             }
         }
         
-        if(p) {
+        if(p && !isReloading(p)) {
             p->reloadModel();
         }
     } else if(dirty.endsWith(".cmake"))
