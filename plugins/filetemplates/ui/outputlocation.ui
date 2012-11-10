@@ -50,7 +50,7 @@
          <item>
           <widget class="QCheckBox" name="lowerFilenameCheckBox">
            <property name="text">
-            <string>Low case file names</string>
+            <string>Lower case file names</string>
            </property>
            <property name="checked">
             <bool>true</bool>
