@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="133" name="kdevelop" >
+<kpartgui version="134" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -123,8 +123,6 @@
     <Separator/>
     <Action name="split_horizontal"/>
     <Action name="split_vertical"/>
-    <Separator/>
-    <Action name="fullscreen"/>
     <Separator/>
     <DefineGroup name="window_operations"/>
     <Separator/>
