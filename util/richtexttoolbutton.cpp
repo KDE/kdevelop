@@ -69,6 +69,7 @@ QSize RichTextToolButton::sizeHint() const
         return QToolButton::sizeHint();
     } else{
         QTextDocument richTextLabel;
+        richTextLabel.setDefaultFont(font());
         richTextLabel.setHtml(htmlText);
         return richTextLabel.size().toSize();
     }
@@ -83,6 +84,7 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
         QPoint point;
 
         QTextDocument richTextLabel;
+        richTextLabel.setDefaultFont(font());
         richTextLabel.setHtml(htmlText);
 
         QPixmap richTextPixmap(richTextLabel.size().width(), richTextLabel.size().height());
