@@ -68,6 +68,9 @@ void TestController::addTestSuite(ITestSuite* suite)
 {
     if (ITestSuite* existingSuite = findTestSuite(suite->project(), suite->name()))
     {
+        if (existingSuite == suite) {
+            return;
+        }
         removeTestSuite(existingSuite);
         delete existingSuite;
     }
