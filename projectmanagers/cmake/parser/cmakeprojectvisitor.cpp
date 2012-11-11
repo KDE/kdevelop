@@ -1929,13 +1929,13 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             kDebug(9032) << "warning! String configure is not supported!" << sast->content()[sast->line()].writeBack();
             break;
         case StringAst::ToUpper:
-            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
+            m_vars->insert(sast->outputVariable(), QStringList(sast->input().join(QChar(';')).toUpper()));
             break;
         case StringAst::ToLower:
-            m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
+            m_vars->insert(sast->outputVariable(), QStringList(sast->input().join(QChar(';')).toLower()));
             break;
         case StringAst::Length:
-            m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
+            m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input().join(QChar(';')).count())));
             break;
         case StringAst::Substring:
         {
