@@ -200,10 +200,7 @@ public:
   }
   virtual QString description() const
   {
-    if(m_problem->type->isFunction)
-      return i18n("<b>%1</b> function in <i>%2</i>", accessString(), Qt::escape(containerString()));
-    else
-      return i18n("<b>%1</b> variable in <i>%2</i>", accessString(), Qt::escape(containerString()));
+    return QString("<b>%1</b>").arg(accessString());
   }
 
   virtual QString containerString() const
@@ -337,7 +334,26 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
     targetClass = localClass;
   }
 
-  if (canAddTo(targetClass, localClass) && (type->convertedTo.isValid() || type->assigned.isValid() || type->isFunction)) {
+  if (canAddTo(targetClass, localClass)
+      && (type->convertedTo.isValid() || type->assigned.isValid() || type->isFunction))
+  {
+    // public is always possible
+    CreateMemberDeclarationAction* publicAction = new CreateMemberDeclarationAction(problem, Declaration::Public);
+
+    if (actions().size()) {
+      // place label between first action and the following actions
+      const QString label = i18nc("assistant, declare member in class identified by %1",
+                                  "member of <code>%1</code>:",
+                                  Qt::escape(publicAction->containerString()));
+      addAction(IAssistantAction::Ptr(new AssistantLabelAction(label)));
+    } else {
+      // set the title manually
+      m_title = i18nc("assistant, declare %1 as member of class identified by %2",
+                      "Declare <code>'%1'</code> as member of <code>%2</code>",
+                      publicAction->declarationString(),
+                      Qt::escape(publicAction->containerString()));
+    }
+
     if(localClass == targetClass) {
       //Actions to create a declaration within the local class
       addAction(IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Private)));
@@ -351,10 +367,10 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
         addAction(IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
     }
     // public is always possible
-    addAction(IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Public)));
+    addAction(IAssistantAction::Ptr(publicAction));
   }
 
-  if(!actions().isEmpty()) {
+  if(!actions().isEmpty() && m_title.isEmpty()) {
     MissingDeclarationAction* action = dynamic_cast<MissingDeclarationAction*>(actions().last().data());
     Q_ASSERT(action);
     m_title = i18n("Declare <code>'%1'</code> as", action->declarationString());
