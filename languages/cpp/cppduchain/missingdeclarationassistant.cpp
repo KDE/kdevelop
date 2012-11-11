@@ -302,6 +302,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
         addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Protected)));
         addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem, Declaration::Public)));
       }
+      updateTitle();
       return;
     }
     if(type->containerContext.data() && (type->convertedTo.isValid() || type->assigned.isValid() || type->isFunction)) {
@@ -332,11 +333,15 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
       }
     }
   }
-  
-  if(!actions().isEmpty())
-  {
+
+  updateTitle();
+}
+
+void MissingDeclarationAssistant::updateTitle()
+{
+  if(!actions().isEmpty()) {
     MissingDeclarationAction* action = dynamic_cast<MissingDeclarationAction*>(actions().last().data());
     Q_ASSERT(action);
-    m_title = i18n("Declare <big><tt>'%1'</tt></big> as", action->getDeclarationString());
+    m_title = i18n("Declare <code>'%1'</code> as", action->getDeclarationString());
   }
 }
