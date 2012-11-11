@@ -119,6 +119,7 @@ namespace CMakeParserUtils
 
     QString executeProcess(const QString& execName, const QStringList& args)
     {
+        Q_ASSERT(!execName.isEmpty());
         kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
         
         KProcess p;
