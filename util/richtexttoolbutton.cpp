@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2010 Unknown Author (Qt Centre)
    Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 
@@ -19,7 +19,7 @@
 */
 
 #include "richtexttoolbutton.h"
- 
+
 #include <QPainter>
 #include <QPixmap>
 #include <QTextDocument>
@@ -36,24 +36,23 @@ RichTextToolButton::RichTextToolButton(QWidget *parent) :
     QToolButton(parent)
 {
 }
- 
+
 void RichTextToolButton::setHtml(const QString &text)
 {
     htmlText = text;
     isRichText = true;
- 
+
     QPalette palette;
     palette.setBrush(QPalette::ButtonText, Qt::transparent);
     setPalette(palette);
 }
- 
+
 void RichTextToolButton::setText(const QString &text)
 {
     isRichText = false;
     QToolButton::setText(text);
 }
- 
- 
+
 QString RichTextToolButton::text() const
 {
     if (isRichText) {
@@ -74,7 +73,7 @@ QSize RichTextToolButton::sizeHint() const
         return richTextLabel.size().toSize();
     }
 }
- 
+
 void RichTextToolButton::paintEvent(QPaintEvent *event)
 {
     if (isRichText) {
@@ -82,10 +81,10 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
 
         QRect buttonRect = rect();
         QPoint point;
- 
+
         QTextDocument richTextLabel;
         richTextLabel.setHtml(htmlText);
- 
+
         QPixmap richTextPixmap(richTextLabel.size().width(), richTextLabel.size().height());
         richTextPixmap.fill(Qt::transparent);
         QPainter richTextPainter(&richTextPixmap);
@@ -93,14 +92,14 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
         ctx.palette.setBrush(QPalette::Text, palette().windowText());
         ctx.clip=richTextPixmap.rect();
         richTextLabel.documentLayout()->draw(&richTextPainter, ctx);
- 
+
         if (!icon().isNull())
             point = QPoint(buttonRect.x() + buttonRect.width() / 2 + iconSize().width() / 2 + 2, buttonRect.y() + buttonRect.height() / 2);
         else
             point = QPoint(buttonRect.x() + buttonRect.width() / 2 - 1, buttonRect.y() + buttonRect.height() / 2);
- 
+
         buttonRect.translate(point.x() - richTextPixmap.width() / 2, point.y() - richTextPixmap.height() / 2);
- 
+
         QStyleOptionButton opt = getStyleOption();
         p.drawControl(QStyle::CE_PushButtonBevel, opt);
         p.drawPrimitive(QStyle::PE_FrameFocusRect, opt);
@@ -108,11 +107,11 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
     } else
         QToolButton::paintEvent(event);
 }
- 
+
 QStyleOptionButton RichTextToolButton::getStyleOption() const
 {
     QStyleOptionButton opt;
-    
+
     opt.initFrom(this);
     opt.features = QStyleOptionButton::None;
     if (menu())

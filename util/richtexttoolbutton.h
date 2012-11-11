@@ -20,35 +20,32 @@
 
 #ifndef RICHTEXTTOOLBUTTON_H
 #define RICHTEXTTOOLBUTTON_H
- 
+
 #include <QToolButton>
 #include <QString>
 #include <QStyleOptionButton>
 #include "utilexport.h"
- 
+
 namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT RichTextToolButton : public QToolButton
 {
 Q_OBJECT
 public:
     explicit RichTextToolButton(QWidget *parent = 0);
- 
+
     void setHtml(const QString &text);
     void setText(const QString &text);
     QString text() const;
 
     virtual QSize sizeHint() const;
-signals:
- 
-public slots:
- 
+
 protected:
     void paintEvent(QPaintEvent *);
- 
+
 private:
     QString htmlText;
     bool isRichText;
- 
+
     QStyleOptionButton getStyleOption() const;
 };
 
