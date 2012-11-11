@@ -30,12 +30,13 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT MissingDeclarationAssistant : public KDevelop::IAssistant
 {
 public:
-  MissingDeclarationAssistant(KSharedPtr<MissingDeclarationProblem> p);
-  KSharedPtr<MissingDeclarationProblem> problem;
+  MissingDeclarationAssistant(const MissingDeclarationProblem::Ptr& p);
+  MissingDeclarationProblem::Ptr problem;
   MissingDeclarationType::Ptr type;
   QString title() const { return m_title; }
 private:
-  void updateTitle();
+  bool canCreateLocal(KDevelop::DUContext* searchFrom) const;
+  bool canAddTo(KDevelop::Declaration* toClass, KDevelop::Declaration* fromClass) const;
   QString m_title;
 };
 

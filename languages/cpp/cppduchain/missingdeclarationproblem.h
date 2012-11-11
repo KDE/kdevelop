@@ -29,6 +29,8 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT MissingDeclarationProblem : public KDevelop::Problem
 {
 public:
+  typedef KSharedPtr<MissingDeclarationProblem> Ptr;
+
   ///@param type Must not be zero!
   MissingDeclarationProblem(MissingDeclarationType::Ptr type);
 
