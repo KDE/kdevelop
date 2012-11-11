@@ -34,6 +34,7 @@
 #include "kdeprojectsreader.h"
 #include <QSortFilterProxyModel>
 #include <KFilterProxySearchLine>
+#include <KMessageBox>
 
 using namespace KDevelop;
 
@@ -95,6 +96,10 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
         return 0;
     
     IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+    if (!plugin) {
+        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to download a KDE project."), i18n("KDE Provider Error"));
+        return 0;
+    }
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
     VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
     
