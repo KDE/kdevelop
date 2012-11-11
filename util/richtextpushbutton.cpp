@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "richtexttoolbutton.h"
- 
+#include "richtextpushbutton.h"
+
 #include <QPainter>
 #include <QPixmap>
 #include <QTextDocument>
@@ -27,17 +27,15 @@
 #include <QSize>
 #include <QMenu>
 #include <QStylePainter>
-#include <qtextobject.h>
-#include <QAbstractTextDocumentLayout>
 
 using namespace KDevelop;
 
-RichTextToolButton::RichTextToolButton(QWidget *parent) :
-    QToolButton(parent)
+RichTextPushButton::RichTextPushButton(QWidget *parent) :
+    QPushButton(parent)
 {
 }
- 
-void RichTextToolButton::setHtml(const QString &text)
+
+void RichTextPushButton::setHtml(const QString &text)
 {
     htmlText = text;
     isRichText = true;
@@ -46,40 +44,39 @@ void RichTextToolButton::setHtml(const QString &text)
     palette.setBrush(QPalette::ButtonText, Qt::transparent);
     setPalette(palette);
 }
- 
-void RichTextToolButton::setText(const QString &text)
+
+void RichTextPushButton::setText(const QString &text)
 {
     isRichText = false;
-    QToolButton::setText(text);
+    QPushButton::setText(text);
 }
- 
- 
-QString RichTextToolButton::text() const
+
+QString RichTextPushButton::text() const
 {
     if (isRichText) {
         QTextDocument richText;
         richText.setHtml(htmlText);
         return richText.toPlainText();
     } else
-        return QToolButton::text();
+        return QPushButton::text();
 }
 
-QSize RichTextToolButton::sizeHint() const
+QSize RichTextPushButton::sizeHint() const
 {
     if(!isRichText) {
-        return QToolButton::sizeHint();
+        return QPushButton::sizeHint();
     } else{
         QTextDocument richTextLabel;
         richTextLabel.setHtml(htmlText);
         return richTextLabel.size().toSize();
     }
 }
- 
-void RichTextToolButton::paintEvent(QPaintEvent *event)
+
+void RichTextPushButton::paintEvent(QPaintEvent *event)
 {
     if (isRichText) {
         QStylePainter p(this);
-
+ 
         QRect buttonRect = rect();
         QPoint point;
  
@@ -89,10 +86,7 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
         QPixmap richTextPixmap(richTextLabel.size().width(), richTextLabel.size().height());
         richTextPixmap.fill(Qt::transparent);
         QPainter richTextPainter(&richTextPixmap);
-        QAbstractTextDocumentLayout::PaintContext ctx;
-        ctx.palette.setBrush(QPalette::Text, palette().windowText());
-        ctx.clip=richTextPixmap.rect();
-        richTextLabel.documentLayout()->draw(&richTextPainter, ctx);
+        richTextLabel.drawContents(&richTextPainter, richTextPixmap.rect());
  
         if (!icon().isNull())
             point = QPoint(buttonRect.x() + buttonRect.width() / 2 + iconSize().width() / 2 + 2, buttonRect.y() + buttonRect.height() / 2);
@@ -101,33 +95,31 @@ void RichTextToolButton::paintEvent(QPaintEvent *event)
  
         buttonRect.translate(point.x() - richTextPixmap.width() / 2, point.y() - richTextPixmap.height() / 2);
  
-        QStyleOptionButton opt = getStyleOption();
-        p.drawControl(QStyle::CE_PushButtonBevel, opt);
-        p.drawPrimitive(QStyle::PE_FrameFocusRect, opt);
-        p.drawPixmap(buttonRect.topLeft(), richTextPixmap);
+        p.drawControl(QStyle::CE_PushButton, getStyleOption());
+        p.drawPixmap(buttonRect.left(), buttonRect.top(), richTextPixmap.width(), richTextPixmap.height(),richTextPixmap);
     } else
-        QToolButton::paintEvent(event);
+        QPushButton::paintEvent(event);
 }
- 
-QStyleOptionButton RichTextToolButton::getStyleOption() const
+
+QStyleOptionButton RichTextPushButton::getStyleOption() const
 {
     QStyleOptionButton opt;
-    
     opt.initFrom(this);
     opt.features = QStyleOptionButton::None;
+    if (isFlat())
+        opt.features |= QStyleOptionButton::Flat;
     if (menu())
         opt.features |= QStyleOptionButton::HasMenu;
+    if (autoDefault() || isDefault())
+        opt.features |= QStyleOptionButton::AutoDefaultButton;
+    if (isDefault())
+        opt.features |= QStyleOptionButton::DefaultButton;
     if (isDown() || (menu() && menu()->isVisible()))
         opt.state |= QStyle::State_Sunken;
     if (isChecked())
         opt.state |= QStyle::State_On;
-    if (!isDown())
-    {
-        if(opt.state & QStyle::State_MouseOver)
-            opt.state |= QStyle::State_Raised;
-        else
-            opt.features |= QStyleOptionButton::Flat;
-    }
+    if (!isFlat() && !isDown())
+        opt.state |= QStyle::State_Raised;
     opt.text = text();
     opt.icon = icon();
     opt.iconSize = iconSize();
