@@ -77,8 +77,16 @@ void AssistantPopup::updateActions()
 
 QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action)
 {
+    KAction* realAction = action ? action->toKAction() : 0;
     RichTextToolButton* button = new RichTextToolButton;
-    KAction* realAction = 0;
+
+    if (action && !realAction) {
+        // non-executable "label" actions
+        button->setHtml(action->description());
+        button->setEnabled(false);
+        return button;
+    }
+
     QString buttonText;
     int index = m_assistantActions.indexOf(action);
     if (index == -1) {

@@ -71,6 +71,34 @@ Q_SIGNALS:
     void executed(IAssistantAction* action);
 };
 
+/**
+ * A fake action that only shows a label.
+ */
+class KDEVPLATFORMINTERFACES_EXPORT AssistantLabelAction : public IAssistantAction
+{
+    Q_OBJECT
+public:
+    /**
+     * @p description The label to show.
+     */
+    AssistantLabelAction(const QString& description);
+    /**
+     * @return the label contents.
+     */
+    virtual QString description() const;
+    /**
+     * The label cannot be executed.
+     */
+    virtual void execute();
+    /**
+     * No action is returned.
+     */
+    virtual KAction* toKAction() const;
+
+private:
+    QString m_description;
+};
+
 ///Represents a single assistant popup.
 ///Subclass it to create your own assistants.
 class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KSharedObject

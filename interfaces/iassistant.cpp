@@ -31,6 +31,8 @@ static QString removeHtmlFromString(QString string)
     return QTextEdit(string).toPlainText();
 }
 
+//BEGIN IAssistant
+
 KAction* IAssistantAction::toKAction() const
 {
     KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
@@ -67,11 +69,39 @@ QString IAssistantAction::toolTip() const
     return QString();
 }
 
+//END IAssistantAction
+
+//BEGIN AssistantLabelAction
+
+AssistantLabelAction::AssistantLabelAction(const QString& description)
+: m_description(description)
+{
+
+}
+
+QString AssistantLabelAction::description() const
+{
+    return m_description;
+}
+
+void AssistantLabelAction::execute()
+{
+    // do nothing
+}
+
+KAction* AssistantLabelAction::toKAction() const
+{
+    return 0;
+}
+
+//END AssistantLabelAction
+
+//BEGIN: IAssistant
+
 IAssistant::IAssistant()
 : KSharedObject(*(QObject*)this)
 {
 }
-
 
 QIcon IAssistant::icon() const
 {
@@ -102,5 +132,7 @@ void IAssistant::clearActions()
 {
     m_actions.clear();
 }
+
+//END IAssistant
 
 #include "iassistant.moc"
