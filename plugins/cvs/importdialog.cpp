@@ -80,7 +80,7 @@ void ImportDialog::jobFinished(KJob * job)
 
     if (error) {
         KMessageBox::error(this,
-            i18n("Some errors occurred while importing") + m_url.toLocalFile(),
+            i18n("Some errors occurred while importing %1", m_url.toLocalFile()),
             i18n("Import Error"));
     } else {
         KDialog::accept();
