@@ -307,7 +307,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
     }
     if(type->containerContext.data() && (type->convertedTo.isValid() || type->assigned.isValid() || type->isFunction)) {
       KUrl url = type->containerContext.data()->url().toUrl();
-      if(KDevelop::ICore::self()->projectController()->findProjectForUrl(url) || KDevelop::ICore::self()->documentController()->documentForUrl(url)) {
+      if(url == searchFrom->url().toUrl() || KDevelop::ICore::self()->projectController()->findProjectForUrl(url) || KDevelop::ICore::self()->documentController()->documentForUrl(url)) {
         DUContext* container = problem->type->containerContext.data();
         Declaration* searchFromClass = Cpp::localClassFromCodeContext(searchFrom);
 

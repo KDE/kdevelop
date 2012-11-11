@@ -128,7 +128,7 @@ void TestCppCodegen::testAssistants_data()
   QTest::addColumn<int>("executeAssistant");
   QTest::addColumn<QString>("insertionText");
 
-  QTest::newRow("local_infunc") <<
+  QTest::newRow("local") <<
     "enum Honk { Hank };\n"
     "void test() {\n"
     " val = Hank;\n"
@@ -142,10 +142,25 @@ void TestCppCodegen::testAssistants_data()
     "   val = Hank;\n"
     "  }\n"
     "};\n";
-  QTest::newRow("local_inclass") << inClass << 4 << 0 << "Honk val = Hank;";
-  QTest::newRow("private") << inClass << 4 << 1 << "private:\n    Honk val;";
-  QTest::newRow("protected") << inClass << 4 << 2 << "protected:\n    Honk val;";
-  QTest::newRow("public") << inClass << 4 << 3 << "}\n    Honk val;";
+  QTest::newRow("local_class") << inClass << 4 << 0 << "Honk val = Hank;";
+  QTest::newRow("private_class") << inClass << 4 << 1 << "private:\n    Honk val;";
+  QTest::newRow("protected_class") << inClass << 4 << 2 << "protected:\n    Honk val;";
+  QTest::newRow("public_class") << inClass << 4 << 3 << "}\n    Honk val;";
+
+  QString inOtherClass =
+    "class other {\n"
+    "};\n"
+    "class myClass : public other {\n"
+    "public:\n"
+    "  void test() {\n"
+    "   other* o;\n"
+    "   o->foo(1, 0.5);\n"
+    "  }\n"
+    "};\n";
+  QTest::newRow("public_other") << inOtherClass << 2 << 1
+    << "class other {\npublic:\n    void foo(int arg1, double arg2);";
+  QTest::newRow("protected_other") << inOtherClass << 2 << 0
+    << "class other {\nprotected:\n    void foo(int arg1, double arg2);";
 }
 
 void TestCppCodegen::testUpdateIndices()
