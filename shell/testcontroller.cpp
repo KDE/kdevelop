@@ -53,18 +53,18 @@ void TestController::cleanup()
     d->suites.clear();
 }
 
-QList< KDevelop::ITestSuite* > TestController::testSuites() const
+QList<ITestSuite*> TestController::testSuites() const
 {
     return d->suites;
 }
 
-void TestController::removeTestSuite(KDevelop::ITestSuite* suite)
+void TestController::removeTestSuite(ITestSuite* suite)
 {
     d->suites.removeAll(suite);
     emit testSuiteRemoved(suite);
 }
 
-void TestController::addTestSuite(KDevelop::ITestSuite* suite)
+void TestController::addTestSuite(ITestSuite* suite)
 {
     if (ITestSuite* existingSuite = findTestSuite(suite->project(), suite->name()))
     {
