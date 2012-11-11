@@ -26,7 +26,29 @@
 
 const int SPACING_FROM_PARENT_BOTTOM = 5;
 
-void AssistantPopup::updateActions() {
+using namespace KDevelop;
+
+AssistantPopup::AssistantPopup(QWidget* parent, const IAssistant::Ptr& assistant)
+: QToolBar(parent)
+, m_assistant(assistant)
+{
+    Q_ASSERT(assistant);
+    setAutoFillBackground(true);
+    updateActions();
+}
+
+IAssistant::Ptr AssistantPopup::assistant() const
+{
+    return m_assistant;
+}
+
+void AssistantPopup::executeHideAction()
+{
+    m_assistant->doHide();
+}
+
+void AssistantPopup::updateActions()
+{
     QPalette palette = this->palette();
     palette.setBrush(QPalette::Background, palette.toolTipBase());
     palette.setBrush(QPalette::WindowText, palette.toolTipText());
@@ -42,52 +64,37 @@ void AssistantPopup::updateActions() {
         addWidget(title);
     }
     ///@todo Add some intelligent layouting to make sure the widget doesn't become too wide
-    foreach(KDevelop::IAssistantAction::Ptr action, m_assistantActions)
+    foreach(IAssistantAction::Ptr action, m_assistantActions)
     {
         if(haveTitle || action != m_assistantActions.first())
             addSeparator();
         addWidget(widgetForAction(action));
     }
     addSeparator();
-    addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
+    addWidget(widgetForAction(IAssistantAction::Ptr()));
     resize(sizeHint());
     move((parentWidget()->width() - width())/2, parentWidget()->height() - height() - SPACING_FROM_PARENT_BOTTOM);
 }
 
-AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QToolBar(parent), m_assistant(assistant) {
-    Q_ASSERT(assistant);
-    setAutoFillBackground(true);
-    updateActions();
-}
-
-QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action) {
-    KDevelop::RichTextToolButton* button = new KDevelop::RichTextToolButton;
-    KAction* realAction;
+QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action)
+{
+    RichTextToolButton* button = new RichTextToolButton;
+    KAction* realAction = 0;
     QString buttonText;
     int index = m_assistantActions.indexOf(action);
-    if(index == -1) {
+    if (index == -1) {
         realAction = new KAction(button);
         buttonText = "<u>0</u> - " + i18n("Hide");
-    }
-    else {
+    } else {
         realAction = action->toKAction();
         buttonText = QString("<u>%1</u> - ").arg(index+1) + action->description();
     }
     realAction->setParent(button);
     connect(realAction, SIGNAL(triggered(bool)), SLOT(executeHideAction()));
     button->setDefaultAction(realAction);
-    
     button->setText(QString("&%1").arg(index+1)); // Let the button care about the shortcut
     button->setHtml(buttonText);
     return button;
-}
-
-void AssistantPopup::executeHideAction() {
-    m_assistant->doHide();
-}
-
-KSharedPtr< KDevelop::IAssistant > AssistantPopup::assistant() const {
-    return m_assistant;
 }
 
 #include "assistantpopup.moc"

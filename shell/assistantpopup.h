@@ -26,16 +26,20 @@
 
 class AssistantPopup : public QToolBar
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     typedef KSharedPtr<AssistantPopup> Ptr;
-    AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant);
+
+    AssistantPopup(QWidget* parent, const KDevelop::IAssistant::Ptr& assistant);
     KDevelop::IAssistant::Ptr assistant() const;
+
 public slots:
     void executeHideAction();
+
 private:
     void updateActions();
-    QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
+    QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
 };
