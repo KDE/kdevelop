@@ -77,6 +77,10 @@ public:
     explicit CMakeManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~CMakeManager();
+
+    virtual bool hasError() const;
+    virtual QString errorDescription() const;
+
     virtual Features features() const { return Features(Folders | Targets | Files ); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder() const;

@@ -40,6 +40,10 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     Q_INTERFACES( KDevelop::IDocumentationProvider )
     public:
         explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
+
+        virtual bool hasError() const;
+        virtual QString errorDescription() const;
+
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file) const;
         KSharedPtr<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
         

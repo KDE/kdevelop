@@ -462,6 +462,10 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeManager)
 
+    if (hasError()) {
+        return;
+    }
+
     m_highlight = new KDevelop::CodeHighlighting(this);
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
@@ -472,6 +476,16 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     m_fileSystemChangeTimer->setSingleShot(true);
     m_fileSystemChangeTimer->setInterval(100);
     connect(m_fileSystemChangeTimer,SIGNAL(timeout()),SLOT(filesystemBuffererTimeout()));
+}
+
+bool CMakeManager::hasError() const
+{
+    return KStandardDirs::findExe("cmake").isEmpty();
+}
+
+QString CMakeManager::errorDescription() const
+{
+    return hasError() ? i18n("cmake is not installed") : QString();
 }
 
 CMakeManager::~CMakeManager()
