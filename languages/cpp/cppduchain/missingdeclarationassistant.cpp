@@ -177,13 +177,14 @@ class CreateMemberDeclarationAction : public MissingDeclarationAction {
           DUChainReadLocker lock(DUChain::lock());
           DUContext* container = useContainer();
           if(container)
-            return QString("%2 %3").arg(returnString(), problem->type->identifier().toString() + signatureString());
+            return returnString() + " " + problem->type->identifier().toString() + signatureString();
           else
             return QString();
         }
         
         virtual QString toolTip() const {
-          return QString("Declare %2 %3").arg(returnString(), getContainerString() + "::" + problem->type->identifier().toString() + signatureString());
+          return i18nc("%1: access, %2: identifier/signature", "Declare %1 %2",
+                        accessString(), getDeclarationString());
         }
     private:
         QString accessString() const {
