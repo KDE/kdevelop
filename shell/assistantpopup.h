@@ -31,13 +31,8 @@ class AssistantPopup : public QToolBar
 public:
     typedef KSharedPtr<AssistantPopup> Ptr;
 
-    /**
-     * @p parent The widget below which the assistant should be shown.
-     */
     AssistantPopup(QWidget* parent, const KDevelop::IAssistant::Ptr& assistant);
     KDevelop::IAssistant::Ptr assistant() const;
-
-    virtual bool eventFilter(QObject* object, QEvent* event);
 
 public slots:
     void executeHideAction();
@@ -45,9 +40,6 @@ public slots:
 private:
     void updateActions();
     QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action);
-    void updatePosition();
-
-    QWidget* m_parentWidget;
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
 };

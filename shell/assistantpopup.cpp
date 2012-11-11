@@ -17,41 +17,24 @@
 */
 
 #include "assistantpopup.h"
-
 #include <QVBoxLayout>
-#include <QEvent>
 #include <QLabel>
-#include <QApplication>
-
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <KAction>
-
+#include <QApplication>
 #include <util/richtexttoolbutton.h>
+
+const int SPACING_FROM_PARENT_BOTTOM = 5;
 
 using namespace KDevelop;
 
 AssistantPopup::AssistantPopup(QWidget* parent, const IAssistant::Ptr& assistant)
-: QToolBar()
-, m_parentWidget(parent)
+: QToolBar(parent)
 , m_assistant(assistant)
 {
-    setWindowFlags(Qt::ToolTip);
-
     Q_ASSERT(assistant);
     setAutoFillBackground(true);
     updateActions();
-
-    connect(m_parentWidget, SIGNAL(destroyed(QObject*)),
-        this, SLOT(deleteLater()));
-    m_parentWidget->installEventFilter(this);
-}
-
-bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
-{
-    if (object == m_parentWidget && event->type() == QEvent::Resize) {
-        updatePosition();
-    }
-    return QObject::eventFilter(object, event);
 }
 
 IAssistant::Ptr AssistantPopup::assistant() const
@@ -62,15 +45,6 @@ IAssistant::Ptr AssistantPopup::assistant() const
 void AssistantPopup::executeHideAction()
 {
     m_assistant->doHide();
-}
-
-void AssistantPopup::updatePosition()
-{
-    const QRect geometry = m_parentWidget->geometry();
-    const QPoint topLeft = m_parentWidget->mapToGlobal(geometry.topLeft());
-    // center horizontally and move below parent widget
-    move( topLeft.x() + (geometry.width() - width()) / 2,
-          topLeft.y() + geometry.height());
 }
 
 void AssistantPopup::updateActions()
@@ -98,7 +72,7 @@ void AssistantPopup::updateActions()
     addSeparator();
     addWidget(widgetForAction(IAssistantAction::Ptr()));
     resize(sizeHint());
-    updatePosition();
+    move((parentWidget()->width() - width())/2, parentWidget()->height() - height() - SPACING_FROM_PARENT_BOTTOM);
 }
 
 QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action)
