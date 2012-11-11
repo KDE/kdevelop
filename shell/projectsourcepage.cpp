@@ -133,7 +133,6 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
     } else if(m_providerWidget) {
         job=m_providerWidget->createWorkingCopy(url);
     }
-    Q_ASSERT(job);
     return job;
 }
 
@@ -150,6 +149,9 @@ void ProjectSourcePage::getVcsProject()
     }
     
     VcsJob* job=jobPerCurrent();
+    if (!job) {
+        return;
+    }
     
     m_ui->sources->setEnabled(false);
     m_ui->sourceBox->setEnabled(false);
