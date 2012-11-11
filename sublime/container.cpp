@@ -550,7 +550,9 @@ QRect Container::tabRect(int tab) const
 
 void Container::documentListActionTriggered(QAction* action)
 {
-    QWidget* widget = action->data().value< QWidget* >();
+    Sublime::View* view = action->data().value< Sublime::View* >();
+    Q_ASSERT(view);
+    QWidget* widget = d->viewForWidget.key(view);
     Q_ASSERT(widget);
     setCurrentWidget(widget);
 }
