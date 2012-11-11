@@ -124,7 +124,7 @@ QStyleOptionButton RichTextToolButton::getStyleOption() const
         opt.state |= QStyle::State_On;
     if (!isDown())
     {
-        if(opt.state & QStyle::State_MouseOver)
+        if(opt.state & QStyle::State_MouseOver && isEnabled())
             opt.state |= QStyle::State_Raised;
         else
             opt.features |= QStyleOptionButton::Flat;
