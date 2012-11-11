@@ -99,25 +99,53 @@ void dumpDUChain(InsertIntoDUChain& code)
 
 void TestCppCodegen::testAssistants()
 {
-  {
-    //A missing-declaration assistant should be added, that creates a declaration "Honk val = ..."
-    InsertIntoDUChain code("test_assistants.cpp", "enum Honk { Hank };\nvoid test() {\n val = Hank;\n }\n");
-    kWarning() << "********************* Parsing step 1";
-    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
-    DUChainReadLocker lock;
+  QFETCH(QString, contents);
+  QFETCH(int, numAssistants);
+  QFETCH(int, executeAssistant);
+  QFETCH(QString, insertionText);
+  InsertIntoDUChain code("test_assistants.cpp", contents);
+  code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
-    QCOMPARE(code->problems().size(), 2);
-    //There is one problem from the include-path resolver as it couldn't resolve include paths for the artificial code
-    //The second problem is the missing-declaration assistant problem
-    QVERIFY(code->problems()[1]->solutionAssistant());
-    QCOMPARE(code->problems()[1]->solutionAssistant()->actions().size(), 1);
-    code->problems()[1]->solutionAssistant()->actions()[0]->execute();
-    
-    //Make sure the assistant has inserted the correct solution
-    kDebug() << code.m_insertedCode.text();
-    QVERIFY(code.m_insertedCode.text().contains("Honk val = Hank;"));
-  }  
+  DUChainReadLocker lock;
+
+  // There is one problem from the include-path resolver as it couldn't
+  // resolve include paths for the artificial code
+  // The second problem is the missing-declaration assistant problem
+  QCOMPARE(code->problems().size(), 2);
+  QVERIFY(code->problems()[1]->solutionAssistant());
+  QCOMPARE(code->problems()[1]->solutionAssistant()->actions().size(), numAssistants);
+  code->problems()[1]->solutionAssistant()->actions()[executeAssistant]->execute();
+
+  //Make sure the assistant has inserted the correct solution
+  kDebug() << code.m_insertedCode.text();
+  QVERIFY(code.m_insertedCode.text().contains(insertionText));
+}
+
+void TestCppCodegen::testAssistants_data()
+{
+  QTest::addColumn<QString>("contents");
+  QTest::addColumn<int>("numAssistants");
+  QTest::addColumn<int>("executeAssistant");
+  QTest::addColumn<QString>("insertionText");
+
+  QTest::newRow("local_infunc") <<
+    "enum Honk { Hank };\n"
+    "void test() {\n"
+    " val = Hank;\n"
+    " }\n"
+    << 1 << 0 << "Honk val = Hank;";
+
+  QString inClass = "enum Honk { Hank };\n"
+    "class myClass {\n"
+    "public:\n"
+    "  void test() {\n"
+    "   val = Hank;\n"
+    "  }\n"
+    "};\n";
+  QTest::newRow("local_inclass") << inClass << 4 << 0 << "Honk val = Hank;";
+  QTest::newRow("private") << inClass << 4 << 1 << "private:\n    Honk val;";
+  QTest::newRow("protected") << inClass << 4 << 2 << "protected:\n    Honk val;";
+  QTest::newRow("public") << inClass << 4 << 3 << "}\n    Honk val;";
 }
 
 void TestCppCodegen::testUpdateIndices()

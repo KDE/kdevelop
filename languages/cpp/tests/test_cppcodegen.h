@@ -33,6 +33,7 @@ class TestCppCodegen : public QObject
     
     // Tests
     void testAssistants();
+    void testAssistants_data();
     
     void testSimplifiedUpdating();
     void testUpdateIndices();
