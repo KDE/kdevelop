@@ -5,6 +5,7 @@
 #include <interfaces/itemplateprovider.h>
 #include <QVariantList>
 
+class KUrl;
 namespace KDevelop
 {
 class TemplatesModel;
@@ -18,6 +19,13 @@ class FileTemplatesPlugin : public KDevelop::IPlugin, public KDevelop::ITemplate
     Q_INTERFACES(KDevelop::ITemplateProvider)
 
 public:
+    enum TemplateType
+    {
+        NoTemplate,
+        FileTemplate,
+        ProjectTemplate
+    };
+
     FileTemplatesPlugin(QObject* parent, const QVariantList& args);
     virtual ~FileTemplatesPlugin();
     virtual void unload();
@@ -33,12 +41,15 @@ public:
     virtual void reload();
     virtual void loadTemplate(const QString& fileName);
 
+    TemplateType determineTemplateType(const KUrl& url);
+
 private:
     KDevelop::TemplatesModel* m_model;
     KDevelop::IToolViewFactory* m_toolView;
 
 public slots:
     void createFromTemplate();
+    void previewTemplate();
 };
 
 #endif // FILETEMPLATESPLUGIN_H

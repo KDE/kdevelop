@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QHash>
 
+class FileTemplatesPlugin;
 namespace KTextEditor
 {
 class Document;
@@ -48,7 +49,7 @@ class TemplatePreview : public QWidget
     Q_OBJECT
 
 public:
-    explicit TemplatePreview(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit TemplatePreview(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f = 0);
     virtual ~TemplatePreview();
 
 private:
@@ -57,6 +58,7 @@ private:
     QHash<QString,QString> m_variables;
     KTextEditor::Document* m_original;
     KTextEditor::Document* m_preview;
+    FileTemplatesPlugin* m_plugin;
 
 private slots:
     void sourceTextChanged(const QString& text);

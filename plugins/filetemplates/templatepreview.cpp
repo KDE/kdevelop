@@ -19,6 +19,7 @@
  */
 
 #include "templatepreview.h"
+#include "filetemplatesplugin.h"
 #include "ui_templatepreview.h"
 
 #include <language/codegen/templaterenderer.h>
@@ -41,15 +42,17 @@
 
 using namespace KDevelop;
 
-TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
+TemplatePreview::TemplatePreview(FileTemplatesPlugin* plugin, QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , ui(new Ui::TemplatePreview)
 , m_renderer(0)
 , m_original(0)
 , m_preview(0)
+, m_plugin(plugin)
 {
     ui->setupUi(this);
     ui->messageWidget->hide();
+    ui->emptyLinesPolicyComboBox->setCurrentIndex(1);
 
     m_renderer = new TemplateRenderer;
 
@@ -122,7 +125,26 @@ void TemplatePreview::documentActivated (KDevelop::IDocument* document)
     }
     m_original = document->textDocument();
     connect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
-    documentChanged(m_original);
+
+    FileTemplatesPlugin::TemplateType type = m_plugin->determineTemplateType(document->url());
+    switch (type)
+    {
+        case FileTemplatesPlugin::NoTemplate:
+            ui->messageWidget->setMessageType(KMessageWidget::Information);
+            ui->messageWidget->setText(i18n("The active document is not a <application>KDevelop</application> template"));
+            ui->messageWidget->animatedShow();
+            break;
+
+        case FileTemplatesPlugin::FileTemplate:
+            ui->classRadioButton->setChecked(true);
+            documentChanged(m_original);
+            break;
+
+        case FileTemplatesPlugin::ProjectTemplate:
+            ui->projectRadioButton->setChecked(true);
+            documentChanged(m_original);
+            break;
+    }
 }
 
 void TemplatePreview::documentChanged (KTextEditor::Document* document)
@@ -169,7 +191,6 @@ void TemplatePreview::sourceTextChanged(const QString& text)
         bool project = ui->projectRadioButton->isChecked();
         QString rendered;
         QString errorString;
-        bool error = false;
         if (project)
         {
             rendered = KMacroExpander::expandMacros(text, m_variables);
@@ -178,31 +199,13 @@ void TemplatePreview::sourceTextChanged(const QString& text)
         {
             rendered = m_renderer->render(text);
             errorString = m_renderer->errorString();
-            error = !errorString.isEmpty();
         }
 
-        if (rendered.simplified() == text.simplified())
-        {
-            error = false;
-            // If the difference in only in whitespace, this is probably not a suitable template
-            if (project)
-            {
-                errorString = i18n("The active document is not a <application>KDevelop</application> project template");
-            }
-            else
-            {
-                errorString = i18n("The active document is not a <application>KDevelop</application> class template");
-            }
-            m_preview->clear();
-        }
-        else
-        {
-            m_preview->setText(rendered);
-        }
+        m_preview->setText(rendered);
 
         if (!errorString.isEmpty())
         {
-            ui->messageWidget->setMessageType(error ? KMessageWidget::Error : KMessageWidget::Information);
+            ui->messageWidget->setMessageType(KMessageWidget::Error);
             ui->messageWidget->setText(errorString);
             ui->messageWidget->animatedShow();
         }
