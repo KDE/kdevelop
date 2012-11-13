@@ -1644,7 +1644,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 m_type = InItems;
             } else
                 return false;
-            incr=4;
+            incr=3;
         } else {
             m_type=InItems;
             incr=1;
