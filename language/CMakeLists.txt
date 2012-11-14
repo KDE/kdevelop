@@ -146,8 +146,7 @@ target_link_libraries(kdevplatformlanguage
         ${Grantlee_CORE_LIBRARIES})
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
 target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
-        kdevplatforminterfaces
-        ${Grantlee_CORE_LIBRARIES})
+        kdevplatforminterfaces)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
