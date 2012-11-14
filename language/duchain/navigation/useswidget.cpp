@@ -50,10 +50,8 @@
 
 using namespace KDevelop;
 
-QString sizePrefix;// = "<small><small>";
-QString sizeSuffix;// = "</small></small>";
 
-const int tooltipContextSize = 3; //How many lines around the use are shown in the tooltip
+const int tooltipContextSize = 2; //How many lines around the use are shown in the tooltip
 const bool showUsesHeader = false;
 
 ///The returned text is fully escaped
@@ -104,7 +102,10 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
   const QColor background(251, 250, 150);
   const QColor foreground(0, 0, 0);
 
-  return Qt::escape(line.left(range.start.column)) + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">" + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column)) + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) ;
+  return "<span style=\"font-family:'monospace'\">" + Qt::escape(line.left(range.start.column))
+                    + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">"
+                    + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column))
+                    + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) + "</span>";
 }
 
 OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
@@ -114,14 +115,20 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
   m_sourceLine = code.line(m_range->range().start.line);
 
-  connect(this, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
+  m_layout = new QHBoxLayout(this);
+  setLayout(m_layout);
+
+  m_label = new QLabel(this);
+  m_icon = new QLabel(this);
+  m_icon->setPixmap(KIcon("code-function").pixmap(16));
+
+  connect(m_label, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
 
   DUChainReadLocker lock(DUChain::lock());
-  QString text = sizePrefix + "<a href='open'>" + i18n("Line") + sizeSuffix + QString(" <b>%1%2%3</b></a>").arg(sizePrefix).arg(range.start.line).arg(sizeSuffix);
-  text += sizePrefix;
+  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start.line) + QString("</a>");
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end.column) {
 
-    text += ' ' + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
+    text += "&nbsp;&nbsp;" + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
 
     //Useful tooltip:
     int start = m_range->range().start.line - tooltipContextSize;
@@ -130,13 +137,23 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
     QString toolTipText;
     for(int a = start; a < end; ++a) {
       QString lineText = code.line(a);
-      if(!lineText.isEmpty())
-        toolTipText += lineText + '\n';
+      if (m_range->range().start.line <= a && m_range->range().end.line >= a) {
+        lineText = QString("<b>") + Qt::escape(lineText) + QString("</b>");
+      }
+      if(!lineText.trimmed().isEmpty()) {
+        toolTipText += lineText + "<br>";
+      }
     }
-    setToolTip(toolTipText);
+    if ( toolTipText.endsWith("<br>") ) {
+      toolTipText.remove(toolTipText.length() - 4, 4);
+    }
+    setToolTip(QString("<html><body><pre>") + toolTipText + QString("</pre></body></html>"));
   }
-  text += sizeSuffix;
-  setText(text);
+  m_label->setText(text);
+
+  m_layout->addWidget(m_icon);
+  m_layout->addWidget(m_label);
+  m_layout->setAlignment(Qt::AlignLeft);
 }
 
 void OneUseWidget::jumpTo() {
@@ -157,17 +174,19 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   int maxCutOff = m_sourceLine.length() - (range.end.column - range.start.column);
 
   //Reset so we also get more context while up-sizing
-  setText(i18n("<a href='open'>Line <b>%1</b></a> %2", range.start.line+1, highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+  m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start.line+1)
+                 + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
 
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    setText(i18n("<a href='open'>Line <b>%1</b></a> %2", range.start.line+1, highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+    m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start.line+1)
+                   + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
     cutOff += 5;
   }
 
   event->accept();
 
-  QLabel::resizeEvent(event);
+  QWidget::resizeEvent(event);
 }
 
 void NavigatableWidgetList::setShowHeader(bool show) {
@@ -314,9 +333,10 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
 
 ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclarations, IndexedDUContext context) : m_context(context) {
 
+  setFrameShape(NoFrame);
+
   DUChainReadLocker lock(DUChain::lock());
     QString headerText = i18n("Unknown context");
-    uint usesCount = 0;
     setUpdatesEnabled(false);
 
     if(context.data()) {
@@ -327,7 +347,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
       else {
         headerText = ctx->scopeIdentifier(true).toString();
         if(ctx->type() == DUContext::Function || (ctx->owner() && ctx->owner()->isFunctionDeclaration()))
-          headerText += "(..)";
+          headerText += "(...)";
       }
 
       QSet<int> hadIndices;
@@ -342,50 +362,37 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
         if(usedDeclarationIndex != std::numeric_limits<int>::max()) {
           foreach(OneUseWidget* widget, createUseWidgets(code, usedDeclarationIndex, usedDeclaration, ctx))
             addItem(widget);
-
-          usesCount = countUses(usedDeclarationIndex, ctx);
         }
       }
     }
 
-    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Context") + "</b>" + " <a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>" + sizeSuffix);
+    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", "<a href='navigateToFunction'>" 
+                                          + Qt::escape(headerText) + "</a>: "));
     addHeaderItem(headerLabel);
-    if(usesCount) {
-      QLabel* usesCountLabel = new QLabel("&nbsp;" + i18np("<i>(1 use)</i>", "<i>(%1 uses)</i>", usesCount));
-      usesCountLabel->setAlignment(Qt::AlignLeft);
-      addHeaderItem(usesCountLabel, Qt::AlignLeft);
-    }
-
     setUpdatesEnabled(true);
-
     connect(headerLabel, SIGNAL(linkActivated(QString)), this, SLOT(linkWasActivated(QString)));
 }
 
 void ContextUsesWidget::linkWasActivated(QString link) {
-
-  IndexedDeclaration decl;
-  bool declValid = false;
-  {
+  if ( link == "navigateToFunction" ) {
     DUChainReadLocker lock(DUChain::lock());
-
-    if(m_context.context() && m_context.context()->owner())
-      decl = IndexedDeclaration(m_context.context()->owner());
-    declValid = decl.isValid();
+    if(m_context.context()) {
+      CursorInRevision contextStart = m_context.context()->range().start;
+      KTextEditor::Cursor cursor(contextStart.line, contextStart.column);
+      ForegroundLock lock;
+      ICore::self()->documentController()->openDocument(m_context.context()->url().toUrl(), cursor);
+    }
   }
-
-  if(link == "navigateToFunction" && declValid)
-    emit navigateDeclaration(decl);
 }
 
 DeclarationWidget::DeclarationWidget(const CodeRepresentation& code, const IndexedDeclaration& decl) {
 
+  setFrameShape(NoFrame);
   DUChainReadLocker lock(DUChain::lock());
 
   setUpdatesEnabled(false);
   if (Declaration* dec = decl.data()) {
-    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" +
-                                                  (dec->isDefinition() ? i18n("Definition") : i18n("Declaration"))
-                                                + "</b>" + sizeSuffix);
+    QLabel* headerLabel = new QLabel(dec->isDefinition() ? i18n("Definition") : i18n("Declaration"));
     addHeaderItem(headerLabel);
     addItem(new OneUseWidget(decl, dec->url(), dec->rangeInCurrentRevision(), code));
   }
@@ -393,10 +400,14 @@ DeclarationWidget::DeclarationWidget(const CodeRepresentation& code, const Index
   setUpdatesEnabled(true);
 }
 
-TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> allDeclarations, IndexedTopDUContext topContext) :
-m_topContext(topContext),
-m_declaration(declaration),
-m_allDeclarations(allDeclarations) {
+TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> allDeclarations, IndexedTopDUContext topContext)
+  : m_topContext(topContext)
+  , m_declaration(declaration)
+  , m_allDeclarations(allDeclarations)
+  , m_usesCount(0)
+{
+    m_itemLayout->setContentsMargins(10, 0, 0, 5);
+    setFrameShape(NoFrame);
     setUpdatesEnabled(false);
     DUChainReadLocker lock(DUChain::lock());
     QHBoxLayout * labelLayout = new QHBoxLayout;
@@ -404,22 +415,32 @@ m_allDeclarations(allDeclarations) {
     headerWidget->setLayout(labelLayout);
     headerWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
-    QLabel* label = new QLabel;
-    m_button = new QToolButton;
-    labelLayout->addWidget(m_button, Qt::AlignLeft | Qt::AlignVCenter);
-    labelLayout->addWidget(label, Qt::AlignLeft | Qt::AlignVCenter);
-
-    int usesCount = 0;
+    QLabel* label = new QLabel(this);
+    m_icon = new QLabel(this);
+    m_toggleButton = new QLabel(this);
+    m_icon->setPixmap(KIcon("code-class").pixmap(16));
+    labelLayout->addWidget(m_icon);
+    labelLayout->addWidget(label);
+    labelLayout->addWidget(m_toggleButton);
+    labelLayout->setAlignment(Qt::AlignLeft);
 
     if(topContext.isLoaded())
-      usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
+      m_usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
 
-    label->setText(i18np("<b>File:</b> %2&nbsp;<i>(1 use)</i>", "<b>File:</b> %2&nbsp;<i>(%1 uses)</i>", usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl())));
+    QString labelText = i18ncp("%1: number of uses, %2: filename with uses", "%2: 1 use", "%2: %1 uses",
+                              m_usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl()));
+    label->setText(labelText);
 
-    m_button->setIcon(KIcon("go-next"));
-    connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
+    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to closing a UI element", "Collapse") + "]</a>");
+
+    connect(m_toggleButton, SIGNAL(linkActivated(QString)), this, SLOT(labelClicked()));
     addHeaderItem(headerWidget);
     setUpdatesEnabled(true);
+}
+
+int TopContextUsesWidget::usesCount() const
+{
+  return m_usesCount;
 }
 
 QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, QList<IndexedDeclaration> declarations, DUContext* context) {
@@ -441,10 +462,10 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, QList
 
 void TopContextUsesWidget::setExpanded(bool expanded) {
   if(!expanded) {
+    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to opening a UI element", "Expand") + "]</a>");
     deleteItems();
-    m_button->setIcon(KIcon("go-next"));
   }else{
-    m_button->setIcon(KIcon("go-down"));
+    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to closing a UI element", "Collapse") + "]</a>");
     if(hasItems())
       return;
     DUChainReadLocker lock(DUChain::lock());
@@ -464,7 +485,6 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
 
       foreach(ContextUsesWidget* usesWidget, buildContextUses(*code, m_allDeclarations, topContext)) {
         addItem(usesWidget);
-        connect(usesWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
       }
       setUpdatesEnabled(true);
     }
@@ -474,10 +494,8 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
 void TopContextUsesWidget::labelClicked() {
   if(hasItems()) {
     setExpanded(false);
-    m_button->setIcon(KIcon("go-next"));
   }else{
     setExpanded(true);
-    m_button->setIcon(KIcon("go-down"));
   }
 }
 
@@ -488,6 +506,14 @@ UsesWidget::~UsesWidget() {
 UsesWidget::UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector) : NavigatableWidgetList(true) {
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
+
+    m_headerLine = new QLabel;
+    redrawHeaderLine();
+    connect(m_headerLine, SIGNAL(linkActivated(QString)), this, SLOT(headerLinkActivated(QString)));
+    m_layout->insertWidget(0, m_headerLine, 0, Qt::AlignTop);
+
+    m_layout->setAlignment(Qt::AlignTop);
+    m_itemLayout->setAlignment(Qt::AlignTop);
 
     m_progressBar = new QProgressBar;
     addHeaderItem(m_progressBar);
@@ -503,6 +529,48 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* cust
     m_collector->startCollecting();
 
     setUpdatesEnabled(true);
+}
+
+void UsesWidget::redrawHeaderLine()
+{
+  m_headerLine->setText(headerLineText());
+}
+
+const QString UsesWidget::headerLineText() const
+{
+  return i18n("%1 uses found", countAllUses()) + " &bull; "
+              "<a href='expandAll'>[" + i18n("Expand all") + "]</a> &bull; "
+              "<a href='collapseAll'>[" + i18n("Collapse all") + "]</a>";
+}
+
+unsigned int UsesWidget::countAllUses() const
+{
+  unsigned int totalUses = 0;
+  foreach ( QWidget* w, items() ) {
+    if ( TopContextUsesWidget* useWidget = dynamic_cast<TopContextUsesWidget*>(w) ) {
+      totalUses += useWidget->usesCount();
+    }
+  }
+  return totalUses;
+}
+
+void UsesWidget::setAllExpanded(bool expanded)
+{
+  foreach ( QWidget* w, items() ) {
+    if ( TopContextUsesWidget* useWidget = dynamic_cast<TopContextUsesWidget*>(w) ) {
+      useWidget->setExpanded(expanded);
+    }
+  }
+}
+
+void UsesWidget::headerLinkActivated(QString linkName)
+{
+  if(linkName == "expandAll") {
+    setAllExpanded(true);
+  }
+  else if(linkName == "collapseAll") {
+    setAllExpanded(false);
+  }
 }
 
 UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl) : UsesCollector(decl), m_widget(0) {
@@ -525,6 +593,8 @@ void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
 }
 
 void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
+  m_widget->redrawHeaderLine();
+
   if(m_widget->m_progressBar) {
     m_widget->m_progressBar->setValue(processed);
 
@@ -543,22 +613,18 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
   DUChainReadLocker lock(DUChain::lock());
   kDebug() << "processing" << topContext->url().str();
-    TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
-    connect(widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  m_widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
-    bool expand = false;
-    bool toFront = false;
-    if(ICore::self()->documentController()->activeDocument() &&  ICore::self()->documentController()->activeDocument()->url().equals(topContext->url().toUrl())) {
-      expand = true; //Expand + move to front the item belonging to the current open document
-      toFront = true;
-    }
+  TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
+  
+  // move to back if it's just the declaration/definition
+  bool toBack = widget->usesCount() == 0;
+  // move to front the item belonging to the current open document
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  bool toFront = doc && doc->url().equals(topContext->url().toUrl());
 
-    if(m_widget->items().count() == 0)
-      expand = true; //Expand the first item
+  widget->setExpanded(true);
 
-    if(expand)
-      widget->setExpanded(true);
-
-    m_widget->addItem(widget, toFront ? 0 : -1);
+  m_widget->addItem(widget, toFront ? 0 : toBack ? widget->items().size() : -1);
+  m_widget->redrawHeaderLine();
 }
 
 QSize KDevelop::UsesWidget::sizeHint() const {

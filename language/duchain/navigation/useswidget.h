@@ -43,7 +43,7 @@ namespace KDevelop {
   
     class IndexedDeclaration;
     ///A widget representing one use of a Declaration in a speicific context
-    class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QLabel {
+    class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QWidget {
       Q_OBJECT
       public:
         OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code);
@@ -58,6 +58,10 @@ namespace KDevelop {
         IndexedDeclaration m_declaration;
         IndexedString m_document;
         QString m_sourceLine;
+        
+        QLabel* m_label;
+        QLabel* m_icon;
+        QHBoxLayout* m_layout;
     };
     
     
@@ -74,9 +78,10 @@ namespace KDevelop {
         void deleteItems();
         QList<QWidget*> items() const;
         void setShowHeader(bool show);
-      private:
-        QVBoxLayout* m_layout;
+      protected:
         QBoxLayout* m_itemLayout;
+        QVBoxLayout* m_layout;
+      private:
         QHBoxLayout* m_headerLayout;
         QToolButton *m_previousButton, *m_nextButton;
         uint m_maxHeight;
@@ -107,17 +112,18 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT TopContextUsesWidget : public NavigatableWidgetList {
         Q_OBJECT
         public:
-            TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> localDeclarations, IndexedTopDUContext topContext);
-            void setExpanded(bool);
-        Q_SIGNALS:
-          void navigateDeclaration(KDevelop::IndexedDeclaration);
+          TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> localDeclarations, IndexedTopDUContext topContext);
+          void setExpanded(bool);
+          int usesCount() const;
         private slots:
             void labelClicked();
         private:
             IndexedTopDUContext m_topContext;
             IndexedDeclaration m_declaration;
-            QToolButton* m_button;
+            QLabel* m_icon;
+            QLabel* m_toggleButton;
             QList<IndexedDeclaration> m_allDeclarations;
+            int m_usesCount;
     };
 
     /**
@@ -142,13 +148,19 @@ namespace KDevelop {
             ///by this widget, and will be deleted on destruction.
             UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector = 0);
             ~UsesWidget();
+            void setAllExpanded(bool expanded);
+            unsigned int countAllUses() const;
         Q_SIGNALS:
             void navigateDeclaration(KDevelop::IndexedDeclaration);
         private:
-
+            const QString headerLineText() const;
+            QLabel* m_headerLine;
             bool m_showDeclarations;
             UsesWidgetCollector* m_collector;
             QProgressBar* m_progressBar;
+        public slots:
+            void headerLinkActivated(QString linkName);
+            void redrawHeaderLine();
     };
 }
 

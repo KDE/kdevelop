@@ -961,7 +961,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
     QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
     if (project) {
         if (format == FormatHtml) {
-            prefixText = "<i>" +  project->name() + "/</i>";
+            prefixText = "<i>" +  project->name() + "</i>/";
         } else {
             prefixText = project->name() + '/';
         }
